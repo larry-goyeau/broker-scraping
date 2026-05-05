@@ -1,4 +1,5 @@
 from copy import deepcopy
+from typing import Optional
 import pandas as pd
 from tradingview_screener import Column, Query
 
@@ -14,7 +15,7 @@ def _clone_query(q: Query) -> Query:
 
 
 def list_all_etfs(
-    market: str | None = "america",
+    market: Optional[str] = "america",
     *,
     page_size: int = 500,
 ) -> pd.DataFrame:
@@ -33,7 +34,7 @@ def list_all_etfs(
         q = q.set_markets(market)
 
     base = (
-        q.select("name", "type", "typespecs")
+        q.select("name", "description", "type", "typespecs")
         .where(Column("type") == "fund", Column("typespecs").has(["etf"]))
         .order_by("name", ascending=True)
     )
@@ -56,9 +57,12 @@ if __name__ == "__main__":
     # Use market=None for an "all world" scan (much larger result set).
     df = list_all_etfs(market=None, page_size=500)
 
+    # TradingView's `name` is often a short code; `description` holds the readable fund name.
+    export_df = df.assign(name=df["description"].fillna(df["name"]))[["ticker", "name"]]
+
     # Print a small preview (full list is saved to CSV below)
-    print(df[["ticker", "name"]].head(50))
+    print(export_df.head(50))
     print(f"\nTotal ETFs: {len(df)}")
 
     # Optional: save to CSV
-    df[["ticker", "name"]].to_csv("etfs.csv", index=False)
+    export_df.to_csv("etfs.csv", index=False)

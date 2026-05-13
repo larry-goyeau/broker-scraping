@@ -12,11 +12,13 @@ function toTickerOnly(value) {
   if (!firstColumn) return "";
 
   // Keep only ticker part from EXCHANGE:TICKER
-  const ticker = firstColumn.includes(":")
+  const tickerWithSuffix = firstColumn.includes(":")
     ? firstColumn.split(":").pop()
     : firstColumn;
 
-  return (ticker || "").trim();
+  // Drop exchange-specific ticker suffixes like ".GB" or ".USD".
+  const baseTicker = (tickerWithSuffix || "").split(".")[0];
+  return baseTicker.trim();
 }
 
 function loadTickersFromCsv(csvPath) {
@@ -27,6 +29,16 @@ function loadTickersFromCsv(csvPath) {
     .split(/\r?\n/)
     .map((line) => toTickerOnly(line))
     .filter(Boolean);
+}
+
+function uniqueQueries(values) {
+  const seen = new Set();
+  return values.filter((value) => {
+    const key = value.toUpperCase();
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 }
 
 const browser = await puppeteer.connect({
@@ -60,14 +72,15 @@ if (!searchInput) {
 const defaultEtfQueries = ["ACWI", "VWCE", "VUAA"];
 const cliQueries = process.argv.slice(2).filter(Boolean).map(toTickerOnly).filter(Boolean);
 const csvQueries = loadTickersFromCsv("etfs.csv");
-const queries =
+const rawQueries =
   cliQueries.length > 0
     ? cliQueries
     : csvQueries.length > 0
       ? csvQueries
       : defaultEtfQueries;
+const queries = uniqueQueries(rawQueries);
 
-async function scrapeFirstResultForQuery(q) {
+async function scrapeResultsForQuery(q) {
   await searchInput.click({ clickCount: 3 });
   await searchInput.press("Backspace");
   await searchInput.type(q, { delay: 40 });
@@ -87,43 +100,53 @@ async function scrapeFirstResultForQuery(q) {
         if (!text) return false;
         if (text.length < 18 || text.length > 180) return false;
         if (!text.toUpperCase().includes(queryUpper)) return false;
-        if (!/[€$£p]\s*\d/.test(text)) return false;
+        // Trading212 can render prices with symbols (€, $, £, p) or currency prefixes (e.g. Fr).
+        if (!/(?:[€$£p]|[A-Za-z]{1,4})\s*\d/.test(text)) return false;
         if (!/\s·\s/.test(text)) return false;
         if (/^INVEST Search/i.test(text)) return false;
         return true;
       })
       .sort((a, b) => a.length - b.length);
 
-    const text = rowCandidates[0];
-    if (!text) return null;
+    const uniqueTexts = [...new Set(rowCandidates)];
+    return uniqueTexts.map((text) => {
+      const match = text.match(
+        /^(.*?)\s+([A-Z0-9.-]{2,12})\s*·\s*([A-Z]{2,8})\s+((?:[€$£p]|[A-Za-z]{1,4})\s*[0-9][0-9.,]*)\s*([+-]?[0-9][0-9.,]*%)?/i
+      );
 
-    const match = text.match(
-      /^(.*?)\s+([A-Z0-9.-]{2,12})\s*·\s*([A-Z]{2,8})\s+([€$£p][0-9][0-9.,]*)\s*([+-]?[0-9][0-9.,]*%)?/i
-    );
+      if (!match) return { raw: text };
 
-    if (!match) return { raw: text };
-
-    return {
-      name: match[1].trim(),
-      ticker: match[2].trim(),
-      exchange: match[3].trim(),
-      price: match[4].trim(),
-      change: (match[5] || "").trim() || null,
-      raw: text,
-    };
+      return {
+        name: match[1].trim(),
+        ticker: match[2].trim(),
+        exchange: match[3].trim(),
+        raw: `${match[1].trim()} ${match[2].trim()} · ${match[3].trim()}`,
+      };
+    });
   }, q);
 }
 
 const results = [];
+const seen = new Set();
 for (const query of queries) {
-  const firstResult = await scrapeFirstResultForQuery(query);
-  results.push({
-    query,
-    ...firstResult,
-    found: !!firstResult,
-  });
+  const foundResults = await scrapeResultsForQuery(query);
+  for (const result of foundResults) {
+    const key =
+      result?.exchange && result?.ticker
+        ? `${result.exchange}:${result.ticker}`.toUpperCase()
+        : `RAW:${(result?.raw || "").toUpperCase()}`;
+    if (!seen.has(key)) {
+      seen.add(key);
+      results.push({
+        query,
+        ...result,
+        found: true,
+      });
+    }
+  }
 }
 
+fs.writeFileSync("trading212-parsed.json", JSON.stringify(results, null, 2));
 console.log(JSON.stringify(results, null, 2));
 
 await browser.disconnect();

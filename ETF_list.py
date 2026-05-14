@@ -34,7 +34,7 @@ def list_all_etfs(
         q = q.set_markets(market)
 
     base = (
-        q.select("name", "description", "isin", "type", "typespecs")
+        q.select("name", "description", "isin", "exchange", "type", "typespecs")
         .where(Column("type") == "fund", Column("typespecs").has(["etf"]))
         .order_by("name", ascending=True)
     )
@@ -58,9 +58,10 @@ if __name__ == "__main__":
     df = list_all_etfs(market=None, page_size=500)
 
     # TradingView's `name` is often a short code; `description` holds the readable fund name.
-    export_df = df.assign(name=df["description"].fillna(df["name"]))[
-        ["ticker", "isin", "name"]
-    ]
+    export_df = df.assign(
+        name=df["description"].fillna(df["name"]),
+        exchange=df["exchange"].fillna(df["ticker"].str.split(":").str[0]),
+    )[["ticker", "exchange", "isin", "name"]]
 
     # Print a small preview (full list is saved to CSV below)
     print(export_df.head(50))

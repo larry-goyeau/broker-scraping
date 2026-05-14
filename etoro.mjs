@@ -20,12 +20,24 @@ function toTickerOnly(value) {
   return baseTicker.trim();
 }
 
-function loadTickersFromCsv(csvPath) {
+function toIsin(value) {
+  const text = (value || "").trim().toUpperCase();
+  if (!text) return "";
+  const match = text.match(/\b[A-Z]{2}[A-Z0-9]{10}\b/);
+  return match ? match[0] : "";
+}
+
+function loadIsinsFromCsv(csvPath) {
   if (!fs.existsSync(csvPath)) return [];
   const content = fs.readFileSync(csvPath, "utf8");
   return content
     .split(/\r?\n/)
-    .map((line) => toTickerOnly(line))
+    .map((line) => {
+      // Expected CSV format: ticker,isin,name
+      const cols = line.split(",");
+      const isinCol = (cols[1] || "").trim();
+      return toIsin(isinCol);
+    })
     .filter(Boolean);
 }
 
@@ -134,9 +146,9 @@ if (!page.url().includes("etoro.com")) {
 await page.bringToFront();
 const searchInput = await ensureEtoroSearchInput(page);
 
-const defaultEtfQueries = ["ACWI", "VWCE", "VUAA"];
-const cliQueries = process.argv.slice(2).filter(Boolean).map(toTickerOnly).filter(Boolean);
-const csvQueries = loadTickersFromCsv("etfs.csv");
+const defaultEtfQueries = ["IE00B44Z5B48", "IE00BK5BQT80", "IE00BFMXXD54"];
+const cliQueries = process.argv.slice(2).filter(Boolean).map(toIsin).filter(Boolean);
+const csvQueries = loadIsinsFromCsv("etfs.csv");
 const rawQueries =
   cliQueries.length > 0
     ? cliQueries
@@ -193,9 +205,8 @@ for (const query of queries) {
     if (seen.has(key)) continue;
     seen.add(key);
 
-    const normalizedMatchedTicker = parsed?.ticker ? toTickerOnly(parsed.ticker) : "";
     results.push({
-      query: normalizedMatchedTicker || query,
+      query,
       ...parsed,
       found: true,
     });

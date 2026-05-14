@@ -3,42 +3,44 @@ import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-function toTickerOnly(value) {
-  const text = (value || "").trim();
+function toIsin(value) {
+  const text = (value || "").trim().toUpperCase();
+  if (!text) return "";
+  const match = text.match(/\b[A-Z]{2}[A-Z0-9]{10}\b/);
+  return match ? match[0] : "";
+}
+
+function normalizeTicker(value) {
+  const text = (value || "").trim().toUpperCase();
   if (!text) return "";
 
-  // Handle CSV lines like: EXCHANGE:TICKER,Name
-  const firstColumn = text.split(",")[0].trim();
-  if (!firstColumn) return "";
-
-  // Keep only ticker part from EXCHANGE:TICKER
-  const tickerWithSuffix = firstColumn.includes(":")
-    ? firstColumn.split(":").pop()
-    : firstColumn;
-
-  // Drop exchange-specific ticker suffixes like ".GB" or ".USD".
-  const baseTicker = (tickerWithSuffix || "").split(".")[0];
-  return baseTicker.trim();
+  // Drop EXCHANGE: prefix and exchange-specific tails like .USD, /N, -ETFP.
+  const afterExchange = text.includes(":") ? text.split(":").pop() : text;
+  return (afterExchange || "").split(/[./-]/)[0].trim();
 }
 
-function loadTickersFromCsv(csvPath) {
-  if (!fs.existsSync(csvPath)) return [];
+function loadIsinToTickersFromCsv(csvPath) {
+  if (!fs.existsSync(csvPath)) return new Map();
 
   const content = fs.readFileSync(csvPath, "utf8");
-  return content
-    .split(/\r?\n/)
-    .map((line) => toTickerOnly(line))
-    .filter(Boolean);
-}
+  const map = new Map();
 
-function uniqueQueries(values) {
-  const seen = new Set();
-  return values.filter((value) => {
-    const key = value.toUpperCase();
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
+  for (const line of content.split(/\r?\n/)) {
+    if (!line.trim()) continue;
+
+    const cols = line.split(",");
+    // Supports both: symbol,isin,name and symbol,exchange,isin,name
+    const isin = toIsin(cols[2]) || toIsin(cols[1]) || cols.map(toIsin).find(Boolean) || "";
+    if (!isin) continue;
+
+    const ticker = normalizeTicker(cols[0]);
+    if (!ticker) continue;
+
+    if (!map.has(isin)) map.set(isin, new Set());
+    map.get(isin).add(ticker);
+  }
+
+  return map;
 }
 
 const browser = await puppeteer.connect({
@@ -69,16 +71,17 @@ if (!searchInput) {
   );
 }
 
-const defaultEtfQueries = ["ACWI", "VWCE", "VUAA"];
-const cliQueries = process.argv.slice(2).filter(Boolean).map(toTickerOnly).filter(Boolean);
-const csvQueries = loadTickersFromCsv("etfs.csv");
-const rawQueries =
-  cliQueries.length > 0
-    ? cliQueries
-    : csvQueries.length > 0
-      ? csvQueries
-      : defaultEtfQueries;
-const queries = uniqueQueries(rawQueries);
+const isinToTickers = loadIsinToTickersFromCsv("etfs.csv");
+
+const cliIsins = process.argv.slice(2).filter(Boolean).map(toIsin).filter(Boolean);
+const defaultIsins = ["IE00B44Z5B48", "IE00BK5BQT80", "IE00BFMXXD54"];
+
+const queries =
+  cliIsins.length > 0
+    ? [...new Set(cliIsins)]
+    : isinToTickers.size > 0
+      ? [...isinToTickers.keys()]
+      : defaultIsins;
 
 async function scrapeResultsForQuery(q) {
   await searchInput.click({ clickCount: 3 });
@@ -86,24 +89,44 @@ async function scrapeResultsForQuery(q) {
   await searchInput.type(q, { delay: 40 });
   await sleep(900);
 
-  return page.evaluate((query) => {
+  return page.evaluate(() => {
     const norm = (s) => (s || "").replace(/\s+/g, " ").trim();
-    const queryUpper = query.toUpperCase();
 
-    const nodes = [...document.querySelectorAll("*")].filter(
-      (el) => el instanceof HTMLElement && el.offsetParent !== null
-    );
+    // Trading212's search modal has a tabs row ("All Stocks ETFs CFDs Leveraged funds")
+    // plus either result rows (with " · ") or "No results found". Find the smallest
+    // ancestor that contains both signals so we exclude the dashboard's
+    // Trending/Watchlist/Recently viewed panels.
+    function findSearchModal() {
+      const candidates = [...document.querySelectorAll("div")]
+        .filter((el) => el instanceof HTMLElement && el.offsetParent !== null)
+        .filter((el) => {
+          const t = el.innerText || "";
+          const hasTabs =
+            t.includes("Stocks") &&
+            t.includes("ETFs") &&
+            t.includes("CFDs") &&
+            t.includes("Leveraged funds");
+          if (!hasTabs) return false;
+          return /\s·\s/.test(t) || /No results found/i.test(t);
+        })
+        .sort((a, b) => (a.innerText || "").length - (b.innerText || "").length);
+      return candidates[0] || null;
+    }
 
-    const rowCandidates = nodes
+    const modal = findSearchModal();
+    if (!modal) return [];
+    if (/No results found/i.test(modal.innerText || "")) return [];
+
+    const rowCandidates = [...modal.querySelectorAll("*")]
+      .filter((el) => el instanceof HTMLElement && el.offsetParent !== null)
       .map((el) => norm(el.innerText))
       .filter((text) => {
         if (!text) return false;
         if (text.length < 18 || text.length > 180) return false;
-        if (!text.toUpperCase().includes(queryUpper)) return false;
-        // Trading212 can render prices with symbols (€, $, £, p) or currency prefixes (e.g. Fr).
         if (!/(?:[€$£p]|[A-Za-z]{1,4})\s*\d/.test(text)) return false;
         if (!/\s·\s/.test(text)) return false;
-        if (/^INVEST Search/i.test(text)) return false;
+        // Drop any text that still contains the tab row.
+        if (/All\s+Stocks\s+ETFs\s+CFDs\s+Leveraged\s+funds/i.test(text)) return false;
         return true;
       })
       .sort((a, b) => a.length - b.length);
@@ -123,26 +146,33 @@ async function scrapeResultsForQuery(q) {
         raw: `${match[1].trim()} ${match[2].trim()} · ${match[3].trim()}`,
       };
     });
-  }, q);
+  });
 }
 
 const results = [];
 const seen = new Set();
-for (const query of queries) {
-  const foundResults = await scrapeResultsForQuery(query);
+for (const isin of queries) {
+  const expectedTickers = isinToTickers.get(isin) || new Set();
+  const foundResults = await scrapeResultsForQuery(isin);
+
   for (const result of foundResults) {
-    const key =
-      result?.exchange && result?.ticker
-        ? `${result.exchange}:${result.ticker}`.toUpperCase()
-        : `RAW:${(result?.raw || "").toUpperCase()}`;
-    if (!seen.has(key)) {
-      seen.add(key);
-      results.push({
-        query,
-        ...result,
-        found: true,
-      });
-    }
+    if (!result?.ticker) continue;
+
+    // Trading212 search is fuzzy and returns many name-related ETFs for an ISIN,
+    // not a strict ISIN match. Keep only rows whose ticker is one of the expected
+    // tickers from etfs.csv for this ISIN.
+    const resultTicker = normalizeTicker(result.ticker);
+    if (expectedTickers.size === 0 || !expectedTickers.has(resultTicker)) continue;
+
+    const key = `${isin}:${result.exchange || ""}:${result.ticker}`.toUpperCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+
+    results.push({
+      query: isin,
+      ...result,
+      found: true,
+    });
   }
 }
 

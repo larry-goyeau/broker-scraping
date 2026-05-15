@@ -33,10 +33,17 @@ function loadIsinsFromCsv(csvPath) {
   return content
     .split(/\r?\n/)
     .map((line) => {
-      // Expected CSV format: ticker,isin,name
+      // Supports both: ticker,isin,name and ticker,exchange,isin,name.
       const cols = line.split(",");
-      const isinCol = (cols[1] || "").trim();
-      return toIsin(isinCol);
+      const fromKnownColumns = toIsin(cols[2]) || toIsin(cols[1]);
+      if (fromKnownColumns) return fromKnownColumns;
+
+      // Fallback: find the first ISIN-looking token in the row.
+      for (const col of cols) {
+        const isin = toIsin(col);
+        if (isin) return isin;
+      }
+      return "";
     })
     .filter(Boolean);
 }
@@ -187,7 +194,7 @@ async function scrapeResultsForQuery(query) {
 }
 
 const results = [];
-const seen = new Set();
+const byKey = new Map();
 
 for (const query of queries) {
   const foundTexts = await scrapeResultsForQuery(query);
@@ -195,21 +202,23 @@ for (const query of queries) {
     const parsed = parseEtoroRowText(text);
     if (!parsed) continue;
 
-    const key =
-      parsed?.ticker && parsed?.exchange
-        ? `${parsed.exchange}:${parsed.ticker}`.toUpperCase()
-        : parsed?.ticker
-          ? `TICKER:${parsed.ticker}`.toUpperCase()
-          : `RAW:${(parsed?.raw || "").toUpperCase()}`;
+    // The page scraper picks up both a parent container (with exchange info) and
+    // child elements (without it), so we dedupe by (query, ticker) and keep
+    // whichever variant has the richest exchange value.
+    const key = parsed.ticker
+      ? `${query}:TICKER:${parsed.ticker.toUpperCase()}`
+      : `${query}:RAW:${(parsed.raw || "").toUpperCase()}`;
 
-    if (seen.has(key)) continue;
-    seen.add(key);
-
-    results.push({
-      query,
-      ...parsed,
-      found: true,
-    });
+    const incoming = { query, ...parsed, found: true };
+    const existing = byKey.get(key);
+    if (!existing) {
+      byKey.set(key, incoming);
+      results.push(incoming);
+      continue;
+    }
+    if (!existing.exchange && incoming.exchange) {
+      Object.assign(existing, incoming);
+    }
   }
 }
 

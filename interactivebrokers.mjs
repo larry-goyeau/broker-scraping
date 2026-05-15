@@ -67,20 +67,20 @@ function parseIbkrRow(text) {
     name = body.slice(0, withSlash).trim();
     exchange = body.slice(withSlash + 3).trim();
   } else {
-    // Some IBKR rows collapse exchange into the final token (e.g. LSEETF).
+    // Most IBKR result rows render exchange as the final token (e.g. "LSEETF").
     const parts = body.split(/\s+/);
-    if (parts.length > 1) {
-      exchange = parts.pop();
-      name = parts.join(" ").trim();
-    }
+    if (parts.length < 2) return null;
+    exchange = parts.pop();
+    name = parts.join(" ").trim();
   }
+  if (!name || !exchange) return null;
 
   return {
     ticker,
     name,
     exchange,
     type: securityType,
-    raw: exchange ? `${ticker} ${name} / ${exchange} ${securityType}` : compact,
+    raw: `${ticker} ${name} / ${exchange} ${securityType}`,
     found: true,
   };
 }
@@ -139,18 +139,66 @@ async function scrapeRowsForQuery(query) {
   await searchInput.click({ clickCount: 3 });
   await searchInput.press("Backspace");
   await searchInput.type(query, { delay: 40 });
-  await sleep(1000);
 
-  return page.evaluate(() => {
-    const norm = (s) => (s || "").replace(/\s+/g, " ").trim();
-    const rows = [
-      ...document.querySelectorAll(
-        ".search-table tbody tr, table.search-table tbody tr, tbody.p-datatable-tbody tr"
-      ),
-    ];
+  const collectRows = () =>
+    page.evaluate(() => {
+      const norm = (s) => (s || "").replace(/\s+/g, " ").trim();
 
-    return [...new Set(rows.map((row) => norm(row.innerText)).filter(Boolean))];
-  });
+      // Locate the "TOP RESULTS" section header and take the result table that
+      // follows it. This avoids picking up rows from the "ASK IBKR" and
+      // "HELP & SUPPORT" tables that share the same markup.
+      const headers = [...document.querySelectorAll("*")].filter((el) => {
+        if (el.children.length > 0) return false;
+        return /^\s*top results\s*$/i.test(el.textContent || "");
+      });
+
+      let resultsTable = null;
+      for (const header of headers) {
+        const root = header.closest("section, div, form") || document.body;
+        const t = root.querySelector(".p-datatable-table, table.p-datatable-table");
+        if (t) {
+          resultsTable = t;
+          break;
+        }
+      }
+
+      if (!resultsTable) {
+        // Fallback: first p-datatable-table on the page.
+        resultsTable = document.querySelector(
+          ".p-datatable-table, table.p-datatable-table"
+        );
+      }
+      if (!resultsTable) return [];
+
+      const rows = [...resultsTable.querySelectorAll("tbody tr")];
+      return [...new Set(rows.map((row) => norm(row.innerText)).filter(Boolean))];
+    });
+
+  // IBKR streams in additional TOP RESULTS rows after the first hit.
+  // Wait until the row count is stable for a couple consecutive polls,
+  // capped by maxWaitMs.
+  const maxWaitMs = 4000;
+  const pollMs = 250;
+  const stableNeeded = 3;
+  let elapsed = 0;
+  let lastCount = -1;
+  let stableHits = 0;
+  let rowTexts = [];
+
+  while (elapsed < maxWaitMs) {
+    await sleep(pollMs);
+    elapsed += pollMs;
+    rowTexts = await collectRows();
+    if (rowTexts.length === lastCount && rowTexts.length > 0) {
+      stableHits += 1;
+      if (stableHits >= stableNeeded) break;
+    } else {
+      stableHits = 0;
+      lastCount = rowTexts.length;
+    }
+  }
+
+  return rowTexts;
 }
 
 const results = [];

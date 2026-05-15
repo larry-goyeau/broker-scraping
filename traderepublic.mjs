@@ -31,10 +31,16 @@ function loadIsinsFromCsv(csvPath) {
   return content
     .split(/\r?\n/)
     .map((line) => {
-      // Expected CSV shape: ticker,isin,name
+      // Supports both: symbol,isin,name and symbol,exchange,isin,name.
       const cols = line.split(",");
-      const isinCol = (cols[1] || "").trim();
-      return toIsin(isinCol);
+      const fromKnownColumns = toIsin(cols[2]) || toIsin(cols[1]);
+      if (fromKnownColumns) return fromKnownColumns;
+
+      for (const col of cols) {
+        const isin = toIsin(col);
+        if (isin) return isin;
+      }
+      return "";
     })
     .filter(Boolean);
 }
@@ -48,6 +54,12 @@ function uniqueQueries(values) {
     return true;
   });
 }
+
+const CURRENCY_SYMBOL_TO_CODE = {
+  "€": "EUR",
+  $: "USD",
+  "£": "GBP",
+};
 
 function parseFundRow(text, query) {
   const compact = (text || "").replace(/\s+/g, " ").trim();
@@ -63,19 +75,18 @@ function parseFundRow(text, query) {
   let rest = compact.slice((isinMatch.index || 0) + isin.length).trim();
   if (rest.startsWith(isin)) rest = rest.slice(isin.length).trim();
 
-  let issuer = null;
-  const issuerMatch = rest.match(/·\s*(.+)$/);
-  if (issuerMatch) {
-    issuer = issuerMatch[1].replace(/\s+[0-9].*$/, "").trim() || null;
-  }
+  // Detect currency from the first price token: e.g., "588.85 €" or "$588.85".
+  const currencyMatch = rest.match(/[0-9][0-9.,]*\s*([€$£])|([€$£])\s*[0-9]/);
+  const symbol = currencyMatch ? currencyMatch[1] || currencyMatch[2] : null;
+  const currency = symbol ? CURRENCY_SYMBOL_TO_CODE[symbol] || symbol : null;
 
   return {
     query,
     ticker: query,
     isin,
     name,
-    exchange: issuer,
-    raw: issuer ? `${name} ${isin} · ${issuer}` : `${name} ${isin}`,
+    exchange: currency,
+    raw: currency ? `${name} ${isin} · ${currency}` : `${name} ${isin}`,
     found: true,
   };
 }
@@ -106,7 +117,26 @@ const seen = new Set();
 for (const query of queries) {
   const url = `https://app.traderepublic.com/browse/fund?q=${encodeURIComponent(query)}`;
   await page.goto(url, { waitUntil: "domcontentloaded" });
-  await sleep(900);
+
+  // Trade Republic loads prices/currencies asynchronously; poll until they appear.
+  const maxWaitMs = 5000;
+  const pollMs = 250;
+  let elapsed = 0;
+  while (elapsed < maxWaitMs) {
+    const hasCurrency = await page.evaluate(() => {
+      const rows = [...document.querySelectorAll("tbody tr")];
+      return rows.some((row) => /[€$£]/.test(row.innerText || ""));
+    });
+    if (hasCurrency) break;
+
+    const noResult = await page.evaluate(() =>
+      /couldn['’]t find anything that matches/i.test(document.body.innerText || "")
+    );
+    if (noResult) break;
+
+    await sleep(pollMs);
+    elapsed += pollMs;
+  }
 
   const rowTexts = await page.evaluate(() => {
     const norm = (s) => (s || "").replace(/\s+/g, " ").trim();

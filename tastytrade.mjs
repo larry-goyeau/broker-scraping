@@ -12,6 +12,13 @@ function normalizeTicker(value) {
   return (afterExchange || "").split(/[./-]/)[0].trim();
 }
 
+function toIsin(value) {
+  const text = (value || "").trim().toUpperCase();
+  if (!text) return "";
+  const match = text.match(/\b[A-Z]{2}[A-Z0-9]{10}\b/);
+  return match ? match[0] : "";
+}
+
 function loadTickersFromCsv(csvPath) {
   if (!fs.existsSync(csvPath)) return [];
 
@@ -20,6 +27,29 @@ function loadTickersFromCsv(csvPath) {
     .split(/\r?\n/)
     .map((line) => normalizeTicker(line))
     .filter(Boolean);
+}
+
+function loadTickerToIsinFromCsv(csvPath) {
+  if (!fs.existsSync(csvPath)) return new Map();
+
+  const content = fs.readFileSync(csvPath, "utf8");
+  const map = new Map();
+
+  for (const line of content.split(/\r?\n/)) {
+    if (!line.trim()) continue;
+
+    const cols = line.split(",");
+    const ticker = normalizeTicker(cols[0]);
+    if (!ticker) continue;
+
+    // Supports both: symbol,isin,name and symbol,exchange,isin,name.
+    const isin = toIsin(cols[2]) || toIsin(cols[1]) || cols.map(toIsin).find(Boolean) || "";
+    if (!isin) continue;
+
+    if (!map.has(ticker)) map.set(ticker, isin);
+  }
+
+  return map;
 }
 
 function uniqueQueries(values) {
@@ -97,7 +127,17 @@ async function scrapeRowsForQuery(page, searchInput, query) {
         const existing = dedup.get(key);
         if (!existing || (!existing.type && row.type)) dedup.set(key, row);
       }
-      return [...dedup.values()];
+      const pageText = norm(document.body?.innerText || "");
+      const notFound =
+        // Primary empty state in the search dropdown.
+        /not found in all/i.test(pageText) ||
+        // Backup text in case the first line wording changes.
+        /clear the search field to browse all symbols/i.test(pageText);
+
+      return {
+        rows: [...dedup.values()],
+        notFound,
+      };
     }, query.toUpperCase());
 
   const maxWaitMs = 4000;
@@ -109,9 +149,11 @@ async function scrapeRowsForQuery(page, searchInput, query) {
   let rows = [];
 
   while (elapsed < maxWaitMs) {
-    await sleep(pollMs);
-    elapsed += pollMs;
-    rows = await collectRows();
+    const snapshot = await collectRows();
+    rows = snapshot.rows;
+
+    // Explicit tastytrade empty-state message; no need to keep polling.
+    if (snapshot.notFound) break;
 
     if (rows.length === lastCount && rows.length > 0) {
       stableHits += 1;
@@ -120,6 +162,9 @@ async function scrapeRowsForQuery(page, searchInput, query) {
       stableHits = 0;
       lastCount = rows.length;
     }
+
+    await sleep(pollMs);
+    elapsed += pollMs;
   }
 
   return rows;
@@ -143,6 +188,7 @@ const searchInput = await ensureSearchInput(page);
 const defaultQueries = ["ACWI", "VHT", "VWRL"];
 const cliQueries = process.argv.slice(2).map(normalizeTicker).filter(Boolean);
 const csvQueries = loadTickersFromCsv("etfs.csv");
+const tickerToIsin = loadTickerToIsinFromCsv("etfs.csv");
 const rawQueries =
   cliQueries.length > 0 ? cliQueries : csvQueries.length > 0 ? csvQueries : defaultQueries;
 const queries = uniqueQueries(rawQueries);
@@ -153,14 +199,18 @@ const byKey = new Map();
 for (const query of queries) {
   const rows = await scrapeRowsForQuery(page, searchInput, query);
   for (const row of rows) {
+    const queryTicker = normalizeTicker(query) || query;
+    const resultTicker = normalizeTicker(row.ticker);
+    const isin =
+      tickerToIsin.get(resultTicker) || tickerToIsin.get(queryTicker) || null;
     const parsed = {
-      query: normalizeTicker(query) || query,
+      query: queryTicker,
       ticker: row.ticker,
       name: row.name,
       exchange: null,
       type: row.type,
       raw: row.raw,
-      found: true,
+      isin,
     };
 
     const key = `${parsed.query}:${parsed.ticker}`.toUpperCase();

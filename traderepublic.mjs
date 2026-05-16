@@ -55,12 +55,6 @@ function uniqueQueries(values) {
   });
 }
 
-const CURRENCY_SYMBOL_TO_CODE = {
-  "€": "EUR",
-  $: "USD",
-  "£": "GBP",
-};
-
 function parseFundRow(text, query) {
   const compact = (text || "").replace(/\s+/g, " ").trim();
   if (!compact) return null;
@@ -72,21 +66,13 @@ function parseFundRow(text, query) {
   const isin = isinMatch[1];
   const name = compact.slice(0, isinMatch.index).trim();
 
-  let rest = compact.slice((isinMatch.index || 0) + isin.length).trim();
-  if (rest.startsWith(isin)) rest = rest.slice(isin.length).trim();
-
-  // Detect currency from the first price token: e.g., "588.85 €" or "$588.85".
-  const currencyMatch = rest.match(/[0-9][0-9.,]*\s*([€$£])|([€$£])\s*[0-9]/);
-  const symbol = currencyMatch ? currencyMatch[1] || currencyMatch[2] : null;
-  const currency = symbol ? CURRENCY_SYMBOL_TO_CODE[symbol] || symbol : null;
-
   return {
     query,
-    ticker: query,
+    ticker: null,
     isin,
     name,
-    exchange: currency,
-    raw: currency ? `${name} ${isin} · ${currency}` : `${name} ${isin}`,
+    exchange: "null",
+    raw: `${name} ${isin}`,
     found: true,
   };
 }

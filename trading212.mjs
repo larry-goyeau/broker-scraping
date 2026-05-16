@@ -83,11 +83,48 @@ const queries =
       ? [...isinToTickers.keys()]
       : defaultIsins;
 
+async function selectEtfTab() {
+  const clicked = await page.evaluate(() => {
+    const norm = (s) => (s || "").replace(/\s+/g, " ").trim();
+
+    function findSearchModal() {
+      const candidates = [...document.querySelectorAll("div")]
+        .filter((el) => el instanceof HTMLElement && el.offsetParent !== null)
+        .filter((el) => {
+          const t = el.innerText || "";
+          return (
+            t.includes("Stocks") &&
+            t.includes("ETFs") &&
+            t.includes("CFDs") &&
+            t.includes("Leveraged funds")
+          );
+        })
+        .sort((a, b) => (a.innerText || "").length - (b.innerText || "").length);
+      return candidates[0] || null;
+    }
+
+    const modal = findSearchModal();
+    if (!modal) return false;
+
+    const tab = [...modal.querySelectorAll("*")]
+      .filter((el) => el instanceof HTMLElement && el.offsetParent !== null)
+      .find((el) => norm(el.textContent) === "ETFs");
+    if (!tab) return false;
+
+    tab.click();
+    return true;
+  });
+  return clicked;
+}
+
 async function scrapeResultsForQuery(q) {
   await searchInput.click({ clickCount: 3 });
   await searchInput.press("Backspace");
   await searchInput.type(q, { delay: 40 });
   await sleep(900);
+
+  await selectEtfTab();
+  await sleep(500);
 
   return page.evaluate(() => {
     const norm = (s) => (s || "").replace(/\s+/g, " ").trim();
@@ -170,8 +207,8 @@ for (const isin of queries) {
 
     results.push({
       query: isin,
+      isin,
       ...result,
-      found: true,
     });
   }
 }

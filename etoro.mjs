@@ -209,7 +209,7 @@ for (const query of queries) {
       ? `${query}:TICKER:${parsed.ticker.toUpperCase()}`
       : `${query}:RAW:${(parsed.raw || "").toUpperCase()}`;
 
-    const incoming = { query, ...parsed, found: true };
+    const incoming = { query, ...parsed, isin: query };
     const existing = byKey.get(key);
     if (!existing) {
       byKey.set(key, incoming);

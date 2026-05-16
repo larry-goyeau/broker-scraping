@@ -81,7 +81,6 @@ function parseIbkrRow(text) {
     exchange,
     type: securityType,
     raw: `${ticker} ${name} / ${exchange} ${securityType}`,
-    found: true,
   };
 }
 
@@ -220,6 +219,7 @@ for (const query of queries) {
     results.push({
       ...parsed,
       query,
+      isin: query,
     });
   }
 }

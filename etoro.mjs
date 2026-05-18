@@ -220,8 +220,10 @@ for (const query of queries) {
       Object.assign(existing, incoming);
     }
   }
+
+  // Persist progress after every query so an interruption keeps prior work.
+  fs.writeFileSync("etoro-parsed.json", JSON.stringify(results, null, 2));
 }
 
-fs.writeFileSync("etoro-parsed.json", JSON.stringify(results, null, 2));
 console.log(JSON.stringify(results, null, 2));
 await browser.disconnect();

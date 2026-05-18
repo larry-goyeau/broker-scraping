@@ -143,9 +143,11 @@ for (const query of queries) {
     seen.add(key);
     results.push(parsed);
   }
+
+  // Persist progress after every query so an interruption keeps prior work.
+  fs.writeFileSync("traderepublic-parsed.json", JSON.stringify(results, null, 2));
 }
 
-fs.writeFileSync("traderepublic-parsed.json", JSON.stringify(results, null, 2));
 console.log(JSON.stringify(results, null, 2));
 
 await browser.disconnect();

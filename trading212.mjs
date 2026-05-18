@@ -211,9 +211,11 @@ for (const isin of queries) {
       ...result,
     });
   }
+
+  // Persist progress after every query so an interruption keeps prior work.
+  fs.writeFileSync("trading212-parsed.json", JSON.stringify(results, null, 2));
 }
 
-fs.writeFileSync("trading212-parsed.json", JSON.stringify(results, null, 2));
 console.log(JSON.stringify(results, null, 2));
 
 await browser.disconnect();

@@ -85,9 +85,35 @@ async function ensureSearchInput(page) {
   return searchInput;
 }
 
+async function clearSearchInput(page, input) {
+  await input.focus();
+
+  // Triple-click + Backspace works on macOS but is flaky on Windows: the
+  // selection sometimes doesn't take, so Backspace only deletes one char and
+  // the next query gets concatenated onto the previous one.
+  await input.click({ clickCount: 3 });
+  await input.press("Backspace");
+
+  let remaining = (await input.evaluate((el) => el.value || "")).length;
+  if (remaining === 0) return;
+
+  // Fallback: explicit keyboard select-all then delete. Use the platform's
+  // modifier key (Cmd on macOS, Ctrl elsewhere).
+  const modifier = process.platform === "darwin" ? "Meta" : "Control";
+  await page.keyboard.down(modifier);
+  await page.keyboard.press("KeyA");
+  await page.keyboard.up(modifier);
+  await page.keyboard.press("Backspace");
+
+  // Last resort: send a Backspace for each remaining character.
+  remaining = (await input.evaluate((el) => el.value || "")).length;
+  for (let i = 0; i < remaining; i++) {
+    await page.keyboard.press("Backspace");
+  }
+}
+
 async function scrapeRowsForQuery(page, searchInput, query) {
-  await searchInput.click({ clickCount: 3 });
-  await searchInput.press("Backspace");
+  await clearSearchInput(page, searchInput);
   await searchInput.type(query, { delay: 40 });
 
   const collectRows = async () =>

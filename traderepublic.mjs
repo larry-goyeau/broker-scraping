@@ -100,7 +100,8 @@ const queries = uniqueQueries(rawQueries);
 const results = [];
 const seen = new Set();
 
-for (const query of queries) {
+for (const [queryIndex, query] of queries.entries()) {
+  console.error(`[${queryIndex + 1}/${queries.length}] ${query}`);
   const url = `https://app.traderepublic.com/browse/fund?q=${encodeURIComponent(query)}`;
   await page.goto(url, { waitUntil: "domcontentloaded" });
 

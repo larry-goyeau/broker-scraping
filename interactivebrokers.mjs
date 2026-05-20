@@ -203,7 +203,8 @@ async function scrapeRowsForQuery(query) {
 const results = [];
 const seen = new Set();
 
-for (const query of queries) {
+for (const [queryIndex, query] of queries.entries()) {
+  console.error(`[${queryIndex + 1}/${queries.length}] ${query}`);
   const rowTexts = await scrapeRowsForQuery(query);
   for (const text of rowTexts) {
     const parsed = parseIbkrRow(text);

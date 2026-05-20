@@ -196,7 +196,8 @@ async function scrapeResultsForQuery(query) {
 const results = [];
 const byKey = new Map();
 
-for (const query of queries) {
+for (const [queryIndex, query] of queries.entries()) {
+  console.error(`[${queryIndex + 1}/${queries.length}] ${query}`);
   const foundTexts = await scrapeResultsForQuery(query);
   for (const text of foundTexts) {
     const parsed = parseEtoroRowText(text);

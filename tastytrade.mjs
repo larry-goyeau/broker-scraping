@@ -222,7 +222,8 @@ const queries = uniqueQueries(rawQueries);
 const results = [];
 const byKey = new Map();
 
-for (const query of queries) {
+for (const [queryIndex, query] of queries.entries()) {
+  console.error(`[${queryIndex + 1}/${queries.length}] ${query}`);
   const rows = await scrapeRowsForQuery(page, searchInput, query);
   for (const row of rows) {
     const queryTicker = normalizeTicker(query) || query;

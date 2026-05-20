@@ -188,7 +188,8 @@ async function scrapeResultsForQuery(q) {
 
 const results = [];
 const seen = new Set();
-for (const isin of queries) {
+for (const [queryIndex, isin] of queries.entries()) {
+  console.error(`[${queryIndex + 1}/${queries.length}] ${isin}`);
   const expectedTickers = isinToTickers.get(isin) || new Set();
   const foundResults = await scrapeResultsForQuery(isin);
 

@@ -211,8 +211,19 @@ if (!/tastytrade|tastyworks/i.test(page.url())) {
 await page.bringToFront();
 const searchInput = await ensureSearchInput(page);
 
+// `--start=N` (1-indexed) lets a run resume from a specific query without
+// throwing away progress already saved to tastytrade-parsed.json.
+const startIndex = (() => {
+  for (const arg of process.argv.slice(2)) {
+    const m = arg.match(/^--start=(\d+)$/i);
+    if (m) return Math.max(1, parseInt(m[1], 10));
+  }
+  return 1;
+})();
+const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
+
 const defaultQueries = ["ACWI", "VHT", "VWRL"];
-const cliQueries = process.argv.slice(2).map(normalizeTicker).filter(Boolean);
+const cliQueries = positionalArgs.map(normalizeTicker).filter(Boolean);
 const csvQueries = loadTickersFromCsv("etfs.csv");
 const tickerToIsin = loadTickerToIsinFromCsv("etfs.csv");
 const rawQueries =
@@ -222,7 +233,26 @@ const queries = uniqueQueries(rawQueries);
 const results = [];
 const byKey = new Map();
 
+// When resuming, load already-saved entries so we don't overwrite them and so
+// the dedup `byKey` map knows about rows from earlier queries.
+if (startIndex > 1 && fs.existsSync("tastytrade-parsed.json")) {
+  try {
+    const existing = JSON.parse(fs.readFileSync("tastytrade-parsed.json", "utf8"));
+    if (Array.isArray(existing)) {
+      for (const entry of existing) {
+        results.push(entry);
+        if (entry?.query && entry?.ticker) {
+          byKey.set(`${entry.query}:${entry.ticker}`.toUpperCase(), entry);
+        }
+      }
+    }
+  } catch {
+    // Ignore parse errors -- treat as a fresh run.
+  }
+}
+
 for (const [queryIndex, query] of queries.entries()) {
+  if (queryIndex + 1 < startIndex) continue;
   console.error(`[${queryIndex + 1}/${queries.length}] ${query}`);
   const rows = await scrapeRowsForQuery(page, searchInput, query);
   for (const row of rows) {

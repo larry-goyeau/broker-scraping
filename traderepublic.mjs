@@ -86,8 +86,19 @@ const pages = await browser.pages();
 const page = pages.find((p) => p.url().includes("traderepublic.com")) || (await browser.newPage());
 await page.bringToFront();
 
+// `--start=N` (1-indexed) lets a run resume from a specific query without
+// throwing away progress already saved to traderepublic-parsed.json.
+const startIndex = (() => {
+  for (const arg of process.argv.slice(2)) {
+    const m = arg.match(/^--start=(\d+)$/i);
+    if (m) return Math.max(1, parseInt(m[1], 10));
+  }
+  return 1;
+})();
+const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
+
 const defaultQueries = ["IE00B44Z5B48", "IE00BK5BQT80", "IE00BFMXXD54"];
-const cliQueries = process.argv.slice(2).filter(Boolean).map(toIsin).filter(Boolean);
+const cliQueries = positionalArgs.filter(Boolean).map(toIsin).filter(Boolean);
 const csvQueries = loadIsinsFromCsv("etfs.csv");
 const rawQueries =
   cliQueries.length > 0
@@ -100,7 +111,29 @@ const queries = uniqueQueries(rawQueries);
 const results = [];
 const seen = new Set();
 
+// When resuming, load already-saved entries so we don't overwrite them and so
+// the dedup `seen` set knows about rows from earlier queries.
+if (startIndex > 1 && fs.existsSync("traderepublic-parsed.json")) {
+  try {
+    const existing = JSON.parse(fs.readFileSync("traderepublic-parsed.json", "utf8"));
+    if (Array.isArray(existing)) {
+      for (const entry of existing) {
+        results.push(entry);
+        const key = entry?.isin
+          ? `ISIN:${entry.isin}`
+          : entry?.raw
+            ? `RAW:${entry.raw.toUpperCase()}`
+            : null;
+        if (key) seen.add(key);
+      }
+    }
+  } catch {
+    // Ignore parse errors -- treat as a fresh run.
+  }
+}
+
 for (const [queryIndex, query] of queries.entries()) {
+  if (queryIndex + 1 < startIndex) continue;
   console.error(`[${queryIndex + 1}/${queries.length}] ${query}`);
   const url = `https://app.traderepublic.com/browse/fund?q=${encodeURIComponent(query)}`;
   await page.goto(url, { waitUntil: "domcontentloaded" });

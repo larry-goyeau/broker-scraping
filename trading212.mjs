@@ -73,7 +73,18 @@ if (!searchInput) {
 
 const isinToTickers = loadIsinToTickersFromCsv("etfs.csv");
 
-const cliIsins = process.argv.slice(2).filter(Boolean).map(toIsin).filter(Boolean);
+// `--start=N` (1-indexed) lets a run resume from a specific query without
+// throwing away progress already saved to trading212-parsed.json.
+const startIndex = (() => {
+  for (const arg of process.argv.slice(2)) {
+    const m = arg.match(/^--start=(\d+)$/i);
+    if (m) return Math.max(1, parseInt(m[1], 10));
+  }
+  return 1;
+})();
+const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
+
+const cliIsins = positionalArgs.filter(Boolean).map(toIsin).filter(Boolean);
 const defaultIsins = ["IE00B44Z5B48", "IE00BK5BQT80", "IE00BFMXXD54"];
 
 const queries =
@@ -188,7 +199,29 @@ async function scrapeResultsForQuery(q) {
 
 const results = [];
 const seen = new Set();
+
+// When resuming, load already-saved entries so we don't overwrite them and so
+// the dedup `seen` set knows about rows from earlier queries.
+if (startIndex > 1 && fs.existsSync("trading212-parsed.json")) {
+  try {
+    const existing = JSON.parse(fs.readFileSync("trading212-parsed.json", "utf8"));
+    if (Array.isArray(existing)) {
+      for (const entry of existing) {
+        results.push(entry);
+        if (entry?.isin && entry?.ticker) {
+          seen.add(
+            `${entry.isin}:${entry.exchange || ""}:${entry.ticker}`.toUpperCase()
+          );
+        }
+      }
+    }
+  } catch {
+    // Ignore parse errors -- treat as a fresh run.
+  }
+}
+
 for (const [queryIndex, isin] of queries.entries()) {
+  if (queryIndex + 1 < startIndex) continue;
   console.error(`[${queryIndex + 1}/${queries.length}] ${isin}`);
   const expectedTickers = isinToTickers.get(isin) || new Set();
   const foundResults = await scrapeResultsForQuery(isin);

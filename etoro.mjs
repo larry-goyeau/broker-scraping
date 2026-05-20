@@ -153,8 +153,19 @@ if (!page.url().includes("etoro.com")) {
 await page.bringToFront();
 const searchInput = await ensureEtoroSearchInput(page);
 
+// `--start=N` (1-indexed) lets a run resume from a specific query without
+// throwing away progress already saved to etoro-parsed.json.
+const startIndex = (() => {
+  for (const arg of process.argv.slice(2)) {
+    const m = arg.match(/^--start=(\d+)$/i);
+    if (m) return Math.max(1, parseInt(m[1], 10));
+  }
+  return 1;
+})();
+const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
+
 const defaultEtfQueries = ["IE00B44Z5B48", "IE00BK5BQT80", "IE00BFMXXD54"];
-const cliQueries = process.argv.slice(2).filter(Boolean).map(toIsin).filter(Boolean);
+const cliQueries = positionalArgs.filter(Boolean).map(toIsin).filter(Boolean);
 const csvQueries = loadIsinsFromCsv("etfs.csv");
 const rawQueries =
   cliQueries.length > 0
@@ -196,7 +207,29 @@ async function scrapeResultsForQuery(query) {
 const results = [];
 const byKey = new Map();
 
+// When resuming, load already-saved entries so we don't overwrite them and so
+// the dedup `byKey` map knows about rows from earlier queries.
+if (startIndex > 1 && fs.existsSync("etoro-parsed.json")) {
+  try {
+    const existing = JSON.parse(fs.readFileSync("etoro-parsed.json", "utf8"));
+    if (Array.isArray(existing)) {
+      for (const entry of existing) {
+        results.push(entry);
+        const key = entry?.ticker
+          ? `${entry.query}:TICKER:${entry.ticker.toUpperCase()}`
+          : entry?.raw
+            ? `${entry.query}:RAW:${entry.raw.toUpperCase()}`
+            : null;
+        if (key) byKey.set(key, entry);
+      }
+    }
+  } catch {
+    // Ignore parse errors -- treat as a fresh run.
+  }
+}
+
 for (const [queryIndex, query] of queries.entries()) {
+  if (queryIndex + 1 < startIndex) continue;
   console.error(`[${queryIndex + 1}/${queries.length}] ${query}`);
   const foundTexts = await scrapeResultsForQuery(query);
   for (const text of foundTexts) {

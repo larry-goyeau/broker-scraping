@@ -1,3 +1,4 @@
+import sys
 from copy import deepcopy
 from typing import Optional
 import pandas as pd
@@ -67,5 +68,7 @@ if __name__ == "__main__":
     print(export_df.head(50))
     print(f"\nTotal ETFs: {len(df)}")
 
-    # Optional: save to CSV
-    export_df.to_csv("etfs.csv", index=False)
+    # Optional: save to CSV. Output path can be overridden as the first CLI arg
+    # (defaults to etfs.csv).
+    output_path = sys.argv[1] if len(sys.argv) > 1 else "etfs.csv"
+    export_df.to_csv(output_path, index=False)

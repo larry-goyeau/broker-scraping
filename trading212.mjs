@@ -71,10 +71,18 @@ if (!searchInput) {
   );
 }
 
-const isinToTickers = loadIsinToTickersFromCsv("etfs.csv");
+// `--csv=PATH` overrides the default ETF list CSV (defaults to etfs.csv).
+const csvPath = (() => {
+  for (const arg of process.argv.slice(2)) {
+    const m = arg.match(/^--csv=(.+)$/i);
+    if (m) return m[1];
+  }
+  return "etfs.csv";
+})();
+const isinToTickers = loadIsinToTickersFromCsv(csvPath);
 
 // `--start=N` (1-indexed) lets a run resume from a specific query without
-// throwing away progress already saved to trading212-parsed.json.
+// throwing away progress already saved to parsed_json/trading212-parsed.json.
 const startIndex = (() => {
   for (const arg of process.argv.slice(2)) {
     const m = arg.match(/^--start=(\d+)$/i);
@@ -202,9 +210,9 @@ const seen = new Set();
 
 // When resuming, load already-saved entries so we don't overwrite them and so
 // the dedup `seen` set knows about rows from earlier queries.
-if (startIndex > 1 && fs.existsSync("trading212-parsed.json")) {
+if (startIndex > 1 && fs.existsSync("parsed_json/trading212-parsed.json")) {
   try {
-    const existing = JSON.parse(fs.readFileSync("trading212-parsed.json", "utf8"));
+    const existing = JSON.parse(fs.readFileSync("parsed_json/trading212-parsed.json", "utf8"));
     if (Array.isArray(existing)) {
       for (const entry of existing) {
         results.push(entry);
@@ -247,7 +255,8 @@ for (const [queryIndex, isin] of queries.entries()) {
   }
 
   // Persist progress after every query so an interruption keeps prior work.
-  fs.writeFileSync("trading212-parsed.json", JSON.stringify(results, null, 2));
+  fs.mkdirSync("parsed_json", { recursive: true });
+  fs.writeFileSync("parsed_json/trading212-parsed.json", JSON.stringify(results, null, 2));
 }
 
 console.log(JSON.stringify(results, null, 2));

@@ -161,7 +161,7 @@ await page.bringToFront();
 const searchInput = await ensureLightyearSearchInput(page);
 
 // `--start=N` (1-indexed) lets a run resume from a specific query without
-// throwing away progress already saved to lightyear-parsed.json.
+// throwing away progress already saved to parsed_json/lightyear-parsed.json.
 const startIndex = (() => {
   for (const arg of process.argv.slice(2)) {
     const m = arg.match(/^--start=(\d+)$/i);
@@ -173,7 +173,15 @@ const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--
 
 const defaultQueries = ["IE00B44Z5B48", "IE00BK5BQT80", "IE00BFMXXD54"];
 const cliQueries = positionalArgs.filter(Boolean).map(toIsin).filter(Boolean);
-const csvQueries = loadIsinsFromCsv("etfs.csv");
+// `--csv=PATH` overrides the default ETF list CSV (defaults to etfs.csv).
+const csvPath = (() => {
+  for (const arg of process.argv.slice(2)) {
+    const m = arg.match(/^--csv=(.+)$/i);
+    if (m) return m[1];
+  }
+  return "etfs.csv";
+})();
+const csvQueries = loadIsinsFromCsv(csvPath);
 const rawQueries =
   cliQueries.length > 0
     ? cliQueries
@@ -321,9 +329,9 @@ const seen = new Set();
 
 // When resuming, load already-saved entries so we don't overwrite them and so
 // the dedup `seen` set knows about rows from earlier queries.
-if (startIndex > 1 && fs.existsSync("lightyear-parsed.json")) {
+if (startIndex > 1 && fs.existsSync("parsed_json/lightyear-parsed.json")) {
   try {
-    const existing = JSON.parse(fs.readFileSync("lightyear-parsed.json", "utf8"));
+    const existing = JSON.parse(fs.readFileSync("parsed_json/lightyear-parsed.json", "utf8"));
     if (Array.isArray(existing)) {
       for (const entry of existing) {
         results.push(entry);
@@ -357,7 +365,8 @@ for (const [queryIndex, query] of queries.entries()) {
   }
 
   // Persist progress after every query so an interruption keeps prior work.
-  fs.writeFileSync("lightyear-parsed.json", JSON.stringify(results, null, 2));
+  fs.mkdirSync("parsed_json", { recursive: true });
+  fs.writeFileSync("parsed_json/lightyear-parsed.json", JSON.stringify(results, null, 2));
 }
 
 console.log(JSON.stringify(results, null, 2));

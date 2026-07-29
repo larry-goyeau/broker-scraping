@@ -212,7 +212,7 @@ await page.bringToFront();
 const searchInput = await ensureSearchInput(page);
 
 // `--start=N` (1-indexed) lets a run resume from a specific query without
-// throwing away progress already saved to tastytrade-parsed.json.
+// throwing away progress already saved to parsed_json/tastytrade-parsed.json.
 const startIndex = (() => {
   for (const arg of process.argv.slice(2)) {
     const m = arg.match(/^--start=(\d+)$/i);
@@ -224,8 +224,16 @@ const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--
 
 const defaultQueries = ["ACWI", "VHT", "VWRL"];
 const cliQueries = positionalArgs.map(normalizeTicker).filter(Boolean);
-const csvQueries = loadTickersFromCsv("etfs.csv");
-const tickerToIsin = loadTickerToIsinFromCsv("etfs.csv");
+// `--csv=PATH` overrides the default ETF list CSV (defaults to etfs.csv).
+const csvPath = (() => {
+  for (const arg of process.argv.slice(2)) {
+    const m = arg.match(/^--csv=(.+)$/i);
+    if (m) return m[1];
+  }
+  return "etfs.csv";
+})();
+const csvQueries = loadTickersFromCsv(csvPath);
+const tickerToIsin = loadTickerToIsinFromCsv(csvPath);
 const rawQueries =
   cliQueries.length > 0 ? cliQueries : csvQueries.length > 0 ? csvQueries : defaultQueries;
 const queries = uniqueQueries(rawQueries);
@@ -235,9 +243,9 @@ const byKey = new Map();
 
 // When resuming, load already-saved entries so we don't overwrite them and so
 // the dedup `byKey` map knows about rows from earlier queries.
-if (startIndex > 1 && fs.existsSync("tastytrade-parsed.json")) {
+if (startIndex > 1 && fs.existsSync("parsed_json/tastytrade-parsed.json")) {
   try {
-    const existing = JSON.parse(fs.readFileSync("tastytrade-parsed.json", "utf8"));
+    const existing = JSON.parse(fs.readFileSync("parsed_json/tastytrade-parsed.json", "utf8"));
     if (Array.isArray(existing)) {
       for (const entry of existing) {
         results.push(entry);
@@ -283,7 +291,8 @@ for (const [queryIndex, query] of queries.entries()) {
   }
 
   // Persist progress after every query so an interruption keeps prior work.
-  fs.writeFileSync("tastytrade-parsed.json", JSON.stringify(results, null, 2));
+  fs.mkdirSync("parsed_json", { recursive: true });
+  fs.writeFileSync("parsed_json/tastytrade-parsed.json", JSON.stringify(results, null, 2));
 }
 
 console.log(JSON.stringify(results, null, 2));

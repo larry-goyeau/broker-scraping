@@ -323,7 +323,6 @@ for (const [queryIndex, query] of queries.entries()) {
       query: queryTicker,
       ticker: parsed.ticker,
       name: parsed.name,
-      exchange: "OANDA",
       type: parsed.type,
       isin,
       raw: parsed.raw,

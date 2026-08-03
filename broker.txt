@@ -1,0 +1,7 @@
+Swissquote
+MEXEM
+alpaca
+tradezero
+tradier
+BGL BNP Paribas
+choicetrade

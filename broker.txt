@@ -8,7 +8,6 @@ choicetrade
 BUX
 bunq
 robinhood
-moomoo
 Lightspeed
 cobra trading
 Siebert Financial
@@ -35,3 +34,8 @@ ilirika
 Sarwa
 Century Financial
 Thndr
+Tiger Brokers AU
+Webull SG
+CGS International
+Endowus
+Syfe

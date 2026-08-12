@@ -1,5 +1,4 @@
 Swissquote
-MEXEM
 alpaca
 tradezero
 tradier
@@ -40,3 +39,4 @@ CGS International
 Endowus
 Syfe
 Rakuten Trade
+WHSelfinvest

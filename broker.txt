@@ -1,31 +1,19 @@
 Swissquote
 alpaca
 tradezero
-tradier
-BGL BNP Paribas
 choicetrade
 BUX
 bunq
 robinhood
 Lightspeed
 cobra trading
-Siebert Financial
 questrade
 freetrade
 withplum
-sidekickmoney
-raisin
 hello bank
-Yuh
-neon invest
-Alpian
-findependent
 Dukascopy Bank
 fortuneo
 bforbank
-linxea
-fideuramdirect
-Piraeus Securities
 seb
 Investimental
 Elana Trading
@@ -40,3 +28,4 @@ Endowus
 Syfe
 Rakuten Trade
 WHSelfinvest
+Exante

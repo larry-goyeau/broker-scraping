@@ -1,0 +1,674 @@
+Interactive Brokers	US	Broker	Global ETFs / ETPs	Scraped
+Alpaca	US	Broker	US ETFs / ETNs	Scraped
+Firstrade	US	Broker	US ETFs / ETNs	Scraped
+SogoTrade	US	Broker	US ETFs / ETNs	Scraped
+tastytrade	US	Broker	US ETFs / ETNs	Scraped
+TradeStation	US	Broker	US ETFs / ETNs	Scraped
+Tradier	US	Broker	US ETFs / ETNs	In broker.txt
+TradeZero	US	Broker	US ETFs / ETNs	In broker.txt
+ChoiceTrade	US	Broker	US ETFs / ETNs	In broker.txt
+Charles Schwab	US	Broker	US ETFs / ETNs	Not covered
+Fidelity Investments	US	Broker	US ETFs / ETNs	Not covered
+Vanguard Brokerage	US	Broker	US ETFs / ETNs	Not covered
+E*TRADE (Morgan Stanley)	US	Broker	US ETFs / ETNs	Not covered
+Merrill Edge	US	Bank	US ETFs / ETNs	Not covered
+J.P. Morgan Self-Directed	US	Bank	US ETFs / ETNs	Not covered
+WellsTrade	US	Bank	US ETFs / ETNs	Not covered
+Ally Invest	US	Broker	US ETFs / ETNs	Not covered
+Axos Self-Directed Trading	US	Bank	US ETFs / ETNs	Not covered
+Robinhood	US	Neobroker	US ETFs / ETNs	Not covered
+Webull	US	Neobroker	US ETFs / ETNs	Not covered
+moomoo (Futu US)	US	Neobroker	US ETFs / ETNs	Not covered
+SoFi Invest	US	Neobroker	US ETFs / ETNs	Not covered
+Public.com	US	Neobroker	US ETFs / ETNs	Not covered
+M1 Finance	US	Neobroker	US ETFs / ETNs	Not covered
+Cash App Investing	US	Neobroker	US ETFs / ETNs	Not covered
+Stash	US	Neobroker	US ETFs / ETNs	Not covered
+Fennel	US	Neobroker	US ETFs / ETNs	Not covered
+eToro US	US	Neobroker	US ETFs / ETNs	Not covered
+Zacks Trade	US	Broker	Global ETFs / ETPs	Not covered
+Lightspeed Financial	US	Broker	US ETFs / ETNs	Not covered
+Cobra Trading	US	Broker	US ETFs / ETNs	Not covered
+CenterPoint Securities	US	Broker	US ETFs / ETNs	Not covered
+Siebert Financial	US	Broker	US ETFs / ETNs	Not covered
+Betterment	US	Robo	ETF model portfolios	Not covered
+Wealthfront	US	Robo	ETF model portfolios	Not covered
+Acorns	US	Robo	ETF model portfolios	Not covered
+Citi Self Invest	US	Bank	US ETFs / ETNs	Not covered
+U.S. Bancorp Advisors Self-Directed Investing	US	Bank	US ETFs / ETNs	Not covered
+TIAA Brokerage	US	Broker	US ETFs / ETNs	Not covered
+eOption	US	Broker	US ETFs / ETNs	Not covered
+Stockpile	US	Neobroker	US ETFs / ETNs	Not covered
+Plynk	US	Neobroker	US ETFs / ETNs	Not covered
+TradeUP	US	Neobroker	US ETFs / ETNs	Not covered
+Hapi	US	Neobroker	US ETFs / ETNs	Not covered
+Empower	US	Robo	ETF model portfolios	Not covered
+Questrade	CA	Broker	Local + US ETFs	Not covered
+Wealthsimple	CA	Neobroker	Local + US ETFs	Not covered
+Qtrade Direct Investing	CA	Broker	Local + US ETFs	Not covered
+TD Direct Investing	CA	Bank	Local + US ETFs	Not covered
+RBC Direct Investing	CA	Bank	Local + US ETFs	Not covered
+BMO InvestorLine	CA	Bank	Local + US ETFs	Not covered
+Scotia iTRADE	CA	Bank	Local + US ETFs	Not covered
+CIBC Investor's Edge	CA	Bank	Local + US ETFs	Not covered
+National Bank Direct Brokerage	CA	Bank	Local + US ETFs	Not covered
+Desjardins Online Brokerage	CA	Bank	Local + US ETFs	Not covered
+CI Direct Investing	CA	Robo	ETF model portfolios	Not covered
+CI Direct Trading	CA	Broker	Local + US ETFs	Not covered
+Justwealth	CA	Robo	ETF model portfolios	Not covered
+ModernAdvisor	CA	Robo	ETF model portfolios	Not covered
+Nest Wealth	CA	Robo	ETF model portfolios	Not covered
+Intelligent Investing	CA	Robo	ETF model portfolios	Not covered
+CMC Markets Canada	CA	CFD	ETF CFDs	Not covered
+FOREX.com Canada	CA	CFD	ETF CFDs	Not covered
+IG	UK	Broker	Global ETFs / ETPs	Scraped
+Trading 212	UK	Neobroker	UCITS ETFs / ETCs	Scraped
+Lightyear	UK	Neobroker	UCITS ETFs / ETCs	Scraped
+Revolut	UK	Neobroker	UCITS ETFs / ETCs	Scraped
+Davy Select	IE	Broker	UCITS ETFs / ETCs	Scraped
+Hargreaves Lansdown	UK	Broker	UCITS ETFs / ETCs	Not covered
+AJ Bell	UK	Broker	UCITS ETFs / ETCs	Not covered
+AJ Bell Dodl	UK	Neobroker	UCITS ETFs / ETCs	Not covered
+interactive investor	UK	Broker	UCITS ETFs / ETCs	Not covered
+Freetrade	UK	Neobroker	UCITS ETFs / ETCs	Not covered
+InvestEngine	UK	Neobroker	UCITS ETFs / ETCs	Not covered
+Vanguard Investor UK	UK	Broker	UCITS ETFs / ETCs	Not covered
+Fidelity Personal Investing UK	UK	Broker	UCITS ETFs / ETCs	Not covered
+Charles Stanley Direct	UK	Broker	UCITS ETFs / ETCs	Not covered
+Bestinvest	UK	Broker	UCITS ETFs / ETCs	Not covered
+Willis Owen	UK	Broker	UCITS ETFs / ETCs	Not covered
+iWeb Share Dealing	UK	Bank	UCITS ETFs / ETCs	Not covered
+Halifax Share Dealing	UK	Bank	UCITS ETFs / ETCs	Not covered
+Lloyds Direct Investments	UK	Bank	UCITS ETFs / ETCs	Not covered
+Barclays Smart Investor	UK	Bank	UCITS ETFs / ETCs	Not covered
+HSBC InvestDirect UK	UK	Bank	UCITS ETFs / ETCs	Not covered
+NatWest Invest	UK	Bank	ETF model portfolios	Not covered
+Santander Investment Hub	UK	Bank	UCITS ETFs / ETCs	Not covered
+Webull UK	UK	Neobroker	UCITS ETFs / ETCs	Not covered
+Moneybox	UK	Neobroker	UCITS ETFs / ETCs	Not covered
+Plum	UK	Neobroker	UCITS ETFs / ETCs	Not covered
+Wombat Invest	UK	Neobroker	UCITS ETFs / ETCs	Not covered
+Chip	UK	Neobroker	UCITS ETFs / ETCs	Not covered
+Prosper	UK	Neobroker	UCITS ETFs / ETCs	Not covered
+Sidekick	UK	Neobroker	UCITS ETFs / ETCs	Not covered
+Nutmeg	UK	Robo	ETF model portfolios	Not covered
+Moneyfarm	UK	Robo	ETF model portfolios	Not covered
+Wealthify	UK	Robo	ETF model portfolios	Not covered
+Wahed	UK	Robo	ETF model portfolios	Not covered
+Spreadex	UK	CFD	ETF CFDs	Not covered
+Goodbody	IE	Broker	UCITS ETFs / ETCs	Not covered
+Cantor Fitzgerald Ireland	IE	Broker	UCITS ETFs / ETCs	Not covered
+Moneycube	IE	Robo	ETF model portfolios	Not covered
+Trade Republic	DE	Neobroker	UCITS ETFs / ETCs	Scraped
+CapTrader	DE	Broker	Global ETFs / ETPs	Scraped
+Swissquote	CH	Bank	Global ETFs / ETPs	In broker.txt
+Scalable Capital	DE	Neobroker	UCITS ETFs / ETCs	Not covered
+comdirect	DE	Bank	UCITS ETFs / ETCs	Not covered
+ING Deutschland	DE	Bank	UCITS ETFs / ETCs	Not covered
+DKB Broker	DE	Bank	UCITS ETFs / ETCs	Not covered
+Consorsbank	DE	Bank	UCITS ETFs / ETCs	Not covered
+flatex	DE	Broker	UCITS ETFs / ETCs	Not covered
+N26	DE	Bank	UCITS ETFs / ETCs	Not covered
+Commerzbank	DE	Bank	UCITS ETFs / ETCs	Not covered
+1822direkt	DE	Bank	UCITS ETFs / ETCs	Not covered
+S Broker (Sparkasse)	DE	Bank	UCITS ETFs / ETCs	Not covered
+maxblue (Deutsche Bank)	DE	Bank	UCITS ETFs / ETCs	Not covered
+Smartbroker+	DE	Neobroker	UCITS ETFs / ETCs	Not covered
+justTRADE	DE	Neobroker	UCITS ETFs / ETCs	Not covered
+finanzen.net zero	DE	Neobroker	UCITS ETFs / ETCs	Not covered
+Traders Place	DE	Neobroker	UCITS ETFs / ETCs	Not covered
+Targobank	DE	Bank	UCITS ETFs / ETCs	Not covered
+Postbank	DE	Bank	UCITS ETFs / ETCs	Not covered
+GENO Broker	DE	Bank	UCITS ETFs / ETCs	Not covered
+LYNX Broker	DE	Broker	Global ETFs / ETPs	Not covered
+BANX Broker	DE	Broker	Global ETFs / ETPs	Not covered
+Estably	DE	Broker	Global ETFs / ETPs	Not covered
+quirion	DE	Robo	ETF model portfolios	Not covered
+growney	DE	Robo	ETF model portfolios	Not covered
+Raisin Vermögensverwaltung	DE	Robo	ETF model portfolios	Not covered
+OSKAR	DE	Robo	ETF model portfolios	Not covered
+VisualVest	DE	Robo	ETF model portfolios	Not covered
+Ginmon	DE	Robo	ETF model portfolios	Not covered
+Whitebox	DE	Robo	ETF model portfolios	Not covered
+LIQID	DE	Robo	ETF model portfolios	Not covered
+Bitpanda	AT	Neobroker	UCITS ETFs / ETCs	Not covered
+Erste Bank George	AT	Bank	UCITS ETFs / ETCs	Not covered
+easybank	AT	Bank	UCITS ETFs / ETCs	Not covered
+DADAT Bank	AT	Bank	UCITS ETFs / ETCs	Not covered
+Raiffeisen Mein ELBA	AT	Bank	UCITS ETFs / ETCs	Not covered
+BankDirekt.at	AT	Bank	UCITS ETFs / ETCs	Not covered
+Bank Austria	AT	Bank	UCITS ETFs / ETCs	Not covered
+BAWAG	AT	Bank	UCITS ETFs / ETCs	Not covered
+PostFinance	CH	Bank	Global ETFs / ETPs	Not covered
+UBS key4 / e-banking	CH	Bank	Global ETFs / ETPs	Not covered
+Cornèrtrader	CH	Bank	Global ETFs / ETPs	Not covered
+Migros Bank	CH	Bank	Global ETFs / ETPs	Not covered
+Zürcher Kantonalbank / frankly	CH	Bank	ETF model portfolios	Not covered
+Yuh	CH	Neobroker	Global ETFs / ETPs	Not covered
+neon invest	CH	Neobroker	Global ETFs / ETPs	Not covered
+Alpian	CH	Bank	Global ETFs / ETPs	Not covered
+Selma Finance	CH	Robo	ETF model portfolios	Not covered
+True Wealth	CH	Robo	ETF model portfolios	Not covered
+findependent	CH	Robo	ETF model portfolios	Not covered
+VIAC	CH	Robo	ETF model portfolios	Not covered
+Raiffeisen Switzerland	CH	Bank	Global ETFs / ETPs	Not covered
+clevercircles	CH	Robo	ETF model portfolios	Not covered
+Dukascopy Bank	CH	CFD	ETF CFDs	Not covered
+DEGIRO	NL	Broker	UCITS ETFs / ETCs	Scraped
+BUX	NL	Neobroker	UCITS ETFs / ETCs	In broker.txt
+bunq	NL	Neobroker	UCITS ETFs / ETCs	In broker.txt
+BGL BNP Paribas	LU	Bank	UCITS ETFs / ETCs	In broker.txt
+ING Nederland	NL	Bank	UCITS ETFs / ETCs	Not covered
+Rabobank	NL	Bank	UCITS ETFs / ETCs	Not covered
+ABN AMRO	NL	Bank	UCITS ETFs / ETCs	Not covered
+SemmieWealth	NL	Robo	ETF model portfolios	Not covered
+Meesman	NL	Robo	ETF model portfolios	Not covered
+LYNX Nederland	NL	Broker	Global ETFs / ETPs	Not covered
+Peaks	NL	Robo	ETF model portfolios	Not covered
+Easybroker	NL	Broker	Global ETFs / ETPs	Not covered
+Bolero (KBC)	BE	Bank	UCITS ETFs / ETCs	Not covered
+Keytrade Bank	BE	Bank	UCITS ETFs / ETCs	Not covered
+MeDirect	BE	Bank	UCITS ETFs / ETCs	Not covered
+Belfius	BE	Bank	UCITS ETFs / ETCs	Not covered
+BNP Paribas Fortis	BE	Bank	UCITS ETFs / ETCs	Not covered
+Argenta	BE	Bank	UCITS ETFs / ETCs	Not covered
+Re=Bel	BE	Neobroker	UCITS ETFs / ETCs	Not covered
+ING Self Invest	BE	Bank	UCITS ETFs / ETCs	Not covered
+Curvo	BE	Robo	ETF model portfolios	Not covered
+Easyvest	BE	Robo	ETF model portfolios	Not covered
+Swissquote Bank Europe	LU	Bank	Global ETFs / ETPs	Not covered
+Spuerkeess (S-Net Invest)	LU	Bank	UCITS ETFs / ETCs	Not covered
+Banque de Luxembourg	LU	Bank	UCITS ETFs / ETCs	Not covered
+Banque Raiffeisen	LU	Bank	UCITS ETFs / ETCs	Not covered
+Banque Internationale à Luxembourg	LU	Bank	Global ETFs / ETPs	Not covered
+Birdee	LU	Robo	ETF model portfolios	Not covered
+BoursoBank (Boursorama)	FR	Bank	UCITS ETFs / ETCs	Not covered
+Fortuneo	FR	Bank	UCITS ETFs / ETCs	Not covered
+Bourse Direct	FR	Broker	UCITS ETFs / ETCs	Not covered
+BforBank	FR	Bank	UCITS ETFs / ETCs	Not covered
+Hello bank! France	FR	Bank	UCITS ETFs / ETCs	Not covered
+Crédit Agricole Invest Store	FR	Bank	UCITS ETFs / ETCs	Not covered
+LCL Bourse	FR	Bank	UCITS ETFs / ETCs	Not covered
+Société Générale Bourse	FR	Bank	UCITS ETFs / ETCs	Not covered
+BNP Paribas Bourse	FR	Bank	UCITS ETFs / ETCs	Not covered
+Saxo France	FR	Bank	Global ETFs / ETPs	Not covered
+ProRealTime Trading	FR	Broker	UCITS ETFs / ETCs	Not covered
+Yomoni	FR	Robo	ETF model portfolios	Not covered
+Nalo	FR	Robo	ETF model portfolios	Not covered
+Ramify	FR	Robo	ETF model portfolios	Not covered
+Linxea	FR	Robo	ETF model portfolios	Not covered
+Goodvest	FR	Robo	ETF model portfolios	Not covered
+Placement-direct	FR	Robo	ETF model portfolios	Not covered
+EasyBourse	FR	Broker	UCITS ETFs / ETCs	Not covered
+Mon Petit Placement	FR	Robo	ETF model portfolios	Not covered
+FinecoBank	IT	Bank	UCITS ETFs / ETCs	Not covered
+Directa SIM	IT	Broker	UCITS ETFs / ETCs	Not covered
+Banca Sella	IT	Bank	UCITS ETFs / ETCs	Not covered
+Webank (Banco BPM)	IT	Bank	UCITS ETFs / ETCs	Not covered
+Intesa Sanpaolo	IT	Bank	UCITS ETFs / ETCs	Not covered
+Fideuram Direct	IT	Bank	UCITS ETFs / ETCs	Not covered
+Widiba	IT	Bank	UCITS ETFs / ETCs	Not covered
+Mediobanca Premier (CheBanca!)	IT	Bank	UCITS ETFs / ETCs	Not covered
+BG Saxo SIM	IT	Broker	Global ETFs / ETPs	Not covered
+Banca Generali	IT	Bank	UCITS ETFs / ETCs	Not covered
+BancoPosta	IT	Bank	UCITS ETFs / ETCs	Not covered
+UniCredit	IT	Bank	Global ETFs / ETPs	Not covered
+BPER Banca	IT	Bank	UCITS ETFs / ETCs	Not covered
+Fürstenberg Euclidea	IT	Robo	ETF model portfolios	Not covered
+Renta 4 Banco	ES	Bank	UCITS ETFs / ETCs	Not covered
+Bankinter	ES	Bank	UCITS ETFs / ETCs	Not covered
+BBVA Trader Bolsa	ES	Bank	UCITS ETFs / ETCs	Not covered
+CaixaBank Bolsa	ES	Bank	UCITS ETFs / ETCs	Not covered
+Openbank	ES	Bank	UCITS ETFs / ETCs	Not covered
+MyInvestor	ES	Neobroker	UCITS ETFs / ETCs	Not covered
+Singular Bank (SelfBank)	ES	Bank	UCITS ETFs / ETCs	Not covered
+ActivoTrade	ES	Broker	UCITS ETFs / ETCs	Not covered
+Indexa Capital	ES	Robo	ETF model portfolios	Not covered
+inbestMe	ES	Robo	ETF model portfolios	Not covered
+Finizens	ES	Robo	ETF model portfolios	Not covered
+Banco Santander	ES	Bank	UCITS ETFs / ETCs	Not covered
+ING Broker NARANJA	ES	Bank	Global ETFs / ETPs	Not covered
+Banco Sabadell	ES	Bank	Global ETFs / ETPs	Not covered
+Banco Best	PT	Bank	UCITS ETFs / ETCs	Not covered
+Banco Invest	PT	Bank	UCITS ETFs / ETCs	Not covered
+ActivoBank	PT	Bank	UCITS ETFs / ETCs	Not covered
+Millennium BCP	PT	Bank	UCITS ETFs / ETCs	Not covered
+CaixaDirecta Invest	PT	Bank	UCITS ETFs / ETCs	Not covered
+GoBulling (Banco Carregosa)	PT	Bank	UCITS ETFs / ETCs	Not covered
+Banco BiG	PT	Bank	Global ETFs / ETPs	Not covered
+BPI Broker	PT	Bank	Global ETFs / ETPs	Not covered
+Bankinter Broker	PT	Bank	UCITS ETFs / ETCs	Not covered
+Santander ONeBroker	PT	Bank	Global ETFs / ETPs	Not covered
+Eurobank Equities	GR	Broker	UCITS ETFs / ETCs	Not covered
+Alpha Finance	GR	Broker	UCITS ETFs / ETCs	Not covered
+Piraeus Securities	GR	Broker	UCITS ETFs / ETCs + ETF model portfolios	Not covered
+National Securities (NBG)	GR	Broker	UCITS ETFs / ETCs	Not covered
+Euroxx Securities	GR	Broker	Global ETFs / ETPs	Not covered
+BETA Securities	GR	Broker	Global ETFs / ETPs	Not covered
+HellasFin	GR	Robo	ETF model portfolios	Not covered
+Saxo Bank	DK	Bank	Global ETFs / ETPs	Scraped
+Nordnet	SE	Broker	UCITS ETFs / ETCs	Not covered
+Avanza	SE	Broker	UCITS ETFs / ETCs	Not covered
+SEB	SE	Bank	UCITS ETFs / ETCs	Not covered
+Swedbank	SE	Bank	UCITS ETFs / ETCs	Not covered
+Handelsbanken	SE	Bank	UCITS ETFs / ETCs	Not covered
+Länsförsäkringar	SE	Bank	UCITS ETFs / ETCs	Not covered
+Levler	SE	Neobroker	UCITS ETFs / ETCs	Not covered
+Montrose Bank	SE	Bank	UCITS ETFs / ETCs	Not covered
+Lysa	SE	Robo	ETF model portfolios	Not covered
+Opti	SE	Robo	ETF model portfolios	Not covered
+DNB	NO	Bank	UCITS ETFs / ETCs	Not covered
+Pareto Securities	NO	Broker	UCITS ETFs / ETCs	Not covered
+Kron	NO	Robo	ETF model portfolios	Not covered
+SpareBank 1	NO	Bank	UCITS ETFs / ETCs	Not covered
+Danske Bank	DK	Bank	UCITS ETFs / ETCs	Not covered
+Jyske Bank	DK	Bank	UCITS ETFs / ETCs	Not covered
+Sydbank	DK	Bank	UCITS ETFs / ETCs	Not covered
+Lunar Invest	DK	Neobroker	UCITS ETFs / ETCs	Not covered
+Nord.investments	DK	Robo	ETF model portfolios	Not covered
+Norm Invest	DK	Robo	ETF model portfolios	Not covered
+Nykredit	DK	Bank	UCITS ETFs / ETCs	Not covered
+OP Ryhmä	FI	Bank	UCITS ETFs / ETCs	Not covered
+S-Pankki	FI	Bank	UCITS ETFs / ETCs	Not covered
+Mandatum Trader	FI	Bank	UCITS ETFs / ETCs	Not covered
+Aktia	FI	Bank	UCITS ETFs / ETCs	Not covered
+Nordea	FI	Bank	Global ETFs / ETPs	Not covered
+Arion banki	IS	Bank	Local-market ETFs	Not covered
+Landsbankinn	IS	Bank	Local-market ETFs	Not covered
+XTB	PL	Broker	UCITS ETFs / ETCs	Scraped
+Bossa (DM BOŚ)	PL	Broker	UCITS ETFs / ETCs	Not covered
+mBank eMakler	PL	Bank	UCITS ETFs / ETCs	Not covered
+Santander Biuro Maklerskie	PL	Bank	UCITS ETFs / ETCs	Not covered
+PKO BP Supermakler	PL	Bank	UCITS ETFs / ETCs	Not covered
+Pekao Biuro Maklerskie	PL	Bank	UCITS ETFs / ETCs	Not covered
+Noble Securities	PL	Broker	UCITS ETFs / ETCs	Not covered
+Alior Bank Biuro Maklerskie	PL	Bank	UCITS ETFs / ETCs	Not covered
+ING Biuro Maklerskie	PL	Bank	Local-market ETFs	Not covered
+BNP Paribas Biuro Maklerskie	PL	Bank	Global ETFs / ETPs	Not covered
+Trigon Dom Maklerski	PL	Broker	Local-market ETFs	Not covered
+Fio banka e-Broker	CZ	Bank	UCITS ETFs / ETCs	Not covered
+Patria Finance	CZ	Broker	UCITS ETFs / ETCs	Not covered
+Portu	CZ	Robo	ETF model portfolios	Not covered
+Česká spořitelna	CZ	Bank	Global ETFs / ETPs	Not covered
+Direct Fondee	CZ	Robo	ETF model portfolios	Not covered
+Finax	SK	Robo	ETF model portfolios	Not covered
+Slovenská sporiteľňa	SK	Bank	UCITS ETFs / ETCs	Not covered
+Erste Befektetési	HU	Broker	UCITS ETFs / ETCs	Not covered
+OTP eBROKER	HU	Bank	UCITS ETFs / ETCs	Not covered
+K&H Értékpapír	HU	Broker	Global ETFs / ETPs	Not covered
+Concorde	HU	Broker	UCITS ETFs / ETCs	Not covered
+Equilor	HU	Broker	UCITS ETFs / ETCs	Not covered
+MBH Befektetési Bank	HU	Bank	Global ETFs / ETPs + ETF CFDs	Not covered
+Raiffeisen Online Befektetés	HU	Bank	Global ETFs / ETPs	Not covered
+CIB eBroker	HU	Bank	Global ETFs / ETPs	Not covered
+BT Trade (Banca Transilvania)	RO	Bank	UCITS ETFs / ETCs	Not covered
+Tradeville	RO	Broker	UCITS ETFs / ETCs	Not covered
+Investimental	RO	Broker	UCITS ETFs / ETCs	Not covered
+Goldring	RO	Broker	Local-market ETFs	Not covered
+BRK Financial Group	RO	Broker	Global ETFs / ETPs + ETF CFDs	Not covered
+Swiss Capital	RO	Broker	Global ETFs / ETPs	Not covered
+Prime Transaction	RO	Broker	Local-market ETFs	Not covered
+Elana Trading	BG	Broker	UCITS ETFs / ETCs	Not covered
+Karoll	BG	Broker	UCITS ETFs / ETCs	Not covered
+BenchMark Finance	BG	Broker	UCITS ETFs / ETCs	Not covered
+EuroFinance	BG	Broker	UCITS ETFs / ETCs	Not covered
+Deltastock	BG	CFD	ETF CFDs	Not covered
+InterCapital	HR	Broker	UCITS ETFs / ETCs	Not covered
+Zagrebačka banka	HR	Bank	Local-market ETFs	Not covered
+Agram Brokeri	HR	Broker	Local-market ETFs	Not covered
+Erste Bank Croatia	HR	Bank	Global ETFs / ETPs	Not covered
+Genius by InterCapital	HR	Robo	ETF model portfolios	Not covered
+NLB Banka / NLB Trading	SI	Bank	Global ETFs / ETPs	Not covered
+Ilirika	SI	Broker	UCITS ETFs / ETCs	Not covered
+Optimtrader	SI	Broker	Global ETFs / ETPs	Not covered
+TradeWin24	RS	Broker	Global ETFs / ETPs	Not covered
+ILIRIKA Investments	RS	Broker	Global ETFs / ETPs	Not covered
+Advantis Broker	BA	Broker	Global ETFs / ETPs	Not covered
+CKB Bank	ME	Bank	Global ETFs / ETPs	Not covered
+Universal Capital Bank	ME	Bank	Global ETFs / ETPs	Not covered
+BKT Smart Invest	XK	Bank	Global ETFs / ETPs + ETF CFDs	Not covered
+LHV Pank	EE	Bank	UCITS ETFs / ETCs	Not covered
+Luminor Investor	EE	Bank	UCITS ETFs / ETCs	Not covered
+Swedbank Baltics	LV	Bank	UCITS ETFs / ETCs	Not covered
+SEB Baltics	LT	Bank	UCITS ETFs / ETCs	Not covered
+INDEXO	LV	Robo	ETF model portfolios	Not covered
+Citadele C Trade	LV	Bank	UCITS ETFs / ETCs	Not covered
+BluOr Bank	LV	Bank	Global ETFs / ETPs	Not covered
+Artea Bank	LT	Bank	Global ETFs / ETPs	Not covered
+Admirals	CY	Broker	Global ETFs / ETPs + ETF CFDs	Not covered
+CISCO	CY	Broker	Global ETFs / ETPs	Not covered
+Bank of Cyprus	CY	Bank	Global ETFs / ETPs	Not covered
+Moneybase	MT	Neobroker	Global ETFs / ETPs	Not covered
+MeDirect Bank Malta	MT	Bank	UCITS ETFs / ETCs	Not covered
+Sarwa	AE	Neobroker	US ETFs + ETF model portfolios	Not covered
+Baraka	AE	Neobroker	US ETFs / ETNs	Not covered
+Emirates NBD Securities	AE	Bank	Local + US ETFs	Not covered
+ADCB Securities	AE	Bank	Local-market ETFs	Not covered
+FAB Securities	AE	Bank	Local-market ETFs	Not covered
+Century Financial	AE	Broker	Global ETFs / ETPs	Not covered
+StashAway MENA	AE	Robo	ETF model portfolios	Not covered
+Wio Invest	AE	Bank	Global ETFs / ETPs	Not covered
+Mashreq US Stocks & ETFs	AE	Bank	US ETFs / ETNs	Not covered
+Wahed Invest UAE	AE	Robo	ETF model portfolios	Not covered
+Derayah Financial	SA	Broker	Local + US ETFs	Not covered
+SNB Capital	SA	Bank	Local-market ETFs	Not covered
+Al Rajhi Capital	SA	Bank	Local-market ETFs	Not covered
+Riyad Capital	SA	Bank	Local-market ETFs	Not covered
+Sahm Capital	SA	Neobroker	Local + US ETFs	Not covered
+Tamra Capital	SA	Robo	ETF model portfolios	Not covered
+Abyan Capital	SA	Robo	ETF model portfolios	Not covered
+Drahim	SA	Robo	ETF model portfolios	Not covered
+Alinma Investment	SA	Broker	Local-market ETFs	Not covered
+SAB Invest	SA	Bank	Local-market ETFs	Not covered
+ANB Capital	SA	Bank	Global ETFs / ETPs	Not covered
+QNB Financial Services	QA	Bank	Local-market ETFs	Not covered
+The Group Securities	QA	Broker	Local-market ETFs	Not covered
+Dlala Brokerage	QA	Broker	Local-market ETFs	Not covered
+Commercial Bank Financial Services	QA	Bank	Local-market ETFs	Not covered
+NBK Capital	KW	Bank	Local-market ETFs	Not covered
+National Investments Company / NICTRADE	KW	Broker	Global ETFs / ETPs	Not covered
+SICO	BH	Bank	Local-market ETFs	Not covered
+Mubasher Capital Bahrain	BH	Broker	Global ETFs / ETPs	Not covered
+Meitav Trade	IL	Broker	Local + US ETFs	Not covered
+IBI Trade	IL	Broker	Local + US ETFs	Not covered
+Psagot Trade	IL	Broker	Local + US ETFs	Not covered
+Excellence Trade	IL	Broker	Local + US ETFs	Not covered
+Bank Hapoalim	IL	Bank	Local + US ETFs	Not covered
+Bank Leumi	IL	Bank	Local + US ETFs	Not covered
+Blink	IL	Neobroker	Local + US ETFs	Not covered
+Altshuler Shaham Trade	IL	Broker	Local + US ETFs	Not covered
+CFI Jordan	JO	CFD	ETF CFDs	Not covered
+Midas	TR	Neobroker	Local + US ETFs	Not covered
+İş Yatırım TradeMaster	TR	Broker	Local + US ETFs	Not covered
+Garanti BBVA Yatırım	TR	Bank	Local-market ETFs	Not covered
+Gedik Yatırım	TR	Broker	Local-market ETFs	Not covered
+QNB Invest	TR	Broker	Local-market ETFs	Not covered
+Ak Yatırım	TR	Broker	Local-market ETFs	Not covered
+EasyEquities	ZA	Neobroker	Local + US ETFs	Scraped
+Standard Bank Online Share Trading	ZA	Bank	Global ETFs / ETPs	Not covered
+FNB Share Investing	ZA	Bank	Local-market ETFs	Not covered
+Absa Stockbrokers	ZA	Bank	Local-market ETFs	Not covered
+Nedbank Online Trading	ZA	Bank	Local-market ETFs	Not covered
+PSG Wealth Online	ZA	Broker	Local-market ETFs	Not covered
+Otto1890 Securities	ZA	Broker	Local-market ETFs	Not covered
+Investec Online	ZA	Bank	Global ETFs / ETPs	Not covered
+SatrixNOW	ZA	Neobroker	Local-market ETFs	Not covered
+Sygnia Alchemy	ZA	Robo	Local-market ETFs	Not covered
+10X Investments	ZA	Robo	ETF model portfolios	Not covered
+Sharenet Securities	ZA	Broker	Global ETFs / ETPs	Not covered
+Franc	ZA	Robo	ETF model portfolios	Not covered
+BROKSTOCK	ZA	CFD	ETF CFDs	Not covered
+Bamboo	NG	Neobroker	Local + US ETFs	Not covered
+Trove Finance	NG	Neobroker	US ETFs / ETNs	Not covered
+Hisa Nigeria (formerly Chaka)	NG	Neobroker	Local + US ETFs	Not covered
+Risevest	NG	Robo	ETF model portfolios	Not covered
+Stanbic IBTC Stockbrokers	NG	Bank	Local-market ETFs	Not covered
+Meristem Securities / MeriTrade	NG	Broker	Local-market ETFs	Not covered
+Ndovu	KE	Robo	ETF model portfolios	Not covered
+Hisa	KE	Neobroker	Local + US ETFs	Not covered
+Standard Investment Bank	KE	Broker	Local-market ETFs	Not covered
+AIB-AXYS Africa	KE	Broker	Global ETFs / ETPs	Not covered
+Thndr	EG	Neobroker	Local + US ETFs	Not covered
+EFG Hermes ONE	EG	Broker	Local-market ETFs	Not covered
+CI Capital	EG	Broker	Local-market ETFs	Not covered
+Beltone Securities	EG	Broker	Local-market ETFs	Not covered
+Mubasher Trade Egypt	EG	Broker	Local-market ETFs	Not covered
+Imara Capital Securities	BW	Broker	Local-market ETFs	Not covered
+Motswedi Securities	BW	Broker	Local-market ETFs	Not covered
+IC Securities	GH	Broker	Local-market ETFs	Not covered
+Databank Brokerage	GH	Broker	Local-market ETFs	Not covered
+MCB Securities	MU	Bank	Global ETFs / ETPs	Not covered
+Cirrus Securities	NA	Broker	Local-market ETFs / ETNs	Not covered
+IJG Securities	NA	Broker	Local-market ETFs	Not covered
+Vertex International Securities	TZ	Broker	Local-market ETFs	Not covered
+DSE Hisa Kiganjani	TZ	Neobroker	Local-market ETFs	Not covered
+C-TRADE	ZW	Neobroker	Local-market ETFs	Not covered
+ZSE Direct	ZW	Neobroker	Local-market ETFs	Not covered
+CommSec	AU	Bank	Local + US ETFs	Not covered
+CMC Invest	AU	Broker	Local + US ETFs	Not covered
+nabtrade	AU	Bank	Local + US ETFs	Not covered
+Westpac Share Trading	AU	Bank	Local-market ETFs	Not covered
+Bell Direct	AU	Broker	Local-market ETFs	Not covered
+SelfWealth	AU	Broker	Local + US ETFs	Not covered
+Stake	AU	Neobroker	Local + US ETFs	Not covered
+Pearler	AU	Neobroker	Local + US ETFs	Not covered
+Superhero	AU	Neobroker	Local + US ETFs	Not covered
+Tiger Brokers AU	AU	Neobroker	Global ETFs / ETPs	Not covered
+moomoo AU	AU	Neobroker	Global ETFs / ETPs	Not covered
+Vanguard Personal Investor AU	AU	Broker	Local-market ETFs	Not covered
+Betashares Direct	AU	Neobroker	Local-market ETFs	Not covered
+Raiz	AU	Robo	ETF model portfolios	Not covered
+Spaceship	AU	Robo	ETF model portfolios	Not covered
+Stockspot	AU	Robo	ETF model portfolios	Not covered
+InvestSMART	AU	Robo	ETF model portfolios	Not covered
+Sharesies	NZ	Neobroker	Local + US ETFs	Not covered
+Hatch Invest	NZ	Neobroker	US ETFs / ETNs	Not covered
+InvestNow	NZ	Broker	Local-market ETFs	Not covered
+ASB Securities	NZ	Bank	Global ETFs / ETPs	Not covered
+Kernel Wealth	NZ	Neobroker	US ETFs / ETNs	Not covered
+BlackBull Markets	NZ	Broker	Global ETFs / ETPs + ETF CFDs	Not covered
+Craigs Investment Partners	NZ	Broker	Global ETFs / ETPs	Not covered
+Forsyth Barr	NZ	Broker	Global ETFs / ETPs	Not covered
+DBS Vickers	SG	Bank	Global ETFs / ETPs	Not covered
+OCBC Securities (iOCBC)	SG	Bank	Global ETFs / ETPs	Not covered
+UOB Kay Hian	SG	Broker	Global ETFs / ETPs	Not covered
+Phillip POEMS	SG	Broker	Global ETFs / ETPs	Not covered
+FSMOne	SG	Broker	Global ETFs / ETPs	Not covered
+Tiger Brokers SG	SG	Neobroker	Global ETFs / ETPs	Not covered
+moomoo SG	SG	Neobroker	Global ETFs / ETPs	Not covered
+Webull SG	SG	Neobroker	Global ETFs / ETPs	Not covered
+CGS International	SG	Broker	Global ETFs / ETPs	Not covered
+Syfe	SG	Robo	ETF model portfolios	Not covered
+StashAway	SG	Robo	ETF model portfolios	Not covered
+Lim & Tan Securities	SG	Broker	Local + US ETFs	Not covered
+AutoWealth	SG	Robo	ETF model portfolios	Not covered
+Kristal.AI	SG	Robo	ETF model portfolios	Not covered
+Futu / moomoo HK	HK	Neobroker	Global ETFs / ETPs	Not covered
+Tiger Brokers HK	HK	Neobroker	Global ETFs / ETPs	Not covered
+Bright Smart Securities	HK	Broker	Global ETFs / ETPs	Not covered
+uSMART	HK	Neobroker	Global ETFs / ETPs	Not covered
+Longbridge	HK	Neobroker	Global ETFs / ETPs	Not covered
+HSBC HK	HK	Bank	Global ETFs / ETPs	Not covered
+Hang Seng Bank	HK	Bank	Global ETFs / ETPs	Not covered
+BOCHK	HK	Bank	Global ETFs / ETPs	Not covered
+Standard Chartered HK	HK	Bank	Global ETFs / ETPs	Not covered
+ZA Bank	HK	Neobroker	Global ETFs / ETPs	Not covered
+Mox Bank	HK	Neobroker	Global ETFs / ETPs	Not covered
+Monex Boom	HK	Broker	Global ETFs / ETPs	Not covered
+AQUMON	HK	Robo	ETF model portfolios	Not covered
+Citibank HK	HK	Bank	Global ETFs / ETPs	Not covered
+SBI Securities	JP	Broker	Local + US ETFs	Not covered
+Rakuten Securities	JP	Broker	Local + US ETFs	Not covered
+Monex Japan	JP	Broker	Local + US ETFs	Not covered
+Matsui Securities	JP	Broker	Local-market ETFs	Not covered
+Mitsubishi UFJ eSmart Securities	JP	Broker	Local-market ETFs	Not covered
+Nomura Securities	JP	Broker	Local-market ETFs	Not covered
+Daiwa Securities	JP	Broker	Local-market ETFs	Not covered
+SMBC Nikko	JP	Broker	Local-market ETFs	Not covered
+PayPay Securities	JP	Neobroker	Local + US ETFs	Not covered
+moomoo Japan	JP	Neobroker	Local + US ETFs	Not covered
+WealthNavi	JP	Robo	ETF model portfolios	Not covered
+THEO	JP	Robo	ETF model portfolios	Not covered
+FOLIO ROBOPRO	JP	Robo	ETF model portfolios	Not covered
+GMO Click Securities	JP	Broker	Local-market ETFs	Not covered
+Okasan Online	JP	Broker	Local + US ETFs	Not covered
+Kiwoom Securities	KR	Broker	Local + US ETFs	Not covered
+Mirae Asset Securities	KR	Broker	Local + US ETFs	Not covered
+Samsung Securities	KR	Broker	Local + US ETFs	Not covered
+NH Investment & Securities	KR	Broker	Local-market ETFs	Not covered
+KB Securities	KR	Broker	Local-market ETFs	Not covered
+Korea Investment & Securities	KR	Broker	Local + US ETFs	Not covered
+Toss Securities	KR	Neobroker	Local + US ETFs	Not covered
+Shinhan Securities	KR	Broker	Global ETFs / ETPs	Not covered
+Hana Securities	KR	Broker	Global ETFs / ETPs	Not covered
+Daishin Securities	KR	Broker	Local + US ETFs	Not covered
+Kakao Pay Securities	KR	Neobroker	Local + US ETFs	Not covered
+Yuanta Securities	TW	Broker	Local-market ETFs	Not covered
+Fubon Securities	TW	Broker	Local-market ETFs	Not covered
+Cathay Securities	TW	Broker	Local-market ETFs	Not covered
+KGI Securities	TW	Broker	Local-market ETFs	Not covered
+SinoPac Securities	TW	Broker	Global ETFs / ETPs	Not covered
+CTBC Securities	TW	Broker	Local-market ETFs	Not covered
+Capital Securities	TW	Broker	Local-market ETFs	Not covered
+Mega Securities	TW	Broker	Local-market ETFs	Not covered
+President Securities	TW	Broker	Local-market ETFs	Not covered
+E.SUN Securities	TW	Broker	Local-market ETFs	Not covered
+Taishin Securities	TW	Broker	Local-market ETFs	Not covered
+MasterLink Securities	TW	Broker	Local-market ETFs	Not covered
+Zerodha	IN	Broker	Local-market ETFs	Not covered
+Groww	IN	Neobroker	Local-market ETFs	Not covered
+Upstox	IN	Neobroker	Local-market ETFs	Not covered
+Angel One	IN	Broker	Local-market ETFs	Not covered
+ICICI Direct	IN	Bank	Local-market ETFs	Not covered
+HDFC Securities	IN	Bank	Local-market ETFs	Not covered
+Kotak Securities	IN	Bank	Local-market ETFs	Not covered
+Dhan	IN	Neobroker	Local-market ETFs	Not covered
+5paisa	IN	Neobroker	Local-market ETFs	Not covered
+Paytm Money	IN	Neobroker	Local-market ETFs	Not covered
+Motilal Oswal	IN	Broker	Local-market ETFs	Not covered
+Vested Finance	IN	Neobroker	US ETFs / ETNs	Not covered
+INDmoney	IN	Neobroker	Local + US ETFs	Not covered
+SBI Securities India	IN	Bank	Local-market ETFs	Not covered
+Axis Direct	IN	Bank	Local-market ETFs	Not covered
+FYERS	IN	Broker	Local-market ETFs	Not covered
+InnovestX	TH	Broker	Local + US ETFs	Not covered
+Kasikorn Securities	TH	Broker	Local-market ETFs	Not covered
+Bualuang Securities	TH	Broker	Local-market ETFs	Not covered
+Dime!	TH	Neobroker	US ETFs / ETNs	Not covered
+Liberator	TH	Neobroker	Local-market ETFs	Not covered
+Jitta Wealth	TH	Robo	ETF model portfolios	Not covered
+Krungsri Securities	TH	Broker	Local-market ETFs	Not covered
+Pi Securities	TH	Broker	Local-market ETFs	Not covered
+Finansia Syrus Securities	TH	Broker	Local-market ETFs	Not covered
+Asia Plus Securities	TH	Broker	Global ETFs / ETPs	Not covered
+Rakuten Trade	MY	Broker	Local + US ETFs	Not covered
+Maybank Investment (M+)	MY	Bank	Local-market ETFs	Not covered
+CGS International Securities Malaysia	MY	Broker	Local-market ETFs	Not covered
+moomoo MY	MY	Neobroker	Global ETFs / ETPs	Not covered
+MIDF Invest	MY	Neobroker	US ETFs / ETNs	Not covered
+MYTHEO	MY	Robo	ETF model portfolios	Not covered
+Akru	MY	Robo	ETF model portfolios	Not covered
+Wahed Invest Malaysia	MY	Robo	ETF model portfolios	Not covered
+Kenanga Digital Investing	MY	Robo	ETF model portfolios	Not covered
+Stockbit Sekuritas	ID	Neobroker	Local-market ETFs	Not covered
+Ajaib	ID	Neobroker	Local-market ETFs	Not covered
+Indo Premier (IPOT)	ID	Broker	Local-market ETFs	Not covered
+Growin’ by Mandiri Sekuritas	ID	Bank	Local-market ETFs	Not covered
+Nanovest	ID	Neobroker	US ETFs / ETNs	Not covered
+Gotrade Indonesia	ID	Neobroker	US ETFs / ETNs	Not covered
+Pluang	ID	Neobroker	US ETFs / ETNs	Not covered
+BNI Sekuritas (BIONS)	ID	Bank	Local-market ETFs	Not covered
+BCA Sekuritas	ID	Bank	Local-market ETFs	Not covered
+COL Financial	PH	Broker	Local-market ETFs	Not covered
+First Metro Securities	PH	Broker	Local-market ETFs	Not covered
+BPI Trade	PH	Bank	Local-market ETFs	Not covered
+GStocks PH	PH	Neobroker	Local-market ETFs	Not covered
+AB Capital Securities	PH	Broker	Local-market ETFs	Not covered
+Philstocks	PH	Neobroker	Local-market ETFs	Not covered
+DragonFi	PH	Neobroker	Local-market ETFs	Not covered
+BDO Securities	PH	Bank	Local-market ETFs	Not covered
+SSI iBoard	VN	Broker	Local-market ETFs	Not covered
+VNDirect	VN	Broker	Local-market ETFs	Not covered
+VPS Securities	VN	Broker	Local-market ETFs	Not covered
+TCBS	VN	Broker	Local-market ETFs	Not covered
+HSC (Ho Chi Minh City Securities)	VN	Broker	Local-market ETFs	Not covered
+Vietcap Securities	VN	Broker	Local-market ETFs	Not covered
+FPT Securities	VN	Broker	Local-market ETFs	Not covered
+Vietcombank Securities	VN	Bank	Local-market ETFs	Not covered
+Baiduri Capital	BN	Bank	Global ETFs / ETPs	Not covered
+XP Investimentos	BR	Broker	Local-market ETFs	Not covered
+Rico	BR	Broker	Local-market ETFs	Not covered
+Clear	BR	Broker	Local-market ETFs	Not covered
+BTG Pactual digital	BR	Bank	Local-market ETFs	Not covered
+Nubank Investments	BR	Neobroker	Local-market ETFs	Not covered
+Inter Invest	BR	Bank	Local + US ETFs	Not covered
+Itaú íon	BR	Bank	Local-market ETFs	Not covered
+Ágora (Bradesco)	BR	Bank	Local-market ETFs	Not covered
+Genial Investimentos	BR	Broker	Local-market ETFs	Not covered
+Modalmais	BR	Broker	Local-market ETFs	Not covered
+Santander Corretora	BR	Bank	Local-market ETFs	Not covered
+Avenue	BR	Broker	US ETFs / ETNs	Not covered
+Nomad	BR	Neobroker	US ETFs / ETNs	Not covered
+Banco do Brasil	BR	Bank	Local-market ETFs	Not covered
+Banco Safra	BR	Bank	Local-market ETFs	Not covered
+Guide Investimentos	BR	Broker	Local-market ETFs	Not covered
+Warren Investimentos	BR	Robo	Local-market ETFs + ETF model portfolios	Not covered
+GBM+	MX	Broker	Local + US ETFs	Not covered
+Actinver Trade (formerly Bursanet)	MX	Bank	Local + US ETFs	Not covered
+Kuspit	MX	Broker	Local-market ETFs	Not covered
+Webull México	MX	Neobroker	US ETFs / ETNs	Not covered
+Hey Banco	MX	Neobroker	Local + US ETFs	Not covered
+Vector Casa de Bolsa	MX	Broker	Local + US ETFs	Not covered
+BBVA Trader México	MX	Bank	Global ETFs / ETPs	Not covered
+Finamex Trading	MX	Broker	Global ETFs / ETPs	Not covered
+Monex Casa de Bolsa	MX	Bank	Global ETFs / ETPs	Not covered
+InvertirOnline (IOL)	AR	Broker	ETF CEDEARs	Not covered
+Balanz	AR	Broker	ETF CEDEARs	Not covered
+Portfolio Personal (PPI)	AR	Broker	ETF CEDEARs	Not covered
+Cocos Capital	AR	Neobroker	ETF CEDEARs	Not covered
+Bull Market Brokers	AR	Broker	ETF CEDEARs	Not covered
+Adcap	AR	Broker	ETF CEDEARs	Not covered
+Banco Galicia	AR	Bank	ETF CEDEARs	Not covered
+Macro Securities	AR	Broker	ETF CEDEARs	Not covered
+Ualá	AR	Neobroker	ETF CEDEARs	Not covered
+Fintual	CL	Robo	US ETFs + ETF model portfolios	Not covered
+Racional	CL	Neobroker	US ETFs / ETNs	Not covered
+BICE Inversiones	CL	Bank	Local + US ETFs	Not covered
+Banchile Inversiones	CL	Bank	Local-market ETFs	Not covered
+Renta 4 Chile	CL	Broker	Local + US ETFs	Not covered
+BancoEstado Corredores de Bolsa	CL	Bank	Local-market ETFs	Not covered
+Bci Inversiones	CL	Bank	Global ETFs / ETPs	Not covered
+BTG Pactual Inversiones Digitales	CL	Bank	Local + US ETFs	Not covered
+Capitaria	CL	CFD	ETF CFDs	Not covered
+Itaú Corredores de Bolsa	CL	Bank	Global ETFs / ETPs	Not covered
+LarrainVial	CL	Broker	Global ETFs / ETPs	Not covered
+Santander Corredores de Bolsa Chile	CL	Bank	Local-market ETFs	Not covered
+SoyFocus	CL	Robo	ETF model portfolios	Not covered
+Trii	CO	Neobroker	Global ETFs / ETPs	Not covered
+Tyba	CO	Neobroker	US ETFs + ETF model portfolios	Not covered
+Valores Bancolombia	CO	Bank	Local-market ETFs	Not covered
+Davivienda Corredores	CO	Bank	Global ETFs / ETPs	Not covered
+Renta 4 SAB	PE	Broker	Local + US ETFs	Not covered
+Credicorp Capital	PE	Broker	Global ETFs / ETPs + ETF model portfolios	Not covered
+Inteligo SAB	PE	Broker	Global ETFs / ETPs	Not covered
+Trii Peru	PE	Neobroker	Global ETFs / ETPs	Not covered
+Tyba Peru	PE	Neobroker	US ETFs / ETNs	Not covered
+Gletir Global	UY	Broker	Global ETFs / ETPs	Not covered
+Nobilis Digital	UY	Robo	ETF model portfolios	Not covered
+Paullier	UY	Broker	Global ETFs / ETPs	Not covered
+eToro	Global	Neobroker	Global ETFs / ETPs	Scraped
+OANDA	Global	CFD	ETF CFDs	Scraped
+Quantfury	Global	Neobroker	Global ETFs / ETPs	Scraped
+MEXEM	Global	Broker	Global ETFs / ETPs	In broker.txt
+Exante	MT	Broker	Global ETFs / ETPs	Not covered
+Freedom24	CY	Broker	Global ETFs / ETPs	Not covered
+WH SelfInvest	LU	Broker	Global ETFs / ETPs + ETF CFDs	Not covered
+Plus500 Invest	Global	Broker	Global ETFs / ETPs	Not covered
+Plus500	Global	CFD	ETF CFDs	Not covered
+Capital.com	Global	CFD	ETF CFDs	Not covered
+Pepperstone	Global	CFD	ETF CFDs	Not covered
+ActivTrades	Global	CFD	ETF CFDs	Not covered
+AvaTrade	Global	CFD	ETF CFDs	Not covered
+NAGA	Global	CFD	ETF CFDs	Not covered
+Libertex	Global	CFD	ETF CFDs	Not covered
+ThinkMarkets	Global	CFD	ETF CFDs	Not covered
+Skilling	Global	CFD	ETF CFDs	Not covered
+Vantage Markets	Global	CFD	ETF CFDs	Not covered
+City Index	Global	CFD	ETF CFDs	Not covered
+Trade Nation	Global	CFD	ETF CFDs	Not covered
+Axi	Global	CFD	ETF CFDs	Not covered
+FP Markets	Global	CFD	ETF CFDs	Not covered
+Markets.com	Global	CFD	ETF CFDs	Not covered
+HFM	Global	CFD	ETF CFDs	Not covered
+FxPro	Global	CFD	ETF CFDs	Not covered
+iFOREX	Global	CFD	ETF CFDs	Not covered
+ATFX	Global	CFD	ETF CFDs	Not covered
+Tickmill	Global	CFD	ETF CFDs	Not covered
+Eightcap	Global	CFD	ETF CFDs	Not covered
+GO Markets	Global	CFD	ETF CFDs	Not covered
+Deriv	Global	CFD	ETF CFDs	Not covered
+TRADE.com	Global	CFD	ETF CFDs	Not covered
+FXCM	Global	CFD	ETF CFDs	Not covered
+Moneta Markets	Global	CFD	ETF CFDs	Not covered
+PU Prime	Global	CFD	ETF CFDs	Not covered
+ACY Securities	Global	CFD	ETF CFDs	Not covered

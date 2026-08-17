@@ -4,11 +4,8 @@ Lightspeed
 cobra trading
 questrade
 freetrade
-withplum
 hello bank
-Dukascopy Bank
 fortuneo
-bforbank
 ilirika
 Sarwa
 Thndr
@@ -33,3 +30,4 @@ Mubasher Capital Bahrain
 sabinvest.com
 sharenet
 BUX
+withplum

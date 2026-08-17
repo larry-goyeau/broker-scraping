@@ -1,8 +1,5 @@
 Swissquote
-alpaca
-tradezero
 choicetrade
-BUX
 bunq
 robinhood
 Lightspeed
@@ -25,3 +22,16 @@ Syfe
 Rakuten Trade
 WHSelfinvest
 Exante
+N26
+Banque Internationale à Luxembourg
+easybourse
+benchmark
+eurofinance
+Optimtrader
+bluorbank
+Bank of Cyprus
+moneybase
+Mubasher Capital Bahrain
+sabinvest.com
+sharenet
+BUX

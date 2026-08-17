@@ -21,16 +21,21 @@ function toIsin(value) {
   return match ? match[0] : "";
 }
 
-// Alpaca names a listing after the venue it is quoted on, so NYSE Arca comes
-// through as ARCA and Cboe BZX as BATS, both of which the CSV files under the
-// exchange that owns them.
+// TradeZero names venues after the feed each one reports on: PACF is NYSE Arca,
+// NQNM and NQSC the two tiers of Nasdaq, NQPK and PINK the over-the-counter
+// sheets. The mapping onto the CSV's own vocabulary was the one it agreed with
+// on every one of the 399 funds a ticker alone identified in a first sweep.
 const EXCHANGE_NAMES = {
   AMEX: "AMEX",
-  ARCA: "AMEX",
+  PACF: "AMEX",
   BATS: "CBOE",
-  NASDAQ: "NASDAQ",
+  CBOE: "CBOE",
+  NQNM: "NASDAQ",
+  NQSC: "NASDAQ",
   NYSE: "NYSE",
-  OTC: "OTC",
+  IEX: "IEX",
+  NQPK: "OTC",
+  PINK: "OTC",
 };
 
 // One ISIN is often listed on several venues under differently worded names
@@ -81,10 +86,6 @@ const GENERIC_TOKENS = new Set([
   "GMBH",
   "THE",
   "CO",
-  "COMMON",
-  "STOCK",
-  "SHARES",
-  "CLASS",
 ]);
 
 function nameTokens(value) {
@@ -138,10 +139,11 @@ function scoreCandidate(scrapedName, candidate) {
 
 const MIN_NAME_SCORE = 0.5;
 
-// An American ticker belongs to one instrument apiece, so the fund Alpaca
-// quotes under it is the one the CSV files on that same venue. Where a ticker
-// covers several share classes the venue tells them apart before the name has
-// to, and the name only has to settle what is left.
+// American tickers belong to one instrument apiece, so the fund trading under
+// the ticker asked for is the one the CSV lists there. Where a ticker covers
+// several share classes, the venue TradeZero quotes it on tells them apart
+// before the name has to, which matters because the over-the-counter sheets
+// come through with the name left blank.
 function resolveIsin(tickerCandidates, asset) {
   const candidates = tickerCandidates.get(asset.ticker) || [];
   if (candidates.length === 0) return null;
@@ -172,19 +174,18 @@ const browser = await puppeteer.connect({
   defaultViewport: null,
 });
 
-const APP_URL = "https://app.alpaca.markets/trade/SPY";
+const APP_URL = "https://tz1.tradezero.com/";
 
 const pages = await browser.pages();
 const page =
-  pages.find((candidate) => candidate.url().includes("app.alpaca.markets")) ||
-  (await browser.newPage());
-if (!page.url().includes("app.alpaca.markets")) {
+  pages.find((candidate) => candidate.url().includes("tradezero.com")) || (await browser.newPage());
+if (!page.url().includes("tradezero.com")) {
   await page.goto(APP_URL, { waitUntil: "domcontentloaded" });
 }
 await page.bringToFront();
 
 // `--start=N` (1-indexed) lets a run resume from a specific instrument without
-// throwing away progress already saved to parsed_json/alpaca-parsed.json.
+// throwing away progress already saved to parsed_json/tradezero-parsed.json.
 const startIndex = (() => {
   for (const arg of process.argv.slice(2)) {
     const match = arg.match(/^--start=(\d+)$/i);
@@ -206,7 +207,7 @@ const csvPath = (() => {
 const tickerCandidates = loadTickerCandidatesFromCsv(csvPath);
 const onlyTickers = new Set(positionalArgs.map(normalizeTicker).filter(Boolean));
 
-const outputPath = "parsed_json/alpaca-parsed.json";
+const outputPath = "parsed_json/tradezero-parsed.json";
 const results = [];
 const seen = new Set();
 
@@ -224,18 +225,18 @@ if (startIndex > 1 && fs.existsSync(outputPath)) {
   }
 }
 
-// Alpaca trades America alone, so a ticker the CSV only lists abroad is a
-// namesake of an American share rather than the fund being looked for.
-const MARKET_EXCHANGES = new Set(Object.values(EXCHANGE_NAMES));
+// TradeZero trades America, the over-the-counter sheets included, so only the
+// listings the CSV puts there are worth asking about.
+const MARKET_EXCHANGES = new Set(["AMEX", "CBOE", "NASDAQ", "NYSE", "BATS", "ARCA", "OTC"]);
 
-const wanted = new Set();
+const queries = [];
 for (const [ticker, candidates] of tickerCandidates) {
   if (onlyTickers.size > 0 && !onlyTickers.has(ticker)) continue;
   const exchanges = new Set(candidates.flatMap((candidate) => [...candidate.exchanges]));
   if (![...exchanges].some((exchange) => MARKET_EXCHANGES.has(exchange))) continue;
-  wanted.add(ticker);
+  queries.push(ticker);
 }
-console.error(`${wanted.size} American tickers to look for`);
+console.error(`${queries.length} tickers to look up`);
 
 // The app signs its calls with a token it renews on its own, so it is read off
 // the app's own traffic rather than minted here.
@@ -243,113 +244,145 @@ let token = null;
 const client = await page.createCDPSession();
 await client.send("Network.enable");
 client.on("Network.requestWillBeSent", (event) => {
-  if (!event.request.url.includes("alpaca.markets")) return;
+  if (!event.request.url.includes("tradezero.com")) return;
   const sent = event.request.headers || {};
-  const authorization = sent.Authorization || sent.authorization || "";
-  if (authorization.startsWith("Bearer ")) token = authorization;
+  token = sent.Authorization || sent.authorization || token;
 });
 
-// The platform polls its own feeds every few seconds, so a token turns up on
-// its own once a trading page is open; a reload hurries it along.
+// The app polls its own feeds every few seconds, so a token turns up on its own
+// once the platform is open; nudging the symbol box hurries it along.
 async function captureToken() {
   for (let attempt = 0; attempt < 3 && !token; attempt += 1) {
+    const input = await page.$("input.symbol-lookup-input, input[placeholder='Search' i], input");
+    if (input) {
+      await input.click({ clickCount: 3 }).catch(() => {});
+      await page.keyboard.press("Backspace").catch(() => {});
+      await input.type("SPY", { delay: 70 }).catch(() => {});
+    }
+
     for (let waited = 0; waited < 20000 && !token; waited += 250) await sleep(250);
     if (token) return true;
 
     await page.goto(APP_URL, { waitUntil: "domcontentloaded" }).catch(() => {});
-    await sleep(3000);
+    await sleep(5000);
   }
   return Boolean(token);
 }
 
 if (!(await captureToken())) {
-  throw new Error("Could not read Alpaca's API token. Is app.alpaca.markets signed in?");
+  throw new Error("Could not read TradeZero's API token. Is tz1.tradezero.com signed in?");
 }
 
-// The whole American offer comes down in one answer, so there is nothing to
-// page through and nothing to search for.
-async function loadAssets() {
-  for (let attempt = 0; attempt < 3; attempt += 1) {
-    const answer = await page.evaluate(async (authorization) => {
-      try {
-        const response = await fetch(
-          "https://app.alpaca.markets/api/v1/assets?status=active&asset_class=us_equity",
-          { headers: { Authorization: authorization } }
-        );
-        if (!response.ok) return { status: response.status };
-        return { status: 200, rows: await response.json() };
-      } catch (error) {
-        return { status: 0 };
-      }
-    }, token);
+// The symbology search takes one ticker at a time but tolerates twenty at once,
+// which brings the American offer down to a couple of minutes.
+const CONCURRENCY = 20;
+const BATCH_SIZE = 400;
 
-    if (answer.status === 200 && Array.isArray(answer.rows)) return answer.rows;
+async function lookup(tickers) {
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const answers = await page.evaluate(
+      async (list, authorization, concurrency) => {
+        const found = {};
+        let cursor = 0;
+        async function worker() {
+          while (cursor < list.length) {
+            const ticker = list[cursor++];
+            const url = `https://api.tradezero.com/v1/symbology/api/search?Query=${encodeURIComponent(
+              ticker
+            )}&Page=1&NumOfResults=25&LuceneQuery=false`;
+            try {
+              const response = await fetch(url, { headers: { Authorization: authorization } });
+              if (!response.ok) {
+                found[ticker] = { status: response.status };
+                continue;
+              }
+              found[ticker] = { status: 200, rows: await response.json() };
+            } catch (error) {
+              found[ticker] = { status: 0 };
+            }
+          }
+        }
+        await Promise.all(Array.from({ length: concurrency }, worker));
+        return found;
+      },
+      tickers,
+      token,
+      CONCURRENCY
+    );
+
+    const refused = Object.values(answers).filter((answer) => answer.status === 401).length;
+    if (refused === 0) return answers;
 
     // The token turns over on its own; wait for the app to mint a new one
     // before asking again.
     const stale = token;
     for (let waited = 0; waited < 30000 && token === stale; waited += 250) await sleep(250);
-    if (token === stale) {
-      token = null;
-      await captureToken();
+    if (token === stale) await captureToken();
+  }
+
+  return {};
+}
+
+let notCarried = 0;
+let elsewhere = 0;
+
+for (let index = 0; index < queries.length; index += BATCH_SIZE) {
+  if (index + BATCH_SIZE < startIndex) continue;
+
+  const batch = queries.slice(index, index + BATCH_SIZE);
+  const answers = await lookup(batch);
+
+  for (const ticker of batch) {
+    if (seen.has(ticker)) continue;
+
+    // The search ranks an exact ticker first but answers on names too, so the
+    // row that carries the ticker asked for is the only one that counts.
+    const row = (answers[ticker]?.rows || []).find(
+      (candidate) => String(candidate.ticker || "").toUpperCase() === ticker
+    );
+    if (!row) {
+      notCarried += 1;
+      continue;
     }
+
+    // Options and futures ride the same symbology; only cash listings are funds.
+    const exchange = String(row.exchange || "").trim().toUpperCase();
+    if (row.securityType !== "Stock" || !EXCHANGE_NAMES[exchange]) {
+      elsewhere += 1;
+      continue;
+    }
+
+    const asset = {
+      ticker,
+      name: (row.name || "").replace(/\s+/g, " ").trim(),
+      exchange,
+    };
+
+    const candidate = resolveIsin(tickerCandidates, asset);
+    if (!candidate) continue;
+
+    seen.add(ticker);
+    results.push({
+      query: ticker,
+      ticker,
+      // The over-the-counter sheets carry no name at all, so the CSV's wording
+      // stands in for those.
+      name: asset.name || candidate.name,
+      exchange: EXCHANGE_NAMES[exchange],
+      type: "ETF",
+      raw: [ticker, asset.name, exchange].filter(Boolean).join(" "),
+      isin: candidate.isin,
+    });
   }
 
-  return [];
+  fs.mkdirSync("parsed_json", { recursive: true });
+  fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+  console.error(`  ${Math.min(index + BATCH_SIZE, queries.length)}/${queries.length} looked up, ${results.length} matched`);
 }
 
-const assets = await loadAssets();
-if (assets.length === 0) {
-  throw new Error("Alpaca returned no assets.");
-}
-console.error(`${assets.length} listings in Alpaca's book`);
-
-// Alpaca keeps delisted and broker-blocked shares in the book under the active
-// status, and marks what an account may actually place an order on.
-const onTicker = assets
-  .filter((asset) => EXCHANGE_NAMES[String(asset.exchange || "").toUpperCase()])
-  .filter((asset) => wanted.has(String(asset.symbol || "").toUpperCase()));
-const listings = onTicker
-  .filter((asset) => asset.tradable)
-  .sort((left, right) => left.symbol.localeCompare(right.symbol));
-const refused = onTicker.length - listings.length;
-console.error(`${listings.length} of them carry a ticker the CSV lists in America`);
-
-let unmatched = 0;
-
-for (const [index, asset] of listings.entries()) {
-  if (index + 1 < startIndex) continue;
-
-  const ticker = String(asset.symbol).toUpperCase();
-  if (seen.has(ticker)) continue;
-
-  const exchange = String(asset.exchange).toUpperCase();
-  const name = String(asset.name || "").replace(/\s+/g, " ").trim();
-
-  const candidate = resolveIsin(tickerCandidates, { ticker, name, exchange });
-  if (!candidate) {
-    // Alpaca's book is stocks and funds alike, so a name that reads nothing
-    // like the fund on that ticker is a share that happens to share it.
-    unmatched += 1;
-    continue;
-  }
-
-  seen.add(ticker);
-  results.push({
-    query: ticker,
-    ticker,
-    name: name || candidate.name,
-    exchange: EXCHANGE_NAMES[exchange],
-    type: "ETF",
-    raw: [ticker, name, exchange].filter(Boolean).join(" "),
-    isin: candidate.isin,
-  });
-}
-
-fs.mkdirSync("parsed_json", { recursive: true });
-fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
-
-console.error(`${results.length} funds matched, ${unmatched} listings not the fund on that ticker, ${refused} refused`);
+console.error(
+  `${results.length} funds matched, ${notCarried} tickers not carried, ${elsewhere} not cash listings`
+);
 console.log(JSON.stringify(results, null, 2));
 
 await browser.disconnect();

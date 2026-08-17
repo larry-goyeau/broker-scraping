@@ -1,0 +1,170 @@
+US	Citi Self Invest	Bank	US ETFs / ETNs
+US	U.S. Bancorp Advisors Self-Directed Investing	Bank	US ETFs / ETNs
+US	TIAA Brokerage	Broker	US ETFs / ETNs
+US	eOption	Broker	US ETFs / ETNs
+US	Stockpile	Neobroker	US ETFs / ETNs
+US	Plynk	Neobroker	US ETFs / ETNs
+US	TradeUP	Neobroker	US ETFs / ETNs
+US	Hapi	Neobroker	US ETFs / ETNs
+DE	N26	Bank	UCITS ETFs / ETCs
+DE	Commerzbank	Bank	UCITS ETFs / ETCs
+DE	1822direkt	Bank	UCITS ETFs / ETCs
+AT	easybank	Bank	UCITS ETFs / ETCs
+AT	Bank Austria	Bank	UCITS ETFs / ETCs
+AT	BAWAG	Bank	UCITS ETFs / ETCs
+NL	Easybroker	Broker	Global ETFs / ETPs
+LU	Banque Internationale à Luxembourg	Bank	Global ETFs / ETPs
+FR	EasyBourse	Broker	UCITS ETFs / ETCs
+IT	UniCredit	Bank	Global ETFs / ETPs
+IT	BPER Banca	Bank	UCITS ETFs / ETCs
+ES	BBVA Trader Bolsa	Bank	UCITS ETFs / ETCs
+ES	Banco Santander	Bank	UCITS ETFs / ETCs
+ES	ING Broker NARANJA	Bank	Global ETFs / ETPs
+ES	Banco Sabadell	Bank	Global ETFs / ETPs
+PT	Banco BiG	Bank	Global ETFs / ETPs
+PT	BPI Broker	Bank	Global ETFs / ETPs
+PT	Bankinter Broker	Bank	UCITS ETFs / ETCs
+PT	Santander ONeBroker	Bank	Global ETFs / ETPs
+GR	Eurobank Equities	Broker	UCITS ETFs / ETCs
+GR	Euroxx Securities	Broker	Global ETFs / ETPs
+GR	BETA Securities	Broker	Global ETFs / ETPs
+NO	SpareBank 1	Bank	UCITS ETFs / ETCs
+DK	Nykredit	Bank	UCITS ETFs / ETCs
+FI	Nordea	Bank	Global ETFs / ETPs
+PL	Alior Bank Biuro Maklerskie	Bank	UCITS ETFs / ETCs
+PL	ING Biuro Maklerskie	Bank	Local-market ETFs
+PL	BNP Paribas Biuro Maklerskie	Bank	Global ETFs / ETPs
+PL	Trigon Dom Maklerski	Broker	Local-market ETFs
+CZ	Česká spořitelna	Bank	Global ETFs / ETPs
+SK	Slovenská sporiteľňa	Bank	UCITS ETFs / ETCs
+HU	K&H Értékpapír	Broker	Global ETFs / ETPs
+HU	MBH Befektetési Bank	Bank	Global ETFs / ETPs + ETF CFDs
+HU	Raiffeisen Online Befektetés	Bank	Global ETFs / ETPs
+HU	CIB eBroker	Bank	Global ETFs / ETPs
+RO	BRK Financial Group	Broker	Global ETFs / ETPs + ETF CFDs
+RO	Swiss Capital	Broker	Global ETFs / ETPs
+RO	Prime Transaction	Broker	Local-market ETFs
+BG	BenchMark Finance	Broker	UCITS ETFs / ETCs
+BG	EuroFinance	Broker	UCITS ETFs / ETCs
+HR	Agram Brokeri	Broker	Local-market ETFs
+HR	Erste Bank Croatia	Bank	Global ETFs / ETPs
+SI	NLB Banka / NLB Trading	Bank	Global ETFs / ETPs
+SI	Optimtrader	Broker	Global ETFs / ETPs
+RS	TradeWin24	Broker	Global ETFs / ETPs
+RS	ILIRIKA Investments	Broker	Global ETFs / ETPs
+BA	Advantis Broker	Broker	Global ETFs / ETPs
+ME	CKB Bank	Bank	Global ETFs / ETPs
+ME	Universal Capital Bank	Bank	Global ETFs / ETPs
+XK	BKT Smart Invest	Bank	Global ETFs / ETPs + ETF CFDs
+EE	Luminor Investor	Bank	UCITS ETFs / ETCs
+LV	Citadele C Trade	Bank	UCITS ETFs / ETCs
+LV	BluOr Bank	Bank	Global ETFs / ETPs
+LT	Artea Bank	Bank	Global ETFs / ETPs
+CY	CISCO	Broker	Global ETFs / ETPs
+CY	Bank of Cyprus	Bank	Global ETFs / ETPs
+MT	Moneybase	Neobroker	Global ETFs / ETPs
+MT	MeDirect Bank Malta	Bank	UCITS ETFs / ETCs
+AE	Wio Invest	Bank	Global ETFs / ETPs
+AE	Mashreq US Stocks & ETFs	Bank	US ETFs / ETNs
+SA	Alinma Investment	Broker	Local-market ETFs
+SA	SAB Invest	Bank	Local-market ETFs
+SA	ANB Capital	Bank	Global ETFs / ETPs
+QA	The Group Securities	Broker	Local-market ETFs
+QA	Dlala Brokerage	Broker	Local-market ETFs
+QA	Commercial Bank Financial Services	Bank	Local-market ETFs
+KW	National Investments Company / NICTRADE	Broker	Global ETFs / ETPs
+BH	Mubasher Capital Bahrain	Broker	Global ETFs / ETPs
+IL	Blink	Neobroker	Local + US ETFs
+IL	Altshuler Shaham Trade	Broker	Local + US ETFs
+TR	QNB Invest	Broker	Local-market ETFs
+TR	Ak Yatırım	Broker	Local-market ETFs
+ZA	Otto1890 Securities	Broker	Local-market ETFs
+ZA	SatrixNOW	Neobroker	Local-market ETFs
+ZA	Sharenet Securities	Broker	Global ETFs / ETPs
+NG	Hisa Nigeria (formerly Chaka)	Neobroker	Local + US ETFs
+NG	Meristem Securities / MeriTrade	Broker	Local-market ETFs
+KE	Standard Investment Bank	Broker	Local-market ETFs
+KE	AIB-AXYS Africa	Broker	Global ETFs / ETPs
+EG	Beltone Securities	Broker	Local-market ETFs
+EG	Mubasher Trade Egypt	Broker	Local-market ETFs
+BW	Imara Capital Securities	Broker	Local-market ETFs
+BW	Motswedi Securities	Broker	Local-market ETFs
+GH	IC Securities	Broker	Local-market ETFs
+GH	Databank Brokerage	Broker	Local-market ETFs
+MU	MCB Securities	Bank	Global ETFs / ETPs
+NA	Cirrus Securities	Broker	Local-market ETFs / ETNs
+NA	IJG Securities	Broker	Local-market ETFs
+TZ	Vertex International Securities	Broker	Local-market ETFs
+TZ	DSE Hisa Kiganjani	Neobroker	Local-market ETFs
+ZW	C-TRADE	Neobroker	Local-market ETFs
+ZW	ZSE Direct	Neobroker	Local-market ETFs
+NZ	BlackBull Markets	Broker	Global ETFs / ETPs + ETF CFDs
+NZ	Craigs Investment Partners	Broker	Global ETFs / ETPs
+NZ	Forsyth Barr	Broker	Global ETFs / ETPs
+SG	Lim & Tan Securities	Broker	Local + US ETFs
+HK	Citibank HK	Bank	Global ETFs / ETPs
+JP	Mitsubishi UFJ eSmart Securities	Broker	Local-market ETFs
+JP	GMO Click Securities	Broker	Local-market ETFs
+JP	Okasan Online	Broker	Local + US ETFs
+KR	Shinhan Securities	Broker	Global ETFs / ETPs
+KR	Hana Securities	Broker	Global ETFs / ETPs
+KR	Daishin Securities	Broker	Local + US ETFs
+KR	Kakao Pay Securities	Neobroker	Local + US ETFs
+TW	SinoPac Securities	Broker	Global ETFs / ETPs
+TW	CTBC Securities	Broker	Local-market ETFs
+TW	Capital Securities	Broker	Local-market ETFs
+TW	Mega Securities	Broker	Local-market ETFs
+TW	President Securities	Broker	Local-market ETFs
+TW	E.SUN Securities	Broker	Local-market ETFs
+TW	Taishin Securities	Broker	Local-market ETFs
+TW	MasterLink Securities	Broker	Local-market ETFs
+IN	SBI Securities India	Bank	Local-market ETFs
+IN	Axis Direct	Bank	Local-market ETFs
+IN	FYERS	Broker	Local-market ETFs
+TH	Krungsri Securities	Broker	Local-market ETFs
+TH	Pi Securities	Broker	Local-market ETFs
+TH	Finansia Syrus Securities	Broker	Local-market ETFs
+TH	Asia Plus Securities	Broker	Global ETFs / ETPs
+MY	CGS International Securities Malaysia	Broker	Local-market ETFs
+MY	MIDF Invest	Neobroker	US ETFs / ETNs
+ID	Growin’ by Mandiri Sekuritas	Bank	Local-market ETFs
+ID	Gotrade Indonesia	Neobroker	US ETFs / ETNs
+ID	Pluang	Neobroker	US ETFs / ETNs
+ID	BNI Sekuritas (BIONS)	Bank	Local-market ETFs
+ID	BCA Sekuritas	Bank	Local-market ETFs
+PH	AB Capital Securities	Broker	Local-market ETFs
+PH	Philstocks	Neobroker	Local-market ETFs
+PH	DragonFi	Neobroker	Local-market ETFs
+PH	BDO Securities	Bank	Local-market ETFs
+VN	HSC (Ho Chi Minh City Securities)	Broker	Local-market ETFs
+VN	Vietcap Securities	Broker	Local-market ETFs
+VN	FPT Securities	Broker	Local-market ETFs
+VN	Vietcombank Securities	Bank	Local-market ETFs
+BN	Baiduri Capital	Bank	Global ETFs / ETPs
+BR	Nubank Investments	Neobroker	Local-market ETFs
+BR	Santander Corretora	Bank	Local-market ETFs
+BR	Banco do Brasil	Bank	Local-market ETFs
+BR	Banco Safra	Bank	Local-market ETFs
+BR	Guide Investimentos	Broker	Local-market ETFs
+BR	Warren Investimentos	Robo	Local-market ETFs + ETF model portfolios
+MX	Actinver Trade (formerly Bursanet)	Bank	Local + US ETFs
+MX	Webull México	Neobroker	US ETFs / ETNs
+MX	BBVA Trader México	Bank	Global ETFs / ETPs
+MX	Finamex Trading	Broker	Global ETFs / ETPs
+MX	Monex Casa de Bolsa	Bank	Global ETFs / ETPs
+AR	Adcap	Broker	ETF CEDEARs
+AR	Banco Galicia	Bank	ETF CEDEARs
+AR	Macro Securities	Broker	ETF CEDEARs
+AR	Ualá	Neobroker	ETF CEDEARs
+CL	BancoEstado Corredores de Bolsa	Bank	Local-market ETFs
+CL	Bci Inversiones	Bank	Global ETFs / ETPs
+CL	BTG Pactual Inversiones Digitales	Bank	Local + US ETFs
+CL	Itaú Corredores de Bolsa	Bank	Global ETFs / ETPs
+CL	LarrainVial	Broker	Global ETFs / ETPs
+CL	Santander Corredores de Bolsa Chile	Bank	Local-market ETFs
+CO	Davivienda Corredores	Bank	Global ETFs / ETPs
+PE	Inteligo SAB	Broker	Global ETFs / ETPs
+PE	Trii Peru	Neobroker	Global ETFs / ETPs
+PE	Tyba Peru	Neobroker	US ETFs / ETNs
+UY	Gletir Global	Broker	Global ETFs / ETPs
+UY	Paullier	Broker	Global ETFs / ETPs

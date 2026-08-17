@@ -1,23 +1,15 @@
-import puppeteer from "puppeteer-core";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-function toTickerOnly(value) {
-  const text = (value || "").trim();
+function normalizeTicker(value) {
+  const text = (value || "").trim().toUpperCase();
   if (!text) return "";
-
-  // Handle CSV lines like: EXCHANGE:TICKER,Name
   const firstColumn = text.split(",")[0].trim();
-  if (!firstColumn) return "";
-
-  const tickerWithSuffix = firstColumn.includes(":")
-    ? firstColumn.split(":").pop()
-    : firstColumn;
-
-  // Drop suffixes like ".GB" / ".USD" to keep one search query.
-  const baseTicker = (tickerWithSuffix || "").split(".")[0];
-  return baseTicker.trim();
+  const afterExchange = firstColumn.includes(":") ? firstColumn.split(":").pop() : firstColumn;
+  // Drop venue suffixes eToro appends (IBCK.DE, VUSA.NV, IB01.L) or the CSV
+  // carries (.GB/.USD) so one bare ticker keys both sides.
+  return (afterExchange || "").split(".")[0].trim();
 }
 
 function toIsin(value) {
@@ -27,246 +19,252 @@ function toIsin(value) {
   return match ? match[0] : "";
 }
 
-function loadIsinsFromCsv(csvPath) {
-  if (!fs.existsSync(csvPath)) return [];
-  const content = fs.readFileSync(csvPath, "utf8");
-  return content
-    .split(/\r?\n/)
-    .map((line) => {
-      // Supports both: ticker,isin,name and ticker,exchange,isin,name.
-      const cols = line.split(",");
-      const fromKnownColumns = toIsin(cols[2]) || toIsin(cols[1]);
-      if (fromKnownColumns) return fromKnownColumns;
+// The CSV rows are `ticker,exchange,isin,name`; one ISIN recurs across venues
+// under differently worded names, so every spelling and venue is kept and the
+// closest wording decides a match.
+function loadTickerCandidatesFromCsv(csvPath) {
+  if (!fs.existsSync(csvPath)) return new Map();
 
-      // Fallback: find the first ISIN-looking token in the row.
-      for (const col of cols) {
-        const isin = toIsin(col);
-        if (isin) return isin;
-      }
-      return "";
-    })
-    .filter(Boolean);
-}
+  const map = new Map();
+  for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
+    if (!line.trim()) continue;
 
-function uniqueQueries(values) {
-  const seen = new Set();
-  return values.filter((value) => {
-    const key = value.toUpperCase();
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
-}
+    const columns = line.split(",");
+    const ticker = normalizeTicker(columns[0]);
+    const isinIndex = columns.findIndex((column) => Boolean(toIsin(column)));
+    if (!ticker || isinIndex < 0) continue;
 
-async function ensureEtoroSearchInput(page) {
-  let searchInput = await page.$(
-    'input[placeholder*="Search" i], input[placeholder*="Rechercher" i], input[type="search"]'
-  );
-  if (searchInput) return searchInput;
+    const isin = toIsin(columns[isinIndex]);
+    const exchange = (columns[isinIndex - 1] || "").trim().toUpperCase();
+    const name = columns.slice(isinIndex + 1).join(",").trim();
+    if (!name) continue;
 
-  const triggerSelectors = [
-    '[aria-label*="Search" i]',
-    '[aria-label*="Rechercher" i]',
-    'button[title*="Search" i]',
-    'button[title*="Rechercher" i]',
-    'a[href*="/discover"]',
-  ];
+    const candidates = map.get(ticker) || [];
+    map.set(ticker, candidates);
 
-  for (const selector of triggerSelectors) {
-    const trigger = await page.$(selector);
-    if (trigger) {
-      await trigger.click();
-      await sleep(300);
-      searchInput = await page.$(
-        'input[placeholder*="Search" i], input[placeholder*="Rechercher" i], input[type="search"]'
-      );
-      if (searchInput) return searchInput;
+    const existing = candidates.find((candidate) => candidate.isin === isin);
+    if (existing) {
+      if (!existing.names.includes(name)) existing.names.push(name);
+      if (exchange) existing.exchanges.add(exchange);
+    } else {
+      candidates.push({ isin, names: [name], exchanges: new Set(exchange ? [exchange] : []) });
     }
   }
 
-  // Fallback: click a visible element with "Search" or "Recherche" text.
-  await page.evaluate(() => {
-    const nodes = [...document.querySelectorAll("button, a, div, span")];
-    const isVisible = (el) => {
-      const r = el.getBoundingClientRect();
-      return r.width > 0 && r.height > 0;
-    };
-    const target = nodes.find((el) => {
-      const text = (el.textContent || "").trim();
-      return isVisible(el) && /^(search|recherche)$/i.test(text);
-    });
-    if (target) target.click();
-  });
-
-  searchInput = await page.waitForSelector(
-    'input[placeholder*="Search" i], input[placeholder*="Rechercher" i], input[type="search"]',
-    { timeout: 8000 }
-  );
-  return searchInput;
+  return map;
 }
 
-function parseEtoroRowText(text) {
-  const compact = (text || "").replace(/\s+/g, " ").trim();
-  if (!compact) return null;
+// Legal-entity suffixes are shared by unrelated funds, so counting them would
+// let a same-ticker instrument pass for the one being looked up.
+const GENERIC_TOKENS = new Set([
+  "LTD",
+  "LIMITED",
+  "PLC",
+  "INC",
+  "CORP",
+  "CORPORATION",
+  "LLC",
+  "GMBH",
+  "THE",
+  "CO",
+  "TRUST",
+]);
 
-  // Drop trailing action labels from CTA buttons.
-  const cleaned = compact
-    .replace(/\s+(Investissez|Investir|Acheter|Vendre|Trade|Buy|Sell)\s*$/i, "")
-    .trim();
+function nameTokens(value) {
+  return (value || "")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toUpperCase()
+    .split(/[^A-Z0-9]+/)
+    .filter((token) => token.length > 1 && !GENERIC_TOKENS.has(token));
+}
 
-  const pipeMatch = cleaned.match(/^([A-Z0-9.-]{2,20})\s*\|\s*(.+)$/i);
-  if (!pipeMatch) return { raw: cleaned };
+// Fund names are shortened inconsistently between sources ("Small Cap" against
+// "Small-Ca"), so tokens are compared by prefix rather than equality.
+function tokensMatch(left, right) {
+  if (left === right) return true;
+  const [shorter, longer] = left.length <= right.length ? [left, right] : [right, left];
+  return shorter.length >= 2 && longer.startsWith(shorter);
+}
 
-  const ticker = pipeMatch[1].trim().toUpperCase();
-  let rest = pipeMatch[2].trim();
+function nameScore(scrapedName, candidateName) {
+  const scraped = nameTokens(scrapedName);
+  const candidate = nameTokens(candidateName);
+  if (scraped.length === 0 || candidate.length === 0) return 0;
 
-  // Common line shape: "Name ETF, Xetra ETFs"
-  const exchangeMatch = rest.match(/,\s*([^,]+)$/);
-  const exchange = exchangeMatch ? exchangeMatch[1].trim() : null;
-  if (exchangeMatch) {
-    rest = rest.slice(0, exchangeMatch.index).trim();
+  const used = new Set();
+  let matched = 0;
+  for (const token of scraped) {
+    const index = candidate.findIndex(
+      (other, position) => !used.has(position) && tokensMatch(token, other)
+    );
+    if (index >= 0) {
+      used.add(index);
+      matched += 1;
+    }
+  }
+  return matched / Math.max(scraped.length, candidate.length);
+}
+
+function scoreCandidate(scrapedName, candidate) {
+  let best = { score: 0, name: candidate.names[0] || "" };
+  for (const name of candidate.names) {
+    const score = nameScore(scrapedName, name);
+    if (score > best.score) best = { score, name };
+  }
+  return best;
+}
+
+const MIN_NAME_SCORE = 0.5;
+
+// eToro prices every US listing off "NASDAQ" and lumps European ones by
+// operator, so each price source expands to the CSV venue codes it can cover;
+// the fund's own listing then narrows it down.
+const PRICE_SOURCE_VENUES = {
+  NASDAQ: ["NASDAQ", "AMEX", "NYSE", "CBOE", "OTC"],
+  "OTC Markets": ["OTC", "NASDAQ", "AMEX", "NYSE"],
+  eToro: ["NASDAQ", "AMEX", "NYSE", "CBOE", "OTC"],
+  Xetra: ["XETR"],
+  "LSE PLC": ["LSE", "LSIN"],
+  Euronext: ["EURONEXT"],
+  "CBOE EU": ["EURONEXT", "XETR", "LSE"],
+  "CBOE AUS": ["ASX"],
+  HKEX: ["HKEX"],
+  ADX: ["ADX"],
+};
+
+// Only EU-domiciled (UCITS) ETFs may be sold to European retail as the real
+// fund; everything else -- US listings above all -- reaches them as a CFD. The
+// price source eToro assigns is a faithful stand-in for that line.
+const REAL_ETF_SOURCES = new Set(["Xetra", "LSE PLC", "Euronext", "CBOE EU"]);
+
+// A shared ticker is not a shared fund. When the listing venue eToro implies
+// matches where the CSV carries the ticker, the venue settles it and a verbose
+// legal name need not be re-derived; without venue agreement the name must
+// carry the match so a cross-border ticker clash cannot slip through.
+function resolveIsin(tickerCandidates, ticker, name, venues) {
+  const candidates = tickerCandidates.get(ticker) || [];
+  if (candidates.length === 0) return null;
+
+  const allowed = new Set(venues || []);
+  const sameVenue =
+    allowed.size > 0
+      ? candidates.filter((candidate) => [...candidate.exchanges].some((exchange) => allowed.has(exchange)))
+      : [];
+  const shortlist = sameVenue.length > 0 ? sameVenue : candidates;
+
+  const scored = shortlist.map((candidate) => ({
+    candidate,
+    isin: candidate.isin,
+    ...scoreCandidate(name, candidate),
+  }));
+
+  const bestScore = Math.max(0, ...scored.map((entry) => entry.score));
+  if (sameVenue.length === 0 && bestScore < MIN_NAME_SCORE) return null;
+
+  let winner;
+  if (scored.length === 1) {
+    winner = scored[0];
+  } else {
+    const winners = scored.filter((entry) => entry.score === bestScore);
+    if (winners.length !== 1) return null;
+    winner = winners[0];
   }
 
-  // Strip instrument-type suffix from name.
-  const name = rest.replace(/\s+(ETF|Stock|Crypto|Index|CFD|Forex|Commodity)\b.*$/i, "").trim();
-
-  return {
-    name: name || rest,
-    ticker,
-    exchange,
-    raw: exchange ? `${ticker} | ${name || rest} · ${exchange}` : `${ticker} | ${name || rest}`,
-  };
+  const exchange =
+    [...winner.candidate.exchanges].find((code) => allowed.has(code)) ||
+    [...winner.candidate.exchanges][0] ||
+    "";
+  return { isin: winner.isin, name: winner.name, exchange };
 }
 
-const browser = await puppeteer.connect({
-  browserURL: "http://127.0.0.1:9222",
-  defaultViewport: null,
-});
-
-const pages = await browser.pages();
-const page = pages.find((p) => p.url().includes("etoro.com")) || (await browser.newPage());
-
-if (!page.url().includes("etoro.com")) {
-  await page.goto("https://www.etoro.com/", { waitUntil: "domcontentloaded" });
-}
-
-await page.bringToFront();
-const searchInput = await ensureEtoroSearchInput(page);
-
-// `--start=N` (1-indexed) lets a run resume from a specific query without
-// throwing away progress already saved to parsed_json/etoro-parsed.json.
-const startIndex = (() => {
-  for (const arg of process.argv.slice(2)) {
-    const m = arg.match(/^--start=(\d+)$/i);
-    if (m) return Math.max(1, parseInt(m[1], 10));
-  }
-  return 1;
-})();
 const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
+const onlyTickers = new Set(positionalArgs.map(normalizeTicker).filter(Boolean));
 
-const defaultEtfQueries = ["IE00B44Z5B48", "IE00BK5BQT80", "IE00BFMXXD54"];
-const cliQueries = positionalArgs.filter(Boolean).map(toIsin).filter(Boolean);
 // `--csv=PATH` overrides the default ETF list CSV (defaults to etfs.csv).
 const csvPath = (() => {
   for (const arg of process.argv.slice(2)) {
-    const m = arg.match(/^--csv=(.+)$/i);
-    if (m) return m[1];
+    const match = arg.match(/^--csv=(.+)$/i);
+    if (match) return match[1];
   }
   return "etfs.csv";
 })();
-const csvQueries = loadIsinsFromCsv(csvPath);
-const rawQueries =
-  cliQueries.length > 0
-    ? cliQueries
-    : csvQueries.length > 0
-      ? csvQueries
-      : defaultEtfQueries;
-const queries = uniqueQueries(rawQueries);
 
-async function scrapeResultsForQuery(query) {
-  await searchInput.click({ clickCount: 3 });
-  await searchInput.press("Backspace");
-  await searchInput.type(query, { delay: 40 });
-  await sleep(900);
+const tickerCandidates = loadTickerCandidatesFromCsv(csvPath);
+const outputPath = "parsed_json/etoro-parsed.json";
 
-  return page.evaluate((q) => {
-    const norm = (s) => (s || "").replace(/\s+/g, " ").trim();
-    const nodes = [...document.querySelectorAll("*")].filter(
-      (el) => el instanceof HTMLElement && el.offsetParent !== null
-    );
+// eToro publishes its whole instrument catalogue unauthenticated, so the ETF
+// universe -- real UCITS funds and the US ETFs it can only offer as CFDs alike
+// -- comes down in one call, no logged-in browser or per-ISIN search needed.
+const ETF_TYPE_ID = 6;
 
-    const rowCandidates = nodes
-      .map((el) => norm(el.innerText))
-      .filter((text) => {
-        if (!text) return false;
-        if (text.length < 8 || text.length > 220) return false;
-        if (!text.includes("|")) return false;
-        if (!/^[A-Z0-9.-]{2,20}\s*\|/.test(text)) return false;
-        if (/^(Recherches récentes|Recent searches|Tendances|Trending|Smart Portfolios)/i.test(text)) {
-          return false;
-        }
-        return true;
+async function loadEtfs() {
+  const url = "https://api.etorostatic.com/sapi/instrumentsmetadata/V1.1/instruments";
+  for (let attempt = 0; attempt < 4; attempt += 1) {
+    try {
+      const response = await fetch(url, {
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36",
+        },
       });
-
-    return [...new Set(rowCandidates)];
-  }, query);
+      if (response.ok) {
+        const data = await response.json();
+        return (data.InstrumentDisplayDatas || []).filter(
+          (instrument) => instrument.InstrumentTypeID === ETF_TYPE_ID
+        );
+      }
+    } catch {
+      // Fall through to the pause and try again.
+    }
+    await sleep(1000 * (attempt + 1));
+  }
+  throw new Error("could not fetch eToro instrument metadata");
 }
+
+const etfs = await loadEtfs();
+console.error(`${etfs.length} ETFs in eToro's catalogue`);
 
 const results = [];
-const byKey = new Map();
+let realCount = 0;
+let cfdCount = 0;
+let unmatched = 0;
 
-// When resuming, load already-saved entries so we don't overwrite them and so
-// the dedup `byKey` map knows about rows from earlier queries.
-if (startIndex > 1 && fs.existsSync("parsed_json/etoro-parsed.json")) {
-  try {
-    const existing = JSON.parse(fs.readFileSync("parsed_json/etoro-parsed.json", "utf8"));
-    if (Array.isArray(existing)) {
-      for (const entry of existing) {
-        results.push(entry);
-        const key = entry?.ticker
-          ? `${entry.query}:TICKER:${entry.ticker.toUpperCase()}`
-          : entry?.raw
-            ? `${entry.query}:RAW:${entry.raw.toUpperCase()}`
-            : null;
-        if (key) byKey.set(key, entry);
-      }
-    }
-  } catch {
-    // Ignore parse errors -- treat as a fresh run.
-  }
-}
+for (const instrument of etfs) {
+  const ticker = normalizeTicker(instrument.SymbolFull || "");
+  if (!ticker) continue;
+  if (onlyTickers.size > 0 && !onlyTickers.has(ticker)) continue;
 
-for (const [queryIndex, query] of queries.entries()) {
-  if (queryIndex + 1 < startIndex) continue;
-  console.error(`[${queryIndex + 1}/${queries.length}] ${query}`);
-  const foundTexts = await scrapeResultsForQuery(query);
-  for (const text of foundTexts) {
-    const parsed = parseEtoroRowText(text);
-    if (!parsed) continue;
+  const name = (instrument.InstrumentDisplayName || "").replace(/\s+/g, " ").trim();
+  const priceSource = instrument.PriceSource || "";
+  const cfd = !REAL_ETF_SOURCES.has(priceSource);
 
-    // The page scraper picks up both a parent container (with exchange info) and
-    // child elements (without it), so we dedupe by (query, ticker) and keep
-    // whichever variant has the richest exchange value.
-    const key = parsed.ticker
-      ? `${query}:TICKER:${parsed.ticker.toUpperCase()}`
-      : `${query}:RAW:${(parsed.raw || "").toUpperCase()}`;
-
-    const incoming = { query, ...parsed, isin: query };
-    const existing = byKey.get(key);
-    if (!existing) {
-      byKey.set(key, incoming);
-      results.push(incoming);
-      continue;
-    }
-    if (!existing.exchange && incoming.exchange) {
-      Object.assign(existing, incoming);
-    }
+  const match = resolveIsin(tickerCandidates, ticker, name, PRICE_SOURCE_VENUES[priceSource]);
+  if (!match) {
+    unmatched += 1;
+    continue;
   }
 
-  // Persist progress after every query so an interruption keeps prior work.
-  fs.mkdirSync("parsed_json", { recursive: true });
-  fs.writeFileSync("parsed_json/etoro-parsed.json", JSON.stringify(results, null, 2));
+  if (cfd) cfdCount += 1;
+  else realCount += 1;
+
+  results.push({
+    ticker,
+    name,
+    exchange: match.exchange || priceSource,
+    type: "ETF",
+    cfd,
+    raw: [ticker, name, priceSource].filter(Boolean).join(" "),
+    isin: match.isin,
+  });
 }
 
+results.sort((left, right) => left.ticker.localeCompare(right.ticker));
+
+fs.mkdirSync("parsed_json", { recursive: true });
+fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+
+console.error(
+  `${results.length} ETFs matched to ${csvPath} | ${realCount} real UCITS | ${cfdCount} offered as CFD | ${unmatched} eToro ETFs with no CSV match`
+);
 console.log(JSON.stringify(results, null, 2));
-await browser.disconnect();

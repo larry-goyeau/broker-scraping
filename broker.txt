@@ -1,7 +1,5 @@
 Swissquote
 choicetrade
-bunq
-robinhood
 Lightspeed
 cobra trading
 questrade

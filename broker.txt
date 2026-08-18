@@ -20,6 +20,9 @@ Bank of Cyprus
 moneybase
 galtandtaggart
 bankofgeorgia
+caisse-epargne
+La Banque Postale
+vivid
 BUX
 withplum
 Syfe

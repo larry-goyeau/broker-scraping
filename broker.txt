@@ -6,26 +6,21 @@ questrade
 freetrade
 hello bank
 fortuneo
-Thndr
 Tiger Brokers AU
 Webull SG
 CGS International
 Endowus
-Syfe
 Rakuten Trade
-WHSelfinvest
 Exante
-N26
-Banque Internationale à Luxembourg
 easybourse
 benchmark
 eurofinance
-Optimtrader
 bluorbank
 Bank of Cyprus
 moneybase
-Mubasher Capital Bahrain
-sabinvest.com
-sharenet
+galtandtaggart
+bankofgeorgia
 BUX
 withplum
+Syfe
+N26

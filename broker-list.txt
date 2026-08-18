@@ -672,3 +672,15 @@ FXCM	Global	CFD	ETF CFDs	Not covered
 Moneta Markets	Global	CFD	ETF CFDs	Not covered
 PU Prime	Global	CFD	ETF CFDs	Not covered
 ACY Securities	Global	CFD	ETF CFDs	Not covered
+Freedom Broker	KZ	Broker	Global ETFs / ETPs	Not covered
+Halyk Finance	KZ	Broker	Global ETFs / ETPs	Not covered
+Alatau City Invest	KZ	Broker	Local + US ETFs	Not covered
+BCC Invest	KZ	Broker	Local-market ETFs	Not covered
+ForteFinance	KZ	Broker	Global ETFs / ETPs	Not covered
+Galt & Taggart	GE	Broker	Global ETFs / ETPs	Not covered
+TBC Capital	GE	Broker	Global ETFs / ETPs	Not covered
+Bank of Georgia	GE	Bank	US ETFs / ETNs	Not covered
+TBC Bank	GE	Bank	Global ETFs / ETPs	Not covered
+Ameriabank	AM	Bank	Global ETFs / ETPs	Not covered
+Evocabank	AM	Bank	Global ETFs / ETPs	Not covered
+Freedom Finance	UA	Broker	Global ETFs / ETPs	Not covered

@@ -1,32 +1,29 @@
 Swissquote
 choicetrade
-Lightspeed
-cobra trading
 questrade
 freetrade
-hello bank
 fortuneo
 Tiger Brokers AU
 Webull SG
 CGS International
 Endowus
-Rakuten Trade
-Exante
 easybourse
 benchmark
 eurofinance
 bluorbank
-Bank of Cyprus
-moneybase
 galtandtaggart
-bankofgeorgia
 caisse-epargne
 La Banque Postale
 vivid
 Creand
 patria
 bhmuae
+
 BUX
 withplum
 Syfe
 N26
+Exante
+Bank of Cyprus
+moneybase
+hello bank

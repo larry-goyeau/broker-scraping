@@ -683,3 +683,51 @@ SkyBridge Invest	KZ	Broker	Global ETFs / ETPs	https://sbinvest.kz/investors/
 Syfe	SG	Neobroker	Global ETFs / ETPs	https://www.syfe.com/create-account
 Moneyfarm	UK	Neobroker	UCITS ETFs / ETCs	https://www.moneyfarm.com/uk/
 Zürcher Kantonalbank	CH	Bank	Global ETFs / ETPs	https://www.zkb.ch/de/private/anlagen/anlageloesungen/execution-only.html
+SAVR	SE	Neobroker	UCITS ETFs / ETCs	https://savr.com/sv/etf
+HypoVereinsbank (HVB)	DE	Bank	UCITS ETFs / ETCs	https://www.hypovereinsbank.de/hvb/privatkunden/geldanlage/depotmodelle/smart-depot
+BCR Broker	RO	Bank	Global ETFs / ETPs	https://www.bcr.ro/ro/persoane-fizice/economisire-si-investire/investitii/bcr-broker
+novobanco Trading Pro	PT	Bank	Global ETFs / ETPs	https://www.novobanco.pt/particulares/investimento/plataforma-de-trading
+Caixa Geral de Depósitos	PT	Bank	UCITS ETFs / ETCs	https://www.cgd.pt/Particulares/Poupanca-Investimento/Intermediacao-Financeira/Pages/Bolsa-e-Mercados.aspx
+Oberbank	AT	Bank	UCITS ETFs / ETCs	https://www.oberbank.at/wertpapier-infos
+cash – banking by bank zweiplus	CH	Bank	Global ETFs / ETPs	https://www.cash.ch/online-trading
+Norne Securities	NO	Broker	UCITS ETFs / ETCs	https://norne.no/aksjehandel/
+BKS Bank Slovenia	SI	Bank	UCITS ETFs / ETCs	https://www.bksbank.si/fizicne-osebe/financni-instrumenti/inr-racun
+FIMA Vrijednosnice	HR	Broker	Global ETFs / ETPs	https://fima-vrijednosnice.hr/en/trading-on-foreign-exchanges/
+Truist Trade	US	Bank	US ETFs / ETNs	https://www.truist.com/investing-retirement/self-directed-investing
+PNC Brokerage Plus	US	Bank	US ETFs / ETNs	https://www.pnc.com/en/personal-banking/investments-and-retirement/brokerage-accounts/brokerage-accounts-faqs.html
+Webull Canada	CA	Neobroker	Local + US ETFs	https://www.webull.ca/trading-investing/stocks
+Moomoo Canada	CA	Neobroker	Local + US ETFs	https://www.moomoo.com/ca/
+Casa de Bolsa Banorte (BeTrading)	MX	Bank	Local + US ETFs	https://www.banorte.com/Casa-de-Bolsa/BeTrading/Que-es-BeTrading.html
+C6 Invest	BR	Neobroker	Local-market ETFs	https://www.c6bank.com.br/c6-invest/
+CM Capital	BR	Broker	Local-market ETFs	https://mkt.cmcapital.com.br/abertura-de-conta-versao-2
+Allaria	AR	Broker	Local + US ETFs	https://allaria.com.ar/
+Eco Valores	AR	Broker	Local + US ETFs	https://www.ecovalores.com.ar/preguntas-frecuentes.php
+Fintual Acciones	CL	Neobroker	US ETFs / ETNs	https://fintual.cl/que-es-fintual/
+Credicorp Capital Colombia	CO	Broker	Global ETFs / ETPs	https://www.credicorpcapital.com/Colombia/Neg/MerCap/Paginas/Ser.aspx
+Maybank Securities Singapore	SG	Bank	Global ETFs / ETPs	https://www.maybank.com/investment-banking/sg/services/trading/etf.page
+KGI Securities Singapore	SG	Broker	Global ETFs / ETPs	https://www.kgi.sg/securities/stocks
+Phillip Securities Hong Kong	HK	Broker	Global ETFs / ETPs	https://www.poems.com.hk/en-us/customer-service/online-account-opening/
+Daiwa Connect Securities	JP	Neobroker	Local + US ETFs	https://www.connect-sec.co.jp/account/
+Hanwha Investment & Securities	KR	Broker	Local + US ETFs	https://www.hanwhawm.com/nftf/main/index.cmd
+LS Securities	KR	Broker	Local-market ETFs / ETNs	https://www.ls-sec.co.kr/guide/eDirect/newid/GUJoinNewid0_01.jsp?front_menu_no=1402&left_menu_no=321&parent_menu_no=322
+CICC Wealth Management	CN	Broker	Local-market ETFs	https://www.ciccwm.com/ciccwmweb/zzt/advsixpc.html
+Share.Market by PhonePe	IN	Neobroker	Local-market ETFs	https://www.share.market/etf/
+m.Stock by Mirae Asset	IN	Neobroker	Local-market ETFs	https://www.mstock.com/open-demat-account
+Mirae Asset Sharekhan	IN	Broker	Local-market ETFs	https://www.sharekhan.com/equity-trading-account
+Geojit Financial Services	IN	Broker	Local-market ETFs	https://www.geojit.com/open-demat-account
+Bajaj Broking	IN	Broker	Local-market ETFs	https://www.bajajbroking.in/knowledge-center/exchange-traded-fund
+FSMOne Malaysia	MY	Broker	Global ETFs / ETPs	https://www.fsmone.com.my/pricing/stocks
+HSBC WorldTrader UAE	AE	Bank	Global ETFs / ETPs	https://www.hsbc.ae/investments/products/worldtrader/
+CBD Self Investr	AE	Bank	US ETFs / ETNs	https://www.cbd.ae/cbdinvestr/self-investors.html
+United Securities Oman	OM	Broker	Global ETFs / ETPs	https://usoman.com/Download-Forms.html
+Ubhar Capital (U-Capital)	OM	Broker	Global ETFs / ETPs	https://u-capital.net/u-capital-brokerage/
+Qatar Securities Company	QA	Broker	Global ETFs / ETPs	https://qatar-securities.com/faq/
+Ahli Brokerage Company	QA	Bank	Global ETFs / ETPs	https://www.ahlibrokerage.com.qa/AccountOpening.aspx
+ONE ZERO Digital Bank	IL	Bank	Global ETFs / ETPs	https://www.onezerobank.com/special/5636
+SBM Securities	MU	Bank	Global ETFs / ETPs	https://nbfc.sbmgroup.mu/trading-and-structuring/join-us
+EDC Stockbrokers	GH	Bank	Local-market ETFs	https://ecobank.com/gh/corporate-banking/edc
+SBG Securities Ghana	GH	Broker	Local-market ETFs	https://www.sbgsecurities.com.gh/sbgsecuritiesghana/sbg-securities/forms
+iTrust Finance	TZ	Broker	Local-market ETFs	https://www.itrust.co.tz/application-form
+Bendigo Invest Direct	AU	Bank	Local + Global ETFs	https://www.bendigobank.com.au/personal/investing/share-trading/
+Marketech Focus	AU	Broker	Local-market ETFs	https://onboarding.marketech.com.au/
+Morgans	AU	Broker	Local + Global ETFs	https://morgans.com.au/stockbroking

@@ -11,10 +11,7 @@ easybourse
 benchmark
 eurofinance
 bluorbank
-galtandtaggart
 caisse-epargne
-La Banque Postale
-vivid
 bhmuae
 maybank
 
@@ -25,3 +22,4 @@ Bank of Cyprus
 moneybase
 hello bank
 patria
+La Banque Postale

@@ -4,7 +4,6 @@ questrade
 freetrade
 fortuneo
 Tiger Brokers AU
-Webull SG
 CGS International
 Endowus
 easybourse
@@ -13,13 +12,11 @@ eurofinance
 bluorbank
 caisse-epargne
 bhmuae
-maybank
-
-Syfe
-N26
-Exante
-Bank of Cyprus
 moneybase
 hello bank
 patria
+
+Syfe
+Exante
+Bank of Cyprus
 La Banque Postale

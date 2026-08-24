@@ -1,3 +1,4 @@
+import re
 import sys
 from copy import deepcopy
 from typing import Optional
@@ -54,19 +55,96 @@ def list_all_etfs(
     return pd.concat(pages, ignore_index=True)
 
 
+# Words that name a fund family or a legal wrapper rather than the fund itself.
+_GENERIC_TOKENS = frozenset(
+    {
+        "PLC", "ICAV", "LTD", "LIMITED", "SICAV", "FUND", "FUNDS", "ETF", "ETFS",
+        "INC", "CO", "CORP", "TRUST", "SA", "AG", "NV", "I", "II", "III", "IV",
+        "V", "VI", "VII", "VIII", "IX", "X",
+    }
+)
+
+
+def _descriptiveness(name: str) -> int:
+    tokens = [token for token in re.split(r"[^A-Za-z0-9]+", name.upper()) if len(token) > 1]
+    return sum(1 for token in tokens if token not in _GENERIC_TOKENS)
+
+
+def _is_registry_entry(name: str) -> bool:
+    """
+    Registry names come in shouting capitals ("COINSHARES XBT PROVIDER AB"),
+    where the name a broker shows is written for humans.
+    """
+    letters = [char for char in name if char.isalpha()]
+    return len(letters) > 1 and name == name.upper()
+
+
+def _canonical_name(names: pd.Series) -> str:
+    """
+    Pick the name a broker is most likely to display. TradingView returns only
+    the issuer ("IShares Plc.") on some venues, and a legacy name on others —
+    London still calls the Russell 2000 ETF an "Index Fund". Those poorest and
+    oldest variants each appear on a venue or two, so the name carried by most
+    listings wins, provided it says more than the issuer's own.
+    """
+    counts = names.value_counts()
+    described = [name for name in counts.index if _descriptiveness(name) >= 2]
+    pool = described or list(counts.index)
+    return max(
+        pool,
+        key=lambda name: (
+            not _is_registry_entry(name),
+            counts[name],
+            _descriptiveness(name),
+            len(name),
+            name,
+        ),
+    )
+
+
+def tidy(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Drop what cannot be matched and give every ISIN a single name.
+    """
+    df = df.assign(
+        name=df["name"].fillna("").str.replace(r"\s+", " ", regex=True).str.strip(),
+        isin=df["isin"].fillna("").str.strip().str.upper(),
+    )
+
+    without_isin = int((df["isin"] == "").sum())
+    df = df[df["isin"] != ""]
+
+    before = len(df)
+    df = df.drop_duplicates(subset=["ticker", "exchange", "isin"])
+    duplicates = before - len(df)
+
+    canonical = df.groupby("isin")["name"].agg(_canonical_name)
+    renamed = int((df["name"] != df["isin"].map(canonical)).sum())
+    df = df.assign(name=df["isin"].map(canonical))
+
+    print(
+        f"Tidied: dropped {without_isin} rows without an ISIN, "
+        f"{duplicates} duplicate listings, renamed {renamed} rows to the fullest "
+        f"name of their ISIN."
+    )
+    return df.reset_index(drop=True)
+
+
 if __name__ == "__main__":
     # Use market=None for an "all world" scan (much larger result set).
     df = list_all_etfs(market=None, page_size=500)
 
     # TradingView's `name` is often a short code; `description` holds the readable fund name.
-    export_df = df.assign(
-        name=df["description"].fillna(df["name"]),
-        exchange=df["exchange"].fillna(df["ticker"].str.split(":").str[0]),
-    )[["ticker", "exchange", "isin", "name"]]
+    export_df = tidy(
+        df.assign(
+            name=df["description"].fillna(df["name"]),
+            exchange=df["exchange"].fillna(df["ticker"].str.split(":").str[0]),
+        )[["ticker", "exchange", "isin", "name"]]
+    )
 
     # Print a small preview (full list is saved to CSV below)
     print(export_df.head(50))
-    print(f"\nTotal ETFs: {len(df)}")
+    print(f"\nTotal ETFs: {len(export_df)} listings kept out of {len(df)} scanned")
 
     # Optional: save to CSV. Output path can be overridden as the first CLI arg
     # (defaults to etfs.csv).

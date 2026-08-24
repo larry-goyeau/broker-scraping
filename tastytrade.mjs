@@ -299,6 +299,9 @@ for (const instrument of tradable.sort((left, right) =>
     ticker,
     name: name || candidate.name,
     exchange: EXCHANGE_NAMES[exchange] || exchange || null,
+    // The active equities endpoint covers US venues only, so every line quotes
+    // in dollars.
+    currency: "USD",
     type: "ETF",
     raw: [ticker, name, exchange].filter(Boolean).join(" "),
     isin: candidate.isin,

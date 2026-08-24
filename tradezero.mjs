@@ -369,6 +369,9 @@ for (let index = 0; index < queries.length; index += BATCH_SIZE) {
       // stands in for those.
       name: asset.name || candidate.name,
       exchange: EXCHANGE_NAMES[exchange],
+      // The universe is restricted to US exchanges and the OTC sheets, so
+      // every line quotes in dollars.
+      currency: "USD",
       type: "ETF",
       raw: [ticker, asset.name, exchange].filter(Boolean).join(" "),
       isin: candidate.isin,

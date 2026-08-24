@@ -21,4 +21,4 @@ Bank of Cyprus
 La Banque Postale
 
 
-easyequities · firstrade · ig · interactivebrokers · lightyear · oanda · revolut · saxo · sogotrade · traderepublic · tradestation · trading212 · xtb
+firstrade · ig · interactivebrokers · lightyear · oanda · revolut · saxo · sogotrade · traderepublic · tradestation · trading212 · xtb

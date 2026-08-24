@@ -264,6 +264,8 @@ for (const instrument of universe) {
     ticker: instrument.ticker,
     name: instrument.name,
     exchange: EXCHANGE_NAMES[instrument.mic],
+    // The 24-hour market is a US venue list, quoted in dollars.
+    currency: "USD",
     type: "ETF",
     raw: [instrument.ticker, instrument.name, instrument.mic].filter(Boolean).join(" "),
     isin: associated ? associated.isin : "",

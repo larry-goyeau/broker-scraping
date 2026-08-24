@@ -66,11 +66,17 @@ function parseFundRow(text, query) {
   const isin = isinMatch[1];
   const name = compact.slice(0, isinMatch.index).trim();
 
+  // The price follows the ISIN, and its symbol is the only place the row says
+  // which currency the fund trades in.
+  const symbol = compact.slice(isinMatch.index + isin.length).match(/[€$£]/);
+  const SYMBOLS = { "€": "EUR", $: "USD", "£": "GBP" };
+
   return {
     query,
     ticker: null,
     isin,
     name,
+    currency: symbol ? SYMBOLS[symbol[0]] : null,
     exchange: "null",
     raw: `${name} ${isin}`,
     found: true,

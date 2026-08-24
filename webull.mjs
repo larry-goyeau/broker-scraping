@@ -436,6 +436,10 @@ for (const listing of tradable.sort((left, right) =>
     ticker,
     name: name || candidate.name,
     exchange: EXCHANGE_NAMES[exchange] || exchange,
+    // Hong Kong quotes in its own dollar; every other venue on the shelf is
+    // American. This is what tells the two counters of a dual-listed fund
+    // apart.
+    currency: exchange === "HKG" ? "HKD" : "USD",
     type: "ETF",
     raw: [listing.symbol, name, exchange].filter(Boolean).join(" "),
     isin: candidate.isin,

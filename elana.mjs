@@ -283,6 +283,7 @@ function collect(isin, rows) {
       ticker: ticker.toUpperCase(),
       name: (row.Description || "").replace(/\s+/g, " ").trim(),
       exchange: EXCHANGE_NAMES[(mic || "").toLowerCase()] || (mic || "").toLowerCase() || null,
+      currency: (row.CurrencyCode || "").toUpperCase() || null,
       type: (row.AssetType || "ETF").toUpperCase(),
       raw: [symbol, row.Description, row.ExchangeName, row.CurrencyCode].filter(Boolean).join(" "),
       isin,

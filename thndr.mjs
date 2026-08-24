@@ -365,6 +365,8 @@ for (const [index, asset] of offered.entries()) {
     query: asset.symbol,
     ticker: asset.symbol,
     name: asset.name || candidate.name,
+    // The catalogue is fetched with market=us, so every line quotes in dollars.
+    currency: "USD",
     type: "ETF",
     raw: [asset.symbol, asset.name].filter(Boolean).join(" "),
     isin: candidate.isin,

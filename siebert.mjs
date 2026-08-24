@@ -549,6 +549,8 @@ for (let offset = 0; offset < queries.length; offset += BATCH_SIZE) {
       ticker: quoted.ticker || ticker,
       name: quoted.name,
       exchange: EXCHANGE_NAMES[code] || code || null,
+      // Siebert keeps to US venues, so every line quotes in dollars.
+      currency: "USD",
       type: "ETF",
       raw: [ticker, quoted.name, quoted.exchangeName].filter(Boolean).join(" "),
       isin: candidate.isin,
@@ -590,6 +592,8 @@ if (failures.length > 0) {
       ticker: quoted.ticker || ticker,
       name: quoted.name,
       exchange: EXCHANGE_NAMES[code] || code || null,
+      // Siebert keeps to US venues, so every line quotes in dollars.
+      currency: "USD",
       type: "ETF",
       raw: [ticker, quoted.name, quoted.exchangeName].filter(Boolean).join(" "),
       isin: candidate.isin,

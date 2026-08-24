@@ -256,37 +256,51 @@ async function searchSymbol(query) {
   return Array.isArray(answer.json) ? answer.json : null;
 }
 
+// The search says nothing about the currency, which is what separates the two
+// London lines of one fund. The contract details do.
+async function readInfo(conid) {
+  if (!conid) return null;
+  const answer = await api(`iserver/secdef/info?conid=${conid}`);
+  return answer.json && !answer.json.error ? answer.json : null;
+}
+
 async function scrapeRowsForQuery(query) {
   let payload = await searchSymbol(query);
   if (!payload) payload = await searchSymbol(query);
   if (!payload) return [];
 
-  return payload
+  const hits = payload
     .filter((entry) => (entry?.symbol || "").toUpperCase() === query)
     .filter((entry) =>
       (entry.sections || []).some((section) => section?.secType === "STK")
-    )
-    .map((entry) => {
-      const exchange = (entry.description || "").trim();
-      const heading = (entry.companyHeader || entry.companyName || "").trim();
-      // The exact search suffixes the listing venue onto the company name
-      // ("SPDR GOLD SHARES - ARCA"), which the fuzzy search leaves off.
-      const suffix = ` - ${exchange}`;
-      const name =
-        exchange && heading.endsWith(suffix)
-          ? heading.slice(0, -suffix.length).trim()
-          : heading;
-      if (!name) return null;
+    );
 
-      return {
-        ticker: (entry.symbol || "").toUpperCase(),
-        name,
-        exchange,
-        type: "ETF",
-        raw: heading,
-      };
-    })
-    .filter(Boolean);
+  const rows = [];
+  for (const entry of hits) {
+    const exchange = (entry.description || "").trim();
+    const heading = (entry.companyHeader || entry.companyName || "").trim();
+    // The exact search suffixes the listing venue onto the company name
+    // ("SPDR GOLD SHARES - ARCA"), which the fuzzy search leaves off.
+    const suffix = ` - ${exchange}`;
+    const name =
+      exchange && heading.endsWith(suffix)
+        ? heading.slice(0, -suffix.length).trim()
+        : heading;
+    if (!name) continue;
+
+    const info = (await readInfo(entry.conid)) || {};
+
+    rows.push({
+      ticker: (entry.symbol || "").toUpperCase(),
+      name,
+      exchange,
+      currency: info.currency || null,
+      type: "ETF",
+      raw: heading,
+    });
+  }
+
+  return rows;
 }
 
 console.error(`${queries.length} tickers to check`);

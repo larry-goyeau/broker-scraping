@@ -331,6 +331,8 @@ for (const [index, etf] of etfs.entries()) {
     ticker: etf.ticker,
     name: etf.name || candidate.name,
     exchange: EXCHANGE_NAMES[etf.exchange] || etf.exchange || null,
+    // Sarwa Trade offers US listings only, so every line quotes in dollars.
+    currency: "USD",
     type: "ETF",
     raw: [etf.ticker, etf.name, etf.exchange].filter(Boolean).join(" "),
     isin: candidate.isin,

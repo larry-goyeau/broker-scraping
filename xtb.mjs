@@ -69,9 +69,15 @@ function parseXtbRow(text) {
   const exchange = suffixIndex > 0 ? symbol.slice(suffixIndex + 1) : null;
   const type = typeMatch[1].toUpperCase();
 
+  // The subtitle closes on the trading currency, which is what separates the
+  // two lines of one fund: "... UCITS, ACC, EUR" against "... ACC, USD".
+  const lastPart = rest.split(",").pop()?.trim().toUpperCase() || "";
+  const currency = /^(?:[A-Z]{3}|GBX)$/.test(lastPart) ? lastPart : null;
+
   return {
     ticker,
     exchange,
+    currency,
     name,
     type,
     raw: compact,

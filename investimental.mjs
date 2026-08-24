@@ -463,6 +463,7 @@ async function handle(batch) {
         ticker,
         name: named,
         exchange: MARKET_NAMES[market] || market || null,
+        currency: (listing.currency || "").toUpperCase() || null,
         type: "ETF",
         raw: [listing.symbol, listing.name, market, listing.currency].filter(Boolean).join(" "),
         isin: candidate.isin,

@@ -311,6 +311,8 @@ for (const [index, security] of securities.entries()) {
     ticker: security.ticker,
     name: security.name || candidate.name,
     exchange: venue || null,
+    // Tradier serves US venues only, so every line quotes in dollars.
+    currency: "USD",
     type: "ETF",
     raw: [security.ticker, security.name, security.exchange].filter(Boolean).join(" "),
     isin: candidate.isin,

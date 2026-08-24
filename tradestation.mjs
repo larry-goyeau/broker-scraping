@@ -173,6 +173,8 @@ async function scrapeInstrument(query) {
       ticker,
       name,
       exchange: exchange || null,
+      // TradeStation researches US listings only, quoted in dollars.
+      currency: "USD",
       type: "ETF",
       raw: normalize(header.innerText),
     };

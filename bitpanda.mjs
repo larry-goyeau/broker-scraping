@@ -405,6 +405,9 @@ await inParallel(shelf, 3, async (asset) => {
     ticker,
     name,
     exchange: (asset.exchange?.name || "").toUpperCase() || null,
+    // The whole shelf is quoted on Quotrix in euros, which is also the currency
+    // the API is asked for.
+    currency: "EUR",
     type: asset.__typename === "EquityEtcAsset" ? "ETC" : "ETF",
     raw: [asset.name, ticker, asset.wkn, asset.issuer].filter(Boolean).join(" "),
     isin: found.isin,

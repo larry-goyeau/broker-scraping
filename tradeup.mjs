@@ -387,6 +387,8 @@ for (let index = 0; index < queries.length; index += BATCH_SIZE) {
       // then as the bare number, so the CSV's wording stands in for it.
       name: asset.name && asset.name !== symbol ? asset.name : candidate.name,
       exchange: EXCHANGE_NAMES[exchange] || exchange,
+      // Hong Kong quotes in its own dollar, the rest of the shelf in the US one.
+      currency: HK_EXCHANGES.has(exchange) ? "HKD" : "USD",
       type: "ETF",
       raw: [symbol, asset.name, exchange].filter(Boolean).join(" "),
       isin: candidate.isin,

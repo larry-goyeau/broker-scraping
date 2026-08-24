@@ -195,10 +195,16 @@ async function scrapeResultsForQuery(q) {
 
       if (!match) return { raw: text };
 
+      // The price carries the currency the line trades in, London quoting in
+      // pence under a bare "p".
+      const symbol = (match[4] || "").replace(/[\s0-9.,]/g, "").toUpperCase();
+      const SYMBOLS = { "€": "EUR", $: "USD", "£": "GBP", P: "GBX" };
+
       return {
         name: match[1].trim(),
         ticker: match[2].trim(),
         exchange: match[3].trim(),
+        currency: SYMBOLS[symbol] || (/^[A-Z]{3}$/.test(symbol) ? symbol : null),
         raw: `${match[1].trim()} ${match[2].trim()} · ${match[3].trim()}`,
       };
     });

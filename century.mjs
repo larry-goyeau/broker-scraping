@@ -441,6 +441,7 @@ for (const [index, product] of universe.entries()) {
     query: product.N,
     ticker: candidate.ticker || match.ticker || "",
     name: candidate.name || match.name,
+    currency: candidate.currency || null,
     type: "ETF",
     raw: [product.N, candidate.name, candidate.currency].filter(Boolean).join(" "),
     isin: match.isin,

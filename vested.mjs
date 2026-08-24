@@ -402,6 +402,8 @@ for (let round = 1; queue.length > 0 && round <= MAX_ROUNDS; round += 1) {
         ticker: entry.ticker,
         name,
         exchange: (answer.exchange || "").trim() || null,
+        // Vested gives Indian investors US listings, quoted in dollars.
+        currency: "USD",
         type: (answer.type || "ETF").toUpperCase(),
         raw: [entry.ticker, entry.listName, answer.exchange].filter(Boolean).join(" "),
         isin: entry.isin,

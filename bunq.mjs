@@ -219,6 +219,8 @@ for (const instrument of etfs) {
     query: isin,
     ticker: pickTicker(entry),
     name,
+    // bunq routes its orders to Xetra, which quotes in euros.
+    currency: "EUR",
     type: "ETF",
     raw: [instrument.name, instrument.legal_name, isin].filter(Boolean).join(" "),
     isin,

@@ -340,6 +340,9 @@ for (const [index, asset] of listings.entries()) {
     ticker,
     name: name || candidate.name,
     exchange: EXCHANGE_NAMES[exchange],
+    // The assets endpoint is asked for US equities only, so every line quotes
+    // in dollars.
+    currency: "USD",
     type: "ETF",
     raw: [ticker, name, exchange].filter(Boolean).join(" "),
     isin: candidate.isin,

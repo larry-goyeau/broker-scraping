@@ -242,6 +242,8 @@ async function scrapeInstrument(query) {
           return {
             ticker,
             name,
+            // SogoTrade is a US broker quoting US listings in dollars.
+            currency: "USD",
             type: "ETF",
             raw: normalize(quotePanel?.innerText || `${ticker} ${name}`),
           };

@@ -306,6 +306,8 @@ for (const [queryIndex, query] of queries.entries()) {
         ticker: parsed.ticker,
         name,
         exchange: parsed.exchange,
+        // Firstrade lists US venues only, so every line quotes in dollars.
+        currency: "USD",
         type: "ETF",
         raw: `${parsed.ticker} ${name} - ${parsed.exchange}`,
         isin,

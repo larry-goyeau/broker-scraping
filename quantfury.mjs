@@ -127,6 +127,12 @@ const EXCHANGE_VENUES = {
   B3: ["BMFBOVESPA", "BOVESPA", "BIVA"],
 };
 
+const VENUE_CURRENCIES = {
+  NYSE: "USD",
+  NASDAQ: "USD",
+  B3: "BRL",
+};
+
 // A shared ticker is not a shared fund. When the venue Quantfury quotes agrees
 // with where the CSV carries the ticker, the venue settles it and a verbose
 // legal name need not be re-derived; without that agreement the name must carry
@@ -275,6 +281,9 @@ for (const instrument of etfs) {
     ticker,
     name,
     exchange: match.exchange || venue,
+    // The operator says the currency: São Paulo trades in reais, the American
+    // venues in dollars.
+    currency: VENUE_CURRENCIES[venue] || (instrument.eci === "US" ? "USD" : null),
     type: "ETF",
     raw: [instrument.sn, name, venue].filter(Boolean).join(" "),
     isin: match.isin,

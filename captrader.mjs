@@ -144,17 +144,21 @@ const browser = await puppeteer.connect({
   defaultViewport: null,
 });
 
+// Captrader introduces the account onto IBKR's Client Portal, served from
+// clientam.com just like MEXEM and WH SelfInvest, so the same portal bridge is
+// used. The page is only there to lend its session to the calls.
 const pages = await browser.pages();
 const page =
   pages.find((candidate) => candidate.url().includes("clientam.com")) ||
   (await browser.newPage());
+await page.bringToFront();
 
 if (!page.url().includes("clientam.com")) {
   await page.goto("https://www.clientam.com/portal/", {
     waitUntil: "domcontentloaded",
   });
+  await sleep(5000);
 }
-await page.bringToFront();
 
 // `--start=N` (1-indexed) lets a run resume from a specific query without
 // throwing away progress already saved to parsed_json/captrader-parsed.json.
@@ -211,114 +215,51 @@ if (startIndex > 1 && fs.existsSync(outputPath)) {
   }
 }
 
-const searchInputSelector = "#cp-ib-bar-sl-input";
+const API = "/portal.proxy/v1/portal";
 
-// Submitting the search detaches the field while the results panel renders.
-async function ensureSearchInput() {
-  await page.waitForSelector(searchInputSelector, { visible: true, timeout: 30000 });
-}
-
-await ensureSearchInput();
-
-async function setInputValue(value) {
-  await page.evaluate(
-    (selector, text) => {
-      const input = document.querySelector(selector);
-      if (!input) return;
-      // The portal tracks the field through its own value setter, so assigning
-      // `input.value` directly would leave its model unchanged.
-      const setter = Object.getOwnPropertyDescriptor(
-        window.HTMLInputElement.prototype,
-        "value"
-      ).set;
-      setter.call(input, text);
-      input.dispatchEvent(new Event("input", { bubbles: true }));
+async function api(path, options = {}) {
+  return page.evaluate(
+    async (base, p, opts) => {
+      const response = await fetch(`${base}/${p}`, {
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        method: opts.method || "GET",
+        body: opts.body || undefined,
+      });
+      const text = await response.text();
+      try {
+        return { status: response.status, json: JSON.parse(text) };
+      } catch {
+        return { status: response.status, error: text.slice(0, 200) };
+      }
     },
-    searchInputSelector,
-    value
+    API,
+    path,
+    options
   );
 }
 
-// Typing runs a fuzzy prefix search (`pattern: true`) that also matches other
-// symbols; submitting the query runs an exact-symbol search. Both hit the same
-// endpoint, so they are told apart by the request body.
-function waitForSearchResponse(query, { exact }, timeoutMs) {
-  return page
-    .waitForResponse(
-      (response) => {
-        if (!response.url().includes("/iserver/secdef/search")) return false;
-        try {
-          const body = JSON.parse(response.request().postData() || "{}");
-          if (body.symbol !== query) return false;
-          return exact ? !body.pattern : Boolean(body.pattern);
-        } catch {
-          return false;
-        }
-      },
-      { timeout: timeoutMs }
-    )
-    .catch(() => null);
+// Keeps the Client Portal bridge awake; without it, later calls start failing.
+async function tickle() {
+  await api("tickle").catch(() => null);
 }
 
-async function submitQuery(query) {
-  const focused = await page.evaluate((selector) => {
-    const input = document.querySelector(selector);
-    if (!input) return false;
-    input.focus();
-    return document.activeElement === input;
-  }, searchInputSelector);
-  if (!focused) return false;
-
-  await page.keyboard.press("Enter");
-  return true;
-}
-
-// Runs the exact-symbol lookup the portal performs when the query is submitted.
-async function fetchExactListings(query) {
-  await ensureSearchInput();
-
-  // The portal ignores a term matching the one it last searched, so a rerun of
-  // the query still in the box needs a different lookup to reset that state.
-  // Blanking the field does not count, since an empty term is never searched.
-  const alreadyShowing = await page.evaluate(
-    (selector, value) => document.querySelector(selector)?.value === value,
-    searchInputSelector,
-    query
-  );
-  if (alreadyShowing) {
-    const primer = query.length > 1 ? query.slice(0, -1) : `${query}Z`;
-    const primerPending = waitForSearchResponse(primer, { exact: false }, 8000);
-    await setInputValue(primer);
-    await primerPending;
-  }
-
-  const suggestionsPending = waitForSearchResponse(query, { exact: false }, 15000);
-  await setInputValue(query);
-  // The query is only submittable once the suggestion lookup has answered.
-  if (!(await suggestionsPending)) return null;
-
-  const exactPending = waitForSearchResponse(query, { exact: true }, 15000);
-  if (!(await submitQuery(query))) return null;
-
-  const response = await exactPending;
-  if (!response) return null;
-  try {
-    return await response.json();
-  } catch {
-    return null;
-  }
+// The search the portal runs when a query is submitted rather than merely
+// typed: `pattern: false` asks for the symbol itself instead of everything
+// starting with it, which is what keeps unrelated companies out.
+async function searchSymbol(query) {
+  const answer = await api("iserver/secdef/search", {
+    method: "POST",
+    body: JSON.stringify({ symbol: query, pattern: false, referrer: "" }),
+  });
+  // An unknown symbol answers `{ error: "No symbol found" }`.
+  return Array.isArray(answer.json) ? answer.json : null;
 }
 
 async function scrapeRowsForQuery(query) {
-  let payload = await fetchExactListings(query);
-  if (!payload) payload = await fetchExactListings(query);
-
-  if (!payload) {
-    console.error(`  no search response for ${query}`);
-    return [];
-  }
-  // An unknown symbol answers `{ error: "No symbol found" }`.
-  if (!Array.isArray(payload)) return [];
+  let payload = await searchSymbol(query);
+  if (!payload) payload = await searchSymbol(query);
+  if (!payload) return [];
 
   return payload
     .filter((entry) => (entry?.symbol || "").toUpperCase() === query)
@@ -348,8 +289,11 @@ async function scrapeRowsForQuery(query) {
     .filter(Boolean);
 }
 
+console.error(`${queries.length} tickers to check`);
+
 for (const [queryIndex, query] of queries.entries()) {
   if (queryIndex + 1 < startIndex) continue;
+  if (queryIndex % 20 === 0) await tickle();
   console.error(`[${queryIndex + 1}/${queries.length}] ${query}`);
 
   const rows = await scrapeRowsForQuery(query);

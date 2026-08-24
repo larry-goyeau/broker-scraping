@@ -32,114 +32,6 @@ function loadIsinsFromCsv(csvPath) {
     .filter(Boolean);
 }
 
-function uniqueQueries(values) {
-  const seen = new Set();
-  return values.filter((value) => {
-    const key = value.toUpperCase();
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
-}
-
-function parseDegiroRow(text) {
-  const compact = (text || "").replace(/\s+/g, " ").trim();
-  if (!compact) return null;
-
-  // Each row in the DeGiro product table renders as innerText like:
-  //   "A V <NAME>[ H] <TICKER> | <ISIN> <EXCHANGE> <CURRENCY?> <PRICE> ..."
-  // The leading "A V" comes from the Acheter/Vendre action buttons, and an
-  // optional trailing "H" badge (hedged/hard-to-borrow indicator) may sit
-  // between the name and the ticker column.
-  const match = compact.match(
-    /^A\s+V\s+(.+?)\s+([A-Z0-9.]{1,12})\s*\|\s*([A-Z]{2}[A-Z0-9]{10})\s+([A-Z]{2,4})\b(?:\s+(\S+))?/
-  );
-  if (!match) return null;
-
-  let name = match[1].trim();
-  // Strip the optional "H" hedged / hard-to-borrow badge that sits between
-  // the name and the ticker column when present.
-  name = name.replace(/\s+H$/, "").trim();
-
-  const ticker = match[2].toUpperCase();
-  const isin = match[3].toUpperCase();
-  const exchange = match[4].toUpperCase();
-
-  // The slot after the exchange code is the currency. Reject anything that
-  // looks like a price/percentage/dash so we don't capture the price column
-  // when the currency cell is empty.
-  let currency = match[5] || null;
-  if (currency && /^[-—.,\d%+]+$/.test(currency)) currency = null;
-
-  return {
-    name,
-    ticker,
-    exchange,
-    currency,
-    isin,
-  };
-}
-
-async function ensureDegiroSearchInput(page) {
-  const selectors = [
-    'input[placeholder*="Search" i]',
-    'input[placeholder*="Rechercher" i]',
-    'input[placeholder*="Suchen" i]',
-    'input[placeholder*="Zoeken" i]',
-    'input[placeholder*="Cerca" i]',
-    'input[type="search"]',
-  ];
-
-  let input = await page.$(selectors.join(", "));
-  if (input) return input;
-
-  await page.evaluate(() => {
-    const norm = (s) => (s || "").replace(/\s+/g, " ").trim();
-    const candidates = [...document.querySelectorAll("button, a, [role='button']")];
-    const target = candidates.find((el) =>
-      /search|rechercher|suchen|zoeken|cerca/i.test(
-        norm(el.textContent || el.getAttribute("aria-label") || "")
-      )
-    );
-    if (target) target.click();
-  });
-  await sleep(300);
-
-  input = await page.waitForSelector(selectors.join(", "), { timeout: 8000 });
-  return input;
-}
-
-const browser = await puppeteer.connect({
-  browserURL: "http://127.0.0.1:9222",
-  defaultViewport: null,
-});
-
-const pages = await browser.pages();
-const page = pages.find((p) => /degiro\./i.test(p.url())) || (await browser.newPage());
-
-if (!/degiro\./i.test(page.url())) {
-  // productType=131 narrows the products tab to Trackers (ETFs).
-  await page.goto("https://trader.degiro.nl/trader/#/products?productType=131", {
-    waitUntil: "domcontentloaded",
-  });
-}
-
-await page.bringToFront();
-const searchInput = await ensureDegiroSearchInput(page);
-
-// `--start=N` (1-indexed) lets a run resume from a specific query without
-// throwing away progress already saved to parsed_json/degiro-parsed.json.
-const startIndex = (() => {
-  for (const arg of process.argv.slice(2)) {
-    const m = arg.match(/^--start=(\d+)$/i);
-    if (m) return Math.max(1, parseInt(m[1], 10));
-  }
-  return 1;
-})();
-const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
-
-const defaultQueries = ["IE00B44Z5B48", "IE00BK5BQT80", "IE00BFMXXD54"];
-const cliQueries = positionalArgs.filter(Boolean).map(toIsin).filter(Boolean);
 // `--csv=PATH` overrides the default ETF list CSV (defaults to etfs.csv).
 const csvPath = (() => {
   for (const arg of process.argv.slice(2)) {
@@ -148,169 +40,154 @@ const csvPath = (() => {
   }
   return "etfs.csv";
 })();
-const csvQueries = loadIsinsFromCsv(csvPath);
-const rawQueries =
-  cliQueries.length > 0
-    ? cliQueries
-    : csvQueries.length > 0
-      ? csvQueries
-      : defaultQueries;
-const queries = uniqueQueries(rawQueries);
 
-async function scrapeRowsForQuery(query) {
-  await searchInput.click({ clickCount: 3 });
-  await searchInput.press("Backspace");
-  await searchInput.type(query, { delay: 40 });
+// Naming ISINs on the command line narrows a run down to those.
+const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
+const cliIsins = new Set(positionalArgs.map(toIsin).filter(Boolean));
+const wanted = cliIsins.size > 0 ? cliIsins : new Set(loadIsinsFromCsv(csvPath));
 
-  const emptyStateRegex =
-    /^(Aucun élément à afficher|No items to display|Geen items om weer te geven|Keine Einträge( vorhanden)?|Nessun elemento da visualizzare)$/i;
+const browser = await puppeteer.connect({
+  browserURL: "http://127.0.0.1:9222",
+  defaultViewport: null,
+});
 
-  const collectSnapshot = () =>
-    page.evaluate(
-      ({ q, emptyStatePattern }) => {
-        const norm = (s) => (s || "").replace(/\s+/g, " ").trim();
-        const upper = q.toUpperCase();
+// The page is only there to lend its signed-in session to the calls below.
+const pages = await browser.pages();
+const page = pages.find((p) => /degiro\./i.test(p.url())) || (await browser.newPage());
 
-        // Locate the product table specifically by finding the header row
-        // that contains "ISIN" or "TICKER". Other panels on the page (orders,
-        // transactions) also use tables, and we don't want their empty-state
-        // placeholders or rows to influence our results.
-        const allTables = [...document.querySelectorAll("table")];
-        const productTable = allTables.find((table) => {
-          if (!(table instanceof HTMLElement) || table.offsetParent === null) return false;
-          const headerText = norm(
-            (table.querySelector("thead") || table).innerText || ""
-          ).toUpperCase();
-          return /ISIN|TICKER|PRODUIT|PRODUCT/.test(headerText);
-        });
+if (!/degiro\./i.test(page.url())) {
+  await page.goto("https://trader.degiro.nl/trader/#/markets", { waitUntil: "domcontentloaded" });
+  await sleep(5000);
+}
 
-        // Only consider rows that contain the ISIN we just typed; this avoids
-        // grabbing stale rows from the previous search while results refresh.
-        const rowScope = productTable
-          ? [...productTable.querySelectorAll("tbody tr")]
-          : [...document.querySelectorAll("tr")];
-        const rows = rowScope.filter((row) => {
-          if (!(row instanceof HTMLElement) || row.offsetParent === null) return false;
-          return norm(row.innerText).toUpperCase().includes(upper);
-        });
+// Every call the trader makes carries the session and the account number in
+// plain sight, so they are read back off its own traffic rather than guessed.
+// The browser keeps a bounded log of those requests, hence the reload when
+// nothing turns up.
+async function readSession() {
+  return page.evaluate(() => {
+    const found = {};
+    for (const entry of performance.getEntriesByType("resource")) {
+      const query = new URL(entry.name).searchParams;
+      if (query.get("sessionId")) found.sessionId = query.get("sessionId");
+      if (query.get("intAccount")) found.intAccount = query.get("intAccount");
+    }
+    return found;
+  });
+}
 
-        // DeGiro renders a localized empty-state placeholder inside the table
-        // ("Aucun élément à afficher" in FR, "No items to display" in EN, etc.)
-        // when the search returns no products. Only detect the placeholder
-        // inside the product table so persistent labels elsewhere on the page
-        // don't trigger a false positive.
-        const re = new RegExp(emptyStatePattern, "i");
-        const emptyStateScope = productTable
-          ? [
-              ...productTable.querySelectorAll(
-                "tbody td, .p-datatable-emptymessage, .p-datatable-emptymessage td"
-              ),
-            ]
-          : [];
-        const emptyState = emptyStateScope.some((cell) => {
-          if (!(cell instanceof HTMLElement) || cell.offsetParent === null) return false;
-          return re.test(norm(cell.innerText));
-        });
+let session = await readSession();
+if (!session.sessionId || !session.intAccount) {
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await sleep(6000);
+  session = await readSession();
+}
+if (!session.sessionId || !session.intAccount) {
+  throw new Error("Could not read the DeGiro session. Is the trader signed in?");
+}
 
-        return {
-          rows: [...new Set(rows.map((row) => norm(row.innerText)).filter(Boolean))],
-          emptyState,
-          productTableFound: Boolean(productTable),
-        };
-      },
-      { q: query, emptyStatePattern: emptyStateRegex.source }
+const tail = `intAccount=${session.intAccount}&sessionId=${session.sessionId}`;
+
+async function api(path) {
+  const answer = await page.evaluate(async (url) => {
+    const response = await fetch(url, {
+      credentials: "include",
+      headers: { Accept: "application/json" },
+    });
+    const text = await response.text();
+    try {
+      return { status: response.status, json: JSON.parse(text) };
+    } catch {
+      return { status: response.status, error: text.slice(0, 160) };
+    }
+  }, path);
+
+  if (answer.status !== 200) {
+    throw new Error(`DeGiro answered ${answer.status} for ${path.split("?")[0]}`);
+  }
+  return answer.json;
+}
+
+// Products name their venue by number; the dictionary turns that into the
+// short code the trader shows in its own product table.
+async function loadExchanges() {
+  const payload = await api(`/productsearch/secure/v1/config/dictionary?${tail}`);
+  const names = new Map();
+  for (const row of payload?.exchanges || []) {
+    names.set(String(row.id), (row.hiqAbbr || row.name || "").toUpperCase());
+  }
+  return names;
+}
+
+// The whole tracker shelf comes down a page at a time, so the CSV is matched
+// against it afterwards instead of asking DeGiro about one ISIN at a time.
+async function loadEtfs() {
+  const products = [];
+  const pageSize = 1000; // The service caps a page here whatever is asked for.
+
+  for (let offset = 0; offset < 100000; offset += pageSize) {
+    const payload = await api(
+      `/product_search/secure/v5/etfs?popularOnly=false&inputAggregateTypes=&inputAggregateValues=` +
+        `&searchText=&offset=${offset}&limit=${pageSize}&requireTotal=true` +
+        `&sortColumns=name&sortTypes=asc&${tail}`
     );
 
-  // DeGiro streams results across multiple exchanges over a few hundred ms;
-  // wait until the row count is stable for a couple consecutive polls. We
-  // also bail early when the product table itself shows the empty-state
-  // placeholder, but only after a minimum elapsed time and several
-  // consecutive empty-state observations so we don't trip on the brief
-  // flash of empty state while the previous results clear and the new
-  // request is in flight.
-  const maxWaitMs = 5000;
-  const pollMs = 250;
-  const stableNeeded = 3;
-  const emptyStateNeeded = 4;
-  const emptyStateMinElapsedMs = 1200;
-  let elapsed = 0;
-  let lastCount = -1;
-  let stableHits = 0;
-  let emptyStateHits = 0;
-  let rowTexts = [];
-
-  while (elapsed < maxWaitMs) {
-    await sleep(pollMs);
-    elapsed += pollMs;
-    const snapshot = await collectSnapshot();
-    rowTexts = snapshot.rows;
-
-    if (rowTexts.length === 0 && snapshot.emptyState) {
-      emptyStateHits += 1;
-      if (emptyStateHits >= emptyStateNeeded && elapsed >= emptyStateMinElapsedMs) {
-        return [];
-      }
-    } else {
-      emptyStateHits = 0;
-    }
-
-    if (rowTexts.length === lastCount && rowTexts.length > 0) {
-      stableHits += 1;
-      if (stableHits >= stableNeeded) break;
-    } else {
-      stableHits = 0;
-      lastCount = rowTexts.length;
-    }
+    const batch = payload?.products || [];
+    products.push(...batch);
+    console.error(`  ${products.length}/${payload?.total ?? "?"} listings`);
+    if (batch.length < pageSize) break;
   }
 
-  return rowTexts;
+  return products;
 }
+
+const exchanges = await loadExchanges();
+console.error(`${exchanges.size} exchanges named, ${wanted.size} ISINs wanted`);
+
+const shelf = await loadEtfs();
 
 const results = [];
 const seen = new Set();
+let untradable = 0;
+let absent = 0;
 
-// When resuming, load already-saved entries so we don't overwrite them and so
-// the dedup `seen` set knows about rows from earlier queries.
-if (startIndex > 1 && fs.existsSync("parsed_json/degiro-parsed.json")) {
-  try {
-    const existing = JSON.parse(fs.readFileSync("parsed_json/degiro-parsed.json", "utf8"));
-    if (Array.isArray(existing)) {
-      for (const entry of existing) {
-        results.push(entry);
-        if (entry?.exchange && entry?.ticker && entry?.isin) {
-          seen.add(`${entry.exchange}:${entry.ticker}:${entry.isin}`.toUpperCase());
-        }
-      }
-    }
-  } catch {
-    // Ignore parse errors -- treat as a fresh run.
+for (const product of shelf) {
+  const isin = toIsin(product?.isin);
+  if (!isin) continue;
+
+  if (!wanted.has(isin)) {
+    absent += 1;
+    continue;
   }
-}
-
-for (const [queryIndex, query] of queries.entries()) {
-  if (queryIndex + 1 < startIndex) continue;
-  console.error(`[${queryIndex + 1}/${queries.length}] ${query}`);
-  const rowTexts = await scrapeRowsForQuery(query);
-  for (const text of rowTexts) {
-    const parsed = parseDegiroRow(text);
-    if (!parsed) continue;
-    if (parsed.isin !== query) continue;
-
-    const key = `${parsed.exchange}:${parsed.ticker}:${parsed.isin}`.toUpperCase();
-    if (seen.has(key)) continue;
-    seen.add(key);
-
-    results.push({
-      query,
-      ...parsed,
-    });
+  // Listings the account cannot act on are no use in a shopping list.
+  if (!product.tradable || !product.active) {
+    untradable += 1;
+    continue;
   }
 
-  // Persist progress after every query so an interruption keeps prior work.
-  fs.mkdirSync("parsed_json", { recursive: true });
-  fs.writeFileSync("parsed_json/degiro-parsed.json", JSON.stringify(results, null, 2));
+  const ticker = String(product.symbol || "").toUpperCase();
+  const exchange = exchanges.get(String(product.exchangeId)) || String(product.exchangeId);
+  const key = `${exchange}:${ticker}:${isin}`;
+  if (seen.has(key)) continue;
+  seen.add(key);
+
+  results.push({
+    query: isin,
+    name: String(product.name || "").replace(/\s+/g, " ").trim(),
+    ticker,
+    exchange,
+    currency: product.currency || null,
+    isin,
+  });
 }
 
+fs.mkdirSync("parsed_json", { recursive: true });
+fs.writeFileSync("parsed_json/degiro-parsed.json", JSON.stringify(results, null, 2));
+
+console.error(
+  `${results.length} listings kept over ${new Set(results.map((row) => row.isin)).size} funds, ` +
+    `${untradable} not tradable, ${absent} the CSV does not carry`
+);
 console.log(JSON.stringify(results, null, 2));
 
 await browser.disconnect();

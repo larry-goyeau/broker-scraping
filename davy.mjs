@@ -46,11 +46,16 @@ const browser = await puppeteer.connect({
   defaultViewport: null,
 });
 
+// The page is only there to lend its signed-in session to the calls below.
 const pages = await browser.pages();
 const page =
   pages.find((candidate) => candidate.url().includes("mydavy.ie")) ||
   (await browser.newPage());
-await page.bringToFront();
+
+if (!page.url().includes("mydavy.ie")) {
+  await page.goto("https://www.mydavy.ie/trading.htm", { waitUntil: "domcontentloaded" });
+  await sleep(3000);
+}
 
 // `--start=N` (1-indexed) lets a run resume from a specific query without
 // throwing away progress already saved to parsed_json/davy-parsed.json.
@@ -107,84 +112,32 @@ if (startIndex > 1 && fs.existsSync(outputPath)) {
   }
 }
 
-const TICKET_URL = "https://www.mydavy.ie/tradefunds.htm?action=buy";
+const SEARCH_URL = "https://www.mydavy.ie/api/search/tradeProductSearch";
 
-// The ticket serves shares, ETFs and funds from one box; only the ETF tab makes
-// the search hit the ETF universe.
-async function openEtfTicket() {
-  if (!page.url().includes("tradefunds.htm")) {
-    await page.goto(TICKET_URL, { waitUntil: "domcontentloaded" });
-  }
-  await page.waitForSelector("#company-search", { timeout: 30000 });
+// The lookup the ticket runs as the search box is typed into. `tradeType` picks
+// the universe, and the ETF tab spells it `etfs`: the constant the app's own
+// code carries ("ETF") is accepted but answers empty, ISIN or not.
+async function fetchListings(isin) {
+  const answer = await page.evaluate(
+    async (url, term) => {
+      const response = await fetch(
+        `${url}?search=${encodeURIComponent(term)}&selling=false&tradeType=etfs`,
+        { credentials: "include", headers: { Accept: "application/json, text/plain, */*" } }
+      );
+      const text = await response.text();
+      try {
+        return { status: response.status, json: JSON.parse(text) };
+      } catch {
+        return { status: response.status, error: text.slice(0, 160) };
+      }
+    },
+    SEARCH_URL,
+    isin
+  );
 
-  const switched = await page.evaluate(() => {
-    const tabs = [...document.querySelectorAll("ul.nav-tabs li")];
-    const etfTab = tabs.find((tab) => /trade\s*etfs/i.test(tab.innerText || ""));
-    if (!etfTab || etfTab.classList.contains("active")) return false;
-    etfTab.querySelector("a")?.click();
-    return true;
-  });
-
-  if (switched) {
-    await sleep(500);
-    await page.waitForSelector("#company-search", { timeout: 30000 });
-  }
-}
-
-function setSearchTerm(term) {
-  return page.evaluate((value) => {
-    const input = document.querySelector("#company-search");
-    if (!input) return;
-    // The box is bound through ng-model, which only reacts to input events.
-    const setValue = Object.getOwnPropertyDescriptor(
-      window.HTMLInputElement.prototype,
-      "value"
-    ).set;
-    setValue.call(input, value);
-    input.dispatchEvent(new Event("input", { bubbles: true }));
-  }, term);
-}
-
-// Returns the listings the ticket loaded for `term`, or null when the search
-// never fired.
-async function runSearch(term) {
-  const pending = page
-    .waitForResponse(
-      (response) =>
-        response.url().includes("/api/search/tradeProductSearch") &&
-        new URL(response.url()).searchParams.get("search") === term,
-      { timeout: 10000 }
-    )
-    .catch(() => null);
-
-  await setSearchTerm(term);
-
-  const response = await pending;
-  if (!response) return null;
-
-  try {
-    const payload = await response.json();
-    return Array.isArray(payload) ? payload : [];
-  } catch {
-    return [];
-  }
-}
-
-async function fetchListings(query) {
-  // The ticket ignores a term equal to the one it last searched, so a repeat
-  // stalls unless something different is searched in between.
-  const showing = await page
-    .$eval("#company-search", (input) => input.value)
-    .catch(() => "");
-  if (showing === query) await runSearch(query.slice(0, -1));
-
-  let listings = await runSearch(query);
-  if (listings === null) {
-    await runSearch(query.slice(0, -1));
-    listings = await runSearch(query);
-  }
-
-  return listings || [];
+  // A signed-out session is answered with the login page rather than an error,
+  // so anything that is not a list counts as no answer at all.
+  return Array.isArray(answer.json) ? answer.json : null;
 }
 
 function parseListing(entry, query) {
@@ -211,13 +164,25 @@ function parseListing(entry, query) {
   };
 }
 
-await openEtfTicket();
+console.error(`${queries.length} ISINs to check`);
+
+let silences = 0;
 
 for (const [queryIndex, query] of queries.entries()) {
   if (queryIndex + 1 < startIndex) continue;
   console.error(`[${queryIndex + 1}/${queries.length}] ${query}`);
 
   const listings = await fetchListings(query);
+  if (!listings) {
+    silences += 1;
+    console.error("  no answer");
+    if (silences >= 5) {
+      throw new Error("myDavy stopped answering. Is the session still signed in?");
+    }
+    continue;
+  }
+  silences = 0;
+
   for (const entry of listings) {
     const row = parseListing(entry, query);
     if (!row) continue;

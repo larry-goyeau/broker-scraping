@@ -42,107 +42,24 @@ function uniqueQueries(values) {
   });
 }
 
-function parseSaxoRow(text) {
-  const compact = (text || "").replace(/\s+/g, " ").trim();
-  if (!compact) return null;
-
-  // Strip a leading type badge (e.g. "ETF ", "Stock ") which Saxo renders as
-  // a small pill to the left of the row.
-  const stripped = compact.replace(
-    /^(ETF|Stock|Fund|Bond|Index|Crypto|Warrant|Option|Future|CFD)\s+/i,
-    ""
-  );
-
-  // Row shape: "<name> <ticker>:<mic> <type>" where <mic> is a 4-letter MIC
-  // code (xetr, xswx, xmil, xlon, xpar, xams, …).
-  const match = stripped.match(
-    /^(.+?)\s+([A-Z0-9.]{1,12}):([a-z]{4})\s+(ETF|Stock|Fund|Bond|Index|Crypto|Warrant|Option|Future|CFD)\b/i
-  );
-  if (!match) return null;
-
-  return {
-    name: match[1].trim(),
-    ticker: match[2].toUpperCase(),
-    exchange: match[3].toLowerCase(),
-    type: match[4].toUpperCase(),
-  };
-}
-
-async function clearSearchInput(page, input) {
-  await input.focus();
-
-  // Triple-click + Backspace works on macOS but is flaky on Windows: the
-  // selection sometimes doesn't take, so Backspace only deletes one char and
-  // the next query gets concatenated onto the previous one.
-  await input.click({ clickCount: 3 });
-  await input.press("Backspace");
-
-  let remaining = (await input.evaluate((el) => el.value || "")).length;
-  if (remaining === 0) return;
-
-  // Fallback: explicit keyboard select-all then delete. Use the platform's
-  // modifier key (Cmd on macOS, Ctrl elsewhere).
-  const modifier = process.platform === "darwin" ? "Meta" : "Control";
-  await page.keyboard.down(modifier);
-  await page.keyboard.press("KeyA");
-  await page.keyboard.up(modifier);
-  await page.keyboard.press("Backspace");
-
-  // Last resort: send a Backspace for each remaining character.
-  remaining = (await input.evaluate((el) => el.value || "")).length;
-  for (let i = 0; i < remaining; i++) {
-    await page.keyboard.press("Backspace");
-  }
-}
-
-async function ensureSaxoSearchInput(page) {
-  const selectors = [
-    'input[placeholder*="Rechercher" i]',
-    'input[placeholder*="Search" i]',
-    'input[placeholder*="Suchen" i]',
-    'input[placeholder*="Cerca" i]',
-    'input[type="search"]',
-  ];
-
-  let input = await page.$(selectors.join(", "));
-  if (input) return input;
-
-  // The search input may be hidden behind a magnifier-icon button until
-  // clicked. Try to open the search panel first, then re-query.
-  await page.evaluate(() => {
-    const norm = (s) => (s || "").replace(/\s+/g, " ").trim();
-    const candidates = [...document.querySelectorAll("button, a, [role='button']")];
-    const target = candidates.find((el) =>
-      /search|rechercher|suchen|cerca/i.test(
-        norm(el.textContent || el.getAttribute("aria-label") || "")
-      )
-    );
-    if (target) target.click();
-  });
-  await sleep(300);
-
-  input = await page.waitForSelector(selectors.join(", "), { timeout: 8000 });
-  return input;
-}
-
 const browser = await puppeteer.connect({
   browserURL: "http://127.0.0.1:9222",
   defaultViewport: null,
 });
 
+// The page is only there to lend its signed-in session to the calls below.
 const pages = await browser.pages();
 const page =
-  pages.find((p) => /saxoinvestor|saxotrader|saxobank|saxo\./i.test(p.url())) ||
-  (await browser.newPage());
+  pages.find((candidate) =>
+    /saxoinvestor|saxotrader|saxobank|saxo\./i.test(candidate.url())
+  ) || (await browser.newPage());
 
 if (!/saxoinvestor|saxotrader|saxobank|saxo\./i.test(page.url())) {
   await page.goto("https://www.saxoinvestor.fr/investor/page/portfolio", {
     waitUntil: "domcontentloaded",
   });
+  await sleep(5000);
 }
-
-await page.bringToFront();
-const searchInput = await ensureSaxoSearchInput(page);
 
 // `--start=N` (1-indexed) lets a run resume from a specific query without
 // throwing away progress already saved to parsed_json/saxo-parsed.json.
@@ -174,141 +91,25 @@ const rawQueries =
       : defaultQueries;
 const queries = uniqueQueries(rawQueries);
 
-function fingerprintRows(rows) {
-  return rows.slice().sort().join("|");
-}
-
-async function scrapeRowsForQuery(query) {
-  const collectSnapshot = () =>
-    page.evaluate(() => {
-      const norm = (s) => (s || "").replace(/\s+/g, " ").trim();
-
-      // Result rows render as small visible elements whose innerText is
-      // "<name> <ticker>:<mic> <type>". We pick those out by:
-      //   - requiring exactly one <ticker>:<mic> token in the text (so we
-      //     don't grab a parent container that wraps several rows),
-      //   - requiring an asset-type word (ETF, Stock, ...),
-      //   - bounding length to avoid the whole dropdown container.
-      const tickerMicRegex = /\b[A-Z0-9.]{1,12}:x[a-z]{3}\b/g;
-      const typeRegex = /\b(ETF|Stock|Fund|Bond|Index|Crypto|Warrant|Option|Future|CFD)\b/i;
-
-      const candidates = [...document.querySelectorAll("*")].filter(
-        (el) => el instanceof HTMLElement && el.offsetParent !== null
-      );
-
-      // Chrome around the search dropdown that should never appear in a row.
-      // If a candidate's innerText contains any of these, it's the parent
-      // container of the dropdown -- not an individual result row.
-      const chromeRegex =
-        /Résultats de la recherche|Search results|Suchergebnisse|Risultati della ricerca|Ordre de tri|Sort (?:by|order)|Sortieren nach|Ordina per|Explorer dans le sélecteur|Browse in (?:the )?selector|Im Auswahlfilter|Esplora nel selettore|\bFermer\b|\bClose\b|\bSchließen\b|\bChiudi\b/i;
-
-      const rowTexts = candidates
-        .map((el) => norm(el.innerText))
-        .filter((text) => {
-          if (!text || text.length < 8 || text.length > 240) return false;
-          if (chromeRegex.test(text)) return false;
-          const matches = text.match(tickerMicRegex) || [];
-          if (matches.length !== 1) return false;
-          if (!typeRegex.test(text)) return false;
-          return true;
-        });
-
-      // Saxo shows a localized "no results" message inside the dropdown when
-      // the search returns nothing. Covers both the "Aucun résultat" /
-      // "No results" generic variant and the search-dropdown-specific
-      // "Aucun instrument trouvé!" / "No instruments found" message.
-      const bodyText = norm(document.body?.innerText || "");
-      const emptyState =
-        /Aucun (?:résultat|instrument trouvé)|No (?:results|instruments? found)|Keine (?:Ergebnisse|Instrumente gefunden)|Nessun(?:o)? (?:risultato|strumento trovato)/i.test(
-          bodyText
-        );
-
-      return {
-        rows: [...new Set(rowTexts)],
-        emptyState,
-      };
-    });
-
-  // Fingerprint the dropdown contents BEFORE typing so we can tell whether
-  // a given poll is still showing stale results from the previous query.
-  const beforeSnapshot = await collectSnapshot();
-  const beforeFingerprint = fingerprintRows(beforeSnapshot.rows);
-
-  await clearSearchInput(page, searchInput);
-  await searchInput.type(query, { delay: 40 });
-
-  // Poll until the row set is stable for a couple consecutive snapshots.
-  // The fingerprint match against `beforeFingerprint` is only treated as
-  // stale during the first `staleWindowMs` -- after that, Saxo has had time
-  // to fire the search, so a matching fingerprint means the new query
-  // simply returns the same set as the previous one (e.g. when the same
-  // ISIN is searched twice in a row) and should be accepted.
-  const maxWaitMs = 5000;
-  const pollMs = 250;
-  const stableNeeded = 3;
-  const emptyStateNeeded = 4;
-  const emptyStateMinElapsedMs = 1200;
-  const staleWindowMs = 600;
-  let elapsed = 0;
-  let lastFingerprint = null;
-  let stableHits = 0;
-  let emptyStateHits = 0;
-  let rowTexts = [];
-
-  while (elapsed < maxWaitMs) {
-    await sleep(pollMs);
-    elapsed += pollMs;
-    const snapshot = await collectSnapshot();
-    rowTexts = snapshot.rows;
-    const currentFingerprint = fingerprintRows(rowTexts);
-
-    // Within the first ~600 ms a matching fingerprint almost certainly
-    // means Saxo hasn't refreshed yet; skip those snapshots.
-    if (
-      elapsed < staleWindowMs &&
-      currentFingerprint === beforeFingerprint &&
-      rowTexts.length > 0
-    ) {
-      stableHits = 0;
-      lastFingerprint = currentFingerprint;
-      continue;
-    }
-
-    if (rowTexts.length === 0 && snapshot.emptyState) {
-      emptyStateHits += 1;
-      if (emptyStateHits >= emptyStateNeeded && elapsed >= emptyStateMinElapsedMs) {
-        return [];
-      }
-    } else {
-      emptyStateHits = 0;
-    }
-
-    if (currentFingerprint === lastFingerprint && rowTexts.length > 0) {
-      stableHits += 1;
-      if (stableHits >= stableNeeded) break;
-    } else {
-      stableHits = 0;
-      lastFingerprint = currentFingerprint;
-    }
-  }
-
-  return rowTexts;
-}
-
+const outputPath = "parsed_json/saxo-parsed.json";
 const results = [];
 const seen = new Set();
 
+// One fund reaches several venues, and a venue can carry it in more than one
+// currency (SIX lists iShares MSCI ACWI in both USD and CHF), so the currency
+// belongs in the key that tells two listings apart.
+const entryKey = (isin, row) =>
+  `${isin}:${row.ticker}:${row.exchange}:${row.currency || ""}`.toUpperCase();
+
 // When resuming, load already-saved entries so we don't overwrite them and so
 // the dedup `seen` set knows about rows from earlier queries.
-if (startIndex > 1 && fs.existsSync("parsed_json/saxo-parsed.json")) {
+if (startIndex > 1 && fs.existsSync(outputPath)) {
   try {
-    const existing = JSON.parse(fs.readFileSync("parsed_json/saxo-parsed.json", "utf8"));
+    const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
     if (Array.isArray(existing)) {
       for (const entry of existing) {
         results.push(entry);
-        if (entry?.exchange && entry?.ticker && entry?.type) {
-          seen.add(`${entry.exchange}:${entry.ticker}:${entry.type}`.toUpperCase());
-        }
+        if (entry?.isin && entry?.ticker) seen.add(entryKey(entry.isin, entry));
       }
     }
   } catch {
@@ -316,30 +117,248 @@ if (startIndex > 1 && fs.existsSync("parsed_json/saxo-parsed.json")) {
   }
 }
 
+// The cash instruments an investor account can hold. Leaving this open would
+// also return the CFD twin of every listing (AssetType "CfdOnEtf"), which is a
+// different product quoted on the same line.
+const ASSET_TYPES = "Etf,Etc,Etn,Fund,MutualFund,Stock";
+
+// OpenAPI wants a bearer token and the platform keeps its own only in memory.
+// This endpoint mints a fresh one from the session cookies, so being signed in
+// is all we need. Tokens expire, hence the refresh on age and on a 401.
+const TOKEN_MAX_AGE_MS = 5 * 60 * 1000;
+let token = "";
+let tokenFetchedAt = 0;
+
+async function refreshToken() {
+  const answer = await page.evaluate(async () => {
+    try {
+      const response = await fetch("/api/login/refresh_token?appId=investor", {
+        method: "POST",
+        credentials: "include",
+      });
+      const text = await response.text();
+      try {
+        return { status: response.status, json: JSON.parse(text) };
+      } catch {
+        return { status: response.status, error: text.slice(0, 200) };
+      }
+    } catch (error) {
+      return { error: String(error) };
+    }
+  });
+
+  // The OpenAPI bearer is the id_token; access_token belongs to the login realm.
+  token = answer.json?.id_token || "";
+  tokenFetchedAt = token ? Date.now() : 0;
+  return Boolean(token);
+}
+
+async function api(path) {
+  if (!token || Date.now() - tokenFetchedAt > TOKEN_MAX_AGE_MS) await refreshToken();
+
+  const request = (bearer) =>
+    page.evaluate(
+      async (target, auth) => {
+        try {
+          const response = await fetch(`/openapi${target}`, {
+            credentials: "include",
+            headers: { authorization: `Bearer ${auth}` },
+          });
+          const text = await response.text();
+          try {
+            return { status: response.status, json: JSON.parse(text) };
+          } catch {
+            return { status: response.status, error: text.slice(0, 200) };
+          }
+        } catch (error) {
+          return { error: String(error) };
+        }
+      },
+      path,
+      bearer
+    );
+
+  let answer = await request(token);
+  if (answer.status === 401 && (await refreshToken())) answer = await request(token);
+  return answer;
+}
+
+// The lookup the platform's own search box runs. An ISIN is an accepted keyword
+// and every listing of the fund comes back in one answer, so no paging is
+// needed: no fund is carried on more than a handful of venues.
+async function searchIsin(isin) {
+  const answer = await api(
+    `/ref/v1/instruments?Keywords=${encodeURIComponent(isin)}&$top=100&AssetTypes=${ASSET_TYPES}`
+  );
+  // A signed-out session is refused rather than answered with an empty list.
+  if (!Array.isArray(answer.json?.Data)) return null;
+
+  // The search also matches on name, so it can offer a fund we did not ask
+  // about; every listing kept here states the ISIN that was searched for.
+  return answer.json.Data.filter(
+    (hit) => (hit.Isin || "").toUpperCase() === isin && hit.Identifier
+  );
+}
+
+// Drop the Keywords and the same endpoint enumerates the whole asset class,
+// which is how a long run avoids a search per ISIN. Asked for one asset type at
+// a time because paging stops at the end of each.
+async function fetchUniverse() {
+  const byIsin = new Map();
+
+  for (const assetType of ASSET_TYPES.split(",")) {
+    let listings = 0;
+    for (let skip = 0; ; skip += 1000) {
+      const answer = await api(
+        `/ref/v1/instruments?AssetTypes=${assetType}&$top=1000&$skip=${skip}`
+      );
+      if (!Array.isArray(answer.json?.Data)) {
+        throw new Error(
+          `Saxo stopped handing over its instrument list (HTTP ${answer.status}). Is the session still signed in?`
+        );
+      }
+
+      const rows = answer.json.Data;
+      for (const row of rows) {
+        const isin = (row.Isin || "").toUpperCase();
+        if (!isin || !row.Identifier) continue;
+        if (!byIsin.has(isin)) byIsin.set(isin, []);
+        byIsin.get(isin).push(row);
+        listings += 1;
+      }
+
+      if (rows.length < 1000 || !answer.json.__next) break;
+    }
+    console.error(`  ${assetType}: ${listings} listings`);
+  }
+
+  return byIsin;
+}
+
+// Neither the search nor the listing says whether the account may actually buy
+// a line. The details do, and they take 200 instruments per call.
+async function readDetails(uics) {
+  const details = new Map();
+
+  for (let offset = 0; offset < uics.length; offset += 200) {
+    const chunk = uics.slice(offset, offset + 200);
+    const answer = await api(
+      `/ref/v1/instruments/details?Uics=${chunk.join(",")}&AssetTypes=${ASSET_TYPES}&$top=200`
+    );
+    for (const row of answer.json?.Data || []) {
+      if (row?.Uic) details.set(row.Uic, row);
+    }
+  }
+
+  return details;
+}
+
+// Progress is persisted as the run goes so an interruption keeps prior work.
+// Rewriting the whole file after every hit would mean thousands of rewrites of
+// a file thousands of entries long, so a crash costs a couple of seconds of
+// work instead.
+const SAVE_INTERVAL_MS = 2000;
+let savedCount = results.length;
+let savedAt = 0;
+
+function save() {
+  fs.mkdirSync("parsed_json", { recursive: true });
+  fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+  savedCount = results.length;
+  savedAt = Date.now();
+}
+
+// A search costs a round trip per ISIN, so a long list is cheaper to answer by
+// reading the whole universe once (~40 calls) and matching it locally.
+const pending = queries.slice(startIndex - 1);
+const useUniverse = pending.length >= 200;
+
+let universe = null;
+let prefetchedDetails = null;
+
+if (useUniverse) {
+  console.error("reading Saxo's instrument list");
+  universe = await fetchUniverse();
+  console.error(`${universe.size} ISINs listed`);
+
+  // Every line we are going to look at, asked for in as few calls as possible.
+  const uics = pending.flatMap((query) =>
+    (universe.get(query) || []).map((hit) => hit.Identifier)
+  );
+  console.error(`reading tradability of ${uics.length} matching listings`);
+  prefetchedDetails = await readDetails(uics);
+}
+
+console.error(`${queries.length} ISINs to check`);
+
+let silences = 0;
+
 for (const [queryIndex, query] of queries.entries()) {
   if (queryIndex + 1 < startIndex) continue;
   console.error(`[${queryIndex + 1}/${queries.length}] ${query}`);
-  const rowTexts = await scrapeRowsForQuery(query);
-  for (const text of rowTexts) {
-    const parsed = parseSaxoRow(text);
-    if (!parsed) continue;
 
-    const key = `${parsed.exchange}:${parsed.ticker}:${parsed.type}`.toUpperCase();
+  let hits;
+  if (useUniverse) {
+    hits = universe.get(query) || [];
+  } else {
+    hits = await searchIsin(query);
+    if (hits === null) {
+      silences += 1;
+      console.error("  no answer");
+      if (silences >= 5) {
+        throw new Error("Saxo stopped answering. Is the session still signed in?");
+      }
+      continue;
+    }
+    silences = 0;
+  }
+
+  const details =
+    prefetchedDetails || (await readDetails(hits.map((hit) => hit.Identifier)));
+
+  for (const hit of hits) {
+    // A line whose details never arrived is kept rather than guessed away.
+    const detail = details.get(hit.Identifier) || {};
+
+    // Saxo quotes lines it will not let the account buy -- most often a US ETF
+    // with no KID, which EU retail rules leave sell-only.
+    const reason = detail.NonTradableReason;
+    if (detail.IsTradable === false || (reason && reason !== "None")) {
+      console.error(`  ${hit.Symbol}: ${reason || "not tradable"} — skipped`);
+      continue;
+    }
+
+    // Symbol is "<ticker>:<mic>", e.g. "SPYY:xetr".
+    const [symbol, mic] = (detail.Symbol || hit.Symbol || "").split(":");
+    const row = {
+      name: (detail.Description || hit.Description || "").replace(/\s+/g, " ").trim(),
+      ticker: (symbol || "").toUpperCase(),
+      exchange: detail.Exchange?.ExchangeId || hit.ExchangeId || null,
+      exchangeName: detail.Exchange?.Name || hit.ExchangeName || null,
+      mic: (mic || "").toLowerCase() || null,
+      currency: detail.CurrencyCode || hit.CurrencyCode || null,
+      type: (detail.AssetType || hit.AssetType || "").toUpperCase(),
+      tradingStatus: detail.TradingStatus || null,
+    };
+    if (!row.ticker) continue;
+
+    const key = entryKey(query, row);
     if (seen.has(key)) continue;
     seen.add(key);
 
     results.push({
       query,
       isin: query,
-      ...parsed,
+      ...row,
+      uic: hit.Identifier,
+      raw: [row.ticker, row.name, row.exchange, row.currency].filter(Boolean).join(" "),
     });
   }
 
-  // Persist progress after every query so an interruption keeps prior work.
-  fs.mkdirSync("parsed_json", { recursive: true });
-  fs.writeFileSync("parsed_json/saxo-parsed.json", JSON.stringify(results, null, 2));
+  if (results.length !== savedCount && Date.now() - savedAt >= SAVE_INTERVAL_MS) save();
 }
 
+save();
 console.log(JSON.stringify(results, null, 2));
 
 await browser.disconnect();

@@ -114,6 +114,7 @@ const browser = await puppeteer.connect({
   defaultViewport: null,
 });
 
+// The page is only there to lend its signed-in session to the calls below.
 const pages = await browser.pages();
 const page =
   pages.find((candidate) => candidate.url().includes("trading.sogotrade.com")) ||
@@ -123,17 +124,11 @@ if (!page.url().includes("trading.sogotrade.com")) {
   await page.goto("https://trading.sogotrade.com/", {
     waitUntil: "domcontentloaded",
   });
+  await sleep(3000);
 }
-await page.bringToFront();
 
-const frame = page.mainFrame();
-const symbolInputSelector =
-  "#ctl00_ctl00_FormContent_Content_PlaceOrder_StockSymbol";
-const quoteSymbolSelector =
-  "#ctl00_ctl00_FormContent_Content_StockQuote1_LabelSymbol";
-const quoteNameSelector =
-  "#ctl00_ctl00_FormContent_Content_StockQuote1_LabelCompanyName";
-
+// The trading page raises alerts of its own, and an open dialog would freeze
+// every call made through it.
 page.on("dialog", async (dialog) => {
   await dialog.dismiss();
 });
@@ -191,99 +186,128 @@ if (startIndex > 1 && fs.existsSync(outputPath)) {
   }
 }
 
-async function scrapeInstrument(query) {
-  await frame.waitForSelector(symbolInputSelector, {
-    visible: true,
-    timeout: 8000,
-  });
+// The service behind the trading page's own symbol box. It takes a list of
+// items in one call, which is what lets a whole run be a handful of calls
+// rather than a page interaction per ticker.
+const BATCH_SIZE = 500;
 
-  // Use SogoTrade's own symbol API. Manipulating the legacy autocomplete or
-  // Go button can leave its private symbol state out of sync with the textbox.
-  await frame.evaluate((ticker) => {
-    window.stockInfoHelper.setSymbol(ticker, { updateShares: false });
-  }, query);
-
-  // SogoTrade updates the ticker label before the company name. Let the
-  // legacy AJAX callback settle so fields from two symbols are not combined.
-  await sleep(250);
-
-  const maxWaitMs = 3000;
-  const pollMs = 150;
-  let elapsed = 0;
-
-  while (elapsed < maxWaitMs) {
-    const loaded = await frame.evaluate(
-      (symbolSelector, nameSelector) => ({
-        ticker: (
-          document.querySelector(symbolSelector)?.textContent || ""
-        ).trim().toUpperCase(),
-        name: (document.querySelector(nameSelector)?.textContent || "").trim(),
-      }),
-      quoteSymbolSelector,
-      quoteNameSelector
-    );
-
-    if (loaded.ticker === query && loaded.name) {
-      return frame.evaluate(
-        (symbolSelector, nameSelector) => {
-          const normalize = (value) =>
-            (value || "").replace(/\s+/g, " ").trim();
-          const ticker = normalize(
-            document.querySelector(symbolSelector)?.textContent
-          ).toUpperCase();
-          const name = normalize(
-            document.querySelector(nameSelector)?.textContent
-          );
-          const quotePanel = document.querySelector(
-            "#ctl00_ctl00_FormContent_Content_StockQuote1"
-          );
-          if (!ticker || !name) return null;
-
-          return {
-            ticker,
-            name,
-            // SogoTrade is a US broker quoting US listings in dollars.
-            currency: "USD",
-            type: "ETF",
-            raw: normalize(quotePanel?.innerText || `${ticker} ${name}`),
-          };
-        },
-        quoteSymbolSelector,
-        quoteNameSelector
+async function fetchFundamentals(symbols) {
+  const answer = await page.evaluate(async (batch) => {
+    try {
+      const response = await fetch(
+        "/Sogo.Shared.Services.dll/Snapshot.asmx/RequestSnapshot",
+        {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json; charset=utf-8" },
+          body: JSON.stringify({
+            items: batch.map((symbol) => `/SymbolFundamental|${symbol}`),
+          }),
+        }
       );
+      const text = await response.text();
+      try {
+        return { status: response.status, json: JSON.parse(text) };
+      } catch {
+        return { status: response.status, error: text.slice(0, 200) };
+      }
+    } catch (error) {
+      return { error: String(error) };
     }
+  }, symbols);
 
-    await sleep(pollMs);
-    elapsed += pollMs;
+  // A signed-out session is served the login page instead of an answer, so
+  // anything that is not the expected envelope counts as no answer at all.
+  if (!answer.json?.d) return null;
+
+  const fundamentals = new Map();
+  for (const symbol of symbols) {
+    const data = answer.json.d[`/SymbolFundamental|${symbol}`];
+    // A symbol SogoTrade does not carry says so: "Underlying provider
+    // returned null".
+    if (!data || data.CreationIssue || !data.Name) continue;
+    fundamentals.set(symbol, data);
   }
-
-  return null;
+  return fundamentals;
 }
 
-for (const [queryIndex, query] of queries.entries()) {
-  if (queryIndex + 1 < startIndex) continue;
-  console.error(`[${queryIndex + 1}/${queries.length}] ${query}`);
-
-  const parsed = await scrapeInstrument(query);
-  if (parsed && parsed.ticker === query) {
-    const isin = resolveIsin(tickerCandidates, parsed.ticker, parsed.name);
-    if ((tickerCandidates.get(parsed.ticker) || []).length === 0 || isin) {
-      const key = `${query}:${parsed.ticker}`.toUpperCase();
-      if (!seen.has(key)) {
-        seen.add(key);
-        results.push({
-          query,
-          ...parsed,
-          isin,
-        });
-      }
-    }
-  }
-
+function save() {
   fs.mkdirSync("parsed_json", { recursive: true });
   fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 }
 
+console.error(`${queries.length} tickers to check`);
+
+let silences = 0;
+
+for (let offset = startIndex - 1; offset < queries.length; offset += BATCH_SIZE) {
+  const batch = queries.slice(offset, offset + BATCH_SIZE);
+
+  const fundamentals = await fetchFundamentals(batch);
+  if (fundamentals === null) {
+    silences += 1;
+    console.error(`[${offset + 1}-${offset + batch.length}] no answer`);
+    if (silences >= 3) {
+      throw new Error("SogoTrade stopped answering. Is the session still signed in?");
+    }
+    continue;
+  }
+  silences = 0;
+
+  for (const [batchIndex, query] of batch.entries()) {
+    console.error(`[${offset + batchIndex + 1}/${queries.length}] ${query}`);
+
+    const data = fundamentals.get(query);
+    if (!data) continue;
+
+    const ticker = (data.Symbol || query).toUpperCase();
+    if (ticker !== query) continue;
+
+    const name = (data.Name || "").replace(/\s+/g, " ").trim();
+
+    // The list is keyed by ticker, and a US ticker often belongs to a
+    // different fund than the one the list files under it. Keeping only rows
+    // whose name matches a candidate is what stops those from being mixed up.
+    const isin = resolveIsin(tickerCandidates, ticker, name);
+    if ((tickerCandidates.get(ticker) || []).length > 0 && !isin) continue;
+
+    // A name can match by coincidence: the list files AMZN as a 1x Amazon
+    // tracker ETP, and matching on "Amazon" lands on Amazon the company. Funds
+    // are left unclassified here ("" or "NC") or filed vaguely as "Other",
+    // while an operating company gets a real sector, so that is the one thing
+    // in the answer that gives a collision away.
+    const sector = (data.Sector || "").trim();
+    if (sector && sector !== "NC" && sector !== "Other") {
+      console.error(`  ${ticker} is ${name} here, not a fund — skipped`);
+      continue;
+    }
+
+    const key = `${query}:${ticker}`.toUpperCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+
+    const exchange = (data.Exchange || "").replace(/\s+/g, " ").trim().toUpperCase();
+
+    results.push({
+      query,
+      ticker,
+      name,
+      exchange: exchange || null,
+      // SogoTrade is a US broker and every venue it quotes here (NASDAQ, NYSE,
+      // NYSE ARCA, the OTC tiers) prices in dollars; nothing in the answer
+      // states it.
+      currency: "USD",
+      type: "ETF",
+      raw: [ticker, name, exchange].filter(Boolean).join(" "),
+      isin,
+    });
+  }
+
+  // Persist progress after every batch so an interruption keeps prior work.
+  save();
+}
+
+save();
 console.log(JSON.stringify(results, null, 2));
 
 await browser.disconnect();

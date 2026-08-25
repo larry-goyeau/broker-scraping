@@ -56,48 +56,14 @@ function loadTickersFromCsv(csvPath) {
     .filter(Boolean);
 }
 
-function nameTokens(value) {
-  const ignored = new Set([
-    "ISHARES",
-    "ETF",
-    "ETC",
-    "ETN",
-    "ETP",
-    "UCITS",
-    "PLC",
-    "FUND",
-    "SHARES",
-  ]);
-
-  return new Set(
-    (value || "")
-      .normalize("NFKD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toUpperCase()
-      .split(/[^A-Z0-9]+/)
-      .filter((token) => token.length > 1 && !ignored.has(token))
-  );
-}
-
-function resolveIsin(tickerCandidates, ticker, scrapedName) {
+// Revolut states the ISIN itself, so the CSV is no longer asked to supply one.
+// It is still worth consulting: a ticker is reused by unrelated funds, and a
+// listing whose ISIN contradicts every ISIN the CSV files under that ticker is
+// a different fund that happens to share the symbol.
+function contradictsCsv(tickerCandidates, ticker, isin) {
   const candidates = tickerCandidates.get(ticker) || [];
-  if (candidates.length === 0) return null;
-  if (candidates.length === 1) return candidates[0].isin;
-
-  const scrapedTokens = nameTokens(scrapedName);
-  let bestCandidate = candidates[0];
-  let bestScore = -1;
-
-  for (const candidate of candidates) {
-    const candidateTokens = nameTokens(candidate.name);
-    const score = [...scrapedTokens].filter((token) => candidateTokens.has(token)).length;
-    if (score > bestScore) {
-      bestScore = score;
-      bestCandidate = candidate;
-    }
-  }
-
-  return bestCandidate.isin;
+  if (candidates.length === 0) return false;
+  return !candidates.some((candidate) => candidate.isin === isin);
 }
 
 function uniqueQueries(values) {
@@ -115,6 +81,7 @@ const browser = await puppeteer.connect({
   defaultViewport: null,
 });
 
+// The page is only there to lend its signed-in session to the call below.
 const pages = await browser.pages();
 const page =
   pages.find((candidate) => candidate.url().includes("invest.revolut.com")) ||
@@ -124,33 +91,7 @@ if (!page.url().includes("invest.revolut.com")) {
   await page.goto("https://invest.revolut.com/", {
     waitUntil: "domcontentloaded",
   });
-}
-await page.bringToFront();
-
-async function ensureSearchInput() {
-  const selector =
-    '[role="dialog"][aria-label="Asset list modal window"] input[type="search"][aria-label="Search"]';
-  let input = await page.$(selector);
-  if (input) return input;
-
-  const trigger = await page.$('button[aria-label="Browse assets"]');
-  if (!trigger) throw new Error("Could not find Revolut's Browse assets button.");
-  await trigger.click();
-  input = await page.waitForSelector(selector, { visible: true, timeout: 8000 });
-  return input;
-}
-
-async function selectEtpFilter() {
-  await page.evaluate(() => {
-    const dialog = document.querySelector(
-      '[role="dialog"][aria-label="Asset list modal window"]'
-    );
-    const button = [...(dialog?.querySelectorAll("button") || [])].find(
-      (candidate) => (candidate.innerText || "").trim() === "ETPs"
-    );
-    if (button && !button.hasAttribute("data-active")) button.click();
-  });
-  await sleep(200);
+  await sleep(5000);
 }
 
 // `--start=N` (1-indexed) lets a run resume from a specific query without
@@ -190,15 +131,17 @@ const outputPath = "parsed_json/revolut-parsed.json";
 const results = [];
 const seen = new Set();
 
+// The same fund reaches Revolut on more than one venue and currency.
+const entryKey = (query, row) =>
+  `${query}:${row.ticker}:${row.exchange}:${row.currency}`.toUpperCase();
+
 if (startIndex > 1 && fs.existsSync(outputPath)) {
   try {
     const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
     if (Array.isArray(existing)) {
       for (const entry of existing) {
         results.push(entry);
-        if (entry?.query && entry?.ticker) {
-          seen.add(`${entry.query}:${entry.ticker}`.toUpperCase());
-        }
+        if (entry?.query && entry?.ticker) seen.add(entryKey(entry.query, entry));
       }
     }
   } catch {
@@ -206,90 +149,108 @@ if (startIndex > 1 && fs.existsSync(outputPath)) {
   }
 }
 
-async function scrapeRowsForQuery(query) {
-  let searchInput = await ensureSearchInput();
-  await selectEtpFilter();
-  searchInput = await ensureSearchInput();
+// The catalogue the asset-list modal filters client-side. Revolut hands over
+// every instrument it carries in one answer, so the whole run needs a single
+// call instead of a search per ticker.
+//
+// Cookies alone are refused with "Phone and/or passcode are incorrect": the
+// API also wants the device header, which the app keeps in a readable cookie.
+async function fetchUniverse() {
+  const answer = await page.evaluate(async () => {
+    const cookie = (name) =>
+      document.cookie
+        .split(";")
+        .map((part) => part.trim())
+        .find((part) => part.startsWith(`${name}=`))
+        ?.slice(name.length + 1) || "";
 
-  // Clear the controlled React input and notify the application.
-  await searchInput.evaluate((input) => {
-    const valueSetter = Object.getOwnPropertyDescriptor(
-      HTMLInputElement.prototype,
-      "value"
-    ).set;
-    valueSetter.call(input, "");
-    input.dispatchEvent(new Event("input", { bubbles: true }));
-    input.dispatchEvent(new Event("change", { bubbles: true }));
-    input.focus();
+    try {
+      const response = await fetch("/api/retail/instruments", {
+        credentials: "include",
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          "x-browser-application": "WEB_CLIENT",
+          "x-client-version": "100.0",
+          "x-device-id": decodeURIComponent(cookie("revo_device_id")),
+        },
+      });
+      const text = await response.text();
+      try {
+        return { status: response.status, json: JSON.parse(text) };
+      } catch {
+        return { status: response.status, error: text.slice(0, 200) };
+      }
+    } catch (error) {
+      return { error: String(error) };
+    }
   });
-  await searchInput.type(query, { delay: 30 });
 
-  const collectRows = () =>
-    page.evaluate(() => {
-      const normalize = (value) => (value || "").replace(/\s+/g, " ").trim();
-      const dialog = document.querySelector(
-        '[role="dialog"][aria-label="Asset list modal window"]'
-      );
-
-      return [...(dialog?.querySelectorAll("tbody tr") || [])]
-        .map((row) => {
-          const tickerCell = row.querySelector('td[data-column-id="ticker"]');
-          const typeCell = row.querySelector('td[data-column-id="type"]');
-          const type = normalize(typeCell?.innerText || typeCell?.textContent).toUpperCase();
-          const tickerAndName = normalize(
-            tickerCell?.innerText || tickerCell?.textContent
-          );
-          const ticker = tickerAndName.split(/\s+/)[0]?.toUpperCase() || "";
-          const name = tickerAndName.slice(ticker.length).trim();
-
-          if (!ticker || !name || !/^(ETF|ETC|ETN|ETP)$/.test(type)) return null;
-          return {
-            ticker,
-            name,
-            type,
-            raw: normalize(row.innerText || row.textContent),
-          };
-        })
-        .filter(Boolean);
-    });
-
-  const maxWaitMs = 3000;
-  const pollMs = 200;
-  let elapsed = 0;
-  let emptyPolls = 0;
-
-  while (elapsed < maxWaitMs) {
-    await sleep(pollMs);
-    elapsed += pollMs;
-
-    const rows = await collectRows();
-    const matches = rows.filter((row) => row.ticker === query);
-    if (matches.length > 0) return matches;
-
-    if (rows.length === 0) emptyPolls += 1;
-    else emptyPolls = 0;
-
-    // Revolut clears the old rows after its debounced search completes.
-    if (elapsed >= 800 && emptyPolls >= 3) return [];
+  if (!Array.isArray(answer.json)) {
+    throw new Error(
+      `Revolut did not hand over its instrument list (HTTP ${answer.status}). Is the session still signed in?`
+    );
   }
-
-  return [];
+  return answer.json;
 }
+
+const universe = await fetchUniverse();
+
+// Exchange-traded products only, which is the "ETPs" tab the modal used to be
+// clicked onto.
+const byTicker = new Map();
+for (const instrument of universe) {
+  if (!/^(ETF|ETC|ETN|ETP)$/.test(instrument?.type || "")) continue;
+  const ticker = (instrument.ticker || "").toUpperCase();
+  if (!ticker) continue;
+  if (!byTicker.has(ticker)) byTicker.set(ticker, []);
+  byTicker.get(ticker).push(instrument);
+}
+
+console.error(
+  `${universe.length} instruments listed, ${byTicker.size} ETP tickers among them`
+);
+console.error(`${queries.length} tickers to check`);
 
 for (const [queryIndex, query] of queries.entries()) {
   if (queryIndex + 1 < startIndex) continue;
   console.error(`[${queryIndex + 1}/${queries.length}] ${query}`);
 
-  const rows = await scrapeRowsForQuery(query);
-  for (const row of rows) {
-    const key = `${query}:${row.ticker}`.toUpperCase();
+  for (const instrument of byTicker.get(query) || []) {
+    const ticker = (instrument.ticker || "").toUpperCase();
+    const isin = (instrument.isin || "").toUpperCase();
+    const name = (instrument.name || "").replace(/\s+/g, " ").trim();
+
+    if (contradictsCsv(tickerCandidates, ticker, isin)) {
+      console.error(`  ${ticker} is ${isin} here, not the fund the list files — skipped`);
+      continue;
+    }
+
+    // Revolut quotes products it will not sell you (a US-domiciled ETF has no
+    // KID for EU clients), and says so rather than hiding them.
+    if (instrument.stateDetails && instrument.stateDetails.canBuy === false) {
+      console.error(`  ${ticker}@${instrument.exchange}: ${instrument.state} — skipped`);
+      continue;
+    }
+
+    const row = {
+      ticker,
+      name,
+      exchange: instrument.exchange || null,
+      mic: instrument.mic || null,
+      currency: instrument.currency || null,
+      type: (instrument.type || "").toUpperCase(),
+      state: instrument.state || null,
+    };
+
+    const key = entryKey(query, row);
     if (seen.has(key)) continue;
     seen.add(key);
 
     results.push({
       query,
       ...row,
-      isin: resolveIsin(tickerCandidates, row.ticker, row.name),
+      raw: [ticker, name, row.exchange, row.currency].filter(Boolean).join(" "),
+      isin,
     });
   }
 

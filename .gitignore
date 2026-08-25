@@ -1,3 +1,4 @@
 *.json
 .env
 *.jpg
+broker-scraping*

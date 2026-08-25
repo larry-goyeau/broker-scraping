@@ -1,7 +1,6 @@
 Swissquote
 choicetrade
 questrade
-freetrade
 fortuneo
 Tiger Brokers AU
 CGS International
@@ -12,13 +11,12 @@ eurofinance
 bluorbank
 caisse-epargne
 bhmuae
-moneybase
-hello bank
+oanda
 
 Syfe
 Exante
 Bank of Cyprus
 La Banque Postale
-
-
-firstrade · ig · interactivebrokers · lightyear · oanda · revolut · saxo · sogotrade · traderepublic · tradestation · trading212 · xtb
+ig
+hello bank
+moneybase

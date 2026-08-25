@@ -3,6 +3,8 @@ import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+const normalize = (value) => (value || "").replace(/\s+/g, " ").trim();
+
 function normalizeTicker(value) {
   const text = (value || "").trim().toUpperCase();
   if (!text) return "";
@@ -151,11 +153,18 @@ const browser = await puppeteer.connect({
   defaultViewport: null,
 });
 
+// The page is only there to lend its signed-in session to the calls below.
 const pages = await browser.pages();
 const page =
   pages.find((candidate) => candidate.url().includes("firstrade.com")) ||
   (await browser.newPage());
-await page.bringToFront();
+
+if (!page.url().includes("firstrade.com")) {
+  await page.goto("https://invest.firstrade.com/app/dashboard", {
+    waitUntil: "domcontentloaded",
+  });
+  await sleep(3000);
+}
 
 // `--start=N` (1-indexed) lets a run resume from a specific query without
 // throwing away progress already saved to parsed_json/firstrade-parsed.json.
@@ -211,81 +220,81 @@ if (startIndex > 1 && fs.existsSync(outputPath)) {
   }
 }
 
-function readInstrument() {
-  return page.evaluate(() => {
-    const normalize = (value) => (value || "").replace(/\s+/g, " ").trim();
-
-    const bodyText = document.body.innerText || "";
-    if (/please enter a valid symbol/i.test(bodyText)) {
-      return { unknownSymbol: true };
+async function api(path) {
+  return page.evaluate(async (target) => {
+    try {
+      const response = await fetch(target, {
+        credentials: "include",
+        headers: { Accept: "application/json, text/plain, */*" },
+      });
+      const text = await response.text();
+      try {
+        return { status: response.status, json: JSON.parse(text) };
+      } catch {
+        return { status: response.status, error: text.slice(0, 160) };
+      }
+    } catch (error) {
+      return { error: String(error) };
     }
-
-    const heading = document.querySelector("h1");
-    const name = normalize(heading?.textContent);
-    // The symbol and its listing venue sit in the row directly below the name.
-    const metadata = heading?.nextElementSibling;
-    const spans = metadata ? [...metadata.querySelectorAll(":scope > span")] : [];
-
-    return {
-      unknownSymbol: false,
-      name,
-      ticker: normalize(spans[0]?.textContent).toUpperCase(),
-      exchange: normalize(spans[1]?.textContent),
-    };
-  });
+  }, path);
 }
 
-// The heading occasionally carries the issuer's trust name ("ISHARES TRUST")
+// The quote the overview page is built from: it names the fund, states the
+// listing venue and marks whether the symbol is an ETF, so the page itself
+// never has to be rendered.
+async function fetchQuote(query) {
+  const answer = await api(`/app/api/quote?q=${encodeURIComponent(query)}`);
+  const payload = answer.json;
+  // A signed-out session is answered with the login page rather than an error,
+  // so anything that is not JSON counts as no answer at all.
+  if (!payload) return { silent: true };
+  // An unknown symbol is refused with reference code 2071 under HTTP 200.
+  if (payload.refCode === 2071 || payload.statusCode === 400) return { unknown: true };
+  if (payload.statusCode || !payload.symbol) return { silent: true };
+  return { quote: payload };
+}
+
+// The quote occasionally carries the issuer's trust name ("ISHARES TRUST")
 // instead of the fund name, which is too generic to match a single ISIN. The
-// fundamentals endpoint backing the page keeps the real fund name.
+// fundamentals endpoint backing the same page keeps the real fund name.
 async function fetchFundName(query) {
-  const name = await page.evaluate(async (symbol) => {
-    try {
-      const response = await fetch(
-        `/app/api/fundamental?symbol=${encodeURIComponent(symbol)}&sharesCorrection=true`,
-        { credentials: "include" }
-      );
-      const payload = await response.json();
-      return payload?.description || payload?.analystReport?.securityName || "";
-    } catch {
-      return "";
-    }
-  }, query);
+  const answer = await api(
+    `/app/api/fundamental?symbol=${encodeURIComponent(query)}&sharesCorrection=true`
+  );
+  const payload = answer.json || {};
+  const name = payload.description || payload.analystReport?.securityName || "";
 
   // Registered-trademark signs come back double-encoded from that endpoint.
-  return name.replace(/\u00c2(?=[\u00ae\u00a9\u2122])/g, "").replace(/\s+/g, " ").trim();
+  return normalize(name.replace(/\u00c2(?=[\u00ae\u00a9\u2122])/g, ""));
 }
 
-async function scrapeInstrument(query) {
-  const url = `https://invest.firstrade.com/app/stocks-etf/${encodeURIComponent(
-    query.toLowerCase()
-  )}/overview`;
-  await page.goto(url, { waitUntil: "domcontentloaded" });
+console.error(`${queries.length} tickers to check`);
 
-  const maxWaitMs = 15000;
-  const pollMs = 200;
-  let elapsed = 0;
-
-  while (elapsed < maxWaitMs) {
-    const state = await readInstrument();
-    if (state.unknownSymbol) return null;
-    if (state.ticker && state.name) return state;
-
-    await sleep(pollMs);
-    elapsed += pollMs;
-  }
-
-  return null;
-}
+let silences = 0;
 
 for (const [queryIndex, query] of queries.entries()) {
   if (queryIndex + 1 < startIndex) continue;
   console.error(`[${queryIndex + 1}/${queries.length}] ${query}`);
 
-  const parsed = await scrapeInstrument(query);
-  // Guard against a page that resolved to some other symbol.
-  if (parsed && parsed.ticker === query) {
-    let name = parsed.name;
+  const answer = await fetchQuote(query);
+  if (answer.silent) {
+    silences += 1;
+    console.error("  no answer");
+    if (silences >= 5) {
+      throw new Error("Firstrade stopped answering. Is the session still signed in?");
+    }
+    continue;
+  }
+  silences = 0;
+  // Firstrade lists US venues only, so most of the CSV is not quoted here.
+  if (answer.unknown) continue;
+
+  const quote = answer.quote;
+  const ticker = normalize(quote.symbol).toUpperCase();
+
+  // Guard against a quote that resolved to some other symbol.
+  if (ticker === query) {
+    let name = normalize(quote.companyName);
     let isin = resolveIsin(tickerCandidates, query, name);
 
     if (!isin) {
@@ -297,19 +306,21 @@ for (const [queryIndex, query] of queries.entries()) {
       }
     }
 
-    const key = `${query}:${parsed.ticker}`.toUpperCase();
+    const exchange = normalize(quote.exchange);
+    const key = `${query}:${ticker}`.toUpperCase();
     // Same ticker, different fund: not the one we asked about.
     if (isin && !seen.has(key)) {
       seen.add(key);
       results.push({
         query,
-        ticker: parsed.ticker,
+        ticker,
         name,
-        exchange: parsed.exchange,
-        // Firstrade lists US venues only, so every line quotes in dollars.
+        exchange,
+        // Firstrade lists US venues only, so every line quotes in dollars: no
+        // endpoint behind the app states a currency at all.
         currency: "USD",
-        type: "ETF",
-        raw: `${parsed.ticker} ${name} - ${parsed.exchange}`,
+        type: quote.isEtf ? "ETF" : "STOCK",
+        raw: `${ticker} ${name} - ${exchange}`,
         isin,
       });
     }

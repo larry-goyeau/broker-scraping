@@ -42,86 +42,25 @@ function uniqueQueries(values) {
   });
 }
 
-function parseIbkrRow(text) {
-  const compact = (text || "").replace(/\s+/g, " ").trim();
-  if (!compact) return null;
-  if (/show more|couldn['’]t find|no results/i.test(compact)) return null;
-
-  // Examples:
-  // ACWI ISHARES MSCI ACWI ETF / NASDAQ Stock
-  // ACWI AM MSCI ALL C WRLD-ETF E ACC SBF Stock
-  const match = compact.match(
-    /^([A-Z0-9.-]{1,20})\s+(.+?)\s+(Stock|ETF|Index|Fund|CFD|Option|Warrant)$/i
-  );
-  if (!match) return null;
-
-  const ticker = match[1].toUpperCase();
-  if (/^(LATEST|RECENT|POPULAR|TOP|ASK|NAVIGATE|OPEN|SEARCH)$/i.test(ticker)) return null;
-  const body = match[2].trim();
-  const securityType = match[3];
-
-  let name = body;
-  let exchange = null;
-  const withSlash = body.lastIndexOf(" / ");
-  if (withSlash >= 0) {
-    name = body.slice(0, withSlash).trim();
-    exchange = body.slice(withSlash + 3).trim();
-  } else {
-    // Most IBKR result rows render exchange as the final token (e.g. "LSEETF").
-    const parts = body.split(/\s+/);
-    if (parts.length < 2) return null;
-    exchange = parts.pop();
-    name = parts.join(" ").trim();
-  }
-  if (!name || !exchange) return null;
-
-  return {
-    ticker,
-    name,
-    exchange,
-    type: securityType,
-    raw: `${ticker} ${name} / ${exchange} ${securityType}`,
-  };
-}
-
-async function ensureSearchInput(page) {
-  let searchInput = await page.$(
-    'input[placeholder*="Search for instruments" i], input.search-input, input[placeholder*="Search" i]'
-  );
-  if (searchInput) return searchInput;
-
-  await page.evaluate(() => {
-    const norm = (s) => (s || "").replace(/\s+/g, " ").trim();
-    const candidates = [...document.querySelectorAll("button, a, div, span")];
-    const target = candidates.find((el) => /search/i.test(norm(el.textContent)));
-    if (target) target.click();
-  });
-  await sleep(300);
-
-  searchInput = await page.waitForSelector(
-    'input[placeholder*="Search for instruments" i], input.search-input, input[placeholder*="Search" i]',
-    { timeout: 8000 }
-  );
-  return searchInput;
-}
-
 const browser = await puppeteer.connect({
   browserURL: "http://127.0.0.1:9222",
   defaultViewport: null,
 });
 
+// The page is only there to lend its signed-in session to the calls below. Any
+// of IBKR's regional domains will do: the calls are relative, so they follow
+// whichever one the session was opened on.
 const pages = await browser.pages();
 const page =
-  pages.find((p) => /interactivebrokers|ibkr/i.test(p.url())) || (await browser.newPage());
+  pages.find((candidate) => /interactivebrokers|ibkr/i.test(candidate.url())) ||
+  (await browser.newPage());
 
 if (!/interactivebrokers|ibkr/i.test(page.url())) {
   await page.goto("https://www.interactivebrokers.ie/portal/", {
     waitUntil: "domcontentloaded",
   });
+  await sleep(5000);
 }
-
-await page.bringToFront();
-const searchInput = await ensureSearchInput(page);
 
 // `--start=N` (1-indexed) lets a run resume from a specific query without
 // throwing away progress already saved to parsed_json/interactivebrokers-parsed.json.
@@ -153,90 +92,24 @@ const rawQueries =
       : defaultQueries;
 const queries = uniqueQueries(rawQueries);
 
-async function scrapeRowsForQuery(query) {
-  await searchInput.click({ clickCount: 3 });
-  await searchInput.press("Backspace");
-  await searchInput.type(query, { delay: 40 });
-
-  const collectRows = () =>
-    page.evaluate(() => {
-      const norm = (s) => (s || "").replace(/\s+/g, " ").trim();
-
-      // Locate the "TOP RESULTS" section header and take the result table that
-      // follows it. This avoids picking up rows from the "ASK IBKR" and
-      // "HELP & SUPPORT" tables that share the same markup.
-      const headers = [...document.querySelectorAll("*")].filter((el) => {
-        if (el.children.length > 0) return false;
-        return /^\s*top results\s*$/i.test(el.textContent || "");
-      });
-
-      let resultsTable = null;
-      for (const header of headers) {
-        const root = header.closest("section, div, form") || document.body;
-        const t = root.querySelector(".p-datatable-table, table.p-datatable-table");
-        if (t) {
-          resultsTable = t;
-          break;
-        }
-      }
-
-      if (!resultsTable) {
-        // Fallback: first p-datatable-table on the page.
-        resultsTable = document.querySelector(
-          ".p-datatable-table, table.p-datatable-table"
-        );
-      }
-      if (!resultsTable) return [];
-
-      const rows = [...resultsTable.querySelectorAll("tbody tr")];
-      return [...new Set(rows.map((row) => norm(row.innerText)).filter(Boolean))];
-    });
-
-  // IBKR streams in additional TOP RESULTS rows after the first hit.
-  // Wait until the row count is stable for a couple consecutive polls,
-  // capped by maxWaitMs.
-  const maxWaitMs = 4000;
-  const pollMs = 250;
-  const stableNeeded = 3;
-  let elapsed = 0;
-  let lastCount = -1;
-  let stableHits = 0;
-  let rowTexts = [];
-
-  while (elapsed < maxWaitMs) {
-    await sleep(pollMs);
-    elapsed += pollMs;
-    rowTexts = await collectRows();
-    if (rowTexts.length === lastCount && rowTexts.length > 0) {
-      stableHits += 1;
-      if (stableHits >= stableNeeded) break;
-    } else {
-      stableHits = 0;
-      lastCount = rowTexts.length;
-    }
-  }
-
-  return rowTexts;
-}
-
+const outputPath = "parsed_json/interactivebrokers-parsed.json";
 const results = [];
 const seen = new Set();
 
+// The same ticker on the same venue can trade in more than one currency, so
+// the currency belongs in the key that tells two listings apart.
+const entryKey = (row) =>
+  `${row.exchange}:${row.ticker}:${row.type}:${row.currency || ""}`.toUpperCase();
+
 // When resuming, load already-saved entries so we don't overwrite them and so
 // the dedup `seen` set knows about rows from earlier queries.
-if (startIndex > 1 && fs.existsSync("parsed_json/interactivebrokers-parsed.json")) {
+if (startIndex > 1 && fs.existsSync(outputPath)) {
   try {
-    const existing = JSON.parse(fs.readFileSync("parsed_json/interactivebrokers-parsed.json", "utf8"));
+    const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
     if (Array.isArray(existing)) {
       for (const entry of existing) {
         results.push(entry);
-        const key =
-          entry?.exchange && entry?.ticker
-            ? `${entry.exchange}:${entry.ticker}:${entry.type}`.toUpperCase()
-            : entry?.raw
-              ? `RAW:${entry.raw.toUpperCase()}`
-              : null;
-        if (key) seen.add(key);
+        if (entry?.exchange && entry?.ticker) seen.add(entryKey(entry));
       }
     }
   } catch {
@@ -244,31 +117,166 @@ if (startIndex > 1 && fs.existsSync("parsed_json/interactivebrokers-parsed.json"
   }
 }
 
+const API = "/portal.proxy/v1/portal";
+
+async function api(path, options = {}) {
+  return page.evaluate(
+    async (base, target, opts) => {
+      try {
+        const response = await fetch(`${base}/${target}`, {
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          method: opts.method || "GET",
+          body: opts.body || undefined,
+        });
+        const text = await response.text();
+        try {
+          return { status: response.status, json: JSON.parse(text) };
+        } catch {
+          return { status: response.status, error: text.slice(0, 200) };
+        }
+      } catch (error) {
+        return { error: String(error) };
+      }
+    },
+    API,
+    path,
+    options
+  );
+}
+
+// Keeps the Client Portal bridge awake; without it, later calls start failing.
+async function tickle() {
+  await api("tickle").catch(() => null);
+}
+
+// The lookup the portal's own search box runs. `pattern: true` is what makes an
+// ISIN acceptable as the term; an exact search only answers to symbols.
+async function searchIsin(isin) {
+  const answer = await api("iserver/secdef/search", {
+    method: "POST",
+    body: JSON.stringify({ symbol: isin, pattern: true, referrer: "" }),
+  });
+  // A signed-out session answers 401 with an empty body, or serves the login
+  // page itself, so anything that is not JSON counts as no answer at all.
+  if (answer.status === 401 || !answer.json) return null;
+  // An ISIN that IBKR does not list answers `{ error: "No symbol found" }`.
+  if (!Array.isArray(answer.json)) return [];
+  // The search is keyed by ISIN, so every hit is a listing of that same fund.
+  return answer.json.filter((hit) => hit?.conid && hit?.symbol);
+}
+
+// The search says nothing about the currency, which is what separates the two
+// London lines of one fund. The contract details do.
+async function readInfo(conid) {
+  const answer = await api(`iserver/secdef/info?conid=${conid}`);
+  return answer.json && !answer.json.error ? answer.json : null;
+}
+
+const RESTRICTED_NOTICE =
+  /KID|Trading Restricted|not available|cannot be traded|Retail clients can trade packaged/i;
+
+// Field 7183 is the order-ticket "Trading Restricted" notice (KID missing, etc.),
+// which is the only place IBKR admits a listing it quotes cannot be bought.
+// 7184 alone is not enough: tradable UCITS listings also come back with 7184=1.
+//
+// A snapshot answers empty until the subscription warms up, so it has to be
+// asked repeatedly. Every listing of one fund is asked for at once, which keeps
+// that waiting to once per ISIN rather than once per listing.
+async function tradingRestricted(conids) {
+  const pending = new Set(conids);
+  const status = new Map();
+
+  for (let attempt = 0; attempt < 10 && pending.size > 0; attempt += 1) {
+    const answer = await api(
+      `iserver/marketdata/snapshot?conids=${[...pending].join(",")}&fields=6509,7183,7184,31`
+    );
+
+    for (const row of Array.isArray(answer.json) ? answer.json : []) {
+      const conid = String(row?.conid ?? "");
+      if (!pending.has(conid)) continue;
+
+      const notice = (row["7183"] || "").toString();
+      if (notice) {
+        status.set(conid, { restricted: RESTRICTED_NOTICE.test(notice), notice });
+        pending.delete(conid);
+      } else if (row["31"] !== undefined || row["6509"] !== undefined) {
+        // Price or availability without a notice means the snapshot settled.
+        status.set(conid, { restricted: false, notice: "" });
+        pending.delete(conid);
+      }
+    }
+
+    if (pending.size > 0) await sleep(300);
+  }
+
+  // A listing the snapshot never settled on is kept rather than guessed away.
+  for (const conid of pending) status.set(conid, { restricted: false, notice: "" });
+  return status;
+}
+
+function save() {
+  fs.mkdirSync("parsed_json", { recursive: true });
+  fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+}
+
+console.error(`${queries.length} ISINs to check`);
+
+let silences = 0;
+
 for (const [queryIndex, query] of queries.entries()) {
   if (queryIndex + 1 < startIndex) continue;
+  if (queryIndex % 20 === 0) await tickle();
   console.error(`[${queryIndex + 1}/${queries.length}] ${query}`);
-  const rowTexts = await scrapeRowsForQuery(query);
-  for (const text of rowTexts) {
-    const parsed = parseIbkrRow(text);
-    if (!parsed) continue;
 
-    const key =
-      parsed.exchange && parsed.ticker
-        ? `${parsed.exchange}:${parsed.ticker}:${parsed.type}`.toUpperCase()
-        : `RAW:${(parsed.raw || "").toUpperCase()}`;
+  const hits = await searchIsin(query);
+  if (hits === null) {
+    silences += 1;
+    console.error("  no answer");
+    if (silences >= 5) {
+      throw new Error("IBKR stopped answering. Is the portal session still signed in?");
+    }
+    continue;
+  }
+  silences = 0;
+
+  const restrictions = await tradingRestricted(hits.map((hit) => String(hit.conid)));
+
+  for (const hit of hits) {
+    const conid = String(hit.conid);
+    if (restrictions.get(conid)?.restricted) {
+      console.error(`  ${hit.symbol}@${hit.description}: Trading Restricted — skipped`);
+      continue;
+    }
+
+    const info = (await readInfo(conid)) || {};
+
+    const ticker = (info.ticker || hit.symbol || "").toUpperCase();
+    const exchange = (info.listingExchange || hit.description || "").toUpperCase();
+    const name = (info.companyName || hit.companyHeader || hit.companyName || "")
+      .replace(/\s+/g, " ")
+      .trim();
+    const currency = info.currency || null;
+    // Funds are carried as ordinary stock contracts on IBKR.
+    const type = (info.secType || "STK").toUpperCase() === "STK" ? "ETF" : info.secType;
+    if (!ticker || !exchange) continue;
+
+    const row = { ticker, name, exchange, currency, type };
+    const key = entryKey(row);
     if (seen.has(key)) continue;
     seen.add(key);
 
     results.push({
-      ...parsed,
+      ...row,
+      raw: [ticker, name, exchange, currency].filter(Boolean).join(" "),
       query,
       isin: query,
+      conid,
     });
   }
 
   // Persist progress after every query so an interruption keeps prior work.
-  fs.mkdirSync("parsed_json", { recursive: true });
-  fs.writeFileSync("parsed_json/interactivebrokers-parsed.json", JSON.stringify(results, null, 2));
+  save();
 }
 
 console.log(JSON.stringify(results, null, 2));

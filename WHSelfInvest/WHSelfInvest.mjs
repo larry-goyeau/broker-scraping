@@ -74,7 +74,7 @@ const csvPath = (() => {
     const match = arg.match(/^--csv=(.+)$/i);
     if (match) return match[1];
   }
-  return "etfs.csv";
+  return new URL("../etfs.csv", import.meta.url);
 })();
 
 const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
@@ -84,7 +84,7 @@ const queries = uniqueQueries(
   cliQueries.length > 0 ? cliQueries : csvQueries.length > 0 ? csvQueries : []
 );
 
-const outputPath = "parsed_json/whselfinvest-parsed.json";
+const outputPath = new URL("../parsed_json/whselfinvest-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 
@@ -182,7 +182,7 @@ async function tradingRestricted(conid) {
 }
 
 function save() {
-  fs.mkdirSync("parsed_json", { recursive: true });
+  fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
   fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 }
 

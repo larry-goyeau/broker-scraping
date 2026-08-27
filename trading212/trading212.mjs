@@ -1,6 +1,5 @@
 import puppeteer from "puppeteer-core";
 import fs from "node:fs";
-import { listingKey, spreadUrl } from "./venues.mjs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -73,7 +72,7 @@ const csvPath = (() => {
     const m = arg.match(/^--csv=(.+)$/i);
     if (m) return m[1];
   }
-  return "etfs.csv";
+  return new URL("../etfs.csv", import.meta.url);
 })();
 
 // `--country=XX` overrides where the account is resident, for when the browser
@@ -231,75 +230,16 @@ function refusal(instrument) {
   return instrument.type === "ETF" ? `not registered in ${residency}` : "";
 }
 
-// What it costs to trade here, as a fraction of the amount, beyond the spread.
-// Trading212 says it itself: its MiFID ex-ante disclosure returns commission,
-// custody, platform and inducements at zero for every quantity, none of the
-// fourteen real orders placed carried a fee line, and a round trip on a single
-// share of EUNL cost one cent, which rules out any flat charge. Conversion is left
-// out by convention, the broker holding a wallet per currency for every currency
-// in the catalogue.
-//
-// The one fee a venue could add is the US regulatory one, and it is unreachable
-// from Europe: of the 1 151 ETFs listed where it applies, not one is available to
-// this account, a US-domiciled fund having no UCITS KID to be sold under. So this
-// is zero for every ETF, and a fund quoted anywhere in the catalogue costs nothing
-// to buy or to sell.
-const COMMISSION = 0;
-
-// Trading212 publishes no bid/ask for real shares: over ninety seconds its quote
-// feed sent only last-traded prices for the four ETFs watched, and zero quote
-// frames. The spread therefore cannot come from the broker at all, so it comes from
-// each listing's own exchange, via `spread.mjs`.
-//
-// It has to be the listing's own exchange and not a convenient one. Carrying Xetra's
-// measure onto the London lines was wrong by a factor of 0.2 to 2.3: IE00B6R52259 is
-// 3.69 bp on Xetra but 1.09 bp as SSAC in pence and 0.80 bp as ISAC in dollars, two
-// separate books on the same exchange.
-const SPREAD_PATH = "parsed_json/spread.json";
-const spreads = fs.existsSync(SPREAD_PATH)
-  ? JSON.parse(fs.readFileSync(SPREAD_PATH, "utf8")).spreads || {}
-  : {};
-
-// What Trading212 adds on top of the market's own spread, as a fraction of the
-// amount. It quotes no spread of its own on real shares: it routes the order and
-// the price is the venue's, which is why its cost disclosure carries no transaction
-// cost line at all. Fourteen real round trips bear this out — a single share of
-// EUNL cost one cent, and IUSQ paid exactly the two cents the Xetra book showed.
-//
-// One caveat this number cannot express. Trading212 internalises small orders, and
-// on a thin fund that was measurably worse than the book: a single share of GC40
-// paid 0.12 EUR against 0.08 on Xetra, while ten shares routed to the venue paid
-// 0.056. So the markup is zero on liquid lines and can go either way on thin ones,
-// which no per-listing figure could capture without trading it.
-const BROKER_SPREAD = 0;
-
-// A spread belongs to a listing, so it is looked up by place, ISIN and currency
-// together. Two lines of the same fund on the same exchange in different currencies
-// are different books and get different answers.
-//
-// The link to the exchange's own page is built rather than looked up: it follows from
-// the venue and the line, so the cache stays a table of numbers.
-function spreadFor(instrument) {
-  const exchange = exchangeById.get(instrument.exchangeId);
-  const listing = {
-    isin: String(instrument.isin || "").toUpperCase(),
-    currency: String(instrument.currency || "").toUpperCase(),
-    ticker: (instrument.shortName || "").toUpperCase(),
-    exchange: exchange?.readableCaption,
-  };
-  const { venue } = listingKey(listing);
-  if (!venue) return { bp: null, url: null };
-  return {
-    bp: spreads[listing.isin]?.[venue.mic]?.[listing.currency] ?? null,
-    url: spreadUrl({ ...listing, venue }),
-  };
-}
+// This file answers what Trading212 sells, not what it costs. The two were mixed here
+// and it made the catalogue impossible to keep honest: a cost is a fact about a broker
+// and a moment, while a listing is a fact about a broker and a fund. What a round trip
+// costs now lives in `trading212_cost.mjs`, which reads the exchange's figure from
+// `parsed_json/spread.json` and applies this broker's own terms to it.
 
 function rowFrom(query, instrument) {
   const exchange = exchangeById.get(instrument.exchangeId);
   const ticker = (instrument.shortName || "").toUpperCase();
   const name = (instrument.description || instrument.fullName || "").replace(/\s+/g, " ").trim();
-  const spread = spreadFor(instrument);
   return {
     query,
     isin: instrument.isin || query,
@@ -320,24 +260,11 @@ function rowFrom(query, instrument) {
     currency: instrument.currency || null,
     type: instrument.type || null,
     subclasses: instrument.subclasses || null,
-    commission: COMMISSION,
-    brokerSpread: BROKER_SPREAD,
-    // Basis points of the amount for a round trip: buy and sell immediately. Since
-    // the broker adds nothing, this is the whole cost, so `amount * bp / 10000` gives
-    // it in currency and half of it covers a one-way trade.
-    //
-    // Null rather than zero whenever the figure cannot be stood behind — no source
-    // for that venue, or a reading taken while the book was shut. An unknown spread
-    // must not read as a free trade.
-    exchangeSpread: spread.bp,
-    // The page the figure came from, so a reader can see the live book: the spread
-    // moves all day and a stored number is only ever a snapshot of it.
-    exchangeSpreadUrl: spread.url,
     raw: [ticker, name, exchange?.readableCaption, instrument.currency].filter(Boolean).join(" "),
   };
 }
 
-const outputPath = "parsed_json/trading212-parsed.json";
+const outputPath = new URL("../parsed_json/trading212-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 
@@ -369,7 +296,7 @@ let savedCount = results.length;
 let savedAt = 0;
 
 function save() {
-  fs.mkdirSync("parsed_json", { recursive: true });
+  fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
   fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
   savedCount = results.length;
   savedAt = Date.now();

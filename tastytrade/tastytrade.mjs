@@ -179,7 +179,7 @@ const csvPath = (() => {
     const match = arg.match(/^--csv=(.+)$/i);
     if (match) return match[1];
   }
-  return "etfs.csv";
+  return new URL("../etfs.csv", import.meta.url);
 })();
 
 // Naming tickers on the command line narrows a run down to those, which is
@@ -308,8 +308,8 @@ for (const instrument of tradable.sort((left, right) =>
   });
 }
 
-fs.mkdirSync("parsed_json", { recursive: true });
-fs.writeFileSync("parsed_json/tastytrade-parsed.json", JSON.stringify(results, null, 2));
+fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
+fs.writeFileSync(new URL("../parsed_json/tastytrade-parsed.json", import.meta.url), JSON.stringify(results, null, 2));
 
 console.error(
   `${results.length} funds matched, ${byCusip} of them by their CUSIP, ${unmatched} not in the CSV`

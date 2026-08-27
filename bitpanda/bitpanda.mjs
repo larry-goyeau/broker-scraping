@@ -124,7 +124,7 @@ const csvPath = (() => {
     const match = arg.match(/^--csv=(.+)$/i);
     if (match) return match[1];
   }
-  return "etfs.csv";
+  return new URL("../etfs.csv", import.meta.url);
 })();
 
 // Naming ISINs on the command line narrows a run down to those.
@@ -416,8 +416,8 @@ await inParallel(shelf, 3, async (asset) => {
 
 results.sort((left, right) => left.ticker.localeCompare(right.ticker));
 
-fs.mkdirSync("parsed_json", { recursive: true });
-fs.writeFileSync("parsed_json/bitpanda-parsed.json", JSON.stringify(results, null, 2));
+fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
+fs.writeFileSync(new URL("../parsed_json/bitpanda-parsed.json", import.meta.url), JSON.stringify(results, null, 2));
 
 console.error(
   `${results.length} instruments matched, ${unmatched} the CSV does not carry ` +

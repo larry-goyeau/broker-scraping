@@ -9,7 +9,7 @@ const csvPath = (() => {
     const match = arg.match(/^--csv=(.+)$/i);
     if (match) return match[1];
   }
-  return "etfs.csv";
+  return new URL("../etfs.csv", import.meta.url);
 })();
 
 // The app key is issued per region and carries that region as a prefix, which
@@ -446,8 +446,8 @@ for (const listing of tradable.sort((left, right) =>
   });
 }
 
-fs.mkdirSync("parsed_json", { recursive: true });
-fs.writeFileSync("parsed_json/webull-parsed.json", JSON.stringify(results, null, 2));
+fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
+fs.writeFileSync(new URL("../parsed_json/webull-parsed.json", import.meta.url), JSON.stringify(results, null, 2));
 
 console.error(
   `${results.length} funds matched, ${unmatched} not in the CSV` +

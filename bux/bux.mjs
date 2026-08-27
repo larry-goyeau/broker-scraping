@@ -18,7 +18,7 @@ function readArg(name, fallback) {
 }
 
 const videoPath = readArg("video", "bux.mp4");
-const csvPath = readArg("csv", "etfs.csv");
+const csvPath = readArg("csv", new URL("../etfs.csv", import.meta.url));
 const fps = Number(readArg("fps", "6"));
 // A row stays on screen for several frames while scrolling, so a reading seen
 // once or twice is OCR noise rather than a fund.
@@ -289,8 +289,8 @@ for (const row of seenRows) {
   });
 }
 
-fs.mkdirSync("parsed_json", { recursive: true });
-fs.writeFileSync("parsed_json/bux-parsed.json", JSON.stringify(results, null, 2));
+fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
+fs.writeFileSync(new URL("../parsed_json/bux-parsed.json", import.meta.url), JSON.stringify(results, null, 2));
 fs.rmSync(workDir, { recursive: true, force: true });
 
 console.error(

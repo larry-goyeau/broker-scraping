@@ -180,7 +180,7 @@ const csvPath = (() => {
     const match = arg.match(/^--csv=(.+)$/i);
     if (match) return match[1];
   }
-  return "etfs.csv";
+  return new URL("../etfs.csv", import.meta.url);
 })();
 
 const csvQueries = loadTickersFromCsv(csvPath);
@@ -193,7 +193,7 @@ const rawQueries =
       : defaultQueries;
 const queries = uniqueQueries(rawQueries);
 
-const outputPath = "parsed_json/captrader-parsed.json";
+const outputPath = new URL("../parsed_json/captrader-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 
@@ -327,7 +327,7 @@ for (const [queryIndex, query] of queries.entries()) {
     });
   }
 
-  fs.mkdirSync("parsed_json", { recursive: true });
+  fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
   fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 }
 

@@ -17,7 +17,7 @@ function readArg(name, fallback) {
 }
 
 const photoDir = readArg("dir", "N26");
-const csvPath = readArg("csv", "etfs.csv");
+const csvPath = readArg("csv", new URL("../etfs.csv", import.meta.url));
 
 if (!fs.existsSync(photoDir)) {
   throw new Error(`No photo directory at ${photoDir}.`);
@@ -360,8 +360,8 @@ for (const { row, rejected } of pending) {
   );
 }
 
-fs.mkdirSync("parsed_json", { recursive: true });
-fs.writeFileSync("parsed_json/n26-parsed.json", JSON.stringify(results, null, 2));
+fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
+fs.writeFileSync(new URL("../parsed_json/n26-parsed.json", import.meta.url), JSON.stringify(results, null, 2));
 
 console.error(
   `${results.length} matched (${results.filter((r) => r.type === "ETF").length} ETF, ` +

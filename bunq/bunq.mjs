@@ -87,7 +87,7 @@ const csvPath = (() => {
     const match = arg.match(/^--csv=(.+)$/i);
     if (match) return match[1];
   }
-  return "etfs.csv";
+  return new URL("../etfs.csv", import.meta.url);
 })();
 
 const csvIsins = loadIsinsFromCsv(csvPath);
@@ -194,7 +194,7 @@ console.error(`${instruments.length} instruments in bunq's offering`);
 const etfs = instruments.filter((instrument) => instrument.category === "ETF");
 console.error(`${etfs.length} of them are ETFs`);
 
-const outputPath = "parsed_json/bunq-parsed.json";
+const outputPath = new URL("../parsed_json/bunq-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 let offList = 0;
@@ -227,7 +227,7 @@ for (const instrument of etfs) {
   });
 }
 
-fs.mkdirSync("parsed_json", { recursive: true });
+fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
 fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 
 console.error(`${results.length} funds matched, ${offList} ETFs not in the CSV`);

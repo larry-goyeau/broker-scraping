@@ -38,7 +38,7 @@ const csvPath = (() => {
     const m = arg.match(/^--csv=(.+)$/i);
     if (m) return m[1];
   }
-  return "etfs.csv";
+  return new URL("../etfs.csv", import.meta.url);
 })();
 
 // Naming ISINs on the command line narrows a run down to those.
@@ -181,8 +181,8 @@ for (const product of shelf) {
   });
 }
 
-fs.mkdirSync("parsed_json", { recursive: true });
-fs.writeFileSync("parsed_json/degiro-parsed.json", JSON.stringify(results, null, 2));
+fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
+fs.writeFileSync(new URL("../parsed_json/degiro-parsed.json", import.meta.url), JSON.stringify(results, null, 2));
 
 console.error(
   `${results.length} listings kept over ${new Set(results.map((row) => row.isin)).size} funds, ` +

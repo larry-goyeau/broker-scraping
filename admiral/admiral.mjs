@@ -216,13 +216,13 @@ const csvPath = (() => {
     const match = arg.match(/^--csv=(.+)$/i);
     if (match) return match[1];
   }
-  return "etfs.csv";
+  return new URL("../etfs.csv", import.meta.url);
 })();
 
 const tickerCandidates = loadTickerCandidatesFromCsv(csvPath);
 const onlyTickers = new Set(positionalArgs.map(normalizeTicker).filter(Boolean));
 
-const outputPath = "parsed_json/admiral-parsed.json";
+const outputPath = new URL("../parsed_json/admiral-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 
@@ -502,11 +502,11 @@ for (const [index, instrument] of instruments.entries()) {
     isin,
   });
 
-  fs.mkdirSync("parsed_json", { recursive: true });
+  fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
   fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 }
 
-fs.mkdirSync("parsed_json", { recursive: true });
+fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
 fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 
 console.log(JSON.stringify(results, null, 2));

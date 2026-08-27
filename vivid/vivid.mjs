@@ -136,7 +136,7 @@ const csvPath = (() => {
     const match = arg.match(/^--csv=(.+)$/i);
     if (match) return match[1];
   }
-  return "etfs.csv";
+  return new URL("../etfs.csv", import.meta.url);
 })();
 
 const csvIsins = loadIsinsFromCsv(csvPath);
@@ -265,7 +265,7 @@ for (let index = 0; index < listed.length; index += BATCH) {
   console.error(`  ${details.size}/${listed.length} sheets read`);
 }
 
-const outputPath = "parsed_json/vivid-parsed.json";
+const outputPath = new URL("../parsed_json/vivid-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 let unresolved = 0;
@@ -303,7 +303,7 @@ for (const row of listed) {
   });
 }
 
-fs.mkdirSync("parsed_json", { recursive: true });
+fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
 fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 
 console.error(

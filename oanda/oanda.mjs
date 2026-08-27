@@ -279,7 +279,7 @@ const csvPath = (() => {
     const m = arg.match(/^--csv=(.+)$/i);
     if (m) return m[1];
   }
-  return "etfs.csv";
+  return new URL("../etfs.csv", import.meta.url);
 })();
 const csvQueries = loadTickersFromCsv(csvPath);
 const tickerToIsin = loadTickerToIsinFromCsv(csvPath);
@@ -292,9 +292,9 @@ const seen = new Set();
 
 // When resuming, load already-saved entries so we don't overwrite them and so
 // the dedup `seen` set knows about rows from earlier queries.
-if (startIndex > 1 && fs.existsSync("parsed_json/oanda-parsed.json")) {
+if (startIndex > 1 && fs.existsSync(new URL("../parsed_json/oanda-parsed.json", import.meta.url))) {
   try {
-    const existing = JSON.parse(fs.readFileSync("parsed_json/oanda-parsed.json", "utf8"));
+    const existing = JSON.parse(fs.readFileSync(new URL("../parsed_json/oanda-parsed.json", import.meta.url), "utf8"));
     if (Array.isArray(existing)) {
       for (const entry of existing) {
         results.push(entry);
@@ -335,8 +335,8 @@ for (const [queryIndex, query] of queries.entries()) {
   }
 
   // Persist progress after every query so an interruption keeps prior work.
-  fs.mkdirSync("parsed_json", { recursive: true });
-  fs.writeFileSync("parsed_json/oanda-parsed.json", JSON.stringify(results, null, 2));
+  fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
+  fs.writeFileSync(new URL("../parsed_json/oanda-parsed.json", import.meta.url), JSON.stringify(results, null, 2));
 }
 
 console.log(JSON.stringify(results, null, 2));

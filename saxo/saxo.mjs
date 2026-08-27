@@ -80,7 +80,7 @@ const csvPath = (() => {
     const m = arg.match(/^--csv=(.+)$/i);
     if (m) return m[1];
   }
-  return "etfs.csv";
+  return new URL("../etfs.csv", import.meta.url);
 })();
 const csvQueries = loadIsinsFromCsv(csvPath);
 const rawQueries =
@@ -91,7 +91,7 @@ const rawQueries =
       : defaultQueries;
 const queries = uniqueQueries(rawQueries);
 
-const outputPath = "parsed_json/saxo-parsed.json";
+const outputPath = new URL("../parsed_json/saxo-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 
@@ -262,7 +262,7 @@ let savedCount = results.length;
 let savedAt = 0;
 
 function save() {
-  fs.mkdirSync("parsed_json", { recursive: true });
+  fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
   fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
   savedCount = results.length;
   savedAt = Date.now();

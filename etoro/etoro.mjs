@@ -187,11 +187,11 @@ const csvPath = (() => {
     const match = arg.match(/^--csv=(.+)$/i);
     if (match) return match[1];
   }
-  return "etfs.csv";
+  return new URL("../etfs.csv", import.meta.url);
 })();
 
 const tickerCandidates = loadTickerCandidatesFromCsv(csvPath);
-const outputPath = "parsed_json/etoro-parsed.json";
+const outputPath = new URL("../parsed_json/etoro-parsed.json", import.meta.url);
 
 // eToro publishes its whole instrument catalogue unauthenticated, so the ETF
 // universe -- real UCITS funds and the US ETFs it can only offer as CFDs alike
@@ -261,7 +261,7 @@ for (const instrument of etfs) {
 
 results.sort((left, right) => left.ticker.localeCompare(right.ticker));
 
-fs.mkdirSync("parsed_json", { recursive: true });
+fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
 fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 
 console.error(

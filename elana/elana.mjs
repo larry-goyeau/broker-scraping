@@ -83,7 +83,7 @@ if (!page.url().includes("webtrader.elana.net")) {
 await page.bringToFront();
 
 // `--start=N` (1-indexed) lets a run resume from a specific ISIN without
-// throwing away progress already saved to parsed_json/elana-parsed.json.
+// throwing away progress already saved to elana-parsed.json.
 const startIndex = (() => {
   for (const arg of process.argv.slice(2)) {
     const match = arg.match(/^--start=(\d+)$/i);
@@ -106,7 +106,7 @@ const csvPath = (() => {
 const cliQueries = positionalArgs.map(toIsin).filter(Boolean);
 const queries = uniqueQueries(cliQueries.length > 0 ? cliQueries : loadIsinsFromCsv(csvPath));
 
-const outputPath = new URL("../parsed_json/elana-parsed.json", import.meta.url);
+const outputPath = new URL("elana-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 
@@ -253,7 +253,6 @@ async function refreshToken(stale) {
 }
 
 function save() {
-  fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
   fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 }
 

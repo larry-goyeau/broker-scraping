@@ -59,7 +59,7 @@ if (!/lightyear\./i.test(page.url())) {
 }
 
 // `--start=N` (1-indexed) lets a run resume from a specific query without
-// throwing away progress already saved to parsed_json/lightyear-parsed.json.
+// throwing away progress already saved to lightyear-parsed.json.
 const startIndex = (() => {
   for (const arg of process.argv.slice(2)) {
     const m = arg.match(/^--start=(\d+)$/i);
@@ -88,7 +88,7 @@ const rawQueries =
       : defaultQueries;
 const queries = uniqueQueries(rawQueries);
 
-const outputPath = new URL("../parsed_json/lightyear-parsed.json", import.meta.url);
+const outputPath = new URL("lightyear-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 
@@ -147,7 +147,6 @@ async function searchIsin(isin) {
 }
 
 function save() {
-  fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
   fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 }
 

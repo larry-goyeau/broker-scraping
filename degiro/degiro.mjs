@@ -181,8 +181,7 @@ for (const product of shelf) {
   });
 }
 
-fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
-fs.writeFileSync(new URL("../parsed_json/degiro-parsed.json", import.meta.url), JSON.stringify(results, null, 2));
+fs.writeFileSync(new URL("degiro-parsed.json", import.meta.url), JSON.stringify(results, null, 2));
 
 console.error(
   `${results.length} listings kept over ${new Set(results.map((row) => row.isin)).size} funds, ` +

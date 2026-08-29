@@ -261,7 +261,7 @@ if (!frame) {
 const searchInput = await ensureSearchInput(frame);
 
 // `--start=N` (1-indexed) lets a run resume from a specific query without
-// throwing away progress already saved to parsed_json/oanda-parsed.json.
+// throwing away progress already saved to oanda-parsed.json.
 const startIndex = (() => {
   for (const arg of process.argv.slice(2)) {
     const m = arg.match(/^--start=(\d+)$/i);
@@ -292,9 +292,9 @@ const seen = new Set();
 
 // When resuming, load already-saved entries so we don't overwrite them and so
 // the dedup `seen` set knows about rows from earlier queries.
-if (startIndex > 1 && fs.existsSync(new URL("../parsed_json/oanda-parsed.json", import.meta.url))) {
+if (startIndex > 1 && fs.existsSync(new URL("oanda-parsed.json", import.meta.url))) {
   try {
-    const existing = JSON.parse(fs.readFileSync(new URL("../parsed_json/oanda-parsed.json", import.meta.url), "utf8"));
+    const existing = JSON.parse(fs.readFileSync(new URL("oanda-parsed.json", import.meta.url), "utf8"));
     if (Array.isArray(existing)) {
       for (const entry of existing) {
         results.push(entry);
@@ -335,8 +335,7 @@ for (const [queryIndex, query] of queries.entries()) {
   }
 
   // Persist progress after every query so an interruption keeps prior work.
-  fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
-  fs.writeFileSync(new URL("../parsed_json/oanda-parsed.json", import.meta.url), JSON.stringify(results, null, 2));
+  fs.writeFileSync(new URL("oanda-parsed.json", import.meta.url), JSON.stringify(results, null, 2));
 }
 
 console.log(JSON.stringify(results, null, 2));

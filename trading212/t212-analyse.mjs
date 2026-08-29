@@ -3,7 +3,7 @@
 
 import fs from "node:fs";
 
-const log = JSON.parse(fs.readFileSync(process.argv[2] || new URL("../parsed_json/t212-experiment.json", import.meta.url), "utf8"));
+const log = JSON.parse(fs.readFileSync(process.argv[2] || new URL("t212-experiment.json", import.meta.url), "utf8"));
 
 // The quoted spread at an instant, taken from the CFD twin: the real ETF streams
 // only a last-traded price, so the CFD book is the only bid/ask on offer.

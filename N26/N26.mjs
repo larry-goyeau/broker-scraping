@@ -360,8 +360,7 @@ for (const { row, rejected } of pending) {
   );
 }
 
-fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
-fs.writeFileSync(new URL("../parsed_json/n26-parsed.json", import.meta.url), JSON.stringify(results, null, 2));
+fs.writeFileSync(new URL("n26-parsed.json", import.meta.url), JSON.stringify(results, null, 2));
 
 console.error(
   `${results.length} matched (${results.filter((r) => r.type === "ETF").length} ETF, ` +

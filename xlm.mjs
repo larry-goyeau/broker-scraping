@@ -6,7 +6,7 @@
 // The measure belongs to the fund on Xetra, not to a broker, so the cache it builds
 // is shared: any broker parser can read it.
 //
-//   node xlm.mjs                     -- ISINs from parsed_json/trading212-parsed.json
+//   node xlm.mjs                     -- ISINs from trading212/trading212-parsed.json
 //   node xlm.mjs --isins=a.csv       -- ISINs from a CSV
 //   node xlm.mjs IE00B4L5Y983 ...    -- ISINs on the command line
 //   node xlm.mjs --refresh           -- refetch instead of trusting the cache
@@ -34,7 +34,7 @@ const isins = positional.length
   ? isinsFrom(positional.join(" "))
   : isinsFile
     ? isinsFrom(fs.readFileSync(isinsFile, "utf8"))
-    : isinsFrom(fs.readFileSync("parsed_json/trading212-parsed.json", "utf8"));
+    : isinsFrom(fs.readFileSync("trading212/trading212-parsed.json", "utf8"));
 
 if (!isins.length) throw new Error("No ISINs to look up.");
 

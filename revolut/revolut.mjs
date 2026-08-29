@@ -95,7 +95,7 @@ if (!page.url().includes("invest.revolut.com")) {
 }
 
 // `--start=N` (1-indexed) lets a run resume from a specific query without
-// throwing away progress already saved to parsed_json/revolut-parsed.json.
+// throwing away progress already saved to revolut-parsed.json.
 const startIndex = (() => {
   for (const arg of process.argv.slice(2)) {
     const match = arg.match(/^--start=(\d+)$/i);
@@ -127,7 +127,7 @@ const rawQueries =
       : defaultQueries;
 const queries = uniqueQueries(rawQueries);
 
-const outputPath = new URL("../parsed_json/revolut-parsed.json", import.meta.url);
+const outputPath = new URL("revolut-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 
@@ -254,7 +254,6 @@ for (const [queryIndex, query] of queries.entries()) {
     });
   }
 
-  fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
   fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 }
 

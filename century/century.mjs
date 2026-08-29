@@ -248,7 +248,7 @@ if (!page.url().includes("liveapp.century.ae")) {
 await page.bringToFront();
 
 // `--start=N` (1-indexed) lets a run resume from a specific instrument without
-// throwing away progress already saved to parsed_json/century-parsed.json.
+// throwing away progress already saved to century-parsed.json.
 const startIndex = (() => {
   for (const arg of process.argv.slice(2)) {
     const match = arg.match(/^--start=(\d+)$/i);
@@ -270,7 +270,7 @@ const csvPath = (() => {
 const { byTicker, rows: csvRows } = loadCsv(csvPath);
 const onlyTickers = new Set(positionalArgs.map(normalizeTicker).filter(Boolean));
 
-const outputPath = new URL("../parsed_json/century-parsed.json", import.meta.url);
+const outputPath = new URL("century-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 
@@ -448,7 +448,6 @@ for (const [index, product] of universe.entries()) {
   });
 }
 
-fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
 fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 
 console.error(`${results.length} funds matched, ${refused} close-only skipped${missing ? `, ${missing} undescribed` : ""}`);

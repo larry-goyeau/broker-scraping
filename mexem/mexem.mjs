@@ -82,7 +82,7 @@ const queries = uniqueQueries(
   cliQueries.length > 0 ? cliQueries : csvQueries.length > 0 ? csvQueries : []
 );
 
-const outputPath = new URL("../parsed_json/clientam-parsed.json", import.meta.url);
+const outputPath = new URL("clientam-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 
@@ -177,7 +177,6 @@ async function tradingRestricted(conid) {
 }
 
 function save() {
-  fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
   fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 }
 

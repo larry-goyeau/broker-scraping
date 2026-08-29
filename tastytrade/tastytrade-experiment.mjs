@@ -33,7 +33,7 @@ const LIVE = process.argv.includes("--live");
 const OUT = arg(
   "out",
   new URL(
-    LIVE ? "../parsed_json/tastytrade-experiment.json" : "../parsed_json/tastytrade-probe.json",
+    LIVE ? "tastytrade-experiment.json" : "tastytrade-probe.json",
     import.meta.url
   )
 );
@@ -313,7 +313,6 @@ if (LIVE) {
 // did once, on 2026-08-27: a later probe, writing the same path, overwrote the six live trips of
 // that afternoon. Their distilled figures survive in `tastytrade_cost.mjs`, the raw legs do not.
 // Hence two defences: a probe writes to its own file, and a live run appends.
-fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
 const run = {
   at: new Date().toISOString(),
   account,

@@ -40,7 +40,7 @@ import { listingKey, resolveVenue } from "../venues.mjs";
 
 // Anchored to the repository rather than to whatever directory the shell happens to be in, so
 // this works both as `node trading212/trading212_cost.mjs` and from inside the folder.
-const CATALOGUE = new URL("../parsed_json/trading212-parsed.json", import.meta.url);
+const CATALOGUE = new URL("trading212-parsed.json", import.meta.url);
 const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
 
 // ------------------------------------------------------------------ the broker's terms

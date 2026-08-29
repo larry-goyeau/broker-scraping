@@ -26,6 +26,7 @@
 
 import fs from "node:fs";
 import { spawn } from "node:child_process";
+import { catalogueFiles } from "./catalogues.mjs";
 
 const arg = (name) => {
   for (const a of process.argv.slice(2)) {
@@ -81,11 +82,7 @@ const markDone = (date, slot) => {
 // Every catalogue at once. A place's book is the same book whichever broker sells it, so
 // pricing it once for all of them is both cheaper and the only way the figures stay
 // consistent between brokers.
-const rows = fs
-  .readdirSync("parsed_json")
-  .filter((f) => f.endsWith("-parsed.json"))
-  .map((f) => `parsed_json/${f}`)
-  .join(",");
+const rows = catalogueFiles().join(",");
 
 const run = (script, args) =>
   new Promise((resolve) => {

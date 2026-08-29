@@ -105,7 +105,7 @@ if (instruments.length === 0) {
 }
 console.error(`${instruments.length} instruments in Al Ramz's offering`);
 
-const outputPath = new URL("../parsed_json/alramz-parsed.json", import.meta.url);
+const outputPath = new URL("alramz-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 let offList = 0;
@@ -150,7 +150,6 @@ for (const instrument of instruments) {
   });
 }
 
-fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
 fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 
 console.error(`${results.length} funds matched, ${offList} instruments not in the CSV`);

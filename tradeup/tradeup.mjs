@@ -193,7 +193,7 @@ if (!page.url().includes("tradeup.com")) {
 await page.bringToFront();
 
 // `--start=N` (1-indexed) lets a run resume from a specific instrument without
-// throwing away progress already saved to parsed_json/tradeup-parsed.json.
+// throwing away progress already saved to tradeup-parsed.json.
 const startIndex = (() => {
   for (const arg of process.argv.slice(2)) {
     const match = arg.match(/^--start=(\d+)$/i);
@@ -215,7 +215,7 @@ const csvPath = (() => {
 const tickerCandidates = loadTickerCandidatesFromCsv(csvPath);
 const onlyTickers = new Set(positionalArgs.map(normalizeTicker).filter(Boolean));
 
-const outputPath = new URL("../parsed_json/tradeup-parsed.json", import.meta.url);
+const outputPath = new URL("tradeup-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 
@@ -395,7 +395,6 @@ for (let index = 0; index < queries.length; index += BATCH_SIZE) {
     });
   }
 
-  fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
   fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 }
 

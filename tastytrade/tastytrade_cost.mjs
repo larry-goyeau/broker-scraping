@@ -59,7 +59,7 @@ import { listingKey, resolveVenue } from "../venues.mjs";
 
 // Anchored to the repository rather than to whatever directory the shell happens to be in, so
 // this works both as `node tastytrade/tastytrade_cost.mjs` and from inside the folder.
-const CATALOGUE = new URL("../parsed_json/tastytrade-parsed.json", import.meta.url);
+const CATALOGUE = new URL("tastytrade-parsed.json", import.meta.url);
 const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
 const RULE605 = new URL("../parsed_json/rule605-monthly.json", import.meta.url);
 

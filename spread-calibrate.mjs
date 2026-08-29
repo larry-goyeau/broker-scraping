@@ -30,6 +30,7 @@
 
 import fs from "node:fs";
 import { listingKey, VENUES } from "./venues.mjs";
+import { catalogueRows } from "./catalogues.mjs";
 
 const arg = (name) => {
   for (const a of process.argv.slice(2)) {
@@ -59,15 +60,12 @@ const thin = (isin, mic, currency) => {
 
 // The name each fund trades under, per place, purely to make the report readable.
 const tickers = new Map();
-for (const file of fs.readdirSync("parsed_json").filter((f) => f.endsWith("-parsed.json"))) {
-  const parsed = JSON.parse(fs.readFileSync(`parsed_json/${file}`, "utf8"));
-  for (const row of Array.isArray(parsed) ? parsed : parsed.rows || []) {
-    const isin = String(row.isin || "").toUpperCase();
-    const ticker = String(row.ticker || row.symbol || "").toUpperCase();
-    if (!isin || !ticker) continue;
-    const { venue } = listingKey(row);
-    if (venue?.mic) tickers.set(`${isin}|${venue.mic}`, ticker);
-  }
+for (const row of catalogueRows()) {
+  const isin = String(row.isin || "").toUpperCase();
+  const ticker = String(row.ticker || row.symbol || "").toUpperCase();
+  if (!isin || !ticker) continue;
+  const { venue } = listingKey(row);
+  if (venue?.mic) tickers.set(`${isin}|${venue.mic}`, ticker);
 }
 
 const pairs = [];

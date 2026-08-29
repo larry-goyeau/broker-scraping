@@ -184,7 +184,7 @@ if (!page.url().includes("app.alpaca.markets")) {
 await page.bringToFront();
 
 // `--start=N` (1-indexed) lets a run resume from a specific instrument without
-// throwing away progress already saved to parsed_json/alpaca-parsed.json.
+// throwing away progress already saved to alpaca-parsed.json.
 const startIndex = (() => {
   for (const arg of process.argv.slice(2)) {
     const match = arg.match(/^--start=(\d+)$/i);
@@ -206,7 +206,7 @@ const csvPath = (() => {
 const tickerCandidates = loadTickerCandidatesFromCsv(csvPath);
 const onlyTickers = new Set(positionalArgs.map(normalizeTicker).filter(Boolean));
 
-const outputPath = new URL("../parsed_json/alpaca-parsed.json", import.meta.url);
+const outputPath = new URL("alpaca-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 
@@ -349,7 +349,6 @@ for (const [index, asset] of listings.entries()) {
   });
 }
 
-fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
 fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 
 console.error(`${results.length} funds matched, ${unmatched} listings not the fund on that ticker, ${refused} refused`);

@@ -200,7 +200,7 @@ if (!page.url().includes("terminal.investimental.ro")) {
 await page.bringToFront();
 
 // `--start=N` (1-indexed) lets a run resume from a specific ticker without
-// throwing away progress already saved to parsed_json/investimental-parsed.json.
+// throwing away progress already saved to investimental-parsed.json.
 const startIndex = (() => {
   for (const arg of process.argv.slice(2)) {
     const match = arg.match(/^--start=(\d+)$/i);
@@ -223,7 +223,7 @@ const csvPath = (() => {
 const tickerCandidates = loadTickerCandidatesFromCsv(csvPath);
 const onlyTickers = new Set(positionalArgs.map(normalizeTicker).filter(Boolean));
 
-const outputPath = new URL("../parsed_json/investimental-parsed.json", import.meta.url);
+const outputPath = new URL("investimental-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 
@@ -422,7 +422,6 @@ const queries = [...tickerCandidates.keys()]
 console.error(`${queries.length} tickers to search`);
 
 function save() {
-  fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
   fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 }
 

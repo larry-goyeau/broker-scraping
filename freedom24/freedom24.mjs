@@ -116,7 +116,7 @@ const wanted = positionalArgs.length > 0
   ? positionalArgs.map((arg) => arg.toUpperCase())
   : candidates;
 
-const outputPath = new URL("../parsed_json/freedom24-parsed.json", import.meta.url);
+const outputPath = new URL("freedom24-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 
@@ -212,7 +212,6 @@ function readDetails(batch) {
 }
 
 function save() {
-  fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
   fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 }
 

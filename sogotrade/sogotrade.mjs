@@ -134,7 +134,7 @@ page.on("dialog", async (dialog) => {
 });
 
 // `--start=N` (1-indexed) lets a run resume from a specific query without
-// throwing away progress already saved to parsed_json/sogotrade-parsed.json.
+// throwing away progress already saved to sogotrade-parsed.json.
 const startIndex = (() => {
   for (const arg of process.argv.slice(2)) {
     const match = arg.match(/^--start=(\d+)$/i);
@@ -166,7 +166,7 @@ const rawQueries =
       : defaultQueries;
 const queries = uniqueQueries(rawQueries);
 
-const outputPath = new URL("../parsed_json/sogotrade-parsed.json", import.meta.url);
+const outputPath = new URL("sogotrade-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 
@@ -232,7 +232,6 @@ async function fetchFundamentals(symbols) {
 }
 
 function save() {
-  fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
   fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 }
 

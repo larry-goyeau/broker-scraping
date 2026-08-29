@@ -186,7 +186,7 @@ const csvPath = (() => {
 })();
 
 const tickerCandidates = loadTickerCandidatesFromCsv(csvPath);
-const outputPath = new URL("../parsed_json/quantfury-parsed.json", import.meta.url);
+const outputPath = new URL("quantfury-parsed.json", import.meta.url);
 
 const browser = await puppeteer.connect({
   browserURL: "http://127.0.0.1:9222",
@@ -292,7 +292,6 @@ for (const instrument of etfs) {
 
 results.sort((left, right) => left.ticker.localeCompare(right.ticker));
 
-fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
 fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 
 console.error(`${results.length} ETFs matched to ${csvPath} | ${unmatched} with no CSV match`);

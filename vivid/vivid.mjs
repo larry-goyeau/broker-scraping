@@ -265,7 +265,7 @@ for (let index = 0; index < listed.length; index += BATCH) {
   console.error(`  ${details.size}/${listed.length} sheets read`);
 }
 
-const outputPath = new URL("../parsed_json/vivid-parsed.json", import.meta.url);
+const outputPath = new URL("vivid-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 let unresolved = 0;
@@ -303,7 +303,6 @@ for (const row of listed) {
   });
 }
 
-fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
 fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 
 console.error(

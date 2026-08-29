@@ -142,7 +142,7 @@ for (const c of CASES) {
   });
 }
 
-fs.writeFileSync(new URL("../parsed_json/t212-prediction.json", import.meta.url), JSON.stringify(out, null, 2));
+fs.writeFileSync(new URL("t212-prediction.json", import.meta.url), JSON.stringify(out, null, 2));
 
 console.log(
   "\nETF  | n  | carnet à       | bid / ask       | spread | prof. touch | carnet prédit | XLM÷2 prédit | mesuré"

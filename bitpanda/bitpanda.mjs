@@ -416,8 +416,7 @@ await inParallel(shelf, 3, async (asset) => {
 
 results.sort((left, right) => left.ticker.localeCompare(right.ticker));
 
-fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
-fs.writeFileSync(new URL("../parsed_json/bitpanda-parsed.json", import.meta.url), JSON.stringify(results, null, 2));
+fs.writeFileSync(new URL("bitpanda-parsed.json", import.meta.url), JSON.stringify(results, null, 2));
 
 console.error(
   `${results.length} instruments matched, ${unmatched} the CSV does not carry ` +

@@ -62,7 +62,7 @@ if (!/saxoinvestor|saxotrader|saxobank|saxo\./i.test(page.url())) {
 }
 
 // `--start=N` (1-indexed) lets a run resume from a specific query without
-// throwing away progress already saved to parsed_json/saxo-parsed.json.
+// throwing away progress already saved to saxo-parsed.json.
 const startIndex = (() => {
   for (const arg of process.argv.slice(2)) {
     const m = arg.match(/^--start=(\d+)$/i);
@@ -91,7 +91,7 @@ const rawQueries =
       : defaultQueries;
 const queries = uniqueQueries(rawQueries);
 
-const outputPath = new URL("../parsed_json/saxo-parsed.json", import.meta.url);
+const outputPath = new URL("saxo-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 
@@ -262,7 +262,6 @@ let savedCount = results.length;
 let savedAt = 0;
 
 function save() {
-  fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
   fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
   savedCount = results.length;
   savedAt = Date.now();

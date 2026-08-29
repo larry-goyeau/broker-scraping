@@ -32,7 +32,7 @@ const REPS = Number(arg("reps", "3"));
 const OUT = arg(
   "out",
   new URL(
-    DRY ? "../parsed_json/t212-dry.json" : "../parsed_json/t212-experiment.json",
+    DRY ? "t212-dry.json" : "t212-experiment.json",
     import.meta.url
   )
 );
@@ -45,7 +45,6 @@ const previousRuns = (() => {
   }
 })();
 const save = (log) => {
-  fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
   fs.writeFileSync(OUT, JSON.stringify({ runs: [...previousRuns, log] }, null, 2));
 };
 // Running every repetition of one size before moving to the next confounds size

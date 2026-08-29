@@ -72,7 +72,7 @@ await page.goto(`https://live.deutsche-boerse.com/etf/${ISIN}`, {
 await new Promise((r) => setTimeout(r, SECONDS * 1000));
 await page.close();
 
-fs.writeFileSync(new URL("../parsed_json/spread-watch.json", import.meta.url), JSON.stringify({ isin: ISIN, n: N, samples }, null, 2));
+fs.writeFileSync(new URL("spread-watch.json", import.meta.url), JSON.stringify({ isin: ISIN, n: N, samples }, null, 2));
 
 console.log(`${samples.length} mises à jour du carnet sur ~${SECONDS}s (données différées de 15 min)\n`);
 console.log("heure UTC | bid      | ask      | spread | prof. bid/ask | coût n=" + N);

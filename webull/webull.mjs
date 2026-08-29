@@ -446,8 +446,7 @@ for (const listing of tradable.sort((left, right) =>
   });
 }
 
-fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
-fs.writeFileSync(new URL("../parsed_json/webull-parsed.json", import.meta.url), JSON.stringify(results, null, 2));
+fs.writeFileSync(new URL("webull-parsed.json", import.meta.url), JSON.stringify(results, null, 2));
 
 console.error(
   `${results.length} funds matched, ${unmatched} not in the CSV` +

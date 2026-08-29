@@ -22,8 +22,8 @@
 // the average hour of the session. The multiples come from Deutsche Börse's intraday XLM
 // and are published beside the figure, so an hour can be put back.
 //
-//   node spread.mjs                              -- listings from trading212-parsed.json
-//   node spread.mjs --rows=parsed_json/xtb-parsed.json
+//   node spread.mjs                              -- listings from trading212/trading212-parsed.json
+//   node spread.mjs --rows=xtb/xtb-parsed.json
 //   node spread.mjs --rows=a.json,b.json         -- several brokers at once
 //   node spread.mjs --refresh                    -- refetch instead of trusting the file
 //   node spread.mjs --out=other.json             -- write somewhere else
@@ -57,7 +57,7 @@ const ONLY = (arg("only") || "")
 
 // ------------------------------------------------------------------- the listings
 
-const rowFiles = (arg("rows") || "parsed_json/trading212-parsed.json").split(",").map((s) => s.trim());
+const rowFiles = (arg("rows") || "trading212/trading212-parsed.json").split(",").map((s) => s.trim());
 
 const listings = new Map();
 

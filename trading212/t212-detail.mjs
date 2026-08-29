@@ -1,6 +1,6 @@
 import fs from "node:fs";
 
-const log = JSON.parse(fs.readFileSync(process.argv[2] || new URL("../parsed_json/t212-experiment.json", import.meta.url), "utf8"));
+const log = JSON.parse(fs.readFileSync(process.argv[2] || new URL("t212-experiment.json", import.meta.url), "utf8"));
 const stream = log.quoteStream.filter((q) => q.kind === "quote").sort((a, b) => a.at - b.at);
 
 const nearest = (at) =>

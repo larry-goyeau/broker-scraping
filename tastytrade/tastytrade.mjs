@@ -308,8 +308,7 @@ for (const instrument of tradable.sort((left, right) =>
   });
 }
 
-fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
-fs.writeFileSync(new URL("../parsed_json/tastytrade-parsed.json", import.meta.url), JSON.stringify(results, null, 2));
+fs.writeFileSync(new URL("tastytrade-parsed.json", import.meta.url), JSON.stringify(results, null, 2));
 
 console.error(
   `${results.length} funds matched, ${byCusip} of them by their CUSIP, ${unmatched} not in the CSV`

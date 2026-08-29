@@ -289,8 +289,7 @@ for (const row of seenRows) {
   });
 }
 
-fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
-fs.writeFileSync(new URL("../parsed_json/bux-parsed.json", import.meta.url), JSON.stringify(results, null, 2));
+fs.writeFileSync(new URL("bux-parsed.json", import.meta.url), JSON.stringify(results, null, 2));
 fs.rmSync(workDir, { recursive: true, force: true });
 
 console.error(

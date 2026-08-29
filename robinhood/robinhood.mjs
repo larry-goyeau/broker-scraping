@@ -184,10 +184,10 @@ const csvPath = (() => {
 const tickerCandidates = loadTickerCandidatesFromCsv(csvPath);
 const onlyTickers = new Set(positionalArgs.map(normalizeTicker).filter(Boolean));
 
-const outputPath = new URL("../parsed_json/robinhood-parsed.json", import.meta.url);
+const outputPath = new URL("robinhood-parsed.json", import.meta.url);
 // Walking 300+ pages costs a couple of minutes, so the harvested 24-Hour Market
 // list is cached and only the (fast) association step reruns unless --refresh.
-const cachePath = new URL("../parsed_json/.robinhood-24h-cache.json", import.meta.url);
+const cachePath = new URL(".robinhood-24h-cache.json", import.meta.url);
 
 async function fetchPage(url) {
   for (let attempt = 0; attempt < 5; attempt += 1) {
@@ -236,7 +236,6 @@ async function loadUniverse() {
     if (pages % 25 === 0) console.error(`  ${pages} pages, ${items.length} kept`);
   }
 
-  fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
   fs.writeFileSync(cachePath, JSON.stringify(items, null, 2));
   return items;
 }
@@ -281,7 +280,6 @@ for (const instrument of universe) {
 
 results.sort((left, right) => left.ticker.localeCompare(right.ticker));
 
-fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
 fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 
 console.error(

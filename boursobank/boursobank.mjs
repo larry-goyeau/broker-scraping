@@ -53,7 +53,7 @@ const page =
 await page.bringToFront();
 
 // `--start=N` (1-indexed) lets a run resume from a specific query without
-// throwing away progress already saved to parsed_json/boursobank-parsed.json.
+// throwing away progress already saved to boursobank-parsed.json.
 const startIndex = (() => {
   for (const arg of process.argv.slice(2)) {
     const match = arg.match(/^--start=(\d+)$/i);
@@ -84,7 +84,7 @@ const rawQueries =
       : defaultQueries;
 const queries = uniqueQueries(rawQueries);
 
-const outputPath = new URL("../parsed_json/boursobank-parsed.json", import.meta.url);
+const outputPath = new URL("boursobank-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 
@@ -310,7 +310,6 @@ for (let offset = 0; offset < pending.length; offset += BATCH_SIZE) {
     }
   }
 
-  fs.mkdirSync(new URL("../parsed_json/", import.meta.url), { recursive: true });
   fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 }
 

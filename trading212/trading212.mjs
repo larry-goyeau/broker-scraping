@@ -57,7 +57,9 @@ if (!page.url().includes("app.trading212.com")) {
 }
 
 // `--start=N` (1-indexed) lets a run resume from a specific query without
-// throwing away progress already saved to trading212-parsed.json.
+// throwing away progress already saved to trading212-parsed.json. It counts
+// against the order the catalogue came in, so a resume is only exact for as
+// long as Trading212's own list has not moved underneath it.
 const startIndex = (() => {
   for (const arg of process.argv.slice(2)) {
     const m = arg.match(/^--start=(\d+)$/i);
@@ -66,32 +68,48 @@ const startIndex = (() => {
   return 1;
 })();
 
-// `--csv=PATH` overrides the default ETF list CSV (defaults to etfs.csv).
-const csvPath = (() => {
+function flagValue(name) {
   for (const arg of process.argv.slice(2)) {
-    const m = arg.match(/^--csv=(.+)$/i);
-    if (m) return m[1];
+    const match = arg.match(new RegExp(`^--${name}=(.+)$`, "i"));
+    if (match) return match[1];
   }
-  return new URL("../etfs.csv", import.meta.url);
-})();
+  return "";
+}
+
+function hasFlag(name) {
+  return process.argv.slice(2).some((arg) => new RegExp(`^--${name}$`, "i").test(arg));
+}
+
+// `--csv=PATH` and `--stocks-csv=PATH` narrow a run to the ISINs those files
+// name. Left alone it answers for the whole catalogue, which is the honest
+// default here: Trading212 hands over every line it will show this account with
+// the ISIN, name, venue and currency already on it, so a list of our own can
+// only leave things out, never add. `--etfs-only` and `--stocks-only` split the
+// answer by what Trading212 itself calls each line.
+const listPaths = ["csv", "stocks-csv"].map(flagValue).filter(Boolean);
+const etfsOnly = hasFlag("etfs-only");
+const stocksOnly = hasFlag("stocks-only");
+
+// Whether a line may still be *bought* is not in the catalogue. Trading212 keeps
+// it on its own endpoint, one ticker per call, and it matters: 8% of the shares
+// on offer and a handful of the funds are sell-only. That is a call per line, so
+// `--no-close-only-check` is there for a run that only needs the listing and
+// `--lanes=N` for how hard to lean on the endpoint.
+const skipCloseOnly = hasFlag("no-close-only-check");
+const lanes = Math.max(1, Number(flagValue("lanes")) || 12);
 
 // `--country=XX` overrides where the account is resident, for when the browser
 // no longer remembers the last sign-in.
 const countryOverride = (() => {
-  for (const arg of process.argv.slice(2)) {
-    const m = arg.match(/^--country=([A-Za-z]{2})$/i);
-    if (m) return m[1].toUpperCase();
-  }
-  return "";
+  const value = flagValue("country");
+  return /^[A-Za-z]{2}$/.test(value) ? value.toUpperCase() : "";
 })();
 
-const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
-const cliQueries = positionalArgs.filter(Boolean).map(toIsin).filter(Boolean);
-const csvQueries = loadIsinsFromCsv(csvPath);
-const defaultQueries = ["IE00B44Z5B48", "IE00BK5BQT80", "IE00BFMXXD54"];
-const queries = uniqueQueries(
-  cliQueries.length > 0 ? cliQueries : csvQueries.length > 0 ? csvQueries : defaultQueries
-);
+const positionalQueries = process.argv
+  .slice(2)
+  .filter((arg) => !arg.startsWith("--"))
+  .map(toIsin)
+  .filter(Boolean);
 
 // Trading212's app does not search server-side: it downloads the whole
 // catalogue it is allowed to show this account and matches locally. Doing the
@@ -190,12 +208,22 @@ if (!entity) {
 // is financed nightly on the whole notional, so holding it is not an investment at
 // all. Only the real shares are kept, and the category is the test to use — 1944 of
 // the 9204 CFDs carry no `_CFD` suffix, so matching on the ticker would leak.
+// Crypto is left out for want of an ISIN rather than on principle.
 const byIsin = new Map();
 const excluded = new Map();
 for (const instrument of instruments) {
-  if (instrument.category !== "EQUITY" || !instrument.isin) {
+  const wanted =
+    instrument.category === "EQUITY" &&
+    Boolean(instrument.isin) &&
+    (!etfsOnly || instrument.type === "ETF") &&
+    (!stocksOnly || instrument.type === "STOCK");
+  if (!wanted) {
     const reason =
-      instrument.category === "EQUITY" ? "no ISIN" : instrument.category || "no category";
+      instrument.category !== "EQUITY"
+        ? instrument.category || "no category"
+        : !instrument.isin
+          ? "no ISIN"
+          : `not asked for (${instrument.type})`;
     excluded.set(reason, (excluded.get(reason) || 0) + 1);
     continue;
   }
@@ -204,9 +232,7 @@ for (const instrument of instruments) {
   byIsin.get(isin).push(instrument);
 }
 
-console.error(
-  `${byIsin.size} ISINs listed, ${queries.length} to check, as a ${residency} account at ${entity}`
-);
+console.error(`${byIsin.size} ISINs listed, as a ${residency} account at ${entity}`);
 console.error(
   `  left out: ${[...excluded].map(([reason, count]) => `${count} ${reason}`).join(", ") || "nothing"}`
 );
@@ -214,9 +240,22 @@ console.error(
 // A listing can be in the catalogue and still be out of reach: US-domiciled
 // funds have no KID for European clients, and some are withheld country by
 // country even within the entity that offers them.
+//
+// Each test below was read back from Trading212's own order validator, which
+// answers what an order would do without placing one. Asking it for a line the
+// catalogue flags this way is what named the flag:
+//
+//   tradable not true      -> "NonTradableInstrument"  (every CVR and CorpAct line)
+//   conditionalVisibility  -> "InstrumentInvisible"    (Wirecard, delisted lines, warrants)
+//
+// `conditionalVisibility` is the flag the app uses to keep a line out of its own
+// search while still showing it to whoever holds it, so it reads as "position
+// only". It is the whole reason warrants are absent from the answer: all 35 of
+// them carry it, and the validator refuses every one.
 function refusal(instrument) {
-  if (instrument.tradable === false) return "not tradable";
+  if (instrument.tradable !== true) return "not for trading";
   if (instrument.suspended) return "suspended";
+  if (instrument.conditionalVisibility) return "position only";
   if ((instrument.dealerExclusions || []).includes(entity)) return `not offered by ${entity}`;
 
   const allowed = instrument.supportedCountries?.[entity];
@@ -228,6 +267,78 @@ function refusal(instrument) {
   // accounts that already hold them. Shares are not sold under that rule, so
   // for them silence means yes.
   return instrument.type === "ETF" ? `not registered in ${residency}` : "";
+}
+
+const offered = new Map();
+const refusals = new Map();
+for (const [isin, listings] of byIsin) {
+  const open = [];
+  for (const listing of listings) {
+    const refused = refusal(listing);
+    if (refused) refusals.set(refused, (refusals.get(refused) || 0) + 1);
+    else open.push(listing);
+  }
+  if (open.length > 0) offered.set(isin, open);
+}
+
+const offeredLines = [...offered.values()].reduce((total, list) => total + list.length, 0);
+console.error(`  ${offeredLines} listings on ${offered.size} ISINs pass the catalogue's own flags`);
+for (const [reason, count] of [...refusals].sort((a, b) => b[1] - a[1])) {
+  console.error(`    ${String(count).padStart(5)} ${reason}`);
+}
+
+// Nothing in the catalogue says whether a line is still open to buyers, so the
+// question is put to the endpoint the app itself asks, one ticker at a time. A
+// line that comes back `closeOnly` can only be sold, which for a catalogue of
+// what is for sale is the same as not being there.
+async function sellOnlyTickers(tickers) {
+  const found = new Set();
+  let failed = 0;
+  const CHUNK = 600;
+
+  for (let at = 0; at < tickers.length; at += CHUNK) {
+    const batch = tickers.slice(at, at + CHUNK);
+    const answers = await page.evaluate(
+      async (slice, client, width) => {
+        const out = {};
+        let next = 0;
+        async function lane() {
+          while (next < slice.length) {
+            const ticker = slice[next++];
+            try {
+              const response = await fetch(
+                "https://live.services.trading212.com/instrumentarium/v1/instrument-trading-statuses" +
+                  `?ticker=${encodeURIComponent(ticker)}`,
+                {
+                  credentials: "include",
+                  headers: { "X-Trader-Client": client, "X-Trader-Target-Type": "EQUITY" },
+                }
+              );
+              out[ticker] = response.ok ? await response.json() : null;
+            } catch {
+              out[ticker] = null;
+            }
+          }
+        }
+        await Promise.all(Array.from({ length: width }, lane));
+        return out;
+      },
+      batch,
+      traderClient,
+      lanes
+    );
+
+    for (const [ticker, status] of Object.entries(answers)) {
+      if (status === null) failed += 1;
+      else if (status.closeOnly) found.add(ticker);
+    }
+    console.error(
+      `  ${Math.min(at + CHUNK, tickers.length)}/${tickers.length} asked, ${found.size} sell-only`
+    );
+  }
+
+  if (failed > 0) console.error(`  ${failed} did not answer and are taken at their listing`);
+  return found;
 }
 
 // This file answers what Trading212 sells, not what it costs. The two were mixed here
@@ -301,14 +412,41 @@ function save() {
   savedAt = Date.now();
 }
 
+// An ISIN named on the command line is answered even when the catalogue has
+// nothing open on it, so that asking about one fund still says so out loud.
+const listedQueries = listPaths.flatMap((path) => loadIsinsFromCsv(path));
+const queries = uniqueQueries(
+  positionalQueries.length > 0
+    ? positionalQueries
+    : listedQueries.length > 0
+      ? listedQueries.filter((isin) => offered.has(isin))
+      : [...offered.keys()]
+);
+if (listedQueries.length > 0) {
+  console.error(
+    `${uniqueQueries(listedQueries).length} ISINs in the lists given, ${queries.length} of them on offer`
+  );
+}
+
+const pending = queries.slice(startIndex - 1);
+const sellOnly = skipCloseOnly
+  ? new Set()
+  : await (async () => {
+      const tickers = uniqueQueries(
+        pending.flatMap((isin) => (offered.get(isin) || []).map((listing) => listing.ticker))
+      );
+      console.error(`asking which of ${tickers.length} listings are sell-only`);
+      return sellOnlyTickers(tickers);
+    })();
+
+let sellOnlyDropped = 0;
+
 for (const [queryIndex, isin] of queries.entries()) {
   if (queryIndex + 1 < startIndex) continue;
-  console.error(`[${queryIndex + 1}/${queries.length}] ${isin}`);
 
-  for (const instrument of byIsin.get(isin) || []) {
-    const refused = refusal(instrument);
-    if (refused) {
-      console.error(`  ${instrument.shortName || instrument.ticker}: ${refused} — skipped`);
+  for (const instrument of offered.get(isin) || []) {
+    if (sellOnly.has(instrument.ticker)) {
+      sellOnlyDropped += 1;
       continue;
     }
 
@@ -322,9 +460,21 @@ for (const [queryIndex, isin] of queries.entries()) {
   }
 
   if (results.length !== savedCount && Date.now() - savedAt >= SAVE_INTERVAL_MS) save();
+  if ((queryIndex + 1) % 2000 === 0) {
+    console.error(`  [${queryIndex + 1}/${queries.length}] ${results.length} listings kept`);
+  }
 }
 
 save();
+
+const byType = new Map();
+for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);
+console.error(
+  `${results.length} listings on ${new Set(results.map((row) => row.isin)).size} ISINs: ` +
+    [...byType].map(([type, count]) => `${count} ${type}`).join(", ")
+);
+if (sellOnlyDropped > 0) console.error(`${sellOnlyDropped} listings left out as sell-only`);
+
 console.log(JSON.stringify(results, null, 2));
 
 await browser.disconnect();

@@ -17,22 +17,25 @@ function toIsin(value) {
   return match ? match[0] : "";
 }
 
-// tastytrade names venues by their ISO code; the CSV files NYSE Arca and Cboe
-// under the exchanges that own them.
+// tastytrade names venues by their ISO code; the CSV files NYSE Arca, NYSE
+// American and Cboe under the exchanges that own them.
 const EXCHANGE_NAMES = {
   ARCX: "AMEX",
+  XASE: "AMEX",
   BATS: "CBOE",
   XNAS: "NASDAQ",
   XNYS: "NYSE",
   OTC: "OTC",
 };
 
-// An American ISIN is its CUSIP with the country in front and a check digit
-// behind, so the number tastytrade files a fund under names it outright and
-// spares the guesswork of comparing wordings.
-function isinFromCusip(cusip) {
-  const body = `US${(cusip || "").trim().toUpperCase()}`;
-  if (!/^US[0-9A-Z]{9}$/.test(body)) return "";
+const AMERICAN_VENUES = new Set(Object.values(EXCHANGE_NAMES));
+
+// An ISIN is its CUSIP with the country in front and a check digit behind, so
+// the number tastytrade files an instrument under names it outright and spares
+// the guesswork of comparing wordings.
+function isinFrom(country, cusip) {
+  const body = `${country}${(cusip || "").trim().toUpperCase()}`;
+  if (!/^[A-Z]{2}[0-9A-Z]{9}$/.test(body)) return "";
 
   const digits = [...body]
     .map((character) => (/[0-9]/.test(character) ? character : String(character.charCodeAt(0) - 55)))
@@ -50,6 +53,18 @@ function isinFromCusip(cusip) {
   return `${body}${(10 - (sum % 10)) % 10}`;
 }
 
+// Both readings of that number, because neither rule holds on its own. A fund
+// or an American company is a US line. A foreign issuer is filed under a CINS,
+// built the same way but belonging to the country it is incorporated in: Jin
+// Medical's G5140V120 is KYG5140V1207. Yet the depositary receipt of that same
+// company is itself an American security with an American ISIN, so both
+// readings are offered and whichever one the CSV knows wins.
+function candidateIsins(instrument) {
+  const country = String(instrument["country-of-incorporation"] || "").toUpperCase();
+  const countries = country && country !== "US" && /^[A-Z]{2}$/.test(country) ? ["US", country] : ["US"];
+  return countries.map((code) => isinFrom(code, instrument.cusip)).filter(Boolean);
+}
+
 // One ISIN is often listed on several venues under differently worded names
 // ("SPDR S&P 500 ETF Trust" and "State Street SPDR S&P 500 ETF"), so every
 // spelling is kept and the closest one decides a match.
@@ -63,7 +78,13 @@ function loadCsv(csvPath) {
 
     const columns = line.split(",");
     const ticker = normalizeTicker(columns[0]);
-    const isinIndex = columns.findIndex((column) => Boolean(toIsin(column)));
+    // Third column in the four-column files, second in the three-column ones.
+    // Searching from the left would find the wrong one on Luxembourg's bond
+    // lines, where the ticker is the ISIN itself and the name would then be
+    // read as everything after the ticker, venue and number included.
+    const isinIndex = toIsin(columns[2])
+      ? 2
+      : columns.findIndex((column, index) => index > 0 && Boolean(toIsin(column)));
     if (!ticker || isinIndex < 0) continue;
 
     const isin = toIsin(columns[isinIndex]);
@@ -144,27 +165,73 @@ function scoreCandidate(scrapedName, candidate) {
 
 const MIN_NAME_SCORE = 0.5;
 
-// Only for the handful of funds tastytrade files without a CUSIP. It carries
-// American listings alone, so the US share class under the ticker is the fund
-// on offer, and where a ticker covers several the venue tells them apart
-// before the name has to.
-function resolveByName(byTicker, listing) {
-  const american = (byTicker.get(listing.ticker) || []).filter((candidate) =>
-    candidate.isin.startsWith("US")
-  );
-  if (american.length === 0) return null;
+// A company's common shares, its preferred series, its warrants and its rights
+// are different securities that share a name -- and, once a ticker loses its
+// suffix on the way into the lists, a ticker too: "AMEX:BCV/PA" is filed under
+// BCV, beside the common line it is not. So before a wording is allowed to
+// settle anything, both sides have to be the same kind of thing.
+const CLASS_MARKERS = [
+  ["PREFERRED", /\b(PREFERRED|PFD|PRF)\b/],
+  ["WARRANT", /\b(WARRANTS?|WTS?)\b/],
+  ["RIGHT", /\bRIGHTS?\b/],
+  ["UNIT", /\bUNITS?\b/],
+  ["NOTE", /\b(NOTES?|ETNS?|DEBENTURES?)\b/],
+];
+
+function shareClass(name) {
+  const text = (name || "").toUpperCase();
+  return CLASS_MARKERS.filter(([, pattern]) => pattern.test(text))
+    .map(([label]) => label)
+    .join("+");
+}
+
+// Only for the instruments tastytrade files without a usable CUSIP. Where a
+// ticker covers several listings the venue tells them apart before the name
+// has to.
+//
+// What counts as eligible differs by kind. A fund on offer here is an American
+// share class, so its ISIN says US outright. A company, on the other hand, can
+// be incorporated in the Caymans and still trade on Nasdaq, so for shares it is
+// the venue that has to be American and not the ISIN -- otherwise the Danish
+// line of a company whose receipt trades in New York would answer for it.
+function resolveByName(byTicker, listing, { fund }) {
+  // Without a wording there is nothing to corroborate a match with, and
+  // tastytrade leaves a few of its listings undescribed.
+  if (!listing.name) return null;
+
+  const pool = byTicker.get(listing.ticker) || [];
+  const eligible = fund
+    ? pool.filter((candidate) => candidate.isin.startsWith("US"))
+    : pool.filter((candidate) =>
+        [...candidate.exchanges].some((exchange) => AMERICAN_VENUES.has(exchange))
+      );
+
+  // Among shares the suffix-stripped ticker collects the whole family, so the
+  // kind has to agree. Funds are spared the test: "Units" is an ordinary word
+  // in a fund's name and means nothing by it.
+  const kind = shareClass(listing.name);
+  const sameKind = fund
+    ? eligible
+    : eligible
+        .map((candidate) => ({
+          ...candidate,
+          names: candidate.names.filter((name) => shareClass(name) === kind),
+        }))
+        .filter((candidate) => candidate.names.length > 0);
+  if (sameKind.length === 0) return null;
 
   const venue = EXCHANGE_NAMES[listing.exchange];
-  const sameVenue = venue ? american.filter((candidate) => candidate.exchanges.has(venue)) : [];
-  const candidates = sameVenue.length > 0 ? sameVenue : american;
+  const sameVenue = venue ? sameKind.filter((candidate) => candidate.exchanges.has(venue)) : [];
+  const candidates = sameVenue.length > 0 ? sameVenue : sameKind;
 
   const scored = candidates.map((candidate) => ({
     isin: candidate.isin,
     ...scoreCandidate(listing.name, candidate),
   }));
 
-  if (scored.length === 1) return scored[0];
-
+  // A lone candidate used to be taken on trust. It is not enough: a nameless or
+  // unrelated line under a shared ticker would inherit an ISIN that belongs to
+  // another security, so every match has to earn its wording.
   const bestScore = Math.max(0, ...scored.map((candidate) => candidate.score));
   if (bestScore < MIN_NAME_SCORE) return null;
 
@@ -173,14 +240,21 @@ function resolveByName(byTicker, listing) {
   return shortlist.length === 1 ? shortlist[0] : null;
 }
 
-// `--csv=PATH` overrides the default ETF list CSV (defaults to etfs.csv).
-const csvPath = (() => {
+// `--csv=PATH` overrides the fund list (defaults to etfs.csv) and
+// `--stocks-csv=PATH` the share list (defaults to stocks.csv). Both are read,
+// because tastytrade sells funds and shares from the one book; `--funds-only`
+// answers for the funds alone, as this script did before it learned about shares.
+function pathArg(flag, fallback) {
   for (const arg of process.argv.slice(2)) {
-    const match = arg.match(/^--csv=(.+)$/i);
+    const match = arg.match(new RegExp(`^--${flag}=(.+)$`, "i"));
     if (match) return match[1];
   }
-  return new URL("../etfs.csv", import.meta.url);
-})();
+  return new URL(fallback, import.meta.url);
+}
+
+const csvPath = pathArg("csv", "../etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
+const fundsOnly = process.argv.slice(2).some((arg) => /^--funds-only$/i.test(arg));
 
 // Naming tickers on the command line narrows a run down to those, which is
 // handy for checking one fund without waiting on the whole book.
@@ -208,43 +282,48 @@ if (!/tastytrade|tastyworks/i.test(page.url())) {
 }
 await page.bringToFront();
 
-// The web platform keeps the session token it signs its calls with in its own
-// tab's storage, so it can be read without disturbing the page.
-const token = await page.evaluate(() => sessionStorage.getItem("tw-session-id") || "");
-if (!token) {
-  throw new Error(`No tastytrade session found. Sign in at ${APP_URL} and run this again.`);
-}
+// The session no longer travels as a bearer token: it lives in a cookie the
+// page cannot read, and the API guards it by insisting on a header no other
+// origin could set. So the calls are made from inside the page, which sends the
+// cookie for us, and the header is sent for the guard's sake -- its value is
+// never checked, only its presence.
+async function fetchJson(url, what) {
+  const answer = await page.evaluate(async (target) => {
+    try {
+      const response = await fetch(target, {
+        credentials: "include",
+        headers: { Accept: "application/json", "X-Tastyworks-CSRF": "1" },
+      });
+      if (!response.ok) return { status: response.status, error: (await response.text()).slice(0, 200) };
+      return { status: 200, body: await response.json() };
+    } catch (error) {
+      return { status: 0, error: String(error) };
+    }
+  }, url);
 
-// The instruments are asked for from inside the page: the request then carries
-// the platform's own origin, which is what api.tastytrade.com expects.
-async function fetchPage(offset) {
-  const answer = await page.evaluate(
-    async (url, authorization) => {
-      try {
-        const response = await fetch(url, {
-          headers: { Authorization: authorization, Accept: "application/json" },
-        });
-        if (!response.ok) return { status: response.status };
-        return { status: 200, body: await response.json() };
-      } catch (error) {
-        return { status: 0, error: String(error) };
-      }
-    },
-    `https://api.tastytrade.com/instruments/equities/active?per-page=1000&page-offset=${offset}`,
-    token
-  );
-
+  if (answer?.status === 401 || answer?.status === 403) {
+    throw new Error(`tastytrade would not answer for this session. Sign in at ${APP_URL} and run this again.`);
+  }
   if (answer?.status !== 200) {
-    throw new Error(`tastytrade answered ${answer?.status} for page ${offset}: ${answer?.error || ""}`);
+    throw new Error(`tastytrade answered ${answer?.status} for ${what}: ${answer?.error || ""}`);
   }
   return answer.body;
 }
 
 // Everything tastytrade trades in shares comes down a page at a time, so the
 // offer is read whole instead of a search per ticker.
+//
+// Fixed income is left out on purpose. tastytrade does sell Treasuries, on a
+// screen of their own that `/instruments/fixed-income-securities` feeds, but the
+// offer is 49 bills of which six mature beyond six months, the smallest ticket
+// is ten bills of $1,000 face, and notes and bonds are bought by reading a CUSIP
+// to the trade desk rather than off any screen.
 const instruments = [];
 for (let offset = 0; offset < 100; offset += 1) {
-  const body = await fetchPage(offset);
+  const body = await fetchJson(
+    `https://api.tastytrade.com/instruments/equities/active?per-page=1000&page-offset=${offset}`,
+    `equity page ${offset}`
+  );
   const items = body?.data?.items || [];
   instruments.push(...items);
 
@@ -253,24 +332,48 @@ for (let offset = 0; offset < 100; offset += 1) {
   if (items.length === 0 || offset + 1 >= totalPages) break;
 }
 
-// tastytrade flags the funds among its shares itself, and marks the ones a
-// position may only be closed out of.
-const etfs = instruments.filter((instrument) => instrument["is-etf"] && instrument.active);
-const tradable = etfs.filter((instrument) => !instrument["is-closing-only"]);
+// Everything here is active by definition of the endpoint; what matters is
+// whether a position may still be opened in it.
+const open = instruments.filter(
+  (instrument) => instrument.active && !instrument["is-closing-only"]
+);
 console.error(
-  `${instruments.length} instruments offered, ${etfs.length} of them funds, ` +
-    `${etfs.length - tradable.length} of those closing-only`
+  `${instruments.length} instruments offered, ${instruments.length - open.length} of them closing-only`
 );
 
-const { byTicker, namesByIsin } = loadCsv(csvPath);
-console.error(`${byTicker.size} tickers in the CSV`);
+const funds = loadCsv(csvPath);
+const shares = fundsOnly ? { byTicker: new Map(), namesByIsin: new Map() } : loadCsv(stocksCsvPath);
+console.error(
+  `${funds.namesByIsin.size} funds and ${shares.namesByIsin.size} shares in the lists to match against`
+);
+
+// Which list an ISIN turns up in is what says whether a line is a fund or a
+// company, and it is a better witness than tastytrade's own `is-etf` flag: that
+// flag misses newly launched funds, and calls a closed-end fund a share.
+//
+// `bonds.csv` is deliberately not consulted. Six of its ISINs are also in the
+// share list, being perpetual preferred lines that the source files both ways --
+// Strategy's STRC and STRK, Strive's SATA, Brookfield's BEPH -- and they are
+// bought and sold as shares, on the equity book, so that is what they are called.
+function matchByIsin(instrument) {
+  for (const isin of candidateIsins(instrument)) {
+    if (funds.namesByIsin.has(isin)) {
+      return { isin, name: funds.namesByIsin.get(isin), type: "ETF" };
+    }
+    if (shares.namesByIsin.has(isin)) {
+      return { isin, name: shares.namesByIsin.get(isin), type: "STOCK" };
+    }
+  }
+  return null;
+}
 
 const results = [];
 const seen = new Set();
 let byCusip = 0;
+let byName = 0;
 let unmatched = 0;
 
-for (const instrument of tradable.sort((left, right) =>
+for (const instrument of open.sort((left, right) =>
   String(left.symbol).localeCompare(String(right.symbol))
 )) {
   const ticker = String(instrument.symbol || "").toUpperCase();
@@ -282,16 +385,25 @@ for (const instrument of tradable.sort((left, right) =>
     .replace(/\s+/g, " ")
     .trim();
 
-  const fromCusip = isinFromCusip(instrument.cusip);
-  const candidate = namesByIsin.has(fromCusip)
-    ? { isin: fromCusip, name: namesByIsin.get(fromCusip) }
-    : resolveByName(byTicker, { ticker, name, exchange });
+  // Failing the number, the name is asked of the list the flag points at, since
+  // there is nothing better to go on once the CUSIP has come up empty.
+  const isFund = Boolean(instrument["is-etf"]);
+  let candidate = matchByIsin(instrument);
+  if (candidate) {
+    byCusip += 1;
+  } else {
+    if (fundsOnly && !isFund) continue;
+    const book = isFund ? funds : shares;
+    const resolved = resolveByName(book.byTicker, { ticker, name, exchange }, { fund: isFund });
+    candidate = resolved ? { ...resolved, type: isFund ? "ETF" : "STOCK" } : null;
+    if (candidate) byName += 1;
+  }
 
   if (!candidate) {
     unmatched += 1;
     continue;
   }
-  if (candidate.isin === fromCusip) byCusip += 1;
+  if (fundsOnly && candidate.type !== "ETF") continue;
 
   seen.add(ticker);
   results.push({
@@ -302,7 +414,7 @@ for (const instrument of tradable.sort((left, right) =>
     // The active equities endpoint covers US venues only, so every line quotes
     // in dollars.
     currency: "USD",
-    type: "ETF",
+    type: candidate.type,
     raw: [ticker, name, exchange].filter(Boolean).join(" "),
     isin: candidate.isin,
   });
@@ -310,8 +422,11 @@ for (const instrument of tradable.sort((left, right) =>
 
 fs.writeFileSync(new URL("tastytrade-parsed.json", import.meta.url), JSON.stringify(results, null, 2));
 
+const matchedFunds = results.filter((row) => row.type === "ETF").length;
+const matchedShares = results.filter((row) => row.type === "STOCK").length;
 console.error(
-  `${results.length} funds matched, ${byCusip} of them by their CUSIP, ${unmatched} not in the CSV`
+  `${results.length} matched: ${matchedFunds} funds and ${matchedShares} shares. ` +
+    `${byCusip} were named by their CUSIP and ${byName} by their wording; ${unmatched} are in neither list`
 );
 console.log(JSON.stringify(results, null, 2));
 

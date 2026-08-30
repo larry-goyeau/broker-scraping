@@ -13,7 +13,6 @@ La Banque Postale
 Syfe
 Exante
 Bank of Cyprus
-ig
 hello bank
 moneybase
 fortuneo

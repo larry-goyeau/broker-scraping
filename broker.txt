@@ -1,21 +1,16 @@
 Swissquote
 choicetrade
-questrade
 Tiger Brokers AU
 CGS International
-easybourse
-eurofinance
 bluorbank
 bhmuae
 oanda
-La Banque Postale
-
-Syfe
-Exante
 Bank of Cyprus
 hello bank
 moneybase
 fortuneo
 Endowus
 benchmark
-caisse-epargne
+
+Syfe
+Exante

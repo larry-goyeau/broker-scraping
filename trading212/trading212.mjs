@@ -40,6 +40,37 @@ function uniqueQueries(values) {
   });
 }
 
+// A crypto line has no ISIN, so it cannot go through the share loader. The
+// file is `ticker,exchange,isin,name` with the number left blank; the name is
+// what we want, keyed on the coin (BTC), not on a pair.
+function loadCryptoNames(csvPath) {
+  const names = new Map();
+  if (!fs.existsSync(csvPath)) return names;
+
+  for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
+    if (!line.trim() || /^ticker,/i.test(line)) continue;
+    const columns = line.split(",");
+    const ticker = String(columns[0] || "").trim().toUpperCase();
+    const name = columns.slice(3).join(",").trim() || String(columns[1] || "").trim();
+    if (ticker && name && !names.has(ticker)) names.set(ticker, name);
+  }
+  return names;
+}
+
+function cryptoBase(symbol) {
+  const text = String(symbol || "").toUpperCase();
+  const cut = text.indexOf("/");
+  return cut >= 0 ? text.slice(0, cut) : text.replace(/(USD|EUR|GBP|USDC|USDT)$/, "");
+}
+
+function cryptoQuote(symbol) {
+  const text = String(symbol || "").toUpperCase();
+  const cut = text.indexOf("/");
+  if (cut >= 0) return text.slice(cut + 1);
+  const match = text.match(/(USD|EUR|GBP|USDC|USDT)$/);
+  return match ? match[1] : "";
+}
+
 const browser = await puppeteer.connect({
   browserURL: "http://127.0.0.1:9222",
   defaultViewport: null,
@@ -85,10 +116,16 @@ function hasFlag(name) {
 // default here: Trading212 hands over every line it will show this account with
 // the ISIN, name, venue and currency already on it, so a list of our own can
 // only leave things out, never add. `--etfs-only` and `--stocks-only` split the
-// answer by what Trading212 itself calls each line.
+// answer by what Trading212 itself calls each line. `--cryptos-csv=PATH` names
+// the coins (defaults to cryptos.csv); `--no-crypto` leaves the pairs out;
+// `--crypto-only` answers for the pairs alone.
 const listPaths = ["csv", "stocks-csv"].map(flagValue).filter(Boolean);
+const cryptosCsvPath = flagValue("cryptos-csv") || new URL("../cryptos.csv", import.meta.url);
 const etfsOnly = hasFlag("etfs-only");
 const stocksOnly = hasFlag("stocks-only");
+const cryptoOnly = hasFlag("crypto-only");
+const skipCrypto = hasFlag("no-crypto") || etfsOnly || stocksOnly;
+const skipEquities = cryptoOnly;
 
 // Whether a line may still be *bought* is not in the catalogue. Trading212 keeps
 // it on its own endpoint, one ticker per call, and it matters: 8% of the shares
@@ -105,10 +142,11 @@ const countryOverride = (() => {
   return /^[A-Za-z]{2}$/.test(value) ? value.toUpperCase() : "";
 })();
 
-const positionalQueries = process.argv
-  .slice(2)
-  .filter((arg) => !arg.startsWith("--"))
-  .map(toIsin)
+const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
+const positionalQueries = positionalArgs.map(toIsin).filter(Boolean);
+const positionalCrypto = positionalArgs
+  .filter((arg) => !toIsin(arg))
+  .map((arg) => String(arg || "").trim().toUpperCase())
   .filter(Boolean);
 
 // Trading212's app does not search server-side: it downloads the whole
@@ -120,16 +158,46 @@ const EXCHANGES = "https://live.services.trading212.com/instrumentarium/v1/excha
 // The app tags its calls with the device and account it is signed in as. The
 // catalogue is served on the session cookie alone, so this is sent when the
 // browser can tell us what to send and simply left off when it cannot.
-const traderClient = await page.evaluate(() => {
+const session = await page.evaluate(() => {
   try {
+    const cached = JSON.parse(localStorage.getItem("cachedLoginResponse") || "null");
+    const login = cached?.loginResponse || {};
     const device = JSON.parse(localStorage.getItem("usedDeviceIdForKeys") || '""');
-    const account = localStorage.getItem("lastLogInAccountId") || "";
-    if (!device || !account) return "";
-    return `application=WC4,version=8.44.1,dUUID=${device},accountId=${account}`;
+    return {
+      residency: (login.residencyCode || "").toUpperCase(),
+      accounts: login.accounts || [],
+      device,
+      lastAccountId: localStorage.getItem("lastLogInAccountId") || "",
+    };
   } catch {
-    return "";
+    return { residency: "", accounts: [], device: "", lastAccountId: "" };
   }
 });
+const residency = countryOverride || session.residency;
+
+if (!residency) {
+  throw new Error(
+    "Could not read the account's country of residence. Sign in again, or pass --country=XX."
+  );
+}
+
+const equityAccount = (session.accounts || []).find(
+  (account) => account.tradingType === "EQUITY" && account.status === "ACTIVE"
+);
+const cryptoAccount = (session.accounts || []).find(
+  (account) => account.tradingType === "CRYPTO" && account.status === "ACTIVE"
+);
+const cryptoDealer = cryptoAccount?.accountDealer || "";
+
+function traderClientFor(accountId) {
+  if (!session.device || !accountId) return "";
+  return `application=WC4,version=8.44.1,dUUID=${session.device},accountId=${accountId}`;
+}
+
+const traderClient = traderClientFor(
+  equityAccount?.id || session.lastAccountId
+);
+const cryptoClient = traderClientFor(cryptoAccount?.id) || traderClient;
 
 async function get(url) {
   return page.evaluate(
@@ -149,26 +217,6 @@ async function get(url) {
     traderClient
   );
 }
-
-// Which country's rules the account trades under. It decides whether a fund is
-// offered at all, so answering as the wrong country would answer for someone else.
-const residency =
-  countryOverride ||
-  (await page.evaluate(() => {
-    try {
-      const cached = JSON.parse(localStorage.getItem("cachedLoginResponse") || "null");
-      return (cached?.loginResponse?.residencyCode || "").toUpperCase();
-    } catch {
-      return "";
-    }
-  }));
-
-if (!residency) {
-  throw new Error(
-    "Could not read the account's country of residence. Sign in again, or pass --country=XX."
-  );
-}
-
 
 console.error("reading Trading212's instrument list");
 const catalogue = await get(CATALOGUE);
@@ -208,10 +256,24 @@ if (!entity) {
 // is financed nightly on the whole notional, so holding it is not an investment at
 // all. Only the real shares are kept, and the category is the test to use — 1944 of
 // the 9204 CFDs carry no `_CFD` suffix, so matching on the ticker would leak.
-// Crypto is left out for want of an ISIN rather than on principle.
+// Spot crypto is a third category, with no ISIN; the CFD crypto book is left
+// with the other CFDs.
+const cryptoNames = skipCrypto ? new Map() : loadCryptoNames(cryptosCsvPath);
 const byIsin = new Map();
+const cryptoListed = [];
 const excluded = new Map();
 for (const instrument of instruments) {
+  if (instrument.category === "CRYPTO" && instrument.type === "CRYPTO") {
+    if (skipCrypto) {
+      excluded.set("CRYPTO", (excluded.get("CRYPTO") || 0) + 1);
+      continue;
+    }
+    cryptoListed.push(instrument);
+    continue;
+  }
+
+  if (skipEquities) continue;
+
   const wanted =
     instrument.category === "EQUITY" &&
     Boolean(instrument.isin) &&
@@ -232,10 +294,16 @@ for (const instrument of instruments) {
   byIsin.get(isin).push(instrument);
 }
 
-console.error(`${byIsin.size} ISINs listed, as a ${residency} account at ${entity}`);
+console.error(
+  `${byIsin.size} ISINs listed, as a ${residency} account at ${entity}` +
+    (cryptoDealer ? `, crypto at ${cryptoDealer}` : "")
+);
 console.error(
   `  left out: ${[...excluded].map(([reason, count]) => `${count} ${reason}`).join(", ") || "nothing"}`
 );
+if (!skipCrypto) {
+  console.error(`${cryptoNames.size} coins in the list to name crypto pairs against`);
+}
 
 // A listing can be in the catalogue and still be out of reach: US-domiciled
 // funds have no KID for European clients, and some are withheld country by
@@ -252,20 +320,27 @@ console.error(
 // search while still showing it to whoever holds it, so it reads as "position
 // only". It is the whole reason warrants are absent from the answer: all 35 of
 // them carry it, and the validator refuses every one.
-function refusal(instrument) {
+//
+// Trading212 does not mark PTP lines the way Alpaca does (`ptp_no_exception`),
+// and it has no `usResidentsOnly` flag of its own. The US dealers (AVUS,
+// AVUSUK) are instead named on `dealerExclusions` where they cannot buy: every
+// spot crypto pair lists them, so those pairs are EU/Cyprus, not the reverse.
+function refusal(instrument, dealer) {
   if (instrument.tradable !== true) return "not for trading";
   if (instrument.suspended) return "suspended";
   if (instrument.conditionalVisibility) return "position only";
-  if ((instrument.dealerExclusions || []).includes(entity)) return `not offered by ${entity}`;
+  if ((instrument.dealerExclusions || []).includes(dealer)) return `not offered by ${dealer}`;
 
-  const allowed = instrument.supportedCountries?.[entity];
+  const allowed = instrument.supportedCountries?.[dealer];
   if (allowed) return allowed.includes(residency) ? "" : `not offered in ${residency}`;
 
   // A fund may only be sold where it is registered, and the catalogue lists
   // those countries. A fund carrying no list at all is not one this account can
   // buy: the US trackers that reach this line are kept in the catalogue for the
   // accounts that already hold them. Shares are not sold under that rule, so
-  // for them silence means yes.
+  // for them silence means yes. Crypto has no registration list either: the
+  // dealer exclusion is the whole test.
+  if (instrument.category === "CRYPTO") return "";
   return instrument.type === "ETF" ? `not registered in ${residency}` : "";
 }
 
@@ -274,7 +349,7 @@ const refusals = new Map();
 for (const [isin, listings] of byIsin) {
   const open = [];
   for (const listing of listings) {
-    const refused = refusal(listing);
+    const refused = refusal(listing, entity);
     if (refused) refusals.set(refused, (refusals.get(refused) || 0) + 1);
     else open.push(listing);
   }
@@ -287,11 +362,54 @@ for (const [reason, count] of [...refusals].sort((a, b) => b[1] - a[1])) {
   console.error(`    ${String(count).padStart(5)} ${reason}`);
 }
 
+function cryptoWanted(instrument) {
+  if (positionalCrypto.length === 0) return true;
+  const pair = String(instrument.shortName || "").toUpperCase();
+  const code = String(instrument.ticker || "").toUpperCase();
+  const base = cryptoBase(pair);
+  const quote = cryptoQuote(pair);
+  return positionalCrypto.some(
+    (symbol) =>
+      symbol === pair ||
+      symbol === code ||
+      symbol === base ||
+      symbol === `${base}/${quote}` ||
+      symbol === `${base}${quote}`
+  );
+}
+
+const includeCrypto =
+  !skipCrypto &&
+  (cryptoOnly ||
+    positionalCrypto.length > 0 ||
+    (positionalQueries.length === 0 && listPaths.length === 0));
+
+const offeredCrypto = [];
+if (includeCrypto) {
+  if (!cryptoDealer) {
+    console.error("  no CRYPTO account on this session; spot pairs are left out");
+  } else {
+    const cryptoRefusals = new Map();
+    for (const instrument of cryptoListed) {
+      if (!cryptoWanted(instrument)) continue;
+      const refused = refusal(instrument, cryptoDealer);
+      if (refused) cryptoRefusals.set(refused, (cryptoRefusals.get(refused) || 0) + 1);
+      else offeredCrypto.push(instrument);
+    }
+    console.error(
+      `  ${offeredCrypto.length} crypto pairs pass the catalogue's own flags at ${cryptoDealer}`
+    );
+    for (const [reason, count] of [...cryptoRefusals].sort((a, b) => b[1] - a[1])) {
+      console.error(`    ${String(count).padStart(5)} ${reason}`);
+    }
+  }
+}
+
 // Nothing in the catalogue says whether a line is still open to buyers, so the
 // question is put to the endpoint the app itself asks, one ticker at a time. A
 // line that comes back `closeOnly` can only be sold, which for a catalogue of
 // what is for sale is the same as not being there.
-async function sellOnlyTickers(tickers) {
+async function sellOnlyTickers(tickers, targetType = "EQUITY", client = traderClient) {
   const found = new Set();
   let failed = 0;
   const CHUNK = 600;
@@ -299,7 +417,7 @@ async function sellOnlyTickers(tickers) {
   for (let at = 0; at < tickers.length; at += CHUNK) {
     const batch = tickers.slice(at, at + CHUNK);
     const answers = await page.evaluate(
-      async (slice, client, width) => {
+      async (slice, client, width, targetType) => {
         const out = {};
         let next = 0;
         async function lane() {
@@ -311,7 +429,7 @@ async function sellOnlyTickers(tickers) {
                   `?ticker=${encodeURIComponent(ticker)}`,
                 {
                   credentials: "include",
-                  headers: { "X-Trader-Client": client, "X-Trader-Target-Type": "EQUITY" },
+                  headers: { "X-Trader-Client": client, "X-Trader-Target-Type": targetType },
                 }
               );
               out[ticker] = response.ok ? await response.json() : null;
@@ -324,8 +442,9 @@ async function sellOnlyTickers(tickers) {
         return out;
       },
       batch,
-      traderClient,
-      lanes
+      client,
+      lanes,
+      targetType
     );
 
     for (const [ticker, status] of Object.entries(answers)) {
@@ -347,13 +466,20 @@ async function sellOnlyTickers(tickers) {
 // costs now lives in `trading212_cost.mjs`, which reads the exchange's figure from
 // `parsed_json/spread.json` and applies this broker's own terms to it.
 
-function rowFrom(query, instrument) {
+function rowFrom(query, instrument, extra = {}) {
   const exchange = exchangeById.get(instrument.exchangeId);
   const ticker = (instrument.shortName || "").toUpperCase();
-  const name = (instrument.description || instrument.fullName || "").replace(/\s+/g, " ").trim();
+  const isCrypto = instrument.category === "CRYPTO";
+  const name = (
+    extra.name ||
+    (isCrypto ? instrument.fullName || instrument.description : instrument.description || instrument.fullName) ||
+    ""
+  )
+    .replace(/\s+/g, " ")
+    .trim();
   return {
     query,
-    isin: instrument.isin || query,
+    isin: isCrypto ? null : instrument.isin || query,
     ticker: ticker || null,
     name,
     // What the app shows in its own lists, which is where the (Acc)/(Dist)
@@ -364,14 +490,16 @@ function rowFrom(query, instrument) {
     // Trading212 names its venues rather than coding them, and it names them
     // loosely: the funds it files under "NYSE" are quoted on NYSE Arca. That is
     // too coarse to turn into a MIC, so the name is passed on as it comes.
-    exchange: exchange?.readableCaption || null,
+    exchange: isCrypto ? "CRYPTO" : exchange?.readableCaption || null,
     exchangeId: instrument.exchangeId ?? null,
     // What the account pays in, which is not always what the fund itself is
     // denominated in: a USD world tracker also trades here in euros and pence.
-    currency: instrument.currency || null,
-    type: instrument.type || null,
+    currency: instrument.currency || (isCrypto ? cryptoQuote(ticker) || null : null),
+    type: isCrypto ? "CRYPTO" : instrument.type || null,
     subclasses: instrument.subclasses || null,
-    raw: [ticker, name, exchange?.readableCaption, instrument.currency].filter(Boolean).join(" "),
+    raw: [ticker, name, isCrypto ? "CRYPTO" : exchange?.readableCaption, instrument.currency]
+      .filter(Boolean)
+      .join(" "),
   };
 }
 
@@ -394,7 +522,7 @@ if (startIndex > 1 && fs.existsSync(outputPath)) {
     if (Array.isArray(existing)) {
       for (const entry of existing) {
         results.push(entry);
-        if (entry?.isin && entry?.ticker) seen.add(entryKey(entry));
+        if (entry?.ticker) seen.add(entryKey(entry));
       }
     }
   } catch {
@@ -415,14 +543,16 @@ function save() {
 // An ISIN named on the command line is answered even when the catalogue has
 // nothing open on it, so that asking about one fund still says so out loud.
 const listedQueries = listPaths.flatMap((path) => loadIsinsFromCsv(path));
-const queries = uniqueQueries(
-  positionalQueries.length > 0
-    ? positionalQueries
-    : listedQueries.length > 0
-      ? listedQueries.filter((isin) => offered.has(isin))
-      : [...offered.keys()]
-);
-if (listedQueries.length > 0) {
+const queries = skipEquities
+  ? []
+  : uniqueQueries(
+      positionalQueries.length > 0
+        ? positionalQueries
+        : listedQueries.length > 0
+          ? listedQueries.filter((isin) => offered.has(isin))
+          : [...offered.keys()]
+    );
+if (listedQueries.length > 0 && !skipEquities) {
   console.error(
     `${uniqueQueries(listedQueries).length} ISINs in the lists given, ${queries.length} of them on offer`
   );
@@ -435,8 +565,18 @@ const sellOnly = skipCloseOnly
       const tickers = uniqueQueries(
         pending.flatMap((isin) => (offered.get(isin) || []).map((listing) => listing.ticker))
       );
+      if (tickers.length === 0) return new Set();
       console.error(`asking which of ${tickers.length} listings are sell-only`);
-      return sellOnlyTickers(tickers);
+      return sellOnlyTickers(tickers, "EQUITY");
+    })();
+
+const sellOnlyCrypto = skipCloseOnly
+  ? new Set()
+  : await (async () => {
+      const tickers = uniqueQueries(offeredCrypto.map((listing) => listing.ticker));
+      if (tickers.length === 0) return new Set();
+      console.error(`asking which of ${tickers.length} crypto pairs are sell-only`);
+      return sellOnlyTickers(tickers, "CRYPTO", cryptoClient);
     })();
 
 let sellOnlyDropped = 0;
@@ -465,13 +605,41 @@ for (const [queryIndex, isin] of queries.entries()) {
   }
 }
 
+let unnamedCrypto = 0;
+for (const instrument of offeredCrypto) {
+  if (sellOnlyCrypto.has(instrument.ticker)) {
+    sellOnlyDropped += 1;
+    continue;
+  }
+
+  const pair = String(instrument.shortName || "").toUpperCase();
+  const base = cryptoBase(pair);
+  const listed = cryptoNames.get(base);
+  if (!listed) unnamedCrypto += 1;
+
+  const row = rowFrom(pair, instrument, { name: listed });
+  if (!row.ticker) continue;
+
+  const key = entryKey(row);
+  if (seen.has(key)) continue;
+  seen.add(key);
+  results.push(row);
+}
+if (unnamedCrypto > 0) {
+  console.error(
+    `${unnamedCrypto} pairs are named by Trading212 alone; their base coin is not in cryptos.csv`
+  );
+}
+
 save();
 
 const byType = new Map();
 for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);
+const isins = new Set(results.map((row) => row.isin).filter(Boolean));
 console.error(
-  `${results.length} listings on ${new Set(results.map((row) => row.isin)).size} ISINs: ` +
-    [...byType].map(([type, count]) => `${count} ${type}`).join(", ")
+  `${results.length} listings` +
+    (isins.size ? ` on ${isins.size} ISINs` : "") +
+    `: ${[...byType].map(([type, count]) => `${count} ${type}`).join(", ")}`
 );
 if (sellOnlyDropped > 0) console.error(`${sellOnlyDropped} listings left out as sell-only`);
 

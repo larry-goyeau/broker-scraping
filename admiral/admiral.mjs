@@ -21,13 +21,37 @@ function toIsin(value) {
   return match ? match[0] : "";
 }
 
+function loadCryptoNames(csvPath) {
+  const names = new Map();
+  if (!fs.existsSync(csvPath)) return names;
+
+  for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
+    if (!line.trim() || /^ticker,/i.test(line)) continue;
+    const columns = line.split(",");
+    const ticker = String(columns[0] || "").trim().toUpperCase();
+    const name = columns.slice(3).join(",").trim() || String(columns[1] || "").trim();
+    if (ticker && name && !names.has(ticker)) names.set(ticker, name);
+  }
+  return names;
+}
+
+// Admirals files a pair as `BTCUSD` and shortens a few bases (DGE for DOGE).
+const CRYPTO_BASE_ALIASES = { DGE: "DOGE", ATM: "ATOM", ALG: "ALGO", LNK: "LINK" };
+
+function admiralCryptoPair(symbol) {
+  const text = String(symbol || "").toUpperCase();
+  const quote = text.endsWith("EUR") ? "EUR" : text.endsWith("USD") ? "USD" : "";
+  const rawBase = quote ? text.slice(0, -quote.length) : text;
+  const base = CRYPTO_BASE_ALIASES[rawBase] || rawBase;
+  return { base, quote, pair: quote ? `${base}/${quote}` : base };
+}
+
 // One ISIN is often listed on several venues under differently worded names
 // ("iShares Core MSCI World UCITS ETF" and "... ETF USD (Acc)"), so every
 // spelling is kept and the closest one decides the match.
-function loadTickerCandidatesFromCsv(csvPath) {
-  if (!fs.existsSync(csvPath)) return new Map();
+function loadTickerCandidatesFromCsv(csvPath, kind, into = new Map()) {
+  if (!fs.existsSync(csvPath)) return into;
 
-  const map = new Map();
   for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
     if (!line.trim()) continue;
 
@@ -44,11 +68,11 @@ function loadTickerCandidatesFromCsv(csvPath) {
     const exchange =
       isinIndex >= 2 ? (columns[isinIndex - 1] || "").trim().toUpperCase() : "";
 
-    const candidates = map.get(ticker) || [];
-    map.set(ticker, candidates);
+    const candidates = into.get(ticker) || [];
+    into.set(ticker, candidates);
 
     const existing = candidates.find((candidate) => candidate.isin === isin);
-    const candidate = existing || { isin, names: [], exchanges: [] };
+    const candidate = existing || { isin, kind, names: [], exchanges: [] };
     if (!existing) candidates.push(candidate);
 
     if (!candidate.names.includes(name)) candidate.names.push(name);
@@ -57,7 +81,7 @@ function loadTickerCandidatesFromCsv(csvPath) {
     }
   }
 
-  return map;
+  return into;
 }
 
 // Legal-entity suffixes are shared by unrelated funds, so counting them would
@@ -147,15 +171,29 @@ const CSV_EXCHANGES = {
   "Germany (Xetra)": "XETR",
   "France (Euronext)": "EURONEXT",
   "Netherlands (Euronext)": "EURONEXT",
+  "Belgium (Euronext)": "EURONEXT",
+  "Portugal (Euronext)": "EURONEXT",
   "Switzerland (SWX)": "SIX",
   "Spain (BME)": "BME",
+  "US (NASDAQ)": "NASDAQ",
+  "US (NYSE)": "NYSE",
+  "US (AMEX)": "AMEX",
+  "Denmark (CSE)": "CSE",
+  "Finland (NASDAQ)": "OMXHEX",
+  "Sweden (NASDAQ)": "OMXSTO",
+  "Norway (NASDAQ)": "OSL",
+  "Austria (VIE)": "VIE",
+  "Australia (ASX)": "ASX",
 };
 
-function resolveIsin(tickerCandidates, ticker, scrapedName, venue) {
-  const candidates = tickerCandidates.get(ticker) || [];
+function resolveIsin(tickerCandidates, ticker, scrapedName, venue, allowedKinds) {
+  const pool = (tickerCandidates.get(ticker) || []).filter((candidate) =>
+    allowedKinds ? allowedKinds.has(candidate.kind) : true
+  );
 
-  const scored = candidates.map((candidate) => ({
+  const scored = pool.map((candidate) => ({
     isin: candidate.isin,
+    kind: candidate.kind,
     exchanges: candidate.exchanges,
     ...scoreCandidate(scrapedName, candidate),
   }));
@@ -164,7 +202,7 @@ function resolveIsin(tickerCandidates, ticker, scrapedName, venue) {
   if (bestScore < MIN_NAME_SCORE) return null;
 
   let shortlist = scored.filter((candidate) => candidate.score === bestScore);
-  if (shortlist.length === 1) return shortlist[0].isin;
+  if (shortlist.length === 1) return shortlist[0];
 
   // Two funds sharing a ticker are told apart by where each one trades, and
   // Admirals says which venue it quotes.
@@ -172,7 +210,7 @@ function resolveIsin(tickerCandidates, ticker, scrapedName, venue) {
   const onVenue = venueCode
     ? shortlist.filter((candidate) => candidate.exchanges.includes(venueCode))
     : [];
-  if (onVenue.length === 1) return onVenue[0].isin;
+  if (onVenue.length === 1) return onVenue[0];
   if (onVenue.length > 1) shortlist = onVenue;
 
   // Share classes of one fund carry names that only add words ("... EUR Hedged
@@ -182,7 +220,7 @@ function resolveIsin(tickerCandidates, ticker, scrapedName, venue) {
   const distance = (candidate) => Math.abs(nameTokens(candidate.name).length - scrapedLength);
   const tightest = Math.min(...shortlist.map(distance));
   shortlist = shortlist.filter((candidate) => distance(candidate) === tightest);
-  if (shortlist.length === 1) return shortlist[0].isin;
+  if (shortlist.length === 1) return shortlist[0];
 
   // Still tied: the name does not tell these funds apart.
   return null;
@@ -210,17 +248,41 @@ const startIndex = (() => {
 })();
 const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
 
-// `--csv=PATH` overrides the default ETF list CSV (defaults to etfs.csv).
-const csvPath = (() => {
+function pathArg(flag, fallback) {
   for (const arg of process.argv.slice(2)) {
-    const match = arg.match(/^--csv=(.+)$/i);
+    const match = arg.match(new RegExp(`^--${flag}=(.+)$`, "i"));
     if (match) return match[1];
   }
-  return new URL("../etfs.csv", import.meta.url);
-})();
+  return new URL(fallback, import.meta.url);
+}
 
-const tickerCandidates = loadTickerCandidatesFromCsv(csvPath);
+function hasFlag(name) {
+  return process.argv.slice(2).some((arg) => new RegExp(`^--${name}$`, "i").test(arg));
+}
+
+// `--csv=PATH` the fund list (defaults to etfs.csv) and `--stocks-csv=PATH`
+// the share list (defaults to stocks.csv). Invest.MT5 is the shares-and-funds
+// book; crypto lives on Trade.MT5 as CFDs under `searchType=cryptocurrencies`.
+// `--funds-only` / `--etfs-only` answer for the funds alone; `--stocks-only`
+// for the shares; `--no-crypto` leaves the pairs out; `--crypto-only` answers
+// for the pairs alone.
+const csvPath = pathArg("csv", "../etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
+const cryptosCsvPath = pathArg("cryptos-csv", "../cryptos.csv");
+const fundsOnly = hasFlag("funds-only") || hasFlag("etfs-only");
+const stocksOnly = hasFlag("stocks-only");
+const cryptoOnly = hasFlag("crypto-only");
+const skipCrypto = hasFlag("no-crypto") || fundsOnly || stocksOnly;
+const skipEquities = cryptoOnly;
+
+const tickerCandidates = new Map();
+if (!stocksOnly && !skipEquities) loadTickerCandidatesFromCsv(csvPath, "ETF", tickerCandidates);
+if (!fundsOnly && !skipEquities) loadTickerCandidatesFromCsv(stocksCsvPath, "STOCK", tickerCandidates);
+const cryptoNames = skipCrypto ? new Map() : loadCryptoNames(cryptosCsvPath);
 const onlyTickers = new Set(positionalArgs.map(normalizeTicker).filter(Boolean));
+const onlyPairs = new Set(
+  positionalArgs.map((arg) => String(arg || "").trim().toUpperCase()).filter(Boolean)
+);
 
 const outputPath = new URL("admiral-parsed.json", import.meta.url);
 const results = [];
@@ -248,104 +310,45 @@ const API_BASE = "https://api.admiralmarkets.com/trade/v1";
 const ACCOUNTS_URL = "https://api.admiralmarkets.com/accounts/";
 const LOGIN_URL = `${API_BASE}/login/`;
 
-// Invest.MT5 is the account that holds shares; the other platforms on the same
-// login trade the CFDs written on them, and their instruments are not ETFs.
+// Invest.MT5 holds the shares. Crypto on
+// /trade/all-instruments?searchType=cryptocurrencies is a Trade.MT5 CFD book
+// (`trade_type_id` 12, `type_ids` 199). Opening that tab logs the UI into
+// Trade.MT5 — often a demo account — and Invest.MT5 then returns no quotes
+// for NVDA. The two books are therefore logged in separately: Invest.MT5 for
+// shares, Trade.MT5 for the pairs (a demo Trade.MT5 account is enough).
 const INVEST_TRADE_TYPE_ID = 20;
+const TRADE_MT5_TYPE_ID = 12;
+const CRYPTO_TYPE_ID = 199;
 
-// Every call is signed with a token that lives about ten minutes and stamped
-// with the trading session it belongs to, and the board only answers for the
-// account's own company, so all three are read off the app's own traffic
-// rather than assembled by hand.
-async function captureSession() {
-  const client = await page.createCDPSession();
-  await client.send("Network.enable");
-
-  let authorization = null;
-  let sessionId = null;
-  let companies = null;
-  const watched = new Map();
-
-  const readBody = async (requestId) => {
-    const fetched = await client
-      .send("Network.getResponseBody", { requestId })
-      .catch(() => null);
-    if (!fetched?.body) return null;
-    try {
-      return JSON.parse(fetched.body);
-    } catch {
-      return null;
-    }
-  };
-
-  client.on("Network.requestWillBeSent", (event) => {
-    const url = event.request.url;
-    if (url === ACCOUNTS_URL || url === LOGIN_URL) watched.set(event.requestId, url);
-    if (!url.startsWith(`${API_BASE}/`)) return;
-
-    const sent = event.request.headers || {};
-    authorization = sent.Authorization || sent.authorization || authorization;
-  });
-
-  client.on("Network.loadingFinished", async (event) => {
-    const url = watched.get(event.requestId);
-    if (!url) return;
-
-    // This call is what opens the trading session, so its answer carries the
-    // id before any request header does.
-    if (url === LOGIN_URL && !sessionId) {
-      sessionId = (await readBody(event.requestId))?.session_id || null;
-      return;
-    }
-
-    if (url === ACCOUNTS_URL && !companies) {
-      const accounts = (await readBody(event.requestId))?.REAL?.accounts || [];
-      const wanted = new Map();
-      for (const account of accounts) {
-        if (account?.trade_type_id !== INVEST_TRADE_TYPE_ID || !account?.company_id) continue;
-        wanted.set(account.company_id, {
-          company_id: account.company_id,
-          trade_type_id: account.trade_type_id,
-        });
-      }
-      if (wanted.size > 0) companies = [...wanted.values()];
-    }
-  });
-
-  // Loading the dashboard is what puts all three on the wire; they arrive
-  // within a second or two of the app booting.
-  await page.goto(TRADE_URL, { waitUntil: "domcontentloaded" });
-  for (let waited = 0; waited < 60000; waited += 250) {
-    if (authorization && sessionId && companies) break;
-    await sleep(250);
-  }
-  await client.detach().catch(() => {});
-
-  if (!authorization || !sessionId || !companies) {
-    throw new Error(
-      "Could not read the trading session. Is admiralmarkets.com signed in on a live Invest.MT5 account?"
-    );
-  }
-
+function apiHeaders(authorization, sessionId) {
   return {
-    headers: {
-      Authorization: authorization,
-      "X-Session-ID": sessionId,
-      "Api-Client": "nt_web",
-      "Content-Type": "application/json",
-    },
-    companies,
+    Authorization: authorization,
+    ...(sessionId ? { "X-Session-ID": sessionId } : {}),
+    "Api-Client": "nt_web",
+    "Content-Type": "application/json",
   };
 }
 
-let session = await captureSession();
+function slimCompanies(accounts, tradeTypeId) {
+  const wanted = new Map();
+  for (const account of accounts || []) {
+    if (account?.trade_type_id !== tradeTypeId || !account?.company_id) continue;
+    wanted.set(account.company_id, {
+      company_id: account.company_id,
+      trade_type_id: account.trade_type_id,
+    });
+  }
+  return [...wanted.values()];
+}
 
-function callApi(path, body) {
+async function callJson(url, headers, body) {
+  const method = body === undefined ? "GET" : "POST";
   return page.evaluate(
-    async (url, headers, payload) => {
+    async (url, headers, payload, method) => {
       const response = await fetch(url, {
-        method: "POST",
+        method,
         headers,
-        body: JSON.stringify(payload),
+        ...(method === "GET" ? {} : { body: JSON.stringify(payload) }),
       });
       const text = await response.text();
       try {
@@ -354,21 +357,129 @@ function callApi(path, body) {
         return { status: response.status, payload: null };
       }
     },
-    `${API_BASE}${path}`,
-    session.headers,
-    body
+    url,
+    headers,
+    body,
+    method
   );
 }
 
-async function request(path, body) {
-  let answer = await callApi(path, body).catch(() => null);
+async function loginAccount(authorization, trAccountId) {
+  const answer = await callJson(LOGIN_URL, apiHeaders(authorization), {
+    tr_account_id: trAccountId,
+    app_id: 3,
+    version: 16,
+    offline_mode: true,
+  });
+  const sessionId = answer.payload?.session_id;
+  if (answer.status !== 200 || !sessionId) {
+    throw new Error(
+      `login for account ${trAccountId} failed (status ${answer.status})`
+    );
+  }
+  return sessionId;
+}
+
+// The bearer is taken off the app's own traffic. Which book it is logged into
+// is ignored: that is whatever tab was last open, and quotes only answer for
+// that book's instruments.
+async function captureAuthorization() {
+  const client = await page.createCDPSession();
+  await client.send("Network.enable");
+
+  let authorization = null;
+  client.on("Network.requestWillBeSent", (event) => {
+    if (!event.request.url.startsWith("https://api.admiralmarkets.com/")) return;
+    const sent = event.request.headers || {};
+    authorization = sent.Authorization || sent.authorization || authorization;
+  });
+
+  await page.goto(TRADE_URL, { waitUntil: "domcontentloaded" });
+  for (let waited = 0; waited < 60000; waited += 250) {
+    if (authorization) break;
+    await sleep(250);
+  }
+  await client.detach().catch(() => {});
+
+  if (!authorization) {
+    throw new Error(
+      "Could not read the trading token. Is admiralmarkets.com signed in?"
+    );
+  }
+  return authorization;
+}
+
+async function captureSession() {
+  const authorization = await captureAuthorization();
+  const accountsAnswer = await callJson(ACCOUNTS_URL, apiHeaders(authorization));
+  if (accountsAnswer.status !== 200 || !accountsAnswer.payload) {
+    throw new Error(`accounts failed (status ${accountsAnswer.status})`);
+  }
+
+  const real = accountsAnswer.payload.REAL?.accounts || [];
+  const demo = accountsAnswer.payload.DEMO?.accounts || [];
+  const invest = real.find((account) => account.trade_type_id === INVEST_TRADE_TYPE_ID);
+  const companies = slimCompanies(real, INVEST_TRADE_TYPE_ID);
+  if (!invest || companies.length === 0) {
+    throw new Error(
+      "Could not find a live Invest.MT5 account. Is admiralmarkets.com signed in on one?"
+    );
+  }
+
+  const investSessionId = await loginAccount(authorization, invest.id);
+  const captured = {
+    headers: apiHeaders(authorization, investSessionId),
+    companies,
+    cryptoHeaders: null,
+    cryptoCompanies: [],
+  };
+
+  if (!skipCrypto) {
+    const trade =
+      real.find((account) => account.trade_type_id === TRADE_MT5_TYPE_ID) ||
+      demo.find((account) => account.trade_type_id === TRADE_MT5_TYPE_ID);
+    if (!trade) {
+      if (cryptoOnly) {
+        throw new Error(
+          "Crypto CFDs need a Trade.MT5 account (a demo one is enough)."
+        );
+      }
+      console.error("No Trade.MT5 account on this login; skipping crypto CFDs");
+    } else {
+      const cryptoSessionId = await loginAccount(authorization, trade.id);
+      captured.cryptoHeaders = apiHeaders(authorization, cryptoSessionId);
+      captured.cryptoCompanies = [
+        { company_id: trade.company_id || invest.company_id, trade_type_id: TRADE_MT5_TYPE_ID },
+      ];
+    }
+  }
+
+  return captured;
+}
+
+let session = await captureSession();
+
+function headersFor(book) {
+  return book === "crypto" ? session.cryptoHeaders : session.headers;
+}
+
+function callApi(path, body, book = "invest") {
+  return callJson(`${API_BASE}${path}`, headersFor(book), body);
+}
+
+async function request(path, body, book = "invest") {
+  if (book === "crypto" && !session.cryptoHeaders) {
+    throw new Error("No Trade.MT5 session to quote crypto CFDs");
+  }
+
+  let answer = await callApi(path, body, book).catch(() => null);
 
   // The token expires mid-run on a long list, and a fresh one is cheap next to
   // losing the call.
   if (!answer || answer.status !== 200) {
     await sleep(1000);
     session = await captureSession();
-    answer = await callApi(path, body).catch(() => null);
+    answer = await callApi(path, body, book).catch(() => null);
   }
 
   if (!answer || answer.status !== 200) {
@@ -377,14 +488,20 @@ async function request(path, body) {
   return answer.payload;
 }
 
-// Admirals carries a few hundred ETFs in one category, so an empty query walks
-// the whole board instead of guessing at search terms the way a ticker-by-ticker
-// lookup would — the search matches names and symbols, never ISINs.
+// Admirals carries a few thousand shares and a few hundred ETFs on the one
+// Invest.MT5 board, so an empty query walks it instead of guessing at search
+// terms the way a ticker-by-ticker lookup would — the search matches names and
+// symbols, never ISINs. Cash bonds are not on this board. Crypto CFDs live on
+// Trade.MT5 and are listed separately. There is also no PTP / US-residents-only
+// flag; `[tax]` on a French share is the domestic transaction tax, not a US
+// withholding mark.
 const ETF_TYPE_ID = 4318;
+const STOCK_TYPE_ID = 206;
 const PAGE_SIZE = 100;
 
-async function listEtfs() {
+async function listInvest() {
   const instruments = new Map();
+  const typeIds = stocksOnly ? [STOCK_TYPE_ID] : fundsOnly ? [ETF_TYPE_ID] : undefined;
 
   for (let pageNumber = 1; pageNumber <= 50; pageNumber += 1) {
     const payload = await request("/search/", {
@@ -393,14 +510,56 @@ async function listEtfs() {
       page: pageNumber,
       sort: "popularity",
       order: "desc",
-      type_ids: [ETF_TYPE_ID],
+      ...(typeIds ? { type_ids: typeIds } : {}),
       trade_companies: session.companies,
-    });
+    }, "invest");
 
     const hits = payload?.hits || [];
     for (const hit of hits) {
       const document = hit?.document;
-      if (!document?.name || document.relation_type !== "ETF") continue;
+      const relation = document?.relation_type;
+      if (!document?.name) continue;
+      if (relation === "ETF" && stocksOnly) continue;
+      if (relation === "STOCK" && fundsOnly) continue;
+      if (relation !== "ETF" && relation !== "STOCK") continue;
+      if (instruments.has(document.name)) continue;
+      instruments.set(document.name, {
+        symbol: document.name,
+        name: (document.description || "").replace(/\s+/g, " ").trim(),
+        relation,
+      });
+    }
+
+    if (hits.length === 0 || instruments.size >= (payload?.found ?? 0)) break;
+  }
+
+  return [...instruments.values()];
+}
+
+async function listCryptos() {
+  const instruments = new Map();
+  const companies = session.cryptoCompanies || [];
+  if (!session.cryptoHeaders || !companies.length) return [];
+
+  for (let pageNumber = 1; pageNumber <= 10; pageNumber += 1) {
+    const payload = await request(
+      "/search/",
+      {
+        q: "",
+        count: PAGE_SIZE,
+        page: pageNumber,
+        sort: "popularity",
+        order: "desc",
+        type_ids: [CRYPTO_TYPE_ID],
+        trade_companies: companies,
+      },
+      "crypto"
+    );
+
+    const hits = payload?.hits || [];
+    for (const hit of hits) {
+      const document = hit?.document;
+      if (!document?.name) continue;
       if (instruments.has(document.name)) continue;
       instruments.set(document.name, {
         symbol: document.name,
@@ -414,19 +573,37 @@ async function listEtfs() {
   return [...instruments.values()];
 }
 
+function cryptoWanted(symbol, pair, base) {
+  if (onlyTickers.size === 0 && onlyPairs.size === 0) return true;
+  const platform = String(symbol || "").toUpperCase();
+  return (
+    onlyPairs.has(platform) ||
+    onlyPairs.has(pair) ||
+    onlyTickers.has(base) ||
+    onlyTickers.has(platform) ||
+    onlyTickers.has(pair)
+  );
+}
+
 // The board answers for a few hundred symbols in one call, so the quote data
 // behind every instrument page is read up front instead of page by page.
 const DATA_BATCH = 250;
 
-async function readInstrumentData(symbols) {
+async function readInstrumentData(symbols, book = "invest") {
   const rows = new Map();
+  const companies = book === "crypto" ? session.cryptoCompanies : session.companies;
 
   for (let offset = 0; offset < symbols.length; offset += DATA_BATCH) {
-    const payload = await request("/instruments/data/", {
-      fields: ["n", "dsc", "cbs", "tm", "p"],
-      instruments: symbols.slice(offset, offset + DATA_BATCH),
-      period: "today",
-    });
+    const payload = await request(
+      "/instruments/data/",
+      {
+        fields: ["n", "dsc", "cbs", "tm", "p"],
+        instruments: symbols.slice(offset, offset + DATA_BATCH),
+        period: "today",
+        ...(companies?.length ? { trade_companies: companies } : {}),
+      },
+      book
+    );
     for (const row of payload?.instruments_data || []) rows.set(row.n, row);
   }
 
@@ -445,45 +622,67 @@ function readPath(path) {
 // instruments it will only let you close out of.
 const OPENABLE_TRADE_MODES = new Set([1, 4]);
 
-const listed = await listEtfs();
+const listed = skipEquities ? [] : await listInvest();
 const instruments = listed.filter(
   (instrument) =>
     onlyTickers.size === 0 || onlyTickers.has(normalizeTicker(instrument.symbol))
 );
-const instrumentData = await readInstrumentData(instruments.map((entry) => entry.symbol));
-console.error(`${instruments.length} ETFs listed, ${instrumentData.size} quoted`);
+const instrumentData = skipEquities
+  ? new Map()
+  : await readInstrumentData(instruments.map((entry) => entry.symbol));
+if (!skipEquities) {
+  console.error(
+    `${listed.length} on the Invest.MT5 board (` +
+      `${listed.filter((row) => row.relation === "STOCK").length} shares, ` +
+      `${listed.filter((row) => row.relation === "ETF").length} funds); ` +
+      `${instruments.length} asked, ${instrumentData.size} quoted`
+  );
+}
+
+const skipped = new Map();
+const bump = (reason) => skipped.set(reason, (skipped.get(reason) || 0) + 1);
 
 for (const [index, instrument] of instruments.entries()) {
   if (index + 1 < startIndex) continue;
 
   const symbol = instrument.symbol;
-  const label = `[${index + 1}/${instruments.length}] ${symbol}`;
 
   // Search indexes instruments the account cannot reach — mostly US-domiciled
   // funds an EU entity may not offer — and those carry no quote at all.
   const data = instrumentData.get(symbol);
   if (!data) {
-    console.error(`${label}: not available on this account`);
+    bump("not available on this account");
     continue;
   }
 
   const { category, venue } = readPath(data.p);
-  if (!/^ETF/i.test(category)) {
-    console.error(`${label}: not an ETF (${category || "no category"})`);
+  const isEtf = /^ETF/i.test(category) || instrument.relation === "ETF";
+  const isStock = /^Stock/i.test(category) || instrument.relation === "STOCK";
+  if (isEtf && stocksOnly) {
+    bump("not a share");
+    continue;
+  }
+  if (isStock && fundsOnly) {
+    bump("not a fund");
+    continue;
+  }
+  if (!isEtf && !isStock) {
+    bump(`not a share or fund (${category || "no category"})`);
     continue;
   }
 
   if (!OPENABLE_TRADE_MODES.has(data.tm)) {
-    console.error(`${label}: close only`);
+    bump("close only");
     continue;
   }
 
   const name = (data.dsc || instrument.name || "").replace(/\s+/g, " ").trim();
   const query = normalizeTicker(symbol);
-  const isin = resolveIsin(tickerCandidates, query, name, venue);
-  // Same ticker, different fund: not the one the CSV is asking about.
-  if (!isin) {
-    console.error(`${label}: no ISIN for "${name}"`);
+  const allowedKinds = new Set(isEtf ? ["ETF"] : ["STOCK"]);
+  const matched = resolveIsin(tickerCandidates, query, name, venue, allowedKinds);
+  // Same ticker, different instrument: not the one the CSV is asking about.
+  if (!matched) {
+    bump("no ISIN");
     continue;
   }
 
@@ -497,15 +696,86 @@ for (const [index, instrument] of instruments.entries()) {
     name,
     exchange: venue,
     currency: (data.cbs || "").toUpperCase() || null,
-    type: "ETF",
+    type: matched.kind,
     raw: [symbol, name, venue].filter(Boolean).join(" "),
-    isin,
+    isin: matched.isin,
   });
 
-  fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+  if (results.length % 250 === 0) {
+    fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+    console.error(`  ${results.length} matched`);
+  }
+}
+
+if (!skipCrypto) {
+  const cryptos = await listCryptos();
+  const cryptoData = await readInstrumentData(
+    cryptos.map((entry) => entry.symbol),
+    "crypto"
+  );
+  console.error(
+    `${cryptos.length} crypto CFDs on Trade.MT5, ${cryptoData.size} quoted`
+  );
+  if (!skipCrypto && cryptoNames.size) {
+    console.error(`${cryptoNames.size} coins in the list to name crypto pairs against`);
+  }
+
+  let unnamedCrypto = 0;
+  for (const instrument of cryptos) {
+    const { base, quote, pair } = admiralCryptoPair(instrument.symbol);
+    if (!cryptoWanted(instrument.symbol, pair, base)) continue;
+
+    const data = cryptoData.get(instrument.symbol);
+    if (!data) {
+      bump("crypto not available on this account");
+      continue;
+    }
+    if (!OPENABLE_TRADE_MODES.has(data.tm)) {
+      bump("crypto close only");
+      continue;
+    }
+
+    const listedName = cryptoNames.get(base);
+    if (!listedName) unnamedCrypto += 1;
+    const name = (
+      listedName ||
+      (data.dsc || instrument.name || "")
+        .replace(/\s+vs\s+(US Dollar|Euro)\s+CFD$/i, "")
+        .replace(/\s+/g, " ")
+        .trim()
+    );
+
+    const key = entryKey(pair, instrument.symbol);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    results.push({
+      query: pair,
+      ticker: pair,
+      name,
+      exchange: "CRYPTO",
+      currency: quote || null,
+      type: "CRYPTO",
+      raw: [instrument.symbol, name, pair, quote].filter(Boolean).join(" "),
+      isin: null,
+    });
+  }
+  if (unnamedCrypto > 0) {
+    console.error(
+      `${unnamedCrypto} pairs are named by Admirals alone; their base coin is not in cryptos.csv`
+    );
+  }
 }
 
 fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+
+const byType = new Map();
+for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);
+console.error(
+  `${results.length} matched (${[...byType].map(([type, count]) => `${count} ${type}`).join(", ")})`
+);
+for (const [reason, count] of [...skipped].sort((a, b) => b[1] - a[1])) {
+  console.error(`  ${String(count).padStart(5)} ${reason}`);
+}
 
 console.log(JSON.stringify(results, null, 2));
 

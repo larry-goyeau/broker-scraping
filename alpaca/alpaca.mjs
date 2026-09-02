@@ -11,7 +11,23 @@ function normalizeTicker(value) {
   const afterExchange = firstColumn.includes(":")
     ? firstColumn.split(":").pop()
     : firstColumn;
-  return (afterExchange || "").split(/[/]/)[0].trim();
+  const body = (afterExchange || "").trim();
+  if (!body) return "";
+
+  // TradingView writes a preferred as `NLY/PG` and a listed note the same way;
+  // Alpaca files both as `NLY.PRG`. Cutting at the slash, which is what a
+  // composite ticker used to need, folded every series of a house onto its
+  // common share and left the preferreds looking unnamed.
+  const preferred = body.match(/^([A-Z0-9]+)\/P([A-Z])$/);
+  if (preferred) return `${preferred[1]}.PR${preferred[2]}`;
+  const preferredBare = body.match(/^([A-Z0-9]+)\/P$/);
+  if (preferredBare) return `${preferredBare[1]}.PR`;
+  const unit = body.match(/^([A-Z0-9]+)\/U$/);
+  if (unit) return `${unit[1]}.U`;
+  const right = body.match(/^([A-Z0-9]+)\/R(?:T)?$/);
+  if (right) return `${right[1]}.RT`;
+
+  return body.split(/[/]/)[0].trim();
 }
 
 function toIsin(value) {
@@ -36,10 +52,19 @@ const EXCHANGE_NAMES = {
 // One ISIN is often listed on several venues under differently worded names
 // ("SPDR S&P 500 ETF Trust" and "State Street SPDR S&P 500 ETF"), so every
 // spelling is kept and the closest one decides a match.
-function loadTickerCandidatesFromCsv(csvPath) {
-  if (!fs.existsSync(csvPath)) return new Map();
+//
+// Funds, shares and listed notes are read into the one pool, each candidate
+// carrying the list it came from, because Alpaca's book does not say which is
+// which and the ticker alone cannot settle it. A handful of American tickers
+// are claimed by more than one list and they do not fall the same way: `GAB`
+// is the Gabelli Equity Trust and the share list only holds its preferred
+// stock, while `NEE` is NextEra Energy's common share and the fund list only
+// holds one of its structured notes. So the name decides, as it already does
+// between share classes, and whichever candidate wins also says what the line
+// is.
+function loadTickerCandidatesFromCsv(csvPath, kind, into = new Map()) {
+  if (!fs.existsSync(csvPath)) return into;
 
-  const map = new Map();
   for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
     if (!line.trim()) continue;
 
@@ -53,19 +78,49 @@ function loadTickerCandidatesFromCsv(csvPath) {
     const name = columns.slice(isinIndex + 1).join(",").trim();
     if (!name) continue;
 
-    const candidates = map.get(ticker) || [];
-    map.set(ticker, candidates);
+    const candidates = into.get(ticker) || [];
+    into.set(ticker, candidates);
 
     const existing = candidates.find((candidate) => candidate.isin === isin);
     if (existing) {
       if (!existing.names.includes(name)) existing.names.push(name);
       if (exchange) existing.exchanges.add(exchange);
     } else {
-      candidates.push({ isin, names: [name], exchanges: new Set(exchange ? [exchange] : []) });
+      candidates.push({ isin, kind, names: [name], exchanges: new Set(exchange ? [exchange] : []) });
     }
   }
 
-  return map;
+  return into;
+}
+
+// A crypto line has no ISIN, so it cannot go through the share loader. The
+// file is `ticker,exchange,isin,name` with the number left blank; the name is
+// what we want, keyed on the coin (BTC), not on a pair.
+function loadCryptoNames(csvPath) {
+  const names = new Map();
+  if (!fs.existsSync(csvPath)) return names;
+
+  for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
+    if (!line.trim() || /^ticker,/i.test(line)) continue;
+    const columns = line.split(",");
+    const ticker = String(columns[0] || "").trim().toUpperCase();
+    const name = columns.slice(3).join(",").trim() || String(columns[1] || "").trim();
+    if (ticker && name && !names.has(ticker)) names.set(ticker, name);
+  }
+  return names;
+}
+
+// Alpaca quotes a pair, `BTC/USD`. The coin the list names is the left side.
+function cryptoBase(symbol) {
+  const text = String(symbol || "").toUpperCase();
+  const cut = text.indexOf("/");
+  return cut >= 0 ? text.slice(0, cut) : text;
+}
+
+function cryptoQuote(symbol) {
+  const text = String(symbol || "").toUpperCase();
+  const cut = text.indexOf("/");
+  return cut >= 0 ? text.slice(cut + 1) : "USD";
 }
 
 // Legal-entity suffixes are shared by unrelated funds, so counting them would
@@ -136,6 +191,20 @@ function scoreCandidate(scrapedName, candidate) {
   return best;
 }
 
+// Warrants, units and rights are the bulk of what no list names, and Alpaca
+// spells them out in the ticker. Preferreds used to land here too, before the
+// slash in TradingView's ticker was mapped onto Alpaca's `.PR` form. Knowing
+// which is which is only used to say what a run could not name, never to drop
+// anything.
+function shapeOf(ticker, name) {
+  if (/\.PR[A-Z]?$/.test(ticker) || /\bPreferred\b/i.test(name)) return "preferred share";
+  if (/W$/.test(ticker) && /\bWarrants?\b/i.test(name)) return "warrant";
+  if (/(\.RT|R)$/.test(ticker) && /\bRights?\b/i.test(name)) return "right";
+  if (/U$/.test(ticker) && /\bUnits?\b/i.test(name)) return "unit";
+  if (/\bNotes?\b/i.test(name)) return "note";
+  return "share or fund";
+}
+
 const MIN_NAME_SCORE = 0.5;
 
 // An American ticker belongs to one instrument apiece, so the fund Alpaca
@@ -154,6 +223,7 @@ function resolveIsin(tickerCandidates, asset) {
 
   const scored = shortlist.map((candidate) => ({
     isin: candidate.isin,
+    kind: candidate.kind,
     ...scoreCandidate(asset.name, candidate),
   }));
 
@@ -194,17 +264,44 @@ const startIndex = (() => {
 })();
 const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
 
-// `--csv=PATH` overrides the default ETF list CSV (defaults to etfs.csv).
-const csvPath = (() => {
+// `--csv=PATH` overrides the fund list (defaults to etfs.csv),
+// `--stocks-csv=PATH` the share list (defaults to stocks.csv),
+// `--bonds-csv=PATH` the listed-note list (defaults to bonds.csv) and
+// `--cryptos-csv=PATH` the coin list (defaults to cryptos.csv). Shares, funds
+// and notes come out of the one `us_equity` book; crypto is a second class on
+// the same endpoint. `--funds-only` answers for the funds alone; `--no-bonds`
+// and `--no-crypto` leave those books out; `--crypto-only` answers for the
+// pairs alone.
+function pathArg(flag, fallback) {
   for (const arg of process.argv.slice(2)) {
-    const match = arg.match(/^--csv=(.+)$/i);
+    const match = arg.match(new RegExp(`^--${flag}=(.+)$`, "i"));
     if (match) return match[1];
   }
-  return new URL("../etfs.csv", import.meta.url);
-})();
+  return new URL(fallback, import.meta.url);
+}
 
-const tickerCandidates = loadTickerCandidatesFromCsv(csvPath);
+function hasFlag(name) {
+  return process.argv.slice(2).some((arg) => new RegExp(`^--${name}$`, "i").test(arg));
+}
+
+const csvPath = pathArg("csv", "../etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
+const bondsCsvPath = pathArg("bonds-csv", "../bonds.csv");
+const cryptosCsvPath = pathArg("cryptos-csv", "../cryptos.csv");
+const fundsOnly = hasFlag("funds-only");
+const cryptoOnly = hasFlag("crypto-only");
+const skipBonds = hasFlag("no-bonds") || fundsOnly || cryptoOnly;
+const skipCrypto = hasFlag("no-crypto") || fundsOnly;
+const skipEquities = cryptoOnly;
+
+const tickerCandidates = skipEquities ? new Map() : loadTickerCandidatesFromCsv(csvPath, "ETF");
+if (!fundsOnly && !skipEquities) loadTickerCandidatesFromCsv(stocksCsvPath, "STOCK", tickerCandidates);
+if (!skipBonds) loadTickerCandidatesFromCsv(bondsCsvPath, "BND", tickerCandidates);
+const cryptoNames = skipCrypto ? new Map() : loadCryptoNames(cryptosCsvPath);
 const onlyTickers = new Set(positionalArgs.map(normalizeTicker).filter(Boolean));
+const onlyPairs = new Set(
+  positionalArgs.map((arg) => String(arg || "").trim().toUpperCase()).filter(Boolean)
+);
 
 const outputPath = new URL("alpaca-parsed.json", import.meta.url);
 const results = [];
@@ -224,18 +321,23 @@ if (startIndex > 1 && fs.existsSync(outputPath)) {
   }
 }
 
-// Alpaca trades America alone, so a ticker the CSV only lists abroad is a
-// namesake of an American share rather than the fund being looked for.
+// Alpaca trades America alone, so a ticker the lists only carry abroad is a
+// namesake of an American line rather than the instrument being looked for.
 const MARKET_EXCHANGES = new Set(Object.values(EXCHANGE_NAMES));
 
 const wanted = new Set();
-for (const [ticker, candidates] of tickerCandidates) {
-  if (onlyTickers.size > 0 && !onlyTickers.has(ticker)) continue;
-  const exchanges = new Set(candidates.flatMap((candidate) => [...candidate.exchanges]));
-  if (![...exchanges].some((exchange) => MARKET_EXCHANGES.has(exchange))) continue;
-  wanted.add(ticker);
+if (!skipEquities) {
+  for (const [ticker, candidates] of tickerCandidates) {
+    if (onlyTickers.size > 0 && !onlyTickers.has(ticker)) continue;
+    const exchanges = new Set(candidates.flatMap((candidate) => [...candidate.exchanges]));
+    if (![...exchanges].some((exchange) => MARKET_EXCHANGES.has(exchange))) continue;
+    wanted.add(ticker);
+  }
+  console.error(`${wanted.size} American tickers to look for`);
 }
-console.error(`${wanted.size} American tickers to look for`);
+if (!skipCrypto) {
+  console.error(`${cryptoNames.size} coins in the list to name crypto pairs against`);
+}
 
 // The app signs its calls with a token it renews on its own, so it is read off
 // the app's own traffic rather than minted here.
@@ -266,27 +368,32 @@ if (!(await captureToken())) {
   throw new Error("Could not read Alpaca's API token. Is app.alpaca.markets signed in?");
 }
 
-// The whole American offer comes down in one answer, so there is nothing to
-// page through and nothing to search for.
-async function loadAssets() {
+// The whole American equity offer comes down in one answer, so there is
+// nothing to page through and nothing to search for. Crypto is the same
+// endpoint under `asset_class=crypto`. The Treasury and corporate books live
+// on the Broker API, which this session is not subscribed to: asking them
+// comes back 403.
+async function loadAssets(assetClass) {
   for (let attempt = 0; attempt < 3; attempt += 1) {
-    const answer = await page.evaluate(async (authorization) => {
-      try {
-        const response = await fetch(
-          "https://app.alpaca.markets/api/v1/assets?status=active&asset_class=us_equity",
-          { headers: { Authorization: authorization } }
-        );
-        if (!response.ok) return { status: response.status };
-        return { status: 200, rows: await response.json() };
-      } catch (error) {
-        return { status: 0 };
-      }
-    }, token);
+    const answer = await page.evaluate(
+      async (authorization, cls) => {
+        try {
+          const response = await fetch(
+            `https://app.alpaca.markets/api/v1/assets?status=active&asset_class=${cls}`,
+            { headers: { Authorization: authorization } }
+          );
+          if (!response.ok) return { status: response.status };
+          return { status: 200, rows: await response.json() };
+        } catch (error) {
+          return { status: 0 };
+        }
+      },
+      token,
+      assetClass
+    );
 
     if (answer.status === 200 && Array.isArray(answer.rows)) return answer.rows;
 
-    // The token turns over on its own; wait for the app to mint a new one
-    // before asking again.
     const stale = token;
     for (let waited = 0; waited < 30000 && token === stale; waited += 250) await sleep(250);
     if (token === stale) {
@@ -298,60 +405,151 @@ async function loadAssets() {
   return [];
 }
 
-const assets = await loadAssets();
-if (assets.length === 0) {
-  throw new Error("Alpaca returned no assets.");
-}
-console.error(`${assets.length} listings in Alpaca's book`);
-
-// Alpaca keeps delisted and broker-blocked shares in the book under the active
-// status, and marks what an account may actually place an order on.
-const onTicker = assets
-  .filter((asset) => EXCHANGE_NAMES[String(asset.exchange || "").toUpperCase()])
-  .filter((asset) => wanted.has(String(asset.symbol || "").toUpperCase()));
-const listings = onTicker
-  .filter((asset) => asset.tradable)
-  .sort((left, right) => left.symbol.localeCompare(right.symbol));
-const refused = onTicker.length - listings.length;
-console.error(`${listings.length} of them carry a ticker the CSV lists in America`);
-
 let unmatched = 0;
 
-for (const [index, asset] of listings.entries()) {
-  if (index + 1 < startIndex) continue;
+if (!skipEquities) {
+  const assets = await loadAssets("us_equity");
+  if (assets.length === 0) {
+    throw new Error("Alpaca returned no assets.");
+  }
+  console.error(`${assets.length} listings in Alpaca's book`);
 
-  const ticker = String(asset.symbol).toUpperCase();
-  if (seen.has(ticker)) continue;
+  // Alpaca keeps delisted and broker-blocked shares in the book under the active
+  // status, and marks what an account may actually place an order on.
+  const onVenue = assets.filter((asset) =>
+    EXCHANGE_NAMES[String(asset.exchange || "").toUpperCase()]
+  );
+  const dealable = onVenue.filter((asset) => asset.tradable);
+  const refused = onVenue.length - dealable.length;
+  const listings = dealable
+    .filter((asset) => wanted.has(String(asset.symbol || "").toUpperCase()))
+    .sort((left, right) => left.symbol.localeCompare(right.symbol));
+  console.error(
+    `${dealable.length} of them can be dealt, ${refused} cannot; ` +
+      `${listings.length} carry a ticker the lists know in America`
+  );
 
-  const exchange = String(asset.exchange).toUpperCase();
-  const name = String(asset.name || "").replace(/\s+/g, " ").trim();
-
-  const candidate = resolveIsin(tickerCandidates, { ticker, name, exchange });
-  if (!candidate) {
-    // Alpaca's book is stocks and funds alike, so a name that reads nothing
-    // like the fund on that ticker is a share that happens to share it.
-    unmatched += 1;
-    continue;
+  // What is left is dealable and has no line in either list, so it cannot be given
+  // an ISIN here. Saying what shape it is turns a bare number into something that
+  // can be acted on: rights and warrants are nobody's loss, preferred shares are.
+  const unlisted = new Map();
+  for (const asset of dealable) {
+    if (wanted.has(String(asset.symbol || "").toUpperCase())) continue;
+    if (onlyTickers.size > 0) continue;
+    const shape = shapeOf(String(asset.symbol).toUpperCase(), String(asset.name || ""));
+    unlisted.set(shape, (unlisted.get(shape) || 0) + 1);
+  }
+  if (unlisted.size > 0) {
+    const total = [...unlisted.values()].reduce((sum, count) => sum + count, 0);
+    console.error(`${total} dealable listings neither list names:`);
+    for (const [shape, count] of [...unlisted].sort((a, b) => b[1] - a[1])) {
+      console.error(`  ${String(count).padStart(5)} ${shape}`);
+    }
   }
 
-  seen.add(ticker);
-  results.push({
-    query: ticker,
-    ticker,
-    name: name || candidate.name,
-    exchange: EXCHANGE_NAMES[exchange],
-    // The assets endpoint is asked for US equities only, so every line quotes
-    // in dollars.
-    currency: "USD",
-    type: "ETF",
-    raw: [ticker, name, exchange].filter(Boolean).join(" "),
-    isin: candidate.isin,
-  });
+  for (const [index, asset] of listings.entries()) {
+    if (index + 1 < startIndex) continue;
+
+    const ticker = String(asset.symbol).toUpperCase();
+    if (seen.has(ticker)) continue;
+
+    const exchange = String(asset.exchange).toUpperCase();
+    const name = String(asset.name || "").replace(/\s+/g, " ").trim();
+
+    const candidate = resolveIsin(tickerCandidates, { ticker, name, exchange });
+    if (!candidate) {
+      unmatched += 1;
+      continue;
+    }
+
+    if (fundsOnly && candidate.kind !== "ETF") continue;
+    if (skipBonds && candidate.kind === "BND") continue;
+
+    seen.add(ticker);
+    const row = {
+      query: ticker,
+      ticker,
+      name: name || candidate.name,
+      exchange: EXCHANGE_NAMES[exchange],
+      currency: "USD",
+      type: candidate.kind,
+      raw: [ticker, name, exchange].filter(Boolean).join(" "),
+      isin: candidate.isin,
+    };
+    // Alpaca's own book: a PTP without a qualified notice cannot be bought by a
+    // non-US account (10% IRS withholding on the whole sale). The ones that
+    // carry an exception stay open to everyone and are not marked.
+    if ((asset.attributes || []).includes("ptp_no_exception")) row.usResidentsOnly = true;
+    results.push(row);
+  }
+}
+
+if (!skipCrypto) {
+  const coins = await loadAssets("crypto");
+  const dealable = coins.filter((asset) => asset.tradable);
+  console.error(
+    `${coins.length} crypto pairs listed, ${dealable.length} of them still dealable`
+  );
+
+  function cryptoWanted(symbol) {
+    if (onlyTickers.size === 0 && onlyPairs.size === 0) return true;
+    const pair = String(symbol || "").toUpperCase();
+    const base = cryptoBase(pair);
+    return onlyPairs.has(pair) || onlyTickers.has(base) || onlyTickers.has(pair);
+  }
+
+  let unnamed = 0;
+  const pairs = dealable
+    .filter((asset) => cryptoWanted(asset.symbol))
+    .sort((left, right) => String(left.symbol).localeCompare(String(right.symbol)));
+
+  for (const asset of pairs) {
+    const ticker = String(asset.symbol).toUpperCase();
+    if (seen.has(ticker)) continue;
+
+    const base = cryptoBase(ticker);
+    const quote = cryptoQuote(ticker);
+    const listed = cryptoNames.get(base);
+    if (!listed) unnamed += 1;
+
+    const name = String(asset.name || "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    seen.add(ticker);
+    results.push({
+      query: ticker,
+      ticker,
+      name: listed || name,
+      exchange: "CRYPTO",
+      currency: quote || "USD",
+      type: "CRYPTO",
+      raw: [ticker, name, base, quote].filter(Boolean).join(" "),
+      // A spot pair is not a security: there is no ISIN to file it under.
+      isin: null,
+    });
+  }
+
+  if (unnamed > 0) {
+    console.error(`${unnamed} pairs are named by Alpaca alone; their base coin is not in cryptos.csv`);
+  }
 }
 
 fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 
-console.error(`${results.length} funds matched, ${unmatched} listings not the fund on that ticker, ${refused} refused`);
+const byType = new Map();
+let usOnly = 0;
+for (const row of results) {
+  byType.set(row.type, (byType.get(row.type) || 0) + 1);
+  if (row.usResidentsOnly) usOnly += 1;
+}
+console.error(
+  `${results.length} matched (${[...byType].map(([type, count]) => `${count} ${type}`).join(", ")}), ` +
+    `${unmatched} on a listed ticker the wording could not settle`
+);
+if (usOnly > 0) {
+  console.error(`${usOnly} of them are US-residents only (PTP, no qualified notice)`);
+}
 console.log(JSON.stringify(results, null, 2));
 
 await browser.disconnect();

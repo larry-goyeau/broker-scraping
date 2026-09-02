@@ -109,6 +109,35 @@ function loadCsv(csvPath) {
   return { byTicker, namesByIsin };
 }
 
+// A crypto line has no ISIN, so it cannot go through the share loader. The
+// file is `ticker,exchange,isin,name` with the number left blank; the name is
+// what we want, keyed on the coin (BTC), not on a pair.
+function loadCryptoNames(csvPath) {
+  const names = new Map();
+  if (!fs.existsSync(csvPath)) return names;
+
+  for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
+    if (!line.trim() || /^ticker,/i.test(line)) continue;
+    const columns = line.split(",");
+    const ticker = String(columns[0] || "").trim().toUpperCase();
+    const name = columns.slice(3).join(",").trim() || String(columns[1] || "").trim();
+    if (ticker && name && !names.has(ticker)) names.set(ticker, name);
+  }
+  return names;
+}
+
+function cryptoBase(symbol) {
+  const text = String(symbol || "").toUpperCase();
+  const cut = text.indexOf("/");
+  return cut >= 0 ? text.slice(0, cut) : text;
+}
+
+function cryptoQuote(symbol) {
+  const text = String(symbol || "").toUpperCase();
+  const cut = text.indexOf("/");
+  return cut >= 0 ? text.slice(cut + 1) : "USD";
+}
+
 // Legal-entity suffixes are shared by unrelated funds, so counting them would
 // let a same-ticker instrument pass for the one being looked up.
 const GENERIC_TOKENS = new Set([
@@ -240,10 +269,12 @@ function resolveByName(byTicker, listing, { fund }) {
   return shortlist.length === 1 ? shortlist[0] : null;
 }
 
-// `--csv=PATH` overrides the fund list (defaults to etfs.csv) and
-// `--stocks-csv=PATH` the share list (defaults to stocks.csv). Both are read,
-// because tastytrade sells funds and shares from the one book; `--funds-only`
-// answers for the funds alone, as this script did before it learned about shares.
+// `--csv=PATH` overrides the fund list (defaults to etfs.csv),
+// `--stocks-csv=PATH` the share list (defaults to stocks.csv) and
+// `--cryptos-csv=PATH` the coin list (defaults to cryptos.csv). Shares and
+// funds come out of the one equities book; crypto is a second endpoint.
+// `--funds-only` answers for the funds alone; `--no-crypto` leaves the pairs
+// out; `--crypto-only` answers for the pairs alone.
 function pathArg(flag, fallback) {
   for (const arg of process.argv.slice(2)) {
     const match = arg.match(new RegExp(`^--${flag}=(.+)$`, "i"));
@@ -252,9 +283,17 @@ function pathArg(flag, fallback) {
   return new URL(fallback, import.meta.url);
 }
 
+function hasFlag(name) {
+  return process.argv.slice(2).some((arg) => new RegExp(`^--${name}$`, "i").test(arg));
+}
+
 const csvPath = pathArg("csv", "../etfs.csv");
 const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
-const fundsOnly = process.argv.slice(2).some((arg) => /^--funds-only$/i.test(arg));
+const cryptosCsvPath = pathArg("cryptos-csv", "../cryptos.csv");
+const fundsOnly = hasFlag("funds-only");
+const cryptoOnly = hasFlag("crypto-only");
+const skipCrypto = hasFlag("no-crypto") || fundsOnly;
+const skipEquities = cryptoOnly;
 
 // Naming tickers on the command line narrows a run down to those, which is
 // handy for checking one fund without waiting on the whole book.
@@ -310,61 +349,18 @@ async function fetchJson(url, what) {
   return answer.body;
 }
 
-// Everything tastytrade trades in shares comes down a page at a time, so the
-// offer is read whole instead of a search per ticker.
-//
-// Fixed income is left out on purpose. tastytrade does sell Treasuries, on a
-// screen of their own that `/instruments/fixed-income-securities` feeds, but the
-// offer is 49 bills of which six mature beyond six months, the smallest ticket
-// is ten bills of $1,000 face, and notes and bonds are bought by reading a CUSIP
-// to the trade desk rather than off any screen.
-const instruments = [];
-for (let offset = 0; offset < 100; offset += 1) {
-  const body = await fetchJson(
-    `https://api.tastytrade.com/instruments/equities/active?per-page=1000&page-offset=${offset}`,
-    `equity page ${offset}`
-  );
-  const items = body?.data?.items || [];
-  instruments.push(...items);
-
-  const totalPages = body?.pagination?.["total-pages"] || 0;
-  console.error(`  ${instruments.length} instruments read`);
-  if (items.length === 0 || offset + 1 >= totalPages) break;
+async function fetchJsonOrNull(url, what) {
+  try {
+    return await fetchJson(url, what);
+  } catch (error) {
+    console.error(String(error.message || error));
+    return null;
+  }
 }
 
-// Everything here is active by definition of the endpoint; what matters is
-// whether a position may still be opened in it.
-const open = instruments.filter(
-  (instrument) => instrument.active && !instrument["is-closing-only"]
-);
-console.error(
-  `${instruments.length} instruments offered, ${instruments.length - open.length} of them closing-only`
-);
-
-const funds = loadCsv(csvPath);
-const shares = fundsOnly ? { byTicker: new Map(), namesByIsin: new Map() } : loadCsv(stocksCsvPath);
-console.error(
-  `${funds.namesByIsin.size} funds and ${shares.namesByIsin.size} shares in the lists to match against`
-);
-
-// Which list an ISIN turns up in is what says whether a line is a fund or a
-// company, and it is a better witness than tastytrade's own `is-etf` flag: that
-// flag misses newly launched funds, and calls a closed-end fund a share.
-//
-// `bonds.csv` is deliberately not consulted. Six of its ISINs are also in the
-// share list, being perpetual preferred lines that the source files both ways --
-// Strategy's STRC and STRK, Strive's SATA, Brookfield's BEPH -- and they are
-// bought and sold as shares, on the equity book, so that is what they are called.
-function matchByIsin(instrument) {
-  for (const isin of candidateIsins(instrument)) {
-    if (funds.namesByIsin.has(isin)) {
-      return { isin, name: funds.namesByIsin.get(isin), type: "ETF" };
-    }
-    if (shares.namesByIsin.has(isin)) {
-      return { isin, name: shares.namesByIsin.get(isin), type: "STOCK" };
-    }
-  }
-  return null;
+const cryptoNames = skipCrypto ? new Map() : loadCryptoNames(cryptosCsvPath);
+if (!skipCrypto) {
+  console.error(`${cryptoNames.size} coins in the list to name crypto pairs against`);
 }
 
 const results = [];
@@ -373,59 +369,165 @@ let byCusip = 0;
 let byName = 0;
 let unmatched = 0;
 
-for (const instrument of open.sort((left, right) =>
-  String(left.symbol).localeCompare(String(right.symbol))
-)) {
-  const ticker = String(instrument.symbol || "").toUpperCase();
-  if (!ticker || seen.has(ticker)) continue;
-  if (onlyTickers.size > 0 && !onlyTickers.has(ticker)) continue;
+if (!skipEquities) {
+  // Everything tastytrade trades in shares comes down a page at a time, so the
+  // offer is read whole instead of a search per ticker.
+  //
+  // Fixed income is left out on purpose. tastytrade does sell Treasuries, on a
+  // screen of their own that `/instruments/fixed-income-securities` feeds, but the
+  // offer is 49 bills of which six mature beyond six months, the smallest ticket
+  // is ten bills of $1,000 face, and notes and bonds are bought by reading a CUSIP
+  // to the trade desk rather than off any screen.
+  const instruments = [];
+  for (let offset = 0; offset < 100; offset += 1) {
+    const body = await fetchJson(
+      `https://api.tastytrade.com/instruments/equities/active?per-page=1000&page-offset=${offset}`,
+      `equity page ${offset}`
+    );
+    const items = body?.data?.items || [];
+    instruments.push(...items);
 
-  const exchange = String(instrument["listed-market"] || "").toUpperCase();
-  const name = String(instrument.description || instrument["short-description"] || "")
-    .replace(/\s+/g, " ")
-    .trim();
-
-  // Failing the number, the name is asked of the list the flag points at, since
-  // there is nothing better to go on once the CUSIP has come up empty.
-  const isFund = Boolean(instrument["is-etf"]);
-  let candidate = matchByIsin(instrument);
-  if (candidate) {
-    byCusip += 1;
-  } else {
-    if (fundsOnly && !isFund) continue;
-    const book = isFund ? funds : shares;
-    const resolved = resolveByName(book.byTicker, { ticker, name, exchange }, { fund: isFund });
-    candidate = resolved ? { ...resolved, type: isFund ? "ETF" : "STOCK" } : null;
-    if (candidate) byName += 1;
+    const totalPages = body?.pagination?.["total-pages"] || 0;
+    console.error(`  ${instruments.length} instruments read`);
+    if (items.length === 0 || offset + 1 >= totalPages) break;
   }
 
-  if (!candidate) {
-    unmatched += 1;
-    continue;
-  }
-  if (fundsOnly && candidate.type !== "ETF") continue;
+  const open = instruments.filter(
+    (instrument) => instrument.active && !instrument["is-closing-only"]
+  );
+  console.error(
+    `${instruments.length} instruments offered, ${instruments.length - open.length} of them closing-only`
+  );
 
-  seen.add(ticker);
-  results.push({
-    query: ticker,
-    ticker,
-    name: name || candidate.name,
-    exchange: EXCHANGE_NAMES[exchange] || exchange || null,
-    // The active equities endpoint covers US venues only, so every line quotes
-    // in dollars.
-    currency: "USD",
-    type: candidate.type,
-    raw: [ticker, name, exchange].filter(Boolean).join(" "),
-    isin: candidate.isin,
-  });
+  const funds = loadCsv(csvPath);
+  const shares = fundsOnly ? { byTicker: new Map(), namesByIsin: new Map() } : loadCsv(stocksCsvPath);
+  console.error(
+    `${funds.namesByIsin.size} funds and ${shares.namesByIsin.size} shares in the lists to match against`
+  );
+
+  // Which list an ISIN turns up in is what says whether a line is a fund or a
+  // company, and it is a better witness than tastytrade's own `is-etf` flag: that
+  // flag misses newly launched funds, and calls a closed-end fund a share.
+  //
+  // `bonds.csv` is deliberately not consulted. Six of its ISINs are also in the
+  // share list, being perpetual preferred lines that the source files both ways --
+  // Strategy's STRC and STRK, Strive's SATA, Brookfield's BEPH -- and they are
+  // bought and sold as shares, on the equity book, so that is what they are called.
+  function matchByIsin(instrument) {
+    for (const isin of candidateIsins(instrument)) {
+      if (funds.namesByIsin.has(isin)) {
+        return { isin, name: funds.namesByIsin.get(isin), type: "ETF" };
+      }
+      if (shares.namesByIsin.has(isin)) {
+        return { isin, name: shares.namesByIsin.get(isin), type: "STOCK" };
+      }
+    }
+    return null;
+  }
+
+  for (const instrument of open.sort((left, right) =>
+    String(left.symbol).localeCompare(String(right.symbol))
+  )) {
+    const ticker = String(instrument.symbol || "").toUpperCase();
+    if (!ticker || seen.has(ticker)) continue;
+    if (onlyTickers.size > 0 && !onlyTickers.has(ticker)) continue;
+
+    const exchange = String(instrument["listed-market"] || "").toUpperCase();
+    const name = String(instrument.description || instrument["short-description"] || "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    const isFund = Boolean(instrument["is-etf"]);
+    let candidate = matchByIsin(instrument);
+    if (candidate) {
+      byCusip += 1;
+    } else {
+      if (fundsOnly && !isFund) continue;
+      const book = isFund ? funds : shares;
+      const resolved = resolveByName(book.byTicker, { ticker, name, exchange }, { fund: isFund });
+      candidate = resolved ? { ...resolved, type: isFund ? "ETF" : "STOCK" } : null;
+      if (candidate) byName += 1;
+    }
+
+    if (!candidate) {
+      unmatched += 1;
+      continue;
+    }
+    if (fundsOnly && candidate.type !== "ETF") continue;
+
+    seen.add(ticker);
+    results.push({
+      query: ticker,
+      ticker,
+      name: name || candidate.name,
+      exchange: EXCHANGE_NAMES[exchange] || exchange || null,
+      currency: "USD",
+      type: candidate.type,
+      raw: [ticker, name, exchange].filter(Boolean).join(" "),
+      isin: candidate.isin,
+    });
+  }
+}
+
+if (!skipCrypto) {
+  const body = await fetchJsonOrNull(
+    "https://api.tastytrade.com/instruments/cryptocurrencies",
+    "cryptocurrencies"
+  );
+  const coins = body?.data?.items || [];
+  const dealable = coins.filter((item) => item.active && !item["is-closing-only"]);
+  console.error(
+    `${coins.length} crypto pairs listed, ${coins.length - dealable.length} of them closing-only`
+  );
+
+  function cryptoWanted(symbol) {
+    if (onlyTickers.size === 0) return true;
+    const pair = String(symbol || "").toUpperCase();
+    const base = cryptoBase(pair);
+    return onlyTickers.has(pair) || onlyTickers.has(base);
+  }
+
+  let unnamed = 0;
+  for (const item of dealable
+    .filter((coin) => cryptoWanted(coin.symbol))
+    .sort((left, right) => String(left.symbol).localeCompare(String(right.symbol)))) {
+    const ticker = String(item.symbol).toUpperCase();
+    if (seen.has(ticker)) continue;
+
+    const base = cryptoBase(ticker);
+    const quote = cryptoQuote(ticker);
+    const listed = cryptoNames.get(base);
+    if (!listed) unnamed += 1;
+
+    const name = String(item["short-description"] || item.description || "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    seen.add(ticker);
+    results.push({
+      query: ticker,
+      ticker,
+      name: listed || name,
+      exchange: "CRYPTO",
+      currency: quote || "USD",
+      type: "CRYPTO",
+      raw: [ticker, name, base, quote].filter(Boolean).join(" "),
+      isin: null,
+    });
+  }
+
+  if (unnamed > 0) {
+    console.error(`${unnamed} pairs are named by tastytrade alone; their base coin is not in cryptos.csv`);
+  }
 }
 
 fs.writeFileSync(new URL("tastytrade-parsed.json", import.meta.url), JSON.stringify(results, null, 2));
 
 const matchedFunds = results.filter((row) => row.type === "ETF").length;
 const matchedShares = results.filter((row) => row.type === "STOCK").length;
+const matchedCrypto = results.filter((row) => row.type === "CRYPTO").length;
 console.error(
-  `${results.length} matched: ${matchedFunds} funds and ${matchedShares} shares. ` +
+  `${results.length} matched: ${matchedFunds} funds, ${matchedShares} shares and ${matchedCrypto} crypto. ` +
     `${byCusip} were named by their CUSIP and ${byName} by their wording; ${unmatched} are in neither list`
 );
 console.log(JSON.stringify(results, null, 2));

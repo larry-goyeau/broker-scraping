@@ -14,13 +14,21 @@ function normalizeTicker(value) {
   return (afterExchange || "").split(/[/]/)[0].trim();
 }
 
-// Century quotes American products as "EZA.EQ" and its foreign ones under a
-// house symbol carrying the market, "ISHARETECH.HK.EQ", which is no ticker at
-// all — only the plain two-part form is read as one.
+// Century names a product for the market it stands on: "EZA.EQ" in New York,
+// "GLCL.HK.EQ" in Hong Kong, "ALRAJHI.SA" in Riyadh. Only the American form
+// carries a ticker in the name; elsewhere the name is a house word and the
+// ticker has to come from the product's details.
 function symbolTicker(symbol) {
   const parts = (symbol || "").toUpperCase().split(".");
   if (parts.length !== 2 || parts[1] !== "EQ") return "";
   return /^[A-Z0-9]{1,6}$/.test(parts[0]) ? parts[0] : "";
+}
+
+// Every listed product stands on a market and says so in its name. What has no
+// market is Century's currency book, whose pairs are contracts for difference
+// on a rate: there is no security behind them and no ISIN to file them under.
+function isCurrencyPair(product) {
+  return !String(product.N || "").includes(".");
 }
 
 function toIsin(value) {
@@ -31,13 +39,14 @@ function toIsin(value) {
 }
 
 // Century names no venue, only the currency a product settles in, so the
-// currency is what says which listings in the CSV a product could be. Its
-// offer is American but for one Hong Kong fund; the rest is here so that a
-// European listing, were one added, could not be matched against an American
-// one that happens to share a ticker.
+// currency is what says which listings in the CSV a product could be. It deals
+// in New York, Hong Kong and Riyadh; the rest is here so that a European
+// listing, were one added, could not be matched against an American one that
+// happens to share a ticker.
 const CURRENCY_EXCHANGES = {
   USD: ["AMEX", "CBOE", "NASDAQ", "NYSE", "BATS", "ARCA"],
   HKD: ["HKEX"],
+  SAR: ["TADAWUL"],
   GBP: ["LSE"],
   GBX: ["LSE"],
   EUR: ["EURONEXT", "XETR", "MIL", "BME", "VIE", "LUXSE"],
@@ -51,13 +60,16 @@ const CURRENCY_EXCHANGES = {
 // One ISIN is often listed on several venues under differently worded names
 // ("SPDR S&P 500 ETF Trust" and "State Street SPDR S&P 500 ETF"), so every
 // spelling is kept and the closest one decides a match.
-function loadCsv(csvPath) {
-  const byTicker = new Map();
-  const rows = [];
-  if (!fs.existsSync(csvPath)) return { byTicker, rows };
+//
+// Century sells funds and shares out of one list and its own labelling is not
+// to be trusted with the difference — it files the Range Nuclear Renaissance
+// Index ETF under shares — so the catalogue a listing was read from is what
+// says which of the two it is, and the kind travels with the candidate.
+function loadCsv(csvPath, kind, index = { byTicker: new Map(), rows: [] }) {
+  if (!fs.existsSync(csvPath)) return index;
 
   for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
-    if (!line.trim()) continue;
+    if (!line.trim() || /^ticker\s*,/i.test(line)) continue;
 
     const columns = line.split(",");
     const ticker = normalizeTicker(columns[0]);
@@ -69,25 +81,31 @@ function loadCsv(csvPath) {
     const name = columns.slice(isinIndex + 1).join(",").trim();
     if (!name) continue;
 
-    rows.push({ ticker, isin, exchange, name });
+    index.rows.push({ ticker, isin, exchange, name, kind });
 
-    const candidates = byTicker.get(ticker) || [];
-    byTicker.set(ticker, candidates);
+    const candidates = index.byTicker.get(ticker) || [];
+    index.byTicker.set(ticker, candidates);
 
     const existing = candidates.find((candidate) => candidate.isin === isin);
     if (existing) {
       if (!existing.names.includes(name)) existing.names.push(name);
       if (exchange) existing.exchanges.add(exchange);
     } else {
-      candidates.push({ isin, names: [name], exchanges: new Set(exchange ? [exchange] : []) });
+      candidates.push({
+        isin,
+        kind,
+        names: [name],
+        exchanges: new Set(exchange ? [exchange] : []),
+      });
     }
   }
 
-  return { byTicker, rows };
+  return index;
 }
 
-// Legal-entity suffixes are shared by unrelated funds, so counting them would
-// let a same-ticker instrument pass for the one being looked up.
+// Legal-entity suffixes are shared by unrelated companies and funds, so
+// counting them would let a same-ticker instrument pass for the one being
+// looked up.
 const GENERIC_TOKENS = new Set([
   "LTD",
   "LIMITED",
@@ -110,12 +128,17 @@ function nameTokens(value) {
     .filter((token) => token.length > 1 && !GENERIC_TOKENS.has(token));
 }
 
-// Fund names are shortened inconsistently between sources ("Small Cap" against
-// "Small-Ca"), so tokens are compared by prefix rather than equality.
+// Names are shortened inconsistently between sources ("Small Cap" against
+// "Small-Ca"), so tokens are compared by prefix rather than equality. A prefix
+// of two or three letters is no evidence of a shortened word, though, and
+// reading it as one is how Tencent comes to answer to Ten Pao, AIA Group to
+// China AI Infrastructure, and Macy's to a fund whose name ends in "(MA)".
+const SHORTEST_PREFIX = 4;
+
 function tokensMatch(left, right) {
   if (left === right) return true;
   const [shorter, longer] = left.length <= right.length ? [left, right] : [right, left];
-  return shorter.length >= 2 && longer.startsWith(shorter);
+  return shorter.length >= SHORTEST_PREFIX && longer.startsWith(shorter);
 }
 
 function nameScore(scrapedName, candidateName) {
@@ -135,8 +158,8 @@ function nameScore(scrapedName, candidateName) {
     }
   }
 
-  // Dividing by the longer name keeps a terser wording from outscoring the fund
-  // actually named just by leaving words out.
+  // Dividing by the longer name keeps a terser wording from outscoring the
+  // instrument actually named just by leaving words out.
   return matched / Math.max(scraped.length, candidate.length);
 }
 
@@ -156,10 +179,8 @@ function allowedExchanges(currency) {
   return CURRENCY_EXCHANGES[(currency || "").toUpperCase()] || null;
 }
 
-// Century's shares and its funds sit in one list and its own labelling is not
-// to be trusted with the difference — it files the Energy Select Sector SPDR
-// Fund under shares — so the CSV decides what counts as a fund and a product
-// is kept only when a listing there answers to both its ticker and its name.
+// A product is kept only when a listing in one of the catalogues answers to
+// both its ticker and its name.
 function resolveByTicker(byTicker, product) {
   const candidates = byTicker.get(product.ticker) || [];
   if (candidates.length === 0) return null;
@@ -172,28 +193,30 @@ function resolveByTicker(byTicker, product) {
 
   const scored = local.map((candidate) => ({
     isin: candidate.isin,
+    kind: candidate.kind,
     ...scoreCandidate(product.name, candidate),
   }));
 
-  // American tickers belong to one instrument apiece, so a ticker Century
-  // quotes that names a single US fund is that fund however the two sources
-  // word it — Century writes SOXX as "iShares Semiconductor ETF" where the CSV
-  // still calls it "iShares PHLX SOX Semiconductor Sector Index Fund".
+  // A ticker on one market belongs to one instrument apiece, so a ticker
+  // Century quotes that names a single listing is that listing however the two
+  // sources word it — Century writes SOXX as "iShares Semiconductor ETF" where
+  // the CSV still calls it "iShares PHLX SOX Semiconductor Sector Index Fund".
   if (scored.length === 1) return scored[0];
 
   const bestScore = Math.max(0, ...scored.map((candidate) => candidate.score));
   // Century lists American shares whose tickers are European funds' tickers
   // too — ESAB is a welding company here and an Irish bond fund there — so a
-  // ticker alone is never enough, the name has to agree as well.
+  // ticker alone is never enough, the name has to agree as well. The same
+  // question decides whether a ticker is the fund or the share that shares it.
   if (bestScore < MIN_NAME_SCORE) return null;
 
   const shortlist = scored.filter((candidate) => candidate.score === bestScore);
-  // Still tied: the name does not tell these share classes apart.
+  // Still tied: the name does not tell these listings apart.
   return shortlist.length === 1 ? shortlist[0] : null;
 }
 
 // Every word of the shorter name has to appear in the longer one. Scoring
-// alone is too forgiving where fund names differ by a single word: iShares MSCI
+// alone is too forgiving where names differ by a single word: iShares MSCI
 // South Africa and iShares MSCI South Korea share four words out of five.
 function nameCovers(scrapedName, candidateName) {
   const scraped = nameTokens(scrapedName);
@@ -201,19 +224,25 @@ function nameCovers(scrapedName, candidateName) {
   if (scraped.length === 0 || candidate.length === 0) return false;
 
   const used = new Set();
-  return scraped.every((token) => {
+  let exact = 0;
+  const covered = scraped.every((token) => {
     const index = candidate.findIndex(
       (other, position) => !used.has(position) && tokensMatch(token, other)
     );
     if (index < 0) return false;
+    if (candidate[index] === token) exact += 1;
     used.add(index);
     return true;
   });
+
+  // A name of one word carried by a prefix alone identifies nothing: it is how
+  // PlayAGS comes to answer to the Tuttle Capital Pure Play Photonics ETF.
+  return covered && (scraped.length > 1 || exact > 0);
 }
 
-// A handful of products, the Hong Kong fund among them, are quoted under a
-// house symbol with no ticker attached, so the name alone has to find them
-// among the listings the product's currency allows.
+// Some products are quoted under a house word with no ticker attached — two of
+// the Saudi shares among them — so the name alone has to find them among the
+// listings the product's currency allows.
 function resolveByName(rows, product) {
   const venues = allowedExchanges(product.currency);
   if (!venues) return null;
@@ -225,10 +254,15 @@ function resolveByName(rows, product) {
     if (!covering.some((found) => found.isin === row.isin)) covering.push(row);
   }
 
-  // Either nothing is named that way or several funds are, and with no ticker
-  // to separate them there is nothing left to choose on.
+  // Either nothing is named that way or several instruments are, and with no
+  // ticker to separate them there is nothing left to choose on.
   if (covering.length !== 1) return null;
-  return { isin: covering[0].isin, name: covering[0].name, ticker: covering[0].ticker };
+  return {
+    isin: covering[0].isin,
+    kind: covering[0].kind,
+    name: covering[0].name,
+    ticker: covering[0].ticker,
+  };
 }
 
 const browser = await puppeteer.connect({
@@ -258,23 +292,45 @@ const startIndex = (() => {
 })();
 const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
 
-// `--csv=PATH` overrides the default ETF list CSV (defaults to etfs.csv).
-const csvPath = (() => {
+function pathArg(flag, fallback) {
   for (const arg of process.argv.slice(2)) {
-    const match = arg.match(/^--csv=(.+)$/i);
+    const match = arg.match(new RegExp(`^--${flag}=(.+)$`, "i"));
     if (match) return match[1];
   }
-  return new URL("../etfs.csv", import.meta.url);
-})();
+  return new URL(fallback, import.meta.url);
+}
 
-const { byTicker, rows: csvRows } = loadCsv(csvPath);
+function hasFlag(name) {
+  return process.argv.slice(2).some((arg) => new RegExp(`^--${name}$`, "i").test(arg));
+}
+
+// `--csv=PATH` overrides the fund list (defaults to etfs.csv) and
+// `--stocks-csv=PATH` the share list (defaults to stocks.csv). `--etfs-only`
+// and `--stocks-only` answer for one shelf alone, which is also how a product
+// matched in both catalogues can be made to declare itself.
+const csvPath = pathArg("csv", "../etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
+const etfsOnly = hasFlag("etfs-only") || hasFlag("funds-only");
+const stocksOnly = hasFlag("stocks-only");
+
+// The funds are read first so that an ISIN both catalogues happen to carry is
+// remembered as the fund it is.
+const catalogues = { byTicker: new Map(), rows: [] };
+if (!stocksOnly) loadCsv(csvPath, "ETF", catalogues);
+if (!etfsOnly) loadCsv(stocksCsvPath, "STOCK", catalogues);
+const { byTicker, rows: csvRows } = catalogues;
+console.error(`${byTicker.size} tickers across the catalogues`);
+
 const onlyTickers = new Set(positionalArgs.map(normalizeTicker).filter(Boolean));
 
 const outputPath = new URL("century-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 
-if (startIndex > 1 && fs.existsSync(outputPath)) {
+// A run that began by emptying the file would throw away a run before it that
+// the session cut short. What is already listed is read back and kept, and
+// `--fresh` is how a run says it means to start the file over.
+if (!hasFlag("fresh") && fs.existsSync(outputPath)) {
   try {
     const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
     if (Array.isArray(existing)) {
@@ -380,7 +436,9 @@ if (!Array.isArray(catalogue) || catalogue.length === 0) {
 }
 console.error(`${catalogue.length} products quoted`);
 
+const currencyPairs = catalogue.filter(isCurrencyPair).length;
 const universe = catalogue.filter((product) => {
+  if (isCurrencyPair(product)) return false;
   if (onlyTickers.size === 0) return true;
   const ticker = (product.I || symbolTicker(product.N) || "").toUpperCase();
   return onlyTickers.has(ticker);
@@ -405,6 +463,8 @@ console.error(`${Object.keys(details).length} of them described in full`);
 
 let refused = 0;
 let missing = 0;
+let unmatched = 0;
+const unmatchedNames = [];
 
 for (const [index, product] of universe.entries()) {
   if (index + 1 < startIndex) continue;
@@ -418,23 +478,33 @@ for (const [index, product] of universe.entries()) {
 
   // "CLOSE ONLY" is the platform refusing to open a position in a product: it
   // can be sold if already held but not bought, so it is not on offer. "LONG
-  // ONLY" is no such bar — it only forbids shorting, which is how a fund is
-  // bought anyway.
+  // ONLY" is no such bar — it only forbids shorting, which is how a share or a
+  // fund is bought anyway, and it is what all of Riyadh trades under.
   if ((detail.TradeMode || "").toUpperCase().includes("CLOSE")) {
     refused += 1;
     continue;
   }
 
+  const wording = (detail.Description || product.D || "").replace(/\s+/g, " ").trim();
   const candidate = {
     ticker: (detail.International || product.I || symbolTicker(product.N) || "").toUpperCase(),
-    name: (detail.Description || product.D || "").replace(/\s+/g, " ").trim(),
+    // Century marks its Hong Kong lines by tacking "(HK)" onto the company's
+    // name, which is a fact about the venue rather than a word in the name.
+    name: wording.replace(/\s*\(HK\)$/i, "").trim(),
     currency: detail.Currency || "",
   };
 
-  const match = candidate.ticker
-    ? resolveByTicker(byTicker, candidate)
-    : resolveByName(csvRows, candidate);
-  if (!match) continue;
+  // Where the ticker leads nowhere it is usually not a ticker at all: Century
+  // quotes Tencent as "TCNT" and Hang Seng Bank as "HNGSNGBK", house words for
+  // listings the exchange numbers 700 and 11. The name is the way back in.
+  const match =
+    (candidate.ticker ? resolveByTicker(byTicker, candidate) : null) ||
+    resolveByName(csvRows, candidate);
+  if (!match) {
+    unmatched += 1;
+    if (unmatchedNames.length < 40) unmatchedNames.push(`${product.N} (${candidate.name})`);
+    continue;
+  }
 
   seen.add(product.N);
   results.push({
@@ -442,7 +512,7 @@ for (const [index, product] of universe.entries()) {
     ticker: candidate.ticker || match.ticker || "",
     name: candidate.name || match.name,
     currency: candidate.currency || null,
-    type: "ETF",
+    type: match.kind,
     raw: [product.N, candidate.name, candidate.currency].filter(Boolean).join(" "),
     isin: match.isin,
   });
@@ -450,7 +520,15 @@ for (const [index, product] of universe.entries()) {
 
 fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 
-console.error(`${results.length} funds matched, ${refused} close-only skipped${missing ? `, ${missing} undescribed` : ""}`);
+const byType = new Map();
+for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);
+
+console.error(
+  `${results.length} listed (${[...byType].map(([type, count]) => `${count} ${type}`).join(", ")})` +
+    `, ${refused} close-only skipped, ${currencyPairs} currency pairs left out` +
+    (missing ? `, ${missing} undescribed` : "") +
+    (unmatched ? `, ${unmatched} not in the catalogues: ${unmatchedNames.join(", ")}` : "")
+);
 console.log(JSON.stringify(results, null, 2));
 
 await browser.disconnect();

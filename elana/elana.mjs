@@ -3,6 +3,10 @@ import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+function normalize(value) {
+  return (value || "").replace(/\s+/g, " ").trim();
+}
+
 function toIsin(value) {
   const text = (value || "").trim().toUpperCase();
   if (!text) return "";
@@ -10,61 +14,188 @@ function toIsin(value) {
   return match ? match[0] : "";
 }
 
-function loadIsinsFromCsv(csvPath) {
-  if (!fs.existsSync(csvPath)) return [];
+// Supports both ticker,isin,name and ticker,exchange,isin,name.
+function loadCsv(csvPath, kind, index = new Map()) {
+  if (!fs.existsSync(csvPath)) return index;
 
-  const isins = [];
   for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
-    if (!line.trim()) continue;
+    if (!line.trim() || /^ticker\s*,/i.test(line)) continue;
+
     const columns = line.split(",");
-    // Supports both ticker,isin,name and ticker,exchange,isin,name.
     const isin = toIsin(columns[2]) || toIsin(columns[1]) || columns.map(toIsin).find(Boolean);
-    if (isin) isins.push(isin);
+    if (isin && !index.has(isin)) index.set(isin, kind);
   }
-  return isins;
+  return index;
 }
 
-function uniqueQueries(values) {
-  const seen = new Set();
-  return values.filter((value) => {
-    if (seen.has(value)) return false;
-    seen.add(value);
-    return true;
-  });
+function pathArg(flag, fallback) {
+  for (const arg of process.argv.slice(2)) {
+    const match = arg.match(new RegExp(`^--${flag}=(.+)$`, "i"));
+    if (match) return match[1];
+  }
+  return new URL(fallback, import.meta.url);
 }
 
-// The platform names a listing by the market's MIC; the CSV names the same
-// markets its own way.
-const EXCHANGE_NAMES = {
+function hasFlag(name) {
+  return process.argv.slice(2).some((arg) => new RegExp(`^--${name}$`, "i").test(arg));
+}
+
+// `--csv=PATH` overrides the fund list (defaults to etfs.csv), `--stocks-csv=PATH`
+// the share list and `--bonds-csv=PATH` the bond list. `--etfs-only`,
+// `--stocks-only` and `--bonds-only` answer for one shelf alone.
+const etfsCsvPath = pathArg("csv", "../etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
+const bondsCsvPath = pathArg("bonds-csv", "../bonds.csv");
+const etfsOnly = hasFlag("etfs-only") || hasFlag("funds-only");
+const stocksOnly = hasFlag("stocks-only");
+const bondsOnly = hasFlag("bonds-only");
+// Everything Elana quotes, and not only what the catalogues happen to carry.
+const keepUnlisted = hasFlag("all");
+
+const wantEtfs = !stocksOnly && !bondsOnly;
+const wantStocks = !etfsOnly && !bondsOnly;
+const wantBonds = !etfsOnly && !stocksOnly;
+
+// Funds are read first so an ISIN two catalogues happen to carry is remembered
+// as the fund it is. There is no coin list to read: Elana's own book holds no
+// crypto — what it quotes of bitcoin is an ETN, which the fund catalogue carries.
+const catalogue = new Map();
+if (wantEtfs) loadCsv(etfsCsvPath, "ETF", catalogue);
+if (wantStocks) loadCsv(stocksCsvPath, "STOCK", catalogue);
+if (wantBonds) loadCsv(bondsCsvPath, "BND", catalogue);
+
+const onlyIsins = new Set(
+  process.argv
+    .slice(2)
+    .filter((arg) => !arg.startsWith("--"))
+    .map(toIsin)
+    .filter(Boolean)
+);
+
+// What Elana calls a shelf, in the platform's own words, and what this repo
+// calls the same thing. MutualFund is asked for nowhere because the account is
+// offered none, and the index and CFD types are not instruments to own: the
+// index is a number and the CFD a contract quoted on the same line as the share.
+const SHELVES = [
+  { want: wantEtfs, types: ["Etf", "Etc", "Etn", "Fund"] },
+  { want: wantStocks, types: ["Stock"] },
+  { want: wantBonds, types: ["Bond"] },
+];
+
+const TYPES = {
+  STOCK: "STOCK",
+  BOND: "BND",
+  ETF: "ETF",
+  ETC: "ETC",
+  ETN: "ETN",
+  FUND: "FUND",
+};
+
+// Saxo, whose platform this is, names a venue with an id of its own, and those
+// ids cannot be passed on as they stand: "SSE" is Stockholm here and Shanghai
+// in the catalogues, and the OTC books are filed under the American exchange
+// whose MIC their symbols carry. So every venue is named here or not at all.
+const EXCHANGES = {
+  AMEX: "AMEX",
+  NYSE: "NYSE",
+  NYSE_ARCA: "AMEX",
+  NASDAQ: "NASDAQ",
+  NSC: "NASDAQ",
+  BATS_BZX: "CBOE",
+  // Elana quotes American over-the-counter shares under a Nasdaq MIC, which is
+  // the venue they report to rather than the venue they trade on.
+  OOTC: "OTC",
+  OOTC_NI: "OTC",
+  AMS: "EURONEXT",
+  AMS_MC_ETF: "EURONEXT",
+  AMS_BONDS: "EURONEXT",
+  BRU: "EURONEXT",
+  BRU_BONDS: "EURONEXT",
+  EGB: "EURONEXT",
+  PAR: "EURONEXT",
+  PAR_MC_ETF: "EURONEXT",
+  PAR_BONDS: "EURONEXT",
+  EGP: "EURONEXT",
+  LISB: "EURONEXT",
+  LISB_BONDS: "EURONEXT",
+  ISE: "EURONEXT",
+  EGD: "EURONEXT",
+  OSE: "OSL",
+  EGO: "OSL",
+  FSE: "XETR",
+  XETR_ETF: "XETR",
+  // The Frankfurt floor is not Xetra, though a listing on it carries a German
+  // MIC either way.
+  FFT: "FWB",
+  LSE_SETS: "LSE",
+  LSE_SEAQ: "LSE",
+  LSE_ETF: "LSE",
+  LSE_INTL: "LSIN",
+  MIL: "MIL",
+  MIL_ETF: "MIL",
+  // Borsa Italiana's bond markets, which are the exchange itself.
+  MOT: "MIL",
+  EUROMOT: "MIL",
+  EUROTLX: "EUROTLX",
+  EUROTLX_INT: "EUROTLX",
+  SWX: "SIX",
+  SWX_ETF: "SIX",
+  SWX_BND_ETF: "SIX",
+  VX: "SIX",
+  SIBE: "BME",
+  VIE: "VIE",
+  HKEX: "HKEX",
+  HSE: "OMXHEX",
+  CSE: "OMXCOP",
+  CSE_BONDS: "OMXCOP",
+  SSE: "OMXSTO",
+  "SSE_FN-SE": "OMXSTO",
+  LUX_BONDS: "LUXSE",
+  LUX_MTF: "LUXSE",
+};
+
+// A venue Elana adds tomorrow will be unnamed above, and the MIC its symbols
+// carry is the second chance at naming it.
+const MICS = {
+  xase: "AMEX",
+  arcx: "AMEX",
+  bats: "CBOE",
+  xnas: "NASDAQ",
+  xnys: "NYSE",
   xams: "EURONEXT",
   xbru: "EURONEXT",
   xdub: "EURONEXT",
   xlis: "EURONEXT",
   xpar: "EURONEXT",
-  xosl: "EURONEXT",
+  xosl: "OSL",
   xetr: "XETR",
-  xfra: "XETR",
+  xfra: "FWB",
   xlon: "LSE",
   xmil: "MIL",
   xswx: "SIX",
   xvtx: "SIX",
+  xmce: "BME",
   xwbo: "VIE",
-  xmad: "BME",
+  xhkg: "HKEX",
   xhel: "OMXHEX",
   xcse: "OMXCOP",
-  xsto: "OMXSTO",
+  xome: "OMXSTO",
   xlux: "LUXSE",
-  xwar: "GPW",
-  xnas: "NASDAQ",
-  xnys: "NYSE",
-  arcx: "AMEX",
-  bats: "CBOE",
-  xasx: "ASX",
-  xtse: "TSX",
-  xhkg: "HKEX",
-  xses: "SGX",
-  xtks: "TSE",
 };
+
+// Saxo deals bonds off its own desk as well as on the exchanges, and those
+// desks are books rather than venues: "US_CP_IG" is where American investment
+// grade paper is quoted, not a place it is listed. Such a book keeps Elana's
+// own name for it, as there is no exchange to give instead.
+function exchangeOf(row) {
+  const exchangeId = row.ExchangeId || "";
+  if (EXCHANGES[exchangeId]) return EXCHANGES[exchangeId];
+
+  const mic = (row.Symbol || "").split(":")[1];
+  if (mic && MICS[mic.toLowerCase()]) return MICS[mic.toLowerCase()];
+
+  return exchangeId.toUpperCase() || null;
+}
 
 const browser = await puppeteer.connect({
   browserURL: "http://127.0.0.1:9222",
@@ -82,54 +213,14 @@ if (!page.url().includes("webtrader.elana.net")) {
 }
 await page.bringToFront();
 
-// `--start=N` (1-indexed) lets a run resume from a specific ISIN without
-// throwing away progress already saved to elana-parsed.json.
-const startIndex = (() => {
-  for (const arg of process.argv.slice(2)) {
-    const match = arg.match(/^--start=(\d+)$/i);
-    if (match) return Math.max(1, parseInt(match[1], 10));
-  }
-  return 1;
-})();
-const resume = process.argv.slice(2).some((arg) => /^--resume$/i.test(arg));
-const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
-
-// `--csv=PATH` overrides the default ETF list CSV (defaults to etfs.csv).
-const csvPath = (() => {
-  for (const arg of process.argv.slice(2)) {
-    const match = arg.match(/^--csv=(.+)$/i);
-    if (match) return match[1];
-  }
-  return new URL("../etfs.csv", import.meta.url);
-})();
-
-const cliQueries = positionalArgs.map(toIsin).filter(Boolean);
-const queries = uniqueQueries(cliQueries.length > 0 ? cliQueries : loadIsinsFromCsv(csvPath));
-
-const outputPath = new URL("elana-parsed.json", import.meta.url);
-const results = [];
-const seen = new Set();
-
-if ((resume || startIndex > 1) && fs.existsSync(outputPath)) {
-  try {
-    const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
-    if (Array.isArray(existing)) {
-      for (const entry of existing) {
-        results.push(entry);
-        if (entry?.raw) seen.add(entry.raw.split(" ")[0].toUpperCase());
-      }
-    }
-  } catch {
-    // Ignore malformed prior output and start fresh.
-  }
-}
-
 const INSTRUMENTS_URL = "https://webtrader.elana.net/openapi/ref/v1/instruments/";
 
 // Elana runs Saxo's platform, whose reference data the web trader reads over
 // an API it signs with a token it rotates on its own. Reading that token off
-// the app's traffic keeps the script in step with the rotation, and the client
-// key travels with it because the search refuses to answer without one.
+// the app's traffic keeps the script in step with the rotation. The client key
+// is read along with it because the app sends one, but the shelf answers the
+// same without it, down to which listings it will not sell: what is refused
+// below is refused of Elana's book rather than of this account.
 const session = { token: null, clientKey: null };
 const client = await page.createCDPSession();
 await client.send("Network.enable");
@@ -145,8 +236,16 @@ client.on("Network.requestWillBeSent", (event) => {
   if (key) session.clientKey = key;
 });
 
-// The app only signs a request when it has something to ask, so the search box
-// is given something to look up.
+// The app signs nothing while it sits idle, so a page left open will not hand
+// a token over however long it is watched. What it always does is fetch its own
+// start-up data, which is why the page is reloaded rather than merely listened
+// to — and why a stale token is replaced the same way.
+async function reload() {
+  await page.reload({ waitUntil: "domcontentloaded" }).catch(() => {});
+}
+
+// The other way to make the app sign a request is to give it something to look
+// up, for the reload that somehow signs nothing.
 async function nudge() {
   const input = await page
     .waitForSelector('input[placeholder*="Instrument search" i], input[placeholder*="search" i]', {
@@ -161,19 +260,22 @@ async function nudge() {
   return true;
 }
 
-async function captureSession() {
-  for (let attempt = 0; attempt < 3; attempt += 1) {
-    if (session.token && session.clientKey) return true;
-    await nudge();
+async function captureSession(stale = null) {
+  const signed = () => session.token && session.token !== stale;
 
-    for (let waited = 0; waited < 20000; waited += 250) {
-      if (session.token && session.clientKey) return true;
-      await sleep(250);
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    for (const prod of [reload, nudge]) {
+      await prod();
+
+      for (let waited = 0; waited < 15000; waited += 250) {
+        if (signed() && session.clientKey) return true;
+        await sleep(250);
+      }
     }
-    await page.reload({ waitUntil: "domcontentloaded" }).catch(() => {});
-    await sleep(5000);
   }
-  return false;
+
+  // Nothing here rests on the key, so a run is not abandoned for want of one.
+  return signed();
 }
 
 if (!(await captureSession())) {
@@ -181,161 +283,157 @@ if (!(await captureSession())) {
 }
 console.error("session captured");
 
-const CONCURRENCY = 10;
-const BATCH_SIZE = 200;
+// A thousand is as many as the endpoint will hand over at once.
+const PAGE_SIZE = 1000;
 
-// Asking for the tradable info tells apart what is merely listed from what
-// this account may actually buy.
-function lookup(isins) {
+async function fetchPage(assetType, skip) {
   return page.evaluate(
-    async (url, token, clientKey, terms, workers) => {
-      const answers = new Array(terms.length);
-      let next = 0;
+    async (url, token, clientKey, type, offset, limit) => {
+      const query = new URLSearchParams({
+        $top: String(limit),
+        $skip: String(offset),
+        AssetTypes: type,
+        // Everything on the shelf is asked for and the untradable sorted out
+        // here, so that a line that cannot be bought is left out on the
+        // platform's own word rather than on a flag being honoured.
+        includeNonTradable: "true",
+        fieldGroups: "TradableInfo",
+      });
+      if (clientKey) query.set("ClientKey", clientKey);
 
-      const run = async () => {
-        while (next < terms.length) {
-          const index = next;
-          next += 1;
-
-          const query = new URLSearchParams({
-            $top: "100",
-            $skip: "0",
-            AssetTypes: "Etf,Etc,Etn",
-            keywords: terms[index],
-            ClientKey: clientKey,
-            // Everything listed is asked for and the untradable sorted out
-            // here, so that a fund this account cannot buy is left out on the
-            // platform's own word rather than on a flag being honoured.
-            includeNonTradable: "true",
-            fieldGroups: "TradableInfo",
-          });
-
-          try {
-            const response = await fetch(`${url}?${query}`, {
-              headers: { Authorization: token, Accept: "application/json" },
-            });
-            if (!response.ok) {
-              answers[index] = { status: response.status };
-              continue;
-            }
-            const payload = await response.json();
-            answers[index] = { status: 200, data: payload?.Data || [] };
-          } catch (error) {
-            answers[index] = { status: 0, error: String(error) };
-          }
-        }
-      };
-
-      await Promise.all(Array.from({ length: workers }, run));
-      return answers;
+      try {
+        const response = await fetch(`${url}?${query}`, {
+          headers: { Authorization: token, Accept: "application/json" },
+        });
+        if (!response.ok) return { status: response.status };
+        const payload = await response.json();
+        return { status: 200, data: payload?.Data || [] };
+      } catch (error) {
+        return { status: 0, error: String(error) };
+      }
     },
     INSTRUMENTS_URL,
     session.token,
     session.clientKey,
-    isins,
-    CONCURRENCY
+    assetType,
+    skip,
+    PAGE_SIZE
   );
 }
 
-// The token lasts minutes rather than hours. The app renews it on its own, so
-// a refusal is answered by waiting for the replacement to appear on the wire.
-async function refreshToken(stale) {
-  for (let attempt = 0; attempt < 3; attempt += 1) {
-    await nudge();
-    for (let waited = 0; waited < 20000; waited += 250) {
-      if (session.token && session.token !== stale) return true;
-      await sleep(250);
+// Drop the keywords and the search endpoint enumerates the whole shelf, which
+// is how the run avoids a lookup per ISIN: the catalogues name a hundred and
+// twelve thousand instruments, Elana quotes twenty thousand, and reading its
+// own list costs twenty-odd calls rather than a hundred and twelve thousand.
+// Nothing is lost by it — searched for one at a time, the platform offers no
+// listing its list does not already carry.
+async function enumerate(assetType) {
+  const rows = [];
+
+  for (let skip = 0; ; skip += PAGE_SIZE) {
+    let answer = await fetchPage(assetType, skip);
+
+    // The token lasts minutes rather than hours, so a refusal part-way through
+    // is answered by reading the app's next one rather than by giving up.
+    if (answer.status === 401) {
+      await captureSession(session.token);
+      answer = await fetchPage(assetType, skip);
     }
-    await page.reload({ waitUntil: "domcontentloaded" }).catch(() => {});
-    await sleep(5000);
-  }
-  return false;
-}
-
-function save() {
-  fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
-}
-
-let refused = 0;
-const failures = [];
-
-function collect(isin, rows) {
-  for (const row of rows) {
-    // Keyword search matches more than the identifier, so the fund asked for
-    // is the one whose identifier comes back.
-    if ((row?.Isin || "").toUpperCase() !== isin) continue;
-    if ((row.TradingStatus || "") !== "Tradable") {
-      refused += 1;
-      continue;
+    if (answer.status !== 200) {
+      throw new Error(
+        `Elana stopped handing over its ${assetType} list (HTTP ${answer.status}). Is the web trader still signed in?`
+      );
     }
 
-    const symbol = row.Symbol || "";
-    const [ticker, mic] = symbol.split(":");
-    if (!ticker) continue;
-
-    const key = symbol.toUpperCase();
-    if (seen.has(key)) continue;
-    seen.add(key);
-
-    results.push({
-      query: isin,
-      ticker: ticker.toUpperCase(),
-      name: (row.Description || "").replace(/\s+/g, " ").trim(),
-      exchange: EXCHANGE_NAMES[(mic || "").toLowerCase()] || (mic || "").toLowerCase() || null,
-      currency: (row.CurrencyCode || "").toUpperCase() || null,
-      type: (row.AssetType || "ETF").toUpperCase(),
-      raw: [symbol, row.Description, row.ExchangeName, row.CurrencyCode].filter(Boolean).join(" "),
-      isin,
-    });
+    rows.push(...answer.data);
+    if (answer.data.length < PAGE_SIZE) break;
   }
+
+  return rows;
 }
 
-async function handle(batch) {
-  let answers = await lookup(batch).catch(() => null);
+const results = [];
+const seen = new Set();
+const refused = new Map();
+let unlisted = 0;
 
-  // A token that expired mid-batch costs the whole batch, and a fresh one is
-  // cheaper than asking for all of it twice.
-  if (!answers || answers.some((answer) => answer?.status === 401)) {
-    await refreshToken(session.token);
-    answers = (await lookup(batch).catch(() => null)) || answers;
-  }
+for (const shelf of SHELVES) {
+  if (!shelf.want) continue;
 
-  for (const [index, isin] of batch.entries()) {
-    const answer = (answers || [])[index];
-    if (answer?.status !== 200) {
-      failures.push(isin);
-      continue;
+  for (const assetType of shelf.types) {
+    const rows = await enumerate(assetType);
+
+    let kept = 0;
+    for (const row of rows) {
+      const isin = toIsin(row.Isin);
+      if (!isin) continue;
+      if (onlyIsins.size > 0 && !onlyIsins.has(isin)) continue;
+
+      // The catalogues are the shared list of instruments this repo asks every
+      // broker about; what Elana quotes beyond them is left out unless asked for.
+      const kind = catalogue.get(isin);
+      if (!kind && !keepUnlisted) {
+        unlisted += 1;
+        continue;
+      }
+
+      // "ReduceOnly" is the platform refusing to open a position: the line can
+      // be sold if already held but not bought, so it is not on offer. Bonds
+      // marked "OfflineTradableBonds" are dealt over the telephone rather than
+      // on the platform, which is the same answer to anyone using it.
+      const status = row.TradingStatus || "";
+      if (status !== "Tradable") {
+        const reason = row.NonTradableReason && row.NonTradableReason !== "None"
+          ? row.NonTradableReason
+          : status || "unstated";
+        refused.set(reason, (refused.get(reason) || 0) + 1);
+        continue;
+      }
+
+      // A listing is named "<ticker>:<mic>" — "SPYY:xetr" — except a bond,
+      // which is named for the borrower and the coupon and has no ticker.
+      const symbol = row.Symbol || "";
+      const ticker = (symbol.split(":")[0] || "").toUpperCase();
+      if (!ticker) continue;
+
+      // The platform's own key for a listing, so one read twice is kept once.
+      const key = String(row.Identifier || `${symbol}:${isin}`);
+      if (seen.has(key)) continue;
+      seen.add(key);
+
+      results.push({
+        query: isin,
+        ticker,
+        name: normalize(row.Description),
+        exchange: exchangeOf(row),
+        currency: (row.CurrencyCode || "").toUpperCase() || null,
+        type: TYPES[(row.AssetType || "").toUpperCase()] || (row.AssetType || "").toUpperCase(),
+        raw: [symbol, row.Description, row.ExchangeName, row.CurrencyCode].filter(Boolean).join(" "),
+        isin,
+      });
+      kept += 1;
     }
-    collect(isin, answer.data || []);
+
+    console.error(`${assetType}: ${rows.length} quoted, ${kept} on offer`);
   }
 }
 
-for (let offset = 0; offset < queries.length; offset += BATCH_SIZE) {
-  const batch = queries.slice(offset, offset + BATCH_SIZE).filter((isin, index) => offset + index + 1 >= startIndex);
-  if (batch.length === 0) continue;
+// Written once, at the end. The whole shelf is read on every run, so there is
+// nothing to resume, and a sweep the session cut short must not be left in
+// place of a whole one.
+const outputPath = new URL("elana-parsed.json", import.meta.url);
+fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 
-  await handle(batch);
-  save();
-  console.error(
-    `[${Math.min(offset + BATCH_SIZE, queries.length)}/${queries.length}] ${results.length} listings, ${failures.length} to retry`
-  );
-}
+const byType = new Map();
+for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);
 
-// A call that never answered says nothing about the fund, so it is asked again
-// rather than being taken for an absence.
-if (failures.length > 0) {
-  console.error(`${failures.length} lookups failed, asking again`);
-  const retries = failures.splice(0, failures.length);
-  await refreshToken(session.token);
-  for (let offset = 0; offset < retries.length; offset += BATCH_SIZE) {
-    await handle(retries.slice(offset, offset + BATCH_SIZE));
-    save();
-  }
-}
-
-save();
 console.error(
-  `${results.length} tradable listings across ${new Set(results.map((entry) => entry.isin)).size} funds, ${refused} listings not tradable`
+  `${results.length} listings over ${new Set(results.map((row) => row.isin)).size} instruments ` +
+    `(${[...byType].map(([type, count]) => `${count} ${type}`).join(", ")})` +
+    (refused.size
+      ? `, ${[...refused].map(([reason, count]) => `${count} ${reason}`).join(", ")}`
+      : "") +
+    (unlisted ? `, ${unlisted} the catalogues do not carry` : "")
 );
 console.log(JSON.stringify(results, null, 2));
 

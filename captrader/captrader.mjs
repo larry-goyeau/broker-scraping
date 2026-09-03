@@ -26,14 +26,18 @@ function loadTickersFromCsv(csvPath) {
   return fs
     .readFileSync(csvPath, "utf8")
     .split(/\r?\n/)
+    .filter((line) => !/^ticker\s*,/i.test(line))
     .map((line) => normalizeTicker(line))
     .filter(Boolean);
 }
 
-function loadTickerCandidatesFromCsv(csvPath) {
-  if (!fs.existsSync(csvPath)) return new Map();
+// Funds and shares are both plain stock contracts on IBKR, which never says
+// which of the two it is quoting. The catalogue a ticker was read from is the
+// only thing that knows, so the kind is carried alongside the candidate and
+// the winning candidate is what types the row.
+function loadTickerCandidatesFromCsv(csvPath, kind, map = new Map()) {
+  if (!fs.existsSync(csvPath)) return map;
 
-  const map = new Map();
   for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
     if (!line.trim()) continue;
 
@@ -45,6 +49,7 @@ function loadTickerCandidatesFromCsv(csvPath) {
     const candidate = {
       isin: toIsin(columns[isinIndex]),
       name: columns.slice(isinIndex + 1).join(",").trim(),
+      kind,
     };
     const candidates = map.get(ticker) || [];
     if (!candidates.some((existing) => existing.isin === candidate.isin)) {
@@ -113,20 +118,20 @@ function nameScore(scrapedName, candidateName) {
 // CSV's ISIN when its name genuinely matches.
 const MIN_NAME_SCORE = 0.5;
 
-function resolveIsin(tickerCandidates, ticker, scrapedName) {
+function resolveListing(tickerCandidates, ticker, scrapedName) {
   const candidates = tickerCandidates.get(ticker) || [];
 
-  let bestIsin = null;
+  let best = null;
   let bestScore = 0;
   for (const candidate of candidates) {
     const score = nameScore(scrapedName, candidate.name);
     if (score > bestScore) {
       bestScore = score;
-      bestIsin = candidate.isin;
+      best = candidate;
     }
   }
 
-  return bestScore >= MIN_NAME_SCORE ? bestIsin : null;
+  return bestScore >= MIN_NAME_SCORE ? best : null;
 }
 
 function uniqueQueries(values) {
@@ -174,17 +179,37 @@ const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--
 const defaultQueries = ["GLD", "EWY", "IUUS"];
 const cliQueries = positionalArgs.map(normalizeTicker).filter(Boolean);
 
-// `--csv=PATH` overrides the default ETF list CSV (defaults to etfs.csv).
-const csvPath = (() => {
+function pathArg(flag, fallback) {
   for (const arg of process.argv.slice(2)) {
-    const match = arg.match(/^--csv=(.+)$/i);
+    const match = arg.match(new RegExp(`^--${flag}=(.+)$`, "i"));
     if (match) return match[1];
   }
-  return new URL("../etfs.csv", import.meta.url);
-})();
+  return new URL(fallback, import.meta.url);
+}
 
-const csvQueries = loadTickersFromCsv(csvPath);
-const tickerCandidates = loadTickerCandidatesFromCsv(csvPath);
+function hasFlag(name) {
+  return process.argv.slice(2).some((arg) => new RegExp(`^--${name}$`, "i").test(arg));
+}
+
+// `--csv=PATH` overrides the fund list (defaults to etfs.csv) and
+// `--stocks-csv=PATH` the share list (defaults to stocks.csv). CapTrader
+// introduces the account onto IBKR, so it sells the whole IBKR book: the funds
+// and the shares are the same kind of contract behind the same search.
+// `--etfs-only` and `--stocks-only` answer for one shelf alone, which is what
+// makes a walk of a catalogue this size resumable in parts.
+const csvPath = pathArg("csv", "../etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
+const etfsOnly = hasFlag("etfs-only") || hasFlag("funds-only");
+const stocksOnly = hasFlag("stocks-only");
+
+const tickerCandidates = new Map();
+if (!stocksOnly) loadTickerCandidatesFromCsv(csvPath, "ETF", tickerCandidates);
+if (!etfsOnly) loadTickerCandidatesFromCsv(stocksCsvPath, "STOCK", tickerCandidates);
+
+const csvQueries = [
+  ...(stocksOnly ? [] : loadTickersFromCsv(csvPath)),
+  ...(etfsOnly ? [] : loadTickersFromCsv(stocksCsvPath)),
+];
 const rawQueries =
   cliQueries.length > 0
     ? cliQueries
@@ -200,8 +225,11 @@ const seen = new Set();
 const entryKey = (query, row) =>
   `${query}:${row.ticker}:${row.exchange}:${row.name}`.toUpperCase();
 
-// When resuming, load already-saved entries so earlier progress is preserved.
-if (startIndex > 1 && fs.existsSync(outputPath)) {
+// A walk this long is run in stretches, and a stretch that began by emptying
+// the file would throw away every stretch before it. What is already listed is
+// read back and kept, and the dedup set below is what stops it being listed
+// twice; `--fresh` is how a run says it means to start the file over.
+if (!hasFlag("fresh") && fs.existsSync(outputPath)) {
   try {
     const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
     if (Array.isArray(existing)) {
@@ -217,26 +245,54 @@ if (startIndex > 1 && fs.existsSync(outputPath)) {
 
 const API = "/portal.proxy/v1/portal";
 
-async function api(path, options = {}) {
+function callInPage(path, options) {
   return page.evaluate(
     async (base, p, opts) => {
-      const response = await fetch(`${base}/${p}`, {
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        method: opts.method || "GET",
-        body: opts.body || undefined,
-      });
-      const text = await response.text();
       try {
-        return { status: response.status, json: JSON.parse(text) };
-      } catch {
-        return { status: response.status, error: text.slice(0, 200) };
+        const response = await fetch(`${base}/${p}`, {
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          method: opts.method || "GET",
+          body: opts.body || undefined,
+        });
+        const text = await response.text();
+        try {
+          return { status: response.status, json: JSON.parse(text) };
+        } catch {
+          return { status: response.status, error: text.slice(0, 200) };
+        }
+      } catch (error) {
+        return { error: String(error) };
       }
     },
     API,
     path,
     options
   );
+}
+
+// The portal reloads itself every so often, and a reload destroys the context
+// the call was made from. A walk of a catalogue this size would otherwise end
+// on the first one, tens of thousands of tickers short, so the call is simply
+// made again against the new document.
+async function api(path, options = {}) {
+  for (let attempt = 0; ; attempt += 1) {
+    try {
+      return await callInPage(path, options);
+    } catch (error) {
+      if (attempt >= 4) return { error: String(error) };
+
+      await sleep(1000);
+      // A reload that lands somewhere other than the portal takes the session
+      // with it, so the portal is asked for again before retrying.
+      if (!page.url().includes("clientam.com")) {
+        await page
+          .goto("https://www.clientam.com/portal/", { waitUntil: "domcontentloaded" })
+          .catch(() => {});
+        await sleep(5000);
+      }
+    }
+  }
 }
 
 // Keeps the Client Portal bridge awake; without it, later calls start failing.
@@ -264,6 +320,51 @@ async function readInfo(conid) {
   return answer.json && !answer.json.error ? answer.json : null;
 }
 
+const RESTRICTED_NOTICE =
+  /KID|Trading Restricted|not available|cannot be traded|Retail clients can trade packaged/i;
+
+// A US-domiciled fund publishes no KID, and PRIIPs leaves European retail
+// clients unable to buy one; only a US resident can. IBKR quotes those
+// listings all the same and admits it in one place only: field 7183, the
+// order-ticket notice. 7184 alone says nothing, since tradable UCITS listings
+// come back with 7184=1 too.
+//
+// A snapshot answers empty until the subscription warms up, so it has to be
+// asked repeatedly. Every listing behind one ticker is asked for at once,
+// which keeps the waiting to once per query rather than once per listing.
+async function tradingRestricted(conids) {
+  const pending = new Set(conids.filter(Boolean));
+  const status = new Map();
+
+  for (let attempt = 0; attempt < 10 && pending.size > 0; attempt += 1) {
+    const answer = await api(
+      `iserver/marketdata/snapshot?conids=${[...pending].join(",")}&fields=6509,7183,7184,31`
+    );
+
+    for (const row of Array.isArray(answer.json) ? answer.json : []) {
+      const conid = String(row?.conid ?? "");
+      if (!pending.has(conid)) continue;
+
+      const notice = (row["7183"] || "").toString();
+      if (notice) {
+        status.set(conid, RESTRICTED_NOTICE.test(notice));
+        pending.delete(conid);
+      } else if (row["31"] !== undefined || row["6509"] !== undefined) {
+        // A price, or mere availability, without a notice means it settled.
+        status.set(conid, false);
+        pending.delete(conid);
+      }
+    }
+
+    if (pending.size > 0) await sleep(300);
+  }
+
+  // A listing the snapshot never settled on is left unflagged rather than
+  // guessed at: the flag is a fact about the notice, not about its absence.
+  for (const conid of pending) status.set(conid, false);
+  return status;
+}
+
 async function scrapeRowsForQuery(query) {
   let payload = await searchSymbol(query);
   if (!payload) payload = await searchSymbol(query);
@@ -274,6 +375,8 @@ async function scrapeRowsForQuery(query) {
     .filter((entry) =>
       (entry.sections || []).some((section) => section?.secType === "STK")
     );
+
+  const restrictions = await tradingRestricted(hits.map((entry) => String(entry.conid)));
 
   const rows = [];
   for (const entry of hits) {
@@ -295,8 +398,8 @@ async function scrapeRowsForQuery(query) {
       name,
       exchange,
       currency: info.currency || null,
-      type: "ETF",
       raw: heading,
+      restricted: restrictions.get(String(entry.conid)) === true,
     });
   }
 
@@ -312,24 +415,43 @@ for (const [queryIndex, query] of queries.entries()) {
 
   const rows = await scrapeRowsForQuery(query);
   for (const row of rows) {
-    const isin = resolveIsin(tickerCandidates, query, row.name);
-    // Same ticker, different company: not the fund we asked about.
-    if (!isin) continue;
+    const listing = resolveListing(tickerCandidates, query, row.name);
+    // Same ticker, different company: not the instrument we asked about.
+    if (!listing) continue;
 
     const key = entryKey(query, row);
     if (seen.has(key)) continue;
     seen.add(key);
 
-    results.push({
+    const entry = {
       query,
-      ...row,
-      isin,
-    });
+      ticker: row.ticker,
+      name: row.name,
+      exchange: row.exchange,
+      currency: row.currency,
+      type: listing.kind,
+      raw: row.raw,
+      isin: listing.isin,
+    };
+    if (row.restricted) entry.usResidentsOnly = true;
+    results.push(entry);
   }
 
   fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 }
 
+const byType = new Map();
+let usOnly = 0;
+for (const row of results) {
+  byType.set(row.type, (byType.get(row.type) || 0) + 1);
+  if (row.usResidentsOnly) usOnly += 1;
+}
+console.error(
+  `${results.length} listed (${[...byType].map(([type, count]) => `${count} ${type}`).join(", ")})`
+);
+if (usOnly > 0) {
+  console.error(`${usOnly} of them are US-residents only (no KID for European retail)`);
+}
 console.log(JSON.stringify(results, null, 2));
 
 await browser.disconnect();

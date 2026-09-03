@@ -19,11 +19,24 @@ function toIsin(value) {
   return match ? match[0] : "";
 }
 
-// Legal-entity and fund-wrapper words are shared by unrelated funds, so
-// counting them would let any two ETFs look alike.
+function pathArg(flag, fallback) {
+  for (const arg of process.argv.slice(2)) {
+    const match = arg.match(new RegExp(`^--${flag}=(.+)$`, "i"));
+    if (match) return match[1];
+  }
+  return new URL(fallback, import.meta.url);
+}
+
+function hasFlag(name) {
+  return process.argv.slice(2).some((arg) => new RegExp(`^--${name}$`, "i").test(arg));
+}
+
+// Legal-entity and fund-wrapper words are shared by unrelated listings, so
+// counting them would let any two names look alike.
 const GENERIC_TOKENS = new Set([
   "UCITS", "ETF", "ETC", "THE", "FUND", "FUNDS", "SHARES", "CLASS", "ACC", "DIST",
   "PLC", "ICAV", "LTD", "LIMITED", "SECURITIES", "INDEX",
+  "INC", "CORP", "CORPORATION", "LLC", "GMBH", "AG", "SA", "NV", "SE", "ASA", "CO",
 ]);
 
 function nameTokens(value) {
@@ -99,6 +112,23 @@ function loadCsv(csvPath) {
   return { rows, byTicker, byToken };
 }
 
+// A crypto line has no ISIN, so it cannot go through the share loader. The
+// file is `ticker,exchange,isin,name` with the number left blank; the name is
+// what we want, keyed on the coin (BTC), not on a pair.
+function loadCryptoNames(csvPath) {
+  const names = new Map();
+  if (!fs.existsSync(csvPath)) return names;
+
+  for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
+    if (!line.trim() || /^ticker,/i.test(line)) continue;
+    const columns = line.split(",");
+    const ticker = String(columns[0] || "").trim().toUpperCase();
+    const name = columns.slice(3).join(",").trim() || String(columns[1] || "").trim();
+    if (ticker && name && !names.has(ticker)) names.set(ticker, name);
+  }
+  return names;
+}
+
 // For a fund whose ticker the CSV files under another venue's symbol, the
 // wording is the only way back in. Rows sharing rare words with the name are
 // gathered through the index so the whole file needn't be scored.
@@ -106,7 +136,7 @@ function candidatesByName(csv, tokens) {
   const shared = new Map();
   for (const token of new Set(tokens)) {
     const holders = csv.byToken.get(token) || [];
-    // A word found all over the file says nothing about which fund this is.
+    // A word found all over the file says nothing about which listing this is.
     if (holders.length > 400) continue;
     for (const index of holders) shared.set(index, (shared.get(index) || 0) + 1);
   }
@@ -118,22 +148,37 @@ function candidatesByName(csv, tokens) {
     .map(([index]) => csv.rows[index]);
 }
 
-// `--csv=PATH` overrides the default ETF list CSV (defaults to etfs.csv).
-const csvPath = (() => {
-  for (const arg of process.argv.slice(2)) {
-    const match = arg.match(/^--csv=(.+)$/i);
-    if (match) return match[1];
-  }
-  return new URL("../etfs.csv", import.meta.url);
-})();
+function listedType(asset) {
+  if (asset.__typename === "EquityEtcAsset") return "ETC";
+  if (asset.__typename === "EquityStockAsset") return "STOCK";
+  if (asset.__typename === "CryptoAsset") return "CRYPTO";
+  return "ETF";
+}
 
-// Naming ISINs on the command line narrows a run down to those.
-const onlyIsins = new Set(
-  process.argv
-    .slice(2)
-    .filter((arg) => !arg.startsWith("--"))
-    .map(toIsin)
-    .filter(Boolean)
+// `--csv=PATH` the fund list (defaults to etfs.csv), `--stocks-csv=PATH` the
+// share list (defaults to stocks.csv) and `--cryptos-csv=PATH` the coin list
+// (defaults to cryptos.csv). Bitpanda shelves funds, commodity notes, shares
+// and coins as four GraphQL facets of the same book. `--funds-only` /
+// `--etfs-only` answer for the funds and notes; `--stocks-only` for the
+// shares; `--no-crypto` leaves the coins out; `--crypto-only` answers for
+// the coins alone.
+const csvPath = pathArg("csv", "../etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
+const cryptosCsvPath = pathArg("cryptos-csv", "../cryptos.csv");
+const fundsOnly = hasFlag("funds-only") || hasFlag("etfs-only");
+const stocksOnly = hasFlag("stocks-only");
+const cryptoOnly = hasFlag("crypto-only");
+const skipCrypto = hasFlag("no-crypto") || fundsOnly || stocksOnly;
+const skipFunds = stocksOnly || cryptoOnly;
+const skipStocks = fundsOnly || cryptoOnly;
+
+// Naming ISINs on the command line narrows a run down to those. A ticker
+// without an ISIN does the same for a coin, or for a share whose number is
+// not yet known.
+const positional = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
+const onlyIsins = new Set(positional.map(toIsin).filter(Boolean));
+const onlyTickers = new Set(
+  positional.map(normalizeTicker).filter((ticker) => ticker && !toIsin(ticker))
 );
 
 const browser = await puppeteer.connect({
@@ -254,15 +299,16 @@ async function graphql(query, variables) {
   throw new Error(`Bitpanda answered ${lastStatus} five times over.`);
 }
 
-// Both shapes are asked for at once so the same document serves funds and the
-// commodity notes that sit beside them.
+// Each shape is asked for at once so the same document serves funds, notes,
+// shares and coins.
 const ASSET_FIELDS = `
   pid
   name
   symbol
   __typename
   ... on EquityEtfAsset { wkn issuer legalName exchange { name } }
-  ... on EquityEtcAsset { wkn issuer legalName exchange { name } }`;
+  ... on EquityEtcAsset { wkn issuer legalName exchange { name } }
+  ... on EquityStockAsset { wkn legalName exchange { name } }`;
 
 const LIST_QUERY = `query AssetList($facets: [FacetOptionInput!], $first: Int, $after: String) {
   assets(
@@ -290,7 +336,7 @@ async function loadShelf(facet) {
   const nodes = [];
   let after = null;
 
-  for (let round = 0; round < 100; round += 1) {
+  for (let round = 0; round < 150; round += 1) {
     const data = await graphql(LIST_QUERY, {
       facets: [{ key: "ASSET_FILTER_OPTION", values: [facet] }],
       first: 100,
@@ -307,9 +353,10 @@ async function loadShelf(facet) {
 }
 
 // Bitpanda's own search reads ISINs, so an identifier can be put to it and the
-// answer compared against the fund in hand. That turns a likeness of names
+// answer compared against the listing in hand. That turns a likeness of names
 // into a plain yes or no, which matters where a ticker covers several share
-// classes.
+// classes. Shares do not carry an ISIN on the object itself; the search is
+// how the number is recovered.
 async function confirmIsin(asset, candidates) {
   for (const candidate of candidates) {
     const data = await graphql(SEARCH_QUERY, { query: candidate.isin, first: 5 });
@@ -333,17 +380,34 @@ async function inParallel(items, width, worker) {
   await Promise.all(runners);
 }
 
-const csv = loadCsv(csvPath);
-console.error(`${csv.rows.length} listings in the CSV`);
+const fundsCsv = skipFunds ? { rows: [], byTicker: new Map(), byToken: new Map() } : loadCsv(csvPath);
+const stocksCsv = skipStocks ? { rows: [], byTicker: new Map(), byToken: new Map() } : loadCsv(stocksCsvPath);
+const cryptoNames = skipCrypto ? new Map() : loadCryptoNames(cryptosCsvPath);
 
-const shelf = [];
-for (const facet of ["ETF", "COMMODITY"]) {
+if (!skipFunds) console.error(`${fundsCsv.rows.length} funds in the CSV`);
+if (!skipStocks) console.error(`${stocksCsv.rows.length} shares in the CSV`);
+if (!skipCrypto) console.error(`${cryptoNames.size} coins in the list to name crypto against`);
+
+const listed = [];
+const coins = [];
+const facets = [];
+if (!skipFunds) facets.push("ETF", "COMMODITY");
+if (!skipStocks) facets.push("STOCK");
+if (!skipCrypto) facets.push("CRYPTO");
+
+for (const facet of facets) {
   const nodes = await loadShelf(facet);
   console.error(`${nodes.length} instruments under ${facet}`);
-  shelf.push(...nodes);
+  if (facet === "CRYPTO") coins.push(...nodes);
+  else listed.push(...nodes);
 }
 
-// Where a ticker names one fund and the wording agrees, the CSV has already
+const wantedTicker = (symbol) => {
+  if (onlyTickers.size === 0) return true;
+  return onlyTickers.has(String(symbol || "").toUpperCase());
+};
+
+// Where a ticker names one listing and the wording agrees, the CSV has already
 // answered and there is nothing to ask. Everything else — share classes
 // sharing a ticker, wordings too far apart, tickers the CSV files under
 // another venue's symbol — is put to Bitpanda, which keeps the questions in
@@ -357,8 +421,12 @@ let unmatched = 0;
 let asked = 0;
 let done = 0;
 
-await inParallel(shelf, 3, async (asset) => {
+const toMatch = listed.filter((asset) => wantedTicker(asset.symbol));
+
+await inParallel(toMatch, 3, async (asset) => {
   const ticker = String(asset.symbol || "").toUpperCase();
+  const kind = listedType(asset);
+  const csv = kind === "STOCK" ? stocksCsv : fundsCsv;
   const wording = `${asset.legalName || ""} ${asset.name || ""}`;
   const tokens = nameTokens(wording);
 
@@ -371,7 +439,7 @@ await inParallel(shelf, 3, async (asset) => {
     .map((row) => ({ ...row, score: nameScore(tokens, row.tokens) }))
     .sort((left, right) => right.score - left.score);
 
-  // Several venues file one fund under one ISIN, and asking twice is a waste.
+  // Several venues file one security under one ISIN, and asking twice is a waste.
   const seenIsins = new Set();
   const distinct = candidates.filter((row) => {
     if (seenIsins.has(row.isin)) return false;
@@ -390,7 +458,7 @@ await inParallel(shelf, 3, async (asset) => {
       : null;
 
   done += 1;
-  if (done % 250 === 0) console.error(`  ${done}/${shelf.length} settled, ${asked} put to Bitpanda`);
+  if (done % 250 === 0) console.error(`  ${done}/${toMatch.length} settled, ${asked} put to Bitpanda`);
 
   if (!found) {
     unmatched += 1;
@@ -405,21 +473,56 @@ await inParallel(shelf, 3, async (asset) => {
     ticker,
     name,
     exchange: (asset.exchange?.name || "").toUpperCase() || null,
-    // The whole shelf is quoted on Quotrix in euros, which is also the currency
-    // the API is asked for.
+    // The listed book is quoted on Quotrix in euros, which is also the
+    // currency the API is asked for.
     currency: "EUR",
-    type: asset.__typename === "EquityEtcAsset" ? "ETC" : "ETF",
+    type: kind,
     raw: [asset.name, ticker, asset.wkn, asset.issuer].filter(Boolean).join(" "),
     isin: found.isin,
   });
 });
 
-results.sort((left, right) => left.ticker.localeCompare(right.ticker));
+let unnamedCrypto = 0;
+for (const asset of coins) {
+  const ticker = String(asset.symbol || "").toUpperCase();
+  if (!ticker || !wantedTicker(ticker)) continue;
+  if (claimed.has(`CRYPTO:${ticker}`)) continue;
+
+  const listedName = cryptoNames.get(ticker);
+  if (!listedName) unnamedCrypto += 1;
+
+  const name = String(listedName || asset.name || "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  claimed.add(`CRYPTO:${ticker}`);
+  results.push({
+    query: ticker,
+    ticker,
+    name,
+    exchange: "CRYPTO",
+    currency: "EUR",
+    type: "CRYPTO",
+    raw: [asset.name, ticker].filter(Boolean).join(" "),
+    // A coin is not a security: there is no ISIN to file it under.
+    isin: null,
+  });
+}
+
+if (unnamedCrypto > 0) {
+  console.error(`${unnamedCrypto} coins are named by Bitpanda alone; their ticker is not in cryptos.csv`);
+}
+
+results.sort((left, right) => left.ticker.localeCompare(right.ticker) || left.type.localeCompare(right.type));
 
 fs.writeFileSync(new URL("bitpanda-parsed.json", import.meta.url), JSON.stringify(results, null, 2));
 
+const byType = new Map();
+for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);
+
 console.error(
-  `${results.length} instruments matched, ${unmatched} the CSV does not carry ` +
+  `${results.length} instruments matched (${[...byType].map(([type, count]) => `${count} ${type}`).join(", ")}), ` +
+    `${unmatched} the CSV does not carry ` +
     `(${asked} put to Bitpanda, the rest settled on the CSV alone)`
 );
 console.log(JSON.stringify(results, null, 2));

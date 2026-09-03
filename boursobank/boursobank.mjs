@@ -41,6 +41,25 @@ function uniqueQueries(values) {
   });
 }
 
+function pathArg(flag, fallback) {
+  for (const arg of process.argv.slice(2)) {
+    const match = arg.match(new RegExp(`^--${flag}=(.+)$`, "i"));
+    if (match) return match[1];
+  }
+  return new URL(fallback, import.meta.url);
+}
+
+function hasFlag(name) {
+  return process.argv.slice(2).some((arg) => new RegExp(`^--${name}$`, "i").test(arg));
+}
+
+// The feed names a share `STK`; the catalogues already speak STOCK.
+function mapType(category) {
+  const text = (category || "").replace(/\s+/g, " ").trim().toUpperCase();
+  if (text === "STK") return "STOCK";
+  return text || "ETF";
+}
+
 const browser = await puppeteer.connect({
   browserURL: "http://127.0.0.1:9222",
   defaultViewport: null,
@@ -63,19 +82,24 @@ const startIndex = (() => {
 })();
 const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
 
-const defaultQueries = ["IE00B4L5Y983", "IE00B5BMR087", "FR0010315770"];
+const defaultQueries = ["IE00B4L5Y983", "US0378331005", "FR0000121014"];
 const cliQueries = positionalArgs.filter(Boolean).map(toIsin).filter(Boolean);
 
-// `--csv=PATH` overrides the default ETF list CSV (defaults to etfs.csv).
-const csvPath = (() => {
-  for (const arg of process.argv.slice(2)) {
-    const match = arg.match(/^--csv=(.+)$/i);
-    if (match) return match[1];
-  }
-  return new URL("../etfs.csv", import.meta.url);
-})();
+// `--csv=PATH` the fund list (defaults to etfs.csv) and `--stocks-csv=PATH`
+// the share list (defaults to stocks.csv). The trading board answers an ISIN
+// with every listing it quotes — funds, notes and shares on the same feed.
+// Spot crypto is quoted (CryptoCompare) but not tradable; BoursoBank sells
+// crypto only as listed ETNs, which already sit in the fund file.
+// `--funds-only` / `--etfs-only` answer for the funds; `--stocks-only` for
+// the shares.
+const csvPath = pathArg("csv", "../etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
+const fundsOnly = hasFlag("funds-only") || hasFlag("etfs-only");
+const stocksOnly = hasFlag("stocks-only");
 
-const csvQueries = loadIsinsFromCsv(csvPath);
+const fundQueries = stocksOnly ? [] : loadIsinsFromCsv(csvPath);
+const stockQueries = fundsOnly ? [] : loadIsinsFromCsv(stocksCsvPath);
+const csvQueries = [...fundQueries, ...stockQueries];
 const rawQueries =
   cliQueries.length > 0
     ? cliQueries
@@ -83,6 +107,14 @@ const rawQueries =
       ? csvQueries
       : defaultQueries;
 const queries = uniqueQueries(rawQueries);
+if (!cliQueries.length) {
+  const fundCount = uniqueQueries(fundQueries).length;
+  const shareCount = queries.length - fundCount;
+  console.error(
+    `${queries.length} ISINs to look up` +
+      (stocksOnly ? " (shares)" : fundsOnly ? " (funds)" : ` (${fundCount} funds, ${shareCount} shares)`)
+  );
+}
 
 const outputPath = new URL("boursobank-parsed.json", import.meta.url);
 const results = [];
@@ -206,6 +238,9 @@ function requestBatch(batchQueries) {
                 exchangeLabel: entry.exchangeLabel,
                 currency: entry.currency,
                 category: entry.category,
+                tradable: entry.tradable,
+                boursoramaTradable: entry.boursoramaTradable,
+                eligibilite: entry.eligibilite,
               })),
             };
           } catch (error) {
@@ -257,6 +292,17 @@ function parseInstrument(entry, query) {
   // matched, so anything else that comes back is not the instrument asked for.
   if (toIsin(entry?.isin) !== query) return null;
 
+  // The board quotes many tapes. The order ticket still answers
+  // "Cette valeur n'est pas disponible à l'achat" unless the listing is
+  // eligible on a retail account: `AVIELUX` on the eligibility list.
+  // `FR_TRADABLE` alone is not enough — the Amsterdam line of this UBS ETF
+  // carries it, and the ticket refuses the order. OPCVM rows never qualify.
+  const exchange = normalize(entry?.exchangeLabel);
+  const tags = Array.isArray(entry?.eligibilite) ? entry.eligibilite : [];
+  if (entry?.tradable !== true || !tags.includes("AVIELUX")) return null;
+  if (!exchange || exchange === "OPCVM") return null;
+  if (String(entry?.category || "").toUpperCase() === "FND") return null;
+
   const ticker = normalize(entry?.code2).toUpperCase();
   const name = normalize(entry?.label);
   if (!ticker || !name) return null;
@@ -264,25 +310,15 @@ function parseInstrument(entry, query) {
   return {
     ticker,
     name,
-    exchange: normalize(entry?.exchangeLabel),
+    exchange,
     currency: normalize(entry?.currency).toUpperCase() || null,
-    type: normalize(entry?.category).toUpperCase() || "ETF",
-    raw: [name, entry?.symbol, ticker, normalize(entry?.exchangeLabel)]
-      .filter(Boolean)
-      .join(" "),
+    type: mapType(entry?.category),
+    raw: [name, entry?.symbol, ticker, exchange].filter(Boolean).join(" "),
   };
 }
 
-// Alongside the venue listings the feed returns the fund's reference quotes,
-// which repeat one ISIN across currencies under no exchange and with no ticker.
-// They only earn a place when nothing is listed on an exchange.
 function selectListings(instruments, query) {
-  const rows = instruments
-    .map((entry) => parseInstrument(entry, query))
-    .filter(Boolean);
-
-  const listed = rows.filter((row) => row.exchange && row.exchange !== "OPCVM");
-  return listed.length > 0 ? listed : rows;
+  return instruments.map((entry) => parseInstrument(entry, query)).filter(Boolean);
 }
 
 const pending = queries.slice(startIndex - 1);
@@ -314,5 +350,11 @@ for (let offset = 0; offset < pending.length; offset += BATCH_SIZE) {
 }
 
 console.log(JSON.stringify(results, null, 2));
+
+const byType = new Map();
+for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);
+console.error(
+  `${results.length} listings (${[...byType].map(([type, count]) => `${count} ${type}`).join(", ")})`
+);
 
 await browser.disconnect();

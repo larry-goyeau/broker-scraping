@@ -81,17 +81,38 @@ function pickTicker(entry) {
   return bestTicker(entry.tickers);
 }
 
-// `--csv=PATH` overrides the default ETF list CSV (defaults to etfs.csv).
-const csvPath = (() => {
+function pathArg(flag, fallback) {
   for (const arg of process.argv.slice(2)) {
-    const match = arg.match(/^--csv=(.+)$/i);
+    const match = arg.match(new RegExp(`^--${flag}=(.+)$`, "i"));
     if (match) return match[1];
   }
-  return new URL("../etfs.csv", import.meta.url);
-})();
+  return new URL(fallback, import.meta.url);
+}
 
-const csvIsins = loadIsinsFromCsv(csvPath);
-console.error(`${csvIsins.size} ISINs in the CSV`);
+function hasFlag(name) {
+  return process.argv.slice(2).some((arg) => new RegExp(`^--${name}$`, "i").test(arg));
+}
+
+function listedType(category) {
+  if (category === "STOCK") return "STOCK";
+  if (category === "ETF") return "ETF";
+  return "";
+}
+
+// `--csv=PATH` the fund list (defaults to etfs.csv) and `--stocks-csv=PATH`
+// the share list (defaults to stocks.csv). bunq's ginmon dump is the whole
+// book — funds and single names — in one answer; there is no spot crypto.
+// `--funds-only` / `--etfs-only` answer for the funds; `--stocks-only` for
+// the shares.
+const csvPath = pathArg("csv", "../etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
+const fundsOnly = hasFlag("funds-only") || hasFlag("etfs-only");
+const stocksOnly = hasFlag("stocks-only");
+
+const fundsIsins = stocksOnly ? new Map() : loadIsinsFromCsv(csvPath);
+const stocksIsins = fundsOnly ? new Map() : loadIsinsFromCsv(stocksCsvPath);
+if (!stocksOnly) console.error(`${fundsIsins.size} funds in the CSV`);
+if (!fundsOnly) console.error(`${stocksIsins.size} shares in the CSV`);
 
 const browser = await puppeteer.connect({
   browserURL: "http://127.0.0.1:9222",
@@ -191,45 +212,69 @@ if (instruments.length === 0) {
 }
 console.error(`${instruments.length} instruments in bunq's offering`);
 
-const etfs = instruments.filter((instrument) => instrument.category === "ETF");
-console.error(`${etfs.length} of them are ETFs`);
+const wantedIsins = new Set(
+  process.argv
+    .slice(2)
+    .filter((arg) => !arg.startsWith("--"))
+    .map(toIsin)
+    .filter(Boolean)
+);
 
 const outputPath = new URL("bunq-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 let offList = 0;
+let skippedKind = 0;
 
-for (const instrument of etfs) {
+for (const instrument of instruments) {
+  const kind = listedType(instrument.category);
+  if (!kind) {
+    skippedKind += 1;
+    continue;
+  }
+  if (fundsOnly && kind !== "ETF") continue;
+  if (stocksOnly && kind !== "STOCK") continue;
+
   const isin = toIsin(instrument.isin);
   if (!isin || seen.has(isin)) continue;
+  if (wantedIsins.size > 0 && !wantedIsins.has(isin)) continue;
 
-  // bunq's offering is funds and single stocks alike; the CSV is what says
-  // which ISIN is an ETF worth keeping.
-  const entry = csvIsins.get(isin);
+  const csv = kind === "STOCK" ? stocksIsins : fundsIsins;
+  const entry = csv.get(isin);
   if (!entry) {
     offList += 1;
     continue;
   }
 
   seen.add(isin);
-  // The platform shows a marketing name ("High Dividends Global"); the fund's
-  // registered name is carried alongside and reads closer to the CSV.
+  // The search box is a Fuse.js filter on `name` and `ticker` only — an ISIN
+  // typed there matches nothing. bunq leaves `ticker` blank, so the marketing
+  // name ("ING", "MSCI World") is the string that actually finds the line.
   const name = (instrument.legal_name || instrument.name || entry.names[0] || "").trim();
+  const query = String(instrument.name || name).trim();
   results.push({
-    query: isin,
+    query,
     ticker: pickTicker(entry),
     name,
     // bunq routes its orders to Xetra, which quotes in euros.
     currency: "EUR",
-    type: "ETF",
+    type: kind,
     raw: [instrument.name, instrument.legal_name, isin].filter(Boolean).join(" "),
     isin,
   });
 }
 
+results.sort((left, right) => left.ticker.localeCompare(right.ticker) || left.type.localeCompare(right.type));
+
 fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 
-console.error(`${results.length} funds matched, ${offList} ETFs not in the CSV`);
+const byType = new Map();
+for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);
+console.error(
+  `${results.length} matched (${[...byType].map(([type, count]) => `${count} ${type}`).join(", ")})` +
+    (offList ? `, ${offList} not in the CSV` : "") +
+    (skippedKind ? `, ${skippedKind} outside funds and shares` : "")
+);
 console.log(JSON.stringify(results, null, 2));
 
 await browser.disconnect();

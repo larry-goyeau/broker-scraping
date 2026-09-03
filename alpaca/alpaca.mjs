@@ -265,13 +265,11 @@ const startIndex = (() => {
 const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
 
 // `--csv=PATH` overrides the fund list (defaults to etfs.csv),
-// `--stocks-csv=PATH` the share list (defaults to stocks.csv),
-// `--bonds-csv=PATH` the listed-note list (defaults to bonds.csv) and
-// `--cryptos-csv=PATH` the coin list (defaults to cryptos.csv). Shares, funds
-// and notes come out of the one `us_equity` book; crypto is a second class on
-// the same endpoint. `--funds-only` answers for the funds alone; `--no-bonds`
-// and `--no-crypto` leave those books out; `--crypto-only` answers for the
-// pairs alone.
+// `--stocks-csv=PATH` the share list (defaults to stocks.csv) and
+// `--cryptos-csv=PATH` the coin list (defaults to cryptos.csv). Shares and
+// funds come out of the one `us_equity` book; crypto is a second class on
+// the same endpoint. `--funds-only` answers for the funds alone;
+// `--no-crypto` leaves coins out; `--crypto-only` answers for the pairs alone.
 function pathArg(flag, fallback) {
   for (const arg of process.argv.slice(2)) {
     const match = arg.match(new RegExp(`^--${flag}=(.+)$`, "i"));
@@ -286,17 +284,14 @@ function hasFlag(name) {
 
 const csvPath = pathArg("csv", "../etfs.csv");
 const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
-const bondsCsvPath = pathArg("bonds-csv", "../bonds.csv");
 const cryptosCsvPath = pathArg("cryptos-csv", "../cryptos.csv");
 const fundsOnly = hasFlag("funds-only");
 const cryptoOnly = hasFlag("crypto-only");
-const skipBonds = hasFlag("no-bonds") || fundsOnly || cryptoOnly;
 const skipCrypto = hasFlag("no-crypto") || fundsOnly;
 const skipEquities = cryptoOnly;
 
 const tickerCandidates = skipEquities ? new Map() : loadTickerCandidatesFromCsv(csvPath, "ETF");
 if (!fundsOnly && !skipEquities) loadTickerCandidatesFromCsv(stocksCsvPath, "STOCK", tickerCandidates);
-if (!skipBonds) loadTickerCandidatesFromCsv(bondsCsvPath, "BND", tickerCandidates);
 const cryptoNames = skipCrypto ? new Map() : loadCryptoNames(cryptosCsvPath);
 const onlyTickers = new Set(positionalArgs.map(normalizeTicker).filter(Boolean));
 const onlyPairs = new Set(
@@ -312,6 +307,7 @@ if (startIndex > 1 && fs.existsSync(outputPath)) {
     const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
     if (Array.isArray(existing)) {
       for (const entry of existing) {
+        if (entry?.type === "BND") continue;
         results.push(entry);
         if (entry?.query) seen.add(entry.query);
       }
@@ -463,7 +459,7 @@ if (!skipEquities) {
     }
 
     if (fundsOnly && candidate.kind !== "ETF") continue;
-    if (skipBonds && candidate.kind === "BND") continue;
+    if (candidate.kind === "BND") continue;
 
     seen.add(ticker);
     const row = {

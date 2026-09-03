@@ -49,11 +49,9 @@ function hasFlag(name) {
 
 const etfsCsvPath = pathArg("csv", "../etfs.csv");
 const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
-const bondsCsvPath = pathArg("bonds-csv", "../bonds.csv");
 const cryptosCsvPath = pathArg("cryptos-csv", "../cryptos.csv");
 const etfsOnly = hasFlag("etfs-only");
 const stocksOnly = hasFlag("stocks-only");
-const bondsOnly = hasFlag("bonds-only");
 const cryptoOnly = hasFlag("crypto-only") || hasFlag("cryptos-only");
 const fresh = hasFlag("fresh");
 const keepUnlisted = hasFlag("all");
@@ -62,16 +60,14 @@ const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--
 const cliIsins = new Set(positionalArgs.map(toIsin).filter(Boolean));
 
 // Funds are read first so an ISIN both catalogues happen to carry is remembered
-// as the fund it is. Bonds and crypto sit in their own files.
+// as the fund it is. Crypto sits in its own file.
 const catalogue = { byIsin: new Map(), byTicker: new Map() };
 const cryptoTickers = new Set();
-const wantEtfs = !stocksOnly && !bondsOnly && !cryptoOnly;
-const wantStocks = !etfsOnly && !bondsOnly && !cryptoOnly;
-const wantBonds = !etfsOnly && !stocksOnly && !cryptoOnly;
-const wantCrypto = !etfsOnly && !stocksOnly && !bondsOnly;
+const wantEtfs = !stocksOnly && !cryptoOnly;
+const wantStocks = !etfsOnly && !cryptoOnly;
+const wantCrypto = !etfsOnly && !stocksOnly;
 if (wantEtfs) loadCsv(etfsCsvPath, "ETF", catalogue);
 if (wantStocks) loadCsv(stocksCsvPath, "STOCK", catalogue);
-if (wantBonds) loadCsv(bondsCsvPath, "BND", catalogue);
 if (wantCrypto) {
   loadCsv(cryptosCsvPath, "CRYPTO", catalogue);
   // Coin tickers collide with share tickers (BTC, ETH), so crypto is matched
@@ -201,7 +197,7 @@ async function loadDictionary() {
 
 // The tracker search accepts a thousand rows; the stock search rejects anything
 // above a hundred.
-const PAGE_SIZE = { etfs: 1000, funds: 1000, bonds: 1000, stocks: 100, crypto: 100 };
+const PAGE_SIZE = { etfs: 1000, funds: 1000, stocks: 100, crypto: 100 };
 
 async function loadPaged(label, buildPath, pageSize = 1000) {
   const products = [];
@@ -216,7 +212,7 @@ async function loadPaged(label, buildPath, pageSize = 1000) {
   return products;
 }
 
-// Trackers, bonds and funds live on the v5 search. Stocks and crypto live on
+// Trackers and funds live on the v5 search. Stocks and crypto live on
 // the older productsearch service; stocks have to be asked for one country at
 // a time or the answer is truncated.
 async function loadShelf(exchanges, stockCountries) {
@@ -251,20 +247,6 @@ async function loadShelf(exchanges, stockCountries) {
         ))
       );
     }
-  }
-
-  if (wantBonds) {
-    console.error("bonds");
-    products.push(
-      ...(await loadPaged(
-        "bonds",
-        (offset, limit) =>
-          `/product_search/secure/v5/bonds?popularOnly=false&inputAggregateTypes=&inputAggregateValues=` +
-          `&searchText=&offset=${offset}&limit=${limit}&requireTotal=true` +
-          `&sortColumns=name&sortTypes=asc&${tail()}`,
-        PAGE_SIZE.bonds
-      ))
-    );
   }
 
   if (wantEtfs) {
@@ -304,7 +286,6 @@ const ETP_TYPES = { 1: "ETF", 3: "ETC", 4: "ETN" };
 const PRODUCT_TYPES = {
   STOCK: "STOCK",
   ETF: "ETF",
-  BOND: "BND",
   FUND: "FUND",
   CRYPTO: "CRYPTO",
 };
@@ -354,7 +335,7 @@ if (!fresh && fs.existsSync(outputPath)) {
   try {
     const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
     for (const entry of Array.isArray(existing) ? existing : []) {
-      if (!entry?.isin || !entry?.ticker) continue;
+      if (!entry?.isin || !entry?.ticker || entry.type === "BND") continue;
       if (seen.has(entryKey(entry))) continue;
       seen.add(entryKey(entry));
       results.push(entry);
@@ -369,6 +350,7 @@ let untradable = 0;
 let absent = 0;
 
 for (const product of shelf) {
+  if (String(product.productType || "").toUpperCase() === "BOND") continue;
   const isin = toIsin(product?.isin);
   if (!isin) continue;
 

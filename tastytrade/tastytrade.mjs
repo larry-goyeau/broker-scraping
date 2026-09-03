@@ -408,11 +408,6 @@ if (!skipEquities) {
   // Which list an ISIN turns up in is what says whether a line is a fund or a
   // company, and it is a better witness than tastytrade's own `is-etf` flag: that
   // flag misses newly launched funds, and calls a closed-end fund a share.
-  //
-  // `bonds.csv` is deliberately not consulted. Six of its ISINs are also in the
-  // share list, being perpetual preferred lines that the source files both ways --
-  // Strategy's STRC and STRK, Strive's SATA, Brookfield's BEPH -- and they are
-  // bought and sold as shares, on the equity book, so that is what they are called.
   function matchByIsin(instrument) {
     for (const isin of candidateIsins(instrument)) {
       if (funds.namesByIsin.has(isin)) {

@@ -40,21 +40,18 @@ function hasFlag(name) {
   return process.argv.slice(2).some((arg) => new RegExp(`^--${name}$`, "i").test(arg));
 }
 
-// `--csv=PATH` overrides the fund list (defaults to etfs.csv), `--stocks-csv=PATH`
-// the share list and `--bonds-csv=PATH` the bond list. `--etfs-only`,
-// `--stocks-only` and `--bonds-only` answer for one shelf alone.
+// `--csv=PATH` overrides the fund list (defaults to etfs.csv) and
+// `--stocks-csv=PATH` the share list. `--etfs-only` and `--stocks-only`
+// answer for one shelf alone.
 const etfsCsvPath = pathArg("csv", "../etfs.csv");
 const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
-const bondsCsvPath = pathArg("bonds-csv", "../bonds.csv");
 const etfsOnly = hasFlag("etfs-only") || hasFlag("funds-only");
 const stocksOnly = hasFlag("stocks-only");
-const bondsOnly = hasFlag("bonds-only");
 // Everything Elana quotes, and not only what the catalogues happen to carry.
 const keepUnlisted = hasFlag("all");
 
-const wantEtfs = !stocksOnly && !bondsOnly;
-const wantStocks = !etfsOnly && !bondsOnly;
-const wantBonds = !etfsOnly && !stocksOnly;
+const wantEtfs = !stocksOnly;
+const wantStocks = !etfsOnly;
 
 // Funds are read first so an ISIN two catalogues happen to carry is remembered
 // as the fund it is. There is no coin list to read: Elana's own book holds no
@@ -62,7 +59,6 @@ const wantBonds = !etfsOnly && !stocksOnly;
 const catalogue = new Map();
 if (wantEtfs) loadCsv(etfsCsvPath, "ETF", catalogue);
 if (wantStocks) loadCsv(stocksCsvPath, "STOCK", catalogue);
-if (wantBonds) loadCsv(bondsCsvPath, "BND", catalogue);
 
 const onlyIsins = new Set(
   process.argv
@@ -79,12 +75,10 @@ const onlyIsins = new Set(
 const SHELVES = [
   { want: wantEtfs, types: ["Etf", "Etc", "Etn", "Fund"] },
   { want: wantStocks, types: ["Stock"] },
-  { want: wantBonds, types: ["Bond"] },
 ];
 
 const TYPES = {
   STOCK: "STOCK",
-  BOND: "BND",
   ETF: "ETF",
   ETC: "ETC",
   ETN: "ETN",
@@ -183,10 +177,8 @@ const MICS = {
   xlux: "LUXSE",
 };
 
-// Saxo deals bonds off its own desk as well as on the exchanges, and those
-// desks are books rather than venues: "US_CP_IG" is where American investment
-// grade paper is quoted, not a place it is listed. Such a book keeps Elana's
-// own name for it, as there is no exchange to give instead.
+// Saxo names some books with ids of its own rather than an exchange MIC.
+// Those keep Elana's name, as there is no exchange to give instead.
 function exchangeOf(row) {
   const exchangeId = row.ExchangeId || "";
   if (EXCHANGES[exchangeId]) return EXCHANGES[exchangeId];
@@ -378,9 +370,7 @@ for (const shelf of SHELVES) {
       }
 
       // "ReduceOnly" is the platform refusing to open a position: the line can
-      // be sold if already held but not bought, so it is not on offer. Bonds
-      // marked "OfflineTradableBonds" are dealt over the telephone rather than
-      // on the platform, which is the same answer to anyone using it.
+      // be sold if already held but not bought, so it is not on offer.
       const status = row.TradingStatus || "";
       if (status !== "Tradable") {
         const reason = row.NonTradableReason && row.NonTradableReason !== "None"
@@ -390,8 +380,7 @@ for (const shelf of SHELVES) {
         continue;
       }
 
-      // A listing is named "<ticker>:<mic>" — "SPYY:xetr" — except a bond,
-      // which is named for the borrower and the coupon and has no ticker.
+      // A listing is named "<ticker>:<mic>" — "SPYY:xetr".
       const symbol = row.Symbol || "";
       const ticker = (symbol.split(":")[0] || "").toUpperCase();
       if (!ticker) continue;
@@ -401,13 +390,16 @@ for (const shelf of SHELVES) {
       if (seen.has(key)) continue;
       seen.add(key);
 
+      const type = TYPES[(row.AssetType || "").toUpperCase()] || (row.AssetType || "").toUpperCase();
+      if (type === "BND" || type === "BOND") continue;
+
       results.push({
         query: isin,
         ticker,
         name: normalize(row.Description),
         exchange: exchangeOf(row),
         currency: (row.CurrencyCode || "").toUpperCase() || null,
-        type: TYPES[(row.AssetType || "").toUpperCase()] || (row.AssetType || "").toUpperCase(),
+        type,
         raw: [symbol, row.Description, row.ExchangeName, row.CurrencyCode].filter(Boolean).join(" "),
         isin,
       });

@@ -3,8 +3,6 @@ import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// Bond tickers come back as numbers rather than text — 188 for the R188 — so
-// everything is put through String first.
 function normalize(value) {
   return String(value ?? "").replace(/\s+/g, " ").trim();
 }
@@ -117,11 +115,9 @@ function hasFlag(name) {
 
 const etfsCsvPath = pathArg("csv", "../etfs.csv");
 const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
-const bondsCsvPath = pathArg("bonds-csv", "../bonds.csv");
 const cryptosCsvPath = pathArg("cryptos-csv", "../cryptos.csv");
 const etfsOnly = hasFlag("etfs-only");
 const stocksOnly = hasFlag("stocks-only");
-const bondsOnly = hasFlag("bonds-only");
 const cryptoOnly = hasFlag("crypto-only") || hasFlag("cryptos-only");
 const fresh = hasFlag("fresh");
 const keepEverything = hasFlag("all");
@@ -131,15 +127,13 @@ const walkLimit = numberArg("limit", 0);
 const lanes = Math.max(1, numberArg("concurrency", 10));
 const MIN_INTERVAL_MS = Math.max(0, numberArg("interval", 50));
 
-const wantEtfs = !stocksOnly && !bondsOnly && !cryptoOnly;
-const wantStocks = !etfsOnly && !bondsOnly && !cryptoOnly;
-const wantBonds = !etfsOnly && !stocksOnly && !cryptoOnly;
-const wantCrypto = !etfsOnly && !stocksOnly && !bondsOnly;
+const wantEtfs = !stocksOnly && !cryptoOnly;
+const wantStocks = !etfsOnly && !cryptoOnly;
+const wantCrypto = !etfsOnly && !stocksOnly;
 
 const catalogue = { byTicker: new Map(), byIsin: new Map() };
 if (wantEtfs) loadCatalogue(etfsCsvPath, "ETF", catalogue);
 if (wantStocks) loadCatalogue(stocksCsvPath, "STOCK", catalogue);
-if (wantBonds) loadCatalogue(bondsCsvPath, "BND", catalogue);
 if (wantCrypto) loadCatalogue(cryptosCsvPath, "CRYPTO", catalogue);
 
 // A contract code names its market between the prefix and the ticker —
@@ -166,7 +160,6 @@ const SHELVES = [
   { category: "etfsexpanded", type: "ETF", walk: "etfs", wanted: () => wantEtfs },
   { category: "commoditiesexpanded", type: "ETF", walk: null, wanted: () => wantEtfs },
   { category: "etnsexpanded", type: "ETN", walk: null, wanted: () => wantEtfs },
-  { category: "bondsexpanded", type: "BND", walk: null, wanted: () => wantBonds },
   { category: "cryptoexpanded", type: "CRYPTO", walk: "cryptos", wanted: () => wantCrypto },
   { category: "propertyexpanded", type: "PROP", walk: null, wanted: () => keepEverything },
 ];
@@ -177,7 +170,6 @@ const ASSET_GROUP_TYPES = {
   "US ETFS": "ETF",
   ETNS: "ETN",
   "US ETNS": "ETN",
-  BONDS: "BND",
   CRYPTO: "CRYPTO",
   "UNIT TRUSTS": "FUND",
   PROPERTY: "PROP",
@@ -477,7 +469,6 @@ const WALK_SOURCES = {
   stocks: stocksCsvPath,
   etfs: etfsCsvPath,
   cryptos: cryptosCsvPath,
-  bonds: bondsCsvPath,
 };
 
 function walkTickers(csvPath) {
@@ -533,7 +524,7 @@ if (!fresh && fs.existsSync(outputPath)) {
   try {
     const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
     for (const entry of Array.isArray(existing) ? existing : []) {
-      if (!entry?.query || seen.has(entry.query)) continue;
+      if (!entry?.query || entry.type === "BND" || seen.has(entry.query)) continue;
       seen.add(entry.query);
       results.push(entry);
     }
@@ -565,8 +556,6 @@ for (const listing of shelf.values()) {
   }
 
   const market = listing.code.includes(".") ? listing.code.split(".")[1] : "";
-  // Bonds are shown under the number of their coupon line — 188 for the R188 —
-  // which is not what the market calls them.
   const codeTicker = normalizeTicker(listing.code.split(".").slice(2).join("."));
   const ticker = /^\d+$/.test(listing.ticker) && codeTicker ? codeTicker : listing.ticker;
 

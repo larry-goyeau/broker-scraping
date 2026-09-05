@@ -3,101 +3,136 @@ import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-function normalizeTicker(value) {
-  const text = (value || "").trim().toUpperCase();
-  if (!text) return "";
+function normalize(value) {
+  return String(value ?? "").replace(/\s+/g, " ").trim();
+}
 
+function normalizeTicker(value) {
+  const text = normalize(value).toUpperCase();
+  if (!text) return "";
   const firstColumn = text.split(",")[0].trim();
-  const afterExchange = firstColumn.includes(":")
-    ? firstColumn.split(":").pop()
-    : firstColumn;
-  return (afterExchange || "").split(/[./]/)[0].trim();
+  const afterExchange = firstColumn.includes(":") ? firstColumn.split(":").pop() : firstColumn;
+  // The ticket accepts the class share with a dot (BRK.B). A slash is the
+  // same spelling and is folded onto it.
+  return (afterExchange || "").replace(/\//g, ".").trim();
 }
 
 function toIsin(value) {
-  const text = (value || "").trim().toUpperCase();
+  const text = normalize(value).toUpperCase();
   if (!text) return "";
   const match = text.match(/\b[A-Z]{2}[A-Z0-9]{10}\b/);
   return match ? match[0] : "";
 }
 
-function loadTickersFromCsv(csvPath) {
-  if (!fs.existsSync(csvPath)) return [];
-
-  return fs
-    .readFileSync(csvPath, "utf8")
-    .split(/\r?\n/)
-    .map((line) => normalizeTicker(line))
-    .filter(Boolean);
+function pathArg(flag, fallback) {
+  for (const arg of process.argv.slice(2)) {
+    const match = arg.match(new RegExp(`^--${flag}=(.+)$`, "i"));
+    if (match) return match[1];
+  }
+  return fallback ? new URL(fallback, import.meta.url) : "";
 }
 
-function loadTickerCandidatesFromCsv(csvPath) {
-  if (!fs.existsSync(csvPath)) return new Map();
+function numberArg(flag, fallback) {
+  for (const arg of process.argv.slice(2)) {
+    const match = arg.match(new RegExp(`^--${flag}=(\\d+)$`, "i"));
+    if (match) return parseInt(match[1], 10);
+  }
+  return fallback;
+}
 
-  const map = new Map();
+function hasFlag(name) {
+  return process.argv.slice(2).some((arg) => new RegExp(`^--${name}$`, "i").test(arg));
+}
+
+function loadTickerCandidatesFromCsv(csvPath, kind, map = new Map()) {
+  if (!csvPath || !fs.existsSync(csvPath)) return map;
+
   for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
-    if (!line.trim()) continue;
+    if (!line.trim() || /^ticker\s*,/i.test(line)) continue;
 
     const columns = line.split(",");
     const ticker = normalizeTicker(columns[0]);
     const isinIndex = columns.findIndex((column) => Boolean(toIsin(column)));
     if (!ticker || isinIndex < 0) continue;
 
-    const candidate = {
-      isin: toIsin(columns[isinIndex]),
-      name: columns.slice(isinIndex + 1).join(",").trim(),
-    };
+    const isin = toIsin(columns[isinIndex]);
+    const exchange = normalize(isinIndex >= 1 ? columns[isinIndex - 1] : columns[1]).toUpperCase();
+    const name = columns.slice(isinIndex + 1).join(",").trim();
+    if (!name) continue;
+
     const candidates = map.get(ticker) || [];
-    if (!candidates.some((existing) => existing.isin === candidate.isin)) {
-      candidates.push(candidate);
-      map.set(ticker, candidates);
+    map.set(ticker, candidates);
+
+    const existing = candidates.find((candidate) => candidate.isin === isin);
+    if (existing) {
+      if (!existing.names.includes(name)) existing.names.push(name);
+      if (exchange) existing.exchanges.add(exchange);
+    } else {
+      candidates.push({
+        isin,
+        kind,
+        names: [name],
+        exchanges: new Set(exchange ? [exchange] : []),
+      });
     }
   }
 
   return map;
 }
 
-function nameTokens(value) {
-  const ignored = new Set([
-    "ISHARES",
-    "ETF",
-    "ETC",
-    "ETN",
-    "ETP",
-    "UCITS",
-    "PLC",
-    "FUND",
-    "SHARES",
-  ]);
+function loadCryptoTickers(csvPath) {
+  const tickers = new Set();
+  if (!csvPath || !fs.existsSync(csvPath)) return tickers;
 
+  for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
+    if (!line.trim() || /^ticker\s*,/i.test(line)) continue;
+    const ticker = normalizeTicker(line.split(",")[0]);
+    if (ticker) tickers.add(ticker);
+  }
+  return tickers;
+}
+
+const GENERIC_TOKENS = new Set([
+  "LTD", "LIMITED", "PLC", "INC", "CORP", "CORPORATION", "LLC", "GMBH", "THE",
+  "CO", "TRUST", "CLASS", "ETF", "ETC", "ETN", "ETP", "UCITS", "FUND", "SHARES",
+  "ISHARES",
+]);
+
+function nameTokens(value) {
   return new Set(
-    (value || "")
+    normalize(value)
       .normalize("NFKD")
       .replace(/[\u0300-\u036f]/g, "")
       .toUpperCase()
       .split(/[^A-Z0-9]+/)
-      .filter((token) => token.length > 1 && !ignored.has(token))
+      .filter((token) => token.length > 1 && !GENERIC_TOKENS.has(token))
   );
 }
 
-function resolveIsin(tickerCandidates, ticker, scrapedName) {
-  const candidates = tickerCandidates.get(ticker) || [];
+function resolveListing(tickerCandidates, ticker, scrapedName, type) {
+  const kind = type === "STOCK" ? "STOCK" : "ETF";
+  let candidates = (tickerCandidates.get(ticker) || []).filter(
+    (candidate) => !candidate.kind || candidate.kind === kind
+  );
+  const us = candidates.filter((candidate) => candidate.isin.startsWith("US"));
+  if (us.length > 0) candidates = us;
   if (candidates.length === 0) return null;
+  if (candidates.length === 1) return candidates[0];
 
   const scrapedTokens = nameTokens(scrapedName);
-  let bestCandidate = candidates[0];
-  let bestScore = -1;
-
+  let best = null;
+  let bestScore = 0;
   for (const candidate of candidates) {
-    const candidateTokens = nameTokens(candidate.name);
-    const score = [...scrapedTokens].filter((token) => candidateTokens.has(token)).length;
+    const score = Math.max(
+      0,
+      ...candidate.names.map((name) => [...scrapedTokens].filter((token) => nameTokens(name).has(token)).length)
+    );
     if (score > bestScore) {
       bestScore = score;
-      bestCandidate = candidate;
+      best = candidate;
     }
   }
-
-  return bestScore > 0 ? bestCandidate.isin : null;
+  return bestScore > 0 ? best : null;
 }
 
 function uniqueQueries(values) {
@@ -110,13 +145,132 @@ function uniqueQueries(values) {
   });
 }
 
+// TradeStation files shares and funds as AssetType Stock. GDAX pairs such
+// as BCHUSD are forex quotes: searching BCH opens Banco de Chile, not the
+// coin. An empty sector used to mark a fund, but BCH the ADS has no sector
+// either, so a ticker that only the share list carries stays a share.
+function listingType(row, ticker) {
+  const asset = normalize(row.AssetType).toLowerCase();
+  const name = normalize(row.Description || row.Name);
+  if (asset && asset !== "stock") return "";
+
+  if (/\bETNs?\b/i.test(name)) return "ETN";
+  // "ETC 6 Meridian…" is Exchange Traded Concepts, the issuer, not a commodity ETC.
+  if (/\bETCs?\b/i.test(name) && !/\bETFs?\b/i.test(name) && !/^ETC\b/i.test(name)) return "ETC";
+  if (/\bETFs?\b|\bETPs?\b|\bUCITS\b/i.test(name)) return "ETF";
+  if (
+    /\bTRUST\b/i.test(name) &&
+    !/\b(REIT|REALTY|INVESTMENT TRUST)\b/i.test(name) &&
+    !/\b(INC|CORP|CORPORATION|LTD|LIMITED|LLC|ADS)\.?\b/i.test(name)
+  ) {
+    return "ETF";
+  }
+
+  const candidates = tickerCandidates.get(ticker) || [];
+  const hasStock = candidates.some((candidate) => candidate.kind === "STOCK");
+  const hasFund = candidates.some((candidate) => candidate.kind === "ETF");
+  if (hasStock && !hasFund) return "STOCK";
+  if (hasFund && !hasStock) return "ETF";
+
+  const sectors = (row.Sectors || []).map((sector) => normalize(sector.Name)).filter(Boolean);
+  const sector = sectors[0] || "";
+  if (sector && sector !== "NC" && sector !== "Other") return "STOCK";
+  if (/\b(INC|CORP|CORPORATION|LTD|LIMITED|LLC|ADS)\.?\b/i.test(name)) return "STOCK";
+  return "ETF";
+}
+
+const EXCHANGES = {
+  NASDAQ: "NASDAQ",
+  NYSE: "NYSE",
+  ARCX: "AMEX",
+  ARCA: "AMEX",
+  AMEX: "AMEX",
+  ASE: "AMEX",
+  BATS: "CBOE",
+  BZX: "CBOE",
+  CBOE: "CBOE",
+  OTC: "OTC",
+  OTCQX: "OTC",
+  OTCQB: "OTC",
+  PINX: "OTC",
+  PINK: "OTC",
+};
+
+const US_VENUES = new Set(["NASDAQ", "NYSE", "AMEX", "CBOE", "OTC"]);
+
+function venueOf(raw, match) {
+  const code = normalize(raw).toUpperCase();
+  if (EXCHANGES[code]) return EXCHANGES[code];
+  if (/^OTC/.test(code) || /PINK|PINX/.test(code)) return "OTC";
+  const fromCatalogue = [...(match?.exchanges || [])].find((exchange) =>
+    US_VENUES.has(EXCHANGES[exchange] || exchange)
+  );
+  if (fromCatalogue) return EXCHANGES[fromCatalogue] || fromCatalogue;
+  return "";
+}
+
+// `--csv=PATH` overrides the fund list, `--stocks-csv=PATH` the share list,
+// `--cryptos-csv=PATH` the coin list. `--etfs-only` / `--stocks-only` /
+// `--crypto-only` answer for one shelf. `--all` keeps lines the catalogues
+// do not carry. `--fresh` starts the file over.
+const etfsCsvPath = pathArg("csv", "../etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
+const cryptosCsvPath = pathArg("cryptos-csv", "../cryptos.csv");
+const etfsOnly = hasFlag("etfs-only") || hasFlag("funds-only");
+const stocksOnly = hasFlag("stocks-only");
+const cryptoOnly = hasFlag("crypto-only") || hasFlag("cryptos-only");
+const keepUnlisted = hasFlag("all");
+const fresh = hasFlag("fresh");
+const startIndex = Math.max(1, numberArg("start", 1));
+
+const wantEtfs = !stocksOnly && !cryptoOnly;
+const wantStocks = !etfsOnly && !cryptoOnly;
+const wantCrypto = !etfsOnly && !stocksOnly;
+
+const tickerCandidates = new Map();
+if (wantEtfs) loadTickerCandidatesFromCsv(etfsCsvPath, "ETF", tickerCandidates);
+if (wantStocks) loadTickerCandidatesFromCsv(stocksCsvPath, "STOCK", tickerCandidates);
+const cryptoTickers = wantCrypto ? loadCryptoTickers(cryptosCsvPath) : new Set();
+
+const onlyTickers = new Set(
+  process.argv
+    .slice(2)
+    .filter((arg) => !arg.startsWith("--"))
+    .map(normalizeTicker)
+    .filter((ticker) => ticker && !toIsin(ticker))
+);
+
+const catalogueQueries = [...tickerCandidates.entries()]
+  .filter(([, candidates]) => candidates.some((candidate) => candidate.isin.startsWith("US")))
+  .map(([ticker]) => ticker);
+
+const queries = uniqueQueries(onlyTickers.size > 0 ? [...onlyTickers] : catalogueQueries);
+
+const outputPath = new URL("tradestation-parsed.json", import.meta.url);
+const results = [];
+const seen = new Set();
+
+if (!fresh && fs.existsSync(outputPath)) {
+  try {
+    const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
+    if (Array.isArray(existing)) {
+      for (const entry of existing) {
+        results.push(entry);
+        if (entry?.ticker) {
+          seen.add(`${entry.ticker}:${entry.type || ""}:${entry.exchange || ""}`.toUpperCase());
+        }
+      }
+    }
+  } catch {
+    // Ignore malformed prior output and start fresh.
+  }
+}
+
 const browser = await puppeteer.connect({
   browserURL: "http://127.0.0.1:9222",
   defaultViewport: null,
 });
 
-// The page is only there so we can lift the bearer token its GraphQL calls
-// already send. The lookups themselves go to api.tradestation.com from here.
 const pages = await browser.pages();
 const page =
   pages.find((candidate) => candidate.url().includes("my.tradestation.com")) ||
@@ -150,9 +304,7 @@ async function waitForToken() {
   const again = Date.now();
   while (!token && Date.now() - again < 15000) await sleep(200);
   if (!token) {
-    throw new Error(
-      "Could not read TradeStation's API token. Is the session still signed in?"
-    );
+    throw new Error("Could not read TradeStation's API token. Is the session still signed in?");
   }
   return token;
 }
@@ -167,6 +319,7 @@ const SYMBOLS_QUERY = `query FetchSymbolAssetType($symbols: [String!]!) {
     Exchange
     Currency
     Error
+    Sectors { Name }
   }
 }`;
 
@@ -199,81 +352,32 @@ async function getSymbols(symbols) {
   return answer.json.data.getSymbols;
 }
 
-// `--start=N` (1-indexed) lets a run resume from a specific query without
-// throwing away progress already saved to tradestation-parsed.json.
-const startIndex = (() => {
-  for (const arg of process.argv.slice(2)) {
-    const match = arg.match(/^--start=(\d+)$/i);
-    if (match) return Math.max(1, parseInt(match[1], 10));
-  }
-  return 1;
-})();
-const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
-
-const defaultQueries = ["SPY", "ACWI", "VTI"];
-const cliQueries = positionalArgs.map(normalizeTicker).filter(Boolean);
-
-// `--csv=PATH` overrides the default ETF list CSV (defaults to etfs.csv).
-const csvPath = (() => {
-  for (const arg of process.argv.slice(2)) {
-    const match = arg.match(/^--csv=(.+)$/i);
-    if (match) return match[1];
-  }
-  return new URL("../etfs.csv", import.meta.url);
-})();
-
-const csvQueries = loadTickersFromCsv(csvPath);
-const tickerCandidates = loadTickerCandidatesFromCsv(csvPath);
-const rawQueries =
-  cliQueries.length > 0
-    ? cliQueries
-    : csvQueries.length > 0
-      ? csvQueries
-      : defaultQueries;
-const queries = uniqueQueries(rawQueries);
-
-const outputPath = new URL("tradestation-parsed.json", import.meta.url);
-const results = [];
-const seen = new Set();
-
-if (startIndex > 1 && fs.existsSync(outputPath)) {
-  try {
-    const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
-    if (Array.isArray(existing)) {
-      for (const entry of existing) {
-        results.push(entry);
-        if (entry?.query && entry?.ticker) {
-          seen.add(`${entry.query}:${entry.ticker}`.toUpperCase());
-        }
-      }
-    }
-  } catch {
-    // Ignore malformed prior output and start fresh.
-  }
-}
-
 const BATCH_SIZE = 100;
+const SAVE_INTERVAL_MS = 2000;
+let savedCount = results.length;
+let savedAt = 0;
 
 function save() {
   fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+  savedCount = results.length;
+  savedAt = Date.now();
 }
 
 console.error(`${queries.length} tickers to check`);
 
 let silences = 0;
+let unlisted = 0;
+const skipped = new Map();
+
+function skip(reason) {
+  skipped.set(reason, (skipped.get(reason) || 0) + 1);
+}
 
 for (let offset = startIndex - 1; offset < queries.length; offset += BATCH_SIZE) {
   const batch = queries.slice(offset, offset + BATCH_SIZE);
-  for (const [index, query] of batch.entries()) {
-    console.error(`[${offset + index + 1}/${queries.length}] ${query}`);
-  }
-
   const rows = await getSymbols(batch);
   if (rows === null) {
     silences += 1;
-    console.error(
-      `[${offset + 1}-${offset + batch.length}] no answer`
-    );
     if (silences >= 3) {
       throw new Error("TradeStation stopped answering. Is the session still signed in?");
     }
@@ -283,58 +387,89 @@ for (let offset = startIndex - 1; offset < queries.length; offset += BATCH_SIZE)
 
   const byName = new Map();
   for (const row of rows) {
-    const ticker = (row.Name || "").toUpperCase();
-    if (ticker) byName.set(ticker, row);
+    const symbol = normalizeTicker(row.Name);
+    if (symbol) byName.set(symbol, row);
   }
 
   for (const query of batch) {
     const data = byName.get(query);
-    if (!data || data.Error || !data.Description) continue;
-
-    const ticker = (data.Name || "").toUpperCase();
-    if (ticker !== query) continue;
-
-    const name = (data.Description || "").replace(/\s+/g, " ").trim();
-
-    // A name can match by coincidence: the list files AMZN as a 1x Amazon
-    // tracker ETP, and matching on "Amazon" lands on Amazon the company.
-    // TradeStation files both as AssetType "Stock", so the legal suffix is
-    // what gives a collision away — a fund's description does not end in Inc.
-    if (
-      /\b(INC|CORP|CORPORATION|LTD|LIMITED|LLC|LP)\.?\b/i.test(name) &&
-      !/\bFIXED INC\b/i.test(name) &&
-      !/\b(ETF|ETN|ETC|ETP|UCITS)\b/i.test(name)
-    ) {
-      console.error(`  ${ticker} is ${name} here, not a fund — skipped`);
+    if (!data || data.Error || !data.Description) {
+      skip("not carried");
       continue;
     }
 
-    const isin = resolveIsin(tickerCandidates, ticker, name);
-    if ((tickerCandidates.get(ticker) || []).length > 0 && !isin) continue;
+    const ticker = normalizeTicker(data.Name);
+    if (!ticker) {
+      skip("no ticker");
+      continue;
+    }
+    if (ticker !== query) {
+      skip("alias");
+      continue;
+    }
 
-    const key = `${query}:${ticker}`.toUpperCase();
+    const type = listingType(data, ticker);
+    if (!type) {
+      skip(String(data.AssetType || "unknown").toLowerCase() || "unknown");
+      continue;
+    }
+    if ((type === "ETF" || type === "ETC" || type === "ETN") && !wantEtfs) continue;
+    if (type === "STOCK" && !wantStocks) continue;
+
+    const name = normalize(data.Description);
+    const match = resolveListing(tickerCandidates, ticker, name, type);
+    if (!match && !keepUnlisted) {
+      unlisted += 1;
+      continue;
+    }
+
+    const exchange = venueOf(data.Exchange, match);
+    if (!US_VENUES.has(exchange)) {
+      skip("foreign tape");
+      continue;
+    }
+
+    const key = `${ticker}:${type}:${exchange}`.toUpperCase();
     if (seen.has(key)) continue;
     seen.add(key);
 
-    const exchange = (data.Exchange || "").replace(/\s+/g, " ").trim().toUpperCase();
-
     results.push({
-      query,
+      query: ticker,
       ticker,
       name,
-      exchange: exchange || null,
-      currency: (data.Currency || "").toUpperCase() || null,
-      type: "ETF",
+      exchange,
+      currency: normalize(data.Currency).toUpperCase() || "USD",
+      type,
       raw: [ticker, name, exchange, data.Currency].filter(Boolean).join(" "),
-      isin,
+      isin: match?.isin || "",
     });
   }
 
-  save();
+  if (offset === 0 || (offset + BATCH_SIZE) % 500 === 0 || offset + BATCH_SIZE >= queries.length) {
+    console.error(`[${Math.min(offset + BATCH_SIZE, queries.length)}/${queries.length}] ${results.length} matched`);
+  }
+  if (results.length !== savedCount && Date.now() - savedAt >= SAVE_INTERVAL_MS) save();
 }
 
+results.sort((left, right) => {
+  const byType = String(left.type).localeCompare(right.type);
+  if (byType !== 0) return byType;
+  const byExchange = String(left.exchange).localeCompare(String(right.exchange));
+  if (byExchange !== 0) return byExchange;
+  return String(left.ticker).localeCompare(String(right.ticker));
+});
+
 save();
-console.log(JSON.stringify(results, null, 2));
+
+const byType = new Map();
+for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);
+
+console.error(
+  `${results.length} listings over ${new Set(results.map((row) => row.isin || row.ticker)).size} instruments ` +
+    `(${[...byType].map(([type, count]) => `${count} ${type}`).join(", ") || "none"})` +
+    (unlisted ? `, ${unlisted} the catalogues do not carry` : "") +
+    (skipped.size ? `, left out ${[...skipped].map(([reason, count]) => `${count} ${reason}`).join(", ")}` : "")
+);
 
 await client.detach();
 await browser.disconnect();

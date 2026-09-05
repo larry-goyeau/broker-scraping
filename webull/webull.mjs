@@ -3,18 +3,40 @@ import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// `--csv=PATH` overrides the default ETF list CSV (defaults to etfs.csv).
-const csvPath = (() => {
+function normalize(value) {
+  return String(value ?? "").replace(/\s+/g, " ").trim();
+}
+
+function normalizeTicker(value) {
+  const text = normalize(value).toUpperCase();
+  if (!text) return "";
+  const firstColumn = text.split(",")[0].trim();
+  const afterExchange = firstColumn.includes(":") ? firstColumn.split(":").pop() : firstColumn;
+  // Class shares arrive as BRK.B or BRK/B. The catalogues keep the dot.
+  return (afterExchange || "").replace(/[\s/]+/g, ".").trim();
+}
+
+function toIsin(value) {
+  const text = normalize(value).toUpperCase();
+  if (!text) return "";
+  const match = text.match(/\b[A-Z]{2}[A-Z0-9]{10}\b/);
+  return match ? match[0] : "";
+}
+
+function pathArg(flag, fallback) {
   for (const arg of process.argv.slice(2)) {
-    const match = arg.match(/^--csv=(.+)$/i);
+    const match = arg.match(new RegExp(`^--${flag}=(.+)$`, "i"));
     if (match) return match[1];
   }
-  return new URL("../etfs.csv", import.meta.url);
-})();
+  return fallback ? new URL(fallback, import.meta.url) : "";
+}
+
+function hasFlag(name) {
+  return process.argv.slice(2).some((arg) => new RegExp(`^--${name}$`, "i").test(arg));
+}
 
 // The app key is issued per region and carries that region as a prefix, which
-// is also what says which host will accept it. Signing against the wrong one
-// answers "invalid credentials" rather than saying so.
+// is also what says which host will accept it.
 const HOSTS = {
   sg: "api.webull.com.sg",
   us: "api.webull.com",
@@ -22,8 +44,6 @@ const HOSTS = {
   jp: "api.webull.co.jp",
 };
 
-// Credentials belong outside the repository, so they are read from the
-// environment or from a .env file that .gitignore keeps out.
 function loadCredentials() {
   const fromFile = {};
   if (fs.existsSync(".env")) {
@@ -49,9 +69,6 @@ function loadCredentials() {
 
 const { appKey, appSecret, host } = loadCredentials();
 
-// Webull signs the path, the query and the signing headers together, sorted by
-// name, and hashes the body in separately. Documented at
-// developer.webull.com/apis/docs/authentication/signature.
 function signature({ path, query, body, timestamp, nonce }) {
   const parts = {
     ...query,
@@ -83,10 +100,6 @@ async function api(method, path, { query = {}, payload } = {}) {
   const search = new URLSearchParams(query).toString();
   const url = `https://${host}${path}${search ? `?${search}` : ""}`;
 
-  // A page of a thousand instruments sometimes takes longer than Webull's own
-  // patience, and a dropped call is worth asking again rather than losing the
-  // run. A signature covers the timestamp it was made with, so each attempt is
-  // signed afresh.
   let lastError;
   for (let attempt = 0; attempt < 4; attempt += 1) {
     const timestamp = new Date().toISOString().replace(/\.\d+Z$/, "Z");
@@ -127,9 +140,7 @@ async function api(method, path, { query = {}, payload } = {}) {
   throw lastError;
 }
 
-// A token outlives a run, so it is kept on disk and only replaced once the
-// server stops accepting it. .gitignore keeps *.json out of the repository.
-const TOKEN_FILE = ".webull-token.json";
+const TOKEN_FILE = new URL(".webull-token.json", import.meta.url);
 
 function rememberedToken() {
   if (!fs.existsSync(TOKEN_FILE)) return "";
@@ -146,8 +157,6 @@ async function tokenStatus(token) {
   return answer.status === 200 ? answer.json?.status || "" : "";
 }
 
-// Two-factor accounts mint a token that only becomes usable once the code sent
-// by SMS is typed into the Webull app, and the offer is five minutes wide.
 async function authorise() {
   const remembered = rememberedToken();
   if (remembered && (await tokenStatus(remembered)) === "NORMAL") {
@@ -188,28 +197,12 @@ async function authorise() {
   }
 
   fs.writeFileSync(TOKEN_FILE, JSON.stringify({ appKey, token: accessToken }, null, 2));
-  console.error(`access token saved to ${TOKEN_FILE}`);
+  console.error(`access token saved to ${TOKEN_FILE.pathname}`);
 }
 
-function normalizeTicker(value) {
-  const text = (value || "").trim().toUpperCase();
-  if (!text) return "";
-  const firstColumn = text.split(",")[0].trim();
-  const afterExchange = firstColumn.includes(":") ? firstColumn.split(":").pop() : firstColumn;
-  return (afterExchange || "").split(/[/]/)[0].trim();
-}
-
-function toIsin(value) {
-  const text = (value || "").trim().toUpperCase();
-  if (!text) return "";
-  const match = text.match(/\b[A-Z]{2}[A-Z0-9]{10}\b/);
-  return match ? match[0] : "";
-}
-
-// Webull names a listing after the venue it is quoted on, in codes of its own:
-// PSE is NYSE Arca under its old Pacific name, NMS and NAS are the two Nasdaq
-// tiers, BAT is Cboe BZX, and the last five are rungs of the over-the-counter
-// market. The CSV files each under the exchange that owns it.
+// Webull names a listing after the venue it is quoted on. PSE is NYSE Arca
+// under its old Pacific name, NMS/NAS/NSQ are Nasdaq tiers, BAT is Cboe BZX,
+// and CCC is the crypto book.
 const EXCHANGE_NAMES = {
   NMS: "NASDAQ",
   NAS: "NASDAQ",
@@ -225,25 +218,18 @@ const EXCHANGE_NAMES = {
   OTCID: "OTC",
   PINL: "OTC",
   PK: "OTC",
+  OTCQ: "OTC",
+  OTCB: "OTC",
   HKG: "HKEX",
+  XGEM: "HKEX",
+  CCC: "CRYPTO",
 };
 
-// Hong Kong pads its numbers out to five digits and the CSV does not, so the
-// Tracker Fund is 02800 on Webull and 2800 in the file.
-function csvTicker(symbol, exchange) {
-  const text = String(symbol || "").toUpperCase().trim();
-  return exchange === "HKG" ? text.replace(/^0+/, "") : text;
-}
+function loadTickerCandidatesFromCsv(csvPath, kind, map = new Map()) {
+  if (!csvPath || !fs.existsSync(csvPath)) return map;
 
-// One ISIN is often listed on several venues under differently worded names
-// ("SPDR S&P 500 ETF Trust" and "State Street SPDR S&P 500 ETF"), so every
-// spelling is kept and the closest one decides a match.
-function loadTickerCandidatesFromCsv(path) {
-  if (!fs.existsSync(path)) return new Map();
-
-  const map = new Map();
-  for (const line of fs.readFileSync(path, "utf8").split(/\r?\n/)) {
-    if (!line.trim()) continue;
+  for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
+    if (!line.trim() || /^ticker\s*,/i.test(line)) continue;
 
     const columns = line.split(",");
     const ticker = normalizeTicker(columns[0]);
@@ -251,7 +237,7 @@ function loadTickerCandidatesFromCsv(path) {
     if (!ticker || isinIndex < 0) continue;
 
     const isin = toIsin(columns[isinIndex]);
-    const exchange = (columns[isinIndex - 1] || "").trim().toUpperCase();
+    const exchange = normalize(isinIndex >= 1 ? columns[isinIndex - 1] : columns[1]).toUpperCase();
     const name = columns.slice(isinIndex + 1).join(",").trim();
     if (!name) continue;
 
@@ -262,19 +248,36 @@ function loadTickerCandidatesFromCsv(path) {
     if (existing) {
       if (!existing.names.includes(name)) existing.names.push(name);
       if (exchange) existing.exchanges.add(exchange);
+      if (!existing.kind) existing.kind = kind;
     } else {
-      candidates.push({ isin, names: [name], exchanges: new Set(exchange ? [exchange] : []) });
+      candidates.push({
+        isin,
+        kind,
+        names: [name],
+        exchanges: new Set(exchange ? [exchange] : []),
+      });
     }
   }
 
   return map;
 }
 
-// Legal-entity suffixes are shared by unrelated funds, so counting them would
-// let a same-ticker instrument pass for the one being looked up.
+function loadCryptoTickers(csvPath) {
+  const tickers = new Set();
+  if (!csvPath || !fs.existsSync(csvPath)) return tickers;
+
+  for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
+    if (!line.trim() || /^ticker\s*,/i.test(line)) continue;
+    const ticker = normalizeTicker(line.split(",")[0]);
+    if (ticker) tickers.add(ticker);
+  }
+  return tickers;
+}
+
 const GENERIC_TOKENS = new Set([
   "LTD", "LIMITED", "PLC", "INC", "CORP", "CORPORATION", "LLC", "GMBH", "THE",
-  "CO", "COMMON", "STOCK", "SHARES", "CLASS", "TRUST", "FUND",
+  "CO", "COMMON", "STOCK", "SHARES", "CLASS", "TRUST", "FUND", "ETF", "ETC",
+  "ETN", "ETP", "UCITS", "ISHARES",
 ]);
 
 function nameTokens(value) {
@@ -286,8 +289,6 @@ function nameTokens(value) {
     .filter((token) => token.length > 1 && !GENERIC_TOKENS.has(token));
 }
 
-// Fund names are shortened inconsistently between sources ("Small Cap" against
-// "Small-Ca"), so tokens are compared by prefix rather than equality.
 function tokensMatch(left, right) {
   if (left === right) return true;
   const [shorter, longer] = left.length <= right.length ? [left, right] : [right, left];
@@ -311,8 +312,6 @@ function nameScore(scrapedName, candidateName) {
     }
   }
 
-  // Dividing by the longer name keeps a terser wording from outscoring the fund
-  // actually named just by leaving words out.
   return matched / Math.max(scraped.length, candidate.length);
 }
 
@@ -327,20 +326,29 @@ function scoreCandidate(scrapedName, candidate) {
 
 const MIN_NAME_SCORE = 0.5;
 
-// An American ticker belongs to one instrument apiece, so the fund Webull
-// quotes under it is the one the CSV files on that same venue. Where a ticker
-// covers several share classes the venue tells them apart before the name has
-// to, and the name only has to settle what is left.
-function resolveIsin(tickerCandidates, listing) {
-  const candidates = tickerCandidates.get(listing.ticker) || [];
+function resolveListing(tickerCandidates, listing, type) {
+  const kind = type === "STOCK" ? "STOCK" : "ETF";
+  let candidates = (tickerCandidates.get(listing.ticker) || []).filter(
+    (candidate) => !candidate.kind || candidate.kind === kind
+  );
   if (candidates.length === 0) return null;
 
-  const venue = EXCHANGE_NAMES[listing.exchange];
-  const sameVenue = venue ? candidates.filter((candidate) => candidate.exchanges.has(venue)) : [];
+  if (listing.market === "HK") {
+    const hk = candidates.filter((candidate) => candidate.isin.startsWith("HK"));
+    if (hk.length) candidates = hk;
+  } else {
+    const us = candidates.filter((candidate) => candidate.isin.startsWith("US"));
+    if (us.length) candidates = us;
+  }
+
+  const venue = EXCHANGE_NAMES[listing.exchange] || listing.exchange;
+  const sameVenue = venue
+    ? candidates.filter((candidate) => candidate.exchanges.has(venue))
+    : [];
   const shortlist = sameVenue.length > 0 ? sameVenue : candidates;
 
   const scored = shortlist.map((candidate) => ({
-    isin: candidate.isin,
+    ...candidate,
     ...scoreCandidate(listing.name, candidate),
   }));
 
@@ -350,28 +358,123 @@ function resolveIsin(tickerCandidates, listing) {
   if (bestScore < MIN_NAME_SCORE) return null;
 
   const winners = scored.filter((candidate) => candidate.score === bestScore);
-  // Still tied: the name does not tell these share classes apart.
   return winners.length === 1 ? winners[0] : null;
 }
 
-// A Singapore account reaches the American and the Hong Kong shelves; asking
-// for Singapore or Japan is refused outright.
-const MARKETS = ["US_STOCK", "HK_STOCK"];
+function listingType(listing) {
+  const category = normalize(listing.category).toUpperCase();
+  const sub = normalize(listing.sub_category).toUpperCase();
+  const name = normalize(listing.name);
+  if (category === "US_CRYPTO" || sub === "CRYPTO") return "CRYPTO";
+  if (sub === "WARRANT" || sub === "UNITS" || sub === "RIGHT") return "";
+  if (/\bETNs?\b/i.test(name)) return "ETN";
+  const withoutParens = name.replace(/\([^)]*\)/g, " ");
+  if (/\bETCs?\b/i.test(withoutParens) && !/\bETFs?\b/i.test(name) && !/^ETC\b/i.test(name)) {
+    return "ETC";
+  }
+  if (sub === "ETF" || listing.crypto_etf) return "ETF";
+  if (sub === "COMMON_STOCK" || sub === "PREFERRED_STOCK") return "STOCK";
+  if (!sub && /STOCK$/.test(category)) {
+    return /\bETFs?\b|\bUCITS\b/i.test(name) ? "ETF" : "STOCK";
+  }
+  return "";
+}
 
-// The whole ETF shelf comes down a page at a time, so nothing has to be
-// searched for ticker by ticker.
-async function loadEtfs(category) {
+// Hong Kong pads its numbers out to five digits and the CSV does not, so the
+// Tracker Fund is 02800 on Webull and 2800 in the file.
+function csvTicker(symbol, exchange) {
+  const text = normalizeTicker(symbol);
+  return exchange === "HKG" ? text.replace(/^0+/, "") || "0" : text;
+}
+
+function cryptoBase(symbol) {
+  const text = normalizeTicker(symbol);
+  return text.replace(/[-/]?(USD|USDT|USDC)$/i, "") || text;
+}
+
+function listingCurrency(listing, exchange) {
+  const code = normalize(listing.currency).toUpperCase();
+  if (/^[A-Z]{3}$/.test(code)) return code;
+  if (exchange === "HKG") return "HKD";
+  if (exchange === "CCC") return "USD";
+  return "USD";
+}
+
+// `--csv=PATH` overrides the fund list, `--stocks-csv=PATH` the share list,
+// `--cryptos-csv=PATH` the coin list. `--etfs-only` / `--stocks-only` /
+// `--crypto-only` answer for one shelf. `--all` keeps lines the catalogues
+// do not carry. `--fresh` starts the file over.
+const etfsCsvPath = pathArg("csv", "../etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
+const cryptosCsvPath = pathArg("cryptos-csv", "../cryptos.csv");
+const etfsOnly = hasFlag("etfs-only") || hasFlag("funds-only");
+const stocksOnly = hasFlag("stocks-only");
+const cryptoOnly = hasFlag("crypto-only") || hasFlag("cryptos-only");
+const keepUnlisted = hasFlag("all");
+const fresh = hasFlag("fresh");
+
+const wantEtfs = !stocksOnly && !cryptoOnly;
+const wantStocks = !etfsOnly && !cryptoOnly;
+const wantCrypto = !etfsOnly && !stocksOnly;
+
+const tickerCandidates = new Map();
+if (wantEtfs) loadTickerCandidatesFromCsv(etfsCsvPath, "ETF", tickerCandidates);
+if (wantStocks) loadTickerCandidatesFromCsv(stocksCsvPath, "STOCK", tickerCandidates);
+const cryptoTickers = wantCrypto ? loadCryptoTickers(cryptosCsvPath) : new Set();
+
+const onlyTickers = new Set(
+  process.argv
+    .slice(2)
+    .filter((arg) => !arg.startsWith("--"))
+    .map(normalizeTicker)
+    .filter((ticker) => ticker && !toIsin(ticker))
+);
+
+const outputPath = new URL("webull-parsed.json", import.meta.url);
+const results = [];
+const seen = new Set();
+
+if (!fresh && fs.existsSync(outputPath)) {
+  try {
+    const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
+    if (Array.isArray(existing)) {
+      for (const entry of existing) {
+        results.push(entry);
+        if (entry?.ticker) {
+          seen.add(`${entry.ticker}:${entry.type || ""}:${entry.exchange || ""}`.toUpperCase());
+        }
+      }
+    }
+  } catch {
+    // Ignore malformed prior output and start fresh.
+  }
+}
+
+await authorise();
+
+// The instrument list is 10 calls / 30s. A short pause keeps a long walk
+// from being dropped mid-page.
+const PAGE_DELAY_MS = 3200;
+
+async function loadShelf(path, query) {
   const listings = [];
   let paginationKey = "";
 
   for (let page = 0; page < 200; page += 1) {
-    const query = { category, sub_category: "ETF" };
-    if (paginationKey) query.pagination_key = paginationKey;
+    const next = { ...query };
+    if (paginationKey) next.pagination_key = paginationKey;
 
-    const answer = await api("GET", "/trading/instruments/stocks/profiles/list", { query });
+    if (page > 0) await sleep(PAGE_DELAY_MS);
+    const answer = await api("GET", path, { query: next });
+    if (answer.status === 429) {
+      console.error("  Webull asked to wait");
+      await sleep(8000);
+      page -= 1;
+      continue;
+    }
     if (answer.status !== 200) {
       throw new Error(
-        `Webull answered ${answer.status} for the instrument list: ${JSON.stringify(answer.json || answer.text)}`
+        `Webull answered ${answer.status} for ${path}: ${JSON.stringify(answer.json || answer.text)}`
       );
     }
 
@@ -386,70 +489,127 @@ async function loadEtfs(category) {
   return listings;
 }
 
-await authorise();
-
-const tickerCandidates = loadTickerCandidatesFromCsv(csvPath);
-console.error(`${tickerCandidates.size} tickers in the CSV`);
-
-const listings = [];
-for (const market of MARKETS) {
-  console.error(`${market}:`);
-  listings.push(...(await loadEtfs(market)));
+const listed = [];
+if (wantStocks || wantEtfs) {
+  for (const market of ["US_STOCK", "HK_STOCK"]) {
+    console.error(`${market}:`);
+    listed.push(
+      ...(await loadShelf("/trading/instruments/stocks/profiles/list", {
+        category: market,
+        status: "OC",
+      }))
+    );
+  }
 }
-if (listings.length === 0) throw new Error("Webull returned no ETFs.");
+if (wantCrypto) {
+  console.error("US_CRYPTO:");
+  listed.push(
+    ...(await loadShelf("/trading/instruments/crypto/profiles/list", {
+      category: "US_CRYPTO",
+      status: "OC",
+    }))
+  );
+}
 
-// Webull keeps instruments in the book that an account may no longer buy: CO
-// closes a position out only, NT cannot be traded at all.
-const tradable = listings.filter((listing) => (listing.status || "OC") === "OC");
-console.error(
-  `${listings.length} ETFs on Webull's shelf, ${listings.length - tradable.length} of them not tradable`
-);
+console.error(`${listed.length} instruments on Webull's shelf`);
 
-const results = [];
-const seen = new Set();
+let unlisted = 0;
+const skipped = new Map();
 const unknownVenues = new Set();
-let unmatched = 0;
 
-for (const listing of tradable.sort((left, right) =>
-  String(left.symbol).localeCompare(String(right.symbol))
-)) {
-  const exchange = String(listing.exchange_code || "").toUpperCase();
-  if (exchange && !EXCHANGE_NAMES[exchange]) unknownVenues.add(exchange);
+function skip(reason) {
+  skipped.set(reason, (skipped.get(reason) || 0) + 1);
+}
 
-  const ticker = csvTicker(listing.symbol, exchange);
-  if (!ticker) continue;
-
-  const name = String(listing.name || "").replace(/\s+/g, " ").trim();
-  const candidate = resolveIsin(tickerCandidates, { ticker, name, exchange });
-  if (!candidate) {
-    unmatched += 1;
+for (const listing of listed) {
+  // CO closes a position out only, NT cannot be traded at all.
+  if ((listing.status || "OC") !== "OC") {
+    skip(listing.status || "unknown");
     continue;
   }
 
-  // A fund cross-listed in Hong Kong keeps the ISIN of its American line, so
-  // the ticker, not the ISIN, is what tells two listings apart.
-  if (seen.has(ticker)) continue;
-  seen.add(ticker);
+  const type = listingType(listing);
+  if (!type) {
+    skip(String(listing.sub_category || listing.category || "unknown").toLowerCase());
+    continue;
+  }
+  if ((type === "ETF" || type === "ETC" || type === "ETN") && !wantEtfs) continue;
+  if (type === "STOCK" && !wantStocks) continue;
+  if (type === "CRYPTO" && !wantCrypto) continue;
+
+  const exchangeCode = normalize(listing.exchange_code).toUpperCase();
+  if (exchangeCode && !EXCHANGE_NAMES[exchangeCode]) unknownVenues.add(exchangeCode);
+
+  const ticker =
+    type === "CRYPTO" ? cryptoBase(listing.symbol) : csvTicker(listing.symbol, exchangeCode);
+  if (!ticker) {
+    skip("no ticker");
+    continue;
+  }
+  if (onlyTickers.size > 0 && !onlyTickers.has(ticker) && !onlyTickers.has(normalizeTicker(listing.symbol))) {
+    continue;
+  }
+
+  const exchange = type === "CRYPTO" ? "CRYPTO" : EXCHANGE_NAMES[exchangeCode] || exchangeCode;
+  if (!exchange) {
+    skip("no exchange");
+    continue;
+  }
+
+  const currency = listingCurrency(listing, exchangeCode);
+  const name = normalize(listing.name);
+  const market = listing.category === "HK_STOCK" || exchangeCode === "HKG" ? "HK" : "US";
+
+  let match = null;
+  if (type === "CRYPTO") {
+    if (!cryptoTickers.has(ticker) && !keepUnlisted) {
+      unlisted += 1;
+      continue;
+    }
+  } else {
+    match = resolveListing(tickerCandidates, { ticker, name, exchange: exchangeCode, market }, type);
+    if (!match && !keepUnlisted) {
+      unlisted += 1;
+      continue;
+    }
+  }
+
+  const key = `${ticker}:${type}:${exchange}`.toUpperCase();
+  if (seen.has(key)) continue;
+  seen.add(key);
 
   results.push({
     query: ticker,
     ticker,
-    name: name || candidate.name,
-    exchange: EXCHANGE_NAMES[exchange] || exchange,
-    // Hong Kong quotes in its own dollar; every other venue on the shelf is
-    // American. This is what tells the two counters of a dual-listed fund
-    // apart.
-    currency: exchange === "HKG" ? "HKD" : "USD",
-    type: "ETF",
-    raw: [listing.symbol, name, exchange].filter(Boolean).join(" "),
-    isin: candidate.isin,
+    name: name || match?.names?.[0] || ticker,
+    exchange,
+    currency,
+    type,
+    raw: [listing.symbol, name, exchange, currency].filter(Boolean).join(" "),
+    isin: match?.isin || "",
   });
 }
 
-fs.writeFileSync(new URL("webull-parsed.json", import.meta.url), JSON.stringify(results, null, 2));
+results.sort((left, right) => {
+  const byType = String(left.type).localeCompare(right.type);
+  if (byType !== 0) return byType;
+  const byExchange = String(left.exchange).localeCompare(String(right.exchange));
+  if (byExchange !== 0) return byExchange;
+  return String(left.ticker).localeCompare(String(right.ticker));
+});
+
+fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+
+const byType = new Map();
+for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);
+const byCurrency = new Map();
+for (const row of results) byCurrency.set(row.currency, (byCurrency.get(row.currency) || 0) + 1);
 
 console.error(
-  `${results.length} funds matched, ${unmatched} not in the CSV` +
-    (unknownVenues.size > 0 ? `, venue codes unaccounted for: ${[...unknownVenues].join(", ")}` : "")
+  `${results.length} listings over ${new Set(results.map((row) => row.isin || row.ticker)).size} instruments ` +
+    `(${[...byType].map(([type, count]) => `${count} ${type}`).join(", ") || "none"}; ` +
+    `${[...byCurrency].map(([currency, count]) => `${count} ${currency}`).join(", ") || "no currency"})` +
+    (unlisted ? `, ${unlisted} the catalogues do not carry` : "") +
+    (skipped.size ? `, left out ${[...skipped].map(([reason, count]) => `${count} ${reason}`).join(", ")}` : "") +
+    (unknownVenues.size ? `, venue codes unaccounted for: ${[...unknownVenues].join(", ")}` : "")
 );
-console.log(JSON.stringify(results, null, 2));

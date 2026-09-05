@@ -358,6 +358,7 @@ if (!fresh && fs.existsSync(outputPath)) {
     const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
     if (Array.isArray(existing)) {
       for (const entry of existing) {
+        if (entry && !entry.currency) entry.currency = "USD";
         results.push(entry);
         if (entry?.ticker) seen.add(entry.ticker.toUpperCase());
       }

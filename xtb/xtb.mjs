@@ -3,50 +3,269 @@ import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+function normalize(value) {
+  return String(value ?? "").replace(/\s+/g, " ").trim();
+}
+
 function toIsin(value) {
-  const text = (value || "").trim().toUpperCase();
+  const text = normalize(value).toUpperCase();
   if (!text) return "";
   const match = text.match(/\b[A-Z]{2}[A-Z0-9]{10}\b/);
   return match ? match[0] : "";
 }
 
-function loadIsinsFromCsv(csvPath) {
-  if (!fs.existsSync(csvPath)) return [];
-
-  const content = fs.readFileSync(csvPath, "utf8");
-  return content
-    .split(/\r?\n/)
-    .map((line) => {
-      // Supports both: ticker,isin,name and ticker,exchange,isin,name.
-      const cols = line.split(",");
-      const fromKnownColumns = toIsin(cols[2]) || toIsin(cols[1]);
-      if (fromKnownColumns) return fromKnownColumns;
-
-      // Fallback: find the first ISIN-looking token in the row.
-      for (const col of cols) {
-        const isin = toIsin(col);
-        if (isin) return isin;
-      }
-      return "";
-    })
-    .filter(Boolean);
+function normalizeTicker(value) {
+  const text = normalize(value).toUpperCase();
+  if (!text) return "";
+  const firstColumn = text.split(",")[0].trim();
+  const afterExchange = firstColumn.includes(":") ? firstColumn.split(":").pop() : firstColumn;
+  return (afterExchange || "").replace(/[\s/]+/g, ".").trim();
 }
 
-function uniqueQueries(values) {
-  const seen = new Set();
-  return values.filter((value) => {
-    const key = value.toUpperCase();
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
+function pathArg(flag, fallback) {
+  for (const arg of process.argv.slice(2)) {
+    const match = arg.match(new RegExp(`^--${flag}=(.+)$`, "i"));
+    if (match) return match[1];
+  }
+  return fallback ? new URL(fallback, import.meta.url) : "";
+}
+
+function numberArg(flag, fallback) {
+  for (const arg of process.argv.slice(2)) {
+    const match = arg.match(new RegExp(`^--${flag}=(\\d+)$`, "i"));
+    if (match) return parseInt(match[1], 10);
+  }
+  return fallback;
+}
+
+function hasFlag(name) {
+  return process.argv.slice(2).some((arg) => new RegExp(`^--${name}$`, "i").test(arg));
+}
+
+function loadByIsin(csvPath, kind, index = new Map()) {
+  if (!csvPath || !fs.existsSync(csvPath)) return index;
+
+  for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
+    if (!line.trim() || /^ticker\s*,/i.test(line)) continue;
+    const columns = line.split(",");
+    const isin = toIsin(columns[2]) || toIsin(columns[1]) || columns.map(toIsin).find(Boolean);
+    if (!isin) continue;
+    const name = normalize(columns.slice(3).join(","));
+    const exchange = normalize(columns[1]).toUpperCase();
+    const entry = index.get(isin);
+    if (!entry) {
+      index.set(isin, { isin, kind, names: name ? [name] : [], exchange, exchanges: new Set(exchange ? [exchange] : []) });
+    } else if (exchange) {
+      entry.exchanges.add(exchange);
+    }
+    else if (name && !entry.names.includes(name)) entry.names.push(name);
+  }
+  return index;
+}
+
+function loadTickerCandidatesFromCsv(csvPath, kind, map = new Map()) {
+  if (!csvPath || !fs.existsSync(csvPath)) return map;
+
+  for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
+    if (!line.trim() || /^ticker\s*,/i.test(line)) continue;
+
+    const columns = line.split(",");
+    const ticker = normalizeTicker(columns[0]);
+    const isinIndex = columns.findIndex((column) => Boolean(toIsin(column)));
+    if (!ticker || isinIndex < 0) continue;
+
+    const isin = toIsin(columns[isinIndex]);
+    const exchange = normalize(isinIndex >= 1 ? columns[isinIndex - 1] : columns[1]).toUpperCase();
+    const name = columns.slice(isinIndex + 1).join(",").trim();
+    if (!name) continue;
+
+    const candidates = map.get(ticker) || [];
+    map.set(ticker, candidates);
+
+    const existing = candidates.find((candidate) => candidate.isin === isin);
+    if (existing) {
+      if (!existing.names.includes(name)) existing.names.push(name);
+      if (exchange) existing.exchanges.add(exchange);
+      if (!existing.kind) existing.kind = kind;
+    } else {
+      candidates.push({
+        isin,
+        kind,
+        names: [name],
+        exchanges: new Set(exchange ? [exchange] : []),
+      });
+    }
+  }
+
+  return map;
+}
+
+const GENERIC_TOKENS = new Set([
+  "LTD", "LIMITED", "PLC", "INC", "CORP", "CORPORATION", "LLC", "GMBH", "THE",
+  "CO", "TRUST", "CLASS", "ETF", "ETC", "ETN", "ETP", "UCITS", "FUND", "SHARES",
+  "ISHARES",
+]);
+
+function nameTokens(value) {
+  return (value || "")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toUpperCase()
+    .split(/[^A-Z0-9]+/)
+    .filter((token) => token.length > 1 && !GENERIC_TOKENS.has(token));
+}
+
+function tokensMatch(left, right) {
+  if (left === right) return true;
+  const [shorter, longer] = left.length <= right.length ? [left, right] : [right, left];
+  return shorter.length >= 2 && longer.startsWith(shorter);
+}
+
+function nameScore(scrapedName, candidateName) {
+  const scraped = nameTokens(scrapedName);
+  const candidate = nameTokens(candidateName);
+  if (scraped.length === 0 || candidate.length === 0) return 0;
+
+  const used = new Set();
+  let matched = 0;
+  for (const token of scraped) {
+    const index = candidate.findIndex(
+      (other, position) => !used.has(position) && tokensMatch(token, other)
+    );
+    if (index >= 0) {
+      used.add(index);
+      matched += 1;
+    }
+  }
+
+  return matched / Math.max(scraped.length, candidate.length);
+}
+
+function scoreCandidate(scrapedName, candidate) {
+  let best = { score: 0, name: candidate.names[0] || "" };
+  for (const name of candidate.names) {
+    const score = nameScore(scrapedName, name);
+    if (score > best.score) best = { score, name };
+  }
+  return best;
+}
+
+const MIN_NAME_SCORE = 0.5;
+const US_VENUES = ["NASDAQ", "NYSE", "AMEX", "CBOE", "OTC"];
+
+function resolveListing(tickerCandidates, ticker, scrapedName, type, exchange) {
+  const kind = type === "STOCK" ? "STOCK" : "ETF";
+  const candidates = (tickerCandidates.get(ticker) || []).filter(
+    (candidate) => !candidate.kind || candidate.kind === kind
+  );
+  if (candidates.length === 0) return null;
+  if (candidates.length === 1) {
+    const only = candidates[0];
+    return { ...only, ...scoreCandidate(scrapedName, only) };
+  }
+
+  const sameVenue = exchange
+    ? candidates.filter((candidate) => candidate.exchanges.has(exchange))
+    : [];
+  const shortlist = sameVenue.length > 0 ? sameVenue : candidates;
+  const scored = shortlist.map((candidate) => ({
+    ...candidate,
+    ...scoreCandidate(scrapedName, candidate),
+  }));
+
+  if (scored.length === 1) return scored[0];
+
+  const bestScore = Math.max(0, ...scored.map((candidate) => candidate.score));
+  if (bestScore < MIN_NAME_SCORE) return null;
+
+  const winners = scored.filter((candidate) => candidate.score === bestScore);
+  return winners.length === 1 ? winners[0] : null;
+}
+
+const EXCHANGES = {
+  "NEW YORK": "NYSE",
+  FRANKFURT: "XETR",
+  LONDON: "LSE",
+  AMSTERDAM: "EURONEXT",
+  PARIS: "EURONEXT",
+  MILAN: "MIL",
+  MADRID: "BME",
+  ZURICH: "SIX",
+  WARSAW: "WSE",
+  PRAGUE: "PRA",
+  BUDAPEST: "BUD",
+  VIENNA: "VIE",
+  STOCKHOLM: "OMX",
+  COPENHAGEN: "OMX",
+  HELSINKI: "OMX",
+  OSLO: "OSL",
+  LISBON: "EURONEXT",
+  BRUSSELS: "EURONEXT",
+  "HONG KONG": "HKEX",
+  TOKYO: "TSE",
+  "CBOE BZX": "CBOE",
+  NASDAQ: "NASDAQ",
+  NYSE: "NYSE",
+};
+
+function venueOf(info, symbol, match) {
+  const suffix = String(symbol || "").split(".").pop()?.toUpperCase();
+  // Cboe BZX is the quote feed XTB prints for US names, not the listing tape.
+  // Only the US share class should take NASDAQ/NYSE/OTC from the catalogue.
+  if (suffix === "US" && match?.exchanges) {
+    for (const code of US_VENUES) {
+      if (code === "CBOE") continue;
+      if (match.exchanges.has(code)) return code;
+    }
+  }
+  const named = EXCHANGES[normalize(info.exchange).toUpperCase()];
+  if (suffix === "US") return named && named !== "CBOE" ? named : "NYSE";
+  if (suffix === "DE") return "XETR";
+  if (suffix === "UK") return "LSE";
+  if (named && named !== "CBOE") return named;
+  return normalize(info.exchange).toUpperCase() || suffix || "";
+}
+
+function preferDottedClass(ticker) {
+  if (ticker.length >= 4 && ticker.length <= 5 && /^[A-Z]+[A-Z]$/.test(ticker)) {
+    const dotted = `${ticker.slice(0, -1)}.${ticker.slice(-1)}`;
+    if (tickerCandidates.has(dotted)) return dotted;
+  }
+  return ticker;
+}
+
+function listingType(info, name) {
+  const asset = String(info.type || "").toUpperCase();
+  if (asset === "CFD" || asset === "SYNTH" || asset === "BONDS") return "";
+  if (/\bETNs?\b/i.test(name)) return "ETN";
+  const withoutParens = name.replace(/\([^)]*\)/g, " ");
+  if (/\bETCs?\b/i.test(withoutParens) && !/\bETFs?\b/i.test(name) && !/^ETC\b/i.test(name)) {
+    return "ETC";
+  }
+  if (asset === "ETN" || asset === "ETC" || asset === "ETF" || asset === "STOCK") return asset;
+  if (info.kind === "etf") return "ETF";
+  if (info.kind === "stock") return "STOCK";
+  return "";
+}
+
+function symbolFromLogo(url) {
+  const file = String(url || "").split("/").pop() || "";
+  const stem = file.replace(/\.(png|svg|jpg|webp)$/i, "");
+  if (!stem || !/_/.test(stem)) return "";
+  const [ticker, venue] = stem.split("_");
+  if (!ticker || !venue) return "";
+  return `${ticker.toUpperCase()}.${venue.toUpperCase()}`;
+}
+
+function tickerFromSymbol(symbol) {
+  const text = normalizeTicker(symbol);
+  const cut = text.lastIndexOf(".");
+  return cut > 0 ? text.slice(0, cut) : text;
 }
 
 // --- protobuf ---------------------------------------------------------------
-// XTB's platform speaks gRPC-Web, so requests and answers are protobuf rather
-// than JSON. Only a handful of shapes are needed here, so they are written and
-// read by hand instead of pulling in a code generator: field numbers come from
-// the schema the platform ships in its own bundles.
+// XTB's platform speaks gRPC-Web. Only a handful of shapes are needed, so
+// they are written and read by hand.
 
 function varint(value) {
   const bytes = [];
@@ -69,8 +288,6 @@ const stringField = (field, text) => {
 };
 const numberField = (field, value) => [...varint((field << 3) | 0), ...varint(value)];
 
-// gRPC-Web frames a message as one flag byte, its length, then the message.
-// A flag with its top bit set carries the trailers instead of a message.
 function frame(body) {
   const header = Buffer.alloc(5);
   header.writeUInt32BE(body.length, 1);
@@ -105,10 +322,6 @@ function readVarint(buffer, at) {
   return [value, at];
 }
 
-// Reads a message without knowing its schema: every field comes back tagged
-// with its number, which is all the callers below need to walk to a value.
-// Length-delimited fields keep their bytes as they are, because on the wire a
-// string and a nested message look alike; only the reader knows which it wants.
 function decode(buffer) {
   const fields = [];
   let at = 0;
@@ -159,10 +372,6 @@ const sub = (fields, field) => {
 const subs = (fields, field) =>
   (fields || []).filter((entry) => entry.field === field && entry.bytes).map((entry) => decode(entry.bytes));
 
-// --- what the numbers mean --------------------------------------------------
-// From instrument-info-service-proto/v1: DisplayAssetClass, DistributionType,
-// and the branch of InstrumentInfoContent an answer arrives in.
-
 const ASSET_CLASS = {
   1: "STOCK",
   2: "ETF",
@@ -172,7 +381,6 @@ const ASSET_CLASS = {
   6: "ETC",
   7: "ETN",
 };
-const DISTRIBUTION = { 1: "DIST", 2: "ACC" };
 const CONTENT_KIND = {
   2: "stock",
   3: "etf",
@@ -183,38 +391,84 @@ const CONTENT_KIND = {
   8: "cfdForex",
   9: "cfdIndex",
 };
-
-// Each asset class describes itself in its own message, and they do not agree on
-// field numbers: a fund spends field 8 on whether it pays out, which pushes its
-// name to 9, while a share names itself at 8. The classes left out here -- CFDs
-// on indices, commodities, currencies and crypto -- carry no ISIN at all, so
-// nothing an ISIN was asked for can honestly come back as one.
 const LAYOUTS = {
-  etf: { isin: 4, exchange: 6, distribution: 8, name: 9, quoteSource: 12, expenseRatio: 14 },
-  cfdEtf: {
-    isin: 4,
-    exchange: 6,
-    distribution: 8,
-    name: 9,
-    quoteSource: 12,
-    leverage: 13,
-    expenseRatio: 16,
-  },
-  stock: { isin: 4, exchange: 6, name: 8, quoteSource: 11 },
-  cfdStock: { isin: 4, exchange: 6, name: 8, quoteSource: 11, leverage: 13 },
+  etf: { isin: 4, exchange: 6, name: 9, quoteSource: 12 },
+  stock: { isin: 4, exchange: 6, name: 8, quoteSource: 11, logo: 10 },
 };
+const PRODUCTS = { 1: "equity", 2: "cfd", 3: "option", 4: "crypto" };
 
 const SEARCH = "pl.xtb.ipax.pub.grpc.trading.instrumentsearch.v2.InstrumentSearchService/Search";
+const CATEGORIES =
+  "pl.xtb.ipax.pub.grpc.trading.instrumentsearch.v2.InstrumentSearchService/GetCategorizedInstruments";
 const CONTENT = "pl.xtb.ipax.pub.grpc.instrumentinfo.v1.InstrumentInfoService/GetInstrumentInfoContent";
-const CONTENT_TYPE_BASIC_INFO = 1;
+
+// `--csv=PATH` overrides the fund list, `--stocks-csv=PATH` the share list,
+// `--cryptos-csv=PATH` the coin list. `--etfs-only` / `--stocks-only` /
+// `--crypto-only` answer for one shelf. `--all` keeps lines the catalogues
+// do not carry. `--fresh` starts the file over.
+const etfsCsvPath = pathArg("csv", "../etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
+const etfsOnly = hasFlag("etfs-only") || hasFlag("funds-only");
+const stocksOnly = hasFlag("stocks-only");
+const cryptoOnly = hasFlag("crypto-only") || hasFlag("cryptos-only");
+const keepUnlisted = hasFlag("all");
+const fresh = hasFlag("fresh");
+const startIndex = Math.max(1, numberArg("start", 1));
+
+const wantEtfs = !stocksOnly && !cryptoOnly;
+const wantStocks = !etfsOnly && !cryptoOnly;
+
+const catalogue = new Map();
+if (wantEtfs) loadByIsin(etfsCsvPath, "ETF", catalogue);
+if (wantStocks) loadByIsin(stocksCsvPath, "STOCK", catalogue);
+const tickerCandidates = new Map();
+if (wantEtfs) loadTickerCandidatesFromCsv(etfsCsvPath, "ETF", tickerCandidates);
+if (wantStocks) loadTickerCandidatesFromCsv(stocksCsvPath, "STOCK", tickerCandidates);
+
+const onlyTickers = new Set(
+  process.argv
+    .slice(2)
+    .filter((arg) => !arg.startsWith("--"))
+    .map(normalizeTicker)
+    .filter((ticker) => ticker && !toIsin(ticker))
+);
+const onlyIsins = new Set(
+  process.argv
+    .slice(2)
+    .filter((arg) => !arg.startsWith("--"))
+    .map(toIsin)
+    .filter(Boolean)
+);
+
+const outputPath = new URL("xtb-parsed.json", import.meta.url);
+const results = [];
+const seen = new Set();
+const seenIsins = new Set();
+
+if (!fresh && fs.existsSync(outputPath)) {
+  try {
+    const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
+    if (Array.isArray(existing)) {
+      for (const entry of existing) {
+        results.push(entry);
+        if (entry?.ticker) {
+          seen.add(
+            `${entry.isin || entry.ticker}:${entry.exchange || ""}:${entry.ticker}:${entry.type || ""}`.toUpperCase()
+          );
+        }
+        if (entry?.isin) seenIsins.add(entry.isin);
+      }
+    }
+  } catch {
+    // Ignore malformed prior output.
+  }
+}
 
 const browser = await puppeteer.connect({
   browserURL: "http://127.0.0.1:9222",
   defaultViewport: null,
 });
 
-// The page is only there to lend the signed-in session: the lookups themselves
-// go straight to ipax.xtb.com from here, carrying the token it hands out.
 const pages = await browser.pages();
 const page =
   pages.find((candidate) => /xtb\.com|xstation/i.test(candidate.url())) ||
@@ -235,15 +489,8 @@ function claims(candidate) {
   }
 }
 
-// The token says when it dies. Rather than wait for a call to be refused, it is
-// swapped out shortly before that, which keeps a long run from stalling.
-const secondsLeft = (candidate) =>
-  (claims(candidate)?.exp || 0) - Math.floor(Date.now() / 1000);
+const secondsLeft = (candidate) => (claims(candidate)?.exp || 0) - Math.floor(Date.now() / 1000);
 
-// Every call the platform makes carries a short-lived token, so we read one off
-// the wire rather than trying to mint it. It hands out two: one that speaks for
-// the person, which the trading side will not answer to, and one that names the
-// account. Only the second is any use here, and it is the one naming an account.
 let token = "";
 client.on("Network.requestWillBeSent", (event) => {
   if (!/ipax\.xtb\.com/i.test(event.request.url)) return;
@@ -254,30 +501,17 @@ client.on("Network.requestWillBeSent", (event) => {
 
 const TOKEN_MARGIN_SECONDS = 45;
 const usable = () => Boolean(token) && secondsLeft(token) > TOKEN_MARGIN_SECONDS;
-
 let refreshing = null;
 
-// Waits for the platform to publish a newer token, and only prods it into
-// reloading if it stays quiet. Whatever happens this hands back a token rather
-// than throwing: a call made with a spent token is retried, but a run that
-// throws here loses the queries still in flight.
 async function freshToken() {
   if (usable()) return token;
-
-  // One refresh serves every caller waiting on a token.
   if (!refreshing) {
     refreshing = (async () => {
       console.error("reading a fresh XTB session token");
-      // Watching the platform's traffic is only switched on for as long as it
-      // takes to read a token off it. Left on, the price feeds it keeps open
-      // report every tick back to this process and drown out the lookups.
       await client.send("Network.enable");
       try {
-        // The platform renews the token on its own schedule and it is the only
-        // thing that can, so it is given a moment before being disturbed.
         for (let waited = 0; waited < 8000 && !usable(); waited += 250) await sleep(250);
         if (usable()) return token;
-
         try {
           await Promise.race([page.reload({ waitUntil: "domcontentloaded" }), sleep(30000)]);
         } catch {
@@ -292,7 +526,6 @@ async function freshToken() {
       refreshing = null;
     });
   }
-
   return refreshing;
 }
 
@@ -300,8 +533,6 @@ if (!(await freshToken())) {
   throw new Error("XTB never handed out a session token. Is the platform still signed in?");
 }
 
-// UNAVAILABLE and RESOURCE_EXHAUSTED are the gateway asking to be left alone
-// for a moment; anything else it says is a real answer about the instrument.
 const RETRYABLE = new Set(["8", "14"]);
 
 async function call(method, body) {
@@ -322,7 +553,6 @@ async function call(method, body) {
           referer: "https://xstation5.xtb.com/",
         },
         body: frame(body),
-        // A request left hanging would stall the whole run behind it.
         signal: AbortSignal.timeout(20000),
       });
     } catch {
@@ -334,13 +564,10 @@ async function call(method, body) {
     const status =
       response.headers.get("grpc-status") || trailers.match(/grpc-status:\s*(\d+)/)?.[1] || "";
 
-    // 16 is UNAUTHENTICATED: the token aged out mid-run, so take a new one.
     if (status === "16" || response.status === 401) {
       if (token === auth) token = "";
       continue;
     }
-    // Freshly signed-in sessions are refused with a bare 404 for a second or
-    // two before the gateway will route them.
     if (response.status === 404 || RETRYABLE.has(status)) continue;
     if (!response.ok || (status && status !== "0")) return null;
 
@@ -349,22 +576,40 @@ async function call(method, body) {
   return null;
 }
 
-// An ISIN typed into the platform's own search box comes back as the listings
-// it will let this account trade -- both the shares themselves and, where XTB
-// writes one, the CFD on them. Funds it may not sell here answer with nothing.
+function refsFromBlob(bytes) {
+  if (!bytes) return [];
+  const refs = [];
+  for (const item of decode(bytes).filter((entry) => entry.field === 1 && entry.bytes)) {
+    const identifier = decode(item.bytes);
+    const chosen = identifier[0];
+    if (!chosen) continue;
+    const id = chosen.bytes ? num(decode(chosen.bytes), 1) : chosen.value;
+    refs.push({ product: PRODUCTS[chosen.field] || "unknown", id });
+  }
+  return refs;
+}
+
+// CFD, FX, commodity, index, option and crypto-CFD shelves are left out.
+const SKIP_CATEGORIES = new Set([1, 2, 3, 6, 11, 15, 16]);
+
+function collectEquityIds(node) {
+  const id = num(node, 1);
+  if (SKIP_CATEGORIES.has(id)) return [];
+  const refs = refsFromBlob(pick(node, 5)?.bytes).filter((ref) => ref.product === "equity" && ref.id);
+  const children = sub(node, 4) ? subs(sub(node, 4), 1) : [];
+  return refs.concat(children.flatMap(collectEquityIds));
+}
+
 async function search(query) {
   const answer = await call(SEARCH, stringField(1, query));
   if (!answer) return null;
 
   const found = [];
   for (const instrument of subs(sub(answer, 1), 1)) {
-    // The id is spelled as a choice between an equity, a CFD, an option and a
-    // crypto, and which one it is says what kind of product this listing is.
     const identifier = sub(instrument, 1) || [];
     const chosen = identifier[0];
-    const products = { 1: "equity", 2: "cfd", 3: "option", 4: "crypto" };
     found.push({
-      product: products[chosen?.field] || "unknown",
+      product: PRODUCTS[chosen?.field] || "unknown",
       id: chosen?.bytes ? num(decode(chosen.bytes), 1) : null,
       symbol: str(instrument, 2),
       name: str(instrument, 3),
@@ -373,35 +618,27 @@ async function search(query) {
   return found;
 }
 
-// The search answer is deliberately thin, so the platform asks separately for
-// the panel it shows beside a listing. That is where the currency, the venue
-// and the ISIN it is quoting against live.
 async function basicInfo(instrumentId) {
-  const answer = await call(
-    CONTENT,
-    [
-      ...numberField(1, instrumentId),
-      ...stringField(2, "en"),
-      ...numberField(3, CONTENT_TYPE_BASIC_INFO),
-    ]
-  );
+  const answer = await call(CONTENT, [
+    ...numberField(1, instrumentId),
+    ...stringField(2, "en"),
+    ...numberField(3, 1),
+  ]);
   if (!answer) return null;
 
   const success = sub(answer, 1);
   if (!success) return null;
 
-  // Which branch the answer arrives in tells an ETF from a CFD written on one,
-  // and it is also what says how to read the rest of the message.
   const branch = success.find((entry) => CONTENT_KIND[entry.field] && entry.bytes);
   if (!branch) return null;
   const kind = CONTENT_KIND[branch.field];
+  if (kind.startsWith("cfd")) return { kind, type: "CFD" };
+
   const layout = LAYOUTS[kind];
   if (!layout) return { kind, unreadable: true };
 
   const essentials = sub(sub(decode(branch.bytes), 1), 1);
   if (!essentials) return null;
-
-  const leverage = layout.leverage ? sub(essentials, layout.leverage) : null;
 
   return {
     kind,
@@ -409,81 +646,10 @@ async function basicInfo(instrumentId) {
     currency: str(essentials, 2) || null,
     isin: (str(essentials, layout.isin) || "").toUpperCase() || null,
     exchange: str(essentials, layout.exchange) || null,
-    distribution: layout.distribution ? DISTRIBUTION[num(essentials, layout.distribution)] || null : null,
     name: str(essentials, layout.name) || null,
-    // The venue XTB quotes off, which is finer than the exchange it files the
-    // listing under: "New York" covers Cboe BZX and the NYSE floor alike.
     quoteSource: str(essentials, layout.quoteSource) || null,
-    expenseRatio: layout.expenseRatio ? num(sub(essentials, layout.expenseRatio), 1) : null,
-    leverage: leverage ? `${num(leverage, 1) ?? 1}:${num(leverage, 2)}` : null,
+    logo: str(essentials, 10) || null,
   };
-}
-
-// `--start=N` (1-indexed) lets a run resume from a specific query without
-// throwing away progress already saved to xtb-parsed.json.
-const startIndex = (() => {
-  for (const arg of process.argv.slice(2)) {
-    const m = arg.match(/^--start=(\d+)$/i);
-    if (m) return Math.max(1, parseInt(m[1], 10));
-  }
-  return 1;
-})();
-
-// `--csv=PATH` overrides the default ETF list CSV (defaults to etfs.csv).
-const csvPath = (() => {
-  for (const arg of process.argv.slice(2)) {
-    const m = arg.match(/^--csv=(.+)$/i);
-    if (m) return m[1];
-  }
-  return new URL("../etfs.csv", import.meta.url);
-})();
-
-const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
-const cliQueries = positionalArgs.filter(Boolean).map(toIsin).filter(Boolean);
-const csvQueries = loadIsinsFromCsv(csvPath);
-const defaultQueries = ["IE00B44Z5B48", "IE00BK5BQT80", "IE00BFMXXD54"];
-const queries = uniqueQueries(
-  cliQueries.length > 0 ? cliQueries : csvQueries.length > 0 ? csvQueries : defaultQueries
-);
-
-// A session that has just been handed a token is refused for a second or two,
-// so the first lookup is spent here. It settles the connection, and if the
-// platform is not really signed in it says so before a long run gets underway.
-let reachable = false;
-for (let attempt = 0; attempt < 6 && !reachable; attempt += 1) {
-  reachable = (await search("IE00B4L5Y983")) !== null;
-  if (!reachable) await sleep(1000);
-}
-if (!reachable) {
-  throw new Error(
-    "XTB's instrument search did not answer. Is the platform still signed in?"
-  );
-}
-
-const outputPath = new URL("xtb-parsed.json", import.meta.url);
-const results = [];
-const seen = new Set();
-
-// One fund reaches the same account as shares in Frankfurt, shares in London
-// and a CFD, all under one ISIN, so the listing and its currency belong in the
-// key that tells two rows apart.
-const entryKey = (row) =>
-  `${row.isin}:${row.symbol}:${row.currency || ""}:${row.product}`.toUpperCase();
-
-// When resuming, load already-saved entries so we don't overwrite them and so
-// the dedup `seen` set knows about rows from earlier queries.
-if (startIndex > 1 && fs.existsSync(outputPath)) {
-  try {
-    const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
-    if (Array.isArray(existing)) {
-      for (const entry of existing) {
-        results.push(entry);
-        if (entry?.isin && entry?.symbol) seen.add(entryKey(entry));
-      }
-    }
-  } catch {
-    // Ignore parse errors -- treat as a fresh run.
-  }
 }
 
 const SAVE_INTERVAL_MS = 2000;
@@ -496,110 +662,194 @@ function save() {
   savedAt = Date.now();
 }
 
-// Each ISIN is one small request, so a few run at once; they are still handed
-// back in order, which keeps the log readable and `--start` meaningful.
+let unlisted = 0;
+const skipped = new Map();
+
+function skip(reason) {
+  skipped.set(reason, (skipped.get(reason) || 0) + 1);
+}
+
+function emit({ ticker, name, exchange, currency, type, isin, match, raw }) {
+  if (!ticker || !type) {
+    skip("no ticker");
+    return;
+  }
+  if ((type === "ETF" || type === "ETC" || type === "ETN") && !wantEtfs) return;
+  if (type === "STOCK" && !wantStocks) return;
+  if (onlyTickers.size > 0 && !onlyTickers.has(ticker) && !onlyIsins.has(isin)) return;
+  if (!exchange) {
+    skip("no exchange");
+    return;
+  }
+  if (!currency) {
+    skip("no currency");
+    return;
+  }
+
+  let resolved = match;
+  if (!resolved && isin) resolved = catalogue.get(isin);
+  if (!resolved) resolved = resolveListing(tickerCandidates, ticker, name, type, exchange);
+
+  if (!resolved && !keepUnlisted) {
+    unlisted += 1;
+    return;
+  }
+
+  const key = `${isin || ticker}:${exchange}:${ticker}:${type}`.toUpperCase();
+  if (seen.has(key)) return;
+  seen.add(key);
+  if (isin) seenIsins.add(isin);
+
+  results.push({
+    query: ticker,
+    ticker,
+    name: name || resolved?.names?.[0] || ticker,
+    exchange,
+    currency,
+    type,
+    raw,
+    isin: isin || resolved?.isin || "",
+  });
+}
+
+async function rowsFromId(id, knownSymbol = "") {
+  const info = await basicInfo(id);
+  if (!info) {
+    skip("no details");
+    return;
+  }
+  if (info.type === "CFD" || info.unreadable) {
+    skip(info.kind || "cfd");
+    return;
+  }
+
+  const name = normalize(info.name);
+  const type = listingType(info, name);
+  if (!type) {
+    skip(String(info.type || info.kind || "unknown").toLowerCase());
+    return;
+  }
+
+  let symbol = knownSymbol || symbolFromLogo(info.logo);
+  const isin = toIsin(info.isin);
+  if (!symbol && isin) {
+    const listings = await search(isin);
+    symbol = listings?.find((listing) => listing.product === "equity")?.symbol || "";
+  }
+  const ticker = preferDottedClass(tickerFromSymbol(symbol));
+  let match = isin ? catalogue.get(isin) : null;
+  if (!match) match = resolveListing(tickerCandidates, ticker, name, type, "");
+  const extras = (tickerCandidates.get(ticker) || []).filter(
+    (candidate) => !isin || candidate.isin === isin
+  );
+  const exchanges = new Set(match?.exchanges || []);
+  if (match?.exchange) exchanges.add(match.exchange);
+  for (const extra of extras) {
+    for (const code of extra.exchanges) exchanges.add(code);
+  }
+  if (match || extras.length) match = { ...match, isin: isin || match?.isin || extras[0]?.isin, exchanges };
+  const exchange = venueOf(info, symbol, match);
+  const currency = normalize(info.currency).toUpperCase();
+
+  emit({
+    ticker,
+    name,
+    exchange,
+    currency,
+    type,
+    isin,
+    match,
+    raw: [symbol || ticker, name, exchange, currency].filter(Boolean).join(" "),
+  });
+}
+
 const CONCURRENCY = 8;
 
-async function rowsFor(query) {
-  const listings = await search(query);
-  if (listings === null) return { query, error: "search failed" };
-  if (listings.length === 0) return { query, rows: [] };
-
-  const rows = [];
-  const notes = [];
-  for (const listing of listings) {
-    // Options and crypto are quoted on their own terms, not as a fund listing.
-    if (listing.product === "option" || listing.product === "crypto") continue;
-
-    const info = await basicInfo(listing.id);
-    if (!info) {
-      notes.push(`${listing.symbol}: no details`);
-      continue;
+async function mapPool(items, worker) {
+  for (let offset = 0; offset < items.length; offset += CONCURRENCY) {
+    const batch = items.slice(offset, offset + CONCURRENCY);
+    await Promise.all(batch.map((item, index) => worker(item, offset + index)));
+    if (offset === 0 || (offset + CONCURRENCY) % 200 === 0 || offset + CONCURRENCY >= items.length) {
+      console.error(`[${Math.min(offset + CONCURRENCY, items.length)}/${items.length}] ${results.length} matched`);
     }
-    if (info.unreadable) {
-      notes.push(`${listing.symbol}: quoted as ${info.kind}, which carries no ISIN — skipped`);
-      continue;
-    }
-    // The search matches names as well as codes, so a listing that answers to
-    // a different ISIN is a namesake rather than the fund being asked about.
-    if (info.isin && info.isin !== query) {
-      notes.push(`${listing.symbol}: ${info.isin} — skipped`);
-      continue;
-    }
-
-    const suffix = listing.symbol?.lastIndexOf(".") ?? -1;
-    rows.push({
-      query,
-      isin: info.isin || query,
-      ticker: suffix > 0 ? listing.symbol.slice(0, suffix) : listing.symbol,
-      // XTB's own code for the listing, e.g. "EUNL.DE".
-      symbol: listing.symbol,
-      // The market code XTB tags onto its symbols, kept as it comes.
-      venue: suffix > 0 ? listing.symbol.slice(suffix + 1) : null,
-      exchange: info.exchange,
-      currency: info.currency,
-      name: info.name || listing.name,
-      // ETF for the shares, CFD for the contract written on them.
-      type: info.type,
-      product: listing.product,
-      // Says which product a CFD is written on: cfdEtf is a CFD on a fund.
-      instrument: info.kind,
-      distribution: info.distribution,
-      expenseRatio: info.expenseRatio,
-      leverage: info.leverage,
-      quoteSource: info.quoteSource,
-      instrumentId: listing.id,
-      raw: [listing.symbol, info.name || listing.name, info.exchange, info.currency, info.type]
-        .filter(Boolean)
-        .join(", "),
-    });
+    if (results.length !== savedCount && Date.now() - savedAt >= SAVE_INTERVAL_MS) save();
   }
-  return { query, rows, notes };
 }
 
-for (let batchStart = 0; batchStart < queries.length; batchStart += CONCURRENCY) {
-  const batch = [];
-  for (let offset = 0; offset < CONCURRENCY && batchStart + offset < queries.length; offset += 1) {
-    const index = batchStart + offset;
-    if (index + 1 < startIndex) continue;
-    // The queries in a batch are started together, so one of them failing must
-    // not take the run down with it before its turn to be read comes around.
-    batch.push({
-      index,
-      promise: rowsFor(queries[index]).catch((error) => ({
-        query: queries[index],
-        error: String(error),
-      })),
-    });
-  }
-  if (batch.length === 0) continue;
-
-  for (const { index, promise } of batch) {
-    const answer = await promise;
-    const label = `[${index + 1}/${queries.length}] ${answer.query}`;
-    if (answer.error) {
-      console.error(`${label}: ${answer.error}`);
-      continue;
-    }
-
-    for (const note of answer.notes || []) console.error(`  ${note}`);
-    for (const row of answer.rows) {
-      const key = entryKey(row);
-      if (seen.has(key)) continue;
-      seen.add(key);
-      results.push(row);
-    }
-    console.error(
-      answer.rows.length > 0
-        ? `${label}: ${answer.rows.map((row) => `${row.symbol} ${row.currency}`).join(", ")}`
-        : `${label}: not offered`
-    );
-  }
-
-  if (results.length !== savedCount && Date.now() - savedAt >= SAVE_INTERVAL_MS) save();
+let reachable = false;
+for (let attempt = 0; attempt < 6 && !reachable; attempt += 1) {
+  reachable = (await search("AAPL")) !== null;
+  if (!reachable) await sleep(1000);
 }
+if (!reachable) {
+  throw new Error("XTB's instrument search did not answer. Is the platform still signed in?");
+}
+
+if ((wantStocks || wantEtfs) && onlyTickers.size === 0 && onlyIsins.size === 0) {
+  const tree = await call(CATEGORIES, []);
+  const ids = [];
+  const seenId = new Set();
+  for (const category of subs(tree, 1)) {
+    for (const ref of collectEquityIds(category)) {
+      if (seenId.has(ref.id)) continue;
+      seenId.add(ref.id);
+      ids.push(ref.id);
+    }
+  }
+  console.error(`${ids.length} share-class listings in XTB's stocks tree`);
+  await mapPool(ids, (id) => rowsFromId(id));
+}
+
+if (wantEtfs && onlyTickers.size === 0) {
+  const etfIsins = [...catalogue.entries()]
+    .filter(([, entry]) => entry.kind === "ETF")
+    .map(([isin]) => isin)
+    .filter((isin) => !seenIsins.has(isin));
+  const jobs = onlyIsins.size > 0 ? [...onlyIsins] : etfIsins;
+  console.error(`${jobs.length} fund ISINs still to search`);
+
+  await mapPool(jobs.slice(startIndex - 1), async (isin) => {
+    const listings = await search(isin);
+    if (!listings) {
+      skip("search failed");
+      return;
+    }
+    const equities = listings.filter((listing) => listing.product === "equity" && listing.id);
+    for (const equity of equities) await rowsFromId(equity.id, equity.symbol);
+  });
+}
+
+if (onlyTickers.size > 0) {
+  await mapPool([...onlyTickers], async (ticker) => {
+    const listings = await search(ticker);
+    if (!listings) return;
+    for (const listing of listings.filter((row) => row.product === "equity" && row.id)) {
+      await rowsFromId(listing.id, listing.symbol);
+    }
+  });
+}
+
+results.sort((left, right) => {
+  const byType = String(left.type).localeCompare(right.type);
+  if (byType !== 0) return byType;
+  const byExchange = String(left.exchange).localeCompare(String(right.exchange));
+  if (byExchange !== 0) return byExchange;
+  return String(left.ticker).localeCompare(String(right.ticker));
+});
 
 save();
-console.log(JSON.stringify(results, null, 2));
+
+const byType = new Map();
+for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);
+const byCurrency = new Map();
+for (const row of results) byCurrency.set(row.currency, (byCurrency.get(row.currency) || 0) + 1);
+
+console.error(
+  `${results.length} listings over ${new Set(results.map((row) => row.isin || row.ticker)).size} instruments ` +
+    `(${[...byType].map(([type, count]) => `${count} ${type}`).join(", ") || "none"}; ` +
+    `${[...byCurrency].map(([currency, count]) => `${count} ${currency}`).join(", ") || "no currency"})` +
+    (unlisted ? `, ${unlisted} the catalogues do not carry` : "") +
+    (skipped.size ? `, left out ${[...skipped].map(([reason, count]) => `${count} ${reason}`).join(", ")}` : "")
+);
 
 await browser.disconnect();

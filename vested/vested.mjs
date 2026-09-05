@@ -3,33 +3,56 @@ import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-function normalizeTicker(value) {
-  const text = (value || "").trim().toUpperCase();
-  if (!text) return "";
+function normalize(value) {
+  return String(value ?? "").replace(/\s+/g, " ").trim();
+}
 
+function normalizeTicker(value) {
+  const text = normalize(value).toUpperCase();
+  if (!text) return "";
   const firstColumn = text.split(",")[0].trim();
-  const afterExchange = firstColumn.includes(":")
-    ? firstColumn.split(":").pop()
-    : firstColumn;
-  return (afterExchange || "").split(/[./]/)[0].trim();
+  const afterExchange = firstColumn.includes(":") ? firstColumn.split(":").pop() : firstColumn;
+  // The ticket accepts the class share with a dot (BRK.B). A slash is the
+  // same spelling and is folded onto it.
+  return (afterExchange || "").replace(/\//g, ".").trim();
 }
 
 function toIsin(value) {
-  const text = (value || "").trim().toUpperCase();
+  const text = normalize(value).toUpperCase();
   if (!text) return "";
   const match = text.match(/\b[A-Z]{2}[A-Z0-9]{10}\b/);
   return match ? match[0] : "";
 }
 
-// One ISIN is often listed on several venues under differently worded names
-// ("SPDR S&P 500 ETF Trust" and "State Street SPDR S&P 500 ETF"), so every
-// spelling is kept and the closest one decides a match.
-function loadTickerCandidatesFromCsv(csvPath) {
-  if (!fs.existsSync(csvPath)) return new Map();
+function pathArg(flag, fallback) {
+  for (const arg of process.argv.slice(2)) {
+    const match = arg.match(new RegExp(`^--${flag}=(.+)$`, "i"));
+    if (match) return match[1];
+  }
+  return fallback ? new URL(fallback, import.meta.url) : "";
+}
 
-  const map = new Map();
+function hasFlag(name) {
+  return process.argv.slice(2).some((arg) => new RegExp(`^--${name}$`, "i").test(arg));
+}
+
+const EXCHANGES = {
+  NASDAQ: "NASDAQ",
+  NYSE: "NYSE",
+  AMEX: "AMEX",
+  ARCA: "AMEX",
+  BATS: "CBOE",
+  CBOE: "CBOE",
+  OTC: "OTC",
+};
+
+const US_VENUES = new Set(["NASDAQ", "NYSE", "AMEX", "CBOE", "OTC"]);
+
+function loadTickerCandidatesFromCsv(csvPath, kind, map = new Map()) {
+  if (!csvPath || !fs.existsSync(csvPath)) return map;
+
   for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
-    if (!line.trim()) continue;
+    if (!line.trim() || /^ticker\s*,/i.test(line)) continue;
 
     const columns = line.split(",");
     const ticker = normalizeTicker(columns[0]);
@@ -37,6 +60,7 @@ function loadTickerCandidatesFromCsv(csvPath) {
     if (!ticker || isinIndex < 0) continue;
 
     const isin = toIsin(columns[isinIndex]);
+    const exchange = normalize(isinIndex >= 1 ? columns[isinIndex - 1] : columns[1]).toUpperCase();
     const name = columns.slice(isinIndex + 1).join(",").trim();
     if (!name) continue;
 
@@ -46,27 +70,25 @@ function loadTickerCandidatesFromCsv(csvPath) {
     const existing = candidates.find((candidate) => candidate.isin === isin);
     if (existing) {
       if (!existing.names.includes(name)) existing.names.push(name);
+      if (exchange) existing.exchanges.add(exchange);
+      if (!existing.kind) existing.kind = kind;
     } else {
-      candidates.push({ isin, names: [name] });
+      candidates.push({
+        isin,
+        kind,
+        names: [name],
+        exchanges: new Set(exchange ? [exchange] : []),
+      });
     }
   }
 
   return map;
 }
 
-// Legal-entity suffixes are shared by unrelated funds, so counting them would
-// let a same-ticker instrument pass for the one being looked up.
 const GENERIC_TOKENS = new Set([
-  "LTD",
-  "LIMITED",
-  "PLC",
-  "INC",
-  "CORP",
-  "CORPORATION",
-  "LLC",
-  "GMBH",
-  "THE",
-  "CO",
+  "LTD", "LIMITED", "PLC", "INC", "CORP", "CORPORATION", "LLC", "GMBH", "THE",
+  "CO", "TRUST", "CLASS", "ETF", "ETC", "ETN", "ETP", "UCITS", "FUND", "SHARES",
+  "ISHARES",
 ]);
 
 function nameTokens(value) {
@@ -78,8 +100,6 @@ function nameTokens(value) {
     .filter((token) => token.length > 1 && !GENERIC_TOKENS.has(token));
 }
 
-// Fund names are shortened inconsistently between sources ("Small Cap" against
-// "Small-Ca"), so tokens are compared by prefix rather than equality.
 function tokensMatch(left, right) {
   if (left === right) return true;
   const [shorter, longer] = left.length <= right.length ? [left, right] : [right, left];
@@ -103,12 +123,9 @@ function nameScore(scrapedName, candidateName) {
     }
   }
 
-  // Dividing by the longer name keeps a terser wording from outscoring the fund
-  // actually named just by leaving words out.
   return matched / Math.max(scraped.length, candidate.length);
 }
 
-// Picks the wording of a candidate that reads closest to what was scraped.
 function scoreCandidate(scrapedName, candidate) {
   let best = { score: 0, name: candidate.names[0] || "" };
   for (const name of candidate.names) {
@@ -121,29 +138,98 @@ function scoreCandidate(scrapedName, candidate) {
 const MIN_NAME_SCORE = 0.5;
 
 // Vested only carries US listings, so the US share class trading under the
-// ticker is the fund on offer. Names are left to separate several US share
-// classes, which is just as well: the instrument list abbreviates them past
-// recognition ("VS PIONEER AST-BASD INC ETF").
-function resolveIsin(tickerCandidates, ticker, scrapedName) {
-  const candidates = (tickerCandidates.get(ticker) || []).filter((candidate) =>
-    candidate.isin.startsWith("US")
+// ticker is the instrument on offer. Names are left to separate several US
+// share classes; the list abbreviates them past recognition.
+function resolveListing(tickerCandidates, ticker, scrapedName, type) {
+  const kind = type === "STOCK" ? "STOCK" : "ETF";
+  let candidates = (tickerCandidates.get(ticker) || []).filter(
+    (candidate) => (!candidate.kind || candidate.kind === kind) && candidate.isin.startsWith("US")
   );
   if (candidates.length === 0) return null;
-  if (candidates.length === 1) {
-    return { isin: candidates[0].isin, name: candidates[0].names[0] };
-  }
+  if (candidates.length === 1) return { ...candidates[0], name: candidates[0].names[0], score: 1 };
 
   const scored = candidates.map((candidate) => ({
-    isin: candidate.isin,
+    ...candidate,
     ...scoreCandidate(scrapedName, candidate),
   }));
 
   const bestScore = Math.max(0, ...scored.map((candidate) => candidate.score));
   if (bestScore < MIN_NAME_SCORE) return null;
 
-  const shortlist = scored.filter((candidate) => candidate.score === bestScore);
-  // Still tied: the name does not tell these share classes apart.
-  return shortlist.length === 1 ? shortlist[0] : null;
+  const winners = scored.filter((candidate) => candidate.score === bestScore);
+  return winners.length === 1 ? winners[0] : null;
+}
+
+// The download already files funds as type etf and shares as stock. Searching
+// BTC opens the Grayscale mini-trust (commissionGroup CRYPTO_ETF), not a coin.
+function listingType(instrument) {
+  const kind = String(instrument.type || "").toLowerCase();
+  const name = normalize(instrument.name);
+  if (kind !== "etf" && kind !== "stock") return "";
+
+  if (/\bETNs?\b/i.test(name)) return "ETN";
+  const withoutParens = name.replace(/\([^)]*\)/g, " ");
+  if (/\bETCs?\b/i.test(withoutParens) && !/\bETFs?\b/i.test(name) && !/^ETC\b/i.test(name)) {
+    return "ETC";
+  }
+  if (kind === "etf") return "ETF";
+  return "STOCK";
+}
+
+function venueOf(instrument, match) {
+  if (instrument.isOtc || instrument.commissionGroup === "OTC_SECURITIES") return "OTC";
+  const fromCatalogue = [...(match?.exchanges || [])].find((exchange) =>
+    US_VENUES.has(EXCHANGES[exchange] || exchange)
+  );
+  if (fromCatalogue) return EXCHANGES[fromCatalogue] || fromCatalogue;
+  return "";
+}
+
+// `--csv=PATH` overrides the fund list, `--stocks-csv=PATH` the share list,
+// `--cryptos-csv=PATH` the coin list. `--etfs-only` / `--stocks-only` /
+// `--crypto-only` answer for one shelf. `--all` keeps lines the catalogues
+// do not carry. `--fresh` starts the file over.
+const etfsCsvPath = pathArg("csv", "../etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
+const etfsOnly = hasFlag("etfs-only") || hasFlag("funds-only");
+const stocksOnly = hasFlag("stocks-only");
+const cryptoOnly = hasFlag("crypto-only") || hasFlag("cryptos-only");
+const keepUnlisted = hasFlag("all");
+const fresh = hasFlag("fresh");
+
+const wantEtfs = !stocksOnly && !cryptoOnly;
+const wantStocks = !etfsOnly && !cryptoOnly;
+
+const tickerCandidates = new Map();
+if (wantEtfs) loadTickerCandidatesFromCsv(etfsCsvPath, "ETF", tickerCandidates);
+if (wantStocks) loadTickerCandidatesFromCsv(stocksCsvPath, "STOCK", tickerCandidates);
+
+const onlyTickers = new Set(
+  process.argv
+    .slice(2)
+    .filter((arg) => !arg.startsWith("--"))
+    .map(normalizeTicker)
+    .filter((ticker) => ticker && !toIsin(ticker))
+);
+
+const outputPath = new URL("vested-parsed.json", import.meta.url);
+const results = [];
+const seen = new Set();
+
+if (!fresh && fs.existsSync(outputPath)) {
+  try {
+    const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
+    if (Array.isArray(existing)) {
+      for (const entry of existing) {
+        results.push(entry);
+        if (entry?.ticker) {
+          seen.add(`${entry.ticker}:${entry.type || ""}:${entry.exchange || ""}`.toUpperCase());
+        }
+      }
+    }
+  } catch {
+    // Ignore malformed prior output and start fresh.
+  }
 }
 
 const browser = await puppeteer.connect({
@@ -155,82 +241,21 @@ const pages = await browser.pages();
 const page =
   pages.find((candidate) => candidate.url().includes("vestedfinance.com")) ||
   (await browser.newPage());
-await page.bringToFront();
-
-// `--start=N` (1-indexed) lets a run resume from a specific instrument without
-// throwing away progress already saved to vested-parsed.json.
-const startIndex = (() => {
-  for (const arg of process.argv.slice(2)) {
-    const match = arg.match(/^--start=(\d+)$/i);
-    if (match) return Math.max(1, parseInt(match[1], 10));
-  }
-  return 1;
-})();
-// Reading every instrument page takes long enough to be interrupted, so
-// `--resume` picks up whatever the last run managed to save.
-const resume = process.argv.slice(2).some((arg) => /^--resume$/i.test(arg));
-const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
-
-// `--csv=PATH` overrides the default ETF list CSV (defaults to etfs.csv).
-const csvPath = (() => {
-  for (const arg of process.argv.slice(2)) {
-    const match = arg.match(/^--csv=(.+)$/i);
-    if (match) return match[1];
-  }
-  return new URL("../etfs.csv", import.meta.url);
-})();
-
-const tickerCandidates = loadTickerCandidatesFromCsv(csvPath);
-const onlyTickers = new Set(positionalArgs.map(normalizeTicker).filter(Boolean));
-
-const outputPath = new URL("vested-parsed.json", import.meta.url);
-const results = [];
-const seen = new Set();
-
-// When resuming, load already-saved entries so earlier progress is preserved.
-if ((resume || startIndex > 1) && fs.existsSync(outputPath)) {
-  try {
-    const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
-    if (Array.isArray(existing)) {
-      for (const entry of existing) {
-        results.push(entry);
-        if (entry?.ticker) seen.add(entry.ticker.toUpperCase());
-      }
-    }
-  } catch {
-    // Ignore malformed prior output and start fresh.
-  }
-}
 
 const APP_URL = "https://app.vestedfinance.com/en/global";
 const INSTRUMENTS_URL = "https://vested-api-prod-ga.vestedfinance.com/instruments";
-const OVERVIEW_BASE = "https://vested-woodpecker-prod-ga.vestedfinance.com/instrument";
 
 // The search box filters in the browser rather than asking a server, which it
 // can do because the app downloads every instrument it offers as it starts.
-// That list is read off the wire, along with the credentials the app signs its
-// calls with, since the instrument pages will not answer without them.
-async function captureSession() {
+async function captureInstruments() {
   const client = await page.createCDPSession();
   await client.send("Network.enable");
 
   let body = null;
-  let authorization = null;
-  let csrf = null;
   const watched = new Set();
 
   client.on("Network.requestWillBeSent", (event) => {
-    const url = event.request.url;
-    if (!url.includes("vestedfinance.com")) return;
-
-    const sent = event.request.headers || {};
-    const value = sent.Authorization || sent.authorization;
-    if (value) {
-      authorization = value;
-      csrf = sent["x-csrf-token"] || sent["X-Csrf-Token"] || csrf;
-    }
-
-    if (url.split("?")[0] === INSTRUMENTS_URL) watched.add(event.requestId);
+    if (event.request.url.split("?")[0] === INSTRUMENTS_URL) watched.add(event.requestId);
   });
 
   client.on("Network.loadingFinished", async (event) => {
@@ -242,196 +267,87 @@ async function captureSession() {
   });
 
   await page.goto(APP_URL, { waitUntil: "domcontentloaded" });
-  for (let waited = 0; waited < 90000; waited += 250) {
-    if (body && authorization) break;
-    await sleep(250);
-  }
+  for (let waited = 0; waited < 90000 && !body; waited += 250) await sleep(250);
   await client.detach().catch(() => {});
 
-  if (!body || !authorization) {
-    throw new Error(
-      "Could not read the instrument list. Is app.vestedfinance.com signed in?"
-    );
+  if (!body) {
+    throw new Error("Could not read the instrument list. Is app.vestedfinance.com signed in?");
   }
 
   const instruments = JSON.parse(body);
-  return {
-    instruments: Array.isArray(instruments) ? instruments : [],
-    // The token is checked; the CSRF value is not, but the call is refused when
-    // the header is missing altogether.
-    headers: { Authorization: authorization, "x-csrf-token": csrf || "" },
-  };
+  return Array.isArray(instruments) ? instruments : [];
 }
 
-const session = await captureSession();
+const instruments = await captureInstruments();
+console.error(`${instruments.length} instruments in Vested's offering`);
 
-const etfs = session.instruments
-  .filter((instrument) => (instrument?.type || "").toLowerCase() === "etf")
-  .map((instrument) => ({
-    ticker: (instrument.symbol || "").toUpperCase(),
-    name: (instrument.name || "").replace(/\s+/g, " ").trim(),
-  }))
-  .filter((instrument) => instrument.ticker)
-  .filter((instrument) => onlyTickers.size === 0 || onlyTickers.has(instrument.ticker));
+let unlisted = 0;
+const skipped = new Map();
 
-console.error(`${etfs.length} ETFs offered`);
+function skip(reason) {
+  skipped.set(reason, (skipped.get(reason) || 0) + 1);
+}
 
-// Only the funds the CSV can name are worth an instrument page.
-const pending = [];
-for (const [index, etf] of etfs.entries()) {
-  if (index + 1 < startIndex) continue;
-  if (seen.has(etf.ticker)) continue;
+for (const instrument of instruments) {
+  const ticker = normalizeTicker(instrument.symbol);
+  const type = listingType(instrument);
+  if (!ticker || !type) {
+    skip(String(instrument.type || "unknown").toLowerCase() || "unknown");
+    continue;
+  }
+  if (onlyTickers.size > 0 && !onlyTickers.has(ticker)) continue;
+  if ((type === "ETF" || type === "ETC" || type === "ETN") && !wantEtfs) continue;
+  if (type === "STOCK" && !wantStocks) continue;
 
-  const candidate = resolveIsin(tickerCandidates, etf.ticker, etf.name);
-  if (!candidate) continue;
+  const name = normalize(instrument.name);
+  const match = resolveListing(tickerCandidates, ticker, name, type);
+  if (!match && !keepUnlisted) {
+    unlisted += 1;
+    continue;
+  }
 
-  pending.push({
-    ticker: etf.ticker,
-    listName: etf.name,
-    csvName: candidate.name,
-    isin: candidate.isin,
+  const exchange = venueOf(instrument, match);
+  if (!US_VENUES.has(exchange)) {
+    skip("no venue");
+    continue;
+  }
+
+  const key = `${ticker}:${type}:${exchange}`.toUpperCase();
+  if (seen.has(key)) continue;
+  seen.add(key);
+
+  results.push({
+    query: ticker,
+    ticker,
+    name: name || match?.name || ticker,
+    exchange,
+    // Neither the instrument list nor the overview page sends a currency.
+    // Vested gives Indian investors US listings, quoted in dollars.
+    currency: "USD",
+    type,
+    raw: [ticker, name, exchange, "USD"].filter(Boolean).join(" "),
+    isin: match?.isin || "",
   });
 }
 
-console.error(`${pending.length} matched to an ISIN, reading their exchanges`);
+results.sort((left, right) => {
+  const byType = String(left.type).localeCompare(right.type);
+  if (byType !== 0) return byType;
+  const byExchange = String(left.exchange).localeCompare(String(right.exchange));
+  if (byExchange !== 0) return byExchange;
+  return String(left.ticker).localeCompare(String(right.ticker));
+});
 
-// The exchange lives on the instrument page rather than in the list, so each
-// fund costs a call. Roughly a thousand of them exhausts a quota that then
-// refuses everything, whatever the pace, until several minutes have passed.
-const BATCH_SIZE = 60;
-const CONCURRENCY = 6;
-const COOLDOWN_MS = 300000;
-const MAX_ROUNDS = 12;
+fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 
-function requestBatch(batch) {
-  return page.evaluate(
-    async (base, headers, symbols, workers) => {
-      const answers = new Array(symbols.length);
-      let next = 0;
+const byType = new Map();
+for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);
 
-      const run = async () => {
-        while (next < symbols.length) {
-          const index = next;
-          next += 1;
-
-          try {
-            const response = await fetch(`${base}/${symbols[index]}/overview`, { headers });
-            if (!response.ok) {
-              answers[index] = { status: response.status };
-              continue;
-            }
-            const payload = await response.json();
-            const data = payload?.data || {};
-            answers[index] = {
-              status: 200,
-              name: data.name,
-              type: data.type,
-              exchange: data.exchange,
-            };
-          } catch (error) {
-            answers[index] = { status: 0, error: String(error) };
-          }
-        }
-      };
-
-      await Promise.all(Array.from({ length: workers }, run));
-      return answers;
-    },
-    OVERVIEW_BASE,
-    session.headers,
-    batch.map((entry) => entry.ticker),
-    CONCURRENCY
-  );
-}
-
-function save() {
-  fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
-}
-
-// While the quota is exhausted the app cannot load its own instrument list
-// either, so a refusal here says nothing about the credentials being held.
-async function refreshSession() {
-  const refreshed = await captureSession().catch(() => null);
-  if (refreshed) session.headers = refreshed.headers;
-}
-
-// Funds whose page could not be read are kept for another round rather than
-// dropped, since a refusal says nothing about the fund itself.
-let queue = pending;
-for (let round = 1; queue.length > 0 && round <= MAX_ROUNDS; round += 1) {
-  const retry = [];
-
-  if (round > 1) {
-    console.error(`round ${round}: ${queue.length} left, waiting out the quota`);
-    await sleep(COOLDOWN_MS);
-    await refreshSession();
-  }
-
-  for (let offset = 0; offset < queue.length; offset += BATCH_SIZE) {
-    const batch = queue.slice(offset, offset + BATCH_SIZE);
-
-    let answers = await requestBatch(batch).catch(() => null);
-    // A token that expired mid-run costs the whole batch, and a fresh one is
-    // cheap next to reading these pages again.
-    if (!answers || answers.some((answer) => answer?.status === 401)) {
-      await sleep(1000);
-      await refreshSession();
-      answers = (await requestBatch(batch).catch(() => null)) || answers;
-    }
-
-    let answered = 0;
-    for (const [index, entry] of batch.entries()) {
-      const answer = (answers || [])[index];
-      if (answer?.status !== 200) {
-        retry.push(entry);
-        continue;
-      }
-
-      answered += 1;
-      if (seen.has(entry.ticker)) continue;
-      seen.add(entry.ticker);
-
-      // The instrument page spells the fund out ("iShares MSCI Brazil ETF")
-      // where the list only carries a shorthand ("Brazil Capped ETF MSCI
-      // iShares").
-      const name =
-        (answer.name || "").replace(/\s+/g, " ").trim() || entry.listName || entry.csvName;
-      results.push({
-        query: entry.ticker,
-        ticker: entry.ticker,
-        name,
-        exchange: (answer.exchange || "").trim() || null,
-        // Vested gives Indian investors US listings, quoted in dollars.
-        currency: "USD",
-        type: (answer.type || "ETF").toUpperCase(),
-        raw: [entry.ticker, entry.listName, answer.exchange].filter(Boolean).join(" "),
-        isin: entry.isin,
-      });
-    }
-
-    save();
-    console.error(
-      `round ${round} [${offset + batch.length}/${queue.length}] ${batch[batch.length - 1].ticker}, ${results.length} saved, ${retry.length} to retry`
-    );
-
-    // Every refusal in a batch means the quota is spent, and it stays spent
-    // until the calls stop for a while.
-    if (answered === 0) {
-      console.error("  quota spent, pausing");
-      await sleep(COOLDOWN_MS);
-      await refreshSession();
-    }
-  }
-
-  queue = retry;
-}
-
-for (const entry of queue) {
-  console.error(`  ${entry.ticker}: instrument page never answered`);
-}
-
-save();
-
-console.log(JSON.stringify(results, null, 2));
+console.error(
+  `${results.length} listings over ${new Set(results.map((row) => row.isin || row.ticker)).size} instruments ` +
+    `(${[...byType].map(([type, count]) => `${count} ${type}`).join(", ") || "none"})` +
+    (unlisted ? `, ${unlisted} the catalogues do not carry` : "") +
+    (skipped.size ? `, left out ${[...skipped].map(([reason, count]) => `${count} ${reason}`).join(", ")}` : "")
+);
 
 await browser.disconnect();

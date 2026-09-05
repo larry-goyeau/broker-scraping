@@ -40,6 +40,8 @@ TradeUP	US	Neobroker	US ETFs / ETNs	https://www.tradeup.com/
 Hapi	US	Neobroker	US ETFs / ETNs	https://hapi.trade
 Truist Trade	US	Bank	US ETFs / ETNs	https://www.truist.com/investing-retirement/self-directed-investing
 PNC Brokerage Plus	US	Bank	US ETFs / ETNs	https://www.pnc.com/en/personal-banking/investments-and-retirement/brokerage-accounts/brokerage-accounts-faqs.html
+Betterment	US	Neobroker	US ETFs / ETNs	https://www.betterment.com/self-directed-investing
+Titan	US	Neobroker	US ETFs / ETNs	https://www.titan.com/
 Questrade	CA	Broker	Local + US ETFs	https://www.questrade.com/account-selection
 Wealthsimple	CA	Neobroker	Local + US ETFs	https://www.wealthsimple.com/en-ca/accounts/non-registered
 Qtrade Direct Investing	CA	Broker	Local + US ETFs	https://www.qtrade.ca/en/investor/apply.html
@@ -86,6 +88,7 @@ Redmayne Bentley	UK	Broker	UCITS ETFs / ETCs	https://www.redmayne.co.uk/stockbro
 Killik & Co	UK	Broker	UCITS ETFs / ETCs	https://killik.com/what-we-offer/investment-management/stockbroking-service/
 Saxo UK	UK	Bank	Global ETFs / ETPs	https://www.home.saxo/en-gb/accounts/openaccount
 Moneyfarm	UK	Neobroker	UCITS ETFs / ETCs	https://www.moneyfarm.com/uk/
+EQi	UK	Broker	UCITS ETFs / ETCs	https://eqi.co.uk/
 Davy Select	IE	Broker	UCITS ETFs / ETCs	https://www.davyselect.ie/open-account
 Goodbody	IE	Broker	UCITS ETFs / ETCs	https://www.goodbody.ie/individuals/self-invest/
 Cantor Fitzgerald Ireland	IE	Broker	UCITS ETFs / ETCs	https://cantorfitzgerald.ie/private-clients/
@@ -152,6 +155,7 @@ LYNX Nederland	NL	Broker	Global ETFs / ETPs	https://www.lynx.nl/beleggingsrekeni
 Easybroker	NL	Broker	Global ETFs / ETPs	https://www.easybroker.nl/start-aanvraag
 Saxo Bank Nederland	NL	Bank	Global ETFs / ETPs	https://www.home.saxo/nl-nl/accounts/openaccount
 Today's Brokers	NL	Broker	Global ETFs / ETPs	https://todaysgroup.nl/todays-brokers/
+Alex Beleggersbank	NL	Broker	UCITS ETFs / ETCs	https://www.alex.nl/
 BGL BNP Paribas	LU	Bank	UCITS ETFs / ETCs	https://www.bgl.lu/fr/particuliers/investir/investir-en-ligne.html
 Swissquote Bank Europe	LU	Bank	Global ETFs / ETPs	https://www.swissquote.com/en-lu/private
 Spuerkeess (S-Net Invest)	LU	Bank	UCITS ETFs / ETCs	https://www.spuerkeess.lu/en/private-customers/saving-and-investing/invest-by-yourself/
@@ -203,6 +207,7 @@ UniCredit	IT	Bank	Global ETFs / ETPs	https://www.unicredit.it/it/privati/investi
 BPER Banca	IT	Bank	UCITS ETFs / ETCs	https://www.bper.it/privati/servizi-digitali/trading-online
 Banca Mediolanum	IT	Bank	UCITS ETFs / ETCs	https://www.bancamediolanum.it/investimenti-online/trading/
 Credem	IT	Bank	UCITS ETFs / ETCs	https://www.credem.it/content/credem/it/privati-e-famiglie/conti-servizi-e-carte/servizi_online/trading_online.html
+IWBank	IT	Bank	UCITS ETFs / ETCs	https://www.iwbank.it/
 Renta 4 Banco	ES	Bank	UCITS ETFs / ETCs	https://www.r4.com/hazte-cliente
 Bankinter	ES	Bank	UCITS ETFs / ETCs	https://www.bankinter.com/banca/ahorro-inversion/inversion/broker
 BBVA Trader Bolsa	ES	Bank	UCITS ETFs / ETCs	https://www.bbva.es/personas/productos/bolsa/cuenta-de-valores.html
@@ -277,6 +282,7 @@ BNP Paribas Biuro Maklerskie	PL	Bank	Global ETFs / ETPs	https://www.bnpparibas.p
 Trigon Dom Maklerski	PL	Broker	Local-market ETFs	https://www.trigon.pl/dom-maklerski/zaloz-rachunek
 Millennium Biuro Maklerskie	PL	Bank	UCITS ETFs / ETCs	https://www.millenniumbm.pl/rachunki-maklerskie/rachunek-indywidualny
 Citi Handlowy Dom Maklerski	PL	Bank	Global ETFs / ETPs	https://www.citibank.pl/biuro-maklerskie/
+IPOPEMA Securities	PL	Broker	UCITS ETFs / ETCs	https://www.ipopema.pl/
 Fio banka e-Broker	CZ	Bank	UCITS ETFs / ETCs	https://www.fio.cz/akcie-investice/e-broker
 Patria Finance	CZ	Broker	UCITS ETFs / ETCs	https://finance.patria.cz/otevrit-ucet
 Česká spořitelna	CZ	Bank	Global ETFs / ETPs	https://www.csas.cz/cs/osobni-finance/investovani
@@ -462,6 +468,7 @@ Webull AU	AU	Neobroker	Local + US ETFs	https://www.webull.com.au
 Bendigo Invest Direct	AU	Bank	Local + Global ETFs	https://www.bendigobank.com.au/personal/investing/share-trading/
 Marketech Focus	AU	Broker	Local-market ETFs	https://onboarding.marketech.com.au/
 Morgans	AU	Broker	Local + Global ETFs	https://morgans.com.au/stockbroking
+Ord Minnett	AU	Broker	Local + Global ETFs	https://www.ordminnett.com.au/
 Sharesies	NZ	Neobroker	Local + US ETFs	https://www.sharesies.nz
 Hatch Invest	NZ	Neobroker	US ETFs / ETNs	https://hatchinvest.nz
 InvestNow	NZ	Broker	Local-market ETFs	https://investnow.co.nz/join-investnow/
@@ -513,6 +520,9 @@ moomoo Japan	JP	Neobroker	Local + US ETFs	https://www.moomoo.com/jp
 GMO Click Securities	JP	Broker	Local-market ETFs	https://www.click-sec.com/corp/kouza/entry/
 Okasan Online	JP	Broker	Local + US ETFs	https://www.okasan-online.co.jp/support/account/
 Daiwa Connect Securities	JP	Neobroker	Local + US ETFs	https://www.connect-sec.co.jp/account/
+LINE Securities	JP	Neobroker	Local-market ETFs	https://line-sec.co.jp/
+SBI Neotrade Securities	JP	Broker	Local-market ETFs	https://www.sbineotrade.jp/
+Webull Japan	JP	Neobroker	Local + US ETFs	https://www.webull.co.jp/
 Kiwoom Securities	KR	Broker	Local + US ETFs	https://www.kiwoom.com/m/customer/acctopen/VAcctOpenInfoView
 Mirae Asset Securities	KR	Broker	Local + US ETFs	https://securities.miraeasset.com/mka/mka1001/n01.do
 Samsung Securities	KR	Broker	Local + US ETFs	https://www.samsungpop.com/ux/kor/customer/online/registonlineaccount/online0.do
@@ -558,6 +568,25 @@ m.Stock by Mirae Asset	IN	Neobroker	Local-market ETFs	https://www.mstock.com/ope
 Mirae Asset Sharekhan	IN	Broker	Local-market ETFs	https://www.sharekhan.com/equity-trading-account
 Geojit Financial Services	IN	Broker	Local-market ETFs	https://www.geojit.com/open-demat-account
 Bajaj Broking	IN	Broker	Local-market ETFs	https://www.bajajbroking.in/knowledge-center/exchange-traded-fund
+Alice Blue	IN	Broker	Local-market ETFs	https://aliceblueonline.com/open-demat-account
+IIFL Capital	IN	Broker	Local-market ETFs	https://www.iiflcapital.com/
+Nuvama	IN	Broker	Local-market ETFs	https://www.nuvamawealth.com/
+Anand Rathi	IN	Broker	Local-market ETFs	https://anandrathi.com/open-demat-account
+Samco	IN	Broker	Local-market ETFs	https://www.samco.in/open-free-demat-account
+Shoonya	IN	Neobroker	Local-market ETFs	https://shoonya.com/
+Edelweiss Broking	IN	Broker	Local-market ETFs	https://www.edelweiss.in/
+JM Financial	IN	Broker	Local-market ETFs	https://www.jmfinancialservices.in/
+Yes Securities	IN	Broker	Local-market ETFs	https://yesinvest.in/
+Choice Broking	IN	Broker	Local-market ETFs	https://choiceindia.com/
+Religare Broking	IN	Broker	Local-market ETFs	https://www.religareonline.com/
+SMC Global	IN	Broker	Local-market ETFs	https://smcindiaonline.com/
+Ventura Securities	IN	Broker	Local-market ETFs	https://www.ventura1.com/
+Aditya Birla Money	IN	Broker	Local-market ETFs	https://www.adityabirlamoney.com/
+Prabhudas Lilladher	IN	Broker	Local-market ETFs	https://www.plindia.com/
+Tradejini	IN	Broker	Local-market ETFs	https://www.tradejini.com/
+Mastertrust	IN	Broker	Local-market ETFs	https://www.mastertrust.co.in/
+Arihant Capital	IN	Broker	Local-market ETFs	https://www.arihantcapital.com/
+Bigul	IN	Neobroker	Local-market ETFs	https://www.bigul.co/
 InnovestX	TH	Broker	Local + US ETFs	https://www.innovestx.co.th/products/stock/Thai-Stock
 Kasikorn Securities	TH	Broker	Local-market ETFs	https://www.kasikornsecurities.com/
 Bualuang Securities	TH	Broker	Local-market ETFs	https://www.bualuang.co.th/en/account-opening

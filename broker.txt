@@ -8,6 +8,7 @@ Endowus
 benchmark
 mexem
 puprime
+saxoinvestor
 
 Syfe
 Exante

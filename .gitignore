@@ -2,3 +2,5 @@
 .env
 *.jpg
 broker-scraping*
+*.mp4
+*.tsv

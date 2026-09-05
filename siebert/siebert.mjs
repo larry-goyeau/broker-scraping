@@ -3,22 +3,45 @@ import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-function normalizeTicker(value) {
-  const text = (value || "").trim().toUpperCase();
-  if (!text) return "";
+function normalize(value) {
+  return String(value ?? "").replace(/\s+/g, " ").trim();
+}
 
+function normalizeTicker(value) {
+  const text = normalize(value).toUpperCase();
+  if (!text) return "";
   const firstColumn = text.split(",")[0].trim();
-  const afterExchange = firstColumn.includes(":")
-    ? firstColumn.split(":").pop()
-    : firstColumn;
-  return (afterExchange || "").split(/[/]/)[0].trim();
+  const afterExchange = firstColumn.includes(":") ? firstColumn.split(":").pop() : firstColumn;
+  // Siebert's ticket wants the class share with a dot (BRK.B). A slash is
+  // refused, so it is folded onto the same spelling.
+  return (afterExchange || "").replace(/\//g, ".").trim();
 }
 
 function toIsin(value) {
-  const text = (value || "").trim().toUpperCase();
+  const text = normalize(value).toUpperCase();
   if (!text) return "";
   const match = text.match(/\b[A-Z]{2}[A-Z0-9]{10}\b/);
   return match ? match[0] : "";
+}
+
+function pathArg(flag, fallback) {
+  for (const arg of process.argv.slice(2)) {
+    const match = arg.match(new RegExp(`^--${flag}=(.+)$`, "i"));
+    if (match) return match[1];
+  }
+  return fallback ? new URL(fallback, import.meta.url) : "";
+}
+
+function numberArg(flag, fallback) {
+  for (const arg of process.argv.slice(2)) {
+    const match = arg.match(new RegExp(`^--${flag}=(\\d+)$`, "i"));
+    if (match) return parseInt(match[1], 10);
+  }
+  return fallback;
+}
+
+function hasFlag(name) {
+  return process.argv.slice(2).some((arg) => new RegExp(`^--${name}$`, "i").test(arg));
 }
 
 // Siebert quotes the listing venue the way its data vendor names it. The
@@ -40,17 +63,23 @@ const EXCHANGE_NAMES = {
   NSD: "NASDAQ",
   NYE: "NYSE",
   NYS: "NYSE",
+  NYSE: "NYSE",
+  OTC: "OTC",
+  OTCBB: "OTC",
+  OTCQX: "OTC",
+  OTCQB: "OTC",
+  PINK: "OTC",
+  PINX: "OTC",
 };
 
 // One ISIN is often listed on several venues under differently worded names
 // ("SPDR S&P 500 ETF Trust" and "State Street SPDR S&P 500 ETF"), so every
 // spelling is kept and the closest one decides a match.
-function loadTickerCandidatesFromCsv(csvPath) {
-  if (!fs.existsSync(csvPath)) return new Map();
+function loadTickerCandidatesFromCsv(csvPath, kind, map = new Map()) {
+  if (!csvPath || !fs.existsSync(csvPath)) return map;
 
-  const map = new Map();
   for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
-    if (!line.trim()) continue;
+    if (!line.trim() || /^ticker\s*,/i.test(line)) continue;
 
     const columns = line.split(",");
     const ticker = normalizeTicker(columns[0]);
@@ -58,7 +87,7 @@ function loadTickerCandidatesFromCsv(csvPath) {
     if (!ticker || isinIndex < 0) continue;
 
     const isin = toIsin(columns[isinIndex]);
-    const exchange = (columns[isinIndex - 1] || "").trim().toUpperCase();
+    const exchange = normalize(isinIndex >= 1 ? columns[isinIndex - 1] : columns[1]).toUpperCase();
     const name = columns.slice(isinIndex + 1).join(",").trim();
     if (!name) continue;
 
@@ -69,27 +98,37 @@ function loadTickerCandidatesFromCsv(csvPath) {
     if (existing) {
       if (!existing.names.includes(name)) existing.names.push(name);
       if (exchange) existing.exchanges.add(exchange);
+      if (!existing.kind) existing.kind = kind;
     } else {
-      candidates.push({ isin, names: [name], exchanges: new Set(exchange ? [exchange] : []) });
+      candidates.push({
+        isin,
+        kind,
+        names: [name],
+        exchanges: new Set(exchange ? [exchange] : []),
+      });
     }
   }
 
   return map;
 }
 
+function loadCryptoTickers(csvPath) {
+  const tickers = new Set();
+  if (!csvPath || !fs.existsSync(csvPath)) return tickers;
+
+  for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
+    if (!line.trim() || /^ticker\s*,/i.test(line)) continue;
+    const ticker = normalizeTicker(line.split(",")[0]);
+    if (ticker) tickers.add(ticker);
+  }
+  return tickers;
+}
+
 // Legal-entity suffixes are shared by unrelated funds, so counting them would
 // let a same-ticker instrument pass for the one being looked up.
 const GENERIC_TOKENS = new Set([
-  "LTD",
-  "LIMITED",
-  "PLC",
-  "INC",
-  "CORP",
-  "CORPORATION",
-  "LLC",
-  "GMBH",
-  "THE",
-  "CO",
+  "LTD", "LIMITED", "PLC", "INC", "CORP", "CORPORATION", "LLC", "GMBH", "THE",
+  "CO", "TRUST", "CLASS", "ETF", "UCITS", "COMMON", "STOCK", "SHARES",
 ]);
 
 function nameTokens(value) {
@@ -131,7 +170,6 @@ function nameScore(scrapedName, candidateName) {
   return matched / Math.max(scraped.length, candidate.length);
 }
 
-// Picks the wording of a candidate that reads closest to what was scraped.
 function scoreCandidate(scrapedName, candidate) {
   let best = { score: 0, name: candidate.names[0] || "" };
   for (const name of candidate.names) {
@@ -143,18 +181,22 @@ function scoreCandidate(scrapedName, candidate) {
 
 const MIN_NAME_SCORE = 0.5;
 
+function wantedKind(type) {
+  return type === "STOCK" ? "STOCK" : "ETF";
+}
+
 // Siebert only trades US listings, so the US share class trading under the
-// ticker is the fund on offer. Where a ticker covers several of them, the
-// venue it is quoted on tells them apart before the name has to, which matters
-// because notes are named after their issuer rather than their fund ("Barclays
-// Bank PLC ZC SP ETN REDEEM 08/09/2049 USD 50").
-function resolveIsin(tickerCandidates, quote) {
-  const usCandidates = (tickerCandidates.get(quote.ticker) || []).filter((candidate) =>
-    candidate.isin.startsWith("US")
+// ticker is the instrument on offer. Where a ticker covers several of them,
+// the venue it is quoted on tells them apart before the name has to, which
+// matters because notes are named after their issuer rather than their fund.
+function resolveListing(tickerCandidates, quote, type) {
+  const kind = wantedKind(type);
+  const usCandidates = (tickerCandidates.get(quote.ticker) || []).filter(
+    (candidate) => candidate.isin.startsWith("US") && (!candidate.kind || candidate.kind === kind)
   );
   if (usCandidates.length === 0) return null;
 
-  const venue = EXCHANGE_NAMES[quote.exchange];
+  const venue = EXCHANGE_NAMES[quote.exchange] || quote.exchange;
   const sameVenue = venue
     ? usCandidates.filter((candidate) => candidate.exchanges.has(venue))
     : [];
@@ -162,19 +204,28 @@ function resolveIsin(tickerCandidates, quote) {
 
   const scored = candidates.map((candidate) => ({
     isin: candidate.isin,
+    kind: candidate.kind,
     ...scoreCandidate(quote.name, candidate),
   }));
 
-  // A lone US fund under a ticker Siebert accepts is that fund, whatever the
-  // quote calls it.
   if (scored.length === 1) return scored[0];
 
   const bestScore = Math.max(0, ...scored.map((candidate) => candidate.score));
   if (bestScore < MIN_NAME_SCORE) return null;
 
   const shortlist = scored.filter((candidate) => candidate.score === bestScore);
-  // Still tied: the name does not tell these share classes apart.
   return shortlist.length === 1 ? shortlist[0] : null;
+}
+
+function listingType(quoted) {
+  const kind = String(quoted.type || "").toLowerCase();
+  const name = quoted.name || "";
+  if (kind === "crypto" || kind === "cryptocurrency") return "CRYPTO";
+  if (kind === "etn" || /\bETNs?\b/i.test(name)) return "ETN";
+  if (kind === "etc" || (/\bETCs?\b/i.test(name) && !/\bETFs?\b/i.test(name))) return "ETC";
+  if (kind === "etf") return "ETF";
+  if (kind === "equity" || kind === "stock" || kind === "adr" || kind === "reit") return "STOCK";
+  return "";
 }
 
 // --- the portal speaks grpc-web, so its frames are built and read by hand ---
@@ -266,46 +317,43 @@ function parseMessage(buffer, depth = 0) {
   return out;
 }
 
-const browser = await puppeteer.connect({
-  browserURL: "http://127.0.0.1:9222",
-  defaultViewport: null,
-});
+// `--csv=PATH` overrides the fund list, `--stocks-csv=PATH` the share list,
+// `--cryptos-csv=PATH` the coin list. `--etfs-only` / `--stocks-only` /
+// `--crypto-only` answer for one shelf. `--all` keeps lines the catalogues
+// do not carry. `--fresh` starts the file over; otherwise a walk this long
+// is read back so an interruption keeps prior work.
+const etfsCsvPath = pathArg("csv", "../etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
+const cryptosCsvPath = pathArg("cryptos-csv", "../cryptos.csv");
+const etfsOnly = hasFlag("etfs-only") || hasFlag("funds-only");
+const stocksOnly = hasFlag("stocks-only");
+const cryptoOnly = hasFlag("crypto-only") || hasFlag("cryptos-only");
+const keepUnlisted = hasFlag("all");
+const fresh = hasFlag("fresh");
+const startIndex = Math.max(1, numberArg("start", 1));
 
-const pages = await browser.pages();
-const page =
-  pages.find((candidate) => candidate.url().includes("investor.siebert.com")) ||
-  (await browser.newPage());
-await page.bringToFront();
+const wantEtfs = !stocksOnly && !cryptoOnly;
+const wantStocks = !etfsOnly && !cryptoOnly;
+const wantCrypto = !etfsOnly && !stocksOnly;
 
-// `--start=N` (1-indexed) lets a run resume from a specific ticker without
-// throwing away progress already saved to siebert-parsed.json.
-const startIndex = (() => {
-  for (const arg of process.argv.slice(2)) {
-    const match = arg.match(/^--start=(\d+)$/i);
-    if (match) return Math.max(1, parseInt(match[1], 10));
-  }
-  return 1;
-})();
-const resume = process.argv.slice(2).some((arg) => /^--resume$/i.test(arg));
-const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
+const tickerCandidates = new Map();
+if (wantEtfs) loadTickerCandidatesFromCsv(etfsCsvPath, "ETF", tickerCandidates);
+if (wantStocks) loadTickerCandidatesFromCsv(stocksCsvPath, "STOCK", tickerCandidates);
+const cryptoTickers = wantCrypto ? loadCryptoTickers(cryptosCsvPath) : new Set();
 
-// `--csv=PATH` overrides the default ETF list CSV (defaults to etfs.csv).
-const csvPath = (() => {
-  for (const arg of process.argv.slice(2)) {
-    const match = arg.match(/^--csv=(.+)$/i);
-    if (match) return match[1];
-  }
-  return new URL("../etfs.csv", import.meta.url);
-})();
-
-const tickerCandidates = loadTickerCandidatesFromCsv(csvPath);
-const onlyTickers = new Set(positionalArgs.map(normalizeTicker).filter(Boolean));
+const onlyTickers = new Set(
+  process.argv
+    .slice(2)
+    .filter((arg) => !arg.startsWith("--"))
+    .map(normalizeTicker)
+    .filter((ticker) => ticker && !toIsin(ticker))
+);
 
 const outputPath = new URL("siebert-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 
-if ((resume || startIndex > 1) && fs.existsSync(outputPath)) {
+if (!fresh && fs.existsSync(outputPath)) {
   try {
     const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
     if (Array.isArray(existing)) {
@@ -318,6 +366,17 @@ if ((resume || startIndex > 1) && fs.existsSync(outputPath)) {
     // Ignore malformed prior output and start fresh.
   }
 }
+
+const browser = await puppeteer.connect({
+  browserURL: "http://127.0.0.1:9222",
+  defaultViewport: null,
+});
+
+const pages = await browser.pages();
+const page =
+  pages.find((candidate) => candidate.url().includes("investor.siebert.com")) ||
+  (await browser.newPage());
+await page.bringToFront();
 
 const TRADING_URL = "https://investor.siebert.com/#/trading";
 const API_BASE = "https://api-investor.siebert.com/Common.CommonService";
@@ -378,7 +437,6 @@ async function captureSession() {
   const headersOf = (call) => {
     const copy = {};
     for (const [key, value] of Object.entries(captured[call].headers)) {
-      // The browser sets these itself and refuses them from a caller.
       if (/^(sec-|referer|user-agent|origin|host|:)/i.test(key)) continue;
       copy[key] = value;
     }
@@ -396,7 +454,6 @@ async function captureSession() {
 const session = await captureSession();
 console.error(`session ${session.session} captured`);
 
-// Both calls are made from the page so they carry the portal's own origin.
 function callApi(endpoint, headers, bodies, workers) {
   return page.evaluate(
     async (url, sentHeaders, sentBodies, concurrency) => {
@@ -433,8 +490,6 @@ function callApi(endpoint, headers, bodies, workers) {
 const CONCURRENCY = 8;
 const BATCH_SIZE = 240;
 
-// The ticket refuses a symbol it cannot trade, and says which venue it trades
-// on when it accepts one.
 async function validate(tickers) {
   const bodies = tickers.map((ticker) =>
     request(stringField(1, session.user), stringField(2, ticker), stringField(3, session.session))
@@ -447,16 +502,12 @@ async function validate(tickers) {
     if (!message) return { failed: true };
 
     const symbol = parseMessage(message)?.[2]?.[2];
-    // An accepted symbol comes back with the venue it trades on; a rejected one
-    // is echoed back bare.
     return typeof symbol === "object" && symbol?.[4]
       ? { valid: true, exchange: symbol[4] }
       : { valid: false };
   });
 }
 
-// The quote carries what the portal shows next to the ticket: the fund's name,
-// what kind of instrument it is and where it trades.
 async function quote(tickers) {
   const bodies = tickers.map((ticker) =>
     request(stringField(1, ticker), stringField(10, session.user), stringField(13, session.session))
@@ -480,11 +531,11 @@ async function quote(tickers) {
   });
 }
 
-// Siebert trades US listings only, so a ticker is worth asking about when the
-// CSV knows a US fund by that name.
-const queries = [...tickerCandidates.entries()]
+const catalogueQueries = [...tickerCandidates.entries()]
   .filter(([, candidates]) => candidates.some((candidate) => candidate.isin.startsWith("US")))
-  .map(([ticker]) => ticker)
+  .map(([ticker]) => ticker);
+
+const queries = [...new Set([...catalogueQueries, ...cryptoTickers])]
   .filter((ticker) => onlyTickers.size === 0 || onlyTickers.has(ticker))
   .sort();
 
@@ -494,9 +545,57 @@ function save() {
   fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 }
 
+function absorb(ticker, quoted) {
+  if (!quoted?.name) return "unquoted";
+
+  const type = listingType(quoted);
+  if (!type) return quoted.type || "unknown type";
+  if ((type === "ETF" || type === "ETC" || type === "ETN") && !wantEtfs) return "shelf";
+  if (type === "STOCK" && !wantStocks) return "shelf";
+  if (type === "CRYPTO" && !wantCrypto) return "shelf";
+
+  const code = String(quoted.exchange || "").toUpperCase();
+  if (type !== "CRYPTO" && !EXCHANGE_NAMES[code]) return "foreign tape";
+
+  const listedTicker = normalizeTicker(quoted.ticker || ticker);
+  let match = null;
+  if (type === "CRYPTO") {
+    if (!cryptoTickers.has(listedTicker) && !keepUnlisted) return "unlisted";
+  } else {
+    match = resolveListing(tickerCandidates, {
+      ticker: listedTicker,
+      name: quoted.name,
+      exchange: code,
+    }, type);
+    if (!match && !keepUnlisted) return "unlisted";
+  }
+
+  if (seen.has(listedTicker)) return "seen";
+  seen.add(listedTicker);
+
+  results.push({
+    query: listedTicker,
+    ticker: listedTicker,
+    name: quoted.name,
+    exchange: type === "CRYPTO" ? "CRYPTO" : EXCHANGE_NAMES[code] || code || null,
+    currency: "USD",
+    type,
+    raw: [listedTicker, quoted.name, quoted.exchangeName].filter(Boolean).join(" "),
+    isin: match?.isin || "",
+  });
+  return "";
+}
+
 let rejected = 0;
 let unquoted = 0;
+let unlisted = 0;
+const skipped = new Map();
 const failures = [];
+
+function skip(reason) {
+  if (!reason) return;
+  skipped.set(reason, (skipped.get(reason) || 0) + 1);
+}
 
 for (let offset = 0; offset < queries.length; offset += BATCH_SIZE) {
   const batch = queries
@@ -507,9 +606,9 @@ for (let offset = 0; offset < queries.length; offset += BATCH_SIZE) {
   const verdicts = await validate(batch);
   const tradable = batch.filter((ticker, index) => {
     if (verdicts[index]?.failed) failures.push(ticker);
+    else if (!verdicts[index]?.valid) rejected += 1;
     return verdicts[index]?.valid;
   });
-  rejected += batch.length - tradable.length;
 
   const quotes = tradable.length > 0 ? await quote(tradable) : [];
   for (const [index, ticker] of tradable.entries()) {
@@ -518,42 +617,13 @@ for (let offset = 0; offset < queries.length; offset += BATCH_SIZE) {
       failures.push(ticker);
       continue;
     }
-    // A fund the portal will trade but cannot quote is left out rather than
-    // recorded on the CSV's word alone.
     if (quoted?.missing || !quoted?.name) {
       unquoted += 1;
       continue;
     }
-    // Notes and trusts are quoted as funds too, which is what the CSV counts
-    // them as; anything else under the ticker is a different instrument.
-    if ((quoted.type || "").toLowerCase() !== "etf") continue;
-
-    // The ticket also accepts foreign listings of US funds, quoted off a feed
-    // of their home market ("2840", SPDR Gold in Hong Kong), which is not the
-    // listing the CSV's US ISIN stands for.
-    const code = (quoted.exchange || "").toUpperCase();
-    if (!EXCHANGE_NAMES[code]) continue;
-
-    const candidate = resolveIsin(tickerCandidates, {
-      ticker,
-      name: quoted.name,
-      exchange: code,
-    });
-    if (!candidate) continue;
-    if (seen.has(ticker)) continue;
-    seen.add(ticker);
-
-    results.push({
-      query: ticker,
-      ticker: quoted.ticker || ticker,
-      name: quoted.name,
-      exchange: EXCHANGE_NAMES[code] || code || null,
-      // Siebert keeps to US venues, so every line quotes in dollars.
-      currency: "USD",
-      type: "ETF",
-      raw: [ticker, quoted.name, quoted.exchangeName].filter(Boolean).join(" "),
-      isin: candidate.isin,
-    });
+    const reason = absorb(ticker, quoted);
+    if (reason === "unlisted") unlisted += 1;
+    else skip(reason);
   }
 
   save();
@@ -562,8 +632,6 @@ for (let offset = 0; offset < queries.length; offset += BATCH_SIZE) {
   );
 }
 
-// A call that never answered says nothing about the fund, so it is worth
-// another pass rather than being taken for a refusal.
 if (failures.length > 0) {
   console.error(`${failures.length} calls failed, asking again`);
   const verdicts = await validate(failures);
@@ -572,37 +640,26 @@ if (failures.length > 0) {
 
   for (const [index, ticker] of tradable.entries()) {
     const quoted = quotes[index];
-    if (!quoted?.name || (quoted.type || "").toLowerCase() !== "etf") continue;
-    if (seen.has(ticker)) continue;
-
-    const code = (quoted.exchange || "").toUpperCase();
-    if (!EXCHANGE_NAMES[code]) continue;
-
-    const candidate = resolveIsin(tickerCandidates, {
-      ticker,
-      name: quoted.name,
-      exchange: code,
-    });
-    if (!candidate) continue;
-    seen.add(ticker);
-
-    results.push({
-      query: ticker,
-      ticker: quoted.ticker || ticker,
-      name: quoted.name,
-      exchange: EXCHANGE_NAMES[code] || code || null,
-      // Siebert keeps to US venues, so every line quotes in dollars.
-      currency: "USD",
-      type: "ETF",
-      raw: [ticker, quoted.name, quoted.exchangeName].filter(Boolean).join(" "),
-      isin: candidate.isin,
-    });
+    if (quoted?.failed || quoted?.missing || !quoted?.name) continue;
+    const reason = absorb(ticker, quoted);
+    if (reason === "unlisted") unlisted += 1;
+    else skip(reason);
   }
   save();
 }
 
 save();
-console.error(`${results.length} funds matched, ${rejected} refused, ${unquoted} accepted but unquoted`);
-console.log(JSON.stringify(results, null, 2));
+
+const byType = new Map();
+for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);
+
+console.error(
+  `${results.length} listings over ${new Set(results.map((row) => row.isin || row.ticker)).size} instruments ` +
+    `(${[...byType].map(([type, count]) => `${count} ${type}`).join(", ") || "none"})` +
+    (unlisted ? `, ${unlisted} the catalogues do not carry` : "") +
+    (rejected ? `, ${rejected} refused` : "") +
+    (unquoted ? `, ${unquoted} accepted but unquoted` : "") +
+    (skipped.size ? `, left out ${[...skipped].map(([reason, count]) => `${count} ${reason}`).join(", ")}` : "")
+);
 
 await browser.disconnect();

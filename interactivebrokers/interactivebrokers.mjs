@@ -3,123 +3,269 @@ import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+function normalize(value) {
+  return String(value ?? "").replace(/\s+/g, " ").trim();
+}
+
 function toIsin(value) {
-  const text = (value || "").trim().toUpperCase();
+  const text = normalize(value).toUpperCase();
   if (!text) return "";
   const match = text.match(/\b[A-Z]{2}[A-Z0-9]{10}\b/);
   return match ? match[0] : "";
 }
 
-function loadIsinsFromCsv(csvPath) {
-  if (!fs.existsSync(csvPath)) return [];
-
-  const content = fs.readFileSync(csvPath, "utf8");
-  return content
-    .split(/\r?\n/)
-    .map((line) => {
-      // Supports both: ticker,isin,name and ticker,exchange,isin,name
-      const cols = line.split(",");
-      const fromKnownColumns = toIsin(cols[2]) || toIsin(cols[1]);
-      if (fromKnownColumns) return fromKnownColumns;
-
-      // Fallback: find the first ISIN-looking token in the row.
-      for (const col of cols) {
-        const isin = toIsin(col);
-        if (isin) return isin;
-      }
-      return "";
-    })
-    .filter(Boolean);
+function normalizeTicker(value) {
+  const text = normalize(value).toUpperCase();
+  if (!text) return "";
+  const firstColumn = text.split(",")[0].trim();
+  const afterExchange = firstColumn.includes(":") ? firstColumn.split(":").pop() : firstColumn;
+  return (afterExchange || "").split(/[./]/)[0].trim();
 }
 
-function uniqueQueries(values) {
-  const seen = new Set();
-  return values.filter((value) => {
-    const key = value.toUpperCase();
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
+function pathArg(flag, fallback) {
+  for (const arg of process.argv.slice(2)) {
+    const match = arg.match(new RegExp(`^--${flag}=(.+)$`, "i"));
+    if (match) return match[1];
+  }
+  return fallback ? new URL(fallback, import.meta.url) : "";
 }
 
-const browser = await puppeteer.connect({
-  browserURL: "http://127.0.0.1:9222",
-  defaultViewport: null,
-});
+function numberArg(flag, fallback) {
+  for (const arg of process.argv.slice(2)) {
+    const match = arg.match(new RegExp(`^--${flag}=(\\d+)$`, "i"));
+    if (match) return parseInt(match[1], 10);
+  }
+  return fallback;
+}
 
-// The page is only there to lend its signed-in session to the calls below. Any
-// of IBKR's regional domains will do: the calls are relative, so they follow
-// whichever one the session was opened on.
-const pages = await browser.pages();
-const page =
-  pages.find((candidate) => /interactivebrokers|ibkr/i.test(candidate.url())) ||
-  (await browser.newPage());
+function hasFlag(name) {
+  return process.argv.slice(2).some((arg) => new RegExp(`^--${name}$`, "i").test(arg));
+}
 
-if (!/interactivebrokers|ibkr/i.test(page.url())) {
+function hasSection(hit, secType) {
+  return (hit.sections || []).some((section) => section?.secType === secType);
+}
+
+// Funds and shares are both STK on IBKR. The catalogue the ISIN was read from
+// is what types the row; the name only splits trackers into ETF / ETC / ETN.
+function listingType(name, kind) {
+  if (kind === "CRYPTO") return "CRYPTO";
+  if (kind === "STOCK") return "STOCK";
+  if (/\bETN\b/i.test(name)) return "ETN";
+  if (/\bETC\b/i.test(name)) return "ETC";
+  return "ETF";
+}
+
+function listingName(hit) {
+  const heading = normalize(hit.companyHeader || hit.companyName || "");
+  const exchange = normalize(hit.description || "");
+  const suffix = exchange ? ` - ${exchange}` : "";
+  if (suffix && heading.endsWith(suffix)) return heading.slice(0, -suffix.length).trim();
+  return heading;
+}
+
+function listingVenue(hit, info) {
+  const fromSearch = normalize(hit.description || "").toUpperCase();
+  if (fromSearch) return fromSearch;
+  const listed = normalize(info.listingExchange || info.exchange || "").toUpperCase();
+  return listed;
+}
+
+function unwrapInfo(json, conid) {
+  if (!json || json.error) return null;
+  if (Array.isArray(json)) {
+    return json.find((row) => String(row?.conid) === String(conid)) || json[0] || null;
+  }
+  return json;
+}
+
+// `--csv=PATH` overrides the fund list, `--stocks-csv=PATH` the share list,
+// `--cryptos-csv=PATH` the coin list. `--etfs-only` / `--stocks-only` /
+// `--crypto-only` walk one shelf. Funds are loaded first so an ISIN both
+// catalogues happen to carry is remembered as the fund it is.
+const etfsCsvPath = pathArg("csv", "../etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
+const cryptosCsvPath = pathArg("cryptos-csv", "../cryptos.csv");
+const etfsOnly = hasFlag("etfs-only") || hasFlag("funds-only");
+const stocksOnly = hasFlag("stocks-only");
+const cryptoOnly = hasFlag("crypto-only") || hasFlag("cryptos-only");
+const fresh = hasFlag("fresh");
+const startIndex = Math.max(1, numberArg("start", 1));
+const walkLimit = numberArg("limit", 0);
+
+const wantEtfs = !stocksOnly && !cryptoOnly;
+const wantStocks = !etfsOnly && !cryptoOnly;
+const wantCrypto = !etfsOnly && !stocksOnly;
+
+function loadIsinKinds(csvPath, kind, index) {
+  if (!csvPath || !fs.existsSync(csvPath)) return;
+
+  for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
+    if (!line.trim() || /^ticker\s*,/i.test(line)) continue;
+    const columns = line.split(",");
+    const isin = toIsin(columns[2]) || toIsin(columns[1]) || columns.map(toIsin).find(Boolean);
+    if (isin && !index.has(isin)) index.set(isin, kind);
+  }
+}
+
+function loadIsinJobs(csvPath, kind, seen, jobs) {
+  if (!csvPath || !fs.existsSync(csvPath)) return;
+
+  for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
+    if (!line.trim() || /^ticker\s*,/i.test(line)) continue;
+    const columns = line.split(",");
+    const isin = toIsin(columns[2]) || toIsin(columns[1]) || columns.map(toIsin).find(Boolean);
+    if (!isin || seen.has(isin)) continue;
+    seen.add(isin);
+    jobs.push({ query: isin, shelf: "isin", kind });
+  }
+}
+
+function loadCryptoJobs(csvPath, seen, jobs) {
+  if (!csvPath || !fs.existsSync(csvPath)) return;
+
+  for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
+    if (!line.trim() || /^ticker\s*,/i.test(line)) continue;
+    const ticker = normalizeTicker(line.split(",")[0]);
+    if (!ticker || seen.has(ticker)) continue;
+    seen.add(ticker);
+    jobs.push({ query: ticker, shelf: "crypto", kind: "CRYPTO" });
+  }
+}
+
+const kindByIsin = new Map();
+loadIsinKinds(etfsCsvPath, "ETF", kindByIsin);
+loadIsinKinds(stocksCsvPath, "STOCK", kindByIsin);
+
+const jobs = [];
+const seenQueries = new Set();
+const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
+
+if (positionalArgs.length > 0) {
+  for (const arg of positionalArgs) {
+    const isin = toIsin(arg);
+    if (isin) {
+      if (seenQueries.has(isin)) continue;
+      seenQueries.add(isin);
+      jobs.push({
+        query: isin,
+        shelf: "isin",
+        kind: kindByIsin.get(isin) || "STOCK",
+      });
+    } else {
+      const ticker = normalizeTicker(arg);
+      if (!ticker || seenQueries.has(ticker)) continue;
+      seenQueries.add(ticker);
+      jobs.push({ query: ticker, shelf: "crypto", kind: "CRYPTO" });
+    }
+  }
+} else {
+  if (wantEtfs) loadIsinJobs(etfsCsvPath, "ETF", seenQueries, jobs);
+  if (wantStocks) loadIsinJobs(stocksCsvPath, "STOCK", seenQueries, jobs);
+  if (wantCrypto) loadCryptoJobs(cryptosCsvPath, seenQueries, jobs);
+}
+
+const CHROME = { browserURL: "http://127.0.0.1:9222", defaultViewport: null };
+
+let browser = await puppeteer.connect(CHROME);
+
+function isPortalUrl(url) {
+  return /interactivebrokers|ibkr/i.test(url) && !/clientam\.com/i.test(url);
+}
+
+// SSO, the authentication interstitial, and the login form are the same tab
+// after a timeout; the portal host is still in the URL, so host alone is not
+// enough to tell a live session from a dead one.
+function looksLoggedOut(url) {
+  return /sso\.|\/sso\/|\/Login|signin|authentication|amauthentication/i.test(url);
+}
+
+// The page is only there to lend its signed-in session. Any of IBKR's regional
+// domains will do: the calls are relative, so they follow whichever one the
+// session was opened on. clientam.com is an introducing broker (CapTrader /
+// MEXEM) and is left alone when a native IBKR tab is open. The handle is
+// rebound after a logout because login often lands in a new tab.
+let page = null;
+
+async function attachPortalPage() {
+  let pages = [];
+  try {
+    pages = await browser.pages();
+  } catch {
+    return false;
+  }
+
+  const ibkr = [];
+  for (const candidate of pages) {
+    try {
+      if (candidate.isClosed()) continue;
+      if (isPortalUrl(candidate.url())) ibkr.push(candidate);
+    } catch {
+      // Tab went away while it was being inspected.
+    }
+  }
+
+  const live = ibkr.find((candidate) => !looksLoggedOut(candidate.url()));
+  page = live || ibkr[0] || null;
+  return Boolean(page);
+}
+
+if (!(await attachPortalPage())) {
+  page = await browser.newPage();
   await page.goto("https://www.interactivebrokers.ie/portal/", {
     waitUntil: "domcontentloaded",
   });
+}
+await page.bringToFront();
+
+if (!isPortalUrl(page.url()) || looksLoggedOut(page.url())) {
+  await page
+    .goto("https://www.interactivebrokers.ie/portal/", { waitUntil: "domcontentloaded" })
+    .catch(() => {});
   await sleep(5000);
 }
-
-// `--start=N` (1-indexed) lets a run resume from a specific query without
-// throwing away progress already saved to interactivebrokers-parsed.json.
-const startIndex = (() => {
-  for (const arg of process.argv.slice(2)) {
-    const m = arg.match(/^--start=(\d+)$/i);
-    if (m) return Math.max(1, parseInt(m[1], 10));
-  }
-  return 1;
-})();
-const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
-
-const defaultQueries = ["IE00B44Z5B48", "IE00BK5BQT80", "IE00BFMXXD54"];
-const cliQueries = positionalArgs.filter(Boolean).map(toIsin).filter(Boolean);
-// `--csv=PATH` overrides the default ETF list CSV (defaults to etfs.csv).
-const csvPath = (() => {
-  for (const arg of process.argv.slice(2)) {
-    const m = arg.match(/^--csv=(.+)$/i);
-    if (m) return m[1];
-  }
-  return new URL("../etfs.csv", import.meta.url);
-})();
-const csvQueries = loadIsinsFromCsv(csvPath);
-const rawQueries =
-  cliQueries.length > 0
-    ? cliQueries
-    : csvQueries.length > 0
-      ? csvQueries
-      : defaultQueries;
-const queries = uniqueQueries(rawQueries);
 
 const outputPath = new URL("interactivebrokers-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 
-// The same ticker on the same venue can trade in more than one currency, so
-// the currency belongs in the key that tells two listings apart.
 const entryKey = (row) =>
-  `${row.exchange}:${row.ticker}:${row.type}:${row.currency || ""}`.toUpperCase();
+  `${row.isin || row.query}:${row.exchange}:${row.ticker}:${row.type}:${row.currency || ""}`.toUpperCase();
 
-// When resuming, load already-saved entries so we don't overwrite them and so
-// the dedup `seen` set knows about rows from earlier queries.
-if (startIndex > 1 && fs.existsSync(outputPath)) {
+// A walk this long is run in stretches. What is already listed is read back
+// and kept; `--fresh` is how a run says it means to start the file over.
+if (!fresh && fs.existsSync(outputPath)) {
   try {
     const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
     if (Array.isArray(existing)) {
       for (const entry of existing) {
         results.push(entry);
-        if (entry?.exchange && entry?.ticker) seen.add(entryKey(entry));
+        if (entry?.ticker) seen.add(entryKey(entry));
       }
     }
   } catch {
-    // Ignore parse errors -- treat as a fresh run.
+    // Ignore malformed prior output and start fresh.
   }
 }
 
 const API = "/portal.proxy/v1/portal";
 
-async function api(path, options = {}) {
+function isDeadSession(answer) {
+  if (!answer) return true;
+  if (answer.status === 401 || answer.status === 403) return true;
+  const err = String(answer.error || "");
+  if (/<!DOCTYPE|<html|unauthorized|not authenticated|session expired/i.test(err)) return true;
+  const jsonError = answer.json && !Array.isArray(answer.json) ? String(answer.json.error || "") : "";
+  if (/unauthorized|not authenticated|session|login|token/i.test(jsonError)) return true;
+  try {
+    if (page && !page.isClosed() && looksLoggedOut(page.url())) return true;
+  } catch {
+    return true;
+  }
+  return false;
+}
+
+function callInPage(path, options) {
   return page.evaluate(
     async (base, target, opts) => {
       try {
@@ -145,47 +291,120 @@ async function api(path, options = {}) {
   );
 }
 
-// Keeps the Client Portal bridge awake; without it, later calls start failing.
+async function ensureBrowser() {
+  try {
+    await browser.pages();
+    return true;
+  } catch {
+    try {
+      await browser.disconnect().catch(() => {});
+      browser = await puppeteer.connect(CHROME);
+      page = null;
+      console.error("reconnected to Chrome");
+      return true;
+    } catch {
+      return false;
+    }
+  }
+}
+
+// The portal reloads itself every so often, and a reload destroys the context
+// the call was made from. The call is made again against the new document.
+async function api(path, options = {}) {
+  for (let attempt = 0; ; attempt += 1) {
+    if (!page || page.isClosed()) {
+      await attachPortalPage();
+      if (!page) return { error: "no portal tab" };
+    }
+
+    try {
+      return await callInPage(path, options);
+    } catch (error) {
+      if (attempt >= 4) return { error: String(error) };
+
+      await sleep(1000);
+      await attachPortalPage();
+    }
+  }
+}
+
 async function tickle() {
   await api("tickle").catch(() => null);
 }
 
-// The lookup the portal's own search box runs. `pattern: true` is what makes an
-// ISIN acceptable as the term; an exact search only answers to symbols.
-async function searchIsin(isin) {
+// `pattern: true` is what makes an ISIN acceptable as the term; an exact
+// search only answers to symbols. Crypto has no ISIN, so those go the other way.
+async function search(symbol, pattern) {
   const answer = await api("iserver/secdef/search", {
     method: "POST",
-    body: JSON.stringify({ symbol: isin, pattern: true, referrer: "" }),
+    body: JSON.stringify({ symbol, pattern, referrer: "" }),
   });
-  // A signed-out session answers 401 with an empty body, or serves the login
-  // page itself, so anything that is not JSON counts as no answer at all.
-  if (answer.status === 401 || !answer.json) return null;
-  // An ISIN that IBKR does not list answers `{ error: "No symbol found" }`.
+  if (isDeadSession(answer) || (!answer.json && !answer.error)) return null;
   if (!Array.isArray(answer.json)) return [];
-  // The search is keyed by ISIN, so every hit is a listing of that same fund.
   return answer.json.filter((hit) => hit?.conid && hit?.symbol);
 }
 
-// The search says nothing about the currency, which is what separates the two
-// London lines of one fund. The contract details do.
+// The portal signs itself out after a stretch, and login often lands in a
+// different tab. Progress is already on disk; this just sits until a search
+// answers again so the walk can retry the query it was on.
+async function waitForSession() {
+  save();
+  console.error("portal not answering; waiting until it is signed in again...");
+
+  for (let waited = 0; ; waited += 10) {
+    await ensureBrowser();
+    await attachPortalPage();
+
+    if (page && !page.isClosed() && !looksLoggedOut(page.url())) {
+      const probe = await search("SPY", false);
+      if (probe !== null) {
+        console.error("portal session restored");
+        await page.bringToFront().catch(() => {});
+        return;
+      }
+    }
+
+    if (waited > 0 && waited % 30 === 0) {
+      console.error(`  still waiting (${waited}s)`);
+    }
+    await sleep(10000);
+  }
+}
+
+async function searchWithRetry(symbol, pattern) {
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const payload = await search(symbol, pattern);
+    if (payload !== null) return payload;
+    console.error("  no answer, retrying");
+    await tickle();
+    await sleep(2000 * (attempt + 1));
+  }
+  return null;
+}
+
 async function readInfo(conid) {
+  if (!conid) return null;
   const answer = await api(`iserver/secdef/info?conid=${conid}`);
-  return answer.json && !answer.json.error ? answer.json : null;
+  return unwrapInfo(answer.json, conid);
 }
 
 const RESTRICTED_NOTICE =
   /KID|Trading Restricted|not available|cannot be traded|Retail clients can trade packaged/i;
 
-// Field 7183 is the order-ticket "Trading Restricted" notice (KID missing, etc.),
-// which is the only place IBKR admits a listing it quotes cannot be bought.
-// 7184 alone is not enough: tradable UCITS listings also come back with 7184=1.
+// A US-domiciled fund publishes no KID, and PRIIPs leaves European retail
+// clients unable to buy one; only a US resident can. IBKR quotes those
+// listings all the same and admits it in one place only: field 7183, the
+// order-ticket notice. 7184 alone says nothing, since tradable UCITS listings
+// come back with 7184=1 too.
 //
-// A snapshot answers empty until the subscription warms up, so it has to be
-// asked repeatedly. Every listing of one fund is asked for at once, which keeps
-// that waiting to once per ISIN rather than once per listing.
+// A snapshot answers empty until the subscription warms up, and the quote can
+// land a beat before the notice, so a price is not treated as "unrestricted"
+// until a couple of extra snapshots have had a chance to carry 7183. Listings
+// the snapshot never settles on are left unflagged rather than guessed at.
 async function tradingRestricted(conids) {
-  const pending = new Set(conids);
+  const pending = new Set(conids.filter(Boolean).map(String));
   const status = new Map();
+  const quotedAt = new Map();
 
   for (let attempt = 0; attempt < 10 && pending.size > 0; attempt += 1) {
     const answer = await api(
@@ -198,86 +417,144 @@ async function tradingRestricted(conids) {
 
       const notice = (row["7183"] || "").toString();
       if (notice) {
-        status.set(conid, { restricted: RESTRICTED_NOTICE.test(notice), notice });
+        status.set(conid, RESTRICTED_NOTICE.test(notice));
         pending.delete(conid);
-      } else if (row["31"] !== undefined || row["6509"] !== undefined) {
-        // Price or availability without a notice means the snapshot settled.
-        status.set(conid, { restricted: false, notice: "" });
-        pending.delete(conid);
+        continue;
+      }
+
+      if (row["31"] !== undefined || row["6509"] !== undefined) {
+        if (!quotedAt.has(conid)) quotedAt.set(conid, attempt);
+        if (attempt - quotedAt.get(conid) >= 2) {
+          status.set(conid, false);
+          pending.delete(conid);
+        }
       }
     }
 
     if (pending.size > 0) await sleep(300);
   }
 
-  // A listing the snapshot never settled on is kept rather than guessed away.
-  for (const conid of pending) status.set(conid, { restricted: false, notice: "" });
+  for (const conid of pending) status.set(conid, false);
   return status;
+}
+
+function wantedHits(payload, job) {
+  if (!payload) return [];
+  const query = job.query.toUpperCase();
+
+  if (job.shelf === "crypto") {
+    return payload.filter(
+      (hit) => (hit.symbol || "").toUpperCase() === query && hasSection(hit, "CRYPTO")
+    );
+  }
+
+  return payload.filter((hit) => hit.conid && hasSection(hit, "STK"));
+}
+
+async function scrapeJob(job) {
+  const pattern = job.shelf === "isin";
+  const payload = await searchWithRetry(job.query, pattern);
+  if (payload === null) return { silent: true, rows: [] };
+
+  const hits = wantedHits(payload, job);
+  if (hits.length === 0) return { silent: false, rows: [] };
+
+  const restrictions = await tradingRestricted(hits.map((hit) => String(hit.conid)));
+  const rows = [];
+
+  for (const hit of hits) {
+    const info = (await readInfo(hit.conid)) || {};
+    const ticker = (info.ticker || hit.symbol || "").toUpperCase();
+    const name = listingName(hit) || normalize(info.companyName || "");
+    const exchange = listingVenue(hit, info);
+    const currency = info.currency || null;
+    if (!ticker || !exchange || !name) continue;
+
+    const type = listingType(name, job.kind);
+    rows.push({
+      ticker,
+      name,
+      exchange,
+      currency,
+      type,
+      raw: [hit.companyHeader || hit.companyName || name, exchange].filter(Boolean).join(" "),
+      restricted: restrictions.get(String(hit.conid)) === true,
+    });
+  }
+
+  return { silent: false, rows };
 }
 
 function save() {
   fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 }
 
-console.error(`${queries.length} ISINs to check`);
+const endIndex = walkLimit > 0 ? startIndex - 1 + walkLimit : jobs.length;
 
-let silences = 0;
+console.error(
+  `${jobs.length} queries to check` +
+    (startIndex > 1 || walkLimit > 0
+      ? ` (walking ${startIndex}–${Math.min(endIndex, jobs.length)})`
+      : "")
+);
 
-for (const [queryIndex, query] of queries.entries()) {
+for (const [queryIndex, job] of jobs.entries()) {
   if (queryIndex + 1 < startIndex) continue;
-  if (queryIndex % 20 === 0) await tickle();
-  console.error(`[${queryIndex + 1}/${queries.length}] ${query}`);
+  if (queryIndex + 1 > endIndex) break;
+  if (queryIndex % 5 === 0) await tickle();
+  console.error(`[${queryIndex + 1}/${jobs.length}] ${job.query}`);
 
-  const hits = await searchIsin(query);
-  if (hits === null) {
-    silences += 1;
+  let silent;
+  let rows;
+  for (;;) {
+    ({ silent, rows } = await scrapeJob(job));
+    if (!silent) break;
     console.error("  no answer");
-    if (silences >= 5) {
-      throw new Error("IBKR stopped answering. Is the portal session still signed in?");
-    }
+    await waitForSession();
+  }
+
+  if (rows.length === 0) {
+    console.error("  no listings");
     continue;
   }
-  silences = 0;
 
-  const restrictions = await tradingRestricted(hits.map((hit) => String(hit.conid)));
+  for (const row of rows) {
+    const entry = {
+      query: job.query,
+      ticker: row.ticker,
+      name: row.name,
+      exchange: row.exchange,
+      currency: row.currency,
+      type: row.type,
+      raw: row.raw,
+      isin: job.shelf === "isin" ? job.query : "",
+    };
+    if (row.restricted) entry.usResidentsOnly = true;
 
-  for (const hit of hits) {
-    const conid = String(hit.conid);
-    if (restrictions.get(conid)?.restricted) {
-      console.error(`  ${hit.symbol}@${hit.description}: Trading Restricted — skipped`);
-      continue;
-    }
-
-    const info = (await readInfo(conid)) || {};
-
-    const ticker = (info.ticker || hit.symbol || "").toUpperCase();
-    const exchange = (info.listingExchange || hit.description || "").toUpperCase();
-    const name = (info.companyName || hit.companyHeader || hit.companyName || "")
-      .replace(/\s+/g, " ")
-      .trim();
-    const currency = info.currency || null;
-    // Funds are carried as ordinary stock contracts on IBKR.
-    const type = (info.secType || "STK").toUpperCase() === "STK" ? "ETF" : info.secType;
-    if (!ticker || !exchange) continue;
-
-    const row = { ticker, name, exchange, currency, type };
-    const key = entryKey(row);
+    const key = entryKey(entry);
     if (seen.has(key)) continue;
     seen.add(key);
+    results.push(entry);
 
-    results.push({
-      ...row,
-      raw: [ticker, name, exchange, currency].filter(Boolean).join(" "),
-      query,
-      isin: query,
-      conid,
-    });
+    if (row.restricted) {
+      console.error(`  ${row.ticker}@${row.exchange}: US residents only (no KID)`);
+    }
   }
 
-  // Persist progress after every query so an interruption keeps prior work.
   save();
 }
 
-console.log(JSON.stringify(results, null, 2));
+const byType = new Map();
+let usOnly = 0;
+for (const row of results) {
+  byType.set(row.type, (byType.get(row.type) || 0) + 1);
+  if (row.usResidentsOnly) usOnly += 1;
+}
+console.error(
+  `${results.length} listed (${[...byType].map(([type, count]) => `${count} ${type}`).join(", ")})`
+);
+if (usOnly > 0) {
+  console.error(`${usOnly} of them are US-residents only (no KID for European retail)`);
+}
 
 await browser.disconnect();

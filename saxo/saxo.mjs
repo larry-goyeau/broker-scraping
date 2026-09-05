@@ -3,43 +3,154 @@ import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+function normalize(value) {
+  return String(value ?? "").replace(/\s+/g, " ").trim();
+}
+
 function toIsin(value) {
-  const text = (value || "").trim().toUpperCase();
+  const text = normalize(value).toUpperCase();
   if (!text) return "";
   const match = text.match(/\b[A-Z]{2}[A-Z0-9]{10}\b/);
   return match ? match[0] : "";
 }
 
-function loadIsinsFromCsv(csvPath) {
-  if (!fs.existsSync(csvPath)) return [];
-
-  const content = fs.readFileSync(csvPath, "utf8");
-  return content
-    .split(/\r?\n/)
-    .map((line) => {
-      // Supports both: ticker,isin,name and ticker,exchange,isin,name.
-      const cols = line.split(",");
-      const fromKnownColumns = toIsin(cols[2]) || toIsin(cols[1]);
-      if (fromKnownColumns) return fromKnownColumns;
-
-      // Fallback: find the first ISIN-looking token in the row.
-      for (const col of cols) {
-        const isin = toIsin(col);
-        if (isin) return isin;
-      }
-      return "";
-    })
-    .filter(Boolean);
+function normalizeTicker(value) {
+  const text = normalize(value).toUpperCase();
+  if (!text) return "";
+  const firstColumn = text.split(",")[0].trim();
+  const afterExchange = firstColumn.includes(":") ? firstColumn.split(":").pop() : firstColumn;
+  return afterExchange;
 }
 
-function uniqueQueries(values) {
-  const seen = new Set();
-  return values.filter((value) => {
-    const key = value.toUpperCase();
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
+function pathArg(flag, fallback) {
+  for (const arg of process.argv.slice(2)) {
+    const match = arg.match(new RegExp(`^--${flag}=(.+)$`, "i"));
+    if (match) return match[1];
+  }
+  return fallback ? new URL(fallback, import.meta.url) : "";
+}
+
+function hasFlag(name) {
+  return process.argv.slice(2).some((arg) => new RegExp(`^--${name}$`, "i").test(arg));
+}
+
+function loadCsv(csvPath, kind, index = new Map()) {
+  if (!csvPath || !fs.existsSync(csvPath)) return index;
+
+  for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
+    if (!line.trim() || /^ticker\s*,/i.test(line)) continue;
+    const columns = line.split(",");
+    const isin = toIsin(columns[2]) || toIsin(columns[1]) || columns.map(toIsin).find(Boolean);
+    if (!isin) continue;
+    const name = normalize(columns.slice(3).join(","));
+    const entry = index.get(isin);
+    if (!entry) {
+      index.set(isin, { kind, names: name ? [name] : [] });
+    } else if (name && !entry.names.includes(name)) {
+      entry.names.push(name);
+    }
+  }
+
+  return index;
+}
+
+function loadCryptoTickers(csvPath) {
+  const tickers = new Set();
+  if (!csvPath || !fs.existsSync(csvPath)) return tickers;
+
+  for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
+    if (!line.trim() || /^ticker\s*,/i.test(line)) continue;
+    const ticker = normalizeTicker(line.split(",")[0]);
+    if (ticker) tickers.add(ticker);
+  }
+  return tickers;
+}
+
+// `--csv=PATH` overrides the fund list, `--stocks-csv=PATH` the share list,
+// `--cryptos-csv=PATH` the coin list. `--etfs-only` / `--stocks-only` /
+// `--crypto-only` answer for one shelf. Funds are loaded first so an ISIN
+// both catalogues happen to carry is remembered as the fund it is.
+const etfsCsvPath = pathArg("csv", "../etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
+const cryptosCsvPath = pathArg("cryptos-csv", "../cryptos.csv");
+const etfsOnly = hasFlag("etfs-only") || hasFlag("funds-only");
+const stocksOnly = hasFlag("stocks-only");
+const cryptoOnly = hasFlag("crypto-only") || hasFlag("cryptos-only");
+const keepUnlisted = hasFlag("all");
+
+const wantEtfs = !stocksOnly && !cryptoOnly;
+const wantStocks = !etfsOnly && !cryptoOnly;
+const wantCrypto = !etfsOnly && !stocksOnly;
+
+const catalogue = new Map();
+if (wantEtfs) loadCsv(etfsCsvPath, "ETF", catalogue);
+if (wantStocks) loadCsv(stocksCsvPath, "STOCK", catalogue);
+const cryptoTickers = wantCrypto ? loadCryptoTickers(cryptosCsvPath) : new Set();
+
+const onlyIsins = new Set(
+  process.argv
+    .slice(2)
+    .filter((arg) => !arg.startsWith("--"))
+    .map(toIsin)
+    .filter(Boolean)
+);
+const onlyTickers = new Set(
+  process.argv
+    .slice(2)
+    .filter((arg) => !arg.startsWith("--"))
+    .map(normalizeTicker)
+    .filter((ticker) => ticker && !toIsin(ticker))
+);
+
+// Saxo names some tapes with a product suffix (XETR_ETF, NYSE_ARCA). The
+// catalogues name the venue, the same way Revolut maps ARCA funds onto AMEX.
+const EXCHANGES = {
+  NASDAQ: "NASDAQ",
+  NYSE: "NYSE",
+  NYSE_ARCA: "AMEX",
+  ARCA: "AMEX",
+  BATS: "CBOE",
+  CBOE: "CBOE",
+  XETR: "XETR",
+  XETR_ETF: "XETR",
+  PAR: "EURONEXT",
+  AMS: "EURONEXT",
+  AMS_MC_ETF: "EURONEXT",
+  LSE: "LSE",
+  LSE_ETF: "LSE",
+  SWX: "SIX",
+  SWX_ETF: "SIX",
+  MIL: "MIL",
+  MIL_ETF: "MIL",
+  TGAT: "TRADEGATE",
+};
+
+function venueOf(exchangeId) {
+  const code = normalize(exchangeId).toUpperCase();
+  if (EXCHANGES[code]) return EXCHANGES[code];
+  return code || null;
+}
+
+function listingType(assetType, name) {
+  const kind = String(assetType || "").toLowerCase();
+  if (kind === "fxcrypto" || kind === "cryptocurrency") return "CRYPTO";
+  if (kind === "etn" || /\bETNs?\b/i.test(name)) return "ETN";
+  if (kind === "etc" || (/\bETCs?\b/i.test(name) && !/\bETFs?\b/i.test(name))) return "ETC";
+  if (kind === "etf") return "ETF";
+  if (kind === "stock") return "STOCK";
+  return "";
+}
+
+function symbolTicker(symbol) {
+  const text = normalize(symbol);
+  const bare = text.includes(":") ? text.split(":")[0] : text;
+  return normalizeTicker(bare);
+}
+
+function cryptoTicker(symbol) {
+  const text = symbolTicker(symbol);
+  const cut = text.replace(/(USD|EUR|GBP|JPY)$/i, "");
+  return cut || text;
 }
 
 const browser = await puppeteer.connect({
@@ -47,7 +158,6 @@ const browser = await puppeteer.connect({
   defaultViewport: null,
 });
 
-// The page is only there to lend its signed-in session to the calls below.
 const pages = await browser.pages();
 const page =
   pages.find((candidate) =>
@@ -61,66 +171,12 @@ if (!/saxoinvestor|saxotrader|saxobank|saxo\./i.test(page.url())) {
   await sleep(5000);
 }
 
-// `--start=N` (1-indexed) lets a run resume from a specific query without
-// throwing away progress already saved to saxo-parsed.json.
-const startIndex = (() => {
-  for (const arg of process.argv.slice(2)) {
-    const m = arg.match(/^--start=(\d+)$/i);
-    if (m) return Math.max(1, parseInt(m[1], 10));
-  }
-  return 1;
-})();
-const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
-
-const defaultQueries = ["IE00B44Z5B48", "IE00BK5BQT80", "IE00BFMXXD54"];
-const cliQueries = positionalArgs.filter(Boolean).map(toIsin).filter(Boolean);
-// `--csv=PATH` overrides the default ETF list CSV (defaults to etfs.csv).
-const csvPath = (() => {
-  for (const arg of process.argv.slice(2)) {
-    const m = arg.match(/^--csv=(.+)$/i);
-    if (m) return m[1];
-  }
-  return new URL("../etfs.csv", import.meta.url);
-})();
-const csvQueries = loadIsinsFromCsv(csvPath);
-const rawQueries =
-  cliQueries.length > 0
-    ? cliQueries
-    : csvQueries.length > 0
-      ? csvQueries
-      : defaultQueries;
-const queries = uniqueQueries(rawQueries);
-
-const outputPath = new URL("saxo-parsed.json", import.meta.url);
-const results = [];
-const seen = new Set();
-
-// One fund reaches several venues, and a venue can carry it in more than one
-// currency (SIX lists iShares MSCI ACWI in both USD and CHF), so the currency
-// belongs in the key that tells two listings apart.
-const entryKey = (isin, row) =>
-  `${isin}:${row.ticker}:${row.exchange}:${row.currency || ""}`.toUpperCase();
-
-// When resuming, load already-saved entries so we don't overwrite them and so
-// the dedup `seen` set knows about rows from earlier queries.
-if (startIndex > 1 && fs.existsSync(outputPath)) {
-  try {
-    const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
-    if (Array.isArray(existing)) {
-      for (const entry of existing) {
-        results.push(entry);
-        if (entry?.isin && entry?.ticker) seen.add(entryKey(entry.isin, entry));
-      }
-    }
-  } catch {
-    // Ignore parse errors -- treat as a fresh run.
-  }
-}
-
 // The cash instruments an investor account can hold. Leaving this open would
 // also return the CFD twin of every listing (AssetType "CfdOnEtf"), which is a
-// different product quoted on the same line.
-const ASSET_TYPES = "Etf,Etc,Etn,Fund,MutualFund,Stock";
+// different product quoted on the same line. Mutual funds and FX stay out.
+const CASH_TYPES = ["Stock", "Etf", "Etc", "Etn"];
+const CRYPTO_TYPES = ["FxCrypto"];
+const DETAIL_TYPES = [...CASH_TYPES, ...CRYPTO_TYPES].join(",");
 
 // OpenAPI wants a bearer token and the platform keeps its own only in memory.
 // This endpoint mints a fresh one from the session cookies, so being signed in
@@ -147,7 +203,6 @@ async function refreshToken() {
     }
   });
 
-  // The OpenAPI bearer is the id_token; access_token belongs to the login realm.
   token = answer.json?.id_token || "";
   tokenFetchedAt = token ? Date.now() : 0;
   return Boolean(token);
@@ -183,30 +238,9 @@ async function api(path) {
   return answer;
 }
 
-// The lookup the platform's own search box runs. An ISIN is an accepted keyword
-// and every listing of the fund comes back in one answer, so no paging is
-// needed: no fund is carried on more than a handful of venues.
-async function searchIsin(isin) {
-  const answer = await api(
-    `/ref/v1/instruments?Keywords=${encodeURIComponent(isin)}&$top=100&AssetTypes=${ASSET_TYPES}`
-  );
-  // A signed-out session is refused rather than answered with an empty list.
-  if (!Array.isArray(answer.json?.Data)) return null;
-
-  // The search also matches on name, so it can offer a fund we did not ask
-  // about; every listing kept here states the ISIN that was searched for.
-  return answer.json.Data.filter(
-    (hit) => (hit.Isin || "").toUpperCase() === isin && hit.Identifier
-  );
-}
-
-// Drop the Keywords and the same endpoint enumerates the whole asset class,
-// which is how a long run avoids a search per ISIN. Asked for one asset type at
-// a time because paging stops at the end of each.
-async function fetchUniverse() {
-  const byIsin = new Map();
-
-  for (const assetType of ASSET_TYPES.split(",")) {
+async function fetchUniverse(assetTypes) {
+  const rows = [];
+  for (const assetType of assetTypes) {
     let listings = 0;
     for (let skip = 0; ; skip += 1000) {
       const answer = await api(
@@ -218,32 +252,23 @@ async function fetchUniverse() {
         );
       }
 
-      const rows = answer.json.Data;
-      for (const row of rows) {
-        const isin = (row.Isin || "").toUpperCase();
-        if (!isin || !row.Identifier) continue;
-        if (!byIsin.has(isin)) byIsin.set(isin, []);
-        byIsin.get(isin).push(row);
-        listings += 1;
-      }
-
-      if (rows.length < 1000 || !answer.json.__next) break;
+      const pageRows = answer.json.Data;
+      rows.push(...pageRows);
+      listings += pageRows.length;
+      if (pageRows.length < 1000 || !answer.json.__next) break;
     }
     console.error(`  ${assetType}: ${listings} listings`);
   }
-
-  return byIsin;
+  return rows;
 }
 
-// Neither the search nor the listing says whether the account may actually buy
-// a line. The details do, and they take 200 instruments per call.
 async function readDetails(uics) {
   const details = new Map();
 
   for (let offset = 0; offset < uics.length; offset += 200) {
     const chunk = uics.slice(offset, offset + 200);
     const answer = await api(
-      `/ref/v1/instruments/details?Uics=${chunk.join(",")}&AssetTypes=${ASSET_TYPES}&$top=200`
+      `/ref/v1/instruments/details?Uics=${chunk.join(",")}&AssetTypes=${DETAIL_TYPES}&$top=200`
     );
     for (const row of answer.json?.Data || []) {
       if (row?.Uic) details.set(row.Uic, row);
@@ -253,111 +278,126 @@ async function readDetails(uics) {
   return details;
 }
 
-// Progress is persisted as the run goes so an interruption keeps prior work.
-// Rewriting the whole file after every hit would mean thousands of rewrites of
-// a file thousands of entries long, so a crash costs a couple of seconds of
-// work instead.
-const SAVE_INTERVAL_MS = 2000;
-let savedCount = results.length;
-let savedAt = 0;
+console.error("reading Saxo's instrument list");
+const wantedTypes = [
+  ...(wantStocks || wantEtfs ? CASH_TYPES : []),
+  ...(wantCrypto ? CRYPTO_TYPES : []),
+];
+const book = await fetchUniverse(wantedTypes);
+console.error(`${book.length} instruments in Saxo's offering`);
 
-function save() {
-  fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
-  savedCount = results.length;
-  savedAt = Date.now();
+const candidates = [];
+const skipped = new Map();
+let unlisted = 0;
+
+function skip(reason) {
+  skipped.set(reason, (skipped.get(reason) || 0) + 1);
 }
 
-// A search costs a round trip per ISIN, so a long list is cheaper to answer by
-// reading the whole universe once (~40 calls) and matching it locally.
-const pending = queries.slice(startIndex - 1);
-const useUniverse = pending.length >= 200;
-
-let universe = null;
-let prefetchedDetails = null;
-
-if (useUniverse) {
-  console.error("reading Saxo's instrument list");
-  universe = await fetchUniverse();
-  console.error(`${universe.size} ISINs listed`);
-
-  // Every line we are going to look at, asked for in as few calls as possible.
-  const uics = pending.flatMap((query) =>
-    (universe.get(query) || []).map((hit) => hit.Identifier)
-  );
-  console.error(`reading tradability of ${uics.length} matching listings`);
-  prefetchedDetails = await readDetails(uics);
+function askedFor(isin, ticker) {
+  if (onlyIsins.size === 0 && onlyTickers.size === 0) return true;
+  return (isin && onlyIsins.has(isin)) || onlyTickers.has(ticker);
 }
 
-console.error(`${queries.length} ISINs to check`);
+for (const row of book) {
+  const name = normalize(row.Description);
+  const type = listingType(row.AssetType, name);
+  if (!type) {
+    skip(String(row.AssetType || "unknown").toLowerCase());
+    continue;
+  }
 
-let silences = 0;
+  if ((type === "ETF" || type === "ETC" || type === "ETN") && !wantEtfs) continue;
+  if (type === "STOCK" && !wantStocks) continue;
+  if (type === "CRYPTO" && !wantCrypto) continue;
 
-for (const [queryIndex, query] of queries.entries()) {
-  if (queryIndex + 1 < startIndex) continue;
-  console.error(`[${queryIndex + 1}/${queries.length}] ${query}`);
+  const ticker = type === "CRYPTO" ? cryptoTicker(row.Symbol) : symbolTicker(row.Symbol);
+  const isin = toIsin(row.Isin);
+  if (!ticker) {
+    skip("no ticker");
+    continue;
+  }
+  if (!askedFor(isin, ticker)) continue;
 
-  let hits;
-  if (useUniverse) {
-    hits = universe.get(query) || [];
+  if (type === "CRYPTO") {
+    if (!cryptoTickers.has(ticker) && !keepUnlisted) {
+      unlisted += 1;
+      continue;
+    }
   } else {
-    hits = await searchIsin(query);
-    if (hits === null) {
-      silences += 1;
-      console.error("  no answer");
-      if (silences >= 5) {
-        throw new Error("Saxo stopped answering. Is the session still signed in?");
-      }
+    const listed = isin ? catalogue.get(isin) : null;
+    if (!listed && !keepUnlisted) {
+      unlisted += 1;
       continue;
     }
-    silences = 0;
   }
 
-  const details =
-    prefetchedDetails || (await readDetails(hits.map((hit) => hit.Identifier)));
-
-  for (const hit of hits) {
-    // A line whose details never arrived is kept rather than guessed away.
-    const detail = details.get(hit.Identifier) || {};
-
-    // Saxo quotes lines it will not let the account buy -- most often a US ETF
-    // with no KID, which EU retail rules leave sell-only.
-    const reason = detail.NonTradableReason;
-    if (detail.IsTradable === false || (reason && reason !== "None")) {
-      console.error(`  ${hit.Symbol}: ${reason || "not tradable"} — skipped`);
-      continue;
-    }
-
-    // Symbol is "<ticker>:<mic>", e.g. "SPYY:xetr".
-    const [symbol, mic] = (detail.Symbol || hit.Symbol || "").split(":");
-    const row = {
-      name: (detail.Description || hit.Description || "").replace(/\s+/g, " ").trim(),
-      ticker: (symbol || "").toUpperCase(),
-      exchange: detail.Exchange?.ExchangeId || hit.ExchangeId || null,
-      exchangeName: detail.Exchange?.Name || hit.ExchangeName || null,
-      mic: (mic || "").toLowerCase() || null,
-      currency: detail.CurrencyCode || hit.CurrencyCode || null,
-      type: (detail.AssetType || hit.AssetType || "").toUpperCase(),
-      tradingStatus: detail.TradingStatus || null,
-    };
-    if (!row.ticker) continue;
-
-    const key = entryKey(query, row);
-    if (seen.has(key)) continue;
-    seen.add(key);
-
-    results.push({
-      query,
-      isin: query,
-      ...row,
-      uic: hit.Identifier,
-      raw: [row.ticker, row.name, row.exchange, row.currency].filter(Boolean).join(" "),
-    });
-  }
-
-  if (results.length !== savedCount && Date.now() - savedAt >= SAVE_INTERVAL_MS) save();
+  candidates.push({ row, type, ticker, isin, name });
 }
 
-save();
-console.log(JSON.stringify(results, null, 2));
+console.error(`reading tradability of ${candidates.length} matching listings`);
+const details = await readDetails(candidates.map((entry) => entry.row.Identifier));
+
+const results = [];
+const seen = new Set();
+
+for (const { row, type, ticker, isin, name } of candidates) {
+  const detail = details.get(row.Identifier) || {};
+  const reason = detail.NonTradableReason;
+  // A US ETF with no KID is sell-only for this EU retail account. Non-EU
+  // retail (and EU professionals) can still buy it, so it is kept and flagged.
+  const notEuResident = /KII?D/i.test(reason || "");
+  if (!notEuResident && (detail.IsTradable === false || (reason && reason !== "None"))) {
+    skip(reason && reason !== "None" ? reason : "not tradable");
+    continue;
+  }
+
+  const exchange = venueOf(detail.Exchange?.ExchangeId || row.ExchangeId);
+  const currency = normalize(detail.CurrencyCode || row.CurrencyCode).toUpperCase() || null;
+  const listedName = isin ? catalogue.get(isin)?.names[0] : "";
+  const displayName = normalize(detail.Description) || name || listedName || ticker;
+  const key = `${isin || ticker}:${exchange}:${ticker}:${currency || ""}:${type}`.toUpperCase();
+  if (seen.has(key)) continue;
+  seen.add(key);
+
+  const entry = {
+    query: ticker,
+    ticker,
+    name: displayName,
+    exchange,
+    currency,
+    type,
+    raw: [ticker, displayName, row.ExchangeId, currency].filter(Boolean).join(" "),
+    isin: isin || "",
+  };
+  if (notEuResident) entry.notEuResident = true;
+  results.push(entry);
+}
+
+results.sort((left, right) => {
+  const byType = String(left.type).localeCompare(right.type);
+  if (byType !== 0) return byType;
+  const byExchange = String(left.exchange).localeCompare(String(right.exchange));
+  if (byExchange !== 0) return byExchange;
+  return String(left.ticker).localeCompare(String(right.ticker));
+});
+
+const outputPath = new URL("saxo-parsed.json", import.meta.url);
+fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+
+const byType = new Map();
+let notEu = 0;
+for (const row of results) {
+  byType.set(row.type, (byType.get(row.type) || 0) + 1);
+  if (row.notEuResident) notEu += 1;
+}
+
+console.error(
+  `${results.length} listings over ${new Set(results.map((row) => row.isin || row.ticker)).size} instruments ` +
+    `(${[...byType].map(([type, count]) => `${count} ${type}`).join(", ") || "none"})` +
+    (notEu ? `, ${notEu} not EU resident (no KID)` : "") +
+    (unlisted ? `, ${unlisted} the catalogues do not carry` : "") +
+    (skipped.size ? `, left out ${[...skipped].map(([reason, count]) => `${count} ${reason}`).join(", ")}` : "")
+);
 
 await browser.disconnect();

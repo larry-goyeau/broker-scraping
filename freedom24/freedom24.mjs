@@ -93,6 +93,7 @@ const FINDER_EXCHANGES = [
   "FIX",
   "EU",
   "HKEX",
+  "EUROBONDS",
   "ATHEX",
   "BIST",
   "WSE",
@@ -102,7 +103,7 @@ const FINDER_EXCHANGES = [
   "ITS",
 ].join(",");
 
-const KEPT_MARKETS = new Set(["FIX", "EU", "HKEX", "ATHEX", "WSE", "CRPT"]);
+const KEPT_MARKETS = new Set(["FIX", "EU", "HKEX", "ATHEX", "WSE", "EUROBOND", "EUROBONDS", "CRPT"]);
 
 function isAliasTicker(ticker) {
   const text = String(ticker || "");
@@ -112,7 +113,7 @@ function isAliasTicker(ticker) {
 function listingType(info, catalogueKind) {
   const kind = Number(info.kind);
   const shelf = Number(info.type);
-  if (kind === 9 || kind === 18 || shelf === 2) return "";
+  if (kind === 9 || kind === 18 || shelf === 2) return "BND";
   if (kind === 8 || kind === 29 || kind === 31 || kind === 32 || kind === 33 || shelf === 6) {
     return "CRYPTO";
   }
@@ -143,6 +144,10 @@ function loadCsv(csvPath, kind, index = { byIsin: new Map(), byTicker: new Map()
     const isin = toIsin(columns[2]) || columns.map(toIsin).find(Boolean) || "";
     if (isin && !index.byIsin.has(isin)) index.byIsin.set(isin, kind);
     if (ticker && !index.byTicker.has(ticker)) index.byTicker.set(ticker, kind);
+    if (kind === "BND") {
+      if (isin) index.bondIsins.push(isin);
+      continue;
+    }
     if (kind === "CRYPTO") {
       if (ticker) index.cryptoTickers.add(ticker);
       continue;
@@ -161,22 +166,40 @@ function loadCsv(csvPath, kind, index = { byIsin: new Map(), byTicker: new Map()
 
 const etfsCsvPath = pathArg("csv", "../etfs.csv");
 const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
+const bondsCsvPath = pathArg("bonds-csv", "../bonds.csv");
 const cryptosCsvPath = pathArg("cryptos-csv", "../cryptos.csv");
 const etfsOnly = hasFlag("etfs-only") || hasFlag("funds-only");
 const stocksOnly = hasFlag("stocks-only");
+const bondsOnly = hasFlag("bonds-only");
 const cryptoOnly = hasFlag("crypto-only") || hasFlag("cryptos-only");
 const fresh = hasFlag("fresh");
 const keepUnlisted = hasFlag("all");
+const skipBonds = hasFlag("no-bonds");
+const skipHk = hasFlag("no-hk") || hasFlag("no-hkex");
 const startIndex = Math.max(1, numberArg("start", 1));
 
-const wantEtfs = !stocksOnly && !cryptoOnly;
-const wantStocks = !etfsOnly && !cryptoOnly;
-const wantCrypto = !etfsOnly && !stocksOnly;
+const wantEtfs = !stocksOnly && !bondsOnly && !cryptoOnly;
+const wantStocks = !etfsOnly && !bondsOnly && !cryptoOnly;
+const wantBonds = !etfsOnly && !stocksOnly && !cryptoOnly && !skipBonds;
+const wantCrypto = !etfsOnly && !stocksOnly && !bondsOnly;
+const wantHk = wantStocks && !skipHk;
 
-const catalogue = { byIsin: new Map(), byTicker: new Map(), candidates: new Set(), hkQueries: [], cryptoTickers: new Set() };
+const catalogue = {
+  byIsin: new Map(),
+  byTicker: new Map(),
+  candidates: new Set(),
+  hkQueries: [],
+  bondIsins: [],
+  cryptoTickers: new Set(),
+};
 if (wantEtfs) loadCsv(etfsCsvPath, "ETF", catalogue);
 if (wantStocks) loadCsv(stocksCsvPath, "STOCK", catalogue);
+if (wantBonds) loadCsv(bondsCsvPath, "BND", catalogue);
 if (wantCrypto) loadCsv(cryptosCsvPath, "CRYPTO", catalogue);
+console.error(
+  `catalogues: ${catalogue.candidates.size} guessed, ${catalogue.bondIsins.length} bonds, ` +
+    `${catalogue.hkQueries.length} Hong Kong, ${catalogue.cryptoTickers.size} coins`
+);
 
 const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
 const cliIsins = positionalArgs.map(toIsin).filter(Boolean);
@@ -208,7 +231,6 @@ if (!fresh && fs.existsSync(outputPath)) {
     const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
     if (Array.isArray(existing)) {
       for (const entry of existing) {
-        if (entry?.type === "BND") continue;
         results.push(entry);
         if (entry?.query) seen.add(entry.query.toUpperCase());
       }
@@ -251,7 +273,25 @@ async function callWithRetry(cmd, params, attempts = 6) {
   return null;
 }
 
-const FINDER_CONCURRENCY = 8;
+const FINDER_CONCURRENCY = Math.max(1, numberArg("finder-concurrency", 3));
+const FINDER_GAP_MS = Math.max(0, numberArg("finder-gap", 200));
+const finderCachePath = new URL("freedom24-finder-cache.json", import.meta.url);
+const finderCache = new Map();
+
+if (!fresh && fs.existsSync(finderCachePath)) {
+  try {
+    const cached = JSON.parse(fs.readFileSync(finderCachePath, "utf8"));
+    for (const [query, tickers] of Object.entries(cached || {})) {
+      if (Array.isArray(tickers)) finderCache.set(query, tickers);
+    }
+  } catch {
+    // Ignore a half-written cache and rebuild it as the run goes.
+  }
+}
+
+function saveFinderCache() {
+  fs.writeFileSync(finderCachePath, JSON.stringify(Object.fromEntries(finderCache)));
+}
 
 function finderHits(answer, isin) {
   const found = Array.isArray(answer?.found) ? answer.found : [];
@@ -259,7 +299,7 @@ function finderHits(answer, isin) {
     const ticker = row.t || "";
     if (!ticker || isAliasTicker(ticker)) return false;
     if (!KEPT_MARKETS.has(row.mkt)) return false;
-    if (Number(row.type) === 10 || Number(row.type) === 2) return false;
+    if (Number(row.type) === 10) return false;
     if (isin && toIsin(row.isin) !== isin) return false;
     return true;
   });
@@ -274,6 +314,7 @@ async function findMany(queries) {
       const index = next;
       next += 1;
       const query = queries[index];
+      if (FINDER_GAP_MS) await sleep(FINDER_GAP_MS);
       answers[index] = await callWithRetry("tickerFinder", {
         text: query.text,
         exchanges: FINDER_EXCHANGES,
@@ -325,10 +366,27 @@ function save() {
   fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 }
 
-function catalogueKind(isin, ticker) {
+function isCryptoInstrument(info, ticker) {
+  const kind = Number(info?.kind);
+  const shelf = Number(info?.type);
+  const market = String(info?.ltr || info?.codesub_nm || "").toUpperCase();
+  return (
+    shelf === 6 ||
+    kind === 8 ||
+    kind === 29 ||
+    kind === 31 ||
+    kind === 32 ||
+    kind === 33 ||
+    market === "CRPT" ||
+    String(ticker || "").includes("/")
+  );
+}
+
+function catalogueKind(isin, ticker, info) {
   if (isin && catalogue.byIsin.has(isin)) return catalogue.byIsin.get(isin);
-  const base = cryptoBase(ticker);
-  if (catalogue.cryptoTickers.has(base)) return "CRYPTO";
+  if (isCryptoInstrument(info, ticker) && catalogue.cryptoTickers.has(cryptoBase(ticker))) {
+    return "CRYPTO";
+  }
   if (keepUnlisted) return "";
   return null;
 }
@@ -339,7 +397,7 @@ function keepRow(info, ticker) {
   if (isAliasTicker(info.c || ticker)) return false;
 
   const isin = toIsin(info.issue_nb);
-  const kind = catalogueKind(isin, ticker);
+  const kind = catalogueKind(isin, ticker, info);
   if (kind === null) return false;
 
   const type = listingType(info, kind);
@@ -407,16 +465,34 @@ async function processTickers(tickers, label) {
 }
 
 async function addFromFinder(queries, label) {
-  if (queries.length === 0) return [];
+  if (queries.length === 0) {
+    console.error(`looking up 0 ${label}`);
+    return [];
+  }
   console.error(`looking up ${queries.length} ${label}`);
   const found = [];
-  for (let offset = 0; offset < queries.length; offset += 200) {
-    const batch = queries.slice(offset, offset + 200);
+  const pending = [];
+  for (const row of queries) {
+    if (finderCache.has(row.text)) {
+      found.push(...finderCache.get(row.text));
+    } else {
+      pending.push(row);
+    }
+  }
+  if (pending.length === 0) return found;
+
+  for (let offset = 0; offset < pending.length; offset += 200) {
+    const batch = pending.slice(offset, offset + 200);
     const answers = await findMany(batch.map((row) => ({ text: row.text })));
     for (const [index, row] of batch.entries()) {
-      for (const hit of finderHits(answers[index], row.isin)) found.push(hit.t);
+      const tickers = finderHits(answers[index], row.isin).map((hit) => hit.t);
+      finderCache.set(row.text, tickers);
+      found.push(...tickers);
     }
-    console.error(`  ${label} ${Math.min(offset + batch.length, queries.length)}/${queries.length}, ${found.length} tickers`);
+    saveFinderCache();
+    console.error(
+      `  ${label} ${finderCache.size} cached, ${Math.min(offset + batch.length, pending.length)}/${pending.length} new, ${found.length} tickers`
+    );
   }
   return found;
 }
@@ -437,9 +513,24 @@ if (cliTickers.length > 0 || cliIsins.length > 0) {
   if (wantCrypto) {
     for (const ticker of catalogue.cryptoTickers) guessed.push(`${ticker}/USD`);
   }
-  await processTickers(guessed.slice(Math.max(0, startIndex - 1)), "listed tickers");
+  // A finished first pass already asked for every guessed ticker. Repeating
+  // that would only reconfirm the refusals, so a resume goes straight to the
+  // lookups that have not run yet.
+  if (fresh || results.length === 0 || hasFlag("recheck")) {
+    await processTickers(guessed.slice(Math.max(0, startIndex - 1)), "listed tickers");
+  } else {
+    console.error(`keeping ${results.length} listings already saved; skipping guessed tickers`);
+  }
 
-  if (wantStocks) {
+  if (wantBonds) {
+    const bondTickers = await addFromFinder(
+      [...new Set(catalogue.bondIsins)].map((isin) => ({ text: isin, isin })),
+      "bond ISINs"
+    );
+    await processTickers(bondTickers, "bonds");
+  }
+
+  if (wantHk) {
     const hkTickers = await addFromFinder(
       catalogue.hkQueries.map((row) => ({ text: row.query, isin: row.isin })),
       "Hong Kong listings"

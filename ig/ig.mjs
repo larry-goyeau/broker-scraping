@@ -3,48 +3,60 @@ import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+function normalize(value) {
+  return String(value ?? "").replace(/\s+/g, " ").trim();
+}
+
 function toIsin(value) {
-  const text = (value || "").trim().toUpperCase();
+  const text = normalize(value).toUpperCase();
   if (!text) return "";
   const match = text.match(/\b[A-Z]{2}[A-Z0-9]{10}\b/);
   return match ? match[0] : "";
 }
 
-function loadIsinsFromCsv(csvPath) {
-  if (!fs.existsSync(csvPath)) return [];
-
-  const content = fs.readFileSync(csvPath, "utf8");
-  return content
-    .split(/\r?\n/)
-    .map((line) => {
-      // Supports both: ticker,isin,name and ticker,exchange,isin,name.
-      const columns = line.split(",");
-      const fromKnownColumns = toIsin(columns[2]) || toIsin(columns[1]);
-      if (fromKnownColumns) return fromKnownColumns;
-
-      for (const column of columns) {
-        const isin = toIsin(column);
-        if (isin) return isin;
-      }
-      return "";
-    })
-    .filter(Boolean);
+function normalizeTicker(value) {
+  const text = normalize(value).toUpperCase();
+  if (!text) return "";
+  const firstColumn = text.split(",")[0].trim();
+  const afterExchange = firstColumn.includes(":") ? firstColumn.split(":").pop() : firstColumn;
+  return (afterExchange || "").trim();
 }
 
-function uniqueQueries(values) {
-  const seen = new Set();
-  return values.filter((value) => {
-    const key = value.toUpperCase();
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
+// Funds first so an ISIN both catalogues happen to carry is remembered as the
+// fund it is. IG's own label is the fallback when `--all` keeps a line the
+// lists do not know.
+function loadCsv(csvPath, kind, index = new Map()) {
+  if (!csvPath || !fs.existsSync(csvPath)) return index;
+
+  for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
+    if (!line.trim() || /^ticker\s*,/i.test(line)) continue;
+    const columns = line.split(",");
+    const isin = toIsin(columns[2]) || toIsin(columns[1]) || columns.map(toIsin).find(Boolean);
+    if (isin && !index.has(isin)) index.set(isin, kind);
+  }
+  return index;
 }
 
-const clean = (value) => (value || "").replace(/\s+/g, " ").trim();
+function pathArg(flag, fallback) {
+  for (const arg of process.argv.slice(2)) {
+    const match = arg.match(new RegExp(`^--${flag}=(.+)$`, "i"));
+    if (match) return match[1];
+  }
+  return fallback ? new URL(fallback, import.meta.url) : "";
+}
 
-// Runs several calls at once while keeping a ceiling on how many are in flight.
-// IG served 80 details a second without complaint; this stays well under that.
+function numberArg(flag, fallback) {
+  for (const arg of process.argv.slice(2)) {
+    const match = arg.match(new RegExp(`^--${flag}=(\\d+)$`, "i"));
+    if (match) return parseInt(match[1], 10);
+  }
+  return fallback;
+}
+
+function hasFlag(name) {
+  return process.argv.slice(2).some((arg) => new RegExp(`^--${name}$`, "i").test(arg));
+}
+
 async function mapLimit(items, limit, worker) {
   const results = new Array(items.length);
   let cursor = 0;
@@ -58,6 +70,30 @@ async function mapLimit(items, limit, worker) {
   );
   return results;
 }
+
+// `--csv=PATH` overrides the fund list (defaults to etfs.csv) and
+// `--stocks-csv=PATH` the share list. `--etfs-only` and `--stocks-only`
+// walk one shelf alone. There is no coin book: a search for BTC answers
+// an ETF and a share, not a pair.
+const etfsCsvPath = pathArg("csv", "../etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
+const etfsOnly = hasFlag("etfs-only") || hasFlag("funds-only");
+const stocksOnly = hasFlag("stocks-only");
+const keepUnlisted = hasFlag("all");
+const fresh = hasFlag("fresh");
+const startIndex = Math.max(1, numberArg("start", 1));
+const walkLimit = numberArg("limit", 0);
+const lanes = Math.max(1, numberArg("concurrency", 12));
+
+const wantEtfs = !stocksOnly;
+const wantStocks = !etfsOnly;
+
+const catalogue = new Map();
+if (wantEtfs) loadCsv(etfsCsvPath, "ETF", catalogue);
+if (wantStocks) loadCsv(stocksCsvPath, "STOCK", catalogue);
+
+const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
+const cliIsins = positionalArgs.map(toIsin).filter(Boolean);
 
 const browser = await puppeteer.connect({
   browserURL: "http://127.0.0.1:9222",
@@ -75,52 +111,11 @@ if (!page.url().includes("deal.ig.com")) {
   await sleep(5000);
 }
 
-// `--start=N` (1-indexed) lets a run resume from a specific query without
-// throwing away progress already saved to ig-parsed.json.
-const startIndex = (() => {
-  for (const arg of process.argv.slice(2)) {
-    const match = arg.match(/^--start=(\d+)$/i);
-    if (match) return Math.max(1, parseInt(match[1], 10));
-  }
-  return 1;
-})();
-
-// `--csv=PATH` overrides the default ETF list CSV (defaults to etfs.csv).
-const csvPath = (() => {
-  for (const arg of process.argv.slice(2)) {
-    const match = arg.match(/^--csv=(.+)$/i);
-    if (match) return match[1];
-  }
-  return new URL("../etfs.csv", import.meta.url);
-})();
-
-const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
-const cliQueries = positionalArgs.filter(Boolean).map(toIsin).filter(Boolean);
-const csvQueries = loadIsinsFromCsv(csvPath);
-const defaultQueries = ["IE00B44Z5B48", "IE00BK5BQT80", "IE00BFMXXD54"];
-const queries = uniqueQueries(
-  cliQueries.length > 0 ? cliQueries : csvQueries.length > 0 ? csvQueries : defaultQueries
-);
-
 // The gateway behind deal.ig.com. It answers the same calls the web platform
 // makes for itself, so nothing here asks for more than the screen already shows.
 const API = "https://api.ig.com/eu-investments-api-gateway";
-const CONCURRENCY = 12;
 const PAGE_SIZE = 100;
 
-// The catalogue is filtered to funds. IG's European share dealing lists shares
-// under a second type, but no ETC or ETN at all, so an ETF list has nothing to
-// find outside this one.
-const ETF_FILTER = {
-  instrumentType: "ETF",
-  country: { values: [] },
-  dividendTreatment: { values: [] },
-  provider: { values: [] },
-  sector: { values: [] },
-};
-
-// The dealing token rotates while the platform is open, so it is read from the
-// browser rather than copied once, and read again whenever a call is refused.
 async function readSession() {
   const cookies = await page.cookies("https://api.ig.com", "https://deal.ig.com");
   const value = (name) => cookies.find((cookie) => cookie.name === name)?.value || "";
@@ -166,7 +161,6 @@ async function api(path, body, { tries = 4 } = {}) {
       continue;
     }
 
-    // An instrument this account cannot see, rather than a broken call.
     if (response.status === 404) return null;
     if (response.ok) return response.json();
 
@@ -179,37 +173,38 @@ async function api(path, body, { tries = 4 } = {}) {
       continue;
     }
 
-    if (attempt === tries) {
-      throw new Error(`IG answered ${response.status} to ${path}`);
-    }
+    if (attempt === tries) throw new Error(`IG answered ${response.status} to ${path}`);
     await sleep(400 * attempt);
   }
   return null;
 }
 
-const searchPage = (query, pageNumber, pageSize, filters) =>
+const searchPage = (query, pageNumber, filters) =>
   api("/instruments/search", {
     query,
     pageNumber,
-    pageSize,
+    pageSize: PAGE_SIZE,
     ...(filters ? { filters } : {}),
   });
 
 const details = (instrumentId) => api(`/instruments/${instrumentId}/details`);
 
-// The only place the dealing currency is written down. It doubles as the answer
-// to whether the listing is quoted at all.
-const priceCache = new Map();
-async function price(instrumentId) {
-  if (!priceCache.has(instrumentId)) priceCache.set(instrumentId, api(`/prices/${instrumentId}`));
-  return priceCache.get(instrumentId);
+function typeFilter(instrumentType) {
+  return {
+    instrumentType,
+    country: { values: [] },
+    dividendTreatment: { values: [] },
+    provider: { values: [] },
+    sector: { values: [] },
+  };
 }
 
-// Every fund IG offers, in `PAGE_SIZE` chunks. The search sorts by name, so
-// paging it is stable, and ids are deduplicated in case a page boundary shifts
-// under us mid-read.
-async function readCatalogue() {
-  const first = await searchPage("", 0, PAGE_SIZE, ETF_FILTER);
+// Every line this account can open, in `PAGE_SIZE` chunks. The search sorts
+// by name, so paging it is stable, and ids are deduplicated in case a page
+// boundary shifts under us mid-read.
+async function readCatalogue(instrumentType) {
+  const filters = instrumentType ? typeFilter(instrumentType) : undefined;
+  const first = await searchPage("", 0, filters);
   const total = first?.meta?.totalResults ?? 0;
   const pageCount = first?.meta?.totalPages ?? 0;
   if (!total) {
@@ -220,63 +215,76 @@ async function readCatalogue() {
   for (const instrument of first.instruments || []) byId.set(instrument.id, instrument);
 
   const rest = Array.from({ length: Math.max(0, pageCount - 1) }, (_, index) => index + 1);
-  await mapLimit(rest, CONCURRENCY, async (pageNumber) => {
-    const result = await searchPage("", pageNumber, PAGE_SIZE, ETF_FILTER);
+  await mapLimit(rest, lanes, async (pageNumber) => {
+    const result = await searchPage("", pageNumber, filters);
     for (const instrument of result?.instruments || []) byId.set(instrument.id, instrument);
   });
 
   if (byId.size < total) {
-    console.error(`  warning: ${total} funds listed but only ${byId.size} came back`);
+    console.error(`  warning: ${total} listed but only ${byId.size} came back`);
   }
   return [...byId.values()];
 }
 
-// IG deals its European share dealing accounts on one venue, and says which by
-// coding it into the instrument's RIC. The name is spelled out where it is
-// known and passed through as it comes where it is not, rather than guessing a MIC.
+// IG's European share dealing is a Tradegate book. The RIC suffix says so
+// (AAPL.TG); the primary listing (AAPL.OQ) is only where the name is from.
 const VENUES = {
-  TG: "Tradegate",
-  DE: "Xetra",
-  PA: "Euronext Paris",
-  AS: "Euronext Amsterdam",
-  BR: "Euronext Brussels",
-  MI: "Borsa Italiana",
+  TG: "TRADEGATE",
+  DE: "XETR",
+  PA: "EURONEXT",
+  AS: "EURONEXT",
+  BR: "EURONEXT",
+  MI: "MIL",
   MC: "BME",
-  L: "London Stock Exchange",
-  S: "SIX Swiss Exchange",
+  L: "LSE",
+  S: "SIX",
+};
+
+const LEGACY_EXCHANGES = {
+  TRADEGATE: "TRADEGATE",
+  XETRA: "XETR",
+  "EURONEXT PARIS": "EURONEXT",
+  "EURONEXT AMSTERDAM": "EURONEXT",
+  "EURONEXT BRUSSELS": "EURONEXT",
+  "BORSA ITALIANA": "MIL",
+  "LONDON STOCK EXCHANGE": "LSE",
+  "SIX SWISS EXCHANGE": "SIX",
 };
 
 function venueOf(detail) {
   const suffix = (detail.tradegateRic || "").split(".")[1] || "";
-  if (suffix) return VENUES[suffix] || suffix;
+  if (suffix) return VENUES[suffix] || suffix.toUpperCase();
   const prefix = (detail.tradingViewSymbol || "").split(":")[0] || "";
-  return prefix ? VENUES[prefix] || clean(prefix) : null;
+  return prefix ? VENUES[prefix] || LEGACY_EXCHANGES[prefix.toUpperCase()] || prefix.toUpperCase() : "TRADEGATE";
 }
 
-function rowFrom(query, detail, quote) {
-  const ticker = (detail.tickerCode || "").toUpperCase();
-  const name = clean(detail.name);
+function listingType(detail, kind) {
+  const name = detail.name || "";
+  if (kind === "ETF" || detail.instrumentType === "ETF") {
+    if (/\bETNs?\b/i.test(name)) return "ETN";
+    if (/\bETCs?\b/i.test(name)) return "ETC";
+    return "ETF";
+  }
+  return kind || "STOCK";
+}
+
+function rowFrom(query, detail, kind) {
+  const ticker = normalizeTicker(detail.tickerCode);
+  const name = normalize(detail.name);
   const exchange = venueOf(detail);
+  const isin = toIsin(detail.isin) || toIsin(query);
+  const type = listingType(detail, kind);
   return {
     query,
-    isin: (detail.isin || query).toUpperCase(),
     ticker: ticker || null,
     name,
-    // The venue's own code for the line, which is not always IG's ticker: IG
-    // files iShares Core MSCI World under SWDA, Tradegate quotes it as EUNL.
-    symbol: (detail.tradegateRic || "").split(".")[0] || null,
     exchange,
-    // What the account actually deals in. Every line here is bought in euros
-    // because that is what the venue quotes, whatever the fund is priced in.
-    currency: quote?.currency || null,
-    // IG's own figure for the listing it quotes fund statistics from, which is
-    // a different thing from the currency above: a world tracker dealt in euros
-    // is still reported against its dollar or sterling line.
-    listingCurrency: detail.listingCurrency || null,
-    type: detail.instrumentType || "ETF",
-    distribution: detail.dividendTreatment || null,
-    instrumentId: detail.instrumentId || null,
-    raw: [ticker, name, exchange, quote?.currency].filter(Boolean).join(" "),
+    // The account deals every line in euros on Tradegate, whatever the fund
+    // reports as its listing currency.
+    currency: "EUR",
+    type,
+    raw: `${ticker} ${name} - ${exchange}`.trim(),
+    isin: isin || null,
   };
 }
 
@@ -284,112 +292,124 @@ const outputPath = new URL("ig-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 
-// One ISIN can be listed more than once, so what tells two rows apart is the
-// line, not the fund.
 const entryKey = (row) =>
-  `${row.isin}:${row.ticker}:${row.exchange || ""}:${row.currency || ""}`.toUpperCase();
+  `${row.isin || ""}:${row.ticker || ""}:${row.exchange || ""}:${row.currency || ""}`.toUpperCase();
 
-// When resuming, load already-saved entries so earlier progress is preserved.
-if (startIndex > 1 && fs.existsSync(outputPath)) {
+if (!fresh && fs.existsSync(outputPath)) {
   try {
     const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
-    if (Array.isArray(existing)) {
-      for (const entry of existing) {
-        results.push(entry);
-        if (entry?.isin) seen.add(entryKey(entry));
+    for (const entry of Array.isArray(existing) ? existing : []) {
+      if (!entry?.ticker || !entry?.isin) continue;
+      if (entry.exchange) {
+        entry.exchange = LEGACY_EXCHANGES[normalize(entry.exchange).toUpperCase()] || entry.exchange;
       }
+      if (seen.has(entryKey(entry))) continue;
+      seen.add(entryKey(entry));
+      results.push(entry);
     }
+    if (results.length) console.error(`${results.length} listings already saved`);
   } catch {
     // Ignore malformed prior output and start fresh.
   }
 }
 
-const SAVE_INTERVAL_MS = 2000;
-let savedCount = results.length;
-let savedAt = 0;
-
 function save() {
   fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
-  savedCount = results.length;
-  savedAt = Date.now();
 }
 
-// A search answers one ISIN per round trip, so a long list is cheaper to answer
-// by reading the whole catalogue once and matching it here. Below that, asking
-// for the few funds wanted beats reading the couple of thousand on offer.
-const pending = queries.slice(startIndex - 1);
-const useCatalogue = pending.length >= 300;
+function keepDetail(detail) {
+  if (!detail) return false;
+  const isin = toIsin(detail.isin);
+  const kind = isin ? catalogue.get(isin) : "";
+  if (cliIsins.length > 0) {
+    if (!cliIsins.includes(isin)) return false;
+  } else if (!kind && !keepUnlisted) {
+    return false;
+  }
+  if (kind === "ETF" && !wantEtfs) return false;
+  if (kind === "STOCK" && !wantStocks) return false;
+  if (!kind && detail.instrumentType === "ETF" && !wantEtfs) return false;
+  if (!kind && detail.instrumentType === "STOCK" && !wantStocks) return false;
+  return true;
+}
 
-let byIsin = null;
+function addDetail(detail, query) {
+  const isin = toIsin(detail.isin) || toIsin(query);
+  const kind = isin ? catalogue.get(isin) : "";
+  const row = rowFrom(query || isin, detail, kind);
+  if (!row.ticker || !row.isin) return false;
+  const key = entryKey(row);
+  if (seen.has(key)) return false;
+  seen.add(key);
+  results.push(row);
+  return true;
+}
 
-if (useCatalogue) {
-  console.error("reading IG's fund list");
-  const catalogue = await readCatalogue();
+if (cliIsins.length > 0) {
+  console.error(`${cliIsins.length} ISINs to check`);
+  for (const [index, isin] of cliIsins.entries()) {
+    if (index + 1 < startIndex) continue;
+    if (walkLimit && index + 1 >= startIndex + walkLimit) break;
+    const found = await searchPage(isin, 0);
+    const hits = found?.instruments || [];
+    const opened = await mapLimit(hits, lanes, (hit) => details(hit.id));
+    for (const detail of opened) {
+      if (!keepDetail(detail)) continue;
+      if ((detail.isin || "").toUpperCase() !== isin) continue;
+      addDetail(detail, isin);
+    }
+    console.error(`  ${index + 1}/${cliIsins.length} ${isin}, ${results.length} listings`);
+  }
+} else {
+  const shelves = [];
+  if (wantEtfs && wantStocks) shelves.push({ type: "", label: "instruments" });
+  else if (wantEtfs) shelves.push({ type: "ETF", label: "funds" });
+  else if (wantStocks) shelves.push({ type: "STOCK", label: "shares" });
 
-  // The list itself carries no ISIN, so each line has to be opened to learn
-  // which fund it is. This is the slow part of a run, and the only one.
-  console.error(`${catalogue.length} funds listed, reading what each one is`);
+  const listed = [];
+  const seenIds = new Set();
+  for (const shelf of shelves) {
+    console.error(`reading IG's ${shelf.label}`);
+    for (const instrument of await readCatalogue(shelf.type || undefined)) {
+      if (seenIds.has(instrument.id)) continue;
+      seenIds.add(instrument.id);
+      listed.push(instrument);
+    }
+  }
+
+  const walk = listed.slice(startIndex - 1, walkLimit > 0 ? startIndex - 1 + walkLimit : undefined);
+  console.error(`${walk.length} listings to open`);
+
   let done = 0;
-  const detailed = await mapLimit(catalogue, CONCURRENCY, async (instrument) => {
+  let unmatched = 0;
+  await mapLimit(walk, lanes, async (instrument) => {
     const detail = await details(instrument.id);
     done += 1;
-    if (done % 500 === 0) console.error(`  ${done}/${catalogue.length}`);
-    return detail;
-  });
-
-  byIsin = new Map();
-  let nameless = 0;
-  for (const detail of detailed) {
-    const isin = (detail?.isin || "").toUpperCase();
-    if (!isin) {
-      nameless += 1;
-      continue;
+    if (!detail) {
+      unmatched += 1;
+    } else if (!keepDetail(detail)) {
+      unmatched += 1;
+    } else {
+      addDetail(detail);
     }
-    if (!byIsin.has(isin)) byIsin.set(isin, []);
-    byIsin.get(isin).push(detail);
-  }
-  console.error(
-    `${byIsin.size} ISINs on offer${nameless ? `, ${nameless} listings without one` : ""}`
-  );
-}
-
-console.error(`${queries.length} ISINs to check`);
-
-for (const [queryIndex, query] of queries.entries()) {
-  if (queryIndex + 1 < startIndex) continue;
-  console.error(`[${queryIndex + 1}/${queries.length}] ${query}`);
-
-  let matches;
-  if (useCatalogue) {
-    matches = byIsin.get(query) || [];
-  } else {
-    // Searching by ISIN is not the same as asking for one: IG matches loosely
-    // and will answer a near neighbour, so every hit is opened and only the
-    // ones carrying the ISIN we asked for are kept.
-    const found = await searchPage(query, 0, 20);
-    const hits = found?.instruments || [];
-    const opened = await mapLimit(hits, CONCURRENCY, (hit) => details(hit.id));
-    matches = opened.filter((detail) => (detail?.isin || "").toUpperCase() === query);
-  }
-
-  if (matches.length === 0) continue;
-
-  const quotes = await mapLimit(matches, CONCURRENCY, (detail) =>
-    price(detail.instrumentId).catch(() => null)
-  );
-
-  for (const [index, detail] of matches.entries()) {
-    const row = rowFrom(query, detail, quotes[index]);
-    const key = entryKey(row);
-    if (seen.has(key)) continue;
-    seen.add(key);
-    results.push(row);
-  }
-
-  if (results.length !== savedCount && Date.now() - savedAt >= SAVE_INTERVAL_MS) save();
+    if (done % 500 === 0) {
+      console.error(`  ${done}/${walk.length} opened, ${results.length} listings`);
+      save();
+    }
+  });
+  if (unmatched) console.error(`${unmatched} listings with no catalogue match`);
 }
 
 save();
-console.log(JSON.stringify(results, null, 2));
+
+const tally = {};
+for (const row of results) tally[row.type] = (tally[row.type] || 0) + 1;
+console.error(
+  `${results.length} listings over ${new Set(results.map((row) => row.isin).filter(Boolean)).size} ISINs ` +
+    `(${Object.entries(tally)
+      .sort((left, right) => right[1] - left[1])
+      .map(([type, count]) => `${count} ${type}`)
+      .join(", ")})`
+);
 
 await browser.disconnect();

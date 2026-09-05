@@ -3,27 +3,39 @@ import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-function normalizeTicker(value) {
-  const text = (value || "").trim().toUpperCase();
-  if (!text) return "";
+function normalize(value) {
+  return String(value ?? "").replace(/\s+/g, " ").trim();
+}
 
+function normalizeTicker(value) {
+  const text = normalize(value).toUpperCase();
+  if (!text) return "";
   const firstColumn = text.split(",")[0].trim();
-  const afterExchange = firstColumn.includes(":")
-    ? firstColumn.split(":").pop()
-    : firstColumn;
-  return (afterExchange || "").split(/[/]/)[0].trim();
+  const afterExchange = firstColumn.includes(":") ? firstColumn.split(":").pop() : firstColumn;
+  return afterExchange;
 }
 
 function toIsin(value) {
-  const text = (value || "").trim().toUpperCase();
+  const text = normalize(value).toUpperCase();
   if (!text) return "";
   const match = text.match(/\b[A-Z]{2}[A-Z0-9]{10}\b/);
   return match ? match[0] : "";
 }
 
-// Sarwa names the venue the way the tape does. The mapping onto the CSV's own
-// vocabulary was the one it agreed with on 4,722 of the 4,727 funds a ticker
-// alone identified, the five exceptions being funds that have changed venue.
+function pathArg(flag, fallback) {
+  for (const arg of process.argv.slice(2)) {
+    const match = arg.match(new RegExp(`^--${flag}=(.+)$`, "i"));
+    if (match) return match[1];
+  }
+  return fallback ? new URL(fallback, import.meta.url) : "";
+}
+
+function hasFlag(name) {
+  return process.argv.slice(2).some((arg) => new RegExp(`^--${name}$`, "i").test(arg));
+}
+
+// Sarwa names the venue the way the tape does. ARCA funds settle on AMEX
+// in the catalogues, the same way Alpaca and Robinhood map them.
 const EXCHANGE_NAMES = {
   AMEX: "AMEX",
   ARCA: "AMEX",
@@ -32,15 +44,11 @@ const EXCHANGE_NAMES = {
   NYSE: "NYSE",
 };
 
-// One ISIN is often listed on several venues under differently worded names
-// ("SPDR S&P 500 ETF Trust" and "State Street SPDR S&P 500 ETF"), so every
-// spelling is kept and the closest one decides a match.
-function loadTickerCandidatesFromCsv(csvPath) {
-  if (!fs.existsSync(csvPath)) return new Map();
+function loadTickerCandidatesFromCsv(csvPath, kind, into = new Map()) {
+  if (!csvPath || !fs.existsSync(csvPath)) return into;
 
-  const map = new Map();
   for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
-    if (!line.trim()) continue;
+    if (!line.trim() || /^ticker\s*,/i.test(line)) continue;
 
     const columns = line.split(",");
     const ticker = normalizeTicker(columns[0]);
@@ -48,38 +56,45 @@ function loadTickerCandidatesFromCsv(csvPath) {
     if (!ticker || isinIndex < 0) continue;
 
     const isin = toIsin(columns[isinIndex]);
-    const exchange = (columns[isinIndex - 1] || "").trim().toUpperCase();
-    const name = columns.slice(isinIndex + 1).join(",").trim();
+    const exchange = normalize(isinIndex >= 1 ? columns[isinIndex - 1] : columns[1]).toUpperCase();
+    const name = (isinIndex >= 0 ? columns.slice(isinIndex + 1) : columns.slice(3)).join(",").trim();
     if (!name) continue;
 
-    const candidates = map.get(ticker) || [];
-    map.set(ticker, candidates);
+    const candidates = into.get(ticker) || [];
+    into.set(ticker, candidates);
 
     const existing = candidates.find((candidate) => candidate.isin === isin);
     if (existing) {
       if (!existing.names.includes(name)) existing.names.push(name);
       if (exchange) existing.exchanges.add(exchange);
     } else {
-      candidates.push({ isin, names: [name], exchanges: new Set(exchange ? [exchange] : []) });
+      candidates.push({
+        isin,
+        kind,
+        names: [name],
+        exchanges: new Set(exchange ? [exchange] : []),
+      });
     }
   }
 
-  return map;
+  return into;
 }
 
-// Legal-entity suffixes are shared by unrelated funds, so counting them would
-// let a same-ticker instrument pass for the one being looked up.
+function loadCryptoTickers(csvPath) {
+  const tickers = new Set();
+  if (!csvPath || !fs.existsSync(csvPath)) return tickers;
+
+  for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
+    if (!line.trim() || /^ticker\s*,/i.test(line)) continue;
+    const ticker = normalizeTicker(line.split(",")[0]);
+    if (ticker) tickers.add(ticker);
+  }
+  return tickers;
+}
+
 const GENERIC_TOKENS = new Set([
-  "LTD",
-  "LIMITED",
-  "PLC",
-  "INC",
-  "CORP",
-  "CORPORATION",
-  "LLC",
-  "GMBH",
-  "THE",
-  "CO",
+  "LTD", "LIMITED", "PLC", "INC", "CORP", "CORPORATION", "LLC", "GMBH", "THE",
+  "CO", "TRUST", "CLASS", "ETF", "UCITS", "COMMON", "STOCK", "SHARES",
 ]);
 
 function nameTokens(value) {
@@ -91,8 +106,6 @@ function nameTokens(value) {
     .filter((token) => token.length > 1 && !GENERIC_TOKENS.has(token));
 }
 
-// Fund names are shortened inconsistently between sources ("Small Cap" against
-// "Small-Ca"), so tokens are compared by prefix rather than equality.
 function tokensMatch(left, right) {
   if (left === right) return true;
   const [shorter, longer] = left.length <= right.length ? [left, right] : [right, left];
@@ -115,13 +128,9 @@ function nameScore(scrapedName, candidateName) {
       matched += 1;
     }
   }
-
-  // Dividing by the longer name keeps a terser wording from outscoring the fund
-  // actually named just by leaving words out.
   return matched / Math.max(scraped.length, candidate.length);
 }
 
-// Picks the wording of a candidate that reads closest to what was scraped.
 function scoreCandidate(scrapedName, candidate) {
   let best = { score: 0, name: candidate.names[0] || "" };
   for (const name of candidate.names) {
@@ -134,38 +143,81 @@ function scoreCandidate(scrapedName, candidate) {
 const MIN_NAME_SCORE = 0.5;
 
 // Sarwa only carries US listings, so the US share class trading under the
-// ticker is the fund on offer. Where a ticker covers several of them, the
-// venue Sarwa quotes it on tells them apart before the name has to, which
-// matters because notes are named after their issuer ("Barclays ETN+ Select
-// MLP ETN").
-function resolveIsin(tickerCandidates, asset) {
-  const usCandidates = (tickerCandidates.get(asset.ticker) || []).filter((candidate) =>
+// ticker is the instrument on offer. Where a ticker covers several of them,
+// the venue tells them apart before the name has to.
+function resolveListing(tickerCandidates, ticker, name, exchange) {
+  const usCandidates = (tickerCandidates.get(ticker) || []).filter((candidate) =>
     candidate.isin.startsWith("US")
   );
   if (usCandidates.length === 0) return null;
 
-  const venue = EXCHANGE_NAMES[asset.exchange];
+  const venue = EXCHANGE_NAMES[exchange] || exchange;
   const sameVenue = venue
     ? usCandidates.filter((candidate) => candidate.exchanges.has(venue))
     : [];
-  const candidates = sameVenue.length > 0 ? sameVenue : usCandidates;
+  const shortlist = sameVenue.length > 0 ? sameVenue : usCandidates;
 
-  const scored = candidates.map((candidate) => ({
+  const scored = shortlist.map((candidate) => ({
     isin: candidate.isin,
-    ...scoreCandidate(asset.name, candidate),
+    kind: candidate.kind,
+    ...scoreCandidate(name, candidate),
   }));
 
-  // A lone US fund under a ticker Sarwa offers is that fund, whatever either
-  // side calls it.
   if (scored.length === 1) return scored[0];
 
-  const bestScore = Math.max(0, ...scored.map((candidate) => candidate.score));
+  const bestScore = Math.max(0, ...scored.map((entry) => entry.score));
   if (bestScore < MIN_NAME_SCORE) return null;
 
-  const shortlist = scored.filter((candidate) => candidate.score === bestScore);
-  // Still tied: the name does not tell these share classes apart.
-  return shortlist.length === 1 ? shortlist[0] : null;
+  const winners = scored.filter((entry) => entry.score === bestScore);
+  return winners.length === 1 ? winners[0] : null;
 }
+
+function listingType(attributes) {
+  const kind = String(attributes.type || "").toLowerCase();
+  if (kind === "crypto") return "CRYPTO";
+  const text = attributes.name || "";
+  if (/\bETNs?\b/i.test(text)) return "ETN";
+  if (/\bETCs?\b/i.test(text) && !/\bETFs?\b/i.test(text)) return "ETC";
+  if (kind === "etf") return "ETF";
+  return "STOCK";
+}
+
+function assetTicker(attributes) {
+  if (String(attributes.type || "").toLowerCase() === "crypto") {
+    return normalizeTicker(attributes.friendly_symbol || attributes.symbol);
+  }
+  return normalizeTicker(attributes.symbol || attributes.friendly_symbol);
+}
+
+// `--csv=PATH` overrides the fund list, `--stocks-csv=PATH` the share list,
+// `--cryptos-csv=PATH` the coin list. `--etfs-only` / `--stocks-only` /
+// `--crypto-only` answer for one shelf. `--all` keeps lines the catalogues
+// do not carry.
+const etfsCsvPath = pathArg("csv", "../etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
+const cryptosCsvPath = pathArg("cryptos-csv", "../cryptos.csv");
+const etfsOnly = hasFlag("etfs-only") || hasFlag("funds-only");
+const stocksOnly = hasFlag("stocks-only");
+const cryptoOnly = hasFlag("crypto-only") || hasFlag("cryptos-only");
+const keepUnlisted = hasFlag("all");
+
+const wantEtfs = !stocksOnly && !cryptoOnly;
+const wantStocks = !etfsOnly && !cryptoOnly;
+const wantCrypto = !etfsOnly && !stocksOnly;
+
+const fundsByTicker = wantEtfs ? loadTickerCandidatesFromCsv(etfsCsvPath, "ETF") : new Map();
+const stocksByTicker = wantStocks ? loadTickerCandidatesFromCsv(stocksCsvPath, "STOCK") : new Map();
+const cryptoTickers = wantCrypto ? loadCryptoTickers(cryptosCsvPath) : new Set();
+
+const onlyTickers = new Set(
+  process.argv
+    .slice(2)
+    .filter((arg) => !arg.startsWith("--"))
+    .map(normalizeTicker)
+    .filter((ticker) => ticker && !toIsin(ticker))
+);
+
+const outputPath = new URL("sarwa-parsed.json", import.meta.url);
 
 const browser = await puppeteer.connect({
   browserURL: "http://127.0.0.1:9222",
@@ -173,54 +225,12 @@ const browser = await puppeteer.connect({
 });
 
 const TRADE_URL = "https://www.sarwa.co/trade";
-
 const pages = await browser.pages();
 const page =
-  pages.find((candidate) => candidate.url().includes("sarwa.co")) || (await browser.newPage());
-if (!page.url().includes("sarwa.co")) {
-  await page.goto(TRADE_URL, { waitUntil: "domcontentloaded" });
-}
+  pages.find((candidate) => /sarwa\.co/i.test(candidate.url())) || (await browser.newPage());
 await page.bringToFront();
-
-// `--start=N` (1-indexed) lets a run resume from a specific instrument without
-// throwing away progress already saved to sarwa-parsed.json.
-const startIndex = (() => {
-  for (const arg of process.argv.slice(2)) {
-    const match = arg.match(/^--start=(\d+)$/i);
-    if (match) return Math.max(1, parseInt(match[1], 10));
-  }
-  return 1;
-})();
-const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
-
-// `--csv=PATH` overrides the default ETF list CSV (defaults to etfs.csv).
-const csvPath = (() => {
-  for (const arg of process.argv.slice(2)) {
-    const match = arg.match(/^--csv=(.+)$/i);
-    if (match) return match[1];
-  }
-  return new URL("../etfs.csv", import.meta.url);
-})();
-
-const tickerCandidates = loadTickerCandidatesFromCsv(csvPath);
-const onlyTickers = new Set(positionalArgs.map(normalizeTicker).filter(Boolean));
-
-const outputPath = new URL("sarwa-parsed.json", import.meta.url);
-const results = [];
-const seen = new Set();
-
-if (startIndex > 1 && fs.existsSync(outputPath)) {
-  try {
-    const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
-    if (Array.isArray(existing)) {
-      for (const entry of existing) {
-        results.push(entry);
-        if (entry?.ticker) seen.add(entry.ticker.toUpperCase());
-      }
-    }
-  } catch {
-    // Ignore malformed prior output and start fresh.
-  }
+if (!/sarwa\.co/i.test(page.url())) {
+  await page.goto(TRADE_URL, { waitUntil: "domcontentloaded" });
 }
 
 const ASSETS_URL = "https://apiv2.sarwa.co/api/v1/assets?paginate=false";
@@ -236,8 +246,6 @@ client.on("Network.requestWillBeSent", (event) => {
   token = sent.Authorization || sent.authorization || token;
 });
 
-// Nothing is signed until the app has something to ask, so the search box is
-// given a symbol to look up.
 async function captureToken() {
   for (let attempt = 0; attempt < 3 && !token; attempt += 1) {
     const input = await page
@@ -260,11 +268,10 @@ async function captureToken() {
 }
 
 if (!(await captureToken())) {
+  await browser.disconnect();
   throw new Error("Could not read Sarwa's API token. Is www.sarwa.co/trade signed in?");
 }
 
-// Sarwa hands over everything it trades in one answer, so the offer is read
-// whole instead of a search per ticker.
 async function loadAssets() {
   for (let attempt = 0; attempt < 3; attempt += 1) {
     const answer = await page.evaluate(
@@ -286,7 +293,6 @@ async function loadAssets() {
 
     if (answer?.status === 200) return answer.data;
 
-    // The token turns over every fifteen minutes; the app renews it on its own.
     const stale = token;
     for (let waited = 0; waited < 20000 && token === stale; waited += 250) await sleep(250);
     if (token === stale) await captureToken();
@@ -296,52 +302,92 @@ async function loadAssets() {
 }
 
 const assets = await loadAssets();
-console.error(`${assets.length} instruments offered`);
+console.error(`${assets.length} instruments in Sarwa's offering`);
 
-// Sarwa files notes and commodity trusts as funds too, which is what the CSV
-// counts them as; everything else it lists is a share or a coin.
-const etfs = [];
+const results = [];
+const seen = new Set();
+let unlisted = 0;
+const skipped = new Map();
+
+function skip(reason) {
+  skipped.set(reason, (skipped.get(reason) || 0) + 1);
+}
+
 for (const asset of assets) {
   const attributes = asset?.attributes || {};
-  if ((attributes.type || "").toLowerCase() !== "etf") continue;
+  const exchangeCode = String(attributes.exchange || "").toUpperCase();
 
-  const ticker = (attributes.symbol || attributes.friendly_symbol || "").toUpperCase();
-  if (!ticker) continue;
+  // ASCX leftover perps (BTCUSD.P), not the cash book.
+  if (exchangeCode === "ASCX" || /\.P$/.test(String(attributes.symbol || ""))) {
+    skip("perp");
+    continue;
+  }
+
+  const type = listingType(attributes);
+  if ((type === "ETF" || type === "ETC" || type === "ETN") && !wantEtfs) continue;
+  if (type === "STOCK" && !wantStocks) continue;
+  if (type === "CRYPTO" && !wantCrypto) continue;
+
+  const ticker = assetTicker(attributes);
+  if (!ticker) {
+    skip("no ticker");
+    continue;
+  }
   if (onlyTickers.size > 0 && !onlyTickers.has(ticker)) continue;
 
-  etfs.push({
-    ticker,
-    name: (attributes.name || "").replace(/\s+/g, " ").trim(),
-    exchange: (attributes.exchange || "").toUpperCase(),
-  });
-}
+  const quoted = normalize(attributes.name);
+  let match = null;
+  if (type === "CRYPTO") {
+    if (!cryptoTickers.has(ticker) && !keepUnlisted) {
+      unlisted += 1;
+      continue;
+    }
+  } else {
+    const catalogue = type === "STOCK" ? stocksByTicker : fundsByTicker;
+    match = resolveListing(catalogue, ticker, quoted, exchangeCode);
+    if (!match && !keepUnlisted) {
+      unlisted += 1;
+      continue;
+    }
+  }
 
-console.error(`${etfs.length} of them are funds, matching them to the CSV`);
-
-for (const [index, etf] of etfs.entries()) {
-  if (index + 1 < startIndex) continue;
-  if (seen.has(etf.ticker)) continue;
-
-  const candidate = resolveIsin(tickerCandidates, etf);
-  if (!candidate) continue;
-  seen.add(etf.ticker);
+  const exchange = type === "CRYPTO" ? "CRYPTO" : EXCHANGE_NAMES[exchangeCode] || exchangeCode || null;
+  const name = quoted || match?.name || ticker;
+  const isin = match?.isin || "";
+  const key = `${isin || ticker}:${exchange}:${ticker}:USD:${type}`.toUpperCase();
+  if (seen.has(key)) continue;
+  seen.add(key);
 
   results.push({
-    query: etf.ticker,
-    ticker: etf.ticker,
-    name: etf.name || candidate.name,
-    exchange: EXCHANGE_NAMES[etf.exchange] || etf.exchange || null,
-    // Sarwa Trade offers US listings only, so every line quotes in dollars.
+    query: ticker,
+    ticker,
+    name,
+    exchange,
     currency: "USD",
-    type: "ETF",
-    raw: [etf.ticker, etf.name, etf.exchange].filter(Boolean).join(" "),
-    isin: candidate.isin,
+    type,
+    raw: [attributes.symbol || ticker, name, attributes.exchange].filter(Boolean).join(" "),
+    isin,
   });
 }
+
+results.sort((left, right) => {
+  const byType = String(left.type).localeCompare(right.type);
+  if (byType !== 0) return byType;
+  const byExchange = String(left.exchange).localeCompare(String(right.exchange));
+  if (byExchange !== 0) return byExchange;
+  return String(left.ticker).localeCompare(String(right.ticker));
+});
 
 fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 
-console.error(`${results.length} funds matched`);
-console.log(JSON.stringify(results, null, 2));
+const byType = new Map();
+for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);
+
+console.error(
+  `${results.length} listings over ${new Set(results.map((row) => row.isin || row.ticker)).size} instruments ` +
+    `(${[...byType].map(([type, count]) => `${count} ${type}`).join(", ") || "none"})` +
+    (unlisted ? `, ${unlisted} the catalogues do not carry` : "") +
+    (skipped.size ? `, left out ${[...skipped].map(([reason, count]) => `${count} ${reason}`).join(", ")}` : "")
+);
 
 await browser.disconnect();

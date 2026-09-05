@@ -1,16 +1,13 @@
 Swissquote
-choicetrade
 Tiger Brokers AU
 CGS International
 bluorbank
-bhmuae
 oanda
-Bank of Cyprus
-hello bank
-moneybase
 fortuneo
 Endowus
 benchmark
+mexem
+puprime
 
 Syfe
 Exante

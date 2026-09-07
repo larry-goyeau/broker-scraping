@@ -253,7 +253,7 @@ const shapes = (store.session?.shapes && { ...store.session.shapes }) || {};
 //
 // A source that ever needs a conversion again puts it here, where the whole table can
 // be read at once. The per-share path below never multiplies by it.
-const CROSSED = { xetra: 1, lse: 1, six: 1, euronext: 1, us605: 1, tradegate: 1, gettex: 1, lsex: 1 };
+const CROSSED = { xetra: 1, lse: 1, six: 1, euronext: 1, us605: 1, tradegate: 1, gettex: 1, lsex: 1, quotrix: 1 };
 
 const CONVENTION =
   "coût d'un aller-retour, taille d'un particulier, à la touche, ramené à la moyenne de séance";
@@ -656,8 +656,9 @@ const delayedQuotes = {
   tradegate: new Map(),
   gettex: new Map(),
   lsex: new Map(),
+  quotrix: new Map(),
 };
-const delayedTrouble = { tradegate: null, gettex: null, lsex: null };
+const delayedTrouble = { tradegate: null, gettex: null, lsex: null, quotrix: null };
 
 const UA = { "User-Agent": "Mozilla/5.0" };
 
@@ -771,6 +772,45 @@ async function loadLsex() {
     delayedQuotes.lsex.set(`${isin}|EUR`, { bid, ask, currency: "EUR" });
   }
   return url;
+}
+
+// BÖAG's MiFID delayed CSVs. DUSD is Quotrix Freiverkehr (the busy book), DUSC the
+// regulated segment. Files are volume-sliced tapes with a European decimal comma;
+// the last two-sided print per ISIN is the book. No currency column: the venue quotes
+// in euro.
+const euroNum = (s) => {
+  const t = String(s).trim();
+  if (!t) return NaN;
+  return t.includes(",") ? Number(t.replace(/\./g, "").replace(",", ".")) : Number(t);
+};
+
+async function loadQuotrix(wanted) {
+  const index = await (await fetchOk("https://cld42.boersenag.de/m13data/data/m13filespt.json")).json();
+  const files = (index.M13Files || []).filter((f) => f && f !== "end");
+  const pick = (mic, n) => files.filter((f) => f.includes(`_${mic}_`)).slice(0, n);
+  const selected = [...pick("DUSD", 5), ...pick("DUSC", 3)];
+  if (!selected.length) throw new Error("index pre-trade BÖAG sans fichier DUSD/DUSC");
+  const wantedIsin = new Set([...wanted].map((k) => k.split("|")[0]));
+  delayedQuotes.quotrix.clear();
+  for (const file of selected) {
+    const text = await (await fetchOk(`https://cld42.boersenag.de/m13data/data/${file}`)).text();
+    for (const line of text.split(/\r?\n/)) {
+      const p = line.split(";");
+      if (p.length < 7 || p[0] === "MIC") continue;
+      const isin = String(p[1] || "").toUpperCase();
+      if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin)) continue;
+      if (wantedIsin.size && !wantedIsin.has(isin)) continue;
+      const bid = euroNum(p[3]);
+      const ask = euroNum(p[5]);
+      if (!(bid > 0) || !(ask > 0) || ask < bid) continue;
+      const at = p[2] || "";
+      const key = `${isin}|EUR`;
+      const prev = delayedQuotes.quotrix.get(key);
+      if (prev && prev.at > at) continue;
+      delayedQuotes.quotrix.set(key, { bid, ask, currency: "EUR", at });
+    }
+  }
+  return selected;
 }
 
 const adapters = {
@@ -1046,6 +1086,31 @@ const adapters = {
       const quote = delayedQuotes.lsex.get(`${l.isin}|EUR`);
       if (!quote) {
         return { spreadBp: null, note: delayedTrouble.lsex || "absent du fichier pre-trade LS Exchange" };
+      }
+      return { spreadBp: bpFrom(quote.bid, quote.ask), tradingCurrency: "EUR" };
+    },
+  },
+
+  // BÖAG delayed CSVs for Düsseldorf Quotrix (DUSC + DUSD). Looked up, not visited.
+  quotrix: {
+    measure: "touche du carnet, différé MiFID",
+    async prefetch(lines) {
+      try {
+        const wanted = new Set(lines.map((l) => `${l.isin}|${l.currency}`));
+        const files = await loadQuotrix(wanted);
+        console.error(`    Quotrix : ${delayedQuotes.quotrix.size} cotations (${files.length} fichiers)\n`);
+      } catch (e) {
+        delayedTrouble.quotrix = String(e.message || e).slice(0, 160);
+        console.error(`    Quotrix : ${delayedTrouble.quotrix}\n`);
+      }
+    },
+    async fetch(l) {
+      if (l.currency !== "EUR") {
+        return { spreadBp: null, note: `Quotrix cote en EUR, pas en ${l.currency}` };
+      }
+      const quote = delayedQuotes.quotrix.get(`${l.isin}|EUR`);
+      if (!quote) {
+        return { spreadBp: null, note: delayedTrouble.quotrix || "absent du fichier pre-trade Quotrix" };
       }
       return { spreadBp: bpFrom(quote.bid, quote.ask), tradingCurrency: "EUR" };
     },

@@ -589,7 +589,8 @@ for (const row of seenRows) {
   seen.add(match.isin);
 
   const country = countryFor(row);
-  const currency = country?.key === "US" ? "USD" : "EUR";
+  // BUX quotes its funds in euro. The country tab only changes the stock book.
+  const currency = row.kind === "ETF" || row.kind === "ETC" || row.kind === "ETN" ? "EUR" : country?.key === "US" ? "USD" : "EUR";
   const subtitle =
     row.kind === "ETF"
       ? `${row.ticker} - ETF - ${row.policy || "Accumulating"}`
@@ -621,6 +622,9 @@ function loadExisting(file) {
 }
 
 const existing = loadExisting(outPath);
+for (const row of existing) {
+  if ((row.type === "ETF" || row.type === "ETC" || row.type === "ETN") && !row.currency) row.currency = "EUR";
+}
 const claimed = new Set(existing.map((row) => row.isin).filter(Boolean));
 const added = [];
 for (const row of results) {

@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Where to buy stock, ETF, crypto ....</title>
+    <style>
+      :root {
+        --paper: #f3eee4;
+        --ink: #1c1914;
+        --mute: #6d675c;
+        --line: #d4cbb8;
+        --card: #fffdf7;
+        --green: #0f4d3a;
+        --green-soft: #dceae3;
+        --hit: #efe6c8;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; background: var(--paper); color: var(--ink); }
+      body {
+        font: 16px/1.45 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+        min-height: 100vh;
+      }
+      main { width: min(920px, calc(100% - 40px)); margin: 0 auto; padding: 56px 0 80px; text-align: center; }
+      h1 { margin: 0 0 10px; font-size: 42px; letter-spacing: -0.03em; font-weight: 650; }
+      .lede { margin: 0 auto 28px; max-width: 38em; color: var(--mute); }
+      .search { position: relative; }
+      #q {
+        width: 100%;
+        border: 1px solid var(--ink);
+        background: var(--card);
+        color: var(--ink);
+        border-radius: 2px;
+        padding: 16px 18px;
+        font: inherit;
+        font-size: 18px;
+        text-align: center;
+        outline: none;
+      }
+      #q:focus { box-shadow: 4px 4px 0 var(--green); }
+      #suggest {
+        position: absolute;
+        z-index: 2;
+        left: 0; right: 0; top: calc(100% - 1px);
+        margin: 0; padding: 6px 0;
+        list-style: none;
+        background: var(--card);
+        border: 1px solid var(--ink);
+        max-height: 360px;
+        overflow: auto;
+      }
+      #suggest[hidden] { display: none; }
+      #suggest button {
+        display: grid;
+        grid-template-columns: 88px 1fr auto;
+        gap: 12px;
+        align-items: baseline;
+        width: 100%;
+        border: 0;
+        background: transparent;
+        color: inherit;
+        text-align: left;
+        padding: 10px 16px;
+        font: inherit;
+        cursor: pointer;
+      }
+      #suggest button[aria-selected="true"], #suggest button:hover { background: var(--hit); }
+      #suggest .tk { font-variant-numeric: tabular-nums; font-weight: 650; }
+      #suggest .nm { color: var(--mute); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      #suggest .nb { color: var(--green); font-size: 13px; white-space: nowrap; }
+      .meta { margin: 14px 0 0; color: var(--mute); font-size: 13px; }
+      #result { margin-top: 36px; text-align: left; }
+      #result[hidden] { display: none; }
+      .instrument {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 18px;
+        align-items: baseline;
+        padding-bottom: 18px;
+        border-bottom: 1px solid var(--line);
+      }
+      .instrument h2 { margin: 0; font-size: 28px; letter-spacing: -0.02em; }
+      .instrument .isin { font-variant-numeric: tabular-nums; color: var(--mute); }
+      .chip {
+        display: inline-block;
+        padding: 2px 8px;
+        background: var(--green-soft);
+        color: var(--green);
+        font-size: 12px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+      .count { margin: 16px 0 12px; color: var(--mute); }
+      table.listings {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--card);
+      }
+      table.listings th,
+      table.listings td {
+        text-align: left;
+        padding: 9px 12px;
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+      }
+      table.listings th {
+        font-size: 12px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--mute);
+        font-weight: 600;
+      }
+      table.listings td a { color: inherit; text-decoration: none; }
+      table.listings td a:hover { border-bottom: 1px solid var(--ink); }
+      table.listings tr:last-child td { border-bottom: 0; }
+      table.listings td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+      table.listings td.na { color: var(--mute); }
+      .empty { margin-top: 28px; color: var(--mute); }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Where to buy stock, ETF, crypto ....</h1>
+      <p class="lede">
+        A ticker, an ISIN or a name. The list is the union of scraped catalogues —
+        only brokers already in this repository.
+      </p>
+      <div class="search">
+        <input id="q" type="search" placeholder="IWDA, Apple, IE00B4L5Y983…" autocomplete="off" autofocus />
+        <ul id="suggest" hidden></ul>
+      </div>
+      <p id="meta" class="meta"></p>
+      <section id="result" hidden></section>
+      <p id="empty" class="empty" hidden>No broker in this repository lists it.</p>
+    </main>
+    <script>
+      const q = document.getElementById("q");
+      const suggest = document.getElementById("suggest");
+      const meta = document.getElementById("meta");
+      const result = document.getElementById("result");
+      const empty = document.getElementById("empty");
+      let hits = [];
+      let cursor = -1;
+      let timer = 0;
+
+      const esc = (s) =>
+        String(s || "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+      fetch("/api/stats")
+        .then((r) => r.json())
+        .then((s) => {
+          meta.textContent = `${s.instruments.toLocaleString("en-US")} instruments · ${s.listings.toLocaleString("en-US")} listings · ${s.brokers} brokers`;
+        });
+
+      function renderSuggest() {
+        if (!hits.length) {
+          suggest.hidden = true;
+          suggest.innerHTML = "";
+          return;
+        }
+        suggest.hidden = false;
+        suggest.innerHTML = hits
+          .map((h, i) => {
+            const label = h.brokers > 1 ? `${h.brokers} brokers` : "1 broker";
+            return `<li><button type="button" data-i="${i}" aria-selected="${i === cursor}">
+              <span class="tk">${esc(h.ticker || "—")}</span>
+              <span class="nm">${esc(h.name || h.isin || h.key)}</span>
+              <span class="nb">${label}</span>
+            </button></li>`;
+          })
+          .join("");
+      }
+
+      async function lookup(query) {
+        const r = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+        hits = await r.json();
+        cursor = hits.length ? 0 : -1;
+        renderSuggest();
+      }
+
+      function pick(hit) {
+        if (!hit) return;
+        q.value = hit.ticker || hit.isin || hit.key;
+        suggest.hidden = true;
+        history.replaceState(null, "", `#${encodeURIComponent(hit.key)}`);
+        show(hit.key);
+      }
+
+      async function show(key) {
+        empty.hidden = true;
+        const r = await fetch(`/api/instrument?key=${encodeURIComponent(key)}`);
+        if (!r.ok) {
+          result.hidden = true;
+          empty.hidden = false;
+          return;
+        }
+        const d = await r.json();
+        const rows = d.soldBy.flatMap((b) => {
+          const name = b.url
+            ? `<a href="${esc(b.url)}" target="_blank" rel="noreferrer">${esc(b.name)}</a>`
+            : esc(b.name);
+          const listed = b.listings.length ? b.listings : [{ exchange: "", currency: "" }];
+          return listed.map((l) => ({
+            broker: name,
+            exchange: l.exchange || "—",
+            currency: l.currency || "—",
+            spread: l.spread || "N/A",
+            perShare: l.perShare || "N/A",
+            perOrder: l.perOrder || "N/A",
+          }));
+        });
+        const cell = (v) => {
+          const text = v || "N/A";
+          return `<td class="num${text === "N/A" ? " na" : ""}">${esc(text)}</td>`;
+        };
+        const body = rows
+          .map(
+            (row) =>
+              `<tr><td>${row.broker}</td><td>${esc(row.exchange)}</td><td>${esc(row.currency)}</td>${cell(row.spread)}${cell(row.perShare)}${cell(row.perOrder)}</tr>`
+          )
+          .join("");
+        result.hidden = false;
+        result.innerHTML = `
+          <div class="instrument">
+            <h2>${esc(d.ticker || d.isin || d.key)}</h2>
+            ${d.type ? `<span class="chip">${esc(d.type)}</span>` : ""}
+            <span>${esc(d.name)}</span>
+            ${d.isin ? `<span class="isin">${esc(d.isin)}</span>` : ""}
+          </div>
+          <p class="count">Sold by ${d.soldBy.length} broker${d.soldBy.length > 1 ? "s" : ""}</p>
+          <table class="listings">
+            <thead>
+              <tr>
+                <th>broker</th>
+                <th>exchange</th>
+                <th>currency</th>
+                <th>spread</th>
+                <th>commission / share</th>
+                <th>commission / order</th>
+              </tr>
+            </thead>
+            <tbody>${body}</tbody>
+          </table>`;
+      }
+
+      q.addEventListener("input", () => {
+        clearTimeout(timer);
+        const v = q.value.trim();
+        if (!v) {
+          hits = [];
+          renderSuggest();
+          return;
+        }
+        timer = setTimeout(() => lookup(v), 80);
+      });
+
+      q.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowDown") {
+          e.preventDefault();
+          if (!hits.length) return;
+          cursor = (cursor + 1) % hits.length;
+          renderSuggest();
+        } else if (e.key === "ArrowUp") {
+          e.preventDefault();
+          if (!hits.length) return;
+          cursor = (cursor - 1 + hits.length) % hits.length;
+          renderSuggest();
+        } else if (e.key === "Enter") {
+          e.preventDefault();
+          const go = async () => {
+            if (!hits.length && q.value.trim()) await lookup(q.value.trim());
+            if (hits[cursor] || hits[0]) pick(hits[cursor] || hits[0]);
+            else if (q.value.trim()) show(q.value.trim().toUpperCase());
+          };
+          go();
+        } else if (e.key === "Escape") {
+          suggest.hidden = true;
+        }
+      });
+
+      suggest.addEventListener("mousedown", (e) => {
+        const btn = e.target.closest("button");
+        if (!btn) return;
+        pick(hits[Number(btn.dataset.i)]);
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!e.target.closest(".search")) suggest.hidden = true;
+      });
+
+      const hash = decodeURIComponent(location.hash.replace(/^#/, ""));
+      if (hash) {
+        q.value = hash;
+        show(hash);
+      }
+    </script>
+  </body>
+</html>

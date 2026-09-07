@@ -21,10 +21,10 @@
 export const VENUES = [
   {
     mic: "XETR",
-    name: "Deutsche Börse Xetra",
+    name: "Börse Xetra",
     source: "xetra",
     hours: { open: "09:00", close: "17:30", tz: "Europe/Berlin" },
-    exact: ["xetr", "xetra", "xet", "xetretf", "deutscheborsexetra", "ibis", "ibis2", "etr"],
+    exact: ["xetr", "xetra", "xet", "xetretf", "deutscheborsexetra", "ibis", "ibis2", "etr", "fse"],
     loose: ["frankfurt", "fra", "germany"],
   },
   {
@@ -101,13 +101,13 @@ export const VENUES = [
     source: "us605",
     hours: { open: "09:30", close: "16:00", tz: "America/New_York" },
     exact: {
-      XNAS: ["xnas", "nasdaq", "nmq", "nasdaqgs", "nasdaqgm", "nasdaqcm"],
+      XNAS: ["xnas", "nasdaq", "nmq", "ndq", "nasdaqgs", "nasdaqgm", "nasdaqcm"],
       // Brokers write "AMEX" for Arca more often than for NYSE American, tastytrade
       // among them: EEM, GLD, IAU and VOO all come through labelled AMEX and all four
       // list on Arca. The alias sits here rather than on XASE because that is what the
       // catalogues mean by it, and because the figure is the same either way.
       ARCX: ["arcx", "arca", "nysearca", "amex", "pcq", "nysemkt"],
-      XNYS: ["xnys", "nyse", "newyorkstockexchange", "nys"],
+      XNYS: ["xnys", "nyse", "newyorkstockexchange", "nys", "nsy", "usnyse"],
       XASE: ["xase", "nyseamerican", "americanstockexchange"],
       BATS: ["bats", "batsz", "cboebzx", "bzx"],
     }[mic],
@@ -151,13 +151,20 @@ export const VENUES = [
     exact: ["lsex", "lsx", "langschwarz", "langundschwarz", "lsexchange", "langschwarzexchange"],
     loose: [],
   },
+  {
+    mic: "XQTX",
+    name: "Börse Düsseldorf",
+    source: "quotrix",
+    hours: { open: "08:00", close: "22:00", tz: "Europe/Berlin" },
+    exact: ["xqtx", "quotrix", "dusc", "dusd"],
+    loose: [],
+  },
 ];
 
 // Places that exist in broker catalogues but publish no free pre-trade book, or have
 // no adapter yet. Naming them keeps a gap distinguishable from a lookup that failed,
 // and keeps a neighbour's number from being borrowed to fill it.
 export const KNOWN_UNSOURCED = [
-  { match: ["quotrix", "xqtx"], name: "Quotrix", why: "pas de carnet public gratuit" },
   // Trade Republic's parser writes TIB when the API left exchangeId empty. That is not a
   // MIC, and assigning those lines to Tradegate or LS Exchange would file another book's
   // number under a place the catalogue never named.
@@ -178,6 +185,7 @@ export const KNOWN_UNSOURCED = [
     name: "places américaines, sans précision",
     why: "le broker ne dit pas laquelle",
   },
+  { match: ["otc", "pink", "otcmkts"], name: "OTC Markets", why: "gré à gré américain, pas un carnet unique" },
   { match: ["bm", "bme", "madrid", "xmad", "spain"], name: "Bolsa de Madrid", why: "adaptateur non écrit" },
   { match: ["mexi", "bmv", "mexico"], name: "Bolsa Mexicana", why: "adaptateur non écrit" },
   { match: ["tase", "telaviv"], name: "Tel Aviv", why: "adaptateur non écrit" },
@@ -279,6 +287,7 @@ const PAGE = {
   tradegate: (l) => `https://www.tradegate.de/orderbuch.php?isin=${l.isin}`,
   gettex: () => "https://www.gettex.de/handel/delayed-data/pretrade-data",
   lsex: () => "https://www.ls-x.de/de/download",
+  quotrix: () => "https://cld42.boersenag.de/m13data/indexpt.html",
 };
 
 export function spreadUrl(row) {

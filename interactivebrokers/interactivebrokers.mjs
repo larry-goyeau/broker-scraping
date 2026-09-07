@@ -92,6 +92,10 @@ const cryptoOnly = hasFlag("crypto-only") || hasFlag("cryptos-only");
 const fresh = hasFlag("fresh");
 const startIndex = Math.max(1, numberArg("start", 1));
 const walkLimit = numberArg("limit", 0);
+// Several searches can be in flight on the same signed-in tab; the portal
+// answers them as ordinary fetches. Four is enough to cut the walk without
+// crowding the snapshot subscription. `--concurrency=1` restores the old pace.
+const lanes = Math.max(1, numberArg("concurrency", 4));
 
 const wantEtfs = !stocksOnly && !cryptoOnly;
 const wantStocks = !etfsOnly && !cryptoOnly;
@@ -346,29 +350,40 @@ async function search(symbol, pattern) {
 
 // The portal signs itself out after a stretch, and login often lands in a
 // different tab. Progress is already on disk; this just sits until a search
-// answers again so the walk can retry the query it was on.
+// answers again so the walk can retry the query it was on. Parallel workers
+// share one wait so they do not all poke the login page at once.
+let sessionWait = null;
+
 async function waitForSession() {
-  save();
-  console.error("portal not answering; waiting until it is signed in again...");
+  if (sessionWait) return sessionWait;
 
-  for (let waited = 0; ; waited += 10) {
-    await ensureBrowser();
-    await attachPortalPage();
+  sessionWait = (async () => {
+    save();
+    console.error("portal not answering; waiting until it is signed in again...");
 
-    if (page && !page.isClosed() && !looksLoggedOut(page.url())) {
-      const probe = await search("SPY", false);
-      if (probe !== null) {
-        console.error("portal session restored");
-        await page.bringToFront().catch(() => {});
-        return;
+    for (let waited = 0; ; waited += 10) {
+      await ensureBrowser();
+      await attachPortalPage();
+
+      if (page && !page.isClosed() && !looksLoggedOut(page.url())) {
+        const probe = await search("SPY", false);
+        if (probe !== null) {
+          console.error("portal session restored");
+          await page.bringToFront().catch(() => {});
+          return;
+        }
       }
-    }
 
-    if (waited > 0 && waited % 30 === 0) {
-      console.error(`  still waiting (${waited}s)`);
+      if (waited > 0 && waited % 30 === 0) {
+        console.error(`  still waiting (${waited}s)`);
+      }
+      await sleep(10000);
     }
-    await sleep(10000);
-  }
+  })().finally(() => {
+    sessionWait = null;
+  });
+
+  return sessionWait;
 }
 
 async function searchWithRetry(symbol, pattern) {
@@ -460,10 +475,11 @@ async function scrapeJob(job) {
   if (hits.length === 0) return { silent: false, rows: [] };
 
   const restrictions = await tradingRestricted(hits.map((hit) => String(hit.conid)));
+  const infos = await Promise.all(hits.map((hit) => readInfo(hit.conid)));
   const rows = [];
 
-  for (const hit of hits) {
-    const info = (await readInfo(hit.conid)) || {};
+  for (const [index, hit] of hits.entries()) {
+    const info = infos[index] || {};
     const ticker = (info.ticker || hit.symbol || "").toUpperCase();
     const name = listingName(hit) || normalize(info.companyName || "");
     const exchange = listingVenue(hit, info);
@@ -490,18 +506,20 @@ function save() {
 }
 
 const endIndex = walkLimit > 0 ? startIndex - 1 + walkLimit : jobs.length;
+const walk = jobs.slice(startIndex - 1, endIndex);
 
 console.error(
   `${jobs.length} queries to check` +
     (startIndex > 1 || walkLimit > 0
       ? ` (walking ${startIndex}–${Math.min(endIndex, jobs.length)})`
-      : "")
+      : "") +
+    (lanes > 1 ? `, ${lanes} at a time` : "")
 );
 
-for (const [queryIndex, job] of jobs.entries()) {
-  if (queryIndex + 1 < startIndex) continue;
-  if (queryIndex + 1 > endIndex) break;
-  if (queryIndex % 5 === 0) await tickle();
+let next = 0;
+let done = 0;
+
+async function runJob(queryIndex, job) {
   console.error(`[${queryIndex + 1}/${jobs.length}] ${job.query}`);
 
   let silent;
@@ -515,7 +533,7 @@ for (const [queryIndex, job] of jobs.entries()) {
 
   if (rows.length === 0) {
     console.error("  no listings");
-    continue;
+    return;
   }
 
   for (const row of rows) {
@@ -543,6 +561,20 @@ for (const [queryIndex, job] of jobs.entries()) {
 
   save();
 }
+
+if (walk.length > 0) await tickle();
+
+await Promise.all(
+  Array.from({ length: Math.min(lanes, walk.length) }, async () => {
+    for (;;) {
+      const offset = next++;
+      if (offset >= walk.length) return;
+      await runJob(startIndex - 1 + offset, walk[offset]);
+      done += 1;
+      if (done % 20 === 0) await tickle();
+    }
+  })
+);
 
 const byType = new Map();
 let usOnly = 0;

@@ -40,7 +40,7 @@ const norm = (t) => {
 const tickers = [
   ...new Set(
     fs
-      .readFileSync("stocks.csv", "utf8")
+      .readFileSync(new URL("../stocks.csv", import.meta.url), "utf8")
       .split(/\r?\n/)
       .slice(1)
       .filter(Boolean)

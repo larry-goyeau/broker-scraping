@@ -1,14 +1,12 @@
 Swissquote
-Tiger Brokers AU
-CGS International
 bluorbank
 oanda
 fortuneo
 Endowus
 benchmark
 mexem
-puprime
 saxoinvestor
 
 Syfe
 Exante
+CGS International

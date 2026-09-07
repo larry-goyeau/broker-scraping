@@ -22,6 +22,10 @@ const arg = (name, fallback) => {
 };
 const DRY = process.argv.includes("--dry");
 const TICKER = arg("ticker", "EUNLd_EQ");
+// The order is denominated in the line's own currency, which is not always the account's: a
+// London line is quoted in pence and an American one in dollars, and passing the account's euro
+// gets the order refused.
+const CURRENCY = arg("currency", "EUR");
 const CFD_TICKER = arg("cfd", "EUNL_DE_CFD");
 const SIZES = arg("sizes", "1,8").split(",").map(Number).filter((n) => n > 0);
 const REPS = Number(arg("reps", "3"));
@@ -222,7 +226,7 @@ async function accountState() {
 const marketOrder = (quantity) => ({
   quantity,
   instrumentCode: TICKER,
-  currencyCode: "EUR",
+  currencyCode: CURRENCY,
   orderType: "MARKET",
   timeValidity: "GOOD_TILL_CANCEL",
   enabledExtendedMarketHours: false,
@@ -238,7 +242,7 @@ async function place(quantity) {
 }
 
 // Waits until nothing is pending and the holding matches what we expect.
-async function settle(expectQuantity, timeoutMs = 60000) {
+async function settle(expectQuantity, timeoutMs = 180000) {
   const started = Date.now();
   let last = null;
   while (Date.now() - started < timeoutMs) {

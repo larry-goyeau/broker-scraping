@@ -123,17 +123,45 @@ export const VENUES = [
     exact: ["xmil", "borsaitaliana", "mil", "miletf", "bvmeetf", "etfp", "mta", "mtaa"],
     loose: ["milan", "milano", "italy", "italianse", "italiansecontinuous"],
   },
+  // Retail German books. They publish a delayed pre-trade file under MiFID rather than
+  // a public live book, which is why they sat in KNOWN_UNSOURCED: the file was never
+  // wired, not because the data is paid. Hours run into the evening, which is the
+  // point of the venues; a snapshot taken then is still a live book.
+  {
+    mic: "XGAT",
+    name: "Tradegate",
+    source: "tradegate",
+    hours: { open: "07:30", close: "22:00", tz: "Europe/Berlin" },
+    exact: ["xgat", "xgrm", "tgat", "tdg", "tradegate", "tradegateexchange", "tradegatebsx"],
+    loose: [],
+  },
+  {
+    mic: "XMUN",
+    name: "gettex",
+    source: "gettex",
+    hours: { open: "08:00", close: "22:00", tz: "Europe/Berlin" },
+    exact: ["xmun", "gettex", "gettex2", "munc", "mund", "munich", "bayerischeboerse", "boersemuenchen"],
+    loose: [],
+  },
+  {
+    mic: "LSEX",
+    name: "LS Exchange",
+    source: "lsex",
+    hours: { open: "07:30", close: "23:00", tz: "Europe/Berlin" },
+    exact: ["lsex", "lsx", "langschwarz", "langundschwarz", "lsexchange", "langschwarzexchange"],
+    loose: [],
+  },
 ];
 
 // Places that exist in broker catalogues but publish no free pre-trade book, or have
 // no adapter yet. Naming them keeps a gap distinguishable from a lookup that failed,
 // and keeps a neighbour's number from being borrowed to fill it.
 export const KNOWN_UNSOURCED = [
-  { match: ["tgat", "xgat", "tradegate"], name: "Tradegate", why: "pas de carnet public gratuit" },
   { match: ["quotrix", "xqtx"], name: "Quotrix", why: "pas de carnet public gratuit" },
-  { match: ["tib", "lsx", "langschwarz"], name: "LS Exchange", why: "pas de carnet public gratuit" },
-  { match: ["gettex", "xmun", "munich"], name: "gettex / Munich", why: "pas de carnet public gratuit" },
-  { match: ["tdg"], name: "Tradegate (code DEGIRO)", why: "pas de carnet public gratuit" },
+  // Trade Republic's parser writes TIB when the API left exchangeId empty. That is not a
+  // MIC, and assigning those lines to Tradegate or LS Exchange would file another book's
+  // number under a place the catalogue never named.
+  { match: ["tib"], name: "Trade Republic (TIB)", why: "le broker ne nomme pas la place" },
   // Freedom24 and Elana name the group without the city. Euronext runs a separate book
   // per place, so there is no single one to point at: guessing Paris would repeat the
   // mistake this file exists to prevent.
@@ -221,20 +249,36 @@ export function listingKey(row) {
 // rather than remembered per fund. `spread.mjs` calls this once and stores the result
 // beside each figure, so that a consumer of the file needs no venue logic to show a
 // reader where the number came from.
+// Three of these exchanges file shares and funds in different sections and answer for the
+// wrong one with a 404 or an empty page, so an ISIN alone does not name a page: Diageo
+// under `/etf/` is a 404 at Frankfurt, and DocMorris in the SIX fund explorer renders
+// "the requested Valor could not be found". Which section a line belongs in is a fact the
+// exchange holds, so the adapters read it there -- Frankfurt's monthly register covers
+// exchange-traded products only, SIX names the product line, Euronext's search returns the
+// family outright -- and pass it back as `family`. Absent, the fund page stands, which is
+// what this file assumed while it held nothing else.
 const PAGE = {
   // Boerse Frankfurt rather than live.deutsche-boerse.com, because this is the page the
   // figure is read from: it renders the Xetra book, and its Xetra tab is the default.
-  xetra: (l) => `https://www.boerse-frankfurt.de/etf/${l.isin}`,
+  xetra: (l) => `https://www.boerse-frankfurt.de/${l.family === "share" ? "aktie" : "etf"}/${l.isin}`,
   // Keyed by TIDM, which is per currency line -- exactly the granularity a spread has.
   lse: (l) => (l.ticker ? `https://www.londonstockexchange.com/stock/${l.ticker}/x/company-page` : null),
   six: (l) =>
-    `https://www.six-group.com/en/market-data/etf/etf-explorer/etf-detail.${l.isin}${l.currency}4.html`,
+    l.family === "share"
+      ? `https://www.six-group.com/en/market-data/shares/share-explorer/share-details.${l.isin}${l.currency}4.html`
+      : `https://www.six-group.com/en/market-data/etf/etf-explorer/etf-detail.${l.isin}${l.currency}4.html`,
+  // Only a fallback: Euronext runs shares, funds and trackers under three different
+  // families and half a dozen segment codes per exchange, so the adapter asks the search
+  // for the real path and hands it back. This is what a line with no reading falls to.
   euronext: (l) => `https://live.euronext.com/en/product/etfs/${l.isin}-${l.path}/market-information`,
   // The American figure is not a book but a monthly average across several firms'
   // published reports, so no single page shows it. The link goes to the directory those
   // reports are found through, which is the nearest thing to a source a reader can open
   // and the only one that stays valid when the set of reporters changes.
   us605: () => "https://www.finra.org/filing-reporting/regulation-nms/sec-rule-605-reports",
+  tradegate: (l) => `https://www.tradegate.de/orderbuch.php?isin=${l.isin}`,
+  gettex: () => "https://www.gettex.de/handel/delayed-data/pretrade-data",
+  lsex: () => "https://www.ls-x.de/de/download",
 };
 
 export function spreadUrl(row) {
@@ -244,6 +288,8 @@ export function spreadUrl(row) {
     isin: String(row.isin || "").toUpperCase(),
     currency: String(row.currency || "").toUpperCase(),
     ticker: row.ticker || null,
+    // Which section of the exchange's site holds the line, when the adapter has found out.
+    family: row.family || null,
     // Euronext serves Milan under its ETF segment and answers 404 for the MIC.
     path: venue.path || venue.mic,
   });

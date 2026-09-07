@@ -1,0 +1,162 @@
+{
+  "at": "2026-09-07T12:20:08.714Z",
+  "shares": 1000,
+  "results": [
+    {
+      "label": "Groupe SFPI",
+      "code": "SFPIp_EQ",
+      "row": {
+        "query": "FR0004155000",
+        "isin": "FR0004155000",
+        "ticker": "SFPI",
+        "name": "Groupe SFPI",
+        "label": "Groupe SFPI",
+        "code": "SFPIp_EQ",
+        "exchange": "Euronext Paris",
+        "exchangeId": 76,
+        "currency": "EUR",
+        "type": "STOCK",
+        "subclasses": [
+          "STOCKS"
+        ],
+        "raw": "SFPI Groupe SFPI Euronext Paris EUR"
+      },
+      "side": "achat",
+      "order": {
+        "quantity": 1000,
+        "instrumentCode": "SFPIp_EQ",
+        "currencyCode": "EUR",
+        "orderType": "MARKET",
+        "timeValidity": "GOOD_TILL_CANCEL",
+        "enabledExtendedMarketHours": false
+      },
+      "status": 200,
+      "disclosure": {
+        "orderQuantity": 1000,
+        "orderValue": 1962,
+        "sharesValue": 1962,
+        "total": 1962,
+        "exchangeRate": null,
+        "costs": {}
+      }
+    },
+    {
+      "label": "Novacyt SA",
+      "code": "ALNOVp_EQ",
+      "row": {
+        "query": "FR0010397232",
+        "isin": "FR0010397232",
+        "ticker": "ALNOV",
+        "name": "Novacyt SA",
+        "label": "Novacyt",
+        "code": "ALNOVp_EQ",
+        "exchange": "Euronext Paris",
+        "exchangeId": 76,
+        "currency": "EUR",
+        "type": "STOCK",
+        "subclasses": [
+          "STOCKS"
+        ],
+        "raw": "ALNOV Novacyt SA Euronext Paris EUR"
+      },
+      "side": "achat",
+      "order": {
+        "quantity": 1000,
+        "instrumentCode": "ALNOVp_EQ",
+        "currencyCode": "EUR",
+        "orderType": "MARKET",
+        "timeValidity": "GOOD_TILL_CANCEL",
+        "enabledExtendedMarketHours": false
+      },
+      "status": 200,
+      "disclosure": {
+        "orderQuantity": 1000,
+        "orderValue": 510.7,
+        "sharesValue": 510.7,
+        "total": 510.7,
+        "exchangeRate": null,
+        "costs": {}
+      }
+    },
+    {
+      "label": "Eutelsat Communications SACA",
+      "code": "ETLp_EQ",
+      "row": {
+        "query": "FR0010221234",
+        "isin": "FR0010221234",
+        "ticker": "ETL",
+        "name": "Eutelsat Communications SACA",
+        "label": "Eutelsat Communications",
+        "code": "ETLp_EQ",
+        "exchange": "Euronext Paris",
+        "exchangeId": 76,
+        "currency": "EUR",
+        "type": "STOCK",
+        "subclasses": [
+          "STOCKS"
+        ],
+        "raw": "ETL Eutelsat Communications SACA Euronext Paris EUR"
+      },
+      "side": "achat",
+      "order": {
+        "quantity": 1000,
+        "instrumentCode": "ETLp_EQ",
+        "currencyCode": "EUR",
+        "orderType": "MARKET",
+        "timeValidity": "GOOD_TILL_CANCEL",
+        "enabledExtendedMarketHours": false
+      },
+      "status": 200,
+      "disclosure": {
+        "orderQuantity": 1000,
+        "orderValue": 1834.3,
+        "sharesValue": 1834.3,
+        "total": 1841.64,
+        "exchangeRate": null,
+        "costs": {
+          "FRENCH_TRANSACTION_TAX": 7.34
+        }
+      }
+    },
+    {
+      "label": "Abivax SA",
+      "code": "ABVXp_EQ",
+      "row": {
+        "query": "FR0012333284",
+        "isin": "FR0012333284",
+        "ticker": "ABVX",
+        "name": "Abivax SA",
+        "label": "Abivax",
+        "code": "ABVXp_EQ",
+        "exchange": "Euronext Paris",
+        "exchangeId": 76,
+        "currency": "EUR",
+        "type": "STOCK",
+        "subclasses": [
+          "STOCKS"
+        ],
+        "raw": "ABVX Abivax SA Euronext Paris EUR"
+      },
+      "side": "achat",
+      "order": {
+        "quantity": 1000,
+        "instrumentCode": "ABVXp_EQ",
+        "currencyCode": "EUR",
+        "orderType": "MARKET",
+        "timeValidity": "GOOD_TILL_CANCEL",
+        "enabledExtendedMarketHours": false
+      },
+      "status": 200,
+      "disclosure": {
+        "orderQuantity": 1000,
+        "orderValue": 99310,
+        "sharesValue": 99310,
+        "total": 99707.24,
+        "exchangeRate": null,
+        "costs": {
+          "FRENCH_TRANSACTION_TAX": 397.24
+        }
+      }
+    }
+  ]
+}

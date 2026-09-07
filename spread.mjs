@@ -37,6 +37,9 @@
 
 import puppeteer from "puppeteer-core";
 import fs from "node:fs";
+import { createGunzip, gunzipSync } from "node:zlib";
+import { Readable } from "node:stream";
+import readline from "node:readline";
 import { listingKey, sessionState, spreadUrl, VENUES } from "./venues.mjs";
 import { monthlyXlm } from "./xlm-monthly.mjs";
 import { monthlyEffectiveSpread } from "./rule605-monthly.mjs";
@@ -200,7 +203,8 @@ const publish = (l, value) => {
     if (spreads[l.isin] && !Object.keys(spreads[l.isin]).length) delete spreads[l.isin];
     return;
   }
-  (((spreads[l.isin] ||= {})[l.mic] ||= {})[l.currency] = { ...value, url: spreadUrl(l) });
+  // A caller that knows which page it read says so; one that does not gets the guess.
+  (((spreads[l.isin] ||= {})[l.mic] ||= {})[l.currency] = { ...value, url: value.url ?? spreadUrl(l) });
 };
 
 // One round trip, in whichever unit the venue publishes, for a log line or a table.
@@ -249,7 +253,7 @@ const shapes = (store.session?.shapes && { ...store.session.shapes }) || {};
 //
 // A source that ever needs a conversion again puts it here, where the whole table can
 // be read at once. The per-share path below never multiplies by it.
-const CROSSED = { xetra: 1, lse: 1, six: 1, euronext: 1, us605: 1 };
+const CROSSED = { xetra: 1, lse: 1, six: 1, euronext: 1, us605: 1, tradegate: 1, gettex: 1, lsex: 1 };
 
 const CONVENTION =
   "coût d'un aller-retour, taille d'un particulier, à la touche, ramené à la moyenne de séance";
@@ -556,6 +560,219 @@ async function xetraBulk(lines, ownTab) {
   console.error(`    Xetra : ${answered} cotations sur ${lines.length} demandées\n`);
 }
 
+// A Xetra line is worth asking for when the monthly workbook confirms it, or — the workbook
+// covering funds only — when it is quoted in the exchange's own currency, where there is no other
+// line to be confused with.
+const xetraAllowed = (l) => Boolean(xlm[`${l.isin}|${l.currency}`]) || l.currency === "EUR";
+
+// ------------------------------------------------------------- Euronext, finding the page
+//
+// The Euronext adapter long built its URL as `/product/etfs/{isin}-{mic}`, which is a page
+// only for a fund on a main market, and answered "instrument not found" for everything
+// else. That refused every share on the platform — around five hundred at Trading212 alone,
+// Paris, Amsterdam, Brussels and Lisbon entire — for no reason to do with the book.
+//
+// Two things have to be known before the page can be named, and the exchange will say both
+// if asked. The first is the family: shares live under `equities`, funds under `etfs`, and
+// the commodity and crypto trackers under `etvs`. The second is the segment, which is not
+// the MIC a broker gives: Euronext Growth Paris is ALXP and Euronext Access XMLI, and Milan
+// runs its shares as MTAA and its funds as ETFP with XMIL naming neither.
+//
+// The search endpoint returns both, as a ready-made path, for one small JSON call — next to
+// nothing against the page load of several seconds that follows, and it saves the load
+// entirely when the answer is that the line is not there.
+//
+// Only segments the named exchange itself runs are accepted. The search answers about the
+// security rather than the place, so for Accor it also offers Milan's MTAH, EuroTLX, and
+// nine series of options: all real books, none of them what a broker means by "Euronext
+// Paris", and any of them published here would file another market's spread under this one.
+// A segment absent from this table is refused by name, so that a place worth adding says so
+// in the log instead of disappearing.
+const EURONEXT_SEGMENTS = {
+  XPAR: ["XPAR", "ALXP", "XMLI"],
+  XAMS: ["XAMS"],
+  XBRU: ["XBRU"],
+  XLIS: ["XLIS"],
+  XMIL: ["MTAA", "ETFP"],
+};
+// Families whose page carries a book. `stock-options` and the other derivative products
+// come back from the same search and are not this file's subject.
+const EURONEXT_FAMILIES = new Set(["equities", "etfs", "etvs", "funds"]);
+
+const euronextSearch = new Map();
+async function euronextPage(l) {
+  if (!euronextSearch.has(l.isin)) {
+    euronextSearch.set(
+      l.isin,
+      (async () => {
+        for (let attempt = 0; attempt < 3; attempt++) {
+          try {
+            const res = await fetch(`https://live.euronext.com/en/instrumentSearch/searchJSON?q=${l.isin}`, {
+              headers: { "User-Agent": "Mozilla/5.0" },
+              signal: AbortSignal.timeout(15000),
+            });
+            if (res.ok) return await res.json();
+          } catch {
+            /* retried below */
+          }
+          await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)));
+        }
+        return null;
+      })()
+    );
+  }
+  const rows = await euronextSearch.get(l.isin);
+  if (!rows) return { url: null, note: "recherche Euronext sans réponse" };
+
+  const lines = rows
+    .map((e) => ({ mic: e.mic, family: e.link?.split("/")[3], link: e.link }))
+    .filter((e) => e.link && EURONEXT_FAMILIES.has(e.family));
+  // In the exchange's own order of preference: the main market first, then the growth and
+  // access segments, so that a company listed on both is read where the volume is.
+  const segments = EURONEXT_SEGMENTS[l.mic] ?? [l.mic];
+  const hit = segments.flatMap((mic) => lines.filter((e) => e.mic === mic))[0];
+  if (!hit) {
+    const others = [...new Set(lines.map((e) => e.mic))];
+    return {
+      url: null,
+      note: others.length ? `Euronext le cote sur ${others.join(", ")}, pas sur ${l.mic}` : `non coté sur ${l.mic}`,
+    };
+  }
+  return { url: `https://live.euronext.com${hit.link}/market-information` };
+}
+
+// ------------------------------------------------- Tradegate, gettex, LS Exchange
+//
+// Three retail German books, one delayed pre-trade dump each, published because MiFID
+// says they must. None of them exposes a live book without a terminal, which is why they
+// were listed as unsourced: the files were never read, not because they are paid.
+//
+// Tradegate's minute file is a tape of every quote update, so the last two-sided print
+// per ISIN and currency is the book. gettex publishes a 15-minute snapshot of MUNC
+// (continuous) and MUND; the continuous book is the one a market order hits, and MUND
+// only fills a hole. LS Exchange answers a CSV of the touch keyed by ISIN, in euro.
+
+const delayedQuotes = {
+  tradegate: new Map(),
+  gettex: new Map(),
+  lsex: new Map(),
+};
+const delayedTrouble = { tradegate: null, gettex: null, lsex: null };
+
+const UA = { "User-Agent": "Mozilla/5.0" };
+
+async function fetchOk(url, timeout = 60000) {
+  const res = await fetch(url, { headers: UA, redirect: "follow", signal: AbortSignal.timeout(timeout) });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res;
+}
+
+async function gunzipText(url) {
+  const buf = Buffer.from(await (await fetchOk(url)).arrayBuffer());
+  try {
+    return gunzipSync(buf).toString("utf8");
+  } catch {
+    return buf.toString("utf8");
+  }
+}
+
+// MUND is a 15-minute tape of tens of millions of ticks, not a snapshot. Loading it as
+// a string OOMs; the last two-sided print per ISIN is the book, and a stream is enough.
+async function forEachGunzipLine(url, onLine, timeout = 180000) {
+  const res = await fetchOk(url, timeout);
+  const stream = Readable.fromWeb(res.body).pipe(createGunzip());
+  for await (const line of readline.createInterface({ input: stream, crlfDelay: Infinity })) {
+    if (line) onLine(line);
+  }
+}
+
+async function loadTradegate(wanted) {
+  const index = await (await fetchOk("https://mfs.deutsche-boerse.com/api/DGAT-pretrade")).json();
+  const file = index.CurrentFiles?.[0];
+  if (!file) throw new Error("index Tradegate vide");
+  const text = await gunzipText(`https://mfs.deutsche-boerse.com/api/download/${file}`);
+  delayedQuotes.tradegate.clear();
+  for (const line of text.split(/\r?\n/)) {
+    if (!line) continue;
+    let o;
+    try {
+      o = JSON.parse(line);
+    } catch {
+      continue;
+    }
+    const isin = String(o.instrumentIdentificationCode || "").toUpperCase();
+    const currency = String(o.priceCurrency || "").toUpperCase();
+    const key = `${isin}|${currency}`;
+    if (!isin || !currency || (wanted.size && !wanted.has(key))) continue;
+    const bid = Number(o.bid);
+    const ask = Number(o.ask);
+    if (!(bid > 0) || !(ask > 0) || ask < bid) continue;
+    const at = o.updateDateAndTime || o.publicationDateAndTime || "";
+    const prev = delayedQuotes.tradegate.get(key);
+    if (prev && prev.at > at) continue;
+    delayedQuotes.tradegate.set(key, { bid, ask, currency, at });
+  }
+  return file;
+}
+
+async function loadGettex(wanted) {
+  const html = await (await fetchOk("https://www.gettex.de/handel/delayed-data/pretrade-data")).text();
+  const grab = (seg) =>
+    [...html.matchAll(
+      new RegExp(
+        `https://erdk\\.bayerische-boerse\\.de:8000/delayed-data/MUNC-MUND/pretrade/pretrade\\.\\d+\\.\\d+\\.\\d+\\.${seg}\\.csv\\.gz`,
+        "g"
+      )
+    )].map((m) => m[0])[0];
+  const munc = grab("munc");
+  const mund = grab("mund");
+  if (!munc && !mund) throw new Error("aucun fichier gettex sur la page delayed-data");
+  const ingest = async (url) => {
+    if (!url) return;
+    await forEachGunzipLine(url, (line) => {
+      const p = line.split(",");
+      if (p.length < 7) return;
+      const isin = p[0].toUpperCase();
+      const currency = p[2].toUpperCase();
+      const key = `${isin}|${currency}`;
+      if (!isin || !currency || (wanted.size && !wanted.has(key))) return;
+      const bid = Number(p[3]);
+      const ask = Number(p[5]);
+      if (!(bid > 0) || !(ask > 0) || ask < bid) return;
+      const at = p[1] || "";
+      const prev = delayedQuotes.gettex.get(key);
+      if (prev && prev.at > at) return;
+      delayedQuotes.gettex.set(key, { bid, ask, currency, at });
+    });
+  };
+  delayedQuotes.gettex.clear();
+  // MUND carries the international names (Trading212's gettex book); MUNC is a small
+  // snapshot of the liquid German names and overwrites the overlap.
+  await ingest(mund);
+  await ingest(munc);
+  return { munc, mund };
+}
+
+async function loadLsex() {
+  const html = await (await fetchOk("https://www.ls-x.de/de/download")).text();
+  const url = html.match(
+    /https:\/\/www\.ls-x\.de\/_rpc\/json\/\.lstc\/instrument\/list\/lsxpretrades\?time=\d+/
+  )?.[0];
+  if (!url) throw new Error("aucun fichier LS Exchange sur la page download");
+  const text = await (await fetchOk(url)).text();
+  delayedQuotes.lsex.clear();
+  for (const line of text.split(/\r?\n/)) {
+    const p = line.split(";").map((s) => s.replace(/^"|"$/g, "").trim());
+    if (p.length < 3) continue;
+    const isin = p[0].toUpperCase();
+    const bid = Number(String(p[1]).replace(",", "."));
+    const ask = Number(String(p[2]).replace(",", "."));
+    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin) || !(bid > 0) || !(ask > 0) || ask < bid) continue;
+    delayedQuotes.lsex.set(`${isin}|EUR`, { bid, ask, currency: "EUR" });
+  }
+  return url;
+}
+
 const adapters = {
   // Xetra's own book, asked for over the socket the page itself uses. Reading it in the
   // DOM worked and was hopeless at this size: a page load and a wait for the quote to
@@ -579,16 +796,23 @@ const adapters = {
   // which currency lines the fund actually has on Xetra. Ask for a line that does not
   // exist and the answer is a quote from the line that does, so without that guard a
   // broker's imaginary dollar line would be published carrying the euro book's spread.
+  //
+  // The workbook only covers exchange-traded products, though, and that guard was quietly
+  // refusing every German share: thirteen hundred listings came back "absent des statistiques
+  // Xetra" for no better reason than that a share is not a fund. What the guard protects
+  // against cannot happen to them — a share has one book on Xetra and it is in euro, so
+  // there is no second currency line whose figure could be borrowed by mistake. So a
+  // listing the workbook does not know is asked for anyway when it is quoted in euro, and
+  // still refused in any other currency, where the ambiguity is real.
   xetra: {
     measure: "touche du carnet, différé de 15 min",
     async prefetch(lines, ownTab) {
-      const wanted = lines.filter((l) => xlm[`${l.isin}|${l.currency}`]);
+      const wanted = lines.filter((l) => xetraAllowed(l));
       if (!wanted.length) return;
       await xetraBulk(wanted, ownTab);
     },
     async fetch(l) {
-      const line = xlm[`${l.isin}|${l.currency}`];
-      if (!line) {
+      if (!xetraAllowed(l)) {
         // The fund can be on Xetra without being on this line of it: another currency is
         // another order book, and borrowing its figure is the error this file prevents.
         const elsewhere = Object.keys(xlm)
@@ -599,7 +823,7 @@ const adapters = {
           settled: true,
           note: elsewhere.length
             ? `coté sur Xetra en ${elsewhere.join(" et ")}, pas en ${l.currency}`
-            : "absent des statistiques Xetra",
+            : `absent des statistiques Xetra et coté en ${l.currency}, pas en euro : ligne invérifiable`,
         };
       }
 
@@ -609,7 +833,14 @@ const adapters = {
       // No two-sided quote is a book with one side or none — before the open, or a line
       // nobody is making a price in. Neither is a cost, and both come back tomorrow.
       if (bp == null) return { spreadBp: null, note: "carnet à un seul côté" };
-      return { spreadBp: bp, tradingCurrency: quote.currency };
+      // The register that decides the guard above also names the page: it lists the
+      // exchange-traded products and nothing else, so a line it does not carry is a share,
+      // and Frankfurt files those under `aktie` and answers 404 under `etf`.
+      return {
+        spreadBp: bp,
+        tradingCurrency: quote.currency,
+        family: xlm[`${l.isin}|${l.currency}`] ? "etf" : "share",
+      };
     },
   },
 
@@ -683,7 +914,7 @@ const adapters = {
   // the line without needing a symbol at all.
   six: {
     dataUrl: (l) =>
-      `https://www.six-group.com/fqs/snap.json?select=ISIN,ValorSymbol,BidPrice,AskPrice,TradingCurrency,ValorId&where=ISIN=${l.isin}`,
+      `https://www.six-group.com/fqs/snap.json?select=ISIN,ValorSymbol,BidPrice,AskPrice,TradingCurrency,ValorId,ProductLine&where=ISIN=${l.isin}`,
     measure: "touche du carnet, différé 15 min",
     async fetch(l) {
       const res = await fetch(adapters.six.dataUrl(l), {
@@ -708,6 +939,10 @@ const adapters = {
         bid: Number(line.BidPrice) || null,
         ask: Number(line.AskPrice) || null,
         tradingCurrency: line.TradingCurrency,
+        // The book is read the same way either way; this only says which page shows it.
+        // Blue chips and domestic shares belong to the share explorer, exchange-traded
+        // products to the fund one, and anything else is left to the default.
+        family: { BC: "share", DS: "share", ET: "etf" }[line.ProductLine],
       };
     },
   },
@@ -718,14 +953,16 @@ const adapters = {
   euronext: {
     measure: "touche du carnet, clôture ou différé",
     async fetch(l, ownTab) {
+      const found = await euronextPage(l);
+      if (!found.url) return { spreadBp: null, note: found.note };
       const p = await ownTab();
       try {
-        await p.goto(spreadUrl(l), { waitUntil: "networkidle2", timeout: 60000 });
+        await p.goto(found.url, { waitUntil: "networkidle2", timeout: 60000 });
         await new Promise((r) => setTimeout(r, 3000));
       } catch {
         return { spreadBp: null, note: "page Euronext non chargée" };
       }
-      const found = await p.evaluate(() => {
+      const book = await p.evaluate(() => {
         const text = (document.body?.innerText || "").replace(/\u00a0/g, " ");
         const grab = (label) => {
           const m = text.match(new RegExp(`${label}\\s*([\\d.,]+)`, "i"));
@@ -733,8 +970,84 @@ const adapters = {
         };
         return { bid: grab("Best Bid"), ask: grab("Best Ask"), notFound: /instrument not found/i.test(text) };
       });
-      if (found.notFound) return { spreadBp: null, note: `non coté sur ${l.mic}` };
-      return { spreadBp: bpFrom(found.bid, found.ask), bid: found.bid, ask: found.ask };
+      if (book.notFound) return { spreadBp: null, note: `non coté sur ${l.mic}` };
+      return {
+        spreadBp: bpFrom(book.bid, book.ask),
+        bid: book.bid,
+        ask: book.ask,
+        // The search already named the page, so it travels back rather than being guessed
+        // again: only it knows that this ISIN is an `etvs` on ALXP rather than an `etfs`.
+        url: found.url,
+      };
+    },
+  },
+
+  // Deutsche Börse's delayed file service: one gzipped NDJSON tape per minute, every
+  // instrument Tradegate makes a price in. Looked up, not visited.
+  tradegate: {
+    measure: "touche du carnet, différé MiFID",
+    async prefetch(lines) {
+      try {
+        const wanted = new Set(lines.map((l) => `${l.isin}|${l.currency}`));
+        const file = await loadTradegate(wanted);
+        console.error(`    Tradegate : ${delayedQuotes.tradegate.size} cotations dans ${file}\n`);
+      } catch (e) {
+        delayedTrouble.tradegate = String(e.message || e).slice(0, 160);
+        console.error(`    Tradegate : ${delayedTrouble.tradegate}\n`);
+      }
+    },
+    async fetch(l) {
+      const quote = delayedQuotes.tradegate.get(`${l.isin}|${l.currency}`);
+      if (!quote) {
+        return { spreadBp: null, note: delayedTrouble.tradegate || "absent du fichier pre-trade Tradegate" };
+      }
+      return { spreadBp: bpFrom(quote.bid, quote.ask), tradingCurrency: quote.currency };
+    },
+  },
+
+  // Bayerische Börse's 15-minute MUNC/MUND snapshots. Continuous book first.
+  gettex: {
+    measure: "touche du carnet, différé MiFID",
+    async prefetch(lines) {
+      try {
+        const wanted = new Set(lines.map((l) => `${l.isin}|${l.currency}`));
+        await loadGettex(wanted);
+        console.error(`    gettex : ${delayedQuotes.gettex.size} cotations\n`);
+      } catch (e) {
+        delayedTrouble.gettex = String(e.message || e).slice(0, 160);
+        console.error(`    gettex : ${delayedTrouble.gettex}\n`);
+      }
+    },
+    async fetch(l) {
+      const quote = delayedQuotes.gettex.get(`${l.isin}|${l.currency}`);
+      if (!quote) {
+        return { spreadBp: null, note: delayedTrouble.gettex || "absent du fichier pre-trade gettex" };
+      }
+      return { spreadBp: bpFrom(quote.bid, quote.ask), tradingCurrency: quote.currency };
+    },
+  },
+
+  // LS Exchange's own delayed CSV, one row per ISIN, euro only.
+  lsex: {
+    measure: "touche du carnet, différé MiFID",
+    async prefetch() {
+      try {
+        const url = await loadLsex();
+        console.error(`    LS Exchange : ${delayedQuotes.lsex.size} cotations (${url.split("time=")[1] || url})\n`);
+      } catch (e) {
+        delayedTrouble.lsex = String(e.message || e).slice(0, 160);
+        console.error(`    LS Exchange : ${delayedTrouble.lsex}\n`);
+      }
+    },
+    async fetch(l) {
+      if (l.currency !== "EUR") {
+        return { spreadBp: null, note: `LS Exchange cote en EUR, pas en ${l.currency}` };
+      }
+      const quote = delayedQuotes.lsex.get(`${l.isin}|EUR`);
+      if (!quote) {
+        return { spreadBp: null, note: delayedTrouble.lsex || "absent du fichier pre-trade LS Exchange" };
+      }
+      return { spreadBp: bpFrom(quote.bid, quote.ask), tradingCurrency: "EUR" };
     },
   },
 };
@@ -755,9 +1068,14 @@ function worthVisiting(l) {
   if (adapters[l.source].local) return true;
   const seen = state[stateKey(l)];
   if (!seen) return true;
-  // A fund the exchange said it does not measure stays answered; anything else that
-  // came back empty is worth another attempt.
-  if (seen.settled) return false;
+  // A previous pass marked Xetra shares "settled" because the ETF workbook did not list
+  // them. That was a false end: the socket quotes them, and an empty settled leaf must
+  // not block the retry. A leaf that already holds a figure stays settled.
+  if (seen.settled) {
+    const leaf = leafOf(l);
+    if (leaf?.bp != null || leaf?.perShare != null) return false;
+    return true;
+  }
   return Date.now() - (Date.parse(seen.at) || 0) > MIN_GAP_MIN * 60000;
 }
 
@@ -791,7 +1109,7 @@ const flush = () => {
         // German session overlap New York's open and cost half again as much.
         session: {
           slots: SLOTS,
-          note: "multiple du coût moyen de la séance, par tranche de trente minutes, heure de Berlin. Source : iXLM mensuel de Deutsche Börse, mesuré sur Xetra et appliqué aux quatre places européennes, qui partagent la même séance. null quand le mois n'a pas assez de transactions dans la tranche.",
+          note: "multiple du coût moyen de la séance, par tranche de trente minutes, heure de Berlin. Source : iXLM mensuel de Deutsche Börse, mesuré sur Xetra et appliqué aux places européennes. Hors de la séance Xetra (soirée Tradegate / gettex / LS Exchange) le relevé n'est pas normalisé. null quand le mois n'a pas assez de transactions dans la tranche.",
           shapes,
         },
         spreads,
@@ -883,12 +1201,15 @@ async function visit(l, ownTab) {
       ? median(readings.map(atAverageHour))
       : null
     : reading;
+  // The page is built from what the fetch found out about the line, not from the ISIN
+  // alone, because a share and a fund live in different sections of the same site.
+  const page = measured.url ?? spreadUrl({ ...l, family: measured.family });
   const cost =
     average == null || average <= 0
       ? null
       : byShare
-        ? { perShare: Number(average.toFixed(5)) }
-        : { bp: Number((average * CROSSED[l.source]).toFixed(2)) };
+        ? { perShare: Number(average.toFixed(5)), url: page }
+        : { bp: Number((average * CROSSED[l.source]).toFixed(2)), url: page };
   publish(l, cost ?? (stale ? null : leafOf(l)));
   if (shape) shapes[`${l.isin}|${l.currency}`] = shape;
 

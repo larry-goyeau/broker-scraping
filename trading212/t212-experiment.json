@@ -1,0 +1,277 @@
+{
+  "runs": [
+    {
+      "startedAt": "2026-09-07T12:38:09.309Z",
+      "ticker": "ETLp_EQ",
+      "cfdTicker": "ETL_FR_CFD",
+      "dry": false,
+      "sizes": [
+        100
+      ],
+      "reps": 1,
+      "sequence": null,
+      "plan": [
+        100
+      ],
+      "tradingSession": {
+        "from": "2026-09-05T22:00Z",
+        "to": "2026-09-12T21:59:59.999999999Z",
+        "sessions": [
+          {
+            "type": "OPEN",
+            "start": "2026-09-07T07:00:03Z",
+            "end": "2026-09-07T15:30Z"
+          },
+          {
+            "type": "OPEN",
+            "start": "2026-09-08T07:00:03Z",
+            "end": "2026-09-08T15:30Z"
+          },
+          {
+            "type": "OPEN",
+            "start": "2026-09-09T07:00:03Z",
+            "end": "2026-09-09T15:30Z"
+          },
+          {
+            "type": "OPEN",
+            "start": "2026-09-10T07:00:03Z",
+            "end": "2026-09-10T15:30Z"
+          },
+          {
+            "type": "OPEN",
+            "start": "2026-09-11T07:00:03Z",
+            "end": "2026-09-11T15:30Z"
+          }
+        ]
+      },
+      "costReview": {
+        "100": {
+          "orderQuantity": 100,
+          "orderValue": 183.72,
+          "sharesValue": 183.72,
+          "total": 184.45,
+          "exchangeRate": null,
+          "costs": {
+            "FRENCH_TRANSACTION_TAX": 0.73
+          }
+        }
+      },
+      "rounds": [],
+      "opening": {
+        "at": 1788784689506,
+        "free": 2010.19,
+        "total": 2219.01,
+        "blocked": 0,
+        "pendingOrders": 0,
+        "position": null
+      },
+      "aborted": "buy did not settle for n=100 (#1 of 1) — holding 0",
+      "closing": {
+        "at": 1788784749887,
+        "free": 1816.99,
+        "total": 2219.01,
+        "blocked": 193.2,
+        "pendingOrders": 1,
+        "position": null
+      },
+      "quoteStream": [
+        {
+          "at": 1788784684199,
+          "kind": "last",
+          "ticker": "ETLp_EQ",
+          "price": 1.8372
+        }
+      ],
+      "fills": [],
+      "finishedAt": "2026-09-07T12:39:10.160Z"
+    },
+    {
+      "startedAt": "2026-09-07T12:41:56.868Z",
+      "ticker": "HSBAl_EQ",
+      "cfdTicker": "HSBA_GB_CFD",
+      "dry": false,
+      "sizes": [
+        10
+      ],
+      "reps": 1,
+      "sequence": null,
+      "plan": [
+        10
+      ],
+      "tradingSession": {
+        "from": "2026-09-05T22:00Z",
+        "to": "2026-09-12T21:59:59.999999999Z",
+        "sessions": [
+          {
+            "type": "OPEN",
+            "start": "2026-09-07T07:00:03Z",
+            "end": "2026-09-07T15:30Z"
+          },
+          {
+            "type": "OPEN",
+            "start": "2026-09-08T07:00:03Z",
+            "end": "2026-09-08T15:30Z"
+          },
+          {
+            "type": "OPEN",
+            "start": "2026-09-09T07:00:03Z",
+            "end": "2026-09-09T15:30Z"
+          },
+          {
+            "type": "OPEN",
+            "start": "2026-09-10T07:00:03Z",
+            "end": "2026-09-10T15:30Z"
+          },
+          {
+            "type": "OPEN",
+            "start": "2026-09-11T07:00:03Z",
+            "end": "2026-09-11T15:30Z"
+          }
+        ]
+      },
+      "costReview": {
+        "10": {
+          "orderQuantity": 10,
+          "orderValue": 184.03,
+          "sharesValue": 184.03,
+          "total": 185.23,
+          "exchangeRate": {
+            "fromCurrency": "GBX",
+            "toCurrency": "EUR",
+            "rate": 0.01164
+          },
+          "costs": {
+            "CURRENCY_CONVERSION_FEE": 0.28,
+            "STAMP_DUTY": 0.92
+          }
+        }
+      },
+      "rounds": [
+        {
+          "n": 10,
+          "rep": 1,
+          "before": {
+            "at": 1788784917338,
+            "free": 2009.35,
+            "total": 2218.17,
+            "blocked": 0,
+            "pendingOrders": 0,
+            "position": null
+          },
+          "afterBuy": {
+            "at": 1788784918294,
+            "free": 1824.09,
+            "total": 2216.93,
+            "blocked": 0,
+            "pendingOrders": 0,
+            "position": {
+              "quantity": 10,
+              "averagePrice": 1580.8,
+              "investment": 184.06,
+              "sellable": 10,
+              "value": 184.02
+            }
+          },
+          "afterSell": {
+            "at": 1788784919977,
+            "free": 2007.86,
+            "total": 2216.68,
+            "blocked": 0,
+            "pendingOrders": 0,
+            "position": null
+          },
+          "buyResponseStatus": 200,
+          "sellResponseStatus": 200,
+          "heldQuantity": 10,
+          "debited": 185.26,
+          "credited": 183.77,
+          "roundTripCost": 1.49,
+          "quotes": {
+            "beforeBuy": [
+              {
+                "at": 1788784912191,
+                "kind": "last",
+                "ticker": "HSBAl_EQ",
+                "price": 1580.5
+              }
+            ],
+            "afterBuy": [
+              {
+                "at": 1788784917931,
+                "kind": "last",
+                "ticker": "HSBAl_EQ",
+                "price": 1580.6
+              }
+            ],
+            "afterSell": [
+              {
+                "at": 1788784917931,
+                "kind": "last",
+                "ticker": "HSBAl_EQ",
+                "price": 1580.6
+              }
+            ]
+          }
+        }
+      ],
+      "opening": {
+        "at": 1788784917071,
+        "free": 2009.35,
+        "total": 2218.17,
+        "blocked": 0,
+        "pendingOrders": 0,
+        "position": null
+      },
+      "aborted": null,
+      "closing": {
+        "at": 1788784924055,
+        "free": 2007.86,
+        "total": 2216.68,
+        "blocked": 0,
+        "pendingOrders": 0,
+        "position": null
+      },
+      "quoteStream": [
+        {
+          "at": 1788784912191,
+          "kind": "last",
+          "ticker": "HSBAl_EQ",
+          "price": 1580.5
+        },
+        {
+          "at": 1788784917931,
+          "kind": "last",
+          "ticker": "HSBAl_EQ",
+          "price": 1580.6
+        }
+      ],
+      "fills": [
+        {
+          "id": "57006165016",
+          "date": "2026-09-07T15:41:59.388+03:00",
+          "side": "SELL",
+          "orderId": "EO57006165009",
+          "orderedQuantity": 10,
+          "fillQuantity": 10,
+          "fillPrice": 1580.8,
+          "total": 183.77,
+          "result": -0.01,
+          "venue": "otc"
+        },
+        {
+          "id": "57006165001",
+          "date": "2026-09-07T15:41:57.816+03:00",
+          "side": "BUY",
+          "orderId": "EO57006164999",
+          "orderedQuantity": 10,
+          "fillQuantity": 10,
+          "fillPrice": 1580.8,
+          "total": 185.26,
+          "result": null,
+          "venue": "otc"
+        }
+      ],
+      "finishedAt": "2026-09-07T12:42:04.516Z"
+    }
+  ]
+}

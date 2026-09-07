@@ -1,0 +1,2332 @@
+[
+  {
+    "ticker": "HIMZ",
+    "name": "Defiance Daily Target 2X Long HIMS ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "CONY",
+    "name": "YieldMax COIN Option Income Strategy ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "LINT",
+    "name": "Direxion Daily INTC Bull 2X ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "METU",
+    "name": "Direxion Daily META Bull 2X ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "EOSU",
+    "name": "T-REX 2X Long EOSE Daily Target ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "SOXQ",
+    "name": "Invesco Exchange-Traded Fund Trust II Invesco PHLX Semiconductor ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "XLV",
+    "name": "State Street Health Care Select Sector SPDR ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "STXX",
+    "name": "Tradr 2X Long STX Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "SPCG",
+    "name": "Tradr 2X Short SpaceX Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "AMA",
+    "name": "Defiance Daily Target 2X Long AMAT ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "KRE",
+    "name": "State Street SPDR S&P Regional Banking ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "HBMX",
+    "name": "Tuttle Capital Concentrated Memory Stack ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "FTEC",
+    "name": "Fidelity MSCI Information Technology Index ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "PTIR",
+    "name": "GraniteShares ETF Trust GraniteShares 2x Long PLTR Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "EZU",
+    "name": "iShares MSCI Eurozone",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "PHO",
+    "name": "Invesco Water Resources ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "BLOX",
+    "name": "Nicholas Crypto Income ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "NUGT",
+    "name": "Direxion Daily Gold Miners Index Bull 2X ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "ITB",
+    "name": "iShares Dow Jones US Home Construction ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "ARMW",
+    "name": "Roundhill ARM WeeklyPay ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "XLF",
+    "name": "State Street Financial Select Sector SPDR ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "KBWY",
+    "name": "Invesco KBW Premium Yield Equity REIT ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "JNUG",
+    "name": "Direxion Daily Junior Gold Miners Index Bull 2X ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "SMCZ",
+    "name": "Defiance Daily Target 2X Short SMCI ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "CVNY",
+    "name": "YieldMax CVNA Option Income Strategy ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "FBTC",
+    "name": "Fidelity Wise Origin Bitcoin Fund",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "COHH",
+    "name": "Leverage Shares 2X Long COHR Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "STXU",
+    "name": "Leverage Shares 2X Long STX Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "EZET",
+    "name": "Franklin Ethereum ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "CWVX",
+    "name": "Tradr 2X Long CRWV Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "SOXL",
+    "name": "Direxion Daily Semiconductor Bull 3X ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "QYLD",
+    "name": "Global X Funds Global X NASDAQ-100 Covered Call ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "SCHG",
+    "name": "Schwab US Large-Cap Growth ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "USGG",
+    "name": "Leverage Shares 2X Long USAR Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "NVDD",
+    "name": "Direxion Daily NVDA Bear 1X ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "SIVR",
+    "name": "abrdn Physical Silver Shares ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "IRE",
+    "name": "Defiance Daily Target 2X Long IREN ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "DRAM",
+    "name": "Roundhill Memory ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "UDOW",
+    "name": "ProShares UltraPro Dow30",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "GDXY",
+    "name": "YieldMax Gold Miners Option Income Strategy ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "BABO",
+    "name": "YieldMax BABA Option Income Strategy ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "KLAG",
+    "name": "Leverage Shares 2x Long KLAC Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "MUD",
+    "name": "Direxion Daily MU Bear 1X ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "BMNZ",
+    "name": "Defiance Daily Target 2X Short BMNR ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "NASA",
+    "name": "Tema Space Innovators ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "NVDL",
+    "name": "GraniteShares 2x Long NVDA Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "OILU",
+    "name": "MicroSectors Oil & Gas Exp. & Prod. 3x Leveraged ETN",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "METD",
+    "name": "Direxion Daily META Bear 1X ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "QLD",
+    "name": "ProShares Ultra QQQ",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "METW",
+    "name": "Roundhill META WeeklyPay ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "JEPQ",
+    "name": "J.P. Morgan Exchange-Traded Fund Trust JPMorgan Nasdaq Equity Premium Income ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "PAVE",
+    "name": "Global X US Infrastructure Development ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "UBRL",
+    "name": "GraniteShares ETF Trust GraniteShares 2x Long UBER Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "TSLT",
+    "name": "T-REX 2X Long Tesla Daily Target ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "SHV",
+    "name": "iShares Trust iShares 0-1 Year Treasury Bond ETF",
+    "mic": "XNYS"
+  },
+  {
+    "ticker": "JAAA",
+    "name": "Janus Henderson AAA CLO ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "BRKU",
+    "name": "Direxion Daily BRKB Bull 2X ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "AEHG",
+    "name": "Leverage Shares 2X Long AEHR Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "TSLY",
+    "name": "YieldMax TSLA Option Income Strategy ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "SEMY",
+    "name": "GraniteShares YieldBOOST Semiconductor ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "GGLL",
+    "name": "Direxion Daily GOOGL Bull 2X ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "PLTM",
+    "name": "GraniteShares Platinum Shares",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "KWEB",
+    "name": "KraneShares CSI China Internet ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "NEBX",
+    "name": "Tradr 2X Long NBIS Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "TSMY",
+    "name": "YieldMax TSM Option Income Strategy ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "BUG",
+    "name": "Global X Funds Global X Cybersecurity ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "SH",
+    "name": "ProShares Short S&P500",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "DRAL",
+    "name": "Defiance Daily Target 2X Long DRAM ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "SDIV",
+    "name": "Global X SuperDividend ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "MRVU",
+    "name": "Direxion Daily MRVL Bull 2X ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "NANC",
+    "name": "Subversive Congressional Democrats Trading ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "SPUS",
+    "name": "SP Funds S&P 500 Sharia ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "DIV",
+    "name": "Global X SuperDividend US ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "ICLN",
+    "name": "iShares Global Clean Energy ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "SPYM",
+    "name": "State Street SPDR Portfolio S&P 500 ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "ASTY",
+    "name": "Defiance Daily Target 2X Long ASTS ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "NVDY",
+    "name": "YieldMax NVDA Option Income Strategy ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "XDTE",
+    "name": "Roundhill S&P 500 0DTE Covered Call Strategy ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "LITP",
+    "name": "Sprott Funds Trust Sprott Lithium Miners ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "HOOY",
+    "name": "YieldMax HOOD Option Income Strategy ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "YANG",
+    "name": "Direxion Daily FTSE China Bear 3X ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "VYM",
+    "name": "Vanguard High Dividend Yield ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "ITA",
+    "name": "iShares Dow Jones US Aerospace & Defense ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "COPX",
+    "name": "Global X Copper Miners ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "BITI",
+    "name": "ProShares Short Bitcoin ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "ARKB",
+    "name": "ARK 21Shares Bitcoin ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "SHLD",
+    "name": "Global X Defense Tech ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "TSLZ",
+    "name": "T-Rex 2X Inverse Tesla Daily Target ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "IREG",
+    "name": "Leverage Shares 2X Long IREN Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "SNOU",
+    "name": "T-REX 2X Long SNOW Daily Target ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "SPXS",
+    "name": "Direxion Daily S&P 500 Bear 3x ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "DRV",
+    "name": "Direxion Daily Real Estate Bear 3X ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "LIT",
+    "name": "Global X Lithium & Battery Tech ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "FTCA",
+    "name": "Franklin California Municipal Income ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "TMF",
+    "name": "Direxion Daily 20+ Year Treasury Bull 3X ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "MAGX",
+    "name": "Roundhill Daily 2X Long Magnificent Seven ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "SMHX",
+    "name": "VanEck ETF Trust VanEck Fabless Semiconductor ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "XPAY",
+    "name": "Roundhill S&P 500 Target 20 Managed Distribution ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "YBTC",
+    "name": "Roundhill Bitcoin Covered Call Strategy ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "POEL",
+    "name": "Defiance Daily Target 2X Long POET ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "GLWG",
+    "name": "Leverage Shares 2X Long GLW Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "AMZW",
+    "name": "Roundhill AMZN WeeklyPay ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "NBIL",
+    "name": "GraniteShares 2x Long NBIS Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "EGGY",
+    "name": "NestYield Dynamic Income ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "ISUL",
+    "name": "GraniteShares 2x Long ISRG Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "GDXW",
+    "name": "Roundhill Gold Miners WeeklyPay ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "USO",
+    "name": "United States Oil Fund",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "SPYI",
+    "name": "NEOS S&P 500 High Income ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "AMAU",
+    "name": "Leverage Shares 2X Long AMAT Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "PLTW",
+    "name": "Roundhill PLTR WeeklyPay ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "GEVX",
+    "name": "Tradr 2X Long GEV Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "USFR",
+    "name": "WisdomTree Floating Rate Treasury Fund",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "SPDN",
+    "name": "Direxion Daily S&P 500 Bear 1X ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "AVL",
+    "name": "Direxion Daily AVGO Bull 2X ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "GLDW",
+    "name": "Roundhill Gold WeeklyPay ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "NFLU",
+    "name": "T-Rex 2X Long NFLX Daily Target ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "AMDY",
+    "name": "YieldMax AMD Option Income Strategy ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "REMX",
+    "name": "VanEck Rare Earth and Strategic Metals ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "BRRR",
+    "name": "Coinshares Bitcoin ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "OVL",
+    "name": "Overlay Shares Large Cap Equity",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "XQQI",
+    "name": "NEOS Boosted Nasdaq-100 High Income ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "SDOW",
+    "name": "ProShares UltraPro Short Dow 30",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "GOOW",
+    "name": "Roundhill GOOGL WeeklyPay ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "HODL",
+    "name": "VanEck Bitcoin ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "RDTE",
+    "name": "Roundhill Russell 2000 0DTE Covered Call Strategy ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "DIA",
+    "name": "State Street SPDR Dow Jones Industrial Average ETF Trust",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "URNJ",
+    "name": "Sprott Funds Trust Sprott Junior Uranium Miners ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "IVV",
+    "name": "iShares Core S&P 500 ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "IWM",
+    "name": "iShares Russell 2000 ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "HOOW",
+    "name": "Roundhill HOOD WeeklyPay ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "SPCM",
+    "name": "Tradr 2X Long SpaceX Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "PLTG",
+    "name": "Leverage Shares 2X Long PLTR Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "DUST",
+    "name": "Direxion Daily Gold Miners Index Bear 2X ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "LITX",
+    "name": "Tradr 2X Long LITE Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "IXUS",
+    "name": "iShares Core MSCI Total International Stock ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "TAN",
+    "name": "Invesco Solar ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "JDST",
+    "name": "Direxion Daily Junior Gold Miners Index Bear 2X ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "SPCH",
+    "name": "Leverage Shares 2X Long SPCX Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "NVDU",
+    "name": "Direxion Daily NVDA Bull 2X ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "DOJE",
+    "name": "REX-Osprey DOGE ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "XRP",
+    "name": "Bitwise XRP ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "SOLZ",
+    "name": "Volatility Shares Trust Solana ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "APPX",
+    "name": "Tradr 2X Long APP Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "LOFF",
+    "name": "Direxion Daily SpaceX Bull 2X ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "MUYY",
+    "name": "GraniteShares YieldBOOST MU ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "AGIX",
+    "name": "KraneShares Public-Private AI & Technology ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "PLTD",
+    "name": "Direxion Daily PLTR Bear 1X ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "AIPI",
+    "name": "ETF Opportunities Trust REX AI Equity Premium Income ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "MARS",
+    "name": "Roundhill Space & Technology ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "GLDM",
+    "name": "SPDR Gold MiniShares",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "SPXU",
+    "name": "ProShares UltraPro Short S&P 500 ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "AIQ",
+    "name": "Global X Funds Global X Artificial Intelligence & Technology",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "RVNL",
+    "name": "GraniteShares 2x Long RIVN Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "NBIG",
+    "name": "Leverage Shares 2X Long NBIS Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "CRWL",
+    "name": "GraniteShares ETF Trust GraniteShares 2x Long CRWD Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "YMAG",
+    "name": "YieldMax Magnificent 7 Fund of Option Income ETFs",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "QQQM",
+    "name": "Invesco Exchange-Traded Fund Trust II Invesco NASDAQ 100 ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "XRPT",
+    "name": "Volatility Shares Trust 2x XRP ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "ARKW",
+    "name": "ARK Next Generation Internet",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "QUBX",
+    "name": "Tradr 2X Long QUBT Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "TERG",
+    "name": "Leverage Shares 2X Long TER Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "INYY",
+    "name": "YieldMax INTC Option Income Strategy ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "VO",
+    "name": "Vanguard Morningstar Mid-Cap ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "GIAX",
+    "name": "Nicholas Global Equity and Income ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "NAIL",
+    "name": "Direxion Daily Homebuilders & Supplies Bull 3X ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "ORR",
+    "name": "EA Series Trust Militia Long/Short Equity ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "CONI",
+    "name": "GraniteShares ETF Trust GraniteShares 2x Short COIN Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "LNOK",
+    "name": "Defiance Daily Target 2X Long NOK ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "TSLQ",
+    "name": "Tradr 2X Short TSLA Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "BOTZ",
+    "name": "Global X Robotics & Artificial Intelligence ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "STXL",
+    "name": "Defiance Daily Target 2x Long STX ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "JEPI",
+    "name": "JPMorgan Equity Premium Income",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "CHPX",
+    "name": "Global X AI Semiconductor & Quantum ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "SMCX",
+    "name": "Defiance Daily Target 2X Long SMCI ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "SLVR",
+    "name": "Sprott Funds Trust Sprott Silver Miners & Physical Silver ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "XRPR",
+    "name": "REX-Osprey XRP ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "SPCI",
+    "name": "Tuttle Capital Space Industry Income Blast ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "SPAX",
+    "name": "T-REX 2X Long SPCX Daily Target ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "SGOV",
+    "name": "iShares 0-3 Month Treasury Bond",
+    "mic": "XNYS"
+  },
+  {
+    "ticker": "USOY",
+    "name": "Tidal Trust II Defiance Oil Enhanced Options Income ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "ARKG",
+    "name": "ARK Genomic Revolution ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "MSFU",
+    "name": "Direxion Daily MSFT Bull 2X ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "TSPY",
+    "name": "TappAlpha S&P 500 Growth & Daily Income ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "MUZ",
+    "name": "Defiance Daily Target 2X Short MU ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "COPP",
+    "name": "Sprott Funds Trust Sprott Copper Miners ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "SSPC",
+    "name": "Leverage Shares 2X Short SPCX Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "SPCQ",
+    "name": "Defiance Daily Target 2X Short SPCX ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "GDX",
+    "name": "VanEck Gold Miners ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "HODU",
+    "name": "Direxion Daily HOOD Bull 2X ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "CRWG",
+    "name": "Leverage Shares 2X Long CRWV Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "IAU",
+    "name": "iShares Gold Trust",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "AVGX",
+    "name": "Defiance Daily Target 2X Long AVGO ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "DRMP",
+    "name": "Tuttle Capital Memory Stack Income Blast ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "TQQQ",
+    "name": "ProShares UltraPro QQQ",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "SOLT",
+    "name": "Volatility Shares Trust 2x Solana ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "BITO",
+    "name": "ProShares Bitcoin ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "EWY",
+    "name": "iShares MSCI South Korea fund",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "QCML",
+    "name": "GraniteShares ETF Trust GraniteShares 2x Long QCOM Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "GLD",
+    "name": "SPDR Gold Trust",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "BTCW",
+    "name": "WisdomTree Bitcoin Fund",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "FXI",
+    "name": "iShares FTSE China Large-Cap ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "SPY",
+    "name": "SPDR S&P 500 ETF Trust",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "XRPC",
+    "name": "Canary XRP ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "KSLV",
+    "name": "Kurv Silver Enhanced Income ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "KBWD",
+    "name": "Invesco KBW High Dividend Yield Financial ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "VDE",
+    "name": "Vanguard Energy ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "AVGU",
+    "name": "GraniteShares 2x Long AVGO Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "ULTI",
+    "name": "REX ETF Trust REX IncomeMax Option Strategy ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "NVTX",
+    "name": "Tradr 2X Long NVTS Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "QNDX",
+    "name": "SPDR Portfolio Nasdaq 100 ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "AVS",
+    "name": "Direxion Daily AVGO Bear 1X ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "URA",
+    "name": "Global X Uranium ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "CQTM",
+    "name": "Corgi Quantum Computing ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "AAAU",
+    "name": "Goldman Sachs Physical Gold ETF Shares",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "EETH",
+    "name": "ProShares Ether ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "AAPX",
+    "name": "T-Rex 2X Long Apple Daily Target ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "PSQ",
+    "name": "ProShares Short QQQ",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "TSLR",
+    "name": "GraniteShares 2x Long TSLA Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "UNG",
+    "name": "United States Natural Gas Fund",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "SHNY",
+    "name": "MicroSectors Gold 3x Leveraged ETN",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "GPIQ",
+    "name": "Goldman Sachs Nasdaq-100 Premium Income ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "EWH",
+    "name": "iShares MSCI Hong Kong ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "BEZ",
+    "name": "Tradr 2X Short BE Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "EWZ",
+    "name": "iShares MSCI Brazil fund",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "YMAX",
+    "name": "YieldMax Universe Fund of Option Income ETFs",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "FAS",
+    "name": "Direxion Daily Financial Bull 3x ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "TSMX",
+    "name": "Direxion Daily TSM Bull 2X ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "BTCL",
+    "name": "T-Rex 2X Long Bitcoin Daily Target ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "BEG",
+    "name": "Leverage Shares 2x Long BE Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "COIW",
+    "name": "Roundhill COIN WeeklyPay ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "IWMY",
+    "name": "Defiance R2000 Weekly Distribution ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "GBTC",
+    "name": "Grayscale Bitcoin Trust ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "TLTW",
+    "name": "iShares 20+ Year Treasury Bond BuyWrite Strategy ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "WNTR",
+    "name": "YieldMax MSTR Short Option Income Strategy ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "CHPY",
+    "name": "YieldMax Semiconductor Portfolio Option Income ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "QID",
+    "name": "ProShares UltraShort QQQ",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "VRTL",
+    "name": "GraniteShares 2x Long VRT Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "IBX",
+    "name": "Tradr 2X Long IBM Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "WEBL",
+    "name": "Direxion Daily Dow Jones Internet Bull 3X ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "BABX",
+    "name": "GraniteShares 2x Long BABA Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "CIEG",
+    "name": "Leverage Shares 2X Long CIEN Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "CRCG",
+    "name": "Leverage Shares 2X Long CRCL Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "YINN",
+    "name": "Direxion Daily FTSE China Bull 3X ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "XME",
+    "name": "State Street SPDR S&P Metals & Mining ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "RGTX",
+    "name": "Defiance Daily Target 2X Long RGTI ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "UAE",
+    "name": "iShares MSCI UAE Capped ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "EUV",
+    "name": "Corgi Lithography & Semiconductor Photonics ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "NVDS",
+    "name": "Tradr 1.5X Short NVDA Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "SMST",
+    "name": "Tidal Trust II Defiance Daily Target 2x Short MSTR ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "SOFX",
+    "name": "Defiance Daily Target 2X Long SOFI ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "ARKK",
+    "name": "ARK Innovation ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "FEPI",
+    "name": "ETF Opportunities Trust REX FANG & Innovation Equity Premium Income ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "AMZU",
+    "name": "Direxion Daily AMZN Bull 2X ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "EZBC",
+    "name": "Franklin Bitcoin ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "PLTY",
+    "name": "YieldMax PLTR Option Income Strategy ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "XBCI",
+    "name": "NEOS Boosted Bitcoin High Income ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "GMEU",
+    "name": "T-REX 2X Long GME Daily Target ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "DTCR",
+    "name": "Global X Funds Global X Data Center & Digital Infrastructure ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "SLV",
+    "name": "iShares Silver Trust",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "SNK",
+    "name": "GraniteShares 2x Short SpaceX Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "MST",
+    "name": "Defiance Leveraged Long Income MSTR ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "SPMO",
+    "name": "Invesco S&P 500 Momentum ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "QDVO",
+    "name": "Amplify CWP Growth & Income ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "APLY",
+    "name": "YieldMax AAPL Option Income Strategy ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "TSLS",
+    "name": "Direxion Daily TSLA Bear 1X ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "QETH",
+    "name": "Invesco Galaxy Ethereum ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "SARK",
+    "name": "Investment Managers Series Trust II Tradr 1X Short Innovation Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "VGT",
+    "name": "Vanguard Information Technology ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "SPCF",
+    "name": "ProShares Ultra SpaceX",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "OMAH",
+    "name": "VistaShares Target 15 Berkshire Select Income ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "SSK",
+    "name": "REX-Osprey SOL + Staking ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "WGMI",
+    "name": "CoinShares Bitcoin Mining ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "BIL",
+    "name": "State Street SPDR Bloomberg 1-3 Month T-Bill ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "QCMU",
+    "name": "Direxion Daily QCOM Bull 2X ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "XLE",
+    "name": "State Street Energy Select Sector SPDR ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "KEEX",
+    "name": "Defiance Daily Target 2x Long KEEL ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "COTG",
+    "name": "Leverage Shares 2X Long COST Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "NVDX",
+    "name": "T-Rex 2X Long NVIDIA Daily Target ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "IJH",
+    "name": "iShares Core S&P MidCap ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "SMH",
+    "name": "VanEck Semiconductor ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "GDXJ",
+    "name": "VanEck Junior Gold Miners ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "CIBR",
+    "name": "First Trust NASDAQ Cybersecurity ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "PALL",
+    "name": "abrdn Physical Palladium Shares ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "AMZZ",
+    "name": "GraniteShares ETF Trust GraniteShares 2x Long AMZN Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "XOP",
+    "name": "State Street SPDR S&P Oil & Gas Exploration & Production ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "ASHR",
+    "name": "Xtrackers Harvest CSI 300 China A-Shares ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "CEGX",
+    "name": "Tradr 2X Long CEG Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "DISK",
+    "name": "Tema Memory ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "BULZ",
+    "name": "MicroSectors FANG & Innovation 3x Leveraged ETN",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "AIS",
+    "name": "VistaShares Artificial Intelligence Supercycle ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "ARMG",
+    "name": "Themes ETF Trust Leverage Shares 2X Long ARM Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "BOXX",
+    "name": "Alpha Architect 1-3 Month Box ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "AGG",
+    "name": "iShares Core US Aggregate Bond ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "XLK",
+    "name": "State Street Technology Select Sector SPDR ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "ASMU",
+    "name": "Direxion Daily ASML Bull 2X ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "RDTL",
+    "name": "GraniteShares ETF Trust GraniteShares 2x Long RDDT Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "IDVO",
+    "name": "Amplify CWP International Enhanced Dividend Income ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "QTUM",
+    "name": "Defiance Quantum ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "QLDY",
+    "name": "Defiance Nasdaq 100 LightningSpread Income ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "NLR",
+    "name": "VanEck Uranium and Nuclear ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "UFO",
+    "name": "Procure ETF Trust II Procure Space",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "RONB",
+    "name": "Baron First Principles ETF",
+    "mic": "XNYS"
+  },
+  {
+    "ticker": "SNDU",
+    "name": "T-REX 2X Long SNDK Daily Target ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "EEM",
+    "name": "iShares MSCI Emerging Markets ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "TSLW",
+    "name": "Roundhill TSLA WeeklyPay ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "FNGD",
+    "name": "MicroSectors FANG+ Index -3X Inverse Leveraged ETNs due January 8, 2038",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "FMTM",
+    "name": "EA Series Trust MarketDesk Focused U.S. Momentum ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "SMCL",
+    "name": "GraniteShares 2x Long SMCI Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "AVGG",
+    "name": "Themes ETF Trust Leverage Shares 2X Long AVGO Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "RYLD",
+    "name": "Global X Russell 2000 Covered Call",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "NVII",
+    "name": "REX NVDA Growth & Income ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "XOVR",
+    "name": "EntrepreneurShares Series Trust ERShares Private-Public Crossover ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "LRCU",
+    "name": "Tradr 2X Long LRCX Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "VGK",
+    "name": "Vanguard FTSE Europe ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "DPST",
+    "name": "Direxion Daily Regional Banks Bull 3X ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "TNA",
+    "name": "Direxion Daily Small Cap Bull 3x ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "AAPD",
+    "name": "Direxion Daily AAPL Bear 1X ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "DXJ",
+    "name": "WisdomTree Japan Hedged Equity ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "NFXL",
+    "name": "Direxion Daily NFLX Bull 2X ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "SSO",
+    "name": "ProShares Ultra S&P 500 ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "TSLG",
+    "name": "Themes ETF Trust Leverage Shares 2X Long TSLA Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "AAOX",
+    "name": "Tradr 2X Long AAOI Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "COHX",
+    "name": "Tradr 2X Long COHR Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "MAGS",
+    "name": "Roundhill Magnificent Seven ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "APLX",
+    "name": "Tradr 2X Long APLD Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "YETH",
+    "name": "Roundhill Ether Covered Call Strategy ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "SPCU",
+    "name": "Defiance Daily Target 2X Long SPCX ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "MARO",
+    "name": "YieldMax MARA Option Income Strategy ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "BITU",
+    "name": "ProShares Ultra Bitcoin ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "SOXX",
+    "name": "iShares Semiconductor ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "BMNU",
+    "name": "T-REX 2X Long BMNR Daily Target ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "SPXL",
+    "name": "Direxion Daily S&P 500 Bull 3x ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "BITB",
+    "name": "Bitwise Bitcoin ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "BMNG",
+    "name": "Leverage Shares 2X Long BMNR Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "AMDL",
+    "name": "GraniteShares ETF Trust GraniteShares 2x Long AMD Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "RWM",
+    "name": "ProShares Short Russell 2000 ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "QBTX",
+    "name": "Tradr 2X Long QBTS Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "SLVO",
+    "name": "UBS AG ETRACS Silver Shares Covered Call ETNs due April 21, 2033",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "IONL",
+    "name": "GraniteShares ETF Trust GraniteShares 2x Long IONQ Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "CBRZ",
+    "name": "Tradr 2X Short CBRS Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "NUKZ",
+    "name": "Range Nuclear Renaissance Index ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "GPIX",
+    "name": "Goldman Sachs S&P 500 Premium Income ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "UPRO",
+    "name": "ProShares UltraPro S&P 500 ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "WULX",
+    "name": "Tradr 2X Long WULF Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "IBB",
+    "name": "iShares Biotechnology ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "NRGU",
+    "name": "MicroSectors U.S. Big Oil 3x Leveraged ETNs due February 17, 2045",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "AAPU",
+    "name": "Direxion Daily AAPL Bull 2X ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "ROBN",
+    "name": "T-Rex 2X Long HOOD Daily Target ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "USOI",
+    "name": "UBS AG ETRACS Crude Oil Shares Covered Call ETNs due April 24, 2037",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "TDAX",
+    "name": "TDAQ Lift ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "PLTU",
+    "name": "Direxion Daily PLTR Bull 2X ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "AIPO",
+    "name": "Defiance AI & Power Infrastructure ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "QDTE",
+    "name": "Roundhill Innovation-100 0DTE Covered Call Strategy ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "ETHA",
+    "name": "iShares Ethereum Trust ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "LFGY",
+    "name": "YieldMax Crypto Industry & Tech Portfolio Option Income ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "NVOX",
+    "name": "Defiance Daily Target 2x Long NVO ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "ETHV",
+    "name": "VanEck Ethereum ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "SRET",
+    "name": "Global X SuperDividend REIT ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "MJ",
+    "name": "Amplify Alternative Harvest ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "TLT",
+    "name": "iShares 20+ Year Treasury Bond ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "DRN",
+    "name": "Direxion Daily Real Estate Bull 3X ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "TSDD",
+    "name": "GraniteShares 2x Short TSLA Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "SILJ",
+    "name": "Amplify Junior Silver Miners ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "NVDW",
+    "name": "Roundhill NVDA WeeklyPay ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "TMV",
+    "name": "Direxion Daily 20+ Year Treasury Bear 3X ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "LABU",
+    "name": "Direxion Daily S&P Biotech Bull 3X ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "WYFL",
+    "name": "Defiance Daily Target 2X Long WYFI ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "SVOL",
+    "name": "Simplify Volatility Premium ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "BITX",
+    "name": "2x Bitcoin ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "GOOY",
+    "name": "YieldMax GOOGL Option Income Strategy ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "ORCX",
+    "name": "Defiance Daily Target 2X Long ORCL ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "UNHG",
+    "name": "Leverage Shares 2X Long UNH Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "FOTO",
+    "name": "Tuttle Capital Pure Play Photonics ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "WQTM",
+    "name": "WisdomTree Quantum Computing Fund",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "QQQY",
+    "name": "Defiance Nasdaq 100 Weekly Distribution ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "RKLX",
+    "name": "Defiance Daily Target 2X Long RKLB ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "KOLD",
+    "name": "ProShares UltraShort Bloomberg Natural Gas",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "RAM",
+    "name": "Roundhill T-REX 2X Long DRAM Daily Target ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "DAX",
+    "name": "Global X Funds Global X DAX Germany ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "VOO",
+    "name": "Vanguard S&P 500 ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "FNGU",
+    "name": "MicroSectors FANG+ 3x Leveraged ETNs due February 17, 2045",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "IBIT",
+    "name": "iShares Bitcoin Trust ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "ASTX",
+    "name": "Tradr 2X Long ASTS Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "XAR",
+    "name": "State Street SPDR S&P Aerospace & Defense ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "NVYY",
+    "name": "GraniteShares YieldBOOST NVDA ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "XBI",
+    "name": "State Street SPDR S&P Biotech ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "AVGW",
+    "name": "Roundhill AVGO WeeklyPay ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "PPLT",
+    "name": "abrdn Physical Platinum Shares ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "CIFU",
+    "name": "T-REX 2X Long CIFR Daily Target ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "AMUU",
+    "name": "Direxion Daily AMD Bull 2X ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "TSLL",
+    "name": "Direxion Daily TSLA Bull 2X ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "SNDG",
+    "name": "Leverage Shares 2X Long SNDK Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "SCHF",
+    "name": "Schwab International Equity ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "MSFL",
+    "name": "GraniteShares ETF Trust GraniteShares 2x Long MSFT Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "SPAL",
+    "name": "GraniteShares 2x Long SpaceX Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "QPUX",
+    "name": "Defiance 2X Daily Long Pure Quantum ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "IQQ",
+    "name": "iShares Trust iShares Nasdaq 100 ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "TETH",
+    "name": "21Shares Ethereum ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "SCHD",
+    "name": "Schwab US Dividend Equity ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "PLTZ",
+    "name": "Defiance Daily Target 2x Short PLTR ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "USD",
+    "name": "ProShares Ultra Semiconductors ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "IONX",
+    "name": "Defiance Daily Target 2X Long IONQ ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "AMDW",
+    "name": "Roundhill AMD WeeklyPay ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "ORCU",
+    "name": "Direxion Daily ORCL Bull 2X ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "ULTY",
+    "name": "YieldMax Ultra Option Income Strategy ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "EWJ",
+    "name": "iShares MSCI Japan ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "NFXS",
+    "name": "Direxion Daily NFLX Bear 1X ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "PSI",
+    "name": "Invesco Semiconductors ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "VXX",
+    "name": "iPath Series B S&P 500 VIX Short-Term Futures ETN",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "MSFX",
+    "name": "T-Rex 2X Long Microsoft Daily Target ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "MRNY",
+    "name": "YieldMax MRNA Option Income Strategy ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "IEFA",
+    "name": "iShares Core MSCI EAFE ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "HOOZ",
+    "name": "Defiance Daily Target 2X Short HOOD ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "IREX",
+    "name": "Tradr 2X Long IREN Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "URNM",
+    "name": "Sprott Uranium Miners ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "CRCA",
+    "name": "ProShares Ultra CRCL",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "KTUP",
+    "name": "T-REX 2X Long KTOS Daily Target ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "XRPI",
+    "name": "Volatility Shares Trust XRP ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "SQQQ",
+    "name": "ProShares UltraPro Short QQQ",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "LLYX",
+    "name": "Defiance Daily Target 2x Long LLY ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "SCHX",
+    "name": "Schwab US Large-Cap ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "NVDQ",
+    "name": "T-Rex 2X Inverse NVIDIA Daily Target ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "TDAQ",
+    "name": "TappAlpha Innovation 100 Growth & Daily Income ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "VUG",
+    "name": "Vanguard Morningstar Growth ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "FBL",
+    "name": "GraniteShares ETF Trust GraniteShares 2x Long META Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "BSOL",
+    "name": "Bitwise Solana Staking ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "KYLD",
+    "name": "Kurv High Income ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "VTI",
+    "name": "Vanguard Morningstar Total Stock Market ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "IJR",
+    "name": "iShares S&P SmallCap 600 ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "QQQ",
+    "name": "Invesco QQQ",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "GUSH",
+    "name": "Direxion Daily S&P Oil & Gas Exp. & Prod. Bull 2X ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "SIL",
+    "name": "Global X Silver Miners ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "WDCX",
+    "name": "Tradr 2X Long WDC Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "ERX",
+    "name": "Direxion Daily Energy Bull 2X ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "QQQI",
+    "name": "NEOS ETF Trust NEOS Nasdaq 100 High Income ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "MORT",
+    "name": "VanEck Mortgage REIT Income ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "FIAT",
+    "name": "YieldMax Short COIN Option Income Strategy ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "HOOG",
+    "name": "Leverage Shares 2X Long HOOD Daily ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "DIVO",
+    "name": "Amplify CWP Enhanced Dividend Income ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "CEPI",
+    "name": "ETF Opportunities Trust REX Crypto Equity Premium Income ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "SLVP",
+    "name": "iShares MSCI Global Silver and Metals Miners ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "EWW",
+    "name": "iShares MSCI Mexico Investable Market fund",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "ROBO",
+    "name": "Robo Global Robotics and Automation ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "SGOL",
+    "name": "abrdn Physical Gold Shares ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "AMZY",
+    "name": "YieldMax AMZN Option Income Strategy ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "TECL",
+    "name": "Direxion Daily Technology Bull 3x ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "VNM",
+    "name": "VanEck Vietnam ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "CRCO",
+    "name": "YieldMax CRCL Option Income Strategy ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "AMZD",
+    "name": "Direxion Daily AMZN Bear 1X ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "MSTY",
+    "name": "YieldMax MSTR Option Income Strategy ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "BTCO",
+    "name": "Invesco Galaxy Bitcoin ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "VT",
+    "name": "Vanguard Total World Stock ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "MSTX",
+    "name": "Defiance Daily Target 2x Long MSTR ETF",
+    "mic": "XNAS"
+  },
+  {
+    "ticker": "TSII",
+    "name": "REX TSLA Covered Call ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "ETH",
+    "name": "Grayscale Ethereum Staking Mini ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "DFEN",
+    "name": "Direxion Daily Aerospace & Defense Bull 3X ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "FETH",
+    "name": "Fidelity Ethereum Fund",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "BEX",
+    "name": "Tradr 2X Long BE Daily ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "SPCL",
+    "name": "Defiance Daily 2X Space ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "ETHE",
+    "name": "Grayscale Ethereum Staking ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "IGV",
+    "name": "iShares Expanded Tech-Software Sector ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "IAUM",
+    "name": "iShares Gold Trust Micro",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "ETHU",
+    "name": "2x Ether ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "AIYY",
+    "name": "YieldMax AI Option Income Strategy ETF",
+    "mic": "ARCX"
+  },
+  {
+    "ticker": "ONDL",
+    "name": "Defiance Daily Target 2X Long ONDS ETF",
+    "mic": "BATS"
+  },
+  {
+    "ticker": "CLSX",
+    "name": "Tradr 2X Long CLSK Daily ETF",
+    "mic": "BATS"
+  }
+]

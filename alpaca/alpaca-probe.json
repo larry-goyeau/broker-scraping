@@ -1,0 +1,92 @@
+{
+  "runs": [
+    {
+      "at": "2026-08-27T19:31:02.126Z",
+      "account": "PA35BHFBPEWR",
+      "live": false,
+      "marketOpen": true,
+      "opening": {
+        "number": "PA35BHFBPEWR",
+        "cash": 99892.73,
+        "equity": 99892.73,
+        "buyingPower": 399570.92,
+        "pendingRegTaf": 0
+      },
+      "trips": [
+        {
+          "symbol": "IAU",
+          "shares": 10,
+          "quote": {
+            "symbol": "IAU",
+            "at": "2026-08-27T19:31:01.407804314Z",
+            "bid": 86.55,
+            "ask": 86.56,
+            "bidSize": 100,
+            "askSize": 600,
+            "bidVenue": "V",
+            "askVenue": "V",
+            "feed": "iex",
+            "mid": 86.555,
+            "spread": 0.01
+          },
+          "model": {
+            "a": 0.0000206,
+            "b": 0.001901,
+            "c": 0,
+            "perShare": 0.0017
+          },
+          "predicted": 0.0368
+        },
+        {
+          "symbol": "ACWI",
+          "shares": 10,
+          "quote": {
+            "symbol": "ACWI",
+            "at": "2026-08-27T19:31:01.380351259Z",
+            "bid": 161.31,
+            "ask": 161.32,
+            "bidSize": 500,
+            "askSize": 100,
+            "bidVenue": "V",
+            "askVenue": "V",
+            "feed": "iex",
+            "mid": 161.315,
+            "spread": 0.01
+          },
+          "model": {
+            "a": 0.0000206,
+            "b": 0.004171,
+            "c": 0,
+            "perShare": 0.00397
+          },
+          "predicted": 0.0749
+        },
+        {
+          "symbol": "AQLT",
+          "shares": 10,
+          "quote": {
+            "symbol": "AQLT",
+            "at": "2026-08-27T19:30:52.778106637Z",
+            "bid": 32,
+            "ask": 32.15,
+            "bidSize": 100,
+            "askSize": 100,
+            "bidVenue": "V",
+            "askVenue": "V",
+            "feed": "iex",
+            "mid": 32.075,
+            "spread": 0.15
+          },
+          "model": {
+            "a": 0.0000206,
+            "b": 0.033211,
+            "c": 0,
+            "perShare": 0.03301
+          },
+          "predicted": 0.3387
+        }
+      ],
+      "reconciliation": null
+    }
+  ]
+}

@@ -1,0 +1,198 @@
+{
+  "runs": [
+    {
+      "at": "2026-08-27T19:31:53.157Z",
+      "account": "PA35BHFBPEWR",
+      "live": true,
+      "marketOpen": true,
+      "opening": {
+        "number": "PA35BHFBPEWR",
+        "cash": 99892.73,
+        "equity": 99892.73,
+        "buyingPower": 399570.92,
+        "pendingRegTaf": 0
+      },
+      "trips": [
+        {
+          "symbol": "IAU",
+          "shares": 10,
+          "quote": {
+            "symbol": "IAU",
+            "at": "2026-08-27T19:31:23.139445811Z",
+            "bid": 86.54,
+            "ask": 86.55,
+            "bidSize": 300,
+            "askSize": 700,
+            "bidVenue": "V",
+            "askVenue": "V",
+            "feed": "iex",
+            "mid": 86.545,
+            "spread": 0.01
+          },
+          "model": {
+            "a": 0.0000206,
+            "b": 0.001901,
+            "c": 0,
+            "perShare": 0.0017
+          },
+          "predicted": 0.0368,
+          "legs": {
+            "buy": {
+              "status": "filled",
+              "shares": 10,
+              "price": 86.55,
+              "filledAt": "2026-08-27T19:31:27.388192676Z"
+            },
+            "sell": {
+              "status": "filled",
+              "shares": 10,
+              "price": 86.54,
+              "filledAt": "2026-08-27T19:31:33.329722513Z"
+            },
+            "quoteBetween": {
+              "symbol": "IAU",
+              "at": "2026-08-27T19:31:30.27872377Z",
+              "bid": 86.54,
+              "ask": 86.55,
+              "bidSize": 600,
+              "askSize": 500,
+              "bidVenue": "V",
+              "askVenue": "V",
+              "feed": "iex",
+              "mid": 86.545,
+              "spread": 0.01
+            }
+          },
+          "measured": {
+            "buySlippage": 0.005,
+            "sellSlippage": 0.005,
+            "perShareAgainstIexMid": 0.01,
+            "cost": 0.1
+          }
+        },
+        {
+          "symbol": "ACWI",
+          "shares": 10,
+          "quote": {
+            "symbol": "ACWI",
+            "at": "2026-08-27T19:31:33.724807158Z",
+            "bid": 161.32,
+            "ask": 161.35,
+            "bidSize": 200,
+            "askSize": 600,
+            "bidVenue": "V",
+            "askVenue": "V",
+            "feed": "iex",
+            "mid": 161.33499999999998,
+            "spread": 0.03
+          },
+          "model": {
+            "a": 0.0000206,
+            "b": 0.004171,
+            "c": 0,
+            "perShare": 0.00397
+          },
+          "predicted": 0.0749,
+          "legs": {
+            "buy": {
+              "status": "filled",
+              "shares": 10,
+              "price": 161.35,
+              "filledAt": "2026-08-27T19:31:34.31390218Z"
+            },
+            "sell": {
+              "status": "filled",
+              "shares": 10,
+              "price": 161.34,
+              "filledAt": "2026-08-27T19:31:40.279211906Z"
+            },
+            "quoteBetween": {
+              "symbol": "ACWI",
+              "at": "2026-08-27T19:31:35.465650376Z",
+              "bid": 161.33,
+              "ask": 161.35,
+              "bidSize": 400,
+              "askSize": 500,
+              "bidVenue": "V",
+              "askVenue": "V",
+              "feed": "iex",
+              "mid": 161.34,
+              "spread": 0.02
+            }
+          },
+          "measured": {
+            "buySlippage": 0.015,
+            "sellSlippage": 0,
+            "perShareAgainstIexMid": 0.015,
+            "cost": 0.15
+          }
+        },
+        {
+          "symbol": "AQLT",
+          "shares": 10,
+          "quote": {
+            "symbol": "AQLT",
+            "at": "2026-08-27T19:30:52.778106637Z",
+            "bid": 32,
+            "ask": 32.15,
+            "bidSize": 100,
+            "askSize": 100,
+            "bidVenue": "V",
+            "askVenue": "V",
+            "feed": "iex",
+            "mid": 32.075,
+            "spread": 0.15
+          },
+          "model": {
+            "a": 0.0000206,
+            "b": 0.033211,
+            "c": 0,
+            "perShare": 0.03301
+          },
+          "predicted": 0.3387,
+          "legs": {
+            "buy": {
+              "status": "filled",
+              "shares": 10,
+              "price": 32.15,
+              "filledAt": "2026-08-27T19:31:45.487669563Z"
+            },
+            "sell": {
+              "status": "filled",
+              "shares": 10,
+              "price": 32.01,
+              "filledAt": "2026-08-27T19:31:51.263694332Z"
+            },
+            "quoteBetween": {
+              "symbol": "AQLT",
+              "at": "2026-08-27T19:31:48.188292408Z",
+              "bid": 32.01,
+              "ask": 32.15,
+              "bidSize": 100,
+              "askSize": 100,
+              "bidVenue": "V",
+              "askVenue": "V",
+              "feed": "iex",
+              "mid": 32.08,
+              "spread": 0.14
+            }
+          },
+          "measured": {
+            "buySlippage": 0.075,
+            "sellSlippage": 0.07,
+            "perShareAgainstIexMid": 0.145,
+            "cost": 1.45
+          }
+        }
+      ],
+      "reconciliation": {
+        "cashBefore": 99892.73,
+        "cashAfter": 99891.13,
+        "observed": -1.6,
+        "expectedFromFills": -1.6,
+        "feesCharged": 0,
+        "pendingRegTafAfter": 0
+      }
+    }
+  ]
+}

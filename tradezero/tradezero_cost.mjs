@@ -1,9 +1,13 @@
-// For one ETF, one venue and one currency, the three coefficients of
+// For one listing, one venue and one currency, the three coefficients of
 //
-//     coût d'un aller-retour = a × p × n + b × n + c
+//     coût (USD) = a × p × n + b × n + c
 //
-// on TradeZero, with n the number of shares and p the share price, the account funded in the
-// currency the fund quotes in — dollars, since the offer is American listings alone.
+// on TradeZero, with n the number of shares and p the share price. The account holds
+// dollars. The catalogue is American listings: stocks, ETFs and ETNs. One schedule
+// covers all three — the card says "all stocks, ETFs and warrants" — and the live
+// trip already travelled the stock order path: TradeZero files IAU as
+// `securityType: Stock`. Crypto is not offered. Options are not in the catalogue,
+// so they answer `a = null`.
 //
 // This is the first broker in the repository where the affine form is not enough on its own, and
 // the reason is worth stating before the numbers. Everywhere else the coefficients are a property
@@ -43,6 +47,7 @@
 // is the weak coefficient, which is the reverse of where the effort went.
 //
 //   node tradezero/tradezero_cost.mjs IAU
+//   node tradezero/tradezero_cost.mjs AAPL NASDAQ USD --shares=1 --price=230
 //   node tradezero/tradezero_cost.mjs IAU --shares=10               -- régime petit
 //   node tradezero/tradezero_cost.mjs IAU --shares=500 --order=repos
 //   node tradezero/tradezero_cost.mjs SPY NASDAQ USD --shares=200 --price=650 --json
@@ -50,6 +55,7 @@
 
 import fs from "node:fs";
 import { listingKey, resolveVenue } from "../venues.mjs";
+import { QUOTE } from "../fx.mjs";
 
 const CATALOGUE = new URL("tradezero-parsed.json", import.meta.url);
 const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
@@ -89,6 +95,9 @@ const VALIDATION = {
     // Paid on the round trip, per share: essentially the whole penny touch, on a book that Rule
     // 605 says trades at a sixth of that for a hundred-share order.
     marketPerSharePaid: 0.0098,
+    // The fill's own ticket. TradeZero does not have a separate ETF order type: IAU went
+    // out as Stock, which is the same path an AAPL order takes.
+    securityType: "Stock",
   },
 };
 
@@ -173,6 +182,22 @@ const spreads = JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {};
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 
+function coverage() {
+  if (!rows.length) return null;
+  const out = {};
+  for (const r of rows) {
+    const type = r.type || "?";
+    const slot = (out[type] ||= { n: 0, withBook: 0 });
+    slot.n += 1;
+    const { venue } = listingKey(r);
+    const leaf =
+      venue?.mic &&
+      spreads[String(r.isin || "").toUpperCase()]?.[venue.mic]?.[String(r.currency || "USD").toUpperCase()];
+    if (leaf?.bp != null || leaf?.perShare != null) slot.withBook += 1;
+  }
+  return out;
+}
+
 // The same search as the sibling files. TradeZero's symbology reports NYSE Arca as PACF and Cboe
 // BZX as BATS, and its scraper files them as AMEX and CBOE, both of which `venues.mjs` resolves.
 function findListing({ etf, place, currency }) {
@@ -230,7 +255,7 @@ export function regimeOf({ shares = null, order = "immédiat", otc = false, pric
 }
 
 // The free tier names a listed venue and a dollar floor. A missing price is read as above a
-// dollar, which is true of every ETF in the catalogue bar a handful.
+// dollar, which is true of every listed stock and ETF in the catalogue bar a handful.
 const freeTierApplies = ({ otc, price }) => !otc && !(price != null && price < 1);
 
 // The commission side of one regime, as the two coefficients it can occupy. Per-share charges go
@@ -254,7 +279,7 @@ export function roundTripCost({
   perShare = null,
   taf = TAF_PER_SHARE,
 }) {
-  const answer = { a: null, b: null, c: null, etf, place, currency };
+  const answer = { a: null, b: null, c: null, ccy: QUOTE, etf, place, currency };
 
   if (catalogue == null) {
     return {
@@ -282,6 +307,7 @@ export function roundTripCost({
     isin: String(m.row.isin || "").toUpperCase(),
     ticker: m.row.ticker || null,
     name: m.row.name || null,
+    type: m.row.type || null,
     mic: m.venue?.mic ?? null,
     exchange: m.venue?.name ?? m.row.exchange ?? null,
     currency: String(m.row.currency || "USD").toUpperCase(),
@@ -338,8 +364,9 @@ export function roundTripCost({
         `NSCC ${NSCC_MIN} et déclaration ${REPORTING_ROUNDING} par jambe, TAF ${REPORTING_ROUNDING} à la vente` +
         (here.c ? `, plus ${FLAT_UNDER} de forfait par jambe` : ""),
     },
-    // Only the over-the-counter and sub-dollar rows have one. On a listed ETF the per-share
-    // commission runs without a ceiling, which is the opposite of what the other two brokers do.
+    // Only the over-the-counter and sub-dollar rows have one. On a listed stock or ETF the
+    // per-share commission runs without a ceiling, which is the opposite of what the other
+    // two brokers do.
     cap: otc
       ? { term: "commission", amount: CAPPED_TRADE, per: "transaction", toShares: CAPPED_TO_SHARES }
       : null,
@@ -394,6 +421,7 @@ export function roundTripCost({
       taf,
       otc,
       mic: listing.mic,
+      type: listing.type,
     }),
     // TradeZero International quotes and holds dollars and states no conversion markup of its
     // own; its European arm does, 0.60 % down to 0.20 % by size. What a euro holder pays to get
@@ -455,12 +483,14 @@ export function exactCost({
 
 // What supports this answer and what still does not, named separately rather than averaged into a
 // hedge. Two independent checks now exist and they cover different halves of the formula.
-function confidenceOf({ market, match, touchWide, regime, taf, otc, mic }) {
+function confidenceOf({ market, match, touchWide, regime, taf, otc, mic, type }) {
+  const family = type === "STOCK" ? "actions" : type === "ETN" ? "ETN" : "fonds";
   const parts = [
     `frais et commissions lus au barème ${SCHEDULE.name} du ${SCHEDULE.revised}, entité ${SCHEDULE.entity} ` +
       `confirmée sur le compte le ${SCHEDULE.entityCheckedOn}, puis recoupés de deux façons : ${VALIDATION.quotes} ` +
       `devis du calculateur de la plateforme et un aller-retour réel de ${VALIDATION.roundTrip.shares} parts ` +
-      `d'${VALIDATION.roundTrip.symbol} le ${VALIDATION.roundTrip.on}`,
+      `d'${VALIDATION.roundTrip.symbol} le ${VALIDATION.roundTrip.on} ` +
+      `(ticket \`${VALIDATION.roundTrip.securityType}\`, le même chemin qu'une action)`,
     // The calculator is the broker's own arithmetic on its own schedule, so it settles the shape of
     // the fee lines without settling whether the ledger agrees with them.
     `le calculateur ${SCHEDULE.calculator} donne les mêmes montants que ce modèle au centime sur ` +
@@ -514,15 +544,21 @@ function confidenceOf({ market, match, touchWide, regime, taf, otc, mic }) {
     );
   }
 
-  // Load-bearing enough to state on every Arca and Cboe line, which is nearly every ETF: the
-  // schedule's clauses name three exchanges, and this one is not among them by name.
+  // Load-bearing enough to state on every Arca and Cboe line: the schedule's clauses name
+  // three exchanges, and this one is not among them by name. Most ETFs live here; a stock
+  // on Nasdaq does not need the caveat.
   if (mic === "ARCX" || mic === "BATS") {
     parts.push(
       `place lue sous le parapluie : le barème nomme NYSE, AMEX et NASDAQ, et cette ligne cote sur ` +
         `${mic === "ARCX" ? "NYSE Arca" : "Cboe BZX"} — la lecture retenue est que les trois noms ` +
         `désignent les places réglementées par opposition au gré à gré, ce que soutient la ligne ` +
-        `payante, qui dit « all stocks, ETFs and warrants », alors que presque aucun ETF ne cote sur ` +
-        `les trois places nommées`
+        `payante, qui dit « all stocks, ETFs and warrants »`
+    );
+  }
+  if (type === "STOCK" || type === "ETN") {
+    parts.push(
+      `même barème que les fonds (${family}) : le ticket d'${VALIDATION.roundTrip.symbol} est déjà ` +
+        `passé en ${VALIDATION.roundTrip.securityType}`
     );
   }
 
@@ -600,13 +636,23 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     console.log(`    déclaration    ${REPORTING_PER_SHARE} par part, arrondi au centime supérieur par ordre, les deux jambes`);
     console.log(`\n  donc plancher ${FEE_FLOOR.toFixed(2)} $ par aller-retour hors commission, ${(FEE_FLOOR + 2 * FLAT_UNDER).toFixed(2)} $ sous ${FREE_FROM_SHARES} parts`);
     console.log("  hors sujet ici : ZeroPro 59 $/mois (TZ1 et ZeroFree gratuits), marge 9 %, transfert 15 $ entrant et sortant");
+    console.log("  pas au catalogue : options (0,42 $ / contrat, plafond 20 $), crypto (non offert)");
+    const cover = coverage();
+    if (cover) {
+      console.log("\n  catalogue :");
+      for (const [type, row] of Object.entries(cover)) {
+        console.log(`    ${type.padEnd(5)} ${row.n} lignes, ${row.withBook} avec carnet 605, ${row.n - row.withBook} frais seuls`);
+      }
+    }
     process.exit(0);
   }
 
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node tradezero/tradezero_cost.mjs <ETF|ISIN> [place] [devise] [--shares=n] [--price=p] [--order=repos|immédiat] [--json] [--schedule]"
+      "usage : node tradezero/tradezero_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--order=repos|immédiat] [--json] [--schedule]\n" +
+        "  ex.   node tradezero/tradezero_cost.mjs AAPL NASDAQ USD --shares=1 --price=230\n" +
+        "        node tradezero/tradezero_cost.mjs IAU --shares=10"
     );
     process.exit(1);
   }
@@ -640,18 +686,21 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 
   const l = answer.listing;
   console.log(`${l.ticker || l.isin} — ${l.name || "sans nom"}`);
-  console.log(`${l.exchange} (${l.mic || "place non résolue"}), ${l.currency}\n`);
+  console.log(
+    `${l.exchange} (${l.mic || "place non résolue"}), ${l.currency}` +
+      `${l.type ? `, ${String(l.type).toLowerCase()}` : ""}${l.otc ? ", gré à gré" : ""}\n`
+  );
 
   console.log(`régime ${answer.regime} : ${answer.regimeWhy}\n`);
   console.log(`a = ${answer.a}   (au prorata du montant : frais SEC ${SEC_RATE}${answer.bp != null ? ` + ${answer.bp} bp de carnet` : ""})`);
   console.log(
-    `b = ${answer.b}   (par part : TAF ${answer.fees.tafPerShare} à la vente + NSCC ${NSCC_PER_SHARE} et déclaration ${REPORTING_PER_SHARE} aux deux jambes` +
+    `b = ${answer.b} $   (par part : TAF ${answer.fees.tafPerShare} à la vente + NSCC ${NSCC_PER_SHARE} et déclaration ${REPORTING_PER_SHARE} aux deux jambes` +
       (answer.fees.commissionPerShareEachWay ? ` + commission ${PER_SHARE_COMMISSION} aux deux jambes` : "") +
       (answer.perShare != null ? ` + ${answer.perShare} de spread effectif` : "") +
       ")"
   );
-  console.log(`c = ${answer.c}   (par ordre : ${answer.fees.commissionFlatEachWay ? `${FLAT_UNDER} de forfait aux deux jambes` : "aucune commission forfaitaire"})`);
-  console.log(`\ncoût = ${answer.a} × p × n + ${answer.b} × n + ${answer.c}   (${answer.basis})`);
+  console.log(`c = ${answer.c} $   (par ordre : ${answer.fees.commissionFlatEachWay ? `${FLAT_UNDER} de forfait aux deux jambes` : "aucune commission forfaitaire"})`);
+  console.log(`\ncoût = ${answer.a} × p × n + ${answer.b} × n + ${answer.c}   ($ ; ${answer.basis})`);
   console.log(`  plancher ${answer.floor.amount} ${l.currency} par ${answer.floor.per} : ${answer.floor.parts}`);
   if (answer.cap)
     console.log(

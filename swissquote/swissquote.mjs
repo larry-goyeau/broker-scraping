@@ -105,13 +105,14 @@ const EXCHANGES = {
   "LONDON STOCK EXCHANGE": "LSE",
   MILAN: "MIL",
   "BORSA ITALIANA": "MIL",
-  PARIS: "EURONEXT",
-  "EURONEXT PARIS": "EURONEXT",
-  AMSTERDAM: "EURONEXT",
-  "EURONEXT AMSTERDAM": "EURONEXT",
-  BRUSSELS: "EURONEXT",
-  "EURONEXT BRUSSELS": "EURONEXT",
-  LISBON: "EURONEXT",
+  PARIS: "XPAR",
+  "EURONEXT PARIS": "XPAR",
+  AMSTERDAM: "XAMS",
+  "EURONEXT AMSTERDAM": "XAMS",
+  BRUSSELS: "XBRU",
+  "EURONEXT BRUSSELS": "XBRU",
+  LISBON: "XLIS",
+  "EURONEXT LISBON": "XLIS",
   TRADEGATE: "TRADEGATE",
   "TOKYO SE": "TSE",
   TOKYO: "TSE",
@@ -121,14 +122,14 @@ const EXCHANGES = {
   TSX: "TSX",
   TORONTO: "TSX",
   "TSX VENTURE": "TSXV",
-  COPENHAGEN: "OMX",
-  STOCKHOLM: "OMX",
-  HELSINKI: "OMX",
+  COPENHAGEN: "XCSE",
+  STOCKHOLM: "XSTO",
+  HELSINKI: "XHEL",
   OSLO: "OSL",
   MADRID: "BME",
   VIENNA: "VIE",
-  WARSAW: "WSE",
-  PRAGUE: "PRA",
+  WARSAW: "GPW",
+  PRAGUE: "PSECZ",
   MUNCHEN: "MUN",
   MUNICH: "MUN",
   DUSSELDORF: "DUS",
@@ -182,7 +183,14 @@ function venueOf(item, match) {
   if (market.includes("NYSE ARCA") || market.includes("ARCA")) return "AMEX";
   if (market.includes("NYSE")) return "NYSE";
   if (market.includes("XETRA")) return "XETR";
-  if (market.includes("EURONEXT")) return "EURONEXT";
+  if (market.includes("EURONEXT")) {
+    if (market.includes("PARIS")) return "XPAR";
+    if (market.includes("AMSTERDAM")) return "XAMS";
+    if (market.includes("BRUSSELS")) return "XBRU";
+    if (market.includes("LISBON")) return "XLIS";
+    if (market.includes("MILAN") || market.includes("ITALIA")) return "MIL";
+    return "EURONEXT";
+  }
   if (match?.exchanges) {
     const currency = normalize(item.stockKey?.currency).toUpperCase();
     if (currency === "USD") {

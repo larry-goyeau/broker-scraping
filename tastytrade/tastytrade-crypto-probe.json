@@ -1,0 +1,181 @@
+{
+  "runs": [
+    {
+      "at": "2026-09-08T13:51:07.800Z",
+      "account": "5WY97743",
+      "live": false,
+      "symbol": "BTC/USD",
+      "amount": 50,
+      "cash": 50.74,
+      "buyingPower": 131465.028,
+      "heldBefore": 0,
+      "quote": {
+        "symbol": "BTC/USD",
+        "at": "2026-09-08T13:51:07.024Z",
+        "bid": 77707.61,
+        "ask": 77707.62,
+        "last": 77707.61,
+        "mid": 77707.61499999999,
+        "spread": 0.00999999999476131,
+        "quoted": 1.2868751659359655e-7
+      },
+      "quotedFees": {
+        "buy": {
+          "error": "dry-run 400 {\"code\":\"validation_error\",\"message\":\"Request validation failed\",\"errors\":[{\"domain\":\"value\",\"reason\":\"must be a positive number\"},{\"domain\":\"value-effect\",\"reason\":\"is missing\"},{\"domain\":\"value-effect\",\"reason\":\"does not have a valid value\"}]}"
+        },
+        "sell": {
+          "error": "dry-run 400 {\"code\":\"validation_error\",\"message\":\"Request validation failed\",\"errors\":[{\"domain\":\"value-effect\",\"reason\":\"is missing\"},{\"domain\":\"value-effect\",\"reason\":\"does not have a valid value\"}]}"
+        }
+      }
+    },
+    {
+      "at": "2026-09-08T13:51:24.857Z",
+      "account": "5WY97743",
+      "live": false,
+      "symbol": "BTC/USD",
+      "amount": 50,
+      "cash": 50.74,
+      "buyingPower": 131465.028,
+      "heldBefore": 0,
+      "quote": {
+        "symbol": "BTC/USD",
+        "at": "2026-09-08T13:51:24.003Z",
+        "bid": 77676.75,
+        "ask": 77676.76,
+        "last": 77676.76,
+        "mid": 77676.755,
+        "spread": 0.00999999999476131,
+        "quoted": 1.287386425290463e-7
+      },
+      "quotedFees": {
+        "buy": {
+          "total": 1,
+          "breakdown": {
+            "commission": 1
+          },
+          "buyingPowerEffect": 51,
+          "raw": {
+            "buying-power-effect": {
+              "change-in-margin-requirement": "50.0",
+              "change-in-margin-requirement-effect": "Debit",
+              "change-in-buying-power": "51.0",
+              "change-in-buying-power-effect": "Debit",
+              "current-buying-power": "131465.02795",
+              "current-buying-power-effect": "Credit",
+              "new-buying-power": "131414.02795",
+              "new-buying-power-effect": "Credit",
+              "isolated-order-margin-requirement": "50.0",
+              "isolated-order-margin-requirement-effect": "Debit",
+              "is-spread": false,
+              "impact": "51.0",
+              "effect": "Debit"
+            },
+            "fee-calculation": {
+              "regulatory-fees": "0.0",
+              "regulatory-fees-effect": "None",
+              "regulatory-fees-breakdown": [
+                {
+                  "name": "exchange",
+                  "value": "0.0",
+                  "effect": "None"
+                },
+                {
+                  "name": "nfa",
+                  "value": "0.0",
+                  "effect": "None"
+                },
+                {
+                  "name": "orf",
+                  "value": "0.0",
+                  "effect": "None"
+                },
+                {
+                  "name": "sec",
+                  "value": "0.0",
+                  "effect": "None"
+                },
+                {
+                  "name": "taf",
+                  "value": "0.0",
+                  "effect": "None"
+                }
+              ],
+              "clearing-fees": "0.0",
+              "clearing-fees-effect": "None",
+              "clearing-fees-breakdown": [
+                {
+                  "name": "clearing",
+                  "value": "0.0",
+                  "effect": "None"
+                }
+              ],
+              "commission": "1.0",
+              "commission-effect": "Debit",
+              "commission-breakdown": [
+                {
+                  "name": "brokerage",
+                  "value": "1.0",
+                  "effect": "Debit"
+                }
+              ],
+              "proprietary-index-option-fees": "0.0",
+              "proprietary-index-option-fees-effect": "None",
+              "proprietary-fees-breakdown": [
+                {
+                  "name": "proprietary",
+                  "value": "0.0",
+                  "effect": "None"
+                }
+              ],
+              "total-fees": "1.0",
+              "total-fees-effect": "Debit",
+              "rebates": "0.0",
+              "rebates-effect": "None",
+              "rebates-breakdown": [
+                {
+                  "name": "rebate",
+                  "value": "0.0",
+                  "effect": "None"
+                }
+              ],
+              "per-quantity": false
+            },
+            "notes": [],
+            "order": {
+              "account-number": "5WY97743",
+              "cancellable": true,
+              "editable": true,
+              "edited": false,
+              "global-request-id": "d9497df8c52070e4497d6172405925cd",
+              "leg-count": 1,
+              "order-type": "Notional Market",
+              "status": "Received",
+              "time-in-force": "IOC",
+              "underlying-instrument-type": "Cryptocurrency",
+              "underlying-symbol": "BTC/USD",
+              "updated-at": 0,
+              "value": "50.0",
+              "value-effect": "Debit",
+              "legs": [
+                {
+                  "action": "Buy to Open",
+                  "instrument-type": "Cryptocurrency",
+                  "symbol": "BTC/USD",
+                  "fills": []
+                }
+              ]
+            },
+            "order-costs": {
+              "estimated-trade-cost": "50.00",
+              "estimated-trade-cost-effect": "Debit"
+            },
+            "warnings": []
+          }
+        },
+        "sell": {
+          "error": "dry-run 422 {\"code\":\"preflight_check_failure\",\"message\":\"One or more preflight checks failed\",\"errors\":[{\"code\":\"closing_with_no_position\",\"message\":\"You cannot route a closing order without an existing position to close.\"}]}"
+        }
+      }
+    }
+  ]
+}

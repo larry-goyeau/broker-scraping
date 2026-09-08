@@ -1,0 +1,267 @@
+{
+  "runs": [
+    {
+      "at": "2026-09-08T13:52:08.878Z",
+      "account": "5WY97743",
+      "live": true,
+      "symbol": "BTC/USD",
+      "amount": 45,
+      "cash": 50.74,
+      "buyingPower": 131465.028,
+      "heldBefore": 0,
+      "quote": {
+        "symbol": "BTC/USD",
+        "at": "2026-09-08T13:52:07.980Z",
+        "bid": 77655.05,
+        "ask": 77655.06,
+        "last": 77664.05,
+        "mid": 77655.055,
+        "spread": 0.00999999999476131,
+        "quoted": 1.2877461737373455e-7
+      },
+      "quotedFees": {
+        "buy": {
+          "total": 1,
+          "breakdown": {
+            "commission": 1
+          },
+          "buyingPowerEffect": 46,
+          "raw": {
+            "buying-power-effect": {
+              "change-in-margin-requirement": "45.0",
+              "change-in-margin-requirement-effect": "Debit",
+              "change-in-buying-power": "46.0",
+              "change-in-buying-power-effect": "Debit",
+              "current-buying-power": "131465.02795",
+              "current-buying-power-effect": "Credit",
+              "new-buying-power": "131419.02795",
+              "new-buying-power-effect": "Credit",
+              "isolated-order-margin-requirement": "45.0",
+              "isolated-order-margin-requirement-effect": "Debit",
+              "is-spread": false,
+              "impact": "46.0",
+              "effect": "Debit"
+            },
+            "fee-calculation": {
+              "regulatory-fees": "0.0",
+              "regulatory-fees-effect": "None",
+              "regulatory-fees-breakdown": [
+                {
+                  "name": "exchange",
+                  "value": "0.0",
+                  "effect": "None"
+                },
+                {
+                  "name": "nfa",
+                  "value": "0.0",
+                  "effect": "None"
+                },
+                {
+                  "name": "orf",
+                  "value": "0.0",
+                  "effect": "None"
+                },
+                {
+                  "name": "sec",
+                  "value": "0.0",
+                  "effect": "None"
+                },
+                {
+                  "name": "taf",
+                  "value": "0.0",
+                  "effect": "None"
+                }
+              ],
+              "clearing-fees": "0.0",
+              "clearing-fees-effect": "None",
+              "clearing-fees-breakdown": [
+                {
+                  "name": "clearing",
+                  "value": "0.0",
+                  "effect": "None"
+                }
+              ],
+              "commission": "1.0",
+              "commission-effect": "Debit",
+              "commission-breakdown": [
+                {
+                  "name": "brokerage",
+                  "value": "1.0",
+                  "effect": "Debit"
+                }
+              ],
+              "proprietary-index-option-fees": "0.0",
+              "proprietary-index-option-fees-effect": "None",
+              "proprietary-fees-breakdown": [
+                {
+                  "name": "proprietary",
+                  "value": "0.0",
+                  "effect": "None"
+                }
+              ],
+              "total-fees": "1.0",
+              "total-fees-effect": "Debit",
+              "rebates": "0.0",
+              "rebates-effect": "None",
+              "rebates-breakdown": [
+                {
+                  "name": "rebate",
+                  "value": "0.0",
+                  "effect": "None"
+                }
+              ],
+              "per-quantity": false
+            },
+            "notes": [],
+            "order": {
+              "account-number": "5WY97743",
+              "cancellable": true,
+              "editable": true,
+              "edited": false,
+              "global-request-id": "ec661a79289286ad83c7276c795a8464",
+              "leg-count": 1,
+              "order-type": "Notional Market",
+              "status": "Received",
+              "time-in-force": "IOC",
+              "underlying-instrument-type": "Cryptocurrency",
+              "underlying-symbol": "BTC/USD",
+              "updated-at": 0,
+              "value": "45.0",
+              "value-effect": "Debit",
+              "legs": [
+                {
+                  "action": "Buy to Open",
+                  "instrument-type": "Cryptocurrency",
+                  "symbol": "BTC/USD",
+                  "fills": []
+                }
+              ]
+            },
+            "order-costs": {
+              "estimated-trade-cost": "45.00",
+              "estimated-trade-cost-effect": "Debit"
+            },
+            "warnings": []
+          }
+        },
+        "sell": {
+          "error": "dry-run 422 {\"code\":\"preflight_check_failure\",\"message\":\"One or more preflight checks failed\",\"errors\":[{\"code\":\"closing_with_no_position\",\"message\":\"You cannot route a closing order without an existing position to close.\"}]}"
+        }
+      },
+      "legs": {
+        "buy": {
+          "status": "Filled",
+          "fills": 1,
+          "quantity": 0.00057946,
+          "price": 77657.65,
+          "value": 44.99950186899999,
+          "order": {
+            "id": 503173140,
+            "account-number": "5WY97743",
+            "cancellable": false,
+            "editable": false,
+            "edited": false,
+            "ext-client-order-id": "JAAACzlApBNlFopXTp",
+            "global-request-id": "0497e921fda62050c54ec2f62c57a124",
+            "leg-count": 1,
+            "order-type": "Notional Market",
+            "received-at": "2026-09-08T13:52:09.446+00:00",
+            "status": "Filled",
+            "terminal-at": "2026-09-08T13:52:09.546+00:00",
+            "time-in-force": "IOC",
+            "underlying-instrument-type": "Cryptocurrency",
+            "underlying-symbol": "BTC/USD",
+            "updated-at": 1788875529550,
+            "value": "45.0",
+            "value-effect": "Debit",
+            "legs": [
+              {
+                "action": "Buy to Open",
+                "instrument-type": "Cryptocurrency",
+                "symbol": "BTC/USD",
+                "fills": [
+                  {
+                    "destination-venue": "ZERO_HASH_CLOB_A",
+                    "fill-id": "CC8FQQREJ1SK",
+                    "fill-price": "77657.65",
+                    "filled-at": "2026-09-08T13:52:09.489+00:00",
+                    "quantity": "0.00057946"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "quoteBetween": {
+          "symbol": "BTC/USD",
+          "at": "2026-09-08T13:52:12.366Z",
+          "bid": 77657.64,
+          "ask": 77657.65,
+          "last": 77657.64,
+          "mid": 77657.64499999999,
+          "spread": 0.00999999999476131,
+          "quoted": 1.2877032254533745e-7
+        },
+        "sell": {
+          "status": "Filled",
+          "fills": 1,
+          "quantity": 0.00057946,
+          "price": 77657.64,
+          "value": 44.9994960744,
+          "order": {
+            "id": 503173265,
+            "account-number": "5WY97743",
+            "cancellable": false,
+            "editable": false,
+            "edited": false,
+            "ext-client-order-id": "JAAACzlAzZxfexgssA",
+            "global-request-id": "4603585d37e3f039f4b07d31836100b8",
+            "leg-count": 1,
+            "order-type": "Market",
+            "received-at": "2026-09-08T13:52:12.844+00:00",
+            "size": "0.00057946",
+            "status": "Filled",
+            "terminal-at": "2026-09-08T13:52:12.970+00:00",
+            "time-in-force": "IOC",
+            "underlying-instrument-type": "Cryptocurrency",
+            "underlying-symbol": "BTC/USD",
+            "updated-at": 1788875532973,
+            "legs": [
+              {
+                "action": "Sell to Close",
+                "instrument-type": "Cryptocurrency",
+                "quantity": "0.00057946",
+                "remaining-quantity": "0.0",
+                "symbol": "BTC/USD",
+                "fills": [
+                  {
+                    "destination-venue": "ZERO_HASH_CLOB_A",
+                    "fill-id": "CC8FS6GMC1SK",
+                    "fill-price": "77657.64",
+                    "filled-at": "2026-09-08T13:52:12.885+00:00",
+                    "quantity": "0.00057946"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "reconciliation": {
+        "cashBefore": 50.74,
+        "cashAfter": 48.74,
+        "observed": -2,
+        "paid": 2
+      },
+      "measured": {
+        "buyPrice": 77657.65,
+        "sellPrice": 77657.64,
+        "quantity": 0.00057946,
+        "paid": 2,
+        "measured": 0.044444936431125105,
+        "quoted": 1.2877032254533745e-7,
+        "published": 0.01
+      }
+    }
+  ]
+}

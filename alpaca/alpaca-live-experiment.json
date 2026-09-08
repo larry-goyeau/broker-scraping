@@ -1,0 +1,37 @@
+{
+  "on": "2026-09-08",
+  "account": "193675213",
+  "cash": 500,
+  "trips": [
+    {
+      "symbol": "IAU",
+      "type": "ETF",
+      "n": 1,
+      "buy": 82.685,
+      "sell": 82.685,
+      "book": 0,
+      "cashDelta": -0.03,
+      "pendingRegTafAfter": 0.03,
+      "assetClass": "us_equity"
+    },
+    {
+      "symbol": "EZU",
+      "type": "ETF",
+      "n": 1,
+      "buy": 70.6475,
+      "sell": 70.64,
+      "book": 0.0075,
+      "cashDelta": -0.01,
+      "pendingRegTafAfter": 0.03,
+      "extraFees": 0,
+      "assetClass": "us_equity"
+    }
+  ],
+  "cryptoRefused": {
+    "symbol": "BTC/USD",
+    "amount": 25,
+    "status": 403,
+    "message": "insufficient balance for USD (requested: 25, available: 0)",
+    "why": "instant ACH is usable on listed equities, not on crypto until settled"
+  }
+}

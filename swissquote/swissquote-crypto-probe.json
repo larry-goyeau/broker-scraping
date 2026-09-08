@@ -1,0 +1,555 @@
+{
+  "runs": [
+    {
+      "at": "2026-09-08T14:12:35.076Z",
+      "live": false,
+      "symbol": "BTC",
+      "currency": "EUR",
+      "amount": 50,
+      "stockKey": {
+        "isin": "EX0X00XBT000",
+        "exchangeId": 31337,
+        "currency": "EUR"
+      },
+      "cash": 500,
+      "cashRows": [
+        {
+          "currency": "CHF",
+          "cash": 0,
+          "positions": 0
+        },
+        {
+          "currency": "EUR",
+          "cash": 500,
+          "positions": 0
+        },
+        {
+          "currency": "USD",
+          "cash": 0,
+          "positions": 0
+        },
+        {
+          "currency": "XAU",
+          "cash": 0,
+          "positions": 0
+        }
+      ],
+      "quote": {
+        "bid": 67250,
+        "ask": 67263,
+        "mid": 67256.5,
+        "quoted": 0.00019328986789380953,
+        "at": "2026-09-08T16:12:33.945"
+      },
+      "quantity": 0.00074335,
+      "quotedFees": {
+        "buy": {
+          "ok": true,
+          "warnings": [],
+          "errors": [],
+          "amounts": {
+            "brutAmount": 49.99,
+            "commissions": 0.5,
+            "totalEstimatedAmount": 50.49,
+            "currency": "EUR",
+            "currencyRate": 1
+          },
+          "raw": {
+            "isSuccess": true,
+            "warnings": [],
+            "errors": [],
+            "orderAmounts": {
+              "brutAmount": 49.99,
+              "commissions": 0.5,
+              "totalEstimatedAmount": 50.49,
+              "currency": "EUR",
+              "currencyRate": 1
+            }
+          },
+          "status": 200
+        },
+        "sell": {
+          "ok": false,
+          "warnings": [],
+          "errors": [
+            {
+              "id": "NOT_ENOUGH_CRYPTO_TRADE_DATE",
+              "data": {}
+            }
+          ],
+          "amounts": null,
+          "raw": {
+            "isSuccess": false,
+            "warnings": [],
+            "errors": [
+              {
+                "id": "NOT_ENOUGH_CRYPTO_TRADE_DATE",
+                "data": {}
+              }
+            ]
+          },
+          "status": 200
+        }
+      }
+    },
+    {
+      "at": "2026-09-08T14:13:40.531Z",
+      "live": false,
+      "symbol": "BTC",
+      "currency": "EUR",
+      "amount": 50,
+      "stockKey": {
+        "isin": "EX0X00XBT000",
+        "exchangeId": 31337,
+        "currency": "EUR"
+      },
+      "cash": 500,
+      "cashRows": [
+        {
+          "currency": "CHF",
+          "cash": 0,
+          "positions": 0
+        },
+        {
+          "currency": "EUR",
+          "cash": 500,
+          "positions": 0
+        },
+        {
+          "currency": "USD",
+          "cash": 0,
+          "positions": 0
+        },
+        {
+          "currency": "XAU",
+          "cash": 0,
+          "positions": 0
+        }
+      ],
+      "quote": {
+        "bid": 67247,
+        "ask": 67257,
+        "mid": 67252,
+        "quoted": 0.0001486944626182121,
+        "at": "2026-09-08T16:13:39.345"
+      },
+      "quantity": 0.00074342,
+      "quotedFees": {
+        "buy": {
+          "ok": false,
+          "warnings": [],
+          "errors": [
+            {
+              "id": "POST_ONLY_ORDER_NOT_VALID",
+              "data": {}
+            }
+          ],
+          "amounts": null,
+          "raw": {
+            "isSuccess": false,
+            "warnings": [],
+            "errors": [
+              {
+                "id": "POST_ONLY_ORDER_NOT_VALID",
+                "data": {}
+              }
+            ]
+          },
+          "status": 200
+        },
+        "sell": {
+          "ok": false,
+          "warnings": [],
+          "errors": [
+            {
+              "id": "POST_ONLY_ORDER_NOT_VALID",
+              "data": {}
+            }
+          ],
+          "amounts": null,
+          "raw": {
+            "isSuccess": false,
+            "warnings": [],
+            "errors": [
+              {
+                "id": "POST_ONLY_ORDER_NOT_VALID",
+                "data": {}
+              }
+            ]
+          },
+          "status": 200
+        }
+      }
+    },
+    {
+      "at": "2026-09-08T14:13:48.247Z",
+      "live": false,
+      "symbol": "BTC",
+      "currency": "EUR",
+      "amount": 50,
+      "stockKey": {
+        "isin": "EX0X00XBT000",
+        "exchangeId": 31337,
+        "currency": "EUR"
+      },
+      "cash": 500,
+      "cashRows": [
+        {
+          "currency": "CHF",
+          "cash": 0,
+          "positions": 0
+        },
+        {
+          "currency": "EUR",
+          "cash": 500,
+          "positions": 0
+        },
+        {
+          "currency": "USD",
+          "cash": 0,
+          "positions": 0
+        },
+        {
+          "currency": "XAU",
+          "cash": 0,
+          "positions": 0
+        }
+      ],
+      "quote": {
+        "bid": 67234,
+        "ask": 67240,
+        "mid": 67237,
+        "quoted": 0.00008923658104912473,
+        "at": "2026-09-08T16:13:47.795"
+      },
+      "quantity": 0.0007436,
+      "quotedFees": {
+        "buy": {
+          "ok": true,
+          "warnings": [],
+          "errors": [],
+          "amounts": {
+            "brutAmount": 50,
+            "commissions": 0.5,
+            "totalEstimatedAmount": 50.5,
+            "currency": "EUR",
+            "currencyRate": 1
+          },
+          "raw": {
+            "isSuccess": true,
+            "warnings": [],
+            "errors": [],
+            "orderAmounts": {
+              "brutAmount": 50,
+              "commissions": 0.5,
+              "totalEstimatedAmount": 50.5,
+              "currency": "EUR",
+              "currencyRate": 1
+            }
+          },
+          "status": 200
+        },
+        "sell": {
+          "ok": false,
+          "warnings": [],
+          "errors": [
+            {
+              "id": "NOT_ENOUGH_CRYPTO_TRADE_DATE",
+              "data": {}
+            }
+          ],
+          "amounts": null,
+          "raw": {
+            "isSuccess": false,
+            "warnings": [],
+            "errors": [
+              {
+                "id": "NOT_ENOUGH_CRYPTO_TRADE_DATE",
+                "data": {}
+              }
+            ]
+          },
+          "status": 200
+        }
+      }
+    },
+    {
+      "at": "2026-09-08T14:14:48.149Z",
+      "live": false,
+      "symbol": "BTC",
+      "currency": "EUR",
+      "amount": 50,
+      "stockKey": {
+        "isin": "EX0X00XBT000",
+        "exchangeId": 31337,
+        "currency": "EUR"
+      },
+      "cash": 500,
+      "cashRows": [
+        {
+          "currency": "CHF",
+          "cash": 0,
+          "positions": 0
+        },
+        {
+          "currency": "EUR",
+          "cash": 500,
+          "positions": 0
+        },
+        {
+          "currency": "USD",
+          "cash": 0,
+          "positions": 0
+        },
+        {
+          "currency": "XAU",
+          "cash": 0,
+          "positions": 0
+        }
+      ],
+      "quote": {
+        "bid": 67235,
+        "ask": 67245,
+        "mid": 67240,
+        "quoted": 0.000148720999405116,
+        "at": "2026-09-08T16:14:45.745"
+      },
+      "quantity": 0.00074355,
+      "quotedFees": {
+        "buy": {
+          "ok": false,
+          "warnings": [],
+          "errors": [
+            {
+              "id": "QUOTE_PRICE_PRECISION_NOT_VALID",
+              "data": {
+                "ALLOWED_PRECISION": "0"
+              }
+            }
+          ],
+          "amounts": null,
+          "raw": {
+            "isSuccess": false,
+            "warnings": [],
+            "errors": [
+              {
+                "id": "QUOTE_PRICE_PRECISION_NOT_VALID",
+                "data": {
+                  "ALLOWED_PRECISION": "0"
+                }
+              }
+            ]
+          },
+          "status": 200
+        },
+        "sell": {
+          "ok": false,
+          "warnings": [],
+          "errors": [
+            {
+              "id": "QUOTE_PRICE_PRECISION_NOT_VALID",
+              "data": {
+                "ALLOWED_PRECISION": "0"
+              }
+            }
+          ],
+          "amounts": null,
+          "raw": {
+            "isSuccess": false,
+            "warnings": [],
+            "errors": [
+              {
+                "id": "QUOTE_PRICE_PRECISION_NOT_VALID",
+                "data": {
+                  "ALLOWED_PRECISION": "0"
+                }
+              }
+            ]
+          },
+          "status": 200
+        }
+      }
+    },
+    {
+      "at": "2026-09-08T14:14:58.988Z",
+      "live": false,
+      "symbol": "BTC",
+      "currency": "EUR",
+      "amount": 50,
+      "stockKey": {
+        "isin": "EX0X00XBT000",
+        "exchangeId": 31337,
+        "currency": "EUR"
+      },
+      "cash": 500,
+      "cashRows": [
+        {
+          "currency": "CHF",
+          "cash": 0,
+          "positions": 0
+        },
+        {
+          "currency": "EUR",
+          "cash": 500,
+          "positions": 0
+        },
+        {
+          "currency": "USD",
+          "cash": 0,
+          "positions": 0
+        },
+        {
+          "currency": "XAU",
+          "cash": 0,
+          "positions": 0
+        }
+      ],
+      "quote": {
+        "bid": 67246,
+        "ask": 67256,
+        "mid": 67251,
+        "quoted": 0.00014869667365541032,
+        "at": "2026-09-08T16:14:57.795"
+      },
+      "quantity": 0.00074343,
+      "quotedFees": {
+        "buy": {
+          "ok": false,
+          "warnings": [],
+          "errors": [
+            {
+              "id": "POST_ONLY_ORDER_NOT_VALID",
+              "data": {}
+            }
+          ],
+          "amounts": null,
+          "raw": {
+            "isSuccess": false,
+            "warnings": [],
+            "errors": [
+              {
+                "id": "POST_ONLY_ORDER_NOT_VALID",
+                "data": {}
+              }
+            ]
+          },
+          "status": 200
+        },
+        "sell": {
+          "ok": false,
+          "warnings": [],
+          "errors": [
+            {
+              "id": "POST_ONLY_ORDER_NOT_VALID",
+              "data": {}
+            }
+          ],
+          "amounts": null,
+          "raw": {
+            "isSuccess": false,
+            "warnings": [],
+            "errors": [
+              {
+                "id": "POST_ONLY_ORDER_NOT_VALID",
+                "data": {}
+              }
+            ]
+          },
+          "status": 200
+        }
+      }
+    },
+    {
+      "at": "2026-09-08T14:15:16.767Z",
+      "live": false,
+      "symbol": "BTC",
+      "currency": "EUR",
+      "amount": 50,
+      "stockKey": {
+        "isin": "EX0X00XBT000",
+        "exchangeId": 31337,
+        "currency": "EUR"
+      },
+      "cash": 500,
+      "cashRows": [
+        {
+          "currency": "CHF",
+          "cash": 0,
+          "positions": 0
+        },
+        {
+          "currency": "EUR",
+          "cash": 500,
+          "positions": 0
+        },
+        {
+          "currency": "USD",
+          "cash": 0,
+          "positions": 0
+        },
+        {
+          "currency": "XAU",
+          "cash": 0,
+          "positions": 0
+        }
+      ],
+      "quote": {
+        "bid": 67284,
+        "ask": 67294,
+        "mid": 67289,
+        "quoted": 0.0001486127004413797,
+        "at": "2026-09-08T16:15:15.595"
+      },
+      "quantity": 0.00074301,
+      "quotedFees": {
+        "buy": {
+          "ok": true,
+          "warnings": [],
+          "errors": [],
+          "amounts": {
+            "brutAmount": 50,
+            "commissions": 0.51,
+            "totalEstimatedAmount": 50.51,
+            "currency": "EUR",
+            "currencyRate": 1
+          },
+          "raw": {
+            "isSuccess": true,
+            "warnings": [],
+            "errors": [],
+            "orderAmounts": {
+              "brutAmount": 50,
+              "commissions": 0.51,
+              "totalEstimatedAmount": 50.51,
+              "currency": "EUR",
+              "currencyRate": 1
+            }
+          },
+          "status": 200
+        },
+        "sell": {
+          "ok": false,
+          "warnings": [],
+          "errors": [
+            {
+              "id": "NOT_ENOUGH_CRYPTO_TRADE_DATE",
+              "data": {}
+            }
+          ],
+          "amounts": null,
+          "raw": {
+            "isSuccess": false,
+            "warnings": [],
+            "errors": [
+              {
+                "id": "NOT_ENOUGH_CRYPTO_TRADE_DATE",
+                "data": {}
+              }
+            ]
+          },
+          "status": 200
+        }
+      }
+    }
+  ]
+}

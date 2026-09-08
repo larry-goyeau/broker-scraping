@@ -1,0 +1,23 @@
+{
+  "on": "2026-09-08",
+  "account": "20009286101",
+  "isin": "FR0000120271",
+  "ticker": "TTE",
+  "name": "TOTALENERGIES SE",
+  "currency": "EUR",
+  "referencePlace": "EURONEXT PARIS",
+  "bestExecution": true,
+  "routed": "EQUIDUCT",
+  "orderType": "Au marché",
+  "settlement": "CPT",
+  "n": 1,
+  "buy": { "fill": 77.8, "pruAfter": 79.8, "commission": 2 },
+  "sell": { "fill": 77.74, "quotedCommission": 2 },
+  "book": 0.06,
+  "bp": 7.71,
+  "publishedXparBp": 1.29,
+  "commissionRoundTrip": 4,
+  "ttfOnTicket": true,
+  "ttfInPru": false,
+  "note": "Position back to 0. Historique blocked by tax self-certification; TTF not visible in PRU."
+}

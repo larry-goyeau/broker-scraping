@@ -1,7 +1,7 @@
 // What one round trip costs at Trading212: buy n shares at price p, sell them back at once, in
 // the form the front end asked for.
 //
-//   coût = a × p × n + b × n + c
+//   coût (USD) = a × toUsd(p) × n + b × n + c
 //
 // Three terms because fees come in three shapes, and a broker charges in whichever it likes: `a`
 // for everything that follows the amount, `b` for what is charged by the share, `c` for what is
@@ -19,11 +19,13 @@
 //   crypto       ni commission ni taxe, mais un écart achat-vente de deux pour cent, cent fois
 //                celui d'un ETF. C'est le seul cas où Trading212 tient les deux prix lui-même.
 //
-// The account is assumed to be funded in the line's own currency, so nothing is converted. That
-// assumption is doing a lot of work and it is the one worth checking first: conversion costs 0.15%
-// each way at this broker, thirty basis points on the round trip, against the 1.84 bp that IUSQ
-// actually costs. Taking a fund's dollar line instead of its euro line multiplies the bill by
-// seventeen, and no precision on the spread survives that choice.
+// `a` is a fraction of the amount. `b` and `c` are dollars, the same unit Swissquote and
+// tastytrade answer in, so a FINRA line and a Swiss franc ticket can sit on the same row.
+// The dollar cost of a trip is `a × toUsd(p) × n + b × n + c`. Conversion of the *notional*
+// is still left out of `a`: it costs 0.15 % each way when the account is not funded in the
+// line's currency, thirty basis points on the round trip, against the 1.84 bp that IUSQ
+// actually costs. Taking a fund's dollar line instead of its euro line multiplies that
+// notional bill by seventeen, and no precision on the spread survives that choice.
 //
 //   node trading212/trading212_cost.mjs IUSQ "Deutsche Börse Xetra" EUR
 //   node trading212/trading212_cost.mjs HSBA "London Stock Exchange" GBX --shares=100
@@ -35,6 +37,7 @@
 
 import fs from "node:fs";
 import { listingKey, resolveVenue } from "../venues.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
 
 // Anchored to the repository rather than to whatever directory the shell happens to be in, so this
 // works both as `node trading212/trading212_cost.mjs` and from inside the folder.
@@ -106,10 +109,9 @@ const NARROW_BP = 2.5;
 // same fund on two consecutive days.
 const CHECKS = {
   "IE00B4L5Y983|XETR|EUR": { bp: 0.99, trips: 6, range: [0.79, 1.18], on: "2026-08-26" },
-  // The one share, as opposed to fund, that has been round-tripped. A hundred Eutelsat at 1.8405
-  // cost 0.84 EUR on 184.05, which is 0.456% — and it decomposes: 0.40% of French transaction tax,
-  // exactly the rate the disclosure quoted, leaving 5.6 bp for the book. That residue is itself a
-  // check, since two ticks of 0.0005 on a 1.84 price is 5.4 bp. Tax and spread both land.
+  // A hundred Eutelsat at 1.8405 cost 0.84 EUR on 184.05, which is 0.456% — and it decomposes:
+  // 0.40% of French transaction tax, exactly the rate the disclosure quoted, leaving 5.6 bp for
+  // the book. That residue is itself a check, since two ticks of 0.0005 on a 1.84 price is 5.4 bp.
   "FR0010221234|XPAR|EUR": { bp: 5.6, trips: 1, range: [5.6, 5.6], on: "2026-09-07", note: "après déduction des 0,40 % de taxe française" },
   "IE00B6R52259|XETR|EUR": { bp: 1.87, trips: 6, range: [1.87, 1.87], on: "2026-08-26" },
   "IE00B5BMR087|XETR|EUR": { bp: 1.12, trips: 3, range: [1.12, 1.12], on: "2026-08-27" },
@@ -122,6 +124,20 @@ const CHECKS = {
   // term in this file is exercised by that one trade, and none of them is off by more than a
   // fiftieth.
   "GB0005405286|XLON|GBX": { bp: 1.0, trips: 1, range: [1.0, 1.0], on: "2026-09-07", note: "après déduction du timbre et du change" },
+  // One Apple, bought and sold at once on NASDAQ. The cash moved 0.12 EUR on a 272.22 debit,
+  // 4.4 bp of the euro amount. The account had already converted dollars the day before, so
+  // that 0.12 is book plus the American fees and nothing else. Converted back at the fill's
+  // own rate (316.40 / 272.24) it is 0.139 $, of which SEC + FINRA take 0.007 $ and the book
+  // the remaining 0.133 $ — 4.2 bp against the 0.36 bp Rule 605 publishes for the 100-to-499
+  // bucket. The 605 figure stays the published `b`; this check is the error bar on an odd lot.
+  "US0378331005|XNAS|USD": {
+    perShare: 0.133,
+    bp: 4.2,
+    trips: 1,
+    range: [0.12, 0.12],
+    on: "2026-09-08",
+    note: "1 part, 0,12 € tout compris (compte déjà en dollars) ; carnet 0,133 $ contre 0,01154 $ en Rule 605",
+  },
 };
 
 // What the taxed round trip proves, kept where the confidence message can quote it: the tax is not
@@ -135,6 +151,22 @@ const TAX_CHECK = { pair: "ETL", venue: "Euronext Paris", amount: 184.05, paid: 
 // earlier. The review is honest to within five per cent, which is what licenses reading the rest of
 // the crypto book off it rather than trading it.
 const CRYPTO_CHECK = { pair: "BTC/EUR", amount: 50, paid: 0.96, measured: 0.0192, quoted: 0.0201, on: "2026-09-07" };
+
+// The American book, measured rather than published. Rule 605 averages orders of a hundred
+// shares; a single share paid eleven times that average, which is what the confidence
+// message quotes on every US line so the 605 figure is not read as what a retail odd lot
+// actually crosses.
+const US_CHECK = {
+  pair: "AAPL",
+  venue: "NASDAQ",
+  n: 1,
+  paid: 0.12,
+  price: 316.4,
+  perShare: 0.133,
+  published: 0.01154,
+  ratio: 11.5,
+  on: "2026-09-08",
+};
 
 // -------------------------------------------------------------------------- the files
 
@@ -206,6 +238,7 @@ export function roundTripCost({ etf, place, currency, bp = null }) {
     a: null,
     b: 0,
     c: FLAT,
+    ccy: QUOTE,
     // The clamps a linear form cannot express, null when the broker imposes none. `floor` is the
     // least a round trip can cost whatever its size, `cap` is where a term stops growing, and
     // `threshold` is a charge that switches on above an amount.
@@ -274,16 +307,18 @@ export function roundTripCost({ etf, place, currency, bp = null }) {
   }
 
   const a = (marketBp ?? 0) / 1e4 + taxTotal + (american ? SEC_RATE : 0);
-  const b = (marketPerShare ?? 0) + (american ? FINRA_PER_SHARE : 0);
+  const bookUsd = american || listing.currency === "USD" ? (marketPerShare ?? 0) : toUsd(marketPerShare ?? 0, listing.currency) ?? 0;
+  const b = bookUsd + (american ? FINRA_PER_SHARE : 0);
 
   const isBritish = listing.mic === "XLON";
   const perPound = listing.currency === "GBX" ? 100 : 1;
 
   return {
     ...answer,
-    // cost = a × p × n + b × n + c, with `a` dimensionless and `b` and `c` in the line's currency.
+    // cost (USD) = a × toUsd(p) × n + b × n + c. `b` and `c` are dollars.
     a: Number(a.toPrecision(4)),
-    b: Number(b.toPrecision(4)),
+    b: Number(b.toPrecision(6)),
+    ccy: QUOTE,
     listing,
     // What each term is made of, because a single coefficient hides which charge dominates — and
     // on a British share the tax is twenty-five times the book.
@@ -300,16 +335,18 @@ export function roundTripCost({ etf, place, currency, bp = null }) {
     cap: american ? { b: FINRA_CAP, why: "plafond FINRA par exécution, pas par ordre : un ordre découpé en cinq paie cinq plafonds" } : null,
     threshold: isBritish
       ? {
-          c: 2 * PTM.each * perPound,
-          currency: listing.currency,
+          c: Number(toUsd(2 * PTM.each, "GBP").toPrecision(6)),
+          currency: QUOTE,
           above: PTM.above * perPound,
+          aboveCurrency: listing.currency,
           why: `prélèvement PTM de ${PTM.each} £ par ordre et par sens, au-delà de ${PTM.above} £ de montant`,
         }
       : null,
     confidence: confidenceOf({ marketBp, marketPerShare, taxTotal, american, tax, type: listing.type }),
     // What real orders paid on this very line, when any have been placed. Reported so the figure
     // above can be judged, never folded into it.
-    check: checkFor(listing, marketBp),
+    check: checkFor(listing, { bp: marketBp, perShare: marketPerShare }),
+    fx: { quote: QUOTE, asOf: FX_AS_OF, listing: usdPer(listing.currency) },
     fxIfConverted: FX_EACH_WAY * 2,
   };
 }
@@ -356,13 +393,18 @@ function cryptoCost(row, answer) {
       ratio: Number((CRYPTO_CHECK.measured / CRYPTO_CHECK.quoted).toFixed(2)),
       note: row.ticker === CRYPTO_CHECK.pair ? null : `mesuré sur ${CRYPTO_CHECK.pair}, pas sur cette paire`,
     },
+    ccy: QUOTE,
+    fx: { quote: QUOTE, asOf: FX_AS_OF, listing: usdPer(listing.currency) },
     fxIfConverted: FX_EACH_WAY * 2,
   };
 }
 
 const checkFor = (listing, used) => {
   const check = CHECKS[`${listing.isin}|${listing.mic}|${listing.currency}`];
-  return check ? { ...check, ratio: used ? Number((check.bp / used).toFixed(2)) : null } : null;
+  if (!check) return null;
+  const published = used?.perShare ?? used?.bp;
+  const measured = check.perShare ?? check.bp;
+  return { ...check, ratio: published ? Number((measured / published).toFixed(2)) : null };
 };
 
 const listAlternatives = (named) =>
@@ -384,18 +426,18 @@ function confidenceOf({ marketBp, marketPerShare, taxTotal, american, tax, type 
         `le ${TAX_CHECK.on} ont coûté ${TAX_CHECK.paid} €, soit les ${(100 * TAX_CHECK.tax).toFixed(2)} % de taxe plus ${TAX_CHECK.residual} pb de carnet ; ` +
         `le timbre britannique a été vérifié de la même façon, à 0,5 % près du centime`
     );
-  } else if (tax?.assumedZero) {
+  } else if (tax?.assumedZero && !american) {
     said.push(tax.why);
-  } else if (tax && !tax.known) {
+  } else if (tax && !tax.known && !american) {
     said.push(`fiscalité non établie pour cette ligne : ${tax.why}`);
   }
 
   if (marketBp != null) {
-    // The error bar comes from twenty-seven round trips on funds. Two shares have since been
-    // round-tripped as well — Eutelsat and HSBC — and both landed within a basis point of the
-    // published book once tax and conversion were taken out, which is as much as two trades can
-    // say. Two is not twenty-seven, and the message says so rather than borrowing the funds'
-    // confidence for a family that has not earned it.
+    // The error bar comes from twenty-seven round trips on funds. Three shares have since been
+    // round-tripped as well — Eutelsat, HSBC, and Apple. The two European ones landed within a
+    // basis point of the published book once tax and conversion were taken out. Apple did not:
+    // Rule 605 is a hundred-share average, and one share paid eleven times that. The message
+    // says so rather than borrowing the funds' confidence for a family that has not earned it.
     const onFunds = type === "ETF" ? "" : ` — l'écart-type vient de fonds ; deux actions seulement ont été tradées, et toutes deux sont tombées à un point de base près`;
     said.push(
       marketBp <= NARROW_BP
@@ -404,10 +446,15 @@ function confidenceOf({ marketBp, marketPerShare, taxTotal, american, tax, type 
     );
   } else if (marketPerShare != null) {
     said.push(
-      `le carnet vient des rapports Rule 605, moyenne mensuelle des ordres de 100 à 499 parts ; ` +
+      `le carnet vient des rapports Rule 605, moyenne mensuelle des ordres de 100 à 499 parts` +
         (marketPerShare > 0.01
-          ? `à ${marketPerShare} $ par part le carnet est large, et sur un carnet large un ordre plus petit paie nettement plus que cette moyenne — mesuré six fois plus chez un autre courtier`
-          : `à ${marketPerShare} $ par part le carnet est serré et cette moyenne tient`)
+          ? ` ; à ${marketPerShare} $ par part ce bucket est déjà large`
+          : ` ; à ${marketPerShare} $ par part ce bucket est serré`)
+    );
+    said.push(
+      `une part de ${US_CHECK.pair} le ${US_CHECK.on} a coûté ${US_CHECK.paid} € (${US_CHECK.perShare} $ de carnet) ` +
+        `contre ${US_CHECK.published} $ publiés, soit ×${US_CHECK.ratio} — un ordre d'une part paie plus que cette moyenne, ` +
+        `et le 605 reste la figure pour un ordre de cent parts`
     );
   } else if (type !== "CRYPTO") {
     said.push(`aucun carnet relevé sur cette ligne : seules les taxes et les frais réglementaires sont comptés, le spread manque`);
@@ -455,12 +502,14 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     for (const [name, rate] of Object.entries(out.parts?.taxes ?? {})) detail.push(`${name} ${rate}`);
     if (out.parts?.réglementaire) detail.push(`SEC ${out.parts.réglementaire.SEC}`);
     console.log(`a = ${out.a}   (au prorata du montant${detail.length ? " : " + detail.join(" + ") : ""})`);
-    console.log(`b = ${out.b}   (par part${out.b ? " : taxe FINRA sur la vente" : " : rien"})`);
-    console.log(`c = ${out.c}   (par ordre : ni commission, ni garde, ni plateforme)`);
-    console.log(`\ncoût = ${out.a} × p × n + ${out.b} × n + ${out.c}   (${out.basis})`);
+    console.log(`b = ${out.b} $   (par part${out.b ? " : taxe FINRA sur la vente" : " : rien"})`);
+    console.log(`c = ${out.c} $   (par ordre : ni commission, ni garde, ni plateforme)`);
+    const fx = out.fx?.listing ?? usdPer(l.currency);
+    console.log(`\ncoût = ${out.a} × p × n × ${fx != null ? Number(fx.toPrecision(6)) : "?"} + ${out.b} × n + ${out.c}   ($ ; p en ${l.currency})`);
+    console.log(`  ${out.basis}`);
 
-    if (out.threshold) console.log(`  au-delà de ${out.threshold.above} ${out.threshold.currency}, ajouter ${out.threshold.c} — ${out.threshold.why}`);
-    if (out.cap) console.log(`  plafond sur b : ${out.cap.b} — ${out.cap.why}`);
+    if (out.threshold) console.log(`  au-delà de ${out.threshold.above} ${out.threshold.aboveCurrency || out.threshold.currency}, ajouter ${out.threshold.c} $ — ${out.threshold.why}`);
+    if (out.cap) console.log(`  plafond sur b : ${out.cap.b} $ — ${out.cap.why}`);
     if (out.quote) console.log(`  achat ${out.quote.achat}, vente ${out.quote.vente}, milieu ${out.quote.milieu}`);
     for (const line of out.confidence.split(" ; ")) console.log(`  ${line}`);
     if (out.check)
@@ -474,10 +523,13 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     const p = Number(flag("price"));
     if (n > 0 && p > 0) {
       const amount = n * p;
+      const amountUsd = toUsd(amount, l.currency);
       const extra = out.threshold && amount >= out.threshold.above ? out.threshold.c : 0;
-      console.log(`\n${n} part${n > 1 ? "s" : ""} à ${p} ${l.currency} = ${amount.toFixed(2)} ${l.currency}`);
-      console.log(`  aller-retour : ${(out.a * amount + out.b * n + out.c + extra).toFixed(3)} ${l.currency}${extra ? ` (dont ${extra} de prélèvement PTM)` : ""}`);
-      console.log(`  si la devise du compte diffère, ajouter ${(out.fxIfConverted * amount).toFixed(2)} ${l.currency} de change`);
+      console.log(`\n${n} part${n > 1 ? "s" : ""} à ${p} ${l.currency} = ${amount.toFixed(2)} ${l.currency}` + (amountUsd != null ? ` (${amountUsd.toFixed(2)} $)` : ""));
+      if (amountUsd != null) {
+        console.log(`  aller-retour : ${(out.a * amountUsd + out.b * n + out.c + extra).toFixed(3)} $${extra ? ` (dont ${extra} $ de prélèvement PTM)` : ""}`);
+        console.log(`  si la devise du compte diffère, ajouter ${(out.fxIfConverted * amountUsd).toFixed(2)} $ de change`);
+      }
     }
     if (out.url) console.log(`\n${out.url}`);
   }

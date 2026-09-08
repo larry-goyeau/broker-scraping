@@ -171,8 +171,12 @@ const ROOT_DIR = path.dirname(fileURLToPath(import.meta.url));
 for (const folder of brokers.keys()) {
   const file = path.join(ROOT_DIR, folder, `${folder}_cost.mjs`);
   if (!fs.existsSync(file)) continue;
-  const mod = await import(pathToFileURL(file));
-  if (typeof mod.roundTripCost === "function") estimators.set(folder, mod.roundTripCost);
+  try {
+    const mod = await import(pathToFileURL(file));
+    if (typeof mod.roundTripCost === "function") estimators.set(folder, mod.roundTripCost);
+  } catch (err) {
+    console.error(`estimateur ${folder} : ${err.message}`);
+  }
 }
 console.error(
   `estimateurs : ${[...estimators.keys()].join(", ") || "aucun"}`
@@ -189,6 +193,7 @@ function formatCost(cost) {
   if (!cost) return { spread: NA, perShare: NA, perOrder: NA };
   // a is a factor of the amount (the book in Europe, taxes, SEC). The American
   // book is published per share and already sits in b, so it must not appear here.
+  // b and c are dollars in every *_cost.mjs the page loads.
   return {
     spread: cost.a == null ? NA : `${fmtNum(cost.a * 100)}%`,
     perShare: cost.b == null ? NA : fmtNum(cost.b),

@@ -109,7 +109,7 @@ export const VENUES = [
       ARCX: ["arcx", "arca", "nysearca", "amex", "pcq", "nysemkt"],
       XNYS: ["xnys", "nyse", "newyorkstockexchange", "nys", "nsy", "usnyse"],
       XASE: ["xase", "nyseamerican", "americanstockexchange"],
-      BATS: ["bats", "batsz", "cboebzx", "bzx"],
+      BATS: ["bats", "batsz", "cboebzx", "bzx", "cboe"],
     }[mic],
     loose: { XNAS: ["nasdaqus"], ARCX: [], XNYS: ["newyork"], XASE: [], BATS: ["cboe"] }[mic],
   })),
@@ -148,7 +148,7 @@ export const VENUES = [
     name: "LS Exchange",
     source: "lsex",
     hours: { open: "07:30", close: "23:00", tz: "Europe/Berlin" },
-    exact: ["lsex", "lsx", "langschwarz", "langundschwarz", "lsexchange", "langschwarzexchange"],
+    exact: ["lsex", "lsx", "ls", "langschwarz", "langundschwarz", "lsexchange", "langschwarzexchange"],
     loose: [],
   },
   {
@@ -156,7 +156,7 @@ export const VENUES = [
     name: "Börse Düsseldorf",
     source: "quotrix",
     hours: { open: "08:00", close: "22:00", tz: "Europe/Berlin" },
-    exact: ["xqtx", "quotrix", "dusc", "dusd"],
+    exact: ["xqtx", "quotrix", "dusc", "dusd", "dus", "xdus", "dusseldorf", "duesseldorf"],
     loose: [],
   },
 ];
@@ -191,6 +191,53 @@ export const KNOWN_UNSOURCED = [
   { match: ["tase", "telaviv"], name: "Tel Aviv", why: "adaptateur non écrit" },
   { match: ["tse", "tyo", "tokyo"], name: "Tokyo", why: "adaptateur non écrit" },
   { match: ["hkex", "sehk", "hongkong"], name: "Hong Kong", why: "adaptateur non écrit" },
+  // Swissquote (and WH SelfInvest) write the German floor books as FWB / SWB / MUN /
+  // HAM / HAN. Those are not Xetra or gettex: Swissquote already has XETR and GETTEX
+  // as separate codes, and Munich's floor is not the gettex book.
+  { match: ["fwb", "xfra", "boersefrankfurt"], name: "Börse Frankfurt", why: "adaptateur non écrit" },
+  { match: ["swb", "xstu", "stuttgart", "boersestuttgart"], name: "Börse Stuttgart", why: "adaptateur non écrit" },
+  { match: ["mun", "xmuc"], name: "Börse München", why: "adaptateur non écrit" },
+  { match: ["ham", "xham", "hamburg", "boersehamburg"], name: "Börse Hamburg", why: "adaptateur non écrit" },
+  { match: ["han", "xhan", "hannover", "boersehannover"], name: "Börse Hannover", why: "adaptateur non écrit" },
+  { match: ["tsx", "xtse", "toronto"], name: "Toronto Stock Exchange", why: "adaptateur non écrit" },
+  { match: ["tsxv", "xtsx", "tsxventure"], name: "TSX Venture", why: "adaptateur non écrit" },
+  { match: ["asx", "xasx"], name: "ASX", why: "adaptateur non écrit" },
+  { match: ["set", "xbkk", "thailand"], name: "Stock Exchange of Thailand", why: "adaptateur non écrit" },
+  {
+    match: ["omx", "nasdaqomx", "nasdaqnordic"],
+    name: "Nasdaq Nordic",
+    why: "le broker ne dit pas laquelle des places nordiques",
+  },
+  { match: ["xcse", "copenhagen"], name: "Nasdaq Copenhagen", why: "adaptateur non écrit" },
+  { match: ["xsto", "stockholm"], name: "Nasdaq Stockholm", why: "adaptateur non écrit" },
+  { match: ["xhel", "helsinki"], name: "Nasdaq Helsinki", why: "adaptateur non écrit" },
+  { match: ["vie", "xwbo", "vienna", "wienerboerse"], name: "Wiener Börse", why: "adaptateur non écrit" },
+  { match: ["sgx", "xses", "singapore"], name: "Singapore Exchange", why: "adaptateur non écrit" },
+  { match: ["jse", "xjse", "johannesburg"], name: "Johannesburg Stock Exchange", why: "adaptateur non écrit" },
+  { match: ["osl", "xosl", "oslo"], name: "Oslo Børs", why: "adaptateur non écrit" },
+  { match: ["gpw", "xwar", "warsaw", "wse"], name: "Warsaw Stock Exchange", why: "adaptateur non écrit" },
+  { match: ["lsin"], name: "Lang & Schwarz International", why: "adaptateur non écrit" },
+  { match: ["luxse", "xlux", "luxembourg"], name: "Luxembourg Stock Exchange", why: "adaptateur non écrit" },
+  { match: ["nzx", "xnze"], name: "NZX", why: "adaptateur non écrit" },
+  { match: ["biva"], name: "BIVA", why: "adaptateur non écrit" },
+  { match: ["dfm", "dubai"], name: "Dubai Financial Market", why: "adaptateur non écrit" },
+  { match: ["crypto"], name: "Crypto", why: "gré à gré, pas un carnet unique" },
+  { match: ["bet", "xbse", "bucharest"], name: "Bucharest Stock Exchange", why: "adaptateur non écrit" },
+  { match: ["csecy", "xcys", "cyprus"], name: "Cyprus Stock Exchange", why: "adaptateur non écrit" },
+  { match: ["psecz", "xpra", "prague"], name: "Prague Stock Exchange", why: "adaptateur non écrit" },
+  { match: ["bx", "bxswiss"], name: "BX Swiss", why: "adaptateur non écrit" },
+  { match: ["bvc", "colombia"], name: "Bolsa de Valores de Colombia", why: "adaptateur non écrit" },
+  { match: ["bsesof", "xbul", "sofia"], name: "Bulgarian Stock Exchange", why: "adaptateur non écrit" },
+  { match: ["myx", "xkls", "malaysia"], name: "Bursa Malaysia", why: "adaptateur non écrit" },
+  { match: ["neo", "neoe"], name: "Cboe Canada", why: "adaptateur non écrit" },
+  { match: ["eurotlx"], name: "EuroTLX", why: "adaptateur non écrit" },
+  { match: ["pse", "xphs"], name: "Philippine Stock Exchange", why: "adaptateur non écrit" },
+  { match: ["nseke", "xnai", "nairobi"], name: "Nairobi Securities Exchange", why: "adaptateur non écrit" },
+  { match: ["aquis", "aqse"], name: "Aquis", why: "adaptateur non écrit" },
+  { match: ["bsse", "xbra", "bratislava"], name: "Bratislava Stock Exchange", why: "adaptateur non écrit" },
+  { match: ["nag", "xnag", "nagoya"], name: "Nagoya", why: "adaptateur non écrit" },
+  { match: ["nseng", "xngn", "nigeria"], name: "Nigerian Exchange", why: "adaptateur non écrit" },
+  { match: ["kse"], name: "Pakistan Stock Exchange", why: "adaptateur non écrit" },
 ];
 
 // "Deutsche Börse Xetra" has to reduce to the same token as "deutscheborsexetra", so
@@ -251,6 +298,23 @@ export function listingKey(row) {
   const currency = String(row.currency || "").toUpperCase() || "?";
   const place = venue?.mic || norm(row.exchange || row.venue || row.exchangeName) || "?";
   return { key: `${place}|${isin}|${currency}`, venue, assumed: Boolean(assumed), unsourced };
+}
+
+// Swissquote (and a few others) write "Euronext" without the city. Guessing Paris
+// would be the error this file exists to prevent — unless the cache holds exactly
+// one of the four books for that ISIN and currency, in which case there is nothing
+// to guess.
+const EURONEXT_MICS = ["XPAR", "XAMS", "XBRU", "XLIS"];
+
+export function spreadLeaf(spreads, { isin, mic, currency, unsourced }) {
+  const id = String(isin || "").toUpperCase();
+  const ccy = String(currency || "").toUpperCase();
+  if (id && mic && spreads[id]?.[mic]?.[ccy]) return { leaf: spreads[id][mic][ccy], mic };
+  const euronext = unsourced?.match?.includes("euronext");
+  if (!euronext || !id || !ccy) return { leaf: null, mic: mic || null };
+  const hits = EURONEXT_MICS.filter((m) => spreads[id]?.[m]?.[ccy]);
+  if (hits.length !== 1) return { leaf: null, mic: mic || null };
+  return { leaf: spreads[id][hits[0]][ccy], mic: hits[0], assumed: true };
 }
 
 // The page showing the book a figure came from, built from the venue and the line

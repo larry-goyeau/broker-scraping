@@ -1,0 +1,52 @@
+{
+  "runs": [
+    {
+      "at": "2026-09-08T16:15:42.000Z",
+      "live": true,
+      "symbol": "BTC",
+      "currency": "EUR",
+      "amount": 50,
+      "stockKey": {
+        "isin": "EX0X00XBT000",
+        "exchangeId": 31337,
+        "currency": "EUR"
+      },
+      "cash": 500,
+      "legs": {
+        "buy": {
+          "orderId": "41846041",
+          "isSuccess": true,
+          "quantity": 0.00074231,
+          "amounts": {
+            "brutAmount": 50,
+            "commissions": 0.5,
+            "totalEstimatedAmount": 50.5,
+            "currency": "EUR"
+          }
+        },
+        "sell": {
+          "orderId": "41846045",
+          "isSuccess": true,
+          "quantity": 0.00074231,
+          "amounts": {
+            "brutAmount": 49,
+            "commissions": 0.5,
+            "totalEstimatedAmount": 49.5,
+            "currency": "EUR"
+          }
+        }
+      },
+      "reconciliation": {
+        "cashBefore": 500,
+        "cashAfter": 499,
+        "paid": 1
+      },
+      "measured": {
+        "quantity": 0.00074231,
+        "paid": 1,
+        "measured": 0.02,
+        "published": 0.02
+      }
+    }
+  ]
+}

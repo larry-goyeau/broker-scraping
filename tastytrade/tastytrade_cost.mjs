@@ -1,9 +1,11 @@
 // What one round trip costs at tastytrade: buy n shares at price p, sell them back at once.
 //
-//   coût = a × p × n + b × n + c
+//   coût (USD) = a × p × n + b × n + c
 //
-// The same three terms as `trading212_cost.mjs`, and the front end can call either without
-// knowing which broker it is asking about. What differs is which term carries the weight.
+// The same three terms as `trading212_cost.mjs` and `swissquote_cost.mjs`, in the same
+// dollar unit, and the front end can call any of them without knowing which broker it is
+// asking about. This broker holds dollars and nothing else, so no conversion is required.
+// What differs is which term carries the weight.
 // At Trading212 everything sits in `a`, the spread being the whole bill. Here `a` is almost
 // empty and `b` is the real charge, because this broker takes no commission and the two fees
 // that remain are counted by the share.
@@ -45,9 +47,25 @@
 // So on a book wider than a tick, `b` is a round-lot price: for a smaller order, pass the quoted
 // touch as `perShare` and the formula becomes exact again.
 //
+// Shares use the same three fees as funds — tastytrade publishes one schedule for "stocks and
+// ETFs" — and the same 605 table, keyed by symbol. A share without a 605 line still answers,
+// as `frais seuls`, the way a fund does.
+//
+// Crypto does not. There is no SEC fee, no TAF, no clearing charge. Zero Hash marks the
+// execution up on the way in and down on the way out: 50 bp each way on BTC and ETH, 75 bp
+// on the other twenty-three pairs this catalogue carries. The round trip is therefore `a`
+// alone, 100 bp or 150 bp, and `b` is zero. That is the published barème.
+//
+// A $45 BTC ticket on 2026-09-08 paid none of that percentage. The two fills printed at the
+// displayed touch — 77657.65 in, 77657.64 out — and the account lost two dollars, one dollar
+// of brokerage on each leg, the amount the dry-run had reserved. `a` stays the published
+// rate; `floor` is that $2, which is the whole bill until the markup on a ticket exceeds a
+// dollar a side (about $200 of BTC). Do not fold the $2 into `a`: a larger order was not
+// traded, and a coefficient fitted on $45 would be the minimum wearing a percentage.
+//
 //   node tastytrade/tastytrade_cost.mjs ACWI NASDAQ USD
-//   node tastytrade/tastytrade_cost.mjs US4642882579 NASDAQ USD --shares=50 --price=160.87
-//   node tastytrade/tastytrade_cost.mjs IAU AMEX USD --json
+//   node tastytrade/tastytrade_cost.mjs AAPL NASDAQ USD --shares=1 --price=230
+//   node tastytrade/tastytrade_cost.mjs BTC/USD
 //   node tastytrade/tastytrade_cost.mjs --verify        -- rejoue le modèle sur les 23 ventes réelles
 //
 // `roundTripCost(...)` returns what the CLI prints and reads two files rather than the
@@ -56,6 +74,7 @@
 
 import fs from "node:fs";
 import { listingKey, resolveVenue } from "../venues.mjs";
+import { QUOTE } from "../fx.mjs";
 
 // Anchored to the repository rather than to whatever directory the shell happens to be in, so
 // this works both as `node tastytrade/tastytrade_cost.mjs` and from inside the folder.
@@ -100,6 +119,31 @@ const near = (value, step) => Math.round(value / step) * step;
 // one, which is exactly the folding a round-trip formula performs: clearing counts twice,
 // the TAF once.
 const PER_SHARE = 2 * CLEARING_PER_SHARE + TAF_PER_SHARE;
+
+// Crypto is a different product and a different bill. Zero Hash, not tastytrade, is the
+// dealer; it keeps a markup on the fill and tastytrade takes 65 % of that. The support
+// page splits the rate: 50 bp on BTC and ETH, 75 bp on everything else, each way — a
+// markdown on the sale, so a round trip pays it twice. No regulatory line attaches.
+const CRYPTO_MARKUP_EACH = { BTC: 0.005, ETH: 0.005 };
+const CRYPTO_MARKUP_OTHER = 0.0075;
+// One dollar a ticket, both legs, as the dry-run reserved and the $45 BTC trip paid.
+// Below ~$33 the published schedule caps this at 3 %; this account did not trade that small.
+const CRYPTO_COMMISSION_EACH = 1;
+const CRYPTO_CHECK = {
+  pair: "BTC/USD",
+  amount: 45,
+  paid: 2,
+  measured: 2 / 45,
+  published: 0.01,
+  commissionEach: CRYPTO_COMMISSION_EACH,
+  on: "2026-09-08",
+};
+
+function cryptoBase(symbol) {
+  const text = String(symbol || "").toUpperCase();
+  const cut = text.indexOf("/");
+  return cut >= 0 ? text.slice(0, cut) : text.replace(/USD$/, "");
+}
 
 // The 23 sell fills in the account's ledger for that day, as tastytrade reported them:
 // shares, proceeds, then the two fee lines it charged. Kept because they are what makes the
@@ -149,8 +193,18 @@ function findListing({ etf, place, currency }) {
   const wantPlace = loose(place);
   const wantCurrency = String(currency || "").toUpperCase();
 
-  const named = rows.filter((r) => loose(r.isin) === asked || loose(r.ticker) === asked);
+  const named = rows.filter((r) => {
+    if (loose(r.isin) === asked || loose(r.ticker) === asked) return true;
+    return r.type === "CRYPTO" && loose(cryptoBase(r.ticker)) === asked;
+  });
+
+  const crypto = named.filter((r) => r.type === "CRYPTO");
+  if (crypto.length && (!place || /crypto/i.test(place))) {
+    return { named, matches: [{ row: crypto[0], venue: null }] };
+  }
+
   const matches = named
+    .filter((r) => r.type !== "CRYPTO")
     .map((r) => ({ row: r, ...listingKey(r) }))
     .filter((m) => {
       if (!wantPlace) return true;
@@ -170,6 +224,7 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
     a: null,
     b: Number(PER_SHARE.toPrecision(6)),
     c: FLAT,
+    ccy: QUOTE,
     // Every sell's SEC line is rounded up to the cent, so no round trip is cheaper than
     // that cent however small it is. On one share of a 31-dollar fund it was the entire
     // regulatory charge.
@@ -182,6 +237,10 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
   };
 
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue tastytrade` };
+
+  const cryptoRow = named.find((r) => r.type === "CRYPTO");
+  if (cryptoRow && (!place || /crypto/i.test(place))) return cryptoCost(cryptoRow, answer);
+
   if (!matches.length)
     return {
       ...answer,
@@ -194,6 +253,7 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
     isin: String(m.row.isin || "").toUpperCase(),
     ticker: m.row.ticker || null,
     name: m.row.name || null,
+    type: m.row.type || null,
     mic: m.venue?.mic ?? null,
     exchange: m.venue?.name ?? m.row.exchange ?? null,
     currency: String(m.row.currency || "").toUpperCase(),
@@ -238,7 +298,7 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
     // minimum tick, so the improvement inside that figure is doing real work — and it is
     // exactly there that an odd lot stops receiving it. Price-free on purpose: the same test
     // has to hold whatever the share costs.
-    confidence: confidenceOf(marketBp ?? marketPerShare, m, (marketPerShare ?? 0) > 0.01),
+    confidence: confidenceOf(marketBp ?? marketPerShare, m, (marketPerShare ?? 0) > 0.01, listing.type),
     // tastytrade holds dollars and nothing else, so no conversion is charged by the broker.
     // What a euro-funded person pays to get dollars in is their bank's business and does not
     // belong to this formula.
@@ -271,6 +331,56 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
       market: perShareAgainstMeasured(),
       on: "2026-08-27",
     },
+  };
+}
+
+function cryptoCost(row, answer) {
+  const base = cryptoBase(row.ticker);
+  const each = CRYPTO_MARKUP_EACH[base] ?? CRYPTO_MARKUP_OTHER;
+  const roundTrip = each * 2;
+  const floor = CRYPTO_COMMISSION_EACH * 2;
+  const measuredOnThisPair = row.ticker === CRYPTO_CHECK.pair;
+  return {
+    ...answer,
+    a: Number(roundTrip.toPrecision(4)),
+    b: 0,
+    c: 0,
+    floor,
+    cap: null,
+    listing: {
+      isin: null,
+      ticker: row.ticker,
+      name: row.name,
+      type: "CRYPTO",
+      mic: null,
+      exchange: "tastytrade (Zero Hash)",
+      currency: String(row.currency || "USD").toUpperCase(),
+    },
+    parts: { marché: Number(roundTrip.toPrecision(4)), markupEachWay: each, commissionEachWay: CRYPTO_COMMISSION_EACH },
+    bp: Number((roundTrip * 1e4).toFixed(0)),
+    perShare: null,
+    url: "https://tastytrade.com/crypto/",
+    basis: "barème Zero Hash, markup à l'achat et markdown à la vente ; plancher 1 $ par ticket",
+    fees: { commission: CRYPTO_COMMISSION_EACH, secOfAmount: 0, tafPerShare: 0, clearingPerShareEachWay: 0 },
+    confidence:
+      `pas de frais SEC ni FINRA. Zero Hash publie ${Number((100 * each).toFixed(2))} % ` +
+      `sur chaque jambe (${base === "BTC" || base === "ETH" ? "50 bp, BTC et ETH" : "75 bp, hors BTC/ETH"}), ` +
+      `soit ${Number((100 * roundTrip).toFixed(2))} % l'aller-retour — c'est \`a\`. ` +
+      `Un aller-retour réel de ${CRYPTO_CHECK.amount} $ sur ${CRYPTO_CHECK.pair} a payé ` +
+      `${CRYPTO_CHECK.paid} $ (${(100 * CRYPTO_CHECK.measured).toFixed(2)} %), ` +
+      `soit ×${(CRYPTO_CHECK.measured / CRYPTO_CHECK.published).toFixed(2)} le barème : ` +
+      `les deux fills au touché affiché, 1 $ de courtage par jambe, le plancher. ` +
+      `Sous ~${(CRYPTO_COMMISSION_EACH / each).toFixed(0)} $ le plancher est toute la facture` +
+      (measuredOnThisPair ? "" : ` ; mesuré sur ${CRYPTO_CHECK.pair}, pas sur cette paire`),
+    check: {
+      bp: Number((1e4 * CRYPTO_CHECK.measured).toFixed(0)),
+      trips: 1,
+      range: [CRYPTO_CHECK.paid, CRYPTO_CHECK.paid],
+      on: CRYPTO_CHECK.on,
+      ratio: Number((CRYPTO_CHECK.measured / CRYPTO_CHECK.published).toFixed(2)),
+      note: measuredOnThisPair ? null : `mesuré sur ${CRYPTO_CHECK.pair}, pas sur cette paire`,
+    },
+    fxIfConverted: null,
   };
 }
 
@@ -386,18 +496,24 @@ const ledgerFees = () => {
 // covering odd lots. And they come from five firms rather than the seven that matter: Citadel
 // and Virtu are missing, and on a thin fund the five that can be read disagree by more than
 // the number itself, which is the honest width of it.
-const confidenceOf = (market, match, touchWide) =>
-  market != null
-    ? `frais exacts (23 ventes réelles reproduites), plus le spread effectif publié : moyenne ` +
+const confidenceOf = (market, match, touchWide, type) => {
+  const family = type === "STOCK" ? "actions" : "fonds";
+  const fees =
+    `frais exacts (même barème actions et ETF ; 23 ventes de fonds reproduites)`;
+  return market != null
+    ? `${fees}, plus le spread effectif publié : moyenne ` +
       `mensuelle sur les ordres immédiats de 100 à 499 parts, cinq teneurs, Citadel et Virtu manquants` +
       (touchWide
         ? `. ATTENTION carnet large : sous 100 parts, l'amélioration de prix que ce chiffre contient ` +
           `n'a pas lieu — six allers-retours de 10 parts ont payé 13 c/part sur AQLT contre 3,3 c publiés, ` +
           `soit la touche entière. Pour un ordre en lot rompu, passer la touche cotée en \`perShare\``
-        : "")
-    : `frais exacts (23 ventes réelles reproduites), mais AUCUN carnet : ${match.unsourced?.name || "cette place"}, ${match.unsourced?.why || "pas de source"}. ` +
+        : "") +
+      (type === "STOCK" ? `. Les allers-retours mesurés sont des fonds ; une action paie les mêmes frais, le carnet est le 605 de son symbole` : "")
+    : `${fees}, mais AUCUN carnet : ${match.unsourced?.name || "cette place"}, ${match.unsourced?.why || "pas de source"}. ` +
       `À lire comme un plancher. Sur un carnet coté au cent l'omission est sans biais (douze allers-retours, exécution moyenne 0,067 c/part, intervalle à 95 % contenant zéro) ; ` +
-      `sur le seul fonds mesuré à carnet large, 9 c cotés, elle a fait manquer 14 bp contre 2,2 bp de frais`;
+      `sur le seul fonds mesuré à carnet large, 9 c cotés, elle a fait manquer 14 bp contre 2,2 bp de frais` +
+      (type === "STOCK" ? ` — ${family} sans ligne 605 : mêmes frais, pas de carnet` : "");
+};
 
 // ------------------------------------------------------------------------------- entrée
 
@@ -423,9 +539,11 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 
   if (!etf) {
     console.error(
-      "usage : node tastytrade_cost.mjs <ETF|ISIN> <place> <devise> [--shares=n] [--price=p] [--bp=x] [--json]\n" +
+      "usage : node tastytrade_cost.mjs <ticker|ISIN|paire> [place] [devise] [--shares=n] [--price=p] [--bp=x] [--json]\n" +
         "        node tastytrade_cost.mjs --verify\n" +
-        "  ex.   node tastytrade_cost.mjs ACWI NASDAQ USD --shares=50 --price=160.87"
+        "  ex.   node tastytrade_cost.mjs ACWI NASDAQ USD --shares=50 --price=160.87\n" +
+        "        node tastytrade_cost.mjs AAPL NASDAQ USD --shares=1 --price=230\n" +
+        "        node tastytrade_cost.mjs BTC/USD --shares=1 --price=100000"
     );
     process.exit(2);
   }
@@ -445,29 +563,42 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     if (out.alternatives?.length) console.log(`\nce que tastytrade propose sous ce nom :\n  ${out.alternatives.join("\n  ")}`);
   } else {
     const l = out.listing;
+    const crypto = l.type === "CRYPTO";
     console.log(`${l.ticker || l.isin} — ${l.name || ""}`);
-    console.log(`${l.exchange}${l.mic ? ` (${l.mic})` : ""}, ${l.currency}\n`);
-    console.log(`a = ${out.a}   (au prorata du montant : frais SEC 0,0000206${out.bp ? ` + ${out.bp} bp de carnet` : ""})`);
-    console.log(
-      `b = ${out.b}   (par part : compensation 0,0008 aux deux jambes + TAF 0,000195 à la vente` +
-        `${out.perShare ? ` + ${out.perShare} de spread effectif` : ""})`
-    );
-    console.log(`c = ${out.c}   (par ordre : aucune commission)`);
-    console.log(`\ncoût = ${out.a} × p × n + ${out.b} × n + ${out.c}   (${out.basis})`);
-    console.log(`  plancher ${out.floor} ${l.currency} : les frais SEC s'arrondissent au centime supérieur`);
+    console.log(`${l.exchange}${l.mic ? ` (${l.mic})` : ""}, ${l.currency}${l.type ? `, ${l.type.toLowerCase()}` : ""}\n`);
+    if (crypto) {
+      console.log(`a = ${out.a}   (au prorata du montant : markup Zero Hash ${out.parts?.markupEachWay} chaque sens)`);
+      console.log(`b = ${out.b} $   (par part : rien)`);
+    } else {
+      console.log(`a = ${out.a}   (au prorata du montant : frais SEC 0,0000206${out.bp ? ` + ${out.bp} bp de carnet` : ""})`);
+      console.log(
+        `b = ${out.b} $   (par part : compensation 0,0008 aux deux jambes + TAF 0,000195 à la vente` +
+          `${out.perShare ? ` + ${out.perShare} de spread effectif` : ""})`
+      );
+    }
+    console.log(`c = ${out.c} $   (par ordre : ${crypto ? `aucune commission en plus du plancher ${out.floor} $` : "aucune commission"})`);
+    console.log(`\ncoût = ${out.a} × p × n + ${out.b} × n + ${out.c}   ($ ; ${out.basis})`);
+    if (crypto) console.log(`  plancher ${out.floor} ${l.currency} : 1 $ de courtage à chaque jambe, le ticket de ${CRYPTO_CHECK.amount} $ l'a payé entier`);
+    else console.log(`  plancher ${out.floor} ${l.currency} : les frais SEC s'arrondissent au centime supérieur`);
     console.log(`  ${out.confidence}`);
 
     const n = Number(flag("shares"));
     const p = Number(flag("price"));
     if (n > 0 && p > 0) {
       const affine = out.a * p * n + out.b * n + out.c;
-      const e = exactCost({ shares: n, price: p, bp: out.bp, perShare: out.perShare });
+      const billed = crypto && out.floor != null ? Math.max(out.floor, affine) : affine;
       console.log(`\n${n} part${n > 1 ? "s" : ""} à ${p} ${l.currency} = ${(n * p).toFixed(2)} ${l.currency}`);
       console.log(`  forme affine  : ${affine.toFixed(4)} ${l.currency}   soit ${((affine / (n * p)) * 1e4).toFixed(2)} bp`);
-      console.log(`  arrondis pris : ${e.total.toFixed(4)} ${l.currency}   (SEC ${e.sec.toFixed(3)} + TAF ${e.taf.toFixed(3)} + compensation ${e.clearing.toFixed(3)}${e.market ? ` + carnet ${e.market.toFixed(3)}` : ""})`);
-      const gap = e.total - affine;
-      if (Math.abs(gap) >= 0.0005)
-        console.log(`  l'arrondi ajoute ${gap > 0 ? "+" : ""}${gap.toFixed(4)} ${l.currency}, ${((gap / affine) * 100).toFixed(0)} %`);
+      if (crypto && billed !== affine) {
+        console.log(`  avec plancher : ${billed.toFixed(4)} ${l.currency}   soit ${((billed / (n * p)) * 1e4).toFixed(2)} bp`);
+      }
+      if (!crypto) {
+        const e = exactCost({ shares: n, price: p, bp: out.bp, perShare: out.perShare });
+        console.log(`  arrondis pris : ${e.total.toFixed(4)} ${l.currency}   (SEC ${e.sec.toFixed(3)} + TAF ${e.taf.toFixed(3)} + compensation ${e.clearing.toFixed(3)}${e.market ? ` + carnet ${e.market.toFixed(3)}` : ""})`);
+        const gap = e.total - affine;
+        if (Math.abs(gap) >= 0.0005)
+          console.log(`  l'arrondi ajoute ${gap > 0 ? "+" : ""}${gap.toFixed(4)} ${l.currency}, ${((gap / affine) * 100).toFixed(0)} %`);
+      }
     }
     if (out.url) console.log(`\n${out.url}`);
   }

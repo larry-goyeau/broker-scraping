@@ -22,22 +22,42 @@
         min-height: 100vh;
       }
       main { width: min(920px, calc(100% - 40px)); margin: 0 auto; padding: 56px 0 80px; text-align: center; }
-      h1 { margin: 0 0 10px; font-size: 42px; letter-spacing: -0.03em; font-weight: 650; }
+      h1 { margin: 0 0 36px; font-size: 42px; letter-spacing: -0.03em; font-weight: 650; }
       .lede { margin: 0 auto 28px; max-width: 38em; color: var(--mute); }
       .search { position: relative; }
+      .search-row { position: relative; }
       #q {
+        display: block;
         width: 100%;
         border: 1px solid var(--ink);
         background: var(--card);
         color: var(--ink);
         border-radius: 2px;
-        padding: 16px 18px;
+        padding: 16px 52px 16px 18px;
         font: inherit;
         font-size: 18px;
-        text-align: center;
+        text-align: left;
         outline: none;
       }
       #q:focus { box-shadow: 4px 4px 0 var(--green); }
+      #go {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        border: 0;
+        border-radius: 50%;
+        background: transparent;
+        color: var(--ink);
+        cursor: pointer;
+        display: grid;
+        place-items: center;
+      }
+      #go:hover { background: var(--green-soft); color: var(--green); }
+      #go svg { display: block; width: 20px; height: 20px; }
       #suggest {
         position: absolute;
         z-index: 2;
@@ -121,12 +141,16 @@
   <body>
     <main>
       <h1>Where to buy stock, ETF, crypto ....</h1>
-      <p class="lede">
-        A ticker, an ISIN or a name. The list is the union of scraped catalogues —
-        only brokers already in this repository.
-      </p>
       <div class="search">
-        <input id="q" type="search" placeholder="IWDA, Apple, IE00B4L5Y983…" autocomplete="off" autofocus />
+        <div class="search-row">
+          <input id="q" type="search" placeholder="IWDA, Apple, IE00B4L5Y983…" autocomplete="off" autofocus />
+          <button id="go" type="button" aria-label="Search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" />
+              <path d="M20 20l-3.5-3.5" />
+            </svg>
+          </button>
+        </div>
         <ul id="suggest" hidden></ul>
       </div>
       <p id="meta" class="meta"></p>
@@ -135,6 +159,7 @@
     </main>
     <script>
       const q = document.getElementById("q");
+      const goBtn = document.getElementById("go");
       const suggest = document.getElementById("suggest");
       const meta = document.getElementById("meta");
       const result = document.getElementById("result");
@@ -267,16 +292,19 @@
           renderSuggest();
         } else if (e.key === "Enter") {
           e.preventDefault();
-          const go = async () => {
-            if (!hits.length && q.value.trim()) await lookup(q.value.trim());
-            if (hits[cursor] || hits[0]) pick(hits[cursor] || hits[0]);
-            else if (q.value.trim()) show(q.value.trim().toUpperCase());
-          };
-          go();
+          submit();
         } else if (e.key === "Escape") {
           suggest.hidden = true;
         }
       });
+
+      async function submit() {
+        if (!hits.length && q.value.trim()) await lookup(q.value.trim());
+        if (hits[cursor] || hits[0]) pick(hits[cursor] || hits[0]);
+        else if (q.value.trim()) show(q.value.trim().toUpperCase());
+      }
+
+      goBtn.addEventListener("click", submit);
 
       suggest.addEventListener("mousedown", (e) => {
         const btn = e.target.closest("button");

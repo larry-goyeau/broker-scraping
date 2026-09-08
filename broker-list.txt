@@ -1,12 +1,12 @@
 Interactive Brokers	US	Broker	Global ETFs / ETPs	https://www.interactivebrokers.com/
 Alpaca	US	Broker	US ETFs / ETNs	https://alpaca.markets
 Firstrade	US	Broker	US ETFs / ETNs	https://firstrade.com/
-SogoTrade	US	Broker	US ETFs / ETNs	https://www.sogotrade.com/account.aspx
+SogoTrade	US	Broker	US ETFs / ETNs	https://www.sogotrade.com/
 tastytrade	US	Broker	US ETFs / ETNs	https://www.tastytrade.com/
-TradeStation	US	Broker	US ETFs / ETNs	https://www.tradestation.com/accounts/individual-and-joint/
-Tradier	US	Broker	US ETFs / ETNs	https://tradier.com/individuals/hub
+TradeStation	US	Broker	US ETFs / ETNs	https://www.tradestation.com/
+Tradier	US	Broker	US ETFs / ETNs	https://tradier.com/
 TradeZero	US	Broker	US ETFs / ETNs	https://tradezero.com/en-us
-ChoiceTrade	US	Broker	US ETFs / ETNs	https://www.choicetrade.com/apply
+ChoiceTrade	US	Broker	US ETFs / ETNs	https://www.choicetrade.com/
 Charles Schwab	US	Broker	US ETFs / ETNs	https://www.schwab.com/
 Fidelity Investments	US	Broker	US ETFs / ETNs	https://www.fidelity.com/open-account/overview
 Vanguard Brokerage	US	Broker	US ETFs / ETNs	https://investor.vanguard.com/accounts-plans/brokerage-accounts
@@ -42,7 +42,7 @@ Truist Trade	US	Bank	US ETFs / ETNs	https://www.truist.com/investing-retirement/
 PNC Brokerage Plus	US	Bank	US ETFs / ETNs	https://www.pnc.com/en/personal-banking/investments-and-retirement/brokerage-accounts/brokerage-accounts-faqs.html
 Betterment	US	Neobroker	US ETFs / ETNs	https://www.betterment.com/self-directed-investing
 Titan	US	Neobroker	US ETFs / ETNs	https://www.titan.com/
-Questrade	CA	Broker	Local + US ETFs	https://www.questrade.com/account-selection
+Questrade	CA	Broker	Local + US ETFs	https://www.questrade.com/
 Wealthsimple	CA	Neobroker	Local + US ETFs	https://www.wealthsimple.com/en-ca/accounts/non-registered
 Qtrade Direct Investing	CA	Broker	Local + US ETFs	https://www.qtrade.ca/en/investor/apply.html
 TD Direct Investing	CA	Bank	Local + US ETFs	https://www.td.com/ca/en/investing/direct-investing
@@ -55,7 +55,7 @@ Desjardins Online Brokerage	CA	Bank	Local + US ETFs	https://www.disnat.com/en/
 CI Direct Trading	CA	Broker	Local + US ETFs	https://www.cifinancial.com/ci-dt/ca/en/trade/account-types.html
 Webull Canada	CA	Neobroker	Local + US ETFs	https://www.webull.ca/trading-investing/stocks
 Moomoo Canada	CA	Neobroker	Local + US ETFs	https://www.moomoo.com/ca/
-IG	UK	Broker	Global ETFs / ETPs	https://www.ig.com/uk/create-account
+IG	UK	Broker	Global ETFs / ETPs	https://www.ig.com/
 Trading 212	UK	Neobroker	UCITS ETFs / ETCs	https://www.trading212.com/
 Lightyear	UK	Neobroker	UCITS ETFs / ETCs	https://lightyear.com/en-gb
 Revolut	UK	Neobroker	UCITS ETFs / ETCs	https://www.revolut.com/stocks/
@@ -89,18 +89,18 @@ Killik & Co	UK	Broker	UCITS ETFs / ETCs	https://killik.com/what-we-offer/investm
 Saxo UK	UK	Bank	Global ETFs / ETPs	https://www.home.saxo/en-gb/accounts/openaccount
 Moneyfarm	UK	Neobroker	UCITS ETFs / ETCs	https://www.moneyfarm.com/uk/
 EQi	UK	Broker	UCITS ETFs / ETCs	https://eqi.co.uk/
-Davy Select	IE	Broker	UCITS ETFs / ETCs	https://www.davyselect.ie/open-account
+Davy Select	IE	Broker	UCITS ETFs / ETCs	https://www.davyselect.ie/
 Goodbody	IE	Broker	UCITS ETFs / ETCs	https://www.goodbody.ie/individuals/self-invest/
 Cantor Fitzgerald Ireland	IE	Broker	UCITS ETFs / ETCs	https://cantorfitzgerald.ie/private-clients/
 Trade Republic	DE	Neobroker	UCITS ETFs / ETCs	https://traderepublic.com/de-de
-CapTrader	DE	Broker	Global ETFs / ETPs	https://www.captrader.com/depot-eroeffnen/
+CapTrader	DE	Broker	Global ETFs / ETPs	https://www.captrader.com/
 Scalable Capital	DE	Neobroker	UCITS ETFs / ETCs	https://de.scalable.capital/trading
 comdirect	DE	Bank	UCITS ETFs / ETCs	https://www.comdirect.de/depot/comdirect-depot.html
 ING Deutschland	DE	Bank	UCITS ETFs / ETCs	https://www.ing.de/sparen-anlegen/direkt-depot/
 DKB Broker	DE	Bank	UCITS ETFs / ETCs	https://www.dkb.de/privatkunden/investieren/depot
 Consorsbank	DE	Bank	UCITS ETFs / ETCs	https://www.consorsbank.de/web/Wertpapierhandel/Wertpapierdepot
 flatex	DE	Broker	UCITS ETFs / ETCs	https://www.flatex.de/depot/
-N26	DE	Bank	UCITS ETFs / ETCs	https://n26.com/de-de/konto-eroeffnen
+N26	DE	Bank	UCITS ETFs / ETCs	https://n26.com/
 Commerzbank	DE	Bank	UCITS ETFs / ETCs	https://www.commerzbank.de/privatkunden/investieren/depot/depot-eroeffnen/
 1822direkt	DE	Bank	UCITS ETFs / ETCs	https://www.1822direkt.de/anlegen-depot/wertpapierdepot/
 S Broker (Sparkasse)	DE	Bank	UCITS ETFs / ETCs	https://www.sbroker.de/service/leistungen/depoteroeffnung
@@ -117,7 +117,7 @@ BANX Broker	DE	Broker	Global ETFs / ETPs	https://www.banx.de/
 Estably	DE	Broker	Global ETFs / ETPs	https://estably.broker/depot/
 Vivid Money	DE	Neobroker	UCITS ETFs / ETCs	https://vivid.money/de-de/personal/
 HypoVereinsbank (HVB)	DE	Bank	UCITS ETFs / ETCs	https://www.hypovereinsbank.de/hvb/privatkunden/geldanlage/depotmodelle/smart-depot
-Swissquote	CH	Bank	Global ETFs / ETPs	https://www.swissquote.com/en-ch/become-client/open-account
+Swissquote	CH	Bank	Global ETFs / ETPs	https://www.swissquote.com/
 PostFinance	CH	Bank	Global ETFs / ETPs	https://www.postfinance.ch/en/private/investing/solutions/online-trading/e-trading.html
 UBS key4 / e-banking	CH	Bank	Global ETFs / ETPs	https://www.ubs.com/ch/en/services/digital-banking/mobile-banking/key4.html
 Cornèrtrader	CH	Bank	Global ETFs / ETPs	https://www.cornertrader.ch/en/
@@ -146,7 +146,7 @@ Bank Austria	AT	Bank	UCITS ETFs / ETCs	https://www.bankaustria.at/geld-anlegen-d
 BAWAG	AT	Bank	UCITS ETFs / ETCs	https://www.bawag.at/bawag/privatkunden/investieren/depot
 Oberbank	AT	Bank	UCITS ETFs / ETCs	https://www.oberbank.at/wertpapier-infos
 DEGIRO	NL	Broker	UCITS ETFs / ETCs	https://www.degiro.nl/
-BUX	NL	Neobroker	UCITS ETFs / ETCs	https://register.getbux.com/nl/welcome
+BUX	NL	Neobroker	UCITS ETFs / ETCs	https://getbux.com/
 bunq	NL	Neobroker	UCITS ETFs / ETCs	https://www.bunq.com/investments
 ING Nederland	NL	Bank	UCITS ETFs / ETCs	https://www.ing.nl/particulier/beleggen/beleggen-bij-ing/zelf-op-de-beurs
 Rabobank	NL	Bank	UCITS ETFs / ETCs	https://www.rabobank.nl/particulieren/beleggen/rabo-zelf-beleggen
@@ -239,7 +239,7 @@ Piraeus Securities	GR	Broker	UCITS ETFs / ETCs	https://www.piraeus-sec.gr/el/idi
 National Securities (NBG)	GR	Broker	UCITS ETFs / ETCs	https://www.nbgsecurities.com
 Euroxx Securities	GR	Broker	Global ETFs / ETPs	https://www.euroxx.gr/en/home
 BETA Securities	GR	Broker	Global ETFs / ETPs	https://betasecurities.com/online-trading-beta/
-Saxo Bank	DK	Bank	Global ETFs / ETPs	https://www.home.saxo/da-dk/accounts/openaccount
+Saxo Bank	DK	Bank	Global ETFs / ETPs	https://www.home.saxo/
 Danske Bank	DK	Bank	UCITS ETFs / ETCs	https://danskebank.dk/privat/produkter/investering/online-investering
 Jyske Bank	DK	Bank	UCITS ETFs / ETCs	https://www.jyskebank.dk/investering
 Sydbank	DK	Bank	UCITS ETFs / ETCs	https://www.sydbank.dk/privat/produkter/investering
@@ -305,7 +305,7 @@ Raiffeisen Online Befektetés	HU	Bank	Global ETFs / ETPs	https://www.raiffeisen.
 CIB eBroker	HU	Bank	Global ETFs / ETPs	https://www.cib.hu/Maganszemelyek/digitalis_bank/eBroker.html
 BT Trade (Banca Transilvania)	RO	Bank	UCITS ETFs / ETCs	https://www.bancatransilvania.ro/economii-si-investitii/investitii/investitii-la-bursa
 Tradeville	RO	Broker	UCITS ETFs / ETCs	https://tradeville.ro/
-Investimental	RO	Broker	UCITS ETFs / ETCs	https://www.investimental.ro/deschidere-cont/
+Investimental	RO	Broker	UCITS ETFs / ETCs	https://www.investimental.ro/
 Goldring	RO	Broker	Local-market ETFs	https://www.goldring.ro/
 BRK Financial Group	RO	Broker	Global ETFs / ETPs	https://my.brk.ro
 Swiss Capital	RO	Broker	Global ETFs / ETPs	https://swisscapital.ro/ro/
@@ -336,7 +336,7 @@ Citadele C Trade	LV	Bank	UCITS ETFs / ETCs	https://www.citadele.lv/lv/private/c-
 BluOr Bank	LV	Bank	Global ETFs / ETPs	https://bluorbank.lv/en/brokerage-services
 SEB Baltics	LT	Bank	UCITS ETFs / ETCs	https://www.seb.lt/privatiems/taupymas-ir-investavimas/investavimas/vertybiniu-popieriu-saskaita
 Artea Bank	LT	Bank	Global ETFs / ETPs	https://www.artea.lt/lt/privatiems/taupymas-investavimas/apie-investavima/investicine-saskaita
-Admirals	CY	Broker	Global ETFs / ETPs	https://admiralmarkets.com/start-trading
+Admirals	CY	Broker	Global ETFs / ETPs	https://admiralmarkets.com/
 CISCO	CY	Broker	Global ETFs / ETPs	https://cisco-online.com.cy/
 Bank of Cyprus	CY	Bank	Global ETFs / ETPs	https://www.bankofcyprus.com/en-gb/Personal/investments/markets-hedging/personal-equites-and-funds/
 Freedom24	CY	Broker	Global ETFs / ETPs	https://freedom24.com/
@@ -348,12 +348,12 @@ Baraka	AE	Neobroker	US ETFs / ETNs	https://getbaraka.com/
 Emirates NBD Securities	AE	Bank	Local + US ETFs	https://www.emiratesnbdsecurities.com/en/apply-now
 ADCB Securities	AE	Bank	Local-market ETFs	https://www.adcbsecurities.com/en/
 FAB Securities	AE	Bank	Local-market ETFs	https://www.bankfab.com/en-ae/subsidiaries/fab-securities
-Century Financial	AE	Broker	Global ETFs / ETPs	https://www.century.ae/en/open-live-account/
+Century Financial	AE	Broker	Global ETFs / ETPs	https://www.century.ae/
 Wio Invest	AE	Bank	Global ETFs / ETPs	https://wioinvest.io
 Mashreq US Stocks & ETFs	AE	Bank	US ETFs / ETNs	https://www.mashreq.com/en/uae/neo/investments/investments-us-stocks-etf/
 Al Ramz Capital	AE	Broker	Local-market ETFs	https://www.alramz.ae/our-platform
 International Securities	AE	Broker	Global ETFs / ETPs	https://www.intlsecurities.ae/account-opening.aspx
-BHM Capital	AE	Broker	Local-market ETFs	https://www.bhmuae.ae/open-an-account/
+BHM Capital	AE	Broker	Local-market ETFs	https://www.bhmuae.ae/
 HSBC WorldTrader UAE	AE	Bank	Global ETFs / ETPs	https://www.hsbc.ae/investments/products/worldtrader/
 CBD Self Investr	AE	Bank	US ETFs / ETNs	https://www.cbd.ae/cbdinvestr/self-investors.html
 Derayah Financial	SA	Broker	Local + US ETFs	https://online.derayah.com/account/Register
@@ -757,6 +757,6 @@ Creand	AD	Bank	Global ETFs / ETPs	https://creand.ad/
 United Securities Oman	OM	Broker	Global ETFs / ETPs	https://usoman.com/Download-Forms.html
 Ubhar Capital (U-Capital)	OM	Broker	Global ETFs / ETPs	https://u-capital.net/u-capital-brokerage/
 eToro	Global	Neobroker	Global ETFs / ETPs	https://www.etoro.com/
-Quantfury	Global	Neobroker	Global ETFs / ETPs	https://trading.quantfury.com/auth/registration
-MEXEM	Global	Broker	Global ETFs / ETPs	https://www.mexem.com/account
+Quantfury	Global	Neobroker	Global ETFs / ETPs	https://quantfury.com/
+MEXEM	Global	Broker	Global ETFs / ETPs	https://www.mexem.com/
 Plus500 Invest	Global	Broker	Global ETFs / ETPs	https://www.plus500.com/

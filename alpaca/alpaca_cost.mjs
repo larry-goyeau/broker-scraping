@@ -63,6 +63,9 @@ const CAT_OTC_EQUIV = 0.01;
 const COMMISSION_RATE = 0;
 const CRYPTO_TAKER = 0.0025;
 const CRYPTO_MAKER = 0.0015;
+const REMARK_EQUITY = "Regulatory floor $0.03/day.";
+const REMARK_CRYPTO =
+  "0.50% taker (tier 1). Instant ACH cash is not available for crypto until settled.";
 
 const CHECK = {
   symbol: "IAU",
@@ -239,6 +242,7 @@ export function roundTripCost({
     }),
     fxIfConverted: null,
     measured: CHECK,
+    remark: REMARK_EQUITY,
   };
 }
 
@@ -261,6 +265,7 @@ function cryptoCost(row, answer) {
     cap: null,
     listing,
     feeMarket: "crypto",
+    remark: REMARK_CRYPTO,
     parts: { markupEachWay: CRYPTO_TAKER, makerEachWay: CRYPTO_MAKER },
     bp: Number((CRYPTO_TAKER * 2 * 1e4).toFixed(0)),
     perShare: null,

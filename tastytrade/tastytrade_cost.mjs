@@ -303,6 +303,7 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
     // What a euro-funded person pays to get dollars in is their bank's business and does not
     // belong to this formula.
     fxIfConverted: null,
+    remark: "Clearing $0.0016/share.",
     // Named apart from the Trading212 file's `check` on purpose: there it reports what real
     // orders paid on that very line, here it reports that the fee arithmetic reproduces a
     // ledger. A front end that treated the two as the same field would compare a measured
@@ -361,6 +362,7 @@ function cryptoCost(row, answer) {
     perShare: null,
     url: "https://tastytrade.com/crypto/",
     basis: "barème Zero Hash, markup à l'achat et markdown à la vente ; plancher 1 $ par ticket",
+    remark: "min fees $2 (Zero Hash).",
     fees: { commission: CRYPTO_COMMISSION_EACH, secOfAmount: 0, tafPerShare: 0, clearingPerShareEachWay: 0 },
     confidence:
       `pas de frais SEC ni FINRA. Zero Hash publie ${Number((100 * each).toFixed(2))} % ` +

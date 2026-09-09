@@ -1,245 +1,246 @@
 import puppeteer from "puppeteer-core";
 import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { spawnSync } from "node:child_process";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-function normalizeTicker(value) {
-  const text = (value || "").trim().toUpperCase();
-  if (!text) return "";
-
-  const firstColumn = text.split(",")[0].trim();
-  const afterExchange = firstColumn.includes(":") ? firstColumn.split(":").pop() : firstColumn;
-  return (afterExchange || "").split(/[./-]/)[0].trim();
+function normalize(value) {
+  return String(value ?? "").replace(/\s+/g, " ").trim();
 }
 
 function toIsin(value) {
-  const text = (value || "").trim().toUpperCase();
+  const text = normalize(value).toUpperCase();
   if (!text) return "";
   const match = text.match(/\b[A-Z]{2}[A-Z0-9]{10}\b/);
   return match ? match[0] : "";
 }
 
-function loadTickersFromCsv(csvPath) {
-  if (!fs.existsSync(csvPath)) return [];
-
-  const content = fs.readFileSync(csvPath, "utf8");
-  return content
-    .split(/\r?\n/)
-    .map((line) => normalizeTicker(line))
-    .filter(Boolean);
+function normalizeTicker(value) {
+  const text = normalize(value).toUpperCase();
+  if (!text) return "";
+  const firstColumn = text.split(",")[0].trim();
+  const afterExchange = firstColumn.includes(":") ? firstColumn.split(":").pop() : firstColumn;
+  return (afterExchange || "").replace(/[\s/]+/g, ".").trim();
 }
 
-function loadTickerToIsinFromCsv(csvPath) {
-  if (!fs.existsSync(csvPath)) return new Map();
+function pathArg(flag, fallback) {
+  for (const arg of process.argv.slice(2)) {
+    const match = arg.match(new RegExp(`^--${flag}=(.+)$`, "i"));
+    if (match) return match[1];
+  }
+  return fallback ? new URL(fallback, import.meta.url) : "";
+}
 
-  const content = fs.readFileSync(csvPath, "utf8");
-  const map = new Map();
+function numberArg(flag, fallback) {
+  for (const arg of process.argv.slice(2)) {
+    const match = arg.match(new RegExp(`^--${flag}=(\\d+)$`, "i"));
+    if (match) return parseInt(match[1], 10);
+  }
+  return fallback;
+}
 
-  for (const line of content.split(/\r?\n/)) {
-    if (!line.trim()) continue;
+function hasFlag(name) {
+  return process.argv.slice(2).some((arg) => new RegExp(`^--${name}$`, "i").test(arg));
+}
 
-    const cols = line.split(",");
-    const ticker = normalizeTicker(cols[0]);
-    if (!ticker) continue;
+function loadByIsin(csvPath, kind, index = new Map()) {
+  if (!csvPath || !fs.existsSync(csvPath)) return index;
 
-    // Supports both: symbol,isin,name and symbol,exchange,isin,name.
-    const isin = toIsin(cols[2]) || toIsin(cols[1]) || cols.map(toIsin).find(Boolean) || "";
+  for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
+    if (!line.trim() || /^ticker\s*,/i.test(line)) continue;
+    const columns = line.split(",");
+    const isin = toIsin(columns[2]) || toIsin(columns[1]) || columns.map(toIsin).find(Boolean);
     if (!isin) continue;
-
-    if (!map.has(ticker)) map.set(ticker, isin);
+    const name = normalize(columns.slice(3).join(","));
+    const exchange = normalize(columns[1]).toUpperCase();
+    const entry = index.get(isin);
+    if (!entry) {
+      index.set(isin, {
+        isin,
+        kind,
+        names: name ? [name] : [],
+        exchange,
+        exchanges: new Set(exchange ? [exchange] : []),
+      });
+    } else {
+      if (exchange) entry.exchanges.add(exchange);
+      if (name && !entry.names.includes(name)) entry.names.push(name);
+    }
   }
-
-  return map;
+  return index;
 }
 
-function uniqueQueries(values) {
-  const seen = new Set();
-  return values.filter((value) => {
-    const key = value.toUpperCase();
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
+const US_VENUES = ["NASDAQ", "NYSE", "AMEX", "CBOE", "OTC"];
+
+const SUFFIX_VENUE = {
+  US: "NYSE",
+  DE: "XETR",
+  UK: "LSE",
+  PL: "WSE",
+  ES: "BME",
+  FR: "EURONEXT",
+  DK: "OMX",
+  ETF: "XETR",
+};
+
+function listingType(suffix, name) {
+  if (suffix === "ETF") {
+    if (/\bETNs?\b/i.test(name)) return "ETN";
+    const withoutParens = name.replace(/\([^)]*\)/g, " ");
+    if (/\bETCs?\b/i.test(withoutParens) && !/\bETFs?\b/i.test(name) && !/^ETC\b/i.test(name)) {
+      return "ETC";
+    }
+    return "ETF";
+  }
+  return "STOCK";
+}
+
+function venueOf(suffix, match) {
+  if (suffix === "US" && match?.exchanges) {
+    for (const code of US_VENUES) {
+      if (code === "CBOE") continue;
+      if (match.exchanges.has(code)) return code;
+    }
+  }
+  if (suffix === "ETF" && match?.exchanges) {
+    for (const code of ["XETR", "LSE", "EURONEXT", "MIL", "SIX", "AMEX", "NASDAQ", "NYSE"]) {
+      if (match.exchanges.has(code)) return code;
+    }
+    if (match.exchange) return match.exchange;
+  }
+  if (match?.exchange && suffix === "US") return match.exchange;
+  return SUFFIX_VENUE[suffix] || match?.exchange || "";
+}
+
+function currencyOf(code) {
+  const text = normalize(code).toUpperCase();
+  if (text === "GBX" || text === "GBP") return "GBP";
+  return /^[A-Z]{3}$/.test(text) ? text : "";
+}
+
+function parseBook(text) {
+  const rows = [];
+  const pattern =
+    /^([A-Z0-9][A-Z0-9.]{0,15})\.(US|DE|UK|PL|ES|FR|DK|ETF)\n(.+?)\n([A-Z]{2}[A-Z0-9]{10})\n(?:[\d.,]+\n)?([A-Z]{3})\n/gm;
+  for (const match of text.matchAll(pattern)) {
+    const ticker = match[1];
+    const suffix = match[2];
+    if (/_CFD$/i.test(ticker)) continue;
+    rows.push({
+      ticker,
+      suffix,
+      name: normalize(match[3]),
+      isin: match[4],
+      currency: currencyOf(match[5]),
+    });
+  }
+  return rows;
+}
+
+function extractPdfText(bytes) {
+  const pdfPath = path.join(os.tmpdir(), "oanda-stocks.pdf");
+  fs.writeFileSync(pdfPath, bytes);
+  const script = [
+    "from pypdf import PdfReader",
+    "import sys",
+    "reader = PdfReader(sys.argv[1])",
+    "sys.stdout.write('\\n'.join((page.extract_text() or '') for page in reader.pages))",
+  ].join("; ");
+  const result = spawnSync("python3", ["-c", script, pdfPath], {
+    encoding: "utf8",
+    maxBuffer: 16 * 1024 * 1024,
   });
-}
-
-function parseOandaRow(text) {
-  const compact = (text || "").replace(/\s+/g, " ").trim();
-  if (!compact) return null;
-
-  // Oanda MT5 list rows render as: "IUSQ.ETF ISHARES MSCI ACWI"
-  const match = compact.match(/^([A-Z0-9.-]{2,20})\.ETF\s+(.+)$/i);
-  if (!match) return null;
-
-  const ticker = match[1].toUpperCase();
-  const name = match[2].trim();
-  if (!ticker || !name) return null;
-
-  return {
-    ticker,
-    name,
-    type: "ETF",
-    raw: compact,
-  };
-}
-
-async function clearSearchInput(page, input) {
-  await input.focus();
-
-  // Triple-click + Backspace works on macOS but is flaky on Windows.
-  await input.click({ clickCount: 3 });
-  await input.press("Backspace");
-
-  let remaining = (await input.evaluate((el) => el.value || "")).length;
-  if (remaining === 0) return;
-
-  const modifier = process.platform === "darwin" ? "Meta" : "Control";
-  await page.keyboard.down(modifier);
-  await page.keyboard.press("KeyA");
-  await page.keyboard.up(modifier);
-  await page.keyboard.press("Backspace");
-
-  remaining = (await input.evaluate((el) => el.value || "")).length;
-  for (let i = 0; i < remaining; i++) {
-    await page.keyboard.press("Backspace");
+  if (result.status !== 0) {
+    throw new Error(result.stderr || "python3 could not read OANDA's stocks PDF (pypdf).");
   }
+  return result.stdout;
 }
 
-function fingerprintRows(rows) {
-  return rows.slice().sort().join("|");
-}
-
-async function findOandaFrame(page) {
-  // Oanda platform hosts the MT5 terminal inside an iframe.
-  for (let i = 0; i < 20; i++) {
-    const frame = page.frames().find((f) => /mt5web\.tms\.pl/i.test(f.url()));
-    if (frame) return frame;
-    await sleep(250);
-  }
-  return null;
-}
-
-async function ensureSearchInput(frame) {
-  const selectors = [
-    'input[placeholder*="Search symbol" i]',
-    'input[placeholder*="Search" i]',
-    'input[type="search"]',
-    'input[type="text"]',
-  ];
-
-  for (const selector of selectors) {
-    const input = await frame.$(selector);
-    if (input) return input;
-  }
-
-  return frame.waitForSelector(selectors.join(", "), { timeout: 10000 });
-}
-
-async function scrapeRowsForQuery(page, frame, searchInput, query) {
-  const collectSnapshot = () =>
-    frame.evaluate((q) => {
-      const norm = (s) => (s || "").replace(/\s+/g, " ").trim();
-      const queryUpper = (q || "").toUpperCase();
-      const isVisible = (el) => {
-        const r = el.getBoundingClientRect();
-        return r.width > 0 && r.height > 0;
-      };
-
-      const buttons = [...document.querySelectorAll("button.item, button[class*='item']")].filter(
-        (el) => el instanceof HTMLElement && isVisible(el)
-      );
-
-      const rows = buttons
-        .map((btn) => {
-          const symbolText = norm(
-            btn.querySelector("span.symbol, [class*='symbol']")?.textContent || ""
-          ).toUpperCase();
-          const descText = norm(
-            btn.querySelector("span.description, [class*='description']")?.textContent || ""
-          );
-          const fallbackText = norm(btn.innerText);
-          const rowText = symbolText && descText ? `${symbolText} ${descText}` : fallbackText;
-          return {
-            symbol: symbolText,
-            description: descText,
-            rowText,
-          };
-        })
-        .filter((row) => {
-          if (!row.symbol || !/\.ETF$/i.test(row.symbol)) return false;
-          const haystack = `${row.symbol} ${row.description} ${row.rowText}`.toUpperCase();
-          // Query is ticker-based; a hit can be in symbol (e.g. IUSQ) or
-          // description (e.g. ACWI) depending on the instrument.
-          return haystack.includes(queryUpper);
-        })
-        .map((row) => row.rowText);
-
-      const uniqueRows = [...new Set(rows)];
-      const bodyText = norm(document.body?.innerText || "");
-      const emptyState =
-        /ETFs?\s+0\/\d+/i.test(bodyText) ||
-        /No symbols found|Nothing found|Aucun résultat|Keine Ergebnisse/i.test(bodyText);
-
-      return {
-        rows: uniqueRows,
-        emptyState,
-      };
-    }, query);
-
-  const beforeSnapshot = await collectSnapshot();
-  const beforeFingerprint = fingerprintRows(beforeSnapshot.rows);
-
-  await clearSearchInput(page, searchInput);
-  await searchInput.type(query, { delay: 40 });
-
-  const maxWaitMs = 5000;
-  const pollMs = 250;
-  const stableNeeded = 3;
-  const staleWindowMs = 600;
-  const emptyStateNeeded = 4;
-  const emptyStateMinElapsedMs = 1200;
-
-  let elapsed = 0;
-  let lastFingerprint = null;
-  let stableHits = 0;
-  let emptyStateHits = 0;
-  let rowTexts = [];
-
-  while (elapsed < maxWaitMs) {
-    await sleep(pollMs);
-    elapsed += pollMs;
-    const snapshot = await collectSnapshot();
-    rowTexts = snapshot.rows;
-    const currentFingerprint = fingerprintRows(rowTexts);
-
-    if (
-      elapsed < staleWindowMs &&
-      rowTexts.length > 0 &&
-      currentFingerprint === beforeFingerprint
-    ) {
-      stableHits = 0;
-      lastFingerprint = currentFingerprint;
-      continue;
+async function bytesFromPage(page, url) {
+  const b64 = await page.evaluate(async (target) => {
+    const response = await fetch(target, { credentials: "include" });
+    if (!response.ok) return { status: response.status };
+    const buffer = new Uint8Array(await response.arrayBuffer());
+    const chunks = [];
+    const step = 0x8000;
+    for (let i = 0; i < buffer.length; i += step) {
+      chunks.push(String.fromCharCode(...buffer.subarray(i, i + step)));
     }
+    return { status: response.status, b64: btoa(chunks.join("")) };
+  }, url);
+  if (!b64?.b64) throw new Error(`OANDA did not return ${url} (${b64?.status || "no body"}).`);
+  return Buffer.from(b64.b64, "base64");
+}
 
-    if (rowTexts.length === 0 && snapshot.emptyState) {
-      emptyStateHits += 1;
-      if (emptyStateHits >= emptyStateNeeded && elapsed >= emptyStateMinElapsedMs) {
-        return [];
+async function discoverListUrl(page) {
+  const html = await page.evaluate(async () => {
+    const response = await fetch("/eu-en/documents", { credentials: "include" });
+    return response.text();
+  });
+  const matches = [...html.matchAll(/href="([^"]+document\/\d+)"[^>]*>\s*List of Financial Instruments\s*</gi)];
+  const current = matches.find((match) => !/\(\d{2}\.\d{2}\.\d{2}/.test(match[0]));
+  const href = current?.[1] || matches[0]?.[1] || "/eu-en/document/80";
+  return href.startsWith("http") ? href : new URL(href, "https://www.oanda.com").href;
+}
+
+// `--csv=PATH` overrides the fund list, `--stocks-csv=PATH` the share list,
+// `--cryptos-csv=PATH` the coin list. `--etfs-only` / `--stocks-only` /
+// `--crypto-only` answer for one shelf. `--all` keeps lines the catalogues
+// do not carry. `--fresh` starts the file over. `--start=` is accepted so
+// a resumed run can reload oanda-parsed.json; the book arrives in one PDF.
+const etfsCsvPath = pathArg("csv", "../etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
+const cryptosCsvPath = pathArg("cryptos-csv", "../cryptos.csv");
+const etfsOnly = hasFlag("etfs-only") || hasFlag("funds-only");
+const stocksOnly = hasFlag("stocks-only");
+const cryptoOnly = hasFlag("crypto-only") || hasFlag("cryptos-only");
+const keepUnlisted = hasFlag("all");
+const fresh = hasFlag("fresh");
+
+const wantEtfs = !stocksOnly && !cryptoOnly;
+const wantStocks = !etfsOnly && !cryptoOnly;
+const wantCrypto = !etfsOnly && !stocksOnly;
+
+const catalogue = new Map();
+if (wantEtfs) loadByIsin(etfsCsvPath, "ETF", catalogue);
+if (wantStocks) loadByIsin(stocksCsvPath, "STOCK", catalogue);
+
+const onlyIsins = new Set(
+  process.argv
+    .slice(2)
+    .filter((arg) => !arg.startsWith("--"))
+    .map(toIsin)
+    .filter(Boolean)
+);
+const onlyTickers = new Set(
+  process.argv
+    .slice(2)
+    .filter((arg) => !arg.startsWith("--"))
+    .map(normalizeTicker)
+    .filter((ticker) => ticker && !toIsin(ticker))
+    .map((ticker) => ticker.replace(/\.(US|DE|UK|PL|ES|FR|DK|ETF)$/i, ""))
+);
+
+const outputPath = new URL("oanda-parsed.json", import.meta.url);
+const results = [];
+const seen = new Set();
+
+if (!fresh && fs.existsSync(outputPath)) {
+  try {
+    const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
+    if (Array.isArray(existing)) {
+      for (const entry of existing) {
+        results.push(entry);
+        if (entry?.ticker) {
+          seen.add(`${entry.isin || entry.ticker}:${entry.exchange || ""}:${entry.ticker}:${entry.currency || ""}:${entry.type || ""}`.toUpperCase());
+        }
       }
-    } else {
-      emptyStateHits = 0;
     }
-
-    if (rowTexts.length > 0 && currentFingerprint === lastFingerprint) {
-      stableHits += 1;
-      if (stableHits >= stableNeeded) break;
-    } else {
-      stableHits = 0;
-      lastFingerprint = currentFingerprint;
-    }
+  } catch {
+    // Ignore malformed prior output.
   }
-
-  return rowTexts;
 }
 
 const browser = await puppeteer.connect({
@@ -248,96 +249,102 @@ const browser = await puppeteer.connect({
 });
 
 const pages = await browser.pages();
-const page = pages.find((p) => /oanda\.com/i.test(p.url())) || (await browser.newPage());
-if (!/oanda\.com/i.test(page.url())) {
+const page =
+  pages.find((candidate) => candidate.url().includes("oanda.com")) || (await browser.newPage());
+
+if (!page.url().includes("oanda.com")) {
   await page.goto("https://www.oanda.com/eu-en/platform", { waitUntil: "domcontentloaded" });
+  await sleep(2000);
 }
 
-await page.bringToFront();
-const frame = await findOandaFrame(page);
-if (!frame) {
-  throw new Error("Could not locate Oanda MT5 iframe.");
-}
-const searchInput = await ensureSearchInput(frame);
+// Cash shares and UCITS ETFs live on the TMS Stocks list. CFDs (including
+// BTCUSD) are a different book and are left out. Crypto is CFD-only here.
+const listUrl = await discoverListUrl(page);
+console.error(`Reading ${listUrl}`);
+const book = parseBook(extractPdfText(await bytesFromPage(page, listUrl)));
+console.error(`${book.length} lines on the Stocks list`);
 
-// `--start=N` (1-indexed) lets a run resume from a specific query without
-// throwing away progress already saved to oanda-parsed.json.
-const startIndex = (() => {
-  for (const arg of process.argv.slice(2)) {
-    const m = arg.match(/^--start=(\d+)$/i);
-    if (m) return Math.max(1, parseInt(m[1], 10));
-  }
-  return 1;
-})();
-const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
-
-const defaultQueries = ["ACWI", "IWRD", "VWRL"];
-const cliQueries = positionalArgs.map(normalizeTicker).filter(Boolean);
-// `--csv=PATH` overrides the default ETF list CSV (defaults to etfs.csv).
-const csvPath = (() => {
-  for (const arg of process.argv.slice(2)) {
-    const m = arg.match(/^--csv=(.+)$/i);
-    if (m) return m[1];
-  }
-  return new URL("../etfs.csv", import.meta.url);
-})();
-const csvQueries = loadTickersFromCsv(csvPath);
-const tickerToIsin = loadTickerToIsinFromCsv(csvPath);
-const rawQueries =
-  cliQueries.length > 0 ? cliQueries : csvQueries.length > 0 ? csvQueries : defaultQueries;
-const queries = uniqueQueries(rawQueries);
-
-const results = [];
-const seen = new Set();
-
-// When resuming, load already-saved entries so we don't overwrite them and so
-// the dedup `seen` set knows about rows from earlier queries.
-if (startIndex > 1 && fs.existsSync(new URL("oanda-parsed.json", import.meta.url))) {
-  try {
-    const existing = JSON.parse(fs.readFileSync(new URL("oanda-parsed.json", import.meta.url), "utf8"));
-    if (Array.isArray(existing)) {
-      for (const entry of existing) {
-        results.push(entry);
-        if (entry?.query && entry?.ticker) {
-          seen.add(`${entry.query}:${entry.ticker}`.toUpperCase());
-        }
-      }
-    }
-  } catch {
-    // Ignore parse errors -- treat as a fresh run.
-  }
+let unlisted = 0;
+const skipped = new Map();
+function skip(reason) {
+  skipped.set(reason, (skipped.get(reason) || 0) + 1);
 }
 
-for (const [queryIndex, query] of queries.entries()) {
-  if (queryIndex + 1 < startIndex) continue;
-  console.error(`[${queryIndex + 1}/${queries.length}] ${query}`);
-  const queryTicker = normalizeTicker(query) || query.toUpperCase();
-  const rowTexts = await scrapeRowsForQuery(page, frame, searchInput, query);
-  for (const text of rowTexts) {
-    const parsed = parseOandaRow(text);
-    if (!parsed) continue;
-    if (parsed.ticker !== queryTicker) continue;
+for (const item of book) {
+  const type = listingType(item.suffix, item.name);
+  if ((type === "ETF" || type === "ETC" || type === "ETN") && !wantEtfs) continue;
+  if (type === "STOCK" && !wantStocks) continue;
+  if (type === "CRYPTO" && !wantCrypto) continue;
 
-    const isin = tickerToIsin.get(queryTicker) || tickerToIsin.get(parsed.ticker) || null;
-    const result = {
-      query: queryTicker,
-      ticker: parsed.ticker,
-      name: parsed.name,
-      type: parsed.type,
-      isin,
-      raw: parsed.raw,
-    };
-
-    const key = `${result.query}:${result.ticker}`.toUpperCase();
-    if (seen.has(key)) continue;
-    seen.add(key);
-    results.push(result);
+  const ticker = normalizeTicker(item.ticker);
+  const isin = item.isin;
+  if (!ticker) {
+    skip("no ticker");
+    continue;
+  }
+  if (onlyTickers.size > 0 || onlyIsins.size > 0) {
+    if (!onlyTickers.has(ticker) && !onlyIsins.has(isin)) continue;
   }
 
-  // Persist progress after every query so an interruption keeps prior work.
-  fs.writeFileSync(new URL("oanda-parsed.json", import.meta.url), JSON.stringify(results, null, 2));
+  const match = isin ? catalogue.get(isin) : null;
+  if (!match && !keepUnlisted) {
+    unlisted += 1;
+    continue;
+  }
+
+  const exchange = venueOf(item.suffix, match);
+  const currency = item.currency;
+  if (!exchange) {
+    skip("no exchange");
+    continue;
+  }
+  if (!currency) {
+    skip("no currency");
+    continue;
+  }
+
+  const key = `${isin || ticker}:${exchange}:${ticker}:${currency}:${type}`.toUpperCase();
+  if (seen.has(key)) continue;
+  seen.add(key);
+
+  const name = normalize(item.name || match?.names?.[0] || ticker);
+  results.push({
+    query: ticker,
+    ticker,
+    name,
+    exchange,
+    currency,
+    type,
+    raw: [ticker, name, exchange, currency, isin].filter(Boolean).join(" "),
+    isin: isin || "",
+  });
 }
 
-console.log(JSON.stringify(results, null, 2));
+if (wantCrypto && !results.some((row) => row.type === "CRYPTO")) {
+  console.error("No spot crypto: BTC/ETH on this entity are CFDs.");
+}
+
+results.sort((left, right) => {
+  const byType = String(left.type).localeCompare(right.type);
+  if (byType !== 0) return byType;
+  const byExchange = String(left.exchange).localeCompare(String(right.exchange));
+  if (byExchange !== 0) return byExchange;
+  return String(left.ticker).localeCompare(String(right.ticker));
+});
+
+fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+
+const byType = new Map();
+for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);
+const byCurrency = new Map();
+for (const row of results) byCurrency.set(row.currency, (byCurrency.get(row.currency) || 0) + 1);
+
+console.error(
+  `${results.length} listings over ${new Set(results.map((row) => row.isin || row.ticker)).size} instruments ` +
+    `(${[...byType].map(([type, count]) => `${count} ${type}`).join(", ") || "none"}; ` +
+    `${[...byCurrency].map(([currency, count]) => `${count} ${currency}`).join(", ") || "no currency"})` +
+    (unlisted ? `, ${unlisted} the catalogues do not carry` : "") +
+    (skipped.size ? `, left out ${[...skipped].map(([reason, count]) => `${count} ${reason}`).join(", ")}` : "")
+);
 
 await browser.disconnect();

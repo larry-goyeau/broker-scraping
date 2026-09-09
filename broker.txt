@@ -1,5 +1,4 @@
 bluorbank
-oanda
 fortuneo
 Endowus
 benchmark
@@ -9,3 +8,5 @@ saxoinvestor
 Syfe
 Exante
 CGS International
+
+alpaca crypto  

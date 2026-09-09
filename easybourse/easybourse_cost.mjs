@@ -22,12 +22,9 @@
 //                                    35 € up to 10 000 €, then 0.35 %
 //     other                          55 € up to 10 000 €, then 0.55 %
 //
-// `c` is twice the lowest ticket. The percentage brackets do not fit `a`: folding
-// 0.45 % into `a` would charge a 100 € order that rate on top of the 2 €, which
-// the card does not do. `exactCost` answers the real step. Default plan is
-// Premium — same Euronext numbers as Découverte, and it is the card that can
-// buy the US and Xetra lines the catalogue actually carries. Pass `--plan=` if
-// the account is Expert or Intense; `c` then jumps to 18 € or 20 € the trip.
+// The published % × 2 sits in `a` (linear in the amount). The ticket is a floor
+// (`min fees` in the remark, `c` = 0). `exactCost` still applies max(min, rate).
+// Default plan is Premium. Pass `--plan=` for Expert or Intense.
 //
 // Conversion is J+1 16:00 fixing + 0.12 % each way. Left out of `a`, the same
 // way Trading212 leaves its 0.15 % out: it only applies when the account is not
@@ -257,6 +254,15 @@ function onlineBuy(plan, market) {
   return true;
 }
 
+function remarkOf({ plan, market, online }) {
+  const rule = ruleOf(plan.id, market);
+  const lines = [];
+  // Premium is cheaper only on Euronext. US / Xetra / other share one card.
+  if (rule) lines.push(`min fees ${rule.min * 2} €.`);
+  lines.push("FX 0.24% if converted.");
+  return lines.join("\n");
+}
+
 // ------------------------------------------------------------------------- listing
 
 function findListing({ etf, place, currency }) {
@@ -373,25 +379,28 @@ export function roundTripCost({
   const rates = taxRates(tax);
   const taxTotal = Object.values(rates).reduce((s, r) => s + r, 0);
 
-  const a = (marketBp ?? 0) / 1e4 + taxTotal + (american ? SEC_RATE : 0);
+  const knownPct = taxTotal + (american ? SEC_RATE : 0) + (rule.rate ?? 0) * 2;
+  const a = marketBp != null ? marketBp / 1e4 + knownPct : knownPct || null;
   const bookUsd = american ? (marketPerShare ?? 0) : dollars(marketPerShare ?? 0, listing.currency) ?? 0;
   const eachEur = rule.min;
   const commUsd = dollars(eachEur * 2, "EUR") ?? 0;
 
   return {
     ...answer,
-    a: Number(a.toPrecision(4)),
+    a: a == null ? null : Number(a.toPrecision(4)),
     b: Number((bookUsd + (american ? TAF_PER_SHARE : 0)).toPrecision(6)),
-    c: Number(commUsd.toPrecision(6)),
+    c: 0,
     floor: commUsd,
     listing,
     feeMarket: market,
     onlineBuy: onlineBuy(picked.id, market),
+    remark: remarkOf({ plan: picked, market, online: onlineBuy(picked.id, market) }),
     parts: {
       marché:
         marketBp != null ? Number((marketBp / 1e4).toPrecision(4)) : marketPerShare != null ? `${marketPerShare} par part` : null,
       taxes: Object.keys(rates).length ? rates : null,
       réglementaire: american ? { SEC: SEC_RATE, FINRA: `${TAF_PER_SHARE} par part` } : null,
+      commission: (rule.rate ?? 0) * 2,
       commissionUsd: commUsd,
     },
     bp: marketBp,

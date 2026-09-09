@@ -1,0 +1,18 @@
+---
+description: Every broker cost file answers with the same a/b/c triple. No per-broker size field.
+globs: "**/*_cost.mjs,front.mjs,front.html"
+alwaysApply: false
+---
+
+# Same cost shape for every broker
+
+`roundTripCost` returns `a`, `b`, `c` in dollars:
+
+`coût ($) = a × toUsd(p) × n + b × n + c`
+
+That is the convention. Do not add a `for`, `size`, or per-broker window. The front compares the three numbers only.
+
+- `a` dimensionless (book in Europe, taxes, SEC)
+- `b` / `c` always USD
+- US effective book (Rule 605, 100–499 shares) lives in `b`, not in a label
+- Ticket brackets stay in `c` (lowest step) or `exactCost`, not in a fourth field

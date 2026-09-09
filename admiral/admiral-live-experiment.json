@@ -1,0 +1,33 @@
+{
+  "on": "2026-09-08",
+  "account": "500052126",
+  "currency": "USD",
+  "entity": "Admirals (CY), Invest.MT5",
+  "isin": "US0970231058",
+  "ticker": "BA",
+  "name": "Boeing Co.",
+  "venue": "NYSE",
+  "position": 1000745187,
+  "n": 0.03,
+  "buys": [
+    { "id": 2000942071, "n": 0.01, "price": 211.68, "commission": -1, "fee": 0 },
+    { "id": 2000942072, "n": 0.01, "price": 211.66, "commission": -1, "fee": 0 },
+    { "id": 2000942073, "n": 0.01, "price": 211.66, "commission": -1, "fee": 0 }
+  ],
+  "sell": {
+    "id": 2000942076,
+    "n": 0.03,
+    "price": 211.59,
+    "commission": -1,
+    "fee": 0
+  },
+  "buyVwap": 211.66666667,
+  "book": 0.0023,
+  "bookPerShare": 0.0767,
+  "rule605PerShare": 0.0402,
+  "cash": { "start": 500, "afterBuys": 490.64, "end": 495.99 },
+  "commissionPaid": 4,
+  "feePaid": 0,
+  "positionsAfter": 0,
+  "note": "Three 0.01 market buys (UI ticket), then one API CLOSE of 0.03. The $1 minimum is per execution, not per position. SEC/TAF rounded to 0 at this notional. Book is not folded into a."
+}

@@ -77,6 +77,22 @@ const LU_MIN_TOKYO = 24.95;
 const LU_DUBAI_RATE = 0.0025;
 const LU_DUBAI_MIN = 24.95;
 
+function remarkOf({ bank, market, type } = {}) {
+  // CH: https://www.swissquote.com/en-ch/private/trade/pricing/account-fees
+  // LU: https://www.swissquote.com/en-lu/private/trade/pricing/account-fees
+  const custody = bank === "ch" ? "Custody 20–50 CHF/quarter (+ VAT)." : "";
+  if (type === "CRYPTO") return ["2% taker (Standard I), no min.", custody].filter(Boolean).join(" ");
+  if (market === "otc") {
+    const otc =
+      bank === "ch"
+        ? "OTC: 1%. min fees 200 in listing currency, plus 1.70 CHF realtime."
+        : "OTC: 1%. min fees 200 in listing currency.";
+    return [otc, custody].filter(Boolean).join(" ");
+  }
+  if (bank === "lu") return "EU card: 0.20%. min fees €29.90 (€49.90 Tokyo/Dubai).";
+  return custody;
+}
+
 // Swiss federal stamp, charged on SIX (and BX) when a Swiss dealer is a party. Domestic
 // securities 0.075 % a side, foreign 0.15 %. Not in the Trading212 tax sweep: that broker
 // does not collect a Swiss stamp.
@@ -179,17 +195,21 @@ export function feeMarketOf(exchange, mic) {
     m === "XMUN" ||
     m === "LSEX" ||
     m === "XQTX" ||
+    m === "XFRA" ||
+    m === "XHAM" ||
+    m === "XHAN" ||
     /^(FWB|SWB|DUS|MUN|HAM|HAN|BER|GETTEX|TRADEGATE|LSX|LS)$/.test(code)
   ) {
     return "de";
   }
   if (
-    /^(XPAR|XAMS|XBRU|XLIS|EURONEXT)$/.test(code) ||
-    ["XPAR", "XAMS", "XBRU", "XLIS"].includes(m)
+    /^(XPAR|XAMS|XBRU|XLIS|EURONEXT|ISE|ISED)$/.test(code) ||
+    ["XPAR", "XAMS", "XBRU", "XLIS", "XMSM", "XDUB"].includes(m)
   ) {
     return "euronext";
   }
-  if (code === "OSL" || m === "XOSL") return "euronext";
+  if (code === "OSL" || code === "OSE" || m === "XOSL") return "euronext";
+  if (code === "LSIN" || m === "LSSI") return "de";
   if (code === "TSX" || code === "TSXV" || code === "NEO") return "ca";
   return "other";
 }
@@ -264,8 +284,8 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
   const { named, matches } = findListing({ etf, place, currency });
   const answer = {
     a: null,
-    b: 0,
-    c: 0,
+    b: null,
+    c: null,
     ccy: QUOTE,
     floor: null,
     cap: null,
@@ -345,6 +365,7 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
       floor: dollars(OTC_MIN * 2, listing.currency),
       listing,
       feeMarket: "otc",
+      remark: remarkOf({ bank, market: "otc" }),
       parts: {
         marché: marketPerShare != null ? `${marketPerShare} par part` : marketBp != null ? Number((marketBp / 1e4).toPrecision(4)) : null,
         taxes: Object.keys(rates).length ? rates : null,
@@ -365,12 +386,14 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
   }
 
   const small = gridChf(0, market);
-  let a = (marketBp ?? 0) / 1e4 + taxTotal + exchangePct + (american ? SEC_RATE : 0);
+  // A book nobody has measured must not become 0 % — that reads as a free trade.
+  const knownPct = taxTotal + exchangePct + (american ? SEC_RATE : 0);
+  let a = marketBp != null ? marketBp / 1e4 + knownPct : knownPct || null;
   let luFloor = null;
   if (bank === "lu") {
     const rate = market === "dubai" ? LU_DUBAI_RATE : LU_RATE;
     const min = market === "jp" || market === "dubai" ? (market === "dubai" ? LU_DUBAI_MIN : LU_MIN_TOKYO) : LU_MIN;
-    a += rate * 2;
+    a = (a ?? 0) + rate * 2;
     luFloor = min * 2;
   }
 
@@ -380,12 +403,13 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
 
   return {
     ...answer,
-    a: Number(a.toPrecision(4)),
+    a: a == null ? null : Number(a.toPrecision(4)),
     b: Number((bookUsd + (american ? TAF_PER_SHARE : 0)).toPrecision(6)),
     c: Number((commUsd + realtimeUsd).toPrecision(6)),
     floor: bank === "lu" ? dollars(luFloor, "EUR") : null,
     listing,
     feeMarket: market,
+    remark: remarkOf({ bank, market }),
     parts: {
       marché:
         marketBp != null ? Number((marketBp / 1e4).toPrecision(4)) : marketPerShare != null ? `${marketPerShare} par part` : null,
@@ -460,6 +484,7 @@ function cryptoCost(row, answer, bank) {
     floor: null,
     listing,
     feeMarket: "crypto",
+    remark: remarkOf({ bank, type: "CRYPTO" }),
     parts: { marché: null, taxes: null, markupEachWay: CRYPTO_TAKER },
     bp: 200,
     perShare: null,

@@ -253,7 +253,22 @@ const shapes = (store.session?.shapes && { ...store.session.shapes }) || {};
 //
 // A source that ever needs a conversion again puts it here, where the whole table can
 // be read at once. The per-share path below never multiplies by it.
-const CROSSED = { xetra: 1, lse: 1, six: 1, euronext: 1, us605: 1, tradegate: 1, gettex: 1, lsex: 1, quotrix: 1 };
+const CROSSED = {
+  xetra: 1,
+  lse: 1,
+  six: 1,
+  euronext: 1,
+  us605: 1,
+  tradegate: 1,
+  gettex: 1,
+  lsex: 1,
+  lsin: 1,
+  quotrix: 1,
+  vienna: 1,
+  frankfurt: 1,
+  hamburg: 1,
+  hannover: 1,
+};
 
 const CONVENTION =
   "coût d'un aller-retour, taille d'un particulier, à la touche, ramené à la moyenne de séance";
@@ -594,6 +609,8 @@ const EURONEXT_SEGMENTS = {
   XBRU: ["XBRU"],
   XLIS: ["XLIS"],
   XMIL: ["MTAA", "ETFP"],
+  XOSL: ["XOSL"],
+  XMSM: ["XMSM"],
 };
 // Families whose page carries a book. `stock-options` and the other derivative products
 // come back from the same search and are not this file's subject.
@@ -641,6 +658,59 @@ async function euronextPage(l) {
   return { url: `https://live.euronext.com${hit.link}/market-information` };
 }
 
+// -------------------------------------------------------------- Wiener Börse
+//
+// Delayed bid/ask on the instrument page (15 min). There is no free monthly average
+// like Xetra's XLM; the published figure is the median of those delayed touches, the
+// same way Paris and London are built. Pages are named `{slug}-{ISIN}` under
+// stock-prime-market / stock-standard-market; the lists and the search both carry
+// the path.
+
+const VIENNA_LISTS = [
+  "https://www.wienerborse.at/en/stocks-prime-market/",
+  "https://www.wienerborse.at/en/stocks-standard-market/",
+];
+const viennaPages = new Map();
+
+const viennaNumber = (s) => {
+  const t = String(s || "").replace(/\s/g, "").replace(/\./g, "").replace(",", ".");
+  const n = Number(t);
+  return n > 0 ? n : null;
+};
+
+async function viennaDiscover() {
+  if (viennaPages.size) return;
+  for (const list of VIENNA_LISTS) {
+    try {
+      const res = await fetchOk(list, 20000);
+      const html = await res.text();
+      for (const m of html.matchAll(/\/en\/stock-[^"'>\s]+-([A-Z]{2}[A-Z0-9]{10})\/?/g)) {
+        if (!viennaPages.has(m[1])) viennaPages.set(m[1], `https://www.wienerborse.at${m[0]}`);
+      }
+    } catch {
+      /* list optional; search still finds a single ISIN */
+    }
+  }
+}
+
+async function viennaPage(l) {
+  await viennaDiscover();
+  if (viennaPages.has(l.isin)) return { url: viennaPages.get(l.isin) };
+  try {
+    const res = await fetchOk(`https://www.wienerborse.at/en/search/?q=${l.isin}`, 20000);
+    const html = await res.text();
+    const href = [...html.matchAll(/href="(\/en\/stock-[^"]+)"/g)]
+      .map((m) => m[1])
+      .find((h) => h.toUpperCase().includes(l.isin));
+    if (!href) return { url: null, note: "Wiener Börse n'a pas de page pour cet ISIN" };
+    const url = `https://www.wienerborse.at${href}`;
+    viennaPages.set(l.isin, url);
+    return { url };
+  } catch (e) {
+    return { url: null, note: String(e.message || e).slice(0, 160) };
+  }
+}
+
 // ------------------------------------------------- Tradegate, gettex, LS Exchange
 //
 // Three retail German books, one delayed pre-trade dump each, published because MiFID
@@ -657,8 +727,21 @@ const delayedQuotes = {
   gettex: new Map(),
   lsex: new Map(),
   quotrix: new Map(),
+  frankfurt: new Map(),
+  hamburg: new Map(),
+  hannover: new Map(),
+  lsin: new Map(),
 };
-const delayedTrouble = { tradegate: null, gettex: null, lsex: null, quotrix: null };
+const delayedTrouble = {
+  tradegate: null,
+  gettex: null,
+  lsex: null,
+  quotrix: null,
+  frankfurt: null,
+  hamburg: null,
+  hannover: null,
+  lsin: null,
+};
 
 const UA = { "User-Agent": "Mozilla/5.0" };
 
@@ -687,33 +770,45 @@ async function forEachGunzipLine(url, onLine, timeout = 180000) {
   }
 }
 
-async function loadTradegate(wanted) {
-  const index = await (await fetchOk("https://mfs.deutsche-boerse.com/api/DGAT-pretrade")).json();
-  const file = index.CurrentFiles?.[0];
-  if (!file) throw new Error("index Tradegate vide");
-  const text = await gunzipText(`https://mfs.deutsche-boerse.com/api/download/${file}`);
-  delayedQuotes.tradegate.clear();
-  for (const line of text.split(/\r?\n/)) {
-    if (!line) continue;
-    let o;
-    try {
-      o = JSON.parse(line);
-    } catch {
-      continue;
+async function loadMfsTape(product, dest, wanted, minutes = 1) {
+  const index = await (await fetchOk(`https://mfs.deutsche-boerse.com/api/${product}`)).json();
+  const files = (index.CurrentFiles || []).slice(0, minutes);
+  if (!files.length) throw new Error(`index ${product} vide`);
+  dest.clear();
+  for (const file of files) {
+    const text = await gunzipText(`https://mfs.deutsche-boerse.com/api/download/${file}`);
+    for (const line of text.split(/\r?\n/)) {
+      if (!line) continue;
+      let o;
+      try {
+        o = JSON.parse(line);
+      } catch {
+        continue;
+      }
+      const isin = String(o.instrumentIdentificationCode || "").toUpperCase();
+      const currency = String(o.priceCurrency || "").toUpperCase();
+      const key = `${isin}|${currency}`;
+      if (!isin || !currency || (wanted.size && !wanted.has(key))) continue;
+      const bid = Number(o.bestBid ?? o.bid);
+      const ask = Number(o.bestAsk ?? o.ask);
+      if (!(bid > 0) || !(ask > 0) || ask < bid) continue;
+      const at = o.updateDateAndTime || o.publicationDateAndTime || "";
+      const prev = dest.get(key);
+      if (prev && prev.at > at) continue;
+      dest.set(key, { bid, ask, currency, at });
     }
-    const isin = String(o.instrumentIdentificationCode || "").toUpperCase();
-    const currency = String(o.priceCurrency || "").toUpperCase();
-    const key = `${isin}|${currency}`;
-    if (!isin || !currency || (wanted.size && !wanted.has(key))) continue;
-    const bid = Number(o.bid);
-    const ask = Number(o.ask);
-    if (!(bid > 0) || !(ask > 0) || ask < bid) continue;
-    const at = o.updateDateAndTime || o.publicationDateAndTime || "";
-    const prev = delayedQuotes.tradegate.get(key);
-    if (prev && prev.at > at) continue;
-    delayedQuotes.tradegate.set(key, { bid, ask, currency, at });
   }
-  return file;
+  return files[0];
+}
+
+async function loadTradegate(wanted) {
+  return loadMfsTape("DGAT-pretrade", delayedQuotes.tradegate, wanted);
+}
+
+async function loadFrankfurt(wanted) {
+  // One minute of the floor tape only quotes names that moved. Fifteen minutes
+  // covers the specialist book without pulling the whole day.
+  return loadMfsTape("DFRA-pretrade", delayedQuotes.frankfurt, wanted, 15);
 }
 
 async function loadGettex(wanted) {
@@ -774,6 +869,29 @@ async function loadLsex() {
   return url;
 }
 
+// Same RPC host as LS Exchange, the TradeCenter / LSSI book. The file is a tape of
+// every quote in the last slice (tens of megabytes), so it is streamed; the last
+// two-sided print per ISIN is the book, in euro.
+async function loadLsin() {
+  const html = await (await fetchOk("https://www.ls-tc.de/de/download")).text();
+  const url = html.match(
+    /https:\/\/www\.ls-x\.de\/_rpc\/json\/\.lstc\/instrument\/list\/lstcpretrades\?time=\d+/
+  )?.[0];
+  if (!url) throw new Error("aucun fichier LS International sur la page download");
+  const res = await fetchOk(url, 180000);
+  delayedQuotes.lsin.clear();
+  for await (const line of readline.createInterface({ input: Readable.fromWeb(res.body), crlfDelay: Infinity })) {
+    const p = line.split(";").map((s) => s.replace(/^"|"$/g, "").trim());
+    if (p.length < 3) continue;
+    const isin = p[0].toUpperCase();
+    const bid = Number(String(p[1]).replace(",", "."));
+    const ask = Number(String(p[2]).replace(",", "."));
+    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin) || !(bid > 0) || !(ask > 0) || ask < bid) continue;
+    delayedQuotes.lsin.set(`${isin}|EUR`, { bid, ask, currency: "EUR" });
+  }
+  return url;
+}
+
 // BÖAG's MiFID delayed CSVs. DUSD is Quotrix Freiverkehr (the busy book), DUSC the
 // regulated segment. Files are volume-sliced tapes with a European decimal comma;
 // the last two-sided print per ISIN is the book. No currency column: the venue quotes
@@ -784,14 +902,14 @@ const euroNum = (s) => {
   return t.includes(",") ? Number(t.replace(/\./g, "").replace(",", ".")) : Number(t);
 };
 
-async function loadQuotrix(wanted) {
+async function loadBoag(wanted, dest, slices) {
   const index = await (await fetchOk("https://cld42.boersenag.de/m13data/data/m13filespt.json")).json();
   const files = (index.M13Files || []).filter((f) => f && f !== "end");
   const pick = (mic, n) => files.filter((f) => f.includes(`_${mic}_`)).slice(0, n);
-  const selected = [...pick("DUSD", 5), ...pick("DUSC", 3)];
-  if (!selected.length) throw new Error("index pre-trade BÖAG sans fichier DUSD/DUSC");
+  const selected = slices.flatMap(({ mic, n }) => pick(mic, n));
+  if (!selected.length) throw new Error(`index pre-trade BÖAG sans ${slices.map((s) => s.mic).join("/")}`);
   const wantedIsin = new Set([...wanted].map((k) => k.split("|")[0]));
-  delayedQuotes.quotrix.clear();
+  dest.clear();
   for (const file of selected) {
     const text = await (await fetchOk(`https://cld42.boersenag.de/m13data/data/${file}`)).text();
     for (const line of text.split(/\r?\n/)) {
@@ -805,12 +923,34 @@ async function loadQuotrix(wanted) {
       if (!(bid > 0) || !(ask > 0) || ask < bid) continue;
       const at = p[2] || "";
       const key = `${isin}|EUR`;
-      const prev = delayedQuotes.quotrix.get(key);
+      const prev = dest.get(key);
       if (prev && prev.at > at) continue;
-      delayedQuotes.quotrix.set(key, { bid, ask, currency: "EUR", at });
+      dest.set(key, { bid, ask, currency: "EUR", at });
     }
   }
   return selected;
+}
+
+async function loadQuotrix(wanted) {
+  return loadBoag(wanted, delayedQuotes.quotrix, [
+    { mic: "DUSD", n: 5 },
+    { mic: "DUSC", n: 3 },
+  ]);
+}
+
+async function loadHamburg(wanted) {
+  return loadBoag(wanted, delayedQuotes.hamburg, [
+    { mic: "HAMQ", n: 5 },
+    { mic: "HAMB", n: 3 },
+    { mic: "HAMA", n: 2 },
+  ]);
+}
+
+async function loadHannover(wanted) {
+  return loadBoag(wanted, delayedQuotes.hannover, [
+    { mic: "HANB", n: 3 },
+    { mic: "HANA", n: 2 },
+  ]);
 }
 
 const adapters = {
@@ -989,7 +1129,7 @@ const adapters = {
 
   // Euronext encrypts its quote endpoint and decrypts it in the page, so the rendered
   // book is the accessible form. One adapter covers Paris, Amsterdam, Brussels, Lisbon
-  // and Milan, which share the platform.
+  // and Milan, which share the platform. Oslo (XOSL) and Dublin (XMSM) sit on it too.
   euronext: {
     measure: "touche du carnet, clôture ou différé",
     async fetch(l, ownTab) {
@@ -1018,6 +1158,38 @@ const adapters = {
         // The search already named the page, so it travels back rather than being guessed
         // again: only it knows that this ISIN is an `etvs` on ALXP rather than an `etfs`.
         url: found.url,
+      };
+    },
+  },
+
+  vienna: {
+    measure: "touche du carnet, différé 15 min",
+    async prefetch() {
+      await viennaDiscover();
+      console.error(`    Wiener Börse : ${viennaPages.size} pages d'instruments\n`);
+    },
+    async fetch(l) {
+      if (l.currency !== "EUR") {
+        return { spreadBp: null, note: `Wiener Börse cote en EUR, pas en ${l.currency}` };
+      }
+      const found = await viennaPage(l);
+      if (!found.url) return { spreadBp: null, note: found.note };
+      let html;
+      try {
+        html = await (await fetchOk(found.url, 20000)).text();
+      } catch {
+        return { spreadBp: null, note: "page Wiener Börse non chargée", url: found.url };
+      }
+      const row = html.match(/Bid\/Ask<\/th><td[^>]*>([\s\S]*?)<\/td>/i);
+      const nums = [...(row?.[1] || "").matchAll(/>([0-9][0-9.,]*)<\/span>/g)].map((m) => viennaNumber(m[1]));
+      const [bid, ask] = nums;
+      return {
+        spreadBp: bpFrom(bid, ask),
+        bid,
+        ask,
+        tradingCurrency: "EUR",
+        url: found.url,
+        ...(bid == null || ask == null ? { note: "carnet à un seul côté" } : {}),
       };
     },
   },
@@ -1091,6 +1263,30 @@ const adapters = {
     },
   },
 
+  // Lang & Schwarz TradeCenter (LSSI). Same CSV shape as LS Exchange, different book.
+  lsin: {
+    measure: "touche du carnet, différé MiFID",
+    async prefetch() {
+      try {
+        const url = await loadLsin();
+        console.error(`    LS International : ${delayedQuotes.lsin.size} cotations (${url.split("time=")[1] || url})\n`);
+      } catch (e) {
+        delayedTrouble.lsin = String(e.message || e).slice(0, 160);
+        console.error(`    LS International : ${delayedTrouble.lsin}\n`);
+      }
+    },
+    async fetch(l) {
+      if (l.currency !== "EUR") {
+        return { spreadBp: null, note: `LS International cote en EUR, pas en ${l.currency}` };
+      }
+      const quote = delayedQuotes.lsin.get(`${l.isin}|EUR`);
+      if (!quote) {
+        return { spreadBp: null, note: delayedTrouble.lsin || "absent du fichier pre-trade LS International" };
+      }
+      return { spreadBp: bpFrom(quote.bid, quote.ask), tradingCurrency: "EUR" };
+    },
+  },
+
   // BÖAG delayed CSVs for Düsseldorf Quotrix (DUSC + DUSD). Looked up, not visited.
   quotrix: {
     measure: "touche du carnet, différé MiFID",
@@ -1111,6 +1307,77 @@ const adapters = {
       const quote = delayedQuotes.quotrix.get(`${l.isin}|EUR`);
       if (!quote) {
         return { spreadBp: null, note: delayedTrouble.quotrix || "absent du fichier pre-trade Quotrix" };
+      }
+      return { spreadBp: bpFrom(quote.bid, quote.ask), tradingCurrency: "EUR" };
+    },
+  },
+
+  // Börse Frankfurt floor (XFRA). Same MFS tape as Tradegate; the fields are bestBid /
+  // bestAsk rather than bid / ask.
+  frankfurt: {
+    measure: "touche du carnet, différé MiFID",
+    async prefetch(lines) {
+      try {
+        const wanted = new Set(lines.map((l) => `${l.isin}|${l.currency}`));
+        const file = await loadFrankfurt(wanted);
+        console.error(`    Börse Frankfurt : ${delayedQuotes.frankfurt.size} cotations dans ${file}\n`);
+      } catch (e) {
+        delayedTrouble.frankfurt = String(e.message || e).slice(0, 160);
+        console.error(`    Börse Frankfurt : ${delayedTrouble.frankfurt}\n`);
+      }
+    },
+    async fetch(l) {
+      const quote = delayedQuotes.frankfurt.get(`${l.isin}|${l.currency}`);
+      if (!quote) {
+        return { spreadBp: null, note: delayedTrouble.frankfurt || "absent du fichier pre-trade Francfort" };
+      }
+      return { spreadBp: bpFrom(quote.bid, quote.ask), tradingCurrency: quote.currency };
+    },
+  },
+
+  hamburg: {
+    measure: "touche du carnet, différé MiFID",
+    async prefetch(lines) {
+      try {
+        const wanted = new Set(lines.map((l) => `${l.isin}|${l.currency}`));
+        const files = await loadHamburg(wanted);
+        console.error(`    Börse Hamburg : ${delayedQuotes.hamburg.size} cotations (${files.length} fichiers)\n`);
+      } catch (e) {
+        delayedTrouble.hamburg = String(e.message || e).slice(0, 160);
+        console.error(`    Börse Hamburg : ${delayedTrouble.hamburg}\n`);
+      }
+    },
+    async fetch(l) {
+      if (l.currency !== "EUR") {
+        return { spreadBp: null, note: `Hambourg cote en EUR, pas en ${l.currency}` };
+      }
+      const quote = delayedQuotes.hamburg.get(`${l.isin}|EUR`);
+      if (!quote) {
+        return { spreadBp: null, note: delayedTrouble.hamburg || "absent du fichier pre-trade Hambourg" };
+      }
+      return { spreadBp: bpFrom(quote.bid, quote.ask), tradingCurrency: "EUR" };
+    },
+  },
+
+  hannover: {
+    measure: "touche du carnet, différé MiFID",
+    async prefetch(lines) {
+      try {
+        const wanted = new Set(lines.map((l) => `${l.isin}|${l.currency}`));
+        const files = await loadHannover(wanted);
+        console.error(`    Börse Hannover : ${delayedQuotes.hannover.size} cotations (${files.length} fichiers)\n`);
+      } catch (e) {
+        delayedTrouble.hannover = String(e.message || e).slice(0, 160);
+        console.error(`    Börse Hannover : ${delayedTrouble.hannover}\n`);
+      }
+    },
+    async fetch(l) {
+      if (l.currency !== "EUR") {
+        return { spreadBp: null, note: `Hanovre cote en EUR, pas en ${l.currency}` };
+      }
+      const quote = delayedQuotes.hannover.get(`${l.isin}|EUR`);
+      if (!quote) {
+        return { spreadBp: null, note: delayedTrouble.hannover || "absent du fichier pre-trade Hanovre" };
       }
       return { spreadBp: bpFrom(quote.bid, quote.ask), tradingCurrency: "EUR" };
     },

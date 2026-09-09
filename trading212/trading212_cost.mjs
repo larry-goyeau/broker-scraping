@@ -348,6 +348,9 @@ export function roundTripCost({ etf, place, currency, bp = null }) {
     check: checkFor(listing, { bp: marketBp, perShare: marketPerShare }),
     fx: { quote: QUOTE, asOf: FX_AS_OF, listing: usdPer(listing.currency) },
     fxIfConverted: FX_EACH_WAY * 2,
+    remark:
+      (isBritish ? "UK takeover levy (PTM) £3 above £10,000.\n" : "") +
+      "FX 0.30% if not funded in the listing currency.",
   };
 }
 
@@ -396,6 +399,7 @@ function cryptoCost(row, answer) {
     ccy: QUOTE,
     fx: { quote: QUOTE, asOf: FX_AS_OF, listing: usdPer(listing.currency) },
     fxIfConverted: FX_EACH_WAY * 2,
+    remark: "Broker spread. FX 0.30% if not funded in the listing currency.",
   };
 }
 

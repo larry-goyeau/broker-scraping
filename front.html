@@ -21,7 +21,7 @@
         font: 16px/1.45 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
         min-height: 100vh;
       }
-      main { width: min(920px, calc(100% - 40px)); margin: 0 auto; padding: 56px 0 80px; text-align: center; }
+      main { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 56px 0 80px; text-align: center; }
       h1 { margin: 0 0 36px; font-size: 42px; letter-spacing: -0.03em; font-weight: 650; }
       .lede { margin: 0 auto 28px; max-width: 38em; color: var(--mute); }
       .search { position: relative; }
@@ -135,6 +135,8 @@
       table.listings tr:last-child td { border-bottom: 0; }
       table.listings td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
       table.listings td.na { color: var(--mute); }
+      table.listings td.remark { color: var(--mute); font-size: 13px; line-height: 1.35; max-width: 28em; white-space: pre-line; }
+      .note { margin: 10px 0 0; color: var(--mute); font-size: 13px; text-align: left; }
       .empty { margin-top: 28px; color: var(--mute); }
     </style>
   </head>
@@ -227,11 +229,12 @@
           const listed = b.listings.length ? b.listings : [{ exchange: "", currency: "" }];
           return listed.map((l) => ({
             broker: name,
-            exchange: l.exchange || "—",
-            currency: l.currency || "—",
+            exchange: l.exchange || "N/A",
+            currency: l.currency || "N/A",
             spread: l.spread || "N/A",
             perShare: l.perShare || "N/A",
             perOrder: l.perOrder || "N/A",
+            remark: l.remark || "N/A",
           }));
         });
         const cell = (v) => {
@@ -241,7 +244,7 @@
         const body = rows
           .map(
             (row) =>
-              `<tr><td>${row.broker}</td><td>${esc(row.exchange)}</td><td>${esc(row.currency)}</td>${cell(row.spread)}${cell(row.perShare)}${cell(row.perOrder)}</tr>`
+              `<tr><td>${row.broker}</td><td>${esc(row.exchange)}</td><td>${esc(row.currency)}</td>${cell(row.spread)}${cell(row.perShare)}${cell(row.perOrder)}<td class="remark${row.remark === "N/A" ? " na" : ""}">${esc(row.remark)}</td></tr>`
           )
           .join("");
         result.hidden = false;
@@ -259,13 +262,15 @@
                 <th>broker</th>
                 <th>exchange</th>
                 <th>currency</th>
-                <th>spread</th>
-                <th>commission / share (USD)</th>
-                <th>commission / order (USD)</th>
+                <th>spread*</th>
+                <th>commission / share (USD)*</th>
+                <th>commission / order (USD)*</th>
+                <th>remark</th>
               </tr>
             </thead>
             <tbody>${body}</tbody>
-          </table>`;
+          </table>
+          <p class="note">* Round trip (buy and sell). Includes broker fees, taxes, and the market spread.</p>`;
       }
 
       q.addEventListener("input", () => {

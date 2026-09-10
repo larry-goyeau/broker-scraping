@@ -110,8 +110,8 @@ function remarkOf({ market, type } = {}) {
     return "Trade.MT5 CFD (dealer spread), not Invest.MT5. No published commission.";
   }
   const r = RULE[market] || RULE.other_eu;
-  const ticket =
-    market === "us" ? "min fees $2." : `min fees ${r.min * 2} ${r.ccy}.`;
+  const ccy = r.ccy === "EUR" ? "€" : r.ccy;
+  const ticket = market === "us" ? "min fees 2 $." : `min fees ${r.min * 2} ${ccy}.`;
   return `${ticket}\nFX 0.30% on converted P&L.`;
 }
 

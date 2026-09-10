@@ -11,6 +11,8 @@ import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { catalogueFiles } from "./catalogues.mjs";
 import { resolveVenue } from "./venues.mjs";
+import { accepts, countryOptions, listingAccepts } from "./accepted.mjs";
+import { toUsd } from "./fx.mjs";
 
 const PORT = (() => {
   const m = process.argv.find((a) => a.startsWith("--port="));
@@ -48,7 +50,20 @@ function loadBrokerMeta() {
   return rows;
 }
 
-const FOLDER_NAME = { saxo: "Saxo Bank", bhmuae: "BHM Capital" };
+const FOLDER_NAME = {
+  saxo: "Saxo Bank",
+  bhmuae: "BHM Capital",
+  bunq: "Bunq",
+  century: "Century Financial",
+  boursobank: "BoursoBank",
+  alramz: "Al Ramz Capital",
+  tastytrade: "Tastytrade",
+  bux: "BUX",
+  davy: "Davy Select",
+  easyequities: "EasyEquities",
+  efocs: "EuroFinance",
+  elana: "Elana Trading",
+};
 
 function metaFor(folder, list) {
   const aliased = FOLDER_NAME[folder];
@@ -150,6 +165,9 @@ for (const file of catalogueFiles()) {
       currency: String(row.currency || "").trim(),
       type: String(row.type || "").trim(),
     };
+    if (row.nonEuResident) listing.nonEuResident = true;
+    if (row.usResidentsOnly) listing.usResidentsOnly = true;
+    if (Array.isArray(row.supportedCountries)) listing.supportedCountries = row.supportedCountries;
     const held = inst.byBroker.get(folder) || [];
     const dup = held.some(
       (h) =>
@@ -189,27 +207,90 @@ function fmtNum(n) {
   return String(Number(x.toPrecision(4)));
 }
 
+function fmtUsd(n) {
+  if (n == null || !Number.isFinite(Number(n))) return NA;
+  const x = Number(n);
+  if (x === 0) return "0";
+  return String(Number(x.toFixed(2)));
+}
+
+const MIN_FEE_CCY = {
+  $: "USD",
+  USD: "USD",
+  "€": "EUR",
+  EUR: "EUR",
+  "£": "GBP",
+  GBP: "GBP",
+  CHF: "CHF",
+  CAD: "CAD",
+  AED: "AED",
+  HKD: "HKD",
+  AUD: "AUD",
+  JPY: "JPY",
+};
+
+// Tickets written as `min fees …` are a floor on the % already in `a`, not a
+// third addend. The page shows them in the order column (USD) with **.
+function pullMinFees(remark) {
+  const text = String(remark || "").trim();
+  if (!text) return { minFees: null, remark: "" };
+  const match = text.match(/min fees\s+(.+?)(?:\.(\s|$)|$)/i);
+  if (!match) return { minFees: null, remark: text };
+  const cleaned = `${text.slice(0, match.index)}${text.slice(match.index + match[0].length)}`
+    .replace(/^\s*\.\s*/, "")
+    .replace(/\n{2,}/g, "\n")
+    .replace(/[ \t]+\n/g, "\n")
+    .trim();
+  return { minFees: match[1].trim(), remark: cleaned };
+}
+
+function numericFloor(cost) {
+  const f = cost?.floor;
+  return typeof f === "number" && Number.isFinite(f) ? f : null;
+}
+
+function minFeesUsd(text, cost) {
+  const raw = String(text || "").replace(/\(odd lot[^)]*\)/gi, "").trim();
+  if (/in listing currency/i.test(raw)) {
+    const n = Number(String(raw.match(/[\d.]+/) || "") );
+    return toUsd(n, cost.listing?.currency || cost.currency);
+  }
+  const euroFirst = raw.match(/^€\s*([\d.]+)/);
+  if (euroFirst) return toUsd(Number(euroFirst[1]), "EUR");
+  const m = raw.match(/^([\d.]+)\s*(USD|EUR|GBP|CHF|CAD|AED|HKD|AUD|JPY|\$|£|€)?/i);
+  if (!m) return null;
+  const token = (m[2] || "USD").toUpperCase();
+  const ccy = MIN_FEE_CCY[token] || MIN_FEE_CCY[m[2]] || token;
+  return toUsd(Number(m[1]), ccy);
+}
+
 function formatCost(cost) {
-  if (!cost) return { spread: NA, perShare: NA, perOrder: NA, remark: NA };
+  if (!cost) return { spread: NA, perShare: NA, perOrder: NA, remark: "", perOrderMin: false };
   // a is a factor of the amount (the book in Europe, taxes, SEC). The American
   // book is published per share and already sits in b, so it must not appear here.
   // b and c are dollars in every *_cost.mjs the page loads.
-  // A missing book used to land as 0 and read as a free trade; null and 0 both
-  // mean we do not have that figure, so the cell is N/A.
-  const remark = String(cost.remark || "").trim();
-  const missingA = cost.a == null || cost.a === 0;
+  // A missing book used to land as 0 and read as a free trade. Unknown is
+  // `null`. A known 0 (no % commission, book already in b) is 0 %.
+  // A flat ticket in `c` (Davy overseas settlement, ChoiceTrade OTC) owns the
+  // order column. `min fees` then stays in the remark, in the published unit.
+  const ticket = Number(cost.c);
+  const hasTicket = Number.isFinite(ticket) && ticket !== 0;
+  const pulled = hasTicket ? { minFees: null, remark: String(cost.remark || "").trim() } : pullMinFees(cost.remark);
+  const missingA = cost.a == null;
+  const minUsd = pulled.minFees ? numericFloor(cost) ?? minFeesUsd(pulled.minFees, cost) : null;
   return {
     spread: missingA ? NA : `${fmtNum(cost.a * 100)}%`,
     perShare: cost.b == null ? NA : fmtNum(cost.b),
-    perOrder: cost.c == null ? NA : fmtNum(cost.c),
-    remark: remark || NA,
+    perOrder: hasTicket ? fmtUsd(ticket) : minUsd != null ? fmtUsd(minUsd) : cost.c == null ? NA : fmtUsd(cost.c),
+    perOrderMin: !hasTicket && minUsd != null,
+    remark: pulled.remark || "",
     buyable: cost.onlineBuy !== false,
   };
 }
 
 function estimateListing(folder, listing, inst, extra = {}) {
   const fn = estimators.get(folder);
-  if (!fn) return { spread: NA, perShare: NA, perOrder: NA, remark: NA };
+  if (!fn) return { spread: NA, perShare: NA, perOrder: NA, remark: "" };
   try {
     const cost = fn({
       etf: inst.isin || listing.ticker,
@@ -219,7 +300,7 @@ function estimateListing(folder, listing, inst, extra = {}) {
     });
     return formatCost(cost);
   } catch {
-    return { spread: NA, perShare: NA, perOrder: NA, remark: NA };
+    return { spread: NA, perShare: NA, perOrder: NA, remark: "" };
   }
 }
 
@@ -267,14 +348,36 @@ function preferredTicker(inst, hint) {
   return best;
 }
 
-function summarize(inst, hint = "") {
+function brokerFolder(folder) {
+  return String(folder || "").split(":")[0];
+}
+
+function acceptsNat(folder, nat) {
+  const meta = brokers.get(brokerFolder(folder));
+  return accepts(brokerFolder(folder), nat, meta?.country);
+}
+
+function listingOpen(listing, nat) {
+  return listingAccepts(listing, nat);
+}
+
+function visibleBrokers(inst, nat) {
+  let n = 0;
+  for (const [folder, listingsOf] of inst.byBroker) {
+    if (!acceptsNat(folder, nat)) continue;
+    if (listingsOf.some((listing) => listingOpen(listing, nat))) n += 1;
+  }
+  return n;
+}
+
+function summarize(inst, hint = "", nat = "") {
   return {
     key: inst.key,
     isin: inst.isin,
     ticker: preferredTicker(inst, hint),
     name: preferredName(inst),
     type: mostCommon(inst.types),
-    brokers: inst.byBroker.size,
+    brokers: visibleBrokers(inst, nat),
   };
 }
 
@@ -313,17 +416,19 @@ function score(inst, q) {
   return s;
 }
 
-function search(q, limit = 20) {
+function search(q, limit = 20, nat = "") {
   const query = String(q || "").trim();
   if (query.length < 1) return [];
   const hits = [];
   for (const inst of instruments.values()) {
     const s = score(inst, query);
     if (s <= 0) continue;
-    hits.push({ s, brokers: inst.byBroker.size, inst });
+    const n = visibleBrokers(inst, nat);
+    if (n <= 0) continue;
+    hits.push({ s, brokers: n, inst });
   }
   hits.sort((a, b) => b.brokers - a.brokers || b.s - a.s);
-  return hits.slice(0, limit).map((h) => summarize(h.inst, query));
+  return hits.slice(0, limit).map((h) => summarize(h.inst, query, nat));
 }
 
 function resolve(key) {
@@ -350,6 +455,32 @@ const EASYBOURSE_PLANS = [
   { id: "intense", name: "EasyBourse Intense" },
 ];
 
+const BUNQ_PLANS = [
+  { id: "free", name: "Bunq Free" },
+  { id: "core", name: "Bunq Core" },
+  { id: "pro", name: "Bunq Pro" },
+  { id: "elite", name: "Bunq Elite" },
+];
+
+const BOURSOBANK_PLANS = [
+  { id: "decouverte", name: "BoursoBank Découverte" },
+  { id: "classic", name: "BoursoBank Classic" },
+  { id: "trader", name: "BoursoBank Trader" },
+  { id: "ultimate", name: "BoursoBank Ultimate Trader" },
+];
+
+const BUX_PLANS = [
+  { id: "basic", name: "BUX Basic" },
+  { id: "plus", name: "BUX Plus" },
+  { id: "prime", name: "BUX Prime" },
+];
+
+const DAVY_PLANS = [
+  { id: "pia", name: "Davy Select PIA" },
+  { id: "io", name: "Davy Select Investment Only" },
+  { id: "tradingplus", name: "Davy Select Trading Plus" },
+];
+
 function sameCostListings(a, b) {
   if (a.length !== b.length) return false;
   return a.every((l, i) => {
@@ -360,6 +491,7 @@ function sameCostListings(a, b) {
       l.spread === r.spread &&
       l.perShare === r.perShare &&
       l.perOrder === r.perOrder &&
+      l.perOrderMin === r.perOrderMin &&
       l.remark === r.remark
     );
   });
@@ -374,24 +506,103 @@ function collapseEasyBourse(built) {
   }
   return groups.map((g) => {
     if (g.members.length === 1) return g.members[0];
-    const labels = g.members.map((m) => m.name.replace(/^EasyBourse\s+/, ""));
     return {
       ...g.members[0],
       folder: `easybourse:${g.members.map((m) => m.folder.split(":")[1]).join("-")}`,
-      name: `EasyBourse ${labels.join(" / ")}`,
+      name: g.members[0].family,
+      plan: "",
+      planRank: 0,
     };
   });
 }
 
-function detail(key) {
+function collapseBunq(built) {
+  const groups = [];
+  for (const row of built) {
+    const hit = groups.find((g) => sameCostListings(g.listings, row.listings));
+    if (hit) hit.members.push(row);
+    else groups.push({ listings: row.listings, members: [row] });
+  }
+  return groups.map((g) => {
+    if (g.members.length === 1) return g.members[0];
+    return {
+      ...g.members[0],
+      folder: `bunq:${g.members.map((m) => m.folder.split(":")[1]).join("-")}`,
+      name: g.members[0].family,
+      plan: "",
+      planRank: 0,
+    };
+  });
+}
+
+function collapseBux(built) {
+  const groups = [];
+  for (const row of built) {
+    const hit = groups.find((g) => sameCostListings(g.listings, row.listings));
+    if (hit) hit.members.push(row);
+    else groups.push({ listings: row.listings, members: [row] });
+  }
+  return groups.map((g) => {
+    if (g.members.length === 1) return g.members[0];
+    return {
+      ...g.members[0],
+      folder: `bux:${g.members.map((m) => m.folder.split(":")[1]).join("-")}`,
+      name: g.members[0].family,
+      plan: "",
+      planRank: 0,
+    };
+  });
+}
+
+function collapseDavy(built) {
+  const groups = [];
+  for (const row of built) {
+    const hit = groups.find((g) => sameCostListings(g.listings, row.listings));
+    if (hit) hit.members.push(row);
+    else groups.push({ listings: row.listings, members: [row] });
+  }
+  return groups.map((g) => {
+    if (g.members.length === 1) return g.members[0];
+    return {
+      ...g.members[0],
+      folder: `davy:${g.members.map((m) => m.folder.split(":")[1]).join("-")}`,
+      name: g.members[0].family,
+      plan: "",
+      planRank: 0,
+    };
+  });
+}
+
+function collapseBoursobank(built) {
+  const groups = [];
+  for (const row of built) {
+    const hit = groups.find((g) => sameCostListings(g.listings, row.listings));
+    if (hit) hit.members.push(row);
+    else groups.push({ listings: row.listings, members: [row] });
+  }
+  return groups.map((g) => {
+    if (g.members.length === 1) return g.members[0];
+    return {
+      ...g.members[0],
+      folder: `boursobank:${g.members.map((m) => m.folder.split(":")[1]).join("-")}`,
+      name: g.members[0].family,
+      plan: "",
+      planRank: 0,
+    };
+  });
+}
+
+function detail(key, nat = "") {
   const inst = resolve(key);
   if (!inst) return null;
   const rows = [];
   const easy = [];
   for (const [folder, listingsOf] of inst.byBroker) {
+    if (!acceptsNat(folder, nat)) continue;
     const meta = brokers.get(folder);
     const listings = (extra) =>
       listingsOf
+        .filter((listing) => listingOpen(listing, nat))
         .slice()
         .sort((a, b) => a.exchange.localeCompare(b.exchange, "en") || a.currency.localeCompare(b.currency))
         .map((listing) => ({
@@ -399,33 +610,81 @@ function detail(key) {
           ...estimateListing(folder, listing, inst, extra),
         }))
         .filter((listing) => listing.buyable !== false)
-        .map(({ buyable, ...listing }) => listing);
+        .map(({ buyable, nonEuResident, usResidentsOnly, supportedCountries, exchangeRaw, ...listing }) => listing);
     const base = {
       folder,
+      family: meta?.name || prettyFolder(folder),
       country: meta?.country || "",
       kind: meta?.type || "",
       url: meta?.url || "",
+      plan: "",
+      planRank: 0,
     };
+    const asPlan = (plan, i, listed) => ({
+      ...base,
+      folder: `${folder}:${plan.id}`,
+      name: plan.name,
+      plan: plan.id,
+      planRank: i + 1,
+      listings: listed,
+    });
     if (folder === "easybourse") {
       const built = [];
-      for (const plan of EASYBOURSE_PLANS) {
+      EASYBOURSE_PLANS.forEach((plan, i) => {
         const listed = listings({ plan: plan.id });
-        if (!listed.length) continue;
-        built.push({ ...base, folder: `${folder}:${plan.id}`, name: plan.name, listings: listed });
-      }
+        if (listed.length) built.push(asPlan(plan, i, listed));
+      });
       easy.push(...collapseEasyBourse(built));
       continue;
     }
+    if (folder === "bunq") {
+      const built = [];
+      BUNQ_PLANS.forEach((plan, i) => {
+        const listed = listings({ plan: plan.id });
+        if (listed.length) built.push(asPlan(plan, i, listed));
+      });
+      for (const row of collapseBunq(built)) rows.push(row);
+      continue;
+    }
+    if (folder === "boursobank") {
+      const built = [];
+      BOURSOBANK_PLANS.forEach((plan, i) => {
+        const listed = listings({ plan: plan.id });
+        if (listed.length) built.push(asPlan(plan, i, listed));
+      });
+      for (const row of collapseBoursobank(built)) rows.push(row);
+      continue;
+    }
+    if (folder === "bux") {
+      const built = [];
+      BUX_PLANS.forEach((plan, i) => {
+        const listed = listings({ plan: plan.id });
+        if (listed.length) built.push(asPlan(plan, i, listed));
+      });
+      for (const row of collapseBux(built)) rows.push(row);
+      continue;
+    }
+    if (folder === "davy") {
+      const built = [];
+      DAVY_PLANS.forEach((plan, i) => {
+        const listed = listings({ plan: plan.id });
+        if (listed.length) built.push(asPlan(plan, i, listed));
+      });
+      for (const row of collapseDavy(built)) rows.push(row);
+      continue;
+    }
+    const listed = listings({});
+    if (!listed.length) continue;
     rows.push({
       ...base,
       name: meta?.name || prettyFolder(folder),
-      listings: listings({}),
+      listings: listed,
     });
   }
   rows.sort((a, b) => a.name.localeCompare(b.name, "en"));
   const at = rows.findIndex((r) => r.name.localeCompare("EasyBourse", "en") > 0);
   rows.splice(at === -1 ? rows.length : at, 0, ...easy);
-  return { ...summarize(inst), soldBy: rows };
+  return { ...summarize(inst, "", nat), soldBy: rows };
 }
 
 function json(res, status, body) {
@@ -438,11 +697,14 @@ function json(res, status, body) {
 
 const server = http.createServer((req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
-  if (url.pathname === "/api/search") return json(res, 200, search(url.searchParams.get("q") || ""));
+  if (url.pathname === "/api/search") {
+    return json(res, 200, search(url.searchParams.get("q") || "", 20, url.searchParams.get("nat") || ""));
+  }
   if (url.pathname === "/api/instrument") {
-    const found = detail(url.searchParams.get("key") || "");
+    const found = detail(url.searchParams.get("key") || "", url.searchParams.get("nat") || "");
     return found ? json(res, 200, found) : json(res, 404, { error: "unknown" });
   }
+  if (url.pathname === "/api/countries") return json(res, 200, countryOptions());
   if (url.pathname === "/api/stats") {
     return json(res, 200, {
       instruments: instruments.size,

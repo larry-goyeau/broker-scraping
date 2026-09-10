@@ -49,8 +49,10 @@ const FOREIGN_PER_USD = {
   PHP: 62.641,
   RON: 4.5189,
   ISK: 121.15,
-  // UAE dirham, IMF peg. Not an ECB print.
+  // GCC pegs. Not ECB prints.
   AED: 3.6725,
+  BHD: 0.376,
+  OMR: 0.3845,
 };
 
 function keyOf(currency) {

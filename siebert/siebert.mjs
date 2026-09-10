@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer-core";
+import { stampRows } from "../accepted.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -543,7 +544,7 @@ const queries = [...new Set([...catalogueQueries, ...cryptoTickers])]
 console.error(`${queries.length} tickers to ask about`);
 
 function save() {
-  fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+  fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
 }
 
 function absorb(ticker, quoted) {

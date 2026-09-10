@@ -9,4 +9,6 @@ Syfe
 Exante
 CGS International
 
-alpaca crypto  
+alpaca  
+alramz
+captrader

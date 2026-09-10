@@ -147,7 +147,7 @@ BAWAG	AT	Bank	UCITS ETFs / ETCs	https://www.bawag.at/bawag/privatkunden/investie
 Oberbank	AT	Bank	UCITS ETFs / ETCs	https://www.oberbank.at/wertpapier-infos
 DEGIRO	NL	Broker	UCITS ETFs / ETCs	https://www.degiro.nl/
 BUX	NL	Neobroker	UCITS ETFs / ETCs	https://getbux.com/
-bunq	NL	Neobroker	UCITS ETFs / ETCs	https://www.bunq.com/investments
+Bunq	NL	Neobroker	UCITS ETFs / ETCs	https://www.bunq.com/investments
 ING Nederland	NL	Bank	UCITS ETFs / ETCs	https://www.ing.nl/particulier/beleggen/beleggen-bij-ing/zelf-op-de-beurs
 Rabobank	NL	Bank	UCITS ETFs / ETCs	https://www.rabobank.nl/particulieren/beleggen/rabo-zelf-beleggen
 ABN AMRO	NL	Bank	UCITS ETFs / ETCs	https://www.abnamro.nl/nl/prive/beleggen/beleggingsvormen/beleggingsrekening/index.html

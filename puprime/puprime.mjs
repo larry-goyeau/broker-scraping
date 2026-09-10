@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer-core";
+import { stampRows } from "../accepted.mjs";
 import fs from "node:fs";
 import zlib from "node:zlib";
 
@@ -300,7 +301,7 @@ for (const [index, instrument] of instruments.entries()) {
   });
 }
 
-fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
 
 console.log(JSON.stringify(results, null, 2));
 

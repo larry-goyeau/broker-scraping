@@ -1,0 +1,39 @@
+{
+  "on": "2026-09-10",
+  "plan": "plus",
+  "currency": "EUR",
+  "entity": "BUX B.V. (NL)",
+  "isin": "US88025U1097",
+  "ticker": "TXG",
+  "name": "10x Genomics",
+  "exchange": "NASDAQ",
+  "n": 1,
+  "order": "market",
+  "exAnte": {
+    "file": "Ex-ante_cost_report_-_BUX.pdf",
+    "fxRate": 0.8609,
+    "valueEur": 57.32,
+    "buy": { "commission": 0.99, "fx": 0.14, "fxPct": 0.0025, "spread": 0.02, "total": 1.15 },
+    "sell": { "commission": 0.99, "fx": 0.19, "fxPct": 0.0033, "spread": 0.02, "total": 1.2 },
+    "roundTrip": 2.35,
+    "monthly": 2.99,
+    "custodyAbove": 250000,
+    "custody": 0.001
+  },
+  "buy": {
+    "priceUsd": 66.44,
+    "eurUsd": 1.15901,
+    "commission": 0.99,
+    "estOrderEur": 58.31479
+  },
+  "sell": {
+    "priceUsd": 66.06,
+    "eurUsd": 1.16476,
+    "commission": 0.99,
+    "estOrderEur": 55.72554
+  },
+  "cash": { "start": 70, "end": 67.477 },
+  "commissionPaid": 1.98,
+  "positionsAfter": 0,
+  "note": "Plus (2.99 €/month on the PDF). Market both ways, 1 TXG. Tickets 0.99 € each way as printed. Ex-ante FX on the buy is 0.25 % (the Plus card); on the sell it prints 0.33 % / 0.19 €. Cash 70.00 → 67.48. a keeps 0.25 % × 2; the 0.33 % sell line is not fitted. c stays 0; floor stays 1.98 €."
+}

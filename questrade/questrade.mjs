@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer-core";
+import { stampRows } from "../accepted.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -436,14 +437,14 @@ for (let offset = 0; offset < symbols.length; offset += QUOTE_BATCH) {
 
   const quotedThrough = Math.min(offset + batch.length, symbols.length);
   if (quotedThrough % 500 === 0 || quotedThrough === symbols.length) {
-    fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+    fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
     console.error(
       `  ${results.length} matched (${quotedThrough}/${symbols.length} quoted)`
     );
   }
 }
 
-fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
 
 const byType = new Map();
 for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);

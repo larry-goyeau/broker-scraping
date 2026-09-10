@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer-core";
+import { stampRows } from "../accepted.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -354,7 +355,7 @@ results.sort((left, right) => {
 });
 
 const outputPath = new URL("revolut-parsed.json", import.meta.url);
-fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
 
 const byType = new Map();
 for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);

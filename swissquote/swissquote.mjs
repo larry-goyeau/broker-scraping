@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer-core";
+import { stampResidency, stampRows } from "../accepted.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -267,6 +268,7 @@ if (!fresh && fs.existsSync(outputPath)) {
       for (const entry of existing) {
         if (entry && nonEuResident(entry.type, entry.isin)) entry.nonEuResident = true;
         else if (entry) delete entry.nonEuResident;
+        stampResidency(entry);
         results.push(entry);
         if (entry?.ticker) {
           seen.add(
@@ -345,7 +347,7 @@ let savedCount = results.length;
 let savedAt = 0;
 
 function save() {
-  fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+  fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
   savedCount = results.length;
   savedAt = Date.now();
 }
@@ -415,6 +417,7 @@ function emit(item) {
     isin: isin || "",
   };
   if (nonEuResident(type, isin)) row.nonEuResident = true;
+  stampResidency(row);
   results.push(row);
 }
 

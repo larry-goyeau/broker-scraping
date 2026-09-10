@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer-core";
+import { stampRows } from "../accepted.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -635,7 +636,7 @@ for (const [code, entry] of reference) {
   if (added) fromReference += 1;
 }
 
-fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
 
 const byType = {};
 for (const row of results) byType[row.type] = (byType[row.type] || 0) + 1;

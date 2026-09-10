@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer-core";
+import { stampRows } from "../accepted.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -150,7 +151,7 @@ for (const instrument of instruments) {
   });
 }
 
-fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
 
 console.error(`${results.length} funds matched, ${offList} instruments not in the CSV`);
 console.log(JSON.stringify(results, null, 2));

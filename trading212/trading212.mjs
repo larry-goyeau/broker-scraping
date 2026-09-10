@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer-core";
+import { stampRows } from "../accepted.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -321,27 +322,27 @@ if (!skipCrypto) {
 // only". It is the whole reason warrants are absent from the answer: all 35 of
 // them carry it, and the validator refuses every one.
 //
-// Trading212 does not mark PTP lines the way Alpaca does (`ptp_no_exception`),
-// and it has no `usResidentsOnly` flag of its own. The US dealers (AVUS,
+// Trading212 does not mark PTP lines the way Alpaca does (`ptp_no_exception`).
+// A US-domiciled fund is left as the catalogue states it. The US dealers (AVUS,
 // AVUSUK) are instead named on `dealerExclusions` where they cannot buy: every
 // spot crypto pair lists them, so those pairs are EU/Cyprus, not the reverse.
-function refusal(instrument, dealer) {
+//
+// Country registration is not a reason to drop the line: the list is written
+// on the row so the front can hide it per nationality. A fund with no list is
+// kept with an empty one (US trackers held for existing positions). Shares
+// and crypto have no registration list; silence means the entity's whole book.
+function hardRefusal(instrument, dealer) {
   if (instrument.tradable !== true) return "not for trading";
   if (instrument.suspended) return "suspended";
   if (instrument.conditionalVisibility) return "position only";
   if ((instrument.dealerExclusions || []).includes(dealer)) return `not offered by ${dealer}`;
+  return "";
+}
 
+function countryList(instrument, dealer) {
   const allowed = instrument.supportedCountries?.[dealer];
-  if (allowed) return allowed.includes(residency) ? "" : `not offered in ${residency}`;
-
-  // A fund may only be sold where it is registered, and the catalogue lists
-  // those countries. A fund carrying no list at all is not one this account can
-  // buy: the US trackers that reach this line are kept in the catalogue for the
-  // accounts that already hold them. Shares are not sold under that rule, so
-  // for them silence means yes. Crypto has no registration list either: the
-  // dealer exclusion is the whole test.
-  if (instrument.category === "CRYPTO") return "";
-  return instrument.type === "ETF" ? `not registered in ${residency}` : "";
+  if (!Array.isArray(allowed)) return null;
+  return [...new Set(allowed.map((code) => String(code).trim().toUpperCase()).filter((code) => /^[A-Z]{2}$/.test(code)))].sort();
 }
 
 const offered = new Map();
@@ -349,7 +350,7 @@ const refusals = new Map();
 for (const [isin, listings] of byIsin) {
   const open = [];
   for (const listing of listings) {
-    const refused = refusal(listing, entity);
+    const refused = hardRefusal(listing, entity);
     if (refused) refusals.set(refused, (refusals.get(refused) || 0) + 1);
     else open.push(listing);
   }
@@ -392,7 +393,7 @@ if (includeCrypto) {
     const cryptoRefusals = new Map();
     for (const instrument of cryptoListed) {
       if (!cryptoWanted(instrument)) continue;
-      const refused = refusal(instrument, cryptoDealer);
+      const refused = hardRefusal(instrument, cryptoDealer);
       if (refused) cryptoRefusals.set(refused, (cryptoRefusals.get(refused) || 0) + 1);
       else offeredCrypto.push(instrument);
     }
@@ -477,7 +478,8 @@ function rowFrom(query, instrument, extra = {}) {
   )
     .replace(/\s+/g, " ")
     .trim();
-  return {
+  const countries = countryList(instrument, isCrypto ? cryptoDealer || entity : entity);
+  const row = {
     query,
     isin: isCrypto ? null : instrument.isin || query,
     ticker: ticker || null,
@@ -501,6 +503,9 @@ function rowFrom(query, instrument, extra = {}) {
       .filter(Boolean)
       .join(" "),
   };
+  if (countries) row.supportedCountries = countries;
+  else if (!isCrypto && instrument.type === "ETF") row.supportedCountries = [];
+  return row;
 }
 
 const outputPath = new URL("trading212-parsed.json", import.meta.url);
@@ -535,7 +540,7 @@ let savedCount = results.length;
 let savedAt = 0;
 
 function save() {
-  fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+  fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
   savedCount = results.length;
   savedAt = Date.now();
 }
@@ -642,6 +647,17 @@ console.error(
     `: ${[...byType].map(([type, count]) => `${count} ${type}`).join(", ")}`
 );
 if (sellOnlyDropped > 0) console.error(`${sellOnlyDropped} listings left out as sell-only`);
+const countryRows = results.filter((row) => Array.isArray(row.supportedCountries));
+const namedCountries = countryRows.filter((row) => row.supportedCountries.length > 0);
+if (countryRows.length > 0) {
+  const codes = new Set(namedCountries.flatMap((row) => row.supportedCountries));
+  console.error(
+    `${namedCountries.length} listings name ${codes.size} residencies` +
+      (countryRows.length > namedCountries.length
+        ? `, ${countryRows.length - namedCountries.length} ETFs with an empty list`
+        : "")
+  );
+}
 
 console.log(JSON.stringify(results, null, 2));
 

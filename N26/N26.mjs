@@ -3,6 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
+import { stampRows } from "../accepted.mjs";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 
@@ -540,7 +541,7 @@ results.sort((left, right) => {
   return String(left.ticker).localeCompare(String(right.ticker));
 });
 
-fs.writeFileSync(new URL("n26-parsed.json", import.meta.url), JSON.stringify(results, null, 2));
+fs.writeFileSync(new URL("n26-parsed.json", import.meta.url), JSON.stringify(stampRows(results, import.meta.url), null, 2));
 
 const byType = new Map();
 for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);

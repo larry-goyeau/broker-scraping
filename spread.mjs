@@ -802,7 +802,9 @@ async function loadMfsTape(product, dest, wanted, minutes = 1) {
 }
 
 async function loadTradegate(wanted) {
-  return loadMfsTape("DGAT-pretrade", delayedQuotes.tradegate, wanted);
+  // One minute of the tape only quotes names that printed. Fifteen minutes
+  // covers the evening book the way the Frankfurt floor pass does.
+  return loadMfsTape("DGAT-pretrade", delayedQuotes.tradegate, wanted, 15);
 }
 
 async function loadFrankfurt(wanted) {

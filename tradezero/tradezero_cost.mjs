@@ -355,7 +355,7 @@ export function roundTripCost({
     regime: chosen.regime,
     regimeWhy: chosen.why,
     remark:
-      "min fees $0.98 (odd lot <100 sh).\nResting limit ≥100: $0.\nMarketable ≥100: $0.01/share.\nWithdrawal $15.",
+      "min fees 0.98 $.\nResting limit ≥100: $0/share.\nWithdrawal $15.",
     regimes: REGIMES.map(build),
     // Commission aside, no round trip goes below this: the clearing minimum and the reporting
     // penny, each on both legs. Per round trip, unlike Alpaca's, which is per day.

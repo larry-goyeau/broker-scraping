@@ -26,9 +26,9 @@
 // (`min fees` in the remark, `c` = 0). `exactCost` still applies max(min, rate).
 // Default plan is Premium. Pass `--plan=` for Expert or Intense.
 //
-// Conversion is J+1 16:00 fixing + 0.12 % each way. Left out of `a`, the same
-// way Trading212 leaves its 0.15 % out: it only applies when the account is not
-// funded in the line's currency. `fxIfConverted` is 0.24 % the round trip.
+// Cash is euro only. Conversion is J+1 16:00 fixing + 0.12 % each way and
+// always hits a non-EUR line, so 0.24 % the round trip sits in `a`. EUR
+// lines have no FX.
 //
 // Custody is 0 €. Inactivity (3 € / 5 € / 5 € per missing Intense order) is a
 // holding cost, not a trip. A published promo zeroes courtage on some listed
@@ -259,7 +259,6 @@ function remarkOf({ plan, market, online }) {
   const lines = [];
   // Premium is cheaper only on Euronext. US / Xetra / other share one card.
   if (rule) lines.push(`min fees ${rule.min * 2} €.`);
-  lines.push("FX 0.24% if converted.");
   return lines.join("\n");
 }
 
@@ -379,7 +378,8 @@ export function roundTripCost({
   const rates = taxRates(tax);
   const taxTotal = Object.values(rates).reduce((s, r) => s + r, 0);
 
-  const knownPct = taxTotal + (american ? SEC_RATE : 0) + (rule.rate ?? 0) * 2;
+  const fxPct = listing.currency === "EUR" ? 0 : FX_EACH_WAY * 2;
+  const knownPct = taxTotal + (american ? SEC_RATE : 0) + (rule.rate ?? 0) * 2 + fxPct;
   const a = marketBp != null ? marketBp / 1e4 + knownPct : knownPct || null;
   const bookUsd = american ? (marketPerShare ?? 0) : dollars(marketPerShare ?? 0, listing.currency) ?? 0;
   const eachEur = rule.min;
@@ -402,6 +402,7 @@ export function roundTripCost({
       réglementaire: american ? { SEC: SEC_RATE, FINRA: `${TAF_PER_SHARE} par part` } : null,
       commission: (rule.rate ?? 0) * 2,
       commissionUsd: commUsd,
+      change: fxPct || null,
     },
     bp: marketBp,
     perShare: marketPerShare,
@@ -441,7 +442,7 @@ export function roundTripCost({
         : null,
     pea: pea ? { cap: PEA_CAP, why: "plafond PEA / PEA-PME 0,5 % du montant, en ligne, EEE seulement" } : null,
     fx: fxNote(listing.currency),
-    fxIfConverted: listing.currency === "EUR" ? 0 : FX_EACH_WAY * 2,
+    fxIfConverted: 0,
     check: market === "euronext" ? CHECK : null,
     confidence: confidenceOf({
       plan: picked,
@@ -516,7 +517,7 @@ function confidenceOf({ plan, market, marketBp, marketPerShare, taxTotal, americ
     );
   }
   said.push(
-    `change 0,12 % par sens sur le fixing J+1 16 h, hors de a (compte supposé tenu dans la devise de la ligne)`
+    `change 0,12 % par sens sur le fixing J+1 16 h, dans a hors EUR (cash euro seulement)`
   );
   return said.join(" ; ");
 }
@@ -599,6 +600,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   if (out.parts?.marché != null) detail.push(`carnet ${out.parts.marché}`);
   for (const [name, rate] of Object.entries(out.parts?.taxes ?? {})) detail.push(`${name} ${rate}`);
   if (out.parts?.réglementaire) detail.push(`SEC ${out.parts.réglementaire.SEC}`);
+  if (out.parts?.change) detail.push(`change ${out.parts.change}`);
 
   console.log(`a = ${out.a}   (au prorata${detail.length ? " : " + detail.join(" + ") : " : rien"})`);
   console.log(`b = ${out.b} $   (par part${out.b ? " : FINRA et/ou spread 605" : " : rien"})`);
@@ -626,10 +628,6 @@ if (import.meta.url === `file://${process.argv[1]}`) {
         `  commission     : ${Number(billed.commission).toFixed(4)} $` +
           (billed.native?.commission != null ? ` (${billed.native.each} € × 2)` : "")
       );
-    }
-    if (out.fxIfConverted) {
-      const fxUsd = amountUsd != null ? amountUsd * out.fxIfConverted : null;
-      if (fxUsd != null) console.log(`  change si conv.: ${fxUsd.toFixed(4)} $  (${(100 * out.fxIfConverted).toFixed(2)} %, hors de a)`);
     }
   }
   if (out.url) console.log(`\n${out.url}`);

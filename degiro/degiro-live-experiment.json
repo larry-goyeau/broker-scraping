@@ -1,0 +1,21 @@
+{
+  "on": "2026-09-10",
+  "entity": "DEGIRO (flatexDEGIRO Bank Dutch Branch, NL)",
+  "isin": "US0378331005",
+  "ticker": "AAPL",
+  "name": "Apple Inc.",
+  "exchange": "NDQ",
+  "productId": 331868,
+  "n": 1,
+  "order": { "buy": "limit", "sell": "market", "buyLimit": 326.29 },
+  "buy": { "priceUsd": 322.86, "at": "2026-09-10T18:36:36", "checkFeeEur": 2 },
+  "sell": { "priceUsd": 322.83, "at": "2026-09-10T18:36:38", "checkFeeEur": 2 },
+  "cash": { "start": 290, "end": 284.58 },
+  "commissionPaid": 4,
+  "stockPnlUsd": -0.03,
+  "cashDelta": -5.42,
+  "fxResidualEur": 1.394,
+  "fxRoundTrip": 0.00502,
+  "positionsAfter": 0,
+  "note": "Market buy refused: worst-case pad 324.44 €, free space 290 €. Limit buy through the delayed last, market sell. Tickets 2 € each way as checkOrder. Cash 290.00 → 284.58. After 4 € tickets and 0.03 $ stock, 1.39 € remains: 0.50 % of the mid notional, the printed AutoFX 0.25 % × 2. No SEC/TAF outside the handling. Reporting /v4/transactions was 502; fills come from the trader update. a keeps 0.25 % × 2."
+}

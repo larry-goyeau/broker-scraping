@@ -81,13 +81,13 @@ function remarkOf({ bank, market, type } = {}) {
   // CH: https://www.swissquote.com/en-ch/private/trade/pricing/account-fees
   // LU: https://www.swissquote.com/en-lu/private/trade/pricing/account-fees
   const custody = bank === "ch" ? "Custody 20–50 CHF/quarter (+ VAT)." : "";
-  if (type === "CRYPTO") return ["2% taker (Standard I), no min.", custody].filter(Boolean).join(" ");
+  if (type === "CRYPTO") return ["2% taker (Standard I), no min.", custody].filter(Boolean).join("\n");
   if (market === "otc") {
     const otc =
       bank === "ch"
-        ? "OTC: 1%. min fees 200 in listing currency, plus 1.70 CHF realtime."
-        : "OTC: 1%. min fees 200 in listing currency.";
-    return [otc, custody].filter(Boolean).join(" ");
+        ? "min fees 200 in listing currency, plus 1.70 CHF realtime."
+        : "min fees 200 in listing currency.";
+    return [otc, custody].filter(Boolean).join("\n");
   }
   if (bank === "lu") return "EU card: 0.20%. min fees €29.90 (€49.90 Tokyo/Dubai).";
   return custody;

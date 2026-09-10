@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer-core";
+import { stampRows } from "../accepted.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -424,7 +425,7 @@ function saveState() {
 }
 
 function saveResults() {
-  fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+  fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
 }
 
 async function quoteFrom(offset) {
@@ -513,7 +514,7 @@ saveState();
 quotedThrough = await quoteFrom(quotedThrough);
 console.error(`${listings.length} tradable listings quoted`);
 
-fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
 if (fs.existsSync(statePath)) fs.unlinkSync(statePath);
 
 const byType = new Map();

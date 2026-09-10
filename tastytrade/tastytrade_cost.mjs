@@ -362,7 +362,7 @@ function cryptoCost(row, answer) {
     perShare: null,
     url: "https://tastytrade.com/crypto/",
     basis: "barème Zero Hash, markup à l'achat et markdown à la vente ; plancher 1 $ par ticket",
-    remark: "min fees $2 (Zero Hash).",
+    remark: "min fees 2 $ (Zero Hash).",
     fees: { commission: CRYPTO_COMMISSION_EACH, secOfAmount: 0, tafPerShare: 0, clearingPerShareEachWay: 0 },
     confidence:
       `pas de frais SEC ni FINRA. Zero Hash publie ${Number((100 * each).toFixed(2))} % ` +

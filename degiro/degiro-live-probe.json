@@ -1,0 +1,31 @@
+{
+  "on": "2026-09-10",
+  "entity": "DEGIRO (flatexDEGIRO Bank Dutch Branch, NL)",
+  "isin": "US0378331005",
+  "ticker": "AAPL",
+  "name": "Apple Inc.",
+  "exchange": "NDQ",
+  "productId": 331868,
+  "currency": "USD",
+  "n": 1,
+  "order": {
+    "buy": "limit",
+    "sell": "market",
+    "lastUsd": 320.31,
+    "buyPrice": 326.31
+  },
+  "cash": {
+    "start": 290,
+    "free": 290
+  },
+  "check": {
+    "buy": {
+      "data": {
+        "confirmationId": "9abacd63-6a57-416e-afb7-a69fa25c0fb8",
+        "transactionFee": 2,
+        "showExAnteReportLink": true
+      }
+    }
+  },
+  "live": false
+}

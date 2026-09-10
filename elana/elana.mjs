@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer-core";
+import { stampRows } from "../accepted.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -370,12 +371,14 @@ for (const shelf of SHELVES) {
       }
 
       // "ReduceOnly" is the platform refusing to open a position: the line can
-      // be sold if already held but not bought, so it is not on offer.
+      // be sold if already held but not bought, so it is not on offer. A KID
+      // notice is the PRIIPs block for EU retail — keep the line and flag it.
       const status = row.TradingStatus || "";
-      if (status !== "Tradable") {
-        const reason = row.NonTradableReason && row.NonTradableReason !== "None"
-          ? row.NonTradableReason
-          : status || "unstated";
+      const reason = row.NonTradableReason && row.NonTradableReason !== "None"
+        ? row.NonTradableReason
+        : status || "unstated";
+      const kidBlocked = /KII?D/i.test(reason);
+      if (status !== "Tradable" && !kidBlocked) {
         refused.set(reason, (refused.get(reason) || 0) + 1);
         continue;
       }
@@ -393,7 +396,7 @@ for (const shelf of SHELVES) {
       const type = TYPES[(row.AssetType || "").toUpperCase()] || (row.AssetType || "").toUpperCase();
       if (type === "BND" || type === "BOND") continue;
 
-      results.push({
+      const entry = {
         query: isin,
         ticker,
         name: normalize(row.Description),
@@ -402,7 +405,9 @@ for (const shelf of SHELVES) {
         type,
         raw: [symbol, row.Description, row.ExchangeName, row.CurrencyCode].filter(Boolean).join(" "),
         isin,
-      });
+      };
+      if (kidBlocked) entry.nonEuResident = true;
+      results.push(entry);
       kept += 1;
     }
 
@@ -414,7 +419,7 @@ for (const shelf of SHELVES) {
 // nothing to resume, and a sweep the session cut short must not be left in
 // place of a whole one.
 const outputPath = new URL("elana-parsed.json", import.meta.url);
-fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
 
 const byType = new Map();
 for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);

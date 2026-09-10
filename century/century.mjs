@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer-core";
+import { stampRows } from "../accepted.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -507,18 +508,23 @@ for (const [index, product] of universe.entries()) {
   }
 
   seen.add(product.N);
+  const currency = candidate.currency || null;
+  const ccy = String(currency || "").toUpperCase();
+  // Century names no US tape. Hong Kong and Riyadh are one book each.
+  const exchange = ccy === "HKD" ? "HKEX" : ccy === "SAR" ? "TADAWUL" : "";
   results.push({
     query: product.N,
     ticker: candidate.ticker || match.ticker || "",
     name: candidate.name || match.name,
-    currency: candidate.currency || null,
+    currency,
+    exchange,
     type: match.kind,
     raw: [product.N, candidate.name, candidate.currency].filter(Boolean).join(" "),
     isin: match.isin,
   });
 }
 
-fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
 
 const byType = new Map();
 for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);

@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer-core";
+import { stampRows } from "../accepted.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -54,9 +55,9 @@ function loadIsinsFromCsv(csvPath) {
   return map;
 }
 
-// bunq is a Dutch/German bank whose stock service trades on Xetra, so a fund's
-// German-listing ticker is the one its clients would recognise. Whichever
-// ticker appears most across all venues could otherwise be a foreign code.
+// bunq is a Dutch bank; Ginmon / Upvest execute in euros. The German-listing
+// ticker is the one its clients would recognise. Whichever ticker appears
+// most across all venues could otherwise be a foreign code.
 const HOME_EXCHANGES = ["XETR", "EURONEXT"];
 
 // Venues list a fund under a plain ticker and under suffixed variants of it
@@ -256,7 +257,10 @@ for (const instrument of instruments) {
     query,
     ticker: pickTicker(entry),
     name,
-    // bunq routes its orders to Xetra, which quotes in euros.
+    // bunq never names a venue. Upvest's EUR book is Tradegate then Quotrix
+    // (best-execution policy of 2025-12-16). Xetra is only where we pick the
+    // German ticker from the CSV so the search box has a code clients know.
+    exchange: "TRADEGATE",
     currency: "EUR",
     type: kind,
     raw: [instrument.name, instrument.legal_name, isin].filter(Boolean).join(" "),
@@ -266,7 +270,7 @@ for (const instrument of instruments) {
 
 results.sort((left, right) => left.ticker.localeCompare(right.ticker) || left.type.localeCompare(right.type));
 
-fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
 
 const byType = new Map();
 for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);

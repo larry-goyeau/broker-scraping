@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import { stampRows } from "../accepted.mjs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -566,7 +567,7 @@ for (const instrument of instruments) {
 
 results.sort((left, right) => left.ticker.localeCompare(right.ticker) || left.query.localeCompare(right.query));
 
-fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
 
 const byCurrency = {};
 for (const row of results) byCurrency[row.currency || "?"] = (byCurrency[row.currency || "?"] || 0) + 1;

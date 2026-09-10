@@ -1,0 +1,36 @@
+{
+  "on": "2026-09-09",
+  "account": "ORD (DE) GOYEAU (00080872721)",
+  "plan": "decouverte",
+  "currency": "EUR",
+  "entity": "BoursoBank (Boursorama, FR)",
+  "isin": "FR0000120271",
+  "ticker": "TTE",
+  "name": "TOTALENERGIES",
+  "n": 1,
+  "session": "22H",
+  "venuePrinted": "Solution Horaires étendus",
+  "buy": {
+    "ref": "F26I09055742",
+    "n": 1,
+    "price": 78.14,
+    "estimated": 78.15,
+    "ticket": 1.99,
+    "feesAllIn": 2.3,
+    "pru": 80.44
+  },
+  "sell": {
+    "ref": "F26I09055784",
+    "n": 1,
+    "price": 78.06,
+    "estimated": 78.07,
+    "ticket": 1.99,
+    "feesAllIn": 1.99
+  },
+  "cash": { "start": 500, "afterBuy": 419.56, "end": 495.63 },
+  "commissionPaid": 3.98,
+  "taxPaid": 0.31,
+  "stockPnl": -0.08,
+  "positionsAfter": 0,
+  "note": "CTO Découverte, 22H. Recap buy 1.99 € ticket + FRAIS TOUT COMPRIS 2.30 € (TTF 0.31 € = 0.40 % of 78.14). Sell 1.99 € only, no TTF. PRU after buy 80.44 = 78.14 + 2.30. Cash 500 → 419.56 → 495.63. Book on the board was the 17:35 Euronext close (78.22 / 78.24); fills 78.14 / 78.06 are not folded into a. c stays 0; floor stays 3.98 €."
+}

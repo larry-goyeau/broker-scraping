@@ -1,0 +1,36 @@
+{
+  "on": "2026-09-09",
+  "account": "Larry Goyeau",
+  "currency": "EUR",
+  "entity": "Century Financial Consultancy LLC (AE), Century Trader",
+  "isin": "US62914V1061",
+  "ticker": "NIO",
+  "query": "NIO.EQ",
+  "name": "NIO Inc",
+  "n": 1,
+  "buy": {
+    "id": 4091523,
+    "orderId": 4146221392,
+    "n": 1,
+    "price": 3.765,
+    "dealPrice": 3.76,
+    "commission": -4
+  },
+  "sell": {
+    "id": 4091528,
+    "orderId": 4146221397,
+    "n": 1,
+    "price": 3.76,
+    "commission": -4,
+    "pnl": -0.01
+  },
+  "cash": { "start": 20, "afterBuy": 12.76, "end": 11.99 },
+  "commissionPaid": 8,
+  "feePaid": 0,
+  "positionsAfter": 0,
+  "card": {
+    "commission": "0.01 EUR per Unit (4 USD min)",
+    "info": { "Type": "UNIT", "Minimum": 4, "Commission": 0.01, "Mode": "CURRENCY", "Currency": "EURUSD" }
+  },
+  "note": "EUR cash account. The card prints 4 USD min; history Commission is −4 € each way and cash 20 → 11.99 matches 8 € tickets plus 0.01 stock P&L. No SEC, no TAF. Dealer spread printed 0. CLOSEPOSITION Direction is BUY on a long, not SELL."
+}

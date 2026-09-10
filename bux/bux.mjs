@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import { stampRows } from "../accepted.mjs";
 import os from "node:os";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
@@ -634,7 +635,7 @@ for (const row of results) {
 }
 
 const merged = [...existing, ...added];
-fs.writeFileSync(outPath, `${JSON.stringify(merged, null, 2)}\n`);
+fs.writeFileSync(outPath, `${JSON.stringify(stampRows(merged, import.meta.url), null, 2)}\n`);
 fs.rmSync(workDir, { recursive: true, force: true });
 
 const byType = {};

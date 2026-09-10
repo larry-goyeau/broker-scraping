@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer-core";
+import { stampRows } from "../accepted.mjs";
 import fs from "node:fs";
 
 function toIsin(value) {
@@ -249,7 +250,7 @@ for (const row of stocks) {
 }
 
 results.sort((a, b) => a.isin.localeCompare(b.isin) || a.ticker.localeCompare(b.ticker));
-fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
 
 const byType = new Map();
 for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);

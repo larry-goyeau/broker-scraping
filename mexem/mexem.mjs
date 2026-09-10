@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer-core";
+import { stampRows } from "../accepted.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -177,7 +178,7 @@ async function tradingRestricted(conid) {
 }
 
 function save() {
-  fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+  fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
 }
 
 console.error(`${queries.length} ISINs to check`);
@@ -204,13 +205,6 @@ for (const [queryIndex, isin] of queries.entries()) {
   for (const hit of hits) {
     const conid = String(hit.conid);
     const status = await tradingRestricted(conid);
-    if (status.restricted) {
-      console.error(
-        `  ${hit.symbol}@${hit.description}: Trading Restricted — skipped`
-      );
-      continue;
-    }
-
     const info = (await readInfo(conid)) || {};
     const ticker = (info.ticker || hit.symbol || "").toUpperCase();
     const exchange = (
@@ -235,7 +229,11 @@ for (const [queryIndex, isin] of queries.entries()) {
     if (seen.has(key)) continue;
     seen.add(key);
 
-    results.push({
+    if (status.restricted) {
+      console.error(`  ${ticker}@${exchange}: non-EU resident (no KID)`);
+    }
+
+    const entry = {
       query: isin,
       ticker,
       name,
@@ -245,7 +243,9 @@ for (const [queryIndex, isin] of queries.entries()) {
       raw: [ticker, name, exchange, currency].filter(Boolean).join(" "),
       isin,
       conid,
-    });
+    };
+    if (status.restricted) entry.nonEuResident = true;
+    results.push(entry);
   }
 
   save();

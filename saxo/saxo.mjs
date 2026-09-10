@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer-core";
+import { stampRows } from "../accepted.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -346,8 +347,8 @@ for (const { row, type, ticker, isin, name } of candidates) {
   const reason = detail.NonTradableReason;
   // A US ETF with no KID is sell-only for this EU retail account. Non-EU
   // retail (and EU professionals) can still buy it, so it is kept and flagged.
-  const notEuResident = /KII?D/i.test(reason || "");
-  if (!notEuResident && (detail.IsTradable === false || (reason && reason !== "None"))) {
+  const kidBlocked = /KII?D/i.test(reason || "");
+  if (!kidBlocked && (detail.IsTradable === false || (reason && reason !== "None"))) {
     skip(reason && reason !== "None" ? reason : "not tradable");
     continue;
   }
@@ -370,7 +371,7 @@ for (const { row, type, ticker, isin, name } of candidates) {
     raw: [ticker, displayName, row.ExchangeId, currency].filter(Boolean).join(" "),
     isin: isin || "",
   };
-  if (notEuResident) entry.notEuResident = true;
+  if (kidBlocked) entry.nonEuResident = true;
   results.push(entry);
 }
 
@@ -383,13 +384,13 @@ results.sort((left, right) => {
 });
 
 const outputPath = new URL("saxo-parsed.json", import.meta.url);
-fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
 
 const byType = new Map();
 let notEu = 0;
 for (const row of results) {
   byType.set(row.type, (byType.get(row.type) || 0) + 1);
-  if (row.notEuResident) notEu += 1;
+  if (row.nonEuResident) notEu += 1;
 }
 
 console.error(

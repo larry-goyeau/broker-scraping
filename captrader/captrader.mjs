@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer-core";
+import { stampRows } from "../accepted.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -324,7 +325,7 @@ const RESTRICTED_NOTICE =
   /KID|Trading Restricted|not available|cannot be traded|Retail clients can trade packaged/i;
 
 // A US-domiciled fund publishes no KID, and PRIIPs leaves European retail
-// clients unable to buy one; only a US resident can. IBKR quotes those
+// clients unable to buy one. A non-EU resident still can. IBKR quotes those
 // listings all the same and admits it in one place only: field 7183, the
 // order-ticket notice. 7184 alone says nothing, since tradable UCITS listings
 // come back with 7184=1 too.
@@ -433,24 +434,24 @@ for (const [queryIndex, query] of queries.entries()) {
       raw: row.raw,
       isin: listing.isin,
     };
-    if (row.restricted) entry.usResidentsOnly = true;
+    if (row.restricted) entry.nonEuResident = true;
     results.push(entry);
   }
 
-  fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+  fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
 }
 
 const byType = new Map();
-let usOnly = 0;
+let nonEu = 0;
 for (const row of results) {
   byType.set(row.type, (byType.get(row.type) || 0) + 1);
-  if (row.usResidentsOnly) usOnly += 1;
+  if (row.nonEuResident) nonEu += 1;
 }
 console.error(
   `${results.length} listed (${[...byType].map(([type, count]) => `${count} ${type}`).join(", ")})`
 );
-if (usOnly > 0) {
-  console.error(`${usOnly} of them are US-residents only (no KID for European retail)`);
+if (nonEu > 0) {
+  console.error(`${nonEu} of them are non-EU-resident (no KID for European retail)`);
 }
 console.log(JSON.stringify(results, null, 2));
 

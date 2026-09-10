@@ -1,0 +1,38 @@
+{
+  "on": "2026-09-10",
+  "account": "U27604034",
+  "currency": "EUR",
+  "entity": "CapTrader GmbH (DE), IBKR introducing broker",
+  "isin": "IE00B4L5Y983",
+  "ticker": "IWDA",
+  "name": "ISHARES CORE MSCI WORLD",
+  "n": 1,
+  "ticketBound": "AEB",
+  "venuePrinted": "GETTEX2",
+  "buy": {
+    "orderId": 279822955,
+    "orderReference": 89213807,
+    "n": 1,
+    "price": 126.1,
+    "ticket": 2,
+    "filledAt": "12:34"
+  },
+  "sell": {
+    "orderId": 279822959,
+    "orderReference": 46916049,
+    "n": 1,
+    "price": 126.1,
+    "ticket": 2,
+    "filledAt": "12:35"
+  },
+  "cash": { "start": 251, "afterBuy": 122.9, "end": 247 },
+  "commissionPaid": 4,
+  "stockPnl": 0,
+  "positionsAfter": 0,
+  "preview": {
+    "amount": 126.11,
+    "commissionEst": "2.00 ... 4.00",
+    "totalEst": 129.11
+  },
+  "note": "EUR cash, market orders during the Euronext cash session. Ticket bound as IWDA AEB; IBKR routed both legs to GETTEX2. Fees 2.0 € each way (GETTEX card min). Same print 126.10 / 126.10; book not folded into a. other_eu / AEB min still unknown. US still blocked under 2 000 € (no FX)."
+}

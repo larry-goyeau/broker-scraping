@@ -236,7 +236,7 @@ export function roundTripCost({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue EFOCS n'existe pas encore : lancer `node efocs/efocs.mjs`",
+      why: "le catalogue EFOCS n'existe pas encore : lancer `node efocs/efocs_scraping.mjs`",
     };
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue EFOCS` };

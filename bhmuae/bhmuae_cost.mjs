@@ -7,7 +7,7 @@
 // other `*_cost.mjs` files answer in.
 //
 // BHM Capital Financial Services PJSC (AE, SCA). The catalogue is Rubix
-// (`trading.bhmuae.ae`, `bhmuae.mjs`). This login's book is DFM and Nasdaq
+// (`trading.bhmuae.ae`, `bhmuae_scraping.mjs`). This login's book is DFM and Nasdaq
 // Dubai (AED and USD). ADX is on the same local card and is wired; ADSM /
 // TDWL are mapped in the scraper in case a later dump actually has them.
 // International executions (US 0.03 $ / share, KSA 0.22 %, …) sit further
@@ -229,7 +229,7 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue BHM n'existe pas encore : lancer `node bhmuae/bhmuae.mjs` avec trading.bhmuae.ae ouvert",
+      why: "le catalogue BHM n'existe pas encore : lancer `node bhmuae/bhmuae_scraping.mjs` avec trading.bhmuae.ae ouvert",
     };
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue BHM` };

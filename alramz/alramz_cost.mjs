@@ -7,7 +7,7 @@
 // other `*_cost.mjs` files answer in.
 //
 // Al Ramz Capital LLC (AE, SCA). The catalogue is webtrade.alramz.ae
-// (`alramz.mjs`) and today only holds four NYSE ETFs that also sit in
+// (`alramz_scraping.mjs`) and today only holds four NYSE ETFs that also sit in
 // `etfs.csv`. The public card still prints DFM, ADX, Nasdaq Dubai, Bahrain
 // and Muscat, so those legs are wired for a later scrape. Custody of the
 // online account is 300 AED / year (FAQ); it stays in the remark.
@@ -219,7 +219,7 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Al Ramz n'existe pas encore : lancer `node alramz/alramz.mjs` avec webtrade.alramz.ae ouvert",
+      why: "le catalogue Al Ramz n'existe pas encore : lancer `node alramz/alramz_scraping.mjs` avec webtrade.alramz.ae ouvert",
     };
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Al Ramz` };

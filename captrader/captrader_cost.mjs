@@ -7,7 +7,7 @@
 // other `*_cost.mjs` files answer in.
 //
 // CapTrader GmbH (DE) is an introducing broker onto Interactive Brokers
-// Ireland. The catalogue is the IBKR book (`captrader.mjs`). Custody is free.
+// Ireland. The catalogue is the IBKR book (`captrader_scraping.mjs`). Custody is free.
 // The published card is 0.10 % of notional on most equity venues, with a
 // minimum that depends on the exchange, or 0.01 $ / share (min 2 $) in the
 // United States. Europe's % × 2 sits in `a`. The US 0.01 $ stays out of `b`
@@ -257,7 +257,7 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue CapTrader n'existe pas encore : lancer `node captrader/captrader.mjs`",
+      why: "le catalogue CapTrader n'existe pas encore : lancer `node captrader/captrader_scraping.mjs`",
     };
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue CapTrader` };

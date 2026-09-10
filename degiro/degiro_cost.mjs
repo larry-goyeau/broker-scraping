@@ -282,7 +282,7 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
   };
 
   if (!catalogue) {
-    return { ...answer, why: "le catalogue DEGIRO n'existe pas encore : lancer `node degiro/degiro.mjs`" };
+    return { ...answer, why: "le catalogue DEGIRO n'existe pas encore : lancer `node degiro/degiro_scraping.mjs`" };
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue DEGIRO` };
   if (!matches.length) {

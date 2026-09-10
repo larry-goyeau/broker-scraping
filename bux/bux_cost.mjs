@@ -8,7 +8,7 @@
 // converted at the ECB mid and folded into the floor (`c` = 0).
 //
 // BUX B.V. (NL), phone app, eight EU countries. The catalogue is recovered
-// from screen recordings (`bux.mjs`). Cash is euro. Three plans on
+// from screen recordings (`bux_scraping.mjs`). Cash is euro. Three plans on
 // bux.com/fees, read 2026-09-10. Default is Basic (no monthly fee).
 //
 // Market order, each way:
@@ -242,7 +242,7 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
   };
 
   if (!catalogue) {
-    return { ...answer, why: "le catalogue BUX n'existe pas encore : lancer `node bux/bux.mjs`" };
+    return { ...answer, why: "le catalogue BUX n'existe pas encore : lancer `node bux/bux_scraping.mjs`" };
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue BUX` };
   if (!matches.length) {

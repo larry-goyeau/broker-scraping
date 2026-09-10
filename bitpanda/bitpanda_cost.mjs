@@ -19,7 +19,7 @@
 //   https://support.bitpanda.com/hc/en-us/articles/24575224671516-Real-Stocks-ETFs-on-Bitpanda
 //   https://support.bitpanda.com/hc/en-us/articles/360000902525-What-fees-and-premiums-can-I-expect-to-pay-on-Bitpanda
 //
-// Crypto on the retail app (what `bitpanda.mjs` catalogues, not Fusion).
+// Crypto on the retail app (what `bitpanda_scraping.mjs` catalogues, not Fusion).
 // Bitcoin is published at 0.99 % to buy and 0.99 % to sell, already in the
 // quoted price. The trade summary prints 0.00 %–2.49 % depending on the
 // asset. This file uses the BTC card for every coin: `a` = 1.98 %. Fusion
@@ -250,7 +250,7 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Bitpanda n'existe pas encore : lancer `node bitpanda/bitpanda.mjs` avec app.bitpanda.com ouvert",
+      why: "le catalogue Bitpanda n'existe pas encore : lancer `node bitpanda/bitpanda_scraping.mjs` avec app.bitpanda.com ouvert",
     };
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Bitpanda` };

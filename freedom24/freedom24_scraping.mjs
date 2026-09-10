@@ -173,6 +173,7 @@ const etfsOnly = hasFlag("etfs-only") || hasFlag("funds-only");
 const stocksOnly = hasFlag("stocks-only");
 const bondsOnly = hasFlag("bonds-only");
 const cryptoOnly = hasFlag("crypto-only") || hasFlag("cryptos-only");
+const usEtfsOnly = hasFlag("us-etfs");
 const fresh = hasFlag("fresh");
 const keepUnlisted = hasFlag("all");
 const skipBonds = hasFlag("no-bonds");
@@ -180,9 +181,9 @@ const skipHk = hasFlag("no-hk") || hasFlag("no-hkex");
 const startIndex = Math.max(1, numberArg("start", 1));
 
 const wantEtfs = !stocksOnly && !bondsOnly && !cryptoOnly;
-const wantStocks = !etfsOnly && !bondsOnly && !cryptoOnly;
-const wantBonds = !etfsOnly && !stocksOnly && !cryptoOnly && !skipBonds;
-const wantCrypto = !etfsOnly && !stocksOnly && !bondsOnly;
+const wantStocks = !etfsOnly && !bondsOnly && !cryptoOnly && !usEtfsOnly;
+const wantBonds = !etfsOnly && !stocksOnly && !cryptoOnly && !skipBonds && !usEtfsOnly;
+const wantCrypto = !etfsOnly && !stocksOnly && !bondsOnly && !usEtfsOnly;
 const wantHk = wantStocks && !skipHk;
 
 const catalogue = {
@@ -392,7 +393,16 @@ function catalogueKind(isin, ticker, info) {
   return null;
 }
 
-function keepRow(info, ticker) {
+const US_LISTED = new Set(["NASDAQ", "NYSE", "AMEX", "ARCA", "BATS", "CBOE", "OTC", "OTCMKTS", "PINK"]);
+
+function isUsTracker(info, ticker, type) {
+  if (!/^(ETF|ETC|ETN)$/i.test(type || "")) return false;
+  const ex = normalize(info?.codesub_nm || info?.ltr).toUpperCase();
+  const isin = toIsin(info?.issue_nb);
+  return US_LISTED.has(ex) || /\.US$/i.test(ticker) || /^US/i.test(isin);
+}
+
+function keepRow(info, ticker, extra = {}) {
   if (!info || info.error) return false;
   if (Number(info.type) === 10) return false;
   if (isAliasTicker(info.c || ticker)) return false;
@@ -408,7 +418,7 @@ function keepRow(info, ticker) {
   if (seen.has(key)) return false;
   seen.add(key);
 
-  results.push({
+  const row = {
     query: info.c || ticker,
     ticker: (info.code_nm || "").trim() || String(ticker).split(/[./]/)[0],
     name: normalize(info.name) || ticker,
@@ -417,7 +427,9 @@ function keepRow(info, ticker) {
     type,
     raw: [info.c, info.name, info.codesub_nm, info.issue_nb].filter(Boolean).join(" "),
     isin: isin || null,
-  });
+  };
+  if (extra.notEuResident) row.notEuResident = true;
+  results.push(row);
   return true;
 }
 
@@ -444,20 +456,34 @@ async function processTickers(tickers, label) {
       continue;
     }
 
-    // "This instrument is not available to you" is what allowed = 0 looks like on
-    // screen, so anything but 1 is dropped here.
-    const batch = candidates.filter((ticker) => permissions[ticker]?.allowed === 1);
-    tradable += batch.length;
+    // allowed = 1 is the ordinary book. A listed ticker with allowed = 0 is
+    // "not available to you" on this EU account (reject_code present). A
+    // guess Freedom24 does not list comes back as allowed = 0 with no
+    // reject_code and no order types — skip those.
+    const listed = (row) =>
+      row && (row.reject_code || (Array.isArray(row.allowedOrderTypes) && row.allowedOrderTypes.length));
+    const tradableBatch = candidates.filter((ticker) => permissions[ticker]?.allowed === 1);
+    const blockedBatch = candidates.filter(
+      (ticker) => permissions[ticker]?.allowed !== 1 && listed(permissions[ticker])
+    );
+    tradable += tradableBatch.length;
 
-    const answers = batch.length > 0 ? (await readDetails(batch).catch(() => null)) || [] : [];
+    const needDetails = [...tradableBatch, ...blockedBatch];
+    const answers = needDetails.length > 0 ? (await readDetails(needDetails).catch(() => null)) || [] : [];
 
-    for (const [index, ticker] of batch.entries()) {
+    for (const [index, ticker] of needDetails.entries()) {
       const info = answers[index];
       if (!info || info.error) {
         console.error(`  ${ticker}: details unavailable`);
         continue;
       }
-      keepRow(info, ticker);
+      if (tradableBatch.includes(ticker)) {
+        keepRow(info, ticker);
+        continue;
+      }
+      const kind = catalogueKind(toIsin(info.issue_nb), ticker, info);
+      const type = listingType(info, kind);
+      if (isUsTracker(info, ticker, type)) keepRow(info, ticker, { notEuResident: true });
     }
 
     save();
@@ -509,6 +535,9 @@ if (cliTickers.length > 0 || cliIsins.length > 0) {
     );
   }
   await processTickers(wanted, "candidates");
+} else if (usEtfsOnly) {
+  const us = [...catalogue.candidates].filter((ticker) => /\.US$/i.test(ticker));
+  await processTickers(us, "US ETFs");
 } else {
   const guessed = [...catalogue.candidates];
   if (wantCrypto) {

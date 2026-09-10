@@ -285,7 +285,7 @@ export function roundTripCost({
     return {
       ...answer,
       why:
-        "le catalogue TradeZero n'existe pas encore : lancer `node tradezero/tradezero.mjs` " +
+        "le catalogue TradeZero n'existe pas encore : lancer `node tradezero/tradezero_scraping.mjs` " +
         "avec la plateforme ouverte pour le construire",
     };
   }

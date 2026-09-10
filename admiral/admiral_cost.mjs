@@ -286,7 +286,7 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Admirals n'existe pas encore : lancer `node admiral/admiral.mjs` avec admiralmarkets.com ouvert",
+      why: "le catalogue Admirals n'existe pas encore : lancer `node admiral/admiral_scraping.mjs` avec admiralmarkets.com ouvert",
     };
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Admirals` };

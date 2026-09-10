@@ -164,7 +164,7 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
   };
 
   if (!catalogue) {
-    return { ...answer, why: "le catalogue ChoiceTrade n'existe pas encore : lancer `node choicetrade/choicetrade.mjs`" };
+    return { ...answer, why: "le catalogue ChoiceTrade n'existe pas encore : lancer `node choicetrade/choicetrade_scraping.mjs`" };
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue ChoiceTrade` };
   if (!matches.length) {

@@ -7,7 +7,7 @@
 // other `*_cost.mjs` files answer in.
 //
 // Century Financial Consultancy LLC (AE, CMA). The catalogue is Century Trader
-// (`liveapp.century.ae`, `century.mjs`), not TWS / CQG / MT5. The site still
+// (`liveapp.century.ae`, `century_scraping.mjs`), not TWS / CQG / MT5. The site still
 // calls the lines share CFDs. Every card read on 2026-09-09 printed margin
 // 100 %, holding 0 %, dealer spread 0 — cash-like, no overnight on a same-day
 // trip. A live NIO trip on a EUR cash account (2026-09-09) charged the 4 €
@@ -251,7 +251,7 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Century n'existe pas encore : lancer `node century/century.mjs` avec liveapp.century.ae ouvert",
+      why: "le catalogue Century n'existe pas encore : lancer `node century/century_scraping.mjs` avec liveapp.century.ae ouvert",
     };
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Century` };

@@ -269,7 +269,7 @@ export function roundTripCost({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue eToro n'existe pas encore : lancer `node etoro/etoro.mjs`",
+      why: "le catalogue eToro n'existe pas encore : lancer `node etoro/etoro_scraping.mjs`",
     };
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue eToro` };

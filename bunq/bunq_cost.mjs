@@ -234,7 +234,7 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue bunq n'existe pas encore : lancer `node bunq/bunq.mjs` avec web.bunq.com ouvert",
+      why: "le catalogue bunq n'existe pas encore : lancer `node bunq/bunq_scraping.mjs` avec web.bunq.com ouvert",
     };
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue bunq` };

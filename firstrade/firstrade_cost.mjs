@@ -157,7 +157,7 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Firstrade n'existe pas encore : lancer `node firstrade/firstrade.mjs`",
+      why: "le catalogue Firstrade n'existe pas encore : lancer `node firstrade/firstrade_scraping.mjs`",
     };
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Firstrade` };

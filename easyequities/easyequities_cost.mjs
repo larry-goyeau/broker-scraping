@@ -254,7 +254,7 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue EasyEquities n'existe pas encore : lancer `node easyequities/easyequities.mjs`",
+      why: "le catalogue EasyEquities n'existe pas encore : lancer `node easyequities/easyequities_scraping.mjs`",
     };
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue EasyEquities` };

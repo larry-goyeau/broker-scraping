@@ -340,7 +340,7 @@ export function roundTripCost({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Elana n'existe pas encore : lancer `node elana/elana.mjs`",
+      why: "le catalogue Elana n'existe pas encore : lancer `node elana/elana_scraping.mjs`",
     };
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Elana` };

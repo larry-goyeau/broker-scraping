@@ -7,7 +7,7 @@ alwaysApply: true
 
 Broker-specific code and output go in `<broker>/`. Shared facts about the market (order books, taxes, catalogues) stay at the repo root.
 
-- Scraper, probes, cost scripts, experiments, and `<broker>-parsed.json` live in `<broker>/`. Never leave a copy of a scraper at the root.
+- Scrapers (`*_scraping.mjs`), probes, cost scripts, experiments, and `<broker>-parsed.json` live in `<broker>/`. Never leave a copy of a scraper at the root.
 - `spread.mjs`, `venues.mjs`, `taxes.mjs`, `taxMap.mjs`, `xlm.mjs`, `rule605-monthly.mjs`, `catalogues.mjs`, `front.mjs` / `front.html`, and `etfs.csv` / `stocks.csv` / `cryptos.csv` stay at the root: they describe exchanges or instruments, not a broker.
 - Shared output goes in `parsed_json/` (`spread.json`, `taxes.json`, XLM, Rule 605). A catalogue belongs in its broker folder, not there. `taxes.json` is keyed by ISIN (`byIsin`) for every `*_cost.mjs`; `byCode` is only the Trading212 sweep.
 - A tax or spread sourced from one broker still belongs at the root if every other broker can use the figure. The reader may sit at the root even when it talks to Trading212.

@@ -276,7 +276,7 @@ export function roundTripCost({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue BoursoBank n'existe pas encore : lancer `node boursobank/boursobank.mjs`",
+      why: "le catalogue BoursoBank n'existe pas encore : lancer `node boursobank/boursobank_scraping.mjs`",
     };
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue BoursoBank` };

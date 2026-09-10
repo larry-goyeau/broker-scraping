@@ -291,7 +291,7 @@ export function roundTripCost({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Davy n'existe pas encore : lancer `node davy/davy.mjs`",
+      why: "le catalogue Davy n'existe pas encore : lancer `node davy/davy_scraping.mjs`",
     };
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Davy` };

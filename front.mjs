@@ -481,6 +481,11 @@ const DAVY_PLANS = [
   { id: "tradingplus", name: "Davy Select Trading Plus" },
 ];
 
+const FREEDOM24_PLANS = [
+  { id: "smart", name: "Freedom24 Smart" },
+  { id: "allinc", name: "Freedom24 All-inclusive" },
+];
+
 function sameCostListings(a, b) {
   if (a.length !== b.length) return false;
   return a.every((l, i) => {
@@ -671,6 +676,13 @@ function detail(key, nat = "") {
         if (listed.length) built.push(asPlan(plan, i, listed));
       });
       for (const row of collapseDavy(built)) rows.push(row);
+      continue;
+    }
+    if (folder === "freedom24") {
+      FREEDOM24_PLANS.forEach((plan, i) => {
+        const listed = listings({ plan: plan.id });
+        if (listed.length) rows.push(asPlan(plan, i, listed));
+      });
       continue;
     }
     const listed = listings({});

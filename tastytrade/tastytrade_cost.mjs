@@ -303,7 +303,7 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
     // What a euro-funded person pays to get dollars in is their bank's business and does not
     // belong to this formula.
     fxIfConverted: null,
-    remark: "Clearing $0.0016/share.",
+    remark: "",
     // Named apart from the Trading212 file's `check` on purpose: there it reports what real
     // orders paid on that very line, here it reports that the fee arithmetic reproduces a
     // ledger. A front end that treated the two as the same field would compare a measured

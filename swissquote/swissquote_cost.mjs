@@ -34,11 +34,10 @@
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
+import { taxesOf, taxRates } from "../taxMap.mjs";
 
 const CATALOGUE = new URL("swissquote-parsed.json", import.meta.url);
 const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
-const TAXES = new URL("../parsed_json/taxes.json", import.meta.url);
-const T212 = new URL("../trading212/trading212-parsed.json", import.meta.url);
 
 const SCHEDULE = {
   ch: {
@@ -147,19 +146,6 @@ const MARKET_COL = {
 const catalogue = JSON.parse(fs.readFileSync(CATALOGUE, "utf8"));
 const rows = Array.isArray(catalogue) ? catalogue : catalogue.rows || [];
 const spreads = JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {};
-const taxFile = fs.existsSync(TAXES) ? JSON.parse(fs.readFileSync(TAXES, "utf8")) : null;
-
-const taxByIsin = (() => {
-  const out = new Map();
-  if (!taxFile?.byCode || !fs.existsSync(T212)) return out;
-  const t212 = JSON.parse(fs.readFileSync(T212, "utf8"));
-  for (const r of Array.isArray(t212) ? t212 : t212.rows || []) {
-    const isin = String(r.isin || "").toUpperCase();
-    const entry = r.code ? taxFile.byCode[r.code] : null;
-    if (isin && entry && (entry.achat || entry.vente)) out.set(isin, entry);
-  }
-  return out;
-})();
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 
@@ -222,20 +208,6 @@ function gridChf(amount, market) {
   return row[col];
 }
 
-function taxesOf(isin) {
-  if (!taxFile) return { known: false, why: "relevé fiscal absent : lancer node taxes.mjs" };
-  const entry = taxByIsin.get(String(isin || "").toUpperCase());
-  if (entry) return { known: true, buy: entry.achat ?? {}, sell: entry.vente ?? {} };
-  return { known: false, assumedZero: true, why: "pas de ligne fiscale Trading212 pour cet ISIN" };
-}
-
-function taxRates(tax) {
-  const rates = {};
-  for (const [name, line] of Object.entries(tax.buy ?? {})) {
-    if (line.ofValue != null) rates[name] = line.ofValue;
-  }
-  return rates;
-}
 
 // ------------------------------------------------------------------------- listing
 
@@ -560,7 +532,7 @@ function confidenceOf({ bank, market, marketBp, marketPerShare, taxTotal, americ
         `convertie en dollars au mid BCE du ${FX_AS_OF} et pliée dans c avec 0,85 de temps réel par jambe`
   );
   if (taxTotal > 0) {
-    said.push(`taxes ${(100 * taxTotal).toFixed(2)} % du montant (T212 pour l'instrument, timbre suisse sur SIX)`);
+    said.push(`taxes ${(100 * taxTotal).toFixed(2)} % du montant (timbre suisse sur SIX)`);
   }
   if (american) {
     said.push(`frais SEC et FINRA à la vente, comme chez tout courtier américain`);

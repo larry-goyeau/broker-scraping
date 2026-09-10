@@ -36,7 +36,7 @@
 // (the card names NYSE / Nasdaq / AMEX; BATS is the same NMS tape, and
 // the catalogue files hundreds of USD ETFs there). SEC / TAF use the current
 // figures (their printed 27.8 $ / million is stale). Stamp / FTT / PTM from
-// the T212 map; else their printed UK 0.50 %, Irish 1 %, HK 0.10 % on STOCK.
+// the tax map; else their printed UK 0.50 %, Irish 1 %, HK 0.10 % on STOCK.
 // Custody 0.1 % / year is a holding cost. Cash can sit in several currencies;
 // conversion is spot ± 0.5 % only if the sub-account is the wrong currency,
 // so FX stays out of `a`. No live trip: the coefficients are the printed %.
@@ -56,11 +56,10 @@
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
+import { taxesOf, taxRates } from "../taxMap.mjs";
 
 const CATALOGUE = new URL("elana-parsed.json", import.meta.url);
 const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
-const TAXES = new URL("../parsed_json/taxes.json", import.meta.url);
-const T212 = new URL("../trading212/trading212-parsed.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://globaltrader.elana.net/en/en-tc/trading-conditions-stocks/",
@@ -119,19 +118,6 @@ const RULE = {
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
 const spreads = fs.existsSync(SPREADS) ? JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {} : {};
-const taxFile = fs.existsSync(TAXES) ? JSON.parse(fs.readFileSync(TAXES, "utf8")) : null;
-
-const taxByIsin = (() => {
-  const out = new Map();
-  if (!taxFile?.byCode || !fs.existsSync(T212)) return out;
-  const t212 = JSON.parse(fs.readFileSync(T212, "utf8"));
-  for (const r of Array.isArray(t212) ? t212 : t212.rows || []) {
-    const isin = String(r.isin || "").toUpperCase();
-    const entry = r.code ? taxFile.byCode[r.code] : null;
-    if (isin && entry && (entry.achat || entry.vente)) out.set(isin, entry);
-  }
-  return out;
-})();
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 
@@ -209,20 +195,6 @@ function remarkOf({ rule, plan }) {
   return lines.join("\n");
 }
 
-function taxesOf(isin) {
-  if (!taxFile) return { known: false, why: "relevé fiscal absent : lancer node taxes.mjs" };
-  const entry = taxByIsin.get(String(isin || "").toUpperCase());
-  if (entry) return { known: true, buy: entry.achat ?? {}, sell: entry.vente ?? {} };
-  return { known: false, assumedZero: true, why: "pas de ligne fiscale Trading212 pour cet ISIN" };
-}
-
-function taxRates(tax) {
-  const rates = {};
-  for (const [name, line] of Object.entries(tax.buy ?? {})) {
-    if (line.ofValue != null) rates[name] = line.ofValue;
-  }
-  return rates;
-}
 
 function stampOf({ market, listing, tax }) {
   const rates = taxRates(tax);

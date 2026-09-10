@@ -32,6 +32,7 @@
 
 import puppeteer from "puppeteer-core";
 import fs from "node:fs";
+import { indexByIsin } from "./taxMap.mjs";
 
 const OUT = new URL("parsed_json/taxes.json", import.meta.url);
 const CATALOGUE = new URL("trading212/trading212-parsed.json", import.meta.url);
@@ -183,6 +184,7 @@ const save = () => {
           "échantillonné ailleurs ; vente échantillonnée partout, voir venteRelevée",
         sweptInFull: [...TAXING_VENUES],
         byCode: Object.fromEntries(seen),
+        byIsin: indexByIsin(Object.fromEntries(seen), catalogue),
         failed: Object.fromEntries(failed),
       },
       null,
@@ -273,6 +275,6 @@ for (const [k, n] of [...tally].sort((a, b) => b[1] - a[1])) {
   const [exchange] = k.split(" · ");
   console.log(`  ${String(n).padStart(5)} / ${String(perExchange.get(exchange)).padStart(5)}   ${k}`);
 }
-console.log(`\nécrit dans parsed_json/taxes.json`);
+console.log(`\nécrit dans parsed_json/taxes.json (byCode + byIsin)`);
 
 await browser.disconnect();

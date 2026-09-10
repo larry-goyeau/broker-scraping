@@ -50,11 +50,10 @@
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
+import { taxesOf, taxRates } from "../taxMap.mjs";
 
 const CATALOGUE = new URL("admiral-parsed.json", import.meta.url);
 const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
-const TAXES = new URL("../parsed_json/taxes.json", import.meta.url);
-const T212 = new URL("../trading212/trading212-parsed.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://admiralmarkets.com/start-trading/admiral-invest-stocks-and-etfs",
@@ -139,19 +138,6 @@ const TO_VENUES = {
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
 const spreads = JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {};
-const taxFile = fs.existsSync(TAXES) ? JSON.parse(fs.readFileSync(TAXES, "utf8")) : null;
-
-const taxByIsin = (() => {
-  const out = new Map();
-  if (!taxFile?.byCode || !fs.existsSync(T212)) return out;
-  const t212 = JSON.parse(fs.readFileSync(T212, "utf8"));
-  for (const r of Array.isArray(t212) ? t212 : t212.rows || []) {
-    const isin = String(r.isin || "").toUpperCase();
-    const entry = r.code ? taxFile.byCode[r.code] : null;
-    if (isin && entry && (entry.achat || entry.vente)) out.set(isin, entry);
-  }
-  return out;
-})();
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 const isCrypto = (row) => row?.type === "CRYPTO" || /^CRYPTO$/i.test(String(row?.exchange || ""));
@@ -189,20 +175,6 @@ export function feeMarketOf(exchange, mic) {
   return "other_eu";
 }
 
-function taxesOf(isin) {
-  if (!taxFile) return { known: false, why: "relevé fiscal absent : lancer node taxes.mjs" };
-  const entry = taxByIsin.get(String(isin || "").toUpperCase());
-  if (entry) return { known: true, buy: entry.achat ?? {}, sell: entry.vente ?? {} };
-  return { known: false, assumedZero: true, why: "pas de ligne fiscale Trading212 pour cet ISIN" };
-}
-
-function taxRates(tax) {
-  const rates = {};
-  for (const [name, line] of Object.entries(tax.buy ?? {})) {
-    if (line.ofValue != null) rates[name] = line.ofValue;
-  }
-  return rates;
-}
 
 function findListing({ etf, place, currency }) {
   const asked = loose(etf);
@@ -460,7 +432,7 @@ function confidenceOf({ market, marketBp, marketPerShare, taxTotal, american, ty
       `0,02 $ par part au-delà de 50 parts (exactCost) ; SEC et FINRA à la vente comme chez tout courtier américain`
     );
   }
-  if (taxTotal) said.push(`taxes ${(100 * taxTotal).toFixed(2)} % du montant (T212 pour l'instrument)`);
+  if (taxTotal) said.push(`taxes ${(100 * taxTotal).toFixed(2)} % du montant`);
   if (marketBp != null) said.push(`carnet publié ${Number(marketBp.toPrecision(4))} bp`);
   else if (marketPerShare != null) {
     said.push(`carnet Rule 605, ${marketPerShare} $ la part, moyenne 100–499 parts`);

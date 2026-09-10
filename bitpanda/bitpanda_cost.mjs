@@ -50,11 +50,10 @@
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
+import { taxesOf, taxRates } from "../taxMap.mjs";
 
 const CATALOGUE = new URL("bitpanda-parsed.json", import.meta.url);
 const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
-const TAXES = new URL("../parsed_json/taxes.json", import.meta.url);
-const T212 = new URL("../trading212/trading212-parsed.json", import.meta.url);
 
 const SCHEDULE = {
   stocks: "https://support.bitpanda.com/hc/en-us/articles/24575224671516-Real-Stocks-ETFs-on-Bitpanda",
@@ -91,19 +90,6 @@ const TO_VENUES = {
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
 const spreads = fs.existsSync(SPREADS) ? JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {} : {};
-const taxFile = fs.existsSync(TAXES) ? JSON.parse(fs.readFileSync(TAXES, "utf8")) : null;
-
-const taxByIsin = (() => {
-  const out = new Map();
-  if (!taxFile?.byCode || !fs.existsSync(T212)) return out;
-  const t212 = JSON.parse(fs.readFileSync(T212, "utf8"));
-  for (const r of Array.isArray(t212) ? t212 : t212.rows || []) {
-    const isin = String(r.isin || "").toUpperCase();
-    const entry = r.code ? taxFile.byCode[r.code] : null;
-    if (isin && entry && (entry.achat || entry.vente)) out.set(isin, entry);
-  }
-  return out;
-})();
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 const isCrypto = (row) => row?.type === "CRYPTO" || /^CRYPTO$/i.test(String(row?.exchange || ""));
@@ -125,20 +111,6 @@ const venueRow = (row) => ({
   exchange: TO_VENUES[String(row.exchange || "").toUpperCase()] || row.exchange,
 });
 
-function taxesOf(isin) {
-  if (!taxFile) return { known: false, why: "relevé fiscal absent : lancer node taxes.mjs" };
-  const entry = taxByIsin.get(String(isin || "").toUpperCase());
-  if (entry) return { known: true, buy: entry.achat ?? {}, sell: entry.vente ?? {} };
-  return { known: false, assumedZero: true, why: "pas de ligne fiscale Trading212 pour cet ISIN" };
-}
-
-function taxRates(tax) {
-  const rates = {};
-  for (const [name, line] of Object.entries(tax.buy ?? {})) {
-    if (line.ofValue != null) rates[name] = line.ofValue;
-  }
-  return rates;
-}
 
 function findListing({ etf, place, currency }) {
   const asked = loose(etf);
@@ -363,7 +335,7 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
       `1 € par exécution, soit 2 € l'aller-retour, lu sur l'aide Real Stocks du ${SCHEDULE.readOn} ` +
       `et confirmé le ${CHECK.on} sur ${CHECK.ticker} (${CHECK.amountFiat} €, ` +
       `offre ${CHECK.buyOffer} / ${CHECK.sellOffer}, caisse ${CHECK.cash.start} → ${CHECK.cash.end}). ` +
-      `a = carnet Quotrix (le spread) + taxes T212 ; pas de % de courtage publié. ` +
+      `a = carnet Quotrix (le spread) + taxes ; pas de % de courtage publié. ` +
       `Le ticket 1 € n'est pas linéaire, il reste dans le plancher. ` +
       (leaf ? "" : `Pas de feuille Quotrix pour cet ISIN dans spread.json. `),
   };

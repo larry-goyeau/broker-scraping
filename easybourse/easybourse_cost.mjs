@@ -41,7 +41,7 @@
 // same 2.00 €. `c` stays 4 €. The 6 cents of book (7.71 bp) is not folded into
 // `a`: XPAR publishes 1.29 bp on that ISIN, and Equiduct has no leaf here.
 // TTF is on the ticket (Oui) but was not in the PRU; it stays in `a` from the
-// T212 map. Expert / Intense / US / Xetra were not traded.
+// tax map. Expert / Intense / US / Xetra were not traded.
 //
 //   node easybourse/easybourse_cost.mjs MC EURONEXT EUR
 //   node easybourse/easybourse_cost.mjs AAPL NASDAQ USD
@@ -53,11 +53,10 @@
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
+import { taxesOf, taxRates } from "../taxMap.mjs";
 
 const CATALOGUE = new URL("easybourse-parsed.json", import.meta.url);
 const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
-const TAXES = new URL("../parsed_json/taxes.json", import.meta.url);
-const T212 = new URL("../trading212/trading212-parsed.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://documents.easybourse.com/formulaires_clients/brochure-tarifaire-bourse_01062026.pdf",
@@ -142,19 +141,6 @@ const OTHER_EU = new Set([
 const catalogue = JSON.parse(fs.readFileSync(CATALOGUE, "utf8"));
 const rows = Array.isArray(catalogue) ? catalogue : catalogue.rows || [];
 const spreads = JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {};
-const taxFile = fs.existsSync(TAXES) ? JSON.parse(fs.readFileSync(TAXES, "utf8")) : null;
-
-const taxByIsin = (() => {
-  const out = new Map();
-  if (!taxFile?.byCode || !fs.existsSync(T212)) return out;
-  const t212 = JSON.parse(fs.readFileSync(T212, "utf8"));
-  for (const r of Array.isArray(t212) ? t212 : t212.rows || []) {
-    const isin = String(r.isin || "").toUpperCase();
-    const entry = r.code ? taxFile.byCode[r.code] : null;
-    if (isin && entry && (entry.achat || entry.vente)) out.set(isin, entry);
-  }
-  return out;
-})();
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 
@@ -232,20 +218,6 @@ export function commissionEach(amount, rule) {
   return fee;
 }
 
-function taxesOf(isin) {
-  if (!taxFile) return { known: false, why: "relevé fiscal absent : lancer node taxes.mjs" };
-  const entry = taxByIsin.get(String(isin || "").toUpperCase());
-  if (entry) return { known: true, buy: entry.achat ?? {}, sell: entry.vente ?? {} };
-  return { known: false, assumedZero: true, why: "pas de ligne fiscale Trading212 pour cet ISIN" };
-}
-
-function taxRates(tax) {
-  const rates = {};
-  for (const [name, line] of Object.entries(tax.buy ?? {})) {
-    if (line.ofValue != null) rates[name] = line.ofValue;
-  }
-  return rates;
-}
 
 function onlineBuy(plan, market) {
   const p = planOf(plan);
@@ -489,7 +461,7 @@ function confidenceOf({ plan, market, marketBp, marketPerShare, taxTotal, americ
       `EasyDécouverte n'achète pas ce marché en ligne : vente seule, par téléphone, au tarif de la carte (sans les +11 €)`
     );
   }
-  if (taxTotal > 0) said.push(`taxes ${(100 * taxTotal).toFixed(2)} % du montant (T212 pour l'instrument)`);
+  if (taxTotal > 0) said.push(`taxes ${(100 * taxTotal).toFixed(2)} % du montant`);
   if (american) said.push(`frais SEC et FINRA à la vente, comme chez tout courtier américain`);
   if (pea) said.push(`plafond PEA 0,5 % appliqué à la commission en ligne, marchés EEE`);
   if (marketPerShare != null) {

@@ -30,7 +30,7 @@
 // Cash is euro by default. AutoFX 0.25 % is processed in the fill on each
 // non-EUR leg, so 0.50 % the round trip sits in `a`. Manual FX
 // (€10 + 0.25 %, USD / GBP cash) is not this trip. Stamp / FTT come from
-// the T212 map. PTM £1.50 above £10 000 on a London STOCK is a threshold.
+// the tax map. PTM £1.50 above £10 000 on a London STOCK is a threshold.
 // Connectivity (€2.50 / year per exchange, max 0.25 % AUM) is a holding
 // cost: not AMS, BRU, Tradias, or the Kernselectie. Custody 0, inactivity 0.
 //
@@ -56,11 +56,10 @@
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
+import { taxesOf, taxRates } from "../taxMap.mjs";
 
 const CATALOGUE = new URL("degiro-parsed.json", import.meta.url);
 const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
-const TAXES = new URL("../parsed_json/taxes.json", import.meta.url);
-const T212 = new URL("../trading212/trading212-parsed.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://www.degiro.nl/data/pdf/Tarievenoverzicht.pdf",
@@ -116,19 +115,6 @@ const EUROPE = new Set([
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
 const spreads = fs.existsSync(SPREADS) ? JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {} : {};
-const taxFile = fs.existsSync(TAXES) ? JSON.parse(fs.readFileSync(TAXES, "utf8")) : null;
-
-const taxByIsin = (() => {
-  const out = new Map();
-  if (!taxFile?.byCode || !fs.existsSync(T212)) return out;
-  const t212 = JSON.parse(fs.readFileSync(T212, "utf8"));
-  for (const r of Array.isArray(t212) ? t212 : t212.rows || []) {
-    const isin = String(r.isin || "").toUpperCase();
-    const entry = r.code ? taxFile.byCode[r.code] : null;
-    if (isin && entry && (entry.achat || entry.vente)) out.set(isin, entry);
-  }
-  return out;
-})();
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 
@@ -194,20 +180,6 @@ function remarkOf({ row, market, isin }) {
   return lines.join("\n");
 }
 
-function taxesOf(isin) {
-  if (!taxFile) return { known: false, why: "relevé fiscal absent : lancer node taxes.mjs" };
-  const entry = taxByIsin.get(String(isin || "").toUpperCase());
-  if (entry) return { known: true, buy: entry.achat ?? {}, sell: entry.vente ?? {} };
-  return { known: false, assumedZero: true, why: "pas de ligne fiscale Trading212 pour cet ISIN" };
-}
-
-function taxRates(tax) {
-  const rates = {};
-  for (const [name, line] of Object.entries(tax.buy ?? {})) {
-    if (line.ofValue != null) rates[name] = line.ofValue;
-  }
-  return rates;
-}
 
 function findListing({ etf, place, currency }) {
   const asked = loose(etf);

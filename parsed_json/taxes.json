@@ -40566,5 +40566,5811 @@
       "price": 125069.98
     }
   },
-  "failed": {}
+  "failed": {},
+  "byIsin": {
+    "US7168174081": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.01,
+          "ofValue": 0.0000147059
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000294118
+        }
+      }
+    },
+    "US10501E3009": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.02,
+          "ofValue": 0.0000190476
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000190476
+        }
+      }
+    },
+    "KYG8117B1196": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.02,
+          "ofValue": 0.0000210593
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000210593
+        }
+      }
+    },
+    "CA92865M1023": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.01,
+          "ofValue": 0.0000273523
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000547046
+        }
+      }
+    },
+    "US26142V1052": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.49,
+          "ofValue": 0.0000204082
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.00000832986
+        }
+      }
+    },
+    "GB00BMWVF760": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 4.1,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "US00507W2061": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.02,
+          "ofValue": 0.0000194175
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000194175
+        }
+      }
+    },
+    "US70450Y1038": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 1.13,
+          "ofValue": 0.0000205641
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.00000363967
+        }
+      }
+    },
+    "GB0030913577": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1005,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "US91704K3014": {
+      "achat": {},
+      "vente": {
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.00242718
+        }
+      }
+    },
+    "US19243B1026": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.02,
+          "ofValue": 0.0000194175
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000194175
+        }
+      }
+    },
+    "US16679L1098": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.49,
+          "ofValue": 0.0000207013
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.00000844951
+        }
+      }
+    },
+    "JP3984070007": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.02,
+          "ofValue": 0.0000205044
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000205044
+        }
+      }
+    },
+    "GB00B085SD50": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 7.4,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "US57774B1098": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 1.55,
+          "ofValue": 0.0000206667
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.00000266667
+        }
+      }
+    },
+    "CA75381M1023": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.02,
+          "ofValue": 0.0000217391
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000217391
+        }
+      }
+    },
+    "GB00BMD1Z199": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 0.6,
+          "ofValue": 0.00504202
+        }
+      },
+      "vente": {}
+    },
+    "US83086J3095": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.04,
+          "ofValue": 0.0000209424
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000104712
+        }
+      }
+    },
+    "US09074F5044": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.04,
+          "ofValue": 0.0000201005
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000100503
+        }
+      }
+    },
+    "US83006G5009": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.02,
+          "ofValue": 0.0000217557
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000217557
+        }
+      }
+    },
+    "US58403P4028": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.25,
+          "ofValue": 0.0000206954
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.0000165563
+        }
+      }
+    },
+    "GB00B1JQDM80": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 248.8,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "US26614N2018": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 2.71,
+          "ofValue": 0.0000205911
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.00000151964
+        }
+      }
+    },
+    "US2193501051": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 3.18,
+          "ofValue": 0.0000206119
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.00000129634
+        }
+      }
+    },
+    "US0200021014": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 5.35,
+          "ofValue": 0.000020611
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 7.70505e-7
+        }
+      }
+    },
+    "US1264081035": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 1.02,
+          "ofValue": 0.0000206478
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.00000404858
+        }
+      }
+    },
+    "US31946M1036": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 45.49,
+          "ofValue": 0.0000206003
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 9.05707e-8
+        }
+      }
+    },
+    "US4435106079": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 9.49,
+          "ofValue": 0.0000206107
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 4.34367e-7
+        }
+      }
+    },
+    "US2600031080": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 3.97,
+          "ofValue": 0.0000205849
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.00000103702
+        }
+      }
+    },
+    "CA06849F1080": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.92,
+          "ofValue": 0.0000205633
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.00000447027
+        }
+      }
+    },
+    "US0084921008": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 1.5,
+          "ofValue": 0.0000206583
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.00000275444
+        }
+      }
+    },
+    "US2605571031": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.61,
+          "ofValue": 0.0000207201
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.00000679348
+        }
+      }
+    },
+    "US3030751057": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 6.22,
+          "ofValue": 0.0000206008
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 6.62405e-7
+        }
+      }
+    },
+    "US04621X1081": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 5.88,
+          "ofValue": 0.0000205926
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 7.00427e-7
+        }
+      }
+    },
+    "US12503M1080": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 6.16,
+          "ofValue": 0.0000205993
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 6.68807e-7
+        }
+      }
+    },
+    "US7561091049": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 1.26,
+          "ofValue": 0.0000205748
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.00000326584
+        }
+      }
+    },
+    "US5184391044": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 2.14,
+          "ofValue": 0.0000206106
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.00000192623
+        }
+      }
+    },
+    "US2944291051": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 3.65,
+          "ofValue": 0.0000206087
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.00000112924
+        }
+      }
+    },
+    "US6668071029": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 10.61,
+          "ofValue": 0.0000206055
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 3.88417e-7
+        }
+      }
+    },
+    "US7010941042": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 19.83,
+          "ofValue": 0.000020597
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 2.07736e-7
+        }
+      }
+    },
+    "US9078181081": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 5.97,
+          "ofValue": 0.0000206139
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 6.90584e-7
+        }
+      }
+    },
+    "US00123Q1040": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.22,
+          "ofValue": 0.0000206573
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.0000187793
+        }
+      }
+    },
+    "US78392B2060": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 3.65,
+          "ofValue": 0.0000206238
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.00000113007
+        }
+      }
+    },
+    "US20440W1053": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.03,
+          "ofValue": 0.0000245902
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000163934
+        }
+      }
+    },
+    "US03834B3096": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.01,
+          "ofValue": 0.0000298507
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000597015
+        }
+      }
+    },
+    "CA71677J1012": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.01,
+          "ofValue": 0.0000251193
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000502386
+        }
+      }
+    },
+    "CA8667961053": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 1.67,
+          "ofValue": 0.0000206224
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.00000246975
+        }
+      }
+    },
+    "GB00BL6K5J42": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 23479,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000319434
+        }
+      },
+      "vente": {}
+    },
+    "CA1380357048": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.02,
+          "ofValue": 0.0000205233
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000205233
+        }
+      }
+    },
+    "US58450D1046": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.02,
+          "ofValue": 0.0000173913
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000173913
+        }
+      }
+    },
+    "US5049221055": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 6.73,
+          "ofValue": 0.0000205899
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 6.11883e-7
+        }
+      }
+    },
+    "US60871R2094": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.83,
+          "ofValue": 0.0000204888
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.00000493705
+        }
+      }
+    },
+    "US95758L4041": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.07,
+          "ofValue": 0.0000197183
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000056338
+        }
+      }
+    },
+    "US67010L2097": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.06,
+          "ofValue": 0.00002
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.0000666667
+        }
+      }
+    },
+    "US54303L3024": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.14,
+          "ofValue": 0.0000204678
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.0000292398
+        }
+      }
+    },
+    "US1511902041": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.03,
+          "ofValue": 0.0000179641
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.00011976
+        }
+      }
+    },
+    "KYG9877T1004": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.03,
+          "ofValue": 0.0000194805
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.00012987
+        }
+      }
+    },
+    "US98957E1064": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.09,
+          "ofValue": 0.000020979
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.00004662
+        }
+      }
+    },
+    "US0012012011": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.13,
+          "ofValue": 0.0000202177
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.0000311042
+        }
+      }
+    },
+    "KYG331471287": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.01,
+          "ofValue": 0.0000178126
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000356252
+        }
+      }
+    },
+    "KYG507161282": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.02,
+          "ofValue": 0.0000215216
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000215216
+        }
+      }
+    },
+    "BMG889121031": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.02,
+          "ofValue": 0.0000196078
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000196078
+        }
+      }
+    },
+    "KYG3R39B1165": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.02,
+          "ofValue": 0.000019802
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.00019802
+        }
+      }
+    },
+    "US31561T1025": {
+      "achat": {},
+      "vente": {
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.00111111
+        }
+      }
+    },
+    "US6994371093": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 6.24,
+          "ofValue": 0.0000205941
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 6.60066e-7
+        }
+      }
+    },
+    "US31788K1088": {
+      "achat": {},
+      "vente": {
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000987654
+        }
+      }
+    },
+    "US59982U2006": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.02,
+          "ofValue": 0.000020202
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.00020202
+        }
+      }
+    },
+    "US2939048011": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.1,
+          "ofValue": 0.0000207469
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.0000414938
+        }
+      }
+    },
+    "CA09088U1093": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.01,
+          "ofValue": 0.0000376932
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000753864
+        }
+      }
+    },
+    "US30218B3087": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.12,
+          "ofValue": 0.0000207612
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.0000346021
+        }
+      }
+    },
+    "US78409V1044": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 9.14,
+          "ofValue": 0.0000206107
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 4.50999e-7
+        }
+      }
+    },
+    "US8265986096": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.03,
+          "ofValue": 0.0000212766
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000141844
+        }
+      }
+    },
+    "CA92840Q6085": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.18,
+          "ofValue": 0.0000206659
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.0000229621
+        }
+      }
+    },
+    "KYG5380J1004": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.02,
+          "ofValue": 0.0000192308
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000192308
+        }
+      }
+    },
+    "US31940A1051": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.02,
+          "ofValue": 0.0000260078
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000260078
+        }
+      }
+    },
+    "US5533681012": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 1.12,
+          "ofValue": 0.0000205467
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.00000366905
+        }
+      }
+    },
+    "US1096411004": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 4.74,
+          "ofValue": 0.0000206015
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 8.69263e-7
+        }
+      }
+    },
+    "US9286612067": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.01,
+          "ofValue": 0.0000292141
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000584283
+        }
+      }
+    },
+    "US68840D1028": {
+      "achat": {},
+      "vente": {
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000888889
+        }
+      }
+    },
+    "CA86890A1093": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.01,
+          "ofValue": 0.0000384615
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000769231
+        }
+      }
+    },
+    "CH0499880968": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.03,
+          "ofValue": 0.0000222222
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000148148
+        }
+      }
+    },
+    "IL0010828585": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.54,
+          "ofValue": 0.0000204545
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.00000757576
+        }
+      }
+    },
+    "GB0002374006": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 8166.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000918386
+        }
+      },
+      "vente": {}
+    },
+    "US6090313072": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 5.46,
+          "ofValue": 0.0000206038
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 7.54717e-7
+        }
+      }
+    },
+    "FR0012333284": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 397.68,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "US0272631021": {
+      "achat": {},
+      "vente": {
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.00255754
+        }
+      }
+    },
+    "GB00B44LQR57": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2.1,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "US64118P1093": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.1,
+          "ofValue": 0.0000199203
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.0000398406
+        }
+      }
+    },
+    "VGG9520B1004": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 9.4,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "US3201481096": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 1.32,
+          "ofValue": 0.0000206282
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.00000312549
+        }
+      }
+    },
+    "US66373M4087": {
+      "achat": {},
+      "vente": {
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.08
+        }
+      }
+    },
+    "US3012272031": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 3.27,
+          "ofValue": 0.0000206309
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.00000126183
+        }
+      }
+    },
+    "CA05335P7039": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.05,
+          "ofValue": 0.0000220264
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.0000881057
+        }
+      }
+    },
+    "US3358761084": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 4.59,
+          "ofValue": 0.0000205839
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 8.96901e-7
+        }
+      }
+    },
+    "GB00BFZZM640": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 244.7,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0009286963": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2403,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "US15236F1003": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.22,
+          "ofValue": 0.0000206767
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000018797
+        }
+      }
+    },
+    "GB00BYSX1508": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 36.2,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0010221234": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 7.34,
+          "ofValue": 0.00399739
+        }
+      },
+      "vente": {}
+    },
+    "GB0031348658": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2495.1,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "US02008G3002": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.02,
+          "ofValue": 0.0000178571
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.000178571
+        }
+      }
+    },
+    "GB00BTQHVY80": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 11538.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000649998
+        }
+      },
+      "vente": {}
+    },
+    "FR0000045072": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 75.29,
+          "ofValue": 0.00400011
+        }
+      },
+      "vente": {}
+    },
+    "US8631672016": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.39,
+          "ofValue": 0.0000205805
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.0000105541
+        }
+      }
+    },
+    "US1251051066": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 0.32,
+          "ofValue": 0.0000204082
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.0000127551
+        }
+      }
+    },
+    "US2270721051": {
+      "achat": {},
+      "vente": {
+        "TRANSACTION_FEE": {
+          "amount": 1.5,
+          "ofValue": 0.0000206669
+        },
+        "FINRA_FEE": {
+          "amount": 0.2,
+          "ofValue": 0.00000275558
+        }
+      }
+    },
+    "GB0009465807": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 13601.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000055141
+        }
+      },
+      "vente": {}
+    },
+    "GB00BYP2QJ94": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 18.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0032398678": {
+      "achat": {
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000360915
+        }
+      },
+      "vente": {}
+    },
+    "GB0002259116": {
+      "achat": {
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000124492
+        }
+      },
+      "vente": {}
+    },
+    "GB00BYQDPD80": {
+      "achat": {
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000909201
+        }
+      },
+      "vente": {}
+    },
+    "GB0032302688": {
+      "achat": {
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000714184
+        }
+      },
+      "vente": {}
+    },
+    "GB00BG5NDX91": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1458.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B1722W11": {
+      "achat": {
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000977963
+        }
+      },
+      "vente": {}
+    },
+    "GB00B2425G68": {
+      "achat": {
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000108719
+        }
+      },
+      "vente": {}
+    },
+    "GB00B0YD2B94": {
+      "achat": {
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000126979
+        }
+      },
+      "vente": {}
+    },
+    "JE00BF0XVB15": {
+      "achat": {
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000799574
+        }
+      },
+      "vente": {}
+    },
+    "GB00B4QVDF07": {
+      "achat": {
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000901876
+        }
+      },
+      "vente": {}
+    },
+    "GB0002090453": {
+      "achat": {
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000107074
+        }
+      },
+      "vente": {}
+    },
+    "GB0001185270": {
+      "achat": {
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000107151
+        }
+      },
+      "vente": {}
+    },
+    "GB0005957005": {
+      "achat": {
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000919512
+        }
+      },
+      "vente": {}
+    },
+    "GB0006389398": {
+      "achat": {
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000132415
+        }
+      },
+      "vente": {}
+    },
+    "GB0007538100": {
+      "achat": {
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000838036
+        }
+      },
+      "vente": {}
+    },
+    "GB0005314363": {
+      "achat": {
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000410959
+        }
+      },
+      "vente": {}
+    },
+    "GB00B04NP100": {
+      "achat": {
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000140805
+        }
+      },
+      "vente": {}
+    },
+    "GB0008706128": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 566.6,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BH4HKS39": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 626.1,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0007980591": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2748.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BMX86B70": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1744,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B033F229": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 755.4,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BM8PJY71": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 3506.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0008782301": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 410.2,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0005603997": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1473.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0005405286": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 7913.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000947748
+        }
+      },
+      "vente": {}
+    },
+    "GB00B63H8491": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 7498,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000100027
+        }
+      },
+      "vente": {}
+    },
+    "GB00B082RF11": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1739,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BYWLRL80": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 4.3,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0001500809": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 102.85,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0004657408": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1050.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BM8Q5M07": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 411.75,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BLGZ9862": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2394,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0033986497": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 353.65,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BYRJ5J14": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 469.4,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BVFNZH21": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2421.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B019KW72": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1719.6,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B5ZN1N88": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 4721.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BG49KP99": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 768,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B635TG28": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 128.65,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B7KR2P84": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 3364,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BN7SWP63": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 9218.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000813581
+        }
+      },
+      "vente": {}
+    },
+    "GB00BDR05C01": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 5792,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000129489
+        }
+      },
+      "vente": {}
+    },
+    "GB0007099541": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 5131,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.00014617
+        }
+      },
+      "vente": {}
+    },
+    "GB0004161021": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 334.05,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0006215205": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 118.35,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B4WFW713": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 916.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0031274896": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1960,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BP6MXD84": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 17471,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000429283
+        }
+      },
+      "vente": {}
+    },
+    "GB00BD3VFW73": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1134,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0033195214": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1518.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0000811801": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1522.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B4Y7R145": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 769.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000133308": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 61.8,
+          "ofValue": 0.00399974
+        }
+      },
+      "vente": {}
+    },
+    "GB0009039941": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 206.65,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B3MBS747": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1061,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0004300496": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 676,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BF345X11": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 419.1,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BF8Q6K64": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1241.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BPQY8M80": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 3627.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0004082847": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 11333.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000661755
+        }
+      },
+      "vente": {}
+    },
+    "GB0002634946": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 9796,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000765619
+        }
+      },
+      "vente": {}
+    },
+    "GB00BMBVGQ36": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1317.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BNGDN821": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2514.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BKFB1C65": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1790,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0004170089": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 52.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BN70RC41": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2.3,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B2B0DG97": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 12928.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000580114
+        }
+      },
+      "vente": {}
+    },
+    "FR0010208488": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 96.76,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00B62G9D36": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 728.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BVZK7T90": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 23564.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000318275
+        }
+      },
+      "vente": {}
+    },
+    "FR0000127771": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 5.97,
+          "ofValue": 0.00400134
+        }
+      },
+      "vente": {}
+    },
+    "GB00BKDRYJ47": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1750.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BTK05J60": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 20814,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000360334
+        }
+      },
+      "vente": {}
+    },
+    "GB00B4YZN328": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 405.05,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000120271": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 308.76,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00BVYVFW23": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2533,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BGDT3G23": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2464,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BMTV7393": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 167.85,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BNHSJN34": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 927.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000120628": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 175.96,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00B17BBQ50": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 3341.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000120578": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 303.76,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB0001367019": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2072.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0009223206": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 5303.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000141416
+        }
+      },
+      "vente": {}
+    },
+    "GB0002875804": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 20594.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000364175
+        }
+      },
+      "vente": {}
+    },
+    "GB00B8VZXT93": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 291,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000120172": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 65.19,
+          "ofValue": 0.00399988
+        }
+      },
+      "vente": {}
+    },
+    "GB00B19NLV48": {
+      "achat": {
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000536078
+        }
+      },
+      "vente": {}
+    },
+    "GB00BN7CG237": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 177.75,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BGJW5255": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 22,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000039299": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 15.12,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB0000163088": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 85.45,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BYW0PQ60": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 3303.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BNVVGD77": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 29.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BDCPN049": {
+      "achat": {
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000191696
+        }
+      },
+      "vente": {}
+    },
+    "FR0014003TT8": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 82.28,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00B8C3BL03": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 5201,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000144203
+        }
+      },
+      "vente": {}
+    },
+    "GB0001859296": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1388.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0007669376": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 5753.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000130355
+        }
+      },
+      "vente": {}
+    },
+    "GB00B04V1276": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 853,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BP9LHF23": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2926.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BLGXWY71": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 501.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BG5KQW09": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2041.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0007188757": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 38274.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000195953
+        }
+      },
+      "vente": {}
+    },
+    "GB0007908733": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 12151,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000617233
+        }
+      },
+      "vente": {}
+    },
+    "GB00BJVQC708": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1023,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B1YW4409": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 13894.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000539782
+        }
+      },
+      "vente": {}
+    },
+    "FR001400AJ45": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 138.32,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00BP92CJ43": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2784,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000124141": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 127.76,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00B1Z4ST84": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 417.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000131104": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 415.16,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB0004544929": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 12493.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000600312
+        }
+      },
+      "vente": {}
+    },
+    "GB00BKPG0138": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 940.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BFCMVS34": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 41.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B01QGK86": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 712.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BGXQNP29": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 4786.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0007958233": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1471,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0006825383": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 5703.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000131498
+        }
+      },
+      "vente": {}
+    },
+    "GB00BD6K4575": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 154.76,
+          "ofValue": 0.00500032
+        },
+        "PTM_LEVY": {
+          "amount": 2.03,
+          "ofValue": 0.0000655897
+        }
+      },
+      "vente": {}
+    },
+    "GB0006027295": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1231,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BGBN7C04": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 988,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BLY2F708": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 359,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0002418548": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 882,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0006776081": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 5842,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000128381
+        }
+      },
+      "vente": {}
+    },
+    "GB0009895292": {
+      "achat": {
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000123459
+        }
+      },
+      "vente": {}
+    },
+    "GB0031743007": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 5499,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000136388
+        }
+      },
+      "vente": {}
+    },
+    "GB00B39J2M42": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 6773.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000110726
+        }
+      },
+      "vente": {}
+    },
+    "GB0005576813": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 3861,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0007973794": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1267.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BFYMWJ95": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 4.15,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000120644": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 253.84,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB0008481250": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 620.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0009697037": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 4927.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000130809": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 299.12,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00B128J450": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 339,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000131906": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 116.4,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00BNNTLN49": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2311.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B0WMWD03": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2408.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BYXJC278": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 421.2,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0006928617": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2448.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BNLPYF73": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1226.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0010220475": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 65.79,
+          "ofValue": 0.00399988
+        }
+      },
+      "vente": {}
+    },
+    "GB00BRJQ8J25": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1796,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B1ZBKY84": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 996.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BJHPLV88": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1069.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BYQ0JC66": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 6499,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000115402
+        }
+      },
+      "vente": {}
+    },
+    "GB00BYN59130": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1044.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0004762810": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 721.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0030232317": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1035.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B53P2009": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 821.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B012TP20": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1291.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR001400J770": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 46.29,
+          "ofValue": 0.00400017
+        }
+      },
+      "vente": {}
+    },
+    "GB00B06QFB75": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 6679.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000112284
+        }
+      },
+      "vente": {}
+    },
+    "GB00BP6S8Z30": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 785,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BJGTLF51": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 558.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0006870611": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 787,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BPJHV584": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1367.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BG0TPX62": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1163.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BNK9TP58": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1385.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0006174348": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 108.28,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00BD7XPJ64": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 393.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0013506730": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 75.08,
+          "ofValue": 0.00399979
+        }
+      },
+      "vente": {}
+    },
+    "GB00BJVWTM27": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 92.95,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BMWC6P49": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 4221.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B7N0K053": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 976.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0004052071": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 18308.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000409646
+        }
+      },
+      "vente": {}
+    },
+    "GB00BMX3W479": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 899,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BL6NGV24": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 358.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B572ZV91": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 149,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B45C9X44": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2684,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0004915632": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1265,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BSZBP530": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 25491.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000294216
+        }
+      },
+      "vente": {}
+    },
+    "GB0008025412": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 50,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BF0P7H59": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 369.1,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0013176526": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 57.25,
+          "ofValue": 0.00399986
+        }
+      },
+      "vente": {}
+    },
+    "GB00B1FW5029": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 3246,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BNG90H86": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 6,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BND88V85": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1525.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0003452173": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 884,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B0SWJX34": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 44039.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000170302
+        }
+      },
+      "vente": {}
+    },
+    "GB00BPCT7534": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1292,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B19Z1432": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 507.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000125007": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 299.56,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0000121147": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 39.12,
+          "ofValue": 0.00399959
+        }
+      },
+      "vente": {}
+    },
+    "GB00BMT9K014": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1358,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0003096442": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 3816.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0000456144": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 19351,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000387577
+        }
+      },
+      "vente": {}
+    },
+    "GB00BCKFY513": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 190.9,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GI000A0F6407": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 222.3,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000120073": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 681.2,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00BM8NFJ84": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1706.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0010908533": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 119.84,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00BKDTK925": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 969,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BYYW3C20": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 713.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000125486": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 454.52,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00BDDN1T20": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1564,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B012BV22": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 828.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0010451203": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 145.2,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00BSB7BS06": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2249,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BJ62K685": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1074,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BMVQDZ64": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2119.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000125338": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 420.92,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00BYWVDP49": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 860,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000120404": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 187.8,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00B17WCR61": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 351,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000121667": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 596.48,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00B1FP6H53": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1383.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B1VNSX38": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 4068.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B1WY2338": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 12953.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000578994
+        }
+      },
+      "vente": {}
+    },
+    "FR0000121972": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 1169.56,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00BYT1DJ19": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 9679,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000774873
+        }
+      },
+      "vente": {}
+    },
+    "GB00B0LCW083": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 7914.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000947628
+        }
+      },
+      "vente": {}
+    },
+    "FR0013258662": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 44.64,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0010307819": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 573.72,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0010533075": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 73.84,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0000120503": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 178.44,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00B0744359": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 555.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000120693": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 244.24,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0000130577": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 402.72,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00BJFLFT45": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 421,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BKRC5K31": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1321.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BNTVWJ75": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 555,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0006731235": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 10274,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000729998
+        }
+      },
+      "vente": {}
+    },
+    "FR0013451333": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 88.84,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00B41H7391": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2174.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BFZNLB60": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 3055.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0000961622": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 4371.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B82YXW83": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1902.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B2QPKJ12": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 15381,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000487615
+        }
+      },
+      "vente": {}
+    },
+    "GB00B61TVQ02": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 4261.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BKM0ZJ18": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 365.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BGLP8L22": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 15401,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000486981
+        }
+      },
+      "vente": {}
+    },
+    "GB00B132NW22": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1103.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000121964": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 148.24,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00B3FLWH99": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 4739.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BMFR8J48": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 12.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BMH18Q19": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2071.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0031638363": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 29274,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.00002562
+        }
+      },
+      "vente": {}
+    },
+    "GB00B64NSP76": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1124.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000073272": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 1335.2,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00BK9RKT01": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 3049.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BLDRH360": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2577,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B0744B38": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 13309.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000563507
+        }
+      },
+      "vente": {}
+    },
+    "GB00B0KM9T71": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1401,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "JE00BN574F90": {
+      "achat": {
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000140318
+        }
+      },
+      "vente": {}
+    },
+    "GB00BDHXPG30": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 821,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BJTNFH41": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 465,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BD45SH49": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1916,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BF5H9P87": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1642.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B63QSB39": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 9233.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000081226
+        }
+      },
+      "vente": {}
+    },
+    "GB0007668071": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2112.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B1FH8J72": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 14840.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000505374
+        }
+      },
+      "vente": {}
+    },
+    "GB00BJDQQ870": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 3456,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BY2Z0H74": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 606.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0010411983": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 132.6,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00BYZJ7G42": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 884,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B1N7Z094": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2804.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B27YGJ97": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 191.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B02J6398": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 19498.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000384645
+        }
+      },
+      "vente": {}
+    },
+    "GB00B14SKR37": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 3926,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000121014": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 1720.36,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00BD0NVK62": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1328,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B1L5QH97": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 501.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B67G5X01": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1830,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BLWDVP51": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 517,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BYZN9041": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1470.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BDFBVT43": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2196,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0002869419": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 4155.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BN3ZZ526": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 3374,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0008794710": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 4298.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B00FPT80": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1786.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BZC0LP49": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1121.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BYM1K758": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 908.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B1KJJ408": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 11756,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000637972
+        }
+      },
+      "vente": {}
+    },
+    "GB00BY7QYJ50": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 3491,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B1CKQ739": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 4388.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BVGBY890": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 8169,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000918105
+        }
+      },
+      "vente": {}
+    },
+    "GB00B2PDGW16": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1894.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0012435121": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 93.16,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00BS3DYQ52": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2956.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0012757854": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 175.2,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00BV9FP302": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 28049.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000267384
+        }
+      },
+      "vente": {}
+    },
+    "GB0006449366": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 836,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B2NGPM57": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 4116,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "VGG379591065": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 37.4,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BKY40Q38": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 3007,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BPVDXX64": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1539,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0000904986": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 10441,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000718322
+        }
+      },
+      "vente": {}
+    },
+    "GB00BWD24154": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 523.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BG12Y042": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 3926.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000121485": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 963.04,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00B1G5HX72": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1338.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BHJYC057": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 796.21,
+          "ofValue": 0.00500038
+        },
+        "PTM_LEVY": {
+          "amount": 2.03,
+          "ofValue": 0.0000127489
+        }
+      },
+      "vente": {}
+    },
+    "FR0000120321": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 1541.28,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB0030927254": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2139.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BF044593": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 232.8,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B28ZPS36": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 215,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "ZAE000255360": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 297.1,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BJFFLV09": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 16439.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000456218
+        }
+      },
+      "vente": {}
+    },
+    "GB00BQVVS097": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 3.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BJT0FF39": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 528,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000051807": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 278.08,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB0001826634": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 36349,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000206333
+        }
+      },
+      "vente": {}
+    },
+    "GB0033147751": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 3154.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0000055888": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 3941.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BV9DPV21": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1627,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BWPD4D87": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1003,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B18P5K83": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 177,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0001638955": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 4114,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000121220": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 230.68,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00B2863827": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 6686,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000112175
+        }
+      },
+      "vente": {}
+    },
+    "GB00BMX64W89": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 3174,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BQS10J50": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 5941,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000126241
+        }
+      },
+      "vente": {}
+    },
+    "GB00BL6C2002": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 975.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BYZDVK82": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 10331,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000072597
+        }
+      },
+      "vente": {}
+    },
+    "FR0000054900": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 27.15,
+          "ofValue": 0.00400029
+        }
+      },
+      "vente": {}
+    },
+    "FR0010386334": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 15.71,
+          "ofValue": 0.00400051
+        }
+      },
+      "vente": {}
+    },
+    "GB00BLH42507": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1764.85,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B135BJ46": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 5149.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000145645
+        }
+      },
+      "vente": {}
+    },
+    "GB0004478896": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2049,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BMCYKB41": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 423,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0001751915": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 189,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000121329": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 926.4,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00B1XH2C03": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 173.6,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0010040865": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 268.48,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB0009292243": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 4309,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0010667147": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 64.28,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00B3CX3644": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 545.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000044448": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 553.6,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0013326246": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 382.56,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00BNR45554": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 59.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B6XZKY75": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 3006,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BZ0D6727": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 6186,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000121242
+        }
+      },
+      "vente": {}
+    },
+    "FR0000077919": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 94.84,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR001400NLM4": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 50.68,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0010313833": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 236.64,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB0007388407": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1484,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BNKT5L33": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1921,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0008475088": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 626.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0013280286": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 290.84,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00BP0RGD03": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 17241,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000043501
+        }
+      },
+      "vente": {}
+    },
+    "GB0033057794": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2830.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "BMG702782084": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 33.41,
+          "ofValue": 0.00500075
+        }
+      },
+      "vente": {}
+    },
+    "GB00BYYJL418": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1546,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BVMTNR93": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 3093.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0005518872": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 394.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0005630420": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2098.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000130452": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 437.68,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB0032089863": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 77049.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000009734
+        }
+      },
+      "vente": {}
+    },
+    "GB00BZBX0P70": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 973.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0006650450": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 13761,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000545019
+        }
+      },
+      "vente": {}
+    },
+    "FR0004125920": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 379.04,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00BTC0LB89": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 810,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000064578": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 194.12,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0000073298": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 146.2,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00B1V9NW54": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 3498.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0010241638": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 43.04,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00B1QH8P22": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 3999,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0001110096": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 750,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0004866223": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 15309.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000489892
+        }
+      },
+      "vente": {}
+    },
+    "GB0005746358": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 952.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0004270301": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 14724.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000509355
+        }
+      },
+      "vente": {}
+    },
+    "GB00BWFGQN14": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 34949,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000214598
+        }
+      },
+      "vente": {}
+    },
+    "GB00BRKD9Z53": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1313.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0010259150": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 661.6,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB0002074580": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 11461,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000654393
+        }
+      },
+      "vente": {}
+    },
+    "GB00BTQGS779": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 239.52,
+          "ofValue": 0.00500042
+        },
+        "PTM_LEVY": {
+          "amount": 1.75,
+          "ofValue": 0.0000365344
+        }
+      },
+      "vente": {}
+    },
+    "GB0009896605": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2255,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000035081": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 69.88,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB0008711763": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 776,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BTWSXB68": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1613.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0010340141": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 431.2,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0000124570": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 50.4,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0014005HJ9": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 57.12,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB0002148343": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 8270.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000906838
+        }
+      },
+      "vente": {}
+    },
+    "FR0010828137": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 61.72,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0013269123": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 134.6,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0000053225": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 47.72,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0000052292": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 5893.2,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB0008883927": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 437,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BYYN4225": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 530,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000121121": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 195.72,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0013154002": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 744.8,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0000071946": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 280.44,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0011726835": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 878,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00B196F554": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 691.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0008085614": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 21119,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000035513
+        }
+      },
+      "vente": {}
+    },
+    "FR001400Q9V2": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 227.56,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB0002318888": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 26148.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000286823
+        }
+      },
+      "vente": {}
+    },
+    "GB00BVZNY531": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1541.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BVV2KN49": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 618.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0009692319": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1383.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BNDRLN84": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 694.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0010282822": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 496.4,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB0007323586": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 25651.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000292381
+        }
+      },
+      "vente": {}
+    },
+    "GB00BMHRMV23": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 769.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0013230612": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 66.84,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0000130395": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 172.96,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR001400PFU4": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 95.96,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0000121709": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 233.84,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00B104RS51": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2350.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0004024222": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 112.76,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00BLPHTX84": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 3061.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B6TKHP66": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 7654.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000979816
+        }
+      },
+      "vente": {}
+    },
+    "FR0014005AL0": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 34.04,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB0000667013": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 9199,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000815306
+        }
+      },
+      "vente": {}
+    },
+    "GB00BYT18307": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 25474.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000294412
+        }
+      },
+      "vente": {}
+    },
+    "FR0000050809": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 662.8,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0000062671": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 495.6,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB0002349065": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 560,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0014004L86": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 1109.2,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0000120859": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 99,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB0001795680": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1516.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0001570810": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 588,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0002018363": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 25173.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000297932
+        }
+      },
+      "vente": {}
+    },
+    "GB00BMD6C023": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1400.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0003718474": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 93149.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.00000805157
+        }
+      },
+      "vente": {}
+    },
+    "GB00BJV2F804": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1100,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BRK01058": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 670.15,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B067N833": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 7874,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000952502
+        }
+      },
+      "vente": {}
+    },
+    "FR0013357621": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 126.72,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00BDFXHW57": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1236,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000053324": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 78.72,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0000120966": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 270.8,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00BPJMN573": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 127.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB0000600931": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 1096.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BMH19X50": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 5939,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000126284
+        }
+      },
+      "vente": {}
+    },
+    "GB00BF4HYT85": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 67448.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000111196
+        }
+      },
+      "vente": {}
+    },
+    "FR0000050353": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 244.8,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0000031775": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 262.8,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB0003395000": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2220.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00BF4HYV08": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 22148.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000338623
+        }
+      },
+      "vente": {}
+    },
+    "GB0006963689": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 4331.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "GB00B1YPC344": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 3639,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0010481960": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 292,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0000121204": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 340.92,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0000131757": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 176.32,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GG00B1Z5FH87": {
+      "achat": {
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000981656
+        }
+      },
+      "vente": {}
+    },
+    "GB0006640972": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 22059.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.000033999
+        }
+      },
+      "vente": {}
+    },
+    "FR0013447729": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 77.24,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0000130213": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 73.44,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0000050049": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 78.8,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0005691656": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 606.4,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00BQVXM815": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 2550.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0011040500": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 156,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB0003781050": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 101876,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.00000736189
+        }
+      },
+      "vente": {}
+    },
+    "FR0004050250": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 143.56,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0000064784": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 224.4,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0000033219": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 356,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0010929125": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 1304.8,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0000031577": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 1254.8,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR001400SF56": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 425.2,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0000130403": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 1578.4,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0000031023": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 629.6,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB0007655037": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 9975.5,
+          "ofValue": 0.005
+        },
+        "PTM_LEVY": {
+          "amount": 150,
+          "ofValue": 0.0000751842
+        }
+      },
+      "vente": {}
+    },
+    "FR0000064271": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 508.4,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00BQXNJY41": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 36.2,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    },
+    "FR0000039091": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 3160.4,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0000060303": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 89.2,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR0000062234": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 5247.2,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "FR001400SUB7": {
+      "achat": {
+        "FRENCH_TRANSACTION_TAX": {
+          "amount": 406.8,
+          "ofValue": 0.004
+        }
+      },
+      "vente": {}
+    },
+    "GB00BMJ6DW54": {
+      "achat": {
+        "STAMP_DUTY": {
+          "amount": 4515.5,
+          "ofValue": 0.005
+        }
+      },
+      "vente": {}
+    }
+  }
 }

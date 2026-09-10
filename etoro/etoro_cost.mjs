@@ -26,7 +26,7 @@
 // on the global platform, some HK names). Market spread is the venue book,
 // not an eToro markup, and sits in `a` / `b` like every other file. They
 // print "no additional broker fees" on real stocks, so SEC / TAF stay out.
-// Stamp / FTT from the T212 map; else their printed UK 0.50 % on a London
+// Stamp / FTT from the tax map; else their printed UK 0.50 % on a London
 // STOCK. Cash can sit in USD and, where offered, GBP / EUR / AUD / DKK;
 // conversion is 0.75 % (local ↔ USD) only if the wallet is the wrong
 // currency, so FX stays out of `a`. Custody 0, inactivity 0. No live trip:
@@ -48,11 +48,10 @@
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
+import { taxesOf, taxRates } from "../taxMap.mjs";
 
 const CATALOGUE = new URL("etoro-parsed.json", import.meta.url);
 const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
-const TAXES = new URL("../parsed_json/taxes.json", import.meta.url);
-const T212 = new URL("../trading212/trading212-parsed.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://www.etoro.com/trading/fees/",
@@ -98,19 +97,6 @@ const ASIA_ME = new Set(["ASX", "HKEX", "DFM", "ADX", "TSE"]);
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
 const spreads = fs.existsSync(SPREADS) ? JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {} : {};
-const taxFile = fs.existsSync(TAXES) ? JSON.parse(fs.readFileSync(TAXES, "utf8")) : null;
-
-const taxByIsin = (() => {
-  const out = new Map();
-  if (!taxFile?.byCode || !fs.existsSync(T212)) return out;
-  const t212 = JSON.parse(fs.readFileSync(T212, "utf8"));
-  for (const r of Array.isArray(t212) ? t212 : t212.rows || []) {
-    const isin = String(r.isin || "").toUpperCase();
-    const entry = r.code ? taxFile.byCode[r.code] : null;
-    if (isin && entry && (entry.achat || entry.vente)) out.set(isin, entry);
-  }
-  return out;
-})();
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 
@@ -171,21 +157,6 @@ function remarkOf({ market, plan, american } = {}) {
     lines.push(`US CFD at or under ${CFD_PENNY_BELOW} $: ${CFD_PENNY_EACH} $/share each way.`);
   }
   return lines.join("\n");
-}
-
-function taxesOf(isin) {
-  if (!taxFile) return { known: false, why: "relevé fiscal absent : lancer node taxes.mjs" };
-  const entry = taxByIsin.get(String(isin || "").toUpperCase());
-  if (entry) return { known: true, buy: entry.achat ?? {}, sell: entry.vente ?? {} };
-  return { known: false, assumedZero: true, why: "pas de ligne fiscale Trading212 pour cet ISIN" };
-}
-
-function taxRates(tax) {
-  const rates = {};
-  for (const [name, line] of Object.entries(tax.buy ?? {})) {
-    if (line.ofValue != null) rates[name] = line.ofValue;
-  }
-  return rates;
 }
 
 function stampOf({ listing, tax }) {

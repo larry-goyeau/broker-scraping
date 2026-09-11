@@ -32,6 +32,7 @@
 
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
+import { plus, finite, bookParts } from "../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
@@ -203,13 +204,20 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
   const rates = taxRates(tax);
   const taxTotal = Object.values(rates).reduce((s, r) => s + r, 0);
   const knownPct = SEC_RATE + taxTotal;
-  const a = marketBp != null ? marketBp / 1e4 + knownPct : knownPct;
-  const bookUsd = marketPerShare ?? 0;
+  const mkt = bookParts({
+    bp: marketBp,
+    perShare: marketPerShare,
+    venue: m.venue,
+    unsourced: m.unsourced,
+    toUsd: (x) => x,
+  });
+  const a = plus(mkt.a, knownPct);
+  const bookUsd = mkt.b;
 
   return {
     ...answer,
-    a: Number(Number(a).toPrecision(4)),
-    b: Number((bookUsd + TAF_PER_SHARE).toPrecision(6)),
+    a: finite(a, 4),
+    b: finite(plus(bookUsd, TAF_PER_SHARE), 6),
     c: 0,
     floor: null,
     listing,

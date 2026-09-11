@@ -42,6 +42,7 @@
 
 import fs from "node:fs";
 import { listingKey, resolveVenue } from "../venues.mjs";
+import { plus, finite, bookParts } from "../na.mjs";
 import { QUOTE } from "../fx.mjs";
 
 const CATALOGUE = new URL("alpaca-parsed.json", import.meta.url);
@@ -64,8 +65,6 @@ const COMMISSION_RATE = 0;
 const CRYPTO_TAKER = 0.0025;
 const CRYPTO_MAKER = 0.0015;
 const REMARK_EQUITY = "Regulatory floor $0.03/day.";
-const REMARK_CRYPTO =
-  "0.50% taker (tier 1). Instant ACH cash is not available for crypto until settled.";
 
 const CHECK = {
   symbol: "IAU",
@@ -208,11 +207,18 @@ export function roundTripCost({
   const marketBp = bp ?? leaf?.bp ?? null;
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
   const fees = perShareFees(otc);
+  const mkt = bookParts({
+    bp: marketBp,
+    perShare: marketPerShare,
+    venue: m.venue,
+    unsourced: m.unsourced,
+    toUsd: (x) => x,
+  });
 
   return {
     ...answer,
-    a: Number((SEC_RATE + 2 * commission + (marketBp ?? 0) / 1e4).toPrecision(4)),
-    b: Number((fees + (marketPerShare ?? 0)).toPrecision(6)),
+    a: finite(plus(SEC_RATE, 2 * commission, mkt.a), 4),
+    b: finite(plus(fees, mkt.b), 6),
     listing,
     bp: marketBp,
     perShare: marketPerShare,
@@ -265,7 +271,7 @@ function cryptoCost(row, answer) {
     cap: null,
     listing,
     feeMarket: "crypto",
-    remark: REMARK_CRYPTO,
+    remark: "",
     parts: { markupEachWay: CRYPTO_TAKER, makerEachWay: CRYPTO_MAKER },
     bp: Number((CRYPTO_TAKER * 2 * 1e4).toFixed(0)),
     perShare: null,

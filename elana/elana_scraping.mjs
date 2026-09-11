@@ -125,7 +125,7 @@ const EXCHANGES = {
   LSE_SETS: "LSE",
   LSE_SEAQ: "LSE",
   LSE_ETF: "LSE",
-  LSE_INTL: "LSIN",
+  LSE_INTL: "LSEIOB",
   MIL: "MIL",
   MIL_ETF: "MIL",
   // Borsa Italiana's bond markets, which are the exchange itself.

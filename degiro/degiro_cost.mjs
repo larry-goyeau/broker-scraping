@@ -55,6 +55,7 @@
 
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
+import { plus, finite, bookParts } from "../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
@@ -331,15 +332,22 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
   const ratePct = ticket.rate ? ticket.rate * 2 : 0;
   const knownPct = taxTotal + fxPct + ratePct;
   // No book and nothing proportional (EUR Tradegate, no tax) is unknown, not 0 %.
-  const a = marketBp != null ? marketBp / 1e4 + knownPct : knownPct || null;
-  const bookUsd = american ? (marketPerShare ?? 0) : dollars(marketPerShare ?? 0, listing.currency) ?? 0;
+  const mkt = bookParts({
+    bp: marketBp,
+    perShare: marketPerShare,
+    venue: m.venue,
+    unsourced: m.unsourced,
+    toUsd: (x) => (american ? x : dollars(x, listing.currency)),
+  });
+  const a = plus(mkt.a, knownPct);
+  const bookUsd = mkt.b;
   const ticketUsd = ticket.each != null ? dollars(ticket.each * 2, "EUR") ?? 0 : 0;
   const floorUsd = ticket.rate ? dollars(ticket.min * 2, "EUR") : null;
 
   return {
     ...answer,
-    a: a == null ? null : Number(Number(a).toPrecision(4)),
-    b: Number(bookUsd.toPrecision(6)),
+    a: finite(a, 4),
+    b: finite(bookUsd, 6),
     c: Number(ticketUsd.toPrecision(6)),
     floor: floorUsd,
     listing,

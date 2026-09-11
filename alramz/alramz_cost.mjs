@@ -7,10 +7,10 @@
 // other `*_cost.mjs` files answer in.
 //
 // Al Ramz Capital LLC (AE, SCA). The catalogue is webtrade.alramz.ae
-// (`alramz_scraping.mjs`) and today only holds four NYSE ETFs that also sit in
-// `etfs.csv`. The public card still prints DFM, ADX, Nasdaq Dubai, Bahrain
-// and Muscat, so those legs are wired for a later scrape. Custody of the
-// online account is 300 AED / year (FAQ); it stays in the remark.
+// (`alramz_scraping.mjs`): US (NYSE / NSDQ), DFM, ADX, Tadawul, Bahrain
+// and Muscat. The public card prints DFM, ADX, Nasdaq Dubai, Bahrain,
+// Muscat and the US. Custody of the online account is 300 AED / year
+// (FAQ); it stays in the remark.
 //
 // Local UAE tape (DFM / ADX / DIFX): the printed % × 2 sits in `a`. VAT 5 %
 // is charged on broker, market, order and CDS lines; it is folded into `a`
@@ -37,6 +37,7 @@
 
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
+import { plus, finite, bookParts } from "../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
@@ -73,6 +74,7 @@ const RULE = {
 const TO_VENUES = {
   ADSM: "ADX",
   DIFX: "NASDAQDUBAI",
+  NSDQ: "NASDAQ",
 };
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
@@ -108,7 +110,6 @@ function remarkOf({ market } = {}) {
       r.ccy === "USD" ? `${n} $` : r.ccy === "AED" ? `${n} AED` : `${n} ${r.ccy}`;
     lines.push(`min fees ${amount}.`);
   }
-  if (r?.vat) lines.push("VAT 5% on the ticket.");
   lines.push("Online account 300 AED/year.");
   return lines.join("\n");
 }
@@ -117,14 +118,14 @@ export function feeMarketOf(exchange, mic, currency) {
   const code = loose(exchange);
   const m = String(mic || "").toUpperCase();
   const ccy = String(currency || "").toUpperCase();
-  if (US_MICS.has(m) || /^(NASDAQ|NYSE|AMEX|ARCA|BATS)$/.test(code)) return "us";
+  if (US_MICS.has(m) || /^(NASDAQ|NSDQ|NYSE|AMEX|ARCA|BATS)$/.test(code)) return "us";
   if (code === "DFM" || m === "XDFM") return "dfm";
   if (code === "ADX" || code === "ADSM" || m === "XADS") return "adx";
   if (code === "DIFX" || code === "NASDAQDUBAI" || code === "NASDAQDXB") {
     return ccy === "AED" ? "difx_aed" : "difx_usd";
   }
-  if (code === "BAHRAIN" || code === "XBAH" || code === "BAHRAINBOURSE") return "bahrain";
-  if (code === "MUSCAT" || code === "MSM" || code === "XMUS") return "muscat";
+  if (code === "BAHRAIN" || code === "BHB" || code === "XBAH" || code === "BAHRAINBOURSE") return "bahrain";
+  if (code === "MUSCAT" || code === "MSM" || code === "MSX" || code === "XMUS") return "muscat";
   return null;
 }
 
@@ -272,14 +273,21 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
   const taxTotal = Object.values(rates).reduce((s, r) => s + r, 0);
   const commissionPct = rule.rate * vatFactor(rule) * 2;
   const knownPct = taxTotal + (american ? SEC_RATE : 0) + commissionPct;
-  const a = marketBp != null ? marketBp / 1e4 + knownPct : knownPct;
-  const bookUsd = american ? (marketPerShare ?? 0) : dollars(marketPerShare ?? 0, listing.currency) ?? 0;
+  const mkt = bookParts({
+    bp: marketBp,
+    perShare: marketPerShare,
+    venue: m.venue,
+    unsourced: m.unsourced,
+    toUsd: (x) => (american ? x : dollars(x, listing.currency)),
+  });
+  const a = plus(mkt.a, knownPct);
+  const bookUsd = mkt.b;
   const floorUsd = rule.min != null ? dollars(rule.min * vatFactor(rule) * 2, rule.ccy) : null;
 
   return {
     ...answer,
-    a: Number(Number(a).toPrecision(4)),
-    b: Number((bookUsd + (american ? TAF_PER_SHARE : 0)).toPrecision(6)),
+    a: finite(a, 4),
+    b: finite(plus(bookUsd, american ? TAF_PER_SHARE : 0), 6),
     c: 0,
     floor: floorUsd,
     listing,

@@ -47,6 +47,7 @@
 
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
+import { plus, finite, bookParts } from "../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
@@ -310,17 +311,22 @@ export function roundTripCost({
   const stamp = stampOf({ listing, tax });
   const commPct = rateEach(market) * 2;
   const knownPct = commPct + stamp.pct;
-  const a = marketBp != null ? marketBp / 1e4 + knownPct : knownPct;
-  const bookUsd = american
-    ? (marketPerShare ?? 0)
-    : dollars(marketPerShare ?? 0, listing.currency) ?? 0;
+  const mkt = bookParts({
+    bp: marketBp,
+    perShare: marketPerShare,
+    venue: m.venue,
+    unsourced: m.unsourced,
+    toUsd: (x) => (american ? x : dollars(x, listing.currency)),
+  });
+  const a = plus(mkt.a, knownPct);
+  const bookUsd = mkt.b;
   const ticket = ticketEach(picked, market) || 0;
   const c = ticket * 2;
 
   return {
     ...answer,
-    a: Number(Number(a).toPrecision(4)),
-    b: Number(bookUsd.toPrecision(6)),
+    a: finite(a, 4),
+    b: finite(bookUsd, 6),
     c: Number(Number(c).toPrecision(6)),
     floor: null,
     listing,

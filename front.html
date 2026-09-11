@@ -104,7 +104,7 @@
       #suggest[hidden] { display: none; }
       #suggest button {
         display: grid;
-        grid-template-columns: 88px 1fr auto;
+        grid-template-columns: 88px 72px 1fr auto;
         gap: 12px;
         align-items: baseline;
         width: 100%;
@@ -118,6 +118,7 @@
       }
       #suggest button[aria-selected="true"], #suggest button:hover { background: var(--hit); }
       #suggest .tk { font-variant-numeric: tabular-nums; font-weight: 650; }
+      #suggest .kind { color: var(--green); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
       #suggest .nm { color: var(--mute); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
       #suggest .nb { color: var(--green); font-size: 13px; white-space: nowrap; }
       .meta { margin: 14px 0 0; color: var(--mute); font-size: 13px; }
@@ -249,8 +250,11 @@
         suggest.innerHTML = hits
           .map((h, i) => {
             const label = h.brokers > 1 ? `${h.brokers} brokers` : "1 broker";
+            const type = String(h.type || "").toUpperCase();
+            const kind = type && type !== "OTHER" ? type : "";
             return `<li><button type="button" data-i="${i}" aria-selected="${i === cursor}">
               <span class="tk">${esc(h.ticker || "—")}</span>
+              <span class="kind">${esc(kind)}</span>
               <span class="nm">${esc(h.name || h.isin || h.key)}</span>
               <span class="nb">${label}</span>
             </button></li>`;
@@ -283,6 +287,7 @@
           return;
         }
         const d = await r.json();
+        const crypto = String(d.type || "").toUpperCase() === "CRYPTO";
         const rows = d.soldBy
           .flatMap((b) => {
             const listed = b.listings.length ? b.listings : [{ exchange: "", currency: "" }];
@@ -291,7 +296,7 @@
               family: b.family || b.name || "",
               planRank: Number(b.planRank) || 0,
               brokerName: b.name || "",
-              exchange: l.exchange || "—",
+              exchange: crypto ? "" : l.exchange || "—",
               currency: l.currency || "N/A",
               spread: l.spread || "N/A",
               perShare: l.perShare || "N/A",
@@ -338,7 +343,7 @@
         const body = merged
           .map(
             (row) =>
-              `<tr><td>${brokerCell(row)}</td><td>${esc(row.exchange)}</td><td>${esc(row.currency)}</td>${cell(row.spread)}${cell(row.perShare)}${cell(row.perOrder, row.perOrderMin)}<td class="remark">${esc(row.remark)}</td></tr>`
+              `<tr><td>${brokerCell(row)}</td>${crypto ? "" : `<td>${esc(row.exchange)}</td>`}<td>${esc(row.currency)}</td>${cell(row.spread)}${cell(row.perShare)}${cell(row.perOrder, row.perOrderMin)}<td class="remark">${esc(row.remark)}</td></tr>`
           )
           .join("");
         result.hidden = false;
@@ -354,7 +359,7 @@
             <thead>
               <tr>
                 <th>broker</th>
-                <th>exchange</th>
+                ${crypto ? "" : "<th>exchange</th>"}
                 <th>currency</th>
                 <th>spread*</th>
                 <th>commission / share (USD)*</th>

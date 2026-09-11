@@ -11,14 +11,27 @@ function toIsin(value) {
   return match ? match[0] : "";
 }
 
-// Al Ramz types every instrument as EQUITY, so it cannot say which of its
-// listings are funds; the CSV is what marks an ISIN as an ETF worth keeping.
-function loadIsinsFromCsv(csvPath) {
-  if (!fs.existsSync(csvPath)) return new Map();
+function pathArg(flag, fallback) {
+  for (const arg of process.argv.slice(2)) {
+    const match = arg.match(new RegExp(`^--${flag}=(.+)$`, "i"));
+    if (match) return match[1];
+  }
+  return new URL(fallback, import.meta.url);
+}
 
-  const map = new Map();
+function hasFlag(name) {
+  return process.argv.slice(2).some((arg) => new RegExp(`^--${name}$`, "i").test(arg));
+}
+
+// Al Ramz types every instrument as EQUITY, so it cannot say which of its
+// listings are funds. The CSV is only what types a known ISIN; the live book
+// is kept in full — dropping anything off `etfs.csv` left four NYSE funds
+// and Al Ramz never showed on the page.
+function loadIsinsFromCsv(csvPath, kind, map = new Map()) {
+  if (!fs.existsSync(csvPath)) return map;
+
   for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
-    if (!line.trim()) continue;
+    if (!line.trim() || /^ticker\s*,/i.test(line)) continue;
 
     const columns = line.split(",");
     const isinIndex = columns.findIndex((column) => Boolean(toIsin(column)));
@@ -26,26 +39,28 @@ function loadIsinsFromCsv(csvPath) {
 
     const isin = toIsin(columns[isinIndex]);
     const name = columns.slice(isinIndex + 1).join(",").trim();
-
-    const entry = map.get(isin) || { names: [] };
-    map.set(isin, entry);
+    if (!map.has(isin)) map.set(isin, { kind, names: [] });
+    const entry = map.get(isin);
     if (name && !entry.names.includes(name)) entry.names.push(name);
   }
 
   return map;
 }
 
-// `--csv=PATH` overrides the default ETF list CSV (defaults to etfs.csv).
-const csvPath = (() => {
-  for (const arg of process.argv.slice(2)) {
-    const match = arg.match(/^--csv=(.+)$/i);
-    if (match) return match[1];
-  }
-  return new URL("../etfs.csv", import.meta.url);
-})();
+function listingType(name, kind) {
+  if (kind === "STOCK") return "STOCK";
+  if (/\bETN\b/i.test(name)) return "ETN";
+  if (/\bETC\b/i.test(name)) return "ETC";
+  if (kind === "ETF") return "ETF";
+  return "STOCK";
+}
 
-const csvIsins = loadIsinsFromCsv(csvPath);
-console.error(`${csvIsins.size} ISINs in the CSV`);
+const etfsOnly = hasFlag("etfs-only") || hasFlag("funds-only");
+const stocksOnly = hasFlag("stocks-only");
+const csvIsins = new Map();
+if (!stocksOnly) loadIsinsFromCsv(pathArg("csv", "../etfs.csv"), "ETF", csvIsins);
+if (!etfsOnly) loadIsinsFromCsv(pathArg("stocks-csv", "../stocks.csv"), "STOCK", csvIsins);
+console.error(`${csvIsins.size} ISINs typed from the catalogues`);
 
 const browser = await puppeteer.connect({
   browserURL: "http://127.0.0.1:9222",
@@ -109,18 +124,10 @@ console.error(`${instruments.length} instruments in Al Ramz's offering`);
 const outputPath = new URL("alramz-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
-let offList = 0;
+let untyped = 0;
 
 for (const instrument of instruments) {
   const isin = toIsin(instrument.sC_ISIN_CODE);
-  if (!isin) continue;
-
-  const entry = csvIsins.get(isin);
-  if (!entry) {
-    offList += 1;
-    continue;
-  }
-
   const exchange = (instrument.sc_exchange || instrument.sC_EXCHANGE || "").toUpperCase();
   const ticker = (
     instrument.tickeR_ID ||
@@ -130,30 +137,39 @@ for (const instrument of instruments) {
   ).toUpperCase();
   if (!ticker || !exchange) continue;
 
-  // A fund can be quoted on more than one of Al Ramz's venues, and each
+  // A name can be quoted on more than one of Al Ramz's venues, and each
   // listing is its own tradable line.
-  const key = `${exchange}:${isin}`;
+  const key = `${exchange}:${isin || ticker}`;
   if (seen.has(key)) continue;
   seen.add(key);
 
-  const name = (instrument.scE_LONG_NAME || entry.names[0] || "").replace(/\s+/g, " ").trim();
+  const entry = isin ? csvIsins.get(isin) : null;
+  if (!entry) untyped += 1;
+  const name = (instrument.scE_LONG_NAME || entry?.names[0] || ticker).replace(/\s+/g, " ").trim();
+  const type = listingType(name, entry?.kind || "");
+  if (etfsOnly && type === "STOCK") continue;
+  if (stocksOnly && type !== "STOCK") continue;
   const currency = instrument.cuR_CODE || null;
 
   results.push({
-    query: isin,
+    query: isin || ticker,
     ticker,
     name,
     exchange,
     currency,
-    type: "ETF",
+    type,
     raw: [ticker, name, exchange, currency].filter(Boolean).join(" "),
-    isin,
+    isin: isin || "",
   });
 }
 
 fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
 
-console.error(`${results.length} funds matched, ${offList} instruments not in the CSV`);
-console.log(JSON.stringify(results, null, 2));
+const byType = new Map();
+for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);
+console.error(
+  `${results.length} listed (${[...byType].map(([type, count]) => `${count} ${type}`).join(", ") || "none"})` +
+    (untyped ? `, ${untyped} not in the catalogues` : "")
+);
 
 await browser.disconnect();

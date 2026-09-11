@@ -37,6 +37,7 @@
 
 import fs from "node:fs";
 import { listingKey, resolveVenue } from "../venues.mjs";
+import { plus, finite, bookParts } from "../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
 
 // Anchored to the repository rather than to whatever directory the shell happens to be in, so this
@@ -296,19 +297,15 @@ export function roundTripCost({ etf, place, currency, bp = null }) {
   const marketBp = bp ?? leaf?.bp ?? null;
   const marketPerShare = leaf?.perShare ?? null;
 
-  if (marketBp == null && marketPerShare == null && !taxTotal && !american) {
-    return {
-      ...answer,
-      listing,
-      tax,
-      // Null rather than zero, always: a spread nobody has measured must not read as a free trade.
-      why: `aucun spread relevé pour ${listing.ticker || listing.isin} sur ${listing.exchange} en ${listing.currency}`,
-    };
-  }
-
-  const a = (marketBp ?? 0) / 1e4 + taxTotal + (american ? SEC_RATE : 0);
-  const bookUsd = american || listing.currency === "USD" ? (marketPerShare ?? 0) : toUsd(marketPerShare ?? 0, listing.currency) ?? 0;
-  const b = bookUsd + (american ? FINRA_PER_SHARE : 0);
+  const mkt = bookParts({
+    bp: marketBp,
+    perShare: marketPerShare,
+    venue: m.venue,
+    unsourced: m.unsourced,
+    toUsd: (x) => (american || listing.currency === "USD" ? x : toUsd(x, listing.currency)),
+  });
+  const a = plus(mkt.a, taxTotal, american ? SEC_RATE : 0);
+  const b = plus(mkt.b, american ? FINRA_PER_SHARE : 0);
 
   const isBritish = listing.mic === "XLON";
   const perPound = listing.currency === "GBX" ? 100 : 1;
@@ -316,8 +313,12 @@ export function roundTripCost({ etf, place, currency, bp = null }) {
   return {
     ...answer,
     // cost (USD) = a × toUsd(p) × n + b × n + c. `b` and `c` are dollars.
-    a: Number(a.toPrecision(4)),
-    b: Number(b.toPrecision(6)),
+    a: finite(a, 4),
+    b: finite(b, 6),
+    why:
+      a == null
+        ? `aucun spread relevé pour ${listing.ticker || listing.isin} sur ${listing.exchange} en ${listing.currency}`
+        : undefined,
     ccy: QUOTE,
     listing,
     // What each term is made of, because a single coefficient hides which charge dominates — and
@@ -330,7 +331,7 @@ export function roundTripCost({ etf, place, currency, bp = null }) {
     bp: marketBp,
     perShare: marketPerShare,
     url: leaf?.url ?? null,
-    basis: bp ? "imposé" : leaf ? "publié" : "pas de carnet relevé, seules les taxes et frais sont comptés",
+    basis: bp ? "imposé" : leaf ? "publié" : "pas de carnet relevé",
     tax,
     cap: american ? { b: FINRA_CAP, why: "plafond FINRA par exécution, pas par ordre : un ordre découpé en cinq paie cinq plafonds" } : null,
     threshold: isBritish
@@ -399,7 +400,7 @@ function cryptoCost(row, answer) {
     ccy: QUOTE,
     fx: { quote: QUOTE, asOf: FX_AS_OF, listing: usdPer(listing.currency) },
     fxIfConverted: FX_EACH_WAY * 2,
-    remark: "Broker spread. FX 0.30% if not funded in the listing currency.",
+    remark: "FX 0.30% if not funded in the listing currency.",
   };
 }
 

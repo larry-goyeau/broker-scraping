@@ -289,20 +289,27 @@ function callInPage(path, options) {
   );
 }
 
-async function ensureBrowser() {
-  try {
-    await browser.pages();
-    return true;
-  } catch {
+async function reconnectBrowser() {
+  await browser.disconnect().catch(() => {});
+  browser = await puppeteer.connect(CHROME);
+  page = null;
+  console.error("reconnected to Chrome");
+}
+
+async function ensureBrowser({ force = false } = {}) {
+  if (!force) {
     try {
-      await browser.disconnect().catch(() => {});
-      browser = await puppeteer.connect(CHROME);
-      page = null;
-      console.error("reconnected to Chrome");
+      await browser.pages();
       return true;
     } catch {
-      return false;
+      /* reconnect below */
     }
+  }
+  try {
+    await reconnectBrowser();
+    return true;
+  } catch {
+    return false;
   }
 }
 
@@ -356,13 +363,17 @@ async function waitForSession() {
     console.error("portal not answering; waiting until it is signed in again...");
 
     for (let waited = 0; ; waited += 10) {
-      await ensureBrowser();
+      // Login opens a new tab; after a long wait the old CDP list no longer
+      // sees it. Reconnect every minute so the walk resumes by itself.
+      await ensureBrowser({ force: waited === 0 || waited % 60 === 0 });
+      page = null;
       await attachPortalPage();
 
       if (page && !page.isClosed() && !looksLoggedOut(page.url())) {
         const probe = await search("AAPL", false);
         if (probe !== null) {
           console.error("portal session restored");
+          await page.bringToFront().catch(() => {});
           return;
         }
       }

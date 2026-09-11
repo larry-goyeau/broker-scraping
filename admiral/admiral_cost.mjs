@@ -49,6 +49,7 @@
 
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
+import { plus, finite, bookParts } from "../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
@@ -105,9 +106,7 @@ const RULE = {
 };
 
 function remarkOf({ market, type } = {}) {
-  if (type === "CRYPTO") {
-    return "Trade.MT5 CFD (dealer spread), not Invest.MT5. No published commission.";
-  }
+  if (type === "CRYPTO") return "";
   const r = RULE[market] || RULE.other_eu;
   const ccy = r.ccy === "EUR" ? "€" : r.ccy;
   const ticket = market === "us" ? "min fees 2 $." : `min fees ${r.min * 2} ${ccy}.`;
@@ -350,14 +349,21 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
   const taxTotal = Object.values(rates).reduce((s, r) => s + r, 0);
 
   const knownPct = taxTotal + (american ? SEC_RATE : 0) + (american ? 0 : (rule.rate ?? 0) * 2);
-  const a = marketBp != null ? marketBp / 1e4 + knownPct : knownPct || null;
-  const bookUsd = american ? (marketPerShare ?? 0) : dollars(marketPerShare ?? 0, listing.currency) ?? 0;
+  const mkt = bookParts({
+    bp: marketBp,
+    perShare: marketPerShare,
+    venue: m.venue,
+    unsourced: m.unsourced,
+    toUsd: (x) => (american ? x : dollars(x, listing.currency)),
+  });
+  const a = plus(mkt.a, knownPct);
+  const bookUsd = mkt.b;
   const commUsd = dollars(rule.min * 2, rule.ccy) ?? 0;
 
   return {
     ...answer,
-    a: a == null ? null : Number(a.toPrecision(4)),
-    b: Number((bookUsd + (american ? TAF_PER_SHARE : 0)).toPrecision(6)),
+    a: finite(a, 4),
+    b: finite(plus(bookUsd, american ? TAF_PER_SHARE : 0), 6),
     c: 0,
     floor: commUsd,
     listing,

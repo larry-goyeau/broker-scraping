@@ -55,6 +55,7 @@
 
 import fs from "node:fs";
 import { listingKey, resolveVenue } from "../venues.mjs";
+import { plus, finite, bookParts } from "../na.mjs";
 import { QUOTE } from "../fx.mjs";
 
 const CATALOGUE = new URL("tradezero-parsed.json", import.meta.url);
@@ -317,6 +318,13 @@ export function roundTripCost({
   const leaf = (listing.mic && spreads[listing.isin]?.[listing.mic]?.[listing.currency]) || null;
   const marketBp = bp ?? leaf?.bp ?? null;
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
+  const mkt = bookParts({
+    bp: marketBp,
+    perShare: marketPerShare,
+    venue: m.venue,
+    unsourced: m.unsourced,
+    toUsd: (x) => x,
+  });
 
   const chosen = regimeOf({ shares, order, otc });
   const fees = feePerShare(taf);
@@ -331,8 +339,8 @@ export function roundTripCost({
     const takes = regime !== "repos";
     return {
       regime,
-      a: Number((SEC_RATE + (takes ? (marketBp ?? 0) / 1e4 : 0)).toPrecision(4)),
-      b: Number((fees + b + (takes ? (marketPerShare ?? 0) : 0)).toPrecision(6)),
+      a: finite(plus(SEC_RATE, takes ? mkt.a : 0), 4),
+      b: finite(plus(fees, b, takes ? mkt.b : 0), 6),
       c: Number(c.toFixed(2)),
       shares: regime === "petit" ? `< ${FREE_FROM_SHARES}` : `≥ ${FREE_FROM_SHARES}`,
       market: takes ? "spread effectif payé" : "aucun spread payé, mais risque d'exécution",

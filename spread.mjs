@@ -669,6 +669,7 @@ async function euronextPage(l) {
 const VIENNA_LISTS = [
   "https://www.wienerborse.at/en/stocks-prime-market/",
   "https://www.wienerborse.at/en/stocks-standard-market/",
+  "https://www.wienerborse.at/en/stocks-global-market/",
 ];
 const viennaPages = new Map();
 
@@ -907,29 +908,45 @@ const euroNum = (s) => {
 async function loadBoag(wanted, dest, slices) {
   const index = await (await fetchOk("https://cld42.boersenag.de/m13data/data/m13filespt.json")).json();
   const files = (index.M13Files || []).filter((f) => f && f !== "end");
-  const pick = (mic, n) => files.filter((f) => f.includes(`_${mic}_`)).slice(0, n);
-  const selected = slices.flatMap(({ mic, n }) => pick(mic, n));
-  if (!selected.length) throw new Error(`index pre-trade BÖAG sans ${slices.map((s) => s.mic).join("/")}`);
   const wantedIsin = new Set([...wanted].map((k) => k.split("|")[0]));
   dest.clear();
-  for (const file of selected) {
-    const text = await (await fetchOk(`https://cld42.boersenag.de/m13data/data/${file}`)).text();
-    for (const line of text.split(/\r?\n/)) {
-      const p = line.split(";");
-      if (p.length < 7 || p[0] === "MIC") continue;
-      const isin = String(p[1] || "").toUpperCase();
-      if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin)) continue;
-      if (wantedIsin.size && !wantedIsin.has(isin)) continue;
-      const bid = euroNum(p[3]);
-      const ask = euroNum(p[5]);
-      if (!(bid > 0) || !(ask > 0) || ask < bid) continue;
-      const at = p[2] || "";
-      const key = `${isin}|EUR`;
-      const prev = dest.get(key);
-      if (prev && prev.at > at) continue;
-      dest.set(key, { bid, ask, currency: "EUR", at });
+  const selected = [];
+  // The newest slices are the liquid book. A name that last printed an hour ago has
+  // already fallen out of them, so the walk keeps going until every asked-for ISIN
+  // has its last two-sided print or the extra files run out.
+  const EXTRA = 40;
+  for (const { mic, n } of slices) {
+    const mine = files.filter((f) => f.includes(`_${mic}_`));
+    const limit = wantedIsin.size ? Math.min(mine.length, n + EXTRA) : Math.min(mine.length, n);
+    for (let i = 0; i < limit; i++) {
+      if (i >= n && wantedIsin.size && ![...wantedIsin].some((isin) => !dest.has(`${isin}|EUR`))) break;
+      const file = mine[i];
+      let text;
+      try {
+        text = await (await fetchOk(`https://cld42.boersenag.de/m13data/data/${file}`)).text();
+      } catch {
+        // The index lists files that rotate off the host within the walk.
+        continue;
+      }
+      selected.push(file);
+      for (const line of text.split(/\r?\n/)) {
+        const p = line.split(";");
+        if (p.length < 7 || p[0] === "MIC") continue;
+        const isin = String(p[1] || "").toUpperCase();
+        if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin)) continue;
+        if (wantedIsin.size && !wantedIsin.has(isin)) continue;
+        const bid = euroNum(p[3]);
+        const ask = euroNum(p[5]);
+        if (!(bid > 0) || !(ask > 0) || ask < bid) continue;
+        const at = p[2] || "";
+        const key = `${isin}|EUR`;
+        const prev = dest.get(key);
+        if (prev && prev.at > at) continue;
+        dest.set(key, { bid, ask, currency: "EUR", at });
+      }
     }
   }
+  if (!selected.length) throw new Error(`index pre-trade BÖAG sans ${slices.map((s) => s.mic).join("/")}`);
   return selected;
 }
 
@@ -1041,16 +1058,15 @@ const adapters = {
     unit: "perShare",
     async fetch(l) {
       if (!l.ticker) return { perShare: null, note: "symbole manquant, clé de la table 605" };
-      // The table is keyed by symbol, and a symbol is only unique within its own market.
-      // A European line a broker happened to label "NASDAQ" would otherwise be answered
-      // with the figures of whatever American security shares its ticker, which is the
-      // one error this venue can make silently. An American listing carries an American
-      // ISIN, so that is the guard.
-      if (!l.isin.startsWith("US")) {
+      // The table is keyed by symbol. A European line a broker labelled "NASDAQ" in
+      // euros must not pick up the American namesake. The venue is already a US
+      // book (us605); USD is what keeps TTE / ASML / SHEL — French or Dutch ISIN,
+      // New York listing — from being treated as a foreign book.
+      if (l.currency !== "USD") {
         return {
           perShare: null,
           settled: true,
-          note: `ISIN ${l.isin.slice(0, 2)} sur une place américaine : ligne non américaine, symbole non fiable`,
+          note: `605 est en USD, pas en ${l.currency}`,
         };
       }
       const line = us605.symbols[l.ticker.toUpperCase()];

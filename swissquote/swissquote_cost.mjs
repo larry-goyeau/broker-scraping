@@ -33,6 +33,7 @@
 
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
+import { plus, finite, bookParts } from "../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
@@ -80,7 +81,7 @@ function remarkOf({ bank, market, type } = {}) {
   // CH: https://www.swissquote.com/en-ch/private/trade/pricing/account-fees
   // LU: https://www.swissquote.com/en-lu/private/trade/pricing/account-fees
   const custody = bank === "ch" ? "Custody 20–50 CHF/quarter (+ VAT)." : "";
-  if (type === "CRYPTO") return ["2% taker (Standard I), no min.", custody].filter(Boolean).join("\n");
+  if (type === "CRYPTO") return custody;
   if (market === "otc") {
     const otc =
       bank === "ch"
@@ -325,14 +326,22 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
   if (market === "hk") exchangePct += 0.001 * 2;
   if (loose(m.row.exchange) === "SGX") exchangePct += 0.000325 * 2;
 
+  const mkt = bookParts({
+    bp: marketBp,
+    perShare: marketPerShare,
+    venue: m.venue,
+    unsourced: m.unsourced,
+    toUsd: (x) => (american ? x : dollars(x, listing.currency)),
+  });
+
   if (market === "otc") {
-    const a = OTC_RATE * 2 + taxTotal + (american ? SEC_RATE : 0);
-    const bookUsd = american ? (marketPerShare ?? 0) : dollars(marketPerShare ?? 0, listing.currency) ?? 0;
+    const a = plus(mkt.a, OTC_RATE * 2, taxTotal, american ? SEC_RATE : 0);
+    const bookUsd = mkt.b;
     const realtimeUsd = bank === "ch" ? dollars(2 * REALTIME_EACH, listing.currency) ?? 0 : 0;
     return {
       ...answer,
-      a: Number(a.toPrecision(4)),
-      b: Number((bookUsd + (american ? TAF_PER_SHARE : 0)).toPrecision(6)),
+      a: finite(a, 4),
+      b: finite(plus(bookUsd, american ? TAF_PER_SHARE : 0), 6),
       c: realtimeUsd,
       floor: dollars(OTC_MIN * 2, listing.currency),
       listing,
@@ -360,23 +369,23 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
   const small = gridChf(0, market);
   // A book nobody has measured must not become 0 % — that reads as a free trade.
   const knownPct = taxTotal + exchangePct + (american ? SEC_RATE : 0);
-  let a = marketBp != null ? marketBp / 1e4 + knownPct : knownPct || null;
+  let a = plus(mkt.a, knownPct);
   let luFloor = null;
   if (bank === "lu") {
     const rate = market === "dubai" ? LU_DUBAI_RATE : LU_RATE;
     const min = market === "jp" || market === "dubai" ? (market === "dubai" ? LU_DUBAI_MIN : LU_MIN_TOKYO) : LU_MIN;
-    a = (a ?? 0) + rate * 2;
+    a = plus(a, rate * 2);
     luFloor = min * 2;
   }
 
-  const bookUsd = american ? (marketPerShare ?? 0) : dollars(marketPerShare ?? 0, listing.currency) ?? 0;
+  const bookUsd = mkt.b;
   const commUsd = bank === "ch" ? dollars(small * 2, "CHF") ?? 0 : 0;
   const realtimeUsd = bank === "ch" ? dollars(2 * REALTIME_EACH, listing.currency) ?? 0 : 0;
 
   return {
     ...answer,
-    a: a == null ? null : Number(a.toPrecision(4)),
-    b: Number((bookUsd + (american ? TAF_PER_SHARE : 0)).toPrecision(6)),
+    a: finite(a, 4),
+    b: finite(plus(bookUsd, american ? TAF_PER_SHARE : 0), 6),
     c: Number((commUsd + realtimeUsd).toPrecision(6)),
     floor: bank === "lu" ? dollars(luFloor, "EUR") : null,
     listing,

@@ -91,11 +91,23 @@ const list = loadBrokerMeta();
 const brokers = new Map();
 const instruments = new Map();
 
+function cryptoPair(ticker, currency) {
+  const raw = String(ticker || "").trim().toUpperCase();
+  const quote = String(currency || "").trim().toUpperCase();
+  const m = raw.match(/^([A-Z0-9]+)[/:_-]([A-Z0-9]+)$/);
+  if (m) return { base: m[1], quote: quote || m[2], raw };
+  return { base: raw, quote, raw };
+}
+
 function instrumentKey(row) {
+  const type = String(row.type || "").trim().toUpperCase() || "OTHER";
+  if (type === "CRYPTO") {
+    const { base } = cryptoPair(row.ticker || row.query, row.currency);
+    return base ? `CRYPTO:${base}` : "";
+  }
   const isin = String(row.isin || "").trim().toUpperCase();
   if (/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin)) return isin;
   const ticker = String(row.ticker || row.query || "").trim().toUpperCase();
-  const type = String(row.type || "").trim().toUpperCase() || "OTHER";
   if (!ticker) return "";
   return `${type}:${ticker}`;
 }
@@ -148,7 +160,9 @@ for (const file of catalogueFiles()) {
       };
       instruments.set(key, inst);
     }
-    const ticker = String(row.ticker || "").trim().toUpperCase();
+    const type = String(row.type || "").trim().toUpperCase();
+    const pair = type === "CRYPTO" ? cryptoPair(row.ticker || row.query, row.currency) : null;
+    const ticker = pair ? pair.base : String(row.ticker || "").trim().toUpperCase();
     if (ticker) {
       inst.tickers.add(ticker);
       inst.tickerCounts.set(ticker, (inst.tickerCounts.get(ticker) || 0) + 1);
@@ -159,10 +173,11 @@ for (const file of catalogueFiles()) {
     const exchangeRaw = String(row.exchange || "").trim();
     const listing = {
       ticker: ticker || String(row.query || ""),
+      query: pair?.raw || String(row.ticker || row.query || ""),
       name: String(row.name || row.label || "").trim(),
       exchange: displayExchange(exchangeRaw),
       exchangeRaw,
-      currency: String(row.currency || "").trim(),
+      currency: pair ? pair.quote || String(row.currency || "").trim() : String(row.currency || "").trim(),
       type: String(row.type || "").trim(),
     };
     if (row.nonEuResident) listing.nonEuResident = true;
@@ -200,18 +215,18 @@ console.error(
   `estimateurs : ${[...estimators.keys()].join(", ") || "aucun"}`
 );
 
-function fmtNum(n) {
-  if (n == null || !Number.isFinite(Number(n))) return NA;
-  const x = Number(n);
-  if (x === 0) return "0";
-  return String(Number(x.toPrecision(4)));
-}
-
 function fmtUsd(n) {
   if (n == null || !Number.isFinite(Number(n))) return NA;
   const x = Number(n);
   if (x === 0) return "0";
   return String(Number(x.toFixed(2)));
+}
+
+function fmt4(n) {
+  if (n == null || !Number.isFinite(Number(n))) return NA;
+  const x = Number(n);
+  if (x === 0) return "0";
+  return x.toFixed(4);
 }
 
 const MIN_FEE_CCY = {
@@ -269,8 +284,8 @@ function formatCost(cost) {
   // a is a factor of the amount (the book in Europe, taxes, SEC). The American
   // book is published per share and already sits in b, so it must not appear here.
   // b and c are dollars in every *_cost.mjs the page loads.
-  // A missing book used to land as 0 and read as a free trade. Unknown is
-  // `null`. A known 0 (no % commission, book already in b) is 0 %.
+  // A missing book is null, not 0: x + N/A = N/A. A known 0 (no %
+  // commission, book already in b) is 0 %.
   // A flat ticket in `c` (Davy overseas settlement, ChoiceTrade OTC) owns the
   // order column. `min fees` then stays in the remark, in the published unit.
   const ticket = Number(cost.c);
@@ -279,8 +294,8 @@ function formatCost(cost) {
   const missingA = cost.a == null;
   const minUsd = pulled.minFees ? numericFloor(cost) ?? minFeesUsd(pulled.minFees, cost) : null;
   return {
-    spread: missingA ? NA : `${fmtNum(cost.a * 100)}%`,
-    perShare: cost.b == null ? NA : fmtNum(cost.b),
+    spread: missingA ? NA : `${fmt4(cost.a * 100)}%`,
+    perShare: cost.b == null ? NA : fmt4(cost.b),
     perOrder: hasTicket ? fmtUsd(ticket) : minUsd != null ? fmtUsd(minUsd) : cost.c == null ? NA : fmtUsd(cost.c),
     perOrderMin: !hasTicket && minUsd != null,
     remark: pulled.remark || "",
@@ -293,7 +308,7 @@ function estimateListing(folder, listing, inst, extra = {}) {
   if (!fn) return { spread: NA, perShare: NA, perOrder: NA, remark: "" };
   try {
     const cost = fn({
-      etf: inst.isin || listing.ticker,
+      etf: inst.key.startsWith("CRYPTO:") ? listing.query || listing.ticker : inst.isin || listing.ticker,
       place: listing.exchangeRaw || listing.exchange || "",
       currency: listing.currency || "",
       ...extra,
@@ -389,7 +404,9 @@ function isWholeWord(text, q, i) {
 }
 
 function score(inst, q) {
-  const Q = q.toUpperCase();
+  const raw = q.toUpperCase();
+  const { base } = cryptoPair(raw, "");
+  const Q = base && base !== raw ? base : raw;
   let s = 0;
   if (inst.isin === Q) s = Math.max(s, 120);
   else if (Q.length >= 3 && inst.isin.startsWith(Q)) s = Math.max(s, 85);
@@ -427,7 +444,7 @@ function search(q, limit = 20, nat = "") {
     if (n <= 0) continue;
     hits.push({ s, brokers: n, inst });
   }
-  hits.sort((a, b) => b.brokers - a.brokers || b.s - a.s);
+  hits.sort((a, b) => b.s - a.s || b.brokers - a.brokers);
   return hits.slice(0, limit).map((h) => summarize(h.inst, query, nat));
 }
 

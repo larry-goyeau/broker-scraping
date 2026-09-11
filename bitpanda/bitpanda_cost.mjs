@@ -49,6 +49,7 @@
 
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
+import { plus, finite, bookParts } from "../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
@@ -214,7 +215,7 @@ function cryptoCost(row, answer) {
     floor: null,
     listing,
     feeMarket: "crypto",
-    remark: `BTC card 0.99% each way. Ticket prints 0–${(100 * CRYPTO_PREMIUM_MAX).toFixed(2)}%. Fusion (0.25%…) is not this file.`,
+    remark: "",
     parts: { markupEachWay: CRYPTO_PREMIUM_EACH },
     bp: Number((CRYPTO_PREMIUM_EACH * 2 * 1e4).toFixed(0)),
     perShare: null,
@@ -294,13 +295,20 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
   const rates = taxRates(tax);
   const taxTotal = Object.values(rates).reduce((s, r) => s + r, 0);
 
-  const a = marketBp != null ? marketBp / 1e4 + taxTotal : taxTotal || null;
-  const bookUsd = listing.currency === "USD" ? (marketPerShare ?? 0) : dollars(marketPerShare ?? 0, listing.currency) ?? 0;
+  const mkt = bookParts({
+    bp: marketBp,
+    perShare: marketPerShare,
+    venue: m.venue,
+    unsourced: m.unsourced,
+    toUsd: (x) => (listing.currency === "USD" ? x : dollars(x, listing.currency)),
+  });
+  const a = plus(mkt.a, taxTotal);
+  const bookUsd = mkt.b;
 
   return {
     ...answer,
-    a: a == null ? null : Number(a.toPrecision(4)),
-    b: Number(bookUsd.toPrecision(6)),
+    a: finite(a, 4),
+    b: finite(bookUsd, 6),
     c: 0,
     floor: floorUsd,
     listing,

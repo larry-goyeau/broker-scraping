@@ -74,6 +74,7 @@
 
 import fs from "node:fs";
 import { listingKey, resolveVenue } from "../venues.mjs";
+import { plus, finite, bookParts } from "../na.mjs";
 import { QUOTE } from "../fx.mjs";
 
 // Anchored to the repository rather than to whatever directory the shell happens to be in, so
@@ -269,13 +270,20 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
   // per share, which is why that is the branch this broker normally takes.
   const marketBp = bp ?? leaf?.bp ?? null;
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
+  const mkt = bookParts({
+    bp: marketBp,
+    perShare: marketPerShare,
+    venue: m.venue,
+    unsourced: m.unsourced,
+    toUsd: (x) => x,
+  });
 
   return {
     ...answer,
     // a = the SEC's rate, plus a percentage-quoted book if one was given for this line.
-    a: Number((SEC_RATE + (marketBp ?? 0) / 1e4).toPrecision(4)),
+    a: finite(plus(SEC_RATE, mkt.a), 4),
     // b = the two per-share fees, plus the book when it is quoted per share.
-    b: Number((PER_SHARE + (marketPerShare ?? 0)).toPrecision(6)),
+    b: finite(plus(PER_SHARE, mkt.b), 6),
     listing,
     bp: marketBp,
     perShare: marketPerShare,

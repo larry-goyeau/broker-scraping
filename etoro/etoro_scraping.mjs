@@ -209,7 +209,7 @@ const PRICE_SOURCE_VENUES = {
   "OTC Markets": ["OTC", "NASDAQ", "AMEX", "NYSE"],
   eToro: ["NASDAQ", "AMEX", "NYSE", "CBOE", "OTC"],
   Xetra: ["XETR"],
-  "LSE PLC": ["LSE", "LSIN"],
+  "LSE PLC": ["LSE", "LSEIOB"],
   Euronext: ["EURONEXT"],
   "CBOE EU": ["EURONEXT", "XETR", "LSE", "SIX", "MIL", "BME", "VIE"],
   "CBOE AUS": ["ASX"],
@@ -221,7 +221,7 @@ const PRICE_SOURCE_VENUES = {
 };
 
 const SUFFIX_VENUES = {
-  L: ["LSE", "LSIN"],
+  L: ["LSE", "LSEIOB"],
   DE: ["XETR"],
   PA: ["EURONEXT"],
   ASX: ["ASX"],

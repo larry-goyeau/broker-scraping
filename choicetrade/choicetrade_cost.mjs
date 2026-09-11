@@ -33,6 +33,7 @@
 
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
+import { plus, finite, bookParts } from "../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
 
 const CATALOGUE = new URL("choicetrade-parsed.json", import.meta.url);
@@ -198,13 +199,20 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
   const marketBp = bp ?? leaf?.bp ?? null;
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
   const ticket = ticketEach({ market });
-  const a = (marketBp != null ? marketBp / 1e4 : 0) + SEC_RATE;
-  const bookUsd = marketPerShare ?? 0;
+  const mkt = bookParts({
+    bp: marketBp,
+    perShare: marketPerShare,
+    venue: m.venue,
+    unsourced: m.unsourced,
+    toUsd: (x) => x,
+  });
+  const a = plus(mkt.a, SEC_RATE);
+  const bookUsd = mkt.b;
 
   return {
     ...answer,
-    a: Number(Number(a).toPrecision(4)),
-    b: Number((bookUsd + TAF_PER_SHARE).toPrecision(6)),
+    a: finite(a, 4),
+    b: finite(plus(bookUsd, TAF_PER_SHARE), 6),
     c: Number((ticket * 2).toPrecision(6)),
     floor: ticket ? null : 0.01,
     listing,

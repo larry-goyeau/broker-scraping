@@ -26,6 +26,13 @@
 // Cash wallets are ZAR / USD / AUD / GBP / EUR. EasyFX is a transfer between
 // them (0.50 % + VAT, rate 0.70 % above WM/R on ZAR pairs), not a charge on
 // every fill, so it stays out of `a`. Thrive 25 R / month is a holding cost.
+//
+// EasyCrypto (spot, same group) is a different book. Help centre, read
+// 2026-09-11: 0.25 % execution + 0.075 % settlement & administration + VAT
+// each way, on every crypto / fiat pair. No published ticket minimum. Token
+// admin 1.5 % p.a. + VAT sits in the NAV, not the trip. Internal EE ↔
+// EasyCrypto transfers are free. The cost-profile PDFs do not cover this
+// shelf; the coefficients are the printed %.
 // No live trip: the coefficients are the printed %.
 //
 //   https://www.easyequities.co.za/pricing
@@ -34,10 +41,13 @@
 //   https://resources.easyequities.co.za/EasyEquities_CostProfile_AUSTrading.pdf
 //   https://resources.easyequities.co.za/EasyEquities_CostProfile_UKTrading.pdf
 //   https://resources.easyequities.co.za/EasyEquities_CostProfile_EURTrading.pdf
+//   https://support.easycrypto.co.za/support/solutions/articles/13000092725-what-are-your-fees-
+//   https://support.easycrypto.co.za/support/solutions/articles/13000093296-fees-and-minimums
 //
 //   node easyequities/easyequities_cost.mjs AAPL
 //   node easyequities/easyequities_cost.mjs AAPL NASDAQ USD --shares=1 --price=320
 //   node easyequities/easyequities_cost.mjs NPN JSE ZAR
+//   node easyequities/easyequities_cost.mjs BTC CRYPTO
 //   node easyequities/easyequities_cost.mjs --schedule
 //
 // `roundTripCost(...)` reads files, not the network.
@@ -58,7 +68,10 @@ const SCHEDULE = {
   aud: "https://resources.easyequities.co.za/EasyEquities_CostProfile_AUSTrading.pdf",
   gbp: "https://resources.easyequities.co.za/EasyEquities_CostProfile_UKTrading.pdf",
   eur: "https://resources.easyequities.co.za/EasyEquities_CostProfile_EURTrading.pdf",
+  crypto: "https://support.easycrypto.co.za/support/solutions/articles/13000092725-what-are-your-fees-",
+  cryptoMinimums: "https://support.easycrypto.co.za/support/solutions/articles/13000093296-fees-and-minimums",
   readOn: "2026-09-10",
+  cryptoReadOn: "2026-09-11",
   zarRevised: "2026-02-12",
   foreignRevised: "2026-03",
   entity: "EasyEquities (First World Trader, ZA)",
@@ -83,6 +96,7 @@ const RULE = {
   au: { comm: 0.0025, extra: 0.0031, min: null, minCcy: "AUD" },
   gbp: { comm: 0.0025, extra: 0.0031, stamp: 0.005, min: 0.01, minCcy: "GBP" },
   eur: { comm: 0.0025, extra: 0.0031, irish: 0.01, min: 0.01, minCcy: "EUR" },
+  crypto: { comm: 0.0025, extra: 0.00075, min: null, minCcy: null },
 };
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
@@ -109,9 +123,11 @@ const codeMarket = (query) => {
 };
 
 export function feeMarketOf(row, mic) {
+  const type = String(row?.type || "").toUpperCase();
+  const code = loose(row?.exchange);
+  if (type === "CRYPTO" || code === "CRYPTO") return "crypto";
   const fromCode = codeMarket(row?.query);
   if (fromCode) return fromCode;
-  const code = loose(row?.exchange);
   const m = String(mic || "").toUpperCase();
   const ccy = String(row?.currency || "").toUpperCase();
   if (US_MICS.has(m) || /^(NASDAQ|NYSE|AMEX|ARCA|BATS)$/.test(code) || ccy === "USD") return "us";
@@ -135,7 +151,8 @@ function minLabel(rule) {
   return `${n} ${rule.minCcy}`;
 }
 
-function remarkOf({ rule }) {
+function remarkOf({ rule, market } = {}) {
+  if (market === "crypto") return "EasyFX 0.5% if converted.";
   const lines = [];
   const min = minLabel(rule);
   if (min) lines.push(`min fees ${min}.`);
@@ -146,6 +163,9 @@ function remarkOf({ rule }) {
 
 
 function stampOf({ market, listing, tax }) {
+  if (market === "crypto" || String(listing?.type || "").toUpperCase() === "CRYPTO") {
+    return { pct: 0, rates: {}, source: null };
+  }
   const rates = taxRates(tax);
   const fromMap = Object.values(rates).reduce((s, r) => s + r, 0);
   if (fromMap) return { pct: fromMap, rates, source: "t212" };
@@ -286,10 +306,6 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
     query: m.row.query || null,
   };
 
-  if (String(listing.type || "").toUpperCase() === "CRYPTO") {
-    return { ...answer, listing, why: "pas de barème crypto publié sur les cost profiles" };
-  }
-
   const market = feeMarketOf(m.row, listing.mic);
   const rule = RULE[market];
   if (!rule) {
@@ -328,7 +344,7 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
     floor: floorUsd,
     listing,
     feeMarket: market,
-    remark: remarkOf({ rule }),
+    remark: remarkOf({ rule, market }),
     parts: {
       marché:
         marketBp != null
@@ -344,8 +360,11 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
     },
     bp: marketBp,
     perShare: marketPerShare,
-    url: leaf?.url ?? SCHEDULE.source,
-    basis: `barème EasyEquities ${market}, lu le ${SCHEDULE.readOn}`,
+    url: leaf?.url ?? (market === "crypto" ? SCHEDULE.crypto : SCHEDULE.source),
+    basis:
+      market === "crypto"
+        ? `barème EasyCrypto, lu le ${SCHEDULE.cryptoReadOn}`
+        : `barème EasyEquities ${market}, lu le ${SCHEDULE.readOn}`,
     tax,
     commission: {
       rate: rule.comm,
@@ -361,14 +380,20 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
     fx: fxNote(listing.currency),
     fxIfConverted: 0,
     confidence:
-      `EasyEquities ${market}, cost profile lu le ${SCHEDULE.readOn}. ` +
-      `Courtage ${(rule.comm * 100).toFixed(2)} %` +
-      (rule.extra ? ` + extra ${(rule.extra * 100).toFixed(4)} %` : "") +
-      ` par jambe, TVA ${(VAT * 100).toFixed(0)} % dans a. ` +
-      (american ? `SEC / TAF aux figures courantes, pas au 0,00218 % / 0,0029 % du PDF US. ` : "") +
-      `EasyFX hors de a (virement entre wallets). ` +
-      `Ticket dans le plancher, c = 0. Pas d'aller-retour réel dans ce dépôt. ` +
-      (leaf ? "" : `Pas de feuille de carnet pour cet ISIN / cette place. `),
+      market === "crypto"
+        ? `EasyCrypto, help centre lu le ${SCHEDULE.cryptoReadOn}. ` +
+          `Exécution ${(rule.comm * 100).toFixed(2)} % + règlement ${(rule.extra * 100).toFixed(3)} % par jambe, ` +
+          `TVA ${(VAT * 100).toFixed(0)} % (taux du cost profile ZA ; la page dit seulement « + VAT ») dans a. ` +
+          `Pas de plancher publié. Admin 1,5 % / an des tokens hors trajet. ` +
+          `Carnet OTC, a est le barème. Pas d'aller-retour réel dans ce dépôt.`
+        : `EasyEquities ${market}, cost profile lu le ${SCHEDULE.readOn}. ` +
+          `Courtage ${(rule.comm * 100).toFixed(2)} %` +
+          (rule.extra ? ` + extra ${(rule.extra * 100).toFixed(4)} %` : "") +
+          ` par jambe, TVA ${(VAT * 100).toFixed(0)} % dans a. ` +
+          (american ? `SEC / TAF aux figures courantes, pas au 0,00218 % / 0,0029 % du PDF US. ` : "") +
+          `EasyFX hors de a (virement entre wallets). ` +
+          `Ticket dans le plancher, c = 0. Pas d'aller-retour réel dans ce dépôt. ` +
+          (leaf ? "" : `Pas de feuille de carnet pour cet ISIN / cette place. `),
   };
 }
 
@@ -404,7 +429,8 @@ if (import.meta.url === `file://${process.argv[1]}`) {
         "        node easyequities_cost.mjs --schedule\n" +
         "  ex.   node easyequities_cost.mjs AAPL\n" +
         "        node easyequities_cost.mjs AAPL NASDAQ USD --shares=1 --price=320\n" +
-        "        node easyequities_cost.mjs NPN JSE ZAR"
+        "        node easyequities_cost.mjs NPN JSE ZAR\n" +
+        "        node easyequities_cost.mjs BTC CRYPTO"
     );
     process.exit(2);
   }

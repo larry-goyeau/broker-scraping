@@ -391,6 +391,19 @@ function emit(item) {
     return;
   }
 
+  // LSE IOB tickers (0xxx) in CHF on a Swiss ISIN are a satellite of SIX.
+  // Most have no tape (0QP4 last printed in 2022); the few that quote are
+  // several percent wide. The home book is the SIX line already in this file.
+  if (
+    exchange === "LSE" &&
+    currency === "CHF" &&
+    String(isin).startsWith("CH") &&
+    /^0[A-Z0-9]{3}$/.test(ticker)
+  ) {
+    skip("lse iob chf satellite of six");
+    return;
+  }
+
   if (type === "CRYPTO") {
     if (!cryptoTickers.has(ticker) && !keepUnlisted) {
       unlisted += 1;

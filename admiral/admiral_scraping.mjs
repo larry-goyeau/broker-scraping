@@ -263,18 +263,21 @@ function hasFlag(name) {
 
 // `--csv=PATH` the fund list (defaults to etfs.csv) and `--stocks-csv=PATH`
 // the share list (defaults to stocks.csv). Invest.MT5 is the shares-and-funds
-// book; crypto lives on Trade.MT5 as CFDs under `searchType=cryptocurrencies`.
+// book. Trade.MT5 crypto is a leveraged CFD book and is not scraped.
 // `--funds-only` / `--etfs-only` answer for the funds alone; `--stocks-only`
-// for the shares; `--no-crypto` leaves the pairs out; `--crypto-only` answers
-// for the pairs alone.
+// for the shares.
 const csvPath = pathArg("csv", "../etfs.csv");
 const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
 const cryptosCsvPath = pathArg("cryptos-csv", "../cryptos.csv");
 const fundsOnly = hasFlag("funds-only") || hasFlag("etfs-only");
 const stocksOnly = hasFlag("stocks-only");
 const cryptoOnly = hasFlag("crypto-only");
-const skipCrypto = hasFlag("no-crypto") || fundsOnly || stocksOnly;
-const skipEquities = cryptoOnly;
+if (cryptoOnly) {
+  console.error("Trade.MT5 crypto CFDs are leveraged; they are not in this project.");
+  process.exit(2);
+}
+const skipCrypto = true;
+const skipEquities = false;
 
 const tickerCandidates = new Map();
 if (!stocksOnly && !skipEquities) loadTickerCandidatesFromCsv(csvPath, "ETF", tickerCandidates);

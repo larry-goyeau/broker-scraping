@@ -37,6 +37,8 @@
 
 import puppeteer from "puppeteer-core";
 import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 import { createGunzip, gunzipSync } from "node:zlib";
 import { Readable } from "node:stream";
 import readline from "node:readline";
@@ -268,6 +270,8 @@ const CROSSED = {
   frankfurt: 1,
   hamburg: 1,
   hannover: 1,
+  stuttgart: 1,
+  bmv: 1,
 };
 
 const CONVENTION =
@@ -591,7 +595,8 @@ const xetraAllowed = (l) => Boolean(xlm[`${l.isin}|${l.currency}`]) || l.currenc
 // if asked. The first is the family: shares live under `equities`, funds under `etfs`, and
 // the commodity and crypto trackers under `etvs`. The second is the segment, which is not
 // the MIC a broker gives: Euronext Growth Paris is ALXP and Euronext Access XMLI, and Milan
-// runs its shares as MTAA and its funds as ETFP with XMIL naming neither.
+// runs its domestic shares as MTAA, its foreign GEM shares as BGEM, and its funds as ETFP
+// — XMIL naming none of those.
 //
 // The search endpoint returns both, as a ready-made path, for one small JSON call — next to
 // nothing against the page load of several seconds that follows, and it saves the load
@@ -608,7 +613,7 @@ const EURONEXT_SEGMENTS = {
   XAMS: ["XAMS"],
   XBRU: ["XBRU"],
   XLIS: ["XLIS"],
-  XMIL: ["MTAA", "ETFP"],
+  XMIL: ["MTAA", "BGEM", "ETFP"],
   XOSL: ["XOSL"],
   XMSM: ["XMSM"],
 };
@@ -732,6 +737,8 @@ const delayedQuotes = {
   hamburg: new Map(),
   hannover: new Map(),
   lsin: new Map(),
+  stuttgart: new Map(),
+  bmv: new Map(),
 };
 const delayedTrouble = {
   tradegate: null,
@@ -742,6 +749,8 @@ const delayedTrouble = {
   hamburg: null,
   hannover: null,
   lsin: null,
+  stuttgart: null,
+  bmv: null,
 };
 
 const UA = { "User-Agent": "Mozilla/5.0" };
@@ -812,6 +821,211 @@ async function loadFrankfurt(wanted) {
   // One minute of the floor tape only quotes names that moved. Fifteen minutes
   // covers the specialist book without pulling the whole day.
   return loadMfsTape("DFRA-pretrade", delayedQuotes.frankfurt, wanted, 15);
+}
+
+const XSTU_INDEX =
+  "https://www.boerse-stuttgart.de/en/business-solutions/reports/mifir-ii-delayed-data/xstu-pre-trade/";
+
+async function waitForNewFile(dir, before, timeoutMs = 20000) {
+  const start = Date.now();
+  while (Date.now() - start < timeoutMs) {
+    const now = fs.readdirSync(dir).filter((name) => !name.endsWith(".crdownload"));
+    const added = now.filter((name) => !before.has(name));
+    if (added.length) return added[0];
+    await new Promise((r) => setTimeout(r, 250));
+  }
+  return "";
+}
+
+// Cloudflare blocks the index from a bare fetch. A signed-in Chrome tab can open
+// it, and each "Download" is a short-lived link on ddl.service.boerse-stuttgart.de.
+// One minute of the tape is every name that printed; fifteen covers the evening
+// book the way the Frankfurt floor pass does.
+async function loadStuttgart(wanted, ownTab) {
+  const page = await ownTab();
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "xstu-"));
+  const cdp = await page.createCDPSession();
+  await cdp.send("Page.setDownloadBehavior", { behavior: "allow", downloadPath: dir });
+
+  await page.goto(XSTU_INDEX, { waitUntil: "networkidle2", timeout: 60000 });
+  await new Promise((r) => setTimeout(r, 2000));
+  const hrefs = await page.evaluate(() =>
+    [...document.querySelectorAll("a[href]")]
+      .map((a) => a.href)
+      .filter((href) => /ddl\.service\.boerse-stuttgart\.de/.test(href))
+      .slice(0, 15)
+  );
+  if (!hrefs.length) throw new Error("aucun fichier XSTU sur la page delayed-data");
+
+  delayedQuotes.stuttgart.clear();
+  let files = 0;
+  for (const href of hrefs) {
+    const before = new Set(fs.readdirSync(dir));
+    await page.evaluate((url) => {
+      const a = [...document.querySelectorAll("a[href]")].find((el) => el.href === url);
+      if (a) a.click();
+    }, href);
+    const name = await waitForNewFile(dir, before);
+    if (!name) continue;
+    files += 1;
+    let rows;
+    try {
+      rows = JSON.parse(gunzipSync(fs.readFileSync(path.join(dir, name))).toString("utf8"));
+    } catch {
+      continue;
+    }
+    if (!Array.isArray(rows)) continue;
+    for (const row of rows) {
+      const isin = String(row.Isin || "").toUpperCase();
+      const currency = String(row.PriceCurrency || "").toUpperCase();
+      const key = `${isin}|${currency}`;
+      if (!isin || !currency || (wanted.size && !wanted.has(key))) continue;
+      const bid = Number(row.Bid);
+      const ask = Number(row.Ask);
+      if (!(bid > 0) || !(ask > 0) || ask < bid) continue;
+      const at = row.TransactionTime || "";
+      const prev = delayedQuotes.stuttgart.get(key);
+      if (prev && prev.at > at) continue;
+      delayedQuotes.stuttgart.set(key, { bid, ask, currency, at });
+    }
+  }
+  fs.rmSync(dir, { recursive: true, force: true });
+  if (!files) throw new Error("téléchargement XSTU vide");
+  return files;
+}
+
+// IBKR writes the BMV series letter against the ticker (SDMXXN). The site prints
+// the same line as "SDMXX N", or "AAPL *". Only a candidate that exists in the
+// directory is kept, so AAPL does not become AAP L.
+function bmvTickerKeys(ticker) {
+  const s = String(ticker || "")
+    .toUpperCase()
+    .replace(/\*/g, "")
+    .trim();
+  const keys = [s, s.replace(/\s+/g, "")];
+  const letter = s.match(/^([A-Z0-9]+?)([A-Z])$/);
+  if (letter) keys.push(`${letter[1]} ${letter[2]}`);
+  const digits = s.match(/^([A-Z]+)(\d+)$/);
+  if (digits) keys.push(`${digits[1]} ${digits[2]}`);
+  return [...new Set(keys.filter(Boolean))];
+}
+
+const BMV_HOME = "https://www.bmv.com.mx/es/mercados/mercado-global";
+const BMV_HOST = "https://www.bmv.com.mx";
+const BMV_JSON = `${BMV_HOST}/es/Grupo_BMV/BmvJsonGeneric`;
+const BMV_CLAVES = `${BMV_HOST}/es/Grupo_BMV/BusquedaCotizacionJSON?idBusquedaCotizacion=global`;
+
+function parseBmvJsonp(text) {
+  const i = String(text).indexOf("{");
+  const j = String(text).lastIndexOf("}");
+  if (i < 0 || j < i) return null;
+  try {
+    return JSON.parse(text.slice(i, j + 1));
+  } catch {
+    return null;
+  }
+}
+
+async function bmvGet(url, cookie, timeout = 20000) {
+  const res = await fetch(url, {
+    headers: {
+      Cookie: cookie,
+      "User-Agent": "Mozilla/5.0",
+      Accept: "application/json,text/plain,*/*",
+      Referer: BMV_HOME,
+    },
+    redirect: "follow",
+    signal: AbortSignal.timeout(timeout),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return parseBmvJsonp(await res.text());
+}
+
+// The public quote is twenty minutes late and still the BMV's own book. A bare
+// fetch is refused; the cookies from a Chrome tab that has opened the site are
+// enough. The directory is one call, then one quote per distinct emission.
+async function loadBmv(lines, ownTab) {
+  const page = await ownTab();
+  await page.goto(BMV_HOME, { waitUntil: "networkidle2", timeout: 60000 });
+  const cookie = (await page.cookies()).map((c) => `${c.name}=${c.value}`).join("; ");
+  if (!cookie) throw new Error("session BMV sans cookie");
+
+  const dir = await bmvGet(BMV_CLAVES, cookie, 60000);
+  const claves = dir?.response?.clavesCotizacion || [];
+  if (!claves.length) throw new Error("annuaire BMV vide");
+
+  const byKey = new Map();
+  for (const c of claves) {
+    if (!c.target || !c.id) continue;
+    const value = String(c.value || "").toUpperCase().trim();
+    const stem = value.replace(/\s+\*$/, "").replace(/\*$/, "").trim();
+    const rec = { id: c.id, target: String(c.target), value, stem };
+    for (const k of [value, stem, stem.replace(/\s+/g, "")]) byKey.set(k, rec);
+  }
+
+  const seen = new Map();
+  for (const line of lines) {
+    const ticker = String(line.ticker || "").toUpperCase();
+    let rec = null;
+    for (const k of bmvTickerKeys(ticker)) {
+      if (byKey.has(k)) {
+        rec = byKey.get(k);
+        break;
+      }
+    }
+    if (!rec) continue;
+    const id = `${rec.id}|${rec.target}`;
+    const job = seen.get(id) || { ...rec, tickers: [] };
+    job.tickers.push(ticker);
+    seen.set(id, job);
+  }
+  const jobs = [...seen.values()];
+
+  delayedQuotes.bmv.clear();
+  let books = 0;
+  let i = 0;
+  const n = 8;
+  const workers = Array.from({ length: n }, async () => {
+    while (i < jobs.length) {
+      const job = jobs[i++];
+      if (i % 80 === 0 || i === jobs.length) {
+        console.error(`    Bolsa Mexicana : ${i}/${jobs.length} émissions`);
+      }
+      let est = {};
+      let cve = "";
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          const q = await bmvGet(
+            `${BMV_JSON}?idSitioPagina=1&bandera=2&idEmisora=${job.id}&idEmision=${job.target}`,
+            cookie
+          );
+          const emi = q?.response?.datosEmision || {};
+          est = emi.datosEstadistica || {};
+          cve = String(emi.cveCorta || job.stem.split(/\s+/)[0] || "").toUpperCase();
+          break;
+        } catch {
+          await new Promise((r) => setTimeout(r, 400 * (attempt + 1)));
+        }
+      }
+      const bid = Number(est.posturaCompra);
+      const ask = Number(est.posturaVenta);
+      if (!(bid > 0) || !(ask > 0) || ask < bid) continue;
+      books += 1;
+      const url = cve
+        ? `https://www.bmv.com.mx/es/emisoras/estadisticas/${encodeURIComponent(cve)}-${job.id}`
+        : BMV_HOME;
+      const quote = { bid, ask, currency: "MXN", url };
+      for (const key of [job.value, job.stem, job.stem.replace(/\s+/g, ""), cve, ...job.tickers]) {
+        const k = String(key || "")
+          .toUpperCase()
+          .replace(/\*/g, "")
+          .trim();
+        if (k) delayedQuotes.bmv.set(k, quote);
+      }
+    }
+  });
+  await Promise.all(workers);
+  return { directory: claves.length, jobs: jobs.length, books };
 }
 
 async function loadGettex(wanted) {
@@ -1398,6 +1612,62 @@ const adapters = {
         return { spreadBp: null, note: delayedTrouble.hannover || "absent du fichier pre-trade Hanovre" };
       }
       return { spreadBp: bpFrom(quote.bid, quote.ask), tradingCurrency: "EUR" };
+    },
+  },
+
+  stuttgart: {
+    measure: "touche du carnet, différé MiFID",
+    async prefetch(lines, ownTab) {
+      try {
+        const wanted = new Set(lines.map((l) => `${l.isin}|${l.currency}`));
+        const files = await loadStuttgart(wanted, ownTab);
+        console.error(`    Börse Stuttgart : ${delayedQuotes.stuttgart.size} cotations (${files} fichiers)\n`);
+      } catch (e) {
+        delayedTrouble.stuttgart = String(e.message || e).slice(0, 160);
+        console.error(`    Börse Stuttgart : ${delayedTrouble.stuttgart}\n`);
+      }
+    },
+    async fetch(l) {
+      const quote = delayedQuotes.stuttgart.get(`${l.isin}|${l.currency}`);
+      if (!quote) {
+        return { spreadBp: null, note: delayedTrouble.stuttgart || "absent du fichier pre-trade Stuttgart" };
+      }
+      return { spreadBp: bpFrom(quote.bid, quote.ask), tradingCurrency: quote.currency };
+    },
+  },
+
+  bmv: {
+    measure: "touche du carnet, différé 20 min",
+    async prefetch(lines, ownTab) {
+      try {
+        const stats = await loadBmv(lines, ownTab);
+        console.error(
+          `    Bolsa Mexicana : ${stats.books} carnets / ${stats.jobs} émissions (${stats.directory} clés)\n`
+        );
+      } catch (e) {
+        delayedTrouble.bmv = String(e.message || e).slice(0, 160);
+        console.error(`    Bolsa Mexicana : ${delayedTrouble.bmv}\n`);
+      }
+    },
+    async fetch(l) {
+      if (l.currency !== "MXN") {
+        return { spreadBp: null, note: `la BMV cote en MXN, pas en ${l.currency}` };
+      }
+      let quote = null;
+      for (const k of bmvTickerKeys(l.ticker)) {
+        quote = delayedQuotes.bmv.get(k);
+        if (quote) break;
+      }
+      if (!quote) {
+        return { spreadBp: null, note: delayedTrouble.bmv || "absent de la cote BMV" };
+      }
+      return {
+        spreadBp: bpFrom(quote.bid, quote.ask),
+        bid: quote.bid,
+        ask: quote.ask,
+        tradingCurrency: "MXN",
+        url: quote.url,
+      };
     },
   },
 };

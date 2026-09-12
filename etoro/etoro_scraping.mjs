@@ -526,6 +526,8 @@ for (const instrument of instruments) {
   } else {
     cfd = !((rules?.RealTradeBuyMaxLeverage || 0) >= 1);
   }
+  // Leveraged crypto CFDs have no real buy; they are not in this project.
+  if (type === "CRYPTO" && cfd) continue;
 
   const exchange =
     match?.exchange ||

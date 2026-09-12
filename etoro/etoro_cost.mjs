@@ -20,6 +20,7 @@
 //   ETF / ETC       $0  (the page names ETFs; ETC share the invest book)
 //   CFD stock/ETF   0.15 % each way, no ticket; US ≤ $3 is 0.02 $/share
 //   crypto          1 % each way (Bronze / Silver / Gold, $0–$10 k)
+//                   real coins only; leveraged crypto CFDs are out
 //
 // The $1 / $2 does not apply to ETFs, CFDs, Copy or Smart Portfolios. A
 // catalogue row with `cfd: true` is the CFD book for that line (US ETFs
@@ -180,7 +181,9 @@ function findListing({ etf, place, currency }) {
   const wantCurrency = String(currency || "").toUpperCase();
 
   const named = rows.filter(
-    (r) => loose(r.isin) === asked || loose(r.ticker) === asked || loose(r.query) === asked
+    (r) =>
+      !(String(r.type || "").toUpperCase() === "CRYPTO" && r.cfd) &&
+      (loose(r.isin) === asked || loose(r.ticker) === asked || loose(r.query) === asked)
   );
   const exactCode = wantPlace ? named.filter((r) => loose(r.exchange) === wantPlace) : [];
   const pool = exactCode.length ? exactCode : named;

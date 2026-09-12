@@ -25,8 +25,7 @@
 // Left out of `a`, the same way Trading212 leaves its 0.15 %: it is not the
 // ticket. Inactivity (10 € / month after 24 months) is a holding cost.
 //
-// Crypto in this catalogue is Trade.MT5 CFDs, not Invest.MT5. The card prices
-// them by the spread, not a single published `a`. They answer `a = null`.
+// Trade.MT5 crypto CFDs are leveraged and are not in this catalogue.
 //
 // No US ETF is in the catalogue (2 391 US lines, all STOCK). The 605 table
 // is still keyed by symbol for those shares.
@@ -42,7 +41,6 @@
 //   node admiral/admiral_cost.mjs AAPL NASDAQ USD
 //   node admiral/admiral_cost.mjs AAPL NASDAQ USD --shares=1 --price=230
 //   node admiral/admiral_cost.mjs EUNL XETR EUR
-//   node admiral/admiral_cost.mjs BTC/USD
 //   node admiral/admiral_cost.mjs --schedule
 //
 // `roundTripCost(...)` reads files, not the network.
@@ -105,8 +103,7 @@ const RULE = {
   other_eu: { rate: 0.0015, min: 1, ccy: "EUR" },
 };
 
-function remarkOf({ market, type } = {}) {
-  if (type === "CRYPTO") return "";
+function remarkOf({ market } = {}) {
   const r = RULE[market] || RULE.other_eu;
   const ccy = r.ccy === "EUR" ? "€" : r.ccy;
   const ticket = market === "us" ? "min fees 2 $." : `min fees ${r.min * 2} ${ccy}.`;
@@ -139,8 +136,6 @@ const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
 const spreads = JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {};
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
-const isCrypto = (row) => row?.type === "CRYPTO" || /^CRYPTO$/i.test(String(row?.exchange || ""));
-const cryptoBase = (ticker) => String(ticker || "").split("/")[0].toUpperCase();
 
 const dollars = (amount, currency) => {
   const v = toUsd(amount, currency);
@@ -181,22 +176,12 @@ function findListing({ etf, place, currency }) {
   const wantPlace = loose(place);
   const wantCurrency = String(currency || "").toUpperCase();
 
-  const named = rows.filter((r) => {
-    if (loose(r.isin) === asked || loose(r.ticker) === asked || loose(r.query) === asked) return true;
-    return isCrypto(r) && (loose(cryptoBase(r.ticker)) === asked || loose(r.ticker) === asked);
-  });
-
-  const crypto = named.filter(isCrypto);
-  if (crypto.length && (!place || /crypto/i.test(place))) {
-    const row =
-      (wantCurrency && crypto.find((r) => String(r.currency).toUpperCase() === wantCurrency)) ||
-      crypto.find((r) => String(r.currency).toUpperCase() === "USD") ||
-      crypto[0];
-    return { named, matches: [{ row, venue: null }] };
-  }
+  const named = rows.filter(
+    (r) => loose(r.isin) === asked || loose(r.ticker) === asked || loose(r.query) === asked
+  );
 
   const matches = named
-    .filter((r) => !isCrypto(r))
+    .filter((r) => String(r.type || "").toUpperCase() !== "CRYPTO")
     .map((r) => ({ row: r, ...listingKey(venueRow(r)) }))
     .filter((m) => {
       if (!wantPlace) return true;
@@ -218,13 +203,7 @@ function coverage() {
   const out = {};
   for (const r of rows) {
     const type = r.type || "?";
-    if (isCrypto(r)) {
-      const slot = (out[type] ||= { n: 0, withBook: 0, byMarket: {} });
-      slot.n += 1;
-      const mk = (slot.byMarket.crypto ||= { n: 0, withBook: 0 });
-      mk.n += 1;
-      continue;
-    }
+    if (String(type).toUpperCase() === "CRYPTO") continue;
     const { venue, unsourced } = listingKey(venueRow(r));
     const book = spreadLeaf(spreads, {
       isin: r.isin,
@@ -289,28 +268,6 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
     };
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Admirals` };
-
-  const cryptoRow = named.find(isCrypto);
-  if (cryptoRow && (!place || /crypto/i.test(place))) {
-    const picked = matches[0]?.row || cryptoRow;
-    return {
-      ...answer,
-      listing: {
-        isin: null,
-        ticker: picked.ticker,
-        name: picked.name,
-        type: "CRYPTO",
-        mic: null,
-        exchange: "Admirals (Trade.MT5)",
-        currency: String(picked.currency || "USD").toUpperCase(),
-      },
-      feeMarket: "crypto",
-      remark: remarkOf({ type: "CRYPTO" }),
-      why:
-        "crypto Trade.MT5 : CFD, écart du teneur, pas de taux unique publié — a reste null. " +
-        "Ce n'est pas Invest.MT5",
-    };
-  }
 
   if (!matches.length) {
     return {
@@ -486,12 +443,11 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node admiral_cost.mjs <ticker|ISIN|paire> [place] [devise] [--shares=n] [--price=p] [--json]\n" +
+      "usage : node admiral_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--json]\n" +
         "        node admiral_cost.mjs --schedule\n" +
         "  ex.   node admiral_cost.mjs AAPL NASDAQ USD\n" +
         "        node admiral_cost.mjs AAPL NASDAQ USD --shares=1 --price=230\n" +
-        "        node admiral_cost.mjs EUNL XETR EUR\n" +
-        "        node admiral_cost.mjs BTC/USD"
+        "        node admiral_cost.mjs EUNL XETR EUR"
     );
     process.exit(2);
   }

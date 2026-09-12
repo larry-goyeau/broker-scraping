@@ -232,7 +232,6 @@ export const ACCEPTED = {
   freedom24: { countries: FREEDOM24 },
   etoro: WORLD_NO_US_CA, // eToro T&Cs: blocked US and Canada
   quantfury: WORLD_NO_US,
-  puprime: WORLD_NO_US,
   // FAQ: citizens or residents of most countries except sanctions / local bans.
   mexem: WORLD,
   century: { groups: ["GCC"], countries: [...EEA, "GB", "CH", "IN", "PK", "EG", "ZA", "SG", "MY", "HK"] },
@@ -246,8 +245,6 @@ export const ACCEPTED = {
   easyequities: WORLD_NO_US,
   vested: { countries: ["IN"] }, // PAN / Aadhaar / LRS — India residents
   tiger: { countries: ["AU", "NZ", "SG", "HK", "MY", "ID", "CN"] },
-  // Passport + foreign address pack; no published country allow-list.
-  investimental: WORLD,
   // Open-account page: simplified postal KYC if the bank is in the EU/EEA,
   // Switzerland or the US — that is the bank's country, not the client's.
   // A French passport is enough in practice (not Bulgaria-only).

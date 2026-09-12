@@ -67,21 +67,25 @@ function loadCryptoTickers(csvPath) {
   return tickers;
 }
 
-// `--csv=PATH` overrides the fund list, `--stocks-csv=PATH` the share list,
-// `--cryptos-csv=PATH` the coin list. `--etfs-only` / `--stocks-only` /
-// `--crypto-only` answer for one shelf. Funds are loaded first so an ISIN
-// both catalogues happen to carry is remembered as the fund it is.
+// `--csv=PATH` overrides the fund list, `--stocks-csv=PATH` the share list.
+// `--etfs-only` / `--stocks-only` answer for one shelf. Funds are loaded first
+// so an ISIN both catalogues happen to carry is remembered as the fund it is.
+// Saxo FxCrypto is a leveraged book and is not scraped.
 const etfsCsvPath = pathArg("csv", "../etfs.csv");
 const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
 const cryptosCsvPath = pathArg("cryptos-csv", "../cryptos.csv");
 const etfsOnly = hasFlag("etfs-only") || hasFlag("funds-only");
 const stocksOnly = hasFlag("stocks-only");
 const cryptoOnly = hasFlag("crypto-only") || hasFlag("cryptos-only");
+if (cryptoOnly) {
+  console.error("Saxo FxCrypto is leveraged; it is not in this project.");
+  process.exit(2);
+}
 const keepUnlisted = hasFlag("all");
 
-const wantEtfs = !stocksOnly && !cryptoOnly;
-const wantStocks = !etfsOnly && !cryptoOnly;
-const wantCrypto = !etfsOnly && !stocksOnly;
+const wantEtfs = !stocksOnly;
+const wantStocks = !etfsOnly;
+const wantCrypto = false;
 
 const catalogue = new Map();
 if (wantEtfs) loadCsv(etfsCsvPath, "ETF", catalogue);

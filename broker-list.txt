@@ -305,7 +305,6 @@ Raiffeisen Online Befektetés	HU	Bank	Global ETFs / ETPs	https://www.raiffeisen.
 CIB eBroker	HU	Bank	Global ETFs / ETPs	https://www.cib.hu/Maganszemelyek/digitalis_bank/eBroker.html
 BT Trade (Banca Transilvania)	RO	Bank	UCITS ETFs / ETCs	https://www.bancatransilvania.ro/economii-si-investitii/investitii/investitii-la-bursa
 Tradeville	RO	Broker	UCITS ETFs / ETCs	https://tradeville.ro/
-Investimental	RO	Broker	UCITS ETFs / ETCs	https://www.investimental.ro/
 Goldring	RO	Broker	Local-market ETFs	https://www.goldring.ro/
 BRK Financial Group	RO	Broker	Global ETFs / ETPs	https://my.brk.ro
 Swiss Capital	RO	Broker	Global ETFs / ETPs	https://swisscapital.ro/ro/

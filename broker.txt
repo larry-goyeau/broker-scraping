@@ -13,3 +13,6 @@ alramz
 captrader
 WHSI — marche ISIN finie (jusqu’à XRP), mais 7 128 ISIN d’affilée sans aucune ligne : IT0000070786 → JP3121910008. IBKR en a trouvé 4 166 dans la même plage. Dedans : AAPL, GOOGL, NVDA, META (US). WHSI n’a qu’un CDR Apple canadien. Très probablement une session morte traitée comme « no listings ».
 Carnet du Golfe
+mexem
+N26
+oanda

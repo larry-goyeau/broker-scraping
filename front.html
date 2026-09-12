@@ -104,7 +104,7 @@
       #suggest[hidden] { display: none; }
       #suggest button {
         display: grid;
-        grid-template-columns: 88px 72px 1fr auto;
+        grid-template-columns: 88px 72px 1fr 132px auto;
         gap: 12px;
         align-items: baseline;
         width: 100%;
@@ -120,6 +120,7 @@
       #suggest .tk { font-variant-numeric: tabular-nums; font-weight: 650; }
       #suggest .kind { color: var(--green); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
       #suggest .nm { color: var(--mute); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      #suggest .isin { color: var(--mute); font-variant-numeric: tabular-nums; font-size: 12px; }
       #suggest .nb { color: var(--green); font-size: 13px; white-space: nowrap; }
       .meta { margin: 14px 0 0; color: var(--mute); font-size: 13px; }
       #result { margin-top: 36px; text-align: left; }
@@ -256,6 +257,7 @@
               <span class="tk">${esc(h.ticker || "—")}</span>
               <span class="kind">${esc(kind)}</span>
               <span class="nm">${esc(h.name || h.isin || h.key)}</span>
+              ${h.isin ? `<span class="isin">${esc(h.isin)}</span>` : ""}
               <span class="nb">${label}</span>
             </button></li>`;
           })
@@ -337,7 +339,8 @@
         };
         const cell = (v, min) => {
           const text = v || "N/A";
-          const mark = min && text !== "N/A" ? "<sup>**</sup>" : "";
+          const zero = text === "0" || Number(text) === 0;
+          const mark = min && text !== "N/A" && !zero ? "<sup>**</sup>" : "";
           return `<td class="num${text === "N/A" ? " na" : ""}">${esc(text)}${mark}</td>`;
         };
         const body = merged
@@ -370,7 +373,9 @@
             <tbody>${body}</tbody>
           </table>
           <p class="note">* Round trip (buy and sell). Includes broker fees, taxes, and the market spread.</p>
-          <p class="note">** Minimum of the proportional brokerage fees.</p>`;
+          ${merged.some((row) => row.perOrderMin && row.perOrder && row.perOrder !== "0")
+            ? `<p class="note">** Minimum of the proportional brokerage fees.</p>`
+            : ""}`;
       }
 
       q.addEventListener("input", () => {

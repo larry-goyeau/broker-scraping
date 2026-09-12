@@ -132,7 +132,7 @@ export const VENUES = [
     source: "euronext",
     path: "ETFP",
     hours: { open: "09:00", close: "17:30", tz: "Europe/Rome" },
-    exact: ["xmil", "borsaitaliana", "mil", "miletf", "bvme", "bvmeetf", "etfp", "mta", "mtaa"],
+    exact: ["xmil", "borsaitaliana", "mil", "miletf", "bvme", "bvmeetf", "etfp", "mta", "mtaa", "bgem"],
     loose: ["milan", "milano", "italy", "italianse", "italiansecontinuous"],
   },
   // Oslo moved onto Euronext's platform. The delayed book is the same live.euronext.com
@@ -240,6 +240,27 @@ export const VENUES = [
     exact: ["xhan", "han", "hannover", "boersehannover", "hana", "hanb"],
     loose: [],
   },
+  // The listing page is behind Cloudflare; the 15-minute MiFIR tape is not, once a
+  // browser has opened the index. XSTU is the cash book Swissquote writes SWB / SWB2.
+  {
+    mic: "XSTU",
+    name: "Börse Stuttgart",
+    source: "stuttgart",
+    hours: { open: "08:00", close: "22:00", tz: "Europe/Berlin" },
+    exact: ["xstu", "swb", "swb2", "stuttgart", "boersestuttgart"],
+    loose: [],
+  },
+  // The official INTRA tape is paid. The public site still prints a 20-minute delayed
+  // touch (posturaCompra / posturaVenta) for the local board and the SIC, which is the
+  // book CapTrader and IBKR write MEXI. XMEX is the ISO MIC; XBMV is a vendor spelling.
+  {
+    mic: "XMEX",
+    name: "Bolsa Mexicana",
+    source: "bmv",
+    hours: { open: "08:30", close: "15:00", tz: "America/Mexico_City" },
+    exact: ["xmex", "xbmv", "mexi", "bmv", "mexico", "bolsamexicana"],
+    loose: [],
+  },
 ];
 
 // Places that exist in broker catalogues but publish no free pre-trade book, or have
@@ -269,9 +290,12 @@ export const KNOWN_UNSOURCED = [
   { match: ["otc", "pink", "otcmkts"], name: "OTC Markets", why: "gré à gré américain, pas un carnet unique" },
   { match: ["bm", "bme", "madrid", "xmad", "spain", "sibe", "mad"], name: "Bolsa de Madrid", why: "adaptateur non écrit" },
   { match: ["ath", "xath", "athens"], name: "Athens Stock Exchange", why: "adaptateur non écrit" },
-  { match: ["mexi", "bmv", "mexico"], name: "Bolsa Mexicana", why: "adaptateur non écrit" },
   { match: ["tase", "telaviv"], name: "Tel Aviv", why: "adaptateur non écrit" },
-  { match: ["tse", "tyo", "tokyo", "tsej"], name: "Tokyo", why: "adaptateur non écrit" },
+  { match: ["tyo", "tokyo", "tsej"], name: "Tokyo", why: "adaptateur non écrit" },
+  // IBKR / CapTrader / Mexem write TSE for Toronto; Swissquote / DEGIRO / eToro
+  // write TSE for Tokyo. `resolveVenue` splits on CAD/CA vs JPY/JP before
+  // falling through to this leftover.
+  { match: ["tse"], name: "TSE (Toronto ou Tokyo)", why: "le sigle nomme les deux places" },
   { match: ["hkex", "sehk", "hongkong", "hks"], name: "Hong Kong", why: "adaptateur non écrit" },
   { match: ["sehkszse"], name: "Stock Connect Shenzhen", why: "adaptateur non écrit" },
   { match: ["sehkntl", "sehkstar"], name: "Stock Connect Shanghai", why: "adaptateur non écrit" },
@@ -279,13 +303,21 @@ export const KNOWN_UNSOURCED = [
   { match: ["twse"], name: "Taiwan Stock Exchange", why: "adaptateur non écrit" },
   { match: ["tpex"], name: "Taipei Exchange", why: "adaptateur non écrit" },
   { match: ["nse"], name: "National Stock Exchange of India", why: "adaptateur non écrit" },
-  { match: ["b3"], name: "B3", why: "adaptateur non écrit" },
-  // Stuttgart still has no free tape wired (the MiFID page is behind Cloudflare).
-  { match: ["swb", "swb2", "xstu", "stuttgart", "boersestuttgart"], name: "Börse Stuttgart", why: "adaptateur non écrit" },
+  {
+    match: ["b3", "bovespa", "bmfbovespa", "bvmf", "xbsp", "bvsp"],
+    name: "B3 São Paulo",
+    why: "bande officielle payante (UMDF) ; le différé public n'inclut pas la touche",
+  },
   { match: ["xmuc"], name: "Börse München (plancher)", why: "adaptateur non écrit" },
   { match: ["tsx", "xtse", "toronto", "tor"], name: "Toronto Stock Exchange", why: "adaptateur non écrit" },
-  { match: ["tsxv", "xtsx", "tsxventure", "tsv"], name: "TSX Venture", why: "adaptateur non écrit" },
-  { match: ["venture", "value", "pure", "aeqlit"], name: "ATS canadiennes", why: "adaptateur non écrit" },
+  { match: ["tsxv", "xtsx", "tsxventure", "tsv", "venture"], name: "TSX Venture", why: "adaptateur non écrit" },
+  {
+    match: ["aeqlit", "xats", "alpha"],
+    name: "Alpha Exchange",
+    why: "bande officielle payante (TMX Datalinx), pas de carnet public",
+  },
+  { match: ["value"], name: "Value ATS", why: "adaptateur non écrit" },
+  { match: ["pure"], name: "Pure Trading", why: "adaptateur non écrit" },
   { match: ["asx", "xasx"], name: "ASX", why: "adaptateur non écrit" },
   { match: ["set", "xbkk", "thailand"], name: "Stock Exchange of Thailand", why: "adaptateur non écrit" },
   {
@@ -309,7 +341,7 @@ export const KNOWN_UNSOURCED = [
   { match: ["difx", "nasdaqdubai", "nasdaqdxb"], name: "Nasdaq Dubai", why: "adaptateur non écrit" },
   { match: ["bahrain", "xbah", "bahrainbourse", "bhb"], name: "Bahrain Bourse", why: "adaptateur non écrit" },
   { match: ["muscat", "msm", "msx", "xmus"], name: "Muscat Stock Exchange", why: "adaptateur non écrit" },
-  { match: ["crypto", "trd", "tradias", "tradiasotc"], name: "Crypto", why: "gré à gré, pas un carnet unique" },
+  { match: ["crypto", "trd", "tradias", "tradiasotc", "zerohash", "zerohashe"], name: "Crypto", why: "gré à gré, pas un carnet unique" },
   { match: ["bet", "xbse", "bucharest", "bvb"], name: "Bucharest Stock Exchange", why: "adaptateur non écrit" },
   { match: ["csecy", "xcys", "cyprus"], name: "Cyprus Stock Exchange", why: "adaptateur non écrit" },
   { match: ["psecz", "xpra", "prague", "pse"], name: "Prague Stock Exchange", why: "adaptateur non écrit" },
@@ -361,6 +393,16 @@ export function resolveVenue(row) {
     const hit = VENUES.find((v) => v.loose.includes(n));
     if (hit) return { venue: hit, assumed: true };
   }
+  if (names.includes("tse")) {
+    const ccy = String(row.currency || "").toUpperCase();
+    const isin = String(row.isin || "").toUpperCase();
+    if (ccy === "CAD" || isin.startsWith("CA")) {
+      return { venue: null, unsourced: KNOWN_UNSOURCED.find((u) => u.match.includes("tsx")) };
+    }
+    if (ccy === "JPY" || isin.startsWith("JP")) {
+      return { venue: null, unsourced: KNOWN_UNSOURCED.find((u) => u.match.includes("tokyo")) };
+    }
+  }
   for (const n of names) {
     const gap = KNOWN_UNSOURCED.find((u) => u.match.includes(n));
     if (gap) return { venue: null, unsourced: gap };
@@ -395,11 +437,18 @@ export function listingKey(row) {
 // one of the four books for that ISIN and currency, in which case there is nothing
 // to guess.
 const EURONEXT_MICS = ["XPAR", "XAMS", "XBRU", "XLIS"];
+const US_MICS = ["XNAS", "ARCX", "XNYS", "XASE", "BATS"];
 
 export function spreadLeaf(spreads, { isin, mic, currency, unsourced }) {
   const id = String(isin || "").toUpperCase();
   const ccy = String(currency || "").toUpperCase();
   if (id && mic && spreads[id]?.[mic]?.[ccy]) return { leaf: spreads[id][mic][ccy], mic };
+  // Rule 605 is a monthly average for the symbol, not a per-MIC book. A US
+  // line stored under BATS (Trading212) is the same tape as Swissquote's AMEX → ARCX.
+  if (id && US_MICS.includes(mic) && ccy === "USD") {
+    const hit = US_MICS.find((m) => spreads[id]?.[m]?.[ccy]?.perShare != null);
+    if (hit) return { leaf: spreads[id][hit][ccy], mic, assumed: true };
+  }
   const euronext = unsourced?.match?.includes("euronext");
   if (!euronext || !id || !ccy) return { leaf: null, mic: mic || null };
   const hits = EURONEXT_MICS.filter((m) => spreads[id]?.[m]?.[ccy]);
@@ -447,6 +496,14 @@ const PAGE = {
   frankfurt: () => "https://www.mds.deutsche-boerse.com/mds-en/real-time-data/Delayed-data",
   hamburg: () => "https://cld42.boersenag.de/m13data/indexpt.html",
   hannover: () => "https://cld42.boersenag.de/m13data/indexpt.html",
+  stuttgart: () =>
+    "https://www.boerse-stuttgart.de/en/business-solutions/reports/mifir-ii-delayed-data/xstu-pre-trade/",
+  bmv: (l) =>
+    l.ticker
+      ? `https://www.bmv.com.mx/es/emisoras/estadisticas/${encodeURIComponent(
+          String(l.ticker).toUpperCase().replace(/\*/g, "").replace(/\s+/g, "")
+        )}`
+      : "https://www.bmv.com.mx/es/mercados/mercado-global",
 };
 
 export function spreadUrl(row) {

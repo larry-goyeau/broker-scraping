@@ -270,6 +270,41 @@ function isDeadSession(answer) {
   return false;
 }
 
+function searchErrorMessage(answer) {
+  if (!answer) return "";
+  if (answer.json && !Array.isArray(answer.json) && answer.json.error) {
+    return String(answer.json.error);
+  }
+  return String(answer.error || "");
+}
+
+// A 200 with `[]` is what IBKR sends for an unknown ISIN, and also what it
+// sends when the search bridge is overloaded. `{ error: "No symbol found" }`
+// is the exact-symbol miss and is the only empty answer that can be trusted
+// on its own. Everything else is an API fault and must not become "no listings".
+function classifySearch(answer) {
+  if (isDeadSession(answer) || (!answer.json && !answer.error)) {
+    return { kind: "session" };
+  }
+
+  const status = Number(answer.status) || 0;
+  if (status === 429 || status >= 500) {
+    return { kind: "error", detail: `http ${status}` };
+  }
+
+  if (!Array.isArray(answer.json)) {
+    const msg = searchErrorMessage(answer);
+    if (/no symbol found|no contracts found/i.test(msg)) return { kind: "absent" };
+    if (/too many|rate|timeout|try again|query again|busy|overload/i.test(msg)) {
+      return { kind: "error", detail: msg.slice(0, 80) || `http ${status || "?"}` };
+    }
+    return { kind: "error", detail: msg.slice(0, 80) || `http ${status || "?"} non-array` };
+  }
+
+  const hits = answer.json.filter((hit) => hit?.conid && hit?.symbol);
+  return hits.length > 0 ? { kind: "hits", hits } : { kind: "empty" };
+}
+
 function callInPage(path, options) {
   return page.evaluate(
     async (base, target, opts) => {
@@ -346,14 +381,45 @@ async function tickle() {
 
 // `pattern: true` is what makes an ISIN acceptable as the term; an exact
 // search only answers to symbols. Crypto has no ISIN, so those go the other way.
-async function search(symbol, pattern) {
+async function searchOnce(symbol, pattern) {
   const answer = await api("iserver/secdef/search", {
     method: "POST",
     body: JSON.stringify({ symbol, pattern, referrer: "" }),
   });
-  if (isDeadSession(answer) || (!answer.json && !answer.error)) return null;
-  if (!Array.isArray(answer.json)) return [];
-  return answer.json.filter((hit) => hit?.conid && hit?.symbol);
+  return classifySearch(answer);
+}
+
+// A non-empty search (any query, including the SPY canary) is proof the
+// bridge still answers. Empty arrays that arrive inside that window are
+// real misses; outside it they are treated as faults until SPY confirms.
+const HEALTHY_MS = 15_000;
+let healthyUntil = 0;
+let canaryWait = null;
+
+function markHealthy() {
+  healthyUntil = Date.now() + HEALTHY_MS;
+}
+
+function isHealthy() {
+  return Date.now() < healthyUntil;
+}
+
+async function confirmHealthy() {
+  if (isHealthy()) return true;
+  if (canaryWait) return canaryWait;
+
+  canaryWait = (async () => {
+    const probe = await searchOnce("SPY", false);
+    if (probe.kind === "hits") {
+      markHealthy();
+      return true;
+    }
+    return false;
+  })().finally(() => {
+    canaryWait = null;
+  });
+
+  return canaryWait;
 }
 
 // The portal signs itself out after a stretch, and login often lands in a
@@ -377,8 +443,9 @@ async function waitForSession() {
       await attachPortalPage();
 
       if (page && !page.isClosed() && !looksLoggedOut(page.url())) {
-        const probe = await search("SPY", false);
-        if (probe !== null) {
+        const probe = await searchOnce("SPY", false);
+        if (probe.kind === "hits") {
+          markHealthy();
           console.error("portal session restored");
           await page.bringToFront().catch(() => {});
           return;
@@ -398,14 +465,39 @@ async function waitForSession() {
 }
 
 async function searchWithRetry(symbol, pattern) {
+  let lastDetail = "";
+
   for (let attempt = 0; attempt < 3; attempt += 1) {
-    const payload = await search(symbol, pattern);
-    if (payload !== null) return payload;
-    console.error("  no answer, retrying");
+    const result = await searchOnce(symbol, pattern);
+
+    if (result.kind === "hits") {
+      markHealthy();
+      return result;
+    }
+
+    if (result.kind === "absent") return result;
+
+    if (result.kind === "empty") {
+      // One empty is cheap to fake under load. A second empty, with SPY
+      // still answering (or having answered in the last few seconds), is
+      // an unknown ISIN. SPY silent means the bridge, not the catalogue.
+      if (attempt === 0) {
+        lastDetail = "empty";
+        await sleep(400);
+        continue;
+      }
+      if (isHealthy() || (await confirmHealthy())) return { kind: "absent" };
+      lastDetail = "empty while SPY is silent";
+    } else {
+      lastDetail = result.detail || result.kind;
+    }
+
+    console.error(`  no answer (${lastDetail}), retrying`);
     await tickle();
     await sleep(2000 * (attempt + 1));
   }
-  return null;
+
+  return { kind: "error", detail: lastDetail || "retries exhausted" };
 }
 
 async function readInfo(conid) {
@@ -479,10 +571,13 @@ function wantedHits(payload, job) {
 
 async function scrapeJob(job) {
   const pattern = job.shelf === "isin";
-  const payload = await searchWithRetry(job.query, pattern);
-  if (payload === null) return { silent: true, rows: [] };
+  const found = await searchWithRetry(job.query, pattern);
+  if (found.kind !== "hits") {
+    if (found.kind === "absent") return { silent: false, rows: [] };
+    return { silent: true, rows: [], reason: found.detail || found.kind };
+  }
 
-  const hits = wantedHits(payload, job);
+  const hits = wantedHits(found.hits, job);
   if (hits.length === 0) return { silent: false, rows: [] };
 
   const restrictions = await tradingRestricted(hits.map((hit) => String(hit.conid)));
@@ -509,6 +604,12 @@ async function scrapeJob(job) {
     });
   }
 
+  // Contracts came back but every info read failed: that is the bridge, not
+  // an empty catalogue. Retry the job instead of recording a miss.
+  if (rows.length === 0) {
+    return { silent: true, rows: [], reason: "listings unreadable" };
+  }
+
   return { silent: false, rows };
 }
 
@@ -516,11 +617,24 @@ function save() {
   fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
 }
 
+const alreadyFound = new Set();
+for (const entry of results) {
+  if (entry?.query) alreadyFound.add(String(entry.query).toUpperCase());
+}
+
+// Resume keeps what is already listed and only walks queries that never
+// produced a row. A named ISIN on the command line is always re-checked.
+const onlyNamed = positionalArgs.length > 0;
 const endIndex = walkLimit > 0 ? startIndex - 1 + walkLimit : jobs.length;
-const walk = jobs.slice(startIndex - 1, endIndex);
+const walk = [];
+for (let i = startIndex - 1; i < Math.min(endIndex, jobs.length); i += 1) {
+  if (!onlyNamed && alreadyFound.has(jobs[i].query.toUpperCase())) continue;
+  walk.push({ index: i, job: jobs[i] });
+}
 
 console.error(
   `${jobs.length} queries to check` +
+    (walk.length !== jobs.length ? `, ${walk.length} still missing` : "") +
     (startIndex > 1 || walkLimit > 0
       ? ` (walking ${startIndex}–${Math.min(endIndex, jobs.length)})`
       : "") +
@@ -535,10 +649,11 @@ async function runJob(queryIndex, job) {
 
   let silent;
   let rows;
+  let reason;
   for (;;) {
-    ({ silent, rows } = await scrapeJob(job));
+    ({ silent, rows, reason } = await scrapeJob(job));
     if (!silent) break;
-    console.error("  no answer");
+    console.error(reason ? `  no answer (${reason})` : "  no answer");
     await waitForSession();
   }
 
@@ -580,7 +695,7 @@ await Promise.all(
     for (;;) {
       const offset = next++;
       if (offset >= walk.length) return;
-      await runJob(startIndex - 1 + offset, walk[offset]);
+      await runJob(walk[offset].index, walk[offset].job);
       done += 1;
       if (done % 20 === 0) await tickle();
     }

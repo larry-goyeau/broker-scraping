@@ -60,6 +60,8 @@ const FOLDER_NAME = {
   tastytrade: "Tastytrade",
   bux: "BUX",
   davy: "Davy Select",
+  oanda: "OANDA TMS",
+  plum: "Plum",
   easyequities: "EasyEquities",
   efocs: "EuroFinance",
   elana: "Elana Trading",
@@ -116,12 +118,16 @@ const UNSOURCED_EN = {
   "Euronext, place non précisée": "Euronext",
   "places américaines, sans précision": "US (unspecified)",
   "Trade Republic (TIB)": "N/A",
+  "ATS canadiennes": "Canadian ATS",
+  "B3 São Paulo": "B3 São Paulo",
+  B3: "B3 São Paulo",
+  "TSE (Toronto ou Tokyo)": "TSE (Toronto or Tokyo)",
 };
 
-function displayExchange(raw) {
+function displayExchange(raw, extra = {}) {
   const text = String(raw || "").trim();
   if (!text) return "";
-  const { venue, unsourced } = resolveVenue({ exchange: text });
+  const { venue, unsourced } = resolveVenue({ exchange: text, ...extra });
   if (venue) return venue.name;
   if (unsourced?.name) return UNSOURCED_EN[unsourced.name] || unsourced.name;
   return text;
@@ -151,6 +157,7 @@ for (const file of catalogueFiles()) {
       inst = {
         key,
         isin: /^[A-Z]{2}[A-Z0-9]{10}$/.test(key) ? key : "",
+        isins: new Set(/^[A-Z]{2}[A-Z0-9]{10}$/.test(key) ? [key] : []),
         tickers: new Set(),
         tickerCounts: new Map(),
         names: new Set(),
@@ -163,10 +170,12 @@ for (const file of catalogueFiles()) {
     const type = String(row.type || "").trim().toUpperCase();
     const pair = type === "CRYPTO" ? cryptoPair(row.ticker || row.query, row.currency) : null;
     const ticker = pair ? pair.base : String(row.ticker || "").trim().toUpperCase();
+    const rowIsin = String(row.isin || "").trim().toUpperCase();
     if (ticker) {
       inst.tickers.add(ticker);
       inst.tickerCounts.set(ticker, (inst.tickerCounts.get(ticker) || 0) + 1);
     }
+    if (/^[A-Z]{2}[A-Z0-9]{10}$/.test(rowIsin)) inst.isins.add(rowIsin);
     addName(inst.names, inst.nameCounts, row.name);
     addName(inst.names, inst.nameCounts, row.label);
     if (row.type) inst.types.add(String(row.type).toUpperCase());
@@ -175,10 +184,11 @@ for (const file of catalogueFiles()) {
       ticker: ticker || String(row.query || ""),
       query: pair?.raw || String(row.ticker || row.query || ""),
       name: String(row.name || row.label || "").trim(),
-      exchange: displayExchange(exchangeRaw),
+      exchange: displayExchange(exchangeRaw, { currency: row.currency, isin: row.isin }),
       exchangeRaw,
       currency: pair ? pair.quote || String(row.currency || "").trim() : String(row.currency || "").trim(),
       type: String(row.type || "").trim(),
+      isin: rowIsin,
     };
     if (row.nonEuResident) listing.nonEuResident = true;
     if (row.usResidentsOnly) listing.usResidentsOnly = true;
@@ -297,9 +307,17 @@ function formatCost(cost) {
     spread: missingA ? NA : `${fmt4(cost.a * 100)}%`,
     perShare: cost.b == null ? NA : fmt4(cost.b),
     perOrder: hasTicket ? fmtUsd(ticket) : minUsd != null ? fmtUsd(minUsd) : cost.c == null ? NA : fmtUsd(cost.c),
-    perOrderMin: !hasTicket && minUsd != null,
+    perOrderMin: !hasTicket && minUsd != null && minUsd > 0,
     remark: pulled.remark || "",
     buyable: cost.onlineBuy !== false,
+    // An OCR catalogue (Plum) names neither place nor currency; the cost file
+    // resolves them. Only a blank catalogue column falls back to these.
+    venueExchange: displayExchange(cost.listing?.exchange || "", {
+      mic: cost.listing?.mic,
+      currency: cost.listing?.currency,
+      isin: cost.listing?.isin,
+    }),
+    venueCurrency: String(cost.listing?.currency || "").trim().toUpperCase(),
   };
 }
 
@@ -308,7 +326,7 @@ function estimateListing(folder, listing, inst, extra = {}) {
   if (!fn) return { spread: NA, perShare: NA, perOrder: NA, remark: "" };
   try {
     const cost = fn({
-      etf: inst.key.startsWith("CRYPTO:") ? listing.query || listing.ticker : inst.isin || listing.ticker,
+      etf: inst.key.startsWith("CRYPTO:") ? listing.query || listing.ticker : listing.isin || inst.isin || listing.ticker,
       place: listing.exchangeRaw || listing.exchange || "",
       currency: listing.currency || "",
       ...extra,
@@ -363,6 +381,126 @@ function preferredTicker(inst, hint) {
   return best;
 }
 
+// A share listed in Paris and the same name on Alpha are one instrument.
+// Brokers file a local ISIN (CDR, CUSIP wrapper) per venue; grouping by
+// ISIN alone split them. Stocks that share a ticker stem and an issuer
+// name — after stripping CDR / legal suffix — are folded together. Funds
+// stay on their ISIN: two VWCE share classes must not collapse.
+// A B3 class code (EMBJ3) is a different security from the NYSE ADR (EMBJ):
+// another ISIN and another price, not the same line in another currency.
+function issuerStem(name) {
+  return String(name || "")
+    .toUpperCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^A-Z0-9]+/g, " ")
+    .replace(
+      /\b(CDR|GDR|ADR|ADS|INC|INCORPORATED|SA|S A|SE|NV|N V|PLC|LTD|LIMITED|CORP|CORPORATION|CO|AG|SPA|S P A|THE|AND|CLASS|CL|ORD|REGISTERED|COMMON|STOCK|SHARES)\b/g,
+      " "
+    )
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function tickerStem(ticker) {
+  return String(ticker || "")
+    .toUpperCase()
+    .replace(/\.[A-Z]{1,4}$/, "");
+}
+
+function clusterTokens(inst) {
+  const type = mostCommon(inst.types);
+  if (type !== "STOCK") return [];
+  const issuer = issuerStem(preferredName(inst));
+  if (issuer.length < 2) return [];
+  const out = [];
+  for (const ticker of inst.tickers) {
+    const stem = tickerStem(ticker);
+    if (stem) out.push(`${type}:${stem}:${issuer}`);
+  }
+  return out;
+}
+
+function absorbInstrument(into, from) {
+  for (const [ticker, count] of from.tickerCounts) {
+    into.tickers.add(ticker);
+    into.tickerCounts.set(ticker, (into.tickerCounts.get(ticker) || 0) + count);
+  }
+  for (const [name, count] of from.nameCounts) {
+    into.names.add(name);
+    into.nameCounts.set(name, (into.nameCounts.get(name) || 0) + count);
+  }
+  for (const type of from.types) into.types.add(type);
+  for (const id of from.isins) into.isins.add(id);
+  for (const [folder, listingsOf] of from.byBroker) {
+    const held = into.byBroker.get(folder) || [];
+    for (const listing of listingsOf) {
+      const dup = held.some(
+        (h) =>
+          h.ticker === listing.ticker &&
+          h.exchange === listing.exchange &&
+          h.currency === listing.currency
+      );
+      if (!dup) held.push(listing);
+    }
+    into.byBroker.set(folder, held);
+  }
+}
+
+const aliases = new Map();
+
+{
+  const parent = new Map();
+  const find = (k) => {
+    const p = parent.get(k);
+    if (!p || p === k) return k;
+    const root = find(p);
+    parent.set(k, root);
+    return root;
+  };
+  const unite = (a, b) => {
+    const ra = find(a);
+    const rb = find(b);
+    if (ra !== rb) parent.set(rb, ra);
+  };
+
+  const buckets = new Map();
+  for (const inst of instruments.values()) {
+    parent.set(inst.key, inst.key);
+    for (const token of clusterTokens(inst)) {
+      const held = buckets.get(token) || [];
+      held.push(inst.key);
+      buckets.set(token, held);
+    }
+  }
+  for (const keys of buckets.values()) {
+    for (let i = 1; i < keys.length; i += 1) unite(keys[0], keys[i]);
+  }
+
+  const members = new Map();
+  for (const inst of instruments.values()) {
+    const root = find(inst.key);
+    const list = members.get(root) || [];
+    list.push(inst);
+    members.set(root, list);
+  }
+
+  let folded = 0;
+  for (const group of members.values()) {
+    if (group.length < 2) continue;
+    group.sort((a, b) => b.byBroker.size - a.byBroker.size || b.isins.size - a.isins.size || a.key.localeCompare(b.key));
+    const primary = group[0];
+    for (const extra of group.slice(1)) {
+      absorbInstrument(primary, extra);
+      aliases.set(extra.key, primary.key);
+      instruments.delete(extra.key);
+      folded += 1;
+    }
+    if (/^[A-Z]{2}[A-Z0-9]{10}$/.test(primary.key)) primary.isin = primary.key;
+  }
+  if (folded) console.error(`${folded} stock ISINs folded into a shared listing`);
+}
+
 function brokerFolder(folder) {
   return String(folder || "").split(":")[0];
 }
@@ -408,9 +546,12 @@ function score(inst, q) {
   const { base } = cryptoPair(raw, "");
   const Q = base && base !== raw ? base : raw;
   let s = 0;
-  if (inst.isin === Q) s = Math.max(s, 120);
-  else if (Q.length >= 3 && inst.isin.startsWith(Q)) s = Math.max(s, 85);
-  else if (inst.isin.includes(Q) && Q.length >= 6) s = Math.max(s, 55);
+  const isins = inst.isins?.size ? inst.isins : new Set(inst.isin ? [inst.isin] : []);
+  for (const id of isins) {
+    if (id === Q) s = Math.max(s, 120);
+    else if (Q.length >= 3 && id.startsWith(Q)) s = Math.max(s, 85);
+    else if (id.includes(Q) && Q.length >= 6) s = Math.max(s, 55);
+  }
   for (const t of inst.tickers) {
     if (t === Q) s = Math.max(s, 110);
     else if (Q.length >= 3 && t.startsWith(Q)) s = Math.max(s, 75);
@@ -451,12 +592,12 @@ function search(q, limit = 20, nat = "") {
 function resolve(key) {
   const k = String(key || "").trim().toUpperCase();
   if (!k) return null;
-  const exact = instruments.get(k);
+  const exact = instruments.get(k) || instruments.get(aliases.get(k));
   if (exact) return exact;
   let best = null;
   let bestScore = 0;
   for (const inst of instruments.values()) {
-    if (!inst.tickers.has(k) && inst.isin !== k) continue;
+    if (!inst.tickers.has(k) && inst.isin !== k && !inst.isins?.has(k)) continue;
     const s = (inst.tickers.has(k) ? 10 : 0) + inst.byBroker.size;
     if (s > bestScore) {
       best = inst;
@@ -502,6 +643,57 @@ const FREEDOM24_PLANS = [
   { id: "smart", name: "Freedom24 Smart" },
   { id: "allinc", name: "Freedom24 All-inclusive" },
 ];
+
+const LIGHTYEAR_PLANS = [
+  { id: "eu", name: "Lightyear Europe" },
+  { id: "uk", name: "Lightyear UK" },
+];
+
+const PLUM_PLANS = [
+  { id: "basic", name: "Plum UK Basic" },
+  { id: "plus", name: "Plum UK Plus" },
+  { id: "boost", name: "Plum UK Boost" },
+  { id: "max", name: "Plum UK Max" },
+  { id: "eu", name: "Plum UE Basic" },
+  { id: "pro", name: "Plum UE Pro" },
+  { id: "eu-boost", name: "Plum UE Boost" },
+  { id: "premium", name: "Plum UE Premium" },
+  { id: "eu-max", name: "Plum UE Max" },
+];
+
+function plumEntity(plan) {
+  const id = String(plan || "");
+  if (id === "eu" || id === "pro" || id === "premium" || id.startsWith("eu-")) return "eu";
+  return "uk";
+}
+
+function plumSubscription(row) {
+  const text = row.listings?.[0]?.remark || "";
+  const match = text.match(/^(\d+(?:\.\d+)? [£€]\/month)/);
+  return match ? match[1] : "";
+}
+
+function lightyearPlansFor(nat) {
+  const n = String(nat || "").toUpperCase();
+  if (n === "GB") return LIGHTYEAR_PLANS.filter((p) => p.id === "uk");
+  if (n) return LIGHTYEAR_PLANS.filter((p) => p.id === "eu");
+  return LIGHTYEAR_PLANS;
+}
+
+function sameAbcListings(a, b) {
+  if (a.length !== b.length) return false;
+  return a.every((l, i) => {
+    const r = b[i];
+    return (
+      l.exchange === r.exchange &&
+      l.currency === r.currency &&
+      l.spread === r.spread &&
+      l.perShare === r.perShare &&
+      l.perOrder === r.perOrder &&
+      l.perOrderMin === r.perOrderMin
+    );
+  });
+}
 
 function sameCostListings(a, b) {
   if (a.length !== b.length) return false;
@@ -595,6 +787,28 @@ function collapseDavy(built) {
   });
 }
 
+function collapsePlum(built) {
+  const groups = [];
+  for (const row of built) {
+    const sub = plumSubscription(row);
+    const hit = groups.find((g) => sameAbcListings(g.listings, row.listings) && g.sub === sub);
+    if (hit) hit.members.push(row);
+    else groups.push({ listings: row.listings, sub, members: [row] });
+  }
+  return groups.map((g) => {
+    if (g.members.length === 1) return g.members[0];
+    const entities = new Set(g.members.map((m) => plumEntity(m.plan)));
+    const name = entities.size === 2 ? g.members[0].family : entities.has("eu") ? "Plum UE" : "Plum UK";
+    return {
+      ...g.members[0],
+      folder: `plum:${g.members.map((m) => m.folder.split(":")[1]).join("-")}`,
+      name,
+      plan: "",
+      planRank: 0,
+    };
+  });
+}
+
 function collapseBoursobank(built) {
   const groups = [];
   for (const row of built) {
@@ -627,12 +841,28 @@ function detail(key, nat = "") {
         .filter((listing) => listingOpen(listing, nat))
         .slice()
         .sort((a, b) => a.exchange.localeCompare(b.exchange, "en") || a.currency.localeCompare(b.currency))
-        .map((listing) => ({
-          ...listing,
-          ...estimateListing(folder, listing, inst, extra),
-        }))
+        .map((listing) => {
+          const cost = estimateListing(folder, listing, inst, extra);
+          return {
+            ...listing,
+            ...cost,
+            exchange: listing.exchange || cost.venueExchange || "",
+            currency: listing.currency || cost.venueCurrency || "",
+          };
+        })
         .filter((listing) => listing.buyable !== false)
-        .map(({ buyable, nonEuResident, usResidentsOnly, supportedCountries, exchangeRaw, ...listing }) => listing);
+        .map(
+          ({
+            buyable,
+            nonEuResident,
+            usResidentsOnly,
+            supportedCountries,
+            exchangeRaw,
+            venueExchange,
+            venueCurrency,
+            ...listing
+          }) => listing
+        );
     const base = {
       folder,
       family: meta?.name || prettyFolder(folder),
@@ -700,6 +930,22 @@ function detail(key, nat = "") {
         const listed = listings({ plan: plan.id });
         if (listed.length) rows.push(asPlan(plan, i, listed));
       });
+      continue;
+    }
+    if (folder === "lightyear") {
+      lightyearPlansFor(nat).forEach((plan, i) => {
+        const listed = listings({ plan: plan.id });
+        if (listed.length) rows.push(asPlan(plan, i, listed));
+      });
+      continue;
+    }
+    if (folder === "plum") {
+      const built = [];
+      PLUM_PLANS.forEach((plan, i) => {
+        const listed = listings({ plan: plan.id });
+        if (listed.length) built.push(asPlan(plan, i, listed));
+      });
+      for (const row of collapsePlum(built)) rows.push(row);
       continue;
     }
     const listed = listings({});

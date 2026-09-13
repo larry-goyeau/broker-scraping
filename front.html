@@ -58,6 +58,29 @@
         outline: none;
       }
       #nat:focus { box-shadow: 4px 4px 0 var(--green); }
+      #size {
+        font: inherit;
+        font-size: 13px;
+        letter-spacing: 0;
+        text-transform: none;
+        font-weight: 400;
+        color: var(--ink);
+        border: 1px solid var(--ink);
+        background: var(--card);
+        border-radius: 2px;
+        padding: 3px 6px;
+        width: 76px;
+        outline: none;
+      }
+      #size:focus { box-shadow: 2px 2px 0 var(--green); }
+      .th-size {
+        display: block;
+        margin-top: 6px;
+        font-weight: 400;
+        text-transform: none;
+        letter-spacing: 0;
+        white-space: nowrap;
+      }
       #q {
         display: block;
         width: 100%;
@@ -203,6 +226,17 @@
     <script>
       const q = document.getElementById("q");
       const nat = document.getElementById("nat");
+      // A share is bought by the unit, a coin by the dollar. The control is one
+      // box either way; only what it counts changes, and it changes when the
+      // instrument on screen does.
+      const SHARES_DEFAULT = 10;
+      const AMOUNT_DEFAULT = 1000;
+      let sizeKind = "shares";
+      let sizeVal = SHARES_DEFAULT;
+      let sizeTimer;
+      // The box lives in the column header, which is rewritten on every answer,
+      // so the value is held here rather than read back off a node that a full
+      // redraw replaces.
       const goBtn = document.getElementById("go");
       const suggest = document.getElementById("suggest");
       const meta = document.getElementById("meta");
@@ -218,6 +252,13 @@
         const n = nationality();
         return n ? `${path}${path.includes("?") ? "&" : "?"}nat=${encodeURIComponent(n)}` : path;
       };
+
+      const sizeValue = () => {
+        const v = Number(sizeVal);
+        return Number.isFinite(v) && v > 0 ? v : sizeKind === "amount" ? AMOUNT_DEFAULT : SHARES_DEFAULT;
+      };
+      const withSize = (path) =>
+        `${path}${path.includes("?") ? "&" : "?"}${sizeKind}=${encodeURIComponent(sizeValue())}`;
 
       const esc = (s) =>
         String(s || "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -279,10 +320,13 @@
         show(hit.key);
       }
 
-      async function show(key) {
+      // sizeOnly redraws the numbers under a header that stays put, because the
+      // box that asked for them sits in that header and a redrawn input is a
+      // lost cursor for whoever is still typing in it.
+      async function show(key, sizeOnly = false) {
         shown = key;
         empty.hidden = true;
-        const r = await fetch(withNat(`/api/instrument?key=${encodeURIComponent(key)}`));
+        const r = await fetch(withSize(withNat(`/api/instrument?key=${encodeURIComponent(key)}`)));
         if (!r.ok) {
           result.hidden = true;
           empty.hidden = false;
@@ -290,6 +334,15 @@
         }
         const d = await r.json();
         const crypto = String(d.type || "").toUpperCase() === "CRYPTO";
+        // The kind of size follows the instrument. Switching to or from a coin
+        // resets the box, since ten of one is not a thousand of the other, and
+        // asks the server again for the size it now means.
+        const kind = crypto ? "amount" : "shares";
+        if (kind !== sizeKind) {
+          sizeKind = kind;
+          sizeVal = crypto ? AMOUNT_DEFAULT : SHARES_DEFAULT;
+          return show(key);
+        }
         const rows = d.soldBy
           .flatMap((b) => {
             const listed = b.listings.length ? b.listings : [{ exchange: "", currency: "" }];
@@ -300,10 +353,7 @@
               brokerName: b.name || "",
               exchange: crypto ? "" : l.exchange || "—",
               currency: l.currency || (crypto ? "" : "N/A"),
-              spread: l.spread || "N/A",
-              perShare: l.perShare || "N/A",
-              perOrder: l.perOrder || "N/A",
-              perOrderMin: Boolean(l.perOrderMin),
+              total: l.total || "N/A",
               remark: l.remark || "",
             }));
           })
@@ -322,10 +372,7 @@
               g.family === row.family &&
               g.exchange === row.exchange &&
               g.currency === row.currency &&
-              g.spread === row.spread &&
-              g.perShare === row.perShare &&
-              g.perOrder === row.perOrder &&
-              g.perOrderMin === row.perOrderMin &&
+              g.total === row.total &&
               g.remark === row.remark
           );
           if (hit) hit.n += 1;
@@ -337,18 +384,30 @@
             ? `<a href="${esc(row.url)}" target="_blank" rel="noreferrer">${esc(label)}</a>`
             : esc(label);
         };
-        const cell = (v, min) => {
+        const cell = (v) => {
           const text = v || "N/A";
-          const zero = text === "0" || Number(text) === 0;
-          const mark = min && text !== "N/A" && !zero ? "<sup>**</sup>" : "";
-          return `<td class="num${text === "N/A" ? " na" : ""}">${esc(text)}${mark}</td>`;
+          return `<td class="num${text === "N/A" ? " na" : ""}">${esc(text)}</td>`;
         };
         const body = merged
           .map(
             (row) =>
-              `<tr><td>${brokerCell(row)}</td>${crypto ? "" : `<td>${esc(row.exchange)}</td>`}<td>${esc(row.currency)}</td>${cell(row.spread)}${cell(row.perShare)}${cell(row.perOrder, row.perOrderMin)}<td class="remark">${esc(row.remark)}</td></tr>`
+              `<tr><td>${brokerCell(row)}</td>${crypto ? "" : `<td>${esc(row.exchange)}</td>`}<td>${esc(row.currency)}</td>${cell(row.total)}<td class="remark">${esc(row.remark)}</td></tr>`
           )
           .join("");
+        const notes = `
+          <p class="note">* Buy ${crypto ? `${esc(String(sizeValue()))} USD of` : `${esc(String(sizeValue()))} shares of`} ${esc(d.ticker || d.isin || d.key)} and sell them back at once. Includes broker fees, taxes, and the market spread.</p>
+          ${!crypto && d.trade && d.trade.price == null
+            ? `<p class="note">No price on file for this instrument, so nothing proportional to the amount can be added up. Write parsed_json/prices.json to fill this column.</p>`
+            : ""}
+          ${merged.every((row) => row.total === "N/A")
+            ? `<p class="note">No broker has been moved to the total-cost contract yet: every one of them answers N/A until its *_cost.mjs exports roundTrip().</p>`
+            : ""}`;
+        const tbody = document.getElementById("costRows");
+        if (sizeOnly && tbody) {
+          tbody.innerHTML = body;
+          document.getElementById("costNotes").innerHTML = notes;
+          return;
+        }
         result.hidden = false;
         result.innerHTML = `
           <div class="instrument">
@@ -364,18 +423,17 @@
                 <th>broker</th>
                 ${crypto ? "" : "<th>exchange</th>"}
                 <th>currency</th>
-                <th>spread*</th>
-                <th>commission / share (USD)*</th>
-                <th>commission / order (USD)*</th>
+                <th>round trip cost (USD)*
+                  <label class="th-size" for="size">for
+                    <input id="size" type="number" min="0" step="any" value="${esc(String(sizeVal))}" />
+                    ${crypto ? "USD" : "shares"}</label>
+                </th>
                 <th>remark</th>
               </tr>
             </thead>
-            <tbody>${body}</tbody>
+            <tbody id="costRows">${body}</tbody>
           </table>
-          <p class="note">* Round trip (buy and sell). Includes broker fees, taxes, and the market spread.</p>
-          ${merged.some((row) => row.perOrderMin && row.perOrder && row.perOrder !== "0")
-            ? `<p class="note">** Minimum of the proportional brokerage fees.</p>`
-            : ""}`;
+          <div id="costNotes">${notes}</div>`;
       }
 
       q.addEventListener("input", () => {
@@ -415,6 +473,19 @@
       }
 
       goBtn.addEventListener("click", submit);
+
+      // Delegated, because the box is rebuilt with the table it sits in.
+      result.addEventListener("input", (e) => {
+        const box = e.target.closest("#size");
+        if (!box) return;
+        sizeVal = box.value;
+        clearTimeout(sizeTimer);
+        // The bill is computed in Node, broker by broker, so a new size is a
+        // new question for the server rather than arithmetic on what is shown.
+        sizeTimer = setTimeout(() => {
+          if (shown && !result.hidden) show(shown, true);
+        }, 250);
+      });
 
       nat.addEventListener("mousedown", () => {
         suggest.hidden = true;

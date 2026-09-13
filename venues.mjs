@@ -371,6 +371,16 @@ export const KNOWN_UNSOURCED = [
     why: "le broker ne dit pas laquelle",
   },
   { match: ["otc", "pink", "otcmkts"], name: "OTC Markets", why: "gré à gré américain, pas un carnet unique" },
+  // Scalable writes SEIX for the European Investor Exchange, the electronic system
+  // BÖAG runs at the Börse Hannover and Scalable operates technically: MIC HANC pour
+  // le marché réglementé, HAND pour le Freiverkehr. Ce n'est pas Hanovre (XHAN), dont
+  // les tranches HANA / HANB sont un autre carnet, et le fichier différé ne passe pas
+  // par l'index BÖAG : EIX publie le sien sur son propre site.
+  {
+    match: ["seix", "eix", "hanc", "hand", "europeaninvestorexchange"],
+    name: "European Investor Exchange (EIX)",
+    why: "adaptateur non écrit ; le fichier pre-trade ne vit que 24 h et la liste était vide",
+  },
   { match: ["bm", "bme", "madrid", "xmad", "spain", "sibe", "mad"], name: "Bolsa de Madrid", why: "adaptateur non écrit" },
   { match: ["ath", "xath", "athens"], name: "Athens Stock Exchange", why: "adaptateur non écrit" },
   { match: ["tase", "telaviv"], name: "Tel Aviv", why: "adaptateur non écrit" },

@@ -215,6 +215,10 @@ export const ACCEPTED = {
   bux: { countries: BUX },
   degiro: { countries: DEGIRO },
   traderepublic: { countries: TRADE_REPUBLIC },
+  // Sign-up FAQ: residents of these six, metropolitan France only, never a US
+  // taxpayer. Moving outside the EEA ends the relationship, so residency is the
+  // test and the German home country alone would be too narrow.
+  scalablecapital: { countries: ["DE", "AT", "FR", "IT", "ES", "NL"] },
   trading212: { countries: T212 },
   lightyear: { countries: LIGHTYEAR },
   revolut: { countries: REVOLUT_STOCKS },

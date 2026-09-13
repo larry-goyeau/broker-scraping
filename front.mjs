@@ -12,7 +12,8 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { catalogueFiles } from "./catalogues.mjs";
 import { resolveVenue } from "./venues.mjs";
 import { accepts, countryOptions, listingAccepts, EEA } from "./accepted.mjs";
-import { toUsd } from "./fx.mjs";
+import { toUsd, usdPer } from "./fx.mjs";
+import { prices, ensureFresh } from "./prices.mjs";
 
 const PORT = (() => {
   const m = process.argv.find((a) => a.startsWith("--port="));
@@ -231,6 +232,15 @@ console.error(
 );
 
 const NA = "N/A";
+// Two contracts live side by side while the shelf is walked broker by broker.
+// `roundTrip` is the one the page prints: it takes the size of the trade and
+// answers one number, so a rule that is not affine — a cap, a tier, a ticket
+// that only bites past a threshold — is the estimator's business and not the
+// page's. `roundTripCost` is the old affine triple, still read here for what it
+// says about the listing itself (the place, the settlement currency, whether
+// the line can be bought online at all) but no longer for a price. A broker
+// with no `roundTrip` yet answers N/A in the cost column and keeps every other
+// column it had.
 const estimators = new Map();
 const ROOT_DIR = path.dirname(fileURLToPath(import.meta.url));
 for (const folder of brokers.keys()) {
@@ -238,14 +248,69 @@ for (const folder of brokers.keys()) {
   if (!fs.existsSync(file)) continue;
   try {
     const mod = await import(pathToFileURL(file));
-    if (typeof mod.roundTripCost === "function") estimators.set(folder, mod.roundTripCost);
+    const entry = {
+      total: typeof mod.roundTrip === "function" ? mod.roundTrip : null,
+      abc: typeof mod.roundTripCost === "function" ? mod.roundTripCost : null,
+    };
+    if (entry.total || entry.abc) estimators.set(folder, entry);
   } catch (err) {
     console.error(`estimateur ${folder} : ${err.message}`);
   }
 }
+const migrated = [...estimators].filter(([, e]) => e.total).map(([folder]) => folder);
 console.error(
   `estimateurs : ${[...estimators.keys()].join(", ") || "aucun"}`
 );
+console.error(
+  `coût total : ${migrated.length ? migrated.join(", ") : "aucun broker migré"}` +
+    ` (${estimators.size - migrated.length} encore en N/A)`
+);
+
+// How many of the thing the reader is buying. Shares for anything with a share
+// price, dollars for a coin — a coin has no unit worth naming, and ten bitcoin
+// is not a question anyone asks.
+const SHARES_DEFAULT = 10;
+const AMOUNT_DEFAULT = 1000;
+
+// A price is not a fact about a broker, so it sits at the root with the other
+// facts about the market. Unlike the spread it barely moves from one venue to
+// the next — arbitrage sees to that — so the key is the ISIN and the currency
+// it is quoted in, which the page knows before it calls anyone. That the venue
+// is absent from the key is also what keeps this lookup out of the circle: the
+// MIC is resolved inside each cost file, after this.
+// The store belongs to `prices.mjs`, which is also the only thing that writes it, so
+// the page reads the same live object rather than a copy of the file taken at boot —
+// a copy would go stale the moment a lookup refreshed something.
+console.error(
+  Object.keys(prices).length
+    ? `${Object.keys(prices).length} ISIN ont déjà un prix en cache`
+    : "aucun prix en cache : le premier affichage de chaque instrument ira le chercher"
+);
+
+// A price read in euros is the same price as the one asked for in dollars, at a rate
+// this repository already applies to every fee it prints. So a Nasdaq line with no
+// American reading is answered from the euro book that quotes the same ISIN in
+// Frankfurt — which is most of the large American names, and none of the small ones.
+// `fx.mjs` knows pence apart from pounds, so London converts without a factor of a
+// hundred going astray. Where several currencies were read, the most corroborated wins:
+// seven German books agreeing beats one thin foreign print.
+function priceOf(isin, currency) {
+  const byCcy = prices[String(isin || "").trim().toUpperCase()];
+  const ccy = String(currency || "").trim().toUpperCase();
+  if (!byCcy) return null;
+  const exact = Number(byCcy[ccy]?.price);
+  if (Number.isFinite(exact) && exact > 0) return exact;
+  const per = usdPer(ccy);
+  if (!(per > 0)) return null;
+  const ranked = Object.entries(byCcy).sort(
+    (a, b) => Object.keys(b[1]?.from || {}).length - Object.keys(a[1]?.from || {}).length
+  );
+  for (const [had, leaf] of ranked) {
+    const usd = toUsd(Number(leaf?.price), had);
+    if (usd > 0) return usd / per;
+  }
+  return null;
+}
 
 function fmtUsd(n) {
   if (n == null || !Number.isFinite(Number(n))) return NA;
@@ -254,95 +319,23 @@ function fmtUsd(n) {
   return String(Number(x.toFixed(2)));
 }
 
-function fmt4(n) {
-  if (n == null || !Number.isFinite(Number(n))) return NA;
-  const x = Number(n);
-  if (x === 0) return "0";
-  return x.toFixed(4);
-}
-
-const MIN_FEE_CCY = {
-  $: "USD",
-  USD: "USD",
-  "€": "EUR",
-  EUR: "EUR",
-  "£": "GBP",
-  GBP: "GBP",
-  CHF: "CHF",
-  CAD: "CAD",
-  AED: "AED",
-  HKD: "HKD",
-  AUD: "AUD",
-  JPY: "JPY",
-};
-
-// Tickets written as `min fees …` are a floor on the % already in `a`, not a
-// third addend. The page shows them in the order column (USD) with **.
-function pullMinFees(remark) {
-  const text = String(remark || "").trim();
-  if (!text) return { minFees: null, remark: "" };
-  const match = text.match(/min fees\s+(.+?)(?:\.(\s|$)|$)/i);
-  if (!match) return { minFees: null, remark: text };
-  const cleaned = `${text.slice(0, match.index)}${text.slice(match.index + match[0].length)}`
-    .replace(/^\s*\.\s*/, "")
-    .replace(/\n{2,}/g, "\n")
-    .replace(/[ \t]+\n/g, "\n")
-    .trim();
-  return { minFees: match[1].trim(), remark: cleaned };
-}
-
-function numericFloor(cost) {
-  const f = cost?.floor;
-  return typeof f === "number" && Number.isFinite(f) ? f : null;
-}
-
-function minFeesUsd(text, cost) {
-  const raw = String(text || "").replace(/\(odd lot[^)]*\)/gi, "").trim();
-  if (/in listing currency/i.test(raw)) {
-    const n = Number(String(raw.match(/[\d.]+/) || "") );
-    return toUsd(n, cost.listing?.currency || cost.currency);
-  }
-  const euroFirst = raw.match(/^€\s*([\d.]+)/);
-  if (euroFirst) return toUsd(Number(euroFirst[1]), "EUR");
-  const m = raw.match(/^([\d.]+)\s*(USD|EUR|GBP|CHF|CAD|AED|HKD|AUD|JPY|\$|£|€)?/i);
-  if (!m) return null;
-  const token = (m[2] || "USD").toUpperCase();
-  const ccy = MIN_FEE_CCY[token] || MIN_FEE_CCY[m[2]] || token;
-  return toUsd(Number(m[1]), ccy);
-}
-
-function formatCost(cost) {
-  if (!cost) return { spread: NA, perShare: NA, perOrder: NA, remark: "", perOrderMin: false };
-  // a is a factor of the amount (the book in Europe, taxes, SEC). The American
-  // book is published per share and already sits in b, so it must not appear here.
-  // b and c are dollars in every *_cost.mjs the page loads.
-  // A missing book is null, not 0: x + N/A = N/A. A known 0 (no %
-  // commission, book already in b) is 0 %.
-  // A flat ticket in `c` (Davy overseas settlement, ChoiceTrade OTC) owns the
-  // order column. `min fees` then stays in the remark, in the published unit.
-  const ticket = Number(cost.c);
-  const hasTicket = Number.isFinite(ticket) && ticket !== 0;
-  const pulled = hasTicket ? { minFees: null, remark: String(cost.remark || "").trim() } : pullMinFees(cost.remark);
-  const missingA = cost.a == null;
-  const minUsd = pulled.minFees ? numericFloor(cost) ?? minFeesUsd(pulled.minFees, cost) : null;
+// What the page keeps from a cost object once the three affine columns are
+// gone: the total when the estimator can give one, and the facts about the
+// listing that no catalogue carries. The remark is passed through whole —
+// `min fees` used to be lifted out of it into a column of its own, and with
+// that column gone the sentence belongs back where its author wrote it.
+function formatTotal(cost, usd) {
   return {
-    spread: missingA ? NA : `${fmt4(cost.a * 100)}%`,
-    perShare: cost.b == null ? NA : fmt4(cost.b),
-    perOrder: hasTicket ? fmtUsd(ticket) : minUsd != null ? fmtUsd(minUsd) : cost.c == null ? NA : fmtUsd(cost.c),
-    perOrderMin: !hasTicket && minUsd != null && minUsd > 0,
-    remark: pulled.remark || "",
-    buyable: cost.onlineBuy !== false,
-    // An OCR catalogue (Plum) names neither place nor currency; the cost file
-    // resolves them. Only a blank catalogue column falls back to these.
-    venueExchange: displayExchange(cost.listing?.exchange || "", {
-      mic: cost.listing?.mic,
-      currency: cost.listing?.currency,
-      isin: cost.listing?.isin,
+    total: fmtUsd(usd),
+    remark: String(cost?.remark || "").trim(),
+    buyable: cost?.onlineBuy !== false,
+    venueExchange: displayExchange(cost?.listing?.exchange || "", {
+      mic: cost?.listing?.mic,
+      currency: cost?.listing?.currency,
+      isin: cost?.listing?.isin,
     }),
-    venueCurrency: String(cost.listing?.currency || "").trim().toUpperCase(),
-    // What the account settles in, which only a cost file can know. A coin is
-    // quoted in whatever the broker bills, not in a currency of its own.
-    cashCurrency: String(cost.cashCurrency || "").trim().toUpperCase(),
+    venueCurrency: String(cost?.listing?.currency || "").trim().toUpperCase(),
+    cashCurrency: String(cost?.cashCurrency || "").trim().toUpperCase(),
   };
 }
 
@@ -350,19 +343,37 @@ function formatCost(cost) {
 // Robinhood is three, and which one serves the reader is decided by residency
 // alone — an American share, a British one plus its conversion, or a Lithuanian
 // derivative over the same line.
-function estimateListing(folder, listing, inst, extra = {}) {
-  const fn = estimators.get(folder);
-  if (!fn) return { spread: NA, perShare: NA, perOrder: NA, remark: "" };
+const EMPTY_ROW = { total: NA, remark: "", buyable: true, venueExchange: "", venueCurrency: "", cashCurrency: "" };
+
+function estimateListing(folder, listing, inst, extra = {}, size = {}) {
+  const entry = estimators.get(folder);
+  if (!entry) return { ...EMPTY_ROW };
+  const crypto = inst.key.startsWith("CRYPTO:");
+  const ask = {
+    etf: crypto ? listing.query || listing.ticker : listing.isin || inst.isin || listing.ticker,
+    place: listing.exchangeRaw || listing.exchange || "",
+    currency: listing.currency || "",
+    ...extra,
+  };
+  // A coin is bought by the dollar, a share by the unit at a price. The
+  // estimator is handed whichever pair describes the trade, and nothing else:
+  // how the two turn into a bill is the whole point of moving it in there.
+  const trade = crypto
+    ? { amount: size.amount ?? AMOUNT_DEFAULT }
+    : {
+        shares: size.shares ?? SHARES_DEFAULT,
+        price: priceOf(listing.isin || inst.isin, listing.currency),
+      };
   try {
-    const cost = fn({
-      etf: inst.key.startsWith("CRYPTO:") ? listing.query || listing.ticker : listing.isin || inst.isin || listing.ticker,
-      place: listing.exchangeRaw || listing.exchange || "",
-      currency: listing.currency || "",
-      ...extra,
-    });
-    return formatCost(cost);
+    if (entry.total) {
+      const cost = entry.total({ ...ask, ...trade });
+      return formatTotal(cost, cost?.usd);
+    }
+    // Not migrated yet: the old file still knows where the line trades and in
+    // what, which is three of the columns. Only the price is withheld.
+    return formatTotal(entry.abc ? entry.abc(ask) : null, null);
   } catch {
-    return { spread: NA, perShare: NA, perOrder: NA, remark: "" };
+    return { ...EMPTY_ROW };
   }
 }
 
@@ -767,18 +778,14 @@ function lightyearPlansFor(nat) {
   return LIGHTYEAR_PLANS;
 }
 
+// Two plans of one broker are one row when they cost the same. While a broker
+// is unmigrated its total is N/A on every plan, so the comparison rests on the
+// remark alone — which is what used to separate them anyway.
 function sameAbcListings(a, b) {
   if (a.length !== b.length) return false;
   return a.every((l, i) => {
     const r = b[i];
-    return (
-      l.exchange === r.exchange &&
-      l.currency === r.currency &&
-      l.spread === r.spread &&
-      l.perShare === r.perShare &&
-      l.perOrder === r.perOrder &&
-      l.perOrderMin === r.perOrderMin
-    );
+    return l.exchange === r.exchange && l.currency === r.currency && l.total === r.total;
   });
 }
 
@@ -789,10 +796,7 @@ function sameCostListings(a, b) {
     return (
       l.exchange === r.exchange &&
       l.currency === r.currency &&
-      l.spread === r.spread &&
-      l.perShare === r.perShare &&
-      l.perOrder === r.perOrder &&
-      l.perOrderMin === r.perOrderMin &&
+      l.total === r.total &&
       l.remark === r.remark
     );
   });
@@ -928,10 +932,7 @@ function sameShown(crypto) {
     const sign = [
       crypto ? "" : l.exchange,
       crypto ? "" : l.currency,
-      l.spread,
-      l.perShare,
-      l.perOrder,
-      l.perOrderMin,
+      l.total,
       l.remark,
     ].join("\u0000");
     if (seen.has(sign)) return false;
@@ -940,7 +941,7 @@ function sameShown(crypto) {
   };
 }
 
-function detail(key, nat = "") {
+function detail(key, nat = "", size = {}) {
   const inst = resolve(key);
   if (!inst) return null;
   const rows = [];
@@ -962,7 +963,7 @@ function detail(key, nat = "") {
         .slice()
         .sort((a, b) => a.exchange.localeCompare(b.exchange, "en") || a.currency.localeCompare(b.currency))
         .map((listing) => {
-          const cost = estimateListing(folder, listing, inst, { nat, ...extra });
+          const cost = estimateListing(folder, listing, inst, { nat, ...extra }, size);
           return {
             ...listing,
             ...cost,
@@ -1115,7 +1116,15 @@ function detail(key, nat = "") {
   rows.sort((a, b) => a.name.localeCompare(b.name, "en"));
   const at = rows.findIndex((r) => r.name.localeCompare("EasyBourse", "en") > 0);
   rows.splice(at === -1 ? rows.length : at, 0, ...easy);
-  return { ...summarize(inst, "", nat), soldBy: rows };
+  // The page prints the size back, so a reader who changed it sees what the
+  // column answers for, and learns when the price behind it is missing.
+  const trade = isCrypto
+    ? { amount: size.amount ?? AMOUNT_DEFAULT }
+    : {
+        shares: size.shares ?? SHARES_DEFAULT,
+        price: priceOf(inst.isin, mostCommon([...inst.byBroker.values()].flat().map((l) => l.currency))),
+      };
+  return { ...summarize(inst, "", nat), trade, soldBy: rows };
 }
 
 function json(res, status, body) {
@@ -1126,13 +1135,37 @@ function json(res, status, body) {
   res.end(JSON.stringify(body));
 }
 
-const server = http.createServer((req, res) => {
+// The estimators read the price synchronously, and a price that is not there yet is
+// indistinguishable from one that does not exist — both end up N/A. So the fetching is
+// done first, for the one instrument on screen, and only then are the rows built.
+// Crypto is sized in dollars and needs no price at all.
+async function warmPrices(key) {
+  const inst = resolve(key);
+  if (!inst || inst.key.startsWith("CRYPTO:")) return;
+  const isins = new Set();
+  if (inst.isin) isins.add(inst.isin);
+  for (const listings of inst.byBroker.values()) {
+    for (const l of listings) if (l.isin) isins.add(l.isin);
+  }
+  // A handful at most: one instrument quoted under a dozen ISINs is a catalogue error,
+  // not a reason to spend a dozen requests on one page view.
+  await Promise.all([...isins].slice(0, 8).map((isin) => ensureFresh(isin)));
+}
+
+const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
   if (url.pathname === "/api/search") {
     return json(res, 200, search(url.searchParams.get("q") || "", 20, url.searchParams.get("nat") || ""));
   }
   if (url.pathname === "/api/instrument") {
-    const found = detail(url.searchParams.get("key") || "", url.searchParams.get("nat") || "");
+    const size = {};
+    const shares = Number(url.searchParams.get("shares"));
+    const amount = Number(url.searchParams.get("amount"));
+    if (Number.isFinite(shares) && shares > 0) size.shares = shares;
+    if (Number.isFinite(amount) && amount > 0) size.amount = amount;
+    const key = url.searchParams.get("key") || "";
+    await warmPrices(key);
+    const found = detail(key, url.searchParams.get("nat") || "", size);
     return found ? json(res, 200, found) : json(res, 404, { error: "unknown" });
   }
   if (url.pathname === "/api/countries") return json(res, 200, countryOptions());

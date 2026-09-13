@@ -1,0 +1,197 @@
+{
+  "generatedAt": "2026-09-13T21:29:31.479Z",
+  "source": "EODHD",
+  "unit": "prices[ISIN][devise] = { price, at, from } : la clôture du dernier jour de bourse, dans la devise de cotation, pour convertir un nombre de parts en montant. Une même ligne cotée sur plusieurs places dans la même devise garde sous `from` toutes ses cotations ; `price` retient la place principale. Londres cote en pence, donc GBX et GBP sont deux entrées, que `fx.mjs` sait distinguer. Ce n'est pas un prix temps réel : il sert à dimensionner un ordre, pas à l'exécuter. `fetched` date la dernière interrogation, y compris quand elle n'a rien trouvé, pour ne pas la refaire chaque jour.",
+  "fetched": {
+    "IE00B4L5Y983": "2026-09-13T21:26:15.928Z",
+    "US0378331005": "2026-09-13T21:26:33.717Z",
+    "US03748R7474": "2026-09-13T21:29:14.094Z",
+    "US46438G4973": "2026-09-13T21:29:29.478Z"
+  },
+  "prices": {
+    "IE00B4L5Y983": {
+      "GBX": {
+        "price": 10871,
+        "at": "2026-09-11",
+        "from": {
+          "LSE:SWDA": {
+            "price": 10871,
+            "at": "2026-09-11",
+            "primary": false
+          }
+        }
+      },
+      "USD": {
+        "price": 146.96,
+        "at": "2026-09-11",
+        "from": {
+          "LSE:IWDA": {
+            "price": 146.96,
+            "at": "2026-09-11",
+            "primary": false
+          },
+          "SW:SWDA": {
+            "price": 146.98,
+            "at": "2026-09-11",
+            "primary": false
+          }
+        }
+      },
+      "EUR": {
+        "price": 126.635,
+        "at": "2026-09-11",
+        "from": {
+          "XETRA:EUNL": {
+            "price": 126.635,
+            "at": "2026-09-11",
+            "primary": false
+          },
+          "AS:IWDA": {
+            "price": 126.64,
+            "at": "2026-09-11",
+            "primary": false
+          },
+          "F:EUNL": {
+            "price": 126.575,
+            "at": "2026-09-11",
+            "primary": false
+          }
+        }
+      }
+    },
+    "US0378331005": {
+      "USD": {
+        "price": 332.27,
+        "at": "2026-09-11",
+        "from": {
+          "US:AAPL": {
+            "price": 332.27,
+            "at": "2026-09-11",
+            "primary": true
+          },
+          "LSE:0R2V": {
+            "price": 332.78,
+            "at": "2026-09-11",
+            "primary": false
+          },
+          "IL:0R2V": {
+            "price": 323.68,
+            "at": "2026-09-10",
+            "primary": false
+          }
+        }
+      },
+      "ARS": {
+        "price": 26560,
+        "at": "2026-09-11",
+        "from": {
+          "BA:AAPL": {
+            "price": 26560,
+            "at": "2026-09-11",
+            "primary": false
+          }
+        }
+      },
+      "EUR": {
+        "price": 288.75,
+        "at": "2026-09-11",
+        "from": {
+          "XETRA:APC": {
+            "price": 288.75,
+            "at": "2026-09-11",
+            "primary": false
+          },
+          "F:APC": {
+            "price": 286.75,
+            "at": "2026-09-11",
+            "primary": false
+          },
+          "STU:APC": {
+            "price": 281.1,
+            "at": "2026-09-10",
+            "primary": false
+          },
+          "MU:APC": {
+            "price": 281.8,
+            "at": "2026-09-11",
+            "primary": false
+          },
+          "DU:APC": {
+            "price": 287.2,
+            "at": "2026-09-11",
+            "primary": false
+          },
+          "HA:APC": {
+            "price": 289,
+            "at": "2026-09-11",
+            "primary": false
+          },
+          "HM:APC": {
+            "price": 289,
+            "at": "2026-09-11",
+            "primary": false
+          }
+        }
+      },
+      "CAD": {
+        "price": 46.8,
+        "at": "2026-09-11",
+        "from": {
+          "NEO:AAPL": {
+            "price": 46.8,
+            "at": "2026-09-11",
+            "primary": false
+          }
+        }
+      },
+      "MXN": {
+        "price": 5640.98,
+        "at": "2026-09-11",
+        "from": {
+          "MX:AAPL": {
+            "price": 5640.98,
+            "at": "2026-09-11",
+            "primary": false
+          }
+        }
+      }
+    },
+    "US03748R7474": {
+      "USD": {
+        "price": 2.4,
+        "at": "2026-09-11",
+        "from": {
+          "US:AIV": {
+            "price": 2.4,
+            "at": "2026-09-11",
+            "primary": true
+          }
+        }
+      },
+      "EUR": {
+        "price": 2.06,
+        "at": "2026-09-11",
+        "from": {
+          "F:AIV": {
+            "price": 2.06,
+            "at": "2026-09-11",
+            "primary": false
+          }
+        }
+      }
+    },
+    "US46438G4973": {
+      "USD": {
+        "price": 31.595,
+        "at": "2026-09-11",
+        "from": {
+          "US:AQLT": {
+            "price": 31.595,
+            "at": "2026-09-11",
+            "primary": false
+          }
+        }
+      }
+    }
+  }
+}

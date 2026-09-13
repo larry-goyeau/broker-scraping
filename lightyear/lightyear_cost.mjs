@@ -193,7 +193,9 @@ function remarkOf({ plan, market, rule, holdable }) {
   if (rule?.min && rule.flat == null) {
     lines.push(`min fees ${rule.min * 2} ${rule.currency}.`);
   }
-  if (holdable) lines.push(`FX ${(plan.fx * 100).toFixed(2)}% if converted.`);
+  // Crypto is left out: the conversion is not one the account can avoid by holding
+  // the currency, so naming a rate the reader cannot act on only adds noise.
+  if (holdable && market !== "crypto") lines.push(`FX ${(plan.fx * 100).toFixed(2)}% if converted.`);
   return lines.join("\n");
 }
 

@@ -360,7 +360,38 @@ async function search(symbol, pattern) {
   });
   if (isDeadSession(answer) || (!answer.json && !answer.error)) return null;
   if (!Array.isArray(answer.json)) return [];
-  return answer.json.filter((hit) => hit?.conid && hit?.symbol);
+  const hits = answer.json.filter((hit) => hit?.conid && hit?.symbol);
+  if (hits.length > 0) markHealthy();
+  return hits;
+}
+
+// A non-empty search (any query, including the SPY canary) is proof the
+// portal still answers. Empty arrays that arrive inside that window are
+// real misses; outside it they are treated as faults until SPY confirms.
+const HEALTHY_MS = 15_000;
+let healthyUntil = 0;
+let canaryWait = null;
+
+function markHealthy() {
+  healthyUntil = Date.now() + HEALTHY_MS;
+}
+
+function isHealthy() {
+  return Date.now() < healthyUntil;
+}
+
+async function confirmHealthy() {
+  if (isHealthy()) return true;
+  if (canaryWait) return canaryWait;
+
+  canaryWait = (async () => {
+    const probe = await search("SPY", false);
+    return Boolean(probe && probe.length > 0);
+  })().finally(() => {
+    canaryWait = null;
+  });
+
+  return canaryWait;
 }
 
 // The portal signs itself out after a stretch, and login often lands in a
@@ -384,6 +415,9 @@ async function waitForSession() {
       await attachPortalPage();
 
       if (await sessionIsLive()) {
+        // Authenticated and connected is the same proof a search gives, so
+        // the lanes can resume without each one probing SPY first.
+        markHealthy();
         console.error("portal session restored");
         await page.bringToFront().catch(() => {});
         return;
@@ -404,8 +438,22 @@ async function waitForSession() {
 async function searchWithRetry(symbol, pattern) {
   for (let attempt = 0; attempt < 3; attempt += 1) {
     const payload = await search(symbol, pattern);
-    if (payload !== null) return payload;
-    console.error("  no answer, retrying");
+    if (payload && payload.length > 0) return payload;
+
+    if (payload !== null) {
+      // One empty is cheap to fake under load. A second empty, with SPY
+      // still answering (or having answered in the last few seconds), is an
+      // unknown ISIN. SPY silent means the session, not the catalogue.
+      if (attempt === 0) {
+        await sleep(400);
+        continue;
+      }
+      if (isHealthy() || (await confirmHealthy())) return payload;
+      console.error("  empty while SPY is silent, retrying");
+    } else {
+      console.error("  no answer, retrying");
+    }
+
     await tickle();
     await sleep(2000 * (attempt + 1));
   }
@@ -584,7 +632,10 @@ await Promise.all(
       if (offset >= walk.length) return;
       await runJob(startIndex - 1 + offset, walk[offset]);
       done += 1;
-      if (done % 20 === 0) await tickle();
+      // A blind tickle keeps the session warm but never says whether it is
+      // still signed in, and a signed-out portal answers `[]` rather than an
+      // error. The same call read for `authStatus` costs nothing more.
+      if (done % 20 === 0 && !(await sessionIsLive())) await waitForSession();
     }
   })
 );

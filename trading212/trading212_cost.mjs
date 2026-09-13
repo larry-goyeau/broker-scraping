@@ -400,7 +400,9 @@ function cryptoCost(row, answer) {
     ccy: QUOTE,
     fx: { quote: QUOTE, asOf: FX_AS_OF, listing: usdPer(listing.currency) },
     fxIfConverted: FX_EACH_WAY * 2,
-    remark: "FX 0.30% if not funded in the listing currency.",
+    // The funding sentence belongs to a share, whose listing currency the account
+    // can hold. A coin's quote leg is not a currency the reader funds.
+    remark: "",
   };
 }
 

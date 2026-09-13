@@ -154,7 +154,9 @@ function remarkOf({ market, plan, american } = {}) {
   const lines = [];
   if (plan?.id === "uk") lines.push("UK / Ireland: no stock ticket.");
   if (plan?.id === "anz") lines.push("Australia / New Zealand: 2 $ every stock exchange.");
-  lines.push("FX 0.75% if converted.");
+  // A coin is not bought in a listing currency the account can choose to hold, so
+  // the conversion is not an "if" the reader can act on and the line says nothing.
+  if (market !== "crypto") lines.push("FX 0.75% if converted.");
   if (market === "cfd" && american) {
     lines.push(`US CFD at or under ${CFD_PENNY_BELOW} $: ${CFD_PENNY_EACH} $/share each way.`);
   }

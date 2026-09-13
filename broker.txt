@@ -2,7 +2,6 @@ bluorbank
 fortuneo
 Endowus
 benchmark
-saxoinvestor
 
 Syfe
 Exante
@@ -16,3 +15,7 @@ Carnet du Golfe
 mexem
 N26
 oanda
+quantfury
+Lundi en sé  ance, Chrome connecté à Questrade sur le port 9222, valide l'adaptateur canadien avec node spread.mjs --only=questrade --rows=questrade/questrade-parsed.json, vérifie que les carnets remontent sans rejet en masse du garde-fou feed, que node questrade/questrade_cost.mjs AAB.TO TSX CAD sorte enfin un b chiffré, puis relance le front sur 3470 sans commiter.
+robinhood
+sarwa

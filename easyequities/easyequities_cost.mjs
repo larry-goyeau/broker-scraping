@@ -152,7 +152,9 @@ function minLabel(rule) {
 }
 
 function remarkOf({ rule, market } = {}) {
-  if (market === "crypto") return "EasyFX 0.5% if converted.";
+  // A coin has no wallet of its own to be funded, so the transfer between wallets
+  // is not a choice the reader makes on this line.
+  if (market === "crypto") return "";
   const lines = [];
   const min = minLabel(rule);
   if (min) lines.push(`min fees ${min}.`);

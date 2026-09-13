@@ -11,7 +11,7 @@ import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { catalogueFiles } from "./catalogues.mjs";
 import { resolveVenue } from "./venues.mjs";
-import { accepts, countryOptions, listingAccepts } from "./accepted.mjs";
+import { accepts, countryOptions, listingAccepts, EEA } from "./accepted.mjs";
 import { toUsd } from "./fx.mjs";
 
 const PORT = (() => {
@@ -140,6 +140,19 @@ function addName(set, counts, value) {
   counts.set(name, (counts.get(name) || 0) + 1);
 }
 
+// Which currency a coin is paid in, per broker. Most impose one — eToro's account
+// is a dollar account, Trade Republic's a euro one — and that is a fact the row
+// should state. A broker whose crypto shelf is quoted in several currencies is not
+// imposing any, and naming one of them would read as a restriction it does not have.
+const cryptoCcys = new Map();
+
+// Revolut quotes its whole shelf in euro and still takes any balance the account
+// holds: the €100 USDC ticket of 2026-09-12 was paid in euro on a coin quoted in
+// dollars. The catalogue cannot show that, so it is declared.
+const ANY_CURRENCY = new Set(["revolut"]);
+const imposesCurrency = (folder) =>
+  !ANY_CURRENCY.has(folder) && (cryptoCcys.get(folder)?.size ?? 0) === 1;
+
 console.error("indexation des catalogues…");
 const t0 = Date.now();
 let listings = 0;
@@ -169,6 +182,10 @@ for (const file of catalogueFiles()) {
     }
     const type = String(row.type || "").trim().toUpperCase();
     const pair = type === "CRYPTO" ? cryptoPair(row.ticker || row.query, row.currency) : null;
+    if (pair?.quote) {
+      if (!cryptoCcys.has(folder)) cryptoCcys.set(folder, new Set());
+      cryptoCcys.get(folder).add(pair.quote);
+    }
     const ticker = pair ? pair.base : String(row.ticker || "").trim().toUpperCase();
     const rowIsin = String(row.isin || "").trim().toUpperCase();
     if (ticker) {
@@ -191,6 +208,11 @@ for (const file of catalogueFiles()) {
       isin: rowIsin,
     };
     if (row.nonEuResident) listing.nonEuResident = true;
+    // Robinhood's catalogue marks with `usOnly` the lines missing from Robinhood
+    // Europe's stock-token list. That is not "US residents only": the British
+    // company sells the same American share. It is exactly `nonEuResident`, which
+    // withholds a line from the EEA and from nobody else.
+    if (row.usOnly) listing.nonEuResident = true;
     if (row.usResidentsOnly) listing.usResidentsOnly = true;
     if (Array.isArray(row.supportedCountries)) listing.supportedCountries = row.supportedCountries;
     const held = inst.byBroker.get(folder) || [];
@@ -318,9 +340,16 @@ function formatCost(cost) {
       isin: cost.listing?.isin,
     }),
     venueCurrency: String(cost.listing?.currency || "").trim().toUpperCase(),
+    // What the account settles in, which only a cost file can know. A coin is
+    // quoted in whatever the broker bills, not in a currency of its own.
+    cashCurrency: String(cost.cashCurrency || "").trim().toUpperCase(),
   };
 }
 
+// `nat` travels with the rest. Most brokers are one company and ignore it;
+// Robinhood is three, and which one serves the reader is decided by residency
+// alone — an American share, a British one plus its conversion, or a Lithuanian
+// derivative over the same line.
 function estimateListing(folder, listing, inst, extra = {}) {
   const fn = estimators.get(folder);
   if (!fn) return { spread: NA, perShare: NA, perOrder: NA, remark: "" };
@@ -649,6 +678,21 @@ const LIGHTYEAR_PLANS = [
   { id: "uk", name: "Lightyear UK" },
 ];
 
+// Ordered by what the subscription costs, so the cheapest plan reads first and
+// the trade-off between the monthly fee and the commission runs down the page.
+//
+// Trading Pro is absent on purpose. It is an add-on bought on top of one of
+// these, and it buys a share rate, not a crypto one: a Metal holder who takes it
+// still exchanges at Metal's 0.99 %. A row of its own would have to pick an
+// underlying plan and would then state that price as Trading Pro's own.
+const REVOLUT_PLANS = [
+  { id: "standard", name: "Revolut Standard" },
+  { id: "plus", name: "Revolut Plus" },
+  { id: "premium", name: "Revolut Premium" },
+  { id: "metal", name: "Revolut Metal" },
+  { id: "ultra", name: "Revolut Ultra" },
+];
+
 const PLUM_PLANS = [
   { id: "basic", name: "Plum UK Basic" },
   { id: "plus", name: "Plum UK Plus" },
@@ -665,6 +709,49 @@ function plumEntity(plan) {
   const id = String(plan || "");
   if (id === "eu" || id === "pro" || id === "premium" || id.startsWith("eu-")) return "eu";
   return "uk";
+}
+
+// The two Plum entities are not two price lists for one account: the UK one is a
+// British ISA and stocks account, the European one is passported from Greece into
+// the EEA, which Britain left. Each has its own residents and neither can sell to
+// the other's. `accepted.mjs` opens the broker to ten countries, which is the union
+// of the two, so the split has to be made here. A visitor who names no country
+// still sees everything.
+function plumOpen(plan, nat) {
+  const code = String(nat || "").trim().toUpperCase();
+  if (!code) return true;
+  return plumEntity(plan) === "uk" ? code === "GB" : code !== "GB";
+}
+
+// Robinhood is three companies behind one name, and they do not sell the same
+// thing at the same price: the American one prices a real share against three
+// regulators and routes crypto to a market maker, the British one adds a currency
+// conversion and sells neither crypto nor any exchange-traded fund, the European
+// one sells a derivative on the share and takes a percent. So the broker gets a
+// row per company, and `collapseRobinhood` puts back together any that a given
+// instrument happens to price alike.
+const ROBINHOOD_PLANS = [
+  { id: "us", name: "Robinhood US" },
+  { id: "uk", name: "Robinhood UK" },
+  { id: "eu", name: "Robinhood UE" },
+];
+
+// The country each company is built for when the visitor named none, so that a
+// line withheld from the EEA still shows on the American and British rows.
+const ROBINHOOD_NAT = { us: "US", uk: "GB", eu: "FR" };
+
+const EEA_SET = new Set(EEA);
+
+function robinhoodEntity(nat) {
+  const code = String(nat || "").trim().toUpperCase();
+  if (code === "GB") return "uk";
+  return EEA_SET.has(code) ? "eu" : "us";
+}
+
+function robinhoodOpen(plan, nat) {
+  const code = String(nat || "").trim().toUpperCase();
+  if (!code) return true;
+  return plan === robinhoodEntity(code);
 }
 
 function plumSubscription(row) {
@@ -828,26 +915,65 @@ function collapseBoursobank(built) {
   });
 }
 
+// Keeps the first of any run of rows the reader could not tell apart. The
+// signature is the columns the page prints and nothing else: a listing may well
+// differ in its name or its query and still be, on screen, the same line twice.
+// A coin never prints its place, and prints its currency only where one is
+// imposed — in which case every row of that broker carries the same one. Neither
+// can tell two rows apart, so neither enters the signature: WH SelfInvest names
+// three venues for bitcoin, in dollars, and quotes no price for any of them.
+function sameShown(crypto) {
+  const seen = new Set();
+  return (l) => {
+    const sign = [
+      crypto ? "" : l.exchange,
+      crypto ? "" : l.currency,
+      l.spread,
+      l.perShare,
+      l.perOrder,
+      l.perOrderMin,
+      l.remark,
+    ].join("\u0000");
+    if (seen.has(sign)) return false;
+    seen.add(sign);
+    return true;
+  };
+}
+
 function detail(key, nat = "") {
   const inst = resolve(key);
   if (!inst) return null;
   const rows = [];
   const easy = [];
+  const isCrypto = inst.key.startsWith("CRYPTO:");
   for (const [folder, listingsOf] of inst.byBroker) {
     if (!acceptsNat(folder, nat)) continue;
     const meta = brokers.get(folder);
-    const listings = (extra) =>
+    // The quote leg still travels into the estimators, which need it to price the
+    // conversion; only the column goes blank, and only where nothing is imposed.
+    const anyCurrency = isCrypto && !imposesCurrency(folder);
+    // `asNat` is the audience a row is built for, which is the visitor's country
+    // except where one broker is several companies: each then has to be filtered
+    // for its own residents, including when the visitor named no country at all
+    // and sees them side by side.
+    const listings = (extra, asNat = nat) =>
       listingsOf
-        .filter((listing) => listingOpen(listing, nat))
+        .filter((listing) => listingOpen(listing, asNat))
         .slice()
         .sort((a, b) => a.exchange.localeCompare(b.exchange, "en") || a.currency.localeCompare(b.currency))
         .map((listing) => {
-          const cost = estimateListing(folder, listing, inst, extra);
+          const cost = estimateListing(folder, listing, inst, { nat, ...extra });
           return {
             ...listing,
             ...cost,
             exchange: listing.exchange || cost.venueExchange || "",
-            currency: listing.currency || cost.venueCurrency || "",
+            // A coin is not quoted in a currency the way a share is: the column
+            // names the cash the account settles in, which the estimator knows
+            // and the catalogue does not. Robinhood's book was read in dollars
+            // and its European company trades the same coins in euros.
+            currency: anyCurrency
+              ? ""
+              : (isCrypto && cost.cashCurrency) || listing.currency || cost.venueCurrency || "",
           };
         })
         .filter((listing) => listing.buyable !== false)
@@ -860,9 +986,16 @@ function detail(key, nat = "") {
             exchangeRaw,
             venueExchange,
             venueCurrency,
+            cashCurrency,
             ...listing
           }) => listing
-        );
+        )
+        // Quantfury carries bitcoin three times, against the dollar, the real and
+        // tether. The quote leg was the whole of what the currency column said, so
+        // with it blank the three print the same line. Only rows that agree on
+        // every visible field are merged, which leaves a pair priced differently
+        // from its neighbours standing on its own.
+        .filter(isCrypto ? sameShown(true) : () => true);
     const base = {
       folder,
       family: meta?.name || prettyFolder(folder),
@@ -939,9 +1072,32 @@ function detail(key, nat = "") {
       });
       continue;
     }
+    // Crypto is the one shelf where the plan changes the price of the trade
+    // itself, 1.49 % down to 0.49 %, so it gets a row each. A share pays 0.25 %
+    // on four plans out of six and stays a single row that names the range.
+    if (folder === "revolut" && inst.key.startsWith("CRYPTO:")) {
+      REVOLUT_PLANS.forEach((plan, i) => {
+        const listed = listings({ plan: plan.id });
+        if (listed.length) rows.push(asPlan(plan, i, listed));
+      });
+      continue;
+    }
+    // No collapse here, unlike the plans above: the three companies never price a
+    // line alike. Two of them differ on the rate, and the American and British
+    // ones, which share it, part on the remark — one waives the regulators under
+    // $500, the other charges a conversion.
+    if (folder === "robinhood") {
+      ROBINHOOD_PLANS.forEach((plan, i) => {
+        if (!robinhoodOpen(plan.id, nat)) return;
+        const listed = listings({ entity: plan.id }, nat || ROBINHOOD_NAT[plan.id]);
+        if (listed.length) rows.push(asPlan(plan, i, listed));
+      });
+      continue;
+    }
     if (folder === "plum") {
       const built = [];
       PLUM_PLANS.forEach((plan, i) => {
+        if (!plumOpen(plan.id, nat)) return;
         const listed = listings({ plan: plan.id });
         if (listed.length) built.push(asPlan(plan, i, listed));
       });

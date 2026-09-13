@@ -42,7 +42,15 @@ import path from "node:path";
 import { createGunzip, gunzipSync } from "node:zlib";
 import { Readable } from "node:stream";
 import readline from "node:readline";
-import { listingKey, sessionState, spreadUrl, VENUES } from "./venues.mjs";
+import {
+  CRYPTO_CCY,
+  CRYPTO_MICS,
+  cryptoId,
+  listingKey,
+  sessionState,
+  spreadUrl,
+  VENUES,
+} from "./venues.mjs";
 import { monthlyXlm } from "./xlm-monthly.mjs";
 import { monthlyEffectiveSpread } from "./rule605-monthly.mjs";
 
@@ -76,6 +84,16 @@ const listings = new Map();
 // before: rows that named neither a sourceable place nor a currency fell out of the
 // accounting entirely, and the report said 160 American listings against a true
 // exposure of some nine thousand.
+// The catalogues agree on this much: a coin is `type: "CRYPTO"`, or an `exchange` that
+// says so, and its ticker is either the base alone or a pair whose first half is.
+const isCryptoRow = (row) =>
+  String(row.type || "").toUpperCase() === "CRYPTO" || /^crypto$/i.test(String(row.exchange || ""));
+const cryptoBase = (row) =>
+  String(row.ticker || row.query || row.symbol || "")
+    .split(/[/:_-]/)[0]
+    .toUpperCase()
+    .replace(/[^A-Z0-9]/g, "");
+
 const gaps = {};
 const gapKeys = new Map();
 function noteGap(why, key, example) {
@@ -92,6 +110,41 @@ for (const file of rowFiles) {
   const rows = Array.isArray(parsed) ? parsed : parsed.rows || [];
   const broker = file.replace(/.*\/|-parsed\.json/g, "");
   for (const row of rows) {
+    // A coin has no ISIN and the catalogues name no exchange for it, so the two
+    // reference books are both read and stored side by side. Which of them a broker
+    // actually executes on is its own business; what this file can say is what the
+    // spot market charged to cross at that moment.
+    if (isCryptoRow(row)) {
+      const base = cryptoBase(row);
+      if (!base) {
+        noteGap("crypto sans symbole lisible", `${broker}|${row.name || "?"}`, `${row.name || "?"} chez ${broker}`);
+        continue;
+      }
+      const id = cryptoId(base);
+      for (const mic of CRYPTO_MICS) {
+        const key = `${mic}|${id}|${CRYPTO_CCY}`;
+        if (listings.has(key)) {
+          listings.get(key).brokers.add(broker);
+          continue;
+        }
+        const venue = VENUES.find((v) => v.mic === mic);
+        listings.set(key, {
+          key,
+          isin: id,
+          currency: CRYPTO_CCY,
+          ticker: base,
+          name: row.name || base,
+          mic,
+          path: mic,
+          exchange: venue.name,
+          source: venue.source,
+          venue,
+          venueAssumed: false,
+          brokers: new Set([broker]),
+        });
+      }
+      continue;
+    }
     const isin = String(row.isin || "").toUpperCase();
     if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin)) continue;
     const { key, venue, assumed, unsourced } = listingKey(row);
@@ -272,6 +325,9 @@ const CROSSED = {
   hannover: 1,
   stuttgart: 1,
   bmv: 1,
+  questrade: 1,
+  binance: 1,
+  coinbase: 1,
 };
 
 const CONVENTION =
@@ -739,6 +795,9 @@ const delayedQuotes = {
   lsin: new Map(),
   stuttgart: new Map(),
   bmv: new Map(),
+  questrade: new Map(),
+  binance: new Map(),
+  coinbase: new Map(),
 };
 const delayedTrouble = {
   tradegate: null,
@@ -751,6 +810,9 @@ const delayedTrouble = {
   lsin: null,
   stuttgart: null,
   bmv: null,
+  questrade: null,
+  binance: null,
+  coinbase: null,
 };
 
 const UA = { "User-Agent": "Mozilla/5.0" };
@@ -1026,6 +1088,150 @@ async function loadBmv(lines, ownTab) {
   });
   await Promise.all(workers);
   return { directory: claves.length, jobs: jobs.length, books };
+}
+
+// Canada publishes no free pre-trade book of its own. TMX answers bid and ask only to a
+// signed-in watchlist, Cboe Canada behind a member key and secret, and there is no Rule
+// 605 here to fall back on. The touch does reach the screen of anyone holding a Questrade
+// account, over the socket its trading page keeps open, and what a broker displays about
+// an exchange is still a fact about that exchange rather than about the broker.
+//
+// The token that socket signs in with is minted for that socket alone: a second
+// connection offering the same token is answered with silence rather than an error. So
+// the reads ride the application's own connection, by keeping a handle on the WebSocket
+// it builds. Only get_symbol_data and get_l1_update are sent, which read and nothing else.
+const QUESTRADE_APP = "https://my.questrade.com/trading/quote/XIU.TO";
+// One request carries a whole list. The batch only bounds how much a silent answer costs
+// before the next one is tried.
+const QUESTRADE_BATCH = 150;
+
+// What each venue calls itself in the quote's `feed`. TSX and Cboe Canada share the `.TO`
+// suffix, so this is what keeps one venue's book off the other's row.
+const QUESTRADE_FEED = { XTSE: "TSX", XTSX: "TSXV", XCNQ: "CSE", NEOE: "NEO" };
+const QUESTRADE_SUFFIX = { XTSE: ".TO", XTSX: ".VN", XCNQ: ".CN", NEOE: ".TO" };
+
+// Questrade's own catalogue stores the symbol in the form the feed uses, suffix and share
+// class included: AAA.P.VN, AAWH.U.CN. A catalogue that writes the bare ticker instead —
+// IBKR and Mexem write TSE and the symbol alone — gets the venue's suffix appended.
+function questradeSymbol(l) {
+  const ticker = String(l.ticker || "").toUpperCase().trim();
+  if (!ticker) return null;
+  if (/\.(TO|VN|CN|NE)$/.test(ticker)) return ticker;
+  const suffix = QUESTRADE_SUFFIX[l.venue?.mic];
+  return suffix ? `${ticker}${suffix}` : null;
+}
+
+async function loadQuestrade(lines, ownTab) {
+  const page = await ownTab();
+  await page.evaluateOnNewDocument(() => {
+    const Native = window.WebSocket;
+    window.__qsFrames = [];
+    // How many frames have already been dropped off the front, so that a reader can hold
+    // a position in the stream rather than an index into an array that shifts under it.
+    window.__qsDropped = 0;
+    window.WebSocket = function (url, protocols) {
+      const socket = new Native(url, protocols);
+      if (String(url).includes("cloud-iq")) {
+        window.__qsSocket = socket;
+        socket.addEventListener("message", (event) => {
+          const data = String(event.data);
+          if (!data.startsWith("42")) return;
+          window.__qsFrames.push(data);
+          // The tape is only ever read back a few seconds, so it is trimmed rather than
+          // kept: a page left open all session would otherwise grow without end.
+          if (window.__qsFrames.length > 4000) {
+            window.__qsDropped += window.__qsFrames.splice(0, 2000).length;
+          }
+        });
+      }
+      return socket;
+    };
+    window.WebSocket.prototype = Native.prototype;
+    Object.assign(window.WebSocket, Native);
+  });
+
+  await page.goto(QUESTRADE_APP, { waitUntil: "domcontentloaded", timeout: 60000 });
+  let live = false;
+  for (let waited = 0; waited < 45000 && !live; waited += 500) {
+    live = await page.evaluate(() => window.__qsSocket?.readyState === 1).catch(() => false);
+    if (!live) await new Promise((r) => setTimeout(r, 500));
+  }
+  if (!live) throw new Error("aucune socket de cotation, session Questrade fermée ?");
+  // The application signs the socket in before it asks anything of it, and a request
+  // posted ahead of that is dropped without a word.
+  await new Promise((r) => setTimeout(r, 6000));
+
+  const wanted = [...new Set(lines.map(questradeSymbol).filter(Boolean))];
+  delayedQuotes.questrade.clear();
+  let books = 0;
+  for (let offset = 0; offset < wanted.length; offset += QUESTRADE_BATCH) {
+    const batch = wanted.slice(offset, offset + QUESTRADE_BATCH);
+    const answer = await page.evaluate(
+      async (symbols, stamp) => {
+        const socket = window.__qsSocket;
+        if (!socket || socket.readyState !== 1) return { error: "socket refermée" };
+        const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+        const from = window.__qsDropped + window.__qsFrames.length;
+        // Ids well clear of the application's own numbering, so neither reads the
+        // other's replies.
+        const metaId = 900001 + stamp * 2;
+        const quoteId = 900002 + stamp * 2;
+        const ask = (method, params, requestID) =>
+          socket.send(`42${JSON.stringify(["sendRequest", { method, params, requestID }])}`);
+        // A list comes back over several frames, so they are gathered until the venue has
+        // answered for everything asked or the window runs out.
+        const reply = async (requestID, expected, ms) => {
+          const held = new Map();
+          for (let waited = 0; waited < ms; waited += 250) {
+            for (const raw of window.__qsFrames.slice(Math.max(0, from - window.__qsDropped))) {
+              let frame;
+              try {
+                frame = JSON.parse(raw.slice(2));
+              } catch {
+                continue;
+              }
+              if (frame?.[1]?.requestID !== requestID) continue;
+              for (const row of frame[1]?.data?.data || []) {
+                if (row?.symbol) held.set(row.symbol, row);
+              }
+            }
+            if (held.size >= expected) break;
+            await wait(250);
+          }
+          return [...held.values()];
+        };
+
+        ask("get_symbol_data", { symbols }, metaId);
+        const meta = await reply(metaId, symbols.length, 25000);
+        if (!meta.length) return { error: "get_symbol_data sans réponse" };
+        const ids = [...new Set(meta.map((m) => m.symbolId).filter(Boolean))];
+        ask("get_l1_update", { symbolIds: ids }, quoteId);
+        const quotes = await reply(quoteId, ids.length, 25000);
+        return {
+          quotes: quotes.map((q) => ({
+            symbol: q.symbol,
+            bid: q.bidPrice,
+            ask: q.askPrice,
+            feed: q.feed,
+            delay: q.delay,
+            halt: q.halt,
+          })),
+        };
+      },
+      batch,
+      offset
+    );
+
+    if (answer.error) throw new Error(answer.error);
+    for (const quote of answer.quotes) {
+      delayedQuotes.questrade.set(quote.symbol, quote);
+      if (quote.bid > 0 && quote.ask > 0) books += 1;
+    }
+    console.error(
+      `    Questrade : ${Math.min(offset + QUESTRADE_BATCH, wanted.length)}/${wanted.length} symboles`
+    );
+  }
+  return { wanted: wanted.length, quoted: delayedQuotes.questrade.size, books };
 }
 
 async function loadGettex(wanted) {
@@ -1670,7 +1876,149 @@ const adapters = {
       };
     },
   },
+
+  // The four Canadian books, read through a Questrade session. TSX and TSX Venture come
+  // live, the CSE and Cboe Canada fifteen minutes late, which the quote says itself.
+  questrade: {
+    measure: "touche du carnet, temps réel ou différé 15 min",
+    async prefetch(lines, ownTab) {
+      try {
+        const stats = await loadQuestrade(lines, ownTab);
+        console.error(
+          `    Questrade : ${stats.books} carnets / ${stats.quoted} cotations (${stats.wanted} symboles)\n`
+        );
+      } catch (e) {
+        delayedTrouble.questrade = String(e.message || e).slice(0, 160);
+        console.error(`    Questrade : ${delayedTrouble.questrade}\n`);
+      }
+    },
+    async fetch(l) {
+      const symbol = questradeSymbol(l);
+      if (!symbol) return { spreadBp: null, note: "ticker manquant, clé du symbole Questrade" };
+      const quote = delayedQuotes.questrade.get(symbol);
+      if (!quote) {
+        return {
+          spreadBp: null,
+          note: delayedTrouble.questrade || `${symbol} absent de la cote Questrade`,
+        };
+      }
+      // The suffix does not name the venue — TSX and Cboe Canada share `.TO` — so the feed
+      // the quote arrived under has to agree with the place the row claims. Without this
+      // the two would swap books silently, which is the one thing this file is for.
+      const want = QUESTRADE_FEED[l.venue.mic];
+      if (quote.feed && want && quote.feed !== want) {
+        return { spreadBp: null, note: `${symbol} cote sur ${quote.feed}, pas sur ${want}` };
+      }
+      // A halted book has a touch, and it is not the one a trade would meet.
+      if (quote.halt) return { spreadBp: null, note: "titre suspendu" };
+      return { spreadBp: bpFrom(quote.bid, quote.ask), bid: quote.bid, ask: quote.ask };
+    },
+  },
+
+  // The whole Binance touch arrives in one call, some three thousand seven hundred
+  // pairs, so the coins are free of charge once the file is in hand.
+  binance: {
+    measure: "touche du carnet, temps réel",
+    digits: 4,
+    async prefetch() {
+      try {
+        const n = await loadBinance();
+        console.error(`    Binance : ${delayedQuotes.binance.size} carnets sur ${n} paires\n`);
+      } catch (e) {
+        delayedTrouble.binance = String(e.message || e).slice(0, 160);
+        console.error(`    Binance : ${delayedTrouble.binance}\n`);
+      }
+    },
+    async fetch(l) {
+      const quote = delayedQuotes.binance.get(l.ticker);
+      if (!quote) {
+        return { spreadBp: null, note: delayedTrouble.binance || `${l.ticker} non coté contre le dollar chez Binance` };
+      }
+      return { spreadBp: bpFrom(quote.bid, quote.ask), bid: quote.bid, ask: quote.ask, tradingCurrency: CRYPTO_CCY };
+    },
+  },
+
+  // Coinbase names every product in one call but serves the touch one product at a time,
+  // so only the coins this run actually wants are asked for, and slowly enough that the
+  // exchange does not start refusing.
+  coinbase: {
+    measure: "touche du carnet, temps réel",
+    digits: 4,
+    async prefetch(lines) {
+      try {
+        const stats = await loadCoinbase(lines);
+        console.error(
+          `    Coinbase : ${delayedQuotes.coinbase.size} carnets / ${stats.listed} paires en dollar (${stats.wanted} demandées)\n`
+        );
+      } catch (e) {
+        delayedTrouble.coinbase = String(e.message || e).slice(0, 160);
+        console.error(`    Coinbase : ${delayedTrouble.coinbase}\n`);
+      }
+    },
+    async fetch(l) {
+      const quote = delayedQuotes.coinbase.get(l.ticker);
+      if (!quote) {
+        return { spreadBp: null, note: delayedTrouble.coinbase || `${l.ticker} non coté contre le dollar chez Coinbase` };
+      }
+      return { spreadBp: bpFrom(quote.bid, quote.ask), bid: quote.bid, ask: quote.ask, tradingCurrency: CRYPTO_CCY };
+    },
+  },
 };
+
+// -------------------------------------------------------------------------- crypto
+
+const BINANCE_BOOK = "https://api.binance.com/api/v3/ticker/bookTicker";
+const COINBASE_PRODUCTS = "https://api.coinbase.com/api/v3/brokerage/market/products?limit=1000";
+const COINBASE_BOOK = (id) =>
+  `https://api.coinbase.com/api/v3/brokerage/market/product_book?product_id=${encodeURIComponent(id)}&limit=1`;
+
+// Binance settles in its own dollar token rather than in dollars. USDT is the deep leg
+// and USDC the thin one, so the first is taken and the second only stands in where the
+// first does not exist. Either way the pair is read as a dollar book, which is what the
+// market itself means by it.
+async function loadBinance() {
+  const rows = await (await fetchOk(BINANCE_BOOK, 60000)).json();
+  const best = new Map();
+  for (const r of rows) {
+    const symbol = String(r.symbol || "");
+    const quote = symbol.endsWith("USDT") ? "USDT" : symbol.endsWith("USDC") ? "USDC" : null;
+    if (!quote) continue;
+    const base = symbol.slice(0, -4);
+    if (!base || (quote === "USDC" && best.has(base))) continue;
+    const bid = Number(r.bidPrice);
+    const ask = Number(r.askPrice);
+    if (!(bid > 0) || !(ask > 0)) continue;
+    best.set(base, { bid, ask, pair: symbol });
+  }
+  delayedQuotes.binance = best;
+  return rows.length;
+}
+
+// One request per coin, which is why the directory is read first: asking for a product
+// Coinbase does not list would spend a round trip to learn nothing. The pause is what
+// keeps four hundred calls from looking like an attack.
+async function loadCoinbase(lines) {
+  const products = (await (await fetchOk(COINBASE_PRODUCTS, 60000)).json()).products || [];
+  const usd = new Map();
+  for (const p of products) {
+    if (p.status !== "online" || p.trading_disabled || p.is_disabled) continue;
+    if (String(p.quote_display_symbol || "").toUpperCase() !== CRYPTO_CCY) continue;
+    usd.set(String(p.base_display_symbol || "").toUpperCase(), p.product_id);
+  }
+  const wanted = [...new Set(lines.map((l) => l.ticker))].filter((t) => usd.has(t));
+  for (const base of wanted) {
+    try {
+      const book = (await (await fetchOk(COINBASE_BOOK(usd.get(base)), 20000)).json()).pricebook;
+      const bid = Number(book?.bids?.[0]?.price);
+      const ask = Number(book?.asks?.[0]?.price);
+      if (bid > 0 && ask > 0) delayedQuotes.coinbase.set(base, { bid, ask, pair: usd.get(base) });
+    } catch {
+      // One coin's silence is not the exchange's: the others are still worth asking for.
+    }
+    await new Promise((r) => setTimeout(r, 120));
+  }
+  return { listed: usd.size, wanted: wanted.length };
+}
 
 // ------------------------------------------------------------------------- resolve
 
@@ -1772,9 +2120,13 @@ async function visit(l, ownTab) {
 
   // Per-share sources are rounded finer because their whole range lives in thousandths
   // of a dollar: two decimals would round IAU's 0.0018 to nothing.
+  // A crypto book is finer still: bitcoin's tick is a cent on seventy-seven thousand
+  // dollars, which is thirteen ten-thousandths of a basis point. Two decimals turn that
+  // into a zero, and the guard below then throws it out as a locked book.
   const byShare = adapter.unit === "perShare";
+  const digits = adapter.digits ?? (byShare ? 5 : 2);
   const raw = byShare ? measured.perShare : measured.spreadBp;
-  const reading = raw == null ? null : Number(raw.toFixed(byShare ? 5 : 2));
+  const reading = raw == null ? null : Number(raw.toFixed(digits));
   // A zero spread is an auction or a locked book, not a free trade, so it is not
   // allowed into the history. A non-positive effective spread says the month's fills
   // averaged at or better than the midpoint, which is a real thing to observe and still
@@ -1829,7 +2181,7 @@ async function visit(l, ownTab) {
       ? null
       : byShare
         ? { perShare: Number(average.toFixed(5)), url: page }
-        : { bp: Number((average * CROSSED[l.source]).toFixed(2)), url: page };
+        : { bp: Number((average * CROSSED[l.source]).toFixed(digits)), url: page };
   publish(l, cost ?? (stale ? null : leafOf(l)));
   if (shape) shapes[`${l.isin}|${l.currency}`] = shape;
 

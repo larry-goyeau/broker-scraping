@@ -261,7 +261,90 @@ export const VENUES = [
     exact: ["xmex", "xbmv", "mexi", "bmv", "mexico", "bolsamexicana"],
     loose: [],
   },
+  // Canada publishes no free pre-trade book of its own: TMX serves bid and ask only to a
+  // signed-in watchlist, Cboe Canada behind a member key, and there is no Rule 605 here.
+  // The touch does reach the screen of anyone holding a Questrade account, and a figure a
+  // broker displays is still a fact about the exchange, so the adapter reads it there. It
+  // names the venue it came from, which is what lets these four stay four.
+  //
+  // TSX and Cboe Canada share the `.TO` suffix in that symbol space, so the venue is
+  // settled by the feed the quote arrives under, never by the ticker.
+  {
+    mic: "XTSE",
+    name: "Toronto Stock Exchange",
+    source: "questrade",
+    hours: { open: "09:30", close: "16:00", tz: "America/Toronto" },
+    exact: ["xtse", "tsx", "toronto", "tor", "torontostockexchange"],
+    loose: [],
+  },
+  {
+    mic: "XTSX",
+    name: "TSX Venture",
+    source: "questrade",
+    hours: { open: "09:30", close: "16:00", tz: "America/Toronto" },
+    exact: ["xtsx", "tsxv", "tsxventure", "tsv", "venture"],
+    loose: [],
+  },
+  // Free only on a 15-minute delay: the account is entitled to TSX and TSX Venture live,
+  // and reads these two late. Same book either way, an older look at it.
+  {
+    mic: "XCNQ",
+    name: "Canadian Securities Exchange",
+    source: "questrade",
+    hours: { open: "09:30", close: "16:00", tz: "America/Toronto" },
+    // "cse" is deliberately absent: Saxo writes it for Copenhagen. `resolveVenue` splits
+    // on the krone before letting it reach here.
+    exact: ["xcnq", "cnsx", "canadiansecuritiesexchange"],
+    loose: [],
+  },
+  {
+    mic: "NEOE",
+    name: "Cboe Canada",
+    source: "questrade",
+    hours: { open: "09:30", close: "16:00", tz: "America/Toronto" },
+    exact: ["neoe", "neo", "cboecanada"],
+    loose: [],
+  },
+
+  // The two spot books a crypto line can be priced against without a key. Neither has a
+  // MIC: these four letters are this file's own, chosen to sit in the same column as the
+  // real ones. Nineteen catalogues in this repository carry crypto, 711 distinct coins
+  // between them, and no broker among them publishes the book it executes against — so
+  // the reference market is the only thing there is to measure, and it is a fact about
+  // the market rather than about any one broker.
+  //
+  // No hours: the book never closes, and `sessionState` answers `null` rather than
+  // `false` for a venue without them, which is what lets a snapshot be taken at any hour.
+  //
+  // Neither covers the shelf alone — 49 % of the coins here are on Coinbase and 53 % on
+  // Binance, 72 % on one or the other — so a crypto line is read on both and stored
+  // twice, like a fund listed on two exchanges.
+  {
+    mic: "BINA",
+    name: "Binance",
+    source: "binance",
+    hours: null,
+    exact: ["binance", "bina"],
+    loose: [],
+  },
+  {
+    mic: "CBSE",
+    name: "Coinbase",
+    source: "coinbase",
+    hours: null,
+    exact: ["coinbase", "cbse", "gdax", "coinbasepro"],
+    loose: [],
+  },
 ];
+
+// A coin has no ISIN, so `spread.json` keys it the way the front already does, by
+// `CRYPTO:<base>`. Both books are stored in dollars: Coinbase quotes USD outright and
+// Binance's USDT leg is read as one, which is the market's own convention and costs a
+// few hundredths of a basis point.
+export const CRYPTO_MICS = ["CBSE", "BINA"];
+export const CRYPTO_CCY = "USD";
+export const cryptoId = (base) => `CRYPTO:${String(base || "").toUpperCase()}`;
+export const isCryptoId = (id) => String(id || "").startsWith("CRYPTO:");
 
 // Places that exist in broker catalogues but publish no free pre-trade book, or have
 // no adapter yet. Naming them keeps a gap distinguishable from a lookup that failed,
@@ -296,6 +379,10 @@ export const KNOWN_UNSOURCED = [
   // write TSE for Tokyo. `resolveVenue` splits on CAD/CA vs JPY/JP before
   // falling through to this leftover.
   { match: ["tse"], name: "TSE (Toronto ou Tokyo)", why: "le sigle nomme les deux places" },
+  // Saxo writes CSE for Copenhagen; Questrade, DEGIRO and N26 write it for the Canadian
+  // Securities Exchange. `resolveVenue` splits on the currency and the ISIN before
+  // falling through to this leftover.
+  { match: ["cse"], name: "CSE (Canada ou Copenhague)", why: "le sigle nomme les deux places" },
   { match: ["hkex", "sehk", "hongkong", "hks"], name: "Hong Kong", why: "adaptateur non écrit" },
   { match: ["sehkszse"], name: "Stock Connect Shenzhen", why: "adaptateur non écrit" },
   { match: ["sehkntl", "sehkstar"], name: "Stock Connect Shanghai", why: "adaptateur non écrit" },
@@ -309,8 +396,6 @@ export const KNOWN_UNSOURCED = [
     why: "bande officielle payante (UMDF) ; le différé public n'inclut pas la touche",
   },
   { match: ["xmuc"], name: "Börse München (plancher)", why: "adaptateur non écrit" },
-  { match: ["tsx", "xtse", "toronto", "tor"], name: "Toronto Stock Exchange", why: "adaptateur non écrit" },
-  { match: ["tsxv", "xtsx", "tsxventure", "tsv", "venture"], name: "TSX Venture", why: "adaptateur non écrit" },
   {
     match: ["aeqlit", "xats", "alpha"],
     name: "Alpha Exchange",
@@ -326,7 +411,6 @@ export const KNOWN_UNSOURCED = [
     why: "le broker ne dit pas laquelle des places nordiques",
   },
   { match: ["xcse", "copenhagen", "omk"], name: "Nasdaq Copenhagen", why: "adaptateur non écrit" },
-  { match: ["cse", "cnsx"], name: "Canadian Securities Exchange", why: "adaptateur non écrit" },
   { match: ["xsto", "stockholm", "sfb"], name: "Nasdaq Stockholm", why: "adaptateur non écrit" },
   { match: ["xhel", "helsinki", "hse"], name: "Nasdaq Helsinki", why: "adaptateur non écrit" },
   { match: ["sgx", "xses", "singapore", "sgxst"], name: "Singapore Exchange", why: "adaptateur non écrit" },
@@ -348,7 +432,6 @@ export const KNOWN_UNSOURCED = [
   { match: ["bx", "bxswiss"], name: "BX Swiss", why: "adaptateur non écrit" },
   { match: ["bvc", "colombia"], name: "Bolsa de Valores de Colombia", why: "adaptateur non écrit" },
   { match: ["bsesof", "xbul", "sofia"], name: "Bulgarian Stock Exchange", why: "adaptateur non écrit" },
-  { match: ["neo", "neoe"], name: "Cboe Canada", why: "adaptateur non écrit" },
   { match: ["tadawul"], name: "Tadawul", why: "adaptateur non écrit" },
   { match: ["shanghaisc", "shenzhensc", "chinext"], name: "bourses chinoises onshore", why: "adaptateur non écrit" },
   { match: ["csefndk"], name: "Nasdaq First North Denmark", why: "adaptateur non écrit" },
@@ -397,10 +480,23 @@ export function resolveVenue(row) {
     const ccy = String(row.currency || "").toUpperCase();
     const isin = String(row.isin || "").toUpperCase();
     if (ccy === "CAD" || isin.startsWith("CA")) {
-      return { venue: null, unsourced: KNOWN_UNSOURCED.find((u) => u.match.includes("tsx")) };
+      return { venue: VENUES.find((v) => v.mic === "XTSE"), assumed: false };
     }
     if (ccy === "JPY" || isin.startsWith("JP")) {
       return { venue: null, unsourced: KNOWN_UNSOURCED.find((u) => u.match.includes("tokyo")) };
+    }
+  }
+  // The same split for CSE. Danish evidence wins first: a Copenhagen line sent to the
+  // Canadian adapter would come back with a real figure for the wrong book, while a
+  // Canadian line left with Copenhagen only comes back empty.
+  if (names.includes("cse")) {
+    const ccy = String(row.currency || "").toUpperCase();
+    const isin = String(row.isin || "").toUpperCase();
+    if (ccy === "DKK" || /^(DK|FO|GL)/.test(isin)) {
+      return { venue: null, unsourced: KNOWN_UNSOURCED.find((u) => u.match.includes("xcse")) };
+    }
+    if (ccy === "CAD" || isin.startsWith("CA")) {
+      return { venue: VENUES.find((v) => v.mic === "XCNQ"), assumed: false };
     }
   }
   for (const n of names) {
@@ -442,6 +538,18 @@ const US_MICS = ["XNAS", "ARCX", "XNYS", "XASE", "BATS"];
 export function spreadLeaf(spreads, { isin, mic, currency, unsourced }) {
   const id = String(isin || "").toUpperCase();
   const ccy = String(currency || "").toUpperCase();
+  // A coin is read in dollars on both books whatever fiat the broker prices it in: what
+  // a round trip costs as a fraction of the amount belongs to the pair, not to the leg
+  // it settles in. A broker that names its venue gets that one; a broker that names
+  // neither — which is all of them — gets the wider of the two, since it could be on
+  // either and this file answers with the pessimistic case elsewhere too.
+  if (isCryptoId(id)) {
+    if (mic && spreads[id]?.[mic]?.[CRYPTO_CCY]) return { leaf: spreads[id][mic][CRYPTO_CCY], mic };
+    const found = CRYPTO_MICS.map((m) => ({ m, leaf: spreads[id]?.[m]?.[CRYPTO_CCY] })).filter((x) => x.leaf);
+    if (!found.length) return { leaf: null, mic: mic || null };
+    const worst = found.reduce((a, b) => ((b.leaf.bp ?? -1) > (a.leaf.bp ?? -1) ? b : a));
+    return { leaf: worst.leaf, mic: worst.m, assumed: true };
+  }
   if (id && mic && spreads[id]?.[mic]?.[ccy]) return { leaf: spreads[id][mic][ccy], mic };
   // Rule 605 is a monthly average for the symbol, not a per-MIC book. A US
   // line stored under BATS (Trading212) is the same tape as Swissquote's AMEX → ARCX.
@@ -498,6 +606,23 @@ const PAGE = {
   hannover: () => "https://cld42.boersenag.de/m13data/indexpt.html",
   stuttgart: () =>
     "https://www.boerse-stuttgart.de/en/business-solutions/reports/mifir-ii-delayed-data/xstu-pre-trade/",
+  // Behind a login, unlike every other link here, because that is where the Canadian
+  // touch is actually shown. Pointing at a TMX page instead would name a source the
+  // figure did not come from.
+  questrade: (l) =>
+    l.ticker
+      ? `https://my.questrade.com/trading/quote/${encodeURIComponent(String(l.ticker).toUpperCase())}`
+      : "https://my.questrade.com/trading",
+  // The coin's own page on each exchange. `ticker` holds the base, the pair is rebuilt
+  // the way each venue spells it: Binance glues USDT to it, Coinbase hyphenates USD.
+  binance: (l) =>
+    l.ticker
+      ? `https://www.binance.com/en/trade/${encodeURIComponent(String(l.ticker).toUpperCase())}_USDT`
+      : "https://www.binance.com/en/markets",
+  coinbase: (l) =>
+    l.ticker
+      ? `https://www.coinbase.com/advanced-trade/spot/${encodeURIComponent(String(l.ticker).toUpperCase())}-USD`
+      : "https://www.coinbase.com/advanced-trade/spot",
   bmv: (l) =>
     l.ticker
       ? `https://www.bmv.com.mx/es/emisoras/estadisticas/${encodeURIComponent(

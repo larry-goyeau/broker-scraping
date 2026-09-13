@@ -299,7 +299,7 @@
               planRank: Number(b.planRank) || 0,
               brokerName: b.name || "",
               exchange: crypto ? "" : l.exchange || "—",
-              currency: l.currency || "N/A",
+              currency: l.currency || (crypto ? "" : "N/A"),
               spread: l.spread || "N/A",
               perShare: l.perShare || "N/A",
               perOrder: l.perOrder || "N/A",

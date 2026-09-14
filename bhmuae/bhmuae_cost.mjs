@@ -1,10 +1,7 @@
 // What one round trip costs at BHM Capital: buy n shares at price p, sell
-// them back at once.
-//
-//   coût (USD) = a × toUsd(p) × n + b × n + c
-//
-// `a` is a fraction of the amount. `b` and `c` are dollars, the same unit the
-// other `*_cost.mjs` files answer in.
+// them back at once. `roundTrip()` answers the bill in dollars rather than an
+// affine triple, so the percentage, the flat order fee and its VAT land in one
+// number instead of three the caller has to reassemble.
 //
 // BHM Capital Financial Services PJSC (AE, SCA). The catalogue is Rubix
 // (`trading.bhmuae.ae`, `bhmuae_scraping.mjs`). This login's book is DFM and Nasdaq
@@ -13,25 +10,51 @@
 // International executions (US 0.03 $ / share, KSA 0.22 %, …) sit further
 // down the same page and are not copied — they are not in this book.
 //
-// The printed % × 2 sits in `a`. VAT is charged line by line on the card
-// (most 5 %, DFM CMA 0 %) and is folded into that rate. DFM and Nasdaq
-// Dubai also print a flat ORDER FEE (10 AED / 3 USD / 10 AED), plus VAT;
-// that is a ticket every time, not a minimum of the %, so it lives in `c`
-// (`cAed` / `cUsd` stay as the source figure). ADX has no order fee.
-// `exactCost` adds % and ticket. No live trip is in this deposit yet.
+// VAT is charged line by line on the card (most 5 %, DFM CMA 0 %) and is folded
+// into the rate. DFM and Nasdaq Dubai also print a flat ORDER FEE (10 AED /
+// 3 USD / 10 AED), plus VAT; that is a ticket every time, not a minimum of the
+// percentage, so it is charged on each leg whatever the size. ADX has no order
+// fee. No live trip is in this deposit yet.
+//
+// The card was read again on 2026-09-14 against the four UAE tables, and the
+// local block needed no correction. It was also read against Al Ramz's card,
+// which prices the same exchanges: the two agree, line for line, on what DFM,
+// the CDS and the regulator take, and on the 0,125 each keeps for itself. The
+// one thing they do not share is the flat fee — Al Ramz floors its commission
+// at ten dirhams, BHM charges ten dirhams on top of it — which is what settles
+// the ticket as BHM's own money rather than the exchange's.
+//
+// What the reading settled is as much what is absent as what is there:
+//
+//   no minimum      The "Minimum (per transaction)" column exists on the page,
+//                   but only for Bahrain and Amman through the Tabadul hub and
+//                   for the international card (USD 18 on America, GBP 50 on
+//                   London, and so on). None of the three UAE tables has one,
+//                   so a one-share order pays the ticket and the percentage of
+//                   almost nothing, and that is the whole bill.
+//   no custody      The safe custody tables price fifteen foreign markets a
+//                   year — mostly 0.05 %, 0.2 % on Kuwait, free on Saudi and
+//                   America — and the UAE is on neither list. Nothing to leave
+//                   out of the trip, because nothing is charged.
+//   no data fee     The market data subscriptions price Saudi, Kuwait, Qatar,
+//                   Oman, Bahrain, Egypt, London and the American tapes. DFM
+//                   and Nasdaq Dubai are not on that list either.
+//
+// Withdrawing says only "bank charges may apply on cash transfers", with no
+// figure, and a withdrawal prices moving cash out rather than trading anyway.
 //
 //   https://www.bhmuae.ae/pricing/
 //
-//   node bhmuae/bhmuae_cost.mjs CHAE
-//   node bhmuae/bhmuae_cost.mjs AIRARABIA DFM AED --shares=1 --price=3
-//   node bhmuae/bhmuae_cost.mjs ABTC NASDAQDUBAI USD --shares=1 --price=20
+//   node bhmuae/bhmuae_cost.mjs CHAE --shares=100 --price=2
+//   node bhmuae/bhmuae_cost.mjs AIRARABIA DFM AED --shares=1000 --price=3
+//   node bhmuae/bhmuae_cost.mjs ABTC NASDAQDUBAI USD --shares=100 --price=20
 //   node bhmuae/bhmuae_cost.mjs --schedule
 //
-// `roundTripCost(...)` reads files, not the network.
+// `roundTrip(...)` reads files, not the network.
 
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite, bookParts } from "../na.mjs";
+import { plus, finite } from "../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
@@ -40,7 +63,7 @@ const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://www.bhmuae.ae/pricing/",
-  readOn: "2026-09-10",
+  readOn: "2026-09-14",
   entity: "BHM Capital Financial Services PJSC (AE)",
 };
 
@@ -122,8 +145,30 @@ export function ticketOf(rule) {
   return rule.ticket * (1 + (rule.ticketVat || 0));
 }
 
+// The share of the rate BHM keeps. Every other line names its counterparty —
+// MARKET is the exchange, CMA the regulator, DIFX is Nasdaq Dubai — and each
+// would be charged whoever carried the order, so none of them is BHM's. The VAT
+// on the broker line goes to the state rather than to BHM, but it exists only
+// because the commission does and leaves with it, so it counts as the price of
+// choosing this broker.
+//
+// Al Ramz settles what the labels leave open. Its card breaks DFM into courtier
+// 0,125 + marché 0,050 + SCA 0,050 + CDS 0,050, and BHM's three lines are the
+// same money under two names: BHM's single MARKET 0,100 is Al Ramz's marché and
+// CDS together, BHM's CMA is Al Ramz's SCA, and the two brokers charge the very
+// same 0,125 for themselves. ADX matches line for line. Two cards written
+// independently agree on what DFM and the regulator take, which is as close to
+// a second source as this deposit will get without a live trip.
+export function brokerRateOf(rule) {
+  if (!rule?.parts) return 0;
+  return rule.parts
+    .filter((line) => line.name === "BROKER")
+    .reduce((sum, line) => sum + line.rate * (1 + (line.vat || 0)), 0);
+}
+
 function remarkOf() {
-  // Ticket + VAT already sit in `c` (10 AED × 1.05 × 2 → the order column).
+  // Nothing to warn about: the percentage, the ticket and its VAT are all in
+  // the total, and the card charges the UAE block no custody and no data fee.
   return "";
 }
 
@@ -188,41 +233,17 @@ function coverage() {
   return out;
 }
 
-export function commissionEach({ amount, market }) {
-  const rule = RULE[market];
-  if (!rule) return null;
-  const pct = amount != null && Number.isFinite(Number(amount)) ? Number(amount) * rateOf(rule) : 0;
-  return pct + ticketOf(rule);
-}
-
-export function exactCost({ shares, price, market, currency }) {
-  const rule = RULE[market];
-  if (!rule) return { commission: null, currency: QUOTE };
-  const amount = shares != null && price != null ? Number(shares) * Number(price) : null;
-  const each = commissionEach({ amount, market });
-  if (each == null) return { commission: null, currency: QUOTE, rule };
-  const ccy = rule.ticketCcy || currency || "AED";
-  return {
-    commission: dollars(each * 2, amount != null ? currency || ccy : ccy),
-    currency: QUOTE,
-    native: { each, roundTrip: each * 2, currency: currency || ccy },
-    rule,
-  };
-}
-
-export function roundTripCost({ etf, place, currency, bp = null, perShare = null }) {
+export function roundTrip({ etf, place, currency, shares, price, bp = null, perShare = null }) {
   const { named, matches } = findListing({ etf, place, currency });
   const answer = {
-    a: null,
-    b: 0,
-    c: 0,
+    usd: null,
+    brokerFees: null,
     ccy: QUOTE,
-    floor: null,
-    cap: null,
-    threshold: null,
     etf,
     place,
     currency,
+    onlineBuy: true,
+    cashCurrency: "",
   };
 
   if (!catalogue) {
@@ -280,41 +301,15 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
   const rates = taxRates(tax);
   const taxTotal = Object.values(rates).reduce((s, r) => s + r, 0);
   const commissionPct = rateOf(rule) * 2;
-  const knownPct = taxTotal + commissionPct;
-  const mkt = bookParts({
-    bp: marketBp,
-    perShare: marketPerShare,
-    venue: m.venue,
-    unsourced: m.unsourced,
-    toUsd: (x) => (american ? x : dollars(x, listing.currency)),
-  });
-  const a = plus(mkt.a, knownPct);
-  const bookUsd = mkt.b;
   const ticketEach = ticketOf(rule);
   const ticketCcy = rule.ticketCcy || listing.currency;
-  const ticketUsd = ticketEach ? dollars(ticketEach * 2, ticketCcy) ?? 0 : 0;
 
-  return {
+  const shared = {
     ...answer,
-    a: finite(a, 4),
-    b: finite(bookUsd, 6),
-    c: Number(ticketUsd.toPrecision(6)),
-    floor: null,
     listing,
     feeMarket: market,
+    cashCurrency: listing.currency,
     remark: remarkOf(),
-    parts: {
-      marché:
-        marketBp != null
-          ? Number((marketBp / 1e4).toPrecision(4))
-          : marketPerShare != null
-            ? `${marketPerShare} par part`
-            : null,
-      taxes: Object.keys(rates).length ? rates : null,
-      commission: commissionPct,
-      ticket: ticketEach || null,
-      ticketCurrency: ticketEach ? ticketCcy : null,
-    },
     bp: marketBp,
     perShare: marketPerShare,
     url: leaf?.url ?? SCHEDULE.source,
@@ -322,32 +317,94 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
     tax,
     commission: {
       rate: rateOf(rule),
+      brokerRate: brokerRateOf(rule),
       ticket: ticketEach || null,
       ticketPrinted: rule.ticket ?? null,
       currency: ticketCcy,
       eachWay: true,
       parts: rule.parts,
     },
-    cAed: ticketCcy === "AED" ? ticketEach * 2 : null,
-    cUsd: ticketCcy === "USD" ? ticketEach * 2 : null,
     ccy: QUOTE,
-    cap: null,
-    threshold: null,
     fx: fxNote(listing.currency),
-    fxIfConverted: 0,
-    confidence:
-      `commission ${market} selon la carte BHM du ${SCHEDULE.readOn} ` +
-      `(bhmuae.ae/pricing). ` +
-      `${(rateOf(rule) * 100).toFixed(3)} % par jambe, TVA des lignes pliée dans a` +
-      (ticketEach
-        ? `, ticket ${rule.ticket} ${rule.ticketCcy} + TVA dans c`
-        : ", pas de ticket") +
-      `. a = carnet` +
-      (taxTotal ? ` + taxes` : "") +
-      ` + ${(commissionPct * 100).toFixed(3)} % de courtage` +
-      `. b = 0, c = ticket. Aucun aller-retour réel chez BHM dans ce dépôt. ` +
-      (leaf ? "" : `Pas de feuille de carnet pour cet ISIN / cette place. `),
+    // The card prices no conversion. Nasdaq Dubai quotes the same line in both
+    // AED and USD and the account holds both, so which side the client funds is
+    // his own affair and never lands in `usd`.
+    fxIfConverted: null,
+    confidence: confidenceOf({ market, rule, leaf, taxTotal, commissionPct, ticketEach }),
   };
+
+  const n = Number(shares);
+  const p = Number(price);
+  if (!(n > 0) || !(p > 0)) {
+    return {
+      ...shared,
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+    };
+  }
+
+  const notional = dollars(n * p, listing.currency);
+
+  // The book is already a round trip, so it is counted once rather than per leg.
+  const bookUsd =
+    marketBp != null && notional != null
+      ? (notional * marketBp) / 1e4
+      : marketPerShare != null
+        ? american
+          ? marketPerShare * n
+          : dollars(marketPerShare * n, listing.currency)
+        : null;
+
+  // Percentage and taxes scale with the amount; the ticket does not, and is
+  // charged whole on each leg however small the order.
+  const commissionUsd = notional != null ? notional * commissionPct : null;
+  const ticketUsd = ticketEach ? (dollars(ticketEach * 2, ticketCcy) ?? null) : 0;
+  const taxUsd = notional != null ? notional * taxTotal : 0;
+
+  const usd = plus(bookUsd, commissionUsd, ticketUsd, taxUsd);
+  // The ticket is BHM's too. Al Ramz trades the same exchanges and prints the
+  // same ten dirhams and three dollars as a floor under its commission, never
+  // as a charge on top: DFM levies no flat fee per order, or Al Ramz's clients
+  // would pay it as well. What BHM adds there it adds for itself.
+  const brokerUsd = plus(notional != null ? notional * brokerRateOf(rule) * 2 : null, ticketUsd);
+
+  return {
+    ...shared,
+    usd: finite(usd, 6),
+    brokerFees: finite(brokerUsd, 6),
+    trade: { shares: n, price: p, currency: listing.currency, notional: n * p, notionalUsd: notional },
+    parts: {
+      marché: finite(bookUsd, 6),
+      courtage: finite(commissionUsd, 6),
+      ticket: ticketUsd || null,
+      taxes: Object.keys(rates).length ? finite(taxUsd, 6) : null,
+    },
+    ...(bookUsd == null
+      ? { why: `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ${m.unsourced?.why || "pas de feuille de carnet"}` }
+      : {}),
+  };
+}
+
+function confidenceOf({ market, rule, leaf, taxTotal, commissionPct, ticketEach }) {
+  const said = [
+    `Barème ${market} de la carte BHM du ${SCHEDULE.readOn} (bhmuae.ae/pricing) : ` +
+      `${(rateOf(rule) * 100).toFixed(4)} % par jambe, TVA de chaque ligne comprise` +
+      (ticketEach
+        ? `, plus un ticket de ${rule.ticket} ${rule.ticketCcy} + TVA par ordre.`
+        : `, et pas de ticket sur cette place.`),
+    `Total = carnet + ${(commissionPct * 100).toFixed(4)} % de courtage` +
+      (ticketEach ? ` + ticket × 2` : "") +
+      (taxTotal ? ` + taxes` : "") +
+      `.`,
+    `Frais courtier = la ligne BROKER, ${(brokerRateOf(rule) * 200).toFixed(4)} % sur l'aller-retour` +
+      (ticketEach ? `, plus le ticket` : "") +
+      `. Le reste de la carte nomme l'échange, le régulateur ou Nasdaq Dubaï, ` +
+      `et la carte d'Al Ramz reverse exactement les mêmes montants sur les mêmes places.`,
+    `Le bloc émirati ne porte ni minimum par transaction, ni frais de garde, ni abonnement de données : ` +
+      `les trois colonnes existent sur la page mais s'arrêtent aux marchés voisins et à la carte internationale.`,
+    `Aucun aller-retour réel chez BHM dans ce dépôt.`,
+  ];
+  if (!leaf) said.push(`Pas de feuille de carnet pour cet ISIN sur cette place.`);
+  return said.join(" ; ");
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
@@ -367,17 +424,19 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     console.error(
       "usage : node bhmuae_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--json]\n" +
         "        node bhmuae_cost.mjs --schedule\n" +
-        "  ex.   node bhmuae_cost.mjs CHAE\n" +
+        "  ex.   node bhmuae_cost.mjs CHAE --shares=100 --price=2\n" +
         "        node bhmuae_cost.mjs AIRARABIA DFM AED --shares=1 --price=3\n" +
         "        node bhmuae_cost.mjs ABTC NASDAQDUBAI USD --shares=1 --price=20"
     );
     process.exit(2);
   }
 
-  const out = roundTripCost({
+  const out = roundTrip({
     etf,
     place,
     currency,
+    shares: flag("shares") ? Number(flag("shares")) : null,
+    price: flag("price") ? Number(flag("price")) : null,
     bp: flag("bp") ? Number(flag("bp")) : null,
     perShare: flag("per-share") ? Number(flag("per-share")) : null,
   });
@@ -387,8 +446,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     process.exit(0);
   }
 
-  if (out.a == null && !out.listing) {
-    console.log(`a = null   b = ${out.b}   c = ${out.c}\n${out.why}`);
+  const show = (x) => (x == null ? "N/A" : x);
+
+  if (!out.listing) {
+    console.log(out.why);
     if (out.alternatives?.length) {
       console.log(`\nce que BHM propose sous ce nom :\n  ${out.alternatives.join("\n  ")}`);
     }
@@ -398,51 +459,36 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const l = out.listing;
   console.log(`${l.ticker || l.isin} — ${l.name || ""}`);
   console.log(
-    `${l.exchange}${l.mic ? ` (${l.mic})` : ""}, ${l.currency}${l.type ? `, ${l.type.toLowerCase()}` : ""}\n`
+    `${l.exchange}${l.mic ? ` (${l.mic})` : ""}, ${l.currency}${l.type ? `, ${l.type.toLowerCase()}` : ""}` +
+      `  [${out.feeMarket}]\n`
   );
 
-  const detail = [];
-  if (out.parts?.marché != null) detail.push(`carnet ${out.parts.marché}`);
-  for (const [name, rate] of Object.entries(out.parts?.taxes ?? {})) detail.push(`${name} ${rate}`);
-  if (out.parts?.commission) detail.push(`courtage ${out.parts.commission}`);
-
-  console.log(`a = ${out.a}   (au prorata${detail.length ? " : " + detail.join(" + ") : " : rien"})`);
-  console.log(`b = ${out.b} $   (par part : rien)`);
-  console.log(
-    `c = ${out.c} $   (par ordre` +
-      (out.parts?.ticket
-        ? ` : ticket ${out.commission?.ticketPrinted} ${out.parts.ticketCurrency} + TVA × 2`
-        : " : rien") +
-      `)`
-  );
-  if (out.why) console.log(out.why);
-  const fx = out.fx?.listing ?? usdPer(l.currency);
-  console.log(
-    `\ncoût = ${out.a} × p × n × ${fx != null ? Number(fx.toPrecision(6)) : "?"} + ${out.b} × n + ${out.c}   ($ ; p en ${l.currency})`
-  );
-  console.log(`  ${out.basis}`);
-  for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
-
-  const n = Number(flag("shares"));
-  const p = Number(flag("price"));
-  if (n > 0 && p > 0) {
-    const amount = n * p;
-    const amountUsd = toUsd(amount, l.currency);
-    const affine = amountUsd != null && out.a != null ? out.a * amountUsd + out.b * n + out.c : null;
-    const billed = exactCost({ shares: n, price: p, market: out.feeMarket, currency: l.currency });
+  if (out.trade) {
+    const t = out.trade;
     console.log(
-      `\n${n} part${n > 1 ? "s" : ""} à ${p} ${l.currency} = ${amount.toFixed(2)} ${l.currency}` +
-        (amountUsd != null ? ` (${amountUsd.toFixed(2)} $)` : "")
+      `${t.shares} part${t.shares > 1 ? "s" : ""} à ${t.price} ${t.currency} = ${t.notional.toFixed(2)} ${t.currency}` +
+        (t.notionalUsd != null ? ` (${t.notionalUsd.toFixed(2)} $)` : "") +
+        "\n"
     );
-    if (affine != null) console.log(`  a, b, c        : ${affine.toFixed(4)} $`);
-    if (billed.commission != null) {
+    console.log(`aller-retour     : ${out.usd == null ? `N/A — ${out.why}` : `${out.usd} $`}`);
+    console.log(`frais du courtier: ${show(out.brokerFees)} $`);
+    const p = out.parts || {};
+    if (p.marché != null) console.log(`  carnet         : ${p.marché} $`);
+    if (p.courtage != null) console.log(`  courtage       : ${p.courtage} $   (${out.feeMarket}, TVA comprise, les deux jambes)`);
+    if (p.ticket) {
       console.log(
-        `  commission     : ${Number(billed.commission).toFixed(4)} $` +
-          (billed.native?.each != null
-            ? ` (${Number(billed.native.each).toPrecision(4)} ${billed.native.currency} × 2)`
-            : "")
+        `  ticket         : ${p.ticket} $   (${out.commission?.ticketPrinted} ${out.commission?.currency} + TVA × 2)`
       );
     }
+    if (p.taxes) console.log(`  taxes          : ${p.taxes} $`);
+    console.log("");
+  } else if (out.why) {
+    console.log(`aller-retour     : N/A — ${out.why}\n`);
   }
+
+  console.log(`  ${out.basis}`);
+  for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
+  if (out.remark) console.log(`\n${out.remark}`);
+
   if (out.url) console.log(`\n${out.url}`);
 }

@@ -1,0 +1,19 @@
+{
+  "symbol": "MOG",
+  "amount": 25,
+  "buy": {
+    "offerId": "1f1b07c5-a03a-6e60-bd1f-edbe7534e068",
+    "type": "BUY",
+    "price": 0,
+    "amountFiat": 25,
+    "amountAsset": 263072050.173101,
+    "feeFiat": 0.63,
+    "feePct": 2.49,
+    "priceWithoutFee": 0,
+    "taxFiat": null,
+    "isFeeTransparent": true,
+    "expiresAt": "2026-09-14T20:39:35.000+00:00"
+  },
+  "sellPriceWithoutFee": 0,
+  "gap": null
+}

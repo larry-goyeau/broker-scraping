@@ -327,6 +327,12 @@ function fmtUsd(n) {
 function formatTotal(cost, usd) {
   return {
     total: fmtUsd(usd),
+    // The same trip, counting only what the broker bills. Printed beside the
+    // total so that a remark cannot be misread: « 3 free trades » waives the
+    // commission and leaves the spread, the stamp duty and the regulator's
+    // levies exactly where they were. A broker still on the old contract has no
+    // such figure and says N/A here as it does for the total.
+    fees: fmtUsd(cost?.brokerFees),
     remark: String(cost?.remark || "").trim(),
     buyable: cost?.onlineBuy !== false,
     venueExchange: displayExchange(cost?.listing?.exchange || "", {
@@ -335,6 +341,12 @@ function formatTotal(cost, usd) {
       isin: cost?.listing?.isin,
     }),
     venueCurrency: String(cost?.listing?.currency || "").trim().toUpperCase(),
+    // Normally the catalogue names the venue and the estimator only fills a gap.
+    // An estimator may know better: N26's catalogue venue is a csv pick made by
+    // its own scraper, while Upvest publishes the four places it can actually
+    // reach. Where a cost file says so, its venue wins — a false venue is worse
+    // than an absent one.
+    venueAuthoritative: cost?.venueAuthoritative === true,
     cashCurrency: String(cost?.cashCurrency || "").trim().toUpperCase(),
   };
 }
@@ -343,7 +355,7 @@ function formatTotal(cost, usd) {
 // Robinhood is three, and which one serves the reader is decided by residency
 // alone — an American share, a British one plus its conversion, or a Lithuanian
 // derivative over the same line.
-const EMPTY_ROW = { total: NA, remark: "", buyable: true, venueExchange: "", venueCurrency: "", cashCurrency: "" };
+const EMPTY_ROW = { total: NA, fees: NA, remark: "", buyable: true, venueExchange: "", venueCurrency: "", cashCurrency: "", venueAuthoritative: false };
 
 function estimateListing(folder, listing, inst, extra = {}, size = {}) {
   const entry = estimators.get(folder);
@@ -581,23 +593,35 @@ function isWholeWord(text, q, i) {
   return true;
 }
 
-function score(inst, q) {
-  const raw = q.toUpperCase();
-  const { base } = cryptoPair(raw, "");
-  const Q = base && base !== raw ? base : raw;
+// Everything scoring needs that does not depend on the query, worked out once.
+// Every keystroke walks all sixty-odd thousand instruments, so rebuilding a Set
+// and upper-casing a name inside that walk was most of what a search cost.
+function searchable(inst) {
+  if (!inst.searchKeys) {
+    inst.searchKeys = {
+      isins: inst.isins?.size ? [...inst.isins] : inst.isin ? [inst.isin] : [],
+      tickers: [...inst.tickers],
+      name: preferredName(inst).toUpperCase(),
+    };
+  }
+  return inst.searchKeys;
+}
+
+function score(inst, Q) {
+  const { isins, tickers, name: N } = searchable(inst);
   let s = 0;
-  const isins = inst.isins?.size ? inst.isins : new Set(inst.isin ? [inst.isin] : []);
   for (const id of isins) {
     if (id === Q) s = Math.max(s, 120);
     else if (Q.length >= 3 && id.startsWith(Q)) s = Math.max(s, 85);
-    else if (id.includes(Q) && Q.length >= 6) s = Math.max(s, 55);
+    // Length first: a substring scan of every ISIN is wasted on a query too
+    // short to earn the points anyway.
+    else if (Q.length >= 6 && id.includes(Q)) s = Math.max(s, 55);
   }
-  for (const t of inst.tickers) {
+  for (const t of tickers) {
     if (t === Q) s = Math.max(s, 110);
     else if (Q.length >= 3 && t.startsWith(Q)) s = Math.max(s, 75);
   }
   if (Q.length >= 2) {
-    const N = preferredName(inst).toUpperCase();
     if (N === Q) s = Math.max(s, 100);
     else if (Q.length >= 3 && N.startsWith(Q)) s = Math.max(s, 50);
     else if (Q.length >= 3) {
@@ -617,9 +641,13 @@ function score(inst, q) {
 function search(q, limit = 20, nat = "") {
   const query = String(q || "").trim();
   if (query.length < 1) return [];
+  // Normalised once rather than once per instrument.
+  const raw = query.toUpperCase();
+  const { base } = cryptoPair(raw, "");
+  const Q = base && base !== raw ? base : raw;
   const hits = [];
   for (const inst of instruments.values()) {
-    const s = score(inst, query);
+    const s = score(inst, Q);
     if (s <= 0) continue;
     const n = visibleBrokers(inst, nat);
     if (n <= 0) continue;
@@ -967,14 +995,18 @@ function detail(key, nat = "", size = {}) {
           return {
             ...listing,
             ...cost,
-            exchange: listing.exchange || cost.venueExchange || "",
+            exchange: (cost.venueAuthoritative && cost.venueExchange) || listing.exchange || cost.venueExchange || "",
             // A coin is not quoted in a currency the way a share is: the column
             // names the cash the account settles in, which the estimator knows
             // and the catalogue does not. Robinhood's book was read in dollars
             // and its European company trades the same coins in euros.
             currency: anyCurrency
               ? ""
-              : (isCrypto && cost.cashCurrency) || listing.currency || cost.venueCurrency || "",
+              : (isCrypto && cost.cashCurrency) ||
+                (cost.venueAuthoritative && cost.venueCurrency) ||
+                listing.currency ||
+                cost.venueCurrency ||
+                "",
           };
         })
         .filter((listing) => listing.buyable !== false)
@@ -988,6 +1020,7 @@ function detail(key, nat = "", size = {}) {
             venueExchange,
             venueCurrency,
             cashCurrency,
+            venueAuthoritative,
             ...listing
           }) => listing
         )

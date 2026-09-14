@@ -1,57 +1,57 @@
 // What one round trip costs at BoursoBank: buy n shares at price p, sell them
-// back at once.
+// back at once. `roundTrip(...)` returns the whole bill in dollars, and
+// `brokerFees` the part BoursoBank keeps.
 //
-//   coût (USD) = a × toUsd(p) × n + b × n + c
+// Brochure tarifaire, tarifs applicables au 4 septembre 2026 (TTC), read
+// 2026-09-14. Four forfaits price Euronext Paris / Amsterdam / Bruxelles and
+// the Horaires Étendus session. Foreign markets share two cards that do not
+// depend on the forfait at all. Default is Découverte, which costs nothing a
+// month. Classic is marked « Uniquement CTO ».
 //
-// `a` is a fraction of the amount. `b` and `c` are dollars, the same unit the
-// other `*_cost.mjs` files answer in. The published ticket is in euros; it is
-// converted at the ECB mid and folded into the floor (`c` = 0).
+//   Découverte       1,99 € up to 500 €,    then 0,60 %
+//   Classic          5,50 € up to 1 000 €,  then 0,48 % (min 8,95 €)
+//   Trader          16,65 € up to 7 750 €,  then 0,22 %
+//   Ultimate Trader  9,90 € up to 10 000 €, then 0,12 %
+//   Bourses américaines  6,95 € up to 6 000 €, then 0,12 %   (every forfait)
+//   Bourses européennes 11,95 € up to 4 000 €, then 0,30 %   (Xetra, Milan,
+//                        Madrid, Zurich, Lisbonne, Londres, Euronext non-euro)
 //
-// Brochure tarifaire 2026 (boursorama_bt.pdf), TTC, read 2026-09-09. Four
-// forfaits on Euronext Paris / Amsterdam / Brussels (and extended hours).
-// Other European venues share one card; the US shares another. Default is
-// Découverte (no monthly fee). Classic is CTO only.
+// The ticket is a step and not a floor, which is why this file no longer
+// answers in a, b, c: at 500 € Découverte bills 1,99 € and at 501 € it bills
+// 3,01 €, so the fee falls as the order grows and no affine form can say it.
+// The commission is computed for the size asked and for each side.
 //
-//   Découverte     1.99 € up to 500 €, then 0.60 %
-//   Classic        5.50 € up to 1 000 €, then 0.48 % (floor 8.95 €)
-//   Trader        16.65 € up to 7 750 €, then 0.22 %
-//   Ultimate Trader 9.90 € up to 10 000 €, then 0.12 %
-//   US             6.95 € up to 6 000 €, then 0.12 %   (every forfait)
-//   other EU      11.95 € up to 4 000 €, then 0.30 %   (Xetra, Milan,
-//                   Madrid, Zurich, Lisbon, London, Euronext non-euro)
+// Custody is free, the monthly subscription is free on Découverte, and the
+// account is euro-only, so a line quoted in anything else is converted twice:
+// « Taux de change J+1 + 0,0025 points », read as 0,25 % a side.
 //
-// The published % × 2 sits in `a`. The ticket is a floor (`min fees`).
-// `exactCost` still applies the step. PEA / PEA-PME caps the ticket at
-// 0.50 % (`--pea`). Boursomarkets 0 € on the buy of listed products is not
-// applied: there is no product list in this deposit, so every ETF keeps
-// the Euronext card both ways.
-//
-// Cash is euro only: a non-EUR line is always converted. The brochure's
-// J+1 + 0.0025 points is 0.25 % each way and sits in `a` (0.50 % the
-// round trip). EUR lines have no FX. Custody is 0. Classic / Trader
-// inactivity (5.95 € / month) and Ultimate's 119 € / month under 30
-// orders stay in the remark.
+// A purchase under the brochure's minimum is refused rather than priced:
+// 20 € on a share, and 200 € on an ETF whatever the account. That floor is the
+// reason a small ETF ticket comes back N/A here and not zero.
 //
 // One live trip on 2026-09-09, CTO Découverte, one TTE, market both ways on
-// Horaires étendus (22H). Buy 78.14, sell 78.06. Recap: 1.99 € ticket each
-// way; buy FRAIS TOUT COMPRIS 2.30 € (TTF 0.31 € = 0.40 % of the fill);
-// sell 1.99 € only. PRU after buy 80.44. Cash 500.00 → 419.56 → 495.63.
-// `c` stays 0; the 3.98 € is the floor. The 8 cents of book is not folded
-// into `a`: the board still showed the 17:35 Euronext close. Classic /
-// Trader / Ultimate / US / other EU were not traded.
+// Horaires étendus (22H). Buy 78.14, sell 78.06. Recap: 1,99 € ticket each
+// way; buy FRAIS TOUT COMPRIS 2,30 € (TTF 0,31 € = 0,40 % of the fill); sell
+// 1,99 € only. PRU after buy 80.44. Cash 500,00 → 419,56 → 495,63, so the
+// trip cost 4,37 € of which 3,98 € is the two tickets and 0,31 € the tax. The
+// eight cents of book are not folded in: the board still showed the 17:35
+// Euronext close. Classic, Trader, Ultimate, the American card and the
+// European one were not traded, and the conversion was never exercised —
+// TotalEnergies is quoted in euro.
 //
 //   https://www.boursobank.com/content/brochure_tarifaire/boursorama_bt.pdf
 //
-//   node boursobank/boursobank_cost.mjs IWDA
-//   node boursobank/boursobank_cost.mjs MC EURONEXT EUR --plan=trader
+//   node boursobank/boursobank_cost.mjs TTE --shares=10 --price=78
+//   node boursobank/boursobank_cost.mjs IWDA EURONEXT EUR --shares=10 --price=100
+//   node boursobank/boursobank_cost.mjs MC EURONEXT EUR --shares=5 --price=600 --plan=trader
 //   node boursobank/boursobank_cost.mjs MEDP NASDAQ USD --shares=1 --price=300
 //   node boursobank/boursobank_cost.mjs --schedule
 //
-// `roundTripCost(...)` reads files, not the network.
+// `roundTrip(...)` reads files, not the network.
 
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite, bookParts } from "../na.mjs";
+import { plus, finite } from "../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
@@ -61,7 +61,8 @@ const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
 const SCHEDULE = {
   source: "https://www.boursobank.com/content/brochure_tarifaire/boursorama_bt.pdf",
   help: "https://www.boursobank.com/aide-en-ligne/bourse/comment-investir-en-bourse/fonctionnement-de-la-bourse/question/quels-sont-les-frais-de-courtage-chez-boursobank-17227195",
-  readOn: "2026-09-09",
+  readOn: "2026-09-14",
+  effective: "2026-09-04",
   entity: "BoursoBank (Boursorama, FR)",
 };
 
@@ -69,10 +70,25 @@ const SEC_RATE = 0.0000206;
 const TAF_PER_SHARE = 0.000195;
 const TAF_CAP = 9.79;
 const PTM = { each: 1.5, currency: "GBP", above: 10000 };
+const UK_REGISTERED = /^(GB|GG|JE|IM)/;
 const FX_EACH_WAY = 0.0025;
 const PEA_CAP = 0.005;
 const US_MICS = new Set(["XNAS", "XNYS", "ARCX", "XASE", "BATS"]);
 const DEFAULT_PLAN = "decouverte";
+
+// Brochure p. 23, « Montant d'ordre minimum à l'achat ». Two columns per
+// account for Boursomarkets and the rest; they only differ on funds, so the
+// figure kept here is the one that binds a share or an ETF.
+const MIN_ORDER = {
+  etf: { cto: 200, pea: 200 },
+  euronext: { cto: 20, pea: 100 },
+  europe: { cto: 20, pea: 2500 },
+  us: { cto: 20, pea: null },
+};
+
+// Neither is part of a round trip, but both are what a reader asks next.
+const SWITCH_FEE = { amount: 119, currency: "EUR", free: "un changement par année civile" };
+const TRANSFER = { france: 17.85, abroad: 29.8, pea: { each: 15, cap: 150 }, currency: "EUR" };
 
 const CHECK = {
   isin: "FR0000120271",
@@ -86,6 +102,7 @@ const CHECK = {
   ttf: 0.31,
   pruAfterBuy: 80.44,
   cash: { start: 500, afterBuy: 419.56, end: 495.63 },
+  trip: 4.37,
   on: "2026-09-09",
 };
 
@@ -119,16 +136,43 @@ const OTHER_RULE = {
   europe: { min: 11.95, upTo: 4000, rate: 0.003 },
 };
 
+// What each forfait costs when it is not used enough, and what it demands to
+// be opened at all. Ultimate is the odd one: the brochure reserves it to a PEA.
+const PLAN_STRINGS = {
+  classic: { idle: 5.95, per: "mois", why: "aucun ordre exécuté dans le mois", account: "CTO uniquement" },
+  trader: { idle: 5.95, per: "mois", why: "aucun ordre exécuté dans le mois", account: null },
+  ultimate: {
+    idle: 119,
+    per: "mois",
+    why: "moins de 30 ordres exécutés dans le mois",
+    account: "réservé à l'ouverture d'un PEA, PEA 18-25 ans ou PEA-PME, trois mois minimum",
+  },
+};
+
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
 const spreads = fs.existsSync(SPREADS) ? JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {} : {};
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+const isEtf = (listing) => String(listing?.type || "").toUpperCase() === "ETF";
 
 const dollars = (amount, currency) => {
   const v = toUsd(amount, currency);
   return v == null ? null : Number(v.toPrecision(6));
 };
+
+// The brochure's thresholds are in euro and its PTM levy in pounds, so a line
+// quoted in anything else is moved through the dollar. GBX is a hundredth of a
+// pound and fx.mjs already knows it, which is why the pence line needs no
+// special case here beyond not being GBP.
+function convert(amount, from, to) {
+  if (amount == null || Number.isNaN(amount)) return null;
+  const src = String(from || "").toUpperCase();
+  if (src === to) return amount;
+  const usd = toUsd(amount, src);
+  const per = usdPer(to);
+  return usd == null || !(per > 0) ? null : usd / per;
+}
 
 const fxNote = (currency) => ({
   quote: QUOTE,
@@ -173,15 +217,64 @@ export function commissionEach(amount, rule) {
   return fee;
 }
 
-function remarkOf({ plan, market } = {}) {
-  const rule = ruleOf(plan.id, market);
+/**
+ * One side's commission in euro, at the step the brochure prints, and under
+ * the PEA cap when the account is one. Says which of the two bit, because the
+ * ticket and the percentage swap places at a size the reader can feel.
+ */
+export function commissionSide({ amount, market, plan = DEFAULT_PLAN, pea = false }) {
+  const rule = ruleOf(plan, market);
+  if (!rule) return null;
+  const raw = commissionEach(amount, rule);
+  if (raw == null) return null;
+  const ticketed = amount <= rule.upTo;
+  // « Les frais de courtage facturés aux clients sur les PEA, PEA 18-25 ans et
+  // PEA-PME seront plafonnés à 0,5 % du montant total de l'ordre. »
+  const cap = pea && market !== "us" ? Number(amount) * PEA_CAP : null;
+  const capped = cap != null && cap < raw;
+  return {
+    charged: capped ? cap : raw,
+    raw,
+    ticketed,
+    capped,
+    currency: "EUR",
+    rule,
+  };
+}
+
+/**
+ * The proportional transaction taxes on the purchase. PTM is dropped here even
+ * though the tax sheet carries it: it is a flat 1,50 £ per order, and the sheet
+ * only expresses it as a fraction because the sweep divided it by the notional
+ * it happened to ask about. Read as a rate it would be wrong at every other
+ * size, and counted here it would be counted twice.
+ */
+function stampOf(tax) {
+  const all = taxRates(tax);
+  const rates = {};
+  for (const [name, rate] of Object.entries(all)) {
+    if (/PTM/i.test(name)) continue;
+    rates[name] = rate;
+  }
+  const pct = Object.values(rates).reduce((s, r) => s + r, 0);
+  return { pct, rates, known: tax?.known === true };
+}
+
+function remarkOf({ plan, market, listing, pea }) {
   const lines = [];
-  if (rule) lines.push(`min fees ${rule.min * 2} €.`);
-  if (plan.id === "classic" || plan.id === "trader") lines.push("5.95 €/month if no trade.");
-  if (plan.id === "ultimate") lines.push("119 €/month if < 30 orders.");
+  const idle = PLAN_STRINGS[plan.id];
+  if (idle) lines.push(`${idle.idle} €/${idle.per} si ${idle.why}.`);
+  if (plan.id === "ultimate") lines.push("Formule liée à un PEA.");
+  const min = minOrderOf({ market, listing, pea });
+  if (min != null) lines.push(`Ordre minimum ${min} € à l'achat.`);
   return lines.join("\n");
 }
 
+function minOrderOf({ market, listing, pea }) {
+  const column = pea ? "pea" : "cto";
+  if (isEtf(listing)) return MIN_ORDER.etf[column];
+  return MIN_ORDER[market]?.[column] ?? null;
+}
 
 function findListing({ etf, place, currency }) {
   const asked = loose(etf);
@@ -230,47 +323,28 @@ function coverage() {
   return out;
 }
 
-export function exactCost({ amount, market, plan = DEFAULT_PLAN, pea = false }) {
-  const picked = planOf(plan);
-  const rule = picked ? ruleOf(picked.id, market) : null;
-  if (!rule) return { commission: null, currency: QUOTE };
-  let each = commissionEach(amount, rule);
-  if (pea && (market === "euronext" || market === "europe")) {
-    each = Math.min(each, Number(amount) * PEA_CAP);
-  }
-  return {
-    commission: dollars(each * 2, "EUR"),
-    currency: QUOTE,
-    native: { each, roundTrip: each * 2, currency: "EUR" },
-    rule,
-    plan: picked.id,
-    pea,
-  };
-}
-
-export function roundTripCost({
+export function roundTrip({
   etf,
   place,
   currency,
+  shares,
+  price,
   bp = null,
   perShare = null,
   plan = DEFAULT_PLAN,
   pea = false,
 }) {
   const picked = planOf(plan);
-  const { named, matches } = findListing({ etf, place, currency });
   const answer = {
-    a: null,
-    b: 0,
-    c: 0,
+    usd: null,
+    brokerFees: null,
     ccy: QUOTE,
-    floor: null,
-    cap: null,
-    threshold: null,
     plan: picked?.id ?? plan,
     etf,
     place,
     currency,
+    onlineBuy: true,
+    cashCurrency: "EUR",
   };
 
   if (!picked) return { ...answer, why: `formule inconnue : ${plan} (decouverte|classic|trader|ultimate)` };
@@ -280,6 +354,7 @@ export function roundTripCost({
       why: "le catalogue BoursoBank n'existe pas encore : lancer `node boursobank/boursobank_scraping.mjs`",
     };
   }
+  const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue BoursoBank` };
   if (!matches.length) {
     return {
@@ -314,47 +389,21 @@ export function roundTripCost({
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
   const american = market === "us";
   const tax = taxesOf(listing.isin);
-  const rates = taxRates(tax);
-  const taxTotal = Object.values(rates).reduce((s, r) => s + r, 0);
-  const fxPct = listing.currency === "EUR" ? 0 : FX_EACH_WAY * 2;
-  const knownPct = taxTotal + (american ? SEC_RATE : 0) + (rule.rate ?? 0) * 2 + fxPct;
-  const mkt = bookParts({
-    bp: marketBp,
-    perShare: marketPerShare,
-    venue: m.venue,
-    unsourced: m.unsourced,
-    toUsd: (x) => (american ? x : dollars(x, listing.currency)),
-  });
-  const a = plus(mkt.a, knownPct);
-  const bookUsd = mkt.b;
-  const floorUsd = dollars(rule.min * 2, "EUR");
+  const stamp = stampOf(tax);
+  const converted = listing.currency !== "EUR";
+  const minOrder = minOrderOf({ market, listing, pea });
 
-  return {
+  const shared = {
     ...answer,
-    a: finite(a, 4),
-    b: finite(plus(bookUsd, american ? TAF_PER_SHARE : 0), 6),
-    c: 0,
-    floor: floorUsd,
     listing,
     feeMarket: market,
-    remark: remarkOf({ plan: picked, market }),
-    parts: {
-      marché:
-        marketBp != null
-          ? Number((marketBp / 1e4).toPrecision(4))
-          : marketPerShare != null
-            ? `${marketPerShare} par part`
-            : null,
-      taxes: Object.keys(rates).length ? rates : null,
-      réglementaire: american ? { SEC: SEC_RATE, FINRA: `${TAF_PER_SHARE} par part` } : null,
-      commission: (rule.rate ?? 0) * 2,
-      change: fxPct || null,
-    },
     bp: marketBp,
     perShare: marketPerShare,
     url: leaf?.url ?? SCHEDULE.source,
-    basis: `barème BoursoBank ${picked.label}, palier ${market}, lu le ${SCHEDULE.readOn}`,
     tax,
+    fx: fxNote(listing.currency),
+    fxIfConverted: converted ? FX_EACH_WAY * 2 : 0,
+    remark: remarkOf({ plan: picked, market, listing, pea }),
     commission: {
       rate: rule.rate,
       min: rule.min,
@@ -364,39 +413,262 @@ export function roundTripCost({
       eachWay: true,
       plan: picked.id,
     },
-    ccy: QUOTE,
-    cap: american
-      ? { term: "b", part: "FINRA TAF", amount: TAF_CAP, per: "exécution" }
-      : pea
-        ? { commission: { rate: PEA_CAP, why: "plafond PEA 0,50 % par ordre" } }
-        : null,
-    threshold:
-      listing.mic === "XLON"
+    minOrder: minOrder == null ? null : { amount: minOrder, currency: "EUR" },
+    switchFee: SWITCH_FEE,
+    transfer: TRANSFER,
+  };
+
+  const basis =
+    `barème BoursoBank ${picked.label}, palier ${market}, brochure du ${SCHEDULE.effective} lue le ${SCHEDULE.readOn} : ` +
+    `${rule.min} € jusqu'à ${rule.upTo} €, puis ${(rule.rate * 100).toFixed(2)} %` +
+    (rule.minAbove != null ? ` avec un minimum de ${rule.minAbove} €` : "") +
+    `, par ordre`;
+
+  if (pea && american) {
+    return {
+      ...shared,
+      basis,
+      why: "un PEA ne peut pas détenir une ligne américaine",
+    };
+  }
+
+  const n = Number(shares);
+  const p = Number(price);
+  if (!(n > 0) || !(p > 0)) {
+    return {
+      ...shared,
+      basis,
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+    };
+  }
+
+  const notional = n * p;
+  const notionalUsd = dollars(notional, listing.currency);
+  const notionalEur = convert(notional, listing.currency, "EUR");
+
+  // The brochure refuses the purchase below this, so there is no trip to price
+  // rather than a cheap one.
+  if (minOrder != null && notionalEur != null && notionalEur < minOrder) {
+    return {
+      ...shared,
+      basis,
+      trade: { shares: n, price: p, notional, notionalUsd: finite(notionalUsd, 6), currency: listing.currency },
+      why:
+        `ordre de ${notionalEur.toFixed(2)} € sous le minimum de ${minOrder} € ` +
+        `à l'achat ${isEtf(listing) ? "sur un ETF" : `sur ce marché`} chez BoursoBank`,
+    };
+  }
+
+  // The book is already a round trip — Rule 605 effective spread per share in
+  // America, basis points elsewhere — so it is added once, not per side.
+  const bookUsd =
+    marketBp != null && notionalUsd != null
+      ? (notionalUsd * marketBp) / 1e4
+      : marketPerShare != null
+        ? marketPerShare * n
+        : null;
+
+  const buyComm = commissionSide({ amount: notionalEur, market, plan: picked.id, pea });
+  const sellComm = commissionSide({ amount: notionalEur, market, plan: picked.id, pea });
+  const buyCommUsd = buyComm ? dollars(buyComm.charged, buyComm.currency) : null;
+  const sellCommUsd = sellComm ? dollars(sellComm.charged, sellComm.currency) : null;
+
+  // Stamp duty and the French tax are charges on the purchase alone.
+  const stampUsd = notionalUsd == null ? null : notionalUsd * stamp.pct;
+
+  // America's two sell-side levies. The brochure names neither; they are the
+  // market's, not BoursoBank's, and every broker on that tape passes them on.
+  const secUsd = american ? (notionalUsd == null ? null : notionalUsd * SEC_RATE) : 0;
+  const tafUsd = american ? Math.min(TAF_PER_SHARE * n, TAF_CAP) : 0;
+
+  // 1,50 £ per order and per side, on a UK-registered share above 10 000 £.
+  const notionalGbp = convert(notional, listing.currency, PTM.currency);
+  const ptmDue =
+    String(listing.type || "").toUpperCase() !== "STOCK" || !UK_REGISTERED.test(listing.isin)
+      ? false
+      : notionalGbp == null
+        ? null
+        : notionalGbp > PTM.above;
+  const ptmUsd = ptmDue === false ? 0 : ptmDue === null ? null : dollars(2 * PTM.each, PTM.currency);
+
+  // « Taux de change J+1 + 0,0025 points », once on the way in and once out.
+  const fxUsd = converted ? (notionalUsd == null ? null : notionalUsd * FX_EACH_WAY * 2) : 0;
+
+  const usd = plus(bookUsd, buyCommUsd, sellCommUsd, stampUsd, secUsd, tafUsd, ptmUsd, fxUsd);
+  // What BoursoBank keeps. The book belongs to whoever quoted it, the French
+  // tax and the stamp to a treasury, the SEC, FINRA and PTM levies to their
+  // regulators, and no forfait forgives any of them — but the conversion
+  // margin is the bank's own, so it sits here beside the two tickets.
+  const brokerFees = plus(buyCommUsd, sellCommUsd, fxUsd);
+
+  return {
+    ...shared,
+    usd: finite(usd, 6),
+    brokerFees: finite(brokerFees, 6),
+    ...(bookUsd == null
+      ? {
+          why:
+            `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ` +
+            `${m.unsourced?.why || "pas de source de spread"}`,
+        }
+      : {}),
+    trade: { shares: n, price: p, notional, notionalUsd: finite(notionalUsd, 6), currency: listing.currency },
+    buy: {
+      commission: finite(buyCommUsd, 6),
+      native: buyComm
         ? {
-            c: dollars(2 * PTM.each, "GBP"),
-            currency: QUOTE,
-            above: PTM.above,
-            aboveCurrency: "GBP",
-            why: `prélèvement PTM de ${PTM.each} £ par ordre et par sens, au-delà de ${PTM.above} £`,
+            charged: finite(buyComm.charged, 6),
+            raw: finite(buyComm.raw, 6),
+            ticketed: buyComm.ticketed,
+            capped: buyComm.capped,
+            currency: buyComm.currency,
           }
         : null,
+      taxes: finite(stampUsd, 6),
+      taxRates: Object.keys(stamp.rates).length ? stamp.rates : null,
+      ptm: ptmDue ? finite(dollars(PTM.each, PTM.currency), 6) : ptmDue === null ? null : 0,
+    },
+    sell: {
+      commission: finite(sellCommUsd, 6),
+      native: sellComm
+        ? {
+            charged: finite(sellComm.charged, 6),
+            raw: finite(sellComm.raw, 6),
+            ticketed: sellComm.ticketed,
+            capped: sellComm.capped,
+            currency: sellComm.currency,
+          }
+        : null,
+      sec: finite(secUsd, 6),
+      taf: finite(tafUsd, 6),
+      ptm: ptmDue ? finite(dollars(PTM.each, PTM.currency), 6) : ptmDue === null ? null : 0,
+    },
+    parts: {
+      marché: finite(bookUsd, 6),
+      commission: finite(plus(buyCommUsd, sellCommUsd), 6),
+      taxes: finite(stampUsd, 6),
+      réglementaire: american ? finite(plus(secUsd, tafUsd), 6) : 0,
+      ptm: ptmUsd === null ? null : finite(ptmUsd, 6),
+      change: finite(fxUsd, 6),
+    },
     pea: pea ? { cap: PEA_CAP, why: "plafond PEA / PEA-PME 0,5 % du montant, marchés EEE" } : null,
-    fx: fxNote(listing.currency),
-    fxIfConverted: 0,
-    confidence:
-      `commission ${picked.label} ${market} selon la brochure BoursoBank 2026, lue le ${SCHEDULE.readOn}. ` +
-      `${(rule.rate * 100).toFixed(2)} % par jambe au-delà de ${rule.upTo} €, ` +
-      `plancher ${rule.min} €. Ticket dans le plancher, b = ` +
-      (american ? `605 + TAF` : `0`) +
-      `, c = 0. Boursomarkets 0 € à l'achat non appliqué (pas de liste ici). ` +
-      (picked.id === "decouverte" && market === "euronext"
-        ? `Un aller-retour réel le ${CHECK.on} sur ${CHECK.ticker} (${CHECK.venue}) : ` +
-          `achat ${CHECK.buy} / vente ${CHECK.sell}, courtage ${CHECK.commissionEach} € par jambe, ` +
-          `TTF ${CHECK.ttf} € à l'achat (PRU ${CHECK.pruAfterBuy}), cash ${CHECK.cash.start} → ${CHECK.cash.end}. ` +
-          `Le carnet 22H n'est pas plié dans a.`
-        : `Courtage ${picked.label} / ${market} non recoupé sur un relevé ; le seul aller-retour réel est ${CHECK.ticker} 22H à 1.99 € le ticket.`) +
-      (leaf ? "" : ` Pas de feuille de carnet pour cet ISIN / cette place.`),
+    basis,
+    confidence: confidenceOf({
+      picked,
+      market,
+      rule,
+      buyComm,
+      stamp,
+      tax,
+      american,
+      converted,
+      ptmDue,
+      minOrder,
+      listing,
+      leaf,
+    }),
   };
+}
+
+function confidenceOf({ picked, market, rule, buyComm, stamp, tax, american, converted, ptmDue, minOrder, listing, leaf }) {
+  const lines = [];
+
+  lines.push(
+    `Commission ${picked.label} sur le palier ${market}, brochure du ${SCHEDULE.effective} lue le ${SCHEDULE.readOn}. ` +
+      (buyComm?.ticketed
+        ? `L'ordre tient sous ${rule.upTo} €, donc le ticket de ${rule.min} € s'applique tel quel, par sens.`
+        : `L'ordre dépasse ${rule.upTo} €, donc ${(rule.rate * 100).toFixed(2)} % s'applique, par sens.`) +
+      (buyComm?.capped ? ` Le plafond PEA de 0,5 % mord et remplace le barème.` : "")
+  );
+
+  lines.push(
+    `Le ticket est une marche et non un plancher : à ${rule.upTo} € l'ordre coûte ${rule.min} €, ` +
+      `un euro plus haut il coûte ${(rule.upTo * rule.rate).toFixed(2)} €. ` +
+      `Le coût est calculé pour la taille demandée, ce qu'une forme affine ne savait pas dire.`
+  );
+
+  if (market !== "us" && market !== "euronext") {
+    lines.push(
+      `La brochure ne liste pas les « bourses européennes » qu'elle facture 11,95 € et renvoie au site, ` +
+        `donc toute place qui n'est ni Paris, ni Amsterdam, ni Bruxelles, ni américaine prend cette carte ici.`
+    );
+  }
+
+  if (stamp.pct) {
+    lines.push(
+      `Taxe de transaction ${(100 * stamp.pct).toFixed(2)} % à l'achat seulement, ` +
+        `depuis la divulgation ex-ante relevée dans taxMap.mjs : ${Object.keys(stamp.rates).join(", ")}.`
+    );
+  } else if (tax?.known) {
+    lines.push(`Ligne chiffrée sans taxe de transaction à l'achat : un zéro mesuré, pas une absence de réponse.`);
+  } else if (/^(IT|ES)/.test(String(listing.isin || ""))) {
+    lines.push(
+      `Aucune ligne fiscale pour cet ISIN, et aucune taxe italienne ni espagnole n'est ajoutée d'office. ` +
+        `Bolsa de Madrid a été balayée intégralement sans une seule taxe à l'achat, donc le zéro espagnol est mesuré ; ` +
+        `côté italien seuls des émetteurs achetés hors de leur place ont été chiffrés, et un ordre passé sur Milan ` +
+        `même reste une question ouverte.`
+    );
+  } else {
+    lines.push(`Aucune ligne fiscale pour cet ISIN : la divulgation ex-ante ne l'a jamais chiffré.`);
+  }
+
+  if (american) {
+    lines.push(
+      `SEC ${SEC_RATE} et FINRA ${TAF_PER_SHARE} $ par part à la vente, plafonnée à ${TAF_CAP} $. ` +
+        `La brochure ne les imprime pas — elles ne sont pas de BoursoBank — et aucun relevé américain n'a été lu ici.`
+    );
+  }
+
+  if (converted) {
+    lines.push(
+      `Compte en euro : la ligne est convertie deux fois. « Taux de change J+1 + 0,0025 points » est lu ` +
+        `comme 0,25 % par sens, ce qui est une lecture et non une mesure — des « points » sur un taux ` +
+        `pourraient être absolus, auquel cas la ponction varierait avec la paire. L'aller-retour réel était en euro.`
+    );
+  }
+
+  if (ptmDue) {
+    lines.push(`Prélèvement PTM de ${PTM.each} £ par ordre et par sens, l'ordre dépassant ${PTM.above} £.`);
+  }
+
+  if (minOrder != null) {
+    lines.push(
+      `Minimum d'ordre à l'achat ${minOrder} €${isEtf(listing) ? " sur un ETF, quel que soit le compte" : ""} : ` +
+        `en dessous, la brochure refuse l'ordre et ce fichier rend N/A plutôt qu'un prix.`
+    );
+  }
+
+  const idle = PLAN_STRINGS[picked.id];
+  if (idle) {
+    lines.push(
+      `Hors aller-retour : ${idle.idle} €/${idle.per} si ${idle.why}` +
+        (idle.account ? `, et la formule est ${idle.account}` : "") +
+        `. Droits de garde et abonnement gratuits sinon.`
+    );
+  }
+
+  lines.push(
+    `Boursomarkets met l'achat à 0 € sur ses produits listés, et ce fichier ne l'applique pas : ` +
+      `le catalogue scrapé ne dit pas quelles lignes en sont, donc tout ETF garde la carte Euronext dans les deux sens. ` +
+      `Là où elle s'applique, le vrai coût est plus bas que celui-ci.`
+  );
+
+  if (picked.id === "decouverte" && market === "euronext") {
+    lines.push(
+      `Aller-retour réel le ${CHECK.on} sur ${CHECK.ticker} (${CHECK.venue}) : achat ${CHECK.buy} / vente ${CHECK.sell}, ` +
+        `${CHECK.commissionEach} € de courtage par jambe, TTF ${CHECK.ttf} € à l'achat, ` +
+        `caisse ${CHECK.cash.start} → ${CHECK.cash.end}, soit ${CHECK.trip} € pour la boucle. Le carnet n'y était pas visible.`
+    );
+  } else {
+    lines.push(
+      `Ni ${picked.label} ni le palier ${market} n'ont été recoupés sur un relevé : ` +
+        `le seul aller-retour réel est ${CHECK.ticker} en Découverte sur Euronext, à ${CHECK.commissionEach} € le ticket.`
+    );
+  }
+
+  if (!leaf) lines.push(`Pas de feuille de carnet pour cet ISIN et cette place.`);
+
+  return lines.join(" ; ");
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
@@ -408,7 +680,18 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   if (process.argv.includes("--schedule")) {
     console.log(
       JSON.stringify(
-        { ...SCHEDULE, defaultPlan: DEFAULT_PLAN, plans: PLANS, euronext: EURONEXT_RULE, other: OTHER_RULE, coverage: coverage() },
+        {
+          ...SCHEDULE,
+          defaultPlan: DEFAULT_PLAN,
+          plans: PLANS,
+          euronext: EURONEXT_RULE,
+          other: OTHER_RULE,
+          minOrder: MIN_ORDER,
+          idle: PLAN_STRINGS,
+          switchFee: SWITCH_FEE,
+          transfer: TRANSFER,
+          coverage: coverage(),
+        },
         null,
         2
       )
@@ -422,23 +705,23 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     console.error(
       "usage : node boursobank_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--plan=decouverte|classic|trader|ultimate] [--pea] [--json]\n" +
         "        node boursobank_cost.mjs --schedule\n" +
-        "  ex.   node boursobank_cost.mjs IWDA\n" +
-        "        node boursobank_cost.mjs MC EURONEXT EUR --plan=trader\n" +
+        "  ex.   node boursobank_cost.mjs TTE --shares=10 --price=78\n" +
+        "        node boursobank_cost.mjs MC EURONEXT EUR --shares=5 --price=600 --plan=trader\n" +
         "        node boursobank_cost.mjs MEDP NASDAQ USD --shares=1 --price=300"
     );
     process.exit(2);
   }
 
-  const plan = flag("plan") || DEFAULT_PLAN;
-  const pea = process.argv.includes("--pea");
-  const out = roundTripCost({
+  const out = roundTrip({
     etf,
     place,
     currency,
+    shares: flag("shares") ? Number(flag("shares")) : null,
+    price: flag("price") ? Number(flag("price")) : null,
     bp: flag("bp") ? Number(flag("bp")) : null,
     perShare: flag("per-share") ? Number(flag("per-share")) : null,
-    plan,
-    pea,
+    plan: flag("plan") || DEFAULT_PLAN,
+    pea: process.argv.includes("--pea"),
   });
 
   if (process.argv.includes("--json")) {
@@ -446,8 +729,8 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     process.exit(0);
   }
 
-  if (out.a == null && !out.listing) {
-    console.log(`a = null   b = ${out.b}   c = ${out.c}\n${out.why}`);
+  if (!out.listing) {
+    console.log(`aller-retour     : N/A — ${out.why}`);
     if (out.alternatives?.length) {
       console.log(`\nce que BoursoBank propose sous ce nom :\n  ${out.alternatives.join("\n  ")}`);
     }
@@ -462,43 +745,32 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       `  [${picked?.label || out.plan}]\n`
   );
 
-  const detail = [];
-  if (out.parts?.marché != null) detail.push(`carnet ${out.parts.marché}`);
-  for (const [name, rate] of Object.entries(out.parts?.taxes ?? {})) detail.push(`${name} ${rate}`);
-  if (out.parts?.commission) detail.push(`courtage ${out.parts.commission}`);
-  if (out.parts?.change) detail.push(`change ${out.parts.change}`);
-  if (out.parts?.réglementaire) detail.push(`SEC ${out.parts.réglementaire.SEC}`);
+  const t = out.trade;
+  if (t) {
+    console.log(
+      `${t.shares} part${t.shares > 1 ? "s" : ""} à ${t.price} ${t.currency} = ${t.notional.toFixed(2)} ${t.currency}` +
+        (t.notionalUsd != null ? ` (${t.notionalUsd} $)` : "") +
+        "\n"
+    );
+  }
 
-  console.log(`a = ${out.a}   (au prorata${detail.length ? " : " + detail.join(" + ") : " : rien"})`);
-  console.log(`b = ${out.b} $   (par part${out.b ? " : FINRA et/ou spread 605" : " : rien"})`);
-  console.log(`c = ${out.c} $   (par ordre : ticket dans la remark, pas dans c)`);
-  if (out.floor != null) console.log(`plancher ${out.floor} $`);
-  const fx = out.fx?.listing ?? usdPer(l.currency);
-  console.log(
-    `\ncoût = ${out.a} × p × n × ${fx != null ? Number(fx.toPrecision(6)) : "?"} + ${out.b} × n + ${out.c}   ($ ; p en ${l.currency})`
-  );
+  console.log(`aller-retour     : ${out.usd == null ? `N/A — ${out.why}` : `${out.usd} $`}`);
+  console.log(`frais du courtier: ${out.brokerFees == null ? "N/A" : `${out.brokerFees} $`}`);
+  const p = out.parts || {};
+  if (p.marché != null) console.log(`  carnet         : ${p.marché} $`);
+  if (p.commission != null) {
+    console.log(
+      `  courtage       : ${p.commission} $` +
+        (out.buy?.native ? `   (${Number(out.buy.native.charged).toFixed(2)} € × 2${out.buy.native.ticketed ? ", au ticket" : ", au pourcentage"}${out.buy.native.capped ? ", plafonné PEA" : ""})` : "")
+    );
+  }
+  if (p.taxes) console.log(`  taxes          : ${p.taxes} $`);
+  if (p.réglementaire) console.log(`  réglementaire  : ${p.réglementaire} $`);
+  if (p.ptm) console.log(`  PTM            : ${p.ptm} $`);
+  if (p.change) console.log(`  change         : ${p.change} $`);
+  console.log("");
   console.log(`  ${out.basis}`);
   for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
-
-  const n = Number(flag("shares"));
-  const p = Number(flag("price"));
-  if (n > 0 && p > 0) {
-    const amount = n * p;
-    const amountUsd = toUsd(amount, l.currency);
-    const extra = out.threshold && amount >= out.threshold.above ? out.threshold.c : 0;
-    const affine = amountUsd != null && out.a != null ? out.a * amountUsd + out.b * n + out.c + extra : null;
-    const billed = exactCost({ amount, market: out.feeMarket, plan: out.plan, pea });
-    console.log(
-      `\n${n} part${n > 1 ? "s" : ""} à ${p} ${l.currency} = ${amount.toFixed(2)} ${l.currency}` +
-        (amountUsd != null ? ` (${amountUsd.toFixed(2)} $)` : "")
-    );
-    if (affine != null) console.log(`  a, b, c        : ${affine.toFixed(4)} $`);
-    if (billed.commission != null) {
-      console.log(
-        `  commission     : ${Number(billed.commission).toFixed(4)} $` +
-          (billed.native?.each != null ? ` (${Number(billed.native.each).toPrecision(4)} € × 2)` : "")
-      );
-    }
-  }
+  if (out.remark) for (const line of out.remark.split("\n")) console.log(`  · ${line}`);
   if (out.url) console.log(`\n${out.url}`);
 }

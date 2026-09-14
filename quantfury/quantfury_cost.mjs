@@ -1,75 +1,184 @@
-// What one round trip costs at Quantfury: buy n shares at price p, sell them
-// back at once.
+// What one round trip costs at Quantfury: buy n shares at price p — or a coin
+// for a given number of dollars — and sell the line back at once. The answer is
+// one number in dollars, `usd`, and beside it `brokerFees`, the part Quantfury
+// bills.
 //
-//   coût (USD) = a × toUsd(p) × n + b × n + c
+// Quantfury bills nothing, and says so in the one place that binds it: the
+// client agreement of 5 January 2026, §13. The Products and Services "are
+// provided without commissions, leverage fees, and/or any other kind of fee to
+// clients; and all trading positions are available to trade and invest at the
+// real time spot bid and ask prices of the relevant exchange where the Asset is
+// trading when opening, reducing, and/or closing trades, in each case as
+// technically achievable by Quantfury using its best commercial efforts". That
+// last clause is quoted here because this file used to cut it: both halves of
+// the promise, the zero and the untouched price, are best efforts and not a
+// guarantee.
 //
-// `a` is a fraction of the amount. `b` and `c` are dollars, the same unit the
-// other `*_cost.mjs` files answer in.
+// So the broker's share of a trip is 0 and the whole bill is the book the
+// client crosses: buy at the ask, sell at the bid. That is not a cost absorbed,
+// it is the business model — Quantfury pairs a client's buy at the ask with
+// another client's sell at the bid and keeps the difference, on prices it does
+// not widen. Which makes this the one file on the shelf where what a broker
+// bills and what it earns differ by the whole amount. `brokerFees` is 0 while
+// `usd` is not, and both are right: the spread belongs to whoever quoted it,
+// and the client would have crossed the same book anywhere.
 //
-// Quantfury charges nothing, and says so in the one place that binds it: the
-// client agreement, §13, "provided without commissions, leverage fees, and/or
-// any other kind of fee to clients; and all trading positions are available to
-// trade and invest at the real time spot bid and ask prices of the relevant
-// exchange". So `c` is 0, there is no ticket to put in it, and the whole cost
-// of a trip is the book the client crosses: buy at the ask, sell at the bid.
-//
-// That is not a broker absorbing a cost, it is the business model. Quantfury
-// pairs a client's buy at the ask with another client's sell at the bid and
-// keeps the difference, on prices it does not widen. The spread the client
-// pays is therefore the exchange's own, which is exactly what `spread.json`
-// and the Rule 605 tape already measure — so `a` and `b` are the book and
-// nothing else is added on top.
+// One half of that promise can be checked without placing an order, and it is
+// the half everything else rests on. The real-time hub behind
+// trading.quantfury.com streams the bid and ask the client is actually shown,
+// and on 14 September 2026 they land on the exchanges' own to the cent:
+// BTC/USDT quoted 78 578.02 / 78 578.03 at Quantfury and 78 578.02 / 78 578.03
+// at Binance, BTC/USD 78 560.01 / 78 560.02 at Quantfury and the same at
+// Coinbase, with SOL, XRP and LTC matching on both tapes too. Not one tick of
+// widening, on either venue. The "real time spot bid and ask prices of the
+// relevant exchange" of §13 is measured here rather than merely promised — on
+// crypto, where the reference book is public, and at that one instant.
 //
 // What is deliberately not zero:
 //
 //   taxes       A transfer tax follows the instrument, not the price list.
 //               British stamp duty is owed by whoever acquires the shares and
-//               the French and Italian FTT by whoever acquires the line,
-//               wherever the two orders met. Quantfury publishes no tax line
-//               and §56 leaves every tax to the client, so these rates come
-//               from the tax map, not from a charge anyone has seen debited.
-//               On a London share the 0.5 % dwarfs the book many times over.
+//               the French FTT by whoever acquires the line, wherever the two
+//               orders met. Quantfury publishes no tax line and §56 leaves
+//               every tax to the client, so these rates come from the tax map,
+//               not from a charge anyone has seen debited. On a London share
+//               the 0.5 % dwarfs the book many times over — which is why the
+//               identity of the line matters more here than anywhere, and why
+//               the second weak joint below is the serious one.
+//
+//               Quantfury's 25 Italian and 29 Spanish lines are charged none,
+//               and that is now a reading rather than a silence. The map reads
+//               Trading212's ex-ante disclosure, and on the Spanish 0.2 % that
+//               reading is negative, not absent: Bolsa de Madrid was swept line
+//               by line, 139 issuers including Iberdrola, Santander, Telefónica,
+//               Repsol and ACS, and not one comes back carrying a purchase tax.
+//               It covers all 29 Spanish lines here. The Italian 0.1 % had
+//               never been asked at all, because Trading212's Borsa Italiana
+//               shelf is 345 foreign ETFs that owe none, and the eleven Italian
+//               issuers it does carry sit on Xetra, gettex, SIX, NYSE and
+//               NASDAQ — outside the venues the sweep walks in full, which is
+//               why `taxes.mjs` gained `--isin=`. Asked that way, Intesa, Enel,
+//               Eni, Generali, Leonardo and Prada all price with no Italian
+//               tax, against controls that do return one: 0.4 % on
+//               TotalEnergies, 0.5 % on BT Group. Buying an Italian share off
+//               its home tape is exactly what Quantfury does through Cboe
+//               Europe, so the reading transfers. Six of the 25 are covered by
+//               it; the other nineteen are not on Trading212's shelf and stay
+//               unasked. This header used to call all of them taxed.
 //
 // What is zero and sourced, rather than merely unseen:
 //
-//   commission  §13 above, and the pricing page: no trade commission.
-//   change      No conversion fee. The eight base currencies (USD, EUR, CHF,
-//               BRL, MXN, ARS, COP …) cover every currency in this catalogue,
-//               and what conversion there is sits in the rate, not in a line.
-//   SEC / TAF   Those are levied on US exchanges and FINRA members for covered
-//               sales. Quantfury is a Bahamas entity (SCB) matching its own
-//               clients, not a US broker-dealer passing a fee through, and it
-//               publishes no such pass-through. Unlike stamp duty, this is a
-//               charge on the venue, not a tax on the buyer.
+//   commission  §13 above, and the conditions page: no trade commission.
 //   portage     No overnight or borrowing fee, even with leverage. The
 //               catalogue holds only unleveraged lines anyway — the scraper
 //               keeps t=1 shares, t=5 spot crypto and t=6 funds, and drops
 //               the futures and currency contracts.
+//   SEC / TAF   Those are levied on US exchanges and FINRA members for covered
+//               sales. Quantfury Trading Americas is a Bahamian dealer
+//               (SIA-F204, DARE-DAB-027) matching its own clients, not a US
+//               broker-dealer passing a fee through, and it publishes no such
+//               pass-through. Unlike stamp duty, this is a charge on the venue,
+//               not a tax on the buyer.
 //
-// The crypto lines used to be the one place `a = 0` understated the bill, for
-// want of a tape. `spread.mjs` now reads both books this broker names, Binance
-// and Coinbase, so a coin costs what the spot market charged to cross it — BTC
-// 0.0013 bp, ADA around 5 — and only a coin neither exchange lists against the
-// dollar is left N/A, which is not the same as free.
+// And the zero that used to be assumed, now read, and only half true:
 //
-// A client owns what he buys without leverage and may transfer it out (§11),
-// so this is a real holding, not a contract on one.
+//   change      Nothing in the agreement or on the conditions page mentions
+//               converting between the balance a client holds and the currency
+//               a line is quoted in, and this file wrote 0 on that silence.
+//               The silence was the wrong place to look. A signed-in account's
+//               own `cashAccount` payload prices every wallet Quantfury offers,
+//               as `commissionOnConvertPercent`, and on 14 September 2026 it
+//               reads 0 % on USD, EUR, GBP and CHF, 1 % on BRL, MXN and CLP,
+//               1.5 % on COP and 4 % on ARS. Every crypto wallet reads 0.
+//
+//               So the old 0 holds for 1 949 of the 2 030 lines — every
+//               American, European and crypto one — and collapses on the other
+//               81: the 70 Brazilian and 11 Mexican lines cost a dollar-funded
+//               reader 1 % going in and 1 % coming out. That is 200 bp against
+//               a book of ten, the largest number in this file by a wide
+//               margin, exactly as this header warned when it had no figure to
+//               put there. It stays outside `usd`, as at Admirals and Mexem,
+//               because the reader's funding currency is not known here; it is
+//               in `fxIfConverted`, and a dollar-funded reader buying in São
+//               Paulo should read that before the total. Quantfury opens the
+//               BRL and MXN wallets to some residents and not others — this
+//               account may hold only USD and EUR — so for a good part of the
+//               clientele the conversion is not optional.
+//
+//               What this still does not settle is whether trading a
+//               foreign-quoted line charges the same tariff as converting a
+//               wallet by hand. The pairs Quantfury quotes as instruments
+//               carry their own visible spread — EUR/USD 1.6 bp, USD/CHF 27.9,
+//               USD/CAD 47.0, USD/BRL 90.7 — which is neither the wallet
+//               tariff nor necessarily the rate a trade gets. Only a funded
+//               round trip on a non-dollar line closes that, and none has been
+//               run. OANDA's silence on the same point turned out to cost
+//               0.52 % a leg.
+//
+// Two weak joints, both in the catalogue rather than in the tariff:
+//
+//   la place    Quantfury names an operator, not a tape, and for all 281 of the
+//               European lines the operator it names is "Cboe Europe", with a
+//               Chi-X suffix on the ticker to match. `spread.json` collects no
+//               Cboe Europe book at all, so the venue shown to the reader is
+//               the one Quantfury names and the book priced is the primary's,
+//               standing in: 232 of the 281 carry one, median 8.2 bp — Paris
+//               9.2, Amsterdam 7.8, Xetra 10.6, Milan 10.7 — and the nine above
+//               50 bp sit on the thin regional tapes, Munich, gettex and
+//               Vienna, where a small name really is that wide. What nothing
+//               here measures is how far Cboe Europe's own touch sits from the
+//               primary's — but `quantfury-probe.mjs` now can, without an
+//               order: Quantfury's price endpoint publishes the bid and ask it
+//               shows, so the two books can be set side by side. It has to run
+//               in session, because outside it every line comes back with the
+//               bid equal to the ask.
+//
+//   l'ISIN      Quantfury publishes none: all 1 981 are the scraper's own
+//               ticker match against the root CSVs. That match used to waive
+//               its name floor whenever a ticker landed on a venue the operator
+//               reached, and since "Cboe Europe" reached into the LSE namespace
+//               a short continental ticker kept coming back British: DIA was
+//               Dialight and not DiaSorin, ITX Itaconix and not Inditex, TRN
+//               Trainline and not Terna. Each carried the wrong book, and the
+//               wrong treasury with it — a 0.5 % stamp duty charged to three
+//               Italian companies. `quantfury_scraping.mjs` now leaves London
+//               out of what "Cboe Europe" expands to and enforces the floor
+//               there, which repaired six lines and dropped eight. Seven of the
+//               eight were wrong and are better absent; the eighth, DHL Group,
+//               is a real loss, since the CSVs still call it Deutsche Post and
+//               no name score bridges that. The size of the repair is the
+//               measure of what it was: the worst European book was 2 754 bp
+//               and is 169 bp, and the lines owing British stamp duty went from
+//               four to one. What remains is that the identity is still
+//               inferred, and a rename can still cost a line.
+//
+// Out of the round trip on purpose: the dividend a long holder receives (§57),
+// the interest a balance does not earn (§74), and funding in or out. None of
+// them is a cost of buying and selling at once.
+//
+// A client owns what he buys without leverage and may transfer it out to an
+// approved brokerage (§11), so this is a real holding and the transfer taxes
+// above really are owed. What no column can hold is the other side of a zero
+// tariff: §38, §52, §60, §66 and §73 let Quantfury reverse positions and seize
+// or reduce a balance at its own discretion, and §37 bars residents of the
+// United States, Canada, the Bahamas and the British Virgin Islands outright.
 //
 //   https://quantfury.com/trading-and-investing-conditions/
 //   https://quantfury.com/business-model/
 //   https://quantfury.com/quantfury-client-agreement.pdf
 //
-//   node quantfury/quantfury_cost.mjs AAPL
-//   node quantfury/quantfury_cost.mjs HSBA LSE GBP --shares=100
-//   node quantfury/quantfury_cost.mjs TTE EURONEXT EUR --shares=10 --price=60
-//   node quantfury/quantfury_cost.mjs BTC
+//   node quantfury/quantfury_cost.mjs AAPL --shares=10 --price=230
+//   node quantfury/quantfury_cost.mjs SHEL LSE EUR --shares=100 --price=30
+//   node quantfury/quantfury_cost.mjs AALB EURONEXT EUR --shares=10 --price=35
+//   node quantfury/quantfury_cost.mjs BTC --amount=1000
 //   node quantfury/quantfury_cost.mjs --schedule
+//   node quantfury/quantfury-probe.mjs            (la touche Cboe Europe, en séance)
 //
-// `roundTripCost(...)` reads files, not the network.
+// `roundTrip(...)` reads files, not the network.
 
 import fs from "node:fs";
 import { cryptoId, listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite, bookParts } from "../na.mjs";
+import { plus, finite } from "../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
@@ -80,22 +189,75 @@ const SCHEDULE = {
   conditions: "https://quantfury.com/trading-and-investing-conditions/",
   model: "https://quantfury.com/business-model/",
   agreement: "https://quantfury.com/quantfury-client-agreement.pdf",
-  readOn: "2026-09-12",
+  agreementVersion: "2026-01-05",
+  readOn: "2026-09-14",
   entity: "Quantfury Trading Americas Limited",
   regulator: "Securities Commission of The Bahamas",
+  licences: ["SIA-F204", "DARE-DAB-027"],
+  groupUk: "Quantfury Trading UK Limited, FCA 577611",
+  barred: ["US", "CA", "BS", "VG"],
 };
 
-// Every one of these is a published zero, not an unknown treated as free.
+// Every one of these is a published zero, not an unknown treated as free. They
+// are named rather than inlined so `--schedule` can print the barème as the
+// other brokers print theirs, and so that a future charge has a place to land.
 const COMMISSION_EACH = 0;
 const TICKET = 0;
-const FX_MARKUP = 0;
+const BORROWING = 0;
 const SEC_RATE = 0;
 const TAF_PER_SHARE = 0;
+
+// This one used to be inferred and is now read. The account's own cashAccount
+// payload prices every wallet Quantfury offers, as `commissionOnConvertPercent`
+// — zero on the currencies this shelf trades in on both sides of the Atlantic,
+// and far from zero in Latin America. It is charged entering and again leaving,
+// so a round trip pays twice what stands here. Crypto wallets all read 0.
+const CONVERT_PERCENT = {
+  USD: 0,
+  EUR: 0,
+  GBP: 0,
+  CHF: 0,
+  TRY: 0,
+  USDT: 0,
+  BRL: 0.01,
+  MXN: 0.01,
+  CLP: 0.01,
+  COP: 0.015,
+  ARS: 0.04,
+};
+
+// A currency the payload did not price stays N/A rather than falling back to
+// the free that this file wrongly assumed for all of them.
+const convertRate = (currency) => CONVERT_PERCENT[String(currency || "").toUpperCase()] ?? null;
 
 const US_MICS = new Set(["XNAS", "XNYS", "ARCX", "XASE", "BATS"]);
 const US_EX = new Set(["NASDAQ", "NYSE", "AMEX", "ARCA", "CBOE", "BATS", "OTC"]);
 
+// The operators Quantfury prints beside a line in its own catalogue string.
+const OPERATORS = ["Cboe Europe", "NASDAQ", "NYSE", "AMEX", "B3", "BMV", "BIVA", "Binance", "Coinbase", "CME", "ICE"];
+const CBOE_EUROPE = "Cboe Europe";
+
 const CRYPTO_REMARK = "Écart Binance/Coinbase non publié ici.";
+
+// Le change reste hors du total parce qu'il dépend de la devise du solde, que
+// ce fichier ne connaît pas ; il est dit ici, et d'autant plus fort qu'il pèse.
+// Les pays barrés, eux, relèvent de l'éligibilité et non du prix d'un
+// aller-retour : ils restent dans `--schedule`.
+function remarkOf({ crypto, marketBp, listing, convert }) {
+  const lines = [];
+
+  if (convert == null) {
+    lines.push(`Conversion vers ${listing.currency} non chiffrée : le barème du compte ne cote pas cette devise.`);
+  } else if (convert > 0) {
+    lines.push(
+      `Change ${(100 * convert).toFixed(2)} % par sens si le solde n'est pas en ${listing.currency}, ` +
+        `soit ${(200 * convert).toFixed(2)} % sur l'aller-retour, hors du total ci-dessus.`
+    );
+  }
+
+  if (crypto && marketBp == null) lines.push(CRYPTO_REMARK);
+  return lines.join("\n");
+}
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
@@ -104,6 +266,11 @@ const spreads = fs.existsSync(SPREADS) ? JSON.parse(fs.readFileSync(SPREADS, "ut
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 const isCrypto = (row) => row?.type === "CRYPTO" || /^CRYPTO$/i.test(String(row?.exchange || ""));
 const cryptoBase = (ticker) => String(ticker || "").split("/")[0].toUpperCase();
+
+// What Quantfury itself said the venue was, read off the catalogue string it
+// was scraped from. The row's `exchange` is the scraper's answer, not this one.
+const saidVenue = (row) =>
+  OPERATORS.find((op) => new RegExp(`\\s${op}\\s+[A-Z]{3,4}\\b`, "i").test(String(row?.raw || ""))) || null;
 
 const dollars = (amount, currency) => {
   const v = toUsd(amount, currency);
@@ -146,9 +313,12 @@ function findListing({ etf, place, currency }) {
     .map((r) => ({ row: r, ...listingKey(r) }))
     .filter((m) => {
       if (!wantPlace) return true;
+      // A reader may ask for the venue Quantfury names as easily as the one the
+      // scraper filed the line under.
+      if (loose(saidVenue(m.row)) === wantPlace) return true;
       if (wantVenue && m.venue) return m.venue.mic === wantVenue.mic;
       // The catalogue files Paris, Amsterdam, Brussels and Lisbon under the
-      // one operator name Quantfury prints.
+      // one operator name the scraper picked.
       if (
         wantVenue &&
         ["XPAR", "XAMS", "XBRU", "XLIS"].includes(wantVenue.mic) &&
@@ -165,7 +335,7 @@ function findListing({ etf, place, currency }) {
 
 const listAlternatives = (named) =>
   named
-    .map((r) => `${r.ticker || r.isin} ${r.currency || "?"} @ ${r.exchange || "place non dite"}`)
+    .map((r) => `${r.ticker || r.isin} ${r.currency || "?"} @ ${saidVenue(r) || r.exchange || "place non dite"}`)
     .slice(0, 12);
 
 function coverage() {
@@ -174,18 +344,19 @@ function coverage() {
   for (const r of rows) {
     const type = r.type || "?";
     const { venue, unsourced } = listingKey(r);
-    const book = isCrypto(r)
-      ? { leaf: null, mic: null }
-      : spreadLeaf(spreads, {
-          isin: r.isin,
-          mic: venue?.mic ?? null,
-          currency: r.currency,
-          unsourced,
-        });
-    const slot = (out[type] ||= { n: 0, withBook: 0, taxed: 0 });
+    // A coin has no ISIN and is found by its base, the same way `roundTrip`
+    // finds it; counting it as bookless would understate the shelf by 49 lines.
+    const book = spreadLeaf(spreads, {
+      isin: isCrypto(r) ? cryptoId(cryptoBase(r.ticker)) : r.isin,
+      mic: isCrypto(r) ? null : (venue?.mic ?? null),
+      currency: r.currency,
+      unsourced: isCrypto(r) ? null : unsourced,
+    });
+    const slot = (out[type] ||= { n: 0, withBook: 0, taxed: 0, cboeEurope: 0 });
     slot.n += 1;
     if (book.leaf?.bp != null || book.leaf?.perShare != null) slot.withBook += 1;
     if (Object.keys(taxRates(taxesOf(r.isin))).length) slot.taxed += 1;
+    if (saidVenue(r) === CBOE_EUROPE) slot.cboeEurope += 1;
   }
   return out;
 }
@@ -193,38 +364,36 @@ function coverage() {
 function taxParts(isin) {
   const tax = taxesOf(isin);
   const rates = taxRates(tax);
-  // The PTM levy is a flat pound on large London tickets, not a rate on the
-  // amount, and Quantfury never fronts it.
+  // The PTM levy is a flat pound on a London ticket above £10,000, not a rate
+  // on the amount, and the tax map can only carry it as one. `roundTrip` could
+  // hold the pound now that the affine triple is gone, but it is still left out
+  // on the ground that put it out: the levy is collected by brokers inside the
+  // UK Takeover Code's chain, Quantfury is a Bahamian dealer outside it, and it
+  // publishes no such pass-through. Were it owed it would add about £1.
   delete rates.PTM_LEVY;
   const taxTotal = Object.values(rates).reduce((sum, rate) => sum + rate, 0);
   return { tax, rates, taxTotal };
 }
 
-export function roundTripCost({ etf, place, currency, bp = null, perShare = null }) {
-  const { named, matches } = findListing({ etf, place, currency });
-  const answer = {
-    a: null,
-    b: null,
-    c: TICKET,
-    ccy: QUOTE,
-    floor: null,
-    cap: null,
-    threshold: null,
-    etf,
-    place,
-    currency,
-  };
+export function roundTrip({ etf, place, currency, shares, price, amount, bp = null, perShare = null }) {
+  // Quantfury bills nothing whether or not the book is known, so `brokerFees`
+  // is 0 from the first line and survives every N/A below it.
+  const base = { usd: null, brokerFees: 0, etf, place, currency, onlineBuy: true, cashCurrency: "" };
 
   if (!catalogue) {
     return {
-      ...answer,
+      ...base,
+      brokerFees: null,
       why: "le catalogue Quantfury n'existe pas encore : lancer `node quantfury/quantfury_scraping.mjs`",
     };
   }
-  if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Quantfury` };
+
+  const { named, matches } = findListing({ etf, place, currency });
+  if (!named.length) return { ...base, brokerFees: null, why: `${etf} n'est pas dans le catalogue Quantfury` };
   if (!matches.length) {
     return {
-      ...answer,
+      ...base,
+      brokerFees: null,
       why: `${etf} n'est pas coté sur cette place dans cette devise chez Quantfury`,
       alternatives: listAlternatives(named),
     };
@@ -232,9 +401,10 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
 
   const m = matches[0];
   const crypto = isCrypto(m.row);
-  // A coin is looked up by its base rather than by an ISIN it does not have. Quantfury
-  // names Binance and Coinbase as the prices it pairs clients on, and `spreadLeaf`
-  // answers with the wider of the two, which is the book a client could have met.
+  // A coin is looked up by its base rather than by an ISIN it does not have.
+  // Quantfury names Binance and Coinbase as the prices it pairs clients on, and
+  // `spreadLeaf` answers with the wider of the two, which is the book a client
+  // could have met.
   const book = spreadLeaf(spreads, {
     isin: crypto ? cryptoId(cryptoBase(m.row.ticker)) : m.row.isin,
     mic: crypto ? null : (m.venue?.mic ?? null),
@@ -242,96 +412,131 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
     unsourced: m.unsourced,
   });
 
+  const said = saidVenue(m.row);
+  const european = said === CBOE_EUROPE;
+  const bookMic = book.mic ?? m.venue?.mic ?? null;
+
   const listing = {
     isin: String(m.row.isin || "").toUpperCase() || null,
     ticker: m.row.ticker || null,
     name: m.row.name || null,
     type: m.row.type || null,
-    mic: book.mic ?? m.venue?.mic ?? null,
-    exchange: m.venue?.name ?? m.row.exchange ?? null,
+    // Quantfury's own venue string wins where the catalogue's is an artefact of
+    // the ticker match — every European line — and loses where it is coarser
+    // than the catalogue's: it files NYSE Arca funds under "NYSE".
+    mic: european ? null : bookMic,
+    exchange: european ? CBOE_EUROPE : (m.venue?.name ?? m.row.exchange ?? null),
     currency: String(m.row.currency || "").toUpperCase(),
     brokerExchange: m.row.exchange || null,
+    // Which book was actually read. On a European line it is not the venue above.
+    bookVenue: bookMic,
   };
 
   const leaf = book.leaf;
   const marketBp = bp ?? leaf?.bp ?? null;
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
-  const american = isAmerican(m.row, listing.mic);
-  const { tax, rates, taxTotal } = crypto
-    ? { tax: null, rates: {}, taxTotal: 0 }
-    : taxParts(listing.isin);
+  const american = isAmerican(m.row, bookMic);
+  const { tax, rates, taxTotal } = crypto ? { tax: null, rates: {}, taxTotal: 0 } : taxParts(listing.isin);
+  const convert = convertRate(listing.currency);
 
-  const mkt = bookParts({
-    bp: marketBp,
-    perShare: marketPerShare,
-    venue: m.venue,
-    // No crypto sentinel any more: a coin whose book was read carries it, and one
-    // neither exchange lists is unknown rather than free. Passing the sentinel would
-    // turn that second case into a zero, which is what this file used to do.
-    unsourced: crypto ? null : m.unsourced,
-    toUsd: (x) => (american ? x : dollars(x, listing.currency)),
-  });
-
-  return {
-    ...answer,
-    a: finite(plus(mkt.a, taxTotal, SEC_RATE, COMMISSION_EACH * 2, FX_MARKUP), 4),
-    b: finite(plus(mkt.b, TAF_PER_SHARE), 6),
-    c: TICKET,
+  const answer = {
+    ...base,
     listing,
     feeMarket: crypto ? "crypto" : american ? "us" : "autre",
-    remark: crypto && marketBp == null ? CRYPTO_REMARK : "",
-    parts: {
-      marché:
-        marketBp != null
-          ? Number((marketBp / 1e4).toPrecision(4))
-          : marketPerShare != null
-            ? `${marketPerShare} par part`
-            : null,
-      taxes: Object.keys(rates).length ? rates : null,
-      réglementaire: null,
-      commission: 0,
-      change: null,
-    },
+    venueAuthoritative: european,
     bp: marketBp,
     perShare: marketPerShare,
     url: leaf?.url ?? SCHEDULE.conditions,
-    basis: `conditions Quantfury (aucun frais), lues le ${SCHEDULE.readOn}`,
-    tax,
-    commission: {
-      rate: COMMISSION_EACH,
-      min: 0,
-      cap: null,
-      flat: null,
-      currency: QUOTE,
-      eachWay: true,
-    },
-    ccy: QUOTE,
+    basis:
+      `accord client Quantfury §13 du ${SCHEDULE.agreementVersion} (aucun frais), relu le ${SCHEDULE.readOn}` +
+      (european ? `, carnet ${bookMic || "primaire"} en doublure de ${CBOE_EUROPE}` : ""),
     fx: fxNote(listing.currency),
-    fxIfConverted: FX_MARKUP,
-    confidence: confidenceOf({ crypto, leaf, marketBp, marketPerShare, taxTotal, tax, american }),
+    fxIfConverted: convert,
+    fxNote:
+      convert == null
+        ? `conversion vers ${listing.currency} non chiffrée : le barème du compte ne cote pas cette devise`
+        : convert === 0
+          ? `conversion gratuite vers ${listing.currency} (barème du compte relu le ${SCHEDULE.readOn})`
+          : `${(100 * convert).toFixed(2)} % à la conversion si le solde n'est pas en ${listing.currency}, ` +
+            `payés à l'aller et au retour, hors du total`,
+    tax,
+    taxRates: Object.keys(rates).length ? rates : null,
+    remark: remarkOf({ crypto, marketBp, listing, convert }),
+    confidence: confidenceOf({ crypto, european, bookMic, leaf, marketBp, marketPerShare, taxTotal, tax, american, listing, convert }),
   };
-}
 
-// Nothing here is billed, so the exact cost of a trip is the book alone. It is
-// kept so the CLI can print the same shape as the brokers that do bill.
-export function exactCost({ shares, price, bp = null, perShare = null }) {
-  const amount = shares * price;
-  const market = ((bp ?? 0) / 1e4) * amount + (perShare ?? 0) * shares;
+  // A coin is bought by the dollar, a share by the unit at a price.
+  const n = Number(shares);
+  const p = Number(price);
+  const a = Number(amount);
+  const notionalUsd = crypto ? (a > 0 ? a : null) : n > 0 && p > 0 ? toUsd(n * p, listing.currency) : null;
+
+  if (notionalUsd == null) {
+    return {
+      ...answer,
+      why: crypto
+        ? "aucun montant pour cette pièce"
+        : !(n > 0)
+          ? "aucun nombre de parts"
+          : !(p > 0)
+            ? "aucun prix pour cette ligne : lancer node prices.mjs"
+            : `aucun taux ${listing.currency} → ${QUOTE}`,
+    };
+  }
+
+  // The book is already a round trip — Rule 605 per share in America, basis
+  // points elsewhere — so it is crossed once, not once per side.
+  const bookUsd =
+    marketBp != null
+      ? (notionalUsd * marketBp) / 1e4
+      : marketPerShare != null && !crypto
+        ? dollars(marketPerShare * n, american ? QUOTE : listing.currency)
+        : null;
+
+  // Bought once, so charged once: a transfer tax is owed by whoever acquires
+  // the line and not again by whoever sells it back.
+  const taxUsd = notionalUsd * taxTotal;
+
   return {
-    commission: 0,
-    market: finite(market, 6),
-    currency: QUOTE,
+    ...answer,
+    usd: finite(plus(bookUsd, taxUsd), 6),
+    trade: crypto
+      ? { amount: notionalUsd, currency: QUOTE }
+      : { shares: n, price: p, notional: n * p, notionalUsd: finite(notionalUsd, 6), currency: listing.currency },
+    parts: {
+      marché: finite(bookUsd, 6),
+      taxes: finite(taxUsd, 6),
+      commission: COMMISSION_EACH,
+      réglementaire: SEC_RATE + TAF_PER_SHARE,
+      // Les parts somment `usd`, et `usd` ne suppose aucune conversion : le
+      // tarif réel de la devise est dans `fxIfConverted`, hors du total.
+      change: 0,
+      portage: BORROWING,
+      ticket: TICKET,
+    },
+    ...(bookUsd == null
+      ? {
+          // The venue named here is the one searched, which on a European line
+          // is the stand-in and not the Cboe Europe shown to the reader.
+          why: crypto
+            ? "ni Binance ni Coinbase ne cote cette pièce contre le dollar"
+            : `aucun carnet pour ${m.unsourced?.name || m.venue?.name || m.row.exchange} : ` +
+              `${m.unsourced?.why || "pas de feuille de spread"}`,
+        }
+      : {}),
   };
 }
 
-function confidenceOf({ crypto, leaf, marketBp, marketPerShare, taxTotal, tax, american }) {
+function confidenceOf({ crypto, european, bookMic, leaf, marketBp, marketPerShare, taxTotal, tax, american, listing, convert }) {
   const lines = [
-    `aucun frais publié chez Quantfury : ni commission, ni change, ni portage (accord client §13, lu le ${SCHEDULE.readOn})`,
+    `aucun frais chez Quantfury : ni commission, ni portage, ni ticket (accord client §13 du ${SCHEDULE.agreementVersion}, relu le ${SCHEDULE.readOn})`,
+    "la colonne « frais du courtier » vaut donc 0 alors que le total ne vaut pas 0 : Quantfury se paie du carnet, mais ce carnet est celui de la place et le client l'aurait croisé ailleurs",
   ];
 
   if (crypto && marketBp != null) {
     lines.push(
-      "crypto : Quantfury reprend le spot Binance / Coinbase, et le coût est la touche de ces carnets, lue à la plus large des deux quand les deux cotent la pièce"
+      "crypto : Quantfury reprend le spot Binance / Coinbase, et le coût est la touche de ces carnets, lue à la plus large des deux quand les deux cotent la pièce" +
+        ` — reprise vérifiée au centime le ${SCHEDULE.readOn} en comparant les cotations diffusées par Quantfury à celles des deux bourses`
     );
   } else if (crypto) {
     lines.push(
@@ -346,17 +551,47 @@ function confidenceOf({ crypto, leaf, marketBp, marketPerShare, taxTotal, tax, a
     );
   }
 
+  if (european) {
+    lines.push(
+      `place : Quantfury dit ${CBOE_EUROPE} pour toute l'Europe, et aucune bande ${CBOE_EUROPE} n'est collectée, ` +
+        `donc le carnet ${bookMic || "primaire"} sert de doublure (médiane 8,2 bp sur les 232 lignes européennes cotées)`
+    );
+    lines.push(
+      "ISIN : celui-ci vient de l'appariement par ticker du scraper, pas de Quantfury ; le plancher de nom s'applique désormais à l'Europe, mais l'identité reste déduite"
+    );
+  }
+
   if (taxTotal > 0) {
     lines.push(
       `taxe de transfert ${(100 * taxTotal).toFixed(2)} % ${tax?.country ? `(${tax.country}) ` : ""}` +
         "prise dans la carte des taxes : Quantfury n'en publie aucune et laisse l'impôt au client (§56), " +
         "mais le droit suit le titre et non le tarif du courtier" +
-        (marketBp ? `, et il pèse ${((1e4 * taxTotal) / marketBp).toFixed(0)} fois le carnet` : "")
+        // Le rapport ne vaut d'être dit que quand l'impôt écrase le carnet ;
+        // l'inverse signale une doublure aberrante, pas une taxe légère.
+        (marketBp && (1e4 * taxTotal) / marketBp >= 2
+          ? `, et il pèse ${((1e4 * taxTotal) / marketBp).toFixed(0)} fois le carnet`
+          : "")
     );
   }
 
-  lines.push("ni SEC ni TAF : entité bahaméenne appariant ses propres clients, pas un courtier américain qui répercute");
-  lines.push("aucun aller-retour réel dans ce dépôt");
+  lines.push(
+    "ni SEC ni TAF : courtier bahaméen appariant ses propres clients (SIA-F204), pas un courtier américain qui répercute"
+  );
+  if (convert == null) {
+    lines.push(`change non chiffré : le barème du compte ne cote pas le ${listing?.currency || "?"}`);
+  } else if (convert > 0) {
+    lines.push(
+      `change ${(100 * convert).toFixed(2)} % par sens, lu dans le barème du compte relu le ${SCHEDULE.readOn} : ` +
+        `un solde en dollars paie ${(200 * convert).toFixed(2)} % sur l'aller-retour, ` +
+        `${marketBp ? `${(2e4 * convert / marketBp).toFixed(0)} fois le carnet, ` : ""}et ce n'est pas dans le total`
+    );
+  } else {
+    lines.push(
+      `change nul vers ${listing?.currency || "?"} : le barème du compte, relu le ${SCHEDULE.readOn}, ` +
+        "ne facture ni l'euro ni le dollar ni la crypto — ce 0 est désormais lu et non plus supposé"
+    );
+  }
+  lines.push("cotations relevées en direct, mais aucun aller-retour réel dans ce dépôt");
   if (!crypto && !leaf) lines.push("carnet absent, le chiffre ci-dessus ne tient qu'aux taxes");
 
   return lines.join(" ; ");
@@ -375,7 +610,8 @@ if (import.meta.url === `file://${process.argv[1]}`) {
           ...SCHEDULE,
           commissionEachWay: COMMISSION_EACH,
           ticket: TICKET,
-          fxMarkup: FX_MARKUP,
+          borrowing: BORROWING,
+          convertPercent: CONVERT_PERCENT,
           secRate: SEC_RATE,
           tafPerShare: TAF_PER_SHARE,
           coverage: coverage(),
@@ -391,19 +627,22 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node quantfury_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--json]\n" +
+      "usage : node quantfury_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--amount=usd] [--json]\n" +
         "        node quantfury_cost.mjs --schedule\n" +
-        "  ex.   node quantfury_cost.mjs AAPL\n" +
-        "        node quantfury_cost.mjs HSBA LSE GBP --shares=100\n" +
-        "        node quantfury_cost.mjs TTE EURONEXT EUR --shares=10 --price=60"
+        "  ex.   node quantfury_cost.mjs AAPL --shares=10 --price=230\n" +
+        "        node quantfury_cost.mjs SHEL LSE EUR --shares=100 --price=30\n" +
+        "        node quantfury_cost.mjs BTC --amount=1000"
     );
     process.exit(2);
   }
 
-  const out = roundTripCost({
+  const out = roundTrip({
     etf,
     place,
     currency,
+    shares: flag("shares") ? Number(flag("shares")) : 10,
+    price: flag("price") ? Number(flag("price")) : undefined,
+    amount: flag("amount") ? Number(flag("amount")) : 1000,
     bp: flag("bp") ? Number(flag("bp")) : null,
     perShare: flag("per-share") ? Number(flag("per-share")) : null,
   });
@@ -415,8 +654,8 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 
   const show = (x) => (x == null ? "N/A" : x);
 
-  if (out.a == null && !out.listing) {
-    console.log(`a = N/A   b = ${show(out.b)}   c = ${show(out.c)}\n${out.why}`);
+  if (!out.listing) {
+    console.log(out.why);
     if (out.alternatives?.length) {
       console.log(`\nce que Quantfury propose sous ce nom :\n  ${out.alternatives.join("\n  ")}`);
     }
@@ -425,45 +664,35 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 
   const l = out.listing;
   console.log(`${l.ticker || l.isin} — ${l.name || ""}`);
-  console.log(`${l.exchange}${l.mic ? ` (${l.mic})` : ""}, ${l.currency}${l.type ? `, ${l.type.toLowerCase()}` : ""}\n`);
-
-  // A book quoted per share belongs to `b`; only a book quoted as a fraction
-  // of the amount belongs next to `a`.
-  const detail = [];
-  if (out.bp != null) detail.push(`carnet ${out.parts.marché}`);
-  for (const [name, rate] of Object.entries(out.parts?.taxes ?? {})) detail.push(`${name} ${rate}`);
-
-  console.log(`a = ${show(out.a)}   (au prorata${detail.length ? " : " + detail.join(" + ") : " : rien"})`);
   console.log(
-    `b = ${show(out.b)} $   (par part${out.b ? ` : carnet ${out.perShare != null ? "605" : "converti"}` : " : rien"})`
+    `${l.exchange}${l.mic ? ` (${l.mic})` : ""}, ${l.currency}${l.type ? `, ${l.type.toLowerCase()}` : ""}` +
+      (out.venueAuthoritative && l.bookVenue ? `, carnet lu sur ${l.bookVenue}` : "") +
+      "\n"
   );
-  console.log(`c = ${show(out.c)} $   (par ordre : aucun ticket)`);
 
-  const fx = out.fx?.listing ?? usdPer(l.currency);
-  console.log(
-    `\ncoût = ${show(out.a)} × p × n × ${fx != null ? Number(fx.toPrecision(6)) : "?"} + ` +
-      `${show(out.b)} × n + ${show(out.c)}   ($ ; p en ${l.currency})`
-  );
-  console.log(`  ${out.basis}`);
-  for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
-
-  const n = Number(flag("shares"));
-  const p = Number(flag("price"));
-  if (n > 0 && p > 0) {
-    const amount = n * p;
-    const amountUsd = toUsd(amount, l.currency);
-    const affine = plus(
-      out.a == null || amountUsd == null ? null : out.a * amountUsd,
-      out.b == null ? null : out.b * n,
-      out.c
-    );
+  if (out.trade?.amount != null) {
+    console.log(`${out.trade.amount} $ aller-retour\n`);
+  } else if (out.trade) {
     console.log(
-      `\n${n} part${n > 1 ? "s" : ""} à ${p} ${l.currency} = ${amount.toFixed(2)} ${l.currency}` +
-        (amountUsd != null ? ` (${amountUsd.toFixed(2)} $)` : "")
+      `${out.trade.shares} part${out.trade.shares > 1 ? "s" : ""} à ${out.trade.price} ${l.currency} = ` +
+        `${out.trade.notional.toFixed(2)} ${l.currency} (${Number(out.trade.notionalUsd).toFixed(2)} $)\n`
     );
-    console.log(`  a, b, c        : ${affine == null ? "N/A" : `${affine.toFixed(4)} $`}`);
-    console.log(`  commission     : 0 $`);
   }
 
+  console.log(`aller-retour     : ${show(out.usd)} $`);
+  console.log(`frais du courtier: ${out.brokerFees} $`);
+  if (out.parts) {
+    console.log(`  carnet         : ${show(out.parts.marché)} $`);
+    console.log(
+      `  taxes          : ${show(out.parts.taxes)} $` +
+        (out.taxRates ? `   (${Object.entries(out.taxRates).map(([k, v]) => `${k} ${v}`).join(", ")})` : "")
+    );
+  }
+  if (out.why) console.log(`  ${out.why}`);
+
+  console.log(`\n  ${out.basis}`);
+  for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
+
+  if (out.remark) console.log(`\n${out.remark}`);
   if (out.url) console.log(`\n${out.url}`);
 }

@@ -16,6 +16,7 @@ const arg = (name, fallback) => {
   return hit ? hit.split("=").slice(1).join("=") : fallback;
 };
 const LIVE = process.argv.includes("--live");
+const GAP = process.argv.includes("--gap");
 const SYMBOL = arg("symbol", "EUNL").toUpperCase();
 const AMOUNT = Number(arg("amount", "25"));
 const PAUSE = Number(arg("pause", "2500"));
@@ -173,7 +174,7 @@ async function gql(url, operationName, query, variables) {
     body: { operationName, query, variables },
   });
   if (res.status !== 200) {
-    throw new Error(`${operationName} HTTP ${res.status}: ${res.text || JSON.stringify(res.body).slice(0, 300)}`);
+    throw new Error(`${operationName} HTTP ${res.status}: ${res.text || JSON.stringify(res.body).slice(0, 1500)}`);
   }
   if (res.body?.errors) {
     throw new Error(`${operationName} : ${JSON.stringify(res.body.errors).slice(0, 400)}`);
@@ -266,6 +267,24 @@ console.error(
     `frais ${quoted.feeFiat} € (${quoted.feePct != null ? `${quoted.feePct} %` : "?"})  ` +
     `hors frais ${quoted.priceWithoutFee}`
 );
+
+// A quote is free and an offer is only binding once accepted, so if Bitpanda
+// prices a sell for someone holding nothing, the gap between the two
+// `priceWithoutFee` can be read on any coin at any size without spending.
+if (GAP) {
+  const sellData = await offer("SELL", AMOUNT, "FIAT");
+  const s = sellData?.createOffer?.offer;
+  if (!s) throw new Error(`pas de devis vente à vide : ${JSON.stringify(sellData).slice(0, 600)}`);
+  const sellPwf = money(s.fee?.priceWithoutFee?.value);
+  const gap = quoted.priceWithoutFee && sellPwf ? (quoted.priceWithoutFee - sellPwf) / quoted.priceWithoutFee : null;
+  console.error(
+    `devis vente ${AMOUNT} € sans détenir : hors frais ${sellPwf}  ` +
+      `(achat ${quoted.priceWithoutFee})  écart ${gap == null ? "?" : (gap * 100).toFixed(3) + " %"}`
+  );
+  fs.writeFileSync(OUT, JSON.stringify({ symbol: SYMBOL, amount: AMOUNT, buy: quoted, sellPriceWithoutFee: sellPwf, gap }, null, 2));
+  await browser.disconnect();
+  process.exit(0);
+}
 
 const log = {
   at: new Date().toISOString(),

@@ -136,7 +136,14 @@ const EXCHANGE_VENUES = {
   B3: ["BMFBOVESPA", "BOVESPA", "BIVA"],
   BMV: ["BMV", "BIVA"],
   LSE: ["LSE", "LSIN"],
-  "CBOE EUROPE": ["XETR", "GETTEX", "TRADEGATE", "CBOE", "EURONEXT", "LSE"],
+  // London is deliberately absent: Quantfury quotes its Cboe Europe book in
+  // euro, and a short continental ticker looked up in the LSE namespace finds
+  // an unrelated British company far more often than the right one — DIA is
+  // DiaSorin in Milan and Dialight in London, TRN is Terna and Trainline, ITX
+  // is Inditex and Itaconix. A genuinely British line is still reachable: with
+  // no candidate on an allowed venue the shortlist widens to every venue, and
+  // there the name has to agree.
+  "CBOE EUROPE": ["XETR", "GETTEX", "TRADEGATE", "CBOE", "EURONEXT"],
 };
 
 const OPERATOR_EXCHANGE = {
@@ -148,14 +155,24 @@ const OPERATOR_EXCHANGE = {
   "CBOE EUROPE": "XETR",
 };
 
+const operatorOf = (instrument) => normalize(instrument.en).toUpperCase();
+
+// An operator covering one country lends its ticker space enough uniqueness for
+// the ticker alone to carry a match, and a company that changed its name —
+// MicroStrategy to Strategy, Deutsche Post to DHL, Schlumberger to SLB — should
+// not lose its line over the wording. "Cboe Europe" covers a dozen countries at
+// once, where the same two or three letters belong to several unrelated
+// companies, so the name floor the rest of the shelf can skip is compulsory.
+const AMBIGUOUS_OPERATORS = new Set(["CBOE EUROPE"]);
+
 function venuesOf(instrument) {
-  const operator = normalize(instrument.en).toUpperCase();
+  const operator = operatorOf(instrument);
   if (EXCHANGE_VENUES[operator]) return EXCHANGE_VENUES[operator];
   if (instrument.eci === "US") return EXCHANGE_VENUES.NYSE;
   return [];
 }
 
-function resolveListing(tickerCandidates, ticker, name, venues) {
+function resolveListing(tickerCandidates, ticker, name, venues, operator) {
   const candidates = tickerCandidates.get(ticker) || [];
   if (candidates.length === 0) return null;
 
@@ -172,8 +189,18 @@ function resolveListing(tickerCandidates, ticker, name, venues) {
     ...scoreCandidate(name, candidate),
   }));
 
+  // With no candidate on a venue this operator reaches, the shortlist widens to
+  // every venue there is and the name is the only evidence left, so the floor
+  // always holds there. On an ambiguous operator the floor is disambiguating
+  // instead, and where the catalogues hold a single line under this ticker
+  // there is nothing to disambiguate: insisting on the wording would drop a
+  // company that renamed or that Quantfury names in another language — Munich
+  // Re against "Münchener Rückversicherungs", Sofina Société Anonyme against
+  // Sofina SA.
+  const sole = candidates.length === 1;
+  const mustName = sameVenue.length === 0 || (AMBIGUOUS_OPERATORS.has(operator) && !sole);
   const bestScore = Math.max(0, ...scored.map((entry) => entry.score));
-  if (sameVenue.length === 0 && bestScore < MIN_NAME_SCORE) return null;
+  if (mustName && bestScore < MIN_NAME_SCORE) return null;
 
   let winner;
   if (scored.length === 1) {
@@ -374,7 +401,7 @@ for (const instrument of book) {
     match = coins[0] ? { isin: coins[0].isin || "", name: coins[0].names[0] || quoted, exchange: "CRYPTO" } : null;
   } else {
     const catalogue = type === "STOCK" ? stocksByTicker : fundsByTicker;
-    match = resolveListing(catalogue, ticker, quoted, venuesOf(instrument));
+    match = resolveListing(catalogue, ticker, quoted, venuesOf(instrument), operatorOf(instrument));
     if (!match && !keepUnlisted) {
       unlisted += 1;
       continue;

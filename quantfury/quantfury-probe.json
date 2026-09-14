@@ -1,0 +1,58 @@
+{
+  "asOf": "2026-09-14T16:17:31.346Z",
+  "currency": "EUR",
+  "asked": 3,
+  "measured": [],
+  "closed": [
+    {
+      "ticker": "ACS",
+      "name": "Actividades de Construcción y Servicios S.A.",
+      "shortName": "ACSe.CHI",
+      "isin": "ES0167050915",
+      "currency": "EUR",
+      "exchange": "BME",
+      "bid": 91.6,
+      "ask": 91.6,
+      "quantfuryBp": 0,
+      "standInBp": null,
+      "standInVenue": null,
+      "rate": 1.15469,
+      "rateOffBp": -4.414819944598428
+    },
+    {
+      "ticker": "AENA",
+      "name": "Aena SME S.A.",
+      "shortName": "AENAe.CHI",
+      "isin": "ES0105046017",
+      "currency": "EUR",
+      "exchange": "BME",
+      "bid": 24.67,
+      "ask": 24.67,
+      "quantfuryBp": 0,
+      "standInBp": null,
+      "standInVenue": null,
+      "rate": 1.15474,
+      "rateOffBp": -3.981994459832972
+    },
+    {
+      "ticker": "AMS",
+      "name": "Amadeus It Group SA",
+      "shortName": "AMS",
+      "isin": "ES0109067019",
+      "currency": "EUR",
+      "exchange": "BME",
+      "bid": 55.15,
+      "ask": 55.15,
+      "quantfuryBp": 0,
+      "standInBp": null,
+      "standInVenue": null,
+      "rate": 1.1547,
+      "rateOffBp": -4.328254847644953
+    }
+  ],
+  "missing": [],
+  "medianQuantfuryBp": null,
+  "medianStandInBp": null,
+  "medianGapBp": null,
+  "medianRateOffBp": null
+}

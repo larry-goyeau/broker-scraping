@@ -1,0 +1,25 @@
+{
+  "readOn": "2026-09-14T11:44:20.395Z",
+  "accountId": "U28294463",
+  "results": [
+    {
+      "id": "cap",
+      "asks": "le plafond américain : Mexem imprime 2 %, le tarif fixe IBKR plafonne à 1 %",
+      "symbol": "F",
+      "exchange": "NYSE",
+      "side": "BUY",
+      "quantity": 1,
+      "expect": "2 % de la valeur si la carte Mexem dit vrai, 1 % si c'est la grille IBKR",
+      "conid": "9599491",
+      "company": "FORD MOTOR CO - NYSE",
+      "price": 13.91,
+      "notional": 13.91,
+      "amount": "13.91 USD (1 Shares)",
+      "commission": "—",
+      "total": "—",
+      "refused": [
+        "YOUR ORDER IS NOT ACCEPTED. THERE IS INSUFFICIENT SETTLED CASH [-14.91 USD for 20260915] IN YOUR ACCOUNT TO OBTAIN THE DESIRED POSITION."
+      ]
+    }
+  ]
+}

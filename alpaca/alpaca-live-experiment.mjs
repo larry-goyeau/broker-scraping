@@ -121,11 +121,14 @@ const quoteCrypto = async (symbol) => {
 const quote = CRYPTO ? await quoteCrypto(SYMBOL) : await quoteStock(SYMBOL);
 console.error(`quote ${SYMBOL} : ${quote.bid}/${quote.ask}` + (quote.error ? ` (${quote.error})` : ""));
 
-const { roundTripCost } = await import("./alpaca_cost.mjs");
-const model = roundTripCost({
+const { roundTrip } = await import("./alpaca_cost.mjs");
+// A coin is bought by the dollar, a share by the unit at a price: the estimator
+// is handed whichever pair describes the order about to be sent.
+const model = roundTrip({
   etf: SYMBOL,
   place: CRYPTO ? "CRYPTO" : undefined,
   currency: "USD",
+  ...(CRYPTO ? { amount: AMOUNT } : { shares: SHARES, price: quote.mid }),
 });
 
 const orderPaths = [
@@ -150,9 +153,20 @@ const placeBody = CRYPTO
     };
 
 if (!LIVE) {
+  // The probe finds which endpoint answers by sending a limit order a cent
+  // above zero, which cannot fill. Cannot fill is not the same as does not
+  // exist: what comes back is a live GTC order resting on the book until
+  // December, holding its notional out of buying power. So whatever the probe
+  // opens, the probe closes.
+  const opened = [];
   for (const p of orderPaths) {
     const r = await api(p, { method: "POST", body: { ...placeBody, type: "limit", limit_price: "0.01" } });
     console.error(`probe POST ${p} -> ${r.status} ${(r.text || JSON.stringify(r.body) || "").slice(0, 180)}`);
+    if (r.status < 300 && r.body?.id) opened.push({ path: p, id: r.body.id });
+  }
+  for (const { path, id: orderId } of opened) {
+    const r = await api(`${path}/${orderId}`, { method: "DELETE" });
+    console.error(`probe DELETE ${orderId} -> ${r.status}${r.status < 300 ? " (carnet laissé propre)" : " ÉCHEC, annuler à la main"}`);
   }
   const out = {
     at: new Date().toISOString(),
@@ -164,7 +178,10 @@ if (!LIVE) {
     pendingRegTaf: money(margin.pending_reg_taf_fees),
     marketOpen: clock.is_open,
     quote,
-    model: model.a == null ? { why: model.why } : { a: model.a, b: model.b, c: model.c, type: model.listing?.type },
+    model:
+      model.usd == null
+        ? { why: model.why }
+        : { usd: model.usd, marginal: model.marginal, parts: model.parts, type: model.listing?.type },
   };
   fs.writeFileSync(OUT, JSON.stringify(out, null, 2));
   console.error("sonde écrite, aucun ordre envoyé");
@@ -266,7 +283,7 @@ const run = {
     pendingRegTaf: money(margin.pending_reg_taf_fees),
   },
   quote,
-  model: { a: model.a, b: model.b, c: model.c, type: model.listing?.type },
+  model: { usd: model.usd, marginal: model.marginal, parts: model.parts, type: model.listing?.type },
   buy,
   sell,
   closing: {

@@ -1,0 +1,138 @@
+{
+  "symbol": "SPYL.ETF",
+  "volume": "7",
+  "eurusd": {
+    "symbol": null,
+    "bid": null,
+    "ask": null,
+    "at": "2026-09-14T14:22:40.793Z",
+    "lines": [
+      "New Order",
+      "Market Execution",
+      "Buy Limit",
+      "Sell Limit",
+      "Buy Stop",
+      "Sell Stop",
+      "Volume",
+      "100 000.00 EUR",
+      "Stop Loss",
+      "Take Profit",
+      "Comment",
+      "1.14730",
+      "1.15930",
+      "Sell by Market"
+    ]
+  },
+  "before": {
+    "symbol": "SPYL.ETF",
+    "bid": 16.321,
+    "ask": 16.326,
+    "mid": 16.323500000000003,
+    "at": "2026-09-14T14:22:53.127Z"
+  },
+  "log": [
+    {
+      "at": "2026-09-14T14:22:30.724Z",
+      "what": "solde avant",
+      "value": {
+        "balance": 122,
+        "equity": 122,
+        "margin": 0,
+        "free": 122,
+        "at": "2026-09-14T14:22:30.723Z"
+      }
+    },
+    {
+      "at": "2026-09-14T14:22:40.793Z",
+      "what": "EURUSD au ticket",
+      "value": {
+        "symbol": null,
+        "bid": null,
+        "ask": null,
+        "at": "2026-09-14T14:22:40.793Z",
+        "lines": [
+          "New Order",
+          "Market Execution",
+          "Buy Limit",
+          "Sell Limit",
+          "Buy Stop",
+          "Sell Stop",
+          "Volume",
+          "100 000.00 EUR",
+          "Stop Loss",
+          "Take Profit",
+          "Comment",
+          "1.14730",
+          "1.15930",
+          "Sell by Market"
+        ]
+      }
+    },
+    {
+      "at": "2026-09-14T14:22:53.127Z",
+      "what": "SPYL.ETF avant l'ordre",
+      "value": {
+        "symbol": "SPYL.ETF",
+        "bid": 16.321,
+        "ask": 16.326,
+        "mid": 16.323500000000003,
+        "at": "2026-09-14T14:22:53.127Z"
+      }
+    },
+    {
+      "at": "2026-09-14T14:22:53.129Z",
+      "what": "ce que le ticket porte",
+      "value": {
+        "volume": "7.00",
+        "symbol": "SPYL.ETF"
+      }
+    },
+    {
+      "at": "2026-09-14T14:22:53.310Z",
+      "what": "achat envoyé",
+      "value": "Buy 7 SPYL.ETF"
+    },
+    {
+      "at": "2026-09-14T14:22:59.417Z",
+      "what": "position",
+      "value": "New Order | #152473221 buy 7 SPYL.ETF | Placed | OK | SPYL.ETF, H1:  | State Street SPDR S&P 500 UCITS ETF (Acc) | Stocks | 10/2040 | Forex | 0/34 | ETFs | 1/379 | Symbol | Ticket | Time | Type | Volume | Price | S / L | T / P | Price | Swap | Profit | Comment | SPYL.ETF | 152473221 | 09.14 16:22:55 | buy | 7.00 | 16.3245"
+    },
+    {
+      "at": "2026-09-14T14:22:59.418Z",
+      "what": "solde après achat",
+      "value": {
+        "balance": 7.73,
+        "equity": 7.73,
+        "margin": 0,
+        "free": 7.73,
+        "at": "2026-09-14T14:22:59.418Z"
+      }
+    },
+    {
+      "at": "2026-09-14T14:23:08.427Z",
+      "what": "fermeture",
+      "value": "croix de la ligne"
+    },
+    {
+      "at": "2026-09-14T14:23:08.559Z",
+      "what": "solde après vente",
+      "value": {
+        "balance": 122,
+        "equity": 122,
+        "margin": 0,
+        "free": 122,
+        "at": "2026-09-14T14:23:08.559Z"
+      }
+    },
+    {
+      "at": "2026-09-14T14:23:08.560Z",
+      "what": "écran",
+      "value": "New Order | Exchange Execution | Buy Limit | Sell Limit | Buy Stop | Sell Stop | Volume | 7.00 SPYL.ETF | Stop Loss | Take Profit | Fill policy | Return | Comment | 16.3235 | 16.3290 | Sell | Buy | SPYL.ETF, H1:  | State Street SPDR S&P 500 UCITS ETF (Acc) | Stocks | 10/2040 | Forex | 0/34 | ETFs | 1/379 | Symbol | Ticket | Time | Type | Volume | Price | S / L | T / P | Price | Swap | Profit | Comment | Balance: 122.00 | Equity: 122.00 | Margin: 0.00"
+    },
+    {
+      "at": "2026-09-14T14:23:12.563Z",
+      "what": "historique",
+      "value": "New Order | Exchange Execution | Buy Limit | Sell Limit | Buy Stop | Sell Stop | Volume | 7.00 SPYL.ETF | Stop Loss | Take Profit | Fill policy | Return | Comment | 16.3230 | 16.3260 | Sell | Buy | SPYL.ETF, H1:  | State Street SPDR S&P 500 UCITS ETF (Acc) | Stocks | 10/2040 | Forex | 0/34 | ETFs | 1/379 | Symbol | Ticket | Time | Type | Volume | Price | S / L | T / P | Price | Swap | Profit | Comment | Balance: 122.00 | Equity: 122.00 | Margin: 0.00 | Free margin: 122.00 | Level: 0.00% | 0.00 | EUR | You don’t have any positions"
+    }
+  ]
+}

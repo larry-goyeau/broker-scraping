@@ -305,9 +305,16 @@
           .join("");
       }
 
+      // Typing now outruns the answer often enough to matter, so a reply that
+      // comes back after a newer one was asked for is dropped rather than
+      // allowed to overwrite fresher suggestions.
+      let asked = 0;
       async function lookup(query) {
+        const mine = ++asked;
         const r = await fetch(withNat(`/api/search?q=${encodeURIComponent(query)}`));
-        hits = await r.json();
+        const rows = await r.json();
+        if (mine !== asked) return;
+        hits = rows;
         cursor = hits.length ? 0 : -1;
         renderSuggest();
       }
@@ -354,6 +361,7 @@
               exchange: crypto ? "" : l.exchange || "—",
               currency: l.currency || (crypto ? "" : "N/A"),
               total: l.total || "N/A",
+              fees: l.fees || "N/A",
               remark: l.remark || "",
             }));
           })
@@ -373,6 +381,7 @@
               g.exchange === row.exchange &&
               g.currency === row.currency &&
               g.total === row.total &&
+              g.fees === row.fees &&
               g.remark === row.remark
           );
           if (hit) hit.n += 1;
@@ -391,11 +400,11 @@
         const body = merged
           .map(
             (row) =>
-              `<tr><td>${brokerCell(row)}</td>${crypto ? "" : `<td>${esc(row.exchange)}</td>`}<td>${esc(row.currency)}</td>${cell(row.total)}<td class="remark">${esc(row.remark)}</td></tr>`
+              `<tr><td>${brokerCell(row)}</td>${crypto ? "" : `<td>${esc(row.exchange)}</td>`}<td>${esc(row.currency)}</td>${cell(row.total)}${cell(row.fees)}<td class="remark">${esc(row.remark)}</td></tr>`
           )
           .join("");
         const notes = `
-          <p class="note">* Buy ${crypto ? `${esc(String(sizeValue()))} USD of` : `${esc(String(sizeValue()))} shares of`} ${esc(d.ticker || d.isin || d.key)} and sell them back at once. Includes broker fees, taxes, and the market spread.</p>
+          <p class="note">* Buy ${crypto ? `${esc(String(sizeValue()))} USD of` : `${esc(String(sizeValue()))} shares of`} ${esc(d.ticker || d.isin || d.key)} and sell them back at once.</p>
           ${!crypto && d.trade && d.trade.price == null
             ? `<p class="note">No price on file for this instrument, so nothing proportional to the amount can be added up. Write parsed_json/prices.json to fill this column.</p>`
             : ""}
@@ -428,6 +437,7 @@
                     <input id="size" type="number" min="0" step="any" value="${esc(String(sizeVal))}" />
                     ${crypto ? "USD" : "shares"}</label>
                 </th>
+                <th>broker fees (USD)*</th>
                 <th>remark</th>
               </tr>
             </thead>
@@ -444,7 +454,9 @@
           renderSuggest();
           return;
         }
-        timer = setTimeout(() => lookup(v), 80);
+        // Short, because the server answers a search in about fifteen
+        // milliseconds: the wait is now the larger half of what a typist feels.
+        timer = setTimeout(() => lookup(v), 40);
       });
 
       q.addEventListener("keydown", (e) => {

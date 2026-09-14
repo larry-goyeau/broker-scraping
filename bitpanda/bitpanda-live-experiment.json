@@ -1,137 +1,135 @@
 {
-  "at": "2026-09-09T11:07:03.520Z",
+  "at": "2026-09-14T20:02:16.221Z",
   "live": true,
-  "symbol": "EUNL",
-  "name": "MSCI World Core USD (Acc)",
-  "typename": "EquityEtfAsset",
-  "isin": "IE00B4L5Y983",
-  "assetId": "8413",
+  "symbol": "BIGTIME",
+  "name": "Big Time",
+  "typename": "CryptoAsset",
+  "isin": null,
+  "assetId": "3017",
   "fiatId": "1",
-  "pid": "1f0f1320-7012-6ed6-9cff-8dcaf86e40f8",
-  "cash": 500,
+  "pid": "1ee69beb-03ad-6ec8-9898-3d2c289ed7d2",
+  "cash": 45.67,
   "amount": 25,
   "buyQuote": {
-    "offerId": "1f1ac3e9-6262-6c70-8d77-8d49d8966fde",
+    "offerId": "1f1b0772-eded-6bb0-aeac-7d58ef1e209d",
     "type": "BUY",
-    "price": 126.18,
+    "price": 0.006611,
     "amountFiat": 25,
-    "amountAsset": 0.190204,
-    "feeFiat": 1,
-    "feePct": 4,
-    "priceWithoutFee": 126.18,
+    "amountAsset": 3781.822022,
+    "feeFiat": 0.63,
+    "feePct": 2.49,
+    "priceWithoutFee": 0.006446,
     "taxFiat": null,
     "isFeeTransparent": true,
-    "expiresAt": "2026-09-09T11:07:08.000+00:00"
+    "expiresAt": "2026-09-14T20:02:35.000+00:00"
   },
   "rawBuyOffer": {
-    "offerId": "1f1ac3e9-6262-6c70-8d77-8d49d8966fde",
+    "offerId": "1f1b0772-eded-6bb0-aeac-7d58ef1e209d",
     "type": "BUY",
     "price": {
-      "value": "126.18"
+      "value": "0.00661057"
     },
     "amountFiat": {
       "value": "25"
     },
     "amountAsset": {
-      "value": "0.19020446"
+      "value": "3781.82202227"
     },
     "fee": {
       "fiat": {
-        "value": "1"
+        "value": "0.63"
       },
       "asset": {
-        "value": "0.00760818"
+        "value": "94.16736836"
       },
       "net": {
-        "value": "24"
+        "value": "24.37"
       },
       "percentage": {
-        "value": "4"
+        "value": "2.49"
       },
       "priceWithoutFee": {
-        "value": "126.18"
+        "value": "0.00644597"
       }
     },
     "isFeeTransparent": true,
     "tax": null,
     "isTaxable": false,
     "expiresAt": {
-      "iso8601": "2026-09-09T11:07:08.000+00:00"
+      "iso8601": "2026-09-14T20:02:35.000+00:00"
     },
     "warnings": []
   },
   "buy": {
-    "tradeId": "1f1ac3e9-6262-6c70-8d77-8d49d8966fde",
+    "tradeId": "1f1b0772-eded-6bb0-aeac-7d58ef1e209d",
     "type": "BUY",
     "status": "FINISHED",
     "price": {
-      "value": "131.43750027"
+      "value": "0.00661057"
     },
     "premium": null,
     "amountFiat": {
       "value": "25"
     },
     "amountAsset": {
-      "value": "0.19020446"
+      "value": "3781.82202227"
     },
     "fiatId": "1",
-    "assetId": "8413",
+    "assetId": "3017",
     "fiatWallet": {
       "id": "190d47d9-d213-4685-9bd0-fde461040df2"
     },
     "assetWallet": {
-      "id": "4ed53968-582b-43a9-86c6-5331cd303d38"
+      "id": "286b800f-97e3-42d3-8b85-c846bb7cd833"
     },
     "fiatWalletTransaction": {
-      "id": "2ca085d9-92b6-70e0-b664-03b612f15964"
+      "id": "2ca0a183-5f41-70ff-9bb6-22f5f019078b"
     },
     "taxWithheld": null,
     "executionTime": {
-      "iso8601": "2026-09-09T11:07:04.000+00:00"
+      "iso8601": "2026-09-14T20:02:16.000+00:00"
     }
   },
   "sellQuote": {
-    "offerId": "1f1ac3e9-84dc-6760-8e65-417142f1523a",
-    "price": 126.185,
-    "amountFiat": 23,
-    "amountAsset": 0.190204,
-    "feeFiat": 1,
-    "feePct": 4.17,
-    "priceWithoutFee": 126.185
+    "offerId": "1f1b0773-0f2e-6ea0-8296-acf5d2da6bdd",
+    "price": 0.005983,
+    "amountFiat": 22.62,
+    "amountAsset": 3781.822022,
+    "feeFiat": 0.57,
+    "feePct": 2.49,
+    "priceWithoutFee": 0.006132
   },
   "sell": {
-    "tradeId": "1f1ac3e9-84dc-6760-8e65-417142f1523a",
+    "tradeId": "1f1b0773-0f2e-6ea0-8296-acf5d2da6bdd",
     "type": "SELL",
     "status": "FINISHED",
     "price": {
-      "value": "120.92748701"
+      "value": "0.00598313"
     },
     "premium": null,
     "amountFiat": {
-      "value": "23"
+      "value": "22.62"
     },
     "amountAsset": {
-      "value": "0.190204"
+      "value": "3781.822022"
     },
     "fiatId": "1",
-    "assetId": "8413",
+    "assetId": "3017",
     "fiatWallet": {
       "id": "190d47d9-d213-4685-9bd0-fde461040df2"
     },
     "assetWallet": {
-      "id": "4ed53968-582b-43a9-86c6-5331cd303d38"
+      "id": "286b800f-97e3-42d3-8b85-c846bb7cd833"
     },
     "fiatWalletTransaction": {
-      "id": "2ca085d9-a0c3-71db-9d7a-61a5afc9d8c4"
+      "id": "2ca0a183-6b8e-73d2-91e1-07b0f463c074"
     },
     "taxWithheld": null,
     "executionTime": {
-      "iso8601": "2026-09-09T11:07:07.000+00:00"
+      "iso8601": "2026-09-14T20:02:19.000+00:00"
     }
   },
-  "cashAfter": 498,
-  "cashDelta": -2,
-  "feeRoundTripQuoted": 2,
-  "positionsAfter": 0,
-  "note": "Offer price 126.18 / 126.185, fee 1 € each way taken from the notional (net 24 then 23). Trade.price 131.44 / 120.93 is all-in (25/qty, 23/qty). The 0.4 bp gap is the print ticking up, not an extra rate. a keeps the Quotrix book plus taxes; the 1 € ticket is the floor."
+  "cashAfter": 43.29,
+  "cashDelta": -2.38,
+  "feeRoundTripQuoted": 1.2
 }

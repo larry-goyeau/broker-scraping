@@ -28,6 +28,7 @@
 //
 //   node taxes.mjs                            (balaie tout, reprend où il en était)
 //   node taxes.mjs --exchange="Euronext Paris"
+//   node taxes.mjs --isin=IT                  (par pays d'émission, à travers les places)
 //   node taxes.mjs --fresh                    (repart de zéro)
 
 import puppeteer from "puppeteer-core";
@@ -78,9 +79,19 @@ const TAXING_VENUES = new Set([
 const SAMPLE = Number(flag("sample", "150"));
 
 const wantExchange = flag("exchange");
+// `--isin=IT` aims the sweep at a country of issue rather than a venue, which is the only way to
+// reach a tax that follows the instrument onto a foreign tape. It is how the Italian question got
+// asked at all: Trading212's Borsa Italiana shelf is foreign ETFs, which owe nothing, and the
+// eleven Italian issuers it does carry sit on Xetra, gettex, SIX, NYSE and NASDAQ, so no sweep by
+// venue would ever have priced one.
+const wantIsin = String(flag("isin", "")).toUpperCase();
 let rows;
-if (wantExchange) {
-  rows = allRows.filter((r) => r.exchange === wantExchange);
+if (wantExchange || wantIsin) {
+  rows = allRows.filter(
+    (r) =>
+      (!wantExchange || r.exchange === wantExchange) &&
+      (!wantIsin || String(r.isin || "").toUpperCase().startsWith(wantIsin))
+  );
 } else {
   const kept = new Map();
   rows = allRows.filter((r) => {

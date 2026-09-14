@@ -34,7 +34,11 @@ export function indexByIsin(byCode, catalogue) {
   for (const r of Array.isArray(catalogue) ? catalogue : catalogue?.rows || []) {
     const isin = String(r.isin || "").toUpperCase();
     const entry = r.code ? byCode?.[r.code] : null;
-    if (!isin || !entry || !(entry.achat || entry.vente)) continue;
+    // A line present in `byCode` was priced, and a priced line that came back with no charge is
+    // an answer, not a silence. The index used to drop those, so a venue swept in full and found
+    // clean — Bolsa de Madrid, 139 Spanish issuers and not one transaction tax — looked exactly
+    // like a venue nobody had ever asked about, and `taxesOf` called it `assumedZero`.
+    if (!isin || !entry) continue;
     const next = score(entry);
     if (out[isin] && scores[isin] >= next) continue;
     out[isin] = {

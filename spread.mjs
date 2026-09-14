@@ -45,12 +45,14 @@ import readline from "node:readline";
 import {
   CRYPTO_CCY,
   CRYPTO_MICS,
+  CRYPTO_READ_MICS,
   cryptoId,
   listingKey,
   sessionState,
   spreadUrl,
   VENUES,
 } from "./venues.mjs";
+import { GULF_BOARDS, gulfSymbol, readGulfBoard } from "./gulf.mjs";
 import { monthlyXlm } from "./xlm-monthly.mjs";
 import { monthlyEffectiveSpread } from "./rule605-monthly.mjs";
 
@@ -121,7 +123,12 @@ for (const file of rowFiles) {
         continue;
       }
       const id = cryptoId(base);
-      for (const mic of CRYPTO_MICS) {
+      // Binance and Coinbase are the two reference books every broker is read
+      // against. Alpaca's own venue is only worth a request for the coins Alpaca
+      // itself sells: asked about the other four hundred it answers nothing, and
+      // the file would fill with empty leaves under a venue that never listed them.
+      const mics = broker === "alpaca" ? CRYPTO_READ_MICS : CRYPTO_MICS;
+      for (const mic of mics) {
         const key = `${mic}|${id}|${CRYPTO_CCY}`;
         if (listings.has(key)) {
           listings.get(key).brokers.add(broker);
@@ -328,6 +335,11 @@ const CROSSED = {
   questrade: 1,
   binance: 1,
   coinbase: 1,
+  alpaca: 1,
+  adx: 1,
+  dfm: 1,
+  bhb: 1,
+  msx: 1,
 };
 
 const CONVENTION =
@@ -798,6 +810,11 @@ const delayedQuotes = {
   questrade: new Map(),
   binance: new Map(),
   coinbase: new Map(),
+  alpaca: new Map(),
+  adx: new Map(),
+  dfm: new Map(),
+  bhb: new Map(),
+  msx: new Map(),
 };
 const delayedTrouble = {
   tradegate: null,
@@ -813,6 +830,11 @@ const delayedTrouble = {
   questrade: null,
   binance: null,
   coinbase: null,
+  alpaca: null,
+  adx: null,
+  dfm: null,
+  bhb: null,
+  msx: null,
 };
 
 const UA = { "User-Agent": "Mozilla/5.0" };
@@ -1392,7 +1414,45 @@ async function loadHannover(wanted) {
   ]);
 }
 
+// ------------------------------------------------------------------------ le Golfe
+//
+// Four boards, one call each, read by `gulf.mjs` because `prices.mjs` wants the last
+// price out of the same response and neither should ask twice. Only Abu Dhabi names an
+// ISIN; the other three are matched on the symbol, which the catalogues spell with a
+// suffix the exchange does not use — BKIC.BI in Manama, BDID.MSX in Muscat.
+function gulfAdapter(key) {
+  const { name, browser } = GULF_BOARDS[key];
+  return {
+    measure: "touche du carnet, temps réel",
+    async prefetch(lines, ownTab) {
+      try {
+        const rows = await readGulfBoard(key, browser ? { page: await ownTab() } : {});
+        for (const r of rows) {
+          const quote = { bid: r.bid, ask: r.ask, currency: r.currency };
+          if (r.isin) delayedQuotes[key].set(r.isin, quote);
+          delayedQuotes[key].set(r.symbol, quote);
+        }
+        console.error(`    ${name} : ${rows.length} cotations\n`);
+      } catch (e) {
+        delayedTrouble[key] = String(e.message || e).slice(0, 160);
+        console.error(`    ${name} : ${delayedTrouble[key]}\n`);
+      }
+    },
+    async fetch(l) {
+      const quote =
+        delayedQuotes[key].get(String(l.isin).toUpperCase()) || delayedQuotes[key].get(gulfSymbol(l.ticker));
+      if (!quote) return { spreadBp: null, note: delayedTrouble[key] || `absent du tableau ${name}` };
+      return { spreadBp: bpFrom(quote.bid, quote.ask), tradingCurrency: quote.currency };
+    },
+  };
+}
+
+
 const adapters = {
+  adx: gulfAdapter("adx"),
+  dfm: gulfAdapter("dfm"),
+  msx: gulfAdapter("msx"),
+  bhb: gulfAdapter("bhb"),
   // Xetra's own book, asked for over the socket the page itself uses. Reading it in the
   // DOM worked and was hopeless at this size: a page load and a wait for the quote to
   // stream in ran at four listings a minute, so a first pass over three thousand of them
@@ -1963,6 +2023,31 @@ const adapters = {
       return { spreadBp: bpFrom(quote.bid, quote.ask), bid: quote.bid, ask: quote.ask, tradingCurrency: CRYPTO_CCY };
     },
   },
+
+  // Alpaca's own venue. The quote endpoint takes a hundred pairs at a time and
+  // needs no key, so the whole shelf costs a handful of calls.
+  alpaca: {
+    measure: "touche du carnet, temps réel",
+    digits: 4,
+    async prefetch(lines) {
+      try {
+        const stats = await loadAlpaca(lines);
+        console.error(
+          `    Alpaca : ${delayedQuotes.alpaca.size} carnets / ${stats.wanted} paires demandées\n`
+        );
+      } catch (e) {
+        delayedTrouble.alpaca = String(e.message || e).slice(0, 160);
+        console.error(`    Alpaca : ${delayedTrouble.alpaca}\n`);
+      }
+    },
+    async fetch(l) {
+      const quote = delayedQuotes.alpaca.get(l.ticker);
+      if (!quote) {
+        return { spreadBp: null, note: delayedTrouble.alpaca || `${l.ticker} non coté contre le dollar chez Alpaca` };
+      }
+      return { spreadBp: bpFrom(quote.bid, quote.ask), bid: quote.bid, ask: quote.ask, tradingCurrency: CRYPTO_CCY };
+    },
+  },
 };
 
 // -------------------------------------------------------------------------- crypto
@@ -2018,6 +2103,32 @@ async function loadCoinbase(lines) {
     await new Promise((r) => setTimeout(r, 120));
   }
   return { listed: usd.size, wanted: wanted.length };
+}
+
+// Alpaca quotes its own book in dollars outright, a hundred symbols per call and
+// no key needed. A pair it does not list simply comes back absent, so nothing has
+// to be read first the way Coinbase's directory does.
+const ALPACA_BOOK = (pairs) =>
+  `https://data.alpaca.markets/v1beta3/crypto/us/latest/quotes?symbols=${encodeURIComponent(pairs.join(","))}`;
+
+async function loadAlpaca(lines) {
+  const bases = [...new Set(lines.map((l) => l.ticker))];
+  for (let i = 0; i < bases.length; i += 100) {
+    const slice = bases.slice(i, i + 100);
+    try {
+      const quotes = (await (await fetchOk(ALPACA_BOOK(slice.map((b) => `${b}/${CRYPTO_CCY}`)), 30000)).json()).quotes || {};
+      for (const [pair, q] of Object.entries(quotes)) {
+        const base = pair.split("/")[0].toUpperCase();
+        const bid = Number(q.bp);
+        const ask = Number(q.ap);
+        if (bid > 0 && ask > 0) delayedQuotes.alpaca.set(base, { bid, ask, pair });
+      }
+    } catch {
+      // One batch's silence is not the venue's.
+    }
+    await new Promise((r) => setTimeout(r, 200));
+  }
+  return { wanted: bases.length };
 }
 
 // ------------------------------------------------------------------------- resolve

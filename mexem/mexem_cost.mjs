@@ -1,71 +1,132 @@
-// What one round trip costs at Mexem: buy n shares at price p, sell them
-// back at once.
+// What one round trip costs at Mexem: buy n shares at price p, sell them back at
+// once, in dollars.
 //
-//   coût (USD) = a × toUsd(p) × n + b × n + c
+// The affine triple this file used to answer — a × p × n + b × n + c — could not
+// hold this card at all, and the reason is worth stating because it is the same
+// reason everywhere: Mexem's whole schedule is a minimum. « The minimum fees are
+// per order », and on every tier it publishes the minimum is the entire bill at
+// any size a retail reader trades. One euro on a European order binds up to
+// 1 667 € of notional; one dollar on an American order binds up to 200 shares.
+// The old file computed that floor correctly and then put it in a `floor` field
+// the page had no column for, leaving `c` at zero — so the page printed the
+// percentage alone and was wrong by the whole ticket on every small trade.
 //
-// `a` is a fraction of the amount. `b` and `c` are dollars, the same unit the
-// other `*_cost.mjs` files answer in.
+// Worse on the two per-share tiers. America is 0,005 $ a share and Canada 0,01,
+// and the old file left `b` at zero on the ground that « under 200 shares the
+// minimum is the whole bill ». True under 200 shares, and false above: a
+// thousand-share order pays 5 $ a side that the affine answer never mentioned.
+// The 2 % American and 1 % Canadian caps lived only in `exactCost`, which the
+// page did not call. `roundTrip` is given the size and charges what is charged.
 //
 // MEXEM Ltd (CY, CySEC 325/17) is an introducing broker onto Interactive
-// Brokers LLC — the page says it is not part of the IBKR group. The catalogue
-// is the IBKR book (`mexem_scraping.mjs`): ETFs / ETC / ETN today, no stocks
-// and no crypto. Custody is not on the Stocks / ETFs card. Cash is not
-// converted automatically, so FX stays out of `a`. Two commission-free ETF
-// buys a month are a promotion, not this trip.
+// Brokers LLC — the page says it is not part of the IBKR group — so the
+// catalogue is the IBKR book (`mexem_scraping.mjs`). It is no longer the ETF
+// shelf this file was written against: the sweep now carries 54 815 lines of
+// which 35 495 are stocks, and it is still running, so any count here is a
+// reading and not a total.
 //
-// The published card is by denominated currency, read 2026-09-11 (page
-// updated 22 July 2026). Europe's % × 2 sits in `a`. The USD 0.005 $ and
-// CAD 0.01 $ stay out of `b` (under 200 shares the minimum is the whole
-// bill). The ticket is a floor (`min fees`, `c` = 0). `exactCost` answers
-// the real step, including the US 2 % cap and the Canadian 1 % cap.
+// Barème relu le 2026-09-14, page inchangée depuis le 22 juillet 2026. Par
+// sens, plancher par ordre, sans plafond sauf où il est dit :
 //
-//   USD     0.005 $/share, min 1 $, max 2 %
-//   CAD     0.01 $/share,  min 2 CAD, max 1 %
-//   EUR     0.06 %, min 1 €     (Madrid BM: same %, min 3 €)
-//   DKK     0.06 %, min 10
-//   GBP     0.08 %, min 2.5
-//   HUF     0.08 %, min 500
-//   NOK     0.08 %, min 20
-//   CHF     0.10 %, min 7.5
-//   ILS     0.10 %, min 15
-//   PLN     0.10 %, min 20
-//   AUD     0.12 %, min 8
-//   HKD     0.12 %, min 20
-//   JPY     0.12 %, min 200     (printed twice, same figures)
-//   SEK     0.12 %, min 20
-//   SGD     0.12 %, min 4
-//   CNH     0.15 %, min 25
-//   MXN     0.15 %, min 75
+//   USD     0,005 $/part,  min 1 $        plafond 2 % du montant
+//   CAD     0,01 $/part,   min 2 CAD      plafond 1 % du montant
+//   EUR     0,06 %,        min 1 €        (Bolsa de Madrid : même %, min 3 €)
+//   DKK     0,06 %,        min 10
+//   GBP     0,08 %,        min 2,5
+//   HUF     0,08 %,        min 500
+//   NOK     0,08 %,        min 20
+//   CHF     0,10 %,        min 7,5
+//   ILS     0,10 %,        min 15
+//   PLN     0,10 %,        min 20
+//   AUD     0,12 %,        min 8
+//   HKD     0,12 %,        min 20
+//   JPY     0,12 %,        min 200        (imprimé deux fois, mêmes chiffres)
+//   SEK     0,12 %,        min 20
+//   SGD     0,12 %,        min 4
+//   CNH     0,15 %,        min 25
+//   MXN     0,15 %,        min 75
 //
-// TWD / KRW / BRL / INR / SAR / MYR / AED / CZK / RON / CNY have no printed
-// tier — the page says the platform price applies first, so this file
-// answers N/A rather than inventing a neighbour's %. Exchange and
-// regulatory costs "apply" on a list of European venues with no amounts;
-// they stay out of `a`. SEC / TAF use the same current figures as the
-// other files; Mexem's table does not reprint them. Stamp UK 0.5 % /
-// Ireland 1 % is passed through — tax map first, else those printed rates
-// on STOCK. PTM is £1 per order above £10 000 on UK / Channel / Isle of
-// Man registered stocks.
+// Three things the old file did not carry, all read off the page on 2026-09-14.
 //
-// `nonEuResident` (no KID) is a residency fact: `listingAccepts` hides the
-// row for an EEA visitor. It does not belong in `onlineBuy`, or a Taiwan
-// ETF vanishes from the page when no country is selected.
+// The first is the conversion. The old file wrote `fxIfConverted: 0` and said in
+// its header that cash is not converted automatically, so FX stays out — which
+// is half the page and the wrong half. The « FX » tab prices the conversion the
+// client is then obliged to do by hand: 0,005 % of the amount, minimum 5 in the
+// currency (7 HKD et SGD, 75 ILS, 100 MXN, 600 JPY, 1 000 HUF, 65 ZAR). A
+// declared zero said a euro account could buy in dollars for nothing. On a
+// thousand-euro order needing a conversion each way that is ten euros of
+// minimum, five times the commission. It cannot go in the number — whether a
+// conversion happens at all is a fact about the client's cash and not about the
+// trade — so it goes in the remark, with its minimum, where the reader can see
+// that it dwarfs the ticket at small sizes.
 //
-// No live trip in this deposit.
+// The second is the withdrawal. The first in any thirty days is free, then
+// 1 € by SEPA, 8 € by wire, 10 $, 7 £. Nobody escapes it forever.
+//
+// The third is the depositary receipt. Mexem passes through the ADR/GDR fee at
+// « a typical range of 0.01 to 0.03 per share », which is a yearly charge on the
+// holding and not on the trade. 382 lines of the catalogue name themselves ADR,
+// GDR or ADS, and those are the ones the remark warns.
+//
+// Custody is free, and so are account opening, dividend processing, telephone
+// orders and incoming transfers — the « Other Costs » tab says so in as many
+// words, which is a zero one can quote rather than a silence one has to read.
+//
+// What is charged and is in the number: the commission each way at its floor and
+// its cap; UK stamp 0,5 % and Irish 1 % on a purchase of a share, passed through
+// by Mexem's own note, taken from `taxMap.mjs` first and from those printed rates
+// otherwise; the PTM levy of 1 £ per transaction above 10 000 £ on a UK, Channel
+// Islands or Isle of Man registered stock, which the old file could only hand
+// over as a `threshold` the page had no way to apply; the SEC fee and FINRA's
+// TAF on an American sale, which Mexem does not reprint but which IBKR's fixed
+// tariff passes through by name; and the market spread, once, since the book is
+// already a round trip.
+//
+// The seventeen European venues whose « exchange and regulatory costs apply »
+// with no figure anywhere on the page — VSE, NASDAQ Baltic, BATS Europe,
+// Turquoise, CHIX, ENEXT.BE, SBF, FWB, IBIS, SWB, TradeLink, BUX, BVME, AEB,
+// BVL, EBS, WSE — used to be a hole this file merely named. It is now measured
+// at one of them and charged at all of them. Amsterdam quotes 1,00 … 1,80 € on
+// an ETF and a flat 1 EUR on a share, so 0,80 € per order goes into the total on
+// an ETF and nothing goes in on a share. Sixteen of the seventeen are an
+// extrapolation from the seventeenth, which `confidence` says on every line that
+// is not AEB. It is the right direction to be wrong in: the total already
+// charges the whole book spread, so it assumes the order takes liquidity, and
+// taking liquidity is the case that draws the top of the range.
+//
+// Ten currencies in the catalogue have no printed tier at all — KRW, TWD, INR,
+// BRL, SAR, MYR, ZAR, AED, CZK, RON, CNY — and the page says that where a
+// product is missing « the price as shown in the platform always applies
+// first ». 6 745 lines therefore answer N/A on the commission rather than borrow
+// a neighbour's percentage.
+//
+// 22 045 of the 54 815 lines carry both a tier and a book. The book is the
+// binding constraint, not the tariff: Tokyo, Hong Kong, Toronto, Sydney,
+// Stockholm and Shanghai are all priced by Mexem and unsourced by `spread.mjs`.
+//
+// `nonEuResident` (no KID) is a residency fact carried by the catalogue row;
+// `listingAccepts` hides such a row from an EEA visitor. It does not belong in
+// `onlineBuy`, or a Taiwanese ETF vanishes from the page when no country is
+// selected.
+//
+// No live trip in this deposit, but the tariff is no longer read off the page
+// alone: `mexem-whatif.mjs` asks the portal to price an order before the order
+// exists, and four such previews are recorded beside `MEASURED` below. They
+// confirm the euro floor to the cent, confirm that it is per order and not per
+// share, and put a figure on the venue fees the page declines to print — nothing
+// on a share, up to 0,80 € on an ETF, at Amsterdam. Nothing was traded.
 //
 //   https://www.mexem.com/fees
 //
 //   node mexem/mexem_cost.mjs IWDA AEB EUR
-//   node mexem/mexem_cost.mjs IWDA LSEETF USD
-//   node mexem/mexem_cost.mjs SPY ARCA USD
-//   node mexem/mexem_cost.mjs BBVAI BM EUR
+//   node mexem/mexem_cost.mjs SPY ARCA USD --shares=10 --price=600
 //   node mexem/mexem_cost.mjs --schedule
 //
-// `roundTripCost(...)` reads files, not the network.
+// `roundTrip(...)` reads files, not the network.
 
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite, bookParts } from "../na.mjs";
+import { plus, finite } from "../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
@@ -74,22 +135,23 @@ const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://www.mexem.com/fees",
-  readOn: "2026-09-11",
+  readOn: "2026-09-14",
   pageUpdated: "2026-07-22",
-  entity: "MEXEM Ltd (CY), IB introducing broker",
+  entity: "MEXEM Ltd (CY, CySEC 325/17), introducing broker onto Interactive Brokers LLC",
 };
 
 const SEC_RATE = 0.0000206;
 const TAF_PER_SHARE = 0.000195;
 const TAF_CAP = 9.79;
-const PTM = { each: 1, currency: "GBP", above: 10000 };
+const PTM = { each: 1, ccy: "GBP", above: 10000 };
 const UK_STAMP = 0.005;
 const IE_STAMP = 0.01;
 const US_MICS = new Set(["XNAS", "XNYS", "ARCX", "XASE", "BATS"]);
 const US_EX = new Set(["NASDAQ", "NYSE", "AMEX", "ARCA", "BATS"]);
 const UK_REGISTERED = /^(GB|GG|JE|IM)/;
 
-// rate of notional per side unless `perShare`. min / maxPct in `ccy`.
+// Per side. `rate` of the amount or `perShare` per share, floored at `min` and,
+// where the page prints one, capped at `maxPct` of the amount. All in `ccy`.
 const RULE = {
   usd: { perShare: 0.005, min: 1, maxPct: 0.02, ccy: "USD" },
   ca: { perShare: 0.01, min: 2, maxPct: 0.01, ccy: "CAD" },
@@ -132,6 +194,70 @@ const BY_CCY = {
   MXN: "mxn",
 };
 
+// The « FX » tab, which is what converting cash actually costs here. Same rate
+// everywhere, a minimum that is 5 in most currencies and larger where 5 units
+// would be pennies.
+const FX_CONVERT = {
+  rate: 0.00005,
+  min: {
+    AUD: 5, CAD: 5, CHF: 5, CZK: 5, DKK: 5, EUR: 5, GBP: 5, NOK: 5, NZD: 5,
+    PLN: 5, SEK: 5, USD: 5, HKD: 7, SGD: 7, ZAR: 65, ILS: 75, MXN: 100,
+    RUB: 300, JPY: 600, HUF: 1000,
+  },
+};
+
+// First in any thirty days free, then this.
+const WITHDRAW = { sepa: 1, wire: 8, ccy: "EUR", usd: 10, gbp: 7 };
+const ADR = { low: 0.01, high: 0.03 };
+const ADR_NAMED = /\b(ADR|GDR|ADS)\b/i;
+
+// « Exchange and regulatory costs apply » on these, with no amount printed
+// anywhere on the page.
+const VENUE_FEES_UNPRICED = [
+  "VSE", "NASDAQ Baltic", "BATS Europe", "Turquoise", "CHIX", "ENEXT.BE", "SBF",
+  "FWB", "IBIS", "SWB", "TradeLink", "BUX", "BVME", "AEB", "BVL", "EBS", "WSE",
+];
+const VENUE_FEES_CODES = new Set(VENUE_FEES_UNPRICED.map((s) => s.toUpperCase().replace(/[^A-Z0-9]/g, "")));
+
+// What the portal answers when asked to price an order it has not been given
+// (`mexem-whatif.mjs`, 2026-09-14, compte U28294463). Four readings, all at
+// Amsterdam, which is the only venue this account may reach:
+//
+//   1 IWDA  ETF     126,28 €   commission « 1.00 ... 1.80 EUR »
+//   1 VUSA  ETF     125,11 €   commission « 1.00 ... 1.80 EUR »
+//   1 CMCOM action    6,90 €   commission « 1 EUR »
+//  20 CMCOM action  138,00 €   commission « 1 EUR »
+//
+// Three things fall out. The euro floor is exactly the euro floor, confirmed
+// rather than inferred. The share count does not move it — twenty shares cost
+// what one costs — so the European tier really is per order. And the unpriced
+// « exchange and regulatory costs » are real but narrow: nothing at all on a
+// share, and up to 0,80 € per order on an ETF, which is Euronext's own ETF
+// schedule showing through. The portal quotes it as a range because the fee
+// depends on how the order executes, so it cannot be pinned to one number; the
+// total below charges the floor, which is therefore a lower bound on a European
+// ETF and exact on a European share.
+const MEASURED = {
+  on: "2026-09-14",
+  how: "aperçu whatif du portail, aucun ordre passé",
+  venue: "AEB",
+  floorConfirmed: true,
+  perOrderConfirmed: true,
+};
+
+// The 0,80 € is charged rather than merely mentioned, on an ETF, on each of the
+// seventeen venues whose costs the page declines to price. That is a deliberate
+// extrapolation from one venue to sixteen others, and it is the right direction
+// for two reasons. The total already charges the whole book spread, which is to
+// say it assumes the order takes liquidity — and taking liquidity is exactly the
+// case where Euronext bills the top of the range. And a comparison table that
+// rounds an unknown charge down to zero flatters whoever charges it.
+//
+// Measured at Amsterdam only. Vienna, Frankfurt, Milan, Lisbon, Warsaw, Budapest
+// and the rest are assumed to behave like it, which is an assumption and is said
+// so in `confidence` on every line that is not AEB.
+const VENUE_ETF_FEE = { amount: 0.8, ccy: "EUR", measuredAt: "AEB", perOrder: true };
+
 const TO_VENUES = {
   TSE: "TSX",
   TSEJ: "TSEJ",
@@ -146,6 +272,7 @@ const spreads = fs.existsSync(SPREADS) ? JSON.parse(fs.readFileSync(SPREADS, "ut
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 
+// The offshore renminbi is quoted CNH and the reference rates know it as CNY.
 const fxCcy = (currency) => (String(currency || "").toUpperCase() === "CNH" ? "CNY" : currency);
 
 const dollars = (amount, currency) => {
@@ -153,29 +280,24 @@ const dollars = (amount, currency) => {
   return v == null ? null : Number(v.toPrecision(6));
 };
 
-const fxNote = (currency) => ({
-  quote: QUOTE,
-  asOf: FX_AS_OF,
-  listing: usdPer(fxCcy(currency)),
-});
+// Money in `to`, from an amount in `from`.
+function convert(amount, from, to) {
+  if (amount == null || Number.isNaN(amount)) return null;
+  const a = String(fxCcy(from) || "").toUpperCase();
+  const b = String(fxCcy(to) || "").toUpperCase();
+  if (a === b) return amount;
+  const usd = toUsd(amount, a);
+  const per = usdPer(b);
+  return usd == null || !(per > 0) ? null : usd / per;
+}
 
-const venueRow = (row) => ({
-  ...row,
-  exchange: TO_VENUES[row.exchange] || row.exchange,
-});
+const fxNote = (currency) => ({ quote: QUOTE, asOf: FX_AS_OF, listing: usdPer(fxCcy(currency)) });
+
+const venueRow = (row) => ({ ...row, exchange: TO_VENUES[row.exchange] || row.exchange });
 
 const isStock = (listing) => String(listing?.type || "").toUpperCase() === "STOCK";
 
 const isAmerican = (exchange, mic) => US_MICS.has(String(mic || "").toUpperCase()) || US_EX.has(loose(exchange));
-
-function remarkOf({ market } = {}) {
-  const r = RULE[market];
-  if (!r || r.min == null) return "";
-  const n = r.min * 2;
-  const ccy = r.ccy === "EUR" ? "€" : r.ccy === "USD" ? "$" : r.ccy === "GBP" ? "£" : r.ccy;
-  const amount = r.ccy === "USD" || r.ccy === "EUR" || r.ccy === "GBP" ? `${n} ${ccy}` : `${n} ${r.ccy}`;
-  return `min fees ${amount}.`;
-}
 
 export function feeMarketOf(exchange, mic, currency) {
   const code = loose(exchange);
@@ -188,6 +310,7 @@ export function feeMarketOf(exchange, mic, currency) {
   return BY_CCY[ccy] || null;
 }
 
+// London quotes in pence; every rate on the card is a rate on pounds.
 function nativeAmount(shares, price, currency) {
   if (shares == null || price == null) return null;
   const amount = Number(shares) * Number(price);
@@ -198,7 +321,7 @@ function nativeAmount(shares, price, currency) {
 function stampOf({ listing, tax }) {
   const rates = taxRates(tax);
   const fromMap = Object.values(rates).reduce((s, r) => s + r, 0);
-  if (fromMap) return { pct: fromMap, rates, source: "t212" };
+  if (fromMap) return { pct: fromMap, rates, source: "taxMap" };
   if (!isStock(listing)) return { pct: 0, rates: {}, source: null };
   const isin = String(listing.isin || "").toUpperCase();
   const mic = String(listing.mic || "").toUpperCase();
@@ -211,15 +334,31 @@ function stampOf({ listing, tax }) {
   return { pct: 0, rates: {}, source: null };
 }
 
-function thresholdOf(listing) {
-  if (!isStock(listing) || !UK_REGISTERED.test(listing.isin || "")) return null;
-  return {
-    c: dollars(2 * PTM.each, "GBP"),
-    currency: QUOTE,
-    above: PTM.above,
-    aboveCurrency: "GBP",
-    why: `prélèvement PTM de ${PTM.each} £ par ordre et par sens, au-delà de ${PTM.above} £`,
-  };
+/**
+ * One side's commission, at the floor and under the cap. Returns the money in
+ * the tier's own currency, and says which of the two bit, because that is the
+ * whole story of this card at retail size.
+ */
+export function commissionSide({ shares, amount, market }) {
+  const rule = RULE[market];
+  if (!rule) return null;
+
+  if (rule.perShare != null) {
+    if (shares == null || !Number.isFinite(Number(shares))) return null;
+    const raw = rule.perShare * Number(shares);
+    const floored = raw < rule.min;
+    const base = Math.max(rule.min, raw);
+    // The cap is on the order's value, so without an amount there is no cap to
+    // apply — and saying so beats quietly charging the uncapped figure.
+    const ceiling = rule.maxPct != null && amount != null ? Number(amount) * rule.maxPct : null;
+    const charged = ceiling != null ? Math.min(base, ceiling) : base;
+    return { raw, charged, floored: floored && charged === base, capped: ceiling != null && ceiling < base, currency: rule.ccy };
+  }
+
+  if (amount == null || !Number.isFinite(Number(amount))) return null;
+  const raw = Number(amount) * rule.rate;
+  const charged = Math.max(rule.min, raw);
+  return { raw, charged, floored: raw < rule.min, capped: false, currency: rule.ccy };
 }
 
 function findListing({ etf, place, currency }) {
@@ -245,9 +384,7 @@ function findListing({ etf, place, currency }) {
 }
 
 const listAlternatives = (named) =>
-  named
-    .map((r) => `${r.ticker || r.isin} ${r.currency || "?"} @ ${r.exchange || "place non dite"}`)
-    .slice(0, 12);
+  named.map((r) => `${r.ticker || r.isin} ${r.currency || "?"} @ ${r.exchange || "place non dite"}`).slice(0, 12);
 
 function coverage() {
   if (!rows.length) return null;
@@ -264,66 +401,54 @@ function coverage() {
     const market = feeMarketOf(r.exchange, book.mic ?? venue?.mic, r.currency) || "?";
     const slot = (out[type] ||= { n: 0, withBook: 0, byMarket: {} });
     slot.n += 1;
-    if (book.leaf?.bp != null || book.leaf?.perShare != null) slot.withBook += 1;
+    const hasBook = book.leaf?.bp != null || book.leaf?.perShare != null;
+    if (hasBook) slot.withBook += 1;
     const mk = (slot.byMarket[market] ||= { n: 0, withBook: 0 });
     mk.n += 1;
-    if (book.leaf?.bp != null || book.leaf?.perShare != null) mk.withBook += 1;
+    if (hasBook) mk.withBook += 1;
   }
   return out;
 }
 
-export function commissionEach({ shares, amount, market }) {
-  const rule = RULE[market];
-  if (!rule || (rule.rate == null && rule.perShare == null)) return null;
-  if (rule.perShare != null) {
-    if (shares == null || !Number.isFinite(Number(shares))) return rule.min;
-    let fee = rule.perShare * Number(shares);
-    if (rule.min != null) fee = Math.max(rule.min, fee);
-    if (rule.maxPct != null && amount != null) fee = Math.min(fee, Number(amount) * rule.maxPct);
-    return fee;
+// The remark carries what the number cannot: a conversion that depends on the
+// client's cash rather than on the trade, and a depositary fee that depends on
+// holding the line rather than trading it. Everything else the card charges is
+// in `usd`.
+//
+// The withdrawal is not here. It prices moving cash out of the account, not
+// buying and selling, and it is paid once however many round trips it follows —
+// the same reason custody is not in a transaction cost. It stays readable in the
+// answer's `withdraw` field and under `--schedule`.
+function remarkOf({ listing }) {
+  const ccy = String(listing.currency || "").toUpperCase();
+  const settle = ccy === "GBX" ? "GBP" : fxCcy(ccy);
+  // The FX tab prints twenty currencies and the catalogue holds thirty. Where the
+  // settlement currency is not one of the twenty, the conversion has no published
+  // price either, and quoting the rate of its neighbours would be inventing one.
+  const min = FX_CONVERT.min[settle];
+  const said = [
+    min != null
+      ? `FX ${(100 * FX_CONVERT.rate).toFixed(3)}% (min ${min} ${settle}) per conversion ` +
+        `if the cash is not already in ${settle}.`
+      : `FX conversion into ${settle} is not priced on the fee page.`,
+  ];
+  if (ADR_NAMED.test(String(listing.name || ""))) {
+    said.push(`ADR/GDR pass-through ${ADR.low}–${ADR.high} per share per year.`);
   }
-  if (amount == null || !Number.isFinite(Number(amount))) return rule.min;
-  let fee = Number(amount) * rule.rate;
-  if (rule.min != null) fee = Math.max(rule.min, fee);
-  if (rule.max != null) fee = Math.min(fee, rule.max);
-  return fee;
+  return said.join("\n");
 }
 
-export function exactCost({ shares, price, market, currency }) {
-  const rule = RULE[market];
-  if (!rule) return { commission: null, currency: QUOTE };
-  const amount = nativeAmount(shares, price, currency);
-  const each = commissionEach({ shares, amount, market });
-  if (each == null) return { commission: null, currency: QUOTE, rule };
-  return {
-    commission: dollars(each * 2, rule.ccy),
-    currency: QUOTE,
-    native: { each, roundTrip: each * 2, currency: rule.ccy },
-    rule,
-  };
-}
-
-export function roundTripCost({ etf, place, currency, bp = null, perShare = null }) {
-  const { named, matches } = findListing({ etf, place, currency });
-  const answer = {
-    a: null,
-    b: 0,
-    c: 0,
-    ccy: QUOTE,
-    floor: null,
-    cap: null,
-    threshold: null,
-    etf,
-    place,
-    currency,
-  };
+/**
+ * The whole bill for buying `shares` at `price` and selling them straight back.
+ * `usd` is the number the page prints; `buy` and `sell` say what each side paid.
+ */
+export function roundTrip({ etf, place, currency, shares, price, bp = null, perShare = null }) {
+  const answer = { usd: null, etf, place, currency, onlineBuy: true, cashCurrency: "" };
 
   if (!catalogue) {
-    return {
-      ...answer,
-      why: "le catalogue Mexem n'existe pas encore : lancer `node mexem/mexem_scraping.mjs`",
-    };
+    return { ...answer, why: "le catalogue Mexem n'existe pas encore : lancer `node mexem/mexem_scraping.mjs`" };
   }
+  const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Mexem` };
   if (!matches.length) {
     return {
@@ -353,64 +478,155 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
 
   const market = feeMarketOf(m.row.exchange, listing.mic, listing.currency);
   const rule = RULE[market];
-  if (!rule) {
-    return {
-      ...answer,
-      a: null,
-      b: null,
-      c: null,
-      listing,
-      feeMarket: market,
-      why: `${listing.currency || "cette devise"} n'a pas de palier publié chez Mexem`,
-      tax: taxesOf(listing.isin),
-      fx: fxNote(listing.currency),
-    };
-  }
-
   const leaf = book.leaf;
   const marketBp = bp ?? leaf?.bp ?? null;
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
   const american = isAmerican(m.row.exchange, listing.mic);
   const tax = taxesOf(listing.isin);
   const stamp = stampOf({ listing, tax });
-  const commissionPct = rule.rate != null ? rule.rate * 2 : 0;
-  const knownPct = stamp.pct + (american ? SEC_RATE : 0) + commissionPct;
-  const mkt = bookParts({
-    bp: marketBp,
-    perShare: marketPerShare,
-    venue: m.venue,
-    unsourced: m.unsourced,
-    toUsd: (x) => (american ? x : dollars(x, listing.currency)),
-  });
-  const a = plus(mkt.a, knownPct);
-  const bookUsd = mkt.b;
-  const floorUsd = rule.min != null ? dollars(rule.min * 2, rule.ccy) : null;
+  const venueFees = VENUE_FEES_CODES.has(loose(m.row.exchange));
 
-  return {
+  const shared = {
     ...answer,
-    a: finite(a, 4),
-    b: finite(plus(bookUsd, american ? TAF_PER_SHARE : 0), 6),
-    c: 0,
-    floor: floorUsd,
     listing,
     feeMarket: market,
-    remark: remarkOf({ market }),
-    parts: {
-      marché:
-        marketBp != null
-          ? Number((marketBp / 1e4).toPrecision(4))
-          : marketPerShare != null
-            ? `${marketPerShare} par part`
-            : null,
-      taxes: Object.keys(stamp.rates).length ? stamp.rates : null,
-      réglementaire: american ? { SEC: SEC_RATE, FINRA: `${TAF_PER_SHARE} par part` } : null,
-      commission: commissionPct || null,
-    },
     bp: marketBp,
     perShare: marketPerShare,
     url: leaf?.url ?? SCHEDULE.source,
-    basis: `barème Mexem ${market}, lu le ${SCHEDULE.readOn} (page mise à jour ${SCHEDULE.pageUpdated})`,
     tax,
+    fx: fxNote(listing.currency),
+    remark: remarkOf({ listing }),
+  };
+
+  if (!rule) {
+    return {
+      ...shared,
+      basis: `aucun palier publié pour ${listing.currency || "cette devise"} chez Mexem`,
+      why:
+        `${listing.currency || "cette devise"} n'a pas de palier sur la carte Mexem : ` +
+        `la page renvoie au prix affiché dans la plateforme`,
+    };
+  }
+
+  const basis =
+    `barème Mexem ${market}, lu le ${SCHEDULE.readOn} (page du ${SCHEDULE.pageUpdated}) : ` +
+    (rule.rate != null
+      ? `${(100 * rule.rate).toFixed(4).replace(/0+$/, "").replace(/\.$/, "")} % par sens`
+      : `${rule.perShare} ${rule.ccy} par part`) +
+    `, plancher ${rule.min} ${rule.ccy} par ordre` +
+    (rule.maxPct != null ? `, plafond ${(100 * rule.maxPct).toFixed(0)} % du montant` : ", sans plafond");
+
+  const n = Number(shares);
+  const p = Number(price);
+  if (!(n > 0) || !(p > 0)) {
+    return {
+      ...shared,
+      basis,
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+    };
+  }
+
+  const notional = nativeAmount(n, p, listing.currency);
+  const notionalUsd = dollars(notional, listing.currency === "GBX" ? "GBP" : listing.currency);
+  const notionalInRule = convert(notional, listing.currency === "GBX" ? "GBP" : listing.currency, rule.ccy);
+
+  // The book is already a round trip — Rule 605 effective spread per share in
+  // America, basis points elsewhere — so it is added once, not per side.
+  const bookUsd =
+    marketBp != null && notionalUsd != null
+      ? (notionalUsd * marketBp) / 1e4
+      : marketPerShare != null
+        ? marketPerShare * n
+        : null;
+
+  const buyComm = commissionSide({ shares: n, amount: notionalInRule, market });
+  const sellComm = commissionSide({ shares: n, amount: notionalInRule, market });
+  const buyCommUsd = buyComm ? dollars(buyComm.charged, buyComm.currency) : null;
+  const sellCommUsd = sellComm ? dollars(sellComm.charged, sellComm.currency) : null;
+
+  // The venue's own fee, per order and so twice over, on an ETF on one of the
+  // seventeen boards the page names without a figure. Measured at Amsterdam.
+  const venueEtfFee = venueFees && !isStock(listing);
+  const venueFeeSideUsd = venueEtfFee ? dollars(VENUE_ETF_FEE.amount, VENUE_ETF_FEE.ccy) : 0;
+  const venueFeeUsd = venueEtfFee ? plus(venueFeeSideUsd, venueFeeSideUsd) : 0;
+
+  // Stamp duty is a charge on the purchase alone, so it is counted once.
+  const stampUsd = notionalUsd == null ? null : notionalUsd * stamp.pct;
+
+  // America's two sell-side levies. Mexem reprints neither, and IBKR's fixed
+  // tariff passes both through by name.
+  const secUsd = american ? (notionalUsd == null ? null : notionalUsd * SEC_RATE) : 0;
+  const tafUsd = american ? Math.min(TAF_PER_SHARE * n, TAF_CAP) : 0;
+
+  // « A 1 GBP fee on any transaction exceeding a value of 10.000 GBP » — a
+  // transaction, so both the purchase and the sale when both exceed it.
+  const notionalGbp = convert(notional, listing.currency === "GBX" ? "GBP" : listing.currency, PTM.ccy);
+  const ptmDue = !isStock(listing) || !UK_REGISTERED.test(listing.isin) ? false : notionalGbp == null ? null : notionalGbp > PTM.above;
+  const ptmUsd = ptmDue === false ? 0 : ptmDue === null ? null : dollars(2 * PTM.each, PTM.ccy);
+
+  const usd = plus(bookUsd, buyCommUsd, sellCommUsd, venueFeeUsd, stampUsd, secUsd, tafUsd, ptmUsd);
+  // What the broker keeps, told apart from the total because the page prints the
+  // two side by side. A free trade, a discount, a plan waives a commission and
+  // nothing else: the book belongs to whoever quoted it, the transaction taxes
+  // to a treasury, the regulatory levies to a regulator, and no broker can
+  // forgive any of them. A remark about free trades next to a single number
+  // would read as if it did.
+  // Le droit de place est refacturé sur la même ligne que la commission et
+  // n'est pas remis non plus, mais il n'est ni un impôt ni un carnet.
+  const brokerFees = plus(buyCommUsd, sellCommUsd, venueFeeUsd);
+
+  return {
+    ...shared,
+    usd: finite(usd, 6),
+    brokerFees: finite(brokerFees, 6),
+    ...(bookUsd == null
+      ? {
+          why:
+            `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ` +
+            `${m.unsourced?.why || "pas de source de spread"}`,
+        }
+      : {}),
+    trade: { shares: n, price: p, notional, notionalUsd: finite(notionalUsd, 6), currency: listing.currency },
+    buy: {
+      commission: finite(buyCommUsd, 6),
+      native: buyComm
+        ? {
+            charged: finite(buyComm.charged, 6),
+            raw: finite(buyComm.raw, 6),
+            floored: buyComm.floored,
+            capped: buyComm.capped,
+            currency: buyComm.currency,
+          }
+        : null,
+      taxes: finite(stampUsd, 6),
+      taxRates: Object.keys(stamp.rates).length ? stamp.rates : null,
+      venue: finite(venueFeeSideUsd, 6),
+      ptm: ptmDue ? finite(dollars(PTM.each, PTM.ccy), 6) : ptmDue === null ? null : 0,
+    },
+    sell: {
+      commission: finite(sellCommUsd, 6),
+      native: sellComm
+        ? {
+            charged: finite(sellComm.charged, 6),
+            raw: finite(sellComm.raw, 6),
+            floored: sellComm.floored,
+            capped: sellComm.capped,
+            currency: sellComm.currency,
+          }
+        : null,
+      sec: finite(secUsd, 6),
+      taf: finite(tafUsd, 6),
+      venue: finite(venueFeeSideUsd, 6),
+      ptm: ptmDue ? finite(dollars(PTM.each, PTM.ccy), 6) : ptmDue === null ? null : 0,
+    },
+    parts: {
+      marché: finite(bookUsd, 6),
+      commission: finite(plus(buyCommUsd, sellCommUsd), 6),
+      place: finite(venueFeeUsd, 6),
+      taxes: finite(stampUsd, 6),
+      réglementaire: american ? finite(plus(secUsd, tafUsd), 6) : 0,
+      ptm: ptmUsd === null ? null : finite(ptmUsd, 6),
+    },
     commission: {
       rate: rule.rate ?? null,
       perShare: rule.perShare ?? null,
@@ -418,34 +634,92 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
       maxPct: rule.maxPct ?? null,
       currency: rule.ccy,
       eachWay: true,
+      minPerOrder: true,
     },
-    ccy: QUOTE,
-    cap: american
-      ? { term: "b", part: "FINRA TAF", amount: TAF_CAP, per: "exécution" }
-      : rule.maxPct != null
-        ? { commission: { maxPct: rule.maxPct, currency: rule.ccy } }
-        : null,
-    threshold: thresholdOf(listing),
-    fx: fxNote(listing.currency),
-    fxIfConverted: 0,
-    confidence:
-      `commission ${market} selon la carte Mexem du ${SCHEDULE.readOn} ` +
-      `(page Stocks / ETFs ${SCHEDULE.pageUpdated}). ` +
-      (rule.rate != null
-        ? `${(rule.rate * 100).toFixed(2)} % par jambe, plancher ${rule.min} ${rule.ccy}. `
-        : `${rule.perShare} ${rule.ccy} par part, plancher ${rule.min} ${rule.ccy}` +
-          (rule.maxPct != null ? `, plafond ${(rule.maxPct * 100).toFixed(0)} %` : "") +
-          `. `) +
-      `a = carnet + taxes` +
-      (american ? ` + SEC` : "") +
-      (commissionPct ? ` + ${(commissionPct * 100).toFixed(2)} % de courtage` : "") +
-      `. Ticket dans le plancher, b = ` +
-      (american ? `605 + TAF` : `0`) +
-      `, c = 0. ` +
-      `Frais de place européens cités sans montant : hors de a. ` +
-      `Pas d'aller-retour réel. ` +
-      (leaf ? "" : `Pas de feuille de carnet pour cet ISIN / cette place. `),
+    conversion: { ...FX_CONVERT, ifNeeded: true },
+    withdraw: WITHDRAW,
+    basis,
+    confidence: confidenceOf({
+      market,
+      rule,
+      buyComm,
+      marketBp,
+      marketPerShare,
+      stamp,
+      american,
+      venueFees,
+      venueEtfFee,
+      ptmDue,
+      unsourced: m.unsourced,
+      listing,
+      n,
+    }),
   };
+}
+
+function confidenceOf({ market, rule, buyComm, marketBp, marketPerShare, stamp, american, venueFees, venueEtfFee, ptmDue, unsourced, listing, n }) {
+  const said = [];
+  said.push(
+    `commission Mexem, palier ${market}, lue le ${SCHEDULE.readOn} sur la page du ${SCHEDULE.pageUpdated}, ` +
+      `facturée par sens et convertie en dollars au mid BCE du ${FX_AS_OF}`
+  );
+  if (buyComm) {
+    said.push(
+      buyComm.capped
+        ? `plafonnée à ${(100 * rule.maxPct).toFixed(0)} % du montant : ${Number(buyComm.charged).toPrecision(4)} ${rule.ccy} par sens`
+        : buyComm.floored
+          ? `au plancher : le ticket de ${rule.min} ${rule.ccy} est toute la commission, ` +
+            `le calcul au barème n'en donnerait que ${Number(buyComm.raw).toPrecision(3)}`
+          : `au-dessus du plancher : ${Number(buyComm.charged).toPrecision(4)} ${rule.ccy} par sens`
+    );
+  }
+  if (rule.perShare != null && n >= rule.min / rule.perShare) {
+    said.push(
+      `au-delà de ${Math.round(rule.min / rule.perShare)} parts la commission cesse d'être le ticket ` +
+        `et devient ${rule.perShare} ${rule.ccy} la part — ce que le modèle affine ne disait pas`
+    );
+  }
+  if (marketBp != null) said.push(`carnet publié ${Number(marketBp).toPrecision(4)} bp, aller-retour`);
+  else if (marketPerShare != null) said.push(`carnet 605 ${marketPerShare} $ la part, aller-retour`);
+  else said.push(`aucun carnet : ${unsourced?.why || "place sans source de spread"} — le total est N/A et non un total sans marché`);
+
+  if (stamp.pct) {
+    said.push(
+      `droit de timbre ${(100 * stamp.pct).toFixed(2)} % à l'achat seulement, ` +
+        (stamp.source === "taxMap" ? "depuis taxMap.mjs" : "au taux imprimé par Mexem")
+    );
+  }
+  if (american) {
+    said.push(
+      `vente américaine : SEC ${SEC_RATE} du montant et TAF FINRA ${TAF_PER_SHARE} la part ` +
+        `(plafond ${TAF_CAP} $), que Mexem ne réimprime pas mais que le tarif fixe IBKR répercute nommément`
+    );
+  }
+  if (ptmDue === null) said.push(`prélèvement PTM indécidable : le montant n'a pas pu être converti en livres`);
+  else if (ptmDue) said.push(`prélèvement PTM de ${PTM.each} £ par sens, le montant dépassant ${PTM.above} £`);
+
+  if (venueFees) {
+    const here = loose(listing.brokerExchange) === VENUE_ETF_FEE.measuredAt;
+    const euros = `${VENUE_ETF_FEE.amount.toFixed(2).replace(".", ",")} ${VENUE_ETF_FEE.ccy}`;
+    said.push(
+      venueEtfFee
+        ? here
+          ? `frais de place ${euros} par sens, mesurés le ${MEASURED.on} par aperçu : le portail annonce ` +
+            `1,00 … 1,80 € sur un ETF d'Amsterdam contre 1 EUR sec sur une action, et le haut de la ` +
+            `fourchette est retenu puisque le total facture déjà l'écart entier du carnet`
+          : `frais de place ${euros} par sens, extrapolés depuis Amsterdam : la page annonce « exchange and ` +
+            `regulatory costs » sur ${listing.brokerExchange} sans aucun montant, et seule AEB a été mesurée`
+        : `« exchange and regulatory costs apply » sur ${listing.brokerExchange} sans montant imprimé — ` +
+          `sur une action l'aperçu du ${MEASURED.on} donne le plancher sec, donc rien n'est ajouté ici`
+    );
+  }
+  said.push(
+    `hors total : la conversion à ${(100 * FX_CONVERT.rate).toFixed(3)} % (plancher 5 dans la plupart des devises), ` +
+      `qui dépend de la trésorerie du client et non de l'ordre — le fichier précédent l'annonçait à zéro`
+  );
+  said.push(`garde et tenue de compte gratuites, l'onglet « Other Costs » le dit en toutes lettres`);
+  said.push(`aucun aller-retour réel chez Mexem dans ce dépôt`);
+  return said.join(" ; ");
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
@@ -455,7 +729,13 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   };
 
   if (process.argv.includes("--schedule")) {
-    console.log(JSON.stringify({ ...SCHEDULE, rules: RULE, coverage: coverage() }, null, 2));
+    console.log(
+      JSON.stringify(
+        { ...SCHEDULE, rules: RULE, conversion: FX_CONVERT, withdraw: WITHDRAW, venueFeesUnpriced: VENUE_FEES_UNPRICED, coverage: coverage() },
+        null,
+        2
+      )
+    );
     process.exit(0);
   }
 
@@ -465,17 +745,18 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     console.error(
       "usage : node mexem_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--json]\n" +
         "        node mexem_cost.mjs --schedule\n" +
-        "  ex.   node mexem_cost.mjs IWDA AEB EUR\n" +
-        "        node mexem_cost.mjs IWDA LSEETF USD\n" +
-        "        node mexem_cost.mjs SPY ARCA USD --shares=1 --price=600"
+        "  ex.   node mexem_cost.mjs IWDA AEB EUR --shares=10 --price=100\n" +
+        "        node mexem_cost.mjs SPY ARCA USD --shares=10 --price=600"
     );
     process.exit(2);
   }
 
-  const out = roundTripCost({
+  const out = roundTrip({
     etf,
     place,
     currency,
+    shares: flag("shares") ? Number(flag("shares")) : 10,
+    price: flag("price") ? Number(flag("price")) : null,
     bp: flag("bp") ? Number(flag("bp")) : null,
     perShare: flag("per-share") ? Number(flag("per-share")) : null,
   });
@@ -485,8 +766,8 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     process.exit(0);
   }
 
-  if (out.a == null && !out.listing) {
-    console.log(`a = null   b = ${out.b}   c = ${out.c}\n${out.why}`);
+  if (!out.listing) {
+    console.log(out.why);
     if (out.alternatives?.length) {
       console.log(`\nce que Mexem propose sous ce nom :\n  ${out.alternatives.join("\n  ")}`);
     }
@@ -495,51 +776,48 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 
   const l = out.listing;
   console.log(`${l.ticker || l.isin} — ${l.name || ""}`);
-  console.log(
-    `${l.exchange}${l.mic ? ` (${l.mic})` : ""}, ${l.currency}${l.type ? `, ${l.type.toLowerCase()}` : ""}\n`
-  );
+  console.log(`${l.exchange}${l.mic ? ` (${l.mic})` : ""}, ${l.currency}${l.type ? `, ${l.type.toLowerCase()}` : ""}\n`);
 
-  if (out.why && out.a == null && !RULE[out.feeMarket]) {
-    console.log(`a = null   b = ${out.b}   c = ${out.c}\n${out.why}`);
-    process.exit(0);
-  }
-
-  const detail = [];
-  if (out.parts?.marché != null) detail.push(`carnet ${out.parts.marché}`);
-  for (const [name, rate] of Object.entries(out.parts?.taxes ?? {})) detail.push(`${name} ${rate}`);
-  if (out.parts?.commission) detail.push(`courtage ${out.parts.commission}`);
-  if (out.parts?.réglementaire) detail.push(`SEC ${out.parts.réglementaire.SEC}`);
-
-  console.log(`a = ${out.a}   (au prorata${detail.length ? " : " + detail.join(" + ") : " : rien"})`);
-  console.log(`b = ${out.b} $   (par part${out.b ? " : FINRA et/ou spread 605" : " : rien"})`);
-  console.log(`c = ${out.c} $   (par ordre : ticket dans la remark, pas dans c)`);
-  if (out.floor != null) console.log(`plancher ${out.floor} $`);
-  const fx = out.fx?.listing ?? usdPer(fxCcy(l.currency));
-  console.log(
-    `\ncoût = ${out.a} × p × n × ${fx != null ? Number(fx.toPrecision(6)) : "?"} + ${out.b} × n + ${out.c}   ($ ; p en ${l.currency})`
-  );
-  console.log(`  ${out.basis}`);
-  for (const line of (out.confidence || out.why || "").split(" ; ")) console.log(`  ${line}`);
-
-  const n = Number(flag("shares"));
-  const p = Number(flag("price"));
-  if (n > 0 && p > 0) {
-    const amount = n * p;
-    const amountUsd = toUsd(nativeAmount(n, p, l.currency) ?? amount, fxCcy(l.currency));
-    const extra = out.threshold && (nativeAmount(n, p, l.currency) ?? amount) >= out.threshold.above ? out.threshold.c : 0;
-    const affine = amountUsd != null && out.a != null ? out.a * amountUsd + out.b * n + out.c + extra : null;
-    const billed = exactCost({ shares: n, price: p, market: out.feeMarket, currency: l.currency });
+  const money = (x) => (x == null ? "N/A" : `${Number(x).toFixed(4)} $`);
+  if (out.trade) {
+    const t = out.trade;
     console.log(
-      `\n${n} part${n > 1 ? "s" : ""} à ${p} ${l.currency} = ${amount.toFixed(2)} ${l.currency}` +
-        (amountUsd != null ? ` (${amountUsd.toFixed(2)} $)` : "")
+      `${t.shares} part${t.shares > 1 ? "s" : ""} à ${t.price} ${t.currency} = ` +
+        `${Number(t.notional).toFixed(2)} ${t.currency === "GBX" ? "GBP" : t.currency}` +
+        (t.notionalUsd != null ? ` (${Number(t.notionalUsd).toFixed(2)} $)` : "") +
+        "\n"
     );
-    if (affine != null) console.log(`  a, b, c        : ${affine.toFixed(4)} $`);
-    if (billed.commission != null) {
-      console.log(
-        `  commission     : ${Number(billed.commission).toFixed(4)} $` +
-          (billed.native?.each != null ? ` (${Number(billed.native.each).toPrecision(4)} ${billed.native.currency} × 2)` : "")
-      );
-    }
+    const side = (name, s) => {
+      const lines = [];
+      if (s.commission != null || s.native) {
+        lines.push(
+          `  commission   ${money(s.commission)}` +
+            (s.native
+              ? `   (${Number(s.native.charged).toPrecision(4)} ${s.native.currency}` +
+                `${s.native.floored ? ", au plancher" : s.native.capped ? ", plafonnée" : ""})`
+              : "")
+        );
+      }
+      if (s.venue) lines.push(`  place        ${money(s.venue)}`);
+      if (s.taxes) lines.push(`  timbre       ${money(s.taxes)}`);
+      if (s.sec) lines.push(`  SEC          ${money(s.sec)}`);
+      if (s.taf) lines.push(`  TAF          ${money(s.taf)}`);
+      if (s.ptm) lines.push(`  PTM          ${money(s.ptm)}`);
+      if (lines.length) console.log(`${name}\n${lines.join("\n")}`);
+    };
+    side("achat", out.buy || {});
+    side("vente", out.sell || {});
+    if (out.parts?.marché != null) console.log(`marché\n  carnet       ${money(out.parts.marché)}   (aller-retour)`);
+    console.log(
+      `\ntotal        ${money(out.usd)}` +
+        (out.usd != null && out.trade.notionalUsd
+          ? `   soit ${((100 * out.usd) / out.trade.notionalUsd).toFixed(3)} % du montant`
+          : "")
+    );
   }
+  if (out.usd == null && out.why) console.log(`coût N/A — ${out.why}`);
+  console.log(`  ${out.basis}`);
+  for (const line of (out.confidence || "").split(" ; ").filter(Boolean)) console.log(`  ${line}`);
+  if (out.remark) console.log(`\nremarque\n  ${out.remark.split("\n").join("\n  ")}`);
   if (out.url) console.log(`\n${out.url}`);
 }

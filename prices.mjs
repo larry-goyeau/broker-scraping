@@ -2,11 +2,18 @@
 // A fact about the instrument and not about any broker, so it sits at the root beside
 // `fx.mjs` and `taxes.mjs`, and every `*_cost.mjs` reads the same figure.
 //
-// The source is EODHD, one vendor for the whole world, because the alternative is one
+// The source is EODHD, one vendor for most of the world, because the alternative is one
 // scraper per venue and a price that only exists while that venue is open. Here the
 // last close is served at any hour: a lookup at midnight in Paris answers for Tokyo,
 // and nothing has to be timed against a session. The day's close is enough — these
 // prices size an order, they do not fill one.
+//
+// Most of the world and not all of it: the vendor carries nothing in the Gulf. Asked for
+// GFH Bank it returns an empty list, and it has missed every Gulf ISIN put to it while
+// answering the American ones first time. So the four Gulf boards that publish their own
+// prices are read directly, through `gulf.mjs`, which `spread.mjs` also reads for the
+// touch. That keeps this file the only writer of `prices.json` while letting 347 lines
+// that no vendor sells stop being N/A.
 //
 // One request per ISIN buys every listing of it at once: `/api/search/{ISIN}` answers
 // with each venue, its currency and its last close, so a single call fills the euro
@@ -25,6 +32,7 @@
 //   node prices.mjs --dry-run         dit ce que ça coûterait et ne demande rien
 //   node prices.mjs --budget=50       ne dépense pas plus de cinquante appels
 //   node prices.mjs --use-reserve     autorise à entamer la réserve non renouvelable
+//   node prices.mjs --gulf            lit les carnets du Golfe, sans clé et sans quota
 //
 // The key lives in `.env` as EODHD_API_KEY, which `.gitignore` already keeps out of the
 // repository.
@@ -94,7 +102,7 @@ function save() {
   fs.writeFileSync(
     STORE_PATH,
     JSON.stringify(
-      { generatedAt: new Date().toISOString(), source: "EODHD", unit: UNIT, fetched, prices },
+      { generatedAt: new Date().toISOString(), source: "EODHD, et les bourses du Golfe pour ce qu'il n'a pas", unit: UNIT, fetched, prices },
       null,
       2
     )
@@ -170,6 +178,105 @@ function noteSearch(isin, rows) {
   }
 }
 
+// ---------------------------------------------------------------- le Golfe
+
+// The vendor does not carry the Gulf. Asked for GFH Bank it answers nothing at all, and
+// across the five Gulf ISINs the front has put to it since the boards were wired, it has
+// answered none — against two out of two for the American ones. That is coverage and not
+// quota: a bigger plan would return the same nothing.
+//
+// The exchanges themselves publish the last price, in the same response that carries the
+// touch `spread.mjs` reads, so `gulf.mjs` fetches it once and both take what they need.
+// This stays the only file that writes `prices.json`.
+//
+// Only Abu Dhabi names an ISIN. The other three board rows carry a symbol, and the thing
+// that knows which ISIN a symbol means on a given board is the brokers' catalogues — so
+// they are read for that and for nothing else, once, on the first Gulf lookup.
+const GULF_COUNTRIES = new Set(["AE", "BH", "KW", "OM", "QA", "SA"]);
+const GULF_HEADLESS = ["adx", "dfm", "msx"];
+const BOARD_TTL = 15 * 60 * 1000;
+
+let gulfIndexPromise = null;
+/** ISIN -> [{ mic, symbol }], for the boards that name no ISIN of their own. */
+function gulfIndex() {
+  return (gulfIndexPromise ||= (async () => {
+    const [{ catalogueRows }, { resolveVenue }, { GULF_BOARDS }] = await Promise.all([
+      import("./catalogues.mjs"),
+      import("./venues.mjs"),
+      import("./gulf.mjs"),
+    ]);
+    const mics = new Set(Object.values(GULF_BOARDS).map((b) => b.mic));
+    const { gulfSymbol } = await import("./gulf.mjs");
+    const index = new Map();
+    for (const row of catalogueRows()) {
+      const isin = String(row.isin || "").trim().toUpperCase();
+      if (!ISIN.test(isin) || !GULF_COUNTRIES.has(isin.slice(0, 2))) continue;
+      const mic = resolveVenue(row).venue?.mic;
+      if (!mics.has(mic)) continue;
+      const symbol = gulfSymbol(row.ticker || row.symbol);
+      if (!symbol) continue;
+      const seen = index.get(isin) || index.set(isin, []).get(isin);
+      if (!seen.some((s) => s.mic === mic && s.symbol === symbol)) seen.push({ mic, symbol });
+    }
+    return index;
+  })());
+}
+
+const boards = new Map();
+/** One board, cached for a quarter of an hour: the front asks per instrument. */
+function gulfBoard(key, page = null) {
+  const held = boards.get(key);
+  if (held && Date.now() - held.at < BOARD_TTL) return held.rows;
+  const rows = (async () => {
+    const { readGulfBoard } = await import("./gulf.mjs");
+    const list = await readGulfBoard(key, page ? { page } : {});
+    return new Map(list.filter((r) => r.last != null).map((r) => [r.isin || r.symbol, r]));
+  })().catch((e) => {
+    boards.delete(key);
+    console.error(`carnet ${key} : ${e.message}`);
+    return new Map();
+  });
+  boards.set(key, { at: Date.now(), rows });
+  return rows;
+}
+
+function noteBoard(isin, row, mic) {
+  const leaf = ((prices[isin] ||= {})[row.currency] ||= { price: null, at: null, from: {} });
+  leaf.from[`${mic}:${row.symbol}`] = {
+    price: Number(row.last.toPrecision(8)),
+    at: new Date().toISOString().slice(0, 10),
+    primary: false,
+  };
+  const best = Object.values(leaf.from).find((x) => x.primary) || Object.values(leaf.from)[0];
+  leaf.price = best.price;
+  leaf.at = best.at;
+}
+
+/**
+ * Price one ISIN off the Gulf boards. `keys` limits which boards are asked — the front
+ * cannot drive a browser, so it never asks Manama.
+ */
+async function gulfFresh(isin, { keys = GULF_HEADLESS, page = null } = {}) {
+  const { GULF_BOARDS } = await import("./gulf.mjs");
+  const where = (await gulfIndex()).get(isin) || [];
+  let found = false;
+  for (const key of keys) {
+    const { mic } = GULF_BOARDS[key];
+    const rows = await gulfBoard(key, GULF_BOARDS[key].browser ? page : null);
+    // Abu Dhabi files its own rows under the ISIN, so it answers even for a line no
+    // catalogue in this repository has ever named.
+    const row = rows.get(isin) || where.filter((w) => w.mic === mic).map((w) => rows.get(w.symbol)).find(Boolean);
+    if (!row) continue;
+    noteBoard(isin, row, mic);
+    found = true;
+  }
+  if (found) {
+    fetched[isin] = new Date().toISOString();
+    scheduleSave();
+  }
+  return found;
+}
+
 const inflight = new Map();
 
 /**
@@ -181,19 +288,30 @@ export async function ensureFresh(isin, maxAge = DAY) {
   const key = String(isin || "").trim().toUpperCase();
   if (!ISIN.test(key)) return undefined;
   if (isFresh(key, maxAge)) return prices[key];
-  if (!KEY) return prices[key];
   // Two readers asking for the same instrument at once is one request, not two.
   if (inflight.has(key)) return inflight.get(key);
   const job = (async () => {
     try {
-      if (spent + 1 > budget) return prices[key];
-      spent++;
-      const rows = await get(`${API}/search/${encodeURIComponent(key)}?api_token=${KEY}&fmt=json&limit=30`);
-      // A miss is dated too. Without that, an ISIN the vendor does not carry would be
-      // asked about on every single page view.
-      fetched[key] = new Date().toISOString();
-      if (Array.isArray(rows)) noteSearch(key, rows.filter((r) => String(r.ISIN || "").toUpperCase() === key));
-      scheduleSave();
+      // A vendor out of quota throws, and that must not carry off the Gulf lookup with
+      // it: the boards below cost nothing and answer exactly where the vendor cannot.
+      if (KEY && spent + 1 <= budget) {
+        try {
+          spent++;
+          const rows = await get(`${API}/search/${encodeURIComponent(key)}?api_token=${KEY}&fmt=json&limit=30`);
+          // A miss is dated too. Without that, an ISIN the vendor does not carry would
+          // be asked about on every single page view.
+          fetched[key] = new Date().toISOString();
+          if (Array.isArray(rows)) noteSearch(key, rows.filter((r) => String(r.ISIN || "").toUpperCase() === key));
+          scheduleSave();
+        } catch (e) {
+          console.error(`prix ${key} chez EODHD : ${e.message}`);
+        }
+      }
+      // The vendor knows nothing east of Suez. Only a Gulf ISIN is worth the catalogue
+      // read this costs the first time, and only when the vendor has come back empty.
+      if (!Object.keys(prices[key] || {}).length && GULF_COUNTRIES.has(key.slice(0, 2))) {
+        await gulfFresh(key);
+      }
       return prices[key];
     } catch (e) {
       console.error(`prix ${key} : ${e.message}`);
@@ -208,7 +326,41 @@ export async function ensureFresh(isin, maxAge = DAY) {
 
 // ---------------------------------------------------------------- the sweep
 
+// Every Gulf line at once, which is four requests rather than one per instrument. Manama
+// needs a tab; without one the other three are still swept and the gap is said out loud
+// rather than passed off as an empty board.
+async function sweepGulf() {
+  const { GULF_BOARDS } = await import("./gulf.mjs");
+  let page = null;
+  let browser = null;
+  try {
+    const { default: puppeteer } = await import("puppeteer-core");
+    browser = await puppeteer.connect({ browserURL: "http://127.0.0.1:9222", defaultViewport: null });
+    page = await browser.newPage();
+  } catch (e) {
+    console.error(`Manama sera sautée : pas de navigateur sur 9222 (${e.message.slice(0, 60)}).`);
+  }
+  const keys = Object.keys(GULF_BOARDS).filter((k) => !GULF_BOARDS[k].browser || page);
+  const index = await gulfIndex();
+  console.error(`${index.size} ISIN du Golfe dans les catalogues, ${keys.length} carnets à lire.`);
+
+  let priced = 0;
+  const wanted = new Set(index.keys());
+  // Abu Dhabi names its own ISINs, so its board can price a line no catalogue lists.
+  for (const key of keys) {
+    const rows = await gulfBoard(key, GULF_BOARDS[key].browser ? page : null);
+    for (const id of rows.keys()) if (ISIN.test(id)) wanted.add(id);
+  }
+  for (const isin of wanted) if (await gulfFresh(isin, { keys, page })) priced++;
+
+  save();
+  await page?.close();
+  await browser?.disconnect();
+  console.error(`${priced} ISIN du Golfe cotés. Écrit dans ${STORE_PATH}.`);
+}
+
 async function main() {
+  if (has("gulf")) return sweepGulf();
   if (!KEY) {
     console.error("Pas de clé : mettre EODHD_API_KEY dans .env ou dans l'environnement.");
     process.exit(1);

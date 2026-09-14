@@ -185,21 +185,23 @@ const settle = async (orderId) => {
 
 // ----------------------------------------------------------------------------- le programme
 
-const { roundTripCost } = await import("./alpaca_cost.mjs");
+const { roundTrip } = await import("./alpaca_cost.mjs");
 
 const trips = [];
 for (const { symbol, shares } of PLAN) {
   const before = await quote(symbol);
-  const model = roundTripCost({ etf: symbol, currency: "USD" });
+  // The estimator is handed the size and answers the bill, so the prediction is
+  // no longer assembled here out of three coefficients.
+  const model = roundTrip({ etf: symbol, currency: "USD", shares, price: before.mid });
   const trip = {
     symbol,
     shares,
     quote: before,
-    model: model.a == null ? { why: model.why } : { a: model.a, b: model.b, c: model.c, perShare: model.perShare },
-    predicted:
-      model.a == null || before.mid == null
-        ? null
-        : money(model.a * before.mid * shares + model.b * shares + model.c),
+    model:
+      model.usd == null
+        ? { why: model.why }
+        : { usd: model.usd, marginal: model.marginal, perShare: model.perShare, parts: model.parts },
+    predicted: model.usd == null ? null : money(model.usd),
   };
 
   if (LIVE) {

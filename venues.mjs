@@ -113,7 +113,9 @@ export const VENUES = [
     source: "us605",
     hours: { open: "09:30", close: "16:00", tz: "America/New_York" },
     exact: {
-      XNAS: ["xnas", "nasdaq", "nmq", "ndq", "nasdaqgs", "nasdaqgm", "nasdaqcm", "nsc"],
+      // "nsdq" is Al Ramz's spelling, and on its own it kept 1 113 American lines of
+      // that catalogue out of reach of a book they plainly have.
+      XNAS: ["xnas", "nasdaq", "nsdq", "nmq", "ndq", "nasdaqgs", "nasdaqgm", "nasdaqcm", "nsc"],
       // Brokers write "AMEX" for Arca more often than for NYSE American, tastytrade
       // among them: EEM, GLD, IAU and VOO all come through labelled AMEX and all four
       // list on Arca. The alias sits here rather than on XASE because that is what the
@@ -306,6 +308,55 @@ export const VENUES = [
     loose: [],
   },
 
+  // The Gulf. Four of these five markets publish their own touch for nothing — the
+  // whole board in one call, bid, ask and both volumes — which is better than most of
+  // Europe manages; they sat in KNOWN_UNSOURCED because nobody had looked, not because
+  // the data is paid. Only Tadawul stays there: the Saudi Exchange publishes last
+  // price and volume and sells the book.
+  //
+  // Abu Dhabi and Dubai moved to a Monday–Friday week in January 2022, so the default
+  // applies. Manama and Muscat did not, and trade Sunday to Thursday; `days` says so,
+  // or `sessionState` would call a live Sunday closed and a dead Friday open.
+  {
+    mic: "XADS",
+    name: "Abu Dhabi Securities Exchange",
+    source: "adx",
+    hours: { open: "10:00", close: "15:00", tz: "Asia/Dubai" },
+    exact: ["xads", "adx", "adsm", "abudhabi", "abudhabisecuritiesexchange", "abudhabisecurities"],
+    loose: [],
+  },
+  {
+    mic: "XDFM",
+    name: "Dubai Financial Market",
+    source: "dfm",
+    hours: { open: "10:00", close: "15:00", tz: "Asia/Dubai" },
+    // "kse" used to be read as Karachi, on the strength of the initials alone. It is
+    // Swissquote's code, it appears on six lines and no others, and all six are Kuwaiti
+    // or Bahraini companies quoted in dirhams — which is what a cross-listing on Dubai
+    // looks like and not what a Pakistani one looks like. All six are on the DFM board
+    // under the same symbol, and five are in Al Ramz's catalogue named DFM outright.
+    // What would falsify this is a catalogue writing KSE for Seoul or Karachi; those
+    // would arrive in won or rupees and so would miss every AED leaf filed here.
+    exact: ["xdfm", "dfm", "dubai", "dubaifinancialmarket", "kse"],
+    loose: [],
+  },
+  {
+    mic: "XBAH",
+    name: "Bahrain Bourse",
+    source: "bhb",
+    hours: { open: "09:30", close: "13:00", tz: "Asia/Bahrain", days: ["Sun", "Mon", "Tue", "Wed", "Thu"] },
+    exact: ["xbah", "bhb", "bahrain", "bahrainbourse"],
+    loose: [],
+  },
+  {
+    mic: "XMUS",
+    name: "Muscat Stock Exchange",
+    source: "msx",
+    hours: { open: "10:00", close: "13:00", tz: "Asia/Muscat", days: ["Sun", "Mon", "Tue", "Wed", "Thu"] },
+    exact: ["xmus", "msx", "msm", "muscat", "muscatstockexchange", "muscatsecuritiesmarket"],
+    loose: [],
+  },
+
   // The two spot books a crypto line can be priced against without a key. Neither has a
   // MIC: these four letters are this file's own, chosen to sit in the same column as the
   // real ones. Nineteen catalogues in this repository carry crypto, 711 distinct coins
@@ -327,6 +378,18 @@ export const VENUES = [
     exact: ["binance", "bina"],
     loose: [],
   },
+  // Alpaca runs its own crypto venue rather than routing to one of the two above,
+  // and publishes its touch without a key. It is a book in its own right and a
+  // much wider one — 3.4 bp on bitcoin against Binance's 0.0013 — so it is stored
+  // beside them and read only by the broker it belongs to.
+  {
+    mic: "ALPA",
+    name: "Alpaca",
+    source: "alpaca",
+    hours: null,
+    exact: ["alpaca", "alpa"],
+    loose: [],
+  },
   {
     mic: "CBSE",
     name: "Coinbase",
@@ -342,6 +405,12 @@ export const VENUES = [
 // Binance's USDT leg is read as one, which is the market's own convention and costs a
 // few hundredths of a basis point.
 export const CRYPTO_MICS = ["CBSE", "BINA"];
+// Every crypto book `spread.mjs` knows how to read. Wider than `CRYPTO_MICS` on
+// purpose: a broker that names no venue could be on Binance or Coinbase and is
+// answered with the wider of those two, but it is certainly not on Alpaca's
+// venue unless it is Alpaca. Folding Alpaca into the fallback would hand its
+// 3.4 bp bitcoin touch to Quantfury, which mirrors the spot books instead.
+export const CRYPTO_READ_MICS = [...CRYPTO_MICS, "ALPA"];
 export const CRYPTO_CCY = "USD";
 export const cryptoId = (base) => `CRYPTO:${String(base || "").toUpperCase()}`;
 export const isCryptoId = (id) => String(id || "").startsWith("CRYPTO:");
@@ -430,11 +499,11 @@ export const KNOWN_UNSOURCED = [
   { match: ["luxse", "xlux", "luxembourg"], name: "Luxembourg Stock Exchange", why: "adaptateur non écrit" },
   { match: ["nzx", "xnze"], name: "NZX", why: "adaptateur non écrit" },
   { match: ["biva"], name: "BIVA", why: "adaptateur non écrit" },
-  { match: ["dfm", "dubai", "xdfm"], name: "Dubai Financial Market", why: "adaptateur non écrit" },
-  { match: ["adx", "adsm", "xads"], name: "Abu Dhabi Securities Exchange", why: "adaptateur non écrit" },
-  { match: ["difx", "nasdaqdubai", "nasdaqdxb"], name: "Nasdaq Dubai", why: "adaptateur non écrit" },
-  { match: ["bahrain", "xbah", "bahrainbourse", "bhb"], name: "Bahrain Bourse", why: "adaptateur non écrit" },
-  { match: ["muscat", "msm", "msx", "xmus"], name: "Muscat Stock Exchange", why: "adaptateur non écrit" },
+  // Nasdaq Dubai shares a building with DFM and not a board: its own site shows last
+  // price and no touch, and the DFM feed that covers the emirate stops at DFM's own
+  // securities. Tadawul publishes a ticker rich in everything except the two numbers
+  // a spread is made of.
+  { match: ["difx", "nasdaqdubai", "nasdaqdxb"], name: "Nasdaq Dubai", why: "pas de carnet public" },
   { match: ["crypto", "trd", "tradias", "tradiasotc", "zerohash", "zerohashe"], name: "Crypto", why: "gré à gré, pas un carnet unique" },
   { match: ["bet", "xbse", "bucharest", "bvb"], name: "Bucharest Stock Exchange", why: "adaptateur non écrit" },
   { match: ["csecy", "xcys", "cyprus"], name: "Cyprus Stock Exchange", why: "adaptateur non écrit" },
@@ -442,7 +511,7 @@ export const KNOWN_UNSOURCED = [
   { match: ["bx", "bxswiss"], name: "BX Swiss", why: "adaptateur non écrit" },
   { match: ["bvc", "colombia"], name: "Bolsa de Valores de Colombia", why: "adaptateur non écrit" },
   { match: ["bsesof", "xbul", "sofia"], name: "Bulgarian Stock Exchange", why: "adaptateur non écrit" },
-  { match: ["tadawul"], name: "Tadawul", why: "adaptateur non écrit" },
+  { match: ["tadawul", "tdwl", "xsau", "saudiexchange"], name: "Tadawul", why: "carnet non publié" },
   { match: ["shanghaisc", "shenzhensc", "chinext"], name: "bourses chinoises onshore", why: "adaptateur non écrit" },
   { match: ["csefndk"], name: "Nasdaq First North Denmark", why: "adaptateur non écrit" },
   { match: ["eurotlx"], name: "EuroTLX", why: "adaptateur non écrit" },
@@ -452,7 +521,7 @@ export const KNOWN_UNSOURCED = [
   { match: ["bsse", "xbra", "bratislava"], name: "Bratislava Stock Exchange", why: "adaptateur non écrit" },
   { match: ["nag", "xnag", "nagoya"], name: "Nagoya", why: "adaptateur non écrit" },
   { match: ["nseng", "xngn", "nigeria"], name: "Nigerian Exchange", why: "adaptateur non écrit" },
-  { match: ["kse"], name: "Pakistan Stock Exchange", why: "adaptateur non écrit" },
+  { match: ["psx", "xkar", "karachi", "pakistan"], name: "Pakistan Stock Exchange", why: "adaptateur non écrit" },
 ];
 
 // "Deutsche Börse Xetra" has to reduce to the same token as "deutscheborsexetra", so
@@ -606,6 +675,12 @@ const PAGE = {
   // reports are found through, which is the nearest thing to a source a reader can open
   // and the only one that stays valid when the set of reporters changes.
   us605: () => "https://www.finra.org/filing-reporting/regulation-nms/sec-rule-605-reports",
+  // The Gulf boards publish one market-wide table each rather than a page per line, so
+  // the link goes to the table the figure was read off.
+  adx: () => "https://www.adx.ae/all-equities",
+  dfm: () => "https://www.dfm.ae/the-exchange/market-information/market-watch",
+  bhb: () => "https://bahrainbourse.com/en/Quotes%20and%20Market/Stocks/Pages/Quotes.aspx",
+  msx: () => "https://www.msx.om/market-watch-custom.aspx",
   tradegate: (l) => `https://www.tradegate.de/orderbuch.php?isin=${l.isin}`,
   gettex: () => "https://www.gettex.de/handel/delayed-data/pretrade-data",
   lsex: () => "https://www.ls-x.de/de/download",
@@ -633,6 +708,14 @@ const PAGE = {
     l.ticker
       ? `https://www.coinbase.com/advanced-trade/spot/${encodeURIComponent(String(l.ticker).toUpperCase())}-USD`
       : "https://www.coinbase.com/advanced-trade/spot",
+  // Alpaca has no public page per pair, so the figure points at the quote that
+  // produced it, which is the thing a reader would want to check anyway.
+  alpaca: (l) =>
+    l.ticker
+      ? `https://data.alpaca.markets/v1beta3/crypto/us/latest/quotes?symbols=${encodeURIComponent(
+          `${String(l.ticker).toUpperCase()}/USD`
+        )}`
+      : "https://docs.alpaca.markets/docs/crypto-trading",
   bmv: (l) =>
     l.ticker
       ? `https://www.bmv.com.mx/es/emisoras/estadisticas/${encodeURIComponent(
@@ -670,7 +753,11 @@ export function sessionState(venue, when = new Date()) {
   const weekday = get("weekday");
   const minutes = Number(get("hour")) * 60 + Number(get("minute"));
   const at = (hhmm) => Number(hhmm.slice(0, 2)) * 60 + Number(hhmm.slice(3, 5));
-  if (weekday === "Sat" || weekday === "Sun") return { open: false, why: "week-end" };
+  // Monday to Friday unless the venue says otherwise. Manama and Muscat rest on Friday
+  // and Saturday and trade on Sunday, so the week is a property of the exchange rather
+  // than a constant of the calendar.
+  const days = venue.hours.days || ["Mon", "Tue", "Wed", "Thu", "Fri"];
+  if (!days.includes(weekday)) return { open: false, why: "hors jours de cotation" };
   // Public holidays are not modelled: an empty book on a holiday reads as a closed
   // book anyway, which is the conclusion that matters.
   if (minutes < at(venue.hours.open)) return { open: false, why: "avant l'ouverture" };

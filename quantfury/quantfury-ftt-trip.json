@@ -1,0 +1,33 @@
+{
+  "why": "Quantfury publishes no tax line and §56 leaves every tax to the client. The tax map charges 0.40 % French FTT on 66 lines and 0.50 % British stamp on one, and on those lines the tax is about 94 % of the modelled round trip — fifteen times the book. Nobody has ever seen it debited. This trip is the test. It has to straddle a session close: the French FTT falls on the net daily acquisition, so an intraday buy and sell cancel out and would owe nothing whatever Quantfury does.",
+  "line": {
+    "ticker": "ACA",
+    "name": "Credit Agricole SA",
+    "isin": "FR0000045072",
+    "currency": "EUR",
+    "operator": "Cboe Europe",
+    "primary": "XPAR"
+  },
+  "open": {
+    "at": "2026-09-15T13:32:36Z",
+    "side": "buy",
+    "shares": 15,
+    "price": 18.465,
+    "notionalLocal": 276.98,
+    "quotedBid": 18.465,
+    "quotedAsk": 18.47,
+    "balanceUsdBefore": 350.02,
+    "balanceUsdAfter": 350.02,
+    "unrealisedLocal": 0.0
+  },
+  "close": null,
+  "expect": {
+    "bookLocal": 0.075,
+    "fttIfCharged": 1.108,
+    "note": "Sell 15 at the bid on the next session and reconcile: balance change minus (sell - 18.465) * 15 converted. A shortfall near 1.11 EUR is the FTT; a shortfall near zero means Quantfury debits no transfer tax and the 66 French lines are overstated fifteenfold."
+  },
+  "alsoWatch": {
+    "what": "the side the fill lands on, which is what the whole cost model rests on",
+    "seen": "The ticket quoted 18.465 / 18.470 and the position opened at 18.465 — the bid, on a buy — and marks at 0.00 unrealised against a bid still at 18.465. PETR4 did the same thing on 15 September: quoted 49.12 / 49.14, filled 49.12. If a buy really lands on the bid rather than the ask, a round trip does not cross the book and `usd` overstates every one of the 2 030 lines by a full spread. Two fills are not enough to tell that from a half-tick of drift, so the close is the third point. Watch whether the sell lands on the bid too, and what the reconciliation leaves unexplained."
+  }
+}

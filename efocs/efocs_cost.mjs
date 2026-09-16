@@ -1,48 +1,49 @@
 // What one round trip costs at EFOCS (EuroFinance): buy n shares at price p,
-// sell them back at once (platform, retail).
+// sell them back at once, platform, retail, in dollars.
 //
-//   coût (USD) = a × toUsd(p) × n + b × n + c
+// The affine triple hid the ticket. Courtage is a % floored at 3 / 4 / 6 €,
+// and that floor lived only in `min fees` / `c` = 0. Every Xetra fill under
+// 8 000 € was missing 8 €. `roundTrip` is given the size and charges what
+// is charged.
 //
-// `a` is a fraction of the amount. `b` and `c` are dollars, the same unit the
-// other `*_cost.mjs` files answer in. The published ticket is a minimum of a
-// % (3.50 / 4 / 6 €), so it sits in the floor (`min fees`, `c` = 0).
+// EURO-FINANCE AD (BG), Schedule of Fees, Board minutes 479 of 14 August
+// 2026, in force 15 September 2026. Re-read 2026-09-15 — the BSE minimum
+// dropped from 3.50 € to 3.00 € (the marketing page prints the same 3 €).
+// Default is the EFOCS platform card (Chapter I), retail. Professional is
+// the same Xetra / Frankfurt % and a cheaper BSE line (0.20 %). Office /
+// telephone (Chapter II: 1.50 %–0.40 %, min 5–10 €) and bonds are not
+// this trip. Catalogue 5 258 lines — 3 689 ETFs, 1 569 stocks — Xetra
+// and Sofia, no Frankfurt floor row.
 //
-// EURO-FINANCE AD (BG), Schedule of Fees, Board minutes 465 of 13 February
-// 2026, in force 16 March 2026. Read 2026-09-10. Default is the EFOCS
-// platform card (Chapter I), retail. Professional is the same Xetra /
-// Frankfurt % and a cheaper BSE line. Office / telephone (Chapter II:
-// 1.50 %–0.40 %, min 5–10 €) and bonds are not this trip.
-//
-//   BSE (XBUL)     retail 0.30 %, professional 0.20 %, min 3.50 €
+//   BSE (XBUL)     retail 0.30 %, professional 0.20 %, min 3 €
 //   Xetra (XETR)   0.05 %, min 4 €          (retail = professional)
 //   Frankfurt floor (XFRA)
 //                  0.10 %, min 6 €          (retail = professional)
 //
-// Starred lines include third-party costs, so exchange / clearing stay out
-// of `a` / `b`. The book is Xetra + Sofia: no US tape, no SEC / TAF. Stamp
-// / FTT come from the tax map. Custody on the BSE / Deutsche Börse pages
-// is none. Art. 33 UniCredit safekeeping is their schedule, not a figure
-// here.
+// Starred lines include third-party costs, so exchange / clearing stay
+// out of the number. No US tape, no SEC / TAF. Stamp / FTT from the tax
+// map, never invented. Custody on the BSE / Deutsche Börse pages is none.
+// Art. 33 UniCredit safekeeping is their schedule, not a figure here.
 //
 // Cash is euro (BG joined on 1 January 2026). They take EUR / USD / GBP
 // deposits and convert "at the current exchange rate of Euro-Finance" on
-// payments — no published fill markup, so FX stays out of `a`. No live
-// trip: the coefficients are the printed %.
+// payments — no published fill markup, so FX stays out of the total.
 //
 //   https://www.eurofinance.bg/wp-content/uploads/documents/legal-documents/Schedule%20of%20fees.pdf
 //   https://eurofinance.bg/en/services/trading/deutscheboerse/
 //   https://eurofinance.bg/en/services/trading/bse/
 //
-//   node efocs/efocs_cost.mjs VWCE
+//   node efocs/efocs_cost.mjs VWCE XETR EUR --shares=1 --price=140
 //   node efocs/efocs_cost.mjs APC XETR EUR --shares=1 --price=230
-//   node efocs/efocs_cost.mjs ETR BSESOF EUR --plan=professional
+//   node efocs/efocs_cost.mjs ETR BSESOF EUR --shares=10 --price=10
+//   node efocs/efocs_cost.mjs ETR BSESOF EUR --plan=professional --shares=10 --price=10
 //   node efocs/efocs_cost.mjs --schedule
 //
-// `roundTripCost(...)` reads files, not the network.
+// `roundTrip(...)` reads files, not the network.
 
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite, bookParts } from "../na.mjs";
+import { plus, finite } from "../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
@@ -53,8 +54,10 @@ const SCHEDULE = {
   source: "https://www.eurofinance.bg/wp-content/uploads/documents/legal-documents/Schedule%20of%20fees.pdf",
   xetra: "https://eurofinance.bg/en/services/trading/deutscheboerse/",
   bse: "https://eurofinance.bg/en/services/trading/bse/",
-  readOn: "2026-09-10",
-  revised: "2026-03-16",
+  readOn: "2026-09-15",
+  previouslyRead: "2026-09-10",
+  revised: "2026-09-15",
+  board: "2026-08-14",
   entity: "EFOCS (EURO-FINANCE AD, BG)",
 };
 
@@ -74,7 +77,7 @@ const PLAN_ALIAS = {
 };
 
 const RULE = {
-  bse: { retail: 0.003, professional: 0.002, min: 3.5 },
+  bse: { retail: 0.003, professional: 0.002, min: 3 },
   xetr: { retail: 0.0005, professional: 0.0005, min: 4 },
   xfra: { retail: 0.001, professional: 0.001, min: 6 },
 };
@@ -88,6 +91,14 @@ const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 const dollars = (amount, currency) => {
   const v = toUsd(amount, currency);
   return v == null ? null : Number(v.toPrecision(6));
+};
+
+const toCcy = (amount, from, to) => {
+  if (String(from || "").toUpperCase() === String(to || "").toUpperCase()) return Number(amount);
+  const usd = toUsd(amount, from);
+  const per = usdPer(to);
+  if (usd == null || !(per > 0)) return null;
+  return usd / per;
 };
 
 const fxNote = (currency) => ({
@@ -125,11 +136,6 @@ export function feeMarketOf(row, mic) {
 function rateOf(rule, plan) {
   return rule[plan.id] ?? rule.retail;
 }
-
-function remarkOf({ rule }) {
-  return `min fees ${rule.min * 2} €.`;
-}
-
 
 function findListing({ etf, place, currency }) {
   const asked = loose(etf);
@@ -186,51 +192,43 @@ function coverage() {
   return out;
 }
 
-export function commissionEach({ amount, market, plan = DEFAULT_PLAN }) {
+/**
+ * One side, in euro of notional. The printed % is floored at the ticket.
+ */
+export function commissionSide({ amountEur, market, plan = DEFAULT_PLAN }) {
   const picked = typeof plan === "string" ? planOf(plan) : plan;
   const rule = RULE[market];
-  if (!picked || !rule) return null;
+  if (!picked || !rule || amountEur == null || !Number.isFinite(Number(amountEur))) return null;
   const rate = rateOf(rule, picked);
-  if (amount == null || !Number.isFinite(Number(amount))) return rule.min;
-  return Math.max(rule.min, Number(amount) * rate);
+  const raw = Number(amountEur) * rate;
+  const charged = Math.max(rule.min, raw);
+  return { charged, raw, floored: raw < rule.min, rate, currency: "EUR" };
 }
 
-export function exactCost({ amount, market, plan = DEFAULT_PLAN }) {
-  const picked = planOf(plan);
-  const rule = RULE[market];
-  if (!picked || !rule) return { commission: null, currency: QUOTE };
-  const each = commissionEach({ amount, market, plan: picked });
-  return {
-    commission: dollars(each * 2, "EUR"),
-    currency: QUOTE,
-    native: { each, roundTrip: each * 2, currency: "EUR" },
-    plan: picked.id,
-    market,
-  };
-}
-
-export function roundTripCost({
+/**
+ * The whole bill for buying `shares` at `price` and selling them straight back.
+ * `brokerFees` is the EFOCS ticket, third-party costs already inside the %.
+ */
+export function roundTrip({
   etf,
   place,
   currency,
+  shares,
+  price,
   bp = null,
   perShare = null,
   plan = DEFAULT_PLAN,
 }) {
   const picked = planOf(plan);
-  const { named, matches } = findListing({ etf, place, currency });
   const answer = {
-    a: null,
-    b: 0,
-    c: 0,
-    ccy: QUOTE,
-    floor: null,
-    cap: null,
-    threshold: null,
-    plan: picked?.id ?? plan,
+    usd: null,
+    brokerFees: null,
     etf,
     place,
     currency,
+    onlineBuy: true,
+    cashCurrency: "EUR",
+    plan: picked?.id ?? plan,
   };
 
   if (!picked) return { ...answer, why: `formule inconnue : ${plan} (retail|professional)` };
@@ -240,6 +238,8 @@ export function roundTripCost({
       why: "le catalogue EFOCS n'existe pas encore : lancer `node efocs/efocs_scraping.mjs`",
     };
   }
+
+  const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue EFOCS` };
   if (!matches.length) {
     return {
@@ -282,71 +282,171 @@ export function roundTripCost({
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
   const tax = taxesOf(listing.isin);
   const rates = taxRates(tax);
-  const taxTotal = Object.values(rates).reduce((s, r) => s + r, 0);
-  const commPct = rateOf(rule, picked) * 2;
-  const knownPct = commPct + taxTotal;
-  const mkt = bookParts({
-    bp: marketBp,
-    perShare: marketPerShare,
-    venue: m.venue,
-    unsourced: m.unsourced,
-    toUsd: (x) => dollars(x, listing.currency),
-  });
-  const a = plus(mkt.a, knownPct);
-  const bookUsd = mkt.b;
-  const floorUsd = dollars(rule.min * 2, "EUR");
+  const taxPct = Object.values(rates).reduce((s, r) => s + r, 0);
+  const rate = rateOf(rule, picked);
 
-  return {
+  const shared = {
     ...answer,
-    a: finite(a, 4),
-    b: finite(bookUsd, 6),
-    c: 0,
-    floor: floorUsd,
     listing,
     feeMarket: market,
-    remark: remarkOf({ rule }),
-    parts: {
-      marché:
-        marketBp != null
-          ? Number((marketBp / 1e4).toPrecision(4))
-          : marketPerShare != null
-            ? `${marketPerShare} par part`
-            : null,
-      taxes: Object.keys(rates).length ? rates : null,
-      commission: commPct,
-    },
     bp: marketBp,
     perShare: marketPerShare,
     url: leaf?.url ?? SCHEDULE.source,
-    basis: `barème EFOCS ${picked.label}, palier ${market}, lu le ${SCHEDULE.readOn}`,
     tax,
+    fx: fxNote(listing.currency),
+    fxIfConverted: 0,
+    remark: "",
+  };
+
+  const basis =
+    `barème EFOCS ${picked.label}, palier ${market}, brochure du ${SCHEDULE.revised} relue le ${SCHEDULE.readOn}` +
+    ` : ${(rate * 100).toFixed(2)} %, plancher ${rule.min} €`;
+
+  const n = Number(shares);
+  const p = Number(price);
+  if (!(n > 0) || !(p > 0)) {
+    return {
+      ...shared,
+      basis,
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      confidence: confidenceOf({
+        picked,
+        market,
+        rule,
+        rate,
+        listing,
+        leaf,
+        marketBp,
+        marketPerShare,
+        unsourced: m.unsourced,
+        taxPct,
+      }),
+    };
+  }
+
+  const notional = n * p;
+  const notionalUsd = toUsd(notional, listing.currency);
+  const notionalEur = toCcy(notional, listing.currency, "EUR");
+  const bookUsd =
+    marketBp != null && notionalUsd != null
+      ? (notionalUsd * marketBp) / 1e4
+      : marketPerShare != null
+        ? marketPerShare * n
+        : null;
+
+  const buy = commissionSide({ amountEur: notionalEur, market, plan: picked });
+  const sell = commissionSide({ amountEur: notionalEur, market, plan: picked });
+  const buyUsd = buy ? dollars(buy.charged, "EUR") : null;
+  const sellUsd = sell ? dollars(sell.charged, "EUR") : null;
+  const brokerFees = plus(buyUsd, sellUsd);
+  const taxUsd = notionalUsd == null ? null : notionalUsd * taxPct;
+  const usd = plus(bookUsd, brokerFees, taxUsd);
+
+  return {
+    ...shared,
+    usd: finite(usd, 6),
+    brokerFees: finite(brokerFees, 6),
+    ...(bookUsd == null
+      ? {
+          why:
+            `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ` +
+            `${m.unsourced?.why || "pas de source de spread"}`,
+        }
+      : {}),
+    trade: {
+      shares: n,
+      price: p,
+      notional,
+      notionalUsd: finite(notionalUsd, 6),
+      notionalEur: finite(notionalEur, 6),
+      currency: listing.currency,
+    },
+    buy: {
+      commission: finite(buyUsd, 6),
+      native: buy ? { ...buy, charged: finite(buy.charged, 6), raw: finite(buy.raw, 6) } : null,
+      taxes: finite(taxUsd, 6),
+      taxRates: Object.keys(rates).length ? rates : null,
+    },
+    sell: {
+      commission: finite(sellUsd, 6),
+      native: sell ? { ...sell, charged: finite(sell.charged, 6), raw: finite(sell.raw, 6) } : null,
+    },
+    parts: {
+      marché: finite(bookUsd, 6),
+      commission: finite(brokerFees, 6),
+      taxes: finite(taxUsd, 6),
+    },
     commission: {
-      rate: rateOf(rule, picked),
+      rate,
       min: rule.min,
       currency: "EUR",
       eachWay: true,
       plan: picked.id,
       thirdPartyIncluded: true,
     },
-    ccy: QUOTE,
-    cap: null,
-    threshold: null,
-    fx: fxNote(listing.currency),
-    fxIfConverted: 0,
-    confidence:
-      `EFOCS ${picked.label}, palier ${market}, tarif du ${SCHEDULE.revised} lu le ${SCHEDULE.readOn}. ` +
-      `Courtage plateforme ${(rateOf(rule, picked) * 100).toFixed(2)} % par jambe, plancher ${rule.min} €. ` +
-      `Tiers inclus dans le %. Ticket dans le plancher, c = 0. ` +
-      `Change hors de a (pas de % publié sur le fill). ` +
-      `Pas d'aller-retour réel dans ce dépôt. ` +
-      (leaf ? "" : `Pas de feuille de carnet pour cet ISIN / cette place. `),
+    basis,
+    confidence: confidenceOf({
+      picked,
+      market,
+      rule,
+      rate,
+      listing,
+      leaf,
+      marketBp,
+      marketPerShare,
+      unsourced: m.unsourced,
+      taxPct,
+      buy,
+    }),
   };
+}
+
+function confidenceOf({
+  picked,
+  market,
+  rule,
+  rate,
+  listing,
+  leaf,
+  marketBp,
+  marketPerShare,
+  unsourced,
+  taxPct,
+  buy,
+}) {
+  const said = [];
+  said.push(
+    `EFOCS ${picked.label}, palier ${market}, barème du ${SCHEDULE.revised} (CA 479 du ${SCHEDULE.board}) ` +
+      `relu le ${SCHEDULE.readOn} — le plancher BSE est passé de 3,50 € à 3 €`
+  );
+  said.push(
+    buy?.floored
+      ? `le plancher mord : ${Number(buy.raw.toPrecision(3))} € calculés, ${rule.min} € facturés par sens`
+      : `courtage plateforme ${(rate * 100).toFixed(2)} % par sens` +
+        (buy ? `, ${Number(buy.charged.toPrecision(4))} €` : "")
+  );
+  said.push(`tiers inclus dans le % (ligne étoilée). Pas de SEC / TAF : pas de tape US`);
+  if (taxPct) said.push(`taxe à l'achat ${(100 * taxPct).toFixed(2)} % du montant, depuis taxMap.mjs`);
+  if (marketBp != null) said.push(`carnet publié ${Number(marketBp.toPrecision(4))} bp, aller-retour`);
+  else if (marketPerShare != null) said.push(`carnet Rule 605, ${marketPerShare} $ la part, moyenne 100–499 parts`);
+  else {
+    said.push(
+      `aucun carnet : ${unsourced?.name || listing.exchange}, ${unsourced?.why || "pas de source"}. ` +
+        `Le total est N/A faute de mesure, pas faute de frais`
+    );
+  }
+  said.push(
+    `hors total : change « at the current exchange rate of Euro-Finance » sans % publié, ` +
+      `garde UniCredit art. 33, virement sortant 1 € / retrait caisse 0,90 %, téléphone chapitre II. ` +
+      `Aucun aller-retour réel dans ce dépôt`
+  );
+  return said.join(" ; ");
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const flag = (name) => {
-    const m = process.argv.find((a) => a.startsWith(`--${name}=`));
-    return m ? m.split("=").slice(1).join("=") : null;
+    const hit = process.argv.find((a) => a.startsWith(`--${name}=`));
+    return hit ? hit.split("=").slice(1).join("=") : null;
   };
 
   if (process.argv.includes("--schedule")) {
@@ -359,12 +459,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
           rules: Object.fromEntries(
             Object.entries(RULE).map(([k, v]) => [
               k,
-              {
-                ...v,
-                retailRt: v.retail * 2,
-                professionalRt: v.professional * 2,
-                minRt: v.min * 2,
-              },
+              { ...v, retailRt: v.retail * 2, professionalRt: v.professional * 2, minRt: v.min * 2 },
             ])
           ),
           coverage: coverage(),
@@ -382,17 +477,19 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     console.error(
       "usage : node efocs_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--plan=retail|professional] [--json]\n" +
         "        node efocs_cost.mjs --schedule\n" +
-        "  ex.   node efocs_cost.mjs VWCE\n" +
+        "  ex.   node efocs_cost.mjs VWCE XETR EUR --shares=1 --price=140\n" +
         "        node efocs_cost.mjs APC XETR EUR --shares=1 --price=230\n" +
-        "        node efocs_cost.mjs ETR BSESOF EUR --plan=professional"
+        "        node efocs_cost.mjs ETR BSESOF EUR --plan=professional --shares=10 --price=10"
     );
     process.exit(2);
   }
 
-  const out = roundTripCost({
+  const out = roundTrip({
     etf,
     place,
     currency,
+    shares: flag("shares") ? Number(flag("shares")) : null,
+    price: flag("price") ? Number(flag("price")) : null,
     bp: flag("bp") ? Number(flag("bp")) : null,
     perShare: flag("per-share") ? Number(flag("per-share")) : null,
     plan: flag("plan") || DEFAULT_PLAN,
@@ -403,15 +500,15 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     process.exit(0);
   }
 
-  if (out.a == null && !out.listing) {
-    console.log(`a = null   b = ${out.b}   c = ${out.c}\n${out.why}`);
+  const l = out.listing;
+  if (!l) {
+    console.log(out.why || "rien à dire");
     if (out.alternatives?.length) {
       console.log(`\nce qu'EFOCS propose sous ce nom :\n  ${out.alternatives.join("\n  ")}`);
     }
     process.exit(0);
   }
 
-  const l = out.listing;
   const picked = planOf(out.plan);
   console.log(`${l.ticker || l.isin} — ${l.name || ""}`);
   console.log(
@@ -419,44 +516,26 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       `  [${picked?.label || out.plan}]\n`
   );
 
-  const detail = [];
-  if (out.parts?.marché != null) detail.push(`carnet ${out.parts.marché}`);
-  for (const [name, rate] of Object.entries(out.parts?.taxes ?? {})) detail.push(`${name} ${rate}`);
-  if (out.parts?.commission) detail.push(`courtage ${out.parts.commission}`);
-
-  console.log(`a = ${out.a}   (au prorata${detail.length ? " : " + detail.join(" + ") : " : rien"})`);
-  console.log(`b = ${out.b} $   (par part${out.b ? " : spread publié" : " : rien"})`);
-  console.log(`c = ${out.c} $   (par ordre : ticket dans la remark, pas dans c)`);
-  if (out.floor != null) console.log(`plancher ${out.floor} $`);
-  if (out.remark) console.log(out.remark);
-  if (out.why) console.log(out.why);
-  const fx = out.fx?.listing ?? usdPer(l.currency);
-  console.log(
-    `\ncoût = ${out.a} × p × n × ${fx != null ? Number(fx.toPrecision(6)) : "?"} + ${out.b} × n + ${out.c}   ($ ; p en ${l.currency})`
-  );
-  console.log(`  ${out.basis}`);
-  for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
-
-  const n = Number(flag("shares"));
-  const p = Number(flag("price"));
-  if (n > 0 && p > 0) {
-    const amount = n * p;
-    const amountUsd = toUsd(amount, l.currency);
-    const affine = amountUsd != null && out.a != null ? out.a * amountUsd + out.b * n + out.c : null;
-    const billed = exactCost({ amount, market: out.feeMarket, plan: out.plan });
+  if (out.trade?.notional != null) {
+    const t = out.trade;
     console.log(
-      `\n${n} part${n > 1 ? "s" : ""} à ${p} ${l.currency} = ${amount.toFixed(2)} ${l.currency}` +
-        (amountUsd != null ? ` (${amountUsd.toFixed(2)} $)` : "")
+      `${t.shares ? `${t.shares} part${t.shares > 1 ? "s" : ""} à ${t.price} ${t.currency} = ` : ""}` +
+        `${t.notional.toFixed(2)} ${t.currency}` +
+        (t.notionalUsd != null ? ` (${t.notionalUsd.toFixed(2)} $)` : "")
     );
-    if (affine != null) console.log(`  a, b, c        : ${affine.toFixed(4)} $`);
-    if (billed.commission != null) {
-      console.log(
-        `  commission     : ${Number(billed.commission).toFixed(4)} $` +
-          (billed.native?.each != null
-            ? ` (${Number(billed.native.each).toPrecision(4)} € × 2)`
-            : "")
-      );
+    console.log();
+  }
+
+  console.log(`aller-retour     : ${out.usd == null ? `N/A${out.why ? ` — ${out.why}` : ""}` : `${out.usd} $`}`);
+  console.log(`frais du courtier: ${out.brokerFees == null ? "N/A" : `${out.brokerFees} $`}`);
+  if (out.parts) {
+    for (const [name, v] of Object.entries(out.parts)) {
+      if (v != null) console.log(`  ${name.padEnd(15)}: ${v} $`);
     }
   }
+  console.log();
+  if (out.basis) console.log(`  ${out.basis}`);
+  for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
+  if (out.remark) for (const r of out.remark.split("\n")) console.log(`  · ${r}`);
   if (out.url) console.log(`\n${out.url}`);
 }

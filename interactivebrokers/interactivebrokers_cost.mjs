@@ -1,48 +1,61 @@
 // What one round trip costs at Interactive Brokers Ireland: buy n shares at
-// price p, sell them back at once.
+// price p (or put `amount` into a coin), sell them back at once, in dollars.
 //
-//   coût (USD) = a × toUsd(p) × n + b × n + c
-//
-// `a` is a fraction of the amount. `b` and `c` are dollars, the same unit the
-// other `*_cost.mjs` files answer in.
+// The affine triple hid every printed floor. America's $1, Europe's €3 / £3,
+// Canada's CAD 1, crypto's $1.75, Hungary's HUF 200 and India's INR 6 sat in
+// `min fees` / `c` = 0, so a ten-share AAPL trip was missing $2 and a VWCE
+// trip €6. The US 1 % cap (note 6: the cap wins when it is under the min),
+// TAF's $9.79 ceiling and PTM's £1.50 above £10 000 lived only in fields the
+// page never read. Hungary was billed 0.65 % both ways instead of 0.55 % buy
+// / 0.10 % sell. `roundTrip` is given the size and charges what is charged.
 //
 // Interactive Brokers Ireland Limited (IBIE). Catalogue from
-// `interactivebrokers_scraping.mjs` on interactivebrokers.ie. Default card is
-// IBKR Pro Fixed + IB SmartRouting — the all-in column (no venue
-// pass-through). `--plan=tiered` is the first published bucket only, and
-// exchange / clearing / rebate lines stay out (the page does not give one
-// number for SMART).
+// `interactivebrokers_scraping.mjs` on interactivebrokers.ie — 80 321 lines
+// (23 332 ETF, 56 695 stocks, 167 ETC, 78 ETN, 49 crypto; 12 495 US-domiciled
+// ETFs flagged `nonEuResident`). Default card is IBKR Pro Fixed + IB
+// SmartRouting — the all-in column (no venue pass-through). `--plan=tiered`
+// is the first published bucket only; exchange / clearing / rebate lines stay
+// out (the page does not give one number for SMART). Korea / Taiwan /
+// Malaysia / Brazil print Tiered only — that first bucket is what this file
+// uses even on the default plan.
 //
-// US / Canada are cents per share with a minimum. The minimum is the whole
-// bill under 200 US shares / 100 CAD shares, so the ¢/share stays out of `b`
-// (same as CapTrader). Europe and Asia are % of notional: that % × 2 sits in
-// `a`, the ticket is a floor (`min fees`, `c` = 0). Western Europe's
-// "€3 / £3 per trade" is that floor: 0.05 % binds above €6 000 / £6 000.
-// Hungary HUF is 0.55 % buy + 0.10 % sell. Korea / Taiwan / Malaysia /
-// Brazil print Tiered only — that first bucket is what this file uses.
+// Tables re-read 2026-09-16 from the IE stocks and crypto pages — unchanged
+// since the 11th. NTF reimbursement after 30 days, directed routing (0.10 %
+// / higher mins), fractionals' $0.01 / 1 % special, the PEA 0.50 % cap and
+// IBKR Lite are not this trip. US-domiciled ETFs answer `onlineBuy: false`
+// (PRIIPs). Crypto is zerohash europe: 0.18 %, min $1.75, cap 1 % of trade
+// value, no tape. Conversion (0.0008–0.002 % on the FX page) stays out: whether
+// cash has to cross is a fact about the client's balances. Custody is free.
+// VAT "may apply" with no rate — left out. NSCC $0.00020 and the NYSE /
+// FINRA pass-throughs are Clearing / Pass-Through lines on the Tiered card;
+// Fixed's third-party column is "Regulatory Fees" only, so they stay out.
 //
-// US-domiciled ETFs (`nonEuResident`) are not buyable for an EU retail
-// account (PRIIPs). They answer `onlineBuy: false`. NTF reimbursement after
-// 30 days is not this trip. Crypto is zerohash europe: 0.18 % , min 1.75 $,
-// no tape. Conversion (0.08–0.20 bp on the FX page) stays out of `a`.
-// Custody is free. VAT "may apply" with no rate — left out. SEC / TAF use
-// the figures printed on the same US page (0.0000206 / 0.000195).
+// What is in the number: the commission each way at its floor and its cap
+// (note 6: max then min, unless max < min); Hungary's 0.55 % buy up to
+// HUF 4 444 444 then 0.10 %, and 0.10 % sell, min HUF 200; stamp / FTT from
+// the tax map, never invented; the PTM levy of £1.50 above £10 000 on a UK
+// share (they print the levy); current SEC and TAF on an American sale, TAF
+// capped at $9.79; CAT $0.000003 a share both ways (they print it on the
+// same US Regulatory Fees block); Canada's printed CAD 0.00011 / share cap
+// CAD 3.30 on a CAD sale; Euronext's €0.75 per execution on an ETF (note 3
+// on FR/NL/BE Fixed); the market spread, once. Crypto has no tape, so the
+// book is 0 and not N/A.
 //
 //   https://www.interactivebrokers.ie/en/pricing/commissions-stocks.php
 //   https://www.interactivebrokers.ie/en/pricing/commissions-crypto-assets.php
 //   https://www.interactivebrokers.ie/en/trading/products-etfs.php
 //
-//   node interactivebrokers/interactivebrokers_cost.mjs AAPL NASDAQ USD
-//   node interactivebrokers/interactivebrokers_cost.mjs IWDA AEB EUR
+//   node interactivebrokers/interactivebrokers_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node interactivebrokers/interactivebrokers_cost.mjs IWDA AEB EUR --shares=10 --price=100
 //   node interactivebrokers/interactivebrokers_cost.mjs VWCE IBIS EUR --shares=1 --price=140
-//   node interactivebrokers/interactivebrokers_cost.mjs BTC ZEROHASH USD
+//   node interactivebrokers/interactivebrokers_cost.mjs BTC ZEROHASH USD --amount=1000
 //   node interactivebrokers/interactivebrokers_cost.mjs --schedule
 //
-// `roundTripCost(...)` reads files, not the network.
+// `roundTrip(...)` reads files, not the network.
 
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite, bookParts } from "../na.mjs";
+import { plus, finite } from "../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
@@ -53,15 +66,25 @@ const SCHEDULE = {
   stocks: "https://www.interactivebrokers.ie/en/pricing/commissions-stocks.php",
   crypto: "https://www.interactivebrokers.ie/en/pricing/commissions-crypto-assets.php",
   etfs: "https://www.interactivebrokers.ie/en/trading/products-etfs.php",
-  readOn: "2026-09-11",
+  readOn: "2026-09-16",
+  previouslyRead: "2026-09-11",
   entity: "Interactive Brokers Ireland Limited (IBIE)",
 };
 
 const SEC_RATE = 0.0000206;
 const TAF_PER_SHARE = 0.000195;
 const TAF_CAP = 9.79;
-const PTM = { each: 1.5, currency: "GBP", above: 10000 };
-const US_MICS = new Set(["XNAS", "XNYS", "ARCX", "XASE", "BATS"]);
+const CAT_PER_SHARE = 0.000003;
+const CA_SEC_PER_SHARE = 0.00011;
+const CA_SEC_CAP = 3.3;
+const PTM = { each: 1.5, ccy: "GBP", above: 10000 };
+const EURONEXT_ETF = { each: 0.75, ccy: "EUR" };
+const HU_BUY_BAND = 4444444;
+const IN_BAND = 1_000_000;
+const UK_REGISTERED = /^(GB|GG|JE|IM)/;
+const US_MICS = new Set(["XNAS", "XNYS", "ARCX", "XASE", "BATS", "IEXG", "MEMX"]);
+const US_EX = /^(NASDAQ|NYSE|AMEX|ARCA|BATS|PINK|IEX|CBOE|MEMX)$/;
+const EURONEXT_ETF_EX = /^(SBF|AEB|ENEXTBE)$/;
 const DEFAULT_PLAN = "fixed";
 
 const WEST_MIN = { EUR: 3, GBP: 3, CHF: 5, USD: 4, DKK: 49, NOK: 49, SEK: 49 };
@@ -69,27 +92,49 @@ const WEST_TIERED_MIN = { EUR: 1.25, GBP: 1, CHF: 1.5, USD: 1.7, DKK: 10, NOK: 1
 const HK_MIN = { HKD: 18, USD: 2.25, CNH: 15, CNY: 15 };
 const SG_MIN = { SGD: 2.5, USD: 2, GBP: 1.4, HKD: 14.5, EUR: 2 };
 
-// Fixed SmartRouting, first published bucket. `roundTrip` is used when the
-// two legs are not the same % (Hungary HUF).
+// Fixed SmartRouting, first published bucket. Hungary Fixed is not the same
+// % on both legs. `tiered` overlays the first volume band when asked.
 const RULE = {
   us: { kind: "perShare", perShare: 0.005, min: 1, maxPct: 0.01, ccy: "USD", tiered: { perShare: 0.0035, min: 0.35 } },
   ca: { kind: "perShare", perShare: 0.01, min: 1, maxPct: 0.005, ccy: "CAD", tiered: { perShare: 0.008, min: 1 } },
-  west: { kind: "pct", rate: 0.0005, minBy: WEST_MIN, fallback: { min: 3, ccy: "EUR" } },
-  pt: { kind: "pct", rate: 0.0015, min: 6, ccy: "EUR" },
-  pl: { kind: "pct", rate: 0.001, min: 15, ccy: "PLN" },
-  baltic: { kind: "pct", rate: 0.002, min: 10, ccy: "EUR" },
+  caUsd: { kind: "perShare", perShare: 0.008, min: 0.8, maxPct: 0.004, ccy: "USD", tiered: { perShare: 0.006, min: 0.8 } },
+  west: {
+    kind: "pct",
+    rate: 0.0005,
+    minBy: WEST_MIN,
+    fallback: { min: 3, ccy: "EUR" },
+    tiered: { rate: 0.0005, minBy: WEST_TIERED_MIN, fallback: { min: 1.25, ccy: "EUR" } },
+  },
+  pt: { kind: "pct", rate: 0.0015, min: 6, ccy: "EUR", tiered: { rate: 0.0005, min: 1.25, ccy: "EUR" } },
+  pl: { kind: "pct", rate: 0.001, min: 15, ccy: "PLN", tiered: { rate: 0.0005, min: 5, ccy: "PLN" } },
+  baltic: { kind: "pct", rate: 0.002, min: 10, ccy: "EUR", tiered: { rate: 0.0005, min: 1.25, ccy: "EUR" } },
   cz: { kind: "pct", rate: 0.0015, min: 70, ccy: "CZK" },
   ro: { kind: "pct", rate: 0.0028, min: 10, ccy: "RON" },
   si: { kind: "pct", rate: 0.0035, min: 3, ccy: "EUR" },
-  hu: { kind: "pct", roundTrip: 0.0065, min: 200, ccy: "HUF" },
-  jp: { kind: "pct", rate: 0.0008, min: 80, ccy: "JPY" },
-  au: { kind: "pct", rate: 0.0008, min: 6, ccy: "AUD" },
-  hk: { kind: "pct", rate: 0.0008, minBy: HK_MIN, fallback: { min: 18, ccy: "HKD" } },
+  hu: {
+    kind: "pct",
+    buy: 0.0055,
+    sell: 0.001,
+    buyBand: HU_BUY_BAND,
+    min: 200,
+    ccy: "HUF",
+    tiered: { rate: 0.0005, min: 200, ccy: "HUF" },
+  },
+  seEur: { kind: "pct", rate: 0.001, min: 4, ccy: "EUR", tiered: { rate: 0.0005, min: 1.25, ccy: "EUR" } },
+  jp: { kind: "pct", rate: 0.0008, min: 80, ccy: "JPY", tiered: { rate: 0.0005, min: 80, ccy: "JPY" } },
+  au: { kind: "pct", rate: 0.0008, min: 6, ccy: "AUD", tiered: { rate: 0.0008, min: 5, ccy: "AUD" } },
+  hk: {
+    kind: "pct",
+    rate: 0.0008,
+    minBy: HK_MIN,
+    fallback: { min: 18, ccy: "HKD" },
+    tiered: { rate: 0.0005, minBy: HK_MIN, fallback: { min: 18, ccy: "HKD" } },
+  },
   sg: { kind: "pct", rate: 0.0008, minBy: SG_MIN, fallback: { min: 2.5, ccy: "SGD" } },
   mx: { kind: "pct", rate: 0.001, min: 60, ccy: "MXN" },
-  in: { kind: "pct", rate: 0.0001, min: 6, max: 20, ccy: "INR" },
-  il: { kind: "pct", rate: 0.001, min: 15, ccy: "ILS" },
-  sa: { kind: "pct", rate: 0.001, min: null, ccy: "SAR" },
+  in: { kind: "pct", rate: 0.0001, min: 6, max: 20, above: IN_BAND, aboveRate: 0.0002, ccy: "INR" },
+  il: { kind: "pct", rate: 0.001, min: 15, ccy: "ILS", tiered: { rate: 0.0005, min: 5.25, ccy: "ILS" } },
+  sa: { kind: "pct", rate: 0.001, min: null, ccy: "SAR", tiered: { rate: 0.0005, min: null, ccy: "SAR" } },
   adx: { kind: "pct", rate: 0.001, min: 5, ccy: "AED" },
   dfm: { kind: "pct", rate: 0.0025, min: 5, ccy: "AED" },
   kr: { kind: "pct", rate: 0.0006, min: 4000, ccy: "KRW", tieredOnly: true },
@@ -105,6 +150,7 @@ const TO_VENUES = {
   "BVME.ETF": "BVME",
   "ENEXT.BE": "XBRU",
   LSEIOB1: "LSE",
+  HEX: "XHEL",
 };
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
@@ -112,36 +158,41 @@ const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
 const spreads = fs.existsSync(SPREADS) ? JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {} : {};
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
-
+const fxCcy = (currency) => (String(currency || "").toUpperCase() === "CNH" ? "CNY" : currency);
 const dollars = (amount, currency) => {
-  const ccy = currency === "CNH" ? "CNY" : currency;
-  const v = toUsd(amount, ccy);
+  const v = toUsd(amount, fxCcy(currency));
   return v == null ? null : Number(v.toPrecision(6));
 };
+function convert(amount, from, to) {
+  if (amount == null || Number.isNaN(amount)) return null;
+  const a = String(fxCcy(from) || "").toUpperCase();
+  const b = String(fxCcy(to) || "").toUpperCase();
+  if (a === b) return amount;
+  const usd = toUsd(amount, a);
+  const per = usdPer(b);
+  return usd == null || !(per > 0) ? null : usd / per;
+}
+const fxNote = (currency) => ({ quote: QUOTE, asOf: FX_AS_OF, listing: usdPer(fxCcy(currency)) });
+const venueRow = (row) => ({ ...row, exchange: TO_VENUES[row.exchange] || row.exchange });
+const isStock = (listing) => String(listing?.type || "").toUpperCase() === "STOCK";
+const isEtf = (listing) => String(listing?.type || "").toUpperCase() === "ETF";
+const settleOf = (currency) => (String(currency || "").toUpperCase() === "GBX" ? "GBP" : currency);
+const nativeAmount = (shares, price, currency) => {
+  if (shares == null || price == null) return null;
+  const amount = Number(shares) * Number(price);
+  if (!Number.isFinite(amount)) return null;
+  return String(currency || "").toUpperCase() === "GBX" ? amount / 100 : amount;
+};
 
-const fxNote = (currency) => ({
-  quote: QUOTE,
-  asOf: FX_AS_OF,
-  listing: usdPer(currency === "CNH" ? "CNY" : currency),
-});
-
-const venueRow = (row) => ({
-  ...row,
-  exchange: TO_VENUES[row.exchange] || row.exchange,
-});
-
-function planOf(name) {
-  const id = String(name || DEFAULT_PLAN).toLowerCase();
+export function planOf(name) {
+  const id = String(name || DEFAULT_PLAN).toLowerCase().replace(/[^a-z0-9]/g, "");
   if (id === "fixed" || id === "pro" || id === "smart") return "fixed";
   if (id === "tiered" || id === "tier") return "tiered";
   return null;
 }
 
-function boundOf(rule, currency, plan) {
+function boundOf(rule, currency) {
   const ccy = String(currency || "").toUpperCase();
-  if (plan === "tiered" && rule.tiered) {
-    return { min: rule.tiered.min, ccy: rule.ccy, perShare: rule.tiered.perShare };
-  }
   if (rule.minBy) {
     if (ccy && rule.minBy[ccy] != null) return { min: rule.minBy[ccy], ccy };
     return { min: rule.fallback.min, ccy: rule.fallback.ccy };
@@ -149,41 +200,38 @@ function boundOf(rule, currency, plan) {
   return { min: rule.min ?? null, ccy: rule.ccy, perShare: rule.perShare };
 }
 
-function commissionPct(rule) {
-  if (rule.kind !== "pct") return 0;
-  if (rule.roundTrip != null) return rule.roundTrip;
-  return rule.rate * 2;
+export function resolveRule(market, currency, plan = DEFAULT_PLAN) {
+  const base = RULE[market];
+  if (!base) return null;
+  const asked = planOf(plan) || DEFAULT_PLAN;
+  const useTiered = base.tieredOnly || (asked === "tiered" && base.tiered);
+  const rule = useTiered && base.tiered ? { ...base, ...base.tiered } : { ...base };
+  const usedPlan = base.tieredOnly || useTiered ? "tiered" : "fixed";
+  return { rule, bound: boundOf(rule, currency), usedPlan };
 }
 
-function remarkOf({ market, rule, bound, plan }) {
-  if (market === "crypto") return "min fees $3.50. zerohash europe, no tape.";
-  if (rule.tieredOnly) {
-    const floor =
-      bound.min != null
-        ? `min fees ${bound.min * 2} ${bound.ccy}. `
-        : "";
-    return `${floor}IBKR publishes Tiered pricing only; this is the lowest volume band.`;
+function remarkOf({ market, rule, usedPlan } = {}) {
+  const lines = [];
+  if (market === "crypto") lines.push("zerohash europe, no tape.");
+  if (rule?.tieredOnly) {
+    lines.push("IBKR publishes Tiered pricing only; this is the lowest volume band.");
+  } else if (usedPlan === "tiered") {
+    lines.push("Tiered first bucket. Exchange / clearing extra.");
   }
-  if (plan === "tiered") return "Tiered first bucket. Exchange / clearing extra, not in a/b/c.";
-  if (bound.min == null) return "";
-  const n = bound.min * 2;
-  const ccy = bound.ccy;
-  const amount =
-    ccy === "USD" ? `$${n}` : ccy === "EUR" ? `€${n}` : ccy === "GBP" ? `£${n}` : `${n} ${ccy}`;
-  return `min fees ${amount}.`;
+  lines.push("FX 0.0008–0.002% if converted.");
+  return lines.join("\n");
 }
 
 export function feeMarketOf(exchange, mic, type, currency) {
   const code = loose(exchange);
   const m = String(mic || "").toUpperCase();
+  const ccy = String(currency || "").toUpperCase();
   if (type === "CRYPTO" || /ZEROHASH|PAXOS/.test(code)) return "crypto";
-  if (US_MICS.has(m) || /^(NASDAQ|NYSE|AMEX|ARCA|BATS|PINK)$/.test(code)) return "us";
-  if (
-    /^(TSE|TSX|VENTURE|VALUE|PURE|AEQLIT)$/.test(code) ||
-    ["XTSE", "XTSX"].includes(m)
-  ) {
-    return "ca";
+  if (US_MICS.has(m) || US_EX.test(code)) return "us";
+  if (/^(TSE|TSX|VENTURE|PURE|AEQLIT)$/.test(code) || ["XTSE", "XTSX"].includes(m)) {
+    return ccy === "USD" ? "caUsd" : "ca";
   }
+  if (code === "VALUE") return ccy === "CAD" ? "ca" : null;
   if (code === "KRX") return "kr";
   if (code === "TWSE" || code === "TPEX") return "tw";
   if (code === "BURSAMY") return "my";
@@ -204,10 +252,32 @@ export function feeMarketOf(exchange, mic, type, currency) {
   if (code === "PRA") return "cz";
   if (code === "BVB") return "ro";
   if (code === "LJSE") return "si";
-  if (code === "BUX") return currency === "HUF" ? "hu" : "west";
+  if (code === "BUX") return ccy === "HUF" ? "hu" : "west";
+  if ((code === "SFB" || m === "XSTO") && ccy === "EUR") return "seEur";
   if (
-    /^(IBIS|IBIS2|GETTEX|GETTEX2|FWB|FWB2|SWB|SWB2|SBF|AEB|ENEXTBE|BVME|BVMEETF|EBS|LSE|LSEETF|LSEIOB1|SFB|OSE|OMXNO|CPH|VSE|BM|ISED)$/.test(code) ||
-    ["XETR", "XMUN", "XFRA", "XSTU", "XPAR", "XAMS", "XBRU", "XMIL", "XSWX", "XLON", "XSTO", "XOSL", "XCSE", "XHEL", "XWBO", "XMAD", "XDUB"].includes(m)
+    /^(IBIS|IBIS2|GETTEX|GETTEX2|FWB|FWB2|SWB|SWB2|SBF|AEB|ENEXTBE|BVME|BVMEETF|EBS|LSE|LSEETF|LSEIOB1|SFB|OSE|OMXNO|OSL|CPH|VSE|BM|ISED|HEX|AQSE)$/.test(
+      code
+    ) ||
+    [
+      "XETR",
+      "XMUN",
+      "XFRA",
+      "XSTU",
+      "XPAR",
+      "XAMS",
+      "XBRU",
+      "XMIL",
+      "XSWX",
+      "XLON",
+      "XSTO",
+      "XOSL",
+      "XCSE",
+      "XHEL",
+      "XWBO",
+      "XMAD",
+      "XDUB",
+      "AQSE",
+    ].includes(m)
   ) {
     return "west";
   }
@@ -223,20 +293,18 @@ function findListing({ etf, place, currency }) {
   const named = rows.filter((r) => loose(r.isin) === asked || loose(r.ticker) === asked || loose(r.query) === asked);
   const matches = named
     .map((r) => ({ row: r, ...listingKey(venueRow(r)) }))
-    .filter((m) => {
+    .filter((hit) => {
       if (!wantPlace) return true;
-      if (wantVenue && m.venue) return m.venue.mic === wantVenue.mic;
-      return loose(m.row.exchange) === wantPlace || loose(m.row.exchange).includes(wantPlace);
+      if (wantVenue && hit.venue) return hit.venue.mic === wantVenue.mic;
+      return loose(hit.row.exchange) === wantPlace || loose(hit.row.exchange).includes(wantPlace);
     })
-    .filter((m) => !wantCurrency || String(m.row.currency || "").toUpperCase() === wantCurrency);
+    .filter((hit) => !wantCurrency || String(hit.row.currency || "").toUpperCase() === wantCurrency);
 
   return { named, matches };
 }
 
 const listAlternatives = (named) =>
-  named
-    .map((r) => `${r.ticker || r.isin} ${r.currency || "?"} @ ${r.exchange || "place non dite"}`)
-    .slice(0, 12);
+  named.map((r) => `${r.ticker || r.isin} ${r.currency || "?"} @ ${r.exchange || "place non dite"}`).slice(0, 12);
 
 function coverage() {
   if (!rows.length) return null;
@@ -253,66 +321,93 @@ function coverage() {
     const market = feeMarketOf(r.exchange, book.mic ?? venue?.mic, r.type, r.currency) || "?";
     const slot = (out[type] ||= { n: 0, withBook: 0, byMarket: {} });
     slot.n += 1;
-    if (book.leaf?.bp != null || book.leaf?.perShare != null) slot.withBook += 1;
+    const hasBook = book.leaf?.bp != null || book.leaf?.perShare != null || type === "CRYPTO";
+    if (hasBook) slot.withBook += 1;
     const mk = (slot.byMarket[market] ||= { n: 0, withBook: 0 });
     mk.n += 1;
-    if (book.leaf?.bp != null || book.leaf?.perShare != null) mk.withBook += 1;
+    if (hasBook) mk.withBook += 1;
   }
   return out;
 }
 
-export function commissionEach({ shares, amount, market, currency, plan = DEFAULT_PLAN }) {
-  const rule = RULE[market];
-  if (!rule) return null;
-  const bound = boundOf(rule, currency, plan);
+/**
+ * One side's commission, at the floor and under the cap. Note 6: when the
+ * printed maximum is under the minimum, the maximum is the whole bill.
+ */
+export function commissionSide({ shares, amount, market, currency, plan = DEFAULT_PLAN, side = "buy" }) {
+  const resolved = resolveRule(market, currency, plan);
+  if (!resolved) return null;
+  const { rule, bound, usedPlan } = resolved;
+
   if (rule.kind === "perShare") {
+    if (shares == null || !Number.isFinite(Number(shares))) return null;
     const px = bound.perShare ?? rule.perShare;
-    if (shares == null || !Number.isFinite(Number(shares))) return bound.min;
-    let fee = px * Number(shares);
-    if (bound.min != null) fee = Math.max(bound.min, fee);
-    if (rule.maxPct != null && amount != null) fee = Math.min(fee, Number(amount) * rule.maxPct);
-    return fee;
+    const raw = px * Number(shares);
+    const ceiling = rule.maxPct != null && amount != null ? Number(amount) * rule.maxPct : null;
+    let charged;
+    if (ceiling != null && bound.min != null && ceiling < bound.min) charged = ceiling;
+    else {
+      charged = ceiling != null ? Math.min(raw, ceiling) : raw;
+      if (bound.min != null) charged = Math.max(bound.min, charged);
+    }
+    return {
+      raw,
+      charged,
+      floored: bound.min != null && charged === bound.min && raw < bound.min,
+      capped: ceiling != null && charged === ceiling,
+      currency: bound.ccy,
+      usedPlan,
+    };
   }
-  const rate = rule.roundTrip != null ? rule.roundTrip / 2 : rule.rate;
-  if (amount == null || !Number.isFinite(Number(amount))) return bound.min;
-  let fee = Number(amount) * rate;
-  if (bound.min != null) fee = Math.max(bound.min, fee);
-  if (rule.max != null) fee = Math.min(fee, rule.max);
-  if (rule.maxPct != null) fee = Math.min(fee, Number(amount) * rule.maxPct);
-  return fee;
-}
 
-export function exactCost({ shares, price, market, currency, plan = DEFAULT_PLAN }) {
-  const rule = RULE[market];
-  if (!rule) return { commission: null, currency: QUOTE };
-  const bound = boundOf(rule, currency, plan);
-  const amount = shares != null && price != null ? Number(shares) * Number(price) : null;
-  const each = commissionEach({ shares, amount, market, currency, plan });
-  if (each == null) return { commission: null, currency: QUOTE, rule };
+  if (amount == null || !Number.isFinite(Number(amount))) return null;
+  let raw;
+  if (usedPlan === "fixed" && rule.buy != null) {
+    if (side === "sell") raw = Number(amount) * rule.sell;
+    else if (rule.buyBand != null && Number(amount) > rule.buyBand) {
+      raw = rule.buyBand * rule.buy + (Number(amount) - rule.buyBand) * rule.sell;
+    } else raw = Number(amount) * rule.buy;
+  } else if (rule.above != null && Number(amount) > rule.above) {
+    raw = rule.above * rule.rate + (Number(amount) - rule.above) * rule.aboveRate;
+  } else {
+    raw = Number(amount) * rule.rate;
+  }
+
+  const ceiling = rule.maxPct != null ? Number(amount) * rule.maxPct : null;
+  let charged = raw;
+  if (bound.min != null) charged = Math.max(bound.min, charged);
+  if (rule.max != null) charged = Math.min(charged, rule.max);
+  if (ceiling != null) {
+    if (bound.min != null && ceiling < bound.min) charged = ceiling;
+    else charged = Math.min(charged, ceiling);
+  }
   return {
-    commission: dollars(each * 2, bound.ccy),
-    currency: QUOTE,
-    native: { each, roundTrip: each * 2, currency: bound.ccy },
-    rule,
+    raw,
+    charged,
+    floored: bound.min != null && raw < bound.min && !(ceiling != null && ceiling < bound.min),
+    capped: (rule.max != null && charged === rule.max) || (ceiling != null && charged === ceiling),
+    currency: bound.ccy,
+    usedPlan,
   };
 }
 
-export function roundTripCost({ etf, place, currency, bp = null, perShare = null, plan = DEFAULT_PLAN }) {
+/**
+ * The whole bill for buying `shares` at `price` (or putting `amount` into a
+ * coin) and selling them straight back. `brokerFees` is the IBIE ticket.
+ */
+export function roundTrip({
+  etf,
+  place,
+  currency,
+  shares,
+  price,
+  amount,
+  bp = null,
+  perShare = null,
+  plan = DEFAULT_PLAN,
+}) {
   const picked = planOf(plan);
-  const { named, matches } = findListing({ etf, place, currency });
-  const answer = {
-    a: null,
-    b: 0,
-    c: 0,
-    ccy: QUOTE,
-    floor: null,
-    cap: null,
-    threshold: null,
-    plan: picked ?? plan,
-    etf,
-    place,
-    currency,
-  };
+  const answer = { usd: null, brokerFees: null, etf, place, currency, onlineBuy: true, cashCurrency: "", plan: picked ?? plan };
 
   if (!picked) return { ...answer, why: `formule inconnue : ${plan} (fixed|tiered)` };
   if (!catalogue) {
@@ -320,6 +415,12 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
       ...answer,
       why: "le catalogue Interactive Brokers n'existe pas encore : lancer `node interactivebrokers/interactivebrokers_scraping.mjs`",
     };
+  }
+
+  let { named, matches } = findListing({ etf, place, currency });
+  if ((amount != null || /ZEROHASH|PAXOS/.test(loose(place))) && matches.length > 1) {
+    const coins = matches.filter((hit) => String(hit.row.type || "").toUpperCase() === "CRYPTO");
+    if (coins.length) matches = coins;
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Interactive Brokers` };
   if (!matches.length) {
@@ -330,132 +431,317 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
     };
   }
 
-  const m = matches[0];
+  const hit = matches[0];
   const book = spreadLeaf(spreads, {
-    isin: m.row.isin,
-    mic: m.venue?.mic ?? null,
-    currency: m.row.currency,
-    unsourced: m.unsourced,
+    isin: hit.row.isin,
+    mic: hit.venue?.mic ?? null,
+    currency: hit.row.currency,
+    unsourced: hit.unsourced,
   });
   const listing = {
-    isin: String(m.row.isin || "").toUpperCase(),
-    ticker: m.row.ticker || null,
-    name: m.row.name || null,
-    type: m.row.type || null,
-    mic: book.mic ?? m.venue?.mic ?? null,
-    exchange: m.venue?.name ?? m.unsourced?.name ?? m.row.exchange ?? null,
-    currency: String(m.row.currency || "").toUpperCase(),
-    brokerExchange: m.row.exchange || null,
+    isin: String(hit.row.isin || "").toUpperCase() || null,
+    ticker: hit.row.ticker || null,
+    name: hit.row.name || null,
+    type: hit.row.type || null,
+    mic: book.mic ?? hit.venue?.mic ?? null,
+    exchange: hit.venue?.name ?? hit.unsourced?.name ?? hit.row.exchange ?? null,
+    currency: String(hit.row.currency || "").toUpperCase() || (String(hit.row.type || "").toUpperCase() === "CRYPTO" ? "USD" : ""),
+    brokerExchange: hit.row.exchange || null,
+    query: hit.row.query || null,
   };
 
-  const market = feeMarketOf(m.row.exchange, listing.mic, listing.type, listing.currency);
-  const rule = market ? RULE[market] : null;
-  if (!rule) {
-    return {
-      ...answer,
-      listing,
-      why: `${listing.brokerExchange || listing.exchange} n'est pas sur la grille IBIE Fixed SmartRouting`,
-      tax: taxesOf(listing.isin),
-      fx: fxNote(listing.currency),
-    };
-  }
-
-  const usedPlan = rule.tieredOnly ? "tiered" : picked;
-  const bound = boundOf(rule, listing.currency, usedPlan);
+  const market = feeMarketOf(hit.row.exchange, listing.mic, listing.type, listing.currency);
+  const resolved = market ? resolveRule(market, listing.currency, picked) : null;
   const leaf = book.leaf;
   const marketBp = bp ?? leaf?.bp ?? null;
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
-  const american = market === "us";
   const tax = taxesOf(listing.isin);
   const rates = taxRates(tax);
-  const taxTotal = Object.values(rates).reduce((s, r) => s + r, 0);
-  const commPct = commissionPct(rule);
+  const taxPct = Object.values(rates).reduce((s, r) => s + r, 0);
+  const american = market === "us";
+  const canadian = market === "ca";
+  const crypto = market === "crypto";
 
-  const mkt = bookParts({
-    bp: marketBp,
-    perShare: marketPerShare,
-    venue: m.venue,
-    unsourced: m.unsourced,
-    toUsd: (x) => (american ? x : dollars(x, listing.currency)),
-  });
-  const a = plus(mkt.a, taxTotal + (american ? SEC_RATE : 0) + commPct);
-  const bookUsd = mkt.b;
-  const floorUsd = bound.min != null ? dollars(bound.min * 2, bound.ccy) : null;
-
-  return {
+  const shared = {
     ...answer,
-    a: finite(a, 4),
-    b: finite(plus(bookUsd, american ? TAF_PER_SHARE : 0), 6),
-    c: 0,
-    floor: floorUsd,
     listing,
     feeMarket: market,
-    plan: usedPlan,
-    onlineBuy: m.row.nonEuResident !== true,
-    remark: remarkOf({ market, rule, bound, plan: usedPlan }),
-    parts: {
-      marché:
-        marketBp != null
-          ? Number((marketBp / 1e4).toPrecision(4))
-          : marketPerShare != null
-            ? `${marketPerShare} par part`
-            : market === "crypto"
-              ? 0
-              : null,
-      taxes: Object.keys(rates).length ? rates : null,
-      réglementaire: american ? { SEC: SEC_RATE, FINRA: `${TAF_PER_SHARE} par part` } : null,
-      commission: commPct || null,
-    },
+    plan: resolved?.usedPlan ?? picked,
+    onlineBuy: hit.row.nonEuResident !== true,
     bp: marketBp,
     perShare: marketPerShare,
-    url: market === "crypto" ? SCHEDULE.crypto : SCHEDULE.stocks,
-    basis: `barème IBIE ${usedPlan} ${market}, lu le ${SCHEDULE.readOn}`,
+    url: crypto ? SCHEDULE.crypto : SCHEDULE.stocks,
     tax,
+    fx: fxNote(listing.currency),
+    fxIfConverted: 0,
+    remark: remarkOf({ market, rule: resolved?.rule, usedPlan: resolved?.usedPlan }),
+  };
+
+  if (!resolved) {
+    return {
+      ...shared,
+      basis: `aucun palier publié pour ${listing.brokerExchange || listing.exchange || "cette place"} chez IBIE`,
+      why:
+        `${listing.brokerExchange || listing.exchange || "cette place"} n'est pas sur la grille IBIE Fixed SmartRouting ` +
+        `du ${SCHEDULE.readOn}`,
+      confidence: `place hors carte, lue le ${SCHEDULE.readOn} : la commission est N/A plutôt qu'un voisin inventé`,
+    };
+  }
+
+  const { rule, bound, usedPlan } = resolved;
+  const basis =
+    `barème IBIE ${usedPlan} ${market}, lu le ${SCHEDULE.readOn}` +
+    (rule.kind === "perShare"
+      ? ` : ${bound.perShare ?? rule.perShare} ${bound.ccy} / part, plancher ${bound.min} ${bound.ccy}` +
+        (rule.maxPct != null ? `, plafond ${(100 * rule.maxPct).toFixed(1)} %` : "")
+      : rule.buy != null && usedPlan === "fixed"
+        ? ` : ${(100 * rule.buy).toFixed(2)} % achat / ${(100 * rule.sell).toFixed(2)} % vente, plancher ${bound.min} ${bound.ccy}`
+        : ` : ${(100 * rule.rate).toFixed(2)} % par sens` +
+          (bound.min != null ? `, plancher ${bound.min} ${bound.ccy}` : "") +
+          (rule.max != null ? `, plafond ${rule.max} ${bound.ccy}` : "") +
+          (rule.maxPct != null ? `, plafond ${(100 * rule.maxPct).toFixed(0)} %` : ""));
+
+  const n = Number(shares);
+  const p = Number(price);
+  const cash = Number(amount);
+  const notional = n > 0 && p > 0 ? nativeAmount(n, p, listing.currency) : crypto && cash > 0 ? cash : null;
+
+  if (notional == null) {
+    return {
+      ...shared,
+      basis,
+      why: crypto
+        ? "aucun montant pour cette ligne"
+        : !(n > 0)
+          ? "aucun nombre de parts"
+          : "aucun prix pour cette ligne : lancer node prices.mjs",
+      confidence: confidenceOf({
+        market,
+        rule,
+        bound,
+        usedPlan,
+        listing,
+        marketBp,
+        marketPerShare,
+        unsourced: hit.unsourced,
+        taxPct,
+      }),
+    };
+  }
+
+  const settle = settleOf(listing.currency) || (crypto ? "USD" : listing.currency);
+  const notionalUsd = dollars(notional, settle);
+  const notionalInRule = convert(notional, settle, bound.ccy);
+  const bookUsd = crypto
+    ? 0
+    : marketBp != null && notionalUsd != null
+      ? (notionalUsd * marketBp) / 1e4
+      : marketPerShare != null && n > 0
+        ? marketPerShare * n
+        : null;
+
+  const buy = commissionSide({
+    shares: n > 0 ? n : null,
+    amount: notionalInRule,
+    market,
+    currency: listing.currency,
+    plan: usedPlan,
+    side: "buy",
+  });
+  const sell = commissionSide({
+    shares: n > 0 ? n : null,
+    amount: notionalInRule,
+    market,
+    currency: listing.currency,
+    plan: usedPlan,
+    side: "sell",
+  });
+  const buyUsd = buy ? dollars(buy.charged, buy.currency) : null;
+  const sellUsd = sell ? dollars(sell.charged, sell.currency) : null;
+  const brokerFees = plus(buyUsd, sellUsd);
+
+  const stampUsd = crypto || notionalUsd == null ? (crypto ? 0 : null) : notionalUsd * taxPct;
+  const secUsd = american ? (notionalUsd == null ? null : notionalUsd * SEC_RATE) : 0;
+  const tafUsd = american && n > 0 ? Math.min(TAF_PER_SHARE * n, TAF_CAP) : american ? null : 0;
+  const catUsd = american && n > 0 ? 2 * CAT_PER_SHARE * n : american ? null : 0;
+  const caSecUsd = canadian && n > 0 ? dollars(Math.min(CA_SEC_PER_SHARE * n, CA_SEC_CAP), "CAD") : 0;
+
+  const euronextNative =
+    usedPlan === "fixed" && isEtf(listing) && EURONEXT_ETF_EX.test(loose(listing.brokerExchange))
+      ? 2 * EURONEXT_ETF.each
+      : 0;
+  const euronextUsd = euronextNative ? dollars(euronextNative, EURONEXT_ETF.ccy) : 0;
+
+  const notionalGbp = convert(notional, settle, PTM.ccy);
+  const ptmDue =
+    crypto || !isStock(listing) || !UK_REGISTERED.test(listing.isin || "")
+      ? false
+      : notionalGbp == null
+        ? null
+        : notionalGbp > PTM.above;
+  const ptmUsd = ptmDue === false ? 0 : ptmDue === null ? null : dollars(2 * PTM.each, PTM.ccy);
+
+  const usd = plus(bookUsd, brokerFees, stampUsd, secUsd, tafUsd, catUsd, caSecUsd, euronextUsd, ptmUsd);
+
+  return {
+    ...shared,
+    usd: finite(usd, 6),
+    brokerFees: finite(brokerFees, 6),
+    ...(bookUsd == null
+      ? {
+          why:
+            `aucun carnet pour ${hit.unsourced?.name || listing.exchange} : ` +
+            `${hit.unsourced?.why || "pas de source de spread"}`,
+        }
+      : {}),
+    trade: {
+      shares: n > 0 ? n : null,
+      price: p > 0 ? p : null,
+      amount: crypto && cash > 0 ? cash : null,
+      notional,
+      notionalUsd: finite(notionalUsd, 6),
+      currency: listing.currency || (crypto ? "USD" : ""),
+    },
+    buy: {
+      commission: finite(buyUsd, 6),
+      native: buy
+        ? {
+            charged: finite(buy.charged, 6),
+            raw: finite(buy.raw, 6),
+            floored: buy.floored,
+            capped: buy.capped,
+            currency: buy.currency,
+          }
+        : null,
+      taxes: finite(stampUsd, 6),
+      taxRates: Object.keys(rates).length ? rates : null,
+    },
+    sell: {
+      commission: finite(sellUsd, 6),
+      native: sell
+        ? {
+            charged: finite(sell.charged, 6),
+            raw: finite(sell.raw, 6),
+            floored: sell.floored,
+            capped: sell.capped,
+            currency: sell.currency,
+          }
+        : null,
+      sec: finite(secUsd, 6),
+      taf: finite(tafUsd, 6),
+      cat: finite(catUsd, 6),
+    },
+    parts: {
+      marché: finite(bookUsd, 6),
+      commission: finite(brokerFees, 6),
+      taxes: finite(stampUsd, 6),
+      réglementaire: finite(plus(secUsd, tafUsd, catUsd, caSecUsd, euronextUsd, ptmUsd), 6),
+    },
     commission: {
       rate: rule.rate ?? null,
-      roundTrip: rule.roundTrip ?? null,
-      perShare: usedPlan === "tiered" ? bound.perShare ?? rule.perShare : rule.perShare ?? null,
+      buy: rule.buy ?? null,
+      sell: rule.sell ?? null,
+      perShare: bound.perShare ?? rule.perShare ?? null,
       min: bound.min,
       max: rule.max ?? null,
       maxPct: rule.maxPct ?? null,
       currency: bound.ccy,
       eachWay: true,
     },
-    ccy: QUOTE,
-    cap: american
-      ? { term: "b", part: "FINRA TAF", amount: TAF_CAP, per: "exécution" }
-      : rule.max != null
-        ? { commission: { amount: dollars(rule.max, bound.ccy), native: rule.max, currency: bound.ccy } }
-        : null,
-    threshold:
-      listing.mic === "XLON"
-        ? {
-            c: dollars(2 * PTM.each, "GBP"),
-            currency: QUOTE,
-            above: PTM.above,
-            aboveCurrency: "GBP",
-            why: `prélèvement PTM de ${PTM.each} £ par ordre et par sens, au-delà de ${PTM.above} £`,
-          }
-        : null,
-    fx: fxNote(listing.currency),
-    fxIfConverted: 0,
-    confidence:
-      `commission ${market} selon IBIE ${usedPlan} du ${SCHEDULE.readOn}. ` +
-      (rule.kind === "perShare"
-        ? `${(usedPlan === "tiered" ? bound.perShare : rule.perShare) * 100} ¢ / part, plancher ${bound.min} ${bound.ccy}. `
-        : `${(commPct * 100).toFixed(2)} % A/R` +
-          (bound.min != null ? `, plancher ${bound.min} ${bound.ccy} par jambe. ` : ". ")) +
-      (usedPlan === "tiered" && !rule.tieredOnly
-        ? `Tiered : frais de place non recopiés. `
-        : "") +
-      `a = carnet + taxes` +
-      (american ? ` + SEC` : "") +
-      (commPct ? ` + ${(commPct * 100).toFixed(2)} % de courtage` : "") +
-      `. Ticket dans le plancher, b = ` +
-      (american ? `605 + TAF` : `0`) +
-      `, c = 0. ` +
-      (leaf || market === "crypto" ? "" : `Pas de feuille de carnet pour cet ISIN / cette place. `),
+    basis,
+    confidence: confidenceOf({
+      market,
+      rule,
+      bound,
+      usedPlan,
+      buy,
+      listing,
+      marketBp,
+      marketPerShare,
+      unsourced: hit.unsourced,
+      taxPct,
+      american,
+      canadian,
+      crypto,
+      ptmDue,
+      euronext: euronextNative > 0,
+      n: n > 0 ? n : null,
+    }),
   };
+}
+
+function confidenceOf({
+  market,
+  rule,
+  bound,
+  usedPlan,
+  buy,
+  listing,
+  marketBp,
+  marketPerShare,
+  unsourced,
+  taxPct,
+  american,
+  canadian,
+  crypto,
+  ptmDue,
+  euronext,
+  n,
+}) {
+  const said = [];
+  said.push(
+    `commission IBIE ${usedPlan}, palier ${market}, lue le ${SCHEDULE.readOn} (inchangée depuis le ${SCHEDULE.previouslyRead}), ` +
+      `facturée par sens et convertie en dollars au mid BCE du ${FX_AS_OF}`
+  );
+  if (buy) {
+    said.push(
+      buy.capped
+        ? `plafonnée : ${Number(buy.charged).toPrecision(4)} ${bound.ccy} à l'achat`
+        : buy.floored
+          ? `au plancher : le ticket de ${bound.min} ${bound.ccy} est toute la commission, ` +
+            `le calcul au barème n'en donnerait que ${Number(buy.raw).toPrecision(3)}`
+          : `au-dessus du plancher : ${Number(buy.charged).toPrecision(4)} ${bound.ccy} à l'achat`
+    );
+  }
+  if (rule.kind === "perShare" && n != null && bound.min != null && bound.perShare) {
+    const cliff = bound.min / bound.perShare;
+    if (n >= cliff) {
+      said.push(
+        `au-delà de ${Math.round(cliff)} parts la commission cesse d'être le ticket ` +
+          `et devient ${bound.perShare} ${bound.ccy} la part`
+      );
+    }
+  }
+  if (crypto) said.push("zerohash europe, pas de carnet : le livre est 0 et non N/A");
+  else if (marketBp != null) said.push(`carnet publié ${Number(marketBp).toPrecision(4)} bp, aller-retour`);
+  else if (marketPerShare != null) said.push(`carnet 605 ${marketPerShare} $ la part, aller-retour`);
+  else said.push(`aucun carnet : ${unsourced?.why || "place sans source de spread"} — le total est N/A et non un total sans marché`);
+
+  if (taxPct) said.push(`taxe à l'achat ${(100 * taxPct).toFixed(2)} % du montant, depuis taxMap.mjs`);
+  if (american) {
+    said.push(
+      `vente américaine : SEC ${SEC_RATE} du montant, TAF FINRA ${TAF_PER_SHARE} la part (plafond ${TAF_CAP} $), ` +
+        `CAT ${CAT_PER_SHARE} la part les deux sens (imprimée sur la même page)`
+    );
+  }
+  if (canadian) {
+    said.push(`vente canadienne CAD : droit imprimé ${CA_SEC_PER_SHARE} $CA la part, plafond ${CA_SEC_CAP} $CA`);
+  }
+  if (euronext) {
+    said.push(`Euronext ETF : ${EURONEXT_ETF.each} € par exécution (note 3 FR/NL/BE), les deux sens`);
+  }
+  if (ptmDue === null) said.push(`prélèvement PTM indécidable : le montant n'a pas pu être converti en livres`);
+  else if (ptmDue) said.push(`prélèvement PTM de ${PTM.each} £ par sens, le montant dépassant ${PTM.above} £`);
+
+  if (usedPlan === "tiered" && !rule.tieredOnly) {
+    said.push("Tiered : frais de place / compensation non recopiés, premier palier seulement");
+  }
+  said.push(
+    `hors total : la conversion (0,0008–0,002 %), qui dépend de la trésorerie. ` +
+      `TVA « may apply » sans taux. NSCC et pass-through NYSE / FINRA : carte Tiered, pas Fixed. ` +
+      `Routage direct, NTF, fractionnaires et plafond PEA hors de ce trajet. Garde 0`
+  );
+  return said.join(" ; ");
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
@@ -473,19 +759,23 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node interactivebrokers_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--plan=fixed|tiered] [--json]\n" +
+      "usage : node interactivebrokers_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--amount=usd] [--plan=fixed|tiered] [--json]\n" +
         "        node interactivebrokers_cost.mjs --schedule\n" +
-        "  ex.   node interactivebrokers_cost.mjs AAPL NASDAQ USD\n" +
-        "        node interactivebrokers_cost.mjs IWDA AEB EUR\n" +
-        "        node interactivebrokers_cost.mjs VWCE IBIS EUR --shares=1 --price=140"
+        "  ex.   node interactivebrokers_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
+        "        node interactivebrokers_cost.mjs IWDA AEB EUR --shares=10 --price=100\n" +
+        "        node interactivebrokers_cost.mjs VWCE IBIS EUR --shares=1 --price=140\n" +
+        "        node interactivebrokers_cost.mjs BTC ZEROHASH USD --amount=1000"
     );
     process.exit(2);
   }
 
-  const out = roundTripCost({
+  const out = roundTrip({
     etf,
     place,
     currency,
+    shares: flag("shares") ? Number(flag("shares")) : null,
+    price: flag("price") ? Number(flag("price")) : null,
+    amount: flag("amount") ? Number(flag("amount")) : null,
     bp: flag("bp") ? Number(flag("bp")) : null,
     perShare: flag("per-share") ? Number(flag("per-share")) : null,
     plan: flag("plan") || DEFAULT_PLAN,
@@ -496,64 +786,43 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     process.exit(0);
   }
 
-  if (out.a == null && !out.listing) {
-    console.log(`a = null   b = ${out.b}   c = ${out.c}\n${out.why}`);
+  const l = out.listing;
+  if (!l) {
+    console.log(out.why || "rien à dire");
     if (out.alternatives?.length) {
       console.log(`\nce qu'Interactive Brokers propose sous ce nom :\n  ${out.alternatives.join("\n  ")}`);
     }
     process.exit(0);
   }
 
-  const l = out.listing;
-  console.log(`${l.ticker || l.isin} — ${l.name || ""}`);
+  console.log(`${l.ticker || l.query || l.isin} — ${l.name || ""}`);
   console.log(
-    `${l.exchange}${l.mic ? ` (${l.mic})` : ""}, ${l.currency}${l.type ? `, ${l.type.toLowerCase()}` : ""}\n`
+    `${l.exchange || "—"}${l.mic ? ` (${l.mic})` : ""}, ${l.currency}${l.type ? `, ${l.type.toLowerCase()}` : ""}` +
+      `  [${out.plan} / ${out.feeMarket}]\n`
   );
 
-  const detail = [];
-  if (out.parts?.marché != null) detail.push(`carnet ${out.parts.marché}`);
-  for (const [name, rate] of Object.entries(out.parts?.taxes ?? {})) detail.push(`${name} ${rate}`);
-  if (out.parts?.commission) detail.push(`courtage ${out.parts.commission}`);
-  if (out.parts?.réglementaire) detail.push(`SEC ${out.parts.réglementaire.SEC}`);
-
-  console.log(`a = ${out.a}   (au prorata${detail.length ? " : " + detail.join(" + ") : " : rien"})`);
-  console.log(`b = ${out.b} $   (par part${out.b ? " : FINRA et/ou spread 605" : " : rien"})`);
-  console.log(`c = ${out.c} $   (par ordre : ticket dans la remark, pas dans c)`);
-  if (out.floor != null) console.log(`plancher ${out.floor} $`);
-  if (out.onlineBuy === false) console.log(`achat en ligne : non (PRIIPs / non-EU resident)`);
-  const fx = out.fx?.listing ?? usdPer(l.currency);
-  console.log(
-    `\ncoût = ${out.a} × p × n × ${fx != null ? Number(fx.toPrecision(6)) : "?"} + ${out.b} × n + ${out.c}   ($ ; p en ${l.currency})`
-  );
-  console.log(`  ${out.basis}`);
-  for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
-  if (out.why) console.log(`  ${out.why}`);
-
-  const n = Number(flag("shares"));
-  const p = Number(flag("price"));
-  if (n > 0 && p > 0) {
-    const amount = n * p;
-    const amountUsd = toUsd(amount, l.currency === "CNH" ? "CNY" : l.currency);
-    const extra = out.threshold && amount >= out.threshold.above ? out.threshold.c : 0;
-    const affine = amountUsd != null && out.a != null ? out.a * amountUsd + out.b * n + out.c + extra : null;
-    const billed = exactCost({
-      shares: n,
-      price: p,
-      market: out.feeMarket,
-      currency: l.currency,
-      plan: out.plan,
-    });
+  if (out.trade?.notional != null) {
+    const t = out.trade;
     console.log(
-      `\n${n} part${n > 1 ? "s" : ""} à ${p} ${l.currency} = ${amount.toFixed(2)} ${l.currency}` +
-        (amountUsd != null ? ` (${amountUsd.toFixed(2)} $)` : "")
+      `${t.shares ? `${t.shares} part${t.shares > 1 ? "s" : ""} à ${t.price} ${t.currency} = ` : t.amount ? `${t.amount} ${t.currency} = ` : ""}` +
+        `${Number(t.notional).toFixed(2)} ${t.currency}` +
+        (t.notionalUsd != null ? ` (${t.notionalUsd.toFixed(2)} $)` : "")
     );
-    if (affine != null) console.log(`  a, b, c        : ${affine.toFixed(4)} $`);
-    if (billed.commission != null) {
-      console.log(
-        `  commission     : ${Number(billed.commission).toFixed(4)} $` +
-          (billed.native?.each != null ? ` (${Number(billed.native.each).toPrecision(4)} ${billed.native.currency} × 2)` : "")
-      );
+    console.log();
+  }
+
+  console.log(`aller-retour     : ${out.usd == null ? `N/A${out.why ? ` — ${out.why}` : ""}` : `${out.usd} $`}`);
+  console.log(`frais du courtier: ${out.brokerFees == null ? "N/A" : `${out.brokerFees} $`}`);
+  if (out.onlineBuy === false) console.log(`achat en ligne   : non (PRIIPs / non-EU resident)`);
+  if (out.parts) {
+    for (const [name, v] of Object.entries(out.parts)) {
+      if (v != null) console.log(`  ${name.padEnd(15)}: ${v} $`);
     }
   }
+  console.log();
+  if (out.basis) console.log(`  ${out.basis}`);
+  for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
+  if (out.remark) for (const r of out.remark.split("\n")) console.log(`  · ${r}`);
+  if (out.why && out.usd == null) console.log(`  ${out.why}`);
   if (out.url) console.log(`\n${out.url}`);
 }

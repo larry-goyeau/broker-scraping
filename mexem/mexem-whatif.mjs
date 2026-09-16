@@ -59,13 +59,16 @@ const CASES = [
   // range's top follows the share count the venue bills per share; if it stays
   // put it bills per order. Nothing else on the page can settle this.
   {
-    id: "amsterdam_20",
-    asks: "le même montant, vingt fois plus de parts",
+    id: "amsterdam_15",
+    asks: "le même montant, quinze fois plus de parts",
     symbol: "CMCOM",
     exchange: "AEB",
     side: "BUY",
-    quantity: 20,
-    expect: "1,00 … 1,80 € si la place facture par ordre, vingt fois plus si c'est par part",
+    // Twenty shares needed 137 € against 128,37 € of settled euro and came back
+    // a credit refusal rather than a price. Fifteen clears and asks the same
+    // question.
+    quantity: 15,
+    expect: "1,00 … 1,80 € si la place facture par ordre, quinze fois plus si c'est par part",
   },
   {
     id: "cap",
@@ -75,6 +78,165 @@ const CASES = [
     side: "BUY",
     quantity: 1,
     expect: "2 % de la valeur si la carte Mexem dit vrai, 1 % si c'est la grille IBKR",
+  },
+  // Amsterdam is one of seventeen venues whose "exchange and regulatory costs
+  // apply" with no figure printed anywhere. `mexem_cost.mjs` charges the 0,80 €
+  // measured there on all seventeen, which is an extrapolation it admits to in
+  // every confidence line. These ask the other venues directly. A share and an
+  // ETF where both exist, because Amsterdam bills them differently.
+  {
+    id: "paris",
+    asks: "les frais de place de Paris, imprimés sans montant",
+    symbol: "ORA",
+    exchange: "SBF",
+    side: "BUY",
+    quantity: 1,
+    expect: "1 € sec si Paris ne facture rien, une fourchette si elle facture",
+  },
+  {
+    id: "paris_etf",
+    asks: "le même à Paris sur un fonds, qu'Amsterdam facture et pas l'action",
+    // CC4 quotes 224 € against 128,37 € of settled euro and came back a credit
+    // refusal. PAEEM asks the same question for about 25 €.
+    symbol: "PAEEM",
+    exchange: "SBF",
+    side: "BUY",
+    quantity: 1,
+    expect: "une fourchette si la majoration ETF n'est pas propre à Amsterdam",
+  },
+  {
+    id: "xetra",
+    asks: "les frais de place de Xetra",
+    symbol: "TUI1",
+    exchange: "IBIS",
+    side: "BUY",
+    quantity: 1,
+    expect: "1 € sec ou une fourchette",
+  },
+  {
+    id: "xetra_etf",
+    asks: "le même à Xetra sur un fonds",
+    symbol: "0EMU",
+    exchange: "IBIS",
+    side: "BUY",
+    quantity: 1,
+    expect: "une fourchette si la majoration ETF est générale",
+  },
+  {
+    id: "milan",
+    asks: "les frais de place de Milan",
+    symbol: "ISP",
+    exchange: "BVME",
+    side: "BUY",
+    quantity: 1,
+    expect: "1 € sec ou une fourchette",
+  },
+  {
+    id: "bruxelles",
+    asks: "les frais de place de Bruxelles",
+    symbol: "PROX",
+    exchange: "ENEXT.BE",
+    side: "BUY",
+    quantity: 1,
+    expect: "1 € sec ou une fourchette",
+  },
+  {
+    id: "vienne",
+    asks: "les frais de place de Vienne",
+    symbol: "UQA",
+    exchange: "VSE",
+    side: "BUY",
+    quantity: 1,
+    expect: "1 € sec ou une fourchette",
+  },
+  {
+    id: "lisbonne",
+    asks: "les frais de place de Lisbonne",
+    symbol: "BCP",
+    exchange: "BVL",
+    side: "BUY",
+    quantity: 1,
+    expect: "1 € sec ou une fourchette",
+  },
+  // The second pass, once the account was given the stock permissions it lacked.
+  // Frankfurt alone is 6 932 of the lines that carry an extrapolated venue fee,
+  // so it is the one that matters most; the rest close the map.
+  {
+    id: "francfort",
+    asks: "les frais de place de Francfort, la plus grosse part de l'extrapolation",
+    symbol: "02V",
+    exchange: "FWB",
+    side: "BUY",
+    quantity: 1,
+    expect: "1 € sec ou une fourchette",
+  },
+  {
+    id: "francfort_etf",
+    asks: "le même à Francfort sur un fonds",
+    // IDF is an American closed-end fund and came back a KID-language refusal
+    // rather than a price. EQSP is a UCITS and asks the same question.
+    symbol: "EQSP",
+    exchange: "FWB",
+    side: "BUY",
+    quantity: 1,
+    expect: "1 € sec ou une fourchette — les fonds allemands n'ont plus de KID en bloc",
+  },
+  {
+    id: "stuttgart",
+    asks: "les frais de place de Stuttgart",
+    symbol: "02M",
+    exchange: "SWB",
+    side: "BUY",
+    quantity: 1,
+    expect: "1 € sec ou une fourchette",
+  },
+  {
+    id: "stuttgart_etf",
+    asks: "le même à Stuttgart sur un fonds",
+    symbol: "BUNH",
+    exchange: "SWB",
+    route: "SWB",
+    side: "BUY",
+    quantity: 1,
+    expect: "1 € sec, 0,80 €, ou autre chose : un premier essai a ouvert 1,00 … 4,50 €",
+  },
+  {
+    id: "ebs",
+    asks: "les frais de place d'EBS, qui cote surtout en francs",
+    symbol: "XSMI",
+    exchange: "EBS",
+    side: "BUY",
+    quantity: 1,
+    expect: "le palier suisse, plancher 7,5 CHF, jamais confronté au portail",
+  },
+  {
+    id: "varsovie",
+    asks: "les frais de place de Varsovie, et si un ordre en zlotys passe sans zlotys",
+    symbol: "ETFBCASH",
+    exchange: "WSE",
+    side: "BUY",
+    quantity: 1,
+    expect: "le palier PLN, plancher 20, ou un refus de trésorerie qui dit autre chose",
+  },
+  {
+    id: "budapest",
+    asks: "les frais de place de Budapest",
+    symbol: "OPUS",
+    exchange: "BUX",
+    side: "BUY",
+    quantity: 1,
+    expect: "le palier HUF, plancher 500",
+  },
+  // Not a venue fee but two taxes this file charges on 1 518 London lines
+  // without ever having seen either debited.
+  {
+    id: "londres",
+    asks: "le timbre britannique de 0,5 % et le prélèvement PTM, jamais vus débités",
+    symbol: "CARD",
+    exchange: "LSE",
+    side: "BUY",
+    quantity: 1,
+    expect: "le plancher de 2,5 £, et le timbre s'il est chiffré à part dans l'aperçu",
   },
   {
     id: "vente_us",
@@ -193,6 +355,23 @@ async function whatIf({ accountId, conid, side, quantity, price, exchange = null
       method: "POST",
       body: JSON.stringify(order),
     });
+  }
+
+  // The limit is the last trade, which on Euronext and Xetra need not sit on the
+  // instrument's own tick — Orange came back « does not conform to the minimum
+  // price variation of 0.005 ». The refusal names the tick, so it can be obeyed
+  // rather than guessed. Down for a buy and up for a sell, which only ever asks
+  // for less cash than the portal already agreed to.
+  const said = JSON.stringify(answer.json ?? "");
+  const tick = said.match(/minimum price variation of ([\d.]+)/);
+  if (tick) {
+    const step = Number(tick[1]);
+    const snapped = Number(
+      (step * (side === "BUY" ? Math.floor(price / step) : Math.ceil(price / step))).toFixed(10)
+    );
+    if (step > 0 && snapped > 0 && snapped !== price) {
+      return whatIf({ accountId, conid, side, quantity, price: snapped, exchange });
+    }
   }
   return answer;
 }

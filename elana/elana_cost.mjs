@@ -1,22 +1,24 @@
 // What one round trip costs at ELANA Global Trader: buy n shares at price p,
-// sell them back at once (online, standard).
+// sell them back at once, online, Standard, in dollars.
 //
-//   coût (USD) = a × toUsd(p) × n + b × n + c
-//
-// `a` is a fraction of the amount. `b` and `c` are dollars, the same unit the
-// other `*_cost.mjs` files answer in. A published minimum of a % (or of the
-// US $/share) sits in the floor (`min fees`, `c` = 0). The OTC Pink ticket
-// under 50 000 $ is a flat 25 $ every order, so it lives in `c`.
+// The affine triple hid the ticket. Xetra's 3 € floor, the US 2 $ minimum
+// and every other printed min lived in `min fees` / `c` = 0, so a ten-share
+// AAPL trip was missing 4 $ and a VWCE trip 6 €. OTC's 25 $ under 50 000 $
+// sat in `c`, which the page no longer reads. PTM £1 and ITP 1.25 € lived
+// only in `threshold`. FINRA's 9.79 $ TAF cap sat in `cap`. `roundTrip` is
+// given the size and charges what is charged.
 //
 // ELANA TRADING AD (BG), Global Trader (Saxo white label). Stocks / ETF
-// card on globaltrader.elana.net, read 2026-09-10. ETF / ETC / ETN use the
-// same exchange line as shares. Default is Standard, not VIP (volume /
-// 1 M$ AUM). BG Trader (BSE 0.80 %, min 2.50 € from 20 Aug 2026), the
-// investment-centre BSE card, CFDs, futures, options and bonds are not
-// this trip. The catalogue is webtrader.elana.net: no Sofia board.
+// card on globaltrader.elana.net, re-read 2026-09-15 — unchanged since the
+// 10th (VIP arrived with the 20 August 2026 tariff). ETF / ETC / ETN use
+// the same exchange line as shares. Default is Standard, not VIP (volume /
+// 1 M$ AUM). BG Trader (BSE 0.80 %, min 2.50 €), the investment-centre BSE
+// card, CFDs, futures, options, bonds and algo pre-market (+0.005 $/share)
+// are not this trip. Catalogue 14 517 lines — 9 251 stocks, 4 759 ETFs,
+// 201 ETC, 96 ETN, 210 funds — no Sofia board, no Frankfurt floor line.
 //
-//   US listed     0.01 $/share, min 2 $     (VIP 0.009 $, same min;
-//                  NYSE / Nasdaq / AMEX on the card; Cboe BZX same tape)
+//   US listed     0.01 $/share, min 2 $     (VIP 0.009 $ NYSE / Nasdaq,
+//                  same 0.01 $ on AMEX; Cboe BZX same NMS tape)
 //   OTC Pink      25 $ under 50 000 $       (0.15 % above; VIP 24 $ / 0.14 %)
 //   Xetra         0.05 %, min 3 €           (VIP 0.04 %, same min)
 //   LSE           0.10 %, min 8 £           (VIP 0.08 %, min 6 £)
@@ -32,30 +34,36 @@
 //   Helsinki      0.10 %, min 12 €          (VIP 0.08 %, min 10 €)
 //   Hong Kong     0.15 %, min 150 HKD       (VIP 0.13 %, min 80 HKD)
 //
-// Frankfurt floor has no published line. Cboe BZX is the US 0.01 $/share
-// (the card names NYSE / Nasdaq / AMEX; BATS is the same NMS tape, and
-// the catalogue files hundreds of USD ETFs there). SEC / TAF use the current
-// figures (their printed 27.8 $ / million is stale). Stamp / FTT / PTM from
-// the tax map; else their printed UK 0.50 %, Irish 1 %, HK 0.10 % on STOCK.
-// Custody 0.1 % / year is a holding cost. Cash can sit in several currencies;
-// conversion is spot ± 0.5 % only if the sub-account is the wrong currency,
-// so FX stays out of `a`. No live trip: the coefficients are the printed %.
+// What is in the number: the printed % or $/share at its floor, each way;
+// OTC's 25 $ or 0.15 %; Irish stamp 1 % and UK stamp 0.50 % on a share
+// purchase (taxMap when it has the ISIN, else the rates they print);
+// French / Italian / Spanish FTT from the same map, never invented; HK
+// stamp 0.10 % on a Hong Kong share; PTM £1 each way on a UK share above
+// 10 000 £ (they still print £1); ITP 1.25 € each way on an Irish share
+// above 12 500 €; current SEC and TAF on an American sale, TAF capped at
+// 9.79 $ (their printed 27.8 $ / million is stale); the market spread,
+// once.
+//
+// Custody 0.1 % / year is a holding cost. Cash can sit in several
+// currencies; conversion is spot ± 0.5 % only if the sub-account is the
+// wrong currency, so FX stays out of the total.
 //
 //   https://globaltrader.elana.net/en/en-tc/trading-conditions-stocks/
 //   https://globaltrader.elana.net/en/en-tc/trading-conditions-etf/
 //   https://www.elana.net/web/files/documents/202/files/elana-trading-tarifa-en.pdf
-//   https://elana.net/bg/trading/novini/promeni-v-tarifata-na-elana-trejding-koito-shte-vljazat-v-sila-ot-20-avgust-2026-g
 //
-//   node elana/elana_cost.mjs AAPL
+//   node elana/elana_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
 //   node elana/elana_cost.mjs VWCE XETR EUR --shares=1 --price=140
-//   node elana/elana_cost.mjs AAPL NASDAQ USD --shares=1 --price=230 --plan=vip
+//   node elana/elana_cost.mjs SHEL LSE GBP --shares=500 --price=28
+//   node elana/elana_cost.mjs 00700 HKEX HKD --shares=10 --price=400
+//   node elana/elana_cost.mjs AAPL NASDAQ USD --plan=vip --shares=10 --price=230
 //   node elana/elana_cost.mjs --schedule
 //
-// `roundTripCost(...)` reads files, not the network.
+// `roundTrip(...)` reads files, not the network.
 
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite, bookParts } from "../na.mjs";
+import { plus, finite } from "../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
@@ -66,7 +74,8 @@ const SCHEDULE = {
   source: "https://globaltrader.elana.net/en/en-tc/trading-conditions-stocks/",
   etf: "https://globaltrader.elana.net/en/en-tc/trading-conditions-etf/",
   tariff: "https://www.elana.net/web/files/documents/202/files/elana-trading-tarifa-en.pdf",
-  readOn: "2026-09-10",
+  readOn: "2026-09-15",
+  previouslyRead: "2026-09-10",
   revised: "2026-08-20",
   entity: "ELANA Trading AD (BG), Global Trader",
 };
@@ -87,11 +96,15 @@ const SEC_RATE = 0.0000206;
 const TAF_PER_SHARE = 0.000195;
 const TAF_CAP = 9.79;
 const US_MICS = new Set(["XNAS", "XNYS", "ARCX", "XASE", "BATS"]);
-const PTM = { each: 1, currency: "GBP", above: 10000 };
+const IE_STAMP = 0.01;
+const UK_STAMP = 0.005;
 const HK_STAMP = 0.001;
+const PTM = { each: 1, currency: "GBP", above: 10000 };
+const ITP = { each: 1.25, currency: "EUR", above: 12500 };
+const UK_ISSUERS = /^(GB|JE|GG|IM)$/;
 
 const RULE = {
-  us: { kind: "perShare", standard: 0.01, vip: 0.009, min: 2, minCcy: "USD" },
+  us: { kind: "perShare", standard: 0.01, vip: 0.009, amexVip: 0.01, min: 2, minCcy: "USD" },
   otc: {
     kind: "flat",
     standard: 25,
@@ -121,10 +134,22 @@ const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
 const spreads = fs.existsSync(SPREADS) ? JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {} : {};
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+const isStock = (listing) => String(listing?.type || "").toUpperCase() === "STOCK";
+const issuerCc = (isin) => String(isin || "").slice(0, 2).toUpperCase();
+const isAmex = (mic, exchange) =>
+  String(mic || "").toUpperCase() === "XASE" || /^(AMEX|NYSEAMERICAN)$/.test(loose(exchange));
 
 const dollars = (amount, currency) => {
   const v = toUsd(amount, currency);
   return v == null ? null : Number(v.toPrecision(6));
+};
+
+const toCcy = (amount, from, to) => {
+  if (String(from || "").toUpperCase() === String(to || "").toUpperCase()) return Number(amount);
+  const usd = toUsd(amount, from);
+  const per = usdPer(to);
+  if (usd == null || !(per > 0)) return null;
+  return usd / per;
 };
 
 const fxNote = (currency) => ({
@@ -141,9 +166,14 @@ export function planOf(name = DEFAULT_PLAN) {
   return PLANS[PLAN_ALIAS[key] || key] || null;
 }
 
-function rateOf(rule, plan) {
+function rateOf(rule, plan, listing = {}) {
   if (rule.kind === "flat") return plan.id === "vip" ? rule.vip : rule.standard;
-  if (rule.kind === "perShare") return plan.id === "vip" ? rule.vip : rule.standard;
+  if (rule.kind === "perShare") {
+    if (plan.id === "vip" && isAmex(listing.mic, listing.brokerExchange || listing.exchange)) {
+      return rule.amexVip ?? rule.standard;
+    }
+    return plan.id === "vip" ? rule.vip : rule.standard;
+  }
   return plan.id === "vip" ? rule.vip : rule.standard;
 }
 
@@ -174,55 +204,52 @@ export function feeMarketOf(row, mic) {
   return null;
 }
 
-function minLabel(rule, plan) {
-  const min = minOf(rule, plan);
-  if (min == null) return null;
-  const n = min * 2;
-  const ccy = rule.minCcy;
-  if (ccy === "USD") return `${n} $`;
-  if (ccy === "EUR") return `${n} €`;
-  if (ccy === "GBP") return `${n} £`;
-  return `${n} ${ccy}`;
+function remarkOf() {
+  return "Custody 0.1%/year.\nFX 0.5% if converted.";
 }
 
-function remarkOf({ rule, plan }) {
-  const lines = [];
-  if (rule.kind !== "flat") {
-    const min = minLabel(rule, plan);
-    if (min) lines.push(`min fees ${min}.`);
-  }
-  lines.push("Custody 0.1%/year.");
-  lines.push("FX 0.5% if converted.");
-  return lines.join("\n");
+/**
+ * Stamp from the tax map when Trading212 swept the ISIN. Irish, British and
+ * Hong Kong shares it never asked about still pay the rates Elana prints
+ * (1 % / 0.50 % / 0.10 %). A German name on London is not a UK share.
+ */
+export function taxesFor(isin, listing, market) {
+  const tax = taxesOf(isin);
+  const mapped = taxRates(tax);
+  if (Object.keys(mapped).length) return { tax, rates: mapped, source: "taxMap" };
+  if (!isStock(listing)) return { tax, rates: {}, source: null };
+  const cc = issuerCc(isin);
+  if (cc === "IE") return { tax, rates: { stamp: IE_STAMP }, source: "elana" };
+  if (UK_ISSUERS.test(cc)) return { tax, rates: { stamp: UK_STAMP }, source: "elana" };
+  if (market === "hkex") return { tax, rates: { stamp: HK_STAMP }, source: "elana" };
+  return { tax, rates: {}, source: null };
 }
 
-
-function stampOf({ market, listing, tax }) {
-  const rates = taxRates(tax);
-  const fromMap = Object.values(rates).reduce((s, r) => s + r, 0);
-  if (fromMap) return { pct: fromMap, rates, source: "t212" };
-  const stock = String(listing.type || "").toUpperCase() === "STOCK";
-  if (market === "lse" && stock && listing.mic === "XLON") {
-    return { pct: 0.005, rates: { stamp: 0.005 }, source: "elana" };
+function levyEach({ listing, notional, currency }) {
+  if (!isStock(listing)) return { itp: 0, ptm: 0 };
+  const cc = issuerCc(listing.isin);
+  const mic = String(listing.mic || "").toUpperCase();
+  const irish = cc === "IE";
+  const london = mic === "XLON" || /^(LSE|LONDON)/i.test(listing.brokerExchange || listing.exchange || "");
+  const british = UK_ISSUERS.test(cc) && london;
+  const out = { itp: 0, ptm: 0 };
+  if (irish) {
+    const eur = toCcy(notional, currency, "EUR");
+    if (eur == null) out.itp = null;
+    else {
+      out.itp = eur > ITP.above ? ITP.each : 0;
+      out.itpCcy = ITP.currency;
+    }
   }
-  if (market === "hkex" && stock) {
-    return { pct: HK_STAMP, rates: { stamp: HK_STAMP }, source: "elana" };
+  if (british) {
+    const gbp = toCcy(notional, currency, "GBP");
+    if (gbp == null) out.ptm = null;
+    else {
+      out.ptm = gbp > PTM.above ? PTM.each : 0;
+      out.ptmCcy = PTM.currency;
+    }
   }
-  return { pct: 0, rates: {}, source: null };
-}
-
-function thresholdOf(listing) {
-  if (String(listing.type || "").toUpperCase() !== "STOCK") return null;
-  if (listing.mic === "XLON") {
-    return {
-      c: dollars(2 * PTM.each, "GBP"),
-      currency: QUOTE,
-      above: PTM.above,
-      aboveCurrency: "GBP",
-      why: `prélèvement PTM de ${PTM.each} £ par ordre et par sens, au-delà de ${PTM.above} £`,
-    };
-  }
-  return null;
+  return out;
 }
 
 function findListing({ etf, place, currency }) {
@@ -280,61 +307,67 @@ function coverage() {
   return out;
 }
 
-export function commissionEach({ amount, shares, market, plan = DEFAULT_PLAN }) {
+/**
+ * One side, in the printed ticket currency. The % (or $/share) is floored
+ * at the ticket; OTC jumps from 25 $ to 0.15 % at 50 000 $.
+ */
+export function commissionSide({ amount, shares, market, plan = DEFAULT_PLAN, listing = {} }) {
   const picked = typeof plan === "string" ? planOf(plan) : plan;
   const rule = RULE[market];
   if (!picked || !rule) return null;
+  const rate = rateOf(rule, picked, listing);
+  const min = minOf(rule, picked);
+  const ccy = rule.minCcy || "USD";
+
   if (rule.kind === "flat") {
-    if (amount != null && Number(amount) >= rule.above) {
-      return Number(amount) * (picked.id === "vip" ? rule.aboveVip : rule.aboveStandard);
+    const usd = toCcy(amount, listing.currency, "USD");
+    if (usd == null || !Number.isFinite(usd)) return null;
+    if (usd >= rule.above) {
+      const pct = picked.id === "vip" ? rule.aboveVip : rule.aboveStandard;
+      const charged = usd * pct;
+      return { charged, raw: charged, floored: false, rate: pct, currency: "USD", kind: "pct" };
     }
-    return rateOf(rule, picked);
+    return { charged: rate, raw: rate, floored: false, rate: null, currency: "USD", kind: "flat" };
   }
+
   if (rule.kind === "perShare") {
-    const n = shares != null && Number.isFinite(Number(shares)) ? Number(shares) : null;
-    const fee = n == null ? minOf(rule, picked) : n * rateOf(rule, picked);
-    return Math.max(minOf(rule, picked), fee);
+    if (shares == null || !Number.isFinite(Number(shares))) return null;
+    const raw = Number(shares) * rate;
+    const charged = Math.max(min, raw);
+    return { charged, raw, floored: raw < min, rate, currency: ccy, kind: "perShare" };
   }
-  if (amount == null || !Number.isFinite(Number(amount))) return minOf(rule, picked);
-  return Math.max(minOf(rule, picked), Number(amount) * rateOf(rule, picked));
+
+  const native = toCcy(amount, listing.currency, ccy);
+  if (native == null || !Number.isFinite(native)) return null;
+  const raw = native * rate;
+  const charged = Math.max(min, raw);
+  return { charged, raw, floored: raw < min, rate, currency: ccy, kind: "pct" };
 }
 
-export function exactCost({ amount, shares, market, plan = DEFAULT_PLAN }) {
-  const picked = planOf(plan);
-  const rule = RULE[market];
-  if (!picked || !rule) return { commission: null, currency: QUOTE };
-  const each = commissionEach({ amount, shares, market, plan: picked });
-  return {
-    commission: dollars(each * 2, rule.minCcy || "USD"),
-    currency: QUOTE,
-    native: { each, roundTrip: each * 2, currency: rule.minCcy || "USD" },
-    plan: picked.id,
-    market,
-  };
-}
-
-export function roundTripCost({
+/**
+ * The whole bill for buying `shares` at `price` and selling them straight back.
+ * `brokerFees` is the Elana ticket, not stamp / PTM / SEC / TAF.
+ */
+export function roundTrip({
   etf,
   place,
   currency,
+  shares,
+  price,
   bp = null,
   perShare = null,
   plan = DEFAULT_PLAN,
 }) {
   const picked = planOf(plan);
-  const { named, matches } = findListing({ etf, place, currency });
   const answer = {
-    a: null,
-    b: 0,
-    c: 0,
-    ccy: QUOTE,
-    floor: null,
-    cap: null,
-    threshold: null,
-    plan: picked?.id ?? plan,
+    usd: null,
+    brokerFees: null,
     etf,
     place,
     currency,
+    onlineBuy: true,
+    cashCurrency: null,
+    plan: picked?.id ?? plan,
   };
 
   if (!picked) return { ...answer, why: `formule inconnue : ${plan} (standard|vip)` };
@@ -344,6 +377,8 @@ export function roundTripCost({
       why: "le catalogue Elana n'existe pas encore : lancer `node elana/elana_scraping.mjs`",
     };
   }
+
+  const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Elana` };
   if (!matches.length) {
     return {
@@ -385,93 +420,242 @@ export function roundTripCost({
   const marketBp = bp ?? leaf?.bp ?? null;
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
   const american = market === "us" || market === "otc" || US_MICS.has(listing.mic);
-  const tax = taxesOf(listing.isin);
-  const stamp = stampOf({ market, listing, tax });
-  const commPct = rule.kind === "pct" ? rateOf(rule, picked) * 2 : 0;
-  const knownPct = commPct + stamp.pct + (american ? SEC_RATE : 0);
-  const mkt = bookParts({
-    bp: marketBp,
-    perShare: marketPerShare,
-    venue: m.venue,
-    unsourced: m.unsourced,
-    toUsd: (x) => (american ? x : dollars(x, listing.currency)),
-  });
-  const a = plus(mkt.a, knownPct);
-  const bookUsd = mkt.b;
-  const shareComm = rule.kind === "perShare" ? rateOf(rule, picked) * 2 : 0;
-  const ticket =
-    rule.kind === "flat" ? dollars(rateOf(rule, picked) * 2, rule.minCcy) ?? 0 : 0;
-  const floorUsd = rule.kind !== "flat" && minOf(rule, picked) != null
-    ? dollars(minOf(rule, picked) * 2, rule.minCcy)
-    : null;
+  const { tax, rates, source: taxSource } = taxesFor(listing.isin, listing, market);
+  const taxPct = Object.values(rates).reduce((s, r) => s + r, 0);
+  const rate = rateOf(rule, picked, listing);
+  const min = minOf(rule, picked);
 
-  return {
+  const shared = {
     ...answer,
-    a: finite(a, 4),
-    b: finite(plus(bookUsd, shareComm, american ? TAF_PER_SHARE : 0), 6),
-    c: Number(Number(ticket).toPrecision(6)),
-    floor: floorUsd,
+    cashCurrency: listing.currency,
     listing,
     feeMarket: market,
-    remark: remarkOf({ rule, plan: picked }),
-    parts: {
-      marché:
-        marketBp != null
-          ? Number((marketBp / 1e4).toPrecision(4))
-          : marketPerShare != null
-            ? `${marketPerShare} par part`
-            : null,
-      taxes: Object.keys(stamp.rates).length ? stamp.rates : null,
-      réglementaire: american ? { SEC: SEC_RATE, FINRA: `${TAF_PER_SHARE} par part` } : null,
-      commission: commPct || shareComm || null,
-      ticket: ticket || null,
-    },
     bp: marketBp,
     perShare: marketPerShare,
     url: leaf?.url ?? SCHEDULE.source,
-    basis: `barème Elana Global Trader ${picked.label}, palier ${market}, lu le ${SCHEDULE.readOn}`,
     tax,
+    fx: fxNote(listing.currency),
+    fxIfConverted: 0,
+    remark: remarkOf(),
+  };
+
+  const basis =
+    `barème Elana Global Trader ${picked.label}, palier ${market}, page du ${SCHEDULE.revised} relue le ${SCHEDULE.readOn}` +
+    (rule.kind === "perShare"
+      ? ` : ${rate} $/share, plancher ${min} $`
+      : rule.kind === "flat"
+        ? ` : ${rate} $ sous ${rule.above} $`
+        : ` : ${(rate * 100).toFixed(2)} %, plancher ${min} ${rule.minCcy}`);
+
+  const n = Number(shares);
+  const p = Number(price);
+  if (!(n > 0) || !(p > 0)) {
+    return {
+      ...shared,
+      basis,
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      confidence: confidenceOf({
+        picked,
+        market,
+        rule,
+        rate,
+        min,
+        listing,
+        leaf,
+        marketBp,
+        marketPerShare,
+        unsourced: m.unsourced,
+        taxPct,
+        taxSource,
+      }),
+    };
+  }
+
+  const notional = n * p;
+  const notionalUsd = toUsd(notional, listing.currency);
+  const bookUsd =
+    marketBp != null && notionalUsd != null
+      ? (notionalUsd * marketBp) / 1e4
+      : marketPerShare != null
+        ? marketPerShare * n
+        : null;
+
+  const buy = commissionSide({
+    amount: notional,
+    shares: n,
+    market,
+    plan: picked,
+    listing,
+  });
+  const sell = commissionSide({
+    amount: notional,
+    shares: n,
+    market,
+    plan: picked,
+    listing,
+  });
+  const buyUsd = buy ? dollars(buy.charged, buy.currency) : null;
+  const sellUsd = sell ? dollars(sell.charged, sell.currency) : null;
+  const brokerFees = plus(buyUsd, sellUsd);
+
+  const taxUsd = notionalUsd == null ? null : notionalUsd * taxPct;
+  const secUsd = american ? (notionalUsd == null ? null : notionalUsd * SEC_RATE) : 0;
+  const tafUsd = american ? Math.min(TAF_CAP, TAF_PER_SHARE * n) : 0;
+  const levy = levyEach({ listing, notional, currency: listing.currency });
+  const itpUsd = levy.itp == null ? null : dollars((levy.itp || 0) * 2, levy.itpCcy || "EUR") ?? 0;
+  const ptmUsd = levy.ptm == null ? null : dollars((levy.ptm || 0) * 2, levy.ptmCcy || "GBP") ?? 0;
+
+  const usd = plus(bookUsd, brokerFees, taxUsd, secUsd, tafUsd, itpUsd, ptmUsd);
+
+  return {
+    ...shared,
+    usd: finite(usd, 6),
+    brokerFees: finite(brokerFees, 6),
+    ...(bookUsd == null
+      ? {
+          why:
+            `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ` +
+            `${m.unsourced?.why || "pas de source de spread"}`,
+        }
+      : {}),
+    trade: {
+      shares: n,
+      price: p,
+      notional,
+      notionalUsd: finite(notionalUsd, 6),
+      currency: listing.currency,
+    },
+    buy: {
+      commission: finite(buyUsd, 6),
+      native: buy ? { ...buy, charged: finite(buy.charged, 6), raw: finite(buy.raw, 6) } : null,
+      taxes: finite(taxUsd, 6),
+      taxRates: Object.keys(rates).length ? rates : null,
+    },
+    sell: {
+      commission: finite(sellUsd, 6),
+      native: sell ? { ...sell, charged: finite(sell.charged, 6), raw: finite(sell.raw, 6) } : null,
+      sec: finite(secUsd, 6),
+      taf: finite(tafUsd, 6),
+    },
+    parts: {
+      marché: finite(bookUsd, 6),
+      commission: finite(brokerFees, 6),
+      taxes: finite(taxUsd, 6),
+      réglementaire: finite(plus(secUsd, tafUsd, itpUsd, ptmUsd), 6),
+    },
+    levy: { itp: levy.itp, ptm: levy.ptm },
     commission: {
       kind: rule.kind,
-      rate: rule.kind === "pct" ? rateOf(rule, picked) : null,
-      perShare: rule.kind === "perShare" ? rateOf(rule, picked) : null,
-      min: minOf(rule, picked),
+      rate: rule.kind === "pct" ? rate : null,
+      perShare: rule.kind === "perShare" ? rate : null,
+      min,
       currency: rule.minCcy,
       eachWay: true,
       plan: picked.id,
     },
-    ccy: QUOTE,
-    cap: american ? { term: "b", part: "FINRA TAF", amount: TAF_CAP, per: "exécution" } : null,
-    threshold:
-      market === "otc"
-        ? {
-            a: (picked.id === "vip" ? rule.aboveVip : rule.aboveStandard) * 2,
-            currency: QUOTE,
-            above: rule.above,
-            aboveCurrency: "USD",
-            why: `OTC au-delà de ${rule.above} $ : ${(picked.id === "vip" ? rule.aboveVip : rule.aboveStandard) * 100}% par jambe, plus de ticket 25 $`,
-          }
-        : thresholdOf(listing),
-    fx: fxNote(listing.currency),
-    fxIfConverted: 0,
-    confidence:
-      `Elana Global Trader ${picked.label}, palier ${market}, page lue le ${SCHEDULE.readOn}. ` +
-      (rule.kind === "pct"
-        ? `Courtage ${(rateOf(rule, picked) * 100).toFixed(2)} % par jambe, plancher ${minOf(rule, picked)} ${rule.minCcy}. Ticket dans le plancher, c = 0. `
-        : rule.kind === "perShare"
-          ? `Courtage ${rateOf(rule, picked)} $/share, plancher ${minOf(rule, picked)} $. `
-          : `OTC ${rateOf(rule, picked)} $ par jambe sous ${rule.above} $ (dans c). `) +
-      (american ? `SEC / TAF aux figures courantes, pas au 27,8 $ / million imprimé. ` : "") +
-      `Change 0,5 % hors de a (sous-compte dans la devise). Custody hors de a. ` +
-      `Pas d'aller-retour réel dans ce dépôt. ` +
-      (leaf ? "" : `Pas de feuille de carnet pour cet ISIN / cette place. `),
+    basis,
+    confidence: confidenceOf({
+      picked,
+      market,
+      rule,
+      rate,
+      min,
+      listing,
+      leaf,
+      marketBp,
+      marketPerShare,
+      unsourced: m.unsourced,
+      taxPct,
+      taxSource,
+      buy,
+      n,
+      american,
+      levy,
+    }),
   };
+}
+
+function confidenceOf({
+  picked,
+  market,
+  rule,
+  rate,
+  min,
+  listing,
+  leaf,
+  marketBp,
+  marketPerShare,
+  unsourced,
+  taxPct,
+  taxSource,
+  buy,
+  n,
+  american,
+  levy,
+}) {
+  const said = [];
+  said.push(
+    `Elana Global Trader ${picked.label}, palier ${market}, page du ${SCHEDULE.revised} relue le ${SCHEDULE.readOn} ` +
+      `(inchangée depuis le ${SCHEDULE.previouslyRead})`
+  );
+  if (rule.kind === "flat") {
+    said.push(
+      buy?.kind === "pct"
+        ? `OTC au-delà de ${rule.above} $ : ${((picked.id === "vip" ? rule.aboveVip : rule.aboveStandard) * 100).toFixed(2)} % par sens`
+        : `OTC ${rate} $ par sens sous ${rule.above} $`
+    );
+  } else if (rule.kind === "perShare") {
+    said.push(
+      buy?.floored
+        ? `le plancher mord : ${Number(buy.raw.toPrecision(3))} $ calculés, ${min} $ facturés par sens`
+        : `courtage ${rate} $/share` + (buy ? `, ${Number(buy.charged.toPrecision(4))} $ par sens` : "")
+    );
+  } else {
+    said.push(
+      buy?.floored
+        ? `le plancher mord : ${Number(buy.raw.toPrecision(3))} ${rule.minCcy} calculés, ${min} ${rule.minCcy} facturés par sens`
+        : `courtage ${(rate * 100).toFixed(2)} % par sens` +
+          (buy ? `, ${Number(buy.charged.toPrecision(4))} ${rule.minCcy}` : "")
+    );
+  }
+  if (taxPct) {
+    said.push(
+      taxSource === "elana"
+        ? `taxe à l'achat ${(100 * taxPct).toFixed(2)} % du montant — timbre ${issuerCc(listing.isin) || market} qu'Elana imprime (cet ISIN n'est pas dans taxMap.mjs)`
+        : `taxe à l'achat ${(100 * taxPct).toFixed(2)} % du montant, depuis taxMap.mjs`
+    );
+  }
+  if (levy?.itp) said.push(`ITP ${ITP.each} € par sens, le montant dépasse ${ITP.above} €`);
+  if (levy?.ptm) {
+    said.push(
+      `PTM ${PTM.each} £ par sens, le montant dépasse ${PTM.above} £ (Elana imprime 1 £ — le prélèvement statutaire est 1,50 £)`
+    );
+  }
+  if (american) {
+    said.push(
+      `vente américaine : SEC ${SEC_RATE} du montant et TAF FINRA ${TAF_PER_SHARE} $ la part (plafond ${TAF_CAP} $), ` +
+        `pas le 27,8 $ / million imprimé`
+    );
+  }
+  if (marketBp != null) said.push(`carnet publié ${Number(marketBp.toPrecision(4))} bp, aller-retour`);
+  else if (marketPerShare != null) said.push(`carnet Rule 605, ${marketPerShare} $ la part, moyenne 100–499 parts`);
+  else {
+    said.push(
+      `aucun carnet : ${unsourced?.name || listing.exchange}, ${unsourced?.why || "pas de source"}. ` +
+        `Le total est N/A faute de mesure, pas faute de frais`
+    );
+  }
+  said.push(
+    `hors total : change spot ± 0,5 % si le sous-compte n'est pas dans la devise, garde 0,1 % / an, ` +
+      `BG Trader / téléphone / algo pre-market. Aucun aller-retour réel dans ce dépôt`
+  );
+  return said.join(" ; ");
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const flag = (name) => {
-    const m = process.argv.find((a) => a.startsWith(`--${name}=`));
-    return m ? m.split("=").slice(1).join("=") : null;
+    const hit = process.argv.find((a) => a.startsWith(`--${name}=`));
+    return hit ? hit.split("=").slice(1).join("=") : null;
   };
 
   if (process.argv.includes("--schedule")) {
@@ -481,6 +665,8 @@ if (import.meta.url === `file://${process.argv[1]}`) {
           ...SCHEDULE,
           defaultPlan: DEFAULT_PLAN,
           plans: PLANS,
+          ptm: PTM,
+          itp: ITP,
           rules: RULE,
           coverage: coverage(),
         },
@@ -497,17 +683,20 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     console.error(
       "usage : node elana_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--plan=standard|vip] [--json]\n" +
         "        node elana_cost.mjs --schedule\n" +
-        "  ex.   node elana_cost.mjs AAPL\n" +
+        "  ex.   node elana_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
         "        node elana_cost.mjs VWCE XETR EUR --shares=1 --price=140\n" +
-        "        node elana_cost.mjs AAPL NASDAQ USD --shares=1 --price=230 --plan=vip"
+        "        node elana_cost.mjs SHEL LSE GBP --shares=500 --price=28\n" +
+        "        node elana_cost.mjs 00700 HKEX HKD --shares=10 --price=400"
     );
     process.exit(2);
   }
 
-  const out = roundTripCost({
+  const out = roundTrip({
     etf,
     place,
     currency,
+    shares: flag("shares") ? Number(flag("shares")) : null,
+    price: flag("price") ? Number(flag("price")) : null,
     bp: flag("bp") ? Number(flag("bp")) : null,
     perShare: flag("per-share") ? Number(flag("per-share")) : null,
     plan: flag("plan") || DEFAULT_PLAN,
@@ -518,15 +707,15 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     process.exit(0);
   }
 
-  if (out.a == null && !out.listing) {
-    console.log(`a = null   b = ${out.b}   c = ${out.c}\n${out.why}`);
+  const l = out.listing;
+  if (!l) {
+    console.log(out.why || "rien à dire");
     if (out.alternatives?.length) {
       console.log(`\nce qu'Elana propose sous ce nom :\n  ${out.alternatives.join("\n  ")}`);
     }
     process.exit(0);
   }
 
-  const l = out.listing;
   const picked = planOf(out.plan);
   console.log(`${l.ticker || l.isin} — ${l.name || ""}`);
   console.log(
@@ -534,48 +723,26 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       `  [${picked?.label || out.plan}]\n`
   );
 
-  const detail = [];
-  if (out.parts?.marché != null) detail.push(`carnet ${out.parts.marché}`);
-  for (const [name, rate] of Object.entries(out.parts?.taxes ?? {})) detail.push(`${name} ${rate}`);
-  if (out.parts?.commission) detail.push(`courtage ${out.parts.commission}`);
-  if (out.parts?.réglementaire) detail.push(`SEC ${out.parts.réglementaire.SEC}`);
-
-  console.log(`a = ${out.a}   (au prorata${detail.length ? " : " + detail.join(" + ") : " : rien"})`);
-  console.log(`b = ${out.b} $   (par part${out.b ? " : courtage $/share, FINRA et/ou spread 605" : " : rien"})`);
-  console.log(
-    `c = ${out.c} $   (par ordre : ${out.c ? "ticket OTC" : "ticket dans la remark, pas dans c"})`
-  );
-  if (out.floor != null) console.log(`plancher ${out.floor} $`);
-  if (out.remark) console.log(out.remark);
-  if (out.why) console.log(out.why);
-  const fx = out.fx?.listing ?? usdPer(l.currency);
-  console.log(
-    `\ncoût = ${out.a} × p × n × ${fx != null ? Number(fx.toPrecision(6)) : "?"} + ${out.b} × n + ${out.c}   ($ ; p en ${l.currency})`
-  );
-  console.log(`  ${out.basis}`);
-  for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
-
-  const n = Number(flag("shares"));
-  const p = Number(flag("price"));
-  if (n > 0 && p > 0) {
-    const amount = n * p;
-    const amountUsd = toUsd(amount, l.currency);
-    const extra = out.threshold && amount >= out.threshold.above ? out.threshold.c || 0 : 0;
-    const affine = amountUsd != null && out.a != null ? out.a * amountUsd + out.b * n + out.c + extra : null;
-    const billed = exactCost({ amount, shares: n, market: out.feeMarket, plan: out.plan });
+  if (out.trade?.notional != null) {
+    const t = out.trade;
     console.log(
-      `\n${n} part${n > 1 ? "s" : ""} à ${p} ${l.currency} = ${amount.toFixed(2)} ${l.currency}` +
-        (amountUsd != null ? ` (${amountUsd.toFixed(2)} $)` : "")
+      `${t.shares ? `${t.shares} part${t.shares > 1 ? "s" : ""} à ${t.price} ${t.currency} = ` : ""}` +
+        `${t.notional.toFixed(2)} ${t.currency}` +
+        (t.notionalUsd != null ? ` (${t.notionalUsd.toFixed(2)} $)` : "")
     );
-    if (affine != null) console.log(`  a, b, c        : ${affine.toFixed(4)} $`);
-    if (billed.commission != null) {
-      console.log(
-        `  commission     : ${Number(billed.commission).toFixed(4)} $` +
-          (billed.native?.each != null
-            ? ` (${Number(billed.native.each).toPrecision(4)} ${billed.native.currency} × 2)`
-            : "")
-      );
+    console.log();
+  }
+
+  console.log(`aller-retour     : ${out.usd == null ? `N/A${out.why ? ` — ${out.why}` : ""}` : `${out.usd} $`}`);
+  console.log(`frais du courtier: ${out.brokerFees == null ? "N/A" : `${out.brokerFees} $`}`);
+  if (out.parts) {
+    for (const [name, v] of Object.entries(out.parts)) {
+      if (v != null) console.log(`  ${name.padEnd(15)}: ${v} $`);
     }
   }
+  console.log();
+  if (out.basis) console.log(`  ${out.basis}`);
+  for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
+  if (out.remark) for (const r of out.remark.split("\n")) console.log(`  · ${r}`);
   if (out.url) console.log(`\n${out.url}`);
 }

@@ -1,47 +1,71 @@
 // What one round trip costs at ChoiceTrade: buy n shares at price p, sell
-// them back at once (market, regular hours, online platform).
+// them back at once, market, regular hours, online platform, in dollars.
 //
-//   coût (USD) = a × p × n + b × n + c
+// The affine triple this file used to answer hid two cliffs and a ceiling.
+// Listed names under a dollar pay the $25 OTC ticket, but `roundTripCost`
+// called `ticketEach({ market })` without a price, so every listed line came
+// back at $0 — including the penny stocks. OTC trades above 10 000 shares add
+// $0.002 a share; that lived only in `exactCost`, which the page never called.
+// FINRA's $9.79 TAF cap sat in a `cap` field with no column. `roundTrip` is
+// given the size and charges what is charged.
 //
-// The account holds dollars and the catalogue is American (stocks, ETFs,
-// ETNs, a few ETCs). Options are not in the book, so they are not priced.
+// ChoiceTrade (US). The catalogue is American (`choicetrade_scraping.mjs`):
+// 19 843 lines on 2026-09-15 — 6 551 ETFs, 13 215 stocks, 7 616 of them OTC.
+// Options are not in the book and are not priced.
 //
-// Default is the online platform, read 2026-09-10 on choicetrade.com/pricing.php.
-// NYSE / Nasdaq / AMEX (and CBOE BATS in this catalogue — NMS, filed with the
-// listed row) at $1.00 or above: $0 commission. Everything else — OTC, and a
-// listed fill under a dollar — is $25 a trade. That $25 is a ticket every
-// time, not a minimum of a %, so it lives in `c` (50 $ the round trip).
-// Above 10 000 shares the OTC row adds 0.002 $/share; that is `exactCost`,
-// not a fourth coefficient. DAY+EXT (0.005 $/share), daytrading (0.002),
-// Elite (0.002) and DAS (0.003) are other platforms and are not this trip.
+// Barème relu le 2026-09-15 sur https://www.choicetrade.com/pricing.php.
+// Inchangé depuis le 10. Commission par sens, plateforme online :
+//
+//   NYSE / Nasdaq / AMEX (and the NMS tapes in this catalogue — ARCA, BATS,
+//   IEX) at $1.00 or above     $0
+//   Everything else, ≤ 10 000 shares     $25
+//   Shares above 10 000                  + $0.002 / share
+//
+// "$0 comm applies to online platform." DAY+EXT ($0.005 / share), daytrading
+// ($0.002), Elite ($0.002) and DAS ($0.003) are other platforms and are not
+// this trip. Broker-assist is $30 on top and is not this trip either.
 //
 // "All Regulatory, Exchange, OCC … surcharges, if applicable, are extra."
-// SEC / TAF use the same current figures as the other US files. CAT, NSCC
-// and venue fees are not on the card and are left out.
+// SEC and TAF use the current figures the other US files use. CAT, NSCC
+// illiquid charges and venue fees are not on the card and stay out of the
+// number rather than being borrowed from a neighbour.
 //
-// Monthly / inactivity / OTC carrying stay in the remark. No live trip is
-// in this deposit yet.
+// What is in the number: the commission each way, including the $1 listed
+// cliff and the 10 000-share OTC add-on; SEC on the sale; TAF on the sale,
+// capped at $9.79; French FTT on the ADRs that carry it, from the tax map;
+// the market spread, once.
+//
+// What stays in the remark: inactivity ($55 / quarter unless 5 trades;
+// fractionals do not count), $10 / month on a non-US account, and on an OTC
+// line the carrying fee ($40 / month, $100 at 100 000 shares). Wires
+// ($35 domestic / $60 foreign), ACH out ($5) and the $100 minimum balance
+// are the same kind of thing and stay out of the total.
+//
+// No live trip is in this deposit yet.
 //
 //   https://www.choicetrade.com/pricing.php
 //
-//   node choicetrade/choicetrade_cost.mjs IAU
-//   node choicetrade/choicetrade_cost.mjs AAPL NASDAQ USD --shares=1 --price=230
+//   node choicetrade/choicetrade_cost.mjs IAU --shares=1 --price=82
+//   node choicetrade/choicetrade_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
 //   node choicetrade/choicetrade_cost.mjs AGSCF OTC USD --shares=1 --price=2
+//   node choicetrade/choicetrade_cost.mjs AGSCF OTC USD --shares=12000 --price=2
 //   node choicetrade/choicetrade_cost.mjs --schedule
 //
-// `roundTripCost(...)` reads files, not the network.
+// `roundTrip(...)` reads files, not the network.
 
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite, bookParts } from "../na.mjs";
+import { plus, finite } from "../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
+import { taxesOf, taxRates } from "../taxMap.mjs";
 
 const CATALOGUE = new URL("choicetrade-parsed.json", import.meta.url);
 const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://www.choicetrade.com/pricing.php",
-  readOn: "2026-09-10",
+  readOn: "2026-09-15",
+  previouslyRead: "2026-09-10",
   entity: "ChoiceTrade (US)",
 };
 
@@ -52,6 +76,11 @@ const LISTED_MIN_PRICE = 1;
 const OTC_TICKET = 25;
 const OTC_OVER_SHARES = 10000;
 const OTC_OVER_PER_SHARE = 0.002;
+
+const WITHDRAW = { ach: 5, wireDomestic: 35, wireForeign: 60, ccy: "USD" };
+const INACTIVITY = { amount: 55, per: "quarter", waivedAt: 5, ccy: "USD" };
+const NON_US_MONTHLY = { amount: 10, ccy: "USD" };
+const OTC_CARRY = { under100k: 40, at100k: 100, ccy: "USD" };
 
 const LISTED_MICS = new Set(["XNAS", "XNYS", "ARCX", "XASE", "BATS", "IEXG"]);
 const LISTED_CODES = /^(NASDAQ|NYSE|AMEX|ARCA|BATS|CBOE|IEX)$/;
@@ -68,10 +97,6 @@ const fxNote = (currency) => ({
   listing: usdPer(currency),
 });
 
-function remarkOf() {
-  return ["Inactivity 55 $/quarter (under 5 trades).", "10 $/month if non-US."].join("\n");
-}
-
 export function feeMarketOf(row, mic) {
   const code = loose(row?.exchange);
   const m = String(mic || "").toUpperCase();
@@ -80,14 +105,32 @@ export function feeMarketOf(row, mic) {
   return "otc";
 }
 
-export function ticketEach({ market, price, shares } = {}) {
-  const subDollar = price != null && Number(price) < LISTED_MIN_PRICE;
-  if (market === "listed" && !subDollar) return 0;
-  let each = OTC_TICKET;
-  if (shares != null && Number(shares) > OTC_OVER_SHARES) {
-    each += (Number(shares) - OTC_OVER_SHARES) * OTC_OVER_PER_SHARE;
+/**
+ * One side, in dollars. Listed at $1 or more is free. A listed print under a
+ * dollar, and every OTC fill, is the $25 ticket; shares past 10 000 add $0.002.
+ */
+export function commissionSide({ market, price, shares } = {}) {
+  const n = shares == null ? null : Number(shares);
+  const p = price == null ? null : Number(price);
+  if (market === "listed") {
+    if (p == null || !Number.isFinite(p)) return null;
+    if (p >= LISTED_MIN_PRICE) return { charged: 0, ticket: 0, overage: 0, currency: "USD" };
   }
-  return each;
+  if (market !== "listed" && market !== "otc") return null;
+  if (n == null || !Number.isFinite(n)) return null;
+  const over = n > OTC_OVER_SHARES ? (n - OTC_OVER_SHARES) * OTC_OVER_PER_SHARE : 0;
+  return { charged: OTC_TICKET + over, ticket: OTC_TICKET, overage: over, currency: "USD" };
+}
+
+function remarkOf(market) {
+  const lines = [
+    `Inactivity $${INACTIVITY.amount}/${INACTIVITY.per} unless ${INACTIVITY.waivedAt} trades.`,
+    `$${NON_US_MONTHLY.amount}/month for non-U.S. accounts.`,
+  ];
+  if (market === "otc") {
+    lines.push(`OTC carrying $${OTC_CARRY.under100k}/month ($${OTC_CARRY.at100k} at 100k shares).`);
+  }
+  return lines.join("\n");
 }
 
 function findListing({ etf, place, currency }) {
@@ -139,34 +182,21 @@ function coverage() {
   return out;
 }
 
-export function exactCost({ market, price, shares }) {
-  const each = ticketEach({ market, price, shares });
-  return {
-    commission: Number((each * 2).toPrecision(6)),
-    currency: QUOTE,
-    native: { each, roundTrip: each * 2, currency: "USD" },
-    market,
-  };
-}
-
-export function roundTripCost({ etf, place, currency, bp = null, perShare = null }) {
-  const { named, matches } = findListing({ etf, place, currency });
-  const answer = {
-    a: null,
-    b: 0,
-    c: 0,
-    ccy: QUOTE,
-    floor: 0.01,
-    cap: { term: "b", part: "FINRA TAF", amount: TAF_CAP, per: "exécution" },
-    threshold: null,
-    etf,
-    place,
-    currency,
-  };
+/**
+ * The whole bill for buying `shares` at `price` and selling them straight back.
+ * `usd` is the number the page prints; `brokerFees` is the commission alone.
+ */
+export function roundTrip({ etf, place, currency, shares, price, bp = null, perShare = null }) {
+  const answer = { usd: null, brokerFees: null, etf, place, currency, onlineBuy: true, cashCurrency: "USD" };
 
   if (!catalogue) {
-    return { ...answer, why: "le catalogue ChoiceTrade n'existe pas encore : lancer `node choicetrade/choicetrade_scraping.mjs`" };
+    return {
+      ...answer,
+      why: "le catalogue ChoiceTrade n'existe pas encore : lancer `node choicetrade/choicetrade_scraping.mjs`",
+    };
   }
+
+  const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue ChoiceTrade` };
   if (!matches.length) {
     return {
@@ -198,63 +228,199 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
   const leaf = book.leaf;
   const marketBp = bp ?? leaf?.bp ?? null;
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
-  const ticket = ticketEach({ market });
-  const mkt = bookParts({
-    bp: marketBp,
-    perShare: marketPerShare,
-    venue: m.venue,
-    unsourced: m.unsourced,
-    toUsd: (x) => x,
-  });
-  const a = plus(mkt.a, SEC_RATE);
-  const bookUsd = mkt.b;
+  const tax = taxesOf(listing.isin);
+  const rates = taxRates(tax);
+  const taxPct = Object.values(rates).reduce((s, r) => s + r, 0);
 
-  return {
+  const shared = {
     ...answer,
-    a: finite(a, 4),
-    b: finite(plus(bookUsd, TAF_PER_SHARE), 6),
-    c: Number((ticket * 2).toPrecision(6)),
-    floor: ticket ? null : 0.01,
     listing,
     feeMarket: market,
-    remark: remarkOf(),
-    parts: {
-      marché: marketBp != null ? Number((marketBp / 1e4).toPrecision(4)) : null,
-      réglementaire: { SEC: SEC_RATE, FINRA: `${TAF_PER_SHARE} par part` },
-      commission: ticket,
-    },
     bp: marketBp,
     perShare: marketPerShare,
     url: leaf?.url ?? SCHEDULE.source,
-    basis: `barème ChoiceTrade online, palier ${market}, lu le ${SCHEDULE.readOn}`,
+    tax,
+    fx: fxNote(listing.currency),
+    fxIfConverted: 0,
+    remark: remarkOf(market),
+    withdraw: WITHDRAW,
+  };
+
+  const n = Number(shares);
+  const p = Number(price);
+  const hasN = n > 0;
+  const hasP = p > 0;
+  const basis =
+    `barème ChoiceTrade online, palier ${market}, relu le ${SCHEDULE.readOn}` +
+    (market === "listed"
+      ? ` : 0 $ au-dessus de ${LISTED_MIN_PRICE} $, ticket ${OTC_TICKET} $ en dessous`
+      : ` : ${OTC_TICKET} $ par sens, + ${OTC_OVER_PER_SHARE} $ / part au-delà de ${OTC_OVER_SHARES}`);
+
+  if (!hasN) {
+    return {
+      ...shared,
+      basis,
+      why: "aucun nombre de parts",
+      confidence: confidenceOf({ market, listing, leaf, marketBp, marketPerShare, unsourced: m.unsourced, taxPct }),
+    };
+  }
+  if (market === "listed" && !hasP) {
+    return {
+      ...shared,
+      basis,
+      why: "aucun prix pour cette ligne : lancer node prices.mjs",
+      confidence: confidenceOf({ market, listing, leaf, marketBp, marketPerShare, unsourced: m.unsourced, taxPct, n }),
+    };
+  }
+
+  const notional = hasP ? n * p : null;
+  const notionalUsd = hasP ? toUsd(notional, listing.currency) : null;
+  const bookUsd =
+    marketBp != null && notionalUsd != null
+      ? (notionalUsd * marketBp) / 1e4
+      : marketPerShare != null
+        ? marketPerShare * n
+        : null;
+
+  const buy = commissionSide({ market, price: hasP ? p : null, shares: n });
+  const sell = commissionSide({ market, price: hasP ? p : null, shares: n });
+  const buyUsd = buy?.charged ?? null;
+  const sellUsd = sell?.charged ?? null;
+  const brokerFees = plus(buyUsd, sellUsd);
+
+  const secUsd = notionalUsd == null ? null : notionalUsd * SEC_RATE;
+  const tafUsd = Math.min(TAF_CAP, TAF_PER_SHARE * n);
+  const taxUsd = notionalUsd == null ? null : notionalUsd * taxPct;
+
+  const usd = plus(bookUsd, brokerFees, secUsd, tafUsd, taxUsd);
+
+  return {
+    ...shared,
+    usd: finite(usd, 6),
+    brokerFees: finite(brokerFees, 6),
+    ...(bookUsd == null
+      ? {
+          why:
+            `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ` +
+            `${m.unsourced?.why || "pas de source de spread"}`,
+        }
+      : {}),
+    trade: {
+      shares: n,
+      price: hasP ? p : null,
+      notional,
+      notionalUsd: finite(notionalUsd, 6),
+      currency: listing.currency,
+    },
+    buy: {
+      commission: finite(buyUsd, 6),
+      native: buy,
+      taxes: finite(taxUsd, 6),
+      taxRates: Object.keys(rates).length ? rates : null,
+    },
+    sell: {
+      commission: finite(sellUsd, 6),
+      native: sell,
+      sec: finite(secUsd, 6),
+      taf: finite(tafUsd, 6),
+    },
+    parts: {
+      marché: finite(bookUsd, 6),
+      commission: finite(brokerFees, 6),
+      taxes: finite(taxUsd, 6),
+      réglementaire: finite(plus(secUsd, tafUsd), 6),
+    },
     commission: {
-      each: ticket,
-      roundTrip: ticket * 2,
+      each: buy?.charged ?? null,
+      ticket: buy?.ticket ?? null,
+      overage: buy?.overage ?? null,
       currency: "USD",
       eachWay: true,
       platform: "online",
     },
-    ccy: QUOTE,
-    cap: { term: "b", part: "FINRA TAF", amount: TAF_CAP, per: "exécution" },
-    threshold: null,
-    fx: fxNote(listing.currency),
-    fxIfConverted: 0,
-    confidence:
-      `commission ${market} selon choicetrade.com/pricing.php, lu le ${SCHEDULE.readOn}. ` +
-      `Plateforme online, market aux heures régulières. ` +
-      (market === "listed"
-        ? `0 $ par jambe au-dessus de ${LISTED_MIN_PRICE} $ ; sous ${LISTED_MIN_PRICE} $ le ticket OTC s'applique. `
-        : `Ticket ${OTC_TICKET} $ par jambe dans c. Au-delà de ${OTC_OVER_SHARES} parts, ${OTC_OVER_PER_SHARE} $ / part en plus (exactCost). `) +
-      `SEC / TAF aux taux courants. DAY+EXT, daytrading, Elite et DAS ne sont pas cet aller-retour. ` +
-      `Aucun aller-retour réel chez ChoiceTrade dans ce dépôt. ` +
-      (leaf ? "" : `Pas de feuille de carnet pour cet ISIN / cette place. `),
+    basis,
+    confidence: confidenceOf({
+      market,
+      listing,
+      leaf,
+      marketBp,
+      marketPerShare,
+      unsourced: m.unsourced,
+      taxPct,
+      buy,
+      n,
+      p: hasP ? p : null,
+      tafUsd,
+    }),
   };
+}
+
+function confidenceOf({
+  market,
+  listing,
+  leaf,
+  marketBp,
+  marketPerShare,
+  unsourced,
+  taxPct,
+  buy,
+  n,
+  p,
+  tafUsd,
+}) {
+  const said = [];
+  said.push(
+    `commission ChoiceTrade online, palier ${market}, page lue le ${SCHEDULE.readOn} ` +
+      `(inchangée depuis le ${SCHEDULE.previouslyRead})`
+  );
+  if (market === "listed") {
+    said.push(
+      p != null && p < LISTED_MIN_PRICE
+        ? `imprimé sous ${LISTED_MIN_PRICE} $ : ticket ${OTC_TICKET} $ par sens, le palier « All other U.S. Stock Trades »`
+        : `0 $ par sens au-dessus de ${LISTED_MIN_PRICE} $. DAY+EXT, daytrading, Elite et DAS ne sont pas cet aller-retour`
+    );
+  } else {
+    said.push(
+      `ticket ${OTC_TICKET} $ par sens` +
+        (buy?.overage
+          ? `, plus ${Number(buy.overage.toPrecision(4))} $ au-delà de ${OTC_OVER_SHARES} parts`
+          : `, sans le ${OTC_OVER_PER_SHARE} $ / part tant que l'ordre reste sous ${OTC_OVER_SHARES} parts`)
+    );
+  }
+  said.push(
+    `SEC ${SEC_RATE} du montant à la vente, TAF FINRA ${TAF_PER_SHARE} $ la part ` +
+      `(plafond ${TAF_CAP} $)` +
+      (tafUsd != null && n != null && TAF_PER_SHARE * n > TAF_CAP
+        ? ` — le plafond mord : ${Number(tafUsd.toPrecision(4))} $`
+        : "")
+  );
+  if (taxPct) said.push(`taxe à l'achat ${(100 * taxPct).toFixed(2)} % du montant, depuis taxMap.mjs`);
+  if (marketBp != null) said.push(`carnet publié ${Number(marketBp.toPrecision(4))} bp, aller-retour`);
+  else if (marketPerShare != null) {
+    said.push(`carnet Rule 605, ${marketPerShare} $ la part, moyenne 100–499 parts`);
+  } else {
+    said.push(
+      `aucun carnet : ${unsourced?.name || listing.exchange}, ${unsourced?.why || "pas de source"}. ` +
+        `Le total est N/A faute de mesure, pas faute de frais`
+    );
+  }
+  said.push(
+    `hors total : CAT, NSCC illiquide et frais de place, « extra » sur la page sans tarif. ` +
+      `Inactivité ${INACTIVITY.amount} $ / trimestre sous ${INACTIVITY.waivedAt} trades, ` +
+      `${NON_US_MONTHLY.amount} $ / mois hors US` +
+      (market === "otc"
+        ? `, portage OTC ${OTC_CARRY.under100k} $ / mois (${OTC_CARRY.at100k} $ à 100 000 parts)`
+        : "") +
+      `. Compte en dollars, aucune conversion. Aucun aller-retour réel dans ce dépôt`
+  );
+  if (leaf == null && market === "listed") said.push(`pas de feuille 605 pour ${listing.isin}`);
+  return said.join(" ; ");
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const flag = (name) => {
-    const m = process.argv.find((a) => a.startsWith(`--${name}=`));
-    return m ? m.split("=").slice(1).join("=") : null;
+    const hit = process.argv.find((a) => a.startsWith(`--${name}=`));
+    return hit ? hit.split("=").slice(1).join("=") : null;
   };
 
   if (process.argv.includes("--schedule")) {
@@ -265,7 +431,11 @@ if (import.meta.url === `file://${process.argv[1]}`) {
           listed: { commission: 0, minPrice: LISTED_MIN_PRICE },
           otc: { ticket: OTC_TICKET, overShares: OTC_OVER_SHARES, overPerShare: OTC_OVER_PER_SHARE },
           sec: SEC_RATE,
-          taf: TAF_PER_SHARE,
+          taf: { perShare: TAF_PER_SHARE, cap: TAF_CAP },
+          withdraw: WITHDRAW,
+          inactivity: INACTIVITY,
+          nonUsMonthly: NON_US_MONTHLY,
+          otcCarry: OTC_CARRY,
           coverage: coverage(),
         },
         null,
@@ -281,17 +451,19 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     console.error(
       "usage : node choicetrade_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--json]\n" +
         "        node choicetrade_cost.mjs --schedule\n" +
-        "  ex.   node choicetrade_cost.mjs IAU\n" +
-        "        node choicetrade_cost.mjs AAPL NASDAQ USD --shares=1 --price=230\n" +
+        "  ex.   node choicetrade_cost.mjs IAU --shares=1 --price=82\n" +
+        "        node choicetrade_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
         "        node choicetrade_cost.mjs AGSCF OTC USD --shares=1 --price=2"
     );
     process.exit(2);
   }
 
-  const out = roundTripCost({
+  const out = roundTrip({
     etf,
     place,
     currency,
+    shares: flag("shares") ? Number(flag("shares")) : null,
+    price: flag("price") ? Number(flag("price")) : null,
     bp: flag("bp") ? Number(flag("bp")) : null,
     perShare: flag("per-share") ? Number(flag("per-share")) : null,
   });
@@ -301,58 +473,42 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     process.exit(0);
   }
 
-  if (out.a == null && !out.listing) {
-    console.log(`a = null   b = ${out.b}   c = ${out.c}\n${out.why}`);
+  const l = out.listing;
+  if (!l) {
+    console.log(out.why || "rien à dire");
     if (out.alternatives?.length) {
       console.log(`\nce que ChoiceTrade propose sous ce nom :\n  ${out.alternatives.join("\n  ")}`);
     }
     process.exit(0);
   }
 
-  const l = out.listing;
   console.log(`${l.ticker || l.isin} — ${l.name || ""}`);
   console.log(
     `${l.exchange || "—"}${l.mic ? ` (${l.mic})` : ""}, ${l.currency}${l.type ? `, ${l.type.toLowerCase()}` : ""}\n`
   );
 
-  const detail = [];
-  if (out.parts?.marché != null) detail.push(`carnet ${out.parts.marché}`);
-  if (out.parts?.réglementaire) detail.push(`SEC ${out.parts.réglementaire.SEC}`);
-
-  console.log(`a = ${out.a}   (au prorata${detail.length ? " : " + detail.join(" + ") : " : rien"})`);
-  console.log(`b = ${out.b} $   (par part${out.b ? " : TAF et/ou spread 605" : " : rien"})`);
-  console.log(
-    `c = ${out.c} $   (par ordre${out.c ? " : ticket OTC 25 $ × 2" : " : 0 $ online listé"})`
-  );
-  if (out.floor != null) console.log(`plancher ${out.floor} $`);
-  if (out.why) console.log(out.why);
-  const fx = out.fx?.listing ?? usdPer(l.currency);
-  console.log(
-    `\ncoût = ${out.a} × p × n × ${fx != null ? Number(fx.toPrecision(6)) : "?"} + ${out.b} × n + ${out.c}   ($ ; p en ${l.currency})`
-  );
-  console.log(`  ${out.basis}`);
-  for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
-
-  const n = Number(flag("shares"));
-  const p = Number(flag("price"));
-  if (n > 0 && p > 0) {
-    const amount = n * p;
-    const amountUsd = toUsd(amount, l.currency);
-    const affine = amountUsd != null && out.a != null ? out.a * amountUsd + out.b * n + out.c : null;
-    const billed = exactCost({ market: out.feeMarket, price: p, shares: n });
-    console.log(
-      `\n${n} part${n > 1 ? "s" : ""} à ${p} ${l.currency} = ${amount.toFixed(2)} ${l.currency}` +
-        (amountUsd != null ? ` (${amountUsd.toFixed(2)} $)` : "")
-    );
-    if (affine != null) console.log(`  a, b, c        : ${affine.toFixed(4)} $`);
-    if (billed.commission != null) {
+  if (out.trade) {
+    const t = out.trade;
+    if (t.notional != null) {
       console.log(
-        `  commission     : ${Number(billed.commission).toFixed(4)} $` +
-          (billed.native?.each != null
-            ? ` (${Number(billed.native.each).toPrecision(4)} ${billed.native.currency} × 2)`
-            : "")
+        `${t.shares ? `${t.shares} part${t.shares > 1 ? "s" : ""} à ${t.price} ${t.currency} = ` : ""}` +
+          `${t.notional.toFixed(2)} ${t.currency}` +
+          (t.notionalUsd != null ? ` (${t.notionalUsd.toFixed(2)} $)` : "")
       );
+      console.log();
     }
   }
+
+  console.log(`aller-retour     : ${out.usd == null ? `N/A${out.why ? ` — ${out.why}` : ""}` : `${out.usd} $`}`);
+  console.log(`frais du courtier: ${out.brokerFees == null ? "N/A" : `${out.brokerFees} $`}`);
+  if (out.parts) {
+    for (const [name, v] of Object.entries(out.parts)) {
+      if (v != null) console.log(`  ${name.padEnd(15)}: ${v} $`);
+    }
+  }
+  console.log();
+  if (out.basis) console.log(`  ${out.basis}`);
+  for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
+  if (out.remark) for (const r of out.remark.split("\n")) console.log(`  · ${r}`);
   if (out.url) console.log(`\n${out.url}`);
 }

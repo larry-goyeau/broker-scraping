@@ -1,0 +1,1036 @@
+{
+  "generatedAt": "2026-09-15",
+  "source": "https://bourse.boursobank.com/bourse/trackers/recherche/?beginnerEtfSearch[isEtf]=1&beginnerEtfSearch[partners]=1&tableName=partner-table",
+  "offer": "https://clients.boursobank.com/mon-offre/placements-financiers/boursomarkets/",
+  "unit": "Les trackers de l'offre Boursomarkets, que BoursoBank courtise à 0 € « à l'achat ou droits d'entrée » et « à la vente ou sortie ». La page de résultats les liste par quinze sur treize pages ; l'ISIN vient de chaque fiche. Vérifié sur un récapitulatif d'ordre : un partenaire s'affiche à 0,00 € de frais au passage, trois non-partenaires à 1,99 €.",
+  "count": 171,
+  "inCatalogue": 147,
+  "entries": [
+    {
+      "code": "1rAEXS1",
+      "isin": "DE0005933931",
+      "name": "iShares Core DAX UCITS ETF EUR (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rTCMSE",
+      "isin": "DE000A0H0728",
+      "name": "iShares Diversified Commodity Swap UCITS ETF (DE)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAEXA1",
+      "isin": "DE000A2QP372",
+      "name": "iShares EURO STOXX Banks 30-15 UCITS ETF (DE) EUR (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIDVA",
+      "isin": "DE000A2QP380",
+      "name": "iShares EURO STOXX Select Dividend 30 UCITS ETF (DE) EUR (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rASTEC",
+      "isin": "DE000A2QP398",
+      "name": "iShares STOXX Europe 600 Technology UCITS ETF (DE) EUR (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rASAOT",
+      "isin": "DE000A2QP4A8",
+      "name": "iShares STOXX Europe 600 Automobiles Parts UCITS ETF (DE) EUR (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rTID37",
+      "isin": "IE00004OA765",
+      "name": null,
+      "inCatalogue": false
+    },
+    {
+      "code": "1rT28ID",
+      "isin": "IE0000UJ3480",
+      "name": "iShares iBonds Dec 2028 Term USD Corp UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rANAQS",
+      "isin": "IE0001ZFMLN7",
+      "name": null,
+      "inCatalogue": false
+    },
+    {
+      "code": "1rTDGGE",
+      "isin": "IE00023EZQ82",
+      "name": "iShares Digital Entertainment and Education UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rTMUSA",
+      "isin": "IE0002W8NB38",
+      "name": "iShares MSCI USA Swap UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rTWPEA",
+      "isin": "IE0002XZSHO1",
+      "name": "iShares MSCI World Swap PEA UCITS ETF EUR (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rTIX28",
+      "isin": "IE0003HV7CS6",
+      "name": null,
+      "inCatalogue": false
+    },
+    {
+      "code": "1rAWOOE",
+      "isin": "IE0003ZXNJY5",
+      "name": "iShares Global Timber & Forestry UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rABNEH",
+      "isin": "IE00043CMIN7",
+      "name": null,
+      "inCatalogue": false
+    },
+    {
+      "code": "1rAISFA",
+      "isin": "IE0005042456",
+      "name": "iShares Core FTSE 100 UCITS ETF",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rTWPEH",
+      "isin": "IE00055B2JD3",
+      "name": null,
+      "inCatalogue": false
+    },
+    {
+      "code": "1rT27IT",
+      "isin": "IE0006UGU3X3",
+      "name": "iShares iBonds Dec 2027 Term $ Treasury UCITS ETF USD (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rT29IT",
+      "isin": "IE00076HZIP3",
+      "name": "iShares iBonds Dec 2029 Term $ Treasury UCITS ETF USD (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAEUFG",
+      "isin": "IE00078SFIQ6",
+      "name": null,
+      "inCatalogue": false
+    },
+    {
+      "code": "1rACUEB",
+      "isin": "IE0007LAQ4A1",
+      "name": null,
+      "inCatalogue": false
+    },
+    {
+      "code": "1rTIB37",
+      "isin": "IE0007SRI1C7",
+      "name": null,
+      "inCatalogue": false
+    },
+    {
+      "code": "1rAEUEA",
+      "isin": "IE0008471009",
+      "name": "iShares Core EURO STOXX 50 UCITS ETF EUR (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rTB28A",
+      "isin": "IE0008UEVOE0",
+      "name": "iShares iBonds Dec 2028 Term  Corp UCITS ETF EUR (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rTIU28",
+      "isin": "IE0008YWAFL1",
+      "name": null,
+      "inCatalogue": false
+    },
+    {
+      "code": "1rTIU29",
+      "isin": "IE00094KNQN4",
+      "name": null,
+      "inCatalogue": false
+    },
+    {
+      "code": "1rAWHCA",
+      "isin": "IE0009QS7W62",
+      "name": "iShares MSCI World Health Care Sector UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rTSTAR",
+      "isin": "IE000A9G9R73",
+      "name": null,
+      "inCatalogue": false
+    },
+    {
+      "code": "1rTIB36",
+      "isin": "IE000AD2AYN2",
+      "name": null,
+      "inCatalogue": false
+    },
+    {
+      "code": "1rT26ID",
+      "isin": "IE000BWITBP9",
+      "name": "iShares iBonds Dec 2026 Term USD Corp UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rT30ID",
+      "isin": "IE000BZXJJ24",
+      "name": "iShares iBonds Dec 2030 Term $ Corp UCITS ETF USD (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAH2OA",
+      "isin": "IE000CFH1JX2",
+      "name": "iShares Global Water UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIG31",
+      "isin": "IE000D9WMGF0",
+      "name": "iShares iBonds Dec 2031 Term  Corp UCITS ETF EUR (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rTIWDS",
+      "isin": "IE000F9IDGB5",
+      "name": "iShares MSCI World Swap UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAMPAB",
+      "isin": "IE000FOSCLU1",
+      "name": "iShares MSCI EMU Paris-Aligned Climate UCITS ETF EUR (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rTIART",
+      "isin": "IE000G0E83X3",
+      "name": "iSh AI Innovation Active UCTS ETF US Acc",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rTIBE7",
+      "isin": "IE000H5X52W8",
+      "name": "iShares iBonds Dec 2027 Term Corp UCITS ETF EUR (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAEPAD",
+      "isin": "IE000HH3SU50",
+      "name": "iShares MSCI Europe Paris-Aligned Climate UCITS ETF EUR (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rTDI27",
+      "isin": "IE000I1D7D10",
+      "name": "iShares iBonds Dec 2027 Term $ Corp UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIG32",
+      "isin": "IE000I660ZF8",
+      "name": "iShares iBonds Dec 2032 Term  Corp UCITS ETF EUR (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rTSEME",
+      "isin": "IE000I8KRLL9",
+      "name": "iShares MSCI Global Semiconductors UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rADEFU",
+      "isin": "IE000IAXNM41",
+      "name": "iShares Europe Defence UCITS ETF EUR Acc",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rT29GI",
+      "isin": "IE000IHURBR0",
+      "name": "iShares iBonds Dec 2029 Term EUR Corp UCITS ETF EUR (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAICEH",
+      "isin": "IE000JEHORH6",
+      "name": null,
+      "inCatalogue": false
+    },
+    {
+      "code": "1rAYCSH",
+      "isin": "IE000JJPY166",
+      "name": "iShares EUR Cash UCITS ETF EUR Accu",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rT30IG",
+      "isin": "IE000LX17BP9",
+      "name": "iShares iBonds Dec 2030 Term EUR Corp UCITS ETF EUR (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rT26TP",
+      "isin": "IE000LZ7BZW8",
+      "name": "iShares iBonds Dec 2026 Term EUR Italy Govt Bond UCITS ETF EUR (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rTEWSP",
+      "isin": "IE000MLMNYS0",
+      "name": "iShares S&P 500 Equal Weight UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rTBLDR",
+      "isin": "IE000PTMIE90",
+      "name": null,
+      "inCatalogue": false
+    },
+    {
+      "code": "1rT28IY",
+      "isin": "IE000Q2EQ5K8",
+      "name": "iShares iBonds Dec 2028 Term EUR Italy Govt Bond UCITS ETF EUR (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rTAIAA",
+      "isin": "IE000Q9W2IR3",
+      "name": "iShares AI Adopters & Applications UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAMVRS",
+      "isin": "IE000RN58M26",
+      "name": null,
+      "inCatalogue": false
+    },
+    {
+      "code": "1rTQNXT",
+      "isin": "IE000SVXJH05",
+      "name": "iSh Nasd 100 ex-Top 30 UCITS ETF USD Acc",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rADTEH",
+      "isin": "IE000T8E6SX8",
+      "name": null,
+      "inCatalogue": false
+    },
+    {
+      "code": "1rTINRE",
+      "isin": "IE000U58J0M1",
+      "name": "iShares Global Clean Energy Transition UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rTDFND",
+      "isin": "IE000U9ODG19",
+      "name": "iShares Global Aerospace & Defence UCITS ETF USD Accu",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIG34",
+      "isin": "IE000UY6XF65",
+      "name": "iShares iBonds Dec 2034 Term  Corp UCITS ETF EUR (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rTSP20",
+      "isin": "IE000VA628D5",
+      "name": "iSh S&P 500 Top 20 UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rTB26A",
+      "isin": "IE000WA6L436",
+      "name": "iShares iBonds Dec 2026 Term  Corp UCITS ETF EUR (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rTAINF",
+      "isin": "IE000X59ZHE2",
+      "name": "iShares AI Infrastructure UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rACSPEH",
+      "isin": "IE000Y7V5EW2",
+      "name": null,
+      "inCatalogue": false
+    },
+    {
+      "code": "1rTQTOP",
+      "isin": "IE000Z7P04F4",
+      "name": "iSh Nasdaq 100 Top 30 UCITS ETF USD Acc",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIG33",
+      "isin": "IE000ZBGZQM8",
+      "name": "iShares iBonds Dec 2033 Term  Corp UCITS ETF EUR (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAXSUE",
+      "isin": "IE000ZDDJWZ5",
+      "name": null,
+      "inCatalogue": false
+    },
+    {
+      "code": "1rTIB27",
+      "isin": "IE000ZOI8OK5",
+      "name": "iShares iBonds Dec 2027 Term  Corp UCITS ETF EUR (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIUSA",
+      "isin": "IE0031442068",
+      "name": "iShares Core S&P 500 UCITS ETF USD (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIBCX",
+      "isin": "IE0032523478",
+      "name": "iShares EUR Corp Bond Large Cap UCITS ETF EUR (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rALQDA",
+      "isin": "IE0032895942",
+      "name": "iShares S Corporate Bond UCITS ETF",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIJPN",
+      "isin": "IE00B02KXH56",
+      "name": "iShares MSCI Japan UCITS ETF (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rADJMC",
+      "isin": "IE00B02KXL92",
+      "name": "iShares EURO STOXX Mid UCITS ETF",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rADJSC",
+      "isin": "IE00B02KXM00",
+      "name": "iShares EURO STOXX Small UCITS ETF",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIWRD",
+      "isin": "IE00B0M62Q58",
+      "name": "iShares MSCI World UCITS ETF (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIDVY",
+      "isin": "IE00B0M62S72",
+      "name": "iShares EURO Dividend UCITS ETF",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIDJG",
+      "isin": "IE00B0M62V02",
+      "name": "iShares EURO Total Market Growth Large UCITS ETF",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIBCI",
+      "isin": "IE00B0M62X26",
+      "name": "iShares Euro Inflation Linked Gov Bond UCITS ETF",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIAEX",
+      "isin": "IE00B0M62Y33",
+      "name": "iShares AEX",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIEMM",
+      "isin": "IE00B0M63177",
+      "name": "iShares MSCI Emerging Markets UCITS ETF (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIPRP",
+      "isin": "IE00B0M63284",
+      "name": "iShares European Property Yield UCITS ETF",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIKRA",
+      "isin": "IE00B0M63391",
+      "name": "iShares MSCI Korea UCITS ETF (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIBZL",
+      "isin": "IE00B0M63516",
+      "name": "iShares MSCI Brazil UCITS ETF (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAITWN",
+      "isin": "IE00B0M63623",
+      "name": "iShares MSCI Taiwan UCITS ETF",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIFFF",
+      "isin": "IE00B0M63730",
+      "name": "iShares MSCI AC Far East ex Japan UCITS ETF",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAINAA",
+      "isin": "IE00B14X4M10",
+      "name": "iShares MSCI North America UCITS ETF",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIEUX",
+      "isin": "IE00B14X4N27",
+      "name": "iShares MSCI Europe ex UK UCITS ETF",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIBGS",
+      "isin": "IE00B14X4Q57",
+      "name": "iShares Euro Government Bond 1 3yr UCITS ETF",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIASP",
+      "isin": "IE00B1FZS244",
+      "name": "iShares Asia Property Yield UCITS ETF USD (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIWDP",
+      "isin": "IE00B1FZS350",
+      "name": "iShares Developed Markets Property Yield UCITS ETF USD (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAINFR",
+      "isin": "IE00B1FZS467",
+      "name": "iShares Global Infrastructure UCITS ETF USD (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAITKY",
+      "isin": "IE00B1FZS574",
+      "name": "iShares MSCI Turkey UCITS ETF USD (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIBGX",
+      "isin": "IE00B1FZS681",
+      "name": "iShares EUR Govt Bond 3-5yr UCITS ETF EUR (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rABTMA",
+      "isin": "IE00B1FZS798",
+      "name": "iShares USD Treasury Bond 7-10yr UCITS ETF USD (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIBGM",
+      "isin": "IE00B1FZS806",
+      "name": "iShares EUR Govt Bond 7-10yr UCITS ETF EUR (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIBGL",
+      "isin": "IE00B1FZS913",
+      "name": "iShares EUR Govt Bond 15-30yr UCITS ETF EUR (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rATPSA",
+      "isin": "IE00B1FZSC47",
+      "name": "iShares S TIPS UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIUSP",
+      "isin": "IE00B1FZSF77",
+      "name": "iShares US Property Yield UCITS ETF USD (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIPRV",
+      "isin": "IE00B1TXHL60",
+      "name": "iShares Listed Private Equity UCITS ETF USD (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rABRIC",
+      "isin": "IE00B1W57M07",
+      "name": "iShares BIC 50 UCITS ETF",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIMEU",
+      "isin": "IE00B1YZSC51",
+      "name": "iShares Core MSCI Europe UCITS ETF",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rALTAM",
+      "isin": "IE00B27YCK28",
+      "name": "iShares MSCI EM Latin America UCITS ETF USD (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAICOV",
+      "isin": "IE00B3B8Q275",
+      "name": "iShares EUR Covered Bond UCITS ETF EUR (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIEAC",
+      "isin": "IE00B3F81R35",
+      "name": "iShares Core EUR Corp Bond UCITS ETF EUR (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIEGE",
+      "isin": "IE00B3FH7618",
+      "name": "iShares EUR Govt Bond 0-1yr UCITS ETF EUR (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rACBE7",
+      "isin": "IE00B3VTML14",
+      "name": "iShares EUR Govt Bond 3-7yr UCITS ETF EUR (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rACBU7",
+      "isin": "IE00B3VWN393",
+      "name": "iShares USD Treas Bond 3-7yr UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIUES",
+      "isin": "IE00B3ZW0K18",
+      "name": "iShares S&P 500 EUR Hedged UCITS ETF (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIJPE",
+      "isin": "IE00B42Z5J44",
+      "name": "iShares MSCI Japan EUR Hedged UCITS ETF (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIWDE",
+      "isin": "IE00B441G979",
+      "name": "iShares MSCI World EUR Hedged UCITS ETF (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIMAE",
+      "isin": "IE00B4K48X80",
+      "name": "iShares Core MSCI Europe UCITS ETF EUR (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIWDA",
+      "isin": "IE00B4L5Y983",
+      "name": "iShares Core MSCI World UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIEMA",
+      "isin": "IE00B4L5YC18",
+      "name": "iShares MSCI EM UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIJPA",
+      "isin": "IE00B4L5YX21",
+      "name": "iShares Core MSCI Japan IMI UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIEGY",
+      "isin": "IE00B4WXJG34",
+      "name": "iShares EUR Govt Bond 5-7yr UCITS ETF EUR (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIEGZ",
+      "isin": "IE00B4WXJH41",
+      "name": "iShares EUR Govt Bond 10-15yr UCITS ETF EUR (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIEGA",
+      "isin": "IE00B4WXJJ64",
+      "name": "iShares Core EUR Govt Bond UCITS ETF EUR (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rACPXJ",
+      "isin": "IE00B52MJY50",
+      "name": "iShares Core MSCI Pcfic ex-Jpn UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rACSCA",
+      "isin": "IE00B52SF786",
+      "name": "iShares MSCI Canada UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rACSUS",
+      "isin": "IE00B52SFT06",
+      "name": "iShares MSCI USA UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIESE",
+      "isin": "IE00B52VJ196",
+      "name": "iShares MSCI Europe SRI UCITS ETF EUR (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rTCSUK",
+      "isin": "IE00B539F030",
+      "name": null,
+      "inCatalogue": false
+    },
+    {
+      "code": "1rACSX5",
+      "isin": "IE00B53L3W79",
+      "name": "iShares Core EURO STOXX 50 UCITS ETF EUR (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rACSJP",
+      "isin": "IE00B53QDK08",
+      "name": "iShares MSCI Japan UCITS ETF",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rACEMU",
+      "isin": "IE00B53QG562",
+      "name": "iShares Core MSCI EMU UCITS ETF",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rACNDX",
+      "isin": "IE00B53SZB19",
+      "name": "iShares NASDAQ 100 UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIGSG",
+      "isin": "IE00B57X3V84",
+      "name": "iShares Dow Jones Global Leaders Screened UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rACMEX",
+      "isin": "IE00B5WHFQ43",
+      "name": "iShares MSCI Mexico Capped UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIOGP",
+      "isin": "IE00B6R51Z18",
+      "name": "iShares Oil & Gas Exploration & Production UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAISOE",
+      "isin": "IE00B6R52036",
+      "name": "iShares Gold Producers UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAISAE",
+      "isin": "IE00B6R52143",
+      "name": "iShares Agribusiness UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rASSAC",
+      "isin": "IE00B6R52259",
+      "name": "iShares MSCI ACWI UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIRCP",
+      "isin": "IE00B6X2VY59",
+      "name": "iShares  Corp Bond Interest Rate Hedged ESG SRI UCITS ETF",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIFRB",
+      "isin": "IE00B7LGZ558",
+      "name": "iShares France Govt Bnd UCITS ETF EUR (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rALQDH",
+      "isin": "IE00BCLWRB83",
+      "name": "iShares $ Corporate Bond Interest Rate Hedged UCITS ETF",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rASDHY",
+      "isin": "IE00BCRY6003",
+      "name": "iShares $ Short Duration High Yield Corporate Bond UCITS ETF",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAERNE",
+      "isin": "IE00BCRY6557",
+      "name": "iShares EUR Ultrashort Bond UCITS ETF",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAAGGH",
+      "isin": "IE00BDBRDM35",
+      "name": "iShares Core Global Aggregate Bond UCITS ETF EUR Hedged (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAHIGH",
+      "isin": "IE00BF3N7094",
+      "name": null,
+      "inCatalogue": false
+    },
+    {
+      "code": "1rAEMSA",
+      "isin": "IE00BF553838",
+      "name": "iShares JP Morgan Advanced $ EM Bond UCITS ETF",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rTEMGA",
+      "isin": "IE00BFZPF546",
+      "name": null,
+      "inCatalogue": false
+    },
+    {
+      "code": "1rALOCK",
+      "isin": "IE00BG0J4C88",
+      "name": "iShares Digital Security UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAISED",
+      "isin": "IE00BGDPWW94",
+      "name": "iShares MSCI Europe SRI UCITS ETF USD (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAECAR",
+      "isin": "IE00BGL86Z12",
+      "name": "iShares Electric Vehicles and Driving Technology UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rADHYE",
+      "isin": "IE00BJK55B31",
+      "name": "iShares $ High Yield Corp Bond ESG SRI UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAEHYA",
+      "isin": "IE00BJK55C48",
+      "name": "iShares  High Yield Corp Bond ESG SRI UCITS ETF",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rASMUA",
+      "isin": "IE00BJLKK341",
+      "name": "iShares MSCI EMU SRI UCITS ETF EUR (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rASUOD",
+      "isin": "IE00BK4W7N32",
+      "name": null,
+      "inCatalogue": false
+    },
+    {
+      "code": "1rAEHYD",
+      "isin": "IE00BKLC5874",
+      "name": "iShares - High Yield Corp Bond ESG SRI UCITS ETF EUR (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAEMIM",
+      "isin": "IE00BKM4GZ66",
+      "name": "iShares Core MSCI Emerging Markets IMI UCITS ETF",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIMBE",
+      "isin": "IE00BKP5L409",
+      "name": "iShares US Mortgage Backed Securities UCITS ETF EUR Hedged (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rTCYEA",
+      "isin": "IE00BKPSFD61",
+      "name": "iShares China CNY Bond UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIX5A",
+      "isin": "IE00BKT6BH25",
+      "name": "iShares Eur Corp Bond ex-Financials 1-5yr UCITS ETF EUR (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIGLE",
+      "isin": "IE00BKT6FT27",
+      "name": "iShares Global Govt Bond UCITS ETF EUR Hedged (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rASJPE",
+      "isin": "IE00BKT6FV49",
+      "name": "iShares Core MSCI Japan IMI UCITS ETF EUR Hedged (",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rACYBE",
+      "isin": "IE00BKT6VQ12",
+      "name": "iShares China CNY Bond UCITS ETF EUR Hedged (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rTCITY",
+      "isin": "IE00BKTLJC87",
+      "name": "iShares Smart City Infra UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAEUPB",
+      "isin": "IE00BL6K8C82",
+      "name": "iShares MSCI Europe Paris-Aligned Climate UCITS ETF EUR (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAEMPA",
+      "isin": "IE00BL6K8D99",
+      "name": "iShares MSCI EMU Paris-Aligned Climate UCITS ETF EUR (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIUHE",
+      "isin": "IE00BMBKBZ46",
+      "name": "iShares S&P 500 Health Care Sector UCITS ETF EUR Hedged (Dist)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rTMTPI",
+      "isin": "IE00BMG6Z448",
+      "name": "iShares MSCI EM ex China UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAI50E",
+      "isin": "IE00BMTX1Y45",
+      "name": null,
+      "inCatalogue": false
+    },
+    {
+      "code": "1rAIAEA",
+      "isin": "IE00BMTX2B82",
+      "name": "iShares AEX UCITS ETF EUR (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAIFRE",
+      "isin": "IE00BP3QZJ36",
+      "name": "iShares MSCI France UCITS ETF EUR (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rACNYA",
+      "isin": "IE00BQT3WG13",
+      "name": "iShares MSCI China A UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rASUSM",
+      "isin": "IE00BYVJRP78",
+      "name": "iShares MSCI EM SRI UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAQDVN",
+      "isin": "IE00BYVJRQ85",
+      "name": null,
+      "inCatalogue": false
+    },
+    {
+      "code": "1rASUAU",
+      "isin": "IE00BYVJRR92",
+      "name": "iShares MSCI USA SRI UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rASUSW",
+      "isin": "IE00BYX2JD69",
+      "name": "iShares MSCI World SRI UCITS ETF EUR (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rASUJP",
+      "isin": "IE00BYX8XC17",
+      "name": "iShares MSCI Japan SRI UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rARBOE",
+      "isin": "IE00BYZK4552",
+      "name": "iShares Automation & Robotics UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAAGED",
+      "isin": "IE00BYZK4669",
+      "name": "iShares Ageing Population UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rAHEAL",
+      "isin": "IE00BYZK4776",
+      "name": "iShares Healthcare Innovation UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    },
+    {
+      "code": "1rADGTL",
+      "isin": "IE00BYZK4883",
+      "name": "iShares Digitalisation UCITS ETF USD (Acc)",
+      "inCatalogue": true
+    }
+  ]
+}

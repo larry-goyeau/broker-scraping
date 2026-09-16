@@ -1,21 +1,20 @@
-// What one round trip costs at DEGIRO NL: buy n shares at price p, sell them
-// back at once.
+// What one round trip costs at DEGIRO NL: buy n shares at price p, sell
+// them back at once, online, Basic / Active / Trader, AutoFX, in dollars.
 //
-//   coût (USD) = a × toUsd(p) × n + b × n + c
+// The affine triple hid the cliffs. PTM £1.50 above £10 000 lived only in
+// `threshold`, which the page never added. Crypto's €0.01 floor sat in
+// `floor` the same way. `roundTrip` is given the size and charges what is
+// charged.
 //
-// `a` is a fraction of the amount. `b` and `c` are dollars, the same unit the
-// other `*_cost.mjs` files answer in. The published ticket is a flat euro
-// amount every order, so it lives in `c`. Crypto is the exception: 0.29 %
-// sits in `a`, the €0.01 minimum in the floor (`min fees`, `c` = 0).
-//
-// flatexDEGIRO Bank Dutch Branch, Basic / Active / Trader, schedule from
-// 1 January 2026, read 2026-09-10. Custody prints the same stock / tracker
-// tickets; it is not a second coefficient. Options, futures, bonds, funds
-// and BNP / SGC OTC warrants are not in this catalogue.
+// flatexDEGIRO Bank Dutch Branch. Schedule from 1 January 2026, re-read
+// 2026-09-15 — unchanged since the 10th. Custody prints the same stock /
+// tracker tickets; it is not a second coefficient. Options, futures, bonds,
+// funds and BNP / SGC OTC warrants are not in this catalogue (28 187 lines:
+// 19 005 stocks, 8 499 ETFs, 457 ETC, 204 ETN, 22 crypto).
 //
 //   Stocks   AMS / BRU                         2.00 € + 1.00 € handling
 //            US / CA                           1.00 € + 1.00 € handling
-//            Europe (Xetra, Tradegate, …)      3.90 € + 1.00 € handling
+//            Europe (Xetra, LSE, Tradegate, …) 3.90 € + 1.00 € handling
 //            ASX / Frankfurt floor / HK / SG / Tokyo
 //                                              5.00 € + 1.00 € handling
 //   Trackers Tradegate (Kernselectie)          0.00 € + 1.00 € handling
@@ -23,39 +22,42 @@
 //   Crypto   Tradias                           0.29 %, min 0.01 €, no handling
 //
 // Handling is €1 on every order except Tradegate stocks and crypto. It
-// covers third-party fees (clearing, SEC, TAF, execution), so those stay
-// out of `a` / `b`. Fair Use on the Kernselectie was withdrawn with the
-// October 2025 rewrite: every Tradegate tracker is €0 + €1.
+// covers third-party execution fees (clearing, SEC, TAF), so those stay
+// out of the number. A live AAPL NDQ trip on 2026-09-10 paid the 2 €
+// ticket each way and 0.50 % AutoFX, nothing else. Fair Use on the
+// Kernselectie was withdrawn with the October 2025 rewrite: every
+// Tradegate tracker is €0 + €1.
 //
-// Cash is euro by default. AutoFX 0.25 % is processed in the fill on each
-// non-EUR leg, so 0.50 % the round trip sits in `a`. Manual FX
-// (€10 + 0.25 %, USD / GBP cash) is not this trip. Stamp / FTT come from
-// the tax map. PTM £1.50 above £10 000 on a London STOCK is a threshold.
-// Connectivity (€2.50 / year per exchange, max 0.25 % AUM) is a holding
-// cost: not AMS, BRU, Tradias, or the Kernselectie. Custody 0, inactivity 0.
+// What is in the number: the ticket each way (commission + handling, or
+// the crypto percentage at its floor); AutoFX 0.25 % each way on a
+// non-euro tape, measured; Irish stamp 1 % and UK stamp 0.50 % on a share
+// purchase (taxMap when it has the ISIN, else the rates DEGIRO says it
+// passes through); French / Italian / Spanish FTT from the same map, never
+// invented; PTM £1.50 each way on a UK share above 10 000 £; the market
+// spread, once.
 //
-// One live trip on 2026-09-10, Basic, EUR cash 290 €. Market buy of 1 AAPL
-// was refused (pad 324.44 €). Limit buy at 326.29 filled 322.86, market sell
-// 322.83. checkOrder 2 € each way. Cash 290.00 → 284.58. After the 4 €
-// tickets and 0.03 $ of stock, 1.39 € remains: 0.50 % of the mid notional.
-// `a` keeps AutoFX 0.25 % × 2. No SEC / TAF outside the handling.
+// Connectivity (€2.50 / year per exchange, max 0.25 % AUM — not AMS, BRU,
+// Tradias, or the Kernselectie), Xetra-Gold custody (0.025 % / month) and
+// ADR pass-through are holding costs and stay in the remark. Manual FX
+// (€10 + 0.25 %, USD / GBP cash) is not this trip. Withdrawals are free.
+// Custody 0, inactivity 0.
 //
 //   https://www.degiro.nl/tarieven
 //   https://www.degiro.nl/data/pdf/Tarievenoverzicht.pdf
 //   https://www.degiro.nl/tarieven/etf-kernselectie
 //
-//   node degiro/degiro_cost.mjs AAPL
 //   node degiro/degiro_cost.mjs AAPL NDQ USD --shares=1 --price=230
-//   node degiro/degiro_cost.mjs EUNL TDG EUR
-//   node degiro/degiro_cost.mjs EUNL XET EUR
-//   node degiro/degiro_cost.mjs IWDA EAM EUR
+//   node degiro/degiro_cost.mjs EUNL TDG EUR --shares=1 --price=108
+//   node degiro/degiro_cost.mjs EUNL XET EUR --shares=1 --price=108
+//   node degiro/degiro_cost.mjs IWDA EAM EUR --shares=1 --price=108
+//   node degiro/degiro_cost.mjs BTC --amount=1000
 //   node degiro/degiro_cost.mjs --schedule
 //
-// `roundTripCost(...)` reads files, not the network.
+// `roundTrip(...)` reads files, not the network.
 
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite, bookParts } from "../na.mjs";
+import { plus, finite } from "../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
@@ -66,12 +68,22 @@ const SCHEDULE = {
   source: "https://www.degiro.nl/data/pdf/Tarievenoverzicht.pdf",
   page: "https://www.degiro.nl/tarieven",
   core: "https://www.degiro.nl/tarieven/etf-kernselectie",
-  readOn: "2026-09-10",
+  readOn: "2026-09-15",
+  previouslyRead: "2026-09-10",
   revised: "2026-01-01",
   entity: "DEGIRO (flatexDEGIRO Bank Dutch Branch, NL)",
 };
 
 const FX_EACH_WAY = 0.0025;
+const CRYPTO_RATE = 0.0029;
+const CRYPTO_MIN = 0.01;
+const PTM = { each: 1.5, currency: "GBP", above: 10000 };
+const IE_STAMP = 0.01;
+const UK_STAMP = 0.005;
+const XETRA_GOLD = "DE000A0S9GB0";
+const UK_ISSUERS = /^(GB|JE|GG|IM)$/;
+const ADR_NAMED = /\bADR\b/i;
+
 const CHECK = {
   isin: "US0378331005",
   ticker: "AAPL",
@@ -84,11 +96,6 @@ const CHECK = {
   fxRoundTrip: 0.00502,
   on: "2026-09-10",
 };
-const CRYPTO_RATE = 0.0029;
-const CRYPTO_MIN = 0.01;
-const PTM = { each: 1.5, currency: "GBP", above: 10000 };
-const XETRA_GOLD = "DE000A0S9GB0";
-const US_MICS = new Set(["XNAS", "XNYS", "ARCX", "XASE", "BATS"]);
 
 const HOME = new Set(["EAM", "EBR"]);
 const US_CA = new Set(["NDQ", "NSY", "ASE", "TOR", "TSV", "CSE"]);
@@ -118,10 +125,21 @@ const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
 const spreads = fs.existsSync(SPREADS) ? JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {} : {};
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+const isTracker = (type) => /^(ETF|ETN|ETC)$/i.test(type || "");
+const isRetail = (listing) => String(listing?.type || "").toUpperCase() === "STOCK";
+const issuerCc = (isin) => String(isin || "").slice(0, 2).toUpperCase();
 
 const dollars = (amount, currency) => {
   const v = toUsd(amount, currency);
   return v == null ? null : Number(v.toPrecision(6));
+};
+
+const toCcy = (amount, from, to) => {
+  if (String(from || "").toUpperCase() === String(to || "").toUpperCase()) return Number(amount);
+  const usd = toUsd(amount, from);
+  const per = usdPer(to);
+  if (usd == null || !(per > 0)) return null;
+  return usd / per;
 };
 
 const fxNote = (currency) => ({
@@ -129,8 +147,6 @@ const fxNote = (currency) => ({
   asOf: FX_AS_OF,
   listing: usdPer(currency),
 });
-
-const isTracker = (type) => /^(ETF|ETN|ETC)$/i.test(type || "");
 
 export function feeMarketOf(row) {
   const code = loose(row?.exchange);
@@ -144,9 +160,11 @@ export function feeMarketOf(row) {
   return null;
 }
 
-// Commission and handling in euros, one way. The Degiro hiq code is the
-// source of the band: FRA is the Frankfurt floor (€5), not Xetra, and CSE
-// is the Canadian Securities Exchange (€1), not Copenhagen.
+/**
+ * Commission and handling in euros, one way. The Degiro hiq code is the
+ * source of the band: FRA is the Frankfurt floor (€5), not Xetra, and CSE
+ * is the Canadian Securities Exchange (€1), not Copenhagen.
+ */
 export function ticketOf(row) {
   const market = feeMarketOf(row);
   const code = loose(row?.exchange);
@@ -165,22 +183,69 @@ export function ticketOf(row) {
   return { market, comm, handling, rate: 0, min: 0, each: comm + handling };
 }
 
+export function commissionSide({ row, amountEur }) {
+  const ticket = ticketOf(row);
+  if (!ticket) return null;
+  if (ticket.rate) {
+    if (amountEur == null || !Number.isFinite(Number(amountEur))) return null;
+    const raw = Number(amountEur) * ticket.rate;
+    const charged = Math.max(ticket.min, raw);
+    return { charged, comm: charged, handling: 0, raw, floored: raw < ticket.min, currency: "EUR" };
+  }
+  return {
+    charged: ticket.each,
+    comm: ticket.comm,
+    handling: ticket.handling,
+    raw: ticket.each,
+    floored: false,
+    currency: "EUR",
+  };
+}
+
 function connectivityOf(row, market) {
   const code = loose(row?.exchange);
   if (HOME.has(code) || market === "crypto" || market === "etf_core") return false;
   return true;
 }
 
-function remarkOf({ row, market, isin }) {
+function remarkOf({ row, market, listing }) {
   const lines = [];
-  if (market === "crypto") lines.push("min fees 0.02 €.");
-  if (connectivityOf(row, market)) lines.push("Connectivity 2.50 €/year per exchange.");
-  if (String(isin || "").toUpperCase() === XETRA_GOLD) {
+  if (connectivityOf(row, market)) lines.push("Connectivity €2.50/year per exchange.");
+  if (String(listing?.isin || "").toUpperCase() === XETRA_GOLD) {
     lines.push("Xetra-Gold custody 0.025%/month.");
+  }
+  if (ADR_NAMED.test(String(listing?.name || ""))) {
+    lines.push("ADR pass-through billed as incurred.");
   }
   return lines.join("\n");
 }
 
+/**
+ * Stamp from the tax map when Trading212 swept the ISIN. Irish and British
+ * shares it never asked about still pay the rates DEGIRO says it passes
+ * through (1 % / 0.50 %). A German name on London is not a UK share.
+ */
+export function taxesFor(isin, listing) {
+  const tax = taxesOf(isin);
+  const mapped = taxRates(tax);
+  if (Object.keys(mapped).length) return { tax, rates: mapped, source: "taxMap" };
+  if (!isRetail(listing)) return { tax, rates: {}, source: null };
+  const cc = issuerCc(isin);
+  if (cc === "IE") return { tax, rates: { stamp: IE_STAMP }, source: "degiro" };
+  if (cc === "GB") return { tax, rates: { stamp: UK_STAMP }, source: "degiro" };
+  return { tax, rates: {}, source: null };
+}
+
+function levyEach({ listing, notional, currency }) {
+  if (!isRetail(listing)) return { ptm: 0 };
+  const cc = issuerCc(listing.isin);
+  const mic = String(listing.mic || "").toUpperCase();
+  const london = mic === "XLON" || loose(listing.brokerExchange) === "LSE";
+  if (!london || !UK_ISSUERS.test(cc)) return { ptm: 0 };
+  const gbp = toCcy(notional, currency, "GBP");
+  if (gbp == null) return { ptm: null };
+  return { ptm: gbp > PTM.above ? PTM.each : 0, ptmCcy: PTM.currency };
+}
 
 function findListing({ etf, place, currency }) {
   const asked = loose(etf);
@@ -234,56 +299,30 @@ function coverage() {
   return out;
 }
 
-function thresholdOf(listing) {
-  if (String(listing.type || "").toUpperCase() !== "STOCK") return null;
-  if (listing.mic !== "XLON") return null;
-  return {
-    c: dollars(2 * PTM.each, "GBP"),
-    currency: QUOTE,
-    above: PTM.above,
-    aboveCurrency: "GBP",
-    why: `prélèvement PTM de ${PTM.each} £ par ordre et par sens, au-delà de ${PTM.above} £`,
-  };
-}
-
-export function exactCost({ amount, row, market } = {}) {
-  const ticket = ticketOf(row || { type: market === "crypto" ? "CRYPTO" : "STOCK", exchange: "" });
-  if (!ticket) return { commission: null, currency: QUOTE };
-  if (ticket.rate) {
-    const n = Number(amount);
-    const each = Number.isFinite(n) ? Math.max(ticket.min, n * ticket.rate) : ticket.min;
-    return {
-      commission: dollars(each * 2, "EUR"),
-      currency: QUOTE,
-      native: { each, roundTrip: each * 2, currency: "EUR" },
-      market: ticket.market,
-    };
-  }
-  return {
-    commission: dollars(ticket.each * 2, "EUR"),
-    currency: QUOTE,
-    native: { each: ticket.each, roundTrip: ticket.each * 2, currency: "EUR" },
-    market: ticket.market,
-  };
-}
-
-export function roundTripCost({ etf, place, currency, bp = null, perShare = null }) {
-  const { named, matches } = findListing({ etf, place, currency });
+/**
+ * The whole bill for buying `shares` at `price` (or putting `amount` into a
+ * coin) and selling straight back. `usd` is the number the page prints;
+ * `brokerFees` is the DEGIRO ticket, not AutoFX or the stamp.
+ */
+export function roundTrip({ etf, place, currency, shares, price, amount, bp = null, perShare = null }) {
   const answer = {
-    a: null,
-    b: 0,
-    c: 0,
-    ccy: QUOTE,
-    floor: null,
-    cap: null,
-    threshold: null,
+    usd: null,
+    brokerFees: null,
     etf,
     place,
     currency,
+    onlineBuy: true,
+    cashCurrency: "EUR",
   };
 
   if (!catalogue) {
     return { ...answer, why: "le catalogue DEGIRO n'existe pas encore : lancer `node degiro/degiro_scraping.mjs`" };
+  }
+
+  let { named, matches } = findListing({ etf, place, currency });
+  if (amount != null && matches.length > 1) {
+    const coins = matches.filter((hit) => feeMarketOf(hit.row) === "crypto");
+    if (coins.length) matches = coins;
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue DEGIRO` };
   if (!matches.length) {
@@ -324,55 +363,124 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
   const leaf = book.leaf;
   const marketBp = bp ?? leaf?.bp ?? null;
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
-  const american = US_MICS.has(listing.mic);
-  const tax = taxesOf(listing.isin);
-  const rates = taxRates(tax);
-  const taxTotal = Object.values(rates).reduce((s, r) => s + r, 0);
-  const fxPct = listing.currency === "EUR" ? 0 : FX_EACH_WAY * 2;
-  const ratePct = ticket.rate ? ticket.rate * 2 : 0;
-  const knownPct = taxTotal + fxPct + ratePct;
-  // No book and nothing proportional (EUR Tradegate, no tax) is unknown, not 0 %.
-  const mkt = bookParts({
-    bp: marketBp,
-    perShare: marketPerShare,
-    venue: m.venue,
-    unsourced: m.unsourced,
-    toUsd: (x) => (american ? x : dollars(x, listing.currency)),
-  });
-  const a = plus(mkt.a, knownPct);
-  const bookUsd = mkt.b;
-  const ticketUsd = ticket.each != null ? dollars(ticket.each * 2, "EUR") ?? 0 : 0;
-  const floorUsd = ticket.rate ? dollars(ticket.min * 2, "EUR") : null;
+  const { tax, rates, source: taxSource } = taxesFor(listing.isin, listing);
+  const taxPct = Object.values(rates).reduce((s, r) => s + r, 0);
+  const fxPct = listing.currency === "EUR" ? 0 : FX_EACH_WAY;
+  const crypto = ticket.market === "crypto";
 
-  return {
+  const shared = {
     ...answer,
-    a: finite(a, 4),
-    b: finite(bookUsd, 6),
-    c: Number(ticketUsd.toPrecision(6)),
-    floor: floorUsd,
     listing,
     feeMarket: ticket.market,
-    remark: remarkOf({ row: m.row, market: ticket.market, isin: listing.isin }),
-    parts: {
-      marché:
-        marketBp != null
-          ? Number((marketBp / 1e4).toPrecision(4))
-          : marketPerShare != null
-            ? `${marketPerShare} par part`
-            : null,
-      taxes: Object.keys(rates).length ? rates : null,
-      change: fxPct || null,
-      commission: ratePct || null,
-      ticket: ticket.each != null ? { each: ticket.each, comm: ticket.comm, handling: ticket.handling } : null,
-    },
     bp: marketBp,
     perShare: marketPerShare,
     url: leaf?.url ?? SCHEDULE.source,
-    basis: `barème DEGIRO NL ${ticket.market}, lu le ${SCHEDULE.readOn}`,
     tax,
+    fx: fxNote(listing.currency),
+    fxIfConverted: 0,
+    remark: remarkOf({ row: m.row, market: ticket.market, listing }),
+    check: listing.isin === CHECK.isin ? CHECK : null,
+  };
+
+  const basis =
+    `barème DEGIRO NL ${ticket.market}, brochure du ${SCHEDULE.revised} relue le ${SCHEDULE.readOn}` +
+    (ticket.rate
+      ? ` : ${(ticket.rate * 100).toFixed(2)} %, plancher ${ticket.min} €`
+      : ` : ${ticket.comm} € + ${ticket.handling} € de handling`);
+
+  const n = Number(shares);
+  const p = Number(price);
+  const cash = Number(amount);
+  const notional =
+    n > 0 && p > 0 ? n * p : crypto && cash > 0 ? cash : null;
+
+  if (notional == null) {
+    return {
+      ...shared,
+      basis,
+      why: crypto
+        ? "aucun montant pour cette ligne"
+        : !(n > 0)
+          ? "aucun nombre de parts"
+          : "aucun prix pour cette ligne : lancer node prices.mjs",
+      confidence: confidenceOf({
+        ticket,
+        listing,
+        leaf,
+        marketBp,
+        marketPerShare,
+        unsourced: m.unsourced,
+        taxPct,
+        taxSource,
+        fxPct,
+      }),
+    };
+  }
+
+  const notionalUsd = toUsd(notional, listing.currency);
+  const notionalEur = toCcy(notional, listing.currency, "EUR");
+  const bookUsd =
+    marketBp != null && notionalUsd != null
+      ? (notionalUsd * marketBp) / 1e4
+      : marketPerShare != null
+        ? marketPerShare * n
+        : null;
+
+  const buy = commissionSide({ row: m.row, amountEur: notionalEur });
+  const sell = commissionSide({ row: m.row, amountEur: notionalEur });
+  const buyUsd = buy ? dollars(buy.charged, "EUR") : null;
+  const sellUsd = sell ? dollars(sell.charged, "EUR") : null;
+  const brokerFees = plus(buyUsd, sellUsd);
+
+  const taxUsd = crypto || notionalUsd == null ? (crypto ? 0 : null) : notionalUsd * taxPct;
+  const fxUsd = fxPct && notionalUsd != null ? notionalUsd * fxPct * 2 : 0;
+  const levy = levyEach({ listing, notional, currency: listing.currency });
+  const ptmUsd = levy.ptm == null ? null : dollars((levy.ptm || 0) * 2, levy.ptmCcy || "GBP") ?? 0;
+
+  const usd = plus(bookUsd, brokerFees, taxUsd, fxUsd, ptmUsd);
+
+  return {
+    ...shared,
+    usd: finite(usd, 6),
+    brokerFees: finite(brokerFees, 6),
+    ...(bookUsd == null
+      ? {
+          why:
+            `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ` +
+            `${m.unsourced?.why || "pas de source de spread"}`,
+        }
+      : {}),
+    trade: {
+      shares: n > 0 ? n : null,
+      price: p > 0 ? p : null,
+      amount: crypto ? notional : null,
+      notional,
+      notionalUsd: finite(notionalUsd, 6),
+      notionalEur: finite(notionalEur, 6),
+      currency: listing.currency,
+    },
+    buy: {
+      commission: finite(buyUsd, 6),
+      native: buy ? { ...buy, charged: finite(buy.charged, 6), raw: finite(buy.raw, 6) } : null,
+      taxes: finite(taxUsd, 6),
+      taxRates: Object.keys(rates).length ? rates : null,
+      fx: finite(fxUsd ? fxUsd / 2 : 0, 6),
+    },
+    sell: {
+      commission: finite(sellUsd, 6),
+      native: sell ? { ...sell, charged: finite(sell.charged, 6), raw: finite(sell.raw, 6) } : null,
+      fx: finite(fxUsd ? fxUsd / 2 : 0, 6),
+    },
+    parts: {
+      marché: finite(bookUsd, 6),
+      commission: finite(brokerFees, 6),
+      taxes: finite(taxUsd, 6),
+      change: finite(fxUsd, 6),
+      réglementaire: finite(ptmUsd, 6),
+    },
+    levy: { ptm: levy.ptm },
     commission: {
       each: ticket.each,
-      roundTrip: ticket.each != null ? ticket.each * 2 : null,
       comm: ticket.comm,
       handling: ticket.handling,
       rate: ticket.rate || null,
@@ -380,32 +488,109 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
       currency: "EUR",
       eachWay: true,
     },
-    ccy: QUOTE,
-    cap: null,
-    threshold: thresholdOf(listing),
-    fx: fxNote(listing.currency),
-    fxIfConverted: 0,
-    confidence:
-      `DEGIRO NL Basic/Active/Trader, palier ${ticket.market}, barème du ${SCHEDULE.revised} lu le ${SCHEDULE.readOn}. ` +
-      (ticket.rate
-        ? `Crypto ${(ticket.rate * 100).toFixed(2)} % par jambe, plancher ${ticket.min} €, pas de handling. `
-        : `Ticket ${ticket.comm} € + handling ${ticket.handling} € par jambe dans c. `) +
-      (fxPct ? `AutoFX ${(FX_EACH_WAY * 100).toFixed(2)} % par jambe dans a. ` : `Cotation EUR : pas de change. `) +
-      `SEC / TAF dans le handling, pas dans a ni b. ` +
-      `Aller-retour AAPL NDQ le ${CHECK.on} : tickets ${CHECK.commissionEach} €, cash ${CHECK.cash.start} → ${CHECK.cash.end}, AutoFX ${(CHECK.fxRoundTrip * 100).toFixed(2)} % RT. ` +
-      (leaf ? "" : `Pas de feuille de carnet pour cet ISIN / cette place. `),
-    check: american ? CHECK : null,
+    basis,
+    confidence: confidenceOf({
+      ticket,
+      listing,
+      leaf,
+      marketBp,
+      marketPerShare,
+      unsourced: m.unsourced,
+      taxPct,
+      taxSource,
+      fxPct,
+      buy,
+      levy,
+    }),
   };
+}
+
+function confidenceOf({
+  ticket,
+  listing,
+  leaf,
+  marketBp,
+  marketPerShare,
+  unsourced,
+  taxPct,
+  taxSource,
+  fxPct,
+  buy,
+  levy,
+}) {
+  const said = [];
+  said.push(
+    `DEGIRO NL Basic/Active/Trader, palier ${ticket.market}, brochure du ${SCHEDULE.revised} relue le ${SCHEDULE.readOn} ` +
+      `(inchangée depuis le ${SCHEDULE.previouslyRead})`
+  );
+  if (ticket.rate) {
+    said.push(
+      buy?.floored
+        ? `le plancher mord : ${Number(buy.raw.toPrecision(3))} € calculés, ${ticket.min} € facturés par sens`
+        : `crypto ${(ticket.rate * 100).toFixed(2)} % par sens, plancher ${ticket.min} €, pas de handling`
+    );
+  } else {
+    said.push(`ticket ${ticket.comm} € + handling ${ticket.handling} € par sens`);
+  }
+  if (fxPct) {
+    said.push(
+      `AutoFX ${(FX_EACH_WAY * 100).toFixed(2)} % par sens, mesuré le ${CHECK.on} ` +
+        `(AAPL NDQ, cash ${CHECK.cash.start} → ${CHECK.cash.end}, ${(CHECK.fxRoundTrip * 100).toFixed(2)} % RT)`
+    );
+  } else {
+    said.push(`cotation EUR : pas de change`);
+  }
+  if (!ticket.rate) {
+    said.push(
+      `SEC / TAF dans le handling, pas en sus. Aller-retour AAPL NDQ le ${CHECK.on} : tickets ${CHECK.commissionEach} €, rien d'autre hors AutoFX`
+    );
+  }
+  if (taxPct) {
+    said.push(
+      taxSource === "degiro"
+        ? `taxe à l'achat ${(100 * taxPct).toFixed(2)} % du montant — timbre ${issuerCc(listing.isin)} que DEGIRO dit répercuter (cet ISIN n'est pas dans taxMap.mjs)`
+        : `taxe à l'achat ${(100 * taxPct).toFixed(2)} % du montant, depuis taxMap.mjs`
+    );
+  }
+  if (levy?.ptm) {
+    said.push(`PTM ${PTM.each} £ par sens, le montant dépasse ${PTM.above} £`);
+  }
+  if (marketBp != null) said.push(`carnet publié ${Number(marketBp.toPrecision(4))} bp, aller-retour`);
+  else if (marketPerShare != null) said.push(`carnet Rule 605, ${marketPerShare} $ la part, moyenne 100–499 parts`);
+  else {
+    said.push(
+      `aucun carnet : ${unsourced?.name || listing.exchange}, ${unsourced?.why || "pas de source"}. ` +
+        `Le total est N/A faute de mesure, pas faute de frais`
+    );
+  }
+  said.push(
+    `hors total : connectivité 2,50 € / an / place (sauf AMS, BRU, Tradias, Kernselectie), ` +
+      `FX manuel 10 € + 0,25 %, virement gratuit. Téléphone + 10 €, obligations et options hors de cet aller-retour`
+  );
+  return said.join(" ; ");
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const flag = (name) => {
-    const m = process.argv.find((a) => a.startsWith(`--${name}=`));
-    return m ? m.split("=").slice(1).join("=") : null;
+    const hit = process.argv.find((a) => a.startsWith(`--${name}=`));
+    return hit ? hit.split("=").slice(1).join("=") : null;
   };
 
   if (process.argv.includes("--schedule")) {
-    console.log(JSON.stringify({ ...SCHEDULE, coverage: coverage() }, null, 2));
+    console.log(
+      JSON.stringify(
+        {
+          ...SCHEDULE,
+          fxEachWay: FX_EACH_WAY,
+          crypto: { rate: CRYPTO_RATE, min: CRYPTO_MIN },
+          ptm: PTM,
+          check: CHECK,
+          coverage: coverage(),
+        },
+        null,
+        2
+      )
+    );
     process.exit(0);
   }
 
@@ -413,20 +598,22 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node degiro_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--json]\n" +
+      "usage : node degiro_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--amount=€] [--json]\n" +
         "        node degiro_cost.mjs --schedule\n" +
-        "  ex.   node degiro_cost.mjs AAPL\n" +
-        "        node degiro_cost.mjs AAPL NDQ USD --shares=1 --price=230\n" +
-        "        node degiro_cost.mjs EUNL TDG EUR\n" +
-        "        node degiro_cost.mjs IWDA EAM EUR"
+        "  ex.   node degiro_cost.mjs AAPL NDQ USD --shares=1 --price=230\n" +
+        "        node degiro_cost.mjs EUNL TDG EUR --shares=1 --price=108\n" +
+        "        node degiro_cost.mjs BTC --amount=1000"
     );
     process.exit(2);
   }
 
-  const out = roundTripCost({
+  const out = roundTrip({
     etf,
     place,
     currency,
+    shares: flag("shares") ? Number(flag("shares")) : null,
+    price: flag("price") ? Number(flag("price")) : null,
+    amount: flag("amount") ? Number(flag("amount")) : null,
     bp: flag("bp") ? Number(flag("bp")) : null,
     perShare: flag("per-share") ? Number(flag("per-share")) : null,
   });
@@ -436,66 +623,40 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     process.exit(0);
   }
 
-  if (out.a == null && !out.listing) {
-    console.log(`a = null   b = ${out.b}   c = ${out.c}\n${out.why}`);
+  const l = out.listing;
+  if (!l) {
+    console.log(out.why || "rien à dire");
     if (out.alternatives?.length) {
       console.log(`\nce que DEGIRO propose sous ce nom :\n  ${out.alternatives.join("\n  ")}`);
     }
     process.exit(0);
   }
 
-  const l = out.listing;
   console.log(`${l.ticker || l.isin} — ${l.name || ""}`);
   console.log(
     `${l.exchange || "—"}${l.mic ? ` (${l.mic})` : ""}, ${l.currency}${l.type ? `, ${l.type.toLowerCase()}` : ""}\n`
   );
 
-  const detail = [];
-  if (out.parts?.marché != null) detail.push(`carnet ${out.parts.marché}`);
-  for (const [name, rate] of Object.entries(out.parts?.taxes ?? {})) detail.push(`${name} ${rate}`);
-  if (out.parts?.change) detail.push(`change ${out.parts.change}`);
-  if (out.parts?.commission) detail.push(`courtage ${out.parts.commission}`);
-
-  console.log(`a = ${out.a}   (au prorata${detail.length ? " : " + detail.join(" + ") : " : rien"})`);
-  console.log(`b = ${out.b} $   (par part${out.b ? " : spread 605" : " : rien"})`);
-  console.log(
-    `c = ${out.c} $   (par ordre : ${
-      out.parts?.ticket
-        ? `${out.parts.ticket.comm} € + ${out.parts.ticket.handling} € × 2`
-        : "ticket dans la remark, pas dans c"
-    })`
-  );
-  if (out.floor != null) console.log(`plancher ${out.floor} $`);
-  if (out.remark) console.log(out.remark);
-  if (out.why) console.log(out.why);
-  const fx = out.fx?.listing ?? usdPer(l.currency);
-  console.log(
-    `\ncoût = ${out.a} × p × n × ${fx != null ? Number(fx.toPrecision(6)) : "?"} + ${out.b} × n + ${out.c}   ($ ; p en ${l.currency})`
-  );
-  console.log(`  ${out.basis}`);
-  for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
-
-  const n = Number(flag("shares"));
-  const p = Number(flag("price"));
-  if (n > 0 && p > 0) {
-    const amount = n * p;
-    const amountUsd = toUsd(amount, l.currency);
-    const extra = out.threshold && amount >= out.threshold.above ? out.threshold.c : 0;
-    const affine = amountUsd != null && out.a != null ? out.a * amountUsd + out.b * n + out.c + extra : null;
-    const billed = exactCost({ amount, row: { type: l.type, exchange: l.brokerExchange } });
+  if (out.trade?.notional != null) {
+    const t = out.trade;
     console.log(
-      `\n${n} part${n > 1 ? "s" : ""} à ${p} ${l.currency} = ${amount.toFixed(2)} ${l.currency}` +
-        (amountUsd != null ? ` (${amountUsd.toFixed(2)} $)` : "")
+      `${t.shares ? `${t.shares} part${t.shares > 1 ? "s" : ""} à ${t.price} ${t.currency} = ` : ""}` +
+        `${t.notional.toFixed(2)} ${t.currency}` +
+        (t.notionalUsd != null ? ` (${t.notionalUsd.toFixed(2)} $)` : "")
     );
-    if (affine != null) console.log(`  a, b, c        : ${affine.toFixed(4)} $`);
-    if (billed.commission != null) {
-      console.log(
-        `  commission     : ${Number(billed.commission).toFixed(4)} $` +
-          (billed.native?.each != null
-            ? ` (${Number(billed.native.each).toPrecision(4)} ${billed.native.currency} × 2)`
-            : "")
-      );
+    console.log();
+  }
+
+  console.log(`aller-retour     : ${out.usd == null ? `N/A${out.why ? ` — ${out.why}` : ""}` : `${out.usd} $`}`);
+  console.log(`frais du courtier: ${out.brokerFees == null ? "N/A" : `${out.brokerFees} $`}`);
+  if (out.parts) {
+    for (const [name, v] of Object.entries(out.parts)) {
+      if (v != null) console.log(`  ${name.padEnd(15)}: ${v} $`);
     }
   }
+  console.log();
+  if (out.basis) console.log(`  ${out.basis}`);
+  for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
+  if (out.remark) for (const r of out.remark.split("\n")) console.log(`  · ${r}`);
   if (out.url) console.log(`\n${out.url}`);
 }

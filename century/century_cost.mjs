@@ -1,56 +1,73 @@
 // What one round trip costs at Century Trader: buy n shares at price p, sell
-// them back at once.
+// them back at once, in dollars.
 //
-//   coût (USD) = a × toUsd(p) × n + b × n + c
-//
-// `a` is a fraction of the amount. `b` and `c` are dollars, the same unit the
-// other `*_cost.mjs` files answer in.
+// The affine triple this file used to answer — a × p × n + b × n + c — hid the
+// ticket. The US floor is 4 € a side, and on a retail size that floor is the
+// whole bill. The old file computed it, left it in a `floor` field the page had
+// no column for, and set `c` to zero, so every American trip under ~400 shares
+// was understated by the eight euros actually taken. Above 400 shares the
+// 0.01 € / unit is no longer a ticket: five hundred shares pay 5 € a side, and
+// the affine answer never said so. `roundTrip` is given the size and charges
+// what is charged.
 //
 // Century Financial Consultancy LLC (AE, CMA). The catalogue is Century Trader
-// (`liveapp.century.ae`, `century_scraping.mjs`), not TWS / CQG / MT5. The site still
-// calls the lines share CFDs. Every card read on 2026-09-09 printed margin
-// 100 %, holding 0 %, dealer spread 0 — cash-like, no overnight on a same-day
-// trip. A live NIO trip on a EUR cash account (2026-09-09) charged the 4 €
-// minimum each way and nothing else: no SEC, no TAF. The card still prints
-// "4 USD min"; the ticket and the cash (20.00 → 11.99) are in euros. `a`
-// therefore has no SEC. The US 0.01 € / share stays out of `b` (the 4 € min
-// is the whole bill under ~345 shares). Hong Kong's 0.50 % × 2 sits in `a`.
-// The ticket is a floor (`min fees`, `c` = 0). `exactCost` answers the real
-// step.
+// (`liveapp.century.ae`, `century_scraping.mjs`): 941 lines on 2026-09-15 —
+// 864 USD, 75 HKD, 2 SAR. Currency pairs are dropped. CLOSE ONLY is skipped.
+// The site still calls the lines share CFDs; every card prints Type Shares,
+// margin 100 %, dealer spread 0, holding 0 % (received). A same-day trip
+// therefore carries no overnight. The public shares page also sells DMA to
+// DFM and ADX, and names UK, German and Chinese stocks: none of those are in
+// this book, and this file does not invent a neighbour's tier for them.
 //
-// The scrape names no venue, only the settlement currency: USD (New York),
-// HKD (Hong Kong), SAR (Riyadh). The US underlying book is Rule 605, found by
-// trying the NMS MICs — Century does not say which tape. Hong Kong and Tadawul
-// have no sourced book in this deposit.
+// The card is the schedule, re-read on 2026-09-15 from GETPRODUCTDETAILS:
 //
-// Cards, signed-in session on liveapp.century.ae, 2026-09-09, GETPRODUCTDETAILS:
-//   USD  0.01 EUR per Unit (4 USD min)   — 25 / 25 names
-//   HKD  0.5 % per Unit (20 USD min)     — 8 / 8 names
-//   SAR  "-"                             — 4 / 4 names, not copied as a number
-// A public-cache snapshot of the same app once printed 0.16 USD / 10 USD min
-// on Apple; that is not this session.
+//   USD   0.01 EUR per Unit (4 USD min)   — every US card sampled
+//   HKD   0.5 % per Unit (20 USD min)     — every HK card sampled
+//   SAR   "-"                             — both Saudi names, not copied as a number
 //
-// One live trip on 2026-09-09, Century Trader EUR cash. One market buy of 1
-// NIO (US62914V1061) at 3.765 then CLOSEPOSITION of 1 at 3.76. History
-// Commission −4 € each way. Cash 20.00 → 12.76 → 11.99. P&L −0.01 on the
-// stock. Positions back to 0. `c` stays 0; the 8 € is the floor.
+// A live NIO trip on a EUR cash account (2026-09-09) charged the floor in
+// euros, not in dollars: history Commission −4 € each way, cash 20.00 → 12.76
+// → 11.99, stock P&L −0.01, no SEC, no TAF, no VAT on the ticket, no separate
+// FX line. The card still prints "4 USD min". The number follows the debit.
 //
-//   https://www.century.ae/en/shares-trading/
+// Two printed schedules are therefore left out of the number, on purpose.
+// The August 2026 Schedule of Charges still writes US CFDs and cash TSLA.EQ
+// at 0.32 $ / share, 10 $ minimum, "SEC and TAF included". The cash-equities
+// marketing page writes 1 ¢ / share, 4 $ minimum, and "128 US stocks". The
+// Trader book in front of this file is 864 US lines including ETFs, the card
+// is 0.01 €, and the trip paid 4 € with neither levy. Charge the portal.
+//
+// What is in the number: the commission each way at its floor; the market
+// spread, once. What is not: stamp duty and FTT (these are CFDs — the client
+// does not acquire the share); SEC and TAF (measured zero); a conversion
+// markup (schedule §2.10 allows one when account and product currencies
+// differ; the EUR trip converted the stock and showed no extra line); overnight
+// (0 % on the card, and this trip does not hold); inactivity (10 $ / month
+// after 12 months idle); market-data subscriptions. Bank transfers in and out
+// are free in as many words.
+//
+// The scrape names no US tape, only the settlement currency. The US underlying
+// book is Rule 605, found by trying the NMS MICs. Hong Kong and Tadawul have
+// no sourced book in this deposit, so those lines answer N/A on the total
+// whenever the book is the missing piece — the commission itself is still
+// returned under `brokerFees` where the card printed one.
+//
 //   https://liveapp.century.ae/
+//   https://www.century.ae/en/shares-trading/
+//   https://www.century.ae/custom_scripts/pdfs/web/cfc-schedule-of-charges.pdf
 //
-//   node century/century_cost.mjs AAPL
-//   node century/century_cost.mjs AAPL NASDAQ USD --shares=1 --price=230
-//   node century/century_cost.mjs 1772 HKEX HKD
-//   node century/century_cost.mjs 1120 TADAWUL SAR
+//   node century/century_cost.mjs AAPL --shares=1 --price=230
+//   node century/century_cost.mjs AAPL NASDAQ USD --shares=500 --price=230
+//   node century/century_cost.mjs 1772 HKEX HKD --shares=200 --price=30
+//   node century/century_cost.mjs 1120 TADAWUL SAR --shares=1 --price=100
 //   node century/century_cost.mjs --schedule
 //
-// `roundTripCost(...)` reads files, not the network.
+// `roundTrip(...)` reads files, not the network.
 
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite, bookParts } from "../na.mjs";
+import { plus, finite } from "../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
 
 const CATALOGUE = new URL("century-parsed.json", import.meta.url);
 const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
@@ -58,12 +75,16 @@ const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
 const SCHEDULE = {
   source: "https://liveapp.century.ae/",
   shares: "https://www.century.ae/en/shares-trading/",
-  readOn: "2026-09-09",
+  cashEquities: "https://www.century.ae/en/cash-equities/",
+  charges: "https://www.century.ae/custom_scripts/pdfs/web/cfc-schedule-of-charges.pdf",
+  readOn: "2026-09-15",
+  pdf: "2026-08",
   entity: "Century Financial Consultancy LLC (AE), Century Trader",
 };
 
 const US_MICS = ["XNAS", "XNYS", "ARCX", "XASE", "BATS"];
 const MARKET_NAME = { us: "USA", hk: "Hong Kong", sa: "Tadawul" };
+const MARKET_RANK = { us: 0, hk: 1, sa: 2 };
 
 const CHECK = {
   isin: "US62914V1061",
@@ -75,6 +96,7 @@ const CHECK = {
   sell: { price: 3.76, commission: -4, pnl: -0.01, dealId: 4091528 },
   cash: { start: 20, afterBuy: 12.76, end: 11.99 },
   commissionPaid: 8,
+  feePaid: 0,
   on: "2026-09-09",
 };
 
@@ -84,9 +106,11 @@ const RULE = {
   sa: { rate: null, min: null, minCcy: "USD" },
 };
 
+const WITHDRAW = { bank: 0, inactivity: { afterMonths: 12, monthly: 10, ccy: "USD" } };
+
 const PLACE_OF = {
-  us: ["US", "USA", "NASDAQ", "NYSE", "AMEX", "ARCA", "BATS", "XNAS", "XNYS", "ARCX"],
-  hk: ["HKEX", "HONGKONG", "HK", "XHKG", "SEHK"],
+  us: ["US", "USA", "USD", "NASDAQ", "NYSE", "AMEX", "ARCA", "BATS", "XNAS", "XNYS", "ARCX"],
+  hk: ["HKEX", "HONGKONG", "HK", "HKD", "XHKG", "SEHK"],
   sa: ["TADAWUL", "SAUDI", "XSAU", "SAR"],
 };
 
@@ -134,14 +158,6 @@ function usBook(isin, currency) {
   return { leaf: null, mic: null };
 }
 
-function remarkOf({ market } = {}) {
-  if (market === "sa") return "Tadawul: commission not printed on the card.";
-  if (market === "us") return "min fees 8 €.";
-  if (market === "hk") return "min fees 40 $.";
-  return "";
-}
-
-
 function namedRow(row, asked) {
   return (
     loose(row.isin) === asked ||
@@ -168,6 +184,15 @@ function findListing({ etf, place, currency }) {
     .map((r) => ({ row: r, ...listingKey(venueRow(r)) }))
     .filter((m) => placeOk(feeMarketOf(m.row), wantVenue, wantPlace))
     .filter((m) => !wantCurrency || String(m.row.currency || "").toUpperCase() === wantCurrency);
+
+  // NIO is both NIO.EQ (USD) and NIO.HK.EQ. With no place asked, the US line
+  // is the one the book is built around — 864 of 941 rows — not whichever
+  // happened to be scraped first.
+  if (!wantPlace && !wantCurrency) {
+    matches.sort(
+      (a, b) => (MARKET_RANK[feeMarketOf(a.row)] ?? 9) - (MARKET_RANK[feeMarketOf(b.row)] ?? 9)
+    );
+  }
 
   return { named, matches };
 }
@@ -205,49 +230,34 @@ function coverage() {
   return out;
 }
 
-export function commissionEach({ shares, amount, market, currency }) {
+/**
+ * One side, in the currency the card bills. `charged` is what leaves the
+ * account; `raw` is the percentage or per-share amount before the floor.
+ */
+export function commissionSide({ shares, amount, market, currency }) {
   const rule = RULE[market];
   if (!rule || (rule.rate == null && rule.perShare == null)) return null;
+
   if (rule.perShare != null) {
-    if (shares == null || !Number.isFinite(Number(shares))) return dollars(rule.min, rule.minCcy);
-    const raw = dollars(rule.perShare * Number(shares), rule.perShareCcy);
-    const floor = dollars(rule.min, rule.minCcy);
-    if (raw == null) return floor;
-    return Math.max(floor, raw);
+    if (shares == null || !Number.isFinite(Number(shares))) return null;
+    const raw = rule.perShare * Number(shares);
+    const charged = Math.max(rule.min, raw);
+    return { raw, charged, floored: raw < rule.min, currency: rule.perShareCcy || rule.minCcy };
   }
+
   const notion = toUsd(amount, currency);
-  if (notion == null || !Number.isFinite(notion)) return dollars(rule.min, rule.minCcy);
-  return Math.max(dollars(rule.min, rule.minCcy), notion * rule.rate);
+  if (notion == null || !Number.isFinite(notion)) return null;
+  const raw = notion * rule.rate;
+  const charged = Math.max(rule.min, raw);
+  return { raw, charged, floored: raw < rule.min, currency: rule.minCcy };
 }
 
-export function exactCost({ shares, price, market, currency }) {
-  const rule = RULE[market];
-  if (!rule || (rule.rate == null && rule.perShare == null)) return { commission: null, currency: QUOTE };
-  const amount = shares != null && price != null ? Number(shares) * Number(price) : null;
-  const each = commissionEach({ shares, amount, market, currency });
-  if (each == null) return { commission: null, currency: QUOTE, rule };
-  return {
-    commission: Number((each * 2).toPrecision(6)),
-    currency: QUOTE,
-    native: { each, roundTrip: each * 2, currency: QUOTE },
-    rule,
-  };
-}
-
-export function roundTripCost({ etf, place, currency, bp = null, perShare = null }) {
-  const { named, matches } = findListing({ etf, place, currency });
-  const answer = {
-    a: null,
-    b: 0,
-    c: 0,
-    ccy: QUOTE,
-    floor: null,
-    cap: null,
-    threshold: null,
-    etf,
-    place,
-    currency,
-  };
+/**
+ * The whole bill for buying `shares` at `price` and selling them straight back.
+ * `usd` is the number the page prints; `brokerFees` is the commission alone.
+ */
+export function roundTrip({ etf, place, currency, shares, price, bp = null, perShare = null }) {
+  const answer = { usd: null, brokerFees: null, etf, place, currency, onlineBuy: true, cashCurrency: "" };
 
   if (!catalogue) {
     return {
@@ -255,6 +265,8 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
       why: "le catalogue Century n'existe pas encore : lancer `node century/century_scraping.mjs` avec liveapp.century.ae ouvert",
     };
   }
+
+  const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Century` };
   if (!matches.length) {
     return {
@@ -274,67 +286,119 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
     name: m.row.name || null,
     type: m.row.type || null,
     mic: book.mic ?? m.venue?.mic ?? null,
-    exchange: MARKET_NAME[market] ?? m.venue?.name ?? null,
+    exchange: MARKET_NAME[market] ?? m.venue?.name ?? m.unsourced?.name ?? null,
     currency: String(m.row.currency || "").toUpperCase(),
     brokerExchange: m.row.query || null,
   };
-
-  if (!market || !rule || (rule.rate == null && rule.perShare == null)) {
-    return {
-      ...answer,
-      listing,
-      feeMarket: market,
-      remark: remarkOf({ market }),
-      why: "Tadawul : la fiche Century imprime « - » pour la commission, pas un chiffre",
-      tax: taxesOf(listing.isin),
-      fx: fxNote(listing.currency),
-    };
-  }
 
   const leaf = book.leaf;
   const marketBp = bp ?? leaf?.bp ?? null;
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
   const american = market === "us";
-  const tax = taxesOf(listing.isin);
-  const rates = taxRates(tax);
-  const taxTotal = Object.values(rates).reduce((s, r) => s + r, 0);
-  const commissionPct = rule.rate != null ? rule.rate * 2 : 0;
-  const knownPct = taxTotal + commissionPct;
-  const mkt = bookParts({
-    bp: marketBp,
-    perShare: marketPerShare,
-    venue: m.venue,
-    unsourced: m.unsourced,
-    toUsd: (x) => (american ? x : dollars(x, listing.currency)),
-  });
-  const a = plus(mkt.a, knownPct);
-  const bookUsd = mkt.b;
-  const floorUsd = rule.min != null ? dollars(rule.min * 2, rule.minCcy) : null;
 
-  return {
+  const shared = {
     ...answer,
-    a: finite(a, 4),
-    b: finite(bookUsd, 6),
-    c: 0,
-    floor: floorUsd,
     listing,
     feeMarket: market,
-    remark: remarkOf({ market }),
-    parts: {
-      marché:
-        marketBp != null
-          ? Number((marketBp / 1e4).toPrecision(4))
-          : marketPerShare != null
-            ? `${marketPerShare} par part`
-            : null,
-      taxes: Object.keys(rates).length ? rates : null,
-      commission: commissionPct || null,
-    },
     bp: marketBp,
     perShare: marketPerShare,
     url: leaf?.url ?? SCHEDULE.source,
-    basis: `barème Century Trader ${market}, lu le ${SCHEDULE.readOn} (fiche produit)`,
-    tax,
+    fx: fxNote(listing.currency),
+    fxIfConverted: 0,
+    remark: "",
+    withdraw: WITHDRAW,
+    check: american ? CHECK : null,
+  };
+
+  if (!market || !rule || (rule.rate == null && rule.perShare == null)) {
+    return {
+      ...shared,
+      basis: `fiche Century Trader ${market || listing.currency}, lue le ${SCHEDULE.readOn} : commission « - »`,
+      why: "Tadawul : la fiche Century imprime « - » pour la commission, pas un chiffre",
+      confidence: confidenceOf({ market, rule, listing, leaf, marketBp, marketPerShare, unsourced: m.unsourced }),
+    };
+  }
+
+  const basis =
+    `barème Century Trader ${market}, fiche lue le ${SCHEDULE.readOn}` +
+    (rule.perShare != null
+      ? ` : ${rule.perShare} ${rule.perShareCcy} / part, plancher ${rule.min} ${rule.minCcy} (débit mesuré en ${rule.minCcy})`
+      : ` : ${(rule.rate * 100).toFixed(2)} % du montant, plancher ${rule.min} ${rule.minCcy}`);
+
+  const n = Number(shares);
+  const p = Number(price);
+  const hasN = n > 0;
+  const hasP = p > 0;
+  // The American ticket is per share. Ten NIO without a cached price still
+  // pay 4 € a side; refusing the row for want of a quote hid the whole bill.
+  // Hong Kong is a percentage of the amount and cannot be billed without one.
+  if (!hasN) {
+    return {
+      ...shared,
+      basis,
+      why: "aucun nombre de parts",
+      confidence: confidenceOf({ market, rule, listing, leaf, marketBp, marketPerShare, unsourced: m.unsourced }),
+    };
+  }
+  if (!hasP && rule.rate != null) {
+    return {
+      ...shared,
+      basis,
+      why: "aucun prix pour cette ligne : lancer node prices.mjs",
+      confidence: confidenceOf({ market, rule, listing, leaf, marketBp, marketPerShare, unsourced: m.unsourced, n }),
+    };
+  }
+
+  const notional = hasP ? n * p : null;
+  const notionalUsd = hasP ? toUsd(notional, listing.currency) : null;
+  const bookUsd =
+    marketBp != null && notionalUsd != null
+      ? (notionalUsd * marketBp) / 1e4
+      : marketPerShare != null
+        ? marketPerShare * n
+        : null;
+
+  const buy = commissionSide({ shares: n, amount: notional, market, currency: listing.currency });
+  const sell = commissionSide({ shares: n, amount: notional, market, currency: listing.currency });
+  const buyUsd = buy ? dollars(buy.charged, buy.currency) : null;
+  const sellUsd = sell ? dollars(sell.charged, sell.currency) : null;
+  const brokerFees = plus(buyUsd, sellUsd);
+  const usd = plus(bookUsd, brokerFees);
+
+  return {
+    ...shared,
+    usd: finite(usd, 6),
+    brokerFees: finite(brokerFees, 6),
+    ...(bookUsd == null
+      ? {
+          why:
+            `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ` +
+            `${m.unsourced?.why || "pas de source de spread"}`,
+        }
+      : {}),
+    trade: {
+      shares: n,
+      price: hasP ? p : null,
+      notional,
+      notionalUsd: finite(notionalUsd, 6),
+      currency: listing.currency,
+    },
+    buy: {
+      commission: finite(buyUsd, 6),
+      native: buy
+        ? { charged: finite(buy.charged, 6), raw: finite(buy.raw, 6), floored: buy.floored, currency: buy.currency }
+        : null,
+    },
+    sell: {
+      commission: finite(sellUsd, 6),
+      native: sell
+        ? { charged: finite(sell.charged, 6), raw: finite(sell.raw, 6), floored: sell.floored, currency: sell.currency }
+        : null,
+    },
+    parts: {
+      marché: finite(bookUsd, 6),
+      commission: finite(brokerFees, 6),
+    },
     commission: {
       rate: rule.rate ?? null,
       perShare: rule.perShare ?? null,
@@ -343,41 +407,120 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
       currency: rule.minCcy,
       eachWay: true,
     },
-    ccy: QUOTE,
-    cap: null,
-    threshold: null,
-    fx: fxNote(listing.currency),
-    fxIfConverted: 0,
-    check: american ? CHECK : null,
-    confidence:
-      `commission ${market} selon la fiche Century Trader du ${SCHEDULE.readOn} ` +
-      `(GETPRODUCTDETAILS, liveapp.century.ae). ` +
-      (rule.rate != null
-        ? `${(rule.rate * 100).toFixed(2)} % par jambe, plancher ${rule.min} ${rule.minCcy}. `
-        : `0,01 ${rule.perShareCcy} par part, plancher ${rule.min} ${rule.minCcy}. `) +
-      `a = carnet` +
-      (taxTotal ? ` + taxes` : "") +
-      (commissionPct ? ` + ${(commissionPct * 100).toFixed(2)} % de courtage` : "") +
-      `. Ticket dans le plancher, b = ` +
-      (american ? `605` : `0`) +
-      `, c = 0. Spread dealer imprimé 0, holding 0 %, marge 100 %. ` +
-      (american
-        ? `Un aller-retour réel le ${CHECK.on} sur ${CHECK.ticker} : achat 1 à ${CHECK.buy.price} ` +
-          `puis vente 1 à ${CHECK.sell.price}, courtage ${CHECK.buy.commission} € par exécution ` +
-          `(caisse ${CHECK.cash.start} → ${CHECK.cash.end} €), pas de SEC ni TAF. `
-        : "") +
-      (leaf ? "" : `Pas de feuille de carnet pour cet ISIN / cette place. `),
+    basis,
+    confidence: confidenceOf({
+      market,
+      rule,
+      listing,
+      leaf,
+      marketBp,
+      marketPerShare,
+      unsourced: m.unsourced,
+      buy,
+      n,
+    }),
   };
+}
+
+function confidenceOf({ market, rule, listing, leaf, marketBp, marketPerShare, unsourced, buy, n }) {
+  const said = [];
+  if (market === "sa" || !rule || (rule.rate == null && rule.perShare == null)) {
+    said.push(
+      `Tadawul : les deux fiches du ${SCHEDULE.readOn} (ALRAJHI.SA, CENOMI CENTERS.SA) impriment « - » ` +
+        `pour la commission. Pas de chiffre inventé, pas de palier voisin`
+    );
+  } else if (rule.perShare != null) {
+    said.push(
+      `commission américaine ${rule.perShare} ${rule.perShareCcy} la part, plancher ${rule.min} ${rule.minCcy} par sens, ` +
+        `fiches GETPRODUCTDETAILS du ${SCHEDULE.readOn} (liveapp.century.ae). ` +
+        `La carte imprime encore « 4 USD min ». Le débit du ${CHECK.on} était ${-CHECK.buy.commission} €`
+    );
+    if (buy) {
+      said.push(
+        buy.floored
+          ? `le plancher mord : ${Number(buy.raw.toPrecision(3))} ${buy.currency} calculés, ` +
+            `${Number(buy.charged.toPrecision(6))} ${buy.currency} facturés par sens ` +
+            `(la falaise est à ${rule.min / rule.perShare} parts)`
+          : `au-dessus du plancher : ${Number(buy.charged.toPrecision(4))} ${buy.currency} par sens`
+      );
+    }
+    if (n > 500) {
+      said.push(
+        `les fiches US plafonnent d'ordinaire à 300–500 unités : ${n} parts dépassent ce que le ticket accepte`
+      );
+    }
+  } else {
+    said.push(
+      `commission Hong Kong ${(rule.rate * 100).toFixed(2)} % du montant, plancher ${rule.min} ${rule.minCcy} par sens, ` +
+        `fiches du ${SCHEDULE.readOn}`
+    );
+    if (buy) {
+      said.push(
+        buy.floored
+          ? `le plancher mord : ${Number(buy.raw.toPrecision(3))} ${buy.currency} calculés, ` +
+            `${Number(buy.charged.toPrecision(6))} ${buy.currency} facturés par sens`
+          : `au-dessus du plancher : ${Number(buy.charged.toPrecision(4))} ${buy.currency} par sens`
+      );
+    }
+  }
+
+  said.push(
+    `le tableau des charges d'août 2026 imprime encore 0,32 $ / part et 10 $ de plancher ` +
+      `sur les CFD américains et sur TSLA.EQ cash, « SEC et TAF comprises ». ` +
+      `La page cash-equities écrit 0,01 $ / 4 $ et « 128 US stocks ». ` +
+      `Ni l'un ni l'autre n'est ce livre : 864 lignes USD dont des ETF, carte 0,01 €, ` +
+      `aller-retour NIO du ${CHECK.on} à ${-CHECK.buy.commission} € par sens sans SEC ni TAF`
+  );
+
+  said.push(
+    `CFD sur actions : pas de droit de timbre ni de TTF dans le total — le client n'acquiert pas le titre. ` +
+      `SEC et TAF mesurés à zéro sur ${CHECK.ticker} (${CHECK.cash.start} → ${CHECK.cash.end} €, ` +
+      `P&L titre ${CHECK.sell.pnl}, commission ${CHECK.commissionPaid} €)`
+  );
+
+  if (marketBp != null) said.push(`carnet publié ${Number(marketBp.toPrecision(4))} bp, aller-retour`);
+  else if (marketPerShare != null) {
+    said.push(`carnet Rule 605, ${marketPerShare} $ la part, moyenne 100–499 parts — Century ne nomme pas la bande`);
+  } else {
+    said.push(
+      `aucun carnet : ${unsourced?.name || listing.exchange}, ${unsourced?.why || "pas de source"}. ` +
+        `Le total est N/A faute de mesure, pas faute de frais`
+    );
+  }
+
+  said.push(
+      `hors total : la conversion (§2.10 du tableau) peut s'appliquer quand la caisse n'est pas dans la devise du titre. ` +
+      `Le voyage EUR du ${CHECK.on} a converti le notionnel et n'a montré aucune ligne à part. ` +
+      `Virement bancaire gratuit. Inactivité ${WITHDRAW.inactivity.monthly} ${WITHDRAW.inactivity.ccy} / mois ` +
+      `après ${WITHDRAW.inactivity.afterMonths} mois. Holding 0 % sur la fiche, donc 0 sur un aller-retour le jour même. ` +
+      `DMA DFM / ADX et les actions UK / DE / CN de la page marketing ne sont pas dans ce catalogue`
+  );
+
+  said.push(`spread dealer imprimé 0, marge 100 %, Type Shares. Mid BCE du ${FX_AS_OF}`);
+  if (leaf == null && market === "us") said.push(`pas de feuille 605 pour ${listing.isin}`);
+  return said.join(" ; ");
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const flag = (name) => {
-    const m = process.argv.find((a) => a.startsWith(`--${name}=`));
-    return m ? m.split("=").slice(1).join("=") : null;
+    const hit = process.argv.find((a) => a.startsWith(`--${name}=`));
+    return hit ? hit.split("=").slice(1).join("=") : null;
   };
 
   if (process.argv.includes("--schedule")) {
-    console.log(JSON.stringify({ ...SCHEDULE, rules: RULE, coverage: coverage() }, null, 2));
+    console.log(
+      JSON.stringify(
+        {
+          ...SCHEDULE,
+          rules: RULE,
+          withdraw: WITHDRAW,
+          check: CHECK,
+          coverage: coverage(),
+        },
+        null,
+        2
+      )
+    );
     process.exit(0);
   }
 
@@ -387,18 +530,20 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     console.error(
       "usage : node century_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--json]\n" +
         "        node century_cost.mjs --schedule\n" +
-        "  ex.   node century_cost.mjs AAPL\n" +
-        "        node century_cost.mjs AAPL NASDAQ USD --shares=1 --price=230\n" +
-        "        node century_cost.mjs 1772 HKEX HKD\n" +
+        "  ex.   node century_cost.mjs AAPL --shares=1 --price=230\n" +
+        "        node century_cost.mjs AAPL NASDAQ USD --shares=500 --price=230\n" +
+        "        node century_cost.mjs 1772 HKEX HKD --shares=200 --price=30\n" +
         "        node century_cost.mjs 1120 TADAWUL SAR"
     );
     process.exit(2);
   }
 
-  const out = roundTripCost({
+  const out = roundTrip({
     etf,
     place,
     currency,
+    shares: flag("shares") ? Number(flag("shares")) : null,
+    price: flag("price") ? Number(flag("price")) : null,
     bp: flag("bp") ? Number(flag("bp")) : null,
     perShare: flag("per-share") ? Number(flag("per-share")) : null,
   });
@@ -408,55 +553,44 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     process.exit(0);
   }
 
-  if (out.a == null && !out.listing) {
-    console.log(`a = null   b = ${out.b}   c = ${out.c}\n${out.why}`);
+  const l = out.listing;
+  if (!l) {
+    console.log(out.why || "rien à dire");
     if (out.alternatives?.length) {
       console.log(`\nce que Century propose sous ce nom :\n  ${out.alternatives.join("\n  ")}`);
     }
     process.exit(0);
   }
 
-  const l = out.listing;
   console.log(`${l.ticker || l.isin} — ${l.name || ""}`);
   console.log(
-    `${l.exchange}${l.mic ? ` (${l.mic})` : ""}, ${l.currency}${l.type ? `, ${l.type.toLowerCase()}` : ""}\n`
+    `${l.exchange || "—"}${l.mic ? ` (${l.mic})` : ""}, ${l.currency}${l.type ? `, ${l.type.toLowerCase()}` : ""}\n`
   );
 
-  const detail = [];
-  if (out.parts?.marché != null) detail.push(`carnet ${out.parts.marché}`);
-  for (const [name, rate] of Object.entries(out.parts?.taxes ?? {})) detail.push(`${name} ${rate}`);
-  if (out.parts?.commission) detail.push(`courtage ${out.parts.commission}`);
-
-  console.log(`a = ${out.a}   (au prorata${detail.length ? " : " + detail.join(" + ") : " : rien"})`);
-  console.log(`b = ${out.b} $   (par part${out.b ? " : spread 605" : " : rien"})`);
-  console.log(`c = ${out.c} $   (par ordre : ticket dans la remark, pas dans c)`);
-  if (out.floor != null) console.log(`plancher ${out.floor} $`);
-  if (out.why) console.log(out.why);
-  const fx = out.fx?.listing ?? usdPer(l.currency);
-  console.log(
-    `\ncoût = ${out.a} × p × n × ${fx != null ? Number(fx.toPrecision(6)) : "?"} + ${out.b} × n + ${out.c}   ($ ; p en ${l.currency})`
-  );
-  if (out.basis) console.log(`  ${out.basis}`);
-  for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
-
-  const n = Number(flag("shares"));
-  const p = Number(flag("price"));
-  if (n > 0 && p > 0) {
-    const amount = n * p;
-    const amountUsd = toUsd(amount, l.currency);
-    const affine = amountUsd != null && out.a != null ? out.a * amountUsd + out.b * n + out.c : null;
-    const billed = exactCost({ shares: n, price: p, market: out.feeMarket, currency: l.currency });
-    console.log(
-      `\n${n} part${n > 1 ? "s" : ""} à ${p} ${l.currency} = ${amount.toFixed(2)} ${l.currency}` +
-        (amountUsd != null ? ` (${amountUsd.toFixed(2)} $)` : "")
-    );
-    if (affine != null) console.log(`  a, b, c        : ${affine.toFixed(4)} $`);
-    if (billed.commission != null) {
+  if (out.trade) {
+    const t = out.trade;
+    if (t.notional != null) {
       console.log(
-        `  commission     : ${Number(billed.commission).toFixed(4)} $` +
-          (billed.native?.each != null ? ` (${Number(billed.native.each).toPrecision(4)} $ × 2)` : "")
+        `${t.shares ? `${t.shares} part${t.shares > 1 ? "s" : ""} à ${t.price} ${t.currency} = ` : ""}` +
+          `${t.notional.toFixed(2)} ${t.currency}` +
+          (t.notionalUsd != null ? ` (${t.notionalUsd.toFixed(2)} $)` : "")
       );
+      console.log();
+    } else if (t.shares) {
+      console.log(`${t.shares} part${t.shares > 1 ? "s" : ""}\n`);
     }
   }
+
+  console.log(`aller-retour     : ${out.usd == null ? `N/A${out.why ? ` — ${out.why}` : ""}` : `${out.usd} $`}`);
+  console.log(`frais du courtier: ${out.brokerFees == null ? "N/A" : `${out.brokerFees} $`}`);
+  if (out.parts) {
+    for (const [name, v] of Object.entries(out.parts)) {
+      if (v != null) console.log(`  ${name.padEnd(15)}: ${v} $`);
+    }
+  }
+  console.log();
+  if (out.basis) console.log(`  ${out.basis}`);
+  for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
+  if (out.remark) for (const r of out.remark.split("\n")) console.log(`  · ${r}`);
   if (out.url) console.log(`\n${out.url}`);
 }

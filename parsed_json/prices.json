@@ -1,16 +1,16 @@
 {
-  "generatedAt": "2026-09-14T21:43:17.165Z",
+  "generatedAt": "2026-09-16T10:46:09.153Z",
   "source": "EODHD, et les bourses du Golfe pour ce qu'il n'a pas",
   "unit": "prices[ISIN][devise] = { price, at, from } : la clôture du dernier jour de bourse, dans la devise de cotation, pour convertir un nombre de parts en montant. Une même ligne cotée sur plusieurs places dans la même devise garde sous `from` toutes ses cotations ; `price` retient la place principale. Londres cote en pence, donc GBX et GBP sont deux entrées, que `fx.mjs` sait distinguer. Ce n'est pas un prix temps réel : il sert à dimensionner un ordre, pas à l'exécuter. `fetched` date la dernière interrogation, y compris quand elle n'a rien trouvé, pour ne pas la refaire chaque jour.",
   "fetched": {
-    "IE00B4L5Y983": "2026-09-13T21:26:15.928Z",
-    "US0378331005": "2026-09-14T21:43:15.150Z",
+    "IE00B4L5Y983": "2026-09-16T10:45:56.448Z",
+    "US0378331005": "2026-09-15T22:40:11.303Z",
     "US03748R7474": "2026-09-13T21:29:14.094Z",
-    "US46438G4973": "2026-09-13T21:29:29.478Z",
-    "CA89157V1058": "2026-09-13T22:10:19.121Z",
-    "FR0000120271": "2026-09-13T22:10:19.122Z",
+    "US46438G4973": "2026-09-15T01:01:05.121Z",
+    "CA89157V1058": "2026-09-15T00:28:41.790Z",
+    "FR0000120271": "2026-09-15T00:28:41.794Z",
     "FR0000121014": "2026-09-13T22:17:51.558Z",
-    "US29082A1079": "2026-09-13T22:22:49.929Z",
+    "US29082A1079": "2026-09-15T14:12:33.171Z",
     "SE0023615885": "2026-09-13T23:53:18.247Z",
     "BH000A0CAQK6": "2026-09-14T10:46:09.143Z",
     "AEE000701012": "2026-09-14T10:46:09.143Z",
@@ -136,7 +136,7 @@
     "AEG000201018": "2026-09-14T10:46:09.143Z",
     "AEE000601014": "2026-09-14T10:46:09.143Z",
     "AED000601016": "2026-09-14T10:46:09.143Z",
-    "AEE000801010": "2026-09-14T10:46:09.143Z",
+    "AEE000801010": "2026-09-16T10:46:07.152Z",
     "AEA000101013": "2026-09-14T10:46:09.143Z",
     "AEA000301019": "2026-09-14T10:46:09.143Z",
     "AEA002801016": "2026-09-14T10:46:09.143Z",
@@ -360,7 +360,7 @@
     "US8740391003": "2026-09-14T14:52:09.923Z",
     "CA0030691012": "2026-09-14T15:07:48.060Z",
     "NL0000852564": "2026-09-14T15:30:05.817Z",
-    "GB00BP6MXD84": "2026-09-14T15:30:18.860Z",
+    "GB00BP6MXD84": "2026-09-15T20:26:46.556Z",
     "ES0148396007": "2026-09-14T15:32:25.765Z",
     "IT0003492391": "2026-09-14T15:40:29.259Z",
     "CA80305U1075": "2026-09-14T16:10:53.758Z",
@@ -374,54 +374,76 @@
     "IE00B6R52036": "2026-09-14T17:26:09.384Z",
     "IE00B5BMR087": "2026-09-14T17:26:25.861Z",
     "US53700T7515": "2026-09-14T17:27:18.324Z",
-    "US77926X8589": "2026-09-14T17:28:00.617Z"
+    "US77926X8589": "2026-09-14T17:28:00.617Z",
+    "GB00BWFGQN14": "2026-09-14T22:10:33.045Z",
+    "LU1681039647": "2026-09-15T00:33:12.850Z",
+    "IE00BYZK4669": "2026-09-15T00:33:13.639Z",
+    "NL0011794037": "2026-09-15T00:43:52.296Z",
+    "IT0003132476": "2026-09-15T00:43:52.914Z",
+    "FR0000120404": "2026-09-15T01:30:26.785Z",
+    "US8807791038": "2026-09-15T14:13:04.593Z",
+    "US1330341082": "2026-09-15T14:13:25.718Z",
+    "LU1681046931": "2026-09-15T14:13:36.705Z",
+    "ES0178430E18": "2026-09-15T14:14:58.598Z",
+    "TW0000067800": "2026-09-15T16:52:53.852Z",
+    "US81369Y5069": "2026-09-15T16:54:30.126Z",
+    "US46284V1017": "2026-09-15T16:54:54.690Z",
+    "US88636R6027": "2026-09-15T16:55:08.079Z",
+    "US47100L3015": "2026-09-15T16:55:22.486Z",
+    "US4642852044": "2026-09-15T17:20:25.189Z",
+    "IE0004906560": "2026-09-15T17:38:18.572Z",
+    "IE00BK5BQT80": "2026-09-15T20:11:26.534Z",
+    "US29364G1031": "2026-09-15T20:11:28.791Z",
+    "US7802593050": "2026-09-15T20:26:46.568Z",
+    "IE00B3XXRP09": "2026-09-15T21:09:08.058Z",
+    "US3899302075": "2026-09-15T21:09:10.752Z"
   },
   "prices": {
     "IE00B4L5Y983": {
       "GBX": {
-        "price": 10871,
-        "at": "2026-09-11",
+        "price": 10769,
+        "at": "2026-09-15",
         "from": {
           "LSE:SWDA": {
-            "price": 10871,
-            "at": "2026-09-11",
+            "price": 10769,
+            "at": "2026-09-15",
             "primary": false
           }
         }
       },
       "USD": {
-        "price": 146.96,
-        "at": "2026-09-11",
+        "price": 145.21,
+        "at": "2026-09-15",
         "from": {
           "LSE:IWDA": {
-            "price": 146.96,
-            "at": "2026-09-11",
+            "price": 145.21,
+            "at": "2026-09-15",
             "primary": false
           },
           "SW:SWDA": {
-            "price": 146.98,
-            "at": "2026-09-11",
+            "price": 145.2,
+            "at": "2026-09-15",
             "primary": false
           }
         }
       },
       "EUR": {
-        "price": 126.635,
-        "at": "2026-09-11",
+        "price": 125.8,
+        "at": "2026-09-15",
         "from": {
           "XETRA:EUNL": {
-            "price": 126.635,
-            "at": "2026-09-11",
+            "price": 125.8,
+            "at": "2026-09-15",
             "primary": false
           },
           "AS:IWDA": {
-            "price": 126.64,
-            "at": "2026-09-11",
+            "price": 125.81,
+            "at": "2026-09-15",
             "primary": false
           },
           "F:EUNL": {
-            "price": 126.575,
-            "at": "2026-09-11",
+            "price": 125.715,
+            "at": "2026-09-15",
             "primary": false
           }
         }
@@ -429,96 +451,96 @@
     },
     "US0378331005": {
       "USD": {
-        "price": 333.08,
-        "at": "2026-09-14",
+        "price": 331.34,
+        "at": "2026-09-15",
         "from": {
           "US:AAPL": {
-            "price": 333.08,
-            "at": "2026-09-14",
+            "price": 331.34,
+            "at": "2026-09-15",
             "primary": true
           },
           "LSE:0R2V": {
-            "price": 334.16,
-            "at": "2026-09-14",
+            "price": 330.68,
+            "at": "2026-09-15",
             "primary": false
           },
           "IL:0R2V": {
-            "price": 332.78,
-            "at": "2026-09-11",
+            "price": 334.16,
+            "at": "2026-09-14",
             "primary": false
           }
         }
       },
       "ARS": {
-        "price": 26640,
-        "at": "2026-09-14",
+        "price": 26380,
+        "at": "2026-09-15",
         "from": {
           "BA:AAPL": {
-            "price": 26640,
-            "at": "2026-09-14",
+            "price": 26380,
+            "at": "2026-09-15",
             "primary": false
           }
         }
       },
       "EUR": {
-        "price": 289.25,
-        "at": "2026-09-14",
+        "price": 285.55,
+        "at": "2026-09-15",
         "from": {
           "XETRA:APC": {
-            "price": 289.25,
-            "at": "2026-09-14",
+            "price": 285.55,
+            "at": "2026-09-15",
             "primary": false
           },
           "F:APC": {
-            "price": 286.75,
-            "at": "2026-09-11",
+            "price": 288.6,
+            "at": "2026-09-14",
             "primary": false
           },
           "STU:APC": {
-            "price": 281.1,
-            "at": "2026-09-10",
+            "price": 286.85,
+            "at": "2026-09-11",
             "primary": false
           },
           "MU:APC": {
-            "price": 289.1,
-            "at": "2026-09-14",
+            "price": 286.75,
+            "at": "2026-09-15",
             "primary": false
           },
           "DU:APC": {
-            "price": 288.85,
-            "at": "2026-09-14",
+            "price": 285.4,
+            "at": "2026-09-15",
             "primary": false
           },
           "HA:APC": {
-            "price": 288.1,
-            "at": "2026-09-14",
+            "price": 285.75,
+            "at": "2026-09-15",
             "primary": false
           },
           "HM:APC": {
-            "price": 288.1,
-            "at": "2026-09-14",
+            "price": 286.05,
+            "at": "2026-09-15",
             "primary": false
           }
         }
       },
       "CAD": {
-        "price": 46.8,
-        "at": "2026-09-11",
+        "price": 46.61,
+        "at": "2026-09-15",
         "from": {
           "NEO:AAPL": {
-            "price": 46.8,
-            "at": "2026-09-11",
+            "price": 46.61,
+            "at": "2026-09-15",
             "primary": false
           }
         }
       },
       "MXN": {
-        "price": 5640.98,
-        "at": "2026-09-11",
+        "price": 5668.1299,
+        "at": "2026-09-15",
         "from": {
           "MX:AAPL": {
-            "price": 5640.98,
-            "at": "2026-09-11",
+            "price": 5668.1299,
+            "at": "2026-09-15",
             "primary": false
           }
         }
@@ -550,12 +572,12 @@
     },
     "US46438G4973": {
       "USD": {
-        "price": 31.595,
-        "at": "2026-09-11",
+        "price": 31.28,
+        "at": "2026-09-14",
         "from": {
           "US:AQLT": {
-            "price": 31.595,
-            "at": "2026-09-11",
+            "price": 31.28,
+            "at": "2026-09-14",
             "primary": false
           }
         }
@@ -563,12 +585,12 @@
     },
     "CA89157V1058": {
       "CAD": {
-        "price": 15.2,
-        "at": "2026-09-11",
+        "price": 15.23,
+        "at": "2026-09-14",
         "from": {
           "NEO:TTE": {
-            "price": 15.2,
-            "at": "2026-09-11",
+            "price": 15.23,
+            "at": "2026-09-14",
             "primary": false
           }
         }
@@ -576,38 +598,38 @@
     },
     "FR0000120271": {
       "EUR": {
-        "price": 78.77,
-        "at": "2026-09-11",
+        "price": 79.53,
+        "at": "2026-09-14",
         "from": {
           "PA:TTE": {
-            "price": 78.77,
-            "at": "2026-09-11",
+            "price": 79.53,
+            "at": "2026-09-14",
             "primary": true
           },
           "XETRA:TOTB": {
-            "price": 78.69,
-            "at": "2026-09-11",
+            "price": 79.5,
+            "at": "2026-09-14",
             "primary": false
           },
           "F:TOTB": {
-            "price": 78.59,
-            "at": "2026-09-11",
+            "price": 79.19,
+            "at": "2026-09-14",
             "primary": false
           },
           "STU:TOTB": {
-            "price": 78.84,
-            "at": "2026-09-10",
+            "price": 78.95,
+            "at": "2026-09-11",
             "primary": false
           }
         }
       },
       "USD": {
-        "price": 91.89,
-        "at": "2026-09-11",
+        "price": 91.14,
+        "at": "2026-09-14",
         "from": {
           "US:TTE": {
-            "price": 91.89,
-            "at": "2026-09-11",
+            "price": 91.14,
+            "at": "2026-09-14",
             "primary": false
           }
         }
@@ -668,28 +690,28 @@
     },
     "US29082A1079": {
       "USD": {
-        "price": 75.49,
-        "at": "2026-09-11",
+        "price": 75,
+        "at": "2026-09-14",
         "from": {
           "US:EMBJ": {
-            "price": 75.49,
-            "at": "2026-09-11",
+            "price": 75,
+            "at": "2026-09-14",
             "primary": true
           }
         }
       },
       "EUR": {
-        "price": 64.4,
-        "at": "2026-09-11",
+        "price": 62.6,
+        "at": "2026-09-14",
         "from": {
           "F:EMY": {
-            "price": 64.4,
-            "at": "2026-09-11",
+            "price": 62.6,
+            "at": "2026-09-14",
             "primary": true
           },
           "STU:EMY": {
-            "price": 65.2,
-            "at": "2026-09-11",
+            "price": 64.8,
+            "at": "2026-09-14",
             "primary": false
           }
         }
@@ -5417,33 +5439,33 @@
     },
     "GB00BP6MXD84": {
       "GBX": {
-        "price": 3551,
-        "at": "2026-09-11",
+        "price": 3652.5,
+        "at": "2026-09-15",
         "from": {
           "LSE:SHEL": {
-            "price": 3551,
-            "at": "2026-09-11",
+            "price": 3652.5,
+            "at": "2026-09-15",
             "primary": true
           }
         }
       },
       "EUR": {
-        "price": 41.415,
-        "at": "2026-09-11",
+        "price": 42.7,
+        "at": "2026-09-15",
         "from": {
           "AS:SHELL": {
-            "price": 41.415,
-            "at": "2026-09-11",
+            "price": 42.7,
+            "at": "2026-09-15",
             "primary": false
           },
           "XETRA:R6C0": {
-            "price": 41.395,
-            "at": "2026-09-11",
+            "price": 42.68,
+            "at": "2026-09-15",
             "primary": false
           },
           "F:R6C0": {
-            "price": 41.5,
-            "at": "2026-09-11",
+            "price": 42.225,
+            "at": "2026-09-14",
             "primary": false
           }
         }
@@ -5842,6 +5864,621 @@
           "US:XPAY": {
             "price": 51.93,
             "at": "2026-09-11",
+            "primary": false
+          }
+        }
+      }
+    },
+    "GB00BWFGQN14": {
+      "GBX": {
+        "price": 6720,
+        "at": "2026-09-14",
+        "from": {
+          "LSE:SPX": {
+            "price": 6720,
+            "at": "2026-09-14",
+            "primary": true
+          }
+        }
+      },
+      "EUR": {
+        "price": 78,
+        "at": "2026-09-11",
+        "from": {
+          "F:1LNB": {
+            "price": 78,
+            "at": "2026-09-11",
+            "primary": false
+          },
+          "STU:1LNB": {
+            "price": 80,
+            "at": "2026-09-11",
+            "primary": false
+          }
+        }
+      }
+    },
+    "LU1681039647": {
+      "EUR": {
+        "price": 224.13,
+        "at": "2026-09-14",
+        "from": {
+          "PA:CC4": {
+            "price": 224.13,
+            "at": "2026-09-14",
+            "primary": false
+          },
+          "XETRA:TCC4": {
+            "price": 224.04,
+            "at": "2026-09-14",
+            "primary": false
+          },
+          "F:TCC4": {
+            "price": 223.97,
+            "at": "2026-09-11",
+            "primary": false
+          }
+        }
+      }
+    },
+    "IE00BYZK4669": {
+      "GBX": {
+        "price": 799.875,
+        "at": "2026-09-14",
+        "from": {
+          "LSE:AGES": {
+            "price": 799.875,
+            "at": "2026-09-14",
+            "primary": false
+          }
+        }
+      },
+      "USD": {
+        "price": 10.8,
+        "at": "2026-09-14",
+        "from": {
+          "LSE:AGED": {
+            "price": 10.8,
+            "at": "2026-09-14",
+            "primary": false
+          },
+          "SW:AGED": {
+            "price": 10.75,
+            "at": "2026-09-14",
+            "primary": false
+          }
+        }
+      },
+      "EUR": {
+        "price": 9.356,
+        "at": "2026-09-14",
+        "from": {
+          "XETRA:2B77": {
+            "price": 9.356,
+            "at": "2026-09-14",
+            "primary": false
+          }
+        }
+      }
+    },
+    "NL0011794037": {
+      "EUR": {
+        "price": 31.79,
+        "at": "2026-09-14",
+        "from": {
+          "AS:AD": {
+            "price": 31.79,
+            "at": "2026-09-14",
+            "primary": true
+          },
+          "LSE:0RI8": {
+            "price": 31.735,
+            "at": "2026-09-14",
+            "primary": false
+          },
+          "XETRA:AHOG": {
+            "price": 31.68,
+            "at": "2026-09-14",
+            "primary": false
+          },
+          "F:AHOG": {
+            "price": 31.65,
+            "at": "2026-09-14",
+            "primary": false
+          },
+          "STU:AHOG": {
+            "price": 30.76,
+            "at": "2026-09-11",
+            "primary": false
+          }
+        }
+      },
+      "USD": {
+        "price": 35.69,
+        "at": "2026-09-14",
+        "from": {
+          "US:AHODF": {
+            "price": 35.69,
+            "at": "2026-09-14",
+            "primary": false
+          }
+        }
+      }
+    },
+    "IT0003132476": {
+      "EUR": {
+        "price": 23.915,
+        "at": "2026-09-14",
+        "from": {
+          "LSE:0N9S": {
+            "price": 23.915,
+            "at": "2026-09-14",
+            "primary": false
+          },
+          "XETRA:ENI": {
+            "price": 24.025,
+            "at": "2026-09-14",
+            "primary": false
+          },
+          "IL:0N9S": {
+            "price": 0.2392,
+            "at": "2026-09-14",
+            "primary": false
+          },
+          "F:ENI": {
+            "price": 24.055,
+            "at": "2026-09-11",
+            "primary": false
+          },
+          "STU:ENI": {
+            "price": 24.075,
+            "at": "2026-09-11",
+            "primary": false
+          }
+        }
+      },
+      "USD": {
+        "price": 28.43,
+        "at": "2026-09-11",
+        "from": {
+          "US:EIPAF": {
+            "price": 28.43,
+            "at": "2026-09-11",
+            "primary": false
+          }
+        }
+      }
+    },
+    "FR0000120404": {
+      "EUR": {
+        "price": 45.73,
+        "at": "2026-09-14",
+        "from": {
+          "PA:AC": {
+            "price": 45.73,
+            "at": "2026-09-14",
+            "primary": true
+          },
+          "LSE:0H59": {
+            "price": 45.665,
+            "at": "2026-09-14",
+            "primary": false
+          },
+          "STU:ACR": {
+            "price": 45.94,
+            "at": "2026-09-11",
+            "primary": false
+          },
+          "F:ACR": {
+            "price": 45.62,
+            "at": "2026-09-14",
+            "primary": false
+          },
+          "XETRA:ACR": {
+            "price": 45.39,
+            "at": "2026-09-14",
+            "primary": false
+          }
+        }
+      }
+    },
+    "US8807791038": {
+      "USD": {
+        "price": 58.68,
+        "at": "2026-09-14",
+        "from": {
+          "US:TEX": {
+            "price": 58.68,
+            "at": "2026-09-14",
+            "primary": true
+          }
+        }
+      },
+      "EUR": {
+        "price": 52.5,
+        "at": "2026-09-11",
+        "from": {
+          "STU:TXG": {
+            "price": 52.5,
+            "at": "2026-09-11",
+            "primary": false
+          },
+          "F:TXG": {
+            "price": 50.5,
+            "at": "2026-09-14",
+            "primary": false
+          }
+        }
+      }
+    },
+    "US1330341082": {
+      "USD": {
+        "price": 58.3,
+        "at": "2026-09-14",
+        "from": {
+          "US:CAC": {
+            "price": 58.3,
+            "at": "2026-09-14",
+            "primary": true
+          }
+        }
+      },
+      "EUR": {
+        "price": 50,
+        "at": "2026-09-14",
+        "from": {
+          "F:3LR": {
+            "price": 50,
+            "at": "2026-09-14",
+            "primary": false
+          }
+        }
+      }
+    },
+    "LU1681046931": {
+      "EUR": {
+        "price": 141.7,
+        "at": "2026-09-14",
+        "from": {
+          "PA:C40": {
+            "price": 141.7,
+            "at": "2026-09-14",
+            "primary": false
+          },
+          "XETRA:GC40": {
+            "price": 141.82,
+            "at": "2026-09-14",
+            "primary": false
+          },
+          "SW:C40": {
+            "price": 141.52,
+            "at": "2026-09-14",
+            "primary": false
+          },
+          "F:GC40": {
+            "price": 142.24,
+            "at": "2026-09-14",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ES0178430E18": {
+      "EUR": {
+        "price": 3.674,
+        "at": "2026-09-14",
+        "from": {
+          "MC:TEF": {
+            "price": 3.674,
+            "at": "2026-09-14",
+            "primary": true
+          },
+          "XETRA:TNE5": {
+            "price": 3.69,
+            "at": "2026-09-14",
+            "primary": false
+          },
+          "F:TNE5": {
+            "price": 3.682,
+            "at": "2026-09-14",
+            "primary": false
+          },
+          "STU:TNE5": {
+            "price": 3.675,
+            "at": "2026-09-14",
+            "primary": false
+          }
+        }
+      }
+    },
+    "US81369Y5069": {
+      "USD": {
+        "price": 64.53,
+        "at": "2026-09-14",
+        "from": {
+          "US:XLE": {
+            "price": 64.53,
+            "at": "2026-09-14",
+            "primary": false
+          }
+        }
+      },
+      "MXN": {
+        "price": 1101,
+        "at": "2026-09-14",
+        "from": {
+          "MX:XLE": {
+            "price": 1101,
+            "at": "2026-09-14",
+            "primary": false
+          }
+        }
+      }
+    },
+    "US46284V1017": {
+      "USD": {
+        "price": 112.06,
+        "at": "2026-09-14",
+        "from": {
+          "US:IRM": {
+            "price": 112.06,
+            "at": "2026-09-14",
+            "primary": true
+          }
+        }
+      },
+      "EUR": {
+        "price": 98.8,
+        "at": "2026-09-14",
+        "from": {
+          "F:I5M": {
+            "price": 98.8,
+            "at": "2026-09-14",
+            "primary": false
+          },
+          "STU:I5M": {
+            "price": 98.88,
+            "at": "2026-09-11",
+            "primary": false
+          }
+        }
+      }
+    },
+    "US88636R6027": {
+      "USD": {
+        "price": 4.13,
+        "at": "2026-09-14",
+        "from": {
+          "US:MARO": {
+            "price": 4.13,
+            "at": "2026-09-14",
+            "primary": false
+          }
+        }
+      }
+    },
+    "US47100L3015": {
+      "USD": {
+        "price": 5.22,
+        "at": "2026-09-14",
+        "from": {
+          "US:DFDV": {
+            "price": 5.22,
+            "at": "2026-09-14",
+            "primary": true
+          }
+        }
+      }
+    },
+    "US4642852044": {
+      "USD": {
+        "price": 80.54,
+        "at": "2026-09-14",
+        "from": {
+          "US:IAU": {
+            "price": 80.54,
+            "at": "2026-09-14",
+            "primary": false
+          }
+        }
+      },
+      "MXN": {
+        "price": 1382,
+        "at": "2026-09-14",
+        "from": {
+          "MX:IAU": {
+            "price": 1382,
+            "at": "2026-09-14",
+            "primary": false
+          }
+        }
+      }
+    },
+    "IE0004906560": {
+      "EUR": {
+        "price": 84.75,
+        "at": "2026-09-15",
+        "from": {
+          "IR:KRZ": {
+            "price": 84.75,
+            "at": "2026-09-15",
+            "primary": true
+          },
+          "LSE:KYGA": {
+            "price": 84.8,
+            "at": "2026-09-15",
+            "primary": false
+          },
+          "F:KRZ": {
+            "price": 83.45,
+            "at": "2026-09-14",
+            "primary": false
+          },
+          "STU:KRZ": {
+            "price": 83.95,
+            "at": "2026-09-11",
+            "primary": false
+          }
+        }
+      }
+    },
+    "IE00BK5BQT80": {
+      "GBP": {
+        "price": 141.56,
+        "at": "2026-09-15",
+        "from": {
+          "LSE:VWRP": {
+            "price": 141.56,
+            "at": "2026-09-15",
+            "primary": false
+          }
+        }
+      },
+      "EUR": {
+        "price": 165.36,
+        "at": "2026-09-15",
+        "from": {
+          "XETRA:VWCE": {
+            "price": 165.36,
+            "at": "2026-09-15",
+            "primary": false
+          },
+          "F:VWCE": {
+            "price": 166.44,
+            "at": "2026-09-14",
+            "primary": false
+          }
+        }
+      },
+      "USD": {
+        "price": 190.92,
+        "at": "2026-09-15",
+        "from": {
+          "LSE:VWRA": {
+            "price": 190.92,
+            "at": "2026-09-15",
+            "primary": false
+          }
+        }
+      }
+    },
+    "US29364G1031": {
+      "USD": {
+        "price": 103.64,
+        "at": "2026-09-14",
+        "from": {
+          "US:ETR": {
+            "price": 103.64,
+            "at": "2026-09-14",
+            "primary": true
+          }
+        }
+      },
+      "EUR": {
+        "price": 90.16,
+        "at": "2026-09-14",
+        "from": {
+          "F:ETY": {
+            "price": 90.16,
+            "at": "2026-09-14",
+            "primary": false
+          },
+          "STU:ETY": {
+            "price": 90.66,
+            "at": "2026-09-11",
+            "primary": false
+          }
+        }
+      }
+    },
+    "US7802593050": {
+      "USD": {
+        "price": 98.95,
+        "at": "2026-09-15",
+        "from": {
+          "US:SHEL": {
+            "price": 98.95,
+            "at": "2026-09-15",
+            "primary": false
+          }
+        }
+      },
+      "EUR": {
+        "price": 82,
+        "at": "2026-09-14",
+        "from": {
+          "F:L3H": {
+            "price": 82,
+            "at": "2026-09-14",
+            "primary": false
+          }
+        }
+      }
+    },
+    "IE00B3XXRP09": {
+      "GBP": {
+        "price": 106.7775,
+        "at": "2026-09-15",
+        "from": {
+          "LSE:VUSA": {
+            "price": 106.7775,
+            "at": "2026-09-15",
+            "primary": false
+          }
+        }
+      },
+      "USD": {
+        "price": 143.935,
+        "at": "2026-09-15",
+        "from": {
+          "LSE:VUSD": {
+            "price": 143.935,
+            "at": "2026-09-15",
+            "primary": false
+          }
+        }
+      },
+      "EUR": {
+        "price": 124.709,
+        "at": "2026-09-15",
+        "from": {
+          "AS:VUSA": {
+            "price": 124.709,
+            "at": "2026-09-15",
+            "primary": false
+          },
+          "XETRA:VUSA": {
+            "price": 124.735,
+            "at": "2026-09-15",
+            "primary": false
+          },
+          "F:VUSA": {
+            "price": 125.415,
+            "at": "2026-09-14",
+            "primary": false
+          }
+        }
+      },
+      "CHF": {
+        "price": 117.9,
+        "at": "2026-09-15",
+        "from": {
+          "SW:VUSA": {
+            "price": 117.9,
+            "at": "2026-09-15",
+            "primary": false
+          }
+        }
+      }
+    },
+    "US3899302075": {
+      "USD": {
+        "price": 33.64,
+        "at": "2026-09-15",
+        "from": {
+          "US:BTC": {
+            "price": 33.64,
+            "at": "2026-09-15",
             "primary": false
           }
         }

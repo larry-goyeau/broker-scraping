@@ -681,9 +681,11 @@ const EASYBOURSE_PLANS = [
   { id: "intense", name: "EasyBourse Intense" },
 ];
 
+// Core is left out: it trades at the same 0,99 % as Free and only adds a
+// subscription, so it can never be the cheaper row. Pro and Elite earn their
+// place by cutting the rate.
 const BUNQ_PLANS = [
   { id: "free", name: "Bunq Free" },
-  { id: "core", name: "Bunq Core" },
   { id: "pro", name: "Bunq Pro" },
   { id: "elite", name: "Bunq Elite" },
 ];

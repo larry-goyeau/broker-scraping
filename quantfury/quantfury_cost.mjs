@@ -80,7 +80,8 @@
 //               pass-through. Unlike stamp duty, this is a charge on the venue,
 //               not a tax on the buyer.
 //
-// And the zero that used to be assumed, now read, and only half true:
+// And the zero that was assumed, then read as half true, and is now measured
+// back to zero where it counts:
 //
 //   change      Nothing in the agreement or on the conditions page mentions
 //               converting between the balance a client holds and the currency
@@ -91,29 +92,32 @@
 //               reads 0 % on USD, EUR, GBP and CHF, 1 % on BRL, MXN and CLP,
 //               1.5 % on COP and 4 % on ARS. Every crypto wallet reads 0.
 //
-//               So the old 0 holds for 1 949 of the 2 030 lines — every
-//               American, European and crypto one — and collapses on the other
-//               81: the 70 Brazilian and 11 Mexican lines cost a dollar-funded
-//               reader 1 % going in and 1 % coming out. That is 200 bp against
-//               a book of ten, the largest number in this file by a wide
-//               margin, exactly as this header warned when it had no figure to
-//               put there. It stays outside `usd`, as at Admirals and Mexem,
-//               because the reader's funding currency is not known here; it is
-//               in `fxIfConverted`, and a dollar-funded reader buying in São
-//               Paulo should read that before the total. Quantfury opens the
-//               BRL and MXN wallets to some residents and not others — this
-//               account may hold only USD and EUR — so for a good part of the
-//               clientele the conversion is not optional.
+//               Read that way it looked like the largest number in this file:
+//               the 70 Brazilian and 11 Mexican lines would cost a
+//               dollar-funded reader 1 % going in and 1 % coming out, 200 bp
+//               against a book of ten. What it did not say is whether a tariff
+//               written for converting a wallet by hand also lands on an order
+//               in a foreign-quoted line. OANDA's silence on that same point
+//               had turned out to cost 0.52 % a leg, so the question was worth
+//               a funded trip rather than a guess.
 //
-//               What this still does not settle is whether trading a
-//               foreign-quoted line charges the same tariff as converting a
-//               wallet by hand. The pairs Quantfury quotes as instruments
-//               carry their own visible spread — EUR/USD 1.6 bp, USD/CHF 27.9,
-//               USD/CAD 47.0, USD/BRL 90.7 — which is neither the wallet
-//               tariff nor necessarily the rate a trade gets. Only a funded
-//               round trip on a non-dollar line closes that, and none has been
-//               run. OANDA's silence on the same point turned out to cost
-//               0.52 % a leg.
+//               The trip was run on 15 September 2026, B3 open, the account
+//               holding dollars only: ten PETR4 bought at R$49.12 and sold
+//               fifty-four seconds later at R$49.11, R$491.20 a side, about
+//               $95.80. The balance went from $350.04 to $350.02. Two cents,
+//               and the position sheet accounts for all of them — minus R$0.10,
+//               the one-tick round trip, converted. The wallet tariff would
+//               have taken about $1.92 of the same trip. It did not take a
+//               cent.
+//
+//               So trading a line quoted in a currency the account does not
+//               hold is free, and `usd` is right to carry no conversion for any
+//               of the 2 030 lines. `commissionOnConvertPercent` is still real
+//               and still worth reading, but it prices a different act: moving
+//               a balance between wallets deliberately. It stays in
+//               `fxIfConverted`, described as what it is, and out of the total
+//               — not because the funding currency is unknown, but because a
+//               round trip does not trigger it.
 //
 // Two weak joints, both in the catalogue rather than in the tariff:
 //
@@ -125,13 +129,30 @@
 //               standing in: 232 of the 281 carry one, median 8.2 bp — Paris
 //               9.2, Amsterdam 7.8, Xetra 10.6, Milan 10.7 — and the nine above
 //               50 bp sit on the thin regional tapes, Munich, gettex and
-//               Vienna, where a small name really is that wide. What nothing
-//               here measures is how far Cboe Europe's own touch sits from the
-//               primary's — but `quantfury-probe.mjs` now can, without an
-//               order: Quantfury's price endpoint publishes the bid and ask it
-//               shows, so the two books can be set side by side. It has to run
-//               in session, because outside it every line comes back with the
-//               bid equal to the ask.
+//               Vienna, where a small name really is that wide. How far Cboe
+//               Europe's own touch sits from the primary's used to be the gap
+//               here, and `quantfury-probe.mjs` closed it on 15 September 2026
+//               without placing an order: the price endpoint publishes the bid
+//               and ask the client is shown, so the two books were set side by
+//               side on all 281 lines. Quantfury's own touch comes to a median
+//               8.93 bp against the stand-in's 8.16 — a gap of 0.65 bp, and the
+//               exchange rate applied sits 0.17 bp off the pair's mid.
+//
+//               So the stand-in is a fair proxy at the median, and the promise
+//               of §13 holds on equities as it did on crypto. It is not free of
+//               dispersion: of the 232 lines with a book in basis points, 158
+//               are wider at Quantfury and 74 tighter, so the figure is a cloud
+//               centred just above zero rather than an identity. The tail is
+//               where the stand-in is worst, not Quantfury — the five biggest
+//               gaps, ACE 31 bp over Milan, HLAG and BC8 28 over Munich, Rubis
+//               27 over Paris, all compare against thin secondary tapes. The
+//               probe has to run in session, because outside it every line
+//               comes back with the bid equal to the ask.
+//
+//               The same reading names the venue more precisely than the
+//               catalogue does: 57 of the short names carry a `.CHI` suffix and
+//               2 a `.DXE`, which is Cboe Europe's Chi-X and DXE order books,
+//               and 57 more carry `.BS`. The other 156 stay mute.
 //
 //   l'ISIN      Quantfury publishes none: all 1 981 are the scraper's own
 //               ticker match against the root CSVs. That match used to waive
@@ -237,7 +258,44 @@ const US_EX = new Set(["NASDAQ", "NYSE", "AMEX", "ARCA", "CBOE", "BATS", "OTC"])
 const OPERATORS = ["Cboe Europe", "NASDAQ", "NYSE", "AMEX", "B3", "BMV", "BIVA", "Binance", "Coinbase", "CME", "ICE"];
 const CBOE_EUROPE = "Cboe Europe";
 
-const CRYPTO_REMARK = "Écart Binance/Coinbase non publié ici.";
+// `quantfury-probe.mjs` in session, no order placed: the touch Quantfury shows
+// against the primary book standing in for it, line by line. Written out to
+// `quantfury-probe.json`.
+const PROBE = {
+  on: "2026-09-15",
+  lines: 281,
+  withStandIn: 232,
+  quantfuryBp: 8.93,
+  standInBp: 8.16,
+  gapBp: 0.65,
+  wider: 158,
+  tighter: 74,
+  rateOffBp: 0.17,
+};
+
+// The one funded round trip in this file, and the only thing that could settle
+// whether trading a foreign-quoted line pays the wallet tariff. Account funded
+// in dollars, line quoted in reais, both legs a minute apart on an open B3.
+const TRIP = {
+  on: "2026-09-15",
+  ticker: "PETR4",
+  venue: "B3",
+  currency: "BRL",
+  shares: 10,
+  buy: 49.12,
+  sell: 49.11,
+  notionalLocal: 491.2,
+  pnlLocal: -0.1,
+  balanceBefore: 350.04,
+  balanceAfter: 350.02,
+  walletTariff: 0.01,
+  // R$491.20 through this file's own rate. The comparison is what matters:
+  // two legs of the wallet tariff would have been about $1.92, not $0.02.
+  notionalUsd: 95.8,
+  costUsd: 0.02,
+};
+
+const CRYPTO_REMARK = "Binance / Coinbase spread not published here.";
 
 // Le change reste hors du total parce qu'il dépend de la devise du solde, que
 // ce fichier ne connaît pas ; il est dit ici, et d'autant plus fort qu'il pèse.
@@ -246,12 +304,10 @@ const CRYPTO_REMARK = "Écart Binance/Coinbase non publié ici.";
 function remarkOf({ crypto, marketBp, listing, convert }) {
   const lines = [];
 
-  if (convert == null) {
-    lines.push(`Conversion vers ${listing.currency} non chiffrée : le barème du compte ne cote pas cette devise.`);
-  } else if (convert > 0) {
+  if (convert > 0) {
     lines.push(
-      `Change ${(100 * convert).toFixed(2)} % par sens si le solde n'est pas en ${listing.currency}, ` +
-        `soit ${(200 * convert).toFixed(2)} % sur l'aller-retour, hors du total ci-dessus.`
+      `Trading in ${listing.currency} from a dollar balance is free, measured. ` +
+        `The card's ${(100 * convert).toFixed(2)}% only hits a wallet converted by hand.`
     );
   }
 
@@ -451,14 +507,18 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
       `accord client Quantfury §13 du ${SCHEDULE.agreementVersion} (aucun frais), relu le ${SCHEDULE.readOn}` +
       (european ? `, carnet ${bookMic || "primaire"} en doublure de ${CBOE_EUROPE}` : ""),
     fx: fxNote(listing.currency),
+    // Le barème du portefeuille, pour qui convertit à la main. Il ne s'applique
+    // pas à un ordre : l'aller-retour du TRIP l'a montré.
     fxIfConverted: convert,
     fxNote:
-      convert == null
-        ? `conversion vers ${listing.currency} non chiffrée : le barème du compte ne cote pas cette devise`
+      `trader en ${listing.currency} depuis un autre solde ne coûte rien, mesuré le ${TRIP.on} ` +
+      `sur ${TRIP.ticker}` +
+      (convert == null
+        ? `. Le barème du compte ne cote pas cette devise pour une conversion à la main`
         : convert === 0
-          ? `conversion gratuite vers ${listing.currency} (barème du compte relu le ${SCHEDULE.readOn})`
-          : `${(100 * convert).toFixed(2)} % à la conversion si le solde n'est pas en ${listing.currency}, ` +
-            `payés à l'aller et au retour, hors du total`,
+          ? `. Convertir un portefeuille en ${listing.currency} est gratuit au barème du ${SCHEDULE.readOn}`
+          : `. Convertir un portefeuille en ${listing.currency} à la main coûte ${(100 * convert).toFixed(2)} %, ` +
+            `ce qui est un autre geste`),
     tax,
     taxRates: Object.keys(rates).length ? rates : null,
     remark: remarkOf({ crypto, marketBp, listing, convert }),
@@ -554,7 +614,10 @@ function confidenceOf({ crypto, european, bookMic, leaf, marketBp, marketPerShar
   if (european) {
     lines.push(
       `place : Quantfury dit ${CBOE_EUROPE} pour toute l'Europe, et aucune bande ${CBOE_EUROPE} n'est collectée, ` +
-        `donc le carnet ${bookMic || "primaire"} sert de doublure (médiane 8,2 bp sur les 232 lignes européennes cotées)`
+        `donc le carnet ${bookMic || "primaire"} sert de doublure (médiane ${PROBE.standInBp} bp sur ` +
+        `${PROBE.withStandIn} lignes cotées). La doublure a été éprouvée le ${PROBE.on} sur les ${PROBE.lines} lignes ` +
+        `européennes, sans ordre : la touche affichée par Quantfury sort à ${PROBE.quantfuryBp} bp de médiane, soit ` +
+        `${PROBE.gapBp} bp de plus, avec ${PROBE.wider} lignes plus larges et ${PROBE.tighter} plus serrées`
     );
     lines.push(
       "ISIN : celui-ci vient de l'appariement par ticker du scraper, pas de Quantfury ; le plancher de nom s'applique désormais à l'Europe, mais l'identité reste déduite"
@@ -577,21 +640,24 @@ function confidenceOf({ crypto, european, bookMic, leaf, marketBp, marketPerShar
   lines.push(
     "ni SEC ni TAF : courtier bahaméen appariant ses propres clients (SIA-F204), pas un courtier américain qui répercute"
   );
-  if (convert == null) {
-    lines.push(`change non chiffré : le barème du compte ne cote pas le ${listing?.currency || "?"}`);
-  } else if (convert > 0) {
+  // Le change était la dernière inconnue chère de ce fichier. Elle est levée
+  // par un aller-retour réel, et dans le bon sens : l'ordre ne le paie pas.
+  lines.push(
+    `change nul sur l'ordre, mesuré : le ${TRIP.on}, ${TRIP.shares} ${TRIP.ticker} achetées ` +
+      `${TRIP.buy} et revendues ${TRIP.sell} ${TRIP.currency} depuis un solde en dollars ont rendu ` +
+      `${TRIP.balanceAfter} $ sur ${TRIP.balanceBefore} $, soit ${TRIP.costUsd.toFixed(2)} $ sur ` +
+      `${TRIP.notionalUsd} $ — la traversée du carnet et rien d'autre, quand le barème du portefeuille ` +
+      `aurait pris ${(200 * TRIP.walletTariff * TRIP.notionalUsd / 100).toFixed(2)} $`
+  );
+  if (convert > 0) {
     lines.push(
-      `change ${(100 * convert).toFixed(2)} % par sens, lu dans le barème du compte relu le ${SCHEDULE.readOn} : ` +
-        `un solde en dollars paie ${(200 * convert).toFixed(2)} % sur l'aller-retour, ` +
-        `${marketBp ? `${(2e4 * convert / marketBp).toFixed(0)} fois le carnet, ` : ""}et ce n'est pas dans le total`
-    );
-  } else {
-    lines.push(
-      `change nul vers ${listing?.currency || "?"} : le barème du compte, relu le ${SCHEDULE.readOn}, ` +
-        "ne facture ni l'euro ni le dollar ni la crypto — ce 0 est désormais lu et non plus supposé"
+      `le ${(100 * convert).toFixed(2)} % que le barème du compte cote sur le ${listing?.currency || "?"} ` +
+        "ne vaut donc que pour une conversion de portefeuille à la main, pas pour un ordre"
     );
   }
-  lines.push("cotations relevées en direct, mais aucun aller-retour réel dans ce dépôt");
+  lines.push(
+    `commission nulle éprouvée sur un seul aller-retour, à ${TRIP.venue} : ailleurs, cotations en direct et barème lu`
+  );
   if (!crypto && !leaf) lines.push("carnet absent, le chiffre ci-dessus ne tient qu'aux taxes");
 
   return lines.join(" ; ");

@@ -1,54 +1,55 @@
-// What one round trip costs at eToro Global: buy n shares at price p, sell
-// them back at once (online, real stock / ETF / coin, non-club).
+// What one round trip costs at eToro Global: buy n shares at price p (or
+// put `amount` into a coin), sell them back at once, online, real stock /
+// ETF / coin, non-club, in dollars.
 //
-//   coût (USD) = a × toUsd(p) × n + b × n + c
+// The affine triple hid the cliffs. The $1 / $2 stock ticket lived in `c`,
+// which the page no longer reads, so every AAPL trip was missing 2 $. The
+// US CFD penny line (0.02 $/share at or under 3 $) sat in `threshold` the
+// same way. Crypto's 1 % was in `a`, which the front also stopped adding.
+// `roundTrip` is given the size and charges what is charged.
 //
-// `a` is a fraction of the amount. `b` and `c` are dollars, the same unit the
-// other `*_cost.mjs` files answer in. The stock ticket is a flat dollar
-// amount every order, so it lives in `c`. Crypto 1 % and the CFD 0.15 % sit
-// in `a`. There is no published minimum of a %, so the floor stays empty.
-//
-// eToro (Europe) Ltd / eToro (UK) Ltd, fees page read 2026-09-10. Default is
-// the country-picker majority: $2 on Australia / Hong Kong / Dubai / Abu
-// Dhabi / Tokyo, $1 on every other stock exchange, each way. Australia and
-// New Zealand are $2 everywhere (`--plan=anz`). The United Kingdom, Ireland
-// and the countries that are not in the picker pay $0 (`--plan=uk`). eToro
-// US, Club, CopyTrader, Smart Portfolios, recurring buys, Stock Margin
-// (0.15 %) and futures are not this trip.
+// eToro (Europe) Ltd / eToro (UK) Ltd, fees page re-read 2026-09-15 —
+// unchanged since the 10th. Default is the country-picker majority: $2 on
+// Australia / Hong Kong / Dubai / Abu Dhabi / Tokyo, $1 on every other
+// stock exchange, each way. Australia and New Zealand are $2 everywhere
+// (`--plan=anz`). The United Kingdom, Ireland and the countries that are
+// not in the picker pay $0 (`--plan=uk`). eToro US, Club, CopyTrader,
+// Smart Portfolios, recurring buys, Stock Margin (0.15 %) and futures are
+// not this trip. Catalogue 10 148 lines — 8 800 stocks, 1 176 ETFs, 163
+// coins, 1 124 of them the CFD book (US ETFs on the global platform, some
+// HK names, ENEL, SHEL London).
 //
 //   stocks (real)   $1 or $2 each way, in USD regardless of the listing
-//   ETF / ETC       $0  (the page names ETFs; ETC share the invest book)
+//   ETF / ETC / ETN $0  (the page names ETFs; ETC share the invest book)
 //   CFD stock/ETF   0.15 % each way, no ticket; US ≤ $3 is 0.02 $/share
 //   crypto          1 % each way (Bronze / Silver / Gold, $0–$10 k)
-//                   real coins only; leveraged crypto CFDs are out
+//                   real coins only; LUNC adds 0.10 % on the bid / ask
 //
-// The $1 / $2 does not apply to ETFs, CFDs, Copy or Smart Portfolios. A
-// catalogue row with `cfd: true` is the CFD book for that line (US ETFs
-// on the global platform, some HK names). Market spread is the venue book,
-// not an eToro markup, and sits in `a` / `b` like every other file. They
-// print "no additional broker fees" on real stocks, so SEC / TAF stay out.
-// Stamp / FTT from the tax map; else their printed UK 0.50 % on a London
-// STOCK. Cash can sit in USD and, where offered, GBP / EUR / AUD / DKK;
-// conversion is 0.75 % (local ↔ USD) only if the wallet is the wrong
-// currency, so FX stays out of `a`. Custody 0, inactivity 0. No live trip:
-// the coefficients are the printed $ / %.
+// They print "no additional broker fees" / no markup on the market spread
+// of a real stock, so SEC / TAF stay out. Stamp / FTT from the tax map;
+// else their printed UK 0.50 % on a real London STOCK, never on a CFD.
+// Irish stamp, PTM and ITP are not printed. Cash sits in USD and, where
+// offered, GBP / EUR / AUD / DKK; conversion is 0.75 % (local ↔ USD) only
+// if the wallet is the wrong currency, so FX stays out of the total.
+// Custody 0, inactivity 0. Withdraw $5 from a USD account (free from a
+// local one).
 //
 //   https://www.etoro.com/trading/fees/
 //   https://www.etoro.com/trading/fees/conversion/
-//   https://www.etoro.com/wp-content/uploads/2025/07/Cost-and-Charges-examples-table-Crypto-Fees-in-May-2025.pdf
 //
-//   node etoro/etoro_cost.mjs AAPL
-//   node etoro/etoro_cost.mjs VUSA EURONEXT EUR
-//   node etoro/etoro_cost.mjs 00001.HK HKEX HKD
-//   node etoro/etoro_cost.mjs BTC
-//   node etoro/etoro_cost.mjs AAPL NASDAQ USD --plan=uk
+//   node etoro/etoro_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node etoro/etoro_cost.mjs VUSA EURONEXT EUR --shares=10 --price=100
+//   node etoro/etoro_cost.mjs 0700 HKEX HKD --shares=10 --price=400
+//   node etoro/etoro_cost.mjs AAL LSE GBX --shares=10 --price=2800
+//   node etoro/etoro_cost.mjs BTC --amount=1000
+//   node etoro/etoro_cost.mjs AAPL NASDAQ USD --plan=uk --shares=10 --price=230
 //   node etoro/etoro_cost.mjs --schedule
 //
-// `roundTripCost(...)` reads files, not the network.
+// `roundTrip(...)` reads files, not the network.
 
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite, bookParts } from "../na.mjs";
+import { plus, finite } from "../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
@@ -60,7 +61,8 @@ const SCHEDULE = {
   conversion: "https://www.etoro.com/trading/fees/conversion/",
   examples:
     "https://www.etoro.com/wp-content/uploads/2025/07/Cost-and-Charges-examples-table-Crypto-Fees-in-May-2025.pdf",
-  readOn: "2026-09-10",
+  readOn: "2026-09-15",
+  previouslyRead: "2026-09-10",
   entity: "eToro (Europe) Ltd / eToro (UK) Ltd",
 };
 
@@ -88,11 +90,11 @@ const PLAN_ALIAS = {
 };
 
 const CRYPTO_EACH = 0.01;
+const LUNC_EXTRA = 0.001;
 const CFD_EACH = 0.0015;
 const CFD_PENNY_EACH = 0.02;
 const CFD_PENNY_BELOW = 3;
 const UK_STAMP = 0.005;
-const FX_IF_CONVERTED = 0.0075;
 const US_MICS = new Set(["XNAS", "XNYS", "ARCX", "XASE", "BATS"]);
 const ASIA_ME = new Set(["ASX", "HKEX", "DFM", "ADX", "TSE"]);
 
@@ -101,6 +103,9 @@ const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
 const spreads = fs.existsSync(SPREADS) ? JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {} : {};
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+const isTracker = (type) => /^(ETF|ETC|ETN)$/i.test(type || "");
+const isStock = (listing) => String(listing?.type || "").toUpperCase() === "STOCK";
+const isLunc = (row) => /LUNC/.test(loose(row?.ticker || row?.query));
 
 const dollars = (amount, currency) => {
   const v = toUsd(amount, currency);
@@ -119,10 +124,6 @@ export function planOf(name = DEFAULT_PLAN) {
     .toLowerCase()
     .replace(/[^a-z0-9]/g, "");
   return PLANS[PLAN_ALIAS[key] || key] || null;
-}
-
-function isTracker(type) {
-  return /^(ETF|ETC|ETN)$/i.test(type || "");
 }
 
 export function feeMarketOf(row, mic) {
@@ -144,34 +145,29 @@ export function ticketEach(plan, market) {
   return 0;
 }
 
-function rateEach(market) {
-  if (market === "crypto") return CRYPTO_EACH;
-  if (market === "cfd") return CFD_EACH;
-  return 0;
-}
-
-function remarkOf({ market, plan, american } = {}) {
+function remarkOf({ market, plan } = {}) {
   const lines = [];
   if (plan?.id === "uk") lines.push("UK / Ireland: no stock ticket.");
-  if (plan?.id === "anz") lines.push("Australia / New Zealand: 2 $ every stock exchange.");
-  // A coin is not bought in a listing currency the account can choose to hold, so
-  // the conversion is not an "if" the reader can act on and the line says nothing.
+  if (plan?.id === "anz") lines.push("Australia / New Zealand: $2 every stock exchange.");
   if (market !== "crypto") lines.push("FX 0.75% if converted.");
-  if (market === "cfd" && american) {
-    lines.push(`US CFD at or under ${CFD_PENNY_BELOW} $: ${CFD_PENNY_EACH} $/share each way.`);
-  }
   return lines.join("\n");
 }
 
-function stampOf({ listing, tax }) {
-  const rates = taxRates(tax);
-  const fromMap = Object.values(rates).reduce((s, r) => s + r, 0);
-  if (fromMap) return { pct: fromMap, rates, source: "t212" };
-  const stock = String(listing.type || "").toUpperCase() === "STOCK";
-  if (stock && listing.mic === "XLON") {
-    return { pct: UK_STAMP, rates: { stamp: UK_STAMP }, source: "etoro" };
+/**
+ * Stamp from the tax map when Trading212 swept the ISIN. A real London
+ * share it never asked about still pays the 0.50 % eToro prints. A CFD
+ * does not: they pass SDRT on UK-listed stocks, not on the derivative.
+ */
+export function taxesFor(isin, listing, market) {
+  const tax = taxesOf(isin);
+  if (market === "crypto" || market === "cfd" || listing?.cfd) {
+    return { tax, rates: {}, source: null };
   }
-  return { pct: 0, rates: {}, source: null };
+  const mapped = taxRates(tax);
+  if (Object.keys(mapped).length) return { tax, rates: mapped, source: "taxMap" };
+  const london = listing.mic === "XLON" || /^(LSE|LONDON)/i.test(listing.brokerExchange || listing.exchange || "");
+  if (isStock(listing) && london) return { tax, rates: { stamp: UK_STAMP }, source: "etoro" };
+  return { tax, rates: {}, source: null };
 }
 
 function findListing({ etf, place, currency }) {
@@ -231,44 +227,80 @@ function coverage() {
   return out;
 }
 
-export function exactCost({ amount, market, plan = DEFAULT_PLAN }) {
-  const picked = planOf(plan);
-  if (!picked) return { commission: null, currency: QUOTE };
+/**
+ * One side, in dollars. Stocks are a flat ticket; crypto / CFD a % of the
+ * USD notional; US CFDs at or under 3 $ switch to 0.02 $/share.
+ */
+export function commissionSide({
+  market,
+  plan = DEFAULT_PLAN,
+  amountUsd,
+  shares,
+  priceUsd,
+  row,
+}) {
+  const picked = typeof plan === "string" ? planOf(plan) : plan;
+  if (!picked || !market) return null;
+
+  if (market === "crypto") {
+    if (amountUsd == null || !Number.isFinite(Number(amountUsd))) return null;
+    const extra = isLunc(row) ? LUNC_EXTRA : 0;
+    const rate = CRYPTO_EACH + extra;
+    const charged = Number(amountUsd) * rate;
+    return { charged, raw: charged, rate, extra, currency: "USD", kind: "pct" };
+  }
+
+  if (market === "cfd") {
+    const american = US_MICS.has(String(row?._mic || "")) || /^(NASDAQ|NYSE|AMEX|CBOE)$/.test(loose(row?.exchange));
+    const penny = american && priceUsd != null && Number(priceUsd) <= CFD_PENNY_BELOW;
+    if (penny) {
+      if (shares == null || !Number.isFinite(Number(shares))) return null;
+      const charged = Number(shares) * CFD_PENNY_EACH;
+      return {
+        charged,
+        raw: charged,
+        rate: CFD_PENNY_EACH,
+        currency: "USD",
+        kind: "perShare",
+        penny: true,
+      };
+    }
+    if (amountUsd == null || !Number.isFinite(Number(amountUsd))) return null;
+    const charged = Number(amountUsd) * CFD_EACH;
+    return { charged, raw: charged, rate: CFD_EACH, currency: "USD", kind: "pct" };
+  }
+
   const ticket = ticketEach(picked, market);
-  const rate = rateEach(market);
-  const notional = amount != null && Number.isFinite(Number(amount)) ? Number(amount) : 0;
-  const each = (ticket || 0) + notional * rate;
-  return {
-    commission: Number((each * 2).toPrecision(6)),
-    currency: QUOTE,
-    native: { each, roundTrip: each * 2, currency: "USD" },
-    plan: picked.id,
-    market,
-  };
+  if (ticket == null) return null;
+  return { charged: ticket, raw: ticket, rate: null, currency: "USD", kind: "flat", ticket };
 }
 
-export function roundTripCost({
+/**
+ * The whole bill for buying `shares` at `price` (or putting `amount` into a
+ * coin) and selling them straight back. `brokerFees` is the eToro ticket or
+ * the 1 % / 0.15 %, not stamp.
+ */
+export function roundTrip({
   etf,
   place,
   currency,
+  shares,
+  price,
+  amount,
   bp = null,
   perShare = null,
   plan = DEFAULT_PLAN,
 }) {
   const picked = planOf(plan);
-  const { named, matches } = findListing({ etf, place, currency });
   const answer = {
-    a: null,
-    b: 0,
-    c: 0,
-    ccy: QUOTE,
-    floor: null,
-    cap: null,
-    threshold: null,
-    plan: picked?.id ?? plan,
+    usd: null,
+    brokerFees: null,
     etf,
     place,
     currency,
+    onlineBuy: true,
+    cashCurrency: "USD",
+    plan: picked?.id ?? plan,
   };
 
   if (!picked) return { ...answer, why: `formule inconnue : ${plan} (standard|anz|uk)` };
@@ -277,6 +309,12 @@ export function roundTripCost({
       ...answer,
       why: "le catalogue eToro n'existe pas encore : lancer `node etoro/etoro_scraping.mjs`",
     };
+  }
+
+  let { named, matches } = findListing({ etf, place, currency });
+  if (amount != null && matches.length > 1) {
+    const coins = matches.filter((hit) => feeMarketOf(hit.row) === "crypto");
+    if (coins.length) matches = coins;
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue eToro` };
   if (!matches.length) {
@@ -301,7 +339,7 @@ export function roundTripCost({
     type: m.row.type || null,
     mic: book.mic ?? m.venue?.mic ?? null,
     exchange: m.venue?.name ?? m.unsourced?.name ?? m.row.exchange ?? null,
-    currency: String(m.row.currency || "").toUpperCase(),
+    currency: String(m.row.currency || "").toUpperCase() || (String(m.row.type || "").toUpperCase() === "CRYPTO" ? "USD" : ""),
     brokerExchange: m.row.exchange || null,
     query: m.row.query || null,
     cfd: Boolean(m.row.cfd),
@@ -311,91 +349,221 @@ export function roundTripCost({
   const leaf = book.leaf;
   const marketBp = bp ?? leaf?.bp ?? null;
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
-  const american = US_MICS.has(listing.mic);
-  const tax = taxesOf(listing.isin);
-  const stamp = stampOf({ listing, tax });
-  const commPct = rateEach(market) * 2;
-  const knownPct = commPct + stamp.pct;
-  const mkt = bookParts({
-    bp: marketBp,
-    perShare: marketPerShare,
-    venue: m.venue,
-    unsourced: m.unsourced,
-    toUsd: (x) => (american ? x : dollars(x, listing.currency)),
-  });
-  const a = plus(mkt.a, knownPct);
-  const bookUsd = mkt.b;
-  const ticket = ticketEach(picked, market) || 0;
-  const c = ticket * 2;
+  const { tax, rates, source: taxSource } = taxesFor(listing.isin, listing, market);
+  const taxPct = Object.values(rates).reduce((s, r) => s + r, 0);
+  const ticket = ticketEach(picked, market);
+  const crypto = market === "crypto";
+  const row = { ...m.row, _mic: listing.mic };
 
-  return {
+  const shared = {
     ...answer,
-    a: finite(a, 4),
-    b: finite(bookUsd, 6),
-    c: Number(Number(c).toPrecision(6)),
-    floor: null,
     listing,
     feeMarket: market,
-    remark: remarkOf({ market, plan: picked, american }),
-    parts: {
-      marché:
-        marketBp != null
-          ? Number((marketBp / 1e4).toPrecision(4))
-          : marketPerShare != null
-            ? `${marketPerShare} par part`
-            : null,
-      taxes: Object.keys(stamp.rates).length ? stamp.rates : null,
-      commission: commPct || null,
-      ticket: c || null,
-    },
     bp: marketBp,
     perShare: marketPerShare,
     url: leaf?.url ?? SCHEDULE.source,
-    basis: `barème eToro ${picked.label}, palier ${market}, lu le ${SCHEDULE.readOn}`,
     tax,
+    fx: fxNote(listing.currency),
+    fxIfConverted: 0,
+    remark: remarkOf({ market, plan: picked }),
+  };
+
+  const basis =
+    `barème eToro ${picked.label}, palier ${market}, page relue le ${SCHEDULE.readOn}` +
+    (crypto
+      ? ` : ${(CRYPTO_EACH * 100).toFixed(0)} %` + (isLunc(m.row) ? ` + ${(LUNC_EXTRA * 100).toFixed(1)} % LUNC` : "")
+      : market === "cfd"
+        ? ` : ${(CFD_EACH * 100).toFixed(2)} % (penny ${CFD_PENNY_EACH} $/share ≤ ${CFD_PENNY_BELOW} $)`
+        : market === "etf"
+          ? " : 0 $ (ETF)"
+          : ` : ${ticket} $ par sens`);
+
+  const n = Number(shares);
+  const p = Number(price);
+  const cash = Number(amount);
+  const notional = n > 0 && p > 0 ? n * p : crypto && cash > 0 ? cash : null;
+
+  if (notional == null) {
+    return {
+      ...shared,
+      basis,
+      why: crypto
+        ? "aucun montant pour cette ligne"
+        : !(n > 0)
+          ? "aucun nombre de parts"
+          : "aucun prix pour cette ligne : lancer node prices.mjs",
+      confidence: confidenceOf({
+        picked,
+        market,
+        listing,
+        leaf,
+        marketBp,
+        marketPerShare,
+        unsourced: m.unsourced,
+        taxPct,
+        taxSource,
+        ticket,
+      }),
+    };
+  }
+
+  const notionalUsd = toUsd(notional, listing.currency || "USD");
+  const priceUsd = n > 0 && p > 0 ? toUsd(p, listing.currency) : null;
+  const bookUsd =
+    marketBp != null && notionalUsd != null
+      ? (notionalUsd * marketBp) / 1e4
+      : marketPerShare != null && n > 0
+        ? marketPerShare * n
+        : crypto
+          ? 0
+          : null;
+
+  const buy = commissionSide({
+    market,
+    plan: picked,
+    amountUsd: notionalUsd,
+    shares: n > 0 ? n : null,
+    priceUsd,
+    row,
+  });
+  const sell = commissionSide({
+    market,
+    plan: picked,
+    amountUsd: notionalUsd,
+    shares: n > 0 ? n : null,
+    priceUsd,
+    row,
+  });
+  const buyUsd = buy ? dollars(buy.charged, buy.currency) : null;
+  const sellUsd = sell ? dollars(sell.charged, sell.currency) : null;
+  const brokerFees = plus(buyUsd, sellUsd);
+  const taxUsd = crypto ? 0 : notionalUsd == null ? null : notionalUsd * taxPct;
+  const usd = plus(bookUsd, brokerFees, taxUsd);
+
+  return {
+    ...shared,
+    usd: finite(usd, 6),
+    brokerFees: finite(brokerFees, 6),
+    ...(bookUsd == null && !crypto
+      ? {
+          why:
+            `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ` +
+            `${m.unsourced?.why || "pas de source de spread"}`,
+        }
+      : {}),
+    trade: {
+      shares: n > 0 ? n : null,
+      price: p > 0 ? p : null,
+      amount: crypto && cash > 0 ? cash : null,
+      notional,
+      notionalUsd: finite(notionalUsd, 6),
+      currency: listing.currency,
+    },
+    buy: {
+      commission: finite(buyUsd, 6),
+      native: buy ? { ...buy, charged: finite(buy.charged, 6), raw: finite(buy.raw, 6) } : null,
+      taxes: finite(taxUsd, 6),
+      taxRates: Object.keys(rates).length ? rates : null,
+    },
+    sell: {
+      commission: finite(sellUsd, 6),
+      native: sell ? { ...sell, charged: finite(sell.charged, 6), raw: finite(sell.raw, 6) } : null,
+    },
+    parts: {
+      marché: finite(bookUsd, 6),
+      commission: finite(brokerFees, 6),
+      taxes: finite(taxUsd, 6),
+    },
     commission: {
-      kind: commPct ? "pct" : "flat",
-      rate: commPct ? rateEach(market) : null,
+      kind: buy?.kind || (ticket ? "flat" : "pct"),
+      rate: buy?.rate ?? null,
       ticket: ticket || null,
       currency: "USD",
       eachWay: true,
       plan: picked.id,
+      penny: Boolean(buy?.penny),
     },
-    ccy: QUOTE,
-    cap: null,
-    threshold:
-      market === "cfd" && american
-        ? {
-            b: CFD_PENNY_EACH * 2,
-            a: 0,
-            currency: QUOTE,
-            below: CFD_PENNY_BELOW,
-            belowCurrency: "USD",
-            why: `CFD US à ${CFD_PENNY_BELOW} $ ou moins : ${CFD_PENNY_EACH} $/share par jambe à la place de ${CFD_EACH * 100} %`,
-          }
-        : null,
-    fx: fxNote(listing.currency),
-    fxIfConverted: 0,
-    confidence:
-      `eToro ${picked.label}, palier ${market}, page lue le ${SCHEDULE.readOn}. ` +
-      (market === "crypto"
-        ? `Crypto ${CRYPTO_EACH * 100} % par jambe (Bronze / Silver / Gold). `
-        : market === "cfd"
-          ? `CFD ${CFD_EACH * 100} % par jambe, pas de ticket. `
-          : market === "etf"
-            ? `ETF / ETC sans commission. `
-            : `Ticket ${ticket} $ par jambe (dans c). `) +
-      `SEC / TAF hors de a (« no additional broker fees »). ` +
-      `Change 0,75 % hors de a (portefeuille USD / local). Custody 0. ` +
-      `Pas d'aller-retour réel dans ce dépôt. ` +
-      (leaf ? "" : `Pas de feuille de carnet pour cet ISIN / cette place. `),
+    basis,
+    confidence: confidenceOf({
+      picked,
+      market,
+      listing,
+      leaf,
+      marketBp,
+      marketPerShare,
+      unsourced: m.unsourced,
+      taxPct,
+      taxSource,
+      ticket,
+      buy,
+    }),
   };
+}
+
+function confidenceOf({
+  picked,
+  market,
+  listing,
+  leaf,
+  marketBp,
+  marketPerShare,
+  unsourced,
+  taxPct,
+  taxSource,
+  ticket,
+  buy,
+}) {
+  const said = [];
+  said.push(
+    `eToro ${picked.label}, palier ${market}, page relue le ${SCHEDULE.readOn} ` +
+      `(inchangée depuis le ${SCHEDULE.previouslyRead})`
+  );
+  if (market === "crypto") {
+    said.push(
+      `crypto ${(CRYPTO_EACH * 100).toFixed(0)} % par sens (Bronze / Silver / Gold, 0–10 k$)` +
+        (buy?.extra ? `, + ${(buy.extra * 100).toFixed(1)} % LUNC sur le bid / ask` : "")
+    );
+  } else if (market === "cfd") {
+    said.push(
+      buy?.penny
+        ? `CFD US ≤ ${CFD_PENNY_BELOW} $ : ${CFD_PENNY_EACH} $/share par sens à la place de ${CFD_EACH * 100} %`
+        : `CFD ${CFD_EACH * 100} % par sens, pas de ticket`
+    );
+  } else if (market === "etf") {
+    said.push(`ETF / ETC / ETN : 0 $ de commission`);
+  } else {
+    said.push(ticket ? `ticket ${ticket} $ par sens (en USD, quelle que soit la cotation)` : `pas de ticket`);
+  }
+  if (taxPct) {
+    said.push(
+      taxSource === "etoro"
+        ? `taxe à l'achat ${(100 * taxPct).toFixed(2)} % du montant — SDRT 0,50 % qu'eToro imprime (cet ISIN n'est pas dans taxMap.mjs)`
+        : `taxe à l'achat ${(100 * taxPct).toFixed(2)} % du montant, depuis taxMap.mjs`
+    );
+  }
+  if (market !== "crypto" && market !== "cfd") {
+    said.push(`SEC / TAF hors total (« no additional broker fees » sur une action réelle)`);
+  }
+  if (marketBp != null) said.push(`carnet publié ${Number(marketBp.toPrecision(4))} bp, aller-retour`);
+  else if (marketPerShare != null) said.push(`carnet Rule 605, ${marketPerShare} $ la part, moyenne 100–499 parts`);
+  else if (market !== "crypto") {
+    said.push(
+      `aucun carnet : ${unsourced?.name || listing.exchange}, ${unsourced?.why || "pas de source"}. ` +
+        `Le total est N/A faute de mesure, pas faute de frais`
+    );
+  }
+  said.push(
+    `hors total : change 0,75 % si le portefeuille n'est pas dans la devise, ` +
+      `retrait 5 $ depuis un compte USD (gratuit en devise locale), Club, Copy, Smart Portfolios, ` +
+      `Stock Margin, overnight CFD. Aucun aller-retour réel dans ce dépôt`
+  );
+  return said.join(" ; ");
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const flag = (name) => {
-    const m = process.argv.find((a) => a.startsWith(`--${name}=`));
-    return m ? m.split("=").slice(1).join("=") : null;
+    const hit = process.argv.find((a) => a.startsWith(`--${name}=`));
+    return hit ? hit.split("=").slice(1).join("=") : null;
   };
 
   if (process.argv.includes("--schedule")) {
@@ -406,7 +574,9 @@ if (import.meta.url === `file://${process.argv[1]}`) {
           defaultPlan: DEFAULT_PLAN,
           plans: PLANS,
           crypto: CRYPTO_EACH,
+          luncExtra: LUNC_EXTRA,
           cfd: CFD_EACH,
+          cfdPenny: { each: CFD_PENNY_EACH, below: CFD_PENNY_BELOW },
           coverage: coverage(),
         },
         null,
@@ -420,19 +590,23 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node etoro_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--plan=standard|anz|uk] [--json]\n" +
+      "usage : node etoro_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--amount=usd] [--plan=standard|anz|uk] [--json]\n" +
         "        node etoro_cost.mjs --schedule\n" +
-        "  ex.   node etoro_cost.mjs AAPL\n" +
-        "        node etoro_cost.mjs VUSA EURONEXT EUR\n" +
-        "        node etoro_cost.mjs AAPL NASDAQ USD --plan=uk"
+        "  ex.   node etoro_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
+        "        node etoro_cost.mjs VUSA EURONEXT EUR --shares=10 --price=100\n" +
+        "        node etoro_cost.mjs BTC --amount=1000\n" +
+        "        node etoro_cost.mjs AAPL NASDAQ USD --plan=uk --shares=10 --price=230"
     );
     process.exit(2);
   }
 
-  const out = roundTripCost({
+  const out = roundTrip({
     etf,
     place,
     currency,
+    shares: flag("shares") ? Number(flag("shares")) : null,
+    price: flag("price") ? Number(flag("price")) : null,
+    amount: flag("amount") ? Number(flag("amount")) : null,
     bp: flag("bp") ? Number(flag("bp")) : null,
     perShare: flag("per-share") ? Number(flag("per-share")) : null,
     plan: flag("plan") || DEFAULT_PLAN,
@@ -443,15 +617,15 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     process.exit(0);
   }
 
-  if (out.a == null && !out.listing) {
-    console.log(`a = null   b = ${out.b}   c = ${out.c}\n${out.why}`);
+  const l = out.listing;
+  if (!l) {
+    console.log(out.why || "rien à dire");
     if (out.alternatives?.length) {
       console.log(`\nce qu'eToro propose sous ce nom :\n  ${out.alternatives.join("\n  ")}`);
     }
     process.exit(0);
   }
 
-  const l = out.listing;
   const picked = planOf(out.plan);
   console.log(`${l.ticker || l.query || l.isin} — ${l.name || ""}`);
   console.log(
@@ -459,45 +633,28 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       `${l.cfd ? ", CFD" : ""}  [${picked?.label || out.plan}]\n`
   );
 
-  const detail = [];
-  if (out.parts?.marché != null) detail.push(`carnet ${out.parts.marché}`);
-  for (const [name, rate] of Object.entries(out.parts?.taxes ?? {})) detail.push(`${name} ${rate}`);
-  if (out.parts?.commission) detail.push(`courtage ${out.parts.commission}`);
-
-  console.log(`a = ${out.a}   (au prorata${detail.length ? " : " + detail.join(" + ") : " : rien"})`);
-  console.log(`b = ${out.b} $   (par part${out.b ? " : spread 605" : " : rien"})`);
-  console.log(
-    `c = ${out.c} $   (par ordre : ${out.c ? `${out.c / 2} $ × 2` : "pas de ticket"})`
-  );
-  if (out.remark) console.log(out.remark);
-  if (out.why) console.log(out.why);
-  const fx = out.fx?.listing ?? usdPer(l.currency);
-  console.log(
-    `\ncoût = ${out.a} × p × n × ${fx != null ? Number(fx.toPrecision(6)) : "?"} + ${out.b} × n + ${out.c}   ($ ; p en ${l.currency})`
-  );
-  console.log(`  ${out.basis}`);
-  for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
-
-  const n = Number(flag("shares"));
-  const p = Number(flag("price"));
-  if (n > 0 && p > 0) {
-    const amount = n * p;
-    const amountUsd = toUsd(amount, l.currency);
-    const affine = amountUsd != null && out.a != null ? out.a * amountUsd + out.b * n + out.c : null;
-    const billed = exactCost({ amount: amountUsd ?? amount, market: out.feeMarket, plan: out.plan });
+  if (out.trade?.notional != null) {
+    const t = out.trade;
     console.log(
-      `\n${n} part${n > 1 ? "s" : ""} à ${p} ${l.currency} = ${amount.toFixed(2)} ${l.currency}` +
-        (amountUsd != null ? ` (${amountUsd.toFixed(2)} $)` : "")
+      (t.amount != null
+        ? `${t.amount} ${t.currency}`
+        : t.shares
+          ? `${t.shares} part${t.shares > 1 ? "s" : ""} à ${t.price} ${t.currency} = ${t.notional.toFixed(2)} ${t.currency}`
+          : "") + (t.notionalUsd != null ? ` (${t.notionalUsd.toFixed(2)} $)` : "")
     );
-    if (affine != null) console.log(`  a, b, c        : ${affine.toFixed(4)} $`);
-    if (billed.commission != null) {
-      console.log(
-        `  commission     : ${Number(billed.commission).toFixed(4)} $` +
-          (billed.native?.each != null
-            ? ` (${Number(billed.native.each).toPrecision(4)} ${billed.native.currency} × 2)`
-            : "")
-      );
+    console.log();
+  }
+
+  console.log(`aller-retour     : ${out.usd == null ? `N/A${out.why ? ` — ${out.why}` : ""}` : `${out.usd} $`}`);
+  console.log(`frais du courtier: ${out.brokerFees == null ? "N/A" : `${out.brokerFees} $`}`);
+  if (out.parts) {
+    for (const [name, v] of Object.entries(out.parts)) {
+      if (v != null) console.log(`  ${name.padEnd(15)}: ${v} $`);
     }
   }
+  console.log();
+  if (out.basis) console.log(`  ${out.basis}`);
+  for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
+  if (out.remark) for (const r of out.remark.split("\n")) console.log(`  · ${r}`);
   if (out.url) console.log(`\n${out.url}`);
 }

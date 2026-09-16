@@ -143,28 +143,49 @@ const kindByIsin = new Map();
 loadIsinKinds(etfsCsvPath, "ETF", kindByIsin);
 loadIsinKinds(stocksCsvPath, "STOCK", kindByIsin);
 
+function loadQueryFile(filePath) {
+  if (!filePath || !fs.existsSync(filePath)) return [];
+  return fs
+    .readFileSync(filePath, "utf8")
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line && !line.startsWith("#"));
+}
+
+const queryFile = (() => {
+  for (const arg of process.argv.slice(2)) {
+    const match = arg.match(/^--file=(.+)$/i);
+    if (match) return match[1];
+  }
+  return "";
+})();
+
 const jobs = [];
 const seenQueries = new Set();
 const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
+const fileArgs = loadQueryFile(queryFile);
+const asked = positionalArgs.length > 0 ? positionalArgs : fileArgs;
 
-if (positionalArgs.length > 0) {
-  for (const arg of positionalArgs) {
-    const isin = toIsin(arg);
-    if (isin) {
-      if (seenQueries.has(isin)) continue;
-      seenQueries.add(isin);
-      jobs.push({
-        query: isin,
-        shelf: "isin",
-        kind: kindByIsin.get(isin) || "STOCK",
-      });
-    } else {
-      const ticker = normalizeTicker(arg);
-      if (!ticker || seenQueries.has(ticker)) continue;
-      seenQueries.add(ticker);
-      jobs.push({ query: ticker, shelf: "crypto", kind: "CRYPTO" });
-    }
+function pushJob(arg) {
+  const isin = toIsin(arg);
+  if (isin) {
+    if (seenQueries.has(isin)) return;
+    seenQueries.add(isin);
+    jobs.push({
+      query: isin,
+      shelf: "isin",
+      kind: kindByIsin.get(isin) || "STOCK",
+    });
+    return;
   }
+  const ticker = normalizeTicker(arg);
+  if (!ticker || seenQueries.has(ticker)) return;
+  seenQueries.add(ticker);
+  jobs.push({ query: ticker, shelf: "crypto", kind: "CRYPTO" });
+}
+
+if (asked.length > 0) {
+  for (const arg of asked) pushJob(arg);
 } else {
   if (wantEtfs) loadIsinJobs(etfsCsvPath, "ETF", seenQueries, jobs);
   if (wantStocks) loadIsinJobs(stocksCsvPath, "STOCK", seenQueries, jobs);
@@ -245,6 +266,14 @@ if (!fresh && fs.existsSync(outputPath)) {
     // Ignore malformed prior output and start fresh.
   }
 }
+
+const alreadyQueried = new Set(
+  results
+    .flatMap((entry) => [entry.isin, entry.query])
+    .map((value) => String(value || "").toUpperCase())
+    .filter(Boolean)
+);
+const pendingJobs = jobs.filter((job) => !alreadyQueried.has(job.query.toUpperCase()));
 
 const API = "/portal.proxy/v1/portal";
 
@@ -346,7 +375,35 @@ async function search(symbol, pattern) {
   });
   if (isDeadSession(answer) || (!answer.json && !answer.error)) return null;
   if (!Array.isArray(answer.json)) return [];
-  return answer.json.filter((hit) => hit?.conid && hit?.symbol);
+  const hits = answer.json.filter((hit) => hit?.conid && hit?.symbol);
+  if (hits.length > 0) markHealthy();
+  return hits;
+}
+
+const HEALTHY_MS = 15_000;
+let healthyUntil = 0;
+let canaryWait = null;
+
+function markHealthy() {
+  healthyUntil = Date.now() + HEALTHY_MS;
+}
+
+function isHealthy() {
+  return Date.now() < healthyUntil;
+}
+
+async function confirmHealthy() {
+  if (isHealthy()) return true;
+  if (canaryWait) return canaryWait;
+
+  canaryWait = (async () => {
+    const probe = await search("SPY", false);
+    return Boolean(probe && probe.length > 0);
+  })().finally(() => {
+    canaryWait = null;
+  });
+
+  return canaryWait;
 }
 
 // The portal signs itself out after a stretch, and login often lands in a
@@ -393,8 +450,19 @@ async function waitForSession() {
 async function searchWithRetry(symbol, pattern) {
   for (let attempt = 0; attempt < 3; attempt += 1) {
     const payload = await search(symbol, pattern);
-    if (payload !== null) return payload;
-    console.error("  no answer, retrying");
+    if (payload && payload.length > 0) return payload;
+
+    if (payload !== null) {
+      if (attempt === 0) {
+        await sleep(400);
+        continue;
+      }
+      if (isHealthy() || (await confirmHealthy())) return payload;
+      console.error("  empty while SPY is silent, retrying");
+    } else {
+      console.error("  no answer, retrying");
+    }
+
     await tickle();
     await sleep(2000 * (attempt + 1));
   }
@@ -504,13 +572,13 @@ function save() {
   fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
 }
 
-const endIndex = walkLimit > 0 ? startIndex - 1 + walkLimit : jobs.length;
-const walk = jobs.slice(startIndex - 1, endIndex);
+const endIndex = walkLimit > 0 ? startIndex - 1 + walkLimit : pendingJobs.length;
+const walk = pendingJobs.slice(startIndex - 1, endIndex);
 
 console.error(
-  `${jobs.length} queries to check` +
+  `${jobs.length} in the list, ${alreadyQueried.size} already listed, ${walk.length} still to ask` +
     (startIndex > 1 || walkLimit > 0
-      ? ` (walking ${startIndex}–${Math.min(endIndex, jobs.length)})`
+      ? ` (walking ${startIndex}–${Math.min(endIndex, pendingJobs.length)})`
       : "") +
     (lanes > 1 ? `, ${lanes} at a time` : "")
 );
@@ -519,7 +587,7 @@ let next = 0;
 let done = 0;
 
 async function runJob(queryIndex, job) {
-  console.error(`[${queryIndex + 1}/${jobs.length}] ${job.query}`);
+  console.error(`[${queryIndex + 1}/${walk.length}] ${job.query}`);
 
   let silent;
   let rows;
@@ -561,7 +629,14 @@ async function runJob(queryIndex, job) {
   save();
 }
 
-if (walk.length > 0) await tickle();
+if (walk.length > 0) {
+  const tick = await api("tickle");
+  const auth = tick?.json?.iserver?.authStatus;
+  if (!(auth && auth.authenticated === true && auth.connected === true)) {
+    console.error("portal is not signed in; waiting...");
+    await waitForSession();
+  }
+}
 
 await Promise.all(
   Array.from({ length: Math.min(lanes, walk.length) }, async () => {

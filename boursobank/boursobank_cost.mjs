@@ -23,7 +23,9 @@
 //
 // Custody is free, the monthly subscription is free on Découverte, and the
 // account is euro-only, so a line quoted in anything else is converted twice:
-// « Taux de change J+1 + 0,0025 points », read as 0,25 % a side.
+// « Taux de change J+1 + 0,0025 points ». The points are absolute on the rate,
+// so the margin is 0,0025 divided by the price of a euro in the listing
+// currency — near 0,22 % on the dollar, near 0,29 % on the pound.
 //
 // A purchase under the brochure's minimum is refused rather than priced:
 // 20 € on a share, and 200 € on an ETF whatever the account. That floor is the
@@ -36,8 +38,27 @@
 // trip cost 4,37 € of which 3,98 € is the two tickets and 0,31 € the tax. The
 // eight cents of book are not folded in: the board still showed the 17:35
 // Euronext close. Classic, Trader, Ultimate, the American card and the
-// European one were not traded, and the conversion was never exercised —
-// TotalEnergies is quoted in euro.
+// European one were not traded.
+//
+// The rest was read off order tickets carried to the confirmation screen and
+// abandoned there, which prints the all-in fee and costs nothing. A control on
+// the same TTE reproduced this file to the cent, then: a Nasdaq ticket priced
+// the American card at 6,95 € and the conversion at 0,220 %, which is what
+// fixed the reading above; a London ticket priced the European card at 11,95 €
+// and, on a currency trading below the euro, billed the same 0,0025 point as
+// 0,298 % where the dollar had paid 0,221 % — two screens matched to the cent
+// by absolute points and missed by any flat percentage; three Paris trackers
+// all paid the full Euronext ticket, none of them free — and none of them on
+// the Boursomarkets list, which turned out to be published as a ranking and is
+// now read into `boursomarkets.json`: 171 partner trackers, 147 of them in this
+// catalogue, brokered at nothing on both sides, one of which was checked on a
+// recap and printed 0,00 €; and a 50 € tracker was
+// refused in the bank's own words for the 200 € floor. The selling side, where
+// the American regulatory levies sit, was never shown.
+//
+// One caveat on those recaps: the euro amount they print is padded by about
+// 2 % over the market rate, a provisioning cushion rather than a charge, and
+// the fees are struck on the padded figure. The rates used here are mid.
 //
 //   https://www.boursobank.com/content/brochure_tarifaire/boursorama_bt.pdf
 //
@@ -56,6 +77,7 @@ import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
 const CATALOGUE = new URL("boursobank-parsed.json", import.meta.url);
+const PARTNERS_FILE = new URL("boursomarkets.json", import.meta.url);
 const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
 
 const SCHEDULE = {
@@ -71,7 +93,15 @@ const TAF_PER_SHARE = 0.000195;
 const TAF_CAP = 9.79;
 const PTM = { each: 1.5, currency: "GBP", above: 10000 };
 const UK_REGISTERED = /^(GB|GG|JE|IM)/;
-const FX_EACH_WAY = 0.0025;
+
+// « Taux de change J+1 + 0,0025 points ». The points are absolute on the rate
+// and not a percentage of the amount, which the recap settles: a Nasdaq ticket
+// of 225 $US was priced at 198,68 € and billed 0,44 € of conversion, which is
+// 0,0025 over a rate of 1,135 dollars to the euro — 0,220 %. A flat 0,25 %
+// would have billed 0,50 € and the screen would have read 7,45 € instead of
+// 7,39 €. So the margin bites harder on a currency that trades below the euro
+// than on one above it, and no single percentage can stand for all of them.
+const FX_POINTS = 0.0025;
 const PEA_CAP = 0.005;
 const US_MICS = new Set(["XNAS", "XNYS", "ARCX", "XASE", "BATS"]);
 const DEFAULT_PLAN = "decouverte";
@@ -104,6 +134,52 @@ const CHECK = {
   cash: { start: 500, afterBuy: 419.56, end: 495.63 },
   trip: 4.37,
   on: "2026-09-09",
+
+  // Order tickets carried to the confirmation screen and abandoned there. That
+  // panel prints « FRAIS TOUT COMPRIS », the only place the bank itemises a
+  // trade before it is sent, so these cost nothing and still read the card.
+  // The control first: TotalEnergies at 80 € came back at 1,99 € of commission
+  // and 2,31 € all in, the missing 0,32 € being 0,4 % of French turnover tax —
+  // the file reproduces the screen to the cent, so the screen can be trusted
+  // on the lines where the file was guessing.
+  recap: {
+    on: "2026-09-15",
+    control: { ticker: "TTE", amountEur: 80, commission: 1.99, allIn: 2.31 },
+  },
+  uk: {
+    ticker: "PRU",
+    venue: "LSE",
+    notionalGbx: 18600,
+    amountEur: 221.64,
+    commission: 11.95,
+    allIn: 13.72,
+    stampEur: 1.11,
+    fxEur: 0.66,
+  },
+  us: {
+    ticker: "MEDP",
+    venue: "NASDAQ",
+    notional: 225,
+    amountEur: 198.68,
+    commission: 6.95,
+    allIn: 7.39,
+    fxEur: 0.44,
+  },
+  // No transaction tax and no conversion on a Paris tracker, yet the all-in
+  // runs above the ticket by an amount that changes with the fund: it is the
+  // product's own entry cost from its key information document, not a charge
+  // the bank keeps. `spread.json` already carries that cost, so counting the
+  // gap here would count it twice. What matters is the commission column:
+  // every one paid the full Euronext ticket, none went free.
+  etfs: [
+    { ticker: "CC4", amountEur: 208.44, commission: 1.99, allIn: 2.38 },
+    { ticker: "500", amountEur: 245.54, commission: 1.99, allIn: 2.36 },
+    { ticker: "EEA", amountEur: 209.79, commission: 1.99, allIn: 3.0 },
+  ],
+  // The other end of the Boursomarkets list: a partner tracker, free.
+  partner: { ticker: "AGED", amountEur: 207.0, commission: 0, allIn: 0.91 },
+  // Refused before any confirmation screen, in the bank's own words.
+  floor: { ticker: "B26A", amountEur: 50, message: "Le minimum de souscription sur cette valeur est de 200.0 euros" },
 };
 
 const PLANS = {
@@ -138,14 +214,29 @@ const OTHER_RULE = {
 
 // What each forfait costs when it is not used enough, and what it demands to
 // be opened at all. Ultimate is the odd one: the brochure reserves it to a PEA.
+// `per`, `why` and `account` feed the confidence text and stay French; `en` is
+// the one-line remark, which the shelf writes in English like every other.
 const PLAN_STRINGS = {
-  classic: { idle: 5.95, per: "mois", why: "aucun ordre exécuté dans le mois", account: "CTO uniquement" },
-  trader: { idle: 5.95, per: "mois", why: "aucun ordre exécuté dans le mois", account: null },
+  classic: {
+    idle: 5.95,
+    per: "mois",
+    why: "aucun ordre exécuté dans le mois",
+    account: "CTO uniquement",
+    en: "5.95 €/month if no trade that month.",
+  },
+  trader: {
+    idle: 5.95,
+    per: "mois",
+    why: "aucun ordre exécuté dans le mois",
+    account: null,
+    en: "5.95 €/month if no trade that month.",
+  },
   ultimate: {
     idle: 119,
     per: "mois",
     why: "moins de 30 ordres exécutés dans le mois",
     account: "réservé à l'ouverture d'un PEA, PEA 18-25 ans ou PEA-PME, trois mois minimum",
+    en: "119 €/month if under 30 trades that month.",
   },
 };
 
@@ -179,6 +270,19 @@ const fxNote = (currency) => ({
   asOf: FX_AS_OF,
   listing: usdPer(currency),
 });
+
+// The conversion margin for one leg, as a fraction of the amount. GBX is a
+// hundredth of a pound but settles in pounds, so the pence quote borrows the
+// pound's rate rather than carrying a hundredfold smaller one.
+export function fxMarginRate(currency) {
+  const c = String(currency || "").toUpperCase() === "GBX" ? "GBP" : String(currency || "").toUpperCase();
+  if (!c || c === "EUR") return 0;
+  const perUsd = usdPer(c);
+  const eurUsd = usdPer("EUR");
+  if (!(perUsd > 0) || !(eurUsd > 0)) return null;
+  const perEur = eurUsd / perUsd;
+  return perEur > 0 ? FX_POINTS / perEur : null;
+}
 
 export function planOf(name = DEFAULT_PLAN) {
   const key = String(name || "")
@@ -222,9 +326,27 @@ export function commissionEach(amount, rule) {
  * the PEA cap when the account is one. Says which of the two bit, because the
  * ticket and the percentage swap places at a size the reader can feel.
  */
-export function commissionSide({ amount, market, plan = DEFAULT_PLAN, pea = false }) {
+// The Boursomarkets trackers, which the bank brokes at 0 € « à l'achat ou
+// droits d'entrée » and « à la vente ou sortie ». Read once, and tolerated
+// missing: without the list the file simply bills every tracker in full, which
+// is what it did before the list existed.
+const PARTNERS = (() => {
+  try {
+    const j = JSON.parse(fs.readFileSync(PARTNERS_FILE, "utf8"));
+    return { on: new Set((j.entries || []).map((e) => e.isin)), at: j.generatedAt || null };
+  } catch {
+    return { on: new Set(), at: null };
+  }
+})();
+
+export const isPartner = (isin) => PARTNERS.on.has(String(isin || "").toUpperCase());
+
+export function commissionSide({ amount, market, plan = DEFAULT_PLAN, pea = false, partner = false }) {
   const rule = ruleOf(plan, market);
   if (!rule) return null;
+  if (partner) {
+    return { charged: 0, raw: 0, ticketed: true, capped: false, partner: true, currency: "EUR", rule };
+  }
   const raw = commissionEach(amount, rule);
   if (raw == null) return null;
   const ticketed = amount <= rule.upTo;
@@ -242,20 +364,11 @@ export function commissionSide({ amount, market, plan = DEFAULT_PLAN, pea = fals
   };
 }
 
-/**
- * The proportional transaction taxes on the purchase. PTM is dropped here even
- * though the tax sheet carries it: it is a flat 1,50 £ per order, and the sheet
- * only expresses it as a fraction because the sweep divided it by the notional
- * it happened to ask about. Read as a rate it would be wrong at every other
- * size, and counted here it would be counted twice.
- */
+// The proportional transaction taxes on the purchase. The PTM levy is not one
+// of them and taxMap.mjs no longer returns it: it is 1,50 £ per order, counted
+// below against the brochure's own threshold.
 function stampOf(tax) {
-  const all = taxRates(tax);
-  const rates = {};
-  for (const [name, rate] of Object.entries(all)) {
-    if (/PTM/i.test(name)) continue;
-    rates[name] = rate;
-  }
+  const rates = taxRates(tax);
   const pct = Object.values(rates).reduce((s, r) => s + r, 0);
   return { pct, rates, known: tax?.known === true };
 }
@@ -263,10 +376,10 @@ function stampOf(tax) {
 function remarkOf({ plan, market, listing, pea }) {
   const lines = [];
   const idle = PLAN_STRINGS[plan.id];
-  if (idle) lines.push(`${idle.idle} €/${idle.per} si ${idle.why}.`);
-  if (plan.id === "ultimate") lines.push("Formule liée à un PEA.");
-  const min = minOrderOf({ market, listing, pea });
-  if (min != null) lines.push(`Ordre minimum ${min} € à l'achat.`);
+  if (idle) lines.push(idle.en);
+  // The minimum order is not a fee but a refusal, and `roundTrip` already
+  // answers N/A with the reason when an order falls under it. The account a
+  // plan is tied to is spelled out in full in the confidence text.
   return lines.join("\n");
 }
 
@@ -391,6 +504,7 @@ export function roundTrip({
   const tax = taxesOf(listing.isin);
   const stamp = stampOf(tax);
   const converted = listing.currency !== "EUR";
+  const fxRate = converted ? fxMarginRate(listing.currency) : 0;
   const minOrder = minOrderOf({ market, listing, pea });
 
   const shared = {
@@ -402,7 +516,7 @@ export function roundTrip({
     url: leaf?.url ?? SCHEDULE.source,
     tax,
     fx: fxNote(listing.currency),
-    fxIfConverted: converted ? FX_EACH_WAY * 2 : 0,
+    fxIfConverted: fxRate == null ? null : finite(fxRate * 2, 6),
     remark: remarkOf({ plan: picked, market, listing, pea }),
     commission: {
       rate: rule.rate,
@@ -468,8 +582,9 @@ export function roundTrip({
         ? marketPerShare * n
         : null;
 
-  const buyComm = commissionSide({ amount: notionalEur, market, plan: picked.id, pea });
-  const sellComm = commissionSide({ amount: notionalEur, market, plan: picked.id, pea });
+  const partner = isPartner(listing.isin);
+  const buyComm = commissionSide({ amount: notionalEur, market, plan: picked.id, pea, partner });
+  const sellComm = commissionSide({ amount: notionalEur, market, plan: picked.id, pea, partner });
   const buyCommUsd = buyComm ? dollars(buyComm.charged, buyComm.currency) : null;
   const sellCommUsd = sellComm ? dollars(sellComm.charged, sellComm.currency) : null;
 
@@ -492,7 +607,7 @@ export function roundTrip({
   const ptmUsd = ptmDue === false ? 0 : ptmDue === null ? null : dollars(2 * PTM.each, PTM.currency);
 
   // « Taux de change J+1 + 0,0025 points », once on the way in and once out.
-  const fxUsd = converted ? (notionalUsd == null ? null : notionalUsd * FX_EACH_WAY * 2) : 0;
+  const fxUsd = !converted ? 0 : fxRate == null || notionalUsd == null ? null : notionalUsd * fxRate * 2;
 
   const usd = plus(bookUsd, buyCommUsd, sellCommUsd, stampUsd, secUsd, tafUsd, ptmUsd, fxUsd);
   // What BoursoBank keeps. The book belongs to whoever quoted it, the French
@@ -562,6 +677,8 @@ export function roundTrip({
       tax,
       american,
       converted,
+      fxRate,
+      partner,
       ptmDue,
       minOrder,
       listing,
@@ -570,22 +687,26 @@ export function roundTrip({
   };
 }
 
-function confidenceOf({ picked, market, rule, buyComm, stamp, tax, american, converted, ptmDue, minOrder, listing, leaf }) {
+function confidenceOf({ picked, market, rule, buyComm, stamp, tax, american, converted, fxRate, partner, ptmDue, minOrder, listing, leaf }) {
   const lines = [];
 
-  lines.push(
-    `Commission ${picked.label} sur le palier ${market}, brochure du ${SCHEDULE.effective} lue le ${SCHEDULE.readOn}. ` +
-      (buyComm?.ticketed
-        ? `L'ordre tient sous ${rule.upTo} €, donc le ticket de ${rule.min} € s'applique tel quel, par sens.`
-        : `L'ordre dépasse ${rule.upTo} €, donc ${(rule.rate * 100).toFixed(2)} % s'applique, par sens.`) +
-      (buyComm?.capped ? ` Le plafond PEA de 0,5 % mord et remplace le barème.` : "")
-  );
+  // A partner tracker never reaches the grid, so quoting the grid at it would
+  // only contradict the zero printed two lines below.
+  if (!partner) {
+    lines.push(
+      `Commission ${picked.label} sur le palier ${market}, brochure du ${SCHEDULE.effective} lue le ${SCHEDULE.readOn}. ` +
+        (buyComm?.ticketed
+          ? `L'ordre tient sous ${rule.upTo} €, donc le ticket de ${rule.min} € s'applique tel quel, par sens.`
+          : `L'ordre dépasse ${rule.upTo} €, donc ${(rule.rate * 100).toFixed(2)} % s'applique, par sens.`) +
+        (buyComm?.capped ? ` Le plafond PEA de 0,5 % mord et remplace le barème.` : "")
+    );
 
-  lines.push(
-    `Le ticket est une marche et non un plancher : à ${rule.upTo} € l'ordre coûte ${rule.min} €, ` +
-      `un euro plus haut il coûte ${(rule.upTo * rule.rate).toFixed(2)} €. ` +
-      `Le coût est calculé pour la taille demandée, ce qu'une forme affine ne savait pas dire.`
-  );
+    lines.push(
+      `Le ticket est une marche et non un plancher : à ${rule.upTo} € l'ordre coûte ${rule.min} €, ` +
+        `un euro plus haut il coûte ${(rule.upTo * rule.rate).toFixed(2)} €. ` +
+        `Le coût est calculé pour la taille demandée, ce qu'une forme affine ne savait pas dire.`
+    );
+  }
 
   if (market !== "us" && market !== "euronext") {
     lines.push(
@@ -604,8 +725,8 @@ function confidenceOf({ picked, market, rule, buyComm, stamp, tax, american, con
   } else if (/^(IT|ES)/.test(String(listing.isin || ""))) {
     lines.push(
       `Aucune ligne fiscale pour cet ISIN, et aucune taxe italienne ni espagnole n'est ajoutée d'office. ` +
-        `Bolsa de Madrid a été balayée intégralement sans une seule taxe à l'achat, donc le zéro espagnol est mesuré ; ` +
-        `côté italien seuls des émetteurs achetés hors de leur place ont été chiffrés, et un ordre passé sur Milan ` +
+        `Bolsa de Madrid a été balayée intégralement sans une seule taxe à l'achat, donc le zéro espagnol est mesuré. ` +
+        `Côté italien seuls des émetteurs achetés hors de leur place ont été chiffrés, et un ordre passé sur Milan ` +
         `même reste une question ouverte.`
     );
   } else {
@@ -615,15 +736,22 @@ function confidenceOf({ picked, market, rule, buyComm, stamp, tax, american, con
   if (american) {
     lines.push(
       `SEC ${SEC_RATE} et FINRA ${TAF_PER_SHARE} $ par part à la vente, plafonnée à ${TAF_CAP} $. ` +
-        `La brochure ne les imprime pas — elles ne sont pas de BoursoBank — et aucun relevé américain n'a été lu ici.`
+        `La brochure ne les imprime pas — elles ne sont pas de BoursoBank — et un achat ne les porte pas : ` +
+        `le récapitulatif ${CHECK.us.venue} de ${CHECK.us.amountEur} € n'ajoutait que le change au ticket. ` +
+        `Le sens vendeur, lui, n'a pas été mesuré.`
     );
   }
 
   if (converted) {
     lines.push(
-      `Compte en euro : la ligne est convertie deux fois. « Taux de change J+1 + 0,0025 points » est lu ` +
-        `comme 0,25 % par sens, ce qui est une lecture et non une mesure — des « points » sur un taux ` +
-        `pourraient être absolus, auquel cas la ponction varierait avec la paire. L'aller-retour réel était en euro.`
+      fxRate == null
+        ? `Compte en euro et ligne en ${listing.currency}, mais aucun taux pour cette devise : la conversion n'est pas chiffrée.`
+        : `Compte en euro : la ligne est convertie deux fois, à ${(100 * fxRate).toFixed(3)} % par sens. ` +
+          `Ce n'est pas un pourcentage de barème mais 0,0025 point sur le taux, mesuré sur deux devises : ` +
+          `${CHECK.us.fxEur} € de change sur un ticket ${CHECK.us.venue} de ${CHECK.us.amountEur} €, soit 0,221 %, ` +
+          `et ${CHECK.uk.fxEur} € sur un ticket ${CHECK.uk.venue} de ${CHECK.uk.amountEur} €, soit 0,298 %. ` +
+          `Les deux tombent au centime sur 0,0025 point, et un taux plat de 0,25 % manquerait les deux écrans. ` +
+          `La ponction dépend donc du niveau de la paire, et celui d'ici date du ${FX_AS_OF}.`
     );
   }
 
@@ -634,7 +762,10 @@ function confidenceOf({ picked, market, rule, buyComm, stamp, tax, american, con
   if (minOrder != null) {
     lines.push(
       `Minimum d'ordre à l'achat ${minOrder} €${isEtf(listing) ? " sur un ETF, quel que soit le compte" : ""} : ` +
-        `en dessous, la brochure refuse l'ordre et ce fichier rend N/A plutôt qu'un prix.`
+        `en dessous, l'ordre est refusé et ce fichier rend N/A plutôt qu'un prix. ` +
+        (isEtf(listing)
+          ? `Un ticket de ${CHECK.floor.amountEur} € s'est fait renvoyer « ${CHECK.floor.message} ».`
+          : `Le refus vient de la brochure, non d'un essai.`)
     );
   }
 
@@ -647,11 +778,22 @@ function confidenceOf({ picked, market, rule, buyComm, stamp, tax, american, con
     );
   }
 
-  lines.push(
-    `Boursomarkets met l'achat à 0 € sur ses produits listés, et ce fichier ne l'applique pas : ` +
-      `le catalogue scrapé ne dit pas quelles lignes en sont, donc tout ETF garde la carte Euronext dans les deux sens. ` +
-      `Là où elle s'applique, le vrai coût est plus bas que celui-ci.`
-  );
+  if (partner) {
+    lines.push(
+      `Tracker Boursomarkets : courtage nul dans les deux sens, « 0 € à l'achat ou droits d'entrée » et ` +
+        `« 0 € à la vente ou sortie ». La liste des ${PARTNERS.on.size} partenaires est relevée le ${PARTNERS.at} ` +
+        `depuis le palmarès de la banque, et vérifiée sur un récapitulatif : ` +
+        `${CHECK.partner.ticker} de ${CHECK.partner.amountEur} € s'affiche à ${CHECK.partner.commission} € de frais au passage. ` +
+        `L'écart de carnet, lui, reste dû.`
+    );
+  } else if (isEtf(listing)) {
+    lines.push(
+      `Tracker hors Boursomarkets : il paie la carte Euronext dans les deux sens. ` +
+        `Les ${CHECK.etfs.length} trackers portés au récapitulatif et absents de la liste — ` +
+        `${CHECK.etfs.map((e) => e.ticker).join(", ")} — ont tous payé le ticket plein de ${CHECK.etfs[0].commission} €, ` +
+        `ce qui recoupe la liste par l'autre bout.`
+    );
+  }
 
   if (picked.id === "decouverte" && market === "euronext") {
     lines.push(
@@ -661,8 +803,11 @@ function confidenceOf({ picked, market, rule, buyComm, stamp, tax, american, con
     );
   } else {
     lines.push(
-      `Ni ${picked.label} ni le palier ${market} n'ont été recoupés sur un relevé : ` +
-        `le seul aller-retour réel est ${CHECK.ticker} en Découverte sur Euronext, à ${CHECK.commissionEach} € le ticket.`
+      market === "europe" && picked.id === "decouverte"
+        ? `Le ticket de ${CHECK.uk.commission} € a été lu sur un récapitulatif ${CHECK.uk.venue} de ${CHECK.uk.amountEur} €, ` +
+          `sans qu'aucun ordre ne parte. Le sens vendeur, lui, n'a pas été montré.`
+        : `Ni ${picked.label} ni le palier ${market} n'ont été recoupés sur un relevé : ` +
+          `le seul aller-retour réel est ${CHECK.ticker} en Découverte sur Euronext, à ${CHECK.commissionEach} € le ticket.`
     );
   }
 

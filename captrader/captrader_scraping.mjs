@@ -145,24 +145,54 @@ function uniqueQueries(values) {
   });
 }
 
-const browser = await puppeteer.connect({
-  browserURL: "http://127.0.0.1:9222",
-  defaultViewport: null,
-});
+const CHROME = { browserURL: "http://127.0.0.1:9222", defaultViewport: null };
+const PORTAL = "https://www.clientam.com/portal/";
 
-// Captrader introduces the account onto IBKR's Client Portal, served from
-// clientam.com just like MEXEM and WH SelfInvest, so the same portal bridge is
-// used. The page is only there to lend its session to the calls.
-const pages = await browser.pages();
-const page =
-  pages.find((candidate) => candidate.url().includes("clientam.com")) ||
-  (await browser.newPage());
+let browser = await puppeteer.connect(CHROME);
+
+function isPortalUrl(url) {
+  return /clientam\.com/i.test(url);
+}
+
+function looksLoggedOut(url) {
+  return /sso\.|\/sso\/|\/Login|signin|authentication|amauthentication/i.test(url);
+}
+
+// The page is only there to lend its signed-in CapTrader session. Login often
+// opens a new tab; we prefer a live portal over a login page.
+let page = null;
+
+async function attachPortalPage() {
+  let pages = [];
+  try {
+    pages = await browser.pages();
+  } catch {
+    return false;
+  }
+
+  const portals = [];
+  for (const candidate of pages) {
+    try {
+      if (candidate.isClosed()) continue;
+      if (isPortalUrl(candidate.url())) portals.push(candidate);
+    } catch {
+      // Tab went away while it was being inspected.
+    }
+  }
+
+  const live = portals.find((candidate) => !looksLoggedOut(candidate.url()));
+  page = live || portals[0] || null;
+  return Boolean(page);
+}
+
+if (!(await attachPortalPage())) {
+  page = await browser.newPage();
+  await page.goto(PORTAL, { waitUntil: "domcontentloaded" });
+}
 await page.bringToFront();
 
-if (!page.url().includes("clientam.com")) {
-  await page.goto("https://www.clientam.com/portal/", {
-    waitUntil: "domcontentloaded",
-  });
+if (!isPortalUrl(page.url()) || looksLoggedOut(page.url())) {
+  await page.goto(PORTAL, { waitUntil: "domcontentloaded" }).catch(() => {});
   await sleep(5000);
 }
 
@@ -192,6 +222,23 @@ function hasFlag(name) {
   return process.argv.slice(2).some((arg) => new RegExp(`^--${name}$`, "i").test(arg));
 }
 
+function numberArg(flag, fallback) {
+  for (const arg of process.argv.slice(2)) {
+    const match = arg.match(new RegExp(`^--${flag}=(\\d+)$`, "i"));
+    if (match) return parseInt(match[1], 10);
+  }
+  return fallback;
+}
+
+function loadQueryFile(filePath) {
+  if (!filePath || !fs.existsSync(filePath)) return [];
+  return fs
+    .readFileSync(filePath, "utf8")
+    .split(/\r?\n/)
+    .map((line) => normalizeTicker(line))
+    .filter(Boolean);
+}
+
 // `--csv=PATH` overrides the fund list (defaults to etfs.csv) and
 // `--stocks-csv=PATH` the share list (defaults to stocks.csv). CapTrader
 // introduces the account onto IBKR, so it sells the whole IBKR book: the funds
@@ -200,8 +247,16 @@ function hasFlag(name) {
 // makes a walk of a catalogue this size resumable in parts.
 const csvPath = pathArg("csv", "../etfs.csv");
 const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
+const queryFile = (() => {
+  for (const arg of process.argv.slice(2)) {
+    const match = arg.match(/^--file=(.+)$/i);
+    if (match) return match[1];
+  }
+  return "";
+})();
 const etfsOnly = hasFlag("etfs-only") || hasFlag("funds-only");
 const stocksOnly = hasFlag("stocks-only");
+const lanes = Math.max(1, numberArg("concurrency", 4));
 
 const tickerCandidates = new Map();
 if (!stocksOnly) loadTickerCandidatesFromCsv(csvPath, "ETF", tickerCandidates);
@@ -211,12 +266,15 @@ const csvQueries = [
   ...(stocksOnly ? [] : loadTickersFromCsv(csvPath)),
   ...(etfsOnly ? [] : loadTickersFromCsv(stocksCsvPath)),
 ];
+const fileQueries = loadQueryFile(queryFile);
 const rawQueries =
   cliQueries.length > 0
     ? cliQueries
-    : csvQueries.length > 0
-      ? csvQueries
-      : defaultQueries;
+    : fileQueries.length > 0
+      ? fileQueries
+      : csvQueries.length > 0
+        ? csvQueries
+        : defaultQueries;
 const queries = uniqueQueries(rawQueries);
 
 const outputPath = new URL("captrader-parsed.json", import.meta.url);
@@ -244,7 +302,45 @@ if (!hasFlag("fresh") && fs.existsSync(outputPath)) {
   }
 }
 
+const alreadyQueried = new Set(
+  results.map((entry) => String(entry.query || "").toUpperCase()).filter(Boolean)
+);
+const pending = queries.filter((query) => !alreadyQueried.has(query));
+
 const API = "/portal.proxy/v1/portal";
+let savedAt = 0;
+const SAVE_INTERVAL_MS = 2000;
+
+function save() {
+  fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
+  savedAt = Date.now();
+}
+
+function isDeadSession(answer) {
+  if (!answer) return true;
+  if (answer.status === 401 || answer.status === 403) return true;
+  const err = String(answer.error || "");
+  if (/<!DOCTYPE|<html|unauthorized|not authenticated|session expired/i.test(err)) return true;
+  const jsonError = answer.json && !Array.isArray(answer.json) ? String(answer.json.error || "") : "";
+  if (/unauthorized|not authenticated|session|login|token/i.test(jsonError)) return true;
+  try {
+    if (page && !page.isClosed() && looksLoggedOut(page.url())) return true;
+  } catch {
+    return true;
+  }
+  return false;
+}
+
+function isAuthenticatedTickle(answer) {
+  const auth = answer?.json?.iserver?.authStatus;
+  return Boolean(auth && auth.authenticated === true && auth.connected === true);
+}
+
+async function sessionIsLive() {
+  if (!page || page.isClosed() || looksLoggedOut(page.url())) return false;
+  const answer = await api("tickle");
+  return !isDeadSession(answer) && isAuthenticatedTickle(answer);
+}
 
 function callInPage(path, options) {
   return page.evaluate(
@@ -272,45 +368,148 @@ function callInPage(path, options) {
   );
 }
 
+async function reconnectBrowser() {
+  await browser.disconnect().catch(() => {});
+  browser = await puppeteer.connect(CHROME);
+  page = null;
+  console.error("reconnected to Chrome");
+}
+
+async function ensureBrowser({ force = false } = {}) {
+  if (!force) {
+    try {
+      await browser.pages();
+      return true;
+    } catch {
+      /* reconnect below */
+    }
+  }
+  try {
+    await reconnectBrowser();
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 // The portal reloads itself every so often, and a reload destroys the context
-// the call was made from. A walk of a catalogue this size would otherwise end
-// on the first one, tens of thousands of tickers short, so the call is simply
-// made again against the new document.
+// the call was made from. The call is made again against the new document.
 async function api(path, options = {}) {
   for (let attempt = 0; ; attempt += 1) {
+    if (!page || page.isClosed()) {
+      await attachPortalPage();
+      if (!page) return { error: "no portal tab" };
+    }
+
     try {
       return await callInPage(path, options);
     } catch (error) {
       if (attempt >= 4) return { error: String(error) };
 
       await sleep(1000);
-      // A reload that lands somewhere other than the portal takes the session
-      // with it, so the portal is asked for again before retrying.
-      if (!page.url().includes("clientam.com")) {
-        await page
-          .goto("https://www.clientam.com/portal/", { waitUntil: "domcontentloaded" })
-          .catch(() => {});
-        await sleep(5000);
-      }
+      await attachPortalPage();
     }
   }
 }
 
-// Keeps the Client Portal bridge awake; without it, later calls start failing.
 async function tickle() {
   await api("tickle").catch(() => null);
 }
 
-// The search the portal runs when a query is submitted rather than merely
-// typed: `pattern: false` asks for the symbol itself instead of everything
-// starting with it, which is what keeps unrelated companies out.
-async function searchSymbol(query) {
+// `pattern: false` asks for the symbol itself. An unknown ticker answers
+// `{ error: "No symbol found" }` or `[]`. A logged-out portal answers the
+// same `[]`, which must not be treated as "not listed".
+async function search(symbol) {
   const answer = await api("iserver/secdef/search", {
     method: "POST",
-    body: JSON.stringify({ symbol: query, pattern: false, referrer: "" }),
+    body: JSON.stringify({ symbol, pattern: false, referrer: "" }),
   });
-  // An unknown symbol answers `{ error: "No symbol found" }`.
-  return Array.isArray(answer.json) ? answer.json : null;
+  if (isDeadSession(answer) || (!answer.json && !answer.error)) return null;
+  if (!Array.isArray(answer.json)) return [];
+  const hits = answer.json.filter((hit) => hit?.conid && hit?.symbol);
+  if (hits.length > 0) markHealthy();
+  return hits;
+}
+
+const HEALTHY_MS = 15_000;
+let healthyUntil = 0;
+let canaryWait = null;
+
+function markHealthy() {
+  healthyUntil = Date.now() + HEALTHY_MS;
+}
+
+function isHealthy() {
+  return Date.now() < healthyUntil;
+}
+
+async function confirmHealthy() {
+  if (isHealthy()) return true;
+  if (canaryWait) return canaryWait;
+
+  canaryWait = (async () => {
+    const probe = await search("SPY");
+    return Boolean(probe && probe.length > 0);
+  })().finally(() => {
+    canaryWait = null;
+  });
+
+  return canaryWait;
+}
+
+let sessionWait = null;
+
+async function waitForSession() {
+  if (sessionWait) return sessionWait;
+
+  sessionWait = (async () => {
+    save();
+    console.error("portal not answering; waiting until it is signed in again...");
+
+    for (let waited = 0; ; waited += 10) {
+      await ensureBrowser({ force: waited === 0 || waited % 60 === 0 });
+      page = null;
+      await attachPortalPage();
+
+      if (await sessionIsLive()) {
+        markHealthy();
+        console.error("portal session restored");
+        await page.bringToFront().catch(() => {});
+        return;
+      }
+
+      if (waited > 0 && waited % 30 === 0) {
+        console.error(`  still waiting (${waited}s)`);
+      }
+      await sleep(10000);
+    }
+  })().finally(() => {
+    sessionWait = null;
+  });
+
+  return sessionWait;
+}
+
+async function searchWithRetry(query) {
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const payload = await search(query);
+    if (payload && payload.length > 0) return payload;
+
+    if (payload !== null) {
+      if (attempt === 0) {
+        await sleep(400);
+        continue;
+      }
+      if (isHealthy() || (await confirmHealthy())) return payload;
+      console.error("  empty while SPY is silent, retrying");
+    } else {
+      console.error("  no answer, retrying");
+    }
+
+    await tickle();
+    await sleep(2000 * (attempt + 1));
+  }
+  return null;
 }
 
 // The search says nothing about the currency, which is what separates the two
@@ -367,9 +566,8 @@ async function tradingRestricted(conids) {
 }
 
 async function scrapeRowsForQuery(query) {
-  let payload = await searchSymbol(query);
-  if (!payload) payload = await searchSymbol(query);
-  if (!payload) return [];
+  const payload = await searchWithRetry(query);
+  if (payload === null) return { silent: true, rows: [] };
 
   const hits = payload
     .filter((entry) => (entry?.symbol || "").toUpperCase() === query)
@@ -404,17 +602,18 @@ async function scrapeRowsForQuery(query) {
     });
   }
 
-  return rows;
+  return { silent: false, rows };
 }
 
-console.error(`${queries.length} tickers to check`);
+const walk = pending.slice(startIndex - 1);
+console.error(
+  `${queries.length} tickers in the list, ${alreadyQueried.size} already listed, ${walk.length} still to ask` +
+    (lanes > 1 ? ` (${lanes} in flight)` : "")
+);
 
-for (const [queryIndex, query] of queries.entries()) {
-  if (queryIndex + 1 < startIndex) continue;
-  if (queryIndex % 20 === 0) await tickle();
-  console.error(`[${queryIndex + 1}/${queries.length}] ${query}`);
+let done = 0;
 
-  const rows = await scrapeRowsForQuery(query);
+function ingest(query, rows) {
   for (const row of rows) {
     const listing = resolveListing(tickerCandidates, query, row.name);
     // Same ticker, different company: not the instrument we asked about.
@@ -437,9 +636,43 @@ for (const [queryIndex, query] of queries.entries()) {
     if (row.restricted) entry.nonEuResident = true;
     results.push(entry);
   }
-
-  fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
 }
+
+async function runQuery(query) {
+  let silent;
+  let rows;
+  for (;;) {
+    ({ silent, rows } = await scrapeRowsForQuery(query));
+    if (!silent) break;
+    console.error("  no answer");
+    await waitForSession();
+  }
+  ingest(query, rows);
+}
+
+if (walk.length > 0 && !(await sessionIsLive())) {
+  console.error("portal is not signed in; waiting...");
+  await waitForSession();
+}
+
+let next = 0;
+await Promise.all(
+  Array.from({ length: Math.min(lanes, walk.length || 1) }, async () => {
+    for (;;) {
+      const offset = next++;
+      if (offset >= walk.length) return;
+      const query = walk[offset];
+      await runQuery(query);
+      done += 1;
+      if (done === 1 || done % 50 === 0 || done >= walk.length) {
+        console.error(`[${done}/${walk.length}] ${query} → ${results.length} listed`);
+      }
+      if (Date.now() - savedAt >= SAVE_INTERVAL_MS) save();
+      if (done % 20 === 0 && !(await sessionIsLive())) await waitForSession();
+    }
+  })
+);
+save();
 
 const byType = new Map();
 let nonEu = 0;
@@ -453,6 +686,5 @@ console.error(
 if (nonEu > 0) {
   console.error(`${nonEu} of them are non-EU-resident (no KID for European retail)`);
 }
-console.log(JSON.stringify(results, null, 2));
 
 await browser.disconnect();

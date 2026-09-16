@@ -1,22 +1,24 @@
 // What one round trip costs at Freedom24: buy n shares at price p, sell them
-// back at once (online, exchange-traded stock / ETF / ETC / ETN).
+// back at once (online, exchange-traded stock / ETF / ETC / ETN), in dollars.
 //
-//   coût (USD) = a × toUsd(p) × n + b × n + c
+// The affine triple hid the tickets and two cliffs. Smart's 2 + 0.02 / share
+// lived in `c` and `b`, which the page no longer reads, so every AAPL trip
+// was missing 4.40 in the plan currency. All-inclusive's 1.20 ticket sat in
+// `c` the same way. CIS Smart's 0.20 minimum lived in `floor`, and Promo's
+// 0.012 € / share under 1 € lived in `threshold`. `roundTrip` is given the
+// size and charges what is charged.
 //
-// `a` is a fraction of the amount. `b` and `c` are dollars, the same unit the
-// other `*_cost.mjs` files answer in. Smart's 2 and All-inclusive's 1.20 are
-// always-on tickets, so they live in `c`. The 0.02 / 0.012 per share sit in
-// `b`. A published minimum of a % (CIS Smart 0.20) sits in the floor
-// (`min fees`, `c` = 0).
-//
-// Freedom Finance Europe Ltd (CY), Appendix 6 effective 19 Aug 2026, read
-// 2026-09-10. Default is Smart (self-directed, no monthly). All-inclusive
-// (`--plan=allinc`) is the plan they assign when Promo expires. Exclusive
-// is request-only (`--plan=exclusive`). Promo in EUR (`--plan=promo`) was
-// assigned to FR / IT / RO / CZ accounts opened 1 Mar–31 Aug 2026; it is
-// not selectable and is closed to new accounts. Fix / Super / Prime are
-// legacy. Auto Invest (0), IPO, options, futures, the stock-store card
-// surcharge (0.12 %) and E-Account OTC are not this trip.
+// Freedom Finance Europe Ltd (CY), Appendix 6 effective 19 Aug 2026, re-read
+// 2026-09-16 — unchanged since the 10th. Default is Smart (self-directed, no
+// monthly). All-inclusive (`--plan=allinc`) is the plan they assign when
+// Promo expires. Exclusive is request-only (`--plan=exclusive`). Promo in
+// EUR (`--plan=promo`) was assigned to FR / IT / RO / CZ accounts opened
+// 1 Mar–31 Aug 2026; it is not selectable and is closed to new accounts.
+// Fix / Super / Prime are legacy. Auto Invest (0), IPO, options, futures,
+// the stock-store card surcharge (0.12 %) and E-Account OTC are not this
+// trip. Catalogue 13 180 lines — 7 056 stocks, 6 048 ETFs, 39 ETC, 37 ETN.
+// No CIS or Middle-East board in this book; the printed lines stay in the
+// file and wait.
 //
 //   US & Europe   Smart  2 + 0.02 / share
 //                 All-inc 0.50 % + 0.012 / share + 1.20 / order
@@ -29,26 +31,33 @@
 //
 // Note 1: when the trade currency is not the plan currency, the share /
 // ticket amounts are charged in the trade currency and converted after
-// the debit, so `b` and `c` use the listing currency (USD / EUR / GBP /
-// CHF…). OTC 30 and the CIS 0.20 stay in the plan currency (the card
-// prints 30 USD / 30 EUR). SEC / TAF are not on the card. Stamp / FTT
-// from the tax map. Cash can sit in EUR or USD; conversion is not a
-// printed %, so FX stays out of `a`. Custody 0 on the trading account.
-// No live trip: the coefficients are the printed $ / € / %.
+// the debit. OTC 30 and the CIS 0.20 stay in the plan currency (the card
+// prints 30 USD / 30 EUR). A fee under one cent is rounded
+// mathematically; under half a cent it is 0.
+//
+// What is in the number: the printed % / share / ticket at its floor,
+// each way, including Promo's penny line and CIS Smart's 0.20; stamp /
+// FTT from the tax map, never invented; the market spread, once.
+//
+// What is not: SEC / TAF (absent from the card); PTM / ITP (not printed);
+// a conversion markup (cash can sit in EUR or USD, no % is printed);
+// custody 0 on the trading account; withdrawal at the platform rate
+// (plancher 2 $ / €, otherwise unpublished); the 0.12 % stock-store card
+// surcharge. Monthly is free on every current plan.
 //
 //   https://freedom24.com/download/documents/1203/Appendix_6_Fee_Schedule_19082026
 //
-//   node freedom24/freedom24_cost.mjs AAPL
-//   node freedom24/freedom24_cost.mjs VWCE XETRA EUR
-//   node freedom24/freedom24_cost.mjs 700 HKEX HKD
-//   node freedom24/freedom24_cost.mjs AAPL NASDAQ USD --plan=allinc
+//   node freedom24/freedom24_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node freedom24/freedom24_cost.mjs VWCE XETRA EUR --shares=10 --price=140
+//   node freedom24/freedom24_cost.mjs 0001 HKEX HKD --shares=10 --price=50
+//   node freedom24/freedom24_cost.mjs AAPL NASDAQ USD --plan=allinc --shares=10 --price=230
 //   node freedom24/freedom24_cost.mjs --schedule
 //
-// `roundTripCost(...)` reads files, not the network.
+// `roundTrip(...)` reads files, not the network.
 
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite, bookParts } from "../na.mjs";
+import { plus, finite } from "../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
@@ -57,7 +66,8 @@ const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://freedom24.com/download/documents/1203/Appendix_6_Fee_Schedule_19082026",
-  readOn: "2026-09-10",
+  readOn: "2026-09-16",
+  previouslyRead: "2026-09-10",
   effective: "2026-08-19",
   entity: "Freedom Finance Europe Ltd (CY)",
 };
@@ -90,7 +100,7 @@ const PLAN_ALIAS = {
   promoeur: "promo",
 };
 
-const US_MICS = new Set(["XNAS", "XNYS", "ARCX", "XASE", "BATS"]);
+const US_MICS = new Set(["XNAS", "XNYS", "ARCX", "XASE", "BATS", "IEXG"]);
 const EU_MICS = new Set([
   "XETR",
   "XLON",
@@ -124,6 +134,7 @@ const USEU_CODES =
   /^(NASDAQ|NYSE|AMEX|ARCA|BATS|CBOE|XETRA|XETR|IBIS|LSE|LSEETF|LSEAIM|LSEIOB|EURONEXT|MIL|SIX|XATH|ATH|ENAX|BM|BME|VSE|VIE|OMXH|OMXHEX|OMXSTO|OMXCOP|FWB|CHIX|GETTEX|TRADEGATE)$/;
 const PROMO_PENNY = 0.012;
 const PROMO_BELOW = 1;
+const WITHDRAW_MIN = 2;
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
@@ -135,6 +146,8 @@ const dollars = (amount, currency) => {
   const v = toUsd(amount, currency);
   return v == null ? null : Number(v.toPrecision(6));
 };
+
+const toCent = (x) => (x == null || Number.isNaN(x) ? null : Math.round(x * 100 + Number.EPSILON) / 100);
 
 const fxNote = (currency) => ({
   quote: QUOTE,
@@ -154,16 +167,18 @@ export function feeMarketOf(row, mic) {
   const type = String(row?.type || "").toUpperCase();
   const code = loose(row?.exchange);
   const m = String(mic || "").toUpperCase();
+  const ccy = String(row?.currency || "").toUpperCase();
   if (type === "CRYPTO" || code === "CRYPTO" || code === "CRPT") return null;
   if (type === "BND" || type === "BOND") return "bond";
   if (code === "OTC" || /^(OTC|PINK|OTCMKTS|GREY)/.test(code)) return "otc";
   if (m === "XHKG" || code === "HKEX" || code === "SEHK") return "asia";
-  if (m === "XSHG" || m === "XSHE" || /CNY/.test(code)) return "asia";
+  if (m === "XSHG" || m === "XSHE" || ccy === "CNY" || ccy === "CNH") return "asia";
   if (["XDFM", "XADS", "DIFX"].includes(m) || /^(DFM|ADX|DIFX|NASDAQDUBAI)$/.test(code)) {
     return "me";
   }
   if (/^(KASE|AIX|MOEX|MISX|AIXKZ)$/.test(code)) return "cis";
   if (US_MICS.has(m) || EU_MICS.has(m) || USEU_CODES.test(code)) return "useu";
+  if (ccy === "USD") return "useu";
   return null;
 }
 
@@ -173,7 +188,9 @@ function billedCcy(plan, listingCcy) {
 }
 
 function asiaTicketCcy(listingCcy) {
-  return String(listingCcy || "").toUpperCase() === "CNY" ? "CNY" : "HKD";
+  return String(listingCcy || "").toUpperCase() === "CNY" || String(listingCcy || "").toUpperCase() === "CNH"
+    ? "CNY"
+    : "HKD";
 }
 
 export function ruleOf(plan, market, listingCcy) {
@@ -211,25 +228,13 @@ export function ruleOf(plan, market, listingCcy) {
   return { pct: 0.005, perShare: 0.012, ticket: 1.2, ticketCcy: ccy, shareCcy: ccy };
 }
 
-function remarkOf({ plan, rule }) {
+function remarkOf({ plan, market } = {}) {
   const lines = [];
-  if (plan.family === "promo") {
+  if (plan.family === "promo" && market === "useu") {
     lines.push(`Promo: 0.012 €/share if the print is under ${PROMO_BELOW} €.`);
   }
   if (plan.family === "exclusive") lines.push("Exclusive on request.");
-  if (rule?.min != null) {
-    const n = rule.min * 2;
-    const ccy = rule.minCcy === "EUR" ? "€" : rule.minCcy === "USD" ? "$" : rule.minCcy;
-    lines.push(`min fees ${n} ${ccy}.`);
-  }
   return lines.join("\n");
-}
-
-function stampOf({ listing, tax }) {
-  const rates = taxRates(tax);
-  const fromMap = Object.values(rates).reduce((s, r) => s + r, 0);
-  if (fromMap) return { pct: fromMap, rates, source: "t212" };
-  return { pct: 0, rates: {}, source: null };
 }
 
 function findListing({ etf, place, currency }) {
@@ -287,63 +292,75 @@ function coverage() {
   return out;
 }
 
-export function exactCost({ amount, shares, price, market, listingCcy, plan = DEFAULT_PLAN }) {
-  const picked = planOf(plan);
+function pennyApplies(price, listingCcy) {
+  if (price == null || !Number.isFinite(Number(price))) return false;
+  const px = toUsd(Number(price), listingCcy);
+  const oneEur = toUsd(PROMO_BELOW, "EUR");
+  return px != null && oneEur != null && px < oneEur;
+}
+
+/**
+ * One side, in dollars. The printed ticket / share / % are converted after
+ * the debit when the trade currency is not the plan's (note 1).
+ */
+export function commissionSide({ amount, shares, price, market, listingCcy, plan = DEFAULT_PLAN } = {}) {
+  const picked = typeof plan === "string" ? planOf(plan) : plan;
   const rule = ruleOf(picked, market, listingCcy);
-  if (!picked || !rule) return { commission: null, currency: QUOTE };
-  const n = shares != null && Number.isFinite(Number(shares)) ? Number(shares) : 0;
-  const notional = amount != null && Number.isFinite(Number(amount)) ? Number(amount) : 0;
+  if (!picked || !rule) return null;
+  const n = shares == null ? null : Number(shares);
+  const notional = amount == null ? null : Number(amount);
+  if (rule.perShare && (n == null || !Number.isFinite(n))) return null;
+  if ((rule.pct || rule.min != null) && (notional == null || !Number.isFinite(notional))) return null;
+
   const shareCcy = rule.shareCcy || rule.ticketCcy || picked.ccy;
   const ticketCcy = rule.ticketCcy || picked.ccy;
-  let each = (rule.pct || 0) * notional + (rule.ticket || 0);
-  if (rule.perShare) each += rule.perShare * n;
-  if (rule.penny && price != null && toUsd(price, listingCcy) < toUsd(PROMO_BELOW, "EUR")) {
-    each += rule.penny * n;
-  }
-  if (rule.min != null) each = Math.max(each, rule.min);
-  const shareUsd = dollars(rule.perShare ? rule.perShare * n : 0, shareCcy) ?? 0;
-  const ticketUsd = dollars(rule.ticket || 0, ticketCcy) ?? 0;
-  const pctUsd = (rule.pct || 0) * (toUsd(notional, listingCcy) ?? 0);
-  const pennyUsd =
-    rule.penny && price != null && toUsd(price, listingCcy) < toUsd(PROMO_BELOW, "EUR")
-      ? dollars(rule.penny * n, rule.pennyCcy) ?? 0
-      : 0;
+  const shareUsd = rule.perShare ? dollars(rule.perShare * n, shareCcy) : 0;
+  const ticketUsd = rule.ticket ? dollars(rule.ticket, ticketCcy) : 0;
+  const pctUsd = rule.pct ? dollars(notional * rule.pct, listingCcy) : 0;
+  const addPenny = rule.penny && pennyApplies(price, listingCcy);
+  const pennyUsd = addPenny ? dollars(rule.penny * n, rule.pennyCcy) : 0;
+  if (shareUsd == null || ticketUsd == null || pctUsd == null || pennyUsd == null) return null;
+
+  let charged = pctUsd + shareUsd + ticketUsd + pennyUsd;
   const floorUsd = rule.min != null ? dollars(rule.min, rule.minCcy) : null;
-  const usdEach = Math.max(floorUsd ?? 0, pctUsd + shareUsd + ticketUsd + pennyUsd);
-  const sameCcy = !listingCcy || ticketCcy === String(listingCcy).toUpperCase();
+  if (floorUsd == null && rule.min != null) return null;
+  const floored = floorUsd != null && charged < floorUsd;
+  if (floored) charged = floorUsd;
   return {
-    commission: Number((usdEach * 2).toPrecision(6)),
+    charged: toCent(charged),
+    raw: charged,
+    floored,
+    penny: addPenny,
     currency: QUOTE,
-    native: sameCcy
-      ? { each, roundTrip: each * 2, currency: ticketCcy }
-      : { each: usdEach, roundTrip: usdEach * 2, currency: QUOTE },
-    plan: picked.id,
-    market,
+    ticketCcy,
+    shareCcy,
   };
 }
 
-export function roundTripCost({
+/**
+ * The whole bill for buying `shares` at `price` and selling them straight back.
+ * `usd` is the number the page prints; `brokerFees` is the Freedom24 ticket.
+ */
+export function roundTrip({
   etf,
   place,
   currency,
+  shares,
+  price,
   bp = null,
   perShare = null,
   plan = DEFAULT_PLAN,
 }) {
   const picked = planOf(plan);
-  const { named, matches } = findListing({ etf, place, currency });
   const answer = {
-    a: null,
-    b: 0,
-    c: 0,
-    ccy: QUOTE,
-    floor: null,
-    cap: null,
-    threshold: null,
-    plan: picked?.id ?? plan,
+    usd: null,
+    brokerFees: null,
     etf,
     place,
     currency,
+    onlineBuy: true,
+    cashCurrency: picked?.ccy ?? null,
+    plan: picked?.id ?? plan,
   };
 
   if (!picked) {
@@ -355,6 +372,8 @@ export function roundTripCost({
       why: "le catalogue Freedom24 n'existe pas encore : lancer `node freedom24/freedom24_scraping.mjs`",
     };
   }
+
+  const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Freedom24` };
   if (!matches.length) {
     return {
@@ -396,97 +415,184 @@ export function roundTripCost({
   const leaf = book.leaf;
   const marketBp = bp ?? leaf?.bp ?? null;
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
-  const american = US_MICS.has(listing.mic);
   const tax = taxesOf(listing.isin);
-  const stamp = stampOf({ listing, tax });
-  const commPct = (rule.pct || 0) * 2;
-  const knownPct = commPct + stamp.pct;
-  const mkt = bookParts({
-    bp: marketBp,
-    perShare: marketPerShare,
-    venue: m.venue,
-    unsourced: m.unsourced,
-    toUsd: (x) => (american ? x : dollars(x, listing.currency)),
-  });
-  const a = plus(mkt.a, knownPct);
-  const bookUsd = mkt.b;
-  const shareUsd = rule.perShare ? dollars(rule.perShare * 2, rule.shareCcy || listing.currency) ?? 0 : 0;
-  const ticket = rule.ticket ? dollars(rule.ticket * 2, rule.ticketCcy) ?? 0 : 0;
-  const floorUsd = rule.min != null ? dollars(rule.min * 2, rule.minCcy) : null;
+  const rates = taxRates(tax);
+  const taxPct = Object.values(rates).reduce((s, r) => s + r, 0);
 
-  return {
+  const shared = {
     ...answer,
-    a: finite(a, 4),
-    b: finite(plus(bookUsd, shareUsd), 6),
-    c: Number(Number(ticket).toPrecision(6)),
-    floor: floorUsd,
     listing,
     feeMarket: market,
-    remark: remarkOf({ plan: picked, rule }),
-    parts: {
-      marché:
-        marketBp != null
-          ? Number((marketBp / 1e4).toPrecision(4))
-          : marketPerShare != null
-            ? `${marketPerShare} par part`
-            : null,
-      taxes: Object.keys(stamp.rates).length ? stamp.rates : null,
-      commission: commPct || null,
-      ticket: ticket || null,
-    },
     bp: marketBp,
     perShare: marketPerShare,
     url: leaf?.url ?? SCHEDULE.source,
-    basis: `barème Freedom24 ${picked.label}, palier ${market}, lu le ${SCHEDULE.readOn}`,
     tax,
+    fx: fxNote(listing.currency),
+    fxIfConverted: 0,
+    remark: remarkOf({ plan: picked, market }),
+  };
+
+  const basis = `barème Freedom24 ${picked.label}, palier ${market}, du ${SCHEDULE.effective} relu le ${SCHEDULE.readOn}`;
+
+  const n = Number(shares);
+  const p = Number(price);
+  if (!(n > 0) || !(p > 0)) {
+    return {
+      ...shared,
+      basis,
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      confidence: confidenceOf({ picked, market, rule, listing, leaf, marketBp, marketPerShare, unsourced: m.unsourced, taxPct }),
+    };
+  }
+
+  const notional = n * p;
+  const notionalUsd = toUsd(notional, listing.currency);
+  const bookUsd =
+    marketBp != null && notionalUsd != null
+      ? (notionalUsd * marketBp) / 1e4
+      : marketPerShare != null
+        ? marketPerShare * n
+        : null;
+
+  const buy = commissionSide({
+    amount: notional,
+    shares: n,
+    price: p,
+    market,
+    listingCcy: listing.currency,
+    plan: picked,
+  });
+  const sell = commissionSide({
+    amount: notional,
+    shares: n,
+    price: p,
+    market,
+    listingCcy: listing.currency,
+    plan: picked,
+  });
+  const buyUsd = buy?.charged ?? null;
+  const sellUsd = sell?.charged ?? null;
+  const brokerFees = plus(buyUsd, sellUsd);
+  const taxUsd = notionalUsd == null ? null : notionalUsd * taxPct;
+  const usd = plus(bookUsd, brokerFees, taxUsd);
+
+  return {
+    ...shared,
+    usd: finite(usd, 6),
+    brokerFees: finite(brokerFees, 6),
+    ...(bookUsd == null
+      ? {
+          why:
+            `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ` +
+            `${m.unsourced?.why || "pas de source de spread"}`,
+        }
+      : {}),
+    trade: {
+      shares: n,
+      price: p,
+      notional,
+      notionalUsd: finite(notionalUsd, 6),
+      currency: listing.currency,
+    },
+    buy: {
+      commission: finite(buyUsd, 6),
+      native: buy,
+      taxes: finite(taxUsd, 6),
+      taxRates: Object.keys(rates).length ? rates : null,
+    },
+    sell: {
+      commission: finite(sellUsd, 6),
+      native: sell,
+    },
+    parts: {
+      marché: finite(bookUsd, 6),
+      commission: finite(brokerFees, 6),
+      taxes: finite(taxUsd, 6),
+    },
     commission: {
-      kind: commPct ? "pct" : rule.perShare ? "perShare" : "flat",
-      rate: commPct ? rule.pct : null,
+      kind: rule.pct ? "pct" : rule.perShare ? "perShare" : "flat",
+      rate: rule.pct || null,
       perShare: rule.perShare || null,
       ticket: rule.ticket || null,
       currency: rule.ticketCcy || rule.shareCcy || picked.ccy,
       eachWay: true,
       plan: picked.id,
     },
-    ccy: QUOTE,
-    cap: null,
-    threshold:
-      picked.family === "promo" && market === "useu"
-        ? {
-            b: dollars(PROMO_PENNY * 2, "EUR"),
-            a: 0,
-            currency: QUOTE,
-            below: PROMO_BELOW,
-            belowCurrency: "EUR",
-            why: `Promo : cours < ${PROMO_BELOW} € → ${PROMO_PENNY} €/share par jambe`,
-          }
-        : null,
-    fx: fxNote(listing.currency),
-    fxIfConverted: 0,
-    confidence:
-      `Freedom24 ${picked.label}, palier ${market}, barème du ${SCHEDULE.effective}, lu le ${SCHEDULE.readOn}. ` +
-      (rule.pct
-        ? `Courtage ${Number((rule.pct * 100).toPrecision(4))} % par jambe` +
-          (rule.perShare ? ` + ${rule.perShare} ${rule.shareCcy || ""}/share` : "") +
-          (rule.ticket ? ` + ${rule.ticket} ${rule.ticketCcy}` : "") +
-          `. `
-        : rule.perShare
-          ? `Courtage ${rule.perShare} ${rule.shareCcy}/share + ticket ${rule.ticket} ${rule.ticketCcy}. `
-          : picked.family === "promo"
-            ? `Promo 0 € (0,012 €/share sous ${PROMO_BELOW} €). `
-            : "") +
-      (rule.min != null ? `Plancher ${rule.min} ${rule.minCcy} par jambe. ` : "") +
-      `SEC / TAF hors de a (absents du barème). ` +
-      `Change hors de a (pas de % imprimé ; EUR / USD au choix). Custody 0. ` +
-      `Pas d'aller-retour réel dans ce dépôt. ` +
-      (leaf ? "" : `Pas de feuille de carnet pour cet ISIN / cette place. `),
+    basis,
+    confidence: confidenceOf({
+      picked,
+      market,
+      rule,
+      listing,
+      leaf,
+      marketBp,
+      marketPerShare,
+      unsourced: m.unsourced,
+      taxPct,
+      buy,
+    }),
   };
+}
+
+function confidenceOf({
+  picked,
+  market,
+  rule,
+  listing,
+  leaf,
+  marketBp,
+  marketPerShare,
+  unsourced,
+  taxPct,
+  buy,
+}) {
+  const said = [];
+  said.push(
+    `Freedom24 ${picked.label}, palier ${market}, barème du ${SCHEDULE.effective} relu le ${SCHEDULE.readOn} ` +
+      `(inchangé depuis le ${SCHEDULE.previouslyRead})`
+  );
+  if (picked.family === "promo") {
+    said.push(
+      buy?.penny
+        ? `Promo : cours sous ${PROMO_BELOW} €, ${PROMO_PENNY} €/share par jambe`
+        : `Promo 0 € par jambe (le ${PROMO_PENNY} €/share ne mord que sous ${PROMO_BELOW} €)`
+    );
+  } else if (rule.pct) {
+    said.push(
+      `courtage ${(rule.pct * 100).toFixed(2)} %` +
+        (rule.perShare ? ` + ${rule.perShare} ${rule.shareCcy || ""}/share` : "") +
+        (rule.ticket ? ` + ${rule.ticket} ${rule.ticketCcy}` : "") +
+        ` par jambe`
+    );
+  } else if (rule.perShare) {
+    said.push(`courtage ${rule.perShare} ${rule.shareCcy}/share + ticket ${rule.ticket} ${rule.ticketCcy} par jambe`);
+  }
+  if (buy?.floored) said.push(`le plancher mord : ${rule.min} ${rule.minCcy} par jambe`);
+  if (taxPct) said.push(`taxe à l'achat ${(100 * taxPct).toFixed(2)} % du montant, depuis taxMap.mjs`);
+  if (marketBp != null) said.push(`carnet publié ${Number(marketBp.toPrecision(4))} bp, aller-retour`);
+  else if (marketPerShare != null) {
+    said.push(`carnet Rule 605, ${marketPerShare} $ la part, moyenne 100–499 parts`);
+  } else {
+    said.push(
+      `aucun carnet : ${unsourced?.name || listing.exchange}, ${unsourced?.why || "pas de source"}. ` +
+        `Le total est N/A faute de mesure, pas faute de frais`
+    );
+  }
+  said.push(
+    `hors total : SEC / TAF et PTM / ITP (absents du barème), change sans % imprimé (EUR / USD au choix), ` +
+      `garde 0 sur le compte de trading, retrait au tarif de la plateforme (plancher ${WITHDRAW_MIN} $ / €), ` +
+      `surcharge stock-store 0,12 % hors de ce trajet. Note 1 : ticket / share dans la devise de négociation ` +
+      `si elle n'est pas celle du plan. Arrondi au centime sous 1 ¢, à 0 sous 0,5 ¢. ` +
+      `Aucun aller-retour réel dans ce dépôt`
+  );
+  if (leaf == null && market === "useu") said.push(`pas de feuille de carnet pour ${listing.isin}`);
+  return said.join(" ; ");
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const flag = (name) => {
-    const m = process.argv.find((a) => a.startsWith(`--${name}=`));
-    return m ? m.split("=").slice(1).join("=") : null;
+    const hit = process.argv.find((a) => a.startsWith(`--${name}=`));
+    return hit ? hit.split("=").slice(1).join("=") : null;
   };
 
   if (process.argv.includes("--schedule")) {
@@ -496,6 +602,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
           ...SCHEDULE,
           defaultPlan: DEFAULT_PLAN,
           plans: PLANS,
+          promo: { penny: PROMO_PENNY, below: PROMO_BELOW, belowCcy: "EUR" },
+          withdrawMin: WITHDRAW_MIN,
+          sec: null,
+          taf: null,
           coverage: coverage(),
         },
         null,
@@ -511,17 +621,20 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     console.error(
       "usage : node freedom24_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--plan=smart|allinc|exclusive|promo] [--json]\n" +
         "        node freedom24_cost.mjs --schedule\n" +
-        "  ex.   node freedom24_cost.mjs AAPL\n" +
-        "        node freedom24_cost.mjs VWCE XETRA EUR\n" +
-        "        node freedom24_cost.mjs AAPL NASDAQ USD --plan=allinc"
+        "  ex.   node freedom24_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
+        "        node freedom24_cost.mjs VWCE XETRA EUR --shares=10 --price=140\n" +
+        "        node freedom24_cost.mjs 0001 HKEX HKD --shares=10 --price=50\n" +
+        "        node freedom24_cost.mjs AAPL NASDAQ USD --plan=allinc --shares=10 --price=230"
     );
     process.exit(2);
   }
 
-  const out = roundTripCost({
+  const out = roundTrip({
     etf,
     place,
     currency,
+    shares: flag("shares") ? Number(flag("shares")) : null,
+    price: flag("price") ? Number(flag("price")) : null,
     bp: flag("bp") ? Number(flag("bp")) : null,
     perShare: flag("per-share") ? Number(flag("per-share")) : null,
     plan: flag("plan") || DEFAULT_PLAN,
@@ -532,15 +645,15 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     process.exit(0);
   }
 
-  if (out.a == null && !out.listing) {
-    console.log(`a = null   b = ${out.b}   c = ${out.c}\n${out.why}`);
+  const l = out.listing;
+  if (!l) {
+    console.log(out.why || "rien à dire");
     if (out.alternatives?.length) {
       console.log(`\nce que Freedom24 propose sous ce nom :\n  ${out.alternatives.join("\n  ")}`);
     }
     process.exit(0);
   }
 
-  const l = out.listing;
   const picked = planOf(out.plan);
   console.log(`${l.ticker || l.query || l.isin} — ${l.name || ""}`);
   console.log(
@@ -548,53 +661,26 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       `  [${picked?.label || out.plan}]\n`
   );
 
-  const detail = [];
-  if (out.parts?.marché != null) detail.push(`carnet ${out.parts.marché}`);
-  for (const [name, rate] of Object.entries(out.parts?.taxes ?? {})) detail.push(`${name} ${rate}`);
-  if (out.parts?.commission) detail.push(`courtage ${out.parts.commission}`);
-
-  console.log(`a = ${out.a}   (au prorata${detail.length ? " : " + detail.join(" + ") : " : rien"})`);
-  console.log(`b = ${out.b} $   (par part${out.b ? " : courtage / share et/ou spread 605" : " : rien"})`);
-  console.log(
-    `c = ${out.c} $   (par ordre : ${out.c ? `${out.c / 2} $ × 2` : "pas de ticket"})`
-  );
-  if (out.floor != null) console.log(`plancher ${out.floor} $`);
-  if (out.remark) console.log(out.remark);
-  if (out.why) console.log(out.why);
-  const fx = out.fx?.listing ?? usdPer(l.currency);
-  console.log(
-    `\ncoût = ${out.a} × p × n × ${fx != null ? Number(fx.toPrecision(6)) : "?"} + ${out.b} × n + ${out.c}   ($ ; p en ${l.currency})`
-  );
-  console.log(`  ${out.basis}`);
-  for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
-
-  const n = Number(flag("shares"));
-  const p = Number(flag("price"));
-  if (n > 0 && p > 0) {
-    const amount = n * p;
-    const amountUsd = toUsd(amount, l.currency);
-    const affine = amountUsd != null && out.a != null ? out.a * amountUsd + out.b * n + out.c : null;
-    const billed = exactCost({
-      amount,
-      shares: n,
-      price: p,
-      market: out.feeMarket,
-      listingCcy: l.currency,
-      plan: out.plan,
-    });
+  if (out.trade?.notional != null) {
+    const t = out.trade;
     console.log(
-      `\n${n} part${n > 1 ? "s" : ""} à ${p} ${l.currency} = ${amount.toFixed(2)} ${l.currency}` +
-        (amountUsd != null ? ` (${amountUsd.toFixed(2)} $)` : "")
+      `${t.shares ? `${t.shares} part${t.shares > 1 ? "s" : ""} à ${t.price} ${t.currency} = ` : ""}` +
+        `${t.notional.toFixed(2)} ${t.currency}` +
+        (t.notionalUsd != null ? ` (${t.notionalUsd.toFixed(2)} $)` : "")
     );
-    if (affine != null) console.log(`  a, b, c        : ${affine.toFixed(4)} $`);
-    if (billed.commission != null) {
-      console.log(
-        `  commission     : ${Number(billed.commission).toFixed(4)} $` +
-          (billed.native?.each != null
-            ? ` (${Number(billed.native.each).toPrecision(4)} ${billed.native.currency} × 2)`
-            : "")
-      );
+    console.log();
+  }
+
+  console.log(`aller-retour     : ${out.usd == null ? `N/A${out.why ? ` — ${out.why}` : ""}` : `${out.usd} $`}`);
+  console.log(`frais du courtier: ${out.brokerFees == null ? "N/A" : `${out.brokerFees} $`}`);
+  if (out.parts) {
+    for (const [name, v] of Object.entries(out.parts)) {
+      if (v != null) console.log(`  ${name.padEnd(15)}: ${v} $`);
     }
   }
+  console.log();
+  if (out.basis) console.log(`  ${out.basis}`);
+  for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
+  if (out.remark) for (const r of out.remark.split("\n")) console.log(`  · ${r}`);
   if (out.url) console.log(`\n${out.url}`);
 }

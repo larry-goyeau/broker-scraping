@@ -85,14 +85,33 @@
 // The seventeen European venues whose « exchange and regulatory costs apply »
 // with no figure anywhere on the page — VSE, NASDAQ Baltic, BATS Europe,
 // Turquoise, CHIX, ENEXT.BE, SBF, FWB, IBIS, SWB, TradeLink, BUX, BVME, AEB,
-// BVL, EBS, WSE — used to be a hole this file merely named. It is now measured
-// at one of them and charged at all of them. Amsterdam quotes 1,00 … 1,80 € on
-// an ETF and a flat 1 EUR on a share, so 0,80 € per order goes into the total on
-// an ETF and nothing goes in on a share. Sixteen of the seventeen are an
-// extrapolation from the seventeenth, which `confidence` says on every line that
-// is not AEB. It is the right direction to be wrong in: the total already
-// charges the whole book spread, so it assumes the order takes liquidity, and
-// taking liquidity is the case that draws the top of the range.
+// BVL, EBS, WSE — used to be a hole this file merely named, then a figure taken
+// at Amsterdam and applied to all sixteen others. Nine of them have now been
+// asked on a share, and the answers changed the shape of the charge and not just
+// its size.
+//
+// Amsterdam bills nothing on a share and 0,80 € on an ETF, and this file read
+// that as a rule: nothing on a share anywhere. It is not a rule, but it is very
+// nearly the truth. Nine venues have now answered on a share and seven charge
+// nothing — Amsterdam, Xetra, Frankfurt, Stuttgart, Brussels, Lisbon, and Paris
+// at six cents which is nearly nothing. The two that charge, charge a lot: Milan
+// 0,77 € and Vienna 0,90 € on ordinary listed stock, which is most of a second
+// commission. There is no pattern by operator, currency or country to predict it
+// from, which is why each venue is carried as measured rather than as a rule.
+//
+// German stock permissions landed on 2026-09-15 and Xetra, Frankfurt and
+// Stuttgart all answered a flat euro on a share — the permission was the whole
+// block. Funds on those boards are not a single number. Frankfurt was flat on
+// five UCITS and 1,00 … 1,80 on a sixth (RCRS), so the 0,80 € ceiling still
+// holds. Stuttgart was flat on 4UB9 and opened 1,00 … 4,50 on BUNH even with the
+// order sent to SWB by name, so the ceiling there is 3,50 € and not 0,80.
+//
+// So `VENUE_FEE` carries what was measured and `VENUE_FEE_DEFAULT` covers the
+// handful nobody could reach — EBS, Warsaw, Budapest, the Baltics and the four
+// MTFs. Charging the widest seen is the right direction to be wrong in, since
+// the total already charges the whole book spread and so assumes the order takes
+// liquidity, which is the case that draws the top of the range. But after nine
+// venues it is a ceiling and not an estimate, and `confidence` says so.
 //
 // Ten currencies in the catalogue have no printed tier at all — KRW, TWD, INR,
 // BRL, SAR, MYR, ZAR, AED, CZK, RON, CNY — and the page says that where a
@@ -111,10 +130,44 @@
 //
 // No live trip in this deposit, but the tariff is no longer read off the page
 // alone: `mexem-whatif.mjs` asks the portal to price an order before the order
-// exists, and four such previews are recorded beside `MEASURED` below. They
-// confirm the euro floor to the cent, confirm that it is per order and not per
-// share, and put a figure on the venue fees the page declines to print — nothing
-// on a share, up to 0,80 € on an ETF, at Amsterdam. Nothing was traded.
+// exists, and the answers are recorded beside `MEASURED` below. They confirm the
+// euro floor to the cent, confirm that it is per order and not per share — the
+// same euro at one share and at fifteen — and put a figure on the venue fees the
+// page declines to print: nothing on a share, up to 0,80 € on an ETF, at
+// Amsterdam. Nothing was traded.
+//
+// One of those previews corrected this file rather than confirming it. A single
+// Ford share at 13,65 $ carries 0,005 $ of per-share fee against a 1 $ minimum
+// and a 2 % cap worth 0,27 $, and this file used to floor first and cap after,
+// which let the cap cut below the minimum and answered 0,27 $. The portal
+// answered 1 $. So the cap binds the per-share amount and the minimum binds the
+// result, in that order, which is how IBKR's own tariff reads once you stop
+// treating "maximum" as if it outranked "minimum". The error was worth up to
+// 3,7× on any American order small enough for the minimum to matter, which is
+// most of the ones a retail reader places.
+//
+// Four more tiers are confirmed without a preview and without spending
+// anything, because a refusal is a measurement too. The portal declines an order
+// the account cannot fund and names the sum it wanted, and that sum is the
+// notional plus the commission it would have charged. London asked 3,17 £ for a
+// 0,67 £ share, Vienna-EBS 149,88 CHF for 142,38, Warsaw 166,80 PLN for 146,80
+// and Budapest 787 HUF for 287 — leaving 2,50 £, 7,50 CHF, 20 PLN and 500 HUF,
+// which are the four printed floors to the unit. That is why no cash was
+// converted to reach those markets: the conversion would have cost 5,84 € to
+// learn what the refusals already said.
+//
+// The conversion was priced all the same, since the portal previews it for
+// nothing: 30 € into pounds announced « Includes commission of 5.84 EUR », and
+// 5,84 € at the 0,8561 quoted is 5,00 £ exactly. So the « FX » tab's minimum is
+// five units of the currency bought, billed in the currency sold, which is what
+// `FX_CONVERT` says and had never been checked.
+//
+// What no preview has settled is which cap it is. Mexem prints 2 % and IBKR's
+// fixed tariff prints 1 %, and the two only differ where the cap clears the 1 $
+// minimum — past about 50 $ of notional, on a line under 0,50 $ a share. That
+// wants some 400 shares of a sub-dollar stock, about 120 $, where the account
+// holds 36,87 $. `CAP_UNSETTLED` keeps the figures; `maxPct` keeps the page's
+// 2 %, the dearer of the two.
 //
 //   https://www.mexem.com/fees
 //
@@ -238,25 +291,108 @@ const VENUE_FEES_CODES = new Set(VENUE_FEES_UNPRICED.map((s) => s.toUpperCase().
 // total below charges the floor, which is therefore a lower bound on a European
 // ETF and exact on a European share.
 const MEASURED = {
-  on: "2026-09-14",
+  on: "2026-09-15",
   how: "aperçu whatif du portail, aucun ordre passé",
-  venue: "AEB",
+  venues: ["AEB", "SBF", "IBIS", "FWB", "SWB", "BVME", "VSE", "ENEXT.BE", "BVL"],
   floorConfirmed: true,
+  // The same euro at one share and at fifteen, so the European tier is per order
+  // and not per share. Twenty was refused: 137 € against 128,37 € of settled
+  // euro, which is the account's size and not the tariff's.
   perOrderConfirmed: true,
+  perOrderSeen: { symbol: "CMCOM", venue: "AEB", shares: 15, price: 6.8, commission: "1 EUR" },
+  // The American floor, and the reason this file's arithmetic changed. One Ford
+  // share at 13.65 $ is 0.005 $ of per-share fee, a 2 % cap of 0.27 $ and a 1 $
+  // minimum. The portal answered 1 $, so the cap does not cut under the
+  // minimum — it binds the per-share amount and the minimum binds the result.
+  usFloor: { symbol: "F", shares: 1, price: 13.65, commission: "1 USD" },
+
+  // Four tiers confirmed without spending anything, and without a preview. The
+  // portal refuses an order the account cannot fund, and the refusal names the
+  // sum it wanted — which is the notional plus the commission it would have
+  // charged. Subtract the one and the other falls out. Every one of the four
+  // landed on the printed floor to the unit.
+  //
+  // It confirms the floor and is silent on the venue fee: the credit check was
+  // only ever run on lines where no surcharge is known to apply, and at
+  // Amsterdam 20 CMCOM asked for 137,00 € against 136 € of stock, which is the
+  // bare euro and matches a share there charging nothing.
+  floorsFromRefusals: {
+    GBP: { symbol: "CARD", venue: "LSE", price: 0.67, asked: 3.17, implies: 2.5 },
+    CHF: { symbol: "XSMI", venue: "EBS", price: 142.38, asked: 149.88, implies: 7.5 },
+    PLN: { symbol: "ETFBCASH", venue: "WSE", price: 146.8, asked: 166.8, implies: 20 },
+    HUF: { symbol: "OPUS", venue: "BUX", price: 287, asked: 787, implies: 500 },
+  },
+
+  // The « FX » tab priced, at last, on the portal's own conversion preview:
+  // 30 € into pounds announced « Includes commission of 5.84 EUR », and 5,84 €
+  // at the 0,8561 shown is 5,00 £ to the cent. So the minimum is five units of
+  // the currency bought, billed in the currency sold, exactly as `FX_CONVERT`
+  // has it. Nothing was submitted; the balances are unchanged.
+  fxConvert: { from: "EUR", to: "GBP", amount: 30, rate: 0.8561, commission: "5.84 EUR", implies: "5 GBP" },
 };
 
-// The 0,80 € is charged rather than merely mentioned, on an ETF, on each of the
-// seventeen venues whose costs the page declines to price. That is a deliberate
-// extrapolation from one venue to sixteen others, and it is the right direction
-// for two reasons. The total already charges the whole book spread, which is to
-// say it assumes the order takes liquidity — and taking liquidity is exactly the
-// case where Euronext bills the top of the range. And a comparison table that
-// rounds an unknown charge down to zero flatters whoever charges it.
+// Still open, and the only one of these that needs money rather than patience.
+// Mexem's page prints a 2 % American cap where IBKR's fixed tariff prints 1 %,
+// and no preview run so far separates them: the cap only rises above the 1 $
+// minimum past about 50 $ of notional, and it only binds at all under 0,50 $ a
+// share, so the question needs roughly 400 shares of a sub-dollar line — 120 $
+// or so of settled dollars, against the 36,87 $ the account holds. Until then
+// `maxPct` below is the page's 2 %, which is the figure that charges more.
+const CAP_UNSETTLED = { page: 0.02, ibkrFixed: 0.01, needsUsd: 120 };
+
+// The unpriced « exchange and regulatory costs », asked of nine of the
+// seventeen venues by preview on 2026-09-15. Each figure is the top of the range
+// the portal quotes above the 1 € floor, per order and so twice over a round
+// trip. The portal gives a range rather than a number because the fee depends on
+// how the order executes; the top is the taking-liquidity case, which is the
+// case the rest of this file already assumes when it charges the whole spread.
 //
-// Measured at Amsterdam only. Vienna, Frankfurt, Milan, Lisbon, Warsaw, Budapest
-// and the rest are assumed to behave like it, which is an assumption and is said
-// so in `confidence` on every line that is not AEB.
-const VENUE_ETF_FEE = { amount: 0.8, ccy: "EUR", measuredAt: "AEB", perOrder: true };
+// A fund on the same German board is not one fee. Frankfurt answered 1 € flat
+// on five UCITS and 1,00 … 1,80 on RCRS; Stuttgart answered 1 € on 4UB9 and
+// 1,00 … 4,50 on BUNH, directed. The number below is the ceiling of what that
+// venue was seen to charge, not the mode.
+const VENUE_FEE = {
+  AEB: { stock: 0, etf: 0.8, saw: "CMCOM 15 parts 1 EUR sec, IWDA 1.00 ... 1.80" },
+  SBF: { stock: 0.06, etf: 0.8, saw: "ORA 1.00 ... 1.06, PAEEM 1.00 ... 1.80" },
+  IBIS: { stock: 0, etf: 0.8, saw: "TUI1 1 EUR sec, 0EMU 1.00 ... 1.80" },
+  FWB: { stock: 0, etf: 0.8, saw: "02V 1 EUR sec, EQSP CHSZ BCFK ESTE EEAX 1 EUR sec, RCRS 1.00 ... 1.80" },
+  SWB: { stock: 0, etf: 3.5, saw: "02M 1 EUR sec, 4UB9 1 EUR sec, BUNH dirigé SWB 1.00 ... 4.50" },
+  BVME: { stock: 0.77, etf: null, saw: "ISP 1.00 ... 1.77" },
+  VSE: { stock: 0.9, etf: null, saw: "UQA 1.00 ... 1.90" },
+  ENEXTBE: { stock: 0, etf: null, saw: "PROX 1 EUR sec" },
+  BVL: { stock: 0, etf: null, saw: "BCP 1 EUR sec" },
+};
+
+// For the venues nobody has been able to ask — EBS, Warsaw, Budapest, the
+// Baltics and the four MTFs — and for the classes a measured venue was not asked
+// about. The fund figure stays 0,80 €, which Amsterdam, Paris, Xetra and the
+// dearer Frankfurt line agree on. Stuttgart's 3,50 € is carried on SWB only:
+// it was one fund of two, and spreading it to Warsaw would invent a fee.
+//
+// The share figure is the widest seen and not the typical one, and after nine
+// venues that is worth stating plainly: seven of the nine charge nothing, Paris
+// charges six cents, Milan 0,77 € and Vienna 0,90 €. So 0,90 € is a ceiling
+// rather than an estimate, and `confidence` says so on every line that gets it.
+// It is still the right way to be wrong — a comparison table that rounds an
+// unknown charge down to zero flatters whoever charges it — but a reader
+// comparing an unmeasured venue should know the modal answer was zero.
+const VENUE_FEE_DEFAULT = { stock: 0.9, etf: 0.8 };
+const VENUE_FEE_SEEN_ON_STOCK = { zero: 7, of: 9, widest: 0.9, at: "VSE" };
+const VENUE_FEE_CCY = "EUR";
+
+// The refusal that priced this tier's floor, where there is one.
+function refusalFloor(rule) {
+  const seen = MEASURED.floorsFromRefusals[rule.ccy];
+  return seen && seen.implies === rule.min ? seen : null;
+}
+
+function venueFeeFor(listing) {
+  const key = loose(listing.brokerExchange);
+  const kind = isStock(listing) ? "stock" : "etf";
+  const seen = VENUE_FEE[key];
+  const amount = seen && seen[kind] != null ? seen[kind] : VENUE_FEE_DEFAULT[kind];
+  return { amount, measured: Boolean(seen && seen[kind] != null), key, kind, saw: seen?.saw ?? null };
+}
 
 const TO_VENUES = {
   TSE: "TSX",
@@ -346,13 +482,16 @@ export function commissionSide({ shares, amount, market }) {
   if (rule.perShare != null) {
     if (shares == null || !Number.isFinite(Number(shares))) return null;
     const raw = rule.perShare * Number(shares);
-    const floored = raw < rule.min;
-    const base = Math.max(rule.min, raw);
-    // The cap is on the order's value, so without an amount there is no cap to
-    // apply — and saying so beats quietly charging the uncapped figure.
+    // The cap binds the per-share amount and the floor binds the result, in that
+    // order and not the other. This file used to floor first and cap after,
+    // which let the cap cut below the minimum: one Ford share at 13.65 $ came
+    // out at 0.27 $ where the portal's own preview on 2026-09-15 answered 1 $.
+    // A cap under the minimum is not a cheaper order, it is a minimum.
     const ceiling = rule.maxPct != null && amount != null ? Number(amount) * rule.maxPct : null;
-    const charged = ceiling != null ? Math.min(base, ceiling) : base;
-    return { raw, charged, floored: floored && charged === base, capped: ceiling != null && ceiling < base, currency: rule.ccy };
+    const capped = ceiling != null && ceiling < raw;
+    const perShareAmount = capped ? ceiling : raw;
+    const charged = Math.max(rule.min, perShareAmount);
+    return { raw, charged, floored: perShareAmount < rule.min, capped, currency: rule.ccy };
   }
 
   if (amount == null || !Number.isFinite(Number(amount))) return null;
@@ -544,11 +683,11 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const buyCommUsd = buyComm ? dollars(buyComm.charged, buyComm.currency) : null;
   const sellCommUsd = sellComm ? dollars(sellComm.charged, sellComm.currency) : null;
 
-  // The venue's own fee, per order and so twice over, on an ETF on one of the
-  // seventeen boards the page names without a figure. Measured at Amsterdam.
-  const venueEtfFee = venueFees && !isStock(listing);
-  const venueFeeSideUsd = venueEtfFee ? dollars(VENUE_ETF_FEE.amount, VENUE_ETF_FEE.ccy) : 0;
-  const venueFeeUsd = venueEtfFee ? plus(venueFeeSideUsd, venueFeeSideUsd) : 0;
+  // The venue's own fee, per order and so twice over, on one of the seventeen
+  // boards the page names without a figure. Seven of them have now been asked.
+  const venueFee = venueFees ? venueFeeFor(listing) : null;
+  const venueFeeSideUsd = venueFee?.amount ? dollars(venueFee.amount, VENUE_FEE_CCY) : 0;
+  const venueFeeUsd = venueFee?.amount ? plus(venueFeeSideUsd, venueFeeSideUsd) : 0;
 
   // Stamp duty is a charge on the purchase alone, so it is counted once.
   const stampUsd = notionalUsd == null ? null : notionalUsd * stamp.pct;
@@ -648,7 +787,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
       stamp,
       american,
       venueFees,
-      venueEtfFee,
+      venueFee,
       ptmDue,
       unsourced: m.unsourced,
       listing,
@@ -657,7 +796,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   };
 }
 
-function confidenceOf({ market, rule, buyComm, marketBp, marketPerShare, stamp, american, venueFees, venueEtfFee, ptmDue, unsourced, listing, n }) {
+function confidenceOf({ market, rule, buyComm, marketBp, marketPerShare, stamp, american, venueFees, venueFee, ptmDue, unsourced, listing, n }) {
   const said = [];
   said.push(
     `commission Mexem, palier ${market}, lue le ${SCHEDULE.readOn} sur la page du ${SCHEDULE.pageUpdated}, ` +
@@ -669,9 +808,34 @@ function confidenceOf({ market, rule, buyComm, marketBp, marketPerShare, stamp, 
         ? `plafonnée à ${(100 * rule.maxPct).toFixed(0)} % du montant : ${Number(buyComm.charged).toPrecision(4)} ${rule.ccy} par sens`
         : buyComm.floored
           ? `au plancher : le ticket de ${rule.min} ${rule.ccy} est toute la commission, ` +
-            `le calcul au barème n'en donnerait que ${Number(buyComm.raw).toPrecision(3)}`
+            `le calcul au barème n'en donnerait que ${Number(buyComm.raw).toPrecision(3)}` +
+            // The Ford preview is a fact about the per-share tiers, where a cap
+            // exists to get the order of operations wrong. On a percentage tier
+            // there is no cap and nothing to say.
+            (rule.maxPct != null
+              ? `. Mesuré le ${MEASURED.on} : l'aperçu du portail sur ${MEASURED.usFloor.shares} ` +
+                `${MEASURED.usFloor.symbol} à ${MEASURED.usFloor.price} $ répond ` +
+                `${MEASURED.usFloor.commission}, donc le plafond ne descend pas sous le plancher`
+              : // A refusal names the cash it wanted, notional plus commission,
+                // so it prices the floor for four currencies nobody funded.
+                refusalFloor(rule)
+                ? `. Confirmé le ${MEASURED.on} par le contrôle de trésorerie du portail : ` +
+                  `${refusalFloor(rule).symbol} à ${refusalFloor(rule).price} sur ` +
+                  `${refusalFloor(rule).venue} s'est vu réclamer ${refusalFloor(rule).asked}, ` +
+                  `soit le cours plus ${refusalFloor(rule).implies} ${rule.ccy}`
+                : "")
           : `au-dessus du plancher : ${Number(buyComm.charged).toPrecision(4)} ${rule.ccy} par sens`
     );
+    // Only worth saying where the two published caps would actually differ:
+    // above the minimum, which is where the reader's bill changes.
+    if (rule.maxPct != null && buyComm.capped) {
+      said.push(
+        `le plafond retenu est celui de la page Mexem, ${(100 * CAP_UNSETTLED.page).toFixed(0)} %, quand le tarif ` +
+          `fixe IBKR en imprime ${(100 * CAP_UNSETTLED.ibkrFixed).toFixed(0)} % : aucun aperçu ne les sépare encore, ` +
+          `il y faudrait ${CAP_UNSETTLED.needsUsd} $ de liquidités sur une ligne sous 0,50 $, et c'est le plus cher ` +
+          `des deux qui est compté`
+      );
+    }
   }
   if (rule.perShare != null && n >= rule.min / rule.perShare) {
     said.push(
@@ -698,24 +862,34 @@ function confidenceOf({ market, rule, buyComm, marketBp, marketPerShare, stamp, 
   if (ptmDue === null) said.push(`prélèvement PTM indécidable : le montant n'a pas pu être converti en livres`);
   else if (ptmDue) said.push(`prélèvement PTM de ${PTM.each} £ par sens, le montant dépassant ${PTM.above} £`);
 
-  if (venueFees) {
-    const here = loose(listing.brokerExchange) === VENUE_ETF_FEE.measuredAt;
-    const euros = `${VENUE_ETF_FEE.amount.toFixed(2).replace(".", ",")} ${VENUE_ETF_FEE.ccy}`;
+  if (venueFees && venueFee) {
+    const euros = `${venueFee.amount.toFixed(2).replace(".", ",")} ${VENUE_FEE_CCY}`;
+    const what = venueFee.kind === "stock" ? "une action" : "un fonds";
     said.push(
-      venueEtfFee
-        ? here
-          ? `frais de place ${euros} par sens, mesurés le ${MEASURED.on} par aperçu : le portail annonce ` +
-            `1,00 … 1,80 € sur un ETF d'Amsterdam contre 1 EUR sec sur une action, et le haut de la ` +
-            `fourchette est retenu puisque le total facture déjà l'écart entier du carnet`
-          : `frais de place ${euros} par sens, extrapolés depuis Amsterdam : la page annonce « exchange and ` +
-            `regulatory costs » sur ${listing.brokerExchange} sans aucun montant, et seule AEB a été mesurée`
-        : `« exchange and regulatory costs apply » sur ${listing.brokerExchange} sans montant imprimé — ` +
-          `sur une action l'aperçu du ${MEASURED.on} donne le plancher sec, donc rien n'est ajouté ici`
+      venueFee.measured
+        ? venueFee.amount === 0
+          ? `aucun frais de place : la page annonce « exchange and regulatory costs » sur ` +
+            `${listing.brokerExchange} sans montant, et l'aperçu du ${MEASURED.on} y donne le plancher ` +
+            `sec sur ${what} (${venueFee.saw})`
+          : `frais de place ${euros} par sens, mesurés le ${MEASURED.on} par aperçu sur ` +
+            `${listing.brokerExchange} (${venueFee.saw}) : le haut de la fourchette est retenu puisque le ` +
+            `total facture déjà l'écart entier du carnet`
+        : `frais de place ${euros} par sens, extrapolés : la page annonce « exchange and regulatory costs » ` +
+          `sur ${listing.brokerExchange} sans aucun montant, et ` +
+          (venueFee.kind === "etf"
+            ? `Amsterdam, Paris, Xetra et le plus cher des fonds de Francfort donnent 0,80 € ; ` +
+              `Stuttgart a ouvert 3,50 € sur un fonds et ce chiffre reste sur SWB`
+            : `c'est un plafond et non une estimation — sur ${VENUE_FEE_SEEN_ON_STOCK.of} places mesurées ` +
+              `${VENUE_FEE_SEEN_ON_STOCK.zero} ne facturent rien sur une action, et ${euros} est le plus ` +
+              `haut relevé, à ${VENUE_FEE_SEEN_ON_STOCK.at}`)
     );
   }
   said.push(
     `hors total : la conversion à ${(100 * FX_CONVERT.rate).toFixed(3)} % (plancher 5 dans la plupart des devises), ` +
-      `qui dépend de la trésorerie du client et non de l'ordre — le fichier précédent l'annonçait à zéro`
+      `qui dépend de la trésorerie du client et non de l'ordre — le fichier précédent l'annonçait à zéro. ` +
+      `Mesurée le ${MEASURED.on} sur l'aperçu de conversion du portail : ${MEASURED.fxConvert.amount} ` +
+      `${MEASURED.fxConvert.from} en ${MEASURED.fxConvert.to} annonce ${MEASURED.fxConvert.commission}, ` +
+      `soit ${MEASURED.fxConvert.implies} au taux affiché — le plancher se compte dans la devise achetée`
   );
   said.push(`garde et tenue de compte gratuites, l'onglet « Other Costs » le dit en toutes lettres`);
   said.push(`aucun aller-retour réel chez Mexem dans ce dépôt`);
@@ -731,7 +905,17 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   if (process.argv.includes("--schedule")) {
     console.log(
       JSON.stringify(
-        { ...SCHEDULE, rules: RULE, conversion: FX_CONVERT, withdraw: WITHDRAW, venueFeesUnpriced: VENUE_FEES_UNPRICED, coverage: coverage() },
+        {
+          ...SCHEDULE,
+          rules: RULE,
+          conversion: FX_CONVERT,
+          withdraw: WITHDRAW,
+          venueFeesUnpriced: VENUE_FEES_UNPRICED,
+          venueFee: { measured: VENUE_FEE, fallback: VENUE_FEE_DEFAULT, onStock: VENUE_FEE_SEEN_ON_STOCK, ccy: VENUE_FEE_CCY },
+          measured: MEASURED,
+          capUnsettled: CAP_UNSETTLED,
+          coverage: coverage(),
+        },
         null,
         2
       )

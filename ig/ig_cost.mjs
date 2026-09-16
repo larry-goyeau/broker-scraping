@@ -1,40 +1,46 @@
 // What one round trip costs at IG: buy n shares at price p, sell them back
-// at once (online, EU investments, Tradegate).
+// at once (online, EU investments, Tradegate), in dollars.
 //
-//   coût (USD) = a × toUsd(p) × n + b × n + c
+// There was no cliff in the affine triple — commission is 0 € — but the
+// page no longer reads `a`, `b` and `c`, so every trip came back N/A.
+// `roundTrip` is given the size and charges what is charged.
 //
-// `a` is a fraction of the amount. `b` and `c` are dollars, the same unit the
-// other `*_cost.mjs` files answer in. Online stocks / ETFs are €0, so `c`
-// is 0. There is no published minimum of a %.
-//
-// IG Europe GmbH (DE), deal.ig.com EU investments, costs page read
-// 2026-09-10. The catalogue is that book: every line is Tradegate in EUR
-// (AAPL.TG, not Nasdaq). Default is the online €0 ticket, not the phone
-// desk (€46–€58). CFDs, knock-outs, options, Smart Portfolios and the
-// UK ISA / share-dealing card (IG Markets Ltd, instant FX £0 + 0.49 %)
-// are not this trip. Manual FX (US 3 ¢/share, min 15 $) is an opt-out
-// of the default conversion setting and is not this account.
+// IG Europe GmbH (DE), deal.ig.com EU investments. Catalogue 6 942 lines
+// on 2026-09-16 — 4 246 stocks, 2 696 ETFs — every one Tradegate in EUR
+// (AAPL.TG, not Nasdaq). Costs re-read the same day: the February 2026
+// IGE charges document still prints 0 € on euro shares and ETFs, venue
+// Tradegate; the Ireland share-dealing page still prints 0 € online and
+// FX 0.15 %. Phone (€46.15–€57.65), CFDs, knock-outs, options, Smart
+// Portfolios, crypto (0.50 % a leg in that PDF, not this book) and the
+// UK ISA / IG Markets Ltd card are not this trip. Manual FX (US 3 ¢ /
+// share, min 15 $) is an opt-out of the default conversion and is not
+// this account: every line here is already euro.
 //
 //   stocks / ETF    €0
 //   FX              0.15 % if the listing is not the account currency
 //
 // Cash is euro and every catalogue line is euro, so the 0.15 % does not
-// hit the fill and stays out of `a`. Stamp / FTT from the tax map. SEC /
-// TAF stay out: the print is a euro Tradegate quote, not a US execution.
-// Custody 0. No live trip: the coefficients are the printed €0.
+// hit the fill. Stamp / FTT from the tax map, never invented. The Ireland
+// page also prints UK SDRT 0.50 %, PTM £1.50 above £10 000, Irish stamp
+// 1 %, ITP €1.25 above €12 500 and a stale Section 31 of 0.00229 % —
+// those belong to local-venue dealing (LSE, US tape), not this Tradegate
+// book, so they stay out. SEC / TAF stay out for the same reason.
+// Custody 0. Standard bank transfer 0. Same-day under €115 is €17.50
+// and is funding.
 //
 //   https://www.ig.com/ie/investments/share-dealing/costs-fees
+//   https://www.ig.com/usermanagement/customeragreements?agreementType=costs_and_charges&igCompany=igfr&locale=fr_FR
 //
-//   node ig/ig_cost.mjs AAPL
-//   node ig/ig_cost.mjs IE00B4L5Y983 TRADEGATE EUR
+//   node ig/ig_cost.mjs AAPL TRADEGATE EUR --shares=10 --price=230
+//   node ig/ig_cost.mjs IE00B4L5Y983 TRADEGATE EUR --shares=10 --price=100
 //   node ig/ig_cost.mjs MC TRADEGATE EUR --shares=1 --price=700
 //   node ig/ig_cost.mjs --schedule
 //
-// `roundTripCost(...)` reads files, not the network.
+// `roundTrip(...)` reads files, not the network.
 
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite, bookParts } from "../na.mjs";
+import { plus, finite } from "../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
@@ -43,11 +49,17 @@ const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://www.ig.com/ie/investments/share-dealing/costs-fees",
-  readOn: "2026-09-10",
+  charges:
+    "https://www.ig.com/usermanagement/customeragreements?agreementType=costs_and_charges&igCompany=igfr&locale=fr_FR",
+  readOn: "2026-09-16",
+  previouslyRead: "2026-09-10",
+  chargesAsOf: "2026-02",
   entity: "IG Europe GmbH (DE), EU investments",
 };
 
 const FX_IF_CONVERTED = 0.0015;
+const PHONE = { uk: 46.15, other: 57.65, ccy: "EUR" };
+const SAME_DAY_UNDER = { below: 115, fee: 17.5, ccy: "EUR" };
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
@@ -63,6 +75,10 @@ const fxNote = (currency) => ({
 
 export function feeMarketOf() {
   return "investments";
+}
+
+function remarkOf() {
+  return "FX 0.15% if converted.";
 }
 
 function findListing({ etf, place, currency }) {
@@ -120,27 +136,19 @@ function coverage() {
   return out;
 }
 
-export function exactCost() {
-  return {
-    commission: 0,
-    currency: QUOTE,
-    native: { each: 0, roundTrip: 0, currency: "EUR" },
-  };
-}
-
-export function roundTripCost({ etf, place, currency, bp = null, perShare = null }) {
-  const { named, matches } = findListing({ etf, place, currency });
+/**
+ * The whole bill for buying `shares` at `price` and selling them straight back.
+ * `usd` is the number the page prints; `brokerFees` is the IG ticket (0 €).
+ */
+export function roundTrip({ etf, place, currency, shares, price, bp = null, perShare = null }) {
   const answer = {
-    a: null,
-    b: 0,
-    c: 0,
-    ccy: QUOTE,
-    floor: null,
-    cap: null,
-    threshold: null,
+    usd: null,
+    brokerFees: null,
     etf,
     place,
     currency,
+    onlineBuy: true,
+    cashCurrency: "EUR",
   };
 
   if (!catalogue) {
@@ -149,6 +157,8 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
       why: "le catalogue IG n'existe pas encore : lancer `node ig/ig_scraping.mjs`",
     };
   }
+
+  const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue IG` };
   if (!matches.length) {
     return {
@@ -183,60 +193,121 @@ export function roundTripCost({ etf, place, currency, bp = null, perShare = null
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
   const tax = taxesOf(listing.isin);
   const rates = taxRates(tax);
-  const taxTotal = Object.values(rates).reduce((s, r) => s + r, 0);
-  const mkt = bookParts({
-    bp: marketBp,
-    perShare: marketPerShare,
-    venue: m.venue,
-    unsourced: m.unsourced,
-    toUsd: (x) => toUsd(x, listing.currency),
-  });
-  const a = plus(mkt.a, taxTotal);
-  const bookUsd = mkt.b;
+  const taxPct = Object.values(rates).reduce((s, r) => s + r, 0);
 
-  return {
+  const shared = {
     ...answer,
-    a: finite(a, 4),
-    b: finite(bookUsd, 6),
-    c: 0,
-    floor: null,
     listing,
     feeMarket: market,
-    remark: "FX 0.15% if converted.",
-    parts: {
-      marché:
-        marketBp != null
-          ? Number((marketBp / 1e4).toPrecision(4))
-          : marketPerShare != null
-            ? `${marketPerShare} par part`
-            : null,
-      taxes: Object.keys(rates).length ? rates : null,
-      commission: 0,
-    },
     bp: marketBp,
     perShare: marketPerShare,
     url: leaf?.url ?? SCHEDULE.source,
-    basis: `barème IG Europe investments, palier ${market}, lu le ${SCHEDULE.readOn}`,
     tax,
-    commission: { each: 0, roundTrip: 0, currency: "EUR", eachWay: true },
-    ccy: QUOTE,
-    cap: null,
-    threshold: null,
     fx: fxNote(listing.currency),
     fxIfConverted: FX_IF_CONVERTED,
-    confidence:
-      `IG Europe investments, palier ${market}, page lue le ${SCHEDULE.readOn}. ` +
-      `0 € par jambe (online). SEC / TAF hors de a (Tradegate EUR, pas une exécution US). ` +
-      `Change 0,15 % hors de a (compte EUR, cotation EUR). Custody 0. ` +
-      `Pas d'aller-retour réel dans ce dépôt. ` +
-      (leaf ? "" : `Pas de feuille de carnet pour cet ISIN / cette place. `),
+    remark: remarkOf(),
   };
+
+  const basis = `barème IG Europe investments, palier ${market}, relu le ${SCHEDULE.readOn} : 0 € par jambe`;
+
+  const n = Number(shares);
+  const p = Number(price);
+  if (!(n > 0) || !(p > 0)) {
+    return {
+      ...shared,
+      basis,
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      confidence: confidenceOf({ market, listing, leaf, marketBp, marketPerShare, unsourced: m.unsourced, taxPct }),
+    };
+  }
+
+  const notional = n * p;
+  const notionalUsd = toUsd(notional, listing.currency);
+  const bookUsd =
+    marketBp != null && notionalUsd != null
+      ? (notionalUsd * marketBp) / 1e4
+      : marketPerShare != null
+        ? marketPerShare * n
+        : null;
+
+  const brokerFees = 0;
+  const taxUsd = notionalUsd == null ? null : notionalUsd * taxPct;
+  const usd = plus(bookUsd, brokerFees, taxUsd);
+
+  return {
+    ...shared,
+    usd: finite(usd, 6),
+    brokerFees: finite(brokerFees, 6),
+    ...(bookUsd == null
+      ? {
+          why:
+            `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ` +
+            `${m.unsourced?.why || "pas de source de spread"}`,
+        }
+      : {}),
+    trade: {
+      shares: n,
+      price: p,
+      notional,
+      notionalUsd: finite(notionalUsd, 6),
+      currency: listing.currency,
+    },
+    buy: {
+      commission: 0,
+      taxes: finite(taxUsd, 6),
+      taxRates: Object.keys(rates).length ? rates : null,
+    },
+    sell: { commission: 0 },
+    parts: {
+      marché: finite(bookUsd, 6),
+      commission: 0,
+      taxes: finite(taxUsd, 6),
+    },
+    commission: { each: 0, roundTrip: 0, currency: "EUR", eachWay: true, platform: "online" },
+    basis,
+    confidence: confidenceOf({
+      market,
+      listing,
+      leaf,
+      marketBp,
+      marketPerShare,
+      unsourced: m.unsourced,
+      taxPct,
+    }),
+  };
+}
+
+function confidenceOf({ market, listing, leaf, marketBp, marketPerShare, unsourced, taxPct }) {
+  const said = [];
+  said.push(
+    `IG Europe investments, palier ${market}, page lue le ${SCHEDULE.readOn} ` +
+      `(inchangée depuis le ${SCHEDULE.previouslyRead}, document IGE ${SCHEDULE.chargesAsOf}) : 0 € par jambe online`
+  );
+  if (taxPct) said.push(`taxe à l'achat ${(100 * taxPct).toFixed(2)} % du montant, depuis taxMap.mjs`);
+  if (marketBp != null) said.push(`carnet Tradegate ${Number(marketBp.toPrecision(4))} bp, aller-retour`);
+  else if (marketPerShare != null) {
+    said.push(`carnet ${marketPerShare} $ la part`);
+  } else {
+    said.push(
+      `aucun carnet : ${unsourced?.name || listing.exchange}, ${unsourced?.why || "pas de source"}. ` +
+        `Le total est N/A faute de mesure, pas faute de frais`
+    );
+  }
+  said.push(
+    `hors total : SEC / TAF, timbre UK / IE, PTM et ITP — imprimés sur la carte Irlande pour le dealing local ` +
+      `(LSE, tape US), pas ce livre Tradegate. Change 0,15 % si la cotation n'est pas l'euro ` +
+      `(ici EUR / EUR, donc hors du chiffre). Garde 0, virement standard 0. ` +
+      `Téléphone ${PHONE.uk}–${PHONE.other} € hors de ce trajet. ` +
+      `Aucun aller-retour réel dans ce dépôt`
+  );
+  if (leaf == null) said.push(`pas de feuille de carnet pour ${listing.isin}`);
+  return said.join(" ; ");
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const flag = (name) => {
-    const m = process.argv.find((a) => a.startsWith(`--${name}=`));
-    return m ? m.split("=").slice(1).join("=") : null;
+    const hit = process.argv.find((a) => a.startsWith(`--${name}=`));
+    return hit ? hit.split("=").slice(1).join("=") : null;
   };
 
   if (process.argv.includes("--schedule")) {
@@ -246,6 +317,13 @@ if (import.meta.url === `file://${process.argv[1]}`) {
           ...SCHEDULE,
           commission: 0,
           fxIfConverted: FX_IF_CONVERTED,
+          phone: PHONE,
+          sameDayUnder: SAME_DAY_UNDER,
+          sec: null,
+          taf: null,
+          ukStamp: null,
+          ptm: null,
+          itp: null,
           coverage: coverage(),
         },
         null,
@@ -261,17 +339,19 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     console.error(
       "usage : node ig_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--json]\n" +
         "        node ig_cost.mjs --schedule\n" +
-        "  ex.   node ig_cost.mjs AAPL\n" +
-        "        node ig_cost.mjs IE00B4L5Y983 TRADEGATE EUR\n" +
+        "  ex.   node ig_cost.mjs AAPL TRADEGATE EUR --shares=10 --price=230\n" +
+        "        node ig_cost.mjs IE00B4L5Y983 TRADEGATE EUR --shares=10 --price=100\n" +
         "        node ig_cost.mjs MC TRADEGATE EUR --shares=1 --price=700"
     );
     process.exit(2);
   }
 
-  const out = roundTripCost({
+  const out = roundTrip({
     etf,
     place,
     currency,
+    shares: flag("shares") ? Number(flag("shares")) : null,
+    price: flag("price") ? Number(flag("price")) : null,
     bp: flag("bp") ? Number(flag("bp")) : null,
     perShare: flag("per-share") ? Number(flag("per-share")) : null,
   });
@@ -281,49 +361,41 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     process.exit(0);
   }
 
-  if (out.a == null && !out.listing) {
-    console.log(`a = null   b = ${out.b}   c = ${out.c}\n${out.why}`);
+  const l = out.listing;
+  if (!l) {
+    console.log(out.why || "rien à dire");
     if (out.alternatives?.length) {
       console.log(`\nce qu'IG propose sous ce nom :\n  ${out.alternatives.join("\n  ")}`);
     }
     process.exit(0);
   }
 
-  const l = out.listing;
   console.log(`${l.ticker || l.query || l.isin} — ${l.name || ""}`);
   console.log(
     `${l.exchange || "—"}${l.mic ? ` (${l.mic})` : ""}, ${l.currency}${l.type ? `, ${l.type.toLowerCase()}` : ""}` +
       `  [${out.feeMarket}]\n`
   );
 
-  const detail = [];
-  if (out.parts?.marché != null) detail.push(`carnet ${out.parts.marché}`);
-  for (const [name, rate] of Object.entries(out.parts?.taxes ?? {})) detail.push(`${name} ${rate}`);
-
-  console.log(`a = ${out.a}   (au prorata${detail.length ? " : " + detail.join(" + ") : " : rien"})`);
-  console.log(`b = ${out.b} $   (par part${out.b ? " : spread" : " : rien"})`);
-  console.log(`c = ${out.c} $   (par ordre : 0 € online)`);
-  if (out.remark) console.log(out.remark);
-  if (out.why) console.log(out.why);
-  const fx = out.fx?.listing ?? usdPer(l.currency);
-  console.log(
-    `\ncoût = ${out.a} × p × n × ${fx != null ? Number(fx.toPrecision(6)) : "?"} + ${out.b} × n + ${out.c}   ($ ; p en ${l.currency})`
-  );
-  console.log(`  ${out.basis}`);
-  for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
-
-  const n = Number(flag("shares"));
-  const p = Number(flag("price"));
-  if (n > 0 && p > 0) {
-    const amount = n * p;
-    const amountUsd = toUsd(amount, l.currency);
-    const affine = amountUsd != null && out.a != null ? out.a * amountUsd + out.b * n + out.c : null;
+  if (out.trade?.notional != null) {
+    const t = out.trade;
     console.log(
-      `\n${n} part${n > 1 ? "s" : ""} à ${p} ${l.currency} = ${amount.toFixed(2)} ${l.currency}` +
-        (amountUsd != null ? ` (${amountUsd.toFixed(2)} $)` : "")
+      `${t.shares ? `${t.shares} part${t.shares > 1 ? "s" : ""} à ${t.price} ${t.currency} = ` : ""}` +
+        `${t.notional.toFixed(2)} ${t.currency}` +
+        (t.notionalUsd != null ? ` (${t.notionalUsd.toFixed(2)} $)` : "")
     );
-    if (affine != null) console.log(`  a, b, c        : ${affine.toFixed(4)} $`);
-    console.log(`  commission     : 0.0000 $`);
+    console.log();
   }
+
+  console.log(`aller-retour     : ${out.usd == null ? `N/A${out.why ? ` — ${out.why}` : ""}` : `${out.usd} $`}`);
+  console.log(`frais du courtier: ${out.brokerFees == null ? "N/A" : `${out.brokerFees} $`}`);
+  if (out.parts) {
+    for (const [name, v] of Object.entries(out.parts)) {
+      if (v != null) console.log(`  ${name.padEnd(15)}: ${v} $`);
+    }
+  }
+  console.log();
+  if (out.basis) console.log(`  ${out.basis}`);
+  for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
+  if (out.remark) for (const r of out.remark.split("\n")) console.log(`  · ${r}`);
   if (out.url) console.log(`\n${out.url}`);
 }

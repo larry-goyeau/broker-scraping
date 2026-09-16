@@ -388,7 +388,7 @@ export function roundTrip({
 // that is not: the conversion, which prices moving cash between the two sides of
 // the account rather than buying and selling.
 function remarkOf() {
-  return `Change ${(FX_RATE * 100).toFixed(1)} % par sens si le cash doit traverser.`;
+  return `FX ${(FX_RATE * 100).toFixed(1)}% each way if the cash has to cross.`;
 }
 
 function confidenceOf({ market, leaf, marketBp, marketPerShare, taxTotal, ecnEach, holdable, american, overnight, directRoute }) {

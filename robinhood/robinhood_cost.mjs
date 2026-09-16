@@ -765,14 +765,14 @@ function remarkOf({ who, isa, adr, ukFx }) {
   if (who === "eu") return "";
   if (who === "uk") {
     return isa
-      ? `Change ${(ukFx * 100).toFixed(2)} % par sens, inévitable en ISA : compté dans le total.`
-      : `Change ${(ukFx * 100).toFixed(2)} % par sens si converti.` +
-          (adr ? "\nADR hors bourse : certains supportent des droits de garde de la banque dépositaire." : "");
+      ? `FX ${(ukFx * 100).toFixed(2)}% each way, unavoidable in an ISA: in the total.`
+      : `FX ${(ukFx * 100).toFixed(2)}% each way if converted.` +
+          (adr ? "\nOff-exchange ADR: some carry a depositary bank custody fee." : "");
   }
   // Les deux dispenses sont déjà dans le total, qui tombe à zéro de lui-même sous
   // les seuils : les répéter ici reviendrait à facturer deux fois la même lecture.
   // Le détail reste lisible dans `waivers`.
-  return adr ? "ADR hors bourse : certains supportent des droits de garde de la banque dépositaire." : "";
+  return adr ? "Off-exchange ADR: some carry a depositary bank custody fee." : "";
 }
 
 function confidenceOf({

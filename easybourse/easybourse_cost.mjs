@@ -1,58 +1,65 @@
-// What one round trip costs at EasyBourse (La Banque Postale): buy n shares at price p,
-// sell them back at once.
+// What one round trip costs at EasyBourse (La Banque Postale): buy n shares
+// at price p, sell them back at once, online, in dollars.
 //
-//   coût (USD) = a × toUsd(p) × n + b × n + c
+// The affine triple hid the ticket. Premium is 2 € up to 500 € then 0.45 %
+// of the amount — not max(2 €, 0.45 %) — and `c` was left at 0 with the
+// floor in a remark the page had no column for. Every Euronext trip under
+// 500 € was missing 4 €. Intense's 50 € cap between 10 k and 100 k, PTM
+// £1.50 above 10 000 £ and FINRA's 9.79 $ TAF cap sat in unused fields.
+// `roundTrip` is given the size and charges what is charged.
 //
-// `a` is a fraction of the amount. `b` and `c` are dollars, the same unit the other
-// `*_cost.mjs` files answer in. The published ticket is in euros; it is converted at
-// the ECB mid and folded into `c`. `cEur` stays as the source figure.
-//
-// Four formulas, one card per venue family, brochure of 1 June 2026 (TTC):
+// Brochure of 1 June 2026 (TTC), re-read 2026-09-15 — unchanged since the
+// 8th. Default is EasyPremium. Start is the same card for ages 18–30.
+// Découverte matches Premium on Euronext / Equiduct / LOX and is sell-only
+// by phone, without the +11 €, on every other tape. Telephone (+11 € on
+// Euronext) is not this trip.
 //
 //   Euronext Paris / Brussels / Amsterdam, Equiduct, LOX
 //     Découverte / Premium / Start   2 € up to 500 €, then 0.45 %
 //     Expert                         9 € up to 5 000 €, then 0.20 %
-//     Intense                        10 € up to 10 000 €; 10 k–100 k at 0.10 %
-//                                    capped 50 €; then 0.10 % uncapped
-//   Other venues (Premium / Start / Expert / Intense; Découverte is sell-only
-//   by phone on these):
+//     Intense                        10 € up to 10 000 €; 10 k–100 k at
+//                                    0.10 % capped 50 €; then 0.10 %
+//   Other venues (same card for Premium / Start / Expert / Intense):
 //     NYSE / Nasdaq                  6 € up to 6 000 €, then 0.12 %
 //     Xetra                          11 € up to 4 000 €, then 0.25 %
 //     other EU (LSE, Madrid, Lisbon, Zurich, Milan, Frankfurt floor)
 //                                    35 € up to 10 000 €, then 0.35 %
 //     other                          55 € up to 10 000 €, then 0.55 %
 //
-// The published % × 2 sits in `a` (linear in the amount). The ticket is a floor
-// (`min fees` in the remark, `c` = 0). `exactCost` still applies max(min, rate).
-// Default plan is Premium. Pass `--plan=` for Expert or Intense.
+// What is in the number: the commission each way at its floor, its rate
+// and Intense's cap; AutoFX 0.12 % each way on a non-euro tape (J+1 16:00
+// fixing); Irish stamp 1 % and UK stamp 0.50 % on a share purchase (taxMap
+// when it has the ISIN, else the rates the card says are extra); French /
+// Italian / Spanish FTT from the same map, never invented; PTM £1.50 each
+// way on a UK share above 10 000 £; current SEC and TAF on an American
+// sale, TAF capped at 9.79 $; the market spread, once.
 //
-// Cash is euro only. Conversion is J+1 16:00 fixing + 0.12 % each way and
-// always hits a non-EUR line, so 0.24 % the round trip sits in `a`. EUR
-// lines have no FX.
+// Inactivity (3 € / 5 € / 5 € per missing Intense order), the Découverte
+// first-year free order, PEA 0.50 % online on EEA unless `--pea`, custody
+// 0 € and outgoing internet transfers (free) stay in the remark or off
+// the trip. No list of promo-zero products is in this repo, so ordinary
+// ETFs keep the card. No spot crypto. Catalogue 8 217 lines (7 126 stocks,
+// 1 091 ETFs) on Euronext, Nasdaq, NYSE and Xetra.
 //
-// Custody is 0 €. Inactivity (3 € / 5 € / 5 € per missing Intense order) is a
-// holding cost, not a trip. A published promo zeroes courtage on some listed
-// products (crypto ETP, turbos, warrants); there is no list in this repo, so
-// ordinary ETFs keep the card. No spot crypto.
+// One live trip on 2026-09-08, one share of TTE, market both ways, routed
+// to Equiduct. Buy 77.80, sell 77.74. PRU after the buy was 79.80 — the
+// 2 € ticket on the fill — and the sell recap quoted the same 2.00 €.
+// TTF was on the ticket (Oui) but not in the PRU; it stays from the tax
+// map. Expert / Intense / US / Xetra were not traded.
 //
-// One live trip on 2026-09-08, one share of TTE, market both ways, routed to
-// Equiduct (best execution). Buy 77.80, sell 77.74. The PRU after the buy was
-// 79.80 — the 2 € ticket sitting on the fill — and the sell recap quoted the
-// same 2.00 €. `c` stays 4 €. The 6 cents of book (7.71 bp) is not folded into
-// `a`: XPAR publishes 1.29 bp on that ISIN, and Equiduct has no leaf here.
-// TTF is on the ticket (Oui) but was not in the PRU; it stays in `a` from the
-// tax map. Expert / Intense / US / Xetra were not traded.
+//   https://documents.easybourse.com/formulaires_clients/brochure-tarifaire-bourse_01062026.pdf
 //
-//   node easybourse/easybourse_cost.mjs MC EURONEXT EUR
-//   node easybourse/easybourse_cost.mjs AAPL NASDAQ USD
+//   node easybourse/easybourse_cost.mjs TTE EURONEXT EUR --shares=1 --price=77.8
+//   node easybourse/easybourse_cost.mjs MC EURONEXT EUR --shares=1 --price=700
 //   node easybourse/easybourse_cost.mjs MC EURONEXT EUR --shares=1 --price=700 --plan=expert
+//   node easybourse/easybourse_cost.mjs AAPL NASDAQ USD --shares=1 --price=230
 //   node easybourse/easybourse_cost.mjs --schedule
 //
-// `roundTripCost(...)` reads files, not the network.
+// `roundTrip(...)` reads files, not the network.
 
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite, bookParts } from "../na.mjs";
+import { plus, finite } from "../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
@@ -61,7 +68,8 @@ const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://documents.easybourse.com/formulaires_clients/brochure-tarifaire-bourse_01062026.pdf",
-  readOn: "2026-09-08",
+  readOn: "2026-09-15",
+  previouslyRead: "2026-09-08",
   revised: "2026-06-01",
   entity: "EasyBourse (La Banque Postale)",
 };
@@ -72,7 +80,10 @@ const TAF_CAP = 9.79;
 const PTM = { each: 1.5, currency: "GBP", above: 10000 };
 const FX_EACH_WAY = 0.0012;
 const PEA_CAP = 0.005;
+const IE_STAMP = 0.01;
+const UK_STAMP = 0.005;
 const US_MICS = new Set(["XNAS", "XNYS", "ARCX", "XASE", "BATS"]);
+const UK_ISSUERS = /^(GB|JE|GG|IM)$/;
 
 const CHECK = {
   isin: "FR0000120271",
@@ -91,17 +102,14 @@ const CHECK = {
 
 const DEFAULT_PLAN = "premium";
 
-// Start is Premium for anyone 18–30. Same numbers, different inactivity line.
 const PLANS = {
-  decouverte: { id: "decouverte", label: "EasyDécouverte", aliasOf: null },
-  premium: { id: "premium", label: "EasyPremium", aliasOf: null },
-  start: { id: "start", label: "EasyStart", aliasOf: "premium" },
-  expert: { id: "expert", label: "EasyExpert", aliasOf: null },
-  intense: { id: "intense", label: "EasyIntense", aliasOf: null },
+  decouverte: { id: "decouverte", label: "EasyDécouverte", aliasOf: null, inactivity: 3 },
+  premium: { id: "premium", label: "EasyPremium", aliasOf: null, inactivity: 3 },
+  start: { id: "start", label: "EasyStart", aliasOf: "premium", inactivity: 3 },
+  expert: { id: "expert", label: "EasyExpert", aliasOf: null, inactivity: 5 },
+  intense: { id: "intense", label: "EasyIntense", aliasOf: null, inactivity: 5, intenseGap: 5 },
 };
 
-// min / upTo in EUR of notional. Above `upTo` the fee is `rate` of the amount,
-// not max(min, rate). Intense adds a 50 € cap between 10 k and 100 k.
 const EURONEXT_RULE = {
   decouverte: { min: 2, upTo: 500, rate: 0.0045 },
   premium: { min: 2, upTo: 500, rate: 0.0045 },
@@ -137,17 +145,25 @@ const OTHER_EU = new Set([
   "BER",
 ]);
 
-// -------------------------------------------------------------------------- the files
-
-const catalogue = JSON.parse(fs.readFileSync(CATALOGUE, "utf8"));
-const rows = Array.isArray(catalogue) ? catalogue : catalogue.rows || [];
-const spreads = JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {};
+const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
+const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
+const spreads = fs.existsSync(SPREADS) ? JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {} : {};
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+const isStock = (listing) => String(listing?.type || "").toUpperCase() === "STOCK";
+const issuerCc = (isin) => String(isin || "").slice(0, 2).toUpperCase();
 
 const dollars = (amount, currency) => {
   const v = toUsd(amount, currency);
   return v == null ? null : Number(v.toPrecision(6));
+};
+
+const toCcy = (amount, from, to) => {
+  if (String(from || "").toUpperCase() === String(to || "").toUpperCase()) return Number(amount);
+  const usd = toUsd(amount, from);
+  const per = usdPer(to);
+  if (usd == null || !(per > 0)) return null;
+  return usd / per;
 };
 
 const fxNote = (currency) => ({
@@ -156,8 +172,6 @@ const fxNote = (currency) => ({
   listing: usdPer(currency),
   eur: usdPer("EUR"),
 });
-
-// ------------------------------------------------------------------------- plans / markets
 
 const PLAN_ALIAS = {
   decouverte: "decouverte",
@@ -179,7 +193,13 @@ export function planOf(name = DEFAULT_PLAN) {
   const key = PLAN_ALIAS[loose(raw).toLowerCase()] || PLAN_ALIAS[raw.toLowerCase()];
   const hit = key ? PLANS[key] : null;
   if (!hit) return null;
-  return { id: hit.id, label: hit.label, brokerageOf: hit.aliasOf || hit.id };
+  return {
+    id: hit.id,
+    label: hit.label,
+    brokerageOf: hit.aliasOf || hit.id,
+    inactivity: hit.inactivity,
+    intenseGap: hit.intenseGap ?? null,
+  };
 }
 
 export function feeMarketOf(exchange, mic) {
@@ -187,12 +207,8 @@ export function feeMarketOf(exchange, mic) {
   const m = String(mic || "").toUpperCase();
   if (US_MICS.has(m) || US_MKT.has(code)) return "us";
   if (code === "XETR" || m === "XETR") return "xetra";
-  // Lisbon is Euronext but sits on the "other EU" row of the card (35 €).
   if (m === "XLIS" || code === "XLIS") return "other_eu";
-  if (
-    /^(XPAR|XAMS|XBRU|EURONEXT)$/.test(code) ||
-    ["XPAR", "XAMS", "XBRU"].includes(m)
-  ) {
+  if (/^(XPAR|XAMS|XBRU|EURONEXT)$/.test(code) || ["XPAR", "XAMS", "XBRU"].includes(m)) {
     return "euronext";
   }
   if (code === "LSE" || code === "AQUIS" || m === "XLON") return "other_eu";
@@ -210,6 +226,11 @@ export function ruleOf(plan, market) {
   return OTHER_RULE[market] || OTHER_RULE.other;
 }
 
+/**
+ * One side, in euro of notional. Below `upTo` the printed ticket is a floor,
+ * not a minimum of the percentage. Intense caps 0.10 % at 50 € between
+ * 10 000 € and 100 000 €.
+ */
 export function commissionEach(amount, rule) {
   if (!rule || amount == null || !Number.isFinite(Number(amount))) return null;
   const n = Number(amount);
@@ -219,6 +240,21 @@ export function commissionEach(amount, rule) {
   return fee;
 }
 
+export function commissionSide({ amountEur, plan, market, pea = false }) {
+  const rule = ruleOf(plan, market);
+  if (!rule || amountEur == null || !Number.isFinite(Number(amountEur))) return null;
+  const n = Number(amountEur);
+  let charged = commissionEach(n, rule);
+  if (charged == null) return null;
+  const capped = pea && ["euronext", "xetra", "other_eu"].includes(market) ? Math.min(charged, n * PEA_CAP) : charged;
+  return {
+    charged: capped,
+    raw: n * (rule.rate || 0),
+    floored: n <= rule.upTo,
+    peaCapped: capped < charged,
+    currency: "EUR",
+  };
+}
 
 function onlineBuy(plan, market) {
   const p = planOf(plan);
@@ -227,15 +263,37 @@ function onlineBuy(plan, market) {
   return true;
 }
 
-function remarkOf({ plan, market, online }) {
-  const rule = ruleOf(plan.id, market);
+function remarkOf(plan, market) {
   const lines = [];
-  // Premium is cheaper only on Euronext. US / Xetra / other share one card.
-  if (rule) lines.push(`min fees ${rule.min * 2} €.`);
+  if (plan.brokerageOf === "decouverte" && market !== "euronext") {
+    lines.push("Sell-only by phone off Euronext.");
+  }
+  if (plan.intenseGap != null) lines.push(`€${plan.intenseGap} per missing order under 15/month.`);
+  else if (plan.inactivity != null) lines.push(`€${plan.inactivity}/month if no trades.`);
   return lines.join("\n");
 }
 
-// ------------------------------------------------------------------------- listing
+export function taxesFor(isin, listing) {
+  const tax = taxesOf(isin);
+  const mapped = taxRates(tax);
+  if (Object.keys(mapped).length) return { tax, rates: mapped, source: "taxMap" };
+  if (!isStock(listing)) return { tax, rates: {}, source: null };
+  const cc = issuerCc(isin);
+  if (cc === "IE") return { tax, rates: { stamp: IE_STAMP }, source: "easybourse" };
+  if (cc === "GB") return { tax, rates: { stamp: UK_STAMP }, source: "easybourse" };
+  return { tax, rates: {}, source: null };
+}
+
+function levyEach({ listing, notional, currency }) {
+  if (!isStock(listing)) return { ptm: 0 };
+  const cc = issuerCc(listing.isin);
+  const mic = String(listing.mic || "").toUpperCase();
+  const london = mic === "XLON" || /LSE|LONDON/i.test(listing.brokerExchange || listing.exchange || "");
+  if (!london || !UK_ISSUERS.test(cc)) return { ptm: 0 };
+  const gbp = toCcy(notional, currency, "GBP");
+  if (gbp == null) return { ptm: null };
+  return { ptm: gbp > PTM.above ? PTM.each : 0, ptmCcy: PTM.currency };
+}
 
 function findListing({ etf, place, currency }) {
   const asked = loose(etf);
@@ -284,36 +342,41 @@ function coverage() {
   return out;
 }
 
-// ---------------------------------------------------------------------------- the cost
-
-export function roundTripCost({
+/**
+ * The whole bill for buying `shares` at `price` and selling them straight back.
+ * `usd` is the number the page prints; `brokerFees` is the EasyBourse ticket.
+ */
+export function roundTrip({
   etf,
   place,
   currency,
+  shares,
+  price,
   bp = null,
   perShare = null,
   plan = DEFAULT_PLAN,
   pea = false,
 }) {
   const picked = planOf(plan);
-  const { named, matches } = findListing({ etf, place, currency });
   const answer = {
-    a: null,
-    b: 0,
-    c: 0,
-    ccy: QUOTE,
-    floor: null,
-    cap: null,
-    threshold: null,
-    plan: picked?.id ?? plan,
+    usd: null,
+    brokerFees: null,
     etf,
     place,
     currency,
+    onlineBuy: true,
+    cashCurrency: "EUR",
+    plan: picked?.id ?? plan,
   };
 
   if (!picked) {
     return { ...answer, why: `formule inconnue : ${plan} (decouverte|premium|start|expert|intense)` };
   }
+  if (!catalogue) {
+    return { ...answer, why: "le catalogue EasyBourse n'existe pas encore : lancer `node easybourse/easybourse_scraping.mjs`" };
+  }
+
+  const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue EasyBourse` };
   if (!matches.length) {
     return {
@@ -347,189 +410,271 @@ export function roundTripCost({
   const marketBp = bp ?? leaf?.bp ?? null;
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
   const american = US_MICS.has(listing.mic) || market === "us";
-  const tax = taxesOf(listing.isin);
-  const rates = taxRates(tax);
-  const taxTotal = Object.values(rates).reduce((s, r) => s + r, 0);
+  const { tax, rates, source: taxSource } = taxesFor(listing.isin, listing);
+  const taxPct = Object.values(rates).reduce((s, r) => s + r, 0);
+  const fxPct = listing.currency === "EUR" ? 0 : FX_EACH_WAY;
+  const canBuy = onlineBuy(picked.id, market);
 
-  const fxPct = listing.currency === "EUR" ? 0 : FX_EACH_WAY * 2;
-  const knownPct = taxTotal + (american ? SEC_RATE : 0) + (rule.rate ?? 0) * 2 + fxPct;
-  const mkt = bookParts({
-    bp: marketBp,
-    perShare: marketPerShare,
-    venue: m.venue,
-    unsourced: m.unsourced,
-    toUsd: (x) => (american ? x : dollars(x, listing.currency)),
-  });
-  const a = plus(mkt.a, knownPct);
-  const bookUsd = mkt.b;
-  const eachEur = rule.min;
-  const commUsd = dollars(eachEur * 2, "EUR") ?? 0;
-
-  return {
+  const shared = {
     ...answer,
-    a: finite(a, 4),
-    b: finite(plus(bookUsd, american ? TAF_PER_SHARE : 0), 6),
-    c: 0,
-    floor: commUsd,
+    onlineBuy: canBuy,
     listing,
     feeMarket: market,
-    onlineBuy: onlineBuy(picked.id, market),
-    remark: remarkOf({ plan: picked, market, online: onlineBuy(picked.id, market) }),
-    parts: {
-      marché:
-        marketBp != null ? Number((marketBp / 1e4).toPrecision(4)) : marketPerShare != null ? `${marketPerShare} par part` : null,
-      taxes: Object.keys(rates).length ? rates : null,
-      réglementaire: american ? { SEC: SEC_RATE, FINRA: `${TAF_PER_SHARE} par part` } : null,
-      commission: (rule.rate ?? 0) * 2,
-      commissionUsd: commUsd,
-      change: fxPct || null,
-    },
     bp: marketBp,
     perShare: marketPerShare,
     url: leaf?.url ?? SCHEDULE.source,
-    basis: `barème ${picked.label}, palier ${market}, ticket ${eachEur} € × 2 converti en dollars au mid BCE`,
     tax,
-    commission: {
-      each: dollars(eachEur, "EUR"),
-      roundTrip: commUsd,
-      currency: QUOTE,
-      native: { each: eachEur, roundTrip: eachEur * 2, currency: "EUR" },
-      market,
-      plan: picked.id,
-      atNotional: `palier le plus bas (ticket ≤ ${rule.upTo} €)`,
-      rule,
-    },
-    cEur: eachEur * 2,
-    ccy: QUOTE,
-    cap:
-      american || rule.cap != null
-        ? {
-            ...(american ? { term: "b", part: "FINRA TAF", amount: TAF_CAP, per: "exécution" } : {}),
-            ...(rule.cap != null
-              ? { commission: { amount: dollars(rule.cap, "EUR"), native: rule.cap, currency: "EUR", until: rule.capUntil } }
-              : {}),
-          }
-        : null,
-    threshold:
-      listing.mic === "XLON"
-        ? {
-            c: dollars(2 * PTM.each, "GBP"),
-            currency: QUOTE,
-            above: PTM.above,
-            aboveCurrency: "GBP",
-            why: `prélèvement PTM de ${PTM.each} £ par ordre et par sens, au-delà de ${PTM.above} £`,
-          }
-        : null,
-    pea: pea ? { cap: PEA_CAP, why: "plafond PEA / PEA-PME 0,5 % du montant, en ligne, EEE seulement" } : null,
     fx: fxNote(listing.currency),
     fxIfConverted: 0,
-    check: market === "euronext" ? CHECK : null,
+    remark: remarkOf(picked, market),
+    pea: pea ? { cap: PEA_CAP } : null,
+    check: listing.isin === CHECK.isin ? CHECK : null,
+  };
+
+  const basis =
+    `barème ${picked.label}, palier ${market}, brochure du ${SCHEDULE.revised} relue le ${SCHEDULE.readOn}` +
+    (rule ? ` : ${rule.min} € jusqu'à ${rule.upTo} €, puis ${(rule.rate * 100).toFixed(2)} %` : "") +
+    (rule?.cap != null ? `, plafond ${rule.cap} € jusqu'à ${rule.capUntil} €` : "");
+
+  const n = Number(shares);
+  const p = Number(price);
+  if (!(n > 0) || !(p > 0)) {
+    return {
+      ...shared,
+      basis,
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      confidence: confidenceOf({
+        picked,
+        market,
+        listing,
+        leaf,
+        marketBp,
+        marketPerShare,
+        unsourced: m.unsourced,
+        taxPct,
+        taxSource,
+        fxPct,
+        american,
+        pea,
+        online: canBuy,
+      }),
+    };
+  }
+
+  const notional = n * p;
+  const notionalUsd = toUsd(notional, listing.currency);
+  const notionalEur = toCcy(notional, listing.currency, "EUR");
+  const bookUsd =
+    marketBp != null && notionalUsd != null
+      ? (notionalUsd * marketBp) / 1e4
+      : marketPerShare != null
+        ? marketPerShare * n
+        : null;
+
+  const buy = commissionSide({ amountEur: notionalEur, plan: picked.id, market, pea });
+  const sell = commissionSide({ amountEur: notionalEur, plan: picked.id, market, pea });
+  const buyUsd = buy ? dollars(buy.charged, "EUR") : null;
+  const sellUsd = sell ? dollars(sell.charged, "EUR") : null;
+  const brokerFees = plus(buyUsd, sellUsd);
+
+  const taxUsd = notionalUsd == null ? null : notionalUsd * taxPct;
+  const fxUsd = fxPct && notionalUsd != null ? notionalUsd * fxPct * 2 : 0;
+  const secUsd = american ? (notionalUsd == null ? null : notionalUsd * SEC_RATE) : 0;
+  const tafUsd = american ? Math.min(TAF_CAP, TAF_PER_SHARE * n) : 0;
+  const levy = levyEach({ listing, notional, currency: listing.currency });
+  const ptmUsd = levy.ptm == null ? null : dollars((levy.ptm || 0) * 2, levy.ptmCcy || "GBP") ?? 0;
+
+  const usd = plus(bookUsd, brokerFees, taxUsd, fxUsd, secUsd, tafUsd, ptmUsd);
+
+  return {
+    ...shared,
+    usd: finite(usd, 6),
+    brokerFees: finite(brokerFees, 6),
+    ...(bookUsd == null
+      ? {
+          why:
+            `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ` +
+            `${m.unsourced?.why || "pas de source de spread"}`,
+        }
+      : {}),
+    trade: {
+      shares: n,
+      price: p,
+      notional,
+      notionalUsd: finite(notionalUsd, 6),
+      notionalEur: finite(notionalEur, 6),
+      currency: listing.currency,
+    },
+    buy: {
+      commission: finite(buyUsd, 6),
+      native: buy ? { ...buy, charged: finite(buy.charged, 6), raw: finite(buy.raw, 6) } : null,
+      taxes: finite(taxUsd, 6),
+      taxRates: Object.keys(rates).length ? rates : null,
+      fx: finite(fxUsd ? fxUsd / 2 : 0, 6),
+    },
+    sell: {
+      commission: finite(sellUsd, 6),
+      native: sell ? { ...sell, charged: finite(sell.charged, 6), raw: finite(sell.raw, 6) } : null,
+      fx: finite(fxUsd ? fxUsd / 2 : 0, 6),
+      sec: finite(secUsd, 6),
+      taf: finite(tafUsd, 6),
+    },
+    parts: {
+      marché: finite(bookUsd, 6),
+      commission: finite(brokerFees, 6),
+      taxes: finite(taxUsd, 6),
+      change: finite(fxUsd, 6),
+      réglementaire: finite(plus(secUsd, tafUsd, ptmUsd), 6),
+    },
+    levy: { ptm: levy.ptm },
+    commission: {
+      each: buy?.charged ?? null,
+      min: rule?.min ?? null,
+      rate: rule?.rate ?? null,
+      cap: rule?.cap ?? null,
+      currency: "EUR",
+      eachWay: true,
+      plan: picked.id,
+      pea,
+    },
+    basis,
     confidence: confidenceOf({
-      plan: picked,
+      picked,
       market,
+      listing,
+      leaf,
       marketBp,
       marketPerShare,
-      taxTotal,
-      american,
-      leaf,
-      type: listing.type,
       unsourced: m.unsourced,
-      online: onlineBuy(picked.id, market),
+      taxPct,
+      taxSource,
+      fxPct,
+      american,
       pea,
+      online: canBuy,
+      buy,
+      n,
+      tafUsd,
+      levy,
     }),
   };
 }
 
-export function exactCost({ amount, market, plan = DEFAULT_PLAN, pea = false, currency = "EUR" }) {
-  const picked = planOf(plan);
-  const rule = picked ? ruleOf(picked.id, market) : null;
-  if (!rule) return { commission: null, currency: QUOTE };
-  let each = commissionEach(amount, rule);
-  if (pea && ["euronext", "xetra", "other_eu"].includes(market)) {
-    each = Math.min(each, amount * PEA_CAP);
-  }
-  return {
-    commission: dollars(each * 2, "EUR"),
-    currency: QUOTE,
-    native: { commission: each * 2, each, currency: "EUR" },
-    rule,
-    plan: picked.id,
-    pea,
-  };
-}
-
-function confidenceOf({ plan, market, marketBp, marketPerShare, taxTotal, american, leaf, type, unsourced, online, pea }) {
+function confidenceOf({
+  picked,
+  market,
+  listing,
+  leaf,
+  marketBp,
+  marketPerShare,
+  unsourced,
+  taxPct,
+  taxSource,
+  fxPct,
+  american,
+  pea,
+  online,
+  buy,
+  n,
+  tafUsd,
+  levy,
+}) {
   const said = [];
   said.push(
-    `commission ${plan.label}, palier ${market}, lue le ${SCHEDULE.readOn} (carte du ${SCHEDULE.revised}), ` +
-      `convertie en dollars au mid BCE du ${FX_AS_OF} et pliée dans c au ticket le plus bas`
+    `${picked.label}, palier ${market}, brochure du ${SCHEDULE.revised} relue le ${SCHEDULE.readOn} ` +
+      `(inchangée depuis le ${SCHEDULE.previouslyRead})`
   );
   if (!online) {
+    said.push(`EasyDécouverte n'achète pas ce marché en ligne : vente seule, par téléphone, au tarif de la carte (sans les +11 €)`);
+  }
+  if (buy?.floored) {
+    said.push(`le plancher mord : ${buy.charged} € facturés par sens (palier ≤ ${ruleOf(picked.id, market)?.upTo} €)`);
+  } else if (buy) {
     said.push(
-      `EasyDécouverte n'achète pas ce marché en ligne : vente seule, par téléphone, au tarif de la carte (sans les +11 €)`
+      `courtage ${(ruleOf(picked.id, market)?.rate * 100).toFixed(2)} % par sens, ${Number(buy.charged.toPrecision(4))} €` +
+        (buy.peaCapped ? `, plafond PEA ${(PEA_CAP * 100).toFixed(1)} %` : "")
     );
   }
-  if (taxTotal > 0) said.push(`taxes ${(100 * taxTotal).toFixed(2)} % du montant`);
-  if (american) said.push(`frais SEC et FINRA à la vente, comme chez tout courtier américain`);
+  if (fxPct) {
+    said.push(`change J+1 16 h + ${(FX_EACH_WAY * 100).toFixed(2)} % par sens`);
+  } else {
+    said.push(`cotation EUR : pas de change`);
+  }
+  if (taxPct) {
+    said.push(
+      taxSource === "easybourse"
+        ? `taxe à l'achat ${(100 * taxPct).toFixed(2)} % du montant — timbre ${issuerCc(listing.isin)} que la carte dit répercuter (cet ISIN n'est pas dans taxMap.mjs)`
+        : `taxe à l'achat ${(100 * taxPct).toFixed(2)} % du montant, depuis taxMap.mjs`
+    );
+  }
+  if (american) {
+    said.push(
+      `vente américaine : SEC ${SEC_RATE} du montant et TAF FINRA ${TAF_PER_SHARE} $ la part (plafond ${TAF_CAP} $)` +
+        (tafUsd != null && n != null && TAF_PER_SHARE * n > TAF_CAP
+          ? ` — le plafond mord : ${Number(tafUsd.toPrecision(4))} $`
+          : "")
+    );
+  }
+  if (levy?.ptm) said.push(`PTM ${PTM.each} £ par sens, le montant dépasse ${PTM.above} £`);
   if (pea) said.push(`plafond PEA 0,5 % appliqué à la commission en ligne, marchés EEE`);
-  if (marketPerShare != null) {
+  if (marketBp != null) said.push(`carnet publié ${Number(marketBp.toPrecision(4))} bp, aller-retour`);
+  else if (marketPerShare != null) said.push(`carnet Rule 605, ${marketPerShare} $ la part, moyenne 100–499 parts`);
+  else {
     said.push(
-      `carnet Rule 605, moyenne 100–499 parts` +
-        (marketPerShare > 0.01 ? ` ; à ${marketPerShare} $/part le bucket est déjà large` : "")
+      `aucun carnet : ${unsourced?.name || listing.exchange}, ${unsourced?.why || "pas de source"}. ` +
+        `Le total est N/A faute de mesure, pas faute de frais`
     );
-  } else if (marketBp != null) {
-    said.push(`carnet publié ${marketBp} bp` + (unsourced ? ` (Euronext sans ville, un seul carnet pour cet ISIN)` : ""));
-  } else if (unsourced) {
-    said.push(`aucun carnet : ${unsourced.name}, ${unsourced.why} — seules commission, taxes et frais sont comptés`);
-  } else if (type) {
-    said.push(`aucun carnet relevé sur cette ligne : le spread manque`);
   }
-  if (market === "euronext" && ["decouverte", "premium", "start"].includes(plan.brokerageOf)) {
+  if (market === "euronext" && ["decouverte", "premium", "start"].includes(picked.brokerageOf)) {
     said.push(
-      `un aller-retour réel le ${CHECK.on} sur ${CHECK.ticker} (${CHECK.venue}) : ` +
-        `achat ${CHECK.buy} / vente ${CHECK.sell}, carnet ${CHECK.book} € (${CHECK.bp} bp), ` +
-        `courtage ${CHECK.commissionEach} € par jambe (PRU après achat ${CHECK.pruAfterBuy} = fill + ticket, ` +
-        `récap vente ${CHECK.sellQuoted} €). c reste 4 €, le carnet n'est pas plié dans a`
+      `aller-retour réel le ${CHECK.on} sur ${CHECK.ticker} (${CHECK.venue}) : ` +
+        `achat ${CHECK.buy} / vente ${CHECK.sell}, courtage ${CHECK.commissionEach} € par sens ` +
+        `(PRU après achat ${CHECK.pruAfterBuy} = fill + ticket)`
     );
   } else {
     said.push(
-      `courtage ${plan.label} / ${market} non recoupé sur un relevé ; le seul aller-retour réel est ${CHECK.ticker} Equiduct à 2 € le ticket`
+      `courtage ${picked.label} / ${market} non recoupé sur un relevé — le seul aller-retour réel est ${CHECK.ticker} Equiduct à 2 € le ticket`
     );
   }
   said.push(
-    `change 0,12 % par sens sur le fixing J+1 16 h, dans a hors EUR (cash euro seulement)`
+    `hors total : inactivité ${picked.intenseGap != null ? `${picked.intenseGap} € par ordre manquant sous 15 / mois` : `${picked.inactivity} € / mois`}, ` +
+      `téléphone + 11 € sur Euronext, 1er ordre Découverte offert la 1re année. Virement internet sortant gratuit`
   );
   return said.join(" ; ");
 }
 
-// ------------------------------------------------------------------------------- entrée
-
 if (import.meta.url === `file://${process.argv[1]}`) {
   const flag = (name) => {
-    const m = process.argv.find((a) => a.startsWith(`--${name}=`));
-    return m ? m.split("=").slice(1).join("=") : null;
+    const hit = process.argv.find((a) => a.startsWith(`--${name}=`));
+    return hit ? hit.split("=").slice(1).join("=") : null;
   };
 
   if (process.argv.includes("--schedule")) {
-    const cover = coverage();
-    const out = {
-      ...SCHEDULE,
-      defaultPlan: DEFAULT_PLAN,
-      plans: Object.fromEntries(
-        Object.entries(PLANS).map(([k, v]) => [
-          k,
-          {
-            ...v,
-            euronext: EURONEXT_RULE[v.aliasOf || v.id],
-            other: v.id === "decouverte" ? { note: "vente seule, téléphone" } : OTHER_RULE,
-          },
-        ])
-      ),
-      fxEachWay: FX_EACH_WAY,
-      peaCap: PEA_CAP,
-      coverage: cover,
-    };
-    console.log(JSON.stringify(out, null, 2));
+    console.log(
+      JSON.stringify(
+        {
+          ...SCHEDULE,
+          defaultPlan: DEFAULT_PLAN,
+          fxEachWay: FX_EACH_WAY,
+          peaCap: PEA_CAP,
+          ptm: PTM,
+          check: CHECK,
+          plans: Object.fromEntries(
+            Object.entries(PLANS).map(([k, v]) => [
+              k,
+              {
+                ...v,
+                euronext: EURONEXT_RULE[v.aliasOf || v.id],
+                other: v.id === "decouverte" ? { note: "vente seule, téléphone" } : OTHER_RULE,
+              },
+            ])
+          ),
+          coverage: coverage(),
+        },
+        null,
+        2
+      )
+    );
     process.exit(0);
   }
 
@@ -539,22 +684,22 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     console.error(
       "usage : node easybourse_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--plan=premium|decouverte|start|expert|intense] [--pea] [--json]\n" +
         "        node easybourse_cost.mjs --schedule\n" +
-        "  ex.   node easybourse_cost.mjs MC EURONEXT EUR\n" +
+        "  ex.   node easybourse_cost.mjs TTE EURONEXT EUR --shares=1 --price=77.8\n" +
         "        node easybourse_cost.mjs AAPL NASDAQ USD --shares=1 --price=230 --plan=premium"
     );
     process.exit(2);
   }
 
-  const plan = flag("plan") || DEFAULT_PLAN;
-  const pea = process.argv.includes("--pea");
-  const out = roundTripCost({
+  const out = roundTrip({
     etf,
     place,
     currency,
+    shares: flag("shares") ? Number(flag("shares")) : null,
+    price: flag("price") ? Number(flag("price")) : null,
     bp: flag("bp") ? Number(flag("bp")) : null,
     perShare: flag("per-share") ? Number(flag("per-share")) : null,
-    plan,
-    pea,
+    plan: flag("plan") || DEFAULT_PLAN,
+    pea: process.argv.includes("--pea"),
   });
 
   if (process.argv.includes("--json")) {
@@ -562,53 +707,43 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     process.exit(0);
   }
 
-  if (out.a == null) {
-    console.log(`a = null   b = ${out.b}   c = ${out.c}\n${out.why}`);
-    if (out.alternatives?.length) console.log(`\nce qu'EasyBourse propose sous ce nom :\n  ${out.alternatives.join("\n  ")}`);
+  const l = out.listing;
+  if (!l) {
+    console.log(out.why || "rien à dire");
+    if (out.alternatives?.length) {
+      console.log(`\nce qu'EasyBourse propose sous ce nom :\n  ${out.alternatives.join("\n  ")}`);
+    }
     process.exit(0);
   }
 
-  const l = out.listing;
   const picked = planOf(out.plan);
   console.log(`${l.ticker || l.isin} — ${l.name || ""}`);
   console.log(
-    `${l.exchange}${l.mic ? ` (${l.mic})` : ""}, ${l.currency}${l.type ? `, ${l.type.toLowerCase()}` : ""}` +
+    `${l.exchange || "—"}${l.mic ? ` (${l.mic})` : ""}, ${l.currency}${l.type ? `, ${l.type.toLowerCase()}` : ""}` +
       `  [${picked?.label || out.plan}]\n`
   );
 
-  const detail = [];
-  if (out.parts?.marché != null) detail.push(`carnet ${out.parts.marché}`);
-  for (const [name, rate] of Object.entries(out.parts?.taxes ?? {})) detail.push(`${name} ${rate}`);
-  if (out.parts?.réglementaire) detail.push(`SEC ${out.parts.réglementaire.SEC}`);
-  if (out.parts?.change) detail.push(`change ${out.parts.change}`);
+  if (out.trade?.notional != null) {
+    const t = out.trade;
+    console.log(
+      `${t.shares ? `${t.shares} part${t.shares > 1 ? "s" : ""} à ${t.price} ${t.currency} = ` : ""}` +
+        `${t.notional.toFixed(2)} ${t.currency}` +
+        (t.notionalUsd != null ? ` (${t.notionalUsd.toFixed(2)} $)` : "")
+    );
+    console.log();
+  }
 
-  console.log(`a = ${out.a}   (au prorata${detail.length ? " : " + detail.join(" + ") : " : rien"})`);
-  console.log(`b = ${out.b} $   (par part${out.b ? " : FINRA et/ou spread 605" : " : rien"})`);
-  console.log(`c = ${out.c} $   (par ordre : ${out.cEur} € de commission au palier bas, au mid BCE)`);
-  console.log(`cEur = ${out.cEur} €   (source, marché ${out.feeMarket}, déjà dans c)`);
-  if (!out.onlineBuy) console.log(`en ligne : vente seule (Découverte, marchés hors Euronext)`);
-  if (out.floor != null) console.log(`plancher ${out.floor} $`);
-  const fx = out.fx?.listing ?? usdPer(l.currency);
-  console.log(`\ncoût = ${out.a} × p × n × ${fx != null ? Number(fx.toPrecision(6)) : "?"} + ${out.b} × n + ${out.c}   ($ ; p en ${l.currency})`);
-  console.log(`  ${out.basis}`);
-  for (const line of out.confidence.split(" ; ")) console.log(`  ${line}`);
-
-  const n = Number(flag("shares"));
-  const p = Number(flag("price"));
-  if (n > 0 && p > 0) {
-    const amount = n * p;
-    const amountUsd = toUsd(amount, l.currency);
-    const extra = out.threshold && amount >= out.threshold.above ? out.threshold.c : 0;
-    const affine = amountUsd != null ? out.a * amountUsd + out.b * n + out.c + extra : null;
-    const billed = exactCost({ amount, market: out.feeMarket, plan: out.plan, pea, currency: l.currency });
-    console.log(`\n${n} part${n > 1 ? "s" : ""} à ${p} ${l.currency} = ${amount.toFixed(2)} ${l.currency}` + (amountUsd != null ? ` (${amountUsd.toFixed(2)} $)` : ""));
-    if (affine != null) console.log(`  a, b, c        : ${affine.toFixed(4)} $`);
-    if (billed.commission != null) {
-      console.log(
-        `  commission     : ${Number(billed.commission).toFixed(4)} $` +
-          (billed.native?.commission != null ? ` (${billed.native.each} € × 2)` : "")
-      );
+  console.log(`aller-retour     : ${out.usd == null ? `N/A${out.why ? ` — ${out.why}` : ""}` : `${out.usd} $`}`);
+  console.log(`frais du courtier: ${out.brokerFees == null ? "N/A" : `${out.brokerFees} $`}`);
+  if (out.parts) {
+    for (const [name, v] of Object.entries(out.parts)) {
+      if (v != null) console.log(`  ${name.padEnd(15)}: ${v} $`);
     }
   }
+  if (!out.onlineBuy) console.log(`  en ligne        : vente seule (Découverte, hors Euronext)`);
+  console.log();
+  if (out.basis) console.log(`  ${out.basis}`);
+  for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
+  if (out.remark) for (const r of out.remark.split("\n")) console.log(`  · ${r}`);
   if (out.url) console.log(`\n${out.url}`);
 }

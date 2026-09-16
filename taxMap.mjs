@@ -73,10 +73,19 @@ export function taxesOf(isin) {
   return { known: false, assumedZero: true, why: "pas de ligne fiscale pour cet ISIN" };
 }
 
+// A levy charged per order rather than per euro. The sweep still prints an
+// `ofValue` for it, because it divided the charge by whatever notional it
+// happened to ask about — 1,50 £ over 69 898 £ reads as 0,00215 %. That
+// fraction is true of that one order and of no other, so it is not a rate and
+// does not belong among them: read as one it under-charges a small order and,
+// on a large one, bills the levy many times over. Which order pays it, and how
+// often, is a threshold each `*_cost.mjs` already knows and applies itself.
+const PER_ORDER = /PTM/i;
+
 export function taxRates(tax) {
   const rates = {};
   for (const [name, line] of Object.entries(tax?.buy ?? {})) {
-    if (line.ofValue != null) rates[name] = line.ofValue;
+    if (line.ofValue != null && !PER_ORDER.test(name)) rates[name] = line.ofValue;
   }
   return rates;
 }

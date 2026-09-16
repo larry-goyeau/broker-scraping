@@ -1,0 +1,45 @@
+{
+  "why": "usd charges the published book on the assumption that a client buys the ask and sells the bid. Two earlier buys (PETR4, overnight ACA) had printed on the bid, so a same-session round trip was needed to see whether a trip actually crosses.",
+  "line": {
+    "ticker": "ACA",
+    "name": "Credit Agricole SA",
+    "isin": "FR0000045072",
+    "shortName": "ACAp.BS",
+    "currency": "EUR",
+    "operator": "Cboe Europe"
+  },
+  "open": {
+    "at": "2026-09-16T14:20:49.528Z",
+    "side": "buy",
+    "shares": 10,
+    "price": 18.365,
+    "notionalLocal": 183.65,
+    "button": 18.365,
+    "note": "ACHETER showed 18.370 then 18.365; fill equals the ask button."
+  },
+  "close": {
+    "at": "2026-09-16T14:22:09.890Z",
+    "side": "sell",
+    "shares": 10,
+    "price": 18.36,
+    "button": 18.36,
+    "heldSeconds": 80,
+    "note": "VENDRE showed 18.360; fill equals the bid button."
+  },
+  "history": {
+    "id": "7ac70004-a9c3-434e-ba38-08df13c3e961",
+    "op": 18.365,
+    "acp": 18.36,
+    "pi": -0.05,
+    "pa": -0.06,
+    "roi": -0.0272257011
+  },
+  "reconcile": {
+    "spreadPaidLocal": 0.05,
+    "expectedIfCrossed": 0.05,
+    "residualLocal": 0,
+    "bp": 2.72,
+    "crossed": true,
+    "verdict": "Buy at the ask, sell at the bid, P&L is exactly (18.36 − 18.365) × 10. The trip crossed the book. usd is right to charge it."
+  }
+}

@@ -289,11 +289,13 @@ export function accepts(folder, nat, home = "") {
 
 // A listing the broker's own book withholds from this residency, even if the
 // visitor can open an account: T212 `supportedCountries`, a KID notice
-// (`nonEuResident`), or an Alpaca PTP (`usResidentsOnly`).
+// (`nonEuResident`), an Alpaca PTP (`usResidentsOnly`), or NSE cash
+// (`indianOnly`) that IBKR Europe will not permission.
 export function listingAccepts(row, nat) {
   const code = String(nat || "").trim().toUpperCase();
   if (!code) return true;
   if (row?.usResidentsOnly) return code === "US";
+  if (row?.indianOnly) return code === "IN";
   if (row?.nonEuResident && EEA.includes(code)) return false;
   if (Array.isArray(row?.supportedCountries)) {
     return row.supportedCountries.some((c) => String(c).trim().toUpperCase() === code);
@@ -315,6 +317,10 @@ export function stampResidency(row) {
   if (row.notEuResident) {
     row.nonEuResident = true;
     delete row.notEuResident;
+  }
+  if (row.IndianOnly) {
+    row.indianOnly = true;
+    delete row.IndianOnly;
   }
   delete row.nonUsResident;
   return row;

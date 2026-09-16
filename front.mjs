@@ -66,6 +66,7 @@ const FOLDER_NAME = {
   easyequities: "EasyEquities",
   efocs: "EuroFinance",
   elana: "Elana Trading",
+  siebert: "Siebert Financial",
 };
 
 function metaFor(folder, list) {
@@ -215,6 +216,7 @@ for (const file of catalogueFiles()) {
     // withholds a line from the EEA and from nobody else.
     if (row.usOnly) listing.nonEuResident = true;
     if (row.usResidentsOnly) listing.usResidentsOnly = true;
+    if (row.indianOnly) listing.indianOnly = true;
     if (Array.isArray(row.supportedCountries)) listing.supportedCountries = row.supportedCountries;
     const held = inst.byBroker.get(folder) || [];
     const dup = held.some(
@@ -378,7 +380,16 @@ function estimateListing(folder, listing, inst, extra = {}, size = {}) {
       };
   try {
     if (entry.total) {
-      const cost = entry.total({ ...ask, ...trade });
+      let cost = entry.total({ ...ask, ...trade });
+      // OCR catalogues (Plum) name no currency. The estimator still knows the
+      // tape, so a first call without a price is enough to learn it and look
+      // the quote up under the right key — otherwise the row stays N/A.
+      if (!crypto && !(trade.price > 0) && cost?.listing?.currency) {
+        const price = priceOf(listing.isin || inst.isin, cost.listing.currency);
+        if (price > 0) {
+          cost = entry.total({ ...ask, shares: trade.shares, price });
+        }
+      }
       return formatTotal(cost, cost?.usd);
     }
     // Not migrated yet: the old file still knows where the line trades and in
@@ -719,6 +730,15 @@ const LIGHTYEAR_PLANS = [
   { id: "uk", name: "Lightyear UK" },
 ];
 
+// Crypto is the shelf where the plan changes the fill: Metal is 1 % / 2 %,
+// the others are 1,5 % / 2,5 %. Smart and Go do not cut that rate, so they
+// are not a third and fourth row. Shares stay one N26 line — only the
+// monthly free-trade allowance differs, and that is not a trip.
+const N26_CRYPTO_PLANS = [
+  { id: "standard", name: "N26 Standard" },
+  { id: "metal", name: "N26 Metal" },
+];
+
 // Ordered by what the subscription costs, so the cheapest plan reads first and
 // the trade-off between the monthly fee and the commission runs down the page.
 //
@@ -732,6 +752,17 @@ const REVOLUT_PLANS = [
   { id: "premium", name: "Revolut Premium" },
   { id: "metal", name: "Revolut Metal" },
   { id: "ultra", name: "Revolut Ultra" },
+];
+
+const SAXO_PLANS = [
+  { id: "classic", name: "Saxo Classic" },
+  { id: "platinum", name: "Saxo Platinum" },
+  { id: "vip", name: "Saxo VIP" },
+];
+
+const SCALABLE_PLANS = [
+  { id: "free", name: "Scalable FREE" },
+  { id: "prime", name: "Scalable PRIME+" },
 ];
 
 const PLUM_PLANS = [
@@ -808,6 +839,88 @@ function lightyearPlansFor(nat) {
   return LIGHTYEAR_PLANS;
 }
 
+function revolutEntitiesFor(nat) {
+  const n = String(nat || "").toUpperCase();
+  if (n === "GB") return [{ id: "uk" }];
+  if (n) return [{ id: "eu" }];
+  return [{ id: "eu" }, { id: "uk" }];
+}
+
+function revolutEquityName(entityId, plan, showHouse) {
+  const house = showHouse ? (entityId === "uk" ? "UK " : "UE ") : "";
+  return `Revolut ${house}${plan === "ultra" ? "Ultra" : "Standard"}`;
+}
+
+function revolutHouse(row) {
+  return /:uk(?:-|$)/.test(String(row.folder || "")) ? "uk" : "eu";
+}
+
+function collapseScalable(built) {
+  const groups = [];
+  for (const row of built) {
+    // gettex / Xetra bill the same ticket on both plans; the 4.99 €/month
+    // sits in the remark and must not keep two identical totals on the page.
+    const hit = groups.find((g) => sameTripListings(g.listings, row.listings));
+    if (hit) hit.members.push(row);
+    else groups.push({ listings: row.listings, members: [row] });
+  }
+  return groups.map((g) => {
+    if (g.members.length === 1) return g.members[0];
+    return {
+      ...g.members[0],
+      folder: `scalablecapital:${g.members.map((m) => m.folder.split(":")[1]).join("-")}`,
+      family: "Scalable Capital",
+      name: "Scalable Capital",
+      plan: "",
+      planRank: 0,
+    };
+  });
+}
+
+function collapseSaxo(built) {
+  const groups = [];
+  for (const row of built) {
+    const hit = groups.find((g) => sameCostListings(g.listings, row.listings));
+    if (hit) hit.members.push(row);
+    else groups.push({ listings: row.listings, members: [row] });
+  }
+  return groups.map((g) => {
+    if (g.members.length === 1) return g.members[0];
+    return {
+      ...g.members[0],
+      folder: `saxo:${g.members.map((m) => m.folder.split(":")[1]).join("-")}`,
+      family: "Saxo Bank",
+      name: "Saxo Bank",
+      plan: "",
+      planRank: 0,
+    };
+  });
+}
+
+function collapseRevolut(built) {
+  const bothHouses = new Set(built.map(revolutHouse)).size > 1;
+  const groups = [];
+  for (const row of built) {
+    const plan = String(row.plan || "").includes("ultra") ? "ultra" : "standard";
+    const hit = groups.find((g) => g.plan === plan && sameTripListings(g.listings, row.listings));
+    if (hit) hit.members.push(row);
+    else groups.push({ plan, listings: row.listings, members: [row] });
+  }
+  return groups.map((g) => {
+    const entities = new Set(g.members.map(revolutHouse));
+    const showHouse = entities.size === 1 && bothHouses;
+    const name = revolutEquityName([...entities][0], g.plan, showHouse);
+    return {
+      ...g.members[0],
+      folder: `revolut:${g.members.map((m) => m.folder.split(":")[1]).join("-")}`,
+      family: name,
+      name,
+      plan: g.plan,
+      planRank: g.plan === "ultra" ? 2 : 1,
+    };
+  });
+}
+
 // Two plans of one broker are one row when they cost the same. While a broker
 // is unmigrated its total is N/A on every plan, so the comparison rests on the
 // remark alone — which is what used to separate them anyway.
@@ -829,6 +942,14 @@ function sameCostListings(a, b) {
       l.total === r.total &&
       l.remark === r.remark
     );
+  });
+}
+
+function sameTripListings(a, b) {
+  if (a.length !== b.length) return false;
+  return a.every((l, i) => {
+    const r = b[i];
+    return l.exchange === r.exchange && l.currency === r.currency && l.total === r.total && l.fees === r.fees;
   });
 }
 
@@ -1017,6 +1138,7 @@ function detail(key, nat = "", size = {}) {
             buyable,
             nonEuResident,
             usResidentsOnly,
+            indianOnly,
             supportedCountries,
             exchangeRaw,
             venueExchange,
@@ -1044,6 +1166,10 @@ function detail(key, nat = "", size = {}) {
     const asPlan = (plan, i, listed) => ({
       ...base,
       folder: `${folder}:${plan.id}`,
+      // The page merges rows that share a `family`. If that stays the broker
+      // name, Revolut Standard and Ultra both print as "Revolut" the moment
+      // the two companies happen to cost the same.
+      family: plan.name || base.family,
       name: plan.name,
       plan: plan.id,
       planRank: i + 1,
@@ -1108,20 +1234,83 @@ function detail(key, nat = "", size = {}) {
       });
       continue;
     }
-    // Crypto is the one shelf where the plan changes the price of the trade
-    // itself, 1.49 % down to 0.49 %, so it gets a row each. A share pays 0.25 %
-    // on four plans out of six and stays a single row that names the range.
-    if (folder === "revolut" && inst.key.startsWith("CRYPTO:")) {
-      REVOLUT_PLANS.forEach((plan, i) => {
+    // Same reason as Revolut below: Metal cuts the crypto percentage, so the
+    // two tariffs are two rows. Shares stay one N26 line.
+    if (folder === "N26" && inst.key.startsWith("CRYPTO:")) {
+      N26_CRYPTO_PLANS.forEach((plan, i) => {
         const listed = listings({ plan: plan.id });
         if (listed.length) rows.push(asPlan(plan, i, listed));
       });
+      continue;
+    }
+    // Crypto is the one shelf where every plan changes the fill, 1.49 % down
+    // to 0.49 %, so it gets a row each. A share is 0.25 % on four plans and
+    // 0.12 % on Ultra: Standard stands for the first four, Ultra is added
+    // only when that cut actually moves the total (it does not on an ETF,
+    // nor on a stock still sitting on the €1 floor). UK and UE merge when
+    // they price alike; they only split on the Lithuanian €1 floor.
+    if (folder === "revolut") {
+      if (inst.key.startsWith("CRYPTO:")) {
+        const built = [];
+        REVOLUT_PLANS.forEach((plan, i) => {
+          const listed = listings({ plan: plan.id });
+          if (listed.length) built.push(asPlan(plan, i, listed));
+        });
+        // Stablecoins are 0 on every plan when paid in their own currency, so
+        // five rows would print the same 0. One Revolut line carries the note.
+        const same = built.length > 1 && built.every((r) => sameTripListings(r.listings, built[0].listings));
+        if (same) {
+          rows.push({
+            ...built[0],
+            folder: `revolut:${built.map((m) => m.folder.split(":")[1]).join("-")}`,
+            family: "Revolut",
+            name: "Revolut",
+            plan: "",
+            planRank: 0,
+          });
+        } else {
+          for (const row of built) rows.push(row);
+        }
+      } else {
+        const built = [];
+        revolutEntitiesFor(nat).forEach((ent, i) => {
+          const standard = listings({ entity: ent.id, plan: "standard" });
+          if (standard.length) {
+            built.push(asPlan({ id: ent.id, name: revolutEquityName(ent.id, "standard", false) }, i * 2, standard));
+          }
+          const ultra = listings({ entity: ent.id, plan: "ultra" });
+          if (ultra.length && !sameTripListings(standard, ultra)) {
+            built.push(
+              asPlan({ id: `${ent.id}-ultra`, name: revolutEquityName(ent.id, "ultra", false) }, i * 2 + 1, ultra)
+            );
+          }
+        });
+        for (const row of collapseRevolut(built)) rows.push(row);
+      }
       continue;
     }
     // No collapse here, unlike the plans above: the three companies never price a
     // line alike. Two of them differ on the rate, and the American and British
     // ones, which share it, part on the remark — one waives the regulators under
     // $500, the other charges a conversion.
+    if (folder === "saxo") {
+      const built = [];
+      SAXO_PLANS.forEach((plan, i) => {
+        const listed = listings({ plan: plan.id });
+        if (listed.length) built.push(asPlan(plan, i, listed));
+      });
+      for (const row of collapseSaxo(built)) rows.push(row);
+      continue;
+    }
+    if (folder === "scalablecapital") {
+      const built = [];
+      SCALABLE_PLANS.forEach((plan, i) => {
+        const listed = listings({ plan: plan.id });
+        if (listed.length) built.push(asPlan(plan, i, listed));
+      });
+      for (const row of collapseScalable(built)) rows.push(row);
+      continue;
+    }
     if (folder === "robinhood") {
       ROBINHOOD_PLANS.forEach((plan, i) => {
         if (!robinhoodOpen(plan.id, nat)) return;

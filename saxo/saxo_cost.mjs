@@ -1,19 +1,17 @@
-// What one round trip costs at Saxo: buy n shares at price p, sell them back
-// at once (online, cash account, no leverage).
+// What one round trip costs at Saxo: buy n shares at price p, sell them
+// back at once (online, cash account, no leverage), in dollars.
 //
-//   coût (USD) = a × toUsd(p) × n + b × n + c
+// The affine triple hid the floors. A $230 AAPL pays $1 a side, not 0.08 %,
+// a TSX Venture sell stops at 25 CAD, and a 60 000-share US sale is $9.79
+// of TAF, not 60 000 × $0.000195. `roundTrip` is given the size and
+// charges what is charged.
 //
-// `a` is a fraction of the amount. `b` and `c` are dollars, the same unit the
-// other `*_cost.mjs` files answer in. Saxo's minimum per order is a floor on
-// the % already in `a`, so it sits in the floor (`min fees`) and `c` stays 0.
-// Two tapes are billed per share instead (US OTC, TSX Venture): those go to
-// `b`, and their 25-unit ceiling to `cap`.
-//
-// Saxo Bank A/S (DK) and its entities, read 2026-09-13. ETF / ETC / ETN take
-// the same exchange line as shares — Saxo prints one table for both. Three
-// tiers, Classic by default; Platinum wants ~200 k$ and VIP ~1 M$. CFDs,
-// futures, options, bonds, mutual funds and the leveraged FxCrypto book are
-// not this trip; the catalogue is saxoinvestor.fr, which carries none of them.
+// Saxo Bank A/S (DK) and its entities, re-read 2026-09-16 — the AU table
+// still matches the 13th. ETF / ETC / ETN take the same exchange line as
+// shares. Three tiers, Classic by default; Platinum wants ~200 k$ and VIP
+// ~1 M$ (Australia prints the top tier as First). CFDs, futures, options,
+// bonds, mutual funds and the leveraged FxCrypto book are not this trip;
+// the catalogue is saxoinvestor.fr, which carries none of them.
 //
 //   US (Nasdaq, NYSE, NYSE American, Cboe BZX)   0.08 %, min 1 $
 //   US OTC (Pink)          0.015 $/share, min 1 $, max 25 $
@@ -35,62 +33,48 @@
 //   Singapour              0.08 %, min 3 SGD
 //   Sydney                 0.08 %, min 3 AUD
 //
-// Platinum and VIP take the same line at 0.05 % and 0.03 %. The three 0.12 %
-// places publish only Classic and the top tier (0.05 %), so Platinum is null
-// there rather than guessed, and likewise Johannesburg and the two per-share
-// tapes.
+// Platinum and VIP take the same line at 0.05 % and 0.03 %. The three
+// 0.12 % places publish only Classic and the top tier (0.05 %), so
+// Platinum is not sold there rather than guessed, and likewise
+// Johannesburg and the two per-share tapes.
 //
-// Saxo prints, under every one of those tables, that the prices "vary
-// according to the country of residency" and that the trade ticket is what
-// binds. This file holds the pan-Saxo table, which the French, Belgian, Swiss
-// and Australian pages all repeat unchanged. Two things do move with
-// residency and are read per country:
+// The $ / € / £ floor is in the number, so it stays out of the remark.
+// Custody is a year of holding and FX is a choice — a sub-account in the
+// listing currency opens for free — so both sit in the remark, not the
+// total. The French catalogue is the default home: custody 0, FX 0.25 %.
+// UK / AU / NL / CZ swing the custody; UK / AU swing the FX.
 //
-//   custody   free in BE / FR / IT / PL / CH, 0.01 % (max 40 €, refunded as
-//             trading credit) in NL, 0.12 % in GB, waived against securities
-//             lending in CZ, else the published 0.15 % / 0.12 % / 0.09 % a
-//             year. It is a holding cost, not a trade, so it stays out of `a`
-//             and goes to the remark. The Nordic and Singaporean rows of that
-//             table were not read: DK, NO, SE, FI and SG therefore fall to the
-//             0.15 %, which is a ceiling on them, not a reading.
-//   change    0.25 % nearly everywhere, 0.6 % / 0.4 % / 0.2 % at Saxo UK.
-//             A sub-account can be opened in the listing currency for free,
-//             so the conversion is a choice, not a toll: out of `a`, in the
-//             remark, like Elana — which runs this very platform.
+// Two traps in Saxo's own codes. `TSE` is Toronto and `TSX` is TSX
+// Venture, the reverse of what the letters suggest and of what
+// `venues.mjs` resolves both to (XTSE); the fee market is read off
+// Saxo's code, not off the MIC. And `FSE` is the Frankfurt floor
+// (XFRA), not Xetra: Saxo's table names only Deutsche Börse (XETRA),
+// so the floor answers N/A rather than borrow the 3 € line. Same for
+// Oslo, Varsovie, Prague, Luxembourg, Bursa Malaysia and the LSE
+// International Order Book.
 //
-// Two traps in Saxo's own codes. `TSE` is Toronto and `TSX` is TSX Venture,
-// the reverse of what the letters suggest and of what `venues.mjs` resolves
-// both to (XTSE); the fee market is therefore read off Saxo's code, not off
-// the MIC. And `FSE` (Frankfurt floor) resolves to XETR here while Saxo's
-// table names only Deutsche Börse (XETRA): Frankfurt has no published line,
-// so it answers N/A rather than borrow the Xetra one. Same for Oslo, Varsovie,
-// Prague, Luxembourg, Bursa Malaysia and the LSE International Order Book —
-// 1 689 lines of 28 388, six per cent of the shelf. Elana, on the same
-// platform, prices the IOB apart from the LSE, which is why it is not folded
-// in here either.
-//
-// Stamp / FTT / PTM come from the tax map; failing that, the UK 0.5 %, Irish
-// 1 % and Hong Kong 0.1 % that Saxo's taxation-by-market page prints. SEC and
-// FINRA TAF use the repo's current figures. The PEA cap (0.5 % of the order,
-// French entity) never binds at 0.08 %. Danish VAT of 25 % rides on the
-// custody fee for EU residents, not on the commission. No live round trip:
-// the coefficients are the printed %.
+// Stamp / FTT come from the tax map; failing that, the UK 0.5 %, Irish
+// 1 % and Hong Kong 0.1 % that Saxo's taxation-by-market page prints.
+// PTM £1 a side above £10 000 is that same page, not a neighbour's
+// stamp. SEC and FINRA TAF use the current levies, each ceil-to-cent;
+// TAF stops at $9.79. No CAT. The PEA cap (0.5 %) never binds at 0.08 %.
+// Danish VAT of 25 % rides on the custody fee, not the commission.
 //
 //   https://www.home.saxo/rates-and-conditions/stocks/commissions
 //   https://www.home.saxo/rates-and-conditions/etf/commissions
 //   https://www.home.saxo/en-au/rates-and-conditions/stocks/commissions
 //   https://www.home.saxo/fr-fr/rates-and-conditions/stocks/commissions
 //
-//   node saxo/saxo_cost.mjs AAPL
-//   node saxo/saxo_cost.mjs IWDA EURONEXT EUR --shares=1 --price=100
+//   node saxo/saxo_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
 //   node saxo/saxo_cost.mjs AAPL NASDAQ USD --shares=1 --price=230 --plan=vip
+//   node saxo/saxo_cost.mjs IWDA EURONEXT EUR --shares=1 --price=100
 //   node saxo/saxo_cost.mjs --schedule
 //
-// `roundTripCost(...)` reads files, not the network.
+// `roundTrip(...)` reads files, not the network.
 
 import fs from "node:fs";
 import { VENUES, listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite, bookParts } from "../na.mjs";
+import { plus, finite } from "../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
@@ -102,7 +86,8 @@ const SCHEDULE = {
   etf: "https://www.home.saxo/rates-and-conditions/etf/commissions",
   perExchange: "https://www.home.saxo/en-au/rates-and-conditions/stocks/commissions",
   fr: "https://www.home.saxo/fr-fr/rates-and-conditions/stocks/commissions",
-  readOn: "2026-09-13",
+  readOn: "2026-09-16",
+  previouslyRead: "2026-09-13",
   entity: "Saxo Bank A/S (DK) et ses filiales",
   catalogueFrom: "saxoinvestor.fr",
 };
@@ -118,7 +103,7 @@ const PLAN_ALIAS = {
   default: "classic",
   retail: "classic",
   standard: "classic",
-  first: "vip", // Totality Australia renamed the top tier.
+  first: "vip",
   platinum: "platinum",
   vip: "vip",
 };
@@ -126,16 +111,14 @@ const PLAN_ALIAS = {
 const SEC_RATE = 0.0000206;
 const TAF_PER_SHARE = 0.000195;
 const TAF_CAP = 9.79;
+const CENT = 0.01;
 const US_MICS = new Set(["XNAS", "XNYS", "ARCX", "XASE", "BATS"]);
 const PTM = { each: 1, currency: "GBP", above: 10000 };
 const UK_STAMP = 0.005;
 const IE_STAMP = 0.01;
 const HK_STAMP = 0.001;
 
-// The ladder Saxo repeats on every entity page for the mainstream tapes.
 const LADDER = { classic: 0.0008, platinum: 0.0005, vip: 0.0003 };
-// The three European places that sit a rung above, where only Classic and the
-// top tier are printed.
 const HIGH = { classic: 0.0012, platinum: null, vip: 0.0005 };
 
 const pct = (rates, min, minCcy, extra = {}) => ({ kind: "pct", ...rates, min, minCcy, ...extra });
@@ -175,16 +158,11 @@ const RULE = {
   jse: pct({ classic: 0.003, platinum: null, vip: 0.002 }, 50, "ZAR"),
   tyo: pct(LADDER, 800, "JPY"),
   hkex: pct(LADDER, 15, "HKD"),
-  // Saxo bills the Stock Connect minimum in CNH; `fx.mjs` carries the onshore
-  // CNY, the same currency within a fraction of a percent.
   connect: pct(LADDER, 15, "CNY", { billedIn: "CNH" }),
   sgx: pct(LADDER, 3, "SGD"),
   asx: pct(LADDER, 3, "AUD"),
 };
 
-// Places the catalogue carries and the fee tables do not name. Read off Saxo's
-// own code, before any MIC: `venues.mjs` folds Frankfurt into Xetra and the
-// IOB into the LSE, and borrowing their lines would be an invention.
 const NO_LINE = {
   FSE: "la criée de Francfort",
   FFT: "la criée de Francfort",
@@ -197,8 +175,6 @@ const NO_LINE = {
   LSE_INTL: "l'International Order Book de Londres",
 };
 
-// Custody is a year of holding, not a round trip. It is read per country all
-// the same, because it is the one Saxo fee that swings by residency.
 const CUSTODY_DEFAULT = { classic: 0.0015, platinum: 0.0012, vip: 0.0009 };
 const CUSTODY = {
   BE: { classic: 0, platinum: 0, vip: 0 },
@@ -218,12 +194,7 @@ const FX_BY_COUNTRY = {
   AU: { classic: 0.0045, platinum: 0.0045, vip: 0.0045 },
 };
 
-// The catalogue was read on saxoinvestor.fr, so a reader who has not said
-// where they live is answered as the French entity: custody free, change
-// 0.25 %. Saying nothing would print the 0.15 % of the countries Saxo serves
-// at arm's length, which is the wrong default for the shelf this file reads.
 const HOME = "FR";
-
 const TSXV = VENUES.find((v) => v.mic === "XTSX") ?? null;
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
@@ -232,17 +203,22 @@ const spreads = fs.existsSync(SPREADS) ? JSON.parse(fs.readFileSync(SPREADS, "ut
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 const code = (s) => String(s || "").trim().toUpperCase();
+const nativeCcy = (ccy) => (code(ccy) === "CNH" ? "CNY" : ccy);
+const isAdr = (row) => /\bADRs?\b|american deposit/i.test(String(row?.name || ""));
 
 const dollars = (amount, currency) => {
-  const v = toUsd(amount, currency);
+  const v = toUsd(amount, nativeCcy(currency));
   return v == null ? null : Number(v.toPrecision(6));
 };
 
 const fxNote = (currency) => ({
   quote: QUOTE,
   asOf: FX_AS_OF,
-  listing: usdPer(currency),
+  listing: usdPer(nativeCcy(currency)),
 });
+
+const up = (value) =>
+  value == null || Number.isNaN(value) ? null : value > 0 ? Math.ceil(value / CENT - 1e-9) * CENT : 0;
 
 export function planOf(name = DEFAULT_PLAN) {
   const key = String(name || "")
@@ -271,19 +247,16 @@ export function fxOf(nat, plan = DEFAULT_PLAN) {
 }
 
 const rateOf = (rule, plan) => rule[plan.id] ?? null;
-
 const minOf = (rule) => (rule.min == null ? null : rule.min);
 
-// Saxo's code first: it separates Toronto from TSX Venture, and Frankfurt
-// from Xetra, where the resolved MIC does not.
 export function feeMarketOf(row, mic) {
   const raw = code(row?.exchange);
   const flat = loose(row?.exchange);
   const m = code(mic);
 
   if (NO_LINE[raw]) return null;
-  if (raw === "TSE") return "tsx"; // Toronto Stock Exchange
-  if (raw === "TSX") return "tsxv"; // TSX Venture Exchange
+  if (raw === "TSE") return "tsx";
+  if (raw === "TSX") return "tsxv";
   if (raw === "OOTC" || /PINK|OTCMKTS/.test(flat)) return "otc";
 
   if (US_MICS.has(m) || ["NASDAQ", "NYSE", "AMEX", "CBOE", "NSC", "BATSBZX"].includes(flat)) {
@@ -312,21 +285,8 @@ export function feeMarketOf(row, mic) {
   return null;
 }
 
-function minLabel(rule) {
-  const min = minOf(rule);
-  if (min == null) return null;
-  const n = min * 2;
-  const ccy = rule.billedIn || rule.minCcy;
-  if (ccy === "USD") return `${n} $`;
-  if (ccy === "EUR") return `${n} €`;
-  if (ccy === "GBP") return `${n} £`;
-  return `${n} ${ccy}`;
-}
-
-function remarkOf({ rule, plan, nat }) {
+function remarkOf({ plan, nat, adr }) {
   const lines = [];
-  const min = minLabel(rule);
-  if (min) lines.push(`min fees ${min}.`);
   const custody = custodyOf(nat, plan);
   if (custody.rate) {
     lines.push(
@@ -338,11 +298,14 @@ function remarkOf({ rule, plan, nat }) {
   }
   const fx = fxOf(nat, plan);
   if (fx) lines.push(`FX ${Number((fx * 100).toPrecision(3))}% if converted.`);
+  if (adr) lines.push("ADR 0.01–0.05 $/share (holding).");
   return lines.join("\n");
 }
 
 function stampOf({ market, listing, tax }) {
-  const rates = taxRates(tax);
+  const rates = { ...taxRates(tax) };
+  delete rates.PTM_LEVY;
+  delete rates.PTM;
   const fromMap = Object.values(rates).reduce((s, r) => s + r, 0);
   if (fromMap) return { pct: fromMap, rates, source: "t212" };
   const stock = code(listing.type) === "STOCK";
@@ -355,16 +318,20 @@ function stampOf({ market, listing, tax }) {
   return { pct: 0, rates: {}, source: null };
 }
 
-function thresholdOf(listing) {
-  if (code(listing.type) !== "STOCK") return null;
-  if (listing.mic !== "XLON") return null;
-  return {
-    c: dollars(2 * PTM.each, PTM.currency),
-    currency: QUOTE,
-    above: PTM.above,
-    aboveCurrency: PTM.currency,
-    why: `prélèvement PTM de ${PTM.each} £ par ordre et par sens, au-delà de ${PTM.above} £`,
-  };
+export function commissionEach({ amount, shares, market, plan = DEFAULT_PLAN }) {
+  const picked = typeof plan === "string" ? planOf(plan) : plan;
+  const rule = RULE[market];
+  if (!picked || !rule) return null;
+  const rate = rateOf(rule, picked);
+  if (rate == null) return null;
+  const min = minOf(rule);
+  if (rule.kind === "perShare") {
+    const n = shares != null && Number.isFinite(Number(shares)) ? Number(shares) : null;
+    if (n == null) return min;
+    return Math.min(rule.max ?? Infinity, Math.max(min, n * rate));
+  }
+  if (amount == null || !Number.isFinite(Number(amount))) return min;
+  return Math.max(min, Number(amount) * rate);
 }
 
 function findListing({ etf, place, currency }) {
@@ -422,61 +389,36 @@ function coverage() {
   return out;
 }
 
-export function commissionEach({ amount, shares, market, plan = DEFAULT_PLAN }) {
-  const picked = typeof plan === "string" ? planOf(plan) : plan;
-  const rule = RULE[market];
-  if (!picked || !rule) return null;
-  const rate = rateOf(rule, picked);
-  if (rate == null) return null;
-  const min = minOf(rule);
-  if (rule.kind === "perShare") {
-    const n = shares != null && Number.isFinite(Number(shares)) ? Number(shares) : null;
-    if (n == null) return min;
-    return Math.min(rule.max ?? Infinity, Math.max(min, n * rate));
-  }
-  if (amount == null || !Number.isFinite(Number(amount))) return min;
-  return Math.max(min, Number(amount) * rate);
-}
-
-export function exactCost({ amount, shares, market, plan = DEFAULT_PLAN }) {
-  const picked = planOf(plan);
-  const rule = RULE[market];
-  if (!picked || !rule) return { commission: null, currency: QUOTE };
-  const each = commissionEach({ amount, shares, market, plan: picked });
-  if (each == null) return { commission: null, currency: QUOTE, plan: picked.id, market };
-  return {
-    commission: dollars(each * 2, rule.minCcy),
-    currency: QUOTE,
-    native: { each, roundTrip: each * 2, currency: rule.billedIn || rule.minCcy },
-    plan: picked.id,
-    market,
-  };
-}
-
-export function roundTripCost({
+/**
+ * The whole bill for buying `shares` at `price` and selling them straight
+ * back. `usd` is the number the page prints; `brokerFees` is only Saxo's
+ * commission (the printed % or $/share, at its floor and cap).
+ */
+export function roundTrip({
   etf,
   place,
   currency,
+  shares,
+  price,
   bp = null,
   perShare = null,
   plan = DEFAULT_PLAN,
   nat = null,
 }) {
   const picked = planOf(plan);
+  const house = countryOf(nat);
   const { named, matches } = findListing({ etf, place, currency });
   const answer = {
-    a: null,
-    b: 0,
-    c: 0,
+    usd: null,
+    brokerFees: null,
     ccy: QUOTE,
-    floor: null,
-    cap: null,
-    threshold: null,
-    plan: picked?.id ?? plan,
-    country: countryOf(nat),
     etf,
     place,
     currency,
+    plan: picked?.id ?? plan,
+    country: house,
+    onlineBuy: true,
+    cashCurrency: "",
   };
 
   if (!picked) return { ...answer, why: `formule inconnue : ${plan} (classic|platinum|vip)` };
@@ -496,9 +438,6 @@ export function roundTripCost({
   }
 
   const m = matches[0];
-  // `venues.mjs` reads the string TSX as Toronto, which it is for every other
-  // broker. Saxo files the juniors there and Toronto under TSE, so the venue is
-  // corrected before the book is looked up, not after.
   const venue = code(m.row.exchange) === "TSX" ? TSXV : m.venue;
   const book = spreadLeaf(spreads, {
     isin: m.row.isin,
@@ -507,7 +446,7 @@ export function roundTripCost({
     unsourced: m.unsourced,
   });
   const listing = {
-    isin: code(m.row.isin),
+    isin: code(m.row.isin) || null,
     ticker: m.row.ticker || null,
     name: m.row.name || null,
     type: m.row.type || null,
@@ -515,6 +454,7 @@ export function roundTripCost({
     exchange: venue?.name ?? m.unsourced?.name ?? m.row.exchange ?? null,
     currency: code(m.row.currency),
     brokerExchange: m.row.exchange || null,
+    adr: isAdr(m.row),
   };
 
   const market = feeMarketOf(m.row, listing.mic);
@@ -524,6 +464,8 @@ export function roundTripCost({
     return {
       ...answer,
       listing,
+      cashCurrency: listing.currency,
+      remark: remarkOf({ plan: picked, nat, adr: listing.adr }),
       why: unpriced
         ? `${unpriced} n'a pas de ligne au barème Saxo : le tarif n'est lisible que dans le ticket`
         : `${listing.brokerExchange || listing.exchange} n'a pas de palier publié chez Saxo`,
@@ -534,6 +476,8 @@ export function roundTripCost({
       ...answer,
       listing,
       feeMarket: market,
+      cashCurrency: listing.currency,
+      onlineBuy: false,
       why: `Saxo ne publie pas le taux ${picked.label} sur ${market} : seuls Classic et le palier haut le sont`,
     };
   }
@@ -544,48 +488,19 @@ export function roundTripCost({
   const american = market === "us" || market === "otc" || US_MICS.has(listing.mic);
   const tax = taxesOf(listing.isin);
   const stamp = stampOf({ market, listing, tax });
-  const commPct = rule.kind === "pct" ? rateOf(rule, picked) * 2 : 0;
-  const knownPct = commPct + stamp.pct + (american ? SEC_RATE : 0);
-  const mkt = bookParts({
-    bp: marketBp,
-    perShare: marketPerShare,
-    venue,
-    unsourced: m.unsourced,
-    toUsd: (x) => (american ? x : dollars(x, listing.currency)),
-  });
-  const shareComm =
-    rule.kind === "perShare" ? dollars(rateOf(rule, picked) * 2, rule.minCcy) : 0;
-  const floorUsd = dollars(minOf(rule) * 2, rule.minCcy);
+  const ticketCcy = rule.billedIn || rule.minCcy;
 
-  return {
+  const shared = {
     ...answer,
-    a: finite(plus(mkt.a, knownPct), 4),
-    b: finite(plus(mkt.b, shareComm, american ? TAF_PER_SHARE : 0), 6),
-    c: 0,
-    floor: floorUsd,
     listing,
     feeMarket: market,
-    remark: remarkOf({ rule, plan: picked, nat }),
-    parts: {
-      marché:
-        marketBp != null
-          ? Number((marketBp / 1e4).toPrecision(4))
-          : marketPerShare != null
-            ? `${marketPerShare} par part`
-            : null,
-      taxes: Object.keys(stamp.rates).length ? stamp.rates : null,
-      réglementaire: american ? { SEC: SEC_RATE, FINRA: `${TAF_PER_SHARE} par part` } : null,
-      // Two tapes are billed per share, not on the amount: that belongs with
-      // `b`, and printing it next to the prorata terms would double-count it
-      // to the eye.
-      commission: commPct || null,
-      commissionParPart: shareComm || null,
-      ticket: null,
-    },
+    cashCurrency: listing.currency,
+    onlineBuy: true,
+    remark: remarkOf({ plan: picked, nat, adr: listing.adr }),
     bp: marketBp,
     perShare: marketPerShare,
     url: leaf?.url ?? SCHEDULE.source,
-    basis: `barème Saxo ${picked.label}, palier ${market}, lu le ${SCHEDULE.readOn}`,
+    basis: `barème Saxo ${picked.label}, palier ${market}, relu le ${SCHEDULE.readOn}`,
     tax,
     commission: {
       kind: rule.kind,
@@ -593,62 +508,195 @@ export function roundTripCost({
       perShare: rule.kind === "perShare" ? rateOf(rule, picked) : null,
       min: minOf(rule),
       max: rule.max ?? null,
-      currency: rule.billedIn || rule.minCcy,
+      currency: ticketCcy,
       eachWay: true,
       plan: picked.id,
     },
-    fees: {
-      custody: custodyOf(nat, picked),
-      fxIfConverted: fxOf(nat, picked),
-      vatOnCustody: { rate: 0.25, who: "résidents UE, TVA danoise sur la garde seule" },
-      peaCap: market === "euronext" ? 0.005 : null,
-      schedule: SCHEDULE,
-    },
     ccy: QUOTE,
-    cap:
-      rule.max != null
-        ? {
-            term: "b",
-            part: "commission",
-            amount: rule.max,
-            currency: rule.minCcy,
-            per: "ordre",
-          }
-        : american
-          ? { term: "b", part: "FINRA TAF", amount: TAF_CAP, per: "exécution" }
-          : null,
-    threshold: thresholdOf(listing),
     fx: fxNote(listing.currency),
     fxIfConverted: 0,
-    confidence:
-      `Saxo ${picked.label}, palier ${market}, barème lu le ${SCHEDULE.readOn}. ` +
-      (rule.kind === "pct"
-        ? `Courtage ${(rateOf(rule, picked) * 100).toFixed(2)} % par jambe, plancher ` +
-          `${minOf(rule)} ${rule.billedIn || rule.minCcy}, le même aux trois paliers. Le plancher est ` +
-          `un sol sur le %, pas un ticket en plus : il est dans floor et c = 0. `
-        : `Courtage ${rateOf(rule, picked)} ${rule.minCcy}/part par jambe, plancher ${minOf(rule)} et ` +
-          `plafond ${rule.max} ${rule.minCcy} par ordre. `) +
-      (market === "connect"
-        ? `Le plancher est facturé en CNH ; converti au CNY onshore, faute d'un CNH dans fx.mjs. `
-        : "") +
-      (american ? `SEC et FINRA TAF aux figures courantes du dépôt. ` : "") +
-      `Saxo écrit sous chacune de ses tables que les prix varient selon le pays de résidence et que ` +
-      `le ticket fait foi : ce fichier tient la table pan-Saxo, que les pages française, belge, suisse ` +
-      `et australienne répètent à l'identique. Garde et change, eux, sont lus par pays — ` +
-      `ici ${countryOf(nat)}${nat ? "" : ", faute de résidence dite, comme le catalogue qui vient de saxoinvestor.fr"}. ` +
-      `Garde ${custodyOf(nat, picked).rate === 0 ? "gratuite" : `${Number(((custodyOf(nat, picked).rate ?? 0) * 100).toPrecision(3))} % l'an`}, ` +
-      `hors de a : c'est une année de détention, pas un aller-retour. ` +
-      `Change ${Number(((fxOf(nat, picked) ?? 0) * 100).toPrecision(3))} % hors de a aussi : un sous-compte dans la ` +
-      `devise de la ligne s'ouvre gratuitement, donc la conversion est un choix. ` +
-      `Pas d'aller-retour réel dans ce dépôt. ` +
-      (leaf ? "" : `Pas de feuille de carnet pour cet ISIN / cette place. `),
+    custody: custodyOf(nat, picked).rate ?? 0,
   };
+
+  const n = Number(shares);
+  const p = Number(price);
+  if (!(n > 0) || !(p > 0)) {
+    return {
+      ...shared,
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      confidence: confidenceOf({
+        picked,
+        house,
+        market,
+        rule,
+        listing,
+        leaf,
+        marketBp,
+        marketPerShare,
+        unsourced: m.unsourced,
+        stamp,
+        american,
+      }),
+    };
+  }
+
+  const notional = n * p;
+  const notionalUsd = dollars(notional, listing.currency);
+  const nativeNotional = dollars(notional, listing.currency) == null ? null : notional;
+  const each = commissionEach({
+    amount: rule.kind === "pct" ? nativeNotional : null,
+    shares: n,
+    market,
+    plan: picked,
+  });
+  const commissionUsd = each == null ? null : dollars(each * 2, ticketCcy);
+
+  const bookUsd =
+    marketPerShare != null
+      ? american
+        ? marketPerShare * n
+        : dollars(marketPerShare * n, listing.currency)
+      : marketBp != null && notionalUsd != null
+        ? (notionalUsd * marketBp) / 1e4
+        : null;
+
+  const taxUsd = notionalUsd == null ? null : notionalUsd * stamp.pct;
+  const secUsd = american && notionalUsd != null ? up(notionalUsd * SEC_RATE) : american ? null : 0;
+  const tafRaw = american && n > 0 ? Math.min(n * TAF_PER_SHARE, TAF_CAP) : 0;
+  const tafUsd = american ? up(tafRaw) : 0;
+  const ptmApplies =
+    code(listing.type) === "STOCK" &&
+    listing.mic === "XLON" &&
+    listing.currency === "GBP" &&
+    notional >= PTM.above;
+  const ptmUsd = ptmApplies ? dollars(PTM.each * 2, PTM.currency) : 0;
+
+  const usd = plus(bookUsd, commissionUsd, taxUsd, secUsd, tafUsd, ptmUsd);
+
+  return {
+    ...shared,
+    usd: finite(usd, 6),
+    brokerFees: finite(commissionUsd, 6),
+    ...(bookUsd == null
+      ? {
+          why: `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ${
+            m.unsourced?.why || "pas de feuille de carnet"
+          }`,
+        }
+      : {}),
+    trade: {
+      shares: n,
+      price: p,
+      notional,
+      notionalUsd: finite(notionalUsd, 6),
+      currency: listing.currency,
+    },
+    parts: {
+      marché: finite(bookUsd, 6),
+      courtage: finite(commissionUsd, 6),
+      réglementaire: american || ptmApplies ? finite(plus(secUsd, tafUsd, ptmUsd), 6) : null,
+      taxes: finite(taxUsd, 6),
+    },
+    sell: american
+      ? { sec: finite(secUsd, 6), taf: finite(tafUsd, 6), tafCapped: tafRaw >= TAF_CAP }
+      : null,
+    confidence: confidenceOf({
+      picked,
+      house,
+      market,
+      rule,
+      listing,
+      leaf,
+      marketBp,
+      marketPerShare,
+      unsourced: m.unsourced,
+      stamp,
+      american,
+      each,
+      ticketCcy,
+      ptmApplies,
+      tafCapped: american && tafRaw >= TAF_CAP,
+    }),
+  };
+}
+
+function confidenceOf({
+  picked,
+  house,
+  market,
+  rule,
+  listing,
+  leaf,
+  marketBp,
+  marketPerShare,
+  unsourced,
+  stamp,
+  american,
+  each,
+  ticketCcy,
+  ptmApplies,
+  tafCapped,
+}) {
+  const said = [];
+  const rate = rateOf(rule, picked);
+  said.push(
+    `Saxo ${picked.label}, palier ${market}, barème relu le ${SCHEDULE.readOn} ` +
+      `(inchangé depuis le ${SCHEDULE.previouslyRead}, table AU identique)`
+  );
+  if (rule.kind === "perShare") {
+    said.push(
+      `courtage ${rate} ${rule.minCcy}/part par jambe, plancher ${minOf(rule)} et plafond ${rule.max} ${rule.minCcy}`
+    );
+  } else {
+    said.push(
+      `courtage ${(rate * 100).toFixed(2)} % par jambe, plancher ${minOf(rule)} ${ticketCcy || rule.minCcy}`
+    );
+    if (each != null && each === minOf(rule)) said.push(`le plancher mord`);
+  }
+  if (market === "connect") {
+    said.push(`le plancher est facturé en CNH ; converti au CNY onshore, faute d'un CNH dans fx.mjs`);
+  }
+  if (american) {
+    said.push(
+      `SEC ${SEC_RATE} du montant et TAF ${TAF_PER_SHARE} $/part à la vente, plafonnée à ${TAF_CAP} $` +
+        (tafCapped ? `, le plafond mord` : "")
+    );
+  }
+  if (stamp.pct) {
+    said.push(
+      stamp.source === "saxo"
+        ? `taxe ${(100 * stamp.pct).toFixed(2)} % — timbre ${market} que Saxo imprime (cet ISIN n'est pas dans la carte)`
+        : `taxe de transfert ${(100 * stamp.pct).toFixed(2)} % prise dans la carte des taxes`
+    );
+  }
+  if (ptmApplies) said.push(`PTM ${PTM.each} £ par jambe, le montant dépasse ${PTM.above} £`);
+  said.push(
+    `Saxo écrit sous chacune de ses tables que les prix varient selon le pays de résidence et que le ticket fait foi : ` +
+      `ce fichier tient la table pan-Saxo, ici ${house}`
+  );
+  const custody = custodyOf(house, picked);
+  said.push(
+    `garde ${custody.rate === 0 ? "gratuite" : `${Number(((custody.rate ?? 0) * 100).toPrecision(3))} % l'an`}, hors du total`
+  );
+  said.push(
+    `change ${Number(((fxOf(house, picked) ?? 0) * 100).toPrecision(3))} % hors du total : un sous-compte dans la devise de la ligne s'ouvre gratuitement`
+  );
+  if (marketBp != null) said.push(`carnet ${Number(marketBp.toPrecision(4))} bp`);
+  else if (marketPerShare != null) said.push(`carnet Rule 605, ${marketPerShare} $ la part`);
+  else {
+    said.push(
+      `pas de feuille de carnet : ${unsourced?.name || listing.exchange}, ${unsourced?.why || "pas de source"}`
+    );
+  }
+  if (!leaf) said.push(`carnet absent pour cette ligne`);
+  said.push(`aucun aller-retour réel dans ce dépôt`);
+  return said.join(" ; ");
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const flag = (name) => {
-    const m = process.argv.find((a) => a.startsWith(`--${name}=`));
-    return m ? m.split("=").slice(1).join("=") : null;
+    const hit = process.argv.find((a) => a.startsWith(`--${name}=`));
+    return hit ? hit.split("=").slice(1).join("=") : null;
   };
 
   if (process.argv.includes("--schedule")) {
@@ -662,6 +710,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
           noLine: NO_LINE,
           custody: { default: CUSTODY_DEFAULT, byCountry: CUSTODY },
           fx: { default: FX_DEFAULT, byCountry: FX_BY_COUNTRY },
+          ptm: PTM,
           coverage: coverage(),
         },
         null,
@@ -675,20 +724,22 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node saxo_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]\n" +
+      "usage : node saxo/saxo_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]\n" +
         "                          [--plan=classic|platinum|vip] [--nat=FR] [--json]\n" +
-        "        node saxo_cost.mjs --schedule\n" +
-        "  ex.   node saxo_cost.mjs AAPL\n" +
-        "        node saxo_cost.mjs IWDA EURONEXT EUR --shares=1 --price=100\n" +
-        "        node saxo_cost.mjs AAPL NASDAQ USD --shares=1 --price=230 --plan=vip"
+        "        node saxo/saxo_cost.mjs --schedule\n" +
+        "  ex.   node saxo/saxo_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
+        "        node saxo/saxo_cost.mjs IWDA EURONEXT EUR --shares=1 --price=100\n" +
+        "        node saxo/saxo_cost.mjs AAPL NASDAQ USD --shares=1 --price=230 --plan=vip"
     );
     process.exit(2);
   }
 
-  const out = roundTripCost({
+  const out = roundTrip({
     etf,
     place,
     currency,
+    shares: flag("shares") ? Number(flag("shares")) : null,
+    price: flag("price") ? Number(flag("price")) : null,
     bp: flag("bp") ? Number(flag("bp")) : null,
     perShare: flag("per-share") ? Number(flag("per-share")) : null,
     plan: flag("plan") || DEFAULT_PLAN,
@@ -700,8 +751,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     process.exit(0);
   }
 
+  const show = (x) => (x == null ? "N/A" : x);
+
   if (!out.listing) {
-    console.log(`a = N/A   b = ${out.b}   c = ${out.c}\n${out.why}`);
+    console.log(out.why);
     if (out.alternatives?.length) {
       console.log(`\nce que Saxo propose sous ce nom :\n  ${out.alternatives.join("\n  ")}`);
     }
@@ -716,60 +769,27 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       `  [${picked?.label || out.plan} · ${out.country}]\n`
   );
 
-  if (out.why) {
-    console.log(`a = N/A   b = ${out.b}   c = ${out.c}`);
-    console.log(out.why);
-    process.exit(0);
+  if (out.trade) {
+    const t = out.trade;
+    console.log(
+      `${t.shares} part${t.shares > 1 ? "s" : ""} à ${t.price} ${t.currency} = ${t.notional.toFixed(2)} ${t.currency}` +
+        (t.notionalUsd != null ? ` (${t.notionalUsd.toFixed(2)} $)` : "") +
+        "\n"
+    );
+    console.log(`aller-retour     : ${out.usd == null ? `N/A — ${out.why}` : `${out.usd} $`}`);
+    console.log(`frais du courtier: ${show(out.brokerFees)} $`);
+    const p = out.parts || {};
+    if (p.marché != null) console.log(`  carnet         : ${p.marché} $`);
+    if (p.courtage != null) console.log(`  courtage       : ${p.courtage} $`);
+    if (p.réglementaire) console.log(`  réglementaire  : ${p.réglementaire} $`);
+    if (p.taxes) console.log(`  taxes          : ${p.taxes} $`);
+    console.log("");
+  } else if (out.why) {
+    console.log(`aller-retour     : N/A — ${out.why}\n`);
   }
 
-  const detail = [];
-  if (typeof out.parts?.marché === "number") detail.push(`carnet ${out.parts.marché}`);
-  for (const [name, rate] of Object.entries(out.parts?.taxes ?? {})) detail.push(`${name} ${rate}`);
-  if (out.parts?.commission) detail.push(`courtage ${out.parts.commission}`);
-  if (out.parts?.réglementaire) detail.push(`SEC ${out.parts.réglementaire.SEC}`);
-
-  console.log(
-    `a = ${out.a ?? "N/A"}   (au prorata${detail.length ? " : " + detail.join(" + ") : " : rien"})`
-  );
-  const perPart = [];
-  if (out.parts?.commissionParPart) perPart.push(`courtage ${out.parts.commissionParPart}`);
-  if (out.parts?.réglementaire) perPart.push(`FINRA ${TAF_PER_SHARE}`);
-  if (typeof out.parts?.marché === "string") perPart.push(`carnet 605`);
-  console.log(
-    `b = ${out.b ?? "N/A"} $   (par part${perPart.length ? " : " + perPart.join(" + ") : " : rien"})`
-  );
-  console.log(`c = ${out.c} $   (par ordre : le plancher est dans floor, pas un ticket en plus)`);
-  if (out.floor != null) console.log(`plancher ${out.floor} $`);
-  if (out.remark) console.log(out.remark);
-  const fx = out.fx?.listing ?? usdPer(l.currency);
-  console.log(
-    `\ncoût = ${out.a ?? "N/A"} × p × n × ${fx != null ? Number(fx.toPrecision(6)) : "?"} + ${out.b ?? "N/A"} × n + ${out.c}   ($ ; p en ${l.currency})`
-  );
   console.log(`  ${out.basis}`);
   for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
-
-  const n = Number(flag("shares"));
-  const p = Number(flag("price"));
-  if (n > 0 && p > 0) {
-    const amount = n * p;
-    const amountUsd = toUsd(amount, l.currency);
-    const extra = out.threshold && amount >= out.threshold.above ? out.threshold.c || 0 : 0;
-    const affine =
-      amountUsd != null && out.a != null ? out.a * amountUsd + out.b * n + out.c + extra : null;
-    const billed = exactCost({ amount, shares: n, market: out.feeMarket, plan: out.plan });
-    console.log(
-      `\n${n} part${n > 1 ? "s" : ""} à ${p} ${l.currency} = ${amount.toFixed(2)} ${l.currency}` +
-        (amountUsd != null ? ` (${amountUsd.toFixed(2)} $)` : "")
-    );
-    if (affine != null) console.log(`  a, b, c        : ${affine.toFixed(4)} $`);
-    if (billed.commission != null) {
-      console.log(
-        `  commission     : ${Number(billed.commission).toFixed(4)} $` +
-          (billed.native?.each != null
-            ? ` (${Number(billed.native.each).toPrecision(4)} ${billed.native.currency} × 2)`
-            : "")
-      );
-    }
-  }
+  if (out.remark) console.log(`\n${out.remark}`);
   if (out.url) console.log(`\n${out.url}`);
 }

@@ -606,6 +606,14 @@ async function runJob(queryIndex, job) {
       isin: job.shelf === "isin" ? job.query : "",
     };
     if (row.restricted) entry.nonEuResident = true;
+    // NSE cash in rupees is on the book but IBKR Europe will not permission
+    // it (Indian / NRI account only). Keep the line and mark it.
+    if (
+      String(row.exchange || "").toUpperCase() === "NSE" &&
+      (!row.currency || String(row.currency).toUpperCase() === "INR")
+    ) {
+      entry.indianOnly = true;
+    }
 
     const key = entryKey(entry);
     if (seen.has(key)) continue;
@@ -614,6 +622,9 @@ async function runJob(queryIndex, job) {
 
     if (row.restricted) {
       console.error(`  ${row.ticker}@${row.exchange}: non-EU resident (no KID)`);
+    }
+    if (entry.indianOnly) {
+      console.error(`  ${row.ticker}@${row.exchange}: Indian-resident only`);
     }
   }
 
@@ -642,15 +653,20 @@ await Promise.all(
 
 const byType = new Map();
 let nonEu = 0;
+let indianOnly = 0;
 for (const row of results) {
   byType.set(row.type, (byType.get(row.type) || 0) + 1);
   if (row.nonEuResident) nonEu += 1;
+  if (row.indianOnly) indianOnly += 1;
 }
 console.error(
   `${results.length} listed (${[...byType].map(([type, count]) => `${count} ${type}`).join(", ")})`
 );
 if (nonEu > 0) {
   console.error(`${nonEu} of them are non-EU-resident (no KID for European retail)`);
+}
+if (indianOnly > 0) {
+  console.error(`${indianOnly} of them are Indian-resident only (NSE cash)`);
 }
 
 await browser.disconnect();

@@ -44,8 +44,7 @@ import { Readable } from "node:stream";
 import readline from "node:readline";
 import {
   CRYPTO_CCY,
-  CRYPTO_MICS,
-  CRYPTO_READ_MICS,
+  cryptoMicsFor,
   cryptoId,
   listingKey,
   sessionState,
@@ -127,7 +126,7 @@ for (const file of rowFiles) {
       // against. Alpaca's own venue is only worth a request for the coins Alpaca
       // itself sells: asked about the other four hundred it answers nothing, and
       // the file would fill with empty leaves under a venue that never listed them.
-      const mics = broker === "alpaca" ? CRYPTO_READ_MICS : CRYPTO_MICS;
+      const mics = cryptoMicsFor(broker);
       for (const mic of mics) {
         const key = `${mic}|${id}|${CRYPTO_CCY}`;
         if (listings.has(key)) {
@@ -336,6 +335,7 @@ const CROSSED = {
   binance: 1,
   coinbase: 1,
   alpaca: 1,
+  kraken: 1,
   adx: 1,
   dfm: 1,
   bhb: 1,
@@ -811,6 +811,7 @@ const delayedQuotes = {
   binance: new Map(),
   coinbase: new Map(),
   alpaca: new Map(),
+  kraken: new Map(),
   adx: new Map(),
   dfm: new Map(),
   bhb: new Map(),
@@ -831,6 +832,7 @@ const delayedTrouble = {
   binance: null,
   coinbase: null,
   alpaca: null,
+  kraken: null,
   adx: null,
   dfm: null,
   bhb: null,
@@ -2048,6 +2050,31 @@ const adapters = {
       return { spreadBp: bpFrom(quote.bid, quote.ask), bid: quote.bid, ask: quote.ask, tradingCurrency: CRYPTO_CCY };
     },
   },
+
+  // Lightyear's named tape. One AssetPairs call maps XXBT / XDG onto BTC / DOGE,
+  // then one Ticker call returns the touch for every USD pair this run wants.
+  kraken: {
+    measure: "touche du carnet, temps réel",
+    digits: 4,
+    async prefetch(lines) {
+      try {
+        const stats = await loadKraken(lines);
+        console.error(
+          `    Kraken : ${delayedQuotes.kraken.size} carnets / ${stats.listed} paires en dollar (${stats.wanted} demandées)\n`
+        );
+      } catch (e) {
+        delayedTrouble.kraken = String(e.message || e).slice(0, 160);
+        console.error(`    Kraken : ${delayedTrouble.kraken}\n`);
+      }
+    },
+    async fetch(l) {
+      const quote = delayedQuotes.kraken.get(l.ticker);
+      if (!quote) {
+        return { spreadBp: null, note: delayedTrouble.kraken || `${l.ticker} non coté contre le dollar chez Kraken` };
+      }
+      return { spreadBp: bpFrom(quote.bid, quote.ask), bid: quote.bid, ask: quote.ask, tradingCurrency: CRYPTO_CCY };
+    },
+  },
 };
 
 // -------------------------------------------------------------------------- crypto
@@ -2129,6 +2156,46 @@ async function loadAlpaca(lines) {
     await new Promise((r) => setTimeout(r, 200));
   }
   return { wanted: bases.length };
+}
+
+// Kraken writes bitcoin as XBT and dogecoin as XDG. The catalogues and this
+// file name them BTC and DOGE, so the directory is translated before the
+// ticker is asked for. USD is the deep leg; USDT / USDC are not stored.
+const KRAKEN_PAIRS = "https://api.kraken.com/0/public/AssetPairs";
+const KRAKEN_TICKER = "https://api.kraken.com/0/public/Ticker";
+const KRAKEN_BASE = { XBT: "BTC", XXBT: "BTC", XDG: "DOGE", XXDG: "DOGE" };
+
+function krakenBase(wsname, base) {
+  const raw = String(wsname || "").split("/")[0] || String(base || "");
+  const u = raw.toUpperCase();
+  return KRAKEN_BASE[u] || u;
+}
+
+async function loadKraken(lines) {
+  const pairs = (await (await fetchOk(KRAKEN_PAIRS, 60000)).json()).result || {};
+  const usd = new Map();
+  for (const [id, p] of Object.entries(pairs)) {
+    const quote = String(p.wsname || "").split("/")[1] || "";
+    if (quote !== "USD") continue;
+    const base = krakenBase(p.wsname, p.base);
+    if (base && !usd.has(base)) usd.set(base, { id, alt: p.altname || id });
+  }
+  const wanted = [...new Set(lines.map((l) => l.ticker))].filter((t) => usd.has(t));
+  if (!wanted.length) return { listed: usd.size, wanted: 0 };
+  const tickers =
+    (
+      await (
+        await fetchOk(`${KRAKEN_TICKER}?pair=${wanted.map((t) => usd.get(t).alt).join(",")}`, 30000)
+      ).json()
+    ).result || {};
+  for (const [id, q] of Object.entries(tickers)) {
+    const ask = Number(q.a?.[0]);
+    const bid = Number(q.b?.[0]);
+    if (!(bid > 0) || !(ask > 0)) continue;
+    const base = [...usd].find(([, v]) => v.id === id || v.alt === id)?.[0];
+    if (base && wanted.includes(base)) delayedQuotes.kraken.set(base, { bid, ask, pair: id });
+  }
+  return { listed: usd.size, wanted: wanted.length };
 }
 
 // ------------------------------------------------------------------------- resolve

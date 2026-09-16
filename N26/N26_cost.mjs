@@ -385,12 +385,7 @@ export function cryptoFeeSide({ euros, market, plan = DEFAULT_PLAN }) {
 // month rather than to a trade, and a product cost that belongs to holding the
 // line rather than trading it.
 function remarkOf({ market, listing }) {
-  if (market === "btc" || market === "crypto") {
-    return (
-      `Metal 16.90 €/mo: 1% BTC / 2% other, up to ${METAL_CRYPTO_CAP_EUR} € a month.\n` +
-      `No withdrawal to an external wallet.`
-    );
-  }
+  if (market === "btc" || market === "crypto") return "";
   const said = ["Go 9.90 €/mo: 3 trades with no broker fees.\nMetal 16.90 €/mo: 10 trades with no broker fees."];
   if (String(listing?.type || "").toUpperCase() !== "STOCK") said.push("ETF product costs (TER) apply on top.");
   return said.join("\n");

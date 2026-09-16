@@ -23,6 +23,16 @@
 // `usd` is not, and both are right: the spread belongs to whoever quoted it,
 // and the client would have crossed the same book anywhere.
 //
+// A same-session trip on 16 September 2026 measured that crossing. Ten
+// Crédit Agricole bought at 18.365 € — the ACHETER button, the ask — and
+// sold eighty seconds later at 18.36 € — the VENDRE button, the bid.
+// The sheet is −0.05 € / −0.06 $, which is (18.36 − 18.365) × 10 and
+// nothing else: 2.7 bp, the book, no leftover. Two earlier buys had
+// printed on the bid (PETR4 the day before, ACA overnight), so the
+// assumption was in doubt. It is not, on an immediate round trip.
+// `usd` charges the published book because that is what the client paid.
+// Written out to `quantfury-book-trip.json`.
+//
 // One half of that promise can be checked without placing an order, and it is
 // the half everything else rests on. The real-time hub behind
 // trading.quantfury.com streams the bid and ask the client is actually shown,
@@ -36,35 +46,31 @@
 //
 // What is deliberately not zero:
 //
-//   taxes       A transfer tax follows the instrument, not the price list.
-//               British stamp duty is owed by whoever acquires the shares and
-//               the French FTT by whoever acquires the line, wherever the two
-//               orders met. Quantfury publishes no tax line and §56 leaves
-//               every tax to the client, so these rates come from the tax map,
-//               not from a charge anyone has seen debited. On a London share
-//               the 0.5 % dwarfs the book many times over — which is why the
-//               identity of the line matters more here than anywhere, and why
-//               the second weak joint below is the serious one.
+//   taxes       A transfer tax follows the instrument, not the price list —
+//               except Quantfury never collects it. §56 leaves every tax to
+//               the client and the card prints none. The tax map still names
+//               0.40 % French FTT on 66 lines and 0.50 % British stamp on one;
+//               those figures used to sit in `usd` and were about 94 % of the
+//               modelled trip, fifteen times the book. They are out of the
+//               total now, because a trip measured them at zero.
 //
-//               Quantfury's 25 Italian and 29 Spanish lines are charged none,
-//               and that is now a reading rather than a silence. The map reads
-//               Trading212's ex-ante disclosure, and on the Spanish 0.2 % that
-//               reading is negative, not absent: Bolsa de Madrid was swept line
-//               by line, 139 issuers including Iberdrola, Santander, Telefónica,
-//               Repsol and ACS, and not one comes back carrying a purchase tax.
-//               It covers all 29 Spanish lines here. The Italian 0.1 % had
-//               never been asked at all, because Trading212's Borsa Italiana
-//               shelf is 345 foreign ETFs that owe none, and the eleven Italian
-//               issuers it does carry sit on Xetra, gettex, SIX, NYSE and
-//               NASDAQ — outside the venues the sweep walks in full, which is
-//               why `taxes.mjs` gained `--isin=`. Asked that way, Intesa, Enel,
-//               Eni, Generali, Leonardo and Prada all price with no Italian
-//               tax, against controls that do return one: 0.4 % on
-//               TotalEnergies, 0.5 % on BT Group. Buying an Italian share off
-//               its home tape is exactly what Quantfury does through Cboe
-//               Europe, so the reading transfers. Six of the 25 are covered by
-//               it; the other nineteen are not on Trading212's shelf and stay
-//               unasked. This header used to call all of them taxed.
+//               Fifteen Crédit Agricole (FR0000045072) were bought on
+//               15 September 2026 at 18.465 € and sold the next session at
+//               18.41 €, so the French FTT — assessed on the net daily
+//               acquisition — would have been due if anyone collected it.
+//               The closed-position sheet is −0.83 € / −0.96 $, which is
+//               (18.41 − 18.465) × 15 and nothing else. The trading balance
+//               went 350.02 → 349.06 $, the same 0.96 $. A 1.11 € debit
+//               would have been twelve times the overnight book and could
+//               not have hidden. It was not taken. The 66 French lines were
+//               overstated fifteenfold; they no longer carry the tax.
+//
+//               British stamp was not the line traded. It stays out of `usd`
+//               on the same reading: a Bahamian dealer matching its own
+//               clients, no CREST transfer, no debit seen. Italian and
+//               Spanish purchase taxes were already out — Trading212's
+//               disclosure returns none on those names off their home tape,
+//               which is what Quantfury does through Cboe Europe.
 //
 // What is zero and sourced, rather than merely unseen:
 //
@@ -178,11 +184,13 @@
 // them is a cost of buying and selling at once.
 //
 // A client owns what he buys without leverage and may transfer it out to an
-// approved brokerage (§11), so this is a real holding and the transfer taxes
-// above really are owed. What no column can hold is the other side of a zero
-// tariff: §38, §52, §60, §66 and §73 let Quantfury reverse positions and seize
-// or reduce a balance at its own discretion, and §37 bars residents of the
-// United States, Canada, the Bahamas and the British Virgin Islands outright.
+// approved brokerage (§11), so this is a real holding. Quantfury still does
+// not debit the transfer tax: the ACA overnight trip is in
+// `quantfury-ftt-trip.json`. What no column can hold is the other side of a
+// zero tariff: §38, §52, §60, §66 and §73 let Quantfury reverse positions
+// and seize or reduce a balance at its own discretion, and §37 bars
+// residents of the United States, Canada, the Bahamas and the British
+// Virgin Islands outright.
 //
 //   https://quantfury.com/trading-and-investing-conditions/
 //   https://quantfury.com/business-model/
@@ -190,7 +198,7 @@
 //
 //   node quantfury/quantfury_cost.mjs AAPL --shares=10 --price=230
 //   node quantfury/quantfury_cost.mjs SHEL LSE EUR --shares=100 --price=30
-//   node quantfury/quantfury_cost.mjs AALB EURONEXT EUR --shares=10 --price=35
+//   node quantfury/quantfury_cost.mjs ACA EURONEXT EUR --shares=15 --price=18.465
 //   node quantfury/quantfury_cost.mjs BTC --amount=1000
 //   node quantfury/quantfury_cost.mjs --schedule
 //   node quantfury/quantfury-probe.mjs            (la touche Cboe Europe, en séance)
@@ -211,7 +219,7 @@ const SCHEDULE = {
   model: "https://quantfury.com/business-model/",
   agreement: "https://quantfury.com/quantfury-client-agreement.pdf",
   agreementVersion: "2026-01-05",
-  readOn: "2026-09-14",
+  readOn: "2026-09-16",
   entity: "Quantfury Trading Americas Limited",
   regulator: "Securities Commission of The Bahamas",
   licences: ["SIA-F204", "DARE-DAB-027"],
@@ -293,6 +301,37 @@ const TRIP = {
   // two legs of the wallet tariff would have been about $1.92, not $0.02.
   notionalUsd: 95.8,
   costUsd: 0.02,
+};
+
+// Overnight so the French FTT would have been due on the net daily
+// acquisition. It was not taken. Written out to `quantfury-ftt-trip.json`.
+const FTT_TRIP = {
+  on: "2026-09-16",
+  bought: "2026-09-15",
+  ticker: "ACA",
+  isin: "FR0000045072",
+  shares: 15,
+  buy: 18.465,
+  sell: 18.41,
+  pnlLocal: -0.83,
+  pnlUsd: -0.96,
+  balanceBefore: 350.02,
+  balanceAfter: 349.06,
+  fttIfCharged: 1.108,
+};
+
+// Same-session so the book is not swamped by an overnight move. Buy at
+// the ask, sell at the bid, residual 0. Written out to
+// `quantfury-book-trip.json`.
+const BOOK_TRIP = {
+  on: "2026-09-16",
+  ticker: "ACA",
+  shares: 10,
+  buy: 18.365,
+  sell: 18.36,
+  heldSeconds: 80,
+  pnlLocal: -0.05,
+  pnlUsd: -0.06,
 };
 
 const CRYPTO_REMARK = "Binance / Coinbase spread not published here.";
@@ -419,16 +458,10 @@ function coverage() {
 
 function taxParts(isin) {
   const tax = taxesOf(isin);
-  const rates = taxRates(tax);
-  // The PTM levy is a flat pound on a London ticket above £10,000, not a rate
-  // on the amount, and the tax map can only carry it as one. `roundTrip` could
-  // hold the pound now that the affine triple is gone, but it is still left out
-  // on the ground that put it out: the levy is collected by brokers inside the
-  // UK Takeover Code's chain, Quantfury is a Bahamian dealer outside it, and it
-  // publishes no such pass-through. Were it owed it would add about £1.
-  delete rates.PTM_LEVY;
-  const taxTotal = Object.values(rates).reduce((sum, rate) => sum + rate, 0);
-  return { tax, rates, taxTotal };
+  // The map still names French FTT and British stamp. Quantfury does not
+  // collect them: the ACA overnight trip left a residual of 0 against 1.11 €
+  // of FTT, and stamp is the same §56 silence. PTM was already out.
+  return { tax, rates: {}, taxTotal: 0 };
 }
 
 export function roundTrip({ etf, place, currency, shares, price, amount, bp = null, perShare = null }) {
@@ -522,7 +555,7 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
     tax,
     taxRates: Object.keys(rates).length ? rates : null,
     remark: remarkOf({ crypto, marketBp, listing, convert }),
-    confidence: confidenceOf({ crypto, european, bookMic, leaf, marketBp, marketPerShare, taxTotal, tax, american, listing, convert }),
+    confidence: confidenceOf({ crypto, european, bookMic, leaf, marketBp, marketPerShare, american, listing, convert }),
   };
 
   // A coin is bought by the dollar, a share by the unit at a price.
@@ -553,9 +586,8 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
         ? dollars(marketPerShare * n, american ? QUOTE : listing.currency)
         : null;
 
-  // Bought once, so charged once: a transfer tax is owed by whoever acquires
-  // the line and not again by whoever sells it back.
-  const taxUsd = notionalUsd * taxTotal;
+  // Transfer taxes stay at 0: the map may name one, the trip did not pay it.
+  const taxUsd = 0;
 
   return {
     ...answer,
@@ -587,7 +619,7 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
   };
 }
 
-function confidenceOf({ crypto, european, bookMic, leaf, marketBp, marketPerShare, taxTotal, tax, american, listing, convert }) {
+function confidenceOf({ crypto, european, bookMic, leaf, marketBp, marketPerShare, american, listing, convert }) {
   const lines = [
     `aucun frais chez Quantfury : ni commission, ni portage, ni ticket (accord client §13 du ${SCHEDULE.agreementVersion}, relu le ${SCHEDULE.readOn})`,
     "la colonne « frais du courtier » vaut donc 0 alors que le total ne vaut pas 0 : Quantfury se paie du carnet, mais ce carnet est celui de la place et le client l'aurait croisé ailleurs",
@@ -607,7 +639,10 @@ function confidenceOf({ crypto, european, bookMic, leaf, marketBp, marketPerShar
   } else {
     lines.push(
       `le coût est le carnet croisé, ${american ? "mesuré sur la bande 605" : "lu dans spread.json"}, ` +
-        "puisque Quantfury exécute au bid et à l'ask de la place sans les élargir"
+        "puisque Quantfury exécute au bid et à l'ask de la place sans les élargir" +
+        ` — mesuré le ${BOOK_TRIP.on} : ${BOOK_TRIP.shares} ${BOOK_TRIP.ticker} achetées ${BOOK_TRIP.buy} € ` +
+        `(l'ask) et revendues ${BOOK_TRIP.sell} € (le bid) ${BOOK_TRIP.heldSeconds} s plus tard, ` +
+        `${BOOK_TRIP.pnlLocal} € / ${BOOK_TRIP.pnlUsd} $, le carnet et rien d'autre`
     );
   }
 
@@ -624,18 +659,12 @@ function confidenceOf({ crypto, european, bookMic, leaf, marketBp, marketPerShar
     );
   }
 
-  if (taxTotal > 0) {
-    lines.push(
-      `taxe de transfert ${(100 * taxTotal).toFixed(2)} % ${tax?.country ? `(${tax.country}) ` : ""}` +
-        "prise dans la carte des taxes : Quantfury n'en publie aucune et laisse l'impôt au client (§56), " +
-        "mais le droit suit le titre et non le tarif du courtier" +
-        // Le rapport ne vaut d'être dit que quand l'impôt écrase le carnet ;
-        // l'inverse signale une doublure aberrante, pas une taxe légère.
-        (marketBp && (1e4 * taxTotal) / marketBp >= 2
-          ? `, et il pèse ${((1e4 * taxTotal) / marketBp).toFixed(0)} fois le carnet`
-          : "")
-    );
-  }
+  lines.push(
+    `aucune taxe de transfert débitée : le ${FTT_TRIP.bought}, ${FTT_TRIP.shares} ${FTT_TRIP.ticker} ` +
+      `achetées ${FTT_TRIP.buy} € et revendues le ${FTT_TRIP.on} à ${FTT_TRIP.sell} € ont rendu ` +
+      `${FTT_TRIP.pnlLocal} € / ${FTT_TRIP.pnlUsd} $, le mouvement de prix, contre ${FTT_TRIP.fttIfCharged} € ` +
+      `de FTT si Quantfury l'avait prélevée ; caisse ${FTT_TRIP.balanceBefore} → ${FTT_TRIP.balanceAfter} $`
+  );
 
   lines.push(
     "ni SEC ni TAF : courtier bahaméen appariant ses propres clients (SIA-F204), pas un courtier américain qui répercute"
@@ -658,7 +687,7 @@ function confidenceOf({ crypto, european, bookMic, leaf, marketBp, marketPerShar
   lines.push(
     `commission nulle éprouvée sur un seul aller-retour, à ${TRIP.venue} : ailleurs, cotations en direct et barème lu`
   );
-  if (!crypto && !leaf) lines.push("carnet absent, le chiffre ci-dessus ne tient qu'aux taxes");
+  if (!crypto && !leaf) lines.push("carnet absent : le total est N/A, pas un total sans marché");
 
   return lines.join(" ; ");
 }

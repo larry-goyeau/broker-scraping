@@ -1,73 +1,64 @@
-// For one listing, one venue and one currency, the three coefficients of
+// What one round trip costs at Sarwa Trade: buy n shares at price p, sell
+// them back at once, in dollars. Coins are bought by the amount, so they
+// are handed that and no price.
 //
-//     coût (USD) = a × p × n + b × n + c
+// The affine triple hid the dollar floor. A $230 share pays $1 a side, not
+// 0.25 %, and the percentage only takes over at $400. `roundTrip` is given
+// the size and charges the greater of the two, twice.
 //
-// on Sarwa, with n the number of shares and p the share price. Sarwa is an Abu
-// Dhabi company (FSRA, ADGM) selling an American book: the catalogue is all US
-// listings quoted in dollars, plus a short shelf of coins. The account itself is
-// in dollars.
+// Abu Dhabi company (FSRA, ADGM), re-read 2026-09-16 — rates unchanged
+// since the 13th. The catalogue is Alpaca's American book in dollars
+// (ARCA folded into AMEX) plus 27 coins. Sarwa does not execute: it is a
+// fully disclosed introducing partner of Alpaca Securities LLC. The
+// account holds dollars and only dollars.
 //
-// Sarwa does not execute anything. It is a fully disclosed introducing partner of
-// Alpaca Securities LLC, built on Alpaca's Broker API, which is why this
-// catalogue is Alpaca's own asset list down to the venue codes — `ARCA` folded
-// into AMEX, and `FTXU` still printed on the crypto rows.
+//   stocks / ETF / ETN   max($1, 0.25 %) a side
+//   crypto               0 commission, 1.50 % inside the price a side
 //
-// ---- what Sarwa charges ----
+// The $1 is in the number, so it stays out of the remark. Nothing per
+// share, no opening, custody, closing or inactivity — the pricing page
+// says so against the neighbours. Options are $4 a contract and are not
+// in this catalogue. Invest (0.4–0.85 % a year) and Save (0.5 %) are
+// other products.
 //
-// One line, and it is the whole schedule for a share: the greater of $1 or 0.25 %
-// of the order amount, on the buy and again on the sell. So `a` is 0.005 and the
-// round trip cannot cost less than $2. The minimum bites under $400 an order,
-// where it is worth more than the percentage.
+// SEC / TAF / CAT are not copied. Alpaca pays them and its Broker API
+// has a `passThroughFees` switch; Sarwa's fee page and its help centre
+// name one charge and stop. Inventing the neighbour's levies would be
+// worse than leaving them out. Stamp / FTT come from the tax map.
 //
-// That $1 is not a `c`. A `c` would be charged on every order whatever its size,
-// and here the percentage takes over as soon as the order is worth $400. It is a
-// floor on the round trip, which is what `floor` and the `min fees` remark say.
+// The account holds dollars. A USD listing (the whole catalogue today)
+// needs no conversion and pays none. A line in another currency would
+// convert both ways at the published pair — 3.6823 AED in, 3.6639 out,
+// against a 3.6725 peg — and that 0.50 % sits in `usd` and `brokerFees`.
+// Funding the dollar wallet from dirhams is the same pair used once, not
+// per order, so it stays out. A local UAE transfer is free; the card
+// (2.99 % + 1 AED local, 3.99 % + 1 AED foreign) is the other door.
 //
-// ---- what Sarwa does not charge ----
+// Two tickets on 2026-09-13 settle what the cards do not say: a $100
+// bitcoin buy filled at the ticket price with no side commission, and
+// that ticket sat 1.50 % above the tape. Sarwa's guide still prints
+// 0.75 %. The sell leg was not measured — the account held none — and
+// is priced at the same 1.50 % on the review the buy confirmed.
+// Robinhood is the warning: its markup sat entirely on the buy.
 //
-// Nothing per share. The pricing page makes the point against its competitors in
-// as many words — "No fee per share, no withdrawal fee, no inactivity fee, or
-// custody fee" — so `b` carries the market's effective spread and nothing else.
-// No account opening, custody, closing or inactivity fee either.
+//   https://www.sarwa.co/en/pricing
+//   https://help.sarwa.co/hc/en-us/articles/4410507627281-What-are-the-fees-for-Sarwa-Trade
+//   https://help.sarwa.co/hc/en-us/articles/4407308904337-What-FX-rates-are-charged
+//   https://www.sarwa.co/blog/how-to-buy-bitcoin-in-uae/
 //
-// ---- what nobody publishes ----
-//
-// The American regulators. Alpaca pays the SEC fee, FINRA's TAF and the CAT levy
-// on every one of these trades, and Alpaca's Broker API has a `passThroughFees`
-// switch that decides whether the partner's client sees them. Sarwa's fee page
-// and its help centre both name one charge and stop there, so this file prices
-// one charge and stops there. The omission is worth 0,00206 % of a sale plus two
-// hundredths of a cent a share: against a commission of 0,5 % it cannot move a
-// decision, and inventing it would be worse than leaving it out.
-//
-// ---- the dirham ----
-//
-// The account is in dollars and only in dollars, so a trade needs no conversion
-// and the `a` above is complete. Funding it does: Sarwa sells dollars at 3.6823
-// dirhams and buys them back at 3.6639, against a peg of 3.6725, which is 0.27 %
-// going in, 0.23 % coming out, and almost exactly 0.50 % for the money's own
-// round trip. That is a cost of the account, not of the trade — a UAE resident
-// pays it once however many shares it later buys — so it stays out of `a` and is
-// named in `fees.fx` instead.
-//
-// ---- crypto ----
-//
-// No commission, and a spread inside the price worth 1.50 % a leg — three
-// percent for the round trip, which makes this the dearest coin on the shelf by
-// some way. Sarwa's guide still advertises half of that. It is wrong, and
-// `CRYPTO_CHECK` holds the ticket that says so.
-//
-//   node sarwa/sarwa_cost.mjs VOO
+//   node sarwa/sarwa_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
 //   node sarwa/sarwa_cost.mjs AAPL NASDAQ USD --shares=1 --price=230
-//   node sarwa/sarwa_cost.mjs BTC
+//   node sarwa/sarwa_cost.mjs VOO
+//   node sarwa/sarwa_cost.mjs BTC --amount=1000
 //   node sarwa/sarwa_cost.mjs --schedule
 //
-// `roundTripCost(...)` reads files, not the network.
+// `roundTrip(...)` reads files, not the network.
 
 import fs from "node:fs";
-import { listingKey, resolveVenue } from "../venues.mjs";
-import { plus, finite, bookParts } from "../na.mjs";
-import { QUOTE } from "../fx.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
+import { plus, finite } from "../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
+import { taxesOf, taxRates } from "../taxMap.mjs";
 
 const CATALOGUE = new URL("sarwa-parsed.json", import.meta.url);
 const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
@@ -76,21 +67,30 @@ const SCHEDULE = {
   pricing: "https://www.sarwa.co/en/pricing",
   trade: "https://help.sarwa.co/hc/en-us/articles/4410507627281-What-are-the-fees-for-Sarwa-Trade",
   fx: "https://help.sarwa.co/hc/en-us/articles/4407308904337-What-FX-rates-are-charged",
+  card: "https://help.sarwa.co/hc/en-us/articles/8702263696157-What-are-the-fees-associated-with-card-funding",
+  options: "https://help.sarwa.co/hc/en-us/articles/21539119145501-What-are-the-fees-for-trading-options-on-Sarwa",
   crypto: "https://www.sarwa.co/blog/how-to-buy-bitcoin-in-uae/",
   carrier: "https://alpaca.markets/blog/sarwa-first-fintech-to-launch-options-trading-in-the-middle-east/",
-  readOn: "2026-09-13",
+  readOn: "2026-09-16",
+  previouslyRead: "2026-09-13",
+  entity: "Sarwa Digital Wealth (Capital) Limited",
+  carrierName: "Alpaca Securities LLC",
 };
 
-// The whole of the equity card.
 const COMMISSION_RATE = 0.0025;
 const COMMISSION_MIN = 1;
-
-// Below this the dollar is worth more than the percentage. 1 / 0.0025.
 const MIN_BITES_UNDER = COMMISSION_MIN / COMMISSION_RATE;
-
-// Inside the price, each way. Measured, against Sarwa's own guide, which says
-// half of this and is wrong: see `CRYPTO_CHECK`.
 const CRYPTO_SPREAD_EACH_WAY = 0.015;
+const OPTION_PER_CONTRACT = 4;
+const AED_FUNDING = 3.6823;
+const AED_WITHDRAWAL = 3.6639;
+const AED_PEG = 3.6725;
+const CARD_LOCAL = 0.0299;
+const CARD_FOREIGN = 0.0399;
+const CASH = "USD";
+const FX_IN = Math.abs(AED_FUNDING / AED_PEG - 1);
+const FX_OUT = Math.abs(AED_WITHDRAWAL / AED_PEG - 1);
+const FX_TRIP = FX_IN + FX_OUT;
 
 // A live buy ticket on bitcoin, read at 11:29 Paris on 2026-09-13 and not
 // confirmed. The app showed two prices on one screen: 76 687.93 $ on the chart,
@@ -107,11 +107,6 @@ const CRYPTO_SPREAD_EACH_WAY = 0.015;
 // The 100 $ entered bought 0.001285233 units at exactly the ticket price, to the
 // sixth decimal, so nothing is charged beside the price: the "zero commission"
 // is true and irrelevant.
-//
-// The sell leg is not measured — quoting it needs a position, and this account
-// held none. It is priced at the same 1.50 % on the strength of the review that
-// the buy leg has just confirmed, which states both legs explicitly. Robinhood
-// is the warning here: its markup turned out to sit entirely on the buy.
 const CRYPTO_CHECK = {
   on: "2026-09-13 11:29 Paris",
   coin: "BTC",
@@ -126,31 +121,38 @@ const CRYPTO_CHECK = {
   sellLegMeasured: false,
 };
 
-// Not in the catalogue: the scraper keeps shares, funds and coins.
-const OPTION_PER_CONTRACT = 4;
-
-// Dirhams per dollar. The peg is the central bank's, unchanged since 1997.
-const AED_FUNDING = 3.6823;
-const AED_WITHDRAWAL = 3.6639;
-const AED_PEG = 3.6725;
-
-// Card funding, which is not a trading cost either but is the one line that can
-// dwarf every other: 2.99 % on a UAE card, 3.99 % on a foreign one.
-const CARD_LOCAL = 0.0299;
-const CARD_FOREIGN = 0.0399;
-
-const ROUND_TRIP_MIN = 2 * COMMISSION_MIN;
-const REMARK_EQUITY = `min fees ${ROUND_TRIP_MIN} $.`;
-
-const catalogue = JSON.parse(fs.readFileSync(CATALOGUE, "utf8"));
-const rows = Array.isArray(catalogue) ? catalogue : catalogue.rows || [];
-const spreads = JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {};
+const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
+const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
+const spreads = fs.existsSync(SPREADS) ? JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {} : {};
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 const cryptoBase = (ticker) => String(ticker || "").split("/")[0].toUpperCase();
 const isCrypto = (row) => row?.type === "CRYPTO" || /^CRYPTO$/i.test(String(row?.exchange || ""));
 
-const fxMarkup = (rate) => Math.abs(rate / AED_PEG - 1);
+const dollars = (amount, currency) => {
+  const v = toUsd(amount, currency);
+  return v == null ? null : Number(v.toPrecision(6));
+};
+
+const fxNote = (currency) => ({
+  quote: QUOTE,
+  asOf: FX_AS_OF,
+  listing: usdPer(currency),
+});
+
+function taxParts(isin) {
+  const tax = taxesOf(isin);
+  const rates = { ...taxRates(tax) };
+  delete rates.PTM_LEVY;
+  delete rates.PTM;
+  const taxTotal = Object.values(rates).reduce((sum, rate) => sum + rate, 0);
+  return { tax, rates, taxTotal };
+}
+
+function commissionEach(notional) {
+  if (notional == null || !Number.isFinite(Number(notional))) return null;
+  return Math.max(COMMISSION_MIN, Number(notional) * COMMISSION_RATE);
+}
 
 function findListing({ etf, place, currency }) {
   const asked = loose(etf);
@@ -167,7 +169,7 @@ function findListing({ etf, place, currency }) {
   if (crypto.length && (!place || /crypto/i.test(place))) {
     const row =
       (wantCurrency && crypto.find((r) => String(r.currency).toUpperCase() === wantCurrency)) ||
-      crypto.find((r) => String(r.currency).toUpperCase() === "USD") ||
+      crypto.find((r) => String(r.currency).toUpperCase() === CASH) ||
       crypto[0];
     return { named, matches: [{ row, venue: null }] };
   }
@@ -180,7 +182,7 @@ function findListing({ etf, place, currency }) {
       if (wantVenue && m.venue) return m.venue.mic === wantVenue.mic;
       return loose(m.row.exchange) === wantPlace || loose(m.row.exchange).includes(wantPlace);
     })
-    .filter((m) => !wantCurrency || String(m.row.currency || "USD").toUpperCase() === wantCurrency);
+    .filter((m) => !wantCurrency || String(m.row.currency || CASH).toUpperCase() === wantCurrency);
 
   return { named, matches };
 }
@@ -193,253 +195,348 @@ function coverage() {
     const slot = (out[type] ||= { n: 0, withBook: 0 });
     slot.n += 1;
     if (isCrypto(r)) continue;
-    const { venue } = listingKey(r);
-    const leaf =
-      venue?.mic &&
-      spreads[String(r.isin || "").toUpperCase()]?.[venue.mic]?.[String(r.currency || "USD").toUpperCase()];
+    const { venue, unsourced } = listingKey(r);
+    const { leaf } = spreadLeaf(spreads, {
+      isin: r.isin,
+      mic: venue?.mic ?? null,
+      currency: r.currency || CASH,
+      unsourced,
+    });
     if (leaf?.bp != null || leaf?.perShare != null) slot.withBook += 1;
   }
   return out;
 }
 
-export function roundTripCost({
+const listAlternatives = (named) =>
+  named
+    .map((r) => `${r.ticker || r.isin} ${r.currency || CASH} @ ${r.exchange || "place non dite"}`)
+    .slice(0, 12);
+
+function needsFx(currency) {
+  return String(currency || "").toUpperCase() !== CASH;
+}
+
+/**
+ * The whole bill for buying `shares` at `price` (or putting `amount` into a
+ * coin) and selling straight back. `usd` is the number the page prints;
+ * `brokerFees` is only what Sarwa bills — the $1 / 0.25 % on a share, the
+ * 1.50 % inside a coin's price, and the published FX when the listing is
+ * not the dollar the account holds. The book and any stamp stay in the total.
+ */
+export function roundTrip({
   etf,
   place,
   currency,
+  shares,
+  price,
+  amount,
   bp = null,
   perShare = null,
-  commission = COMMISSION_RATE,
 }) {
   const { named, matches } = findListing({ etf, place, currency });
   const answer = {
-    a: null,
-    // Sarwa charges nothing per share: whatever lands in b is the book's.
-    b: null,
-    c: 0,
+    usd: null,
+    brokerFees: null,
     ccy: QUOTE,
-    floor: { amount: ROUND_TRIP_MIN, per: "aller-retour", each: COMMISSION_MIN },
-    cap: null,
     etf,
     place,
     currency,
+    onlineBuy: true,
+    cashCurrency: CASH,
   };
 
-  if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Sarwa` };
-
-  const cryptoRow = named.find(isCrypto);
-  if (cryptoRow && (!place || /crypto/i.test(place))) {
-    const picked = matches[0]?.row || cryptoRow;
-    return cryptoCost(picked, answer);
+  if (!catalogue) {
+    return {
+      ...answer,
+      why: "le catalogue Sarwa n'existe pas encore : lancer `node sarwa/sarwa_scraping.mjs`",
+    };
   }
-
+  if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Sarwa` };
   if (!matches.length) {
     return {
       ...answer,
       why: `${etf} n'est pas coté sur cette place dans cette devise chez Sarwa`,
-      alternatives: named
-        .map((r) => `${r.ticker || r.isin} ${r.currency || "USD"} @ ${r.exchange || "place non dite"}`)
-        .slice(0, 12),
+      alternatives: listAlternatives(named),
     };
   }
 
   const m = matches[0];
+  const crypto = isCrypto(m.row);
+  if (crypto) return cryptoTrip(m.row, { ...answer, amount, bp });
+
+  const book = spreadLeaf(spreads, {
+    isin: m.row.isin,
+    mic: m.venue?.mic ?? null,
+    currency: m.row.currency || CASH,
+    unsourced: m.unsourced,
+  });
   const listing = {
-    isin: String(m.row.isin || "").toUpperCase(),
+    isin: String(m.row.isin || "").toUpperCase() || null,
     ticker: m.row.ticker || null,
     name: m.row.name || null,
     type: m.row.type || null,
-    mic: m.venue?.mic ?? null,
+    mic: book.mic ?? m.venue?.mic ?? null,
     exchange: m.venue?.name ?? m.row.exchange ?? null,
-    currency: String(m.row.currency || "USD").toUpperCase(),
-    otc: false,
+    currency: String(m.row.currency || CASH).toUpperCase(),
+    brokerExchange: m.row.exchange || null,
   };
 
-  const leaf = (listing.mic && spreads[listing.isin]?.[listing.mic]?.[listing.currency]) || null;
+  const leaf = book.leaf;
   const marketBp = bp ?? leaf?.bp ?? null;
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
-  const mkt = bookParts({
+  const { tax, rates, taxTotal } = taxParts(listing.isin);
+  const converted = needsFx(listing.currency);
+
+  const shared = {
+    ...answer,
+    listing,
+    feeMarket: "us",
+    cashCurrency: CASH,
+    onlineBuy: true,
+    remark: "",
     bp: marketBp,
     perShare: marketPerShare,
-    venue: m.venue,
-    unsourced: m.unsourced,
-    toUsd: (x) => x,
-  });
+    url: leaf?.url ?? SCHEDULE.pricing,
+    basis: `barème Sarwa Trade, relu le ${SCHEDULE.readOn}`,
+    tax,
+    commission: {
+      rate: COMMISSION_RATE,
+      min: COMMISSION_MIN,
+      cap: null,
+      flat: null,
+      currency: CASH,
+      eachWay: true,
+    },
+    ccy: QUOTE,
+    fx: fxNote(listing.currency),
+    fxIfConverted: converted ? FX_TRIP : 0,
+    custody: 0,
+  };
+
+  const n = Number(shares);
+  const p = Number(price);
+  if (!(n > 0) || !(p > 0)) {
+    return {
+      ...shared,
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      confidence: confidenceOf({
+        listing,
+        leaf,
+        marketBp,
+        marketPerShare,
+        taxTotal,
+        unsourced: m.unsourced,
+        converted,
+      }),
+    };
+  }
+
+  const notional = n * p;
+  const notionalUsd = dollars(notional, listing.currency);
+  const each = commissionEach(notionalUsd);
+  const commissionUsd = each == null ? null : each * 2;
+  const bookUsd =
+    marketPerShare != null
+      ? marketPerShare * n
+      : marketBp != null && notionalUsd != null
+        ? (notionalUsd * marketBp) / 1e4
+        : null;
+  const taxUsd = notionalUsd == null ? null : notionalUsd * taxTotal;
+  const fxUsd = converted && notionalUsd != null ? notionalUsd * FX_TRIP : 0;
+  const usd = plus(bookUsd, commissionUsd, fxUsd, taxUsd);
+  const brokerFees = plus(commissionUsd, fxUsd);
 
   return {
-    ...answer,
-    a: finite(plus(2 * commission, mkt.a), 4),
-    b: finite(mkt.b, 6),
-    listing,
-    bp: marketBp,
-    perShare: marketPerShare,
-    url: leaf?.url ?? null,
-    basis:
-      bp || perShare
-        ? "imposé"
-        : marketBp != null || marketPerShare != null
-          ? "publié"
-          : "frais seuls",
-    fees: {
-      commissionOfAmountEachWay: commission,
-      commissionMinEachWay: COMMISSION_MIN,
-      minBitesUnder: MIN_BITES_UNDER,
-      perShare: 0,
-      secOfAmount: null,
-      tafPerShare: null,
-      catPerShareEachWay: null,
-      optionPerContract: OPTION_PER_CONTRACT,
-      fx: {
-        funding: AED_FUNDING,
-        withdrawal: AED_WITHDRAWAL,
-        peg: AED_PEG,
-        inMarkup: Number(fxMarkup(AED_FUNDING).toPrecision(3)),
-        outMarkup: Number(fxMarkup(AED_WITHDRAWAL).toPrecision(3)),
-        roundTrip: Number((1 - AED_WITHDRAWAL / AED_FUNDING).toPrecision(3)),
-        cardLocal: CARD_LOCAL,
-        cardForeign: CARD_FOREIGN,
-      },
-      carrier: "Alpaca Securities LLC",
-      schedule: SCHEDULE,
+    ...shared,
+    usd: finite(usd, 6),
+    brokerFees: finite(brokerFees, 6),
+    ...(bookUsd == null
+      ? {
+          why: `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ${
+            m.unsourced?.why || "pas de feuille de carnet"
+          }`,
+        }
+      : {}),
+    trade: {
+      shares: n,
+      price: p,
+      notional,
+      notionalUsd: finite(notionalUsd, 6),
+      currency: listing.currency,
+    },
+    parts: {
+      marché: finite(bookUsd, 6),
+      courtage: finite(commissionUsd, 6),
+      change: finite(fxUsd, 6),
+      taxes: finite(taxUsd, 6),
     },
     confidence: confidenceOf({
-      market: marketBp ?? marketPerShare,
-      match: m,
-      touchWide: (marketPerShare ?? 0) > 0.01,
-      commission,
-      type: listing.type,
+      listing,
+      leaf,
+      marketBp,
+      marketPerShare,
+      taxTotal,
+      unsourced: m.unsourced,
+      each,
+      notionalUsd,
+      converted,
     }),
-    fxIfConverted: null,
-    measured: null,
-    remark: REMARK_EQUITY,
   };
 }
 
-function cryptoCost(row, answer) {
+function cryptoTrip(row, { amount, bp, ...answer }) {
   const listing = {
     isin: null,
     ticker: row.ticker,
     name: row.name,
     type: "CRYPTO",
     mic: null,
-    exchange: "Sarwa (crypto)",
-    currency: String(row.currency || "USD").toUpperCase(),
+    exchange: "Crypto",
+    currency: String(row.currency || CASH).toUpperCase(),
+    brokerExchange: row.exchange || null,
   };
-  return {
+  const shared = {
     ...answer,
-    a: Number((CRYPTO_SPREAD_EACH_WAY * 2).toPrecision(4)),
-    b: 0,
-    c: 0,
-    // No minimum is published on a coin, and the commission that carries the
-    // equity floor does not exist here.
-    floor: null,
-    cap: null,
     listing,
-    // The account is in dollars and the coin is quoted in dollars.
-    cashCurrency: "USD",
     feeMarket: "crypto",
+    cashCurrency: CASH,
+    onlineBuy: true,
     remark: "",
-    parts: { spreadEachWay: CRYPTO_SPREAD_EACH_WAY },
     bp: Number((CRYPTO_SPREAD_EACH_WAY * 2 * 1e4).toFixed(0)),
     perShare: null,
     url: SCHEDULE.crypto,
-    basis: `1,50 % d'écart dans le prix, chaque sens, aucune commission, mesuré sur un ticket réel`,
-    fees: {
+    basis: `écart 1,50 % dans le prix chaque sens, mesuré le ${CRYPTO_CHECK.on}`,
+    commission: {
+      rate: 0,
+      min: 0,
+      cap: null,
+      flat: null,
+      currency: CASH,
+      eachWay: true,
       spreadEachWay: CRYPTO_SPREAD_EACH_WAY,
-      commissionOfAmountEachWay: 0,
-      secOfAmount: 0,
-      tafPerShare: 0,
-      carrier: "Alpaca Securities LLC",
-      schedule: SCHEDULE,
     },
-    confidence:
-      `aucune commission : tout est dans l'écart, et il vaut 1,50 % par jambe, soit 3,00 % l'aller-retour. ` +
-      `Ticket d'achat réel le ${CRYPTO_CHECK.on}, non validé : l'app affichait ${CRYPTO_CHECK.chartPrice} $ ` +
-      `sur le graphique et ${CRYPTO_CHECK.ticketPrice} $ sur le ticket, au même instant et sur le même écran. ` +
-      `La bande indépendante (${CRYPTO_CHECK.tape.source}) donne ${CRYPTO_CHECK.tape.open} $ à l'ouverture de la ` +
-      `minute et ${CRYPTO_CHECK.tape.close} $ à sa clôture : le graphique de Sarwa était donc bien le marché, ` +
-      `et l'écart lui appartient. Cela place la marge entre ` +
-      `${(CRYPTO_CHECK.markupLow * 100).toFixed(2)} % et ${(CRYPTO_CHECK.markupHigh * 100).toFixed(2)} % selon la ` +
-      `seconde retenue. Les ${CRYPTO_CHECK.spent} $ saisis achetaient ${CRYPTO_CHECK.units} unités exactement au ` +
-      `prix du ticket, donc rien n'est prélevé à côté du prix. ` +
-      `Le guide de Sarwa annonce encore ${(CRYPTO_CHECK.guideClaimed * 100).toFixed(2)} % : cette lecture le ` +
-      `manque de 544 $ sur une pièce à 77 800 $, quand 1,50 % le manque de 31 $. Le guide est périmé. ` +
-      `ATTENTION la jambe vendeuse n'est pas mesurée — la coter demande une position, et le compte n'en avait ` +
-      `aucune. Elle est supposée symétrique sur la foi de la revue que l'achat vient de confirmer ; ` +
-      `chez Robinhood, la marge s'est révélée entière sur l'achat et nulle sur la vente. ` +
-      `Le carnet Binance / Coinbase n'est pas ajouté : la traversée est déjà dedans`,
-    fxIfConverted: null,
+    ccy: QUOTE,
+    fx: fxNote(listing.currency),
+    fxIfConverted: 0,
+    custody: 0,
     measured: CRYPTO_CHECK,
   };
-}
 
-export function exactCost({
-  shares,
-  price,
-  bp = null,
-  perShare = null,
-  commission = COMMISSION_RATE,
-  crypto = false,
-}) {
-  const proceeds = shares * price;
-  const market = ((bp ?? 0) / 1e4) * proceeds + (perShare ?? 0) * shares;
-
-  if (crypto) {
-    const spread = 2 * proceeds * CRYPTO_SPREAD_EACH_WAY;
+  const cash = Number(amount);
+  if (!(cash > 0)) {
     return {
-      spread: Number(spread.toFixed(6)),
-      commission: 0,
-      market: Number(market.toFixed(4)),
-      alone: Number((spread + market).toFixed(4)),
-      marginal: Number((spread + market).toFixed(4)),
+      ...shared,
+      why: "aucun montant",
+      confidence: cryptoConfidence(),
     };
   }
 
-  // The greater of the dollar and the percentage, on each of the two orders.
-  const leg = Math.max(COMMISSION_MIN, proceeds * commission);
-  const fee = 2 * leg;
+  const notionalUsd = dollars(cash, CASH);
+  const bookUsd = notionalUsd == null ? null : notionalUsd * CRYPTO_SPREAD_EACH_WAY * 2;
+  // The guide's 0.75 % is not added on top: the ticket already is the price.
+  const usd = plus(bookUsd, 0);
+
   return {
-    commission: Number(fee.toFixed(6)),
-    perLeg: Number(leg.toFixed(6)),
-    atMinimum: proceeds * commission < COMMISSION_MIN,
-    sec: 0,
-    taf: 0,
-    cat: 0,
-    market: Number(market.toFixed(4)),
-    alone: Number((fee + market).toFixed(4)),
-    marginal: Number((fee + market).toFixed(4)),
+    ...shared,
+    usd: finite(usd, 6),
+    brokerFees: finite(bookUsd, 6),
+    trade: {
+      shares: null,
+      price: null,
+      amount: cash,
+      notional: cash,
+      notionalUsd: finite(notionalUsd, 6),
+      currency: CASH,
+    },
+    parts: {
+      marché: finite(bookUsd, 6),
+      courtage: 0,
+      taxes: 0,
+    },
+    confidence: cryptoConfidence({ amount: cash, bp }),
   };
 }
 
-const confidenceOf = ({ market, match, touchWide, commission, type }) => {
-  const kind = type === "STOCK" ? "action" : type === "ETF" ? "fonds" : type || "titre";
-  const base =
+function confidenceOf({
+  listing,
+  leaf,
+  marketBp,
+  marketPerShare,
+  taxTotal,
+  unsourced,
+  each,
+  notionalUsd,
+  converted,
+}) {
+  const kind = listing.type === "STOCK" ? "action" : listing.type === "ETF" ? "fonds" : listing.type || "titre";
+  const said = [];
+  said.push(
     `barème unique de Sarwa Trade (${kind}) : le plus élevé de ${COMMISSION_MIN} $ ou ` +
-    `${(commission * 100).toFixed(2)} % du montant, par ordre, donc ${(commission * 200).toFixed(2)} % ` +
-    `l'aller-retour et jamais moins de ${ROUND_TRIP_MIN} $. Le minimum mord sous ${MIN_BITES_UNDER} $ par ordre. ` +
-    `Rien par part, rien à l'ouverture, à la garde, à la clôture ni à l'inactivité, page tarifaire lue le ${SCHEDULE.readOn}. ` +
-    `Sarwa n'exécute pas : elle introduit chez Alpaca Securities, ce qui explique que ce catalogue soit celui d'Alpaca. ` +
-    `Les taxes américaines — SEC, TAF de la FINRA, CAT — ne sont nulle part au barème de Sarwa, alors qu'Alpaca ` +
-    `les paie et laisse chaque partenaire décider de les refacturer. Elles ne sont donc pas comptées ici : ` +
-    `elles vaudraient 0,00206 % d'une vente, un quatre-centième de la commission. ` +
-    `Le change dirham est hors de a — le compte est en dollars et un aller-retour de titres n'en demande aucun ; ` +
-    `c'est l'argent qui le paie en entrant et en sortant, ${(fxMarkup(AED_FUNDING) * 100).toFixed(2)} % puis ` +
-    `${(fxMarkup(AED_WITHDRAWAL) * 100).toFixed(2)} %. Aucun aller-retour réel`;
-
-  if (market == null) {
-    return (
-      `${base}. Aucun carnet : ${match.unsourced?.name || "cette place"}, ` +
-      `${match.unsourced?.why || "pas de source 605"}. À lire comme un plancher`
+      `${(COMMISSION_RATE * 100).toFixed(2)} % du montant, par ordre, relu le ${SCHEDULE.readOn} ` +
+      `(inchangé depuis le ${SCHEDULE.previouslyRead})`
+  );
+  if (each != null && notionalUsd != null) {
+    said.push(
+      each === COMMISSION_MIN
+        ? `plancher ${COMMISSION_MIN} $ par jambe, le dollar mord sous ${MIN_BITES_UNDER} $`
+        : `au prorata, le notionnel dépasse ${MIN_BITES_UNDER} $`
     );
   }
-  return (
-    `${base}. Spread effectif publié : moyenne mensuelle sur les ordres immédiats de 100 à 499 ` +
-    `parts, cinq teneurs, Citadel et Virtu manquants` +
-    (touchWide
-      ? `. ATTENTION carnet large : sous 100 parts, l'amélioration de prix que ce chiffre ` +
-        `contient n'a pas lieu. Pour un lot rompu, passer la touche cotée en \`perShare\``
-      : "")
+  said.push(
+    `rien par part, rien à l'ouverture, à la garde, à la clôture ni à l'inactivité, page tarifaire`
   );
-};
+  said.push(
+    `Sarwa n'exécute pas : elle introduit chez ${SCHEDULE.carrierName}, ce qui explique que ce catalogue soit celui d'Alpaca`
+  );
+  said.push(
+    `SEC / TAF / CAT absents du barème Sarwa : Alpaca les paie et laisse chaque partenaire décider de les refacturer, ` +
+      `elles ne sont donc pas inventées ici`
+  );
+  if (converted) {
+    said.push(
+      `change ${(100 * FX_TRIP).toFixed(2)} % l'aller-retour dans le total : la ligne n'est pas en dollar, ` +
+        `paire publiée ${AED_FUNDING} / ${AED_WITHDRAWAL} contre ${AED_PEG}`
+    );
+  } else {
+    said.push(
+      `change hors du total : la ligne est déjà en dollar, ${(100 * FX_IN).toFixed(2)} % seulement ` +
+        `à l'entrée en dirhams (${AED_FUNDING} contre une parité de ${AED_PEG})`
+    );
+  }
+  if (taxTotal > 0) said.push(`taxe de transfert ${(100 * taxTotal).toFixed(2)} % prise dans la carte des taxes`);
+  if (marketBp == null && marketPerShare == null) {
+    said.push(
+      `pas de feuille de carnet : ${unsourced?.name || listing.exchange}, ${unsourced?.why || "pas de source 605"}`
+    );
+  } else if (marketBp != null) {
+    said.push(`carnet ${Number(marketBp.toPrecision(4))} bp`);
+  } else if (marketPerShare != null) {
+    said.push(`carnet Rule 605, ${marketPerShare} $ la part`);
+  }
+  if (!leaf) said.push(`carnet absent pour cette ligne`);
+  said.push(`aucun aller-retour réel dans ce dépôt`);
+  return said.join(" ; ");
+}
+
+function cryptoConfidence() {
+  const said = [
+    `aucune commission : tout est dans l'écart, et il vaut 1,50 % par jambe, soit 3,00 % l'aller-retour`,
+    `ticket d'achat réel le ${CRYPTO_CHECK.on}, non validé : l'app affichait ${CRYPTO_CHECK.chartPrice} $ ` +
+      `sur le graphique et ${CRYPTO_CHECK.ticketPrice} $ sur le ticket, au même instant`,
+    `la bande indépendante (${CRYPTO_CHECK.tape.source}) donne ${CRYPTO_CHECK.tape.open} $ à l'ouverture de la ` +
+      `minute et ${CRYPTO_CHECK.tape.close} $ à sa clôture : le graphique était le marché`,
+    `cela place la marge entre ${(CRYPTO_CHECK.markupLow * 100).toFixed(2)} % et ` +
+      `${(CRYPTO_CHECK.markupHigh * 100).toFixed(2)} % selon la seconde retenue`,
+    `les ${CRYPTO_CHECK.spent} $ saisis achetaient ${CRYPTO_CHECK.units} unités exactement au prix du ticket`,
+    `le guide de Sarwa annonce encore ${(CRYPTO_CHECK.guideClaimed * 100).toFixed(2)} % : cette lecture le ` +
+      `manque de 544 $ sur une pièce à 77 800 $, quand 1,50 % le manque de 31 $`,
+    `ATTENTION la jambe vendeuse n'est pas mesurée — la coter demande une position, et le compte n'en avait ` +
+      `aucune. Elle est supposée symétrique sur la foi de la revue que l'achat vient de confirmer`,
+    `le carnet Binance / Coinbase / ALPA n'est pas ajouté : la traversée est déjà dans les 1,50 %`,
+    `bitcoin pris pour plancher : les 26 autres pièces n'ont pas de ticket`,
+  ];
+  return said.join(" ; ");
+}
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const argv = process.argv.slice(2);
@@ -450,136 +547,107 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const positional = argv.filter((a) => !a.startsWith("--"));
 
   if (argv.includes("--schedule")) {
-    console.log(`barème Sarwa, lu le ${SCHEDULE.readOn}`);
-    console.log(`  ${SCHEDULE.pricing}`);
-    console.log(`  actions ${SCHEDULE.trade}`);
-    console.log(`  change  ${SCHEDULE.fx}`);
-    console.log(`  crypto  ${SCHEDULE.crypto}`);
-    console.log(`  porteur ${SCHEDULE.carrier}\n`);
-    console.log("  actions et ETF, une seule ligne :");
-    console.log(`    commission     le plus élevé de ${COMMISSION_MIN} $ ou ${COMMISSION_RATE} du montant, par ordre`);
-    console.log(`                   le minimum mord sous ${MIN_BITES_UNDER} $ par ordre, soit ${ROUND_TRIP_MIN} $ l'aller-retour`);
-    console.log(`    par part       0 — « No fee per share », page tarifaire`);
-    console.log(`    compte         0 à l'ouverture, à la garde, à la clôture, à l'inactivité`);
-    console.log(`    SEC / TAF / CAT  non publiées : Alpaca les paie, Sarwa ne dit pas si elle les refacture`);
-    console.log(`\n  crypto :`);
-    console.log(`    commission     0`);
-    console.log(`    écart          ${CRYPTO_SPREAD_EACH_WAY} dans le prix, chaque sens, soit ${(CRYPTO_SPREAD_EACH_WAY * 2 * 100).toFixed(2)} % l'aller-retour`);
-    console.log(`                   mesuré le ${CRYPTO_CHECK.on} : ticket ${CRYPTO_CHECK.ticketPrice} $ contre marché ${CRYPTO_CHECK.chartPrice} $`);
-    console.log(`                   le guide de Sarwa annonce encore ${CRYPTO_CHECK.guideClaimed}, soit la moitié : il est périmé`);
-    console.log(`                   jambe vendeuse non mesurée, supposée symétrique`);
-    console.log(`\n  change dirham, hors de a car le compte est en dollars :`);
-    console.log(`    entrée         ${AED_FUNDING} AED / USD contre une parité de ${AED_PEG}, soit ${(fxMarkup(AED_FUNDING) * 100).toFixed(2)} %`);
-    console.log(`    sortie         ${AED_WITHDRAWAL} AED / USD, soit ${(fxMarkup(AED_WITHDRAWAL) * 100).toFixed(2)} %`);
-    console.log(`    aller-retour   ${((1 - AED_WITHDRAWAL / AED_FUNDING) * 100).toFixed(2)} % de l'argent, une fois, pas par ordre`);
-    console.log(`    carte          ${CARD_LOCAL} + 1 AED locale, ${CARD_FOREIGN} + 1 AED étrangère`);
-    console.log(`\n  hors sujet ici : options ${OPTION_PER_CONTRACT} $ le contrat, Invest 0,4 à 0,85 % l'an, Save 0,5 % l'an`);
-    console.log(`  pas au catalogue : options`);
-    const cover = coverage();
-    if (cover) {
-      console.log("\n  catalogue :");
-      for (const [type, row] of Object.entries(cover)) {
-        const extra = type === "CRYPTO" ? "" : `, ${row.withBook} avec carnet 605, ${row.n - row.withBook} frais seuls`;
-        console.log(`    ${String(type).padEnd(6)} ${row.n} lignes${extra}`);
-      }
-    }
+    console.log(
+      JSON.stringify(
+        {
+          ...SCHEDULE,
+          commissionRate: COMMISSION_RATE,
+          commissionMin: COMMISSION_MIN,
+          minBitesUnder: MIN_BITES_UNDER,
+          cryptoSpreadEachWay: CRYPTO_SPREAD_EACH_WAY,
+          cryptoCheck: CRYPTO_CHECK,
+          optionPerContract: OPTION_PER_CONTRACT,
+          aed: {
+            funding: AED_FUNDING,
+            withdrawal: AED_WITHDRAWAL,
+            peg: AED_PEG,
+            inMarkup: Number(FX_IN.toPrecision(3)),
+            outMarkup: Number(FX_OUT.toPrecision(3)),
+            roundTrip: Number(FX_TRIP.toPrecision(3)),
+            cardLocal: CARD_LOCAL,
+            cardForeign: CARD_FOREIGN,
+          },
+          cashCurrency: CASH,
+          coverage: coverage(),
+        },
+        null,
+        2
+      )
+    );
     process.exit(0);
   }
 
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node sarwa/sarwa_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--json] [--schedule]\n" +
-        "  ex.   node sarwa/sarwa_cost.mjs AAPL NASDAQ USD --shares=1 --price=230\n" +
+      "usage : node sarwa/sarwa_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--amount=usd]\n" +
+        "        [--json] [--schedule]\n" +
+        "  ex.   node sarwa/sarwa_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
+        "        node sarwa/sarwa_cost.mjs AAPL NASDAQ USD --shares=1 --price=230\n" +
         "        node sarwa/sarwa_cost.mjs VOO\n" +
-        "        node sarwa/sarwa_cost.mjs BTC"
+        "        node sarwa/sarwa_cost.mjs BTC --amount=1000"
     );
     process.exit(1);
   }
 
-  const commission = arg("commission") != null ? Number(arg("commission")) : COMMISSION_RATE;
-  const answer = roundTripCost({
+  const out = roundTrip({
     etf,
     place,
     currency,
+    shares: arg("shares") != null ? Number(arg("shares")) : null,
+    price: arg("price") != null ? Number(arg("price")) : null,
+    amount: arg("amount") != null ? Number(arg("amount")) : null,
     bp: arg("bp") != null ? Number(arg("bp")) : null,
     perShare: arg("perShare") != null ? Number(arg("perShare")) : null,
-    commission,
   });
 
   if (argv.includes("--json")) {
-    console.log(JSON.stringify(answer, null, 2));
-    process.exit(answer.a == null ? 1 : 0);
-  }
-
-  if (!answer.listing) {
-    console.error(answer.why);
-    if (answer.alternatives?.length) console.error(`  ailleurs : ${answer.alternatives.join(", ")}`);
-    process.exit(1);
+    console.log(JSON.stringify(out, null, 2));
+    process.exit(0);
   }
 
   const show = (x) => (x == null ? "N/A" : x);
-  const l = answer.listing;
-  const crypto = l.type === "CRYPTO";
-  console.log(`${l.ticker || l.isin} — ${l.name || "sans nom"}`);
-  console.log(`${l.exchange}${l.mic ? ` (${l.mic})` : ""}, ${l.currency}${l.type ? `, ${l.type.toLowerCase()}` : ""}\n`);
-  const marketA = answer.bp != null ? ` + ${answer.bp} bp de carnet` : "";
-  const marketB = answer.perShare != null ? `spread effectif ${answer.perShare}` : "carnet inconnu";
-  console.log(
-    `a = ${show(answer.a)}   (au prorata : ${
-      crypto
-        ? `écart ${CRYPTO_SPREAD_EACH_WAY} chaque sens, dans le prix`
-        : `commission ${commission} aux deux jambes${marketA}`
-    })`
-  );
-  console.log(`b = ${show(answer.b)}   (par part : ${crypto ? "rien" : `aucun frais de Sarwa, ${marketB}`})`);
-  console.log(
-    `c = ${answer.c}   (par ordre : ${crypto ? "rien, l'écart est dans a" : "rien de fixe, le dollar est un plancher"})`
-  );
-  console.log(`\ncoût = ${show(answer.a)} × p × n + ${show(answer.b)} × n + ${answer.c}   (${answer.basis})`);
-  if (answer.floor?.amount != null) {
-    console.log(
-      `  plancher ${answer.floor.amount} ${answer.ccy} par ${answer.floor.per} : ` +
-        `${answer.floor.each} $ par ordre, qui l'emporte sous ${MIN_BITES_UNDER} $`
-    );
-  }
-  console.log(`  ${answer.confidence}`);
-  if (answer.url) console.log(`\n${answer.url}`);
 
-  const shares = arg("shares") != null ? Number(arg("shares")) : null;
-  const price = arg("price") != null ? Number(arg("price")) : null;
-  if (shares && price) {
-    const exact = exactCost({
-      shares,
-      price,
-      bp: answer.bp,
-      perShare: answer.perShare,
-      commission,
-      crypto,
-    });
-    const affine = plus(
-      answer.a == null ? null : answer.a * price * shares,
-      answer.b == null ? null : answer.b * shares,
-      answer.c
-    );
-    console.log(`\n${shares} part${shares > 1 ? "s" : ""} à ${price} ${l.currency} :`);
-    console.log(`  formule affine            ${affine == null ? "N/A" : affine.toFixed(4)} ${l.currency}`);
-    if (crypto) {
-      console.log(`  écart ${CRYPTO_SPREAD_EACH_WAY} × 2      ${exact.spread} ${l.currency}`);
+  if (!out.listing) {
+    console.log(out.why);
+    if (out.alternatives?.length) {
+      console.log(`\nce que Sarwa propose sous ce nom :\n  ${out.alternatives.join("\n  ")}`);
+    }
+    process.exit(0);
+  }
+
+  const l = out.listing;
+  console.log(`${l.ticker || l.isin} — ${l.name || ""}`);
+  console.log(
+    `${l.exchange}${l.mic ? ` (${l.mic})` : ""}, ${l.currency}${l.type ? `, ${l.type.toLowerCase()}` : ""}` +
+      `  [${out.feeMarket}]\n`
+  );
+
+  if (out.trade) {
+    const t = out.trade;
+    if (t.amount != null) {
+      console.log(`${t.amount} ${t.currency} aller-retour\n`);
     } else {
       console.log(
-        `  commission réelle         ${exact.commission} ${l.currency}   (${exact.perLeg} par ordre` +
-          (exact.atMinimum ? `, au plancher du dollar` : `, au prorata`) +
-          `)`
+        `${t.shares} part${t.shares > 1 ? "s" : ""} à ${t.price} ${t.currency} = ${t.notional.toFixed(2)} ${t.currency}` +
+          (t.notionalUsd != null ? ` (${t.notionalUsd.toFixed(2)} $)` : "") +
+          "\n"
       );
-      const known = answer.bp != null || answer.perShare != null;
-      console.log(`  dont marché ${known ? exact.market.toFixed(4) : "N/A"}`);
-      console.log(`  total ${known ? exact.alone.toFixed(4) : "N/A"} ${l.currency}`);
-      if (exact.atMinimum) {
-        console.log(
-          `  la formule affine sous-estime : sous ${MIN_BITES_UNDER} $ par ordre c'est le dollar qui s'applique, pas a`
-        );
-      }
     }
+    console.log(`aller-retour     : ${out.usd == null ? `N/A — ${out.why}` : `${out.usd} $`}`);
+    console.log(`frais du courtier: ${show(out.brokerFees)} $`);
+    const p = out.parts || {};
+    if (p.marché != null) console.log(`  carnet         : ${p.marché} $`);
+    if (p.courtage != null) console.log(`  courtage       : ${p.courtage} $`);
+    if (p.change) console.log(`  change         : ${p.change} $`);
+    if (p.taxes) console.log(`  taxes          : ${p.taxes} $`);
+    console.log("");
+  } else if (out.why) {
+    console.log(`aller-retour     : N/A — ${out.why}\n`);
   }
+
+  console.log(`  ${out.basis}`);
+  for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
+  if (out.remark) console.log(`\n${out.remark}`);
+  if (out.url) console.log(`\n${out.url}`);
 }

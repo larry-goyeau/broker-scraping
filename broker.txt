@@ -9,12 +9,10 @@ CGS International
   
 captrader
 mexem
-oanda
 quantfury
-questrade 500
 bhmuae
 
 alpaca
 alramz
 bux
-boursedirect
+saxo

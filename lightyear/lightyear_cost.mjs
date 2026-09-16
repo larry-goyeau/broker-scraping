@@ -1,15 +1,16 @@
 // What one round trip costs at Lightyear: buy n shares at price p, sell them
-// back at once.
+// back at once, in dollars. Coins are bought by the amount, so they are handed
+// that and no price.
 //
-//   coût (USD) = a × toUsd(p) × n + b × n + c
+// The affine triple hid the cliffs. A US share bills max($0.10, min(0.10 %, $1))
+// a side; a Budapest buy bills Hungarian FTT at 0.45 % and then stops at
+// 20 000 HUF. Neither is a × p × n. `roundTrip` is given the size and charges
+// what is charged.
 //
-// `a` is a fraction of the amount. `b` and `c` are dollars, the same unit the
-// other `*_cost.mjs` files answer in.
-//
-// Two published cards, read 2026-09-11. Default is Lightyear Europe AS
-// (`--plan=eu`). `--plan=uk` is Lightyear UK Ltd personal (GIA / ISA): no
-// execution fee. UK business uses the Europe stock tickets and is not a
-// third plan here.
+// Two published cards, re-read 2026-09-16 — unchanged since the 11th. Default
+// is Lightyear Europe AS (`--plan=eu`). `--plan=uk` is Lightyear UK Ltd
+// personal (GIA / ISA): no execution fee. UK business uses the Europe stock
+// tickets and is not a third plan here.
 //
 //   Europe AS
 //     ETF                         0
@@ -25,13 +26,22 @@
 //     crypto                      not sold
 //     FX                          0.10 %
 //
-// The published % × 2 sits in `a`. A flat ticket sits in `c`. The US / other
-// EU minimum is a floor (`min fees`). Cash can be EUR, USD and GBP (HUF too
-// on Europe AS); those lines have no FX in `a`. Any other listing currency
-// must convert, so the markup × 2 sits in `a`. Stamp / FTT come from the tax
-// map; Lightyear also publishes Hungarian FTT 0.45 % (cap 20 000 HUF) on
-// Budapest buys. SEC and FINRA TAF are on the US sell, as on their tax page.
-// Custody 0. No live trip in this deposit.
+// Cash can be EUR, USD and GBP (HUF too on Europe AS). Those lines have no
+// FX in the total. Any other listing currency must convert, so the markup × 2
+// sits in `usd` and in `brokerFees`. Stamp / FTT come from the tax map;
+// Lightyear also publishes Hungarian FTT 0.45 % (cap 20 000 HUF) on Budapest
+// buys, and taxMap has none of those ISINs, so that levy is taken from the
+// page. SEC and FINRA TAF are on the US sell, as on their tax page — they
+// name the lines and not the rates, so the current levies are used. No PTM
+// on either card. Custody 0. No live trip in this deposit.
+//
+// Catalogue 6 784 lines (6 230 stocks, 510 ETFs, 6 ETC, 2 ETN, 36 crypto).
+// The crypto book is Kraken's, the tape Lightyear names; `spread.mjs` reads
+// its public ticker under MIC KRKN.
+// ETN / ETC are typed as such and take the €1 EUR-stock ticket, not the
+// free ETF line. Lightyear's own money-market / Vault fee (0.10–0.15 % a
+// year) is a holding cost on their cash product, not on the one iShares
+// MMF that sits here as an ETF.
 //
 //   https://lightyear.com/en-eu/pricing
 //   https://lightyear.com/en-gb/pricing
@@ -39,17 +49,17 @@
 //   https://lightyear.com/en-gb/help/deposits-conversions-and-withdrawals/fees-and-taxes
 //
 //   node lightyear/lightyear_cost.mjs IWDA
-//   node lightyear/lightyear_cost.mjs AAPL NASDAQ USD
-//   node lightyear/lightyear_cost.mjs TTE EURONEXT EUR
+//   node lightyear/lightyear_cost.mjs AAPL NASDAQ USD --shares=1 --price=230
+//   node lightyear/lightyear_cost.mjs TTE EURONEXT EUR --shares=1 --price=80
 //   node lightyear/lightyear_cost.mjs HSBA LSE GBP --plan=uk
-//   node lightyear/lightyear_cost.mjs BTC
+//   node lightyear/lightyear_cost.mjs BTC --amount=1000
 //   node lightyear/lightyear_cost.mjs --schedule
 //
-// `roundTripCost(...)` reads files, not the network.
+// `roundTrip(...)` reads files, not the network.
 
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite, bookParts } from "../na.mjs";
+import { cryptoId, listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
+import { plus, finite } from "../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
@@ -61,7 +71,8 @@ const SCHEDULE = {
   uk: "https://lightyear.com/en-gb/pricing",
   euFees: "https://lightyear.com/en-eu/help/deposits-conversions-and-withdrawals/fees-and-taxes",
   ukFees: "https://lightyear.com/en-gb/help/deposits-conversions-and-withdrawals/fees-and-taxes",
-  readOn: "2026-09-11",
+  readOn: "2026-09-16",
+  previouslyRead: "2026-09-11",
   entity: "Lightyear Europe AS / Lightyear UK Ltd",
 };
 
@@ -72,6 +83,9 @@ const TAF_CAP = 9.79;
 const HFTT = 0.0045;
 const HFTT_CAP = 20000;
 const CRYPTO_RATE = 0.0045;
+const ADR_PASS_THROUGH = { low: 0.01, high: 0.05 };
+// Lightyear names Kraken on every coin. `spread.mjs` reads that tape under this MIC.
+const KRAKEN_MIC = "KRKN";
 
 const US_MICS = new Set(["XNAS", "XNYS", "ARCX", "XASE", "BATS"]);
 const US_EX = new Set(["NASDAQ", "NYSE", "AMEX", "ARCA", "CBOE", "BATS", "OTC"]);
@@ -130,10 +144,20 @@ const spreads = fs.existsSync(SPREADS) ? JSON.parse(fs.readFileSync(SPREADS, "ut
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 const isCrypto = (row) => row?.type === "CRYPTO" || /^CRYPTO$/i.test(String(row?.exchange || ""));
+const isAdr = (row) => /\bADRs?\b|american deposit/i.test(String(row?.name || ""));
+const cryptoBase = (ticker) => String(ticker || "").split("/")[0].toUpperCase();
 
 const dollars = (amount, currency) => {
   const v = toUsd(amount, currency);
   return v == null ? null : Number(v.toPrecision(6));
+};
+
+const toCcy = (amount, from, to) => {
+  if (String(from || "").toUpperCase() === String(to || "").toUpperCase()) return Number(amount);
+  const usd = toUsd(amount, from);
+  const per = usdPer(to);
+  if (usd == null || !(per > 0)) return null;
+  return usd / per;
 };
 
 const fxNote = (currency) => ({
@@ -156,6 +180,7 @@ export function feeMarketOf(row, mic) {
   const ex = loose(row?.exchange);
   const m = String(mic || "").toUpperCase();
   if (type === "CRYPTO" || ex === "CRYPTO") return "crypto";
+  // ETN / ETC take the EUR-stock ticket when they are euro, not the free ETF line.
   if (type === "ETF") return "etf";
   if (US_MICS.has(m) || US_EX.has(ex)) return "us";
   if (ccy === "GBP" || ccy === "GBX") return "uk";
@@ -188,14 +213,12 @@ export function commissionEach(amount, rule) {
   return fee;
 }
 
-function remarkOf({ plan, market, rule, holdable }) {
+function remarkOf({ plan, market, holdable, adr }) {
   const lines = [];
-  if (rule?.min && rule.flat == null) {
-    lines.push(`min fees ${rule.min * 2} ${rule.currency}.`);
+  if (holdable && market !== "crypto") {
+    lines.push(`FX ${(plan.fx * 100).toFixed(2)}% if converted.`);
   }
-  // Crypto is left out: the conversion is not one the account can avoid by holding
-  // the currency, so naming a rate the reader cannot act on only adds noise.
-  if (holdable && market !== "crypto") lines.push(`FX ${(plan.fx * 100).toFixed(2)}% if converted.`);
+  if (adr) lines.push(`ADR pass-through $${ADR_PASS_THROUGH.low}–$${ADR_PASS_THROUGH.high}/share.`);
   return lines.join("\n");
 }
 
@@ -207,13 +230,14 @@ function findListing({ etf, place, currency }) {
 
   const named = rows.filter((r) => {
     if (loose(r.isin) === asked || loose(r.ticker) === asked || loose(r.query) === asked) return true;
-    return isCrypto(r) && loose(r.ticker) === asked;
+    return isCrypto(r) && loose(cryptoBase(r.ticker)) === asked;
   });
 
   const crypto = named.filter(isCrypto);
   if (crypto.length && (!place || /crypto/i.test(place))) {
     const row =
       (wantCurrency && crypto.find((r) => String(r.currency).toUpperCase() === wantCurrency)) ||
+      crypto.find((r) => String(r.currency).toUpperCase() === "USD") ||
       crypto.find((r) => String(r.currency).toUpperCase() === "EUR") ||
       crypto[0];
     const { venue, unsourced } = listingKey(row);
@@ -248,7 +272,7 @@ function coverage() {
     const type = r.type || "?";
     const { venue, unsourced } = listingKey(r);
     const book = isCrypto(r)
-      ? { leaf: null, mic: null }
+      ? spreadLeaf(spreads, { isin: cryptoId(cryptoBase(r.ticker)), mic: KRAKEN_MIC, currency: "USD" })
       : spreadLeaf(spreads, {
           isin: r.isin,
           mic: venue?.mic ?? null,
@@ -266,33 +290,29 @@ function coverage() {
   return out;
 }
 
-export function exactCost({ amount, market, plan = DEFAULT_PLAN }) {
-  const picked = planOf(plan);
-  const rule = picked ? ruleOf(picked, market) : null;
-  const each = commissionEach(amount, rule);
-  if (each == null || !rule) return { commission: null, currency: QUOTE };
-  return {
-    commission: dollars(each * 2, rule.currency),
-    currency: QUOTE,
-    native: { each, roundTrip: each * 2, currency: rule.currency },
-    rule,
-    plan: picked.id,
-  };
-}
-
 function taxParts(isin, market) {
   const tax = taxesOf(isin);
   const rates = taxRates(tax);
   delete rates.PTM_LEVY;
-  if (market === "hu" && rates.HFTT == null && rates.HUNGARIAN_FTT == null) rates.HFTT = HFTT;
+  delete rates.HFTT;
+  delete rates.HUNGARIAN_FTT;
   const taxTotal = Object.values(rates).reduce((s, r) => s + r, 0);
-  return { tax, rates, taxTotal };
+  return { tax, rates, taxTotal, hftt: market === "hu" };
 }
 
-export function roundTripCost({
+/**
+ * The whole bill for buying `shares` at `price` (or putting `amount` into a
+ * coin) and selling straight back. `usd` is the number the page prints;
+ * `brokerFees` is Lightyear's ticket and, when the listing currency is not
+ * held, the conversion.
+ */
+export function roundTrip({
   etf,
   place,
   currency,
+  shares,
+  price,
+  amount,
   bp = null,
   perShare = null,
   plan = DEFAULT_PLAN,
@@ -300,17 +320,15 @@ export function roundTripCost({
   const picked = planOf(plan);
   const { named, matches } = findListing({ etf, place, currency });
   const answer = {
-    a: null,
-    b: 0,
-    c: 0,
+    usd: null,
+    brokerFees: null,
     ccy: QUOTE,
-    floor: null,
-    cap: null,
-    threshold: null,
-    plan: picked?.id ?? plan,
     etf,
     place,
     currency,
+    plan: picked?.id ?? plan,
+    onlineBuy: true,
+    cashCurrency: "",
   };
 
   if (!picked) return { ...answer, why: `formule inconnue : ${plan} (eu|uk)` };
@@ -334,13 +352,21 @@ export function roundTripCost({
   if (crypto && !picked.crypto) {
     return {
       ...answer,
+      listing: {
+        ticker: m.row.ticker || null,
+        name: m.row.name || null,
+        type: "CRYPTO",
+        exchange: "Crypto",
+        currency: String(m.row.currency || "").toUpperCase(),
+      },
       onlineBuy: false,
       why: "Lightyear UK ne vend pas de crypto",
+      confidence: `${picked.label} ne vend pas de crypto`,
     };
   }
 
   const book = crypto
-    ? { leaf: null, mic: null }
+    ? spreadLeaf(spreads, { isin: cryptoId(cryptoBase(m.row.ticker)), mic: KRAKEN_MIC, currency: "USD" })
     : spreadLeaf(spreads, {
         isin: m.row.isin,
         mic: m.venue?.mic ?? null,
@@ -353,9 +379,10 @@ export function roundTripCost({
     name: m.row.name || null,
     type: m.row.type || null,
     mic: book.mic ?? m.venue?.mic ?? null,
-    exchange: m.venue?.name ?? m.row.exchange ?? null,
+    exchange: crypto ? "Kraken" : m.venue?.name ?? m.unsourced?.name ?? m.row.exchange ?? null,
     currency: String(m.row.currency || "").toUpperCase(),
     brokerExchange: m.row.exchange || null,
+    adr: isAdr(m.row),
   };
 
   const market = feeMarketOf(m.row, listing.mic);
@@ -368,67 +395,25 @@ export function roundTripCost({
   const marketBp = bp ?? leaf?.bp ?? null;
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
   const american = market === "us" || US_MICS.has(listing.mic);
-  const { tax, rates, taxTotal } = taxParts(listing.isin, market);
+  const { tax, rates, taxTotal, hftt } = taxParts(listing.isin, market);
   const holdable = picked.hold.has(listing.currency);
-  const fxPct = holdable || crypto ? 0 : picked.fx * 2;
-  const rate = rule.flat != null ? 0 : rule.rate || 0;
-  const knownPct = taxTotal + (american ? SEC_RATE : 0) + rate * 2 + fxPct;
-  const mkt = bookParts({
-    bp: marketBp,
-    perShare: marketPerShare,
-    venue: m.venue,
-    unsourced: crypto ? { match: ["crypto"], name: "Crypto", why: "gré à gré" } : m.unsourced,
-    toUsd: (x) => (american ? x : dollars(x, listing.currency)),
-  });
-  const a = plus(mkt.a, knownPct);
+  const fxPct = holdable || crypto ? 0 : picked.fx;
   const ticketCcy = rule.currency;
-  const flatUsd = rule.flat != null ? dollars(rule.flat * 2, ticketCcy) : 0;
-  const floorUsd = rule.min && rule.flat == null ? dollars(rule.min * 2, ticketCcy) : null;
 
-  const cap =
-    american || rule.cap != null || market === "hu"
-      ? {
-          ...(american ? { term: "b", part: "FINRA TAF", amount: TAF_CAP, per: "exécution" } : {}),
-          ...(rule.cap != null
-            ? { commission: { amount: dollars(rule.cap * 2, ticketCcy), native: rule.cap, currency: ticketCcy } }
-            : {}),
-          ...(market === "hu"
-            ? { tax: { part: "HFTT", amount: dollars(HFTT_CAP, "HUF"), native: HFTT_CAP, currency: "HUF", per: "achat" } }
-            : {}),
-        }
-      : null;
-
-  return {
+  const shared = {
     ...answer,
-    a: finite(a, 4),
-    b: finite(plus(mkt.b, american ? TAF_PER_SHARE : 0), 6),
-    c: flatUsd || 0,
-    floor: floorUsd,
     listing,
     feeMarket: market,
+    cashCurrency: holdable ? listing.currency : "",
     onlineBuy: !(crypto && !picked.crypto),
-    remark: remarkOf({ plan: picked, market, rule, holdable }),
-    parts: {
-      marché:
-        marketBp != null
-          ? Number((marketBp / 1e4).toPrecision(4))
-          : marketPerShare != null
-            ? `${marketPerShare} par part`
-            : crypto
-              ? 0
-              : null,
-      taxes: Object.keys(rates).length ? rates : null,
-      réglementaire: american ? { SEC: SEC_RATE, FINRA: `${TAF_PER_SHARE} par part` } : null,
-      commission: rate * 2,
-      change: fxPct || null,
-    },
+    remark: remarkOf({ plan: picked, market, holdable, adr: listing.adr }),
     bp: marketBp,
     perShare: marketPerShare,
     url: leaf?.url ?? (picked.id === "uk" ? SCHEDULE.ukFees : SCHEDULE.euFees),
-    basis: `barème ${picked.label}, palier ${market}, lu le ${SCHEDULE.readOn}`,
+    basis: `barème ${picked.label}, palier ${market}, relu le ${SCHEDULE.readOn}`,
     tax,
     commission: {
-      rate,
+      rate: rule.flat != null ? 0 : rule.rate || 0,
       min: rule.min || 0,
       cap: rule.cap ?? null,
       flat: rule.flat ?? null,
@@ -437,25 +422,196 @@ export function roundTripCost({
       plan: picked.id,
     },
     ccy: QUOTE,
-    cap,
     fx: fxNote(listing.currency),
     fxIfConverted: holdable ? picked.fx * 2 : 0,
-    confidence:
-      `commission ${picked.label} ${market} selon ${picked.id === "uk" ? "lightyear.com/en-gb" : "lightyear.com/en-eu"}, ` +
-      `lue le ${SCHEDULE.readOn}. ` +
-      (picked.free && market !== "crypto"
-        ? `Exécution 0. `
-        : rule.flat != null
-          ? `Ticket ${rule.flat} ${ticketCcy} par jambe dans c. `
-          : `${((rule.rate || 0) * 100).toFixed(2)} % par jambe` +
-            (rule.min ? `, plancher ${rule.min} ${ticketCcy}` : "") +
-            (rule.cap != null ? `, plafond ${rule.cap} ${ticketCcy}` : "") +
-            `. `) +
-      (fxPct ? `Change ${(picked.fx * 100).toFixed(2)} % × 2 dans a (${listing.currency} non détenue). ` : `Change hors a si le cash est déjà en ${listing.currency}. `) +
-      (american ? `SEC + TAF à la vente. ` : "") +
-      `Aucun aller-retour réel dans ce dépôt.` +
-      (leaf || crypto ? "" : ` Pas de feuille de carnet pour cet ISIN / cette place.`),
   };
+
+  const n = Number(shares);
+  const p = Number(price);
+  const cash = Number(amount);
+  const notional = n > 0 && p > 0 ? n * p : crypto && cash > 0 ? cash : null;
+
+  if (notional == null) {
+    return {
+      ...shared,
+      why: crypto
+        ? "aucun montant"
+        : !(n > 0)
+          ? "aucun nombre de parts"
+          : "aucun prix pour cette ligne : lancer node prices.mjs",
+      confidence: confidenceOf({
+        picked,
+        market,
+        rule,
+        listing,
+        leaf,
+        marketBp,
+        marketPerShare,
+        unsourced: crypto ? { name: "Kraken", why: "Lightyear nomme Kraken" } : m.unsourced,
+        holdable,
+        fxPct,
+        american,
+        hftt,
+        assumed: book.assumed,
+        bookMic: book.mic,
+      }),
+    };
+  }
+
+  const notionalUsd = dollars(notional, listing.currency);
+  const nativeNotional = toCcy(notional, listing.currency, ticketCcy);
+  const each = commissionEach(nativeNotional, rule);
+  const commissionUsd = each == null ? null : dollars(each * 2, ticketCcy);
+
+  const bookUsd =
+    marketBp != null && notionalUsd != null
+      ? (notionalUsd * marketBp) / 1e4
+      : marketPerShare != null
+        ? american
+          ? marketPerShare * n
+          : dollars(marketPerShare * n, listing.currency)
+        : null;
+
+  const secUsd = american && notionalUsd != null ? notionalUsd * SEC_RATE : 0;
+  const tafUsd = american && n > 0 ? Math.min(n * TAF_PER_SHARE, TAF_CAP) : 0;
+  const taxUsd = crypto || notionalUsd == null ? (crypto ? 0 : null) : notionalUsd * taxTotal;
+  const hfttNative = hftt ? Math.min((toCcy(notional, listing.currency, "HUF") ?? 0) * HFTT, HFTT_CAP) : 0;
+  const hfttUsd = hftt ? dollars(hfttNative, "HUF") : 0;
+  const fxUsd = fxPct && notionalUsd != null ? notionalUsd * fxPct * 2 : 0;
+
+  const usd = plus(bookUsd, commissionUsd, secUsd, tafUsd, taxUsd, hfttUsd, fxUsd);
+  const brokerFees = plus(commissionUsd, fxUsd);
+
+  return {
+    ...shared,
+    usd: finite(usd, 6),
+    brokerFees: finite(brokerFees, 6),
+    ...(bookUsd == null
+      ? {
+          why: `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ${
+            m.unsourced?.why || (crypto ? "pas de feuille crypto" : "pas de feuille de carnet")
+          }`,
+        }
+      : {}),
+    trade: {
+      shares: n > 0 ? n : null,
+      price: p > 0 ? p : null,
+      amount: crypto ? notional : null,
+      notional,
+      notionalUsd: finite(notionalUsd, 6),
+      currency: listing.currency,
+    },
+    parts: {
+      marché: finite(bookUsd, 6),
+      courtage: finite(commissionUsd, 6),
+      réglementaire: american ? finite(plus(secUsd, tafUsd), 6) : null,
+      taxes: finite(plus(taxUsd, hfttUsd), 6),
+      change: finite(fxUsd, 6),
+    },
+    sell: american ? { sec: finite(secUsd, 6), taf: finite(tafUsd, 6), tafCapped: tafUsd >= TAF_CAP } : null,
+    hftt: hftt ? { native: finite(hfttNative, 6), currency: "HUF", usd: finite(hfttUsd, 6), capped: hfttNative >= HFTT_CAP } : null,
+    confidence: confidenceOf({
+      picked,
+      market,
+      rule,
+      listing,
+      leaf,
+      marketBp,
+      marketPerShare,
+      unsourced: crypto ? { name: "Kraken", why: "Lightyear nomme Kraken" } : m.unsourced,
+      holdable,
+      fxPct,
+      american,
+      hftt,
+      assumed: book.assumed,
+      bookMic: book.mic,
+      each,
+      nativeNotional,
+    }),
+  };
+}
+
+function confidenceOf({
+  picked,
+  market,
+  rule,
+  listing,
+  leaf,
+  marketBp,
+  marketPerShare,
+  unsourced,
+  holdable,
+  fxPct,
+  american,
+  hftt,
+  assumed,
+  bookMic,
+  each,
+  nativeNotional,
+}) {
+  const said = [];
+  said.push(
+    `barème ${picked.label} ${market}, relu le ${SCHEDULE.readOn} (inchangé depuis le ${SCHEDULE.previouslyRead})`
+  );
+  if (picked.free && market !== "crypto") {
+    said.push(`exécution 0`);
+  } else if (rule.flat != null) {
+    said.push(`ticket ${rule.flat} ${rule.currency} par jambe`);
+  } else {
+    const floor =
+      rule.min && each != null && nativeNotional != null && each === rule.min
+        ? `, le plancher ${rule.min} ${rule.currency} mord`
+        : rule.min
+          ? `, plancher ${rule.min} ${rule.currency}`
+          : "";
+    const cap =
+      rule.cap != null && each != null && each === rule.cap
+        ? `, le plafond ${rule.cap} ${rule.currency} mord`
+        : rule.cap != null
+          ? `, plafond ${rule.cap} ${rule.currency}`
+          : "";
+    said.push(`${((rule.rate || 0) * 100).toFixed(2)} % par jambe${floor}${cap}`);
+  }
+  if (fxPct) {
+    said.push(
+      `change ${(picked.fx * 100).toFixed(2)} % × 2 : ${listing.currency} n'est pas tenue, donc dans le total`
+    );
+  } else if (holdable) {
+    said.push(
+      `change hors du total : le compte tient déjà ${listing.currency} (${(picked.fx * 100).toFixed(2)} % seulement si le cash doit traverser)`
+    );
+  } else if (market === "crypto") {
+    said.push(`crypto cotée en ${listing.currency} : le 0,45 % est le seul frais Lightyear, pas un second change`);
+  }
+  if (american) {
+    said.push(
+      `SEC ${SEC_RATE} du montant et TAF ${TAF_PER_SHARE} $/part à la vente, plafonnée à ${TAF_CAP} $ : ` +
+        `la page nomme les deux lignes sans publier les taux`
+    );
+  }
+  if (hftt) {
+    said.push(
+      `FTT hongroise ${(HFTT * 100).toFixed(2)} % à l'achat, plafond ${HFTT_CAP} HUF, lue sur la page Lightyear ` +
+        `(taxMap n'a aucun des 26 ISIN de Budapest)`
+    );
+  }
+  if (marketBp != null) {
+    said.push(
+      `carnet ${Number(marketBp.toPrecision(4))} bp` +
+        (market === "crypto" && bookMic === KRAKEN_MIC
+          ? `, la touche de Kraken, relevée sur son ticker public`
+          : assumed && market === "crypto"
+            ? `, plus large de Binance et Coinbase : Lightyear nomme Kraken et ce fichier n'a pas cette touche`
+            : "")
+    );
+  } else if (marketPerShare != null) {
+    said.push(`carnet Rule 605, ${marketPerShare} $ la part`);
+  } else {
+    said.push(`pas de feuille de carnet : ${unsourced?.name || listing.exchange}, ${unsourced?.why || "pas de source"}`);
+  }
+  said.push(`aucun aller-retour réel dans ce dépôt`);
+  if (!leaf && market !== "crypto") said.push(`carnet absent pour cette ligne`);
+  return said.join(" ; ");
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
@@ -487,24 +643,27 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node lightyear_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--plan=eu|uk] [--json]\n" +
+      "usage : node lightyear_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--amount=usd] [--plan=eu|uk] [--json]\n" +
         "        node lightyear_cost.mjs --schedule\n" +
-        "  ex.   node lightyear_cost.mjs IWDA\n" +
-        "        node lightyear_cost.mjs AAPL NASDAQ USD\n" +
+        "  ex.   node lightyear_cost.mjs IWDA --shares=10 --price=100\n" +
+        "        node lightyear_cost.mjs AAPL NASDAQ USD --shares=1 --price=230\n" +
         "        node lightyear_cost.mjs TTE EURONEXT EUR --shares=1 --price=80\n" +
-        "        node lightyear_cost.mjs HSBA LSE GBP --plan=uk"
+        "        node lightyear_cost.mjs HSBA LSE GBP --plan=uk\n" +
+        "        node lightyear_cost.mjs BTC --amount=1000"
     );
     process.exit(2);
   }
 
-  const plan = flag("plan") || DEFAULT_PLAN;
-  const out = roundTripCost({
+  const out = roundTrip({
     etf,
     place,
     currency,
+    shares: flag("shares") ? Number(flag("shares")) : null,
+    price: flag("price") ? Number(flag("price")) : null,
+    amount: flag("amount") ? Number(flag("amount")) : null,
     bp: flag("bp") ? Number(flag("bp")) : null,
     perShare: flag("per-share") ? Number(flag("per-share")) : null,
-    plan,
+    plan: flag("plan") || DEFAULT_PLAN,
   });
 
   if (process.argv.includes("--json")) {
@@ -512,8 +671,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     process.exit(0);
   }
 
-  if (out.a == null && !out.listing) {
-    console.log(`a = null   b = ${out.b}   c = ${out.c}\n${out.why}`);
+  const show = (x) => (x == null ? "N/A" : x);
+
+  if (!out.listing) {
+    console.log(out.why);
     if (out.alternatives?.length) {
       console.log(`\nce que Lightyear propose sous ce nom :\n  ${out.alternatives.join("\n  ")}`);
     }
@@ -528,43 +689,32 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       `  [${picked?.label || out.plan}]\n`
   );
 
-  const detail = [];
-  if (out.parts?.marché != null) detail.push(`carnet ${out.parts.marché}`);
-  for (const [name, rate] of Object.entries(out.parts?.taxes ?? {})) detail.push(`${name} ${rate}`);
-  if (out.parts?.commission) detail.push(`courtage ${out.parts.commission}`);
-  if (out.parts?.change) detail.push(`change ${out.parts.change}`);
-  if (out.parts?.réglementaire) detail.push(`SEC ${out.parts.réglementaire.SEC}`);
-
-  console.log(`a = ${out.a}   (au prorata${detail.length ? " : " + detail.join(" + ") : " : rien"})`);
-  console.log(`b = ${out.b} $   (par part${out.b ? " : FINRA et/ou spread 605" : " : rien"})`);
-  console.log(`c = ${out.c} $   (par ordre${out.c ? " : ticket plat" : " : rien"})`);
-  if (out.floor != null) console.log(`plancher ${out.floor} $`);
-  if (out.onlineBuy === false) console.log(`en ligne : non vendu`);
-  const fx = out.fx?.listing ?? usdPer(l.currency);
-  console.log(
-    `\ncoût = ${out.a} × p × n × ${fx != null ? Number(fx.toPrecision(6)) : "?"} + ${out.b} × n + ${out.c}   ($ ; p en ${l.currency})`
-  );
-  console.log(`  ${out.basis}`);
-  for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
-
-  const n = Number(flag("shares"));
-  const p = Number(flag("price"));
-  if (n > 0 && p > 0) {
-    const amount = n * p;
-    const amountUsd = toUsd(amount, l.currency);
-    const affine = amountUsd != null && out.a != null ? out.a * amountUsd + out.b * n + out.c : null;
-    const billed = exactCost({ amount, market: out.feeMarket, plan: out.plan });
-    console.log(
-      `\n${n} part${n > 1 ? "s" : ""} à ${p} ${l.currency} = ${amount.toFixed(2)} ${l.currency}` +
-        (amountUsd != null ? ` (${amountUsd.toFixed(2)} $)` : "")
-    );
-    if (affine != null) console.log(`  a, b, c        : ${affine.toFixed(4)} $`);
-    if (billed.commission != null) {
+  if (out.trade) {
+    const t = out.trade;
+    if (t.amount != null) {
+      console.log(`${t.amount} ${t.currency} aller-retour\n`);
+    } else {
       console.log(
-        `  commission     : ${Number(billed.commission).toFixed(4)} $` +
-          (billed.native?.each != null ? ` (${Number(billed.native.each).toPrecision(4)} ${billed.native.currency} × 2)` : "")
+        `${t.shares} part${t.shares > 1 ? "s" : ""} à ${t.price} ${t.currency} = ${t.notional.toFixed(2)} ${t.currency}` +
+          (t.notionalUsd != null ? ` (${t.notionalUsd.toFixed(2)} $)` : "") +
+          "\n"
       );
     }
+    console.log(`aller-retour     : ${out.usd == null ? `N/A — ${out.why}` : `${out.usd} $`}`);
+    console.log(`frais du courtier: ${show(out.brokerFees)} $`);
+    const p = out.parts || {};
+    if (p.marché != null) console.log(`  carnet         : ${p.marché} $`);
+    if (p.courtage != null) console.log(`  courtage       : ${p.courtage} $`);
+    if (p.réglementaire) console.log(`  réglementaire  : ${p.réglementaire} $`);
+    if (p.taxes) console.log(`  taxes          : ${p.taxes} $`);
+    if (p.change) console.log(`  change         : ${p.change} $`);
+    console.log("");
+  } else if (out.why) {
+    console.log(`aller-retour     : N/A — ${out.why}\n`);
   }
+
+  console.log(`  ${out.basis}`);
+  for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
+  if (out.remark) console.log(`\n${out.remark}`);
   if (out.url) console.log(`\n${out.url}`);
 }

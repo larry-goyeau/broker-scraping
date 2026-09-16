@@ -378,6 +378,7 @@
           const hit = merged.find(
             (g) =>
               g.family === row.family &&
+              g.brokerName === row.brokerName &&
               g.exchange === row.exchange &&
               g.currency === row.currency &&
               g.total === row.total &&
@@ -388,7 +389,7 @@
           else merged.push({ ...row, n: 1 });
         }
         const brokerCell = (row) => {
-          const label = row.n > 1 && row.family ? row.family : row.brokerName;
+          const label = row.brokerName || row.family;
           return row.url
             ? `<a href="${esc(row.url)}" target="_blank" rel="noreferrer">${esc(label)}</a>`
             : esc(label);

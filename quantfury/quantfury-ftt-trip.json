@@ -1,9 +1,10 @@
 {
-  "why": "Quantfury publishes no tax line and §56 leaves every tax to the client. The tax map charges 0.40 % French FTT on 66 lines and 0.50 % British stamp on one, and on those lines the tax is about 94 % of the modelled round trip — fifteen times the book. Nobody has ever seen it debited. This trip is the test. It has to straddle a session close: the French FTT falls on the net daily acquisition, so an intraday buy and sell cancel out and would owe nothing whatever Quantfury does.",
+  "why": "Quantfury publishes no tax line and §56 leaves every tax to the client. The tax map charged 0.40 % French FTT on 66 lines and 0.50 % British stamp on one, and on those lines the tax was about 94 % of the modelled round trip — fifteen times the book. Nobody had ever seen it debited. This trip is the test. It had to straddle a session close: the French FTT falls on the net daily acquisition, so an intraday buy and sell cancel out and would owe nothing whatever Quantfury does.",
   "line": {
     "ticker": "ACA",
     "name": "Credit Agricole SA",
     "isin": "FR0000045072",
+    "shortName": "ACAp.BS",
     "currency": "EUR",
     "operator": "Cboe Europe",
     "primary": "XPAR"
@@ -20,14 +21,40 @@
     "balanceUsdAfter": 350.02,
     "unrealisedLocal": 0.0
   },
-  "close": null,
+  "close": {
+    "at": "2026-09-16T14:01:00Z",
+    "side": "sell",
+    "shares": 15,
+    "price": 18.41,
+    "quotedBid": 18.405,
+    "quotedAsk": 18.42,
+    "balanceUsdAfter": 349.06,
+    "positionId": "87292174-244c-4ddb-8063-08df10e077bd",
+    "history": {
+      "op": 18.465,
+      "acp": 18.41,
+      "pi": -0.83,
+      "pa": -0.96,
+      "roi": -0.2996660348
+    }
+  },
   "expect": {
     "bookLocal": 0.075,
     "fttIfCharged": 1.108,
     "note": "Sell 15 at the bid on the next session and reconcile: balance change minus (sell - 18.465) * 15 converted. A shortfall near 1.11 EUR is the FTT; a shortfall near zero means Quantfury debits no transfer tax and the 66 French lines are overstated fifteenfold."
   },
+  "reconcile": {
+    "priceMoveLocal": -0.825,
+    "historyPnlLocal": -0.83,
+    "historyPnlUsd": -0.96,
+    "balanceDeltaUsd": -0.96,
+    "residualLocal": 0,
+    "fttDebited": false,
+    "verdict": "The closed-position sheet and the cash movement are the overnight price, 18.465 → 18.41. Nothing near 1.11 EUR was taken. Quantfury does not debit the French FTT."
+  },
   "alsoWatch": {
     "what": "the side the fill lands on, which is what the whole cost model rests on",
-    "seen": "The ticket quoted 18.465 / 18.470 and the position opened at 18.465 — the bid, on a buy — and marks at 0.00 unrealised against a bid still at 18.465. PETR4 did the same thing on 15 September: quoted 49.12 / 49.14, filled 49.12. If a buy really lands on the bid rather than the ask, a round trip does not cross the book and `usd` overstates every one of the 2 030 lines by a full spread. Two fills are not enough to tell that from a half-tick of drift, so the close is the third point. Watch whether the sell lands on the bid too, and what the reconciliation leaves unexplained."
+    "seen": "The ticket quoted 18.465 / 18.470 and the position opened at 18.465 — the bid, on a buy — and marks at 0.00 unrealised against a bid still at 18.465. PETR4 did the same thing on 15 September: quoted 49.12 / 49.14, filled 49.12. If a buy really lands on the bid rather than the ask, a round trip does not cross the book and `usd` overstates every one of the 2 030 lines by a full spread. Two fills are not enough to tell that from a half-tick of drift, so the close is the third point. Watch whether the sell lands on the bid too, and what the reconciliation leaves unexplained.",
+    "close": "The sell ticket showed 18.405 / 18.420 and the fill is 18.41 — the bid, half a tick inside. Three fills, all on the bid: two buys (PETR4, ACA) and this sell. An overnight move of 5.5 cents swamps the 0.5-cent book, so this trip cannot zero the spread; it can only say the crossing assumption is the one that keeps being contradicted."
   }
 }

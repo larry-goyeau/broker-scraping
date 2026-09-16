@@ -1,69 +1,62 @@
 // What one round trip costs at Revolut: buy n shares at price p, sell them
-// back at once.
+// back at once, in dollars. Coins are bought by the amount, so they are
+// handed that and no price.
 //
-//   coût (USD) = a × toUsd(p) × n + b × n + c
+// The affine triple hid the cliffs. A stock bills max(0.25 %, €1) a side
+// on the Lithuanian card, a US sell bills TAF then stops at $9.79, and a
+// crypto exchange under €200 pays a step instead of the percentage.
+// `roundTrip` is given the size and charges what is charged.
 //
-// `a` is a fraction of the amount. `b` and `c` are dollars, the same unit the
-// other `*_cost.mjs` files answer in.
+// Two companies, re-read 2026-09-16. Default is Revolut Securities Europe
+// UAB (`--entity=eu`), the catalogue's Lithuanian card. `--entity=uk` is
+// Revolut Trading Ltd (GIA / ISA): same percentages, no €1 floor, billed
+// in the instrument currency. Trading Pro is an add-on, not a row on the
+// page — `--plan=pro` still prices its 0.12 % on top of Standard's FX and
+// crypto.
 //
-// One entity, five plans plus an add-on, read 2026-09-12. Investment services
-// are Revolut Securities Europe UAB (Vilnius); the crypto in the app is Revolut
-// Digital Assets Europe Ltd. Three published cards, one per instrument family:
+//   EEA / US stock     0.25 %, min €1 (EU) / no min (UK)   Ultra / Pro 0.12 %
+//   EEA ETF / ETC / ETN  0.10 % every plan, no minimum
+//   crypto               1.49 % Standard / Plus, 0.99 % Premium / Metal,
+//                        0.49 % Ultra, or the euro step under €200
 //
-//   EEA stock               0.25 %, min €1 per leg   (Ultra and Pro 0.12 %)
-//   US stock                0.25 %, min €1 per leg   (Ultra and Pro 0.12 %)
-//                           plus SEC and FINRA TAF on the sell
-//   EEA ETF / ETC / ETN     0.10 % per leg, every plan, no minimum
-//   crypto                  1.49 % (Standard, Plus), 0.99 % (Premium, Metal),
-//                           0.49 % (Ultra), or a stepped minimum under €200
+// Two tickets read in the app on 2026-09-12 settle what the cards do not
+// say: a stablecoin bought with its own currency costs nothing, and the
+// crypto price itself carries a markup the ticket never names (1.23 %
+// on BTC vs Kraken / Coinbase). The volume tiers that used to cut those
+// percentages ended on 10 August 2026; the first-tier rates are now the
+// flat card.
 //
-// Two order tickets read in the app on 2026-09-12 settle what the cards do not
-// say, and both are recorded below rather than assumed: a stablecoin bought with
-// its own currency costs nothing, and the crypto price itself carries a markup
-// the ticket never names.
+// Custody is 0 since 13 February 2024. No entry, exit or inactivity.
+// The monthly free-trade grant (1 / 3 / 5 / 10) stays out of the number and
+// sits in the remark, one figure per plan:
+// a round trip is two orders, and even Standard's single grant cannot
+// cover both legs. FX stays out too — the account holds EUR and USD —
+// and is only reported for Standard (1 % above €1 000 / month) and Plus
+// (0.5 %). France's help page prints a flat €1; the MiFID ex-ante still
+// says max(0.25 %, €1), and that is what is copied. A Dutch US-stock
+// PDF (v7.0-NL) prints 0.10 % for every plan; the English US card is
+// still 0.25 % / 0.12 %. SEC / TAF use the current levies, not the
+// stale $27.80 / $0.000166 / $8.30 the PDFs still quote. No CAT on
+// either card. Stamp / FTT come from the tax map. Investment-plan and
+// recurring ETF buys are free one way and cannot close the trip.
 //
-// Custody is 0: Revolut charged 0.12 % a year until 13 February 2024 and then
-// removed it, so a pre-2024 reading of this broker is wrong by the largest term
-// it used to have. There are no entry, exit or inactivity charges either.
-//
-// The published % × 2 sits in `a`, the €1 minimum in `floor`. Two things this
-// shape cannot hold, and which are stated rather than folded in:
-//
-//   The free allowance. Every plan grants commission-free trades each rolling
-//   month — Standard 1, Plus 3, Premium 5, Metal and Ultra 10. What this file
-//   prices is the marginal round trip, both legs charged, because a round trip
-//   is two orders and even the first one on Standard already spends the whole
-//   monthly grant on one leg. A reader whose allowance is untouched pays less.
-//
-//   The FX allowance. Orders execute in the currency of the venue — EUR for the
-//   Tradegate lines, USD for NASDAQ and NYSE — and the account can hold both, so
-//   no conversion is forced and the markup stays out of `a`. Above €1 000 a
-//   month it is 1 % on Standard and 0.5 % on Plus, nothing on Premium, Metal and
-//   Ultra. It is reported in `fxIfConverted`.
-//
-// SEC and FINRA are pass-through government rates, identical at every broker, so
-// the figures here are the current ones this repository uses everywhere else
-// rather than the ones Revolut's PDF prints. Those disclosures still quote SEC
-// $27.80 per million and TAF $0.000166 per share capped at $8.30, which are the
-// previous schedules; taking them literally would make Revolut look dearer than
-// its neighbours for a reason that is about the age of a document, not a price.
-//
-//   https://cdn.revolut.com/legal/terms/RSEUAB-ex-ante-costs-report-EEA-stocks-v3.0.pdf
-//   https://cdn.revolut.com/legal/terms/RSEUAB-ex-ante-costs-report-US-stocks-v6.0.pdf
+//   https://cdn.revolut.com/legal/terms/RSEUAB-ex-ante-costs-report-EEA-stocks-v3.2-EN.pdf
+//   https://cdn.revolut.com/legal/terms/RSEUAB-ex-ante-costs-report-US-stocks-v6.3-EN.pdf
 //   https://cdn.revolut.com/legal/terms/RSEUAB-ex-ante-costs-report-ETFs-v6.0-LT-EN.pdf
-//   https://www.revolut.com/en-FR/legal/exchangingcryptocurrenciespersonalfees/
+//   https://cdn.revolut.com/legal/terms/Revolut_Trading_Ltd/Ex-ante_Costs_and_Charges_Disclosure_US_Stocks_10042025.pdf
+//   https://www.revolut.com/en-SI/legal/exchangingcryptocurrenciespersonalfees/
 //
-//   node revolut/revolut_cost.mjs AAPL
 //   node revolut/revolut_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node revolut/revolut_cost.mjs IWDA TRADEGATE EUR --plan=ultra
-//   node revolut/revolut_cost.mjs BTC
+//   node revolut/revolut_cost.mjs AAPL NASDAQ USD --entity=uk --shares=10 --price=230
+//   node revolut/revolut_cost.mjs VWCE TRADEGATE EUR --plan=ultra --shares=10 --price=120
+//   node revolut/revolut_cost.mjs BTC --amount=1000
 //   node revolut/revolut_cost.mjs --schedule
 //
-// `roundTripCost(...)` reads files, not the network.
+// `roundTrip(...)` reads files, not the network.
 
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite, bookParts } from "../na.mjs";
+import { plus, finite } from "../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
@@ -71,63 +64,41 @@ const CATALOGUE = new URL("revolut-parsed.json", import.meta.url);
 const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
 
 const SCHEDULE = {
-  eeaStocks: "https://cdn.revolut.com/legal/terms/RSEUAB-ex-ante-costs-report-EEA-stocks-v3.0.pdf",
-  usStocks: "https://cdn.revolut.com/legal/terms/RSEUAB-ex-ante-costs-report-US-stocks-v6.0.pdf",
+  eeaStocks: "https://cdn.revolut.com/legal/terms/RSEUAB-ex-ante-costs-report-EEA-stocks-v3.2-EN.pdf",
+  usStocks: "https://cdn.revolut.com/legal/terms/RSEUAB-ex-ante-costs-report-US-stocks-v6.3-EN.pdf",
   etfs: "https://cdn.revolut.com/legal/terms/RSEUAB-ex-ante-costs-report-ETFs-v6.0-LT-EN.pdf",
-  crypto: "https://www.revolut.com/en-FR/legal/exchangingcryptocurrenciespersonalfees/",
-  readOn: "2026-09-12",
+  ukUs: "https://cdn.revolut.com/legal/terms/Revolut_Trading_Ltd/Ex-ante_Costs_and_Charges_Disclosure_US_Stocks_10042025.pdf",
+  crypto: "https://www.revolut.com/en-SI/legal/exchangingcryptocurrenciespersonalfees/",
+  readOn: "2026-09-16",
+  previouslyRead: "2026-09-12",
   entity: "Revolut Securities Europe UAB",
+  entityUk: "Revolut Trading Ltd",
   cryptoEntity: "Revolut Digital Assets Europe Ltd",
 };
 
 const DEFAULT_PLAN = "standard";
+const DEFAULT_ENTITY = "eu";
 
 const SEC_RATE = 0.0000206;
 const TAF_PER_SHARE = 0.000195;
 const TAF_CAP = 9.79;
-
-// Removed on 13 February 2024. Kept named rather than dropped, because the
-// figure is what most published comparisons of this broker still carry.
+const CENT = 0.01;
 const CUSTODY_UNTIL_2024 = 0.0012;
-
-// The per-leg minimum on a stock ticket. Published as EUR 1.00 with a footnote
-// that the real floor is country-specific; the catalogue is EUR and USD lines
-// sold by the Lithuanian entity, so the euro figure is the one that applies.
 const STOCK_MIN = 1;
 
 const US_MICS = new Set(["XNAS", "XNYS", "ARCX", "XASE", "BATS", "OTCM"]);
 const US_EX = new Set(["NASDAQ", "NYSE", "AMEX", "ARCA", "CBOE", "BATS", "OTC"]);
+const ETP = new Set(["ETF", "ETC", "ETN"]);
+const HOLD = new Set(["EUR", "USD"]);
 
-// Under €200 a crypto exchange pays a step instead of the percentage, whichever
-// is greater. Over it, only the percentage. The first step is half the trade,
-// which is a refusal dressed as a fee rather than a price.
-//
-// Verified on a ticket: a $50 BTC buy at 22:14 Paris on 2026-09-12 was charged
-// $2.31, which is the €1.99 step of the 25–100 band converted at 1.1622. So the
-// table holds, and so does the euro billing on a dollar order.
 const CRYPTO_STEPS = {
   "1.49": [[2, null], [5, 0.99], [25, 1.49], [100, 1.99], [150, 2.49], [200, 2.99]],
   "0.99": [[2, null], [50, 0.99], [150, 1.49], [200, 1.99]],
   "0.49": [[2, null], [200, 0.99]],
 };
 
-// The price Revolut shows is not the market's. The same ticket that was charged
-// its €1.99 priced one bitcoin at $78,118.58 while Kraken's touch and Coinbase's
-// spot both sat at $77,170 — 1.23 % above the market, on top of the fee the
-// ticket names. Nothing published says so; this is measured.
-//
-// Doubled into the book term like any other spread, since a round trip crosses
-// it twice, and assumed symmetric on the sell because only the buy was read.
-// Carried by every crypto line, which makes it a floor and not an average:
-// bitcoin is the deepest pair on the shelf and the rest can only be worse.
 const CRYPTO_MARKUP_BP = 123;
 const CRYPTO_MARKUP_READ = "2026-09-12 22:14 Paris, BTC 50 $";
-
-// A stablecoin bought with its own currency is free: the $50 USDC ticket read
-// the same evening credited exactly 50 USDC, no fee, no step, at 1.0000 — while
-// the BTC ticket beside it paid. Revolut prices the 1:1 leg as a conversion
-// rather than an exchange. USDC is the one that was read; USDT and DAI are the
-// rest of the catalogue's stablecoins and are taken with it by kind.
 const STABLECOINS = new Set(["USDC", "USDT", "DAI"]);
 
 const PLANS = {
@@ -136,8 +107,6 @@ const PLANS = {
   premium: { id: "premium", label: "Revolut Premium", stock: 0.0025, etf: 0.001, crypto: 0.0099, fx: 0, free: 5, sub: 7.99 },
   metal: { id: "metal", label: "Revolut Metal", stock: 0.0025, etf: 0.001, crypto: 0.0099, fx: 0, free: 10, sub: 13.99 },
   ultra: { id: "ultra", label: "Revolut Ultra", stock: 0.0012, etf: 0.001, crypto: 0.0049, fx: 0, free: 10, sub: 45 },
-  // An add-on bought on top of any plan, so its FX and crypto stay those of the
-  // plan underneath. Standard's are used here, which is the common case.
   pro: { id: "pro", label: "Trading Pro", stock: 0.0012, etf: 0.001, crypto: 0.0149, fx: 0.01, free: 10, sub: 15 },
 };
 
@@ -153,6 +122,22 @@ const PLAN_ALIAS = {
   tradingpro: "pro",
 };
 
+const ENTITIES = {
+  eu: { id: "eu", label: "Revolut Securities Europe UAB", stockMin: STOCK_MIN },
+  uk: { id: "uk", label: "Revolut Trading Ltd", stockMin: 0 },
+};
+
+const ENTITY_ALIAS = {
+  eu: "eu",
+  eea: "eu",
+  lt: "eu",
+  rseuab: "eu",
+  uk: "uk",
+  gb: "uk",
+  gia: "uk",
+  isa: "uk",
+};
+
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
 const spreads = fs.existsSync(SPREADS) ? JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {} : {};
@@ -160,10 +145,19 @@ const spreads = fs.existsSync(SPREADS) ? JSON.parse(fs.readFileSync(SPREADS, "ut
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 const isCrypto = (row) => row?.type === "CRYPTO" || /^CRYPTO$/i.test(String(row?.exchange || ""));
 const isStablecoin = (row) => isCrypto(row) && STABLECOINS.has(String(row?.ticker || "").toUpperCase());
+const isAdr = (row) => /\bADRs?\b|american deposit/i.test(String(row?.name || ""));
 
 const dollars = (amount, currency) => {
   const v = toUsd(amount, currency);
   return v == null ? null : Number(v.toPrecision(6));
+};
+
+const toCcy = (amount, from, to) => {
+  if (String(from || "").toUpperCase() === String(to || "").toUpperCase()) return Number(amount);
+  const usd = toUsd(amount, from);
+  const per = usdPer(to);
+  if (usd == null || !(per > 0)) return null;
+  return usd / per;
 };
 
 const fxNote = (currency) => ({
@@ -171,6 +165,9 @@ const fxNote = (currency) => ({
   asOf: FX_AS_OF,
   listing: usdPer(currency),
 });
+
+const up = (value) =>
+  value == null || Number.isNaN(value) ? null : value > 0 ? Math.ceil(value / CENT - 1e-9) * CENT : 0;
 
 export function planOf(name = DEFAULT_PLAN) {
   const key = String(name || "")
@@ -180,12 +177,13 @@ export function planOf(name = DEFAULT_PLAN) {
   return PLANS[PLAN_ALIAS[key] || key] || null;
 }
 
-// Which of the three published cards a listing falls under. ETCs and ETNs go
-// with the ETFs: the card's wording names units in a fund, which a certificate
-// or a note is not, but the three are one family of exchange-traded products on
-// the screen and in the hand, and Revolut sells them from the same shelf. The
-// legal reading would put them at the stock rate, two and a half times dearer.
-const ETP = new Set(["ETF", "ETC", "ETN"]);
+export function entityOf(name = DEFAULT_ENTITY) {
+  const key = String(name || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "");
+  return ENTITIES[ENTITY_ALIAS[key] || key] || null;
+}
 
 export function feeMarketOf(row, mic) {
   const type = String(row?.type || "").toUpperCase();
@@ -197,27 +195,21 @@ export function feeMarketOf(row, mic) {
   return "eea";
 }
 
-export function ruleOf(plan, market, { stablecoin = false } = {}) {
+export function ruleOf(plan, market, { stablecoin = false, entity = DEFAULT_ENTITY } = {}) {
   const picked = typeof plan === "string" ? planOf(plan) : plan;
-  if (!picked || !market) return null;
+  const house = typeof entity === "string" ? entityOf(entity) : entity;
+  if (!picked || !market || !house) return null;
   if (market === "crypto") {
     if (stablecoin) return { rate: 0, min: 0, steps: null, currency: "EUR", stablecoin: true };
-    // Keyed on the rounded percentage: `0.0099 * 100` is not `0.99` in binary
-    // floating point, and a miss here silently drops the whole step schedule.
     const steps = CRYPTO_STEPS[(picked.crypto * 100).toFixed(2)] || null;
-    // A step is a function of the size, which `a × p × n + b × n + c` cannot
-    // hold, so `floor` carries the smallest of them: the tightest bound the
-    // affine shape can state without ever overcharging. `exactCost` knows the
-    // exact step once a size is given.
     const min = steps ? (steps.find(([, fee]) => fee != null)?.[1] ?? 0) : 0;
     return { rate: picked.crypto, min, steps, currency: "EUR" };
   }
-  if (market === "etf") return { rate: picked.etf, min: 0, currency: "EUR" };
-  return { rate: picked.stock, min: STOCK_MIN, currency: "EUR" };
+  const currency = house.id === "uk" ? null : "EUR";
+  if (market === "etf") return { rate: picked.etf, min: 0, currency: currency || "EUR" };
+  return { rate: picked.stock, min: house.stockMin, currency: currency || "EUR" };
 }
 
-// The stepped crypto minimum, in euro, for a trade of this size. Null above the
-// last step, where the percentage stands alone.
 export function cryptoStep(amount, steps) {
   if (!steps || amount == null || !Number.isFinite(Number(amount))) return null;
   for (const [ceiling, fee] of steps) {
@@ -229,11 +221,7 @@ export function cryptoStep(amount, steps) {
 export function commissionEach(amount, rule) {
   if (!rule) return null;
   const rate = rule.rate || 0;
-  if (amount == null || !Number.isFinite(Number(amount))) {
-    // Without a size the percentage is known and the floor is not, so the answer
-    // is the percentage and `floor` carries the rest.
-    return rate ? null : 0;
-  }
+  if (amount == null || !Number.isFinite(Number(amount))) return rate ? null : 0;
   let fee = Number(amount) * rate;
   const step = rule.steps ? cryptoStep(amount, rule.steps) : null;
   const floor = step ?? rule.min ?? 0;
@@ -304,87 +292,64 @@ function coverage() {
   return out;
 }
 
-export function exactCost({ amount, market, plan = DEFAULT_PLAN, stablecoin = false }) {
-  const picked = planOf(plan);
-  const rule = picked ? ruleOf(picked, market, { stablecoin }) : null;
-  const each = commissionEach(amount, rule);
-  if (each == null || !rule) return { commission: null, currency: QUOTE };
-  return {
-    commission: dollars(each * 2, rule.currency),
-    currency: QUOTE,
-    native: { each, roundTrip: each * 2, currency: rule.currency },
-    floored: rule.steps
-      ? cryptoStep(amount, rule.steps) != null && each === cryptoStep(amount, rule.steps)
-      : Boolean(rule.min) && each === rule.min,
-    plan: picked.id,
-    market,
-  };
-}
-
 function taxParts(isin) {
   const tax = taxesOf(isin);
-  const rates = taxRates(tax);
+  const rates = { ...taxRates(tax) };
   delete rates.PTM_LEVY;
+  delete rates.PTM;
   const taxTotal = Object.values(rates).reduce((sum, rate) => sum + rate, 0);
   return { tax, rates, taxTotal };
 }
 
-// Every cost the page can compute already has a column of its own, so the remark
-// is left with the one figure none of them can hold: what the subscription costs
-// each month. It is only written where a row stands for a single plan, which is
-// crypto; a share line covers all six and could not name a price.
-//
-// `min fees` is not displayed. The front lifts that sentence out of the remark
-// and into the order column, so removing it would empty the column.
-//
-// A share or an ETF keeps the conversion markup instead. It is the one charge
-// that can dwarf the commission — 1 % against 0.25 % on a dollar line — and it
-// sits outside `a` because the account can hold the currency and avoid it.
-//
-// A stablecoin says on what condition its zero holds. The 1:1 leg is free only
-// when it is paid in the coin's own currency; the €100 ticket credited 114.585
-// USDC, which is 1.1459 to the euro against the 1.1608 the same evening's fee
-// conversion used, so a euro buyer paid the markup the screen called no fees.
-
-function remarkOf({ plan, market, floorUsd, stablecoin }) {
+function remarkOf({ plan, market, stablecoin, adr }) {
+  if (stablecoin) return "0% if same currency with the stablecoin.";
   const lines = [];
-  if (market === "crypto") {
-    if (stablecoin) lines.push("0% if buy with usd.");
-    if (plan.sub) lines.push(`${plan.sub} €/month.`);
-  } else if (plan.fx) {
+  if (plan.free) {
+    lines.push(`${plan.free} free trade${plan.free > 1 ? "s" : ""}/month.`);
+  }
+  if (plan.sub) lines.push(`${plan.sub} €/month.`);
+  if (plan.fx && market !== "crypto") {
     lines.push(`FX ${(plan.fx * 100).toFixed(2)}% above €1,000/month.`);
   }
-  if (floorUsd) lines.push(`min fees ${floorUsd} $.`);
+  if (adr) lines.push("ADR 0.01–0.05 $/share (holding).");
   return lines.join("\n");
 }
 
-export function roundTripCost({
+/**
+ * The whole bill for buying `shares` at `price` (or putting `amount` into a
+ * coin) and selling straight back. `usd` is the number the page prints;
+ * `brokerFees` is Revolut's commission and, on crypto, the measured markup.
+ */
+export function roundTrip({
   etf,
   place,
   currency,
+  shares,
+  price,
+  amount,
   bp = null,
   perShare = null,
   plan = DEFAULT_PLAN,
+  entity = DEFAULT_ENTITY,
 }) {
   const picked = planOf(plan);
+  const house = entityOf(entity);
   const { named, matches } = findListing({ etf, place, currency });
   const answer = {
-    a: null,
-    b: 0,
-    c: 0,
+    usd: null,
+    brokerFees: null,
     ccy: QUOTE,
-    floor: null,
-    cap: null,
-    threshold: null,
-    plan: picked?.id ?? plan,
     etf,
     place,
     currency,
+    plan: picked?.id ?? plan,
+    entity: house?.id ?? entity,
+    onlineBuy: true,
+    cashCurrency: "",
   };
 
-  if (!picked) {
-    return { ...answer, why: `formule inconnue : ${plan} (standard|plus|premium|metal|ultra|pro)` };
-  }
+  if (!picked) return { ...answer, why: `formule inconnue : ${plan} (standard|plus|premium|metal|ultra|pro)` };
+  if (!house) return { ...answer, why: `entité inconnue : ${entity} (eu|uk)` };
   if (!catalogue) {
     return {
       ...answer,
@@ -417,71 +382,47 @@ export function roundTripCost({
     name: m.row.name || null,
     type: m.row.type || null,
     mic: book.mic ?? m.venue?.mic ?? null,
-    exchange: m.venue?.name ?? m.row.exchange ?? null,
+    exchange: crypto ? "Crypto" : m.venue?.name ?? m.row.exchange ?? null,
     currency: String(m.row.currency || "").toUpperCase(),
     brokerExchange: m.row.exchange || null,
+    adr: isAdr(m.row),
   };
 
   const stablecoin = isStablecoin(m.row);
   const market = feeMarketOf(m.row, listing.mic);
-  const rule = ruleOf(picked, market, { stablecoin });
+  const ticketCcy = house.id === "uk" && market !== "crypto" ? listing.currency || "USD" : "EUR";
+  const rule = {
+    ...ruleOf(picked, market, { stablecoin, entity: house }),
+    currency: ticketCcy,
+  };
   const leaf = book.leaf;
-  // Crypto has no book to read, but it does have a measured markup, and a
-  // stablecoin quoted at 1.0000 has neither.
-  const marketBp = bp ?? leaf?.bp ?? (crypto && !stablecoin ? CRYPTO_MARKUP_BP * 2 : null);
+  const marketBp = bp ?? leaf?.bp ?? null;
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
   const american = market === "us";
   const { tax, rates, taxTotal } = taxParts(listing.isin);
+  const holdable = HOLD.has(listing.currency);
 
-  const mkt = bookParts({
-    bp: marketBp,
-    perShare: marketPerShare,
-    venue: m.venue,
-    unsourced: crypto ? { match: ["crypto"], name: "Crypto", why: "gré à gré" } : m.unsourced,
-    toUsd: (x) => (american ? x : dollars(x, listing.currency)),
-  });
-
-  // The commission is billed in euro whatever the venue, so the floor converts
-  // from euro even on a dollar listing.
-  const floorUsd = rule.min ? dollars(rule.min * 2, rule.currency) : null;
-
-  return {
+  const shared = {
     ...answer,
-    a: finite(plus(mkt.a, taxTotal, american ? SEC_RATE : 0, rule.rate * 2), 4),
-    b: finite(plus(mkt.b, american ? TAF_PER_SHARE : 0), 6),
-    c: 0,
-    floor: floorUsd,
-    cap: american ? { term: "b", part: "FINRA TAF", amount: TAF_CAP, per: "exécution" } : null,
     listing,
     feeMarket: market,
+    cashCurrency: holdable ? listing.currency : crypto ? "USD" : "",
     onlineBuy: true,
-    remark: remarkOf({ plan: picked, market, floorUsd, stablecoin }),
-    parts: {
-      marché:
-        marketBp != null
-          ? Number((marketBp / 1e4).toPrecision(4))
-          : marketPerShare != null
-            ? `${marketPerShare} par part`
-            : crypto
-              ? 0
-              : null,
-      taxes: Object.keys(rates).length ? rates : null,
-      réglementaire: american ? { SEC: SEC_RATE, FINRA: `${TAF_PER_SHARE} par part` } : null,
-      commission: rule.rate * 2,
-      change: null,
-    },
+    remark: remarkOf({ plan: picked, market, stablecoin, adr: listing.adr }),
     bp: marketBp,
     perShare: marketPerShare,
     url:
       leaf?.url ??
       (crypto
         ? SCHEDULE.crypto
-        : market === "etf"
-          ? SCHEDULE.etfs
-          : american
-            ? SCHEDULE.usStocks
-            : SCHEDULE.eeaStocks),
-    basis: `barème ${picked.label}, palier ${market}, lu le ${SCHEDULE.readOn}`,
+        : house.id === "uk"
+          ? SCHEDULE.ukUs
+          : market === "etf"
+            ? SCHEDULE.etfs
+            : american
+              ? SCHEDULE.usStocks
+              : SCHEDULE.eeaStocks),
+    basis: `barème ${picked.label} / ${house.id}, palier ${market}, relu le ${SCHEDULE.readOn}`,
     tax,
     commission: {
       rate: rule.rate,
@@ -491,6 +432,7 @@ export function roundTripCost({
       currency: rule.currency,
       eachWay: true,
       plan: picked.id,
+      entity: house.id,
       freeTradesPerMonth: picked.free,
       stablecoin: stablecoin || undefined,
     },
@@ -498,10 +440,101 @@ export function roundTripCost({
     fx: fxNote(listing.currency),
     fxIfConverted: picked.fx * 2,
     custody: 0,
+  };
+
+  const n = Number(shares);
+  const p = Number(price);
+  const cash = Number(amount);
+  const notional = n > 0 && p > 0 ? n * p : crypto && cash > 0 ? cash : null;
+
+  if (notional == null) {
+    return {
+      ...shared,
+      why: crypto
+        ? "aucun montant"
+        : !(n > 0)
+          ? "aucun nombre de parts"
+          : "aucun prix pour cette ligne : lancer node prices.mjs",
+      confidence: confidenceOf({
+        picked,
+        house,
+        market,
+        rule,
+        listing,
+        leaf,
+        crypto,
+        american,
+        taxTotal,
+        marketBp,
+        marketPerShare,
+        stablecoin,
+        unsourced: m.unsourced,
+      }),
+    };
+  }
+
+  const fromCcy = crypto ? "USD" : listing.currency;
+  const notionalUsd = dollars(notional, fromCcy);
+  const nativeNotional = toCcy(notional, fromCcy, rule.currency);
+  const each = commissionEach(nativeNotional, rule);
+  const commissionUsd = each == null ? null : dollars(each * 2, rule.currency);
+
+  const bookUsd = crypto
+    ? stablecoin
+      ? 0
+      : notionalUsd == null
+        ? null
+        : (notionalUsd * CRYPTO_MARKUP_BP * 2) / 1e4
+    : marketBp != null && notionalUsd != null
+      ? (notionalUsd * marketBp) / 1e4
+      : marketPerShare != null
+        ? american
+          ? marketPerShare * n
+          : dollars(marketPerShare * n, listing.currency)
+        : null;
+
+  const secUsd = american && notionalUsd != null ? up(notionalUsd * SEC_RATE) : american ? null : 0;
+  const tafRaw = american && n > 0 ? Math.min(n * TAF_PER_SHARE, TAF_CAP) : 0;
+  const tafUsd = american ? up(tafRaw) : 0;
+  const taxUsd = crypto || notionalUsd == null ? (crypto ? 0 : null) : notionalUsd * taxTotal;
+
+  const usd = plus(bookUsd, commissionUsd, secUsd, tafUsd, taxUsd);
+  const brokerFees = crypto ? plus(bookUsd, commissionUsd) : commissionUsd;
+
+  return {
+    ...shared,
+    usd: finite(usd, 6),
+    brokerFees: finite(brokerFees, 6),
+    ...(bookUsd == null
+      ? {
+          why: `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ${
+            m.unsourced?.why || "pas de feuille de carnet"
+          }`,
+        }
+      : {}),
+    trade: {
+      shares: n > 0 ? n : null,
+      price: p > 0 ? p : null,
+      amount: crypto ? notional : null,
+      notional,
+      notionalUsd: finite(notionalUsd, 6),
+      currency: fromCcy,
+    },
+    parts: {
+      marché: finite(bookUsd, 6),
+      courtage: finite(commissionUsd, 6),
+      réglementaire: american ? finite(plus(secUsd, tafUsd), 6) : null,
+      taxes: finite(taxUsd, 6),
+    },
+    sell: american
+      ? { sec: finite(secUsd, 6), taf: finite(tafUsd, 6), tafCapped: tafRaw >= TAF_CAP }
+      : null,
     confidence: confidenceOf({
       picked,
+      house,
       market,
       rule,
+      listing,
       leaf,
       crypto,
       american,
@@ -509,68 +542,111 @@ export function roundTripCost({
       marketBp,
       marketPerShare,
       stablecoin,
-      type: String(listing.type || "").toUpperCase(),
+      unsourced: m.unsourced,
+      each,
+      nativeNotional,
+      tafCapped: american && tafRaw >= TAF_CAP,
     }),
   };
 }
 
-function confidenceOf({ picked, market, rule, leaf, crypto, american, taxTotal, marketBp, marketPerShare, stablecoin, type }) {
-  const lines = stablecoin
-    ? ["stablecoin sans frais ni palier, ticket lu le " + SCHEDULE.readOn + " : 50 $ rendent 50 USDC à 1,0000 pile"]
-    : [
-        `${(rule.rate * 100).toFixed(2)} % par jambe sur le palier ${market} du plan ${picked.label}, lu le ${SCHEDULE.readOn}`,
-      ];
-
-  if (rule.min && crypto) {
-    lines.push(
-      `plancher ${rule.min} € par jambe, le plus bas des paliers : entre 25 et 100 € c'est 1,99 €, et le ticket lu l'a bien facturé 2,31 $ en euro sur un ordre en dollar`
+function confidenceOf({
+  picked,
+  house,
+  market,
+  rule,
+  listing,
+  leaf,
+  crypto,
+  american,
+  taxTotal,
+  marketBp,
+  marketPerShare,
+  stablecoin,
+  unsourced,
+  each,
+  nativeNotional,
+  tafCapped,
+}) {
+  const said = [];
+  if (stablecoin) {
+    said.push(
+      `stablecoin sans frais ni palier, ticket lu le ${SCHEDULE.previouslyRead} : 50 $ rendent 50 USDC à 1,0000 pile`
     );
-  } else if (rule.min) {
-    lines.push(`plancher ${rule.min} € par jambe, facturé en euro même sur une ligne en dollar`);
+  } else {
+    said.push(
+      `${(rule.rate * 100).toFixed(2)} % par jambe sur le palier ${market} du plan ${picked.label} ` +
+        `(${house.label}), relu le ${SCHEDULE.readOn} (inchangé depuis le ${SCHEDULE.previouslyRead})`
+    );
+  }
+  if (rule.min && crypto && each != null && nativeNotional != null && each !== nativeNotional * (rule.rate || 0)) {
+    said.push(
+      `plancher ${each} € par jambe (palier sous 200 €) : le ticket lu le ${SCHEDULE.previouslyRead} ` +
+        `a facturé 1,99 € / 2,31 $ en euro sur 50 $ de bitcoin`
+    );
+  } else if (rule.min && !crypto) {
+    const floorBites =
+      each != null && nativeNotional != null && each === rule.min ? `, le plancher mord` : "";
+    said.push(
+      `plancher ${rule.min} € par jambe, facturé en euro même sur une ligne en dollar${floorBites} ` +
+        `— l'aide France imprime 1 € forfaitaire, l'ex-ante MiFID dit max(0,25 %, 1 €) : c'est celui-là`
+    );
   } else if (market === "etf") {
-    lines.push("aucun plancher sur les ETF : la fiche ne donne qu'un pourcentage, là où celle des actions ajoute un minimum");
+    said.push(`aucun plancher sur les ETF : la fiche ne donne qu'un pourcentage`);
+  } else if (house.id === "uk") {
+    said.push(`pas de plancher £ / € sur Trading Ltd : le 0,25 % court dès la première part`);
   }
   if (crypto && rule.steps) {
-    lines.push("sous 200 € la crypto paie un palier fixe plutôt que le pourcentage, et sous 2 € la moitié de l'échange");
+    said.push(
+      `sous 200 € la crypto paie un palier fixe plutôt que le pourcentage, et sous 2 € la moitié de l'échange ; ` +
+        `les paliers de volume à 30 jours se sont arrêtés le 10 août 2026`
+    );
   }
-
-  lines.push(
+  said.push(
     `${picked.free} transaction${picked.free > 1 ? "s" : ""} gratuite${picked.free > 1 ? "s" : ""} par mois hors de ce calcul, ` +
-      "qui chiffre l'aller-retour marginal, deux jambes facturées"
+      `qui chiffre l'aller-retour marginal, deux jambes facturées`
   );
-
   if (american) {
-    lines.push(
-      `SEC ${SEC_RATE} et TAF ${TAF_PER_SHARE} par part à la vente, aux taux courants du dépôt et non à ceux, plus anciens, que la fiche Revolut imprime encore`
+    said.push(
+      `SEC ${SEC_RATE} du montant et TAF ${TAF_PER_SHARE} $/part à la vente, plafonnée à ${TAF_CAP} $` +
+        (tafCapped ? `, le plafond mord` : "") +
+        ` : la fiche imprime encore $27,80 / million et TAF $0,000166 plafonnée à $8,30`
     );
   }
-  if (taxTotal > 0) lines.push(`taxe de transfert ${(100 * taxTotal).toFixed(2)} % prise dans la carte des taxes`);
-  if (market === "etf" && type && type !== "ETF") {
-    lines.push(
-      `${type} compté au tarif ETF : la fiche ne nomme que les parts de fonds, mais les trois produits cotés partent du même rayon`
+  if (taxTotal > 0) said.push(`taxe de transfert ${(100 * taxTotal).toFixed(2)} % prise dans la carte des taxes`);
+  if (market === "etf" && listing.type && listing.type !== "ETF") {
+    said.push(
+      `${listing.type} compté au tarif ETF : la fiche ne nomme que les parts de fonds, mais les trois produits cotés partent du même rayon`
     );
   }
-
-  lines.push(`garde 0 depuis le 13 février 2024, où les ${(100 * CUSTODY_UNTIL_2024).toFixed(2)} % annuels ont été supprimés`);
-  lines.push(
-    picked.fx
-      ? `change hors a : le compte tient l'euro et le dollar, ${(picked.fx * 100).toFixed(2)} % seulement au-delà de 1 000 € convertis par mois`
-      : "change hors a : ce plan ne facture pas la conversion"
+  said.push(
+    `garde 0 depuis le 13 février 2024, où les ${(100 * CUSTODY_UNTIL_2024).toFixed(2)} % annuels ont été supprimés`
   );
-
+  if (picked.fx) {
+    said.push(
+      `change hors du total : le compte tient l'euro et le dollar, ${(picked.fx * 100).toFixed(2)} % seulement au-delà de 1 000 € convertis par mois`
+    );
+  } else {
+    said.push(`change hors du total : ce plan ne facture pas la conversion`);
+  }
   if (!crypto && marketBp == null && marketPerShare == null) {
-    lines.push("pas de feuille de carnet pour cet ISIN / cette place : le spread reste N/A");
+    said.push(
+      `pas de feuille de carnet : ${unsourced?.name || listing.exchange}, ${unsourced?.why || "pas de source"}`
+    );
+  } else if (marketBp != null) {
+    said.push(`carnet ${Number(marketBp.toPrecision(4))} bp`);
+  } else if (marketPerShare != null) {
+    said.push(`carnet Rule 605, ${marketPerShare} $ la part`);
   }
   if (crypto && !stablecoin) {
-    lines.push(
+    said.push(
       `marge de cotation ${(CRYPTO_MARKUP_BP / 100).toFixed(2)} % par jambe, mesurée et non publiée (${CRYPTO_MARKUP_READ}), ` +
-        "vente supposée symétrique et bitcoin pris pour plancher : les paires moins liquides paient davantage"
+        `vente supposée symétrique et bitcoin pris pour plancher : les paires moins liquides paient davantage`
     );
   }
-  lines.push("un ticket d'achat lu, aucun aller-retour réel dans ce dépôt");
-  if (!leaf && !crypto) lines.push("carnet absent pour cette ligne");
-
-  return lines.join(" ; ");
+  said.push(`un ticket d'achat lu, aucun aller-retour réel dans ce dépôt`);
+  if (!leaf && !crypto) said.push(`carnet absent pour cette ligne`);
+  return said.join(" ; ");
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
@@ -585,7 +661,9 @@ if (import.meta.url === `file://${process.argv[1]}`) {
         {
           ...SCHEDULE,
           defaultPlan: DEFAULT_PLAN,
+          defaultEntity: DEFAULT_ENTITY,
           plans: PLANS,
+          entities: ENTITIES,
           stockMin: STOCK_MIN,
           secRate: SEC_RATE,
           tafPerShare: TAF_PER_SHARE,
@@ -609,22 +687,28 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node revolut_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]\n" +
-        "        [--plan=standard|plus|premium|metal|ultra|pro] [--json]\n" +
+      "usage : node revolut_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--amount=usd]\n" +
+        "        [--plan=standard|plus|premium|metal|ultra|pro] [--entity=eu|uk] [--json]\n" +
         "        node revolut_cost.mjs --schedule\n" +
         "  ex.   node revolut_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
-        "        node revolut_cost.mjs IWDA TRADEGATE EUR --plan=ultra"
+        "        node revolut_cost.mjs AAPL NASDAQ USD --entity=uk --shares=1 --price=230\n" +
+        "        node revolut_cost.mjs VWCE TRADEGATE EUR --plan=ultra --shares=10 --price=120\n" +
+        "        node revolut_cost.mjs BTC --amount=1000"
     );
     process.exit(2);
   }
 
-  const out = roundTripCost({
+  const out = roundTrip({
     etf,
     place,
     currency,
+    shares: flag("shares") ? Number(flag("shares")) : null,
+    price: flag("price") ? Number(flag("price")) : null,
+    amount: flag("amount") ? Number(flag("amount")) : null,
     bp: flag("bp") ? Number(flag("bp")) : null,
     perShare: flag("per-share") ? Number(flag("per-share")) : null,
     plan: flag("plan") || DEFAULT_PLAN,
+    entity: flag("entity") || DEFAULT_ENTITY,
   });
 
   if (process.argv.includes("--json")) {
@@ -634,8 +718,8 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 
   const show = (x) => (x == null ? "N/A" : x);
 
-  if (out.a == null && !out.listing) {
-    console.log(`a = N/A   b = N/A   c = ${show(out.c)}\n${out.why}`);
+  if (!out.listing) {
+    console.log(out.why);
     if (out.alternatives?.length) {
       console.log(`\nce que Revolut propose sous ce nom :\n  ${out.alternatives.join("\n  ")}`);
     }
@@ -644,62 +728,38 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 
   const l = out.listing;
   const picked = planOf(out.plan);
+  const house = entityOf(out.entity);
   console.log(`${l.ticker || l.isin} — ${l.name || ""}`);
   console.log(
     `${l.exchange}${l.mic ? ` (${l.mic})` : ""}, ${l.currency}${l.type ? `, ${l.type.toLowerCase()}` : ""}` +
-      `  [${picked?.label || out.plan}, ${out.feeMarket}]\n`
+      `  [${picked?.label || out.plan} / ${house?.id || out.entity}, ${out.feeMarket}]\n`
   );
 
-  const detail = [];
-  // A book quoted per share is a `b` term, so it belongs on that line and not here.
-  if (out.bp != null) detail.push(`carnet ${out.parts.marché}`);
-  for (const [name, rate] of Object.entries(out.parts?.taxes ?? {})) detail.push(`${name} ${rate}`);
-  if (out.parts?.commission) detail.push(`courtage ${out.parts.commission}`);
-  if (out.parts?.réglementaire) detail.push(`SEC ${out.parts.réglementaire.SEC}`);
-
-  const perShareDetail = [];
-  if (out.perShare != null) perShareDetail.push("carnet 605");
-  if (out.parts?.réglementaire) perShareDetail.push(`TAF ${TAF_PER_SHARE}`);
-
-  console.log(`a = ${show(out.a)}   (au prorata${detail.length ? " : " + detail.join(" + ") : " : rien"})`);
-  console.log(`b = ${show(out.b)} $   (par part${perShareDetail.length ? " : " + perShareDetail.join(" + ") : " : rien"})`);
-  console.log(`c = ${show(out.c)} $   (par ordre : aucun ticket plat)`);
-  if (out.floor != null) console.log(`plancher ${out.floor} $   (${out.commission.min} € × 2)`);
-
-  const fx = out.fx?.listing ?? usdPer(l.currency);
-  console.log(
-    `\ncoût = ${show(out.a)} × p × n × ${fx != null ? Number(fx.toPrecision(6)) : "?"} + ` +
-      `${show(out.b)} × n + ${show(out.c)}   ($ ; p en ${l.currency})`
-  );
-  console.log(`  ${out.basis}`);
-  for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
-
-  const n = Number(flag("shares"));
-  const p = Number(flag("price"));
-  if (n > 0 && p > 0) {
-    const amount = n * p;
-    const amountUsd = toUsd(amount, l.currency);
-    const affine = plus(
-      out.a == null || amountUsd == null ? null : out.a * amountUsd,
-      out.b == null ? null : out.b * n,
-      out.c
-    );
-    // The euro ticket is charged on the euro value of the order, so a dollar
-    // listing is brought back to euro before the floor is compared with it.
-    const amountEur = l.currency === "EUR" ? amount : toUsd(amount, l.currency) / (usdPer("EUR") || 1);
-    const billed = exactCost({ amount: amountEur, market: out.feeMarket, plan: out.plan });
-    console.log(
-      `\n${n} part${n > 1 ? "s" : ""} à ${p} ${l.currency} = ${amount.toFixed(2)} ${l.currency}` +
-        (amountUsd != null ? ` (${amountUsd.toFixed(2)} $)` : "")
-    );
-    console.log(`  a, b, c        : ${affine == null ? "N/A" : `${affine.toFixed(4)} $`}`);
-    if (billed.commission != null) {
+  if (out.trade) {
+    const t = out.trade;
+    if (t.amount != null) {
+      console.log(`${t.amount} ${t.currency} aller-retour\n`);
+    } else {
       console.log(
-        `  commission     : ${Number(billed.commission).toFixed(4)} $` +
-          ` (${Number(billed.native.each).toPrecision(4)} € × 2${billed.floored ? ", au plancher" : ""})`
+        `${t.shares} part${t.shares > 1 ? "s" : ""} à ${t.price} ${t.currency} = ${t.notional.toFixed(2)} ${t.currency}` +
+          (t.notionalUsd != null ? ` (${t.notionalUsd.toFixed(2)} $)` : "") +
+          "\n"
       );
     }
+    console.log(`aller-retour     : ${out.usd == null ? `N/A — ${out.why}` : `${out.usd} $`}`);
+    console.log(`frais du courtier: ${show(out.brokerFees)} $`);
+    const p = out.parts || {};
+    if (p.marché != null) console.log(`  carnet         : ${p.marché} $`);
+    if (p.courtage != null) console.log(`  courtage       : ${p.courtage} $`);
+    if (p.réglementaire) console.log(`  réglementaire  : ${p.réglementaire} $`);
+    if (p.taxes) console.log(`  taxes          : ${p.taxes} $`);
+    console.log("");
+  } else if (out.why) {
+    console.log(`aller-retour     : N/A — ${out.why}\n`);
   }
 
+  console.log(`  ${out.basis}`);
+  for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
+  if (out.remark) console.log(`\n${out.remark}`);
   if (out.url) console.log(`\n${out.url}`);
 }

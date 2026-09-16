@@ -112,6 +112,7 @@ const onlyTickers = new Set(
 // Lightyear names the tape its own way. The catalogues name the venue.
 // Brussels is "BSE" here (Bourse de Bruxelles, MIC XBRU), not Bombay; AIM
 // is the London junior market. XGAT is Tradegate even when the name is Swiss.
+// BUX is Budapest (XBUD), not Bucharest (BET) and not the Dutch broker.
 const EXCHANGES = {
   NASDAQ: "NASDAQ",
   NYSE: "NYSE",
@@ -141,7 +142,7 @@ const EXCHANGES = {
   BME: "BME",
   VSE: "VIE",
   WSE: "GPW",
-  BUX: "BET",
+  BUX: "BUX",
   LUXSE: "LUXSE",
   KRAKEN: "CRYPTO",
   CRYPTO: "CRYPTO",

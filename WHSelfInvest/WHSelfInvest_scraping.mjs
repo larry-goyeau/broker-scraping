@@ -483,19 +483,29 @@ const RESTRICTED_NOTICE =
 // listings all the same and admits it in one place only: field 7183, the
 // order-ticket notice. 7184 alone says nothing, since tradable UCITS listings
 // come back with 7184=1 too.
+// 7991 is the order-ticket badge string. `sli` is Odd Lot Data (the NSE
+// India odd-lot book), `dfrz` is Frozen Data. 6509=Z only means the session
+// is closed — Xetra and the LSE show it at midnight too, so it is not a filter.
+function ticketSkip(badges) {
+  return /\b(sli|dfrz)\b/i.test(String(badges || ""));
+}
+
 async function tradingRestricted(conids) {
   const pending = new Set(conids.filter(Boolean).map(String));
   const status = new Map();
+  const skip = new Map();
   const quotedAt = new Map();
 
   for (let attempt = 0; attempt < 10 && pending.size > 0; attempt += 1) {
     const answer = await api(
-      `iserver/marketdata/snapshot?conids=${[...pending].join(",")}&fields=6509,7183,7184,31`
+      `iserver/marketdata/snapshot?conids=${[...pending].join(",")}&fields=6509,7183,7184,31,7991`
     );
 
     for (const row of Array.isArray(answer.json) ? answer.json : []) {
       const conid = String(row?.conid ?? "");
       if (!pending.has(conid)) continue;
+
+      if (row["7991"] !== undefined) skip.set(conid, ticketSkip(row["7991"]));
 
       const notice = (row["7183"] || "").toString();
       if (notice) {
@@ -517,7 +527,7 @@ async function tradingRestricted(conids) {
   }
 
   for (const conid of pending) status.set(conid, false);
-  return status;
+  return { status, skip };
 }
 
 function wantedHits(payload, job) {
@@ -541,11 +551,16 @@ async function scrapeJob(job) {
   const hits = wantedHits(payload, job);
   if (hits.length === 0) return { silent: false, rows: [] };
 
-  const restrictions = await tradingRestricted(hits.map((hit) => String(hit.conid)));
+  const { status: restrictions, skip } = await tradingRestricted(
+    hits.map((hit) => String(hit.conid))
+  );
   const infos = await Promise.all(hits.map((hit) => readInfo(hit.conid)));
   const rows = [];
 
   for (const [index, hit] of hits.entries()) {
+    const conid = String(hit.conid);
+    if (skip.get(conid)) continue;
+
     const info = infos[index] || {};
     const ticker = (info.ticker || hit.symbol || "").toUpperCase();
     const name = listingName(hit) || normalize(info.companyName || "");
@@ -561,7 +576,7 @@ async function scrapeJob(job) {
       currency,
       type,
       raw: [hit.companyHeader || hit.companyName || name, exchange].filter(Boolean).join(" "),
-      restricted: restrictions.get(String(hit.conid)) === true,
+      restricted: restrictions.get(conid) === true,
     });
   }
 

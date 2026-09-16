@@ -24,7 +24,7 @@ export const VENUES = [
     name: "Börse Xetra",
     source: "xetra",
     hours: { open: "09:00", close: "17:30", tz: "Europe/Berlin" },
-    exact: ["xetr", "xetra", "xet", "xetretf", "deutscheborsexetra", "ibis", "ibis2", "etr", "fse"],
+    exact: ["xetr", "xetra", "xet", "xetretf", "deutscheborsexetra", "ibis", "ibis2", "etr"],
     loose: ["frankfurt", "fra", "germany"],
   },
   {
@@ -221,7 +221,7 @@ export const VENUES = [
     name: "Börse Frankfurt",
     source: "frankfurt",
     hours: { open: "08:00", close: "22:00", tz: "Europe/Berlin" },
-    exact: ["xfra", "fwb", "fwb2", "boersefrankfurt", "fra"],
+    exact: ["xfra", "fwb", "fwb2", "boersefrankfurt", "fra", "fse", "fft"],
     loose: [],
   },
   // Hamburg and Hannover share BÖAG's delayed CSVs with Quotrix. HAMQ is the busy
@@ -390,6 +390,18 @@ export const VENUES = [
     exact: ["alpaca", "alpa"],
     loose: [],
   },
+  // Lightyear names Kraken on every coin. The public ticker is the touch, no key,
+  // and it is stored beside the two reference books rather than mixed into the
+  // fallback: handing Kraken to Quantfury would price a venue that broker does
+  // not cross.
+  {
+    mic: "KRKN",
+    name: "Kraken",
+    source: "kraken",
+    hours: null,
+    exact: ["kraken", "krkn"],
+    loose: [],
+  },
   {
     mic: "CBSE",
     name: "Coinbase",
@@ -405,12 +417,21 @@ export const VENUES = [
 // Binance's USDT leg is read as one, which is the market's own convention and costs a
 // few hundredths of a basis point.
 export const CRYPTO_MICS = ["CBSE", "BINA"];
+// Named venues that only the broker who crosses them should request. Alpaca's
+// book is wider than spot; Lightyear's is Kraken. Neither belongs in the
+// fallback that answers a broker who named no tape.
+export const CRYPTO_OWN_MIC = { alpaca: "ALPA", lightyear: "KRKN" };
+export const cryptoMicsFor = (broker) => {
+  const own = CRYPTO_OWN_MIC[String(broker || "").toLowerCase()];
+  return own ? [...CRYPTO_MICS, own] : CRYPTO_MICS;
+};
 // Every crypto book `spread.mjs` knows how to read. Wider than `CRYPTO_MICS` on
 // purpose: a broker that names no venue could be on Binance or Coinbase and is
 // answered with the wider of those two, but it is certainly not on Alpaca's
-// venue unless it is Alpaca. Folding Alpaca into the fallback would hand its
-// 3.4 bp bitcoin touch to Quantfury, which mirrors the spot books instead.
-export const CRYPTO_READ_MICS = [...CRYPTO_MICS, "ALPA"];
+// venue unless it is Alpaca, nor on Kraken unless it is Lightyear. Folding
+// either into the fallback would hand that touch to Quantfury, which mirrors
+// the spot books instead.
+export const CRYPTO_READ_MICS = [...CRYPTO_MICS, "ALPA", "KRKN"];
 export const CRYPTO_CCY = "USD";
 export const cryptoId = (base) => `CRYPTO:${String(base || "").toUpperCase()}`;
 export const isCryptoId = (id) => String(id || "").startsWith("CRYPTO:");
@@ -506,6 +527,9 @@ export const KNOWN_UNSOURCED = [
   { match: ["difx", "nasdaqdubai", "nasdaqdxb"], name: "Nasdaq Dubai", why: "pas de carnet public" },
   { match: ["crypto", "trd", "tradias", "tradiasotc", "zerohash", "zerohashe"], name: "Crypto", why: "gré à gré, pas un carnet unique" },
   { match: ["bet", "xbse", "bucharest", "bvb"], name: "Bucharest Stock Exchange", why: "adaptateur non écrit" },
+  // Lightyear and Mexem write BUX for Budapesti Értéktőzsde (XBUD). That is
+  // not Bucharest (BET / XBSE) and not the Dutch broker of the same letters.
+  { match: ["bux", "xbud", "budapest"], name: "Budapest Stock Exchange", why: "adaptateur non écrit" },
   { match: ["csecy", "xcys", "cyprus"], name: "Cyprus Stock Exchange", why: "adaptateur non écrit" },
   { match: ["psecz", "xpra", "prague", "pse"], name: "Prague Stock Exchange", why: "adaptateur non écrit" },
   { match: ["bx", "bxswiss"], name: "BX Swiss", why: "adaptateur non écrit" },
@@ -716,6 +740,10 @@ const PAGE = {
           `${String(l.ticker).toUpperCase()}/USD`
         )}`
       : "https://docs.alpaca.markets/docs/crypto-trading",
+  kraken: (l) =>
+    l.ticker
+      ? `https://www.kraken.com/prices/${encodeURIComponent(String(l.ticker).toLowerCase())}`
+      : "https://www.kraken.com/prices",
   bmv: (l) =>
     l.ticker
       ? `https://www.bmv.com.mx/es/emisoras/estadisticas/${encodeURIComponent(

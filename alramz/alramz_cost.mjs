@@ -47,16 +47,24 @@
 // (0,0000206) rather than the stale one the card still prints, and the
 // substitution is said out loud in `confidence` rather than buried.
 //
-//    50// FINRA's TAF is the one American levy left out. The card prints a TOTAL with
-// no TAF line in it, and Al Ramz is an SCA broker reaching the US through a
-// correspondent, not a FINRA member billing its own members' fees. Inventing an
-// unpublished charge is worse for a model meant to be traceable than naming the
-// hole, so the hole is named: if it is passed through it adds 0,000195 $ a part
-// on the sale, 9,79 $ at most, which is two cents on the page's default ten
-// parts.
+//    50// The account's own commission table was read on 2026-09-18
+// (`getClientAccDetails`, no order). It is what the ticket widget uses, and it
+// corrects three things the card still prints.
 //
-// Tadawul is in the catalogue and on no card. Its 250 lines answer N/A on the
-// commission, not zero.
+// America carries 5 % VAT even though the asterisk is a UAE note: 0,20 %
+// becomes 0,21 % and the 10 $ floor becomes 10,50 $. The sell-side MARKET
+// line is 0,0000294 (0,000028 with VAT on top), not the stale 0,000008 and
+// not the SEC rate in force. The widget does
+// `max(notional × 0,21 %, 10,50) + notional × 0,0000294` on NYSE/NSDQ.
+// FINRA's TAF is still not a line.
+//
+// Tadawul is on that table: 0,155 % plus VAT (0,16275 %), no floor. Those
+// lines are no longer N/A on the commission. The book is still unsourced.
+//
+// The Gulf floors printed on the card (10 AED, 3,3 BHD, 1 OMR) are 0 on
+// this account. DIFX is a flat 3,15 AED (3 $ plus VAT), not the printed
+// percentage. ADX / DFM / Bahreïn / Mascate match the card's percentages
+// once VAT is applied.
 //    60//
 // What stays out of the number, in the remark, because it is not a function of
 // the trade: getting the money back out. A transfer costs 5 AED from the app and
@@ -76,9 +84,12 @@
 // out of the remark too: a bank transfer in is free, so it is a charge one picks
 // rather than one the account carries.
 //
-// No conversion fee is published for the dirham account that buys in dollars,
-//    70// which is a hole rather than a zero and is said in `confidence`. The FAQ also
-// sets a minimum order value of 200 AED: below it there is no trade to price.
+// Cash on this account is dirhams (250 AED). US buying power came back
+// 67,7506775 $, which is 250 / 3,69 exactly. The app lists the peg at 3,669.
+// There is no FX line on the ticket, so the 3,69 is a buying-power rate and
+// not a published conversion fee — it stays in `confidence`, not in `usd`.
+// The FAQ also sets a minimum order value of 200 AED: below it there is no
+// trade to price.
 //
 // Market spread comes from `parsed_json/spread.json` and is already a round
 // trip: the Rule 605 effective spread per share in America, basis points
@@ -156,13 +167,23 @@ const MIN_ORDER = { amount: 200, ccy: "AED" };
 // Per side, as the card breaks it down. `vat` says whether the UAE asterisk
 // applies at all; within a market it never applies to the SCA line.
 const RULE = {
-  dfm: { broker: 0.00125, market: 0.0005, sca: 0.0005, cds: 0.0005, min: 10, ccy: "AED", vat: true },
+  dfm: { broker: 0.00125, market: 0.0005, sca: 0.0005, cds: 0.0005, min: 0, ccy: "AED", vat: true },
   adx: { broker: 0.00125, market: 0.00025, sca: 0, cds: 0, min: 0, ccy: "AED", vat: true },
-  difx_usd: { broker: 0.0015, market: 0.0005, sca: 0, cds: 0.0005, min: 3, ccy: "USD", vat: true },
-  difx_aed: { broker: 0.00125, market: 0.0005, sca: 0, cds: 0.0005, min: 10, ccy: "AED", vat: true },
-  bahrain: { broker: 0.0022, market: 0.000605, sca: 0, cds: 0, min: 3.3, ccy: "BHD", vat: false },
-  muscat: { broker: 0.0025, market: 0.001, sca: 0, cds: 0, min: 1, ccy: "OMR", vat: false },
-  us: { broker: 0.002, market: 0, sca: 0, cds: 0, min: 10, ccy: "USD", vat: false },
+  difx_usd: { broker: 0, market: 0, sca: 0, cds: 0, min: 0, flat: 3.15, ccy: "AED", vat: false },
+  difx_aed: { broker: 0, market: 0, sca: 0, cds: 0, min: 0, flat: 3.15, ccy: "AED", vat: false },
+  bahrain: { broker: 0.0022, market: 0.000605, sca: 0, cds: 0, min: 0, ccy: "BHD", vat: false },
+  muscat: { broker: 0.0025, market: 0.001, sca: 0, cds: 0, min: 0, ccy: "OMR", vat: false },
+  tdwl: { broker: 0.00155, market: 0, sca: 0, cds: 0, min: 0, ccy: "SAR", vat: true },
+  us: { broker: 0.002, market: 0, sca: 0, cds: 0, min: 10, ccy: "USD", vat: true, sellAdd: 0.000028 },
+};
+
+const MEASURED = {
+  on: "2026-09-18",
+  how: "table getClientAccDetails + GetBuyingPower, aucun ordre",
+  cashAed: 250,
+  usBuyingPower: 67.7506775,
+  aedPerUsd: 3.69,
+  listedPeg: 3.669,
 };
 
 const TO_VENUES = {
@@ -216,6 +237,7 @@ export function feeMarketOf(exchange, mic, currency) {
   }
   if (code === "BAHRAIN" || code === "BHB" || code === "XBAH" || code === "BAHRAINBOURSE") return "bahrain";
   if (code === "MUSCAT" || code === "MSM" || code === "MSX" || code === "XMUS") return "muscat";
+  if (code === "TDWL" || code === "TADAWUL" || m === "XSAU") return "tdwl";
   return null;
 }
 
@@ -270,30 +292,35 @@ function coverage() {
  * One side of the trade, in the currency the card quotes that market in.
  * The floor is per transaction, so a round trip pays it twice.
  */
-export function commissionSide({ amount, market }) {
+export function commissionSide({ amount, market, side = "buy" }) {
   const rule = RULE[market];
   if (!rule) return null;
   if (amount == null || !Number.isFinite(Number(amount))) return null;
   const { vatable, plain, total } = ratesOf(rule);
-  const raw = Number(amount) * total;
+  const raw = Number(amount) * total + (rule.flat || 0);
   const base = Math.max(rule.min, raw);
   // The card does not say how a floored ticket splits between its four lines,
   // so the split of the rate is carried over to the floor. On every market but
   // DFM the SCA line is zero and the question does not arise.
   const taxedShare = total > 0 ? vatable / total : 0;
   const vat = rule.vat ? base * taxedShare * VAT : 0;
+  // NYSE/NSDQ only: the widget adds `notional × additionalMarketFees` after
+  // the floor. The live sell add is already 0,000028 before VAT.
+  const sellAdd = side === "sell" && rule.sellAdd ? Number(amount) * rule.sellAdd * (1 + (rule.vat ? VAT : 0)) : 0;
   // The share of the ticket Al Ramz keeps. The other three lines are named after
   // the exchange, the depository and the SCA, and no broker can forgive any of
   // them; the VAT on the broker line goes to the state but exists only because
   // the commission does. A floored ticket is split the same way as the rate, for
   // want of a card that says otherwise.
   const brokerShare = total > 0 ? rule.broker / total : 0;
-  const broker = base * brokerShare * (1 + (rule.vat ? VAT : 0));
+  const broker =
+    (rule.flat || 0) + (total > 0 ? base * brokerShare * (1 + (rule.vat ? VAT : 0)) : 0);
   return {
     raw,
     base,
     vat,
-    charged: base + vat,
+    sellAdd,
+    charged: base + vat + sellAdd,
     broker,
     currency: rule.ccy,
     floored: raw < rule.min,
@@ -308,15 +335,14 @@ export function commissionSide({ amount, market }) {
 // taking the money back out, which is not a function of the trade and which no
 // holder escapes.
 const REMARK =
-  `Withdrawal ${WITHDRAW.transfer} ${WITHDRAW.ccy} by transfer, ` +
-  `${WITHDRAW.crossBorder} ${WITHDRAW.ccy} across a border (VAT on top).`;
+  `Withdrawal ${WITHDRAW.crossBorder} ${WITHDRAW.ccy} across a border (VAT on top).`;
 
 /**
  * The whole bill for buying `shares` at `price` and selling them straight back.
  * `usd` is the number the page prints; `buy` and `sell` say what each side paid.
  */
 export function roundTrip({ etf, place, currency, shares, price, bp = null, perShare = null }) {
-  const base = { usd: null, etf, place, currency, onlineBuy: true, cashCurrency: "" };
+  const base = { usd: null, etf, place, currency, onlineBuy: true, cashCurrency: "AED" };
 
   if (!catalogue) {
     return {
@@ -370,7 +396,6 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     remark: REMARK,
   };
 
-  // Tadawul is reachable through the app and priced on no published card.
   if (!market || !rule) {
     return {
       ...answer,
@@ -414,8 +439,8 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
         ? marketPerShare * n
         : null;
 
-  const buyComm = commissionSide({ amount: notionalInRule, market });
-  const sellComm = commissionSide({ amount: notionalInRule, market });
+  const buyComm = commissionSide({ amount: notionalInRule, market, side: "buy" });
+  const sellComm = commissionSide({ amount: notionalInRule, market, side: "sell" });
   const buyCommUsd = buyComm ? dollars(buyComm.charged, buyComm.currency) : null;
   const sellCommUsd = sellComm ? dollars(sellComm.charged, sellComm.currency) : null;
 
@@ -427,12 +452,10 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const taxRate = Object.values(rates).reduce((s, r) => s + r, 0);
   const taxUsd = notionalUsd == null ? null : notionalUsd * taxRate;
 
-  // The card's sell-side MARKET line, at the rate the SEC charges now rather
-  // than the one printed in February 2025. A levy we cannot convert is a levy
-  // we cannot price: zero would say the sale escaped it.
-  const secUsd = american ? (notionalUsd == null ? null : notionalUsd * SEC_RATE) : 0;
+  // The live NYSE/NSDQ sell add, already inside `sellComm.charged`.
+  const sellAddUsd = sellComm?.sellAdd ? dollars(sellComm.sellAdd, sellComm.currency) : 0;
 
-  const usd = plus(bookUsd, buyCommUsd, sellCommUsd, taxUsd, secUsd);
+  const usd = plus(bookUsd, buyCommUsd, sellCommUsd, taxUsd);
   // What the broker keeps, told apart from the total because the page prints the
   // two side by side. A free trade, a discount, a plan waives a commission and
   // nothing else: the book belongs to whoever quoted it, the transaction taxes
@@ -494,14 +517,14 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
             currency: sellComm.currency,
           }
         : null,
-      sec: finite(secUsd, 6),
+      sec: finite(sellAddUsd, 6),
     },
     parts: {
       marché: finite(bookUsd, 6),
       commission: finite(plus(buyCommUsd, sellCommUsd), 6),
       tva: rule.vat ? finite(plus(dollars(buyComm?.vat, rule.ccy), dollars(sellComm?.vat, rule.ccy)), 6) : 0,
       taxes: finite(taxUsd, 6),
-      réglementaire: american ? finite(secUsd, 6) : 0,
+      réglementaire: american ? finite(sellAddUsd, 6) : 0,
     },
     tax,
     commission: {
@@ -589,15 +612,11 @@ function confidenceOf({
   }
   if (american) {
     said.push(
-      `la carte porte une ligne MARKET de ${CARD_SELL_LEVY} à la vente et zéro à l'achat : c'est la taxe SEC, ` +
-        `et ${CARD_SELL_LEVY} était son taux jusqu'en mai 2024. Facturée ici au taux en vigueur ${SEC_RATE}, ` +
-        `soit ${Number(((SEC_RATE - CARD_SELL_LEVY) * 1e4).toPrecision(2))} bp de plus que ce que la carte imprime`
+      `ticket US lu le ${MEASURED.on} sur la table du compte : ${(100 * rule.broker * (1 + VAT)).toFixed(2)} % ` +
+        `(0,20 % + TVA) plancher ${rule.min * (1 + VAT)} $, plus ${rule.sellAdd * (1 + VAT)} à la vente — ` +
+        `la carte imprime encore ${CARD_SELL_LEVY} et un plancher de 10 $ hors TVA`
     );
-    said.push(
-      `la TAF FINRA n'est sur aucune ligne de la carte et n'est pas facturée ici — si elle est répercutée, ` +
-        `elle ajoute ${TAF_PER_SHARE} $ par part à la vente, ${TAF_CAP} $ au plus, soit ` +
-        `${Number((TAF_PER_SHARE * n).toPrecision(2))} $ à ${n} parts`
-    );
+    said.push(`la TAF FINRA n'est sur aucune ligne de la table et n'est pas facturée ici`);
   }
   if (taxRate) said.push(`taxe à l'achat ${(100 * taxRate).toFixed(2)} % du montant`);
   if (marketBp != null) said.push(`carnet publié ${Number(marketBp.toPrecision(4))} bp, aller-retour`);
@@ -619,8 +638,9 @@ function confidenceOf({
     );
   }
   said.push(
-    `aucun frais de conversion n'est publié pour un compte en dirhams qui achète en dollars : ` +
-      `c'est un trou et non un zéro, et il ne peut qu'augmenter le total américain`
+    `trésorerie en dirhams : ${MEASURED.cashAed} AED donnaient ${MEASURED.usBuyingPower} $ de pouvoir d'achat US ` +
+      `le ${MEASURED.on}, soit ${MEASURED.aedPerUsd} AED/$ contre un peg affiché à ${MEASURED.listedPeg} — ` +
+      `pas de ligne FX sur le ticket, donc ce taux reste hors du total`
   );
   said.push(
     `hors total, barème de services du ${SCHEDULE.servicesUpdated} : le retrait coûte ` +
@@ -640,7 +660,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   };
 
   if (process.argv.includes("--schedule")) {
-    console.log(JSON.stringify({ ...SCHEDULE, rules: RULE, account: { withdraw: WITHDRAW, cardFunding: CARD_FUNDING }, coverage: coverage() }, null, 2));
+    console.log(JSON.stringify({ ...SCHEDULE, rules: RULE, measured: MEASURED, account: { withdraw: WITHDRAW, cardFunding: CARD_FUNDING }, coverage: coverage() }, null, 2));
     process.exit(0);
   }
 

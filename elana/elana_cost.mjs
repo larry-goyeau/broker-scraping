@@ -64,7 +64,7 @@
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
 import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
 const CATALOGUE = new URL("elana-parsed.json", import.meta.url);
@@ -204,8 +204,8 @@ export function feeMarketOf(row, mic) {
   return null;
 }
 
-function remarkOf() {
-  return "Custody 0.1%/year.\nFX 0.5% if converted.";
+function remarkOf(currency) {
+  return `Custody 0.1%/year.\n${fxRemark("0.5", currency)}`;
 }
 
 /**
@@ -436,7 +436,7 @@ export function roundTrip({
     tax,
     fx: fxNote(listing.currency),
     fxIfConverted: 0,
-    remark: remarkOf(),
+    remark: remarkOf(listing.currency),
   };
 
   const basis =

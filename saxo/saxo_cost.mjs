@@ -17,9 +17,16 @@
 //   US OTC (Pink)          0.015 $/share, min 1 $, max 25 $
 //   Toronto                0.08 %, min 5 CAD
 //   TSX Venture            0.015 CAD/share, min 5 CAD, max 25 CAD
-//   Xetra                  0.08 %, min 3 €
+//   Xetra (and Saxo FSE)   0.08 %, min 3 €
+//   Frankfurt floor (FFT)  0.08 %, min 5 €
 //   Euronext               0.08 %, min 2 €
+//   Luxembourg             0.08 %, min 2 €
 //   London                 0.08 %, min 3 £
+//   LSE IOB                0.08 %, min 3 $
+//   Oslo / Growth Oslo     0.08 %, min 10 NOK
+//   Warsaw                 0.12 %, min 10 PLN
+//   Prague                 0.25 %, min 75 CZK
+//   Bursa Malaysia         0.20 %, min 50 MYR
 //   Milan                  0.08 %, min 3 €
 //   SIX                    0.08 %, min 3 CHF
 //   Copenhague             0.08 %, min 10 DKK
@@ -47,11 +54,11 @@
 // Two traps in Saxo's own codes. `TSE` is Toronto and `TSX` is TSX
 // Venture, the reverse of what the letters suggest and of what
 // `venues.mjs` resolves both to (XTSE); the fee market is read off
-// Saxo's code, not off the MIC. And `FSE` is the Frankfurt floor
-// (XFRA), not Xetra: Saxo's table names only Deutsche Börse (XETRA),
-// so the floor answers N/A rather than borrow the 3 € line. Same for
-// Oslo, Varsovie, Prague, Luxembourg, Bursa Malaysia and the LSE
-// International Order Book.
+// Saxo's code, not off the MIC. `FSE` is Xetra (symbol :xetr, 3 €):
+// the printed table's Deutsche Börse line, not the floor. `FFT` is
+// the floor (XFRA, 5 €). Oslo, Euronext Growth Oslo, Varsovie,
+// Prague, Luxembourg, Bursa Malaysia and the LSE IOB have no printed
+// Classic row; their tickets were read on SaxoTrader 2026-09-17.
 //
 // Stamp / FTT come from the tax map; failing that, the UK 0.5 %, Irish
 // 1 % and Hong Kong 0.1 % that Saxo's taxation-by-market page prints.
@@ -75,7 +82,7 @@
 import fs from "node:fs";
 import { VENUES, listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
 import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
 const CATALOGUE = new URL("saxo-parsed.json", import.meta.url);
@@ -88,6 +95,7 @@ const SCHEDULE = {
   fr: "https://www.home.saxo/fr-fr/rates-and-conditions/stocks/commissions",
   readOn: "2026-09-16",
   previouslyRead: "2026-09-13",
+  ticketOn: "2026-09-17",
   entity: "Saxo Bank A/S (DK) et ses filiales",
   catalogueFrom: "saxoinvestor.fr",
 };
@@ -145,8 +153,15 @@ const RULE = {
     minCcy: "CAD",
   },
   xetr: pct(LADDER, 3, "EUR"),
+  xfra: pct(LADDER, 5, "EUR"),
   euronext: pct(LADDER, 2, "EUR"),
   lse: pct(LADDER, 3, "GBP"),
+  lseIntl: pct(LADDER, 3, "USD"),
+  ose: pct(LADDER, 10, "NOK"),
+  wse: pct({ classic: 0.0012, platinum: null, vip: null }, 10, "PLN"),
+  pra: pct({ classic: 0.0025, platinum: null, vip: null }, 75, "CZK"),
+  lux: pct(LADDER, 2, "EUR"),
+  malay: pct({ classic: 0.002, platinum: null, vip: null }, 50, "MYR"),
   mil: pct(LADDER, 3, "EUR"),
   six: pct(LADDER, 3, "CHF"),
   cph: pct(LADDER, 10, "DKK"),
@@ -163,17 +178,8 @@ const RULE = {
   asx: pct(LADDER, 3, "AUD"),
 };
 
-const NO_LINE = {
-  FSE: "la criée de Francfort",
-  FFT: "la criée de Francfort",
-  OSE: "Oslo Børs",
-  EGO: "Euronext Growth Oslo",
-  WSE: "la Bourse de Varsovie",
-  PRA: "la Bourse de Prague",
-  LUX: "la Bourse de Luxembourg",
-  MALAY: "Bursa Malaysia",
-  LSE_INTL: "l'International Order Book de Londres",
-};
+const NO_LINE = {};
+const TICKETED = new Set(["xfra", "ose", "wse", "pra", "lux", "malay", "lseIntl"]);
 
 const CUSTODY_DEFAULT = { classic: 0.0015, platinum: 0.0012, vip: 0.0009 };
 const CUSTODY = {
@@ -258,6 +264,14 @@ export function feeMarketOf(row, mic) {
   if (raw === "TSE") return "tsx";
   if (raw === "TSX") return "tsxv";
   if (raw === "OOTC" || /PINK|OTCMKTS/.test(flat)) return "otc";
+  if (raw === "FSE") return "xetr";
+  if (raw === "FFT") return "xfra";
+  if (raw === "OSE" || raw === "EGO") return "ose";
+  if (raw === "WSE") return "wse";
+  if (raw === "PRA") return "pra";
+  if (raw === "LUX") return "lux";
+  if (raw === "MALAY") return "malay";
+  if (raw === "LSE_INTL") return "lseIntl";
 
   if (US_MICS.has(m) || ["NASDAQ", "NYSE", "AMEX", "CBOE", "NSC", "BATSBZX"].includes(flat)) {
     return "us";
@@ -285,7 +299,7 @@ export function feeMarketOf(row, mic) {
   return null;
 }
 
-function remarkOf({ plan, nat, adr }) {
+function remarkOf({ plan, nat, adr, currency }) {
   const lines = [];
   const custody = custodyOf(nat, plan);
   if (custody.rate) {
@@ -297,7 +311,7 @@ function remarkOf({ plan, nat, adr }) {
     );
   }
   const fx = fxOf(nat, plan);
-  if (fx) lines.push(`FX ${Number((fx * 100).toPrecision(3))}% if converted.`);
+  if (fx) lines.push(fxRemark(Number((fx * 100).toPrecision(3)), currency));
   if (adr) lines.push("ADR 0.01–0.05 $/share (holding).");
   return lines.join("\n");
 }
@@ -465,7 +479,7 @@ export function roundTrip({
       ...answer,
       listing,
       cashCurrency: listing.currency,
-      remark: remarkOf({ plan: picked, nat, adr: listing.adr }),
+      remark: remarkOf({ plan: picked, nat, adr: listing.adr, currency: listing.currency }),
       why: unpriced
         ? `${unpriced} n'a pas de ligne au barème Saxo : le tarif n'est lisible que dans le ticket`
         : `${listing.brokerExchange || listing.exchange} n'a pas de palier publié chez Saxo`,
@@ -496,11 +510,13 @@ export function roundTrip({
     feeMarket: market,
     cashCurrency: listing.currency,
     onlineBuy: true,
-    remark: remarkOf({ plan: picked, nat, adr: listing.adr }),
+    remark: remarkOf({ plan: picked, nat, adr: listing.adr, currency: listing.currency }),
     bp: marketBp,
     perShare: marketPerShare,
     url: leaf?.url ?? SCHEDULE.source,
-    basis: `barème Saxo ${picked.label}, palier ${market}, relu le ${SCHEDULE.readOn}`,
+    basis: TICKETED.has(market)
+      ? `ticket SaxoTrader ${picked.label}, palier ${market}, relu le ${SCHEDULE.ticketOn}`
+      : `barème Saxo ${picked.label}, palier ${market}, relu le ${SCHEDULE.readOn}`,
     tax,
     commission: {
       kind: rule.kind,
@@ -640,8 +656,11 @@ function confidenceOf({
   const said = [];
   const rate = rateOf(rule, picked);
   said.push(
-    `Saxo ${picked.label}, palier ${market}, barème relu le ${SCHEDULE.readOn} ` +
-      `(inchangé depuis le ${SCHEDULE.previouslyRead}, table AU identique)`
+    TICKETED.has(market)
+      ? `Saxo ${picked.label}, palier ${market}, ticket SaxoTrader relu le ${SCHEDULE.ticketOn} ` +
+        `(absent de la table publiée relue le ${SCHEDULE.readOn})`
+      : `Saxo ${picked.label}, palier ${market}, barème relu le ${SCHEDULE.readOn} ` +
+        `(inchangé depuis le ${SCHEDULE.previouslyRead}, table AU identique)`
   );
   if (rule.kind === "perShare") {
     said.push(

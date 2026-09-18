@@ -10,7 +10,8 @@
 //   usdPer("EUR")       → dollars per euro
 //
 // `GBX` is a penny: one-hundredth of a pound. `AED` is the UAE peg, which the
-// ECB does not print.
+// ECB does not print. `EGP` is the Central Bank of Egypt mid of the same day
+// (buy 50.8606 / sell 50.9606 on 2026-09-07).
 
 export const QUOTE = "USD";
 export const AS_OF = "2026-09-07";
@@ -53,6 +54,8 @@ const FOREIGN_PER_USD = {
   AED: 3.6725,
   BHD: 0.376,
   OMR: 0.3845,
+  // CBE mid, not an ECB print. Same day as AS_OF.
+  EGP: 50.9106,
 };
 
 function keyOf(currency) {
@@ -75,4 +78,20 @@ export function toUsd(amount, currency) {
   const px = usdPer(currency);
   if (px == null || amount == null || !Number.isFinite(Number(amount))) return null;
   return Number(amount) * px;
+}
+
+export function listingCash(currency) {
+  const key = keyOf(currency);
+  if (key === "GBX") return "GBP";
+  return key || "";
+}
+
+/** One-way FX in a remark: the rate, and only when cash is not the instrument. */
+export function fxRemark(pctLabel, currency, extra = "") {
+  const ccy = listingCash(currency);
+  const label = String(pctLabel ?? "").replace(/\s*%$/, "");
+  const tail = extra ? ` ${extra}` : "";
+  const vs = ccy || "listing";
+  if (!label) return `FX when cash ≠ ${vs}.`;
+  return `FX ${label}%${tail} when cash ≠ ${vs}.`;
 }

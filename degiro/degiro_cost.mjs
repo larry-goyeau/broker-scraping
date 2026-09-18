@@ -302,7 +302,7 @@ function coverage() {
 /**
  * The whole bill for buying `shares` at `price` (or putting `amount` into a
  * coin) and selling straight back. `usd` is the number the page prints;
- * `brokerFees` is the DEGIRO ticket, not AutoFX or the stamp.
+ * `brokerFees` is the DEGIRO ticket and AutoFX. Stamp stays out.
  */
 export function roundTrip({ etf, place, currency, shares, price, amount, bp = null, perShare = null }) {
   const answer = {
@@ -430,14 +430,14 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
   const sell = commissionSide({ row: m.row, amountEur: notionalEur });
   const buyUsd = buy ? dollars(buy.charged, "EUR") : null;
   const sellUsd = sell ? dollars(sell.charged, "EUR") : null;
-  const brokerFees = plus(buyUsd, sellUsd);
+  const fxUsd = fxPct && notionalUsd != null ? notionalUsd * fxPct * 2 : 0;
+  const brokerFees = plus(buyUsd, sellUsd, fxUsd);
 
   const taxUsd = crypto || notionalUsd == null ? (crypto ? 0 : null) : notionalUsd * taxPct;
-  const fxUsd = fxPct && notionalUsd != null ? notionalUsd * fxPct * 2 : 0;
   const levy = levyEach({ listing, notional, currency: listing.currency });
   const ptmUsd = levy.ptm == null ? null : dollars((levy.ptm || 0) * 2, levy.ptmCcy || "GBP") ?? 0;
 
-  const usd = plus(bookUsd, brokerFees, taxUsd, fxUsd, ptmUsd);
+  const usd = plus(bookUsd, brokerFees, taxUsd, ptmUsd);
 
   return {
     ...shared,

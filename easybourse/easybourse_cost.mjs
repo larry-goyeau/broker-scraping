@@ -475,16 +475,16 @@ export function roundTrip({
   const sell = commissionSide({ amountEur: notionalEur, plan: picked.id, market, pea });
   const buyUsd = buy ? dollars(buy.charged, "EUR") : null;
   const sellUsd = sell ? dollars(sell.charged, "EUR") : null;
-  const brokerFees = plus(buyUsd, sellUsd);
+  const fxUsd = fxPct && notionalUsd != null ? notionalUsd * fxPct * 2 : 0;
+  const brokerFees = plus(buyUsd, sellUsd, fxUsd);
 
   const taxUsd = notionalUsd == null ? null : notionalUsd * taxPct;
-  const fxUsd = fxPct && notionalUsd != null ? notionalUsd * fxPct * 2 : 0;
   const secUsd = american ? (notionalUsd == null ? null : notionalUsd * SEC_RATE) : 0;
   const tafUsd = american ? Math.min(TAF_CAP, TAF_PER_SHARE * n) : 0;
   const levy = levyEach({ listing, notional, currency: listing.currency });
   const ptmUsd = levy.ptm == null ? null : dollars((levy.ptm || 0) * 2, levy.ptmCcy || "GBP") ?? 0;
 
-  const usd = plus(bookUsd, brokerFees, taxUsd, fxUsd, secUsd, tafUsd, ptmUsd);
+  const usd = plus(bookUsd, brokerFees, taxUsd, secUsd, tafUsd, ptmUsd);
 
   return {
     ...shared,

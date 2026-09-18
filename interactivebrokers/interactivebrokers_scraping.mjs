@@ -244,6 +244,7 @@ if (!fresh && fs.existsSync(outputPath)) {
     const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
     if (Array.isArray(existing)) {
       for (const entry of existing) {
+        if (sanctionedListing(entry?.isin || entry?.query, entry?.exchange)) continue;
         results.push(entry);
         if (entry?.ticker) seen.add(entryKey(entry));
       }
@@ -506,8 +507,17 @@ async function readInfo(conid) {
   return unwrapInfo(answer.json, conid);
 }
 
-const RESTRICTED_NOTICE =
-  /KID|Trading Restricted|not available|cannot be traded|Retail clients can trade packaged/i;
+const KID_NOTICE = /KID|Retail clients can trade packaged/i;
+const CLOSE_ONLY_NOTICE = /only closing orders|no opening trade|sanctions/i;
+
+function closeOnlyVenue(listingExchange) {
+  return /\.EXPERT\b/i.test(String(listingExchange || ""));
+}
+
+function sanctionedListing(isin, exchange) {
+  if (/^RU/i.test(String(isin || ""))) return true;
+  return String(exchange || "").toUpperCase() === "MOEX";
+}
 
 // A US-domiciled fund publishes no KID, and PRIIPs leaves European retail
 // clients unable to buy one. A non-EU resident still can. IBKR quotes those
@@ -519,9 +529,13 @@ const RESTRICTED_NOTICE =
 // land a beat before the notice, so a price is not treated as "unrestricted"
 // until a couple of extra snapshots have had a chance to carry 7183. Listings
 // the snapshot never settles on are left unflagged rather than guessed at.
-async function tradingRestricted(conids) {
+//
+// PINK.EXPERT (and 7183 "only closing orders") is close-only: dropped, not
+// flagged as a residency rule.
+async function tradingNotices(conids) {
   const pending = new Set(conids.filter(Boolean).map(String));
-  const status = new Map();
+  const kid = new Map();
+  const closeOnly = new Map();
   const quotedAt = new Map();
 
   for (let attempt = 0; attempt < 10 && pending.size > 0; attempt += 1) {
@@ -535,7 +549,9 @@ async function tradingRestricted(conids) {
 
       const notice = (row["7183"] || "").toString();
       if (notice) {
-        status.set(conid, RESTRICTED_NOTICE.test(notice));
+        const skip = CLOSE_ONLY_NOTICE.test(notice);
+        closeOnly.set(conid, skip);
+        kid.set(conid, !skip && KID_NOTICE.test(notice));
         pending.delete(conid);
         continue;
       }
@@ -543,7 +559,8 @@ async function tradingRestricted(conids) {
       if (row["31"] !== undefined || row["6509"] !== undefined) {
         if (!quotedAt.has(conid)) quotedAt.set(conid, attempt);
         if (attempt - quotedAt.get(conid) >= 2) {
-          status.set(conid, false);
+          kid.set(conid, false);
+          closeOnly.set(conid, false);
           pending.delete(conid);
         }
       }
@@ -552,8 +569,11 @@ async function tradingRestricted(conids) {
     if (pending.size > 0) await sleep(300);
   }
 
-  for (const conid of pending) status.set(conid, false);
-  return status;
+  for (const conid of pending) {
+    kid.set(conid, false);
+    closeOnly.set(conid, false);
+  }
+  return { kid, closeOnly };
 }
 
 function wantedHits(payload, job) {
@@ -580,17 +600,22 @@ async function scrapeJob(job) {
   const hits = wantedHits(found.hits, job);
   if (hits.length === 0) return { silent: false, rows: [] };
 
-  const restrictions = await tradingRestricted(hits.map((hit) => String(hit.conid)));
+  const notices = await tradingNotices(hits.map((hit) => String(hit.conid)));
   const infos = await Promise.all(hits.map((hit) => readInfo(hit.conid)));
   const rows = [];
+  let readable = 0;
 
   for (const [index, hit] of hits.entries()) {
+    const conid = String(hit.conid);
     const info = infos[index] || {};
     const ticker = (info.ticker || hit.symbol || "").toUpperCase();
     const name = listingName(hit) || normalize(info.companyName || "");
     const exchange = listingVenue(hit, info);
     const currency = info.currency || null;
     if (!ticker || !exchange || !name) continue;
+    readable += 1;
+    if (closeOnlyVenue(info.listingExchange) || notices.closeOnly.get(conid)) continue;
+    if (sanctionedListing(job.shelf === "isin" ? job.query : "", exchange)) continue;
 
     const type = listingType(name, job.kind);
     rows.push({
@@ -600,13 +625,13 @@ async function scrapeJob(job) {
       currency,
       type,
       raw: [hit.companyHeader || hit.companyName || name, exchange].filter(Boolean).join(" "),
-      restricted: restrictions.get(String(hit.conid)) === true,
+      restricted: notices.kid.get(conid) === true,
     });
   }
 
   // Contracts came back but every info read failed: that is the bridge, not
   // an empty catalogue. Retry the job instead of recording a miss.
-  if (rows.length === 0) {
+  if (readable === 0) {
     return { silent: true, rows: [], reason: "listings unreadable" };
   }
 
@@ -674,6 +699,12 @@ async function runJob(queryIndex, job) {
       isin: job.shelf === "isin" ? job.query : "",
     };
     if (row.restricted) entry.nonEuResident = true;
+    if (
+      String(row.exchange || "").toUpperCase() === "NSE" &&
+      (!row.currency || String(row.currency).toUpperCase() === "INR")
+    ) {
+      entry.indianOnly = true;
+    }
 
     const key = entryKey(entry);
     if (seen.has(key)) continue;
@@ -682,6 +713,9 @@ async function runJob(queryIndex, job) {
 
     if (row.restricted) {
       console.error(`  ${row.ticker}@${row.exchange}: non-EU resident (no KID)`);
+    }
+    if (entry.indianOnly) {
+      console.error(`  ${row.ticker}@${row.exchange}: Indian-resident only`);
     }
   }
 
@@ -704,15 +738,20 @@ await Promise.all(
 
 const byType = new Map();
 let nonEu = 0;
+let indianOnly = 0;
 for (const row of results) {
   byType.set(row.type, (byType.get(row.type) || 0) + 1);
   if (row.nonEuResident) nonEu += 1;
+  if (row.indianOnly) indianOnly += 1;
 }
 console.error(
   `${results.length} listed (${[...byType].map(([type, count]) => `${count} ${type}`).join(", ")})`
 );
 if (nonEu > 0) {
   console.error(`${nonEu} of them are non-EU-resident (no KID for European retail)`);
+}
+if (indianOnly > 0) {
+  console.error(`${indianOnly} of them are Indian-resident only (NSE cash)`);
 }
 
 await browser.disconnect();

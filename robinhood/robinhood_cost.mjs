@@ -176,7 +176,7 @@
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
 import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../fx.mjs";
 import { EEA } from "../accepted.mjs";
 
 const CATALOGUE = new URL("robinhood-parsed.json", import.meta.url);
@@ -512,6 +512,8 @@ export function roundTrip({
     mic: m.venue?.mic ?? null,
     currency: m.row.currency || "USD",
     unsourced: m.unsourced,
+    broker: "robinhood",
+    ticker: m.row.ticker,
   });
   const listing = {
     isin: String(m.row.isin || "").toUpperCase(),
@@ -552,7 +554,7 @@ export function roundTrip({
     return {
       ...answer,
       why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
-      remark: remarkOf({ who, isa, adr, ukFx }),
+      remark: remarkOf({ who, isa, adr, ukFx, currency: listing.currency }),
     };
   }
 
@@ -621,7 +623,7 @@ export function roundTrip({
     // one is, unless the account is an ISA.
     fxIfConverted: who === "uk" && !isa ? 2 * ukFx : null,
     measured: european ? EU_TOKEN_CHECK : null,
-    remark: remarkOf({ who, isa, adr, ukFx }),
+    remark: remarkOf({ who, isa, adr, ukFx, currency: listing.currency }),
     confidence: confidenceOf({
       who,
       listing,
@@ -758,16 +760,17 @@ function euCryptoTrip({ answer, amount, coin }) {
   };
 }
 
-function remarkOf({ who, isa, adr, ukFx }) {
+function remarkOf({ who, isa, adr, ukFx, currency }) {
   // Le compte est en euros et rien d'autre, donc la conversion n'est pas une
   // option à signaler : elle est dans le total de tout ordre. Sa composition — le
   // taux facturé et l'écart mesuré entre les deux taux — reste dans `confidence`.
   if (who === "eu") return "";
   if (who === "uk") {
-    return isa
-      ? `FX ${(ukFx * 100).toFixed(2)}% each way, unavoidable in an ISA: in the total.`
-      : `FX ${(ukFx * 100).toFixed(2)}% each way if converted.` +
-          (adr ? "\nOff-exchange ADR: some carry a depositary bank custody fee." : "");
+    if (isa) return adr ? "Off-exchange ADR: some carry a depositary bank custody fee." : "";
+    return (
+      `${fxRemark((ukFx * 100).toFixed(2), currency)}` +
+      (adr ? "\nOff-exchange ADR: some carry a depositary bank custody fee." : "")
+    );
   }
   // Les deux dispenses sont déjà dans le total, qui tombe à zéro de lui-même sous
   // les seuils : les répéter ici reviendrait à facturer deux fois la même lecture.

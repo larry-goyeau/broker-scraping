@@ -1,0 +1,139 @@
+{
+  "before": {
+    "BASE": {
+      "bal": 158.4437,
+      "settled": 158.4437
+    },
+    "EUR": {
+      "bal": 126.32,
+      "settled": 126.32
+    },
+    "USD": {
+      "bal": 36.87,
+      "settled": 36.87
+    }
+  },
+  "fxPreview": {
+    "amount": {
+      "amount": "43.61 PLN",
+      "commission": "1.74 EUR",
+      "total": "36.00 PLN"
+    },
+    "equity": null,
+    "initial": null,
+    "maintenance": null,
+    "position": null,
+    "warn": "Important Note: Your order size is below the EUR 20000 IdealPro minimum.\nYou may cancel and increase the order size if you wish to route to IdealPro\nor select the Transmit button to route as an odd lot order.\nNote that odd lot orders are not guaranteed executions at the IdealPro displayed quotes.",
+    "error": null,
+    "warns": [
+      "Important Note: Your order size is below the EUR 20000 IdealPro minimum.\nYou may cancel and increase the order size if you wish to route to IdealPro\nor select the Transmit button to route as an odd lot order.\nNote that odd lot orders are not guaranteed executions at the IdealPro displayed quotes.",
+      "20/You are trying to submit an order without having market data for this instrument. \nMEXEM strongly recommends against this kind of blind trading which may result in \nerroneous or unexpected trades.",
+      "22/<h4>Market Order Confirmation</h4>&nbsp;&nbsp;&nbsp;A Market Order is an instruction to trade your order at any available price and presents significant risk of trading at an undesirable price. Large market orders may also be split into smaller orders and traded over time to minimize impacting and disrupting prices.",
+      "25/<h4>Confirm Mandatory Cap Price</h4>To avoid trading at a price that is not consistent with a fair and orderly market, Clearing Broker may set a cap (for a buy order) or floor (for a sell order). THIS MAY CAUSE AN ORDER THAT WOULD OTHERWISE BE MARKETABLE NOT TO BE TRADED."
+    ],
+    "accruedInterest": null,
+    "currencies": [
+      {
+        "current": 126.32,
+        "currency": "EUR",
+        "after_trade": 116.32
+      },
+      {
+        "current": 0,
+        "currency": "PLN",
+        "after_trade": 43.617
+      }
+    ]
+  },
+  "fxPlaced": [
+    {
+      "order_id": "689668359",
+      "order_status": "Submitted",
+      "warning_message": "399",
+      "text": "Order Message:\nSELL 10 EUR.PLN Forex\nWarning: Your order size is below the EUR 20000 IdealPro minimum and will be routed as an odd lot order.",
+      "encrypt_message": "1"
+    }
+  ],
+  "afterFx": {
+    "BASE": {
+      "bal": 158.4437,
+      "settled": 158.4437
+    },
+    "EUR": {
+      "bal": 126.32,
+      "settled": 126.32
+    },
+    "USD": {
+      "bal": 36.87,
+      "settled": 36.87
+    }
+  },
+  "price": 9.176,
+  "stockPreview": {
+    "amount": {
+      "amount": "9.18 PLN (1 Shares)",
+      "commission": "—",
+      "total": "—"
+    },
+    "equity": {
+      "current": "158",
+      "change": "-7",
+      "after": "152"
+    },
+    "initial": {
+      "current": "0",
+      "change": "0",
+      "after": "0"
+    },
+    "maintenance": {
+      "current": "0",
+      "change": "0",
+      "after": "0"
+    },
+    "position": {
+      "current": "0",
+      "change": "1",
+      "after": "1"
+    },
+    "warn": "20/You are trying to submit an order without having market data for this instrument. \nMEXEM strongly recommends against this kind of blind trading which may result in \nerroneous or unexpected trades.",
+    "error": "CASH AVAILABLE: 0.00; CASH NEEDED FOR THIS ORDER AND OTHER PENDING ORDERS: 29.18; THERE IS 691.04 PLN CASH ACROSS ALL CURRENCIES; PLEASE CONSIDER CONVERTING FUNDS TO PLN AND TRYING ORDER AGAIN.",
+    "warns": [
+      "20/You are trying to submit an order without having market data for this instrument. \nMEXEM strongly recommends against this kind of blind trading which may result in \nerroneous or unexpected trades.",
+      "25/<h4>Confirm Mandatory Cap Price</h4>To avoid trading at a price that is not consistent with a fair and orderly market, Clearing Broker may set a cap (for a buy order) or floor (for a sell order). THIS MAY CAUSE AN ORDER THAT WOULD OTHERWISE BE MARKETABLE NOT TO BE TRADED."
+    ],
+    "errors": [
+      "CASH AVAILABLE: 0.00; CASH NEEDED FOR THIS ORDER AND OTHER PENDING ORDERS: 29.18; THERE IS 691.04 PLN CASH ACROSS ALL CURRENCIES; PLEASE CONSIDER CONVERTING FUNDS TO PLN AND TRYING ORDER AGAIN."
+    ],
+    "accruedInterest": null,
+    "action": "convert_from_base_currency",
+    "order_id": "029608d7.0001c0eb.6aab6a7c.0001",
+    "cqe": {
+      "query": {
+        "account_id": "U28294463",
+        "sec_type": "STK",
+        "order_currency": "PLN",
+        "exchange": "WSE",
+        "conid": "268960206",
+        "order_total": "9.176",
+        "order_id": "029608d7.0001c0eb.6aab6a7c.0001"
+      },
+      "request_method": "GET"
+    }
+  },
+  "stockPlaced": null,
+  "stockSold": null,
+  "after": {
+    "BASE": {
+      "bal": 158.4437,
+      "settled": 158.4437
+    },
+    "EUR": {
+      "bal": 126.32,
+      "settled": 126.32
+    },
+    "USD": {
+      "bal": 36.87,
+      "settled": 36.87
+    }
+  }
+}

@@ -77,7 +77,7 @@
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
 import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
 const CATALOGUE = new URL("questrade-parsed.json", import.meta.url);
@@ -314,7 +314,7 @@ export function roundTrip({
     fxIfConverted: FX_RATE * 2,
     overnight,
     directRoute: directRoute || null,
-    remark: remarkOf(),
+    remark: remarkOf(listing.currency),
     confidence: confidenceOf({
       market,
       leaf,
@@ -387,8 +387,8 @@ export function roundTrip({
 // The trip itself is fully in `usd`, so the remark carries the one real cost
 // that is not: the conversion, which prices moving cash between the two sides of
 // the account rather than buying and selling.
-function remarkOf() {
-  return `FX ${(FX_RATE * 100).toFixed(1)}% each way if the cash has to cross.`;
+function remarkOf(currency) {
+  return fxRemark((FX_RATE * 100).toFixed(1), currency);
 }
 
 function confidenceOf({ market, leaf, marketBp, marketPerShare, taxTotal, ecnEach, holdable, american, overnight, directRoute }) {

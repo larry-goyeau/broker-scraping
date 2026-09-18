@@ -1,0 +1,132 @@
+{
+  "cash": {
+    "BASE": {
+      "bal": 2075.7409,
+      "settled": 2075.7409
+    },
+    "EUR": {
+      "bal": 247,
+      "settled": 247
+    },
+    "USD": {
+      "bal": 2098.87,
+      "settled": 2098.87
+    }
+  },
+  "results": [
+    {
+      "id": "us_floor",
+      "symbol": "F",
+      "exchange": "NYSE",
+      "side": "BUY",
+      "quantity": 1,
+      "expect": "2 USD",
+      "conid": "9599491",
+      "company": "FORD MOTOR CO - NYSE",
+      "desc": "NYSE",
+      "price": 13.49,
+      "bid": 13.47,
+      "ask": 13.5,
+      "amount": {
+        "amount": "13.49 USD (1 Shares)",
+        "commission": "2 USD",
+        "total": "15.49 USD"
+      },
+      "error": null,
+      "warn": "If your order is not immediately executable, our systems may, depending on market conditions, reject your order if its limit price is more than the allowed amount away from the reference price at that time. If this happens, you will not receive a fill. This is a control designed to ensure that we comply with our regulatory obligations to avoid submitting disruptive orders to the marketplace."
+    },
+    {
+      "id": "us_250",
+      "symbol": "GNS",
+      "exchange": "AMEX",
+      "side": "BUY",
+      "quantity": 250,
+      "expect": "2.50 USD si 0,01 $/part",
+      "conid": "723442707",
+      "company": "GENIUS GROUP LTD - AMEX",
+      "desc": "AMEX",
+      "price": 0.1532,
+      "bid": 0.153,
+      "ask": 0.1535,
+      "amount": {
+        "amount": "38.30 USD (250 Shares)",
+        "commission": "2 USD",
+        "total": "40.30 USD"
+      },
+      "error": null,
+      "warn": "If your order is not immediately executable, our systems may, depending on market conditions, reject your order if its limit price is more than the allowed amount away from the reference price at that time. If this happens, you will not receive a fill. This is a control designed to ensure that we comply with our regulatory obligations to avoid submitting disruptive orders to the marketplace."
+    },
+    {
+      "id": "us_sell",
+      "symbol": "F",
+      "exchange": "NYSE",
+      "side": "SELL",
+      "quantity": 1,
+      "expect": "2 USD, plus SEC/TAF s'ils sont nommés",
+      "conid": "9599491",
+      "company": "FORD MOTOR CO - NYSE",
+      "desc": "NYSE",
+      "price": 13.49,
+      "bid": 13.47,
+      "ask": 13.5,
+      "amount": {
+        "amount": "13.49 USD (1 Shares)",
+        "commission": "2 USD",
+        "total": "11.49 USD"
+      },
+      "error": null,
+      "warn": "If your order is not immediately executable, our systems may, depending on market conditions, reject your order if its limit price is more than the allowed amount away from the reference price at that time. If this happens, you will not receive a fill. This is a control designed to ensure that we comply with our regulatory obligations to avoid submitting disruptive orders to the marketplace."
+    },
+    {
+      "id": "us_cap",
+      "symbol": "GNS",
+      "exchange": "AMEX",
+      "side": "BUY",
+      "quantity": 1500,
+      "expect": "1 % du notionnel si le plafond lie, sinon le plancher",
+      "conid": "723442707",
+      "company": "GENIUS GROUP LTD - AMEX",
+      "desc": "AMEX",
+      "price": 0.1532,
+      "bid": 0.153,
+      "ask": 0.1535,
+      "amount": {
+        "amount": "229.80 USD (1500 Shares)",
+        "commission": "2.30 USD",
+        "total": "232.10 USD"
+      },
+      "error": null,
+      "warn": "If your order is not immediately executable, our systems may, depending on market conditions, reject your order if its limit price is more than the allowed amount away from the reference price at that time. If this happens, you will not receive a fill. This is a control designed to ensure that we comply with our regulatory obligations to avoid submitting disruptive orders to the marketplace."
+    },
+    {
+      "id": "otc",
+      "symbol": "BBIG",
+      "exchange": "PINK",
+      "side": "BUY",
+      "quantity": 1,
+      "expect": "8,90 USD sous le dollar",
+      "conid": "630382760",
+      "company": "VINCO VENTURES INC  - PINK",
+      "desc": "PINK",
+      "price": 0.0032,
+      "bid": null,
+      "ask": null,
+      "amount": null,
+      "error": "No Trading Permission, Customer Ineligible; Ineligibility reasons: \nOnly closing orders are permitted in this instrument.",
+      "warn": null
+    },
+    {
+      "id": "ireland",
+      "symbol": "BIRG",
+      "exchange": "ISED",
+      "side": "BUY",
+      "quantity": 1,
+      "expect": "un chiffre, ou N/A confirmé",
+      "conid": "281402721",
+      "company": "BANK OF IRELAND GROUP PLC - ISED",
+      "desc": "ISED",
+      "price": null,
+      "error": "no price"
+    }
+  ]
+}

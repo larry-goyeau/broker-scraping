@@ -67,6 +67,20 @@ const FOLDER_NAME = {
   efocs: "EuroFinance",
   elana: "Elana Trading",
   siebert: "Siebert Financial",
+  sogotrade: "SogoTrade",
+  swissquote: "Swissquote",
+  thndr: "Thndr",
+  tiger: "Tiger Brokers",
+  traderepublic: "Trade Republic",
+  tradestation: "TradeStation",
+  tradeup: "TradeUP",
+  tradezero: "TradeZero",
+  tradier: "Tradier",
+  vested: "Vested Finance",
+  vivid: "Vivid Money",
+  webull: "Webull",
+  WHSelfInvest: "WH SelfInvest",
+  xtb: "XTB",
 };
 
 function metaFor(folder, list) {
@@ -765,6 +779,300 @@ const SCALABLE_PLANS = [
   { id: "prime", name: "Scalable PRIME+" },
 ];
 
+const TRADEREPUBLIC_PLANS = [
+  { id: "best", name: "Trade Republic Best" },
+  { id: "direct", name: "Trade Republic Direct" },
+];
+
+const TRADESTATION_PLANS = [
+  { id: "tier1", name: "TradeStation (Tier 1)" },
+  { id: "tier4", name: "TradeStation (Tier 4)" },
+  { id: "intl", name: "TradeStation (outside the US)" },
+];
+
+const TRADEUP_PLANS = [
+  { id: "us", name: "TradeUP" },
+  { id: "nra-us", name: "TradeUP (non-US, US address)" },
+  { id: "foreign", name: "TradeUP (non-US, foreign address)" },
+];
+
+function tradeupOpen(plan, nat) {
+  const n = String(nat || "").trim().toUpperCase();
+  if (!n) return true;
+  if (n === "US") return plan === "us";
+  return plan !== "us";
+}
+
+const TRADIER_PLANS = [
+  { id: "lite", name: "Tradier Lite" },
+  { id: "pro", name: "Tradier Pro" },
+  { id: "proplus", name: "Tradier Pro Plus" },
+];
+
+const VESTED_PLANS = [
+  { id: "basic", name: "Vested Basic" },
+  { id: "premium", name: "Vested Premium" },
+];
+
+const VIVID_PLANS = [
+  { id: "standard", name: "Vivid Standard" },
+  { id: "plus", name: "Vivid Plus" },
+  { id: "prime", name: "Vivid Prime" },
+];
+
+const WEBULL_PLANS = [
+  { id: "us", name: "Webull US" },
+  { id: "uk-go", name: "Webull UK Go" },
+  { id: "uk-meridian", name: "Webull UK Meridian" },
+  { id: "eu", name: "Webull Europe" },
+  { id: "sg", name: "Webull Singapore" },
+  { id: "ca", name: "Webull Canada" },
+  { id: "au", name: "Webull Australia" },
+  { id: "hk", name: "Webull Hong Kong" },
+];
+
+const WEBULL_EU = new Set([
+  "NL", "BE", "DK", "DE", "EE", "FI", "FR", "GR", "HU", "IE", "IT", "HR", "LV",
+  "LT", "LU", "NO", "AT", "PL", "PT", "RO", "SI", "SK", "ES", "CZ", "SE",
+]);
+
+function webullOpen(plan, nat) {
+  const n = String(nat || "").trim().toUpperCase();
+  if (!n) return true;
+  if (n === "US") return plan === "us";
+  if (n === "CA") return plan === "ca";
+  if (n === "GB") return plan === "uk-go" || plan === "uk-meridian";
+  if (n === "AU") return plan === "au";
+  if (n === "HK") return plan === "hk";
+  if (n === "SG") return plan === "sg";
+  if (WEBULL_EU.has(n)) return plan === "eu";
+  return false;
+}
+
+function collapseWebull(built) {
+  const groups = [];
+  for (const row of built) {
+    const hit = groups.find((g) => sameTripListings(g.listings, row.listings));
+    if (hit) hit.members.push(row);
+    else groups.push({ listings: row.listings, members: [row] });
+  }
+  return groups.map((g) => {
+    if (g.members.length === 1) return g.members[0];
+    const ids = g.members.map((m) => m.plan);
+    return {
+      ...g.members[0],
+      folder: `webull:${ids.join("-")}`,
+      family: "Webull",
+      name: g.members.map((m) => m.name).join(" / "),
+      plan: "",
+      planRank: 0,
+    };
+  });
+}
+
+const TRADEZERO_PLANS = [
+  { id: "tza", name: "TradeZero America" },
+  { id: "tzi", name: "TradeZero International" },
+  { id: "tzeu", name: "TradeZero Europe" },
+];
+
+function tradezeroOpen(plan, nat) {
+  const n = String(nat || "").trim().toUpperCase();
+  if (!n) return true;
+  if (n === "US") return plan === "tza";
+  if (EEA.includes(n)) return plan === "tzeu";
+  return plan === "tzi";
+}
+
+function collapseVivid(built) {
+  const groups = [];
+  for (const row of built) {
+    const hit = groups.find((g) => sameTripListings(g.listings, row.listings));
+    if (hit) hit.members.push(row);
+    else groups.push({ listings: row.listings, members: [row] });
+  }
+  return groups.map((g) => {
+    if (g.members.length === 1) return g.members[0];
+    const ids = g.members.map((m) => m.plan);
+    return {
+      ...g.members[0],
+      folder: `vivid:${ids.join("-")}`,
+      family: "Vivid Money",
+      name: g.members.map((m) => m.name).join(" / "),
+      plan: "",
+      planRank: 0,
+    };
+  });
+}
+
+function collapseVested(built) {
+  const groups = [];
+  for (const row of built) {
+    const hit = groups.find((g) => sameTripListings(g.listings, row.listings));
+    if (hit) hit.members.push(row);
+    else groups.push({ listings: row.listings, members: [row] });
+  }
+  return groups.map((g) => {
+    if (g.members.length === 1) return g.members[0];
+    const ids = g.members.map((m) => m.plan);
+    return {
+      ...g.members[0],
+      folder: `vested:${ids.join("-")}`,
+      family: "Vested Finance",
+      name: g.members.map((m) => m.name).join(" / "),
+      plan: "",
+      planRank: 0,
+    };
+  });
+}
+
+function collapseTradier(built) {
+  const groups = [];
+  for (const row of built) {
+    const hit = groups.find((g) => sameTripListings(g.listings, row.listings));
+    if (hit) hit.members.push(row);
+    else groups.push({ listings: row.listings, members: [row] });
+  }
+  return groups.map((g) => {
+    if (g.members.length === 1) return g.members[0];
+    const ids = g.members.map((m) => m.plan);
+    const paidOnly = ids.every((id) => id !== "lite");
+    return {
+      ...g.members[0],
+      folder: `tradier:${ids.join("-")}`,
+      family: "Tradier",
+      name: paidOnly ? "Tradier Pro" : g.members.map((m) => m.name).join(" / "),
+      plan: "",
+      planRank: 0,
+    };
+  });
+}
+
+function collapseTradezero(built) {
+  const groups = [];
+  for (const row of built) {
+    const hit = groups.find((g) => sameTripListings(g.listings, row.listings));
+    if (hit) hit.members.push(row);
+    else groups.push({ listings: row.listings, members: [row] });
+  }
+  return groups.map((g) => {
+    if (g.members.length === 1) return g.members[0];
+    const ids = g.members.map((m) => m.plan);
+    return {
+      ...g.members[0],
+      folder: `tradezero:${ids.join("-")}`,
+      family: "TradeZero",
+      name: g.members.length === TRADEZERO_PLANS.length ? "TradeZero" : g.members.map((m) => m.name).join(" / "),
+      plan: "",
+      planRank: 0,
+    };
+  });
+}
+
+function collapseTradeup(built) {
+  const groups = [];
+  for (const row of built) {
+    const hit = groups.find((g) => sameTripListings(g.listings, row.listings));
+    if (hit) hit.members.push(row);
+    else groups.push({ listings: row.listings, members: [row] });
+  }
+  return groups.map((g) => {
+    if (g.members.length === 1) return g.members[0];
+    const ids = g.members.map((m) => m.plan);
+    return {
+      ...g.members[0],
+      folder: `tradeup:${ids.join("-")}`,
+      family: "TradeUP",
+      name: g.members.length === TRADEUP_PLANS.length ? "TradeUP" : g.members.map((m) => m.name).join(" / "),
+      plan: "",
+      planRank: 0,
+    };
+  });
+}
+
+function collapseTradestation(built) {
+  const groups = [];
+  for (const row of built) {
+    const hit = groups.find((g) => sameTripListings(g.listings, row.listings));
+    if (hit) hit.members.push(row);
+    else groups.push({ listings: row.listings, members: [row] });
+  }
+  return groups.map((g) => {
+    if (g.members.length === 1) return g.members[0];
+    const ids = g.members.map((m) => m.plan);
+    const allUs = ids.every((id) => id !== "intl");
+    return {
+      ...g.members[0],
+      folder: `tradestation:${ids.join("-")}`,
+      family: "TradeStation",
+      name: allUs || g.members.length === TRADESTATION_PLANS.length ? "TradeStation" : g.members.map((m) => m.name).join(" / "),
+      plan: "",
+      planRank: 0,
+    };
+  });
+}
+
+function collapseTraderepublic(built) {
+  const groups = [];
+  for (const row of built) {
+    const hit = groups.find((g) => sameTripListings(g.listings, row.listings));
+    if (hit) hit.members.push(row);
+    else groups.push({ listings: row.listings, members: [row] });
+  }
+  return groups.map((g) => {
+    if (g.members.length === 1) return g.members[0];
+    return {
+      ...g.members[0],
+      folder: `traderepublic:${g.members.map((m) => m.folder.split(":")[1]).join("-")}`,
+      family: "Trade Republic",
+      name: "Trade Republic",
+      plan: "",
+      planRank: 0,
+    };
+  });
+}
+
+const SWISSQUOTE_PLANS = [
+  { id: "ch", name: "Swissquote" },
+  { id: "lu", name: "Swissquote Europe" },
+];
+
+const TIGER_PLANS = [
+  { id: "sg", name: "Tiger Brokers SG" },
+  { id: "au", name: "Tiger Brokers AU" },
+  { id: "hk", name: "Tiger Brokers HK" },
+  { id: "nz", name: "Tiger Brokers NZ" },
+];
+
+function tigerOpen(plan, nat) {
+  const n = String(nat || "").trim().toUpperCase();
+  if (!n) return true;
+  if (n === "AU") return plan === "au";
+  if (n === "NZ") return plan === "nz";
+  if (n === "HK") return plan === "hk";
+  return plan === "sg";
+}
+
+function collapseTiger(built) {
+  const groups = [];
+  for (const row of built) {
+    const hit = groups.find((g) => sameTripListings(g.listings, row.listings));
+    if (hit) hit.members.push(row);
+    else groups.push({ listings: row.listings, members: [row] });
+  }
+  return groups.map((g) => {
+    if (g.members.length === 1) return g.members[0];
+    return {
+      ...g.members[0],
+      folder: `tiger:${g.members.map((m) => m.folder.split(":")[1]).join("-")}`,
+      family: "Tiger Brokers",
+      name: g.members.length === TIGER_PLANS.length ? "Tiger Brokers" : g.members.map((m) => m.name).join(" / "),
+      plan: "",
+      planRank: 0,
+    };
+  });
+}
+
 const PLUM_PLANS = [
   { id: "basic", name: "Plum UK Basic" },
   { id: "plus", name: "Plum UK Plus" },
@@ -855,6 +1163,26 @@ function revolutHouse(row) {
   return /:uk(?:-|$)/.test(String(row.folder || "")) ? "uk" : "eu";
 }
 
+function collapseSwissquote(built) {
+  const groups = [];
+  for (const row of built) {
+    const hit = groups.find((g) => sameTripListings(g.listings, row.listings));
+    if (hit) hit.members.push(row);
+    else groups.push({ listings: row.listings, members: [row] });
+  }
+  return groups.map((g) => {
+    if (g.members.length === 1) return g.members[0];
+    return {
+      ...g.members[0],
+      folder: `swissquote:${g.members.map((m) => m.folder.split(":")[1]).join("-")}`,
+      family: "Swissquote",
+      name: "Swissquote",
+      plan: "",
+      planRank: 0,
+    };
+  });
+}
+
 function collapseScalable(built) {
   const groups = [];
   for (const row of built) {
@@ -877,22 +1205,62 @@ function collapseScalable(built) {
   });
 }
 
+const SAXO_PLAN_LABEL = { classic: "Classic", platinum: "Platinum", vip: "VIP" };
+
+function saxoName(planIds, allIds) {
+  const order = SAXO_PLANS.map((p) => p.id);
+  const ids = [...new Set(planIds)].sort((a, b) => order.indexOf(a) - order.indexOf(b));
+  if (ids.length === allIds.length) return "Saxo";
+  return `Saxo ${ids.map((id) => SAXO_PLAN_LABEL[id] || id).join(" / ")}`;
+}
+
 function collapseSaxo(built) {
-  const groups = [];
+  if (built.length <= 1) return built;
+  const allIds = built.map((r) => r.plan);
+  const places = new Map();
   for (const row of built) {
-    const hit = groups.find((g) => sameCostListings(g.listings, row.listings));
-    if (hit) hit.members.push(row);
-    else groups.push({ listings: row.listings, members: [row] });
+    for (const listing of row.listings) {
+      const place = `${listing.exchange}\0${listing.currency}`;
+      const list = places.get(place) || [];
+      list.push({ plan: row.plan, listing, row });
+      places.set(place, list);
+    }
   }
-  return groups.map((g) => {
-    if (g.members.length === 1) return g.members[0];
+
+  const buckets = new Map();
+  for (const items of places.values()) {
+    const clusters = [];
+    for (const item of items) {
+      const hit = clusters.find(
+        (c) => c.listing.total === item.listing.total && c.listing.fees === item.listing.fees
+      );
+      if (hit) hit.plans.push(item.plan);
+      else clusters.push({ listing: item.listing, plans: [item.plan], row: item.row });
+    }
+    for (const c of clusters) {
+      const key = [...c.plans].sort().join(",");
+      const bucket = buckets.get(key);
+      if (bucket) bucket.listings.push(c.listing);
+      else buckets.set(key, { plans: c.plans, listings: [c.listing], row: c.row });
+    }
+  }
+
+  const rankOf = (id) => {
+    const i = SAXO_PLANS.findIndex((p) => p.id === id);
+    return i < 0 ? 99 : i + 1;
+  };
+
+  return [...buckets.values()].map((b) => {
+    const name = saxoName(b.plans, allIds);
+    const all = b.plans.length === allIds.length;
     return {
-      ...g.members[0],
-      folder: `saxo:${g.members.map((m) => m.folder.split(":")[1]).join("-")}`,
-      family: "Saxo Bank",
-      name: "Saxo Bank",
-      plan: "",
-      planRank: 0,
+      ...b.row,
+      folder: `saxo:${[...b.plans].join("-")}`,
+      family: name,
+      name,
+      plan: all ? "" : [...b.plans].join("-"),
+      planRank: all ? 0 : Math.min(...b.plans.map(rankOf)),
+      listings: b.listings,
     };
   });
 }
@@ -1289,10 +1657,8 @@ function detail(key, nat = "", size = {}) {
       }
       continue;
     }
-    // No collapse here, unlike the plans above: the three companies never price a
-    // line alike. Two of them differ on the rate, and the American and British
-    // ones, which share it, part on the remark — one waives the regulators under
-    // $500, the other charges a conversion.
+    // A listing that costs the same on every plan is one "Saxo" line. Nasdaq
+    // still splits Classic / Platinum / VIP once the 1 $ floor no longer binds.
     if (folder === "saxo") {
       const built = [];
       SAXO_PLANS.forEach((plan, i) => {
@@ -1302,6 +1668,25 @@ function detail(key, nat = "", size = {}) {
       for (const row of collapseSaxo(built)) rows.push(row);
       continue;
     }
+    if (folder === "swissquote") {
+      const built = [];
+      SWISSQUOTE_PLANS.forEach((plan, i) => {
+        const listed = listings({ entity: plan.id });
+        if (listed.length) built.push(asPlan(plan, i, listed));
+      });
+      for (const row of collapseSwissquote(built)) rows.push(row);
+      continue;
+    }
+    if (folder === "tiger") {
+      const built = [];
+      TIGER_PLANS.forEach((plan, i) => {
+        if (!tigerOpen(plan.id, nat)) return;
+        const listed = listings({ entity: plan.id });
+        if (listed.length) built.push(asPlan(plan, i, listed));
+      });
+      for (const row of collapseTiger(built)) rows.push(row);
+      continue;
+    }
     if (folder === "scalablecapital") {
       const built = [];
       SCALABLE_PLANS.forEach((plan, i) => {
@@ -1309,6 +1694,94 @@ function detail(key, nat = "", size = {}) {
         if (listed.length) built.push(asPlan(plan, i, listed));
       });
       for (const row of collapseScalable(built)) rows.push(row);
+      continue;
+    }
+    if (folder === "webull") {
+      const built = [];
+      WEBULL_PLANS.forEach((plan, i) => {
+        if (!webullOpen(plan.id, nat)) return;
+        const listed = listings({ plan: plan.id });
+        if (listed.length) built.push(asPlan(plan, i, listed));
+      });
+      for (const row of collapseWebull(built)) rows.push(row);
+      continue;
+    }
+    if (folder === "vivid") {
+      const built = [];
+      VIVID_PLANS.forEach((plan, i) => {
+        const listed = listings({ entity: "personal", plan: plan.id });
+        if (listed.length) built.push(asPlan(plan, i, listed));
+      });
+      for (const row of collapseVivid(built)) rows.push(row);
+      continue;
+    }
+    if (folder === "vested") {
+      const built = [];
+      VESTED_PLANS.forEach((plan, i) => {
+        const listed = listings({ plan: plan.id });
+        if (listed.length) built.push(asPlan(plan, i, listed));
+      });
+      for (const row of collapseVested(built)) rows.push(row);
+      continue;
+    }
+    if (folder === "tradier") {
+      const built = [];
+      TRADIER_PLANS.forEach((plan, i) => {
+        const listed = listings({ plan: plan.id });
+        if (listed.length) built.push(asPlan(plan, i, listed));
+      });
+      for (const row of collapseTradier(built)) rows.push(row);
+      continue;
+    }
+    if (folder === "tradezero") {
+      const built = [];
+      TRADEZERO_PLANS.forEach((plan, i) => {
+        if (!tradezeroOpen(plan.id, nat)) return;
+        const listed = listings({ plan: plan.id });
+        if (listed.length) built.push(asPlan(plan, i, listed));
+      });
+      for (const row of collapseTradezero(built)) rows.push(row);
+      continue;
+    }
+    if (folder === "tradeup") {
+      const built = [];
+      TRADEUP_PLANS.forEach((plan, i) => {
+        if (!tradeupOpen(plan.id, nat)) return;
+        const listed = listings({ plan: plan.id });
+        if (listed.length) built.push(asPlan(plan, i, listed));
+      });
+      for (const row of collapseTradeup(built)) rows.push(row);
+      continue;
+    }
+    if (folder === "tradestation") {
+      const built = [];
+      TRADESTATION_PLANS.forEach((plan, i) => {
+        const listed = listings({ plan: plan.id });
+        if (listed.length) built.push(asPlan(plan, i, listed));
+      });
+      for (const row of collapseTradestation(built)) rows.push(row);
+      continue;
+    }
+    if (folder === "traderepublic") {
+      if (isCrypto) {
+        const listed = listings({ plan: "best" });
+        if (listed.length) {
+          rows.push({
+            ...asPlan({ id: "best", name: "Trade Republic" }, 0, listed),
+            folder: "traderepublic",
+            family: "Trade Republic",
+            plan: "",
+            planRank: 0,
+          });
+        }
+        continue;
+      }
+      const built = [];
+      const all = listings({ plan: "best" });
+      if (all.length) built.push(asPlan(TRADEREPUBLIC_PLANS[0], 0, all.slice(0, 1)));
+      const direct = listings({ plan: "direct" }).filter((listing) => String(listing.exchange || "").toUpperCase() !== "TIB");
+      if (direct.length) built.push(asPlan(TRADEREPUBLIC_PLANS[1], 1, direct));
+      for (const row of collapseTraderepublic(built)) rows.push(row);
       continue;
     }
     if (folder === "robinhood") {
@@ -1348,7 +1821,15 @@ function detail(key, nat = "", size = {}) {
         shares: size.shares ?? SHARES_DEFAULT,
         price: priceOf(inst.isin, mostCommon([...inst.byBroker.values()].flat().map((l) => l.currency))),
       };
-  return { ...summarize(inst, "", nat), trade, soldBy: rows };
+  return {
+    ...summarize(inst, "", nat),
+    // Plans and extra venues are extra rows, not extra brokers.
+    brokers: new Set(rows.map((r) => brokerFolder(r.folder))).size,
+    // Same universe as the header, so "51 of 53" is readable against it.
+    brokersTotal: brokers.size,
+    trade,
+    soldBy: rows,
+  };
 }
 
 function json(res, status, body) {

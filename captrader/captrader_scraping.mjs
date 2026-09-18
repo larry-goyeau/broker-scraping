@@ -22,6 +22,11 @@ function toIsin(value) {
   return match ? match[0] : "";
 }
 
+function sanctionedListing(isin, exchange) {
+  if (/^RU/i.test(String(isin || ""))) return true;
+  return String(exchange || "").toUpperCase() === "MOEX";
+}
+
 function loadTickersFromCsv(csvPath) {
   if (!fs.existsSync(csvPath)) return [];
   return fs
@@ -293,6 +298,7 @@ if (!hasFlag("fresh") && fs.existsSync(outputPath)) {
     const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
     if (Array.isArray(existing)) {
       for (const entry of existing) {
+        if (sanctionedListing(entry?.isin, entry?.exchange)) continue;
         results.push(entry);
         if (entry?.ticker) seen.add(entryKey(entry.query, entry));
       }
@@ -591,6 +597,7 @@ async function scrapeRowsForQuery(query) {
     if (!name) continue;
 
     const info = (await readInfo(entry.conid)) || {};
+    if (sanctionedListing(info.isin || "", exchange)) continue;
 
     rows.push({
       ticker: (entry.symbol || "").toUpperCase(),
@@ -633,7 +640,14 @@ function ingest(query, rows) {
       raw: row.raw,
       isin: listing.isin,
     };
+    if (sanctionedListing(entry.isin, entry.exchange)) continue;
     if (row.restricted) entry.nonEuResident = true;
+    if (
+      String(row.exchange || "").toUpperCase() === "NSE" &&
+      (!row.currency || String(row.currency).toUpperCase() === "INR")
+    ) {
+      entry.indianOnly = true;
+    }
     results.push(entry);
   }
 }
@@ -676,15 +690,20 @@ save();
 
 const byType = new Map();
 let nonEu = 0;
+let indianOnly = 0;
 for (const row of results) {
   byType.set(row.type, (byType.get(row.type) || 0) + 1);
   if (row.nonEuResident) nonEu += 1;
+  if (row.indianOnly) indianOnly += 1;
 }
 console.error(
   `${results.length} listed (${[...byType].map(([type, count]) => `${count} ${type}`).join(", ")})`
 );
 if (nonEu > 0) {
   console.error(`${nonEu} of them are non-EU-resident (no KID for European retail)`);
+}
+if (indianOnly > 0) {
+  console.error(`${indianOnly} of them are Indian-resident only (NSE cash)`);
 }
 
 await browser.disconnect();

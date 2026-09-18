@@ -18,13 +18,15 @@
 //
 // `path` is the code a source's own URLs use where it differs from the MIC. Euronext
 // serves Milan under its ETF segment, ETFP, and answers 404 for XMIL.
+
+import { apply606 } from "./rule606.mjs";
 export const VENUES = [
   {
     mic: "XETR",
     name: "Börse Xetra",
     source: "xetra",
     hours: { open: "09:00", close: "17:30", tz: "Europe/Berlin" },
-    exact: ["xetr", "xetra", "xet", "xetretf", "deutscheborsexetra", "ibis", "ibis2", "etr"],
+    exact: ["xetr", "xetra", "xet", "xetretf", "deutscheborsexetra", "ibis", "ibis2", "etr", "fse"],
     loose: ["frankfurt", "fra", "germany"],
   },
   {
@@ -221,7 +223,7 @@ export const VENUES = [
     name: "Börse Frankfurt",
     source: "frankfurt",
     hours: { open: "08:00", close: "22:00", tz: "Europe/Berlin" },
-    exact: ["xfra", "fwb", "fwb2", "boersefrankfurt", "fra", "fse", "fft"],
+    exact: ["xfra", "fwb", "fwb2", "boersefrankfurt", "fra", "fft"],
     loose: [],
   },
   // Hamburg and Hannover share BÖAG's delayed CSVs with Quotrix. HAMQ is the busy
@@ -356,6 +358,14 @@ export const VENUES = [
     exact: ["xmus", "msx", "msm", "muscat", "muscatstockexchange", "muscatsecuritiesmarket"],
     loose: [],
   },
+  {
+    mic: "XCAI",
+    name: "The Egyptian Exchange",
+    source: "egx",
+    hours: { open: "10:00", close: "14:30", tz: "Africa/Cairo", days: ["Sun", "Mon", "Tue", "Wed", "Thu"] },
+    exact: ["xcai", "egx", "case", "cairo", "egyptianexchange", "theegyptianexchange"],
+    loose: [],
+  },
 
   // The two spot books a crypto line can be priced against without a key. Neither has a
   // MIC: these four letters are this file's own, chosen to sit in the same column as the
@@ -440,10 +450,9 @@ export const isCryptoId = (id) => String(id || "").startsWith("CRYPTO:");
 // no adapter yet. Naming them keeps a gap distinguishable from a lookup that failed,
 // and keeps a neighbour's number from being borrowed to fill it.
 export const KNOWN_UNSOURCED = [
-  // Trade Republic's parser writes TIB when the API left exchangeId empty. That is not a
-  // MIC, and assigning those lines to Tradegate or LS Exchange would file another book's
-  // number under a place the catalogue never named.
-  { match: ["tib"], name: "Trade Republic (TIB)", why: "le broker ne nomme pas la place" },
+  // Trade Republic Bestpreis. The API names it TIB; it is not a MIC and has no
+  // public tape. Do not file those lines under Tradegate or LS Exchange.
+  { match: ["tib"], name: "Trade Republic (TIB)", why: "carnet Bestpreis, pas de bande publique" },
   // Freedom24 and Elana name the group without the city. Euronext runs a separate book
   // per place, so there is no single one to point at: guessing Paris would repeat the
   // mistake this file exists to prevent.
@@ -638,7 +647,7 @@ export function listingKey(row) {
 const EURONEXT_MICS = ["XPAR", "XAMS", "XBRU", "XLIS"];
 const US_MICS = ["XNAS", "ARCX", "XNYS", "XASE", "BATS"];
 
-export function spreadLeaf(spreads, { isin, mic, currency, unsourced }) {
+export function spreadLeaf(spreads, { isin, mic, currency, unsourced, broker, ticker }) {
   const id = String(isin || "").toUpperCase();
   const ccy = String(currency || "").toUpperCase();
   // A coin is read in dollars on both books whatever fiat the broker prices it in: what
@@ -653,12 +662,14 @@ export function spreadLeaf(spreads, { isin, mic, currency, unsourced }) {
     const worst = found.reduce((a, b) => ((b.leaf.bp ?? -1) > (a.leaf.bp ?? -1) ? b : a));
     return { leaf: worst.leaf, mic: worst.m, assumed: true };
   }
-  if (id && mic && spreads[id]?.[mic]?.[ccy]) return { leaf: spreads[id][mic][ccy], mic };
+  if (id && mic && spreads[id]?.[mic]?.[ccy]) {
+    return apply606({ leaf: spreads[id][mic][ccy], mic }, { broker, ticker });
+  }
   // Rule 605 is a monthly average for the symbol, not a per-MIC book. A US
   // line stored under BATS (Trading212) is the same tape as Swissquote's AMEX → ARCX.
   if (id && US_MICS.includes(mic) && ccy === "USD") {
     const hit = US_MICS.find((m) => spreads[id]?.[m]?.[ccy]?.perShare != null);
-    if (hit) return { leaf: spreads[id][hit][ccy], mic, assumed: true };
+    if (hit) return apply606({ leaf: spreads[id][hit][ccy], mic, assumed: true }, { broker, ticker });
   }
   const euronext = unsourced?.match?.includes("euronext");
   if (!euronext || !id || !ccy) return { leaf: null, mic: mic || null };
@@ -702,6 +713,7 @@ const PAGE = {
   // The Gulf boards publish one market-wide table each rather than a page per line, so
   // the link goes to the table the figure was read off.
   adx: () => "https://www.adx.ae/all-equities",
+  egx: () => "https://www.egx.com.eg/en/MarketSummary.aspx",
   dfm: () => "https://www.dfm.ae/the-exchange/market-information/market-watch",
   bhb: () => "https://bahrainbourse.com/en/Quotes%20and%20Market/Stocks/Pages/Quotes.aspx",
   msx: () => "https://www.msx.om/market-watch-custom.aspx",

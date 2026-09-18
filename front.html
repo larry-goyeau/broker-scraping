@@ -81,6 +81,28 @@
         letter-spacing: 0;
         white-space: nowrap;
       }
+      .th-label { white-space: nowrap; }
+      .th-sort {
+        display: inline-grid;
+        place-items: center;
+        width: 18px;
+        height: 18px;
+        margin-left: 4px;
+        padding: 0;
+        border: 1px solid var(--line);
+        border-radius: 2px;
+        background: var(--card);
+        color: var(--mute);
+        cursor: pointer;
+        vertical-align: -3px;
+      }
+      .th-sort:hover,
+      .th-sort[aria-pressed="true"] {
+        color: var(--green);
+        border-color: var(--green);
+        background: var(--green-soft);
+      }
+      .th-sort svg { display: block; width: 10px; height: 10px; }
       #q {
         display: block;
         width: 100%;
@@ -234,6 +256,9 @@
       let sizeKind = "shares";
       let sizeVal = SHARES_DEFAULT;
       let sizeTimer;
+      let costAsc = false;
+      let lastMerged = [];
+      let lastCrypto = false;
       // The box lives in the column header, which is rewritten on every answer,
       // so the value is held here rather than read back off a node that a full
       // redraw replaces.
@@ -262,6 +287,40 @@
 
       const esc = (s) =>
         String(s || "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+      const costNum = (v) => {
+        if (!v || v === "N/A") return null;
+        const n = Number(String(v).replace(/,/g, ""));
+        return Number.isFinite(n) ? n : null;
+      };
+      const orderRows = (rows) => {
+        if (!costAsc) return rows;
+        return [...rows].sort((a, b) => {
+          const na = costNum(a.total);
+          const nb = costNum(b.total);
+          if (na == null && nb == null) return a.family.localeCompare(b.family, "en");
+          if (na == null) return 1;
+          if (nb == null) return -1;
+          return na - nb || a.family.localeCompare(b.family, "en");
+        });
+      };
+      const brokerCell = (row) => {
+        const label = row.brokerName || row.family;
+        return row.url
+          ? `<a href="${esc(row.url)}" target="_blank" rel="noreferrer">${esc(label)}</a>`
+          : esc(label);
+      };
+      const numCell = (v) => {
+        const text = v || "N/A";
+        return `<td class="num${text === "N/A" ? " na" : ""}">${esc(text)}</td>`;
+      };
+      const rowsHtml = (rows, crypto) =>
+        orderRows(rows)
+          .map(
+            (row) =>
+              `<tr><td>${brokerCell(row)}</td>${crypto ? "" : `<td>${esc(row.exchange)}</td>`}<td>${esc(row.currency)}</td>${numCell(row.total)}${numCell(row.fees)}<td class="remark">${esc(row.remark)}</td></tr>`
+          )
+          .join("");
 
       fetch("/api/stats")
         .then((r) => r.json())
@@ -388,24 +447,11 @@
           if (hit) hit.n += 1;
           else merged.push({ ...row, n: 1 });
         }
-        const brokerCell = (row) => {
-          const label = row.brokerName || row.family;
-          return row.url
-            ? `<a href="${esc(row.url)}" target="_blank" rel="noreferrer">${esc(label)}</a>`
-            : esc(label);
-        };
-        const cell = (v) => {
-          const text = v || "N/A";
-          return `<td class="num${text === "N/A" ? " na" : ""}">${esc(text)}</td>`;
-        };
-        const body = merged
-          .map(
-            (row) =>
-              `<tr><td>${brokerCell(row)}</td>${crypto ? "" : `<td>${esc(row.exchange)}</td>`}<td>${esc(row.currency)}</td>${cell(row.total)}${cell(row.fees)}<td class="remark">${esc(row.remark)}</td></tr>`
-          )
-          .join("");
+        lastMerged = merged;
+        lastCrypto = crypto;
+        const body = rowsHtml(merged, crypto);
         const notes = `
-          <p class="note">* Buy ${crypto ? `${esc(String(sizeValue()))} USD of` : `${esc(String(sizeValue()))} shares of`} ${esc(d.ticker || d.isin || d.key)} and sell them back at once.</p>
+          <p class="note">* Buy ${crypto ? `${esc(String(sizeValue()))} USD of` : `${esc(String(sizeValue()))} shares of`} ${esc(d.ticker || d.isin || d.key)} and sell them back at once. The spread used is each venue's published average.</p>
           ${!crypto && d.trade && d.trade.price == null
             ? `<p class="note">No price on file for this instrument, so nothing proportional to the amount can be added up. Write parsed_json/prices.json to fill this column.</p>`
             : ""}
@@ -426,14 +472,19 @@
             <span>${esc(d.name)}</span>
             ${d.isin ? `<span class="isin">${esc(d.isin)}</span>` : ""}
           </div>
-          <p class="count">Sold by ${d.soldBy.length} broker${d.soldBy.length > 1 ? "s" : ""}${nationality() ? ` that accept ${nat.options[nat.selectedIndex].text}` : ""}</p>
+          <p class="count">Sold by ${d.brokers}${!nationality() && d.brokersTotal > d.brokers ? ` of ${d.brokersTotal}` : ""} broker${d.brokers > 1 ? "s" : ""}${nationality() ? ` that accept ${nat.options[nat.selectedIndex].text}` : ""}</p>
           <table class="listings">
             <thead>
               <tr>
                 <th>broker</th>
                 ${crypto ? "" : "<th>exchange</th>"}
                 <th>currency</th>
-                <th>round trip cost (USD)*
+                <th><span class="th-label">round trip cost (USD)*
+                  <button type="button" id="sortCost" class="th-sort" aria-pressed="${costAsc ? "true" : "false"}" aria-label="Sort by round-trip cost, lowest first" title="Lowest first">
+                    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M6 2.5v7M3 5.5 6 2.5 9 5.5" />
+                    </svg>
+                  </button></span>
                   <label class="th-size" for="size">for
                     <input id="size" type="number" min="0" step="any" value="${esc(String(sizeVal))}" />
                     ${crypto ? "USD" : "shares"}</label>
@@ -487,7 +538,16 @@
 
       goBtn.addEventListener("click", submit);
 
-      // Delegated, because the box is rebuilt with the table it sits in.
+      // Delegated, because the header is rebuilt with the table it sits in.
+      result.addEventListener("click", (e) => {
+        const btn = e.target.closest("#sortCost");
+        if (!btn) return;
+        costAsc = !costAsc;
+        btn.setAttribute("aria-pressed", costAsc ? "true" : "false");
+        const tbody = document.getElementById("costRows");
+        if (tbody) tbody.innerHTML = rowsHtml(lastMerged, lastCrypto);
+      });
+
       result.addEventListener("input", (e) => {
         const box = e.target.closest("#size");
         if (!box) return;

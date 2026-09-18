@@ -57,7 +57,7 @@
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
 import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
 const CATALOGUE = new URL("revolut-parsed.json", import.meta.url);
@@ -301,7 +301,7 @@ function taxParts(isin) {
   return { tax, rates, taxTotal };
 }
 
-function remarkOf({ plan, market, stablecoin, adr }) {
+function remarkOf({ plan, market, stablecoin, adr, currency }) {
   if (stablecoin) return "0% if same currency with the stablecoin.";
   const lines = [];
   if (plan.free) {
@@ -309,7 +309,7 @@ function remarkOf({ plan, market, stablecoin, adr }) {
   }
   if (plan.sub) lines.push(`${plan.sub} €/month.`);
   if (plan.fx && market !== "crypto") {
-    lines.push(`FX ${(plan.fx * 100).toFixed(2)}% above €1,000/month.`);
+    lines.push(fxRemark((plan.fx * 100).toFixed(2), currency));
   }
   if (adr) lines.push("ADR 0.01–0.05 $/share (holding).");
   return lines.join("\n");
@@ -408,7 +408,7 @@ export function roundTrip({
     feeMarket: market,
     cashCurrency: holdable ? listing.currency : crypto ? "USD" : "",
     onlineBuy: true,
-    remark: remarkOf({ plan: picked, market, stablecoin, adr: listing.adr }),
+    remark: remarkOf({ plan: picked, market, stablecoin, adr: listing.adr, currency: listing.currency }),
     bp: marketBp,
     perShare: marketPerShare,
     url:

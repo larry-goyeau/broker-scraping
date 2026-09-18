@@ -193,6 +193,90 @@
         "feesCharged": 0,
         "pendingRegTafAfter": 0
       }
+    },
+    {
+      "at": "2026-09-17T19:16:41.191Z",
+      "account": "PA35BHFBPEWR",
+      "live": true,
+      "marketOpen": true,
+      "opening": {
+        "number": "PA35BHFBPEWR",
+        "cash": 99891.05,
+        "equity": 99891.05,
+        "buyingPower": 399564.2,
+        "pendingRegTaf": 0
+      },
+      "trips": [
+        {
+          "symbol": "AQLT",
+          "shares": 10,
+          "quote": {
+            "symbol": "AQLT",
+            "at": "2026-09-17T19:14:06.089848723Z",
+            "bid": 31.31,
+            "ask": 31.55,
+            "bidSize": 100,
+            "askSize": 100,
+            "bidVenue": "V",
+            "askVenue": "V",
+            "feed": "iex",
+            "mid": 31.43,
+            "spread": 0.24
+          },
+          "model": {
+            "usd": 0.117643,
+            "marginal": 0.0961273,
+            "perShare": 0.00876427,
+            "parts": {
+              "marché": 0.0876427,
+              "réglementaire": 0.03,
+              "commission": 0
+            }
+          },
+          "predicted": 0.1176,
+          "legs": {
+            "buy": {
+              "status": "filled",
+              "shares": 10,
+              "price": 31.55,
+              "filledAt": "2026-09-17T19:16:34.910364822Z"
+            },
+            "sell": {
+              "status": "filled",
+              "shares": 10,
+              "price": 31.47,
+              "filledAt": "2026-09-17T19:16:39.435678231Z"
+            },
+            "quoteBetween": {
+              "symbol": "AQLT",
+              "at": "2026-09-17T19:14:06.089848723Z",
+              "bid": 31.31,
+              "ask": 31.55,
+              "bidSize": 100,
+              "askSize": 100,
+              "bidVenue": "V",
+              "askVenue": "V",
+              "feed": "iex",
+              "mid": 31.43,
+              "spread": 0.24
+            }
+          },
+          "measured": {
+            "buySlippage": 0.12,
+            "sellSlippage": -0.04,
+            "perShareAgainstIexMid": 0.08,
+            "cost": 0.8
+          }
+        }
+      ],
+      "reconciliation": {
+        "cashBefore": 99891.05,
+        "cashAfter": 99890.25,
+        "observed": -0.8,
+        "expectedFromFills": -0.8,
+        "feesCharged": 0,
+        "pendingRegTafAfter": 0
+      }
     }
   ]
 }

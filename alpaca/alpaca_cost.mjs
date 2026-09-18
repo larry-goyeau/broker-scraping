@@ -73,7 +73,7 @@
 import fs from "node:fs";
 import { cryptoId, listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
 import { plus, finite } from "../na.mjs";
-import { QUOTE } from "../fx.mjs";
+import { QUOTE, fxRemark } from "../fx.mjs";
 
 const CATALOGUE = new URL("alpaca-parsed.json", import.meta.url);
 const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
@@ -249,6 +249,8 @@ export function roundTrip({
     mic: m.venue?.mic ?? null,
     currency: m.row.currency || "USD",
     unsourced: m.unsourced,
+    broker: "alpaca",
+    ticker: m.row.ticker,
   });
   const listing = {
     isin: String(m.row.isin || "").toUpperCase(),
@@ -445,7 +447,7 @@ function cryptoTrip(row, { base, amount, bp }) {
 // funded, and whether a depositary stands between them and the shares.
 function remarkOf({ adr }) {
   const said = [
-    `FX ${(100 * FUNDING_FX).toFixed(2)}% on funding in local currency (max $${FUNDING_FX_CAP}).`,
+    fxRemark((100 * FUNDING_FX).toFixed(2), "USD", `on funding (max $${FUNDING_FX_CAP})`),
   ];
   if (adr) said.push(`ADR pass-through $${ADR_PASS_THROUGH.low}–$${ADR_PASS_THROUGH.high}/share.`);
   return said.join("\n");

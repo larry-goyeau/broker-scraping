@@ -205,6 +205,7 @@ export const ACCEPTED = {
   boursobank: { countries: ["FR"] }, // DIY app; foreign tax residents need a desk path
   easybourse: { countries: ["FR"] },
   labanquepostale: { countries: ["FR"] },
+  fortuneo: { countries: ["FR"] },
   // Online DIY for EU/UK; non-EU/UK must call. US asked on the form (FATCA).
   davy: { groups: ["EEA"], countries: ["GB"] },
   plum: { countries: PLUM },

@@ -1,0 +1,194 @@
+{
+  "quarter": "2026-Q2",
+  "fetchedAt": "2026-09-17T21:16:56.423Z",
+  "source": "https://cdn.finra.org/606reportBulk/2026/606_NMS_2026_Q2.zip",
+  "brokers": {
+    "alpaca": {
+      "crd": [
+        "288202"
+      ],
+      "name": "Alpaca Securities LLC",
+      "files": [
+        "288202_606_NMS_2026_Q2_V1_20260728.xml"
+      ],
+      "mix": {
+        "NITE": 0.2211,
+        "CDRG": 0.413,
+        "JNST": 0.2936,
+        "OTHER": 0.07229
+      }
+    },
+    "choicetrade": {
+      "crd": [
+        "104021"
+      ],
+      "name": "ChoiceTrade",
+      "files": [
+        "104021_606_NMS_2026_Q2_V1_20260802.xml"
+      ],
+      "mix": {
+        "OTHER": 0.958,
+        "CDRG": 0.04203
+      }
+    },
+    "firstrade": {
+      "crd": [
+        "16843"
+      ],
+      "name": "FIRSTRADE SECURITIES INC.",
+      "files": [
+        "16843_606_NMS_2026_Q2_20260730-133930_FFSI_V1_20260730.xml"
+      ],
+      "mix": {
+        "CDRG": 0.6155,
+        "NITE": 0.3845
+      }
+    },
+    "interactivebrokers": {
+      "crd": [
+        "36418"
+      ],
+      "name": "Interactive Brokers",
+      "files": [
+        "36418_606_NMS_2026_Q2_V1_20260727.xml"
+      ],
+      "mix": {
+        "OTHER": 0.9349,
+        "CDRG": 0.02948,
+        "HRTF": 0.02649,
+        "JNST": 0.009145
+      }
+    },
+    "robinhood": {
+      "crd": [
+        "165998",
+        "287900"
+      ],
+      "name": "Robinhood Securities, LLC",
+      "files": [
+        "165998_606_NMS_2026_Q2_V1_20260731.xml",
+        "287900_606_NMS_2026_Q2_V1_20260731.xml"
+      ],
+      "mix": {
+        "NITE": 0.3407,
+        "CDRG": 0.2322,
+        "ETMM": 0.1136,
+        "JNST": 0.1651,
+        "HRTF": 0.09799,
+        "SOHO": 0.05039
+      }
+    },
+    "siebert": {
+      "crd": [
+        "5376"
+      ],
+      "name": "Muriel Siebert & Co., Inc.",
+      "files": [
+        "5376_606_NMS_2026_Q2_CNTXT-SBRT_V1_20260729.xml",
+        "5376_606_NMS_2026_Q2_CNTXT-STXG_V1_20260729.xml"
+      ],
+      "mix": {
+        "OTHER": 0.2857,
+        "NITE": 0.2714,
+        "CDRG": 0.1692,
+        "JNST": 0.1713,
+        "UBSS": 0.1025
+      }
+    },
+    "sogotrade": {
+      "crd": [
+        "17912"
+      ],
+      "name": "SOGO",
+      "files": [
+        "17912_606_NMS_2026_Q2_SOGO_V1_20260729.xml"
+      ],
+      "mix": {
+        "CDRG": 0.9304,
+        "OTHER": 0.06959
+      }
+    },
+    "tastytrade": {
+      "crd": [
+        "277027"
+      ],
+      "name": "Tastytrade Inc",
+      "files": [
+        "277027_606_NMS_2026_Q2_TWTT_V1_20260730.xml"
+      ],
+      "mix": {
+        "CDRG": 0.4167,
+        "HRTF": 0.3083,
+        "ETMM": 0.1928,
+        "NITE": 0.07636,
+        "JNST": 0.005862
+      }
+    },
+    "tradier": {
+      "crd": [
+        "104982"
+      ],
+      "name": "Tradier Brokerage, Inc.",
+      "files": [
+        "104982_606_NMS_2026_Q2_TBIS_V1_20260727.xml"
+      ],
+      "mix": {
+        "CDRG": 0.2172,
+        "HRTF": 0.1784,
+        "NITE": 0.2039,
+        "OTHER": 0.202,
+        "JNST": 0.1815,
+        "ETMM": 0.017
+      }
+    },
+    "tradestation": {
+      "crd": [
+        "39473"
+      ],
+      "name": "Tradestation Securities",
+      "files": [
+        "39473_606_NMS_2026_Q2_TRAD_V1_20260722.xml"
+      ],
+      "mix": {
+        "HRTF": 0.1962,
+        "ETMM": 0.3539,
+        "NITE": 0.1888,
+        "CDRG": 0.04268,
+        "JNST": 0.08825,
+        "SOHO": 0.09784,
+        "OTHER": 0.02093,
+        "UBSS": 0.01145
+      }
+    },
+    "tradeup": {
+      "crd": [
+        "18483"
+      ],
+      "name": "TradeUP Securities Inc",
+      "files": [
+        "18483_606_NMS_2026_Q2_MRSC_V1_20260728.xml"
+      ],
+      "mix": {
+        "CDRG": 0.7697,
+        "JNST": 0.1548,
+        "NITE": 0.04244,
+        "OTHER": 0.03309
+      }
+    },
+    "tradezero": {
+      "crd": [
+        "282940"
+      ],
+      "name": "TradeZero",
+      "files": [
+        "282940_606_NMS_2026_Q2_ZERO_V1_20260731.xml"
+      ],
+      "mix": {
+        "NITE": 0.443,
+        "CDRG": 0.3609,
+        "SOHO": 0.175,
+        "OTHER": 0.02108
+      }
+    }
+  }
+}

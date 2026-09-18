@@ -101,7 +101,8 @@ const lanes = Math.max(1, numberArg("concurrency", 4));
 
 const wantEtfs = !stocksOnly && !cryptoOnly;
 const wantStocks = !etfsOnly && !cryptoOnly;
-const wantCrypto = !etfsOnly && !stocksOnly;
+// Mexem quotes Paxos / Zero Hash coins but the account cannot buy them.
+const wantCrypto = false;
 
 function loadIsinKinds(csvPath, kind, index) {
   if (!csvPath || !fs.existsSync(csvPath)) return;
@@ -159,10 +160,8 @@ if (positionalArgs.length > 0) {
         kind: kindByIsin.get(isin) || "STOCK",
       });
     } else {
-      const ticker = normalizeTicker(arg);
-      if (!ticker || seenQueries.has(ticker)) continue;
-      seenQueries.add(ticker);
-      jobs.push({ query: ticker, shelf: "crypto", kind: "CRYPTO" });
+      // A bare ticker used to walk the crypto shelf. Mexem cannot buy those.
+      continue;
     }
   }
 } else {
@@ -238,6 +237,7 @@ if (!fresh && fs.existsSync(outputPath)) {
     const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
     if (Array.isArray(existing)) {
       for (const entry of existing) {
+        if (String(entry?.type || "").toUpperCase() === "CRYPTO") continue;
         results.push(entry);
         if (entry?.ticker) seen.add(entryKey(entry));
       }
@@ -466,17 +466,25 @@ async function readInfo(conid) {
   return unwrapInfo(answer.json, conid);
 }
 
-const RESTRICTED_NOTICE =
-  /KID|Trading Restricted|not available|cannot be traded|Retail clients can trade packaged/i;
+const KID_NOTICE = /KID|Retail clients can trade packaged/i;
+const CLOSE_ONLY_NOTICE = /only closing orders|no opening trade/i;
+
+function closeOnlyVenue(listingExchange) {
+  return /\.EXPERT\b/i.test(String(listingExchange || ""));
+}
 
 // A US-domiciled fund publishes no KID, and PRIIPs leaves European retail
 // clients unable to buy one. A non-EU resident still can. The portal quotes those
 // listings all the same and admits it in one place only: field 7183, the
 // order-ticket notice. 7184 alone says nothing, since tradable UCITS listings
 // come back with 7184=1 too.
-async function tradingRestricted(conids) {
+//
+// PINK.EXPERT (and 7183 "only closing orders") is close-only: the line can
+// be sold if already held, not bought. It is dropped, not flagged.
+async function tradingNotices(conids) {
   const pending = new Set(conids.filter(Boolean).map(String));
-  const status = new Map();
+  const kid = new Map();
+  const closeOnly = new Map();
   const quotedAt = new Map();
 
   for (let attempt = 0; attempt < 10 && pending.size > 0; attempt += 1) {
@@ -490,7 +498,9 @@ async function tradingRestricted(conids) {
 
       const notice = (row["7183"] || "").toString();
       if (notice) {
-        status.set(conid, RESTRICTED_NOTICE.test(notice));
+        const skip = CLOSE_ONLY_NOTICE.test(notice);
+        closeOnly.set(conid, skip);
+        kid.set(conid, !skip && KID_NOTICE.test(notice));
         pending.delete(conid);
         continue;
       }
@@ -498,7 +508,8 @@ async function tradingRestricted(conids) {
       if (row["31"] !== undefined || row["6509"] !== undefined) {
         if (!quotedAt.has(conid)) quotedAt.set(conid, attempt);
         if (attempt - quotedAt.get(conid) >= 2) {
-          status.set(conid, false);
+          kid.set(conid, false);
+          closeOnly.set(conid, false);
           pending.delete(conid);
         }
       }
@@ -507,8 +518,11 @@ async function tradingRestricted(conids) {
     if (pending.size > 0) await sleep(300);
   }
 
-  for (const conid of pending) status.set(conid, false);
-  return status;
+  for (const conid of pending) {
+    kid.set(conid, false);
+    closeOnly.set(conid, false);
+  }
+  return { kid, closeOnly };
 }
 
 function wantedHits(payload, job) {
@@ -532,12 +546,15 @@ async function scrapeJob(job) {
   const hits = wantedHits(payload, job);
   if (hits.length === 0) return { silent: false, rows: [] };
 
-  const restrictions = await tradingRestricted(hits.map((hit) => String(hit.conid)));
+  const notices = await tradingNotices(hits.map((hit) => String(hit.conid)));
   const infos = await Promise.all(hits.map((hit) => readInfo(hit.conid)));
   const rows = [];
 
   for (const [index, hit] of hits.entries()) {
+    const conid = String(hit.conid);
     const info = infos[index] || {};
+    if (closeOnlyVenue(info.listingExchange) || notices.closeOnly.get(conid)) continue;
+
     const ticker = (info.ticker || hit.symbol || "").toUpperCase();
     const name = listingName(hit) || normalize(info.companyName || "");
     const exchange = listingVenue(hit, info) || (job.kind === "CRYPTO" ? "CRYPTO" : "");
@@ -545,6 +562,7 @@ async function scrapeJob(job) {
     if (!ticker || !exchange || !name) continue;
 
     const type = listingType(name, job.kind);
+    if (type === "CRYPTO") continue;
     rows.push({
       ticker,
       name,
@@ -552,7 +570,7 @@ async function scrapeJob(job) {
       currency,
       type,
       raw: [hit.companyHeader || hit.companyName || name, exchange].filter(Boolean).join(" "),
-      restricted: restrictions.get(String(hit.conid)) === true,
+      restricted: notices.kid.get(conid) === true,
     });
   }
 

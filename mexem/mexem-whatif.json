@@ -1,28 +1,23 @@
 {
-  "readOn": "2026-09-15T15:33:22.780Z",
+  "readOn": "2026-09-17T10:39:11.020Z",
   "accountId": "U28294463",
   "results": [
     {
       "id": "à la volée",
       "asks": "posée en ligne de commande",
-      "symbol": "BUNH",
-      "exchange": "SWB",
-      "route": "SWB",
+      "symbol": "EPH1",
+      "exchange": "EBS",
+      "route": null,
       "side": "BUY",
       "quantity": 1,
       "expect": "—",
-      "conid": "470271668",
-      "company": "AM CR N 100 SP ETF EUR H ACC - SWB",
-      "price": 20.395,
-      "notional": 20.39,
-      "amount": "—",
-      "commission": "1.00 ... 4.50 EUR",
-      "total": "—",
-      "preview": {
-        "amount": "—",
-        "commission": "1.00 ... 4.50 EUR",
-        "total": "—"
-      }
+      "conid": "546845074",
+      "company": "EPH EUROPEAN PROPERTY HOLDIN - EBS",
+      "price": 16,
+      "notional": 16,
+      "amount": "16 EUR (1 Shares)",
+      "commission": "1.00 ... 1.64 EUR",
+      "total": "~ 17.32 EUR"
     }
   ]
 }

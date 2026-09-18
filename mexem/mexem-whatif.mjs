@@ -247,6 +247,69 @@ const CASES = [
     quantity: 1,
     expect: "le plafond ou le plancher, plus les deux prélèvements s'ils sont ajoutés à part",
   },
+  {
+    id: "ebs_eur",
+    asks: "EBS en euro, pour tenir dans la caisse et voir le frais de place",
+    symbol: "E20Y",
+    exchange: "EBS",
+    side: "BUY",
+    quantity: 1,
+    expect: "1 € plus une fourchette si EBS facture, ou le palier CHF si le fonds est en francs",
+  },
+  {
+    id: "ebs_cheap",
+    asks: "EBS sur une action suisse moins chère que le SMI",
+    symbol: "LMN",
+    exchange: "EBS",
+    side: "BUY",
+    quantity: 1,
+    expect: "7,5 CHF de plancher, plus une fourchette si la place facture",
+  },
+  {
+    id: "varsovie_ale",
+    asks: "Varsovie sur une action assez petite pour l'aperçu",
+    symbol: "ALE",
+    exchange: "WSE",
+    side: "BUY",
+    quantity: 1,
+    expect: "20 PLN de plancher, plus une fourchette si la place facture",
+  },
+  {
+    id: "budapest_eur",
+    asks: "Budapest sur un fonds en euro",
+    symbol: "ETFCETOPO",
+    exchange: "BUX",
+    side: "BUY",
+    quantity: 1,
+    expect: "1 € ou le palier HUF, plus une fourchette",
+  },
+  {
+    id: "tallinn",
+    asks: "Nasdaq Baltic (Tallinn), jamais demandé",
+    symbol: "TPD1T",
+    exchange: "N.TALLINN",
+    side: "BUY",
+    quantity: 1,
+    expect: "1 € sec ou une fourchette",
+  },
+  {
+    id: "vilnius",
+    asks: "Nasdaq Baltic (Vilnius)",
+    symbol: "ROE1L",
+    exchange: "N.VILNIUS",
+    side: "BUY",
+    quantity: 1,
+    expect: "1 € sec ou une fourchette",
+  },
+  {
+    id: "riga",
+    asks: "Nasdaq Baltic (Riga)",
+    symbol: "SAF1R",
+    exchange: "N.RIGA",
+    side: "BUY",
+    quantity: 1,
+    expect: "1 € sec ou une fourchette",
+  },
 ];
 
 // ---------------------------------------------------------------- la session
@@ -425,7 +488,7 @@ const adHoc = arg("symbol")
 
 const results = [];
 for (const c of adHoc || CASES) {
-  if (!adHoc && only && c.id !== only) continue;
+  if (!adHoc && only && !only.split(",").includes(c.id)) continue;
   const found = await conidFor(c);
   if (!found) {
     console.error(`${c.id.padEnd(16)} introuvable : ${c.symbol} @ ${c.exchange}`);

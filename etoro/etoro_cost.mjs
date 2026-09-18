@@ -50,7 +50,7 @@
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
 import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
 const CATALOGUE = new URL("etoro-parsed.json", import.meta.url);
@@ -145,11 +145,11 @@ export function ticketEach(plan, market) {
   return 0;
 }
 
-function remarkOf({ market, plan } = {}) {
+function remarkOf({ market, plan, currency } = {}) {
   const lines = [];
   if (plan?.id === "uk") lines.push("UK / Ireland: no stock ticket.");
   if (plan?.id === "anz") lines.push("Australia / New Zealand: $2 every stock exchange.");
-  if (market !== "crypto") lines.push("FX 0.75% if converted.");
+  if (market !== "crypto") lines.push(fxRemark("0.75", currency));
   return lines.join("\n");
 }
 
@@ -365,7 +365,7 @@ export function roundTrip({
     tax,
     fx: fxNote(listing.currency),
     fxIfConverted: 0,
-    remark: remarkOf({ market, plan: picked }),
+    remark: remarkOf({ market, plan: picked, currency: listing.currency }),
   };
 
   const basis =

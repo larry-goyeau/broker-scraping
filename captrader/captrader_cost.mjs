@@ -78,8 +78,9 @@
 //
 // The American cap binds the per-share amount and the minimum binds the
 // result, in that order. Floor-then-cap would let 1 % of a 13 $ share cut
-// under the 2 $ minimum. Mexem's portal answered the same question with the
-// minimum, on the same IBKR ticket machine.
+// under the 2 $ minimum. The CapTrader portal now answers the same way:
+// 1 Ford at 13,49 $ is 2 $ ; 250 NAK at 1,26 $ is 2,50 $ ; 1 500 GNS at
+// 0,1532 $ is 2,30 $ — one percent of 229,80 $, not 15 $ of per-share.
 //
 //   https://www.captrader.com/konditionen/aktien-handel/
 //   https://www.captrader.com/konditionen/etf-handel/
@@ -94,7 +95,7 @@
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
 import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
 const LOCAL = new URL("captrader-parsed.json", import.meta.url);
@@ -145,20 +146,27 @@ const CHECK = {
 // Previews on the same account, 2026-09-15, nothing traded. The range is the
 // GETTEX door and the primary door; the live fill took the first. Orange's
 // 4,06 € is 4 € plus 0,40 % of 15,815 € — French FTT inside the top, already
-// in `taxMap`, so it is not a second venue fee. Dollars and Irish names were
-// refused: the account is under the 2 000 € the portal wants before it will
-// convert or trade a foreign currency.
+// in `taxMap`, so it is not a second venue fee. Dollars were refused on
+// 2026-09-15 (under the 2 000 € the portal wants before it will convert or
+// trade a foreign currency). On 2026-09-17 the account held settled USD
+// and the US previews went through. Ireland still has no quote.
 const MEASURED = {
-  on: "2026-09-15",
+  on: "2026-09-17",
+  previously: "2026-09-15",
   how: "aperçu whatif du portail CapTrader, aucun ordre passé",
   account: CHECK.account,
   cashEur: 247,
+  cashUsd: 2098.87,
   range: "2.00 ... 4.00 EUR",
   seen: {
     IWDA: { venues: ["SMART", "AEB", "GETTEX2", "FTA"], commission: "2.00 ... 4.00 EUR", price: 125.8 },
     TUI1: { venues: ["IBIS"], commission: "2.00 ... 4.00 EUR", price: 6.494 },
     LHA: { venues: ["SMART", "IBIS", "FWB"], commission: "2.00 ... 4.00 EUR", price: 7.576 },
     ORA: { venues: ["SBF"], commission: "2.00 ... 4.06 EUR", price: 15.815, fttOnTop: 0.06 },
+    F: { venues: ["NYSE"], shares: 1, price: 13.49, commission: "2 USD", side: "BUY" },
+    Fsell: { venues: ["NYSE"], shares: 1, price: 13.49, commission: "2 USD", side: "SELL", secTafNamed: false },
+    NAK: { venues: ["AMEX"], shares: 250, price: 1.26, commission: "2.50 USD" },
+    GNS: { venues: ["AMEX"], shares: 1500, price: 0.1532, commission: "2.30 USD", notional: 229.8 },
   },
 };
 
@@ -371,11 +379,9 @@ function remarkOf({ listing, market } = {}) {
   const lines = [];
   const ccy = String(listing?.currency || "").toUpperCase();
   const settle = ccy === "GBX" ? "GBP" : ccy;
-  lines.push(`FX is not on the stock card: a conversion only if cash is not already in ${settle || "the listing currency"}.`);
-  if (ADR_NAMED.test(String(listing?.name || "")) || market === "us") {
-    if (ADR_NAMED.test(String(listing?.name || ""))) {
-      lines.push("ADR/GDR pass-through typically 0.01–0.03 per share per year.");
-    }
+  lines.push(fxRemark("", settle));
+  if (ADR_NAMED.test(String(listing?.name || ""))) {
+    lines.push("Depositary receipt $0.01–0.03 per share per year.");
   }
   const custody = CUSTODY.rate[ccy];
   if (custody != null || market === "hu") {
@@ -640,11 +646,21 @@ function confidenceOf({
   if (buyComm) {
     said.push(
       buyComm.capped
-        ? `plafonnée : ${Number(buyComm.charged).toPrecision(4)} ${rule.ccy} par sens`
+        ? `plafonnée : ${Number(buyComm.charged).toPrecision(4)} ${rule.ccy} par sens` +
+          (market === "us" && MEASURED.seen.GNS
+            ? `. Mesuré le ${MEASURED.on} : ${MEASURED.seen.GNS.shares} GNS à ${MEASURED.seen.GNS.price} $ ` +
+              `répond ${MEASURED.seen.GNS.commission}, soit 1 % de ${MEASURED.seen.GNS.notional} $`
+            : "")
         : buyComm.floored
           ? `au plancher : le ticket de ${rule.min} ${rule.ccy} est toute la commission, ` +
-            `le calcul au barème n'en donnerait que ${Number(buyComm.raw).toPrecision(3)}`
-          : `au-dessus du plancher : ${Number(buyComm.charged).toPrecision(4)} ${rule.ccy} par sens`
+            `le calcul au barème n'en donnerait que ${Number(buyComm.raw).toPrecision(3)}` +
+            (market === "us" && MEASURED.seen.F
+              ? `. Mesuré le ${MEASURED.on} : ${MEASURED.seen.F.shares} F à ${MEASURED.seen.F.price} $ répond ${MEASURED.seen.F.commission}`
+              : "")
+          : `au-dessus du plancher : ${Number(buyComm.charged).toPrecision(4)} ${rule.ccy} par sens` +
+            (market === "us" && MEASURED.seen.NAK
+              ? `. Mesuré le ${MEASURED.on} : ${MEASURED.seen.NAK.shares} NAK à ${MEASURED.seen.NAK.price} $ répond ${MEASURED.seen.NAK.commission}`
+              : "")
     );
   }
   if (market === "frankfurt" || market === "stuttgart") {
@@ -698,7 +714,9 @@ function confidenceOf({
     said.push(
       `vente américaine : SEC ${SEC_RATE} du montant et TAF FINRA ${TAF_PER_SHARE} la part ` +
         `(plafond ${TAF_CAP} $). La page CapTrader imprime encore 0,0000278 / 0,000166 / 8,30 $, ` +
-        `les chiffres courants sont ceux que le tarif fixe IBKR répercute`
+        `les chiffres courants sont ceux que le tarif fixe IBKR répercute. ` +
+        `L'aperçu vente de ${MEASURED.seen.Fsell.shares} F le ${MEASURED.on} répond ${MEASURED.seen.Fsell.commission} ` +
+        `et n'isole ni SEC ni TAF`
     );
   }
   if (ptmDue === null) said.push(`prélèvement PTM indécidable : le montant n'a pas pu être converti en livres`);

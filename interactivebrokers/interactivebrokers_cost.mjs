@@ -56,7 +56,7 @@
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
 import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
 const CATALOGUE = new URL("interactivebrokers-parsed.json", import.meta.url);
@@ -210,7 +210,7 @@ export function resolveRule(market, currency, plan = DEFAULT_PLAN) {
   return { rule, bound: boundOf(rule, currency), usedPlan };
 }
 
-function remarkOf({ market, rule, usedPlan } = {}) {
+function remarkOf({ market, rule, usedPlan, currency } = {}) {
   const lines = [];
   if (market === "crypto") lines.push("zerohash europe, no tape.");
   if (rule?.tieredOnly) {
@@ -218,7 +218,7 @@ function remarkOf({ market, rule, usedPlan } = {}) {
   } else if (usedPlan === "tiered") {
     lines.push("Tiered first bucket. Exchange / clearing extra.");
   }
-  lines.push("FX 0.0008–0.002% if converted.");
+  lines.push(fxRemark("0.0008–0.002", currency));
   return lines.join("\n");
 }
 
@@ -437,6 +437,8 @@ export function roundTrip({
     mic: hit.venue?.mic ?? null,
     currency: hit.row.currency,
     unsourced: hit.unsourced,
+    broker: "interactivebrokers",
+    ticker: hit.row.ticker,
   });
   const listing = {
     isin: String(hit.row.isin || "").toUpperCase() || null,
@@ -474,7 +476,7 @@ export function roundTrip({
     tax,
     fx: fxNote(listing.currency),
     fxIfConverted: 0,
-    remark: remarkOf({ market, rule: resolved?.rule, usedPlan: resolved?.usedPlan }),
+    remark: remarkOf({ market, rule: resolved?.rule, usedPlan: resolved?.usedPlan, currency: listing.currency }),
   };
 
   if (!resolved) {

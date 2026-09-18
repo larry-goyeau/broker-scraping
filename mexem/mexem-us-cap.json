@@ -1,0 +1,80 @@
+{
+  "on": "2026-09-18T11:09:05.240Z",
+  "accountId": "U28294463",
+  "usd": {
+    "bal": 71.3,
+    "settled": 71.3
+  },
+  "pick": {
+    "symbol": "GNS",
+    "conid": 723442707,
+    "price": 0.1515,
+    "listing": "6267"
+  },
+  "whatifs": [
+    {
+      "quantity": 200,
+      "notional": 30.3,
+      "commission": "1 USD",
+      "total": "31.30 USD",
+      "amount": {
+        "amount": "30.30 USD (200 Shares)",
+        "commission": "1 USD",
+        "total": "31.30 USD"
+      },
+      "error": null,
+      "expect2": 0.606,
+      "expect1": 0.303,
+      "expectShare": 1,
+      "expectFloor": 1
+    },
+    {
+      "quantity": 350,
+      "notional": 53.025,
+      "commission": "1.06 ... 1.12 USD",
+      "total": "~ 54.12 USD",
+      "amount": {
+        "amount": "53.02 USD (350 Shares)",
+        "commission": "1.06 ... 1.12 USD",
+        "total": "~ 54.12 USD"
+      },
+      "error": null,
+      "expect2": 1.0605,
+      "expect1": 0.5302,
+      "expectShare": 1.75,
+      "expectFloor": 1
+    },
+    {
+      "quantity": 400,
+      "notional": 60.6,
+      "commission": "1.21 ... 1.28 USD",
+      "total": "~ 61.85 USD",
+      "amount": {
+        "amount": "60.60 USD (400 Shares)",
+        "commission": "1.21 ... 1.28 USD",
+        "total": "~ 61.85 USD"
+      },
+      "error": null,
+      "expect2": 1.212,
+      "expect1": 0.606,
+      "expectShare": 2,
+      "expectFloor": 1
+    },
+    {
+      "quantity": 450,
+      "notional": 68.175,
+      "commission": "1.36 ... 1.44 USD",
+      "total": "~ 69.58 USD",
+      "amount": {
+        "amount": "68.17 USD (450 Shares)",
+        "commission": "1.36 ... 1.44 USD",
+        "total": "~ 69.58 USD"
+      },
+      "error": null,
+      "expect2": 1.3635,
+      "expect1": 0.6817,
+      "expectShare": 2.25,
+      "expectFloor": 1
+    }
+  ]
+}

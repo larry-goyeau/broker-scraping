@@ -78,7 +78,7 @@ export function feeMarketOf() {
 }
 
 function remarkOf() {
-  return "FX 0.15% if converted.";
+  return "";
 }
 
 function findListing({ etf, place, currency }) {
@@ -205,7 +205,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     tax,
     fx: fxNote(listing.currency),
     fxIfConverted: FX_IF_CONVERTED,
-    remark: remarkOf(),
+    remark: remarkOf(listing.currency),
   };
 
   const basis = `barème IG Europe investments, palier ${market}, relu le ${SCHEDULE.readOn} : 0 € par jambe`;

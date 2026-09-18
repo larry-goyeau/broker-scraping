@@ -60,7 +60,7 @@
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
 import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
 const CATALOGUE = new URL("easyequities-parsed.json", import.meta.url);
@@ -152,9 +152,9 @@ function sidePct(rule) {
   return (rule.comm + (rule.extra || 0)) * (1 + VAT);
 }
 
-function remarkOf(market) {
+function remarkOf(market, currency) {
   if (market === "crypto") return "";
-  return ["Thrive 25 R/month.", "EasyFX 0.5% if converted."].join("\n");
+  return ["Thrive 25 R/month.", fxRemark("0.5", currency)].join("\n");
 }
 
 function stampOf({ market, listing, tax }) {
@@ -335,7 +335,7 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
     tax,
     fx: fxNote(listing.currency),
     fxIfConverted: 0,
-    remark: remarkOf(market),
+    remark: remarkOf(market, listing.currency),
   };
 
   const basis = crypto

@@ -1,156 +1,84 @@
-// What one round trip costs at tastytrade: buy n shares at price p, sell them back at once.
+// What one round trip costs at tastytrade: buy n shares at price p, sell them
+// back at once (online), in dollars.
 //
-//   coût (USD) = a × p × n + b × n + c
+// The affine triple hid the TAF cap, the SEC ceil-to-cent and the $1 crypto
+// floor. Thirteen real equity trips on 2026-08-25/27 and a $45 BTC trip on
+// 2026-09-08 already pinned the rounding. `roundTrip` is given the size and
+// charges what the ledger charged.
 //
-// The same three terms as `trading212_cost.mjs` and `swissquote_cost.mjs`, in the same
-// dollar unit, and the front end can call any of them without knowing which broker it is
-// asking about. This broker holds dollars and nothing else, so no conversion is required.
-// What differs is which term carries the weight.
-// At Trading212 everything sits in `a`, the spread being the whole bill. Here `a` is almost
-// empty and `b` is the real charge, because this broker takes no commission and the two fees
-// that remain are counted by the share.
+// tastytrade, Inc. (US, Apex). Commissions & Fees re-read 2026-09-17.
+// Stocks and ETFs share one line: $0 commission, $0.0008 / share clearing
+// each way (Apex), FINRA TAF $0.000195 / share on the sell (cap $9.79),
+// SEC $20.60 / $1,000,000 on the sell (their 4 April 2026 print). Fractional
+// shares clear at $0.10 a ticket instead. No CAT on the page. Stamp / FTT
+// from taxMap by ISIN. Cash is USD and every listing is USD, so FX stays out.
+// The catalogue has no OTC tape. The US book is Rule 605, the same leaf
+// every other American file reads. Crypto still has no book.
 //
-// That is not a detail of presentation. Thirteen real round trips on 25 August 2026, 68 500
-// dollars of notional, cost 3.21 dollars in total — 0.47 bp. Of that, 2.68 dollars were fees
-// and 0.53 was execution: 84% of what left the account was charged by rule, not paid to the
-// market. Trading212's proportions are the exact opposite.
+// Crypto is Zero Hash. The card now prints a commission, not a silent
+// markup: 0.75 % BTC / ETH, 1 % anything else, each way, $1 minimum, 3 %
+// cap under ~$33.33. A $45 BTC trip on 2026-09-08 paid that $1 floor both
+// ways, fills at the displayed touch. No SEC / TAF / clearing. The 1 % is
+// the cost; there is no book.
 //
-// That aggregate is a trap, though, and it took splitting the trips by book width to see it.
-// Twelve of the thirteen were on funds quoting a single cent, where the fees do dominate:
-// 2.67 dollars of fees against 0.44 of execution, and the execution as often negative as
-// positive. The thirteenth was AQLT, quoting nine cents — 28 bp at its price — and it paid
-// half of that quoted spread, exactly, which came to 87% of its cost and six times its fees.
-// So the market term is negligible only where the book is one tick wide, and on a fund that
-// quotes wider it is the whole answer.
+// Clearing is tastytrade's own line, so it is `brokerFees`. SEC and TAF
+// are not. Tickets already in the number stay out of the remark. ADR
+// pass-through is named without a rate, so it stays in the remark when
+// the name says so.
 //
-// Which is why it is now priced rather than omitted. `rule605-monthly.mjs` reads the monthly
-// execution-quality reports that Rule 605 obliges the firms executing retail flow to publish,
-// and takes their average effective spread: what orders in that security actually paid
-// against the midpoint, price improvement included. It arrives in dollars per share, so it
-// lands in `b` beside the fees rather than in `a` — an American quote moves by whole cents,
-// which makes the cost per share the thing that holds still and the percentage the thing that
-// drifts with the price.
+//   https://tastytrade.com/commissions-and-fees/
+//   https://tastytrade.com/pricing/
+//   https://tastytrade.com/crypto/
 //
-// It is a monthly average from five firms, Jane Street among them, which matters here because
-// it is one of the largest wholesalers in these very funds. Citadel and Virtu, which take much
-// of the retail flow in the United States, still publish behind bot protection and are missing.
-// The reporters that can be read disagree with each other by more than the figure itself on
-// thin funds, so treat those as an order of magnitude. Where it is absent entirely, `basis`
-// says `frais seuls` and the answer is a floor.
-//
-// One boundary is now measured rather than suspected, and it is worth knowing before trusting
-// `b` on a wide fund. The reports cover orders of 100 to 499 shares; below a hundred, the
-// legacy report does not look, and the improvement it credits does not arrive. Six round trips
-// of ten shares on 2026-08-27 put ACWI and IAU within a fraction of a cent of their published
-// figures, and AQLT at thirteen cents a share against 3.3 published — its two sales both filled
-// at the bid to the ten-thousandth, its purchases at the offer, the quoted spread paid whole.
-// So on a book wider than a tick, `b` is a round-lot price: for a smaller order, pass the quoted
-// touch as `perShare` and the formula becomes exact again.
-//
-// Shares use the same three fees as funds — tastytrade publishes one schedule for "stocks and
-// ETFs" — and the same 605 table, keyed by symbol. A share without a 605 line still answers,
-// as `frais seuls`, the way a fund does.
-//
-// Crypto does not. There is no SEC fee, no TAF, no clearing charge. Zero Hash marks the
-// execution up on the way in and down on the way out: 50 bp each way on BTC and ETH, 75 bp
-// on the other twenty-three pairs this catalogue carries. The round trip is therefore `a`
-// alone, 100 bp or 150 bp, and `b` is zero. That is the published barème.
-//
-// A $45 BTC ticket on 2026-09-08 paid none of that percentage. The two fills printed at the
-// displayed touch — 77657.65 in, 77657.64 out — and the account lost two dollars, one dollar
-// of brokerage on each leg, the amount the dry-run had reserved. `a` stays the published
-// rate; `floor` is that $2, which is the whole bill until the markup on a ticket exceeds a
-// dollar a side (about $200 of BTC). Do not fold the $2 into `a`: a larger order was not
-// traded, and a coefficient fitted on $45 would be the minimum wearing a percentage.
-//
-//   node tastytrade/tastytrade_cost.mjs ACWI NASDAQ USD
+//   node tastytrade/tastytrade_cost.mjs ACWI NASDAQ USD --shares=10 --price=160
 //   node tastytrade/tastytrade_cost.mjs AAPL NASDAQ USD --shares=1 --price=230
-//   node tastytrade/tastytrade_cost.mjs BTC/USD
-//   node tastytrade/tastytrade_cost.mjs --verify        -- rejoue le modèle sur les 23 ventes réelles
+//   node tastytrade/tastytrade_cost.mjs BTC/USD --amount=1000
+//   node tastytrade/tastytrade_cost.mjs --verify
+//   node tastytrade/tastytrade_cost.mjs --schedule
 //
-// `roundTripCost(...)` returns what the CLI prints and reads two files rather than the
-// network, so it needs no await. `exactCost(...)` is beside it for the cases where the
-// rounding matters, and at these amounts it often does.
+// `roundTrip(...)` reads files, not the network.
 
 import fs from "node:fs";
-import { listingKey, resolveVenue } from "../venues.mjs";
-import { plus, finite, bookParts } from "../na.mjs";
-import { QUOTE } from "../fx.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
+import { plus, finite } from "../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
+import { taxesOf, taxRates } from "../taxMap.mjs";
 
-// Anchored to the repository rather than to whatever directory the shell happens to be in, so
-// this works both as `node tastytrade/tastytrade_cost.mjs` and from inside the folder.
 const CATALOGUE = new URL("tastytrade-parsed.json", import.meta.url);
 const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
-const RULE605 = new URL("../parsed_json/rule605-monthly.json", import.meta.url);
 
-// ------------------------------------------------------------------ the broker's terms
+const SCHEDULE = {
+  source: "https://tastytrade.com/commissions-and-fees/",
+  pricing: "https://tastytrade.com/pricing/",
+  crypto: "https://tastytrade.com/crypto/",
+  readOn: "2026-09-17",
+  secAsOf: "2026-04-04",
+  entity: "tastytrade, Inc. (US)",
+};
 
-// `c`, charged by the order, is zero: no commission on shares or ETFs, on either leg, and
-// no ticket charge. The one place a flat term could hide is the SEC fee's rounding, which
-// is upward to the cent and therefore never returns nothing — that is `floor` below, not
-// `c`, because it is a minimum on a term rather than a term of its own.
-const FLAT = 0;
-
-// tastytrade's own clearing charge, both legs, and the largest of the three fees at every
-// size that was tested. Not a regulator's: this one is the broker's own, which is why it is
-// the only figure here that a competitor could undercut.
 const CLEARING_PER_SHARE = 0.0008;
-
-// FINRA's Trading Activity Fee, on the sell alone, at the rate FINRA published for 2026 and
-// capped per execution. The cap is reached at 50 206 shares, and it is assessed per
-// execution rather than per order, so an order broken into five fills gets five caps —
-// which makes the true bill depend on the slicing, something no function of n and p sees.
+const FRACTIONAL_CLEARING = 0.1;
 const TAF_PER_SHARE = 0.000195;
 const TAF_CAP = 9.79;
-
-// The SEC's Section 31 fee, on the sell alone, proportional to the proceeds. The rate is
-// 20.60 dollars per million, set on 27 February 2026 and effective 4 April; before that
-// date it stood at zero, so a model of this broker read from a 2025 statement would be
-// wrong in a way no arithmetic would reveal.
 const SEC_RATE = 0.0000206;
+const CRYPTO_BTC_ETH = 0.0075;
+const CRYPTO_OTHER = 0.01;
+const CRYPTO_MIN = 1;
+const CRYPTO_SMALL_CAP = 0.03;
+const CRYPTO_SMALL_UNTIL = CRYPTO_MIN / CRYPTO_SMALL_CAP;
+const ADR_NAMED = /\b(ADR|GDR|ADS)\b/i;
+const WIRE = { domestic: 25, foreign: 45, ccy: "USD" };
+const ACAT = { out: 75, ccy: "USD" };
 
-// Both fees are rounded before they are charged, and the two directions differ: the SEC
-// line up to the cent, the per-share lines to the tenth of a cent. Reproducing the ledger
-// requires getting this right — the difference between rounding the SEC fee up and rounding
-// it to the nearest is a cent on every small sell, which is the whole bill on a small sell.
-const up = (value, step) => Math.ceil(value / step - 1e-9) * step;
-const near = (value, step) => Math.round(value / step) * step;
-
-// `a` and `b`, as the front end wants them. `b` mixes a two-legged charge with a one-legged
-// one, which is exactly the folding a round-trip formula performs: clearing counts twice,
-// the TAF once.
-const PER_SHARE = 2 * CLEARING_PER_SHARE + TAF_PER_SHARE;
-
-// Crypto is a different product and a different bill. Zero Hash, not tastytrade, is the
-// dealer; it keeps a markup on the fill and tastytrade takes 65 % of that. The support
-// page splits the rate: 50 bp on BTC and ETH, 75 bp on everything else, each way — a
-// markdown on the sale, so a round trip pays it twice. No regulatory line attaches.
-const CRYPTO_MARKUP_EACH = { BTC: 0.005, ETH: 0.005 };
-const CRYPTO_MARKUP_OTHER = 0.0075;
-// One dollar a ticket, both legs, as the dry-run reserved and the $45 BTC trip paid.
-// Below ~$33 the published schedule caps this at 3 %; this account did not trade that small.
-const CRYPTO_COMMISSION_EACH = 1;
 const CRYPTO_CHECK = {
   pair: "BTC/USD",
   amount: 45,
   paid: 2,
   measured: 2 / 45,
-  published: 0.01,
-  commissionEach: CRYPTO_COMMISSION_EACH,
+  commissionEach: CRYPTO_MIN,
   on: "2026-09-08",
 };
 
-function cryptoBase(symbol) {
-  const text = String(symbol || "").toUpperCase();
-  const cut = text.indexOf("/");
-  return cut >= 0 ? text.slice(0, cut) : text.replace(/USD$/, "");
-}
-
-// The 23 sell fills in the account's ledger for that day, as tastytrade reported them:
-// shares, proceeds, then the two fee lines it charged. Kept because they are what makes the
-// figures above more than a reading of a fee schedule — `--verify` recomputes the model
-// against them, and it reproduces all 23 to the tenth of a cent. The 18:23 ACWI order
-// filled in two pieces, which is why there are 23 sells for 13 round trips.
 const LEDGER_SELLS = [
   ["AQLT", 2, 63.96, 0.01, 0.002],
   ["AQLT", 10, 313.6, 0.012, 0.008],
@@ -177,246 +105,41 @@ const LEDGER_SELLS = [
   ["ACWI", 45, 7239.15, 0.159, 0.036],
 ];
 
-// ------------------------------------------------------------------------- the listing
-
-const catalogue = JSON.parse(fs.readFileSync(CATALOGUE, "utf8"));
-const rows = Array.isArray(catalogue) ? catalogue : catalogue.rows || [];
-const spreads = JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {};
+const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
+const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
+const spreads = fs.existsSync(SPREADS) ? JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {} : {};
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+const code = (s) => String(s || "").trim().toUpperCase();
+const up = (value, step) => Math.ceil(value / step - 1e-9) * step;
+const near = (value, step) => Math.round(value / step) * step;
 
-// Same search as the Trading212 file. The American venues resolve to MICs like the European
-// ones now, so the first branch does the work; the loose comparison on the broker's own
-// spelling stays as the fallback for a label no alias list has met yet.
-function findListing({ etf, place, currency }) {
-  const asked = loose(etf);
-  const wantVenue = place ? resolveVenue({ exchange: place, mic: place }).venue : null;
-  const wantPlace = loose(place);
-  const wantCurrency = String(currency || "").toUpperCase();
+const cryptoBase = (symbol) => {
+  const text = code(symbol);
+  const cut = text.indexOf("/");
+  return cut >= 0 ? text.slice(0, cut) : text.replace(/USD$/, "");
+};
 
-  const named = rows.filter((r) => {
-    if (loose(r.isin) === asked || loose(r.ticker) === asked) return true;
-    return r.type === "CRYPTO" && loose(cryptoBase(r.ticker)) === asked;
-  });
+const isCrypto = (row) => code(row?.type) === "CRYPTO";
+const isAdr = (row) => ADR_NAMED.test(String(row?.name || ""));
+const fxNote = (currency) => ({ quote: QUOTE, asOf: FX_AS_OF, listing: usdPer(currency) });
 
-  const crypto = named.filter((r) => r.type === "CRYPTO");
-  if (crypto.length && (!place || /crypto/i.test(place))) {
-    return { named, matches: [{ row: crypto[0], venue: null }] };
-  }
-
-  const matches = named
-    .filter((r) => r.type !== "CRYPTO")
-    .map((r) => ({ row: r, ...listingKey(r) }))
-    .filter((m) => {
-      if (!wantPlace) return true;
-      if (wantVenue && m.venue) return m.venue.mic === wantVenue.mic;
-      return loose(m.row.exchange) === wantPlace || loose(m.row.exchange).includes(wantPlace);
-    })
-    .filter((m) => !wantCurrency || String(m.row.currency || "").toUpperCase() === wantCurrency);
-
-  return { named, matches };
+export function cryptoCommission(notional, symbol) {
+  const amt = Number(notional);
+  if (!(amt > 0)) return null;
+  if (amt < CRYPTO_SMALL_UNTIL) return amt * CRYPTO_SMALL_CAP;
+  const base = cryptoBase(symbol);
+  const rate = base === "BTC" || base === "ETH" ? CRYPTO_BTC_ETH : CRYPTO_OTHER;
+  return Math.max(CRYPTO_MIN, amt * rate);
 }
 
-// ---------------------------------------------------------------------------- the cost
-
-export function roundTripCost({ etf, place, currency, bp = null, perShare = null }) {
-  const { named, matches } = findListing({ etf, place, currency });
-  const answer = {
-    a: null,
-    b: Number(PER_SHARE.toPrecision(6)),
-    c: FLAT,
-    ccy: QUOTE,
-    // Every sell's SEC line is rounded up to the cent, so no round trip is cheaper than
-    // that cent however small it is. On one share of a 31-dollar fund it was the entire
-    // regulatory charge.
-    floor: 0.01,
-    // Where `b` stops growing. Per execution, not per order.
-    cap: { term: "b", part: "FINRA TAF", amount: TAF_CAP, fromShares: Math.ceil(TAF_CAP / TAF_PER_SHARE), per: "exécution" },
-    etf,
-    place,
-    currency,
-  };
-
-  if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue tastytrade` };
-
-  const cryptoRow = named.find((r) => r.type === "CRYPTO");
-  if (cryptoRow && (!place || /crypto/i.test(place))) return cryptoCost(cryptoRow, answer);
-
-  if (!matches.length)
-    return {
-      ...answer,
-      why: `${etf} n'est pas coté sur cette place dans cette devise chez tastytrade`,
-      alternatives: named.map((r) => `${r.ticker || r.isin} ${r.currency || "?"} @ ${r.exchange || "place non dite"}`).slice(0, 12),
-    };
-
-  const m = matches[0];
-  const listing = {
-    isin: String(m.row.isin || "").toUpperCase(),
-    ticker: m.row.ticker || null,
-    name: m.row.name || null,
-    type: m.row.type || null,
-    mic: m.venue?.mic ?? null,
-    exchange: m.venue?.name ?? m.row.exchange ?? null,
-    currency: String(m.row.currency || "").toUpperCase(),
-  };
-
-  // A spread is a fact about one book, so the file is only consulted at this listing's own
-  // venue. Borrowing a European reading for an American line would be the one error worth
-  // preventing here: they are different funds with different books, and a US-listed tracker
-  // is not the Dublin one whatever its name says.
-  const leaf = (listing.mic && spreads[listing.isin]?.[listing.mic]?.[listing.currency]) || null;
-  // Two units can arrive, and each folds into the coefficient that shares its shape: a
-  // percentage of the amount into `a`, a charge per share into `b`. American listings come
-  // per share, which is why that is the branch this broker normally takes.
-  const marketBp = bp ?? leaf?.bp ?? null;
-  const marketPerShare = perShare ?? leaf?.perShare ?? null;
-  const mkt = bookParts({
-    bp: marketBp,
-    perShare: marketPerShare,
-    venue: m.venue,
-    unsourced: m.unsourced,
-    toUsd: (x) => x,
-  });
-
-  return {
-    ...answer,
-    // a = the SEC's rate, plus a percentage-quoted book if one was given for this line.
-    a: finite(plus(SEC_RATE, mkt.a), 4),
-    // b = the two per-share fees, plus the book when it is quoted per share.
-    b: finite(plus(PER_SHARE, mkt.b), 6),
-    listing,
-    bp: marketBp,
-    perShare: marketPerShare,
-    url: leaf?.url ?? null,
-    basis:
-      bp || perShare
-        ? "imposé"
-        : marketBp != null || marketPerShare != null
-          ? "publié"
-          : "frais seuls",
-    // Which rule each part of the answer comes from, so a rate that changes can be traced
-    // to its term rather than hunted through a total.
-    fees: {
-      secOfAmount: SEC_RATE,
-      tafPerShare: TAF_PER_SHARE,
-      clearingPerShareEachWay: CLEARING_PER_SHARE,
-      commission: 0,
-    },
-    // A published effective spread above a cent a share means the touch is wider than the
-    // minimum tick, so the improvement inside that figure is doing real work — and it is
-    // exactly there that an odd lot stops receiving it. Price-free on purpose: the same test
-    // has to hold whatever the share costs.
-    confidence: confidenceOf(marketBp ?? marketPerShare, m, (marketPerShare ?? 0) > 0.01, listing.type),
-    // tastytrade holds dollars and nothing else, so no conversion is charged by the broker.
-    // What a euro-funded person pays to get dollars in is their bank's business and does not
-    // belong to this formula.
-    fxIfConverted: null,
-    remark: "",
-    // Named apart from the Trading212 file's `check` on purpose: there it reports what real
-    // orders paid on that very line, here it reports that the fee arithmetic reproduces a
-    // ledger. A front end that treated the two as the same field would compare a measured
-    // cost with a passed test.
-    validation: {
-      sells: LEDGER_SELLS.length,
-      reproduced: verify().ok,
-      trips: 13,
-      sharesRoundTripped: ledgerFees().shares,
-      // Both legs of the fee side, off the ledger. The total the account actually lost on
-      // those trips was 3.21 $, execution included, and that one cannot be rebuilt here: the
-      // buy prices are not in this file, only the sells are.
-      fees: ledgerFees().roundTrip,
-      paidRealised: 3.21,
-      // The market term compared with what those trips actually paid, fund by fund and in
-      // cents per share, read from the table each time rather than written down: the blend
-      // changes when a reporter is added, and a number copied here would quietly stop
-      // describing the coefficient above. Adding Jane Street halved the figure for IAU,
-      // from 0.31 to 0.17, against 0.079 measured.
-      //
-      // The trips remain a weak test whatever the blend. Execution swung by more than a
-      // dollar a trip on the two 100-share IAU round trips alone, and the interval around
-      // the IAU measurement, -0.31 to +0.44 cents, contains any of these published values.
-      // Reported rather than tuned away: fitting the coefficient to this sample would be
-      // fitting it to noise.
-      market: perShareAgainstMeasured(),
-      on: "2026-08-27",
-    },
-  };
+export function clearingEach(shares) {
+  const n = Number(shares);
+  if (!(n > 0)) return null;
+  if (!Number.isInteger(n)) return FRACTIONAL_CLEARING;
+  return up(n * CLEARING_PER_SHARE, 0.001);
 }
 
-function cryptoCost(row, answer) {
-  const base = cryptoBase(row.ticker);
-  const each = CRYPTO_MARKUP_EACH[base] ?? CRYPTO_MARKUP_OTHER;
-  const roundTrip = each * 2;
-  const floor = CRYPTO_COMMISSION_EACH * 2;
-  const measuredOnThisPair = row.ticker === CRYPTO_CHECK.pair;
-  return {
-    ...answer,
-    a: Number(roundTrip.toPrecision(4)),
-    b: 0,
-    c: 0,
-    floor,
-    cap: null,
-    listing: {
-      isin: null,
-      ticker: row.ticker,
-      name: row.name,
-      type: "CRYPTO",
-      mic: null,
-      exchange: "tastytrade (Zero Hash)",
-      currency: String(row.currency || "USD").toUpperCase(),
-    },
-    parts: { marché: Number(roundTrip.toPrecision(4)), markupEachWay: each, commissionEachWay: CRYPTO_COMMISSION_EACH },
-    bp: Number((roundTrip * 1e4).toFixed(0)),
-    perShare: null,
-    url: "https://tastytrade.com/crypto/",
-    basis: "barème Zero Hash, markup à l'achat et markdown à la vente ; plancher 1 $ par ticket",
-    remark: "min fees 2 $ (Zero Hash).",
-    fees: { commission: CRYPTO_COMMISSION_EACH, secOfAmount: 0, tafPerShare: 0, clearingPerShareEachWay: 0 },
-    confidence:
-      `pas de frais SEC ni FINRA. Zero Hash publie ${Number((100 * each).toFixed(2))} % ` +
-      `sur chaque jambe (${base === "BTC" || base === "ETH" ? "50 bp, BTC et ETH" : "75 bp, hors BTC/ETH"}), ` +
-      `soit ${Number((100 * roundTrip).toFixed(2))} % l'aller-retour — c'est \`a\`. ` +
-      `Un aller-retour réel de ${CRYPTO_CHECK.amount} $ sur ${CRYPTO_CHECK.pair} a payé ` +
-      `${CRYPTO_CHECK.paid} $ (${(100 * CRYPTO_CHECK.measured).toFixed(2)} %), ` +
-      `soit ×${(CRYPTO_CHECK.measured / CRYPTO_CHECK.published).toFixed(2)} le barème : ` +
-      `les deux fills au touché affiché, 1 $ de courtage par jambe, le plancher. ` +
-      `Sous ~${(CRYPTO_COMMISSION_EACH / each).toFixed(0)} $ le plancher est toute la facture` +
-      (measuredOnThisPair ? "" : ` ; mesuré sur ${CRYPTO_CHECK.pair}, pas sur cette paire`),
-    check: {
-      bp: Number((1e4 * CRYPTO_CHECK.measured).toFixed(0)),
-      trips: 1,
-      range: [CRYPTO_CHECK.paid, CRYPTO_CHECK.paid],
-      on: CRYPTO_CHECK.on,
-      ratio: Number((CRYPTO_CHECK.measured / CRYPTO_CHECK.published).toFixed(2)),
-      note: measuredOnThisPair ? null : `mesuré sur ${CRYPTO_CHECK.pair}, pas sur cette paire`,
-    },
-    fxIfConverted: null,
-  };
-}
-
-// What the broker will actually charge, rounding included, for whoever needs the cent
-// rather than the coefficient. The affine form is the average of this; on a small order the
-// two differ by most of the bill.
-export function exactCost({ shares, price, bp = null, perShare = null }) {
-  const proceeds = shares * price;
-  const clearing = up(shares * CLEARING_PER_SHARE, 0.001) * 2;
-  const taf = Math.min(near(shares * TAF_PER_SHARE, 0.001), TAF_CAP);
-  const sec = up(proceeds * SEC_RATE, 0.01);
-  // The market's share of the bill is not rounded: it is not a line on the statement but
-  // the price the fills came in at, already inside them.
-  const market = ((bp ?? 0) / 1e4) * proceeds + (perShare ?? 0) * shares;
-  return {
-    clearing: Number(clearing.toFixed(4)),
-    taf: Number(taf.toFixed(4)),
-    sec: Number(sec.toFixed(4)),
-    market: Number(market.toFixed(4)),
-    total: Number((clearing + taf + sec + market).toFixed(4)),
-  };
-}
-
-// Replays the model against the ledger. Kept in the file rather than in a test because the
-// three rates expire — the SEC resets its own every year, FINRA has published increases
-// through 2029 — and this is what will fail first when one of them moves.
 export function verify() {
   const wrong = [];
   for (const [symbol, shares, proceeds, regulatory, clearing] of LEDGER_SELLS) {
@@ -431,185 +154,433 @@ export function verify() {
   return { ok: LEDGER_SELLS.length - wrong.length, of: LEDGER_SELLS.length, wrong };
 }
 
-// What real orders paid the market, in cents a share, beside what the reports say about the
-// same funds. The measured side is written down because it is a measurement and will not
-// change; the published side is read at every call, because it moves whenever a reporter joins
-// the table, and a copy of it here would go on describing a blend that no longer exists.
-//
-// Two campaigns, and the second is the one that found the limit of the published figure. Six
-// round trips of ten shares, each leg measured against the mid standing just before it — the
-// Rule 605 definition — say that a penny-wide book behaves as advertised and a wide one does
-// not: AQLT quoted 32.05/32.19 and both sales filled at 32.0500 exactly, the bid, while both
-// purchases filled at the offer. Thirteen cents a share against 3.3 published. The reports
-// average orders of 100 to 499 shares, and an odd lot is not in that sample at all, so on a
-// wide book they describe an improvement a ten-share order does not get.
-const MEASURED = [
-  {
-    on: "2026-08-25",
-    shares: "1 à 100",
-    how: "exécution réalisée sur treize allers-retours",
-    cents: { IAU: 0.079, AQLT: 4.5, CLOI: 0.17 },
-  },
-  {
-    on: "2026-08-27",
-    shares: 10,
-    how: "six allers-retours, chaque jambe contre le mid qui la précédait",
-    cents: { ACWI: -0.18, IAU: 0.24, AQLT: 12.99 },
-  },
-];
+function findListing({ etf, place, currency }) {
+  const asked = loose(etf);
+  const resolved = place ? resolveVenue({ exchange: place, mic: place }) : {};
+  const wantVenue = resolved.venue || null;
+  const wantPlace = loose(place);
+  const wantCurrency = code(currency);
 
-const perShareAgainstMeasured = () => {
-  let table = {};
-  try {
-    table = JSON.parse(fs.readFileSync(RULE605, "utf8")).symbols || {};
-  } catch {}
-  return MEASURED.map((campaign) => ({
-    on: campaign.on,
-    shares: campaign.shares,
-    how: campaign.how,
-    funds: Object.entries(campaign.cents).map(([symbol, paid]) => ({
-      symbol,
-      paidCentsPerShare: paid,
-      publishedCentsPerShare: table[symbol]
-        ? Number((table[symbol].perShare * 100).toFixed(3))
-        : null,
-    })),
-  }));
-};
+  const named = rows.filter((r) => {
+    if (isCrypto(r) && (loose(cryptoBase(r.ticker)) === asked || loose(r.ticker) === asked)) return true;
+    return loose(r.isin) === asked || loose(r.ticker) === asked || loose(r.query) === asked;
+  });
 
-// The fee side of the same trips, summed off the ledger rather than quoted: both clearing legs
-// and the sell-side regulatory lines, over the 816 shares that went round.
-const ledgerFees = () => {
-  let regulatory = 0;
-  let clearing = 0;
-  let shares = 0;
-  for (const [, n, , r, c] of LEDGER_SELLS) {
-    regulatory += r;
-    clearing += c;
-    shares += n;
+  const crypto = named.filter(isCrypto);
+  if (crypto.length && (!place || /crypto/i.test(String(place)))) {
+    return { named, matches: crypto.map((r) => ({ row: r, venue: null, unsourced: { match: "crypto" } })) };
   }
-  return { shares, roundTrip: Number((regulatory + 2 * clearing).toFixed(2)) };
-};
 
-// The fee side is not an estimate — and now not even a reading of a schedule: tastytrade quotes
-// the fees of an order before it exists, and on all twelve legs of the six round trips its
-// quote and this model agreed to five hundredths of a cent. The residue is one rounding: the
-// quote carries the FINRA fee unrounded, 0.00195 $ for ten shares, where the ledger charged it
-// to the nearest mill. What the market takes is the estimate, and the funds where both a
-// measurement and a published figure exist say how good a one: on IAU and ACWI the reports land
-// within a fraction of a cent of what was paid; on AQLT they are a quarter of it at ten shares,
-// for the reason given at the top. `validation.market` recomputes those comparisons from the
-// current table rather than repeating them.
-//
-// Two caveats travel with every one of those figures. They average a month of orders of 100
-// to 499 shares, and a smaller order is not in the sample at all, the legacy report not
-// covering odd lots. And they come from five firms rather than the seven that matter: Citadel
-// and Virtu are missing, and on a thin fund the five that can be read disagree by more than
-// the number itself, which is the honest width of it.
-const confidenceOf = (market, match, touchWide, type) => {
-  const family = type === "STOCK" ? "actions" : "fonds";
-  const fees =
-    `frais exacts (même barème actions et ETF ; 23 ventes de fonds reproduites)`;
-  return market != null
-    ? `${fees}, plus le spread effectif publié : moyenne ` +
-      `mensuelle sur les ordres immédiats de 100 à 499 parts, cinq teneurs, Citadel et Virtu manquants` +
-      (touchWide
-        ? `. ATTENTION carnet large : sous 100 parts, l'amélioration de prix que ce chiffre contient ` +
-          `n'a pas lieu — six allers-retours de 10 parts ont payé 13 c/part sur AQLT contre 3,3 c publiés, ` +
-          `soit la touche entière. Pour un ordre en lot rompu, passer la touche cotée en \`perShare\``
-        : "") +
-      (type === "STOCK" ? `. Les allers-retours mesurés sont des fonds ; une action paie les mêmes frais, le carnet est le 605 de son symbole` : "")
-    : `${fees}, mais AUCUN carnet : ${match.unsourced?.name || "cette place"}, ${match.unsourced?.why || "pas de source"}. ` +
-      `À lire comme un plancher. Sur un carnet coté au cent l'omission est sans biais (douze allers-retours, exécution moyenne 0,067 c/part, intervalle à 95 % contenant zéro) ; ` +
-      `sur le seul fonds mesuré à carnet large, 9 c cotés, elle a fait manquer 14 bp contre 2,2 bp de frais` +
-      (type === "STOCK" ? ` — ${family} sans ligne 605 : mêmes frais, pas de carnet` : "");
-};
+  const exactCode = wantPlace ? named.filter((r) => loose(r.exchange) === wantPlace) : [];
+  const pool = exactCode.length ? exactCode : named.filter((r) => !isCrypto(r));
+  const matches = pool
+    .map((r) => ({ row: r, ...listingKey(r) }))
+    .filter((m) => {
+      if (!wantPlace) return true;
+      if (exactCode.length) return true;
+      if (wantVenue && m.venue) return m.venue.mic === wantVenue.mic;
+      return loose(m.row.exchange) === wantPlace || loose(m.row.exchange).includes(wantPlace);
+    })
+    .filter((m) => !wantCurrency || code(m.row.currency) === wantCurrency);
 
-// ------------------------------------------------------------------------------- entrée
+  return { named, matches };
+}
+
+const listAlternatives = (named) =>
+  named
+    .map((r) => `${r.ticker || r.isin} ${r.currency || "USD"} @ ${r.exchange || "place non dite"}`)
+    .slice(0, 12);
+
+function remarkOf({ adr }) {
+  return adr ? "ADR fees passed through." : "";
+}
+
+/**
+ * The whole bill for buying `shares` at `price` and selling them straight
+ * back. `usd` is the number the page prints; `brokerFees` is only
+ * tastytrade's own line (clearing, or the Zero Hash commission).
+ */
+export function roundTrip({
+  etf,
+  place,
+  currency,
+  shares,
+  price,
+  amount = null,
+  bp = null,
+  perShare = null,
+}) {
+  const answer = {
+    usd: null,
+    brokerFees: null,
+    ccy: QUOTE,
+    etf,
+    place,
+    currency,
+    onlineBuy: true,
+    cashCurrency: "USD",
+  };
+
+  if (!catalogue) {
+    return {
+      ...answer,
+      why: "le catalogue tastytrade n'existe pas encore : lancer `node tastytrade/tastytrade_scraping.mjs`",
+    };
+  }
+
+  const { named, matches } = findListing({ etf, place, currency });
+  if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue tastytrade` };
+  if (!matches.length) {
+    return {
+      ...answer,
+      why: `${etf} n'est pas coté sur cette place dans cette devise chez tastytrade`,
+      alternatives: listAlternatives(named),
+    };
+  }
+
+  const m = matches[0];
+  const crypto = isCrypto(m.row);
+  const book = crypto
+    ? { leaf: null, mic: null }
+    : spreadLeaf(spreads, {
+        isin: m.row.isin,
+        mic: m.venue?.mic ?? null,
+        currency: m.row.currency,
+        unsourced: m.unsourced,
+        broker: "tastytrade",
+        ticker: m.row.ticker,
+      });
+  const listing = {
+    isin: code(m.row.isin) || null,
+    ticker: m.row.ticker || null,
+    name: m.row.name || null,
+    type: m.row.type || null,
+    mic: book.mic ?? m.venue?.mic ?? null,
+    exchange: crypto
+      ? "tastytrade (Zero Hash)"
+      : m.venue?.name ?? m.unsourced?.name ?? m.row.exchange ?? null,
+    currency: code(m.row.currency) || "USD",
+    brokerExchange: m.row.exchange || null,
+    adr: isAdr(m.row),
+  };
+
+  const leaf = book.leaf;
+  const n = Number(shares);
+  const p = Number(price);
+  const cash = Number(amount);
+  const notional = crypto && cash > 0 ? cash : n > 0 && p > 0 ? n * p : null;
+  const marketBp = bp ?? leaf?.bp ?? null;
+  const marketPerShare = perShare ?? leaf?.perShare ?? null;
+  const tax = crypto ? { rates: {} } : taxesOf(listing.isin);
+  const rates = taxRates(tax);
+  const taxPct = Object.values(rates).reduce((s, r) => s + r, 0);
+
+  const shared = {
+    ...answer,
+    listing,
+    feeMarket: crypto ? "crypto" : "listed",
+    cashCurrency: "USD",
+    remark: remarkOf({ crypto, adr: listing.adr }),
+    bp: marketBp,
+    perShare: marketPerShare,
+    url: leaf?.url ?? (crypto ? SCHEDULE.crypto : SCHEDULE.source),
+    basis: crypto
+      ? `barème tastytrade Zero Hash, relu le ${SCHEDULE.readOn}`
+      : `barème tastytrade actions/ETF, relu le ${SCHEDULE.readOn} (SEC au ${SCHEDULE.secAsOf})`,
+    tax,
+    ccy: QUOTE,
+    fx: fxNote(listing.currency),
+    fxIfConverted: 0,
+    validation: crypto ? { check: CRYPTO_CHECK } : { sells: LEDGER_SELLS.length, reproduced: verify().ok, on: "2026-08-27" },
+  };
+
+  if (notional == null) {
+    return {
+      ...shared,
+      why: crypto
+        ? "aucun montant pour cette ligne crypto"
+        : !(n > 0)
+          ? "aucun nombre de parts"
+          : "aucun prix pour cette ligne : lancer node prices.mjs",
+      confidence: confidenceOf({
+        crypto,
+        listing,
+        leaf,
+        marketBp,
+        marketPerShare,
+        unsourced: m.unsourced,
+        taxPct,
+      }),
+    };
+  }
+
+  const notionalUsd = toUsd(notional, listing.currency);
+
+  if (crypto) {
+    const each = cryptoCommission(notional, listing.ticker);
+    const brokerFees = each == null ? null : each * 2;
+    return {
+      ...shared,
+      usd: finite(brokerFees, 6),
+      brokerFees: finite(brokerFees, 6),
+      trade: {
+        shares: null,
+        price: null,
+        amount: notional,
+        notional,
+        notionalUsd: finite(notionalUsd, 6),
+        currency: listing.currency,
+      },
+      commission: {
+        each,
+        currency: "USD",
+        eachWay: true,
+        rate: cryptoBase(listing.ticker) === "BTC" || cryptoBase(listing.ticker) === "ETH" ? CRYPTO_BTC_ETH : CRYPTO_OTHER,
+        min: CRYPTO_MIN,
+      },
+      parts: { marché: 0, courtage: finite(brokerFees, 6), réglementaire: 0, taxes: 0 },
+      check: CRYPTO_CHECK,
+      confidence: confidenceOf({
+        crypto,
+        listing,
+        leaf,
+        marketBp,
+        marketPerShare,
+        unsourced: m.unsourced,
+        taxPct,
+        each,
+        notional,
+      }),
+    };
+  }
+
+  const clearing = clearingEach(n);
+  const tafRaw = Math.min(near(n * TAF_PER_SHARE, 0.001), TAF_CAP);
+  const secUsd = up(notionalUsd * SEC_RATE, 0.01);
+  const bookUsd =
+    marketPerShare != null
+      ? marketPerShare * n
+      : marketBp != null && notionalUsd != null
+        ? (notionalUsd * marketBp) / 1e4
+        : null;
+  const taxUsd = notionalUsd == null ? 0 : notionalUsd * taxPct;
+  const brokerFees = plus(clearing, clearing);
+  const usd = plus(bookUsd, brokerFees, secUsd, tafRaw, taxUsd);
+
+  return {
+    ...shared,
+    usd: finite(usd, 6),
+    brokerFees: finite(brokerFees, 6),
+    ...(bookUsd == null
+      ? {
+          why: `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ${
+            m.unsourced?.why || "pas de feuille de carnet"
+          }`,
+        }
+      : {}),
+    trade: {
+      shares: n,
+      price: p,
+      amount: null,
+      notional,
+      notionalUsd: finite(notionalUsd, 6),
+      currency: listing.currency,
+    },
+    commission: { each: 0, currency: "USD", eachWay: true, clearingEach: clearing },
+    parts: {
+      marché: finite(bookUsd, 6),
+      courtage: finite(brokerFees, 6),
+      réglementaire: finite(plus(secUsd, tafRaw), 6),
+      taxes: finite(taxUsd, 6),
+    },
+    sell: { sec: finite(secUsd, 6), taf: finite(tafRaw, 6), tafCapped: n * TAF_PER_SHARE >= TAF_CAP },
+    confidence: confidenceOf({
+      crypto,
+      listing,
+      leaf,
+      marketBp,
+      marketPerShare,
+      unsourced: m.unsourced,
+      taxPct,
+      n,
+      notional,
+      clearing,
+    }),
+  };
+}
+
+function confidenceOf({
+  crypto,
+  listing,
+  leaf,
+  marketBp,
+  marketPerShare,
+  unsourced,
+  taxPct,
+  each,
+  n,
+  notional,
+  clearing,
+}) {
+  const said = [];
+  if (crypto) {
+    const base = cryptoBase(listing.ticker);
+    const rate = base === "BTC" || base === "ETH" ? CRYPTO_BTC_ETH : CRYPTO_OTHER;
+    said.push(
+      `commission Zero Hash ${100 * rate} % par sens (BTC/ETH 0,75 %, sinon 1 %), ` +
+        `plancher ${CRYPTO_MIN} $, plafond ${100 * CRYPTO_SMALL_CAP} % sous ~${CRYPTO_SMALL_UNTIL.toFixed(2)} $, ` +
+        `lue le ${SCHEDULE.readOn}`
+    );
+    if (each != null) said.push(`ticket ${Number(each.toPrecision(4))} $ par sens`);
+    said.push(
+      `mesuré le ${CRYPTO_CHECK.on} : ${CRYPTO_CHECK.amount} $ sur ${CRYPTO_CHECK.pair} → ${CRYPTO_CHECK.paid} $ (plancher)`
+    );
+    said.push(`pas de carnet : le % est le coût, pas N/A`);
+  } else {
+    said.push(
+      `compensation ${CLEARING_PER_SHARE} $/part chaque sens, TAF ${TAF_PER_SHARE} $/part à la vente ` +
+        `plafonnée à ${TAF_CAP} $, SEC ${SEC_RATE} du montant à la vente (taux du ${SCHEDULE.secAsOf}), ` +
+        `lus le ${SCHEDULE.readOn}`
+    );
+    said.push(`23 ventes du grand livre reproduites (${verify().ok}/${LEDGER_SELLS.length})`);
+    if (clearing != null) said.push(`compensation ${clearing} $ par sens`);
+    if (taxPct) said.push(`taxe de transfert ${(100 * taxPct).toFixed(2)} % prise dans taxMap.mjs`);
+    if (marketPerShare != null) said.push(`carnet Rule 605, ${marketPerShare} $ la part`);
+    else if (marketBp != null) said.push(`carnet ${Number(marketBp.toPrecision(4))} bp`);
+    else {
+      said.push(
+        `pas de feuille de carnet : ${unsourced?.name || listing.exchange}, ${
+          unsourced?.why || "pas de source"
+        }`
+      );
+    }
+    if (!leaf) said.push(`carnet absent pour cette ligne`);
+  }
+  said.push(
+    `hors trajet : virement ${WIRE.domestic} $ / ${WIRE.foreign} $, ACAT sortant ${ACAT.out} $. ` +
+      `Compte en dollars, pas de change. CAT non nommé`
+  );
+  if (n && notional) said.push(`${n} parts, ${Number(notional).toFixed(2)} ${listing.currency}`);
+  return said.join(" ; ");
+}
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const flag = (name) => {
-    const m = process.argv.find((a) => a.startsWith(`--${name}=`));
-    return m ? m.split("=").slice(1).join("=") : null;
+    const hit = process.argv.find((a) => a.startsWith(`--${name}=`));
+    return hit ? hit.split("=").slice(1).join("=") : null;
   };
 
   if (process.argv.includes("--verify")) {
     const v = verify();
     console.log(`modèle de frais contre le grand livre : ${v.ok} ventes sur ${v.of}`);
-    for (const w of v.wrong)
+    for (const w of v.wrong) {
       console.log(
         `  ✗ ${w.symbol} ×${w.shares} : facturé ${w.charged.regulatory}/${w.charged.clearing}, ` +
           `modèle ${w.model.regulatory.toFixed(3)}/${w.model.clearing.toFixed(3)}`
       );
+    }
     process.exit(v.wrong.length ? 1 : 0);
+  }
+
+  if (process.argv.includes("--schedule")) {
+    console.log(
+      JSON.stringify(
+        {
+          ...SCHEDULE,
+          equity: {
+            commission: 0,
+            clearing: CLEARING_PER_SHARE,
+            fractional: FRACTIONAL_CLEARING,
+            taf: { perShare: TAF_PER_SHARE, cap: TAF_CAP },
+            sec: SEC_RATE,
+          },
+          crypto: {
+            btcEth: CRYPTO_BTC_ETH,
+            other: CRYPTO_OTHER,
+            min: CRYPTO_MIN,
+            smallCap: CRYPTO_SMALL_CAP,
+            smallUntil: CRYPTO_SMALL_UNTIL,
+            check: CRYPTO_CHECK,
+          },
+          withdraw: WIRE,
+          acat: ACAT,
+          verify: verify(),
+        },
+        null,
+        2
+      )
+    );
+    process.exit(0);
   }
 
   const positional = process.argv.slice(2).filter((a) => !a.startsWith("--"));
   const [etf, place, currency] = positional;
-
   if (!etf) {
     console.error(
-      "usage : node tastytrade_cost.mjs <ticker|ISIN|paire> [place] [devise] [--shares=n] [--price=p] [--bp=x] [--json]\n" +
-        "        node tastytrade_cost.mjs --verify\n" +
-        "  ex.   node tastytrade_cost.mjs ACWI NASDAQ USD --shares=50 --price=160.87\n" +
-        "        node tastytrade_cost.mjs AAPL NASDAQ USD --shares=1 --price=230\n" +
-        "        node tastytrade_cost.mjs BTC/USD --shares=1 --price=100000"
+      "usage : node tastytrade/tastytrade_cost.mjs <ticker|ISIN|paire> [place] [devise] [--shares=n] [--price=p]\n" +
+        "        node tastytrade/tastytrade_cost.mjs --verify\n" +
+        "        node tastytrade/tastytrade_cost.mjs --schedule\n" +
+        "  ex.   node tastytrade/tastytrade_cost.mjs ACWI NASDAQ USD --shares=10 --price=160\n" +
+        "        node tastytrade/tastytrade_cost.mjs BTC/USD --amount=1000"
     );
     process.exit(2);
   }
 
-  const out = roundTripCost({
+  const out = roundTrip({
     etf,
     place,
     currency,
+    shares: flag("shares") ? Number(flag("shares")) : null,
+    price: flag("price") ? Number(flag("price")) : null,
+    amount: flag("amount") ? Number(flag("amount")) : null,
     bp: flag("bp") ? Number(flag("bp")) : null,
     perShare: flag("per-share") ? Number(flag("per-share")) : null,
   });
 
   if (process.argv.includes("--json")) {
     console.log(JSON.stringify(out, null, 2));
-  } else if (out.a == null) {
-    console.log(`a = null   b = ${out.b}   c = ${out.c}\n${out.why}`);
-    if (out.alternatives?.length) console.log(`\nce que tastytrade propose sous ce nom :\n  ${out.alternatives.join("\n  ")}`);
-  } else {
-    const l = out.listing;
-    const crypto = l.type === "CRYPTO";
-    console.log(`${l.ticker || l.isin} — ${l.name || ""}`);
-    console.log(`${l.exchange}${l.mic ? ` (${l.mic})` : ""}, ${l.currency}${l.type ? `, ${l.type.toLowerCase()}` : ""}\n`);
-    if (crypto) {
-      console.log(`a = ${out.a}   (au prorata du montant : markup Zero Hash ${out.parts?.markupEachWay} chaque sens)`);
-      console.log(`b = ${out.b} $   (par part : rien)`);
-    } else {
-      console.log(`a = ${out.a}   (au prorata du montant : frais SEC 0,0000206${out.bp ? ` + ${out.bp} bp de carnet` : ""})`);
-      console.log(
-        `b = ${out.b} $   (par part : compensation 0,0008 aux deux jambes + TAF 0,000195 à la vente` +
-          `${out.perShare ? ` + ${out.perShare} de spread effectif` : ""})`
-      );
-    }
-    console.log(`c = ${out.c} $   (par ordre : ${crypto ? `aucune commission en plus du plancher ${out.floor} $` : "aucune commission"})`);
-    console.log(`\ncoût = ${out.a} × p × n + ${out.b} × n + ${out.c}   ($ ; ${out.basis})`);
-    if (crypto) console.log(`  plancher ${out.floor} ${l.currency} : 1 $ de courtage à chaque jambe, le ticket de ${CRYPTO_CHECK.amount} $ l'a payé entier`);
-    else console.log(`  plancher ${out.floor} ${l.currency} : les frais SEC s'arrondissent au centime supérieur`);
-    console.log(`  ${out.confidence}`);
-
-    const n = Number(flag("shares"));
-    const p = Number(flag("price"));
-    if (n > 0 && p > 0) {
-      const affine = out.a * p * n + out.b * n + out.c;
-      const billed = crypto && out.floor != null ? Math.max(out.floor, affine) : affine;
-      console.log(`\n${n} part${n > 1 ? "s" : ""} à ${p} ${l.currency} = ${(n * p).toFixed(2)} ${l.currency}`);
-      console.log(`  forme affine  : ${affine.toFixed(4)} ${l.currency}   soit ${((affine / (n * p)) * 1e4).toFixed(2)} bp`);
-      if (crypto && billed !== affine) {
-        console.log(`  avec plancher : ${billed.toFixed(4)} ${l.currency}   soit ${((billed / (n * p)) * 1e4).toFixed(2)} bp`);
-      }
-      if (!crypto) {
-        const e = exactCost({ shares: n, price: p, bp: out.bp, perShare: out.perShare });
-        console.log(`  arrondis pris : ${e.total.toFixed(4)} ${l.currency}   (SEC ${e.sec.toFixed(3)} + TAF ${e.taf.toFixed(3)} + compensation ${e.clearing.toFixed(3)}${e.market ? ` + carnet ${e.market.toFixed(3)}` : ""})`);
-        const gap = e.total - affine;
-        if (Math.abs(gap) >= 0.0005)
-          console.log(`  l'arrondi ajoute ${gap > 0 ? "+" : ""}${gap.toFixed(4)} ${l.currency}, ${((gap / affine) * 100).toFixed(0)} %`);
-      }
-    }
-    if (out.url) console.log(`\n${out.url}`);
+    process.exit(0);
   }
+
+  const show = (x) => (x == null ? "N/A" : x);
+
+  if (!out.listing) {
+    console.log(out.why);
+    if (out.alternatives?.length) {
+      console.log(`\nce que tastytrade propose sous ce nom :\n  ${out.alternatives.join("\n  ")}`);
+    }
+    process.exit(0);
+  }
+
+  const l = out.listing;
+  console.log(`${l.ticker || l.isin} — ${l.name || ""}`);
+  console.log(
+    `${l.exchange || "—"}${l.mic ? ` (${l.mic})` : ""}, ${l.currency}${l.type ? `, ${l.type.toLowerCase()}` : ""}\n`
+  );
+
+  if (out.trade) {
+    const t = out.trade;
+    console.log(
+      (t.shares
+        ? `${t.shares} part${t.shares > 1 ? "s" : ""} à ${t.price} ${t.currency} = ${t.notional.toFixed(2)} ${t.currency}`
+        : `${t.notional.toFixed(2)} ${t.currency}`) +
+        (t.notionalUsd != null ? ` (${t.notionalUsd.toFixed(2)} $)` : "") +
+        "\n"
+    );
+    console.log(`aller-retour     : ${out.usd == null ? `N/A — ${out.why}` : `${out.usd} $`}`);
+    console.log(`frais du courtier: ${show(out.brokerFees)} $`);
+    const parts = out.parts || {};
+    if (parts.marché != null) console.log(`  carnet         : ${parts.marché} $`);
+    if (parts.courtage != null) console.log(`  courtage       : ${parts.courtage} $`);
+    if (parts.réglementaire) console.log(`  réglementaire  : ${parts.réglementaire} $`);
+    if (parts.taxes) console.log(`  taxes          : ${parts.taxes} $`);
+    console.log("");
+  } else if (out.why) {
+    console.log(`aller-retour     : N/A — ${out.why}\n`);
+  }
+
+  console.log(`  ${out.basis}`);
+  for (const line of (out.confidence || "").split(" ; ")) console.log(`  ${line}`);
+  if (out.remark) for (const r of out.remark.split("\n")) console.log(`  · ${r}`);
+  if (out.url) console.log(`\n${out.url}`);
 }

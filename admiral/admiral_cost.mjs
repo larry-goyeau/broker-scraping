@@ -91,7 +91,7 @@
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
 import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
 const CATALOGUE = new URL("admiral-parsed.json", import.meta.url);
@@ -312,7 +312,7 @@ export function commissionSide({ shares, notional, currency, market }) {
 // and broken out under `buy` and `sell`, so naming it here would only invite
 // the reader to add it twice. The conversion fee is the one charge left out,
 // because it turns on the account's base currency rather than on the listing.
-const REMARK = `FX ${(100 * FX_ON_SETTLEMENT).toFixed(2)}% if account currency differs.`;
+const remarkOf = (currency) => fxRemark((100 * FX_ON_SETTLEMENT).toFixed(2), currency);
 
 /**
  * The whole bill for buying `shares` at `price` and selling them straight back.
@@ -379,7 +379,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     return {
       ...answer,
       why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
-      remark: REMARK,
+      remark: remarkOf(listing.currency),
     };
   }
 
@@ -440,7 +440,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     ...answer,
     usd: finite(usd, 6),
     brokerFees: finite(brokerFees, 6),
-    remark: REMARK,
+    remark: remarkOf(listing.currency),
     trade: { shares: n, price: p, notional, notionalUsd: finite(notionalUsd, 6), currency: listing.currency },
     buy: {
       commission: finite(buyCommUsd, 6),

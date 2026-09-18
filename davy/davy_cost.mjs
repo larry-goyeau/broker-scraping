@@ -65,7 +65,7 @@
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
 import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
 const CATALOGUE = new URL("davy-parsed.json", import.meta.url);
@@ -215,7 +215,7 @@ export function commissionSide({ amountEur, plan, market }) {
   };
 }
 
-function remarkOf(plan) {
+function remarkOf(plan, currency) {
   const lines = [];
   if (plan.quarterly != null) {
     lines.push(`€${plan.quarterly}/quarter if commissions below €${plan.quarterly}.`);
@@ -223,7 +223,7 @@ function remarkOf(plan) {
   if (plan.annual != null) {
     lines.push(`Dealing ${(plan.annual * 100).toFixed(2)}%/year, min €${plan.annualMin}.`);
   }
-  lines.push("FX typically ≤1% if converted.");
+  lines.push(fxRemark("typically ≤1", currency));
   lines.push(`Withdraw €${TRANSFER.otherLow}–${TRANSFER.otherHigh} outside of Ireland.`);
   return lines.join("\n");
 }
@@ -389,7 +389,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     tax,
     fx: fxNote(listing.currency),
     fxIfConverted: 0,
-    remark: remarkOf(picked),
+    remark: remarkOf(picked, listing.currency),
     transfer: TRANSFER,
   };
 

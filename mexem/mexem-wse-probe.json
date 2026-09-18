@@ -1,0 +1,165 @@
+{
+  "live": false,
+  "cash": {
+    "BASE": {
+      "bal": 158.4437,
+      "settled": 158.4437
+    },
+    "EUR": {
+      "bal": 126.32,
+      "settled": 126.32
+    },
+    "USD": {
+      "bal": 36.87,
+      "settled": 36.87
+    }
+  },
+  "quotes": [
+    {
+      "symbol": "ALE",
+      "conid": "449543655",
+      "company": "ALLEGRO.EU SA - WSE",
+      "exchange": "WSE",
+      "price": 47.53
+    },
+    {
+      "symbol": "PGE",
+      "conid": "71420788",
+      "company": "PGE SA - WSE",
+      "exchange": "WSE",
+      "price": 13.92
+    },
+    {
+      "symbol": "TPE",
+      "conid": "268960206",
+      "company": "TAURON POLSKA ENERGIA SA - WSE",
+      "exchange": "WSE",
+      "price": 9.172
+    },
+    {
+      "symbol": "PZU",
+      "conid": "75960216",
+      "company": "POWSZECHNY ZAKLAD UBEZPIECZE - WSE",
+      "exchange": "WSE",
+      "price": 74.18
+    },
+    {
+      "symbol": "PKO",
+      "conid": "35146360",
+      "company": "PKO BANK POLSKI SA - WSE",
+      "exchange": "WSE",
+      "price": 121.94
+    },
+    {
+      "symbol": "SPL",
+      "conid": "17803150",
+      "company": "ERSTE BANK POLSKA SA - WSE",
+      "exchange": "WSE",
+      "price": 761
+    },
+    {
+      "symbol": "MBK",
+      "conid": "268960203",
+      "company": "MBANK SA - WSE",
+      "exchange": "WSE",
+      "price": 1451
+    },
+    {
+      "symbol": "CDR",
+      "conid": "268960294",
+      "company": "CD PROJEKT RED SA - WSE",
+      "exchange": "WSE",
+      "price": 241
+    },
+    {
+      "symbol": "KGH",
+      "conid": "13462029",
+      "company": "KGHM POLSKA MIEDZ SA - WSE",
+      "exchange": "WSE",
+      "price": 337.75
+    },
+    {
+      "symbol": "OPL",
+      "conid": "13462053",
+      "company": "ORANGE POLSKA SA - WSE",
+      "exchange": "WSE",
+      "price": 13.88
+    }
+  ],
+  "cheap": {
+    "symbol": "TPE",
+    "conid": "268960206",
+    "company": "TAURON POLSKA ENERGIA SA - WSE",
+    "exchange": "WSE",
+    "price": 9.172
+  },
+  "whatifs": [
+    {
+      "label": "plain",
+      "commission": "—",
+      "total": "—",
+      "errors": [
+        "CASH AVAILABLE: 0.00; CASH NEEDED FOR THIS ORDER AND OTHER PENDING ORDERS: 29.17; THERE IS 691.03 PLN CASH ACROSS ALL CURRENCIES; PLEASE CONSIDER CONVERTING FUNDS TO PLN AND TRYING ORDER AGAIN."
+      ],
+      "amount": {
+        "amount": "9.17 PLN (1 Shares)",
+        "commission": "—",
+        "total": "—"
+      }
+    },
+    {
+      "label": "route WSE",
+      "commission": "—",
+      "total": "—",
+      "errors": [
+        "CASH AVAILABLE: 0.00; CASH NEEDED FOR THIS ORDER AND OTHER PENDING ORDERS: 29.17; THERE IS 691.03 PLN CASH ACROSS ALL CURRENCIES; PLEASE CONSIDER CONVERTING FUNDS TO PLN AND TRYING ORDER AGAIN."
+      ],
+      "amount": {
+        "amount": "9.17 PLN (1 Shares)",
+        "commission": "—",
+        "total": "—"
+      }
+    },
+    {
+      "label": "cashCcy EUR",
+      "commission": "—",
+      "total": "—",
+      "errors": [
+        "CASH AVAILABLE: 0.00; CASH NEEDED FOR THIS ORDER AND OTHER PENDING ORDERS: 29.17; THERE IS 691.03 PLN CASH ACROSS ALL CURRENCIES; PLEASE CONSIDER CONVERTING FUNDS TO PLN AND TRYING ORDER AGAIN."
+      ],
+      "amount": {
+        "amount": "9.17 PLN (1 Shares)",
+        "commission": "—",
+        "total": "—"
+      }
+    },
+    {
+      "label": "fx + EUR",
+      "errors": "Service Unavailable"
+    }
+  ],
+  "fxHints": {
+    "size": 915067,
+    "hits": [
+      {
+        "re": "/cashCcy/g",
+        "n": 1
+      },
+      {
+        "re": "/currency\\/pairs/g",
+        "n": 1
+      }
+    ],
+    "around": ""
+  },
+  "pairs": {
+    "status": 400,
+    "json": {
+      "error": "Bad Request: Currency is required",
+      "statusCode": 400
+    }
+  },
+  "fxPreview": {
+    "error": "conid or conidex is required"
+  }
+}

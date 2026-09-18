@@ -60,7 +60,7 @@
 import fs from "node:fs";
 import { cryptoId, listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
 import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
 const CATALOGUE = new URL("lightyear-parsed.json", import.meta.url);
@@ -213,10 +213,10 @@ export function commissionEach(amount, rule) {
   return fee;
 }
 
-function remarkOf({ plan, market, holdable, adr }) {
+function remarkOf({ plan, market, holdable, adr, currency }) {
   const lines = [];
-  if (holdable && market !== "crypto") {
-    lines.push(`FX ${(plan.fx * 100).toFixed(2)}% if converted.`);
+  if (market !== "crypto" && holdable) {
+    lines.push(fxRemark((plan.fx * 100).toFixed(2), currency));
   }
   if (adr) lines.push(`ADR pass-through $${ADR_PASS_THROUGH.low}–$${ADR_PASS_THROUGH.high}/share.`);
   return lines.join("\n");
@@ -406,7 +406,7 @@ export function roundTrip({
     feeMarket: market,
     cashCurrency: holdable ? listing.currency : "",
     onlineBuy: !(crypto && !picked.crypto),
-    remark: remarkOf({ plan: picked, market, holdable, adr: listing.adr }),
+    remark: remarkOf({ plan: picked, market, holdable, adr: listing.adr, currency: listing.currency }),
     bp: marketBp,
     perShare: marketPerShare,
     url: leaf?.url ?? (picked.id === "uk" ? SCHEDULE.ukFees : SCHEDULE.euFees),

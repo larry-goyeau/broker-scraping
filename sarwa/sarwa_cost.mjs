@@ -216,6 +216,10 @@ function needsFx(currency) {
   return String(currency || "").toUpperCase() !== CASH;
 }
 
+function remarkOf() {
+  return "";
+}
+
 /**
  * The whole bill for buying `shares` at `price` (or putting `amount` into a
  * coin) and selling straight back. `usd` is the number the page prints;
@@ -293,7 +297,7 @@ export function roundTrip({
     feeMarket: "us",
     cashCurrency: CASH,
     onlineBuy: true,
-    remark: "",
+    remark: remarkOf(listing.currency),
     bp: marketBp,
     perShare: marketPerShare,
     url: leaf?.url ?? SCHEDULE.pricing,
@@ -401,7 +405,7 @@ function cryptoTrip(row, { amount, bp, ...answer }) {
     feeMarket: "crypto",
     cashCurrency: CASH,
     onlineBuy: true,
-    remark: "",
+    remark: remarkOf(listing.currency),
     bp: Number((CRYPTO_SPREAD_EACH_WAY * 2 * 1e4).toFixed(0)),
     perShare: null,
     url: SCHEDULE.crypto,

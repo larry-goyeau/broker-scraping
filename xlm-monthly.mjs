@@ -56,13 +56,15 @@ export function zipEntries(buf) {
     });
     p += 46 + nameLen + buf.readUInt16LE(p + 30) + buf.readUInt16LE(p + 32);
   }
-  return (name) => {
+  const read = (name) => {
     const e = entries.get(name);
     if (!e) throw new Error(`${name} absent de l'archive`);
     const start = e.offset + 30 + buf.readUInt16LE(e.offset + 26) + buf.readUInt16LE(e.offset + 28);
     const data = buf.subarray(start, start + e.size);
     return (e.method === 0 ? data : zlib.inflateRawSync(data)).toString("utf8");
   };
+  read.names = [...entries.keys()];
+  return read;
 }
 
 const unescape = (s) =>

@@ -22,11 +22,9 @@
 //   26-field layout, so an order of 20 shares is not in the data. Whether it costs
 //   more or less is not measured here.
 //
-//   Citadel Securities and Virtu Americas, between them the destination of most retail
-//   equity flow in the United States, publish behind bot protection and are absent.
-//   The four reporters below are what a plain fetch can reach. Their agreement with
-//   each other is the only evidence available about how much that absence matters, and
-//   the CLI prints it for exactly that reason.
+//   Citadel's zip sits behind Cloudflare (403 to a bare fetch). The file itself is
+//   public — Chrome on 9222 reads the statements page and pulls `CDRG_605_YYYYMM.txt`.
+//   Virtu publishes a zip on S3 (`TVIRTUYYYYMM.zip`) with both NITE and VIRT inside.
 //
 //   A wholesaler's average is not your fill. It is the average of a month of orders in
 //   that security at that size, which is the same kind of statement XLM makes, and the
@@ -36,6 +34,7 @@
 //   node rule605-monthly.mjs IAU        -- everything known about one symbol
 
 import fs from "node:fs";
+import puppeteer from "puppeteer-core";
 import { zipEntries } from "./xlm-monthly.mjs";
 
 const CACHE_PATH = "parsed_json/rule605-monthly.json";
@@ -64,18 +63,58 @@ const REPORTERS = [
     url: (month) => `https://www.janestreet.com/static/execution-quality-reports/${month}_JNST.txt`,
     plain: true,
   },
+  {
+    ric: "CDRG",
+    name: "Citadel Securities",
+    viaChrome: true,
+    plain: true,
+  },
+  {
+    ric: "NITE",
+    name: "Virtu Americas",
+    participant: "NITE",
+    url: (month) => `https://virtu-www.s3.us-east-1.amazonaws.com/uploads/documents/TVIRTU${month}.zip`,
+  },
 ];
-const fileUrl = (r, month) =>
-  r.url ? r.url(month) : `https://public.s3.com/rule605/${r.ric.toLowerCase()}/T${r.ric}${month}.zip`;
+const fileUrl = (r, month) => {
+  if (typeof r.url === "function") return r.url(month);
+  return `https://public.s3.com/rule605/${r.ric.toLowerCase()}/T${r.ric}${month}.zip`;
+};
 
-// Named rather than merely missing, so that a gap in the sample stays visible to
-// whoever reads the output instead of being rediscovered later. Both publish on their own
-// sites behind bot protection: Citadel answers 403 to anything without a browser, and
-// Virtu is not on the OTC market maker list under a reporter code that resolves to a file.
-const OUT_OF_REACH = [
-  { ric: "CDRG", name: "Citadel Securities", why: "site protégé contre les robots (403)" },
-  { ric: "NITE", name: "Virtu Americas", why: "aucun fichier public trouvé" },
-];
+const CITADEL_INDEX = "https://www.citadelsecurities.com/rule-605-606-statements/";
+
+async function citadelReport(month) {
+  const cached = `/tmp/rule605/CDRG_605_${month}.txt`;
+  const browser = await puppeteer.connect({ browserURL: "http://127.0.0.1:9222", defaultViewport: null });
+  const page = await browser.newPage();
+  try {
+    await page.goto(CITADEL_INDEX, { waitUntil: "domcontentloaded", timeout: 60000 });
+    await new Promise((r) => setTimeout(r, 2500));
+    const href = await page.evaluate((m) => {
+      const re = new RegExp(`${m}[^"'\\s]*\\.txt`, "i");
+      const a = [...document.querySelectorAll("a[href]")].find((el) => re.test(el.href));
+      return a?.href || null;
+    }, month);
+    if (!href) throw new Error(`aucun lien TCDRG${month} sur la page Citadel`);
+    const text = await page.evaluate(async (u) => {
+      const res = await fetch(u);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.text();
+    }, href);
+    if (text.length < 1000 || text.includes("Just a moment")) throw new Error("Cloudflare a renvoyé le défi");
+    fs.mkdirSync("/tmp/rule605", { recursive: true });
+    fs.writeFileSync(cached, text);
+    return { url: href, text };
+  } catch (e) {
+    if (fs.existsSync(cached) && fs.statSync(cached).size > 1000) {
+      return { url: cached, text: fs.readFileSync(cached, "utf8") };
+    }
+    throw e;
+  } finally {
+    await page.close().catch(() => {});
+    await browser.disconnect();
+  }
+}
 
 // The legacy layout, 26 pipe-separated fields. Positions rather than names because the
 // old format has no header line; `checkLayout` below is what keeps the guess honest.
@@ -138,8 +177,9 @@ function weightOf(f) {
     Number(f[F.improvedShares] || 0) +
     Number(f[F.atQuoteShares] || 0) +
     Number(f[F.outsideShares] || 0);
-  if (Math.abs(parts - here) <= 1) return { shares: here, counts: "exécutions propres" };
-  if (Math.abs(parts - (here + away)) <= 1) return { shares: here + away, counts: "exécutions et réacheminements" };
+  const slop = Math.max(2, Math.round(parts * 1e-5));
+  if (Math.abs(parts - here) <= slop) return { shares: here, counts: "exécutions propres" };
+  if (Math.abs(parts - (here + away)) <= slop) return { shares: here + away, counts: "exécutions et réacheminements" };
   throw new Error(
     `colonnes inattendues : ${f[F.symbol]} exécute ${here} parts (${away} ailleurs) mais les ` +
       `trois catégories en totalisent ${parts}`
@@ -149,7 +189,7 @@ function weightOf(f) {
 // One reporter's month, reduced to what a cost model asks of it. Everything is
 // share-weighted, because that is how the exchange's own field is defined and because
 // an order-weighted average would let a hundred one-lot orders outvote a real one.
-function parseReport(text) {
+function parseReport(text, { participant } = {}) {
   const bySymbol = new Map();
   let rows = 0;
   let checked = 0;
@@ -159,6 +199,7 @@ function parseReport(text) {
     if (!line) continue;
     const f = line.split("|");
     if (f.length < 20) continue;
+    if (participant && f[1] !== participant && f[1] !== `T${participant}`) continue;
     rows++;
     const type = f[F.type];
     if (type !== MARKET && type !== MARKETABLE_LIMIT) continue;
@@ -191,38 +232,46 @@ async function download(month) {
   const reports = [];
   const failed = [];
   for (const r of REPORTERS) {
-    const url = fileUrl(r, month);
+    let url;
     try {
-      const res = await fetch(url, {
-        headers: { "User-Agent": "Mozilla/5.0" },
-        signal: AbortSignal.timeout(120000),
-      });
-      if (!res.ok) {
-        failed.push({ ...r, why: `HTTP ${res.status}` });
+      if (r.viaChrome) {
+        const got = await citadelReport(month);
+        reports.push({ ...r, url: got.url, ...parseReport(got.text, { participant: r.participant }) });
         continue;
       }
-      // Served as it is written, by the one firm that does not zip it.
-      if (r.plain) {
-        reports.push({ ...r, url, ...parseReport(await res.text()) });
-        continue;
-      }
-      const buf = Buffer.from(await res.arrayBuffer());
-      const read = zipEntries(buf);
-      // One entry, named after the file, but the extension has moved once already
-      // (.dat to .txt in the 2025 plan amendment) so it is found rather than assumed.
-      const name = [`T${r.ric}${month}.dat`, `T${r.ric}${month}.txt`].find((n) => {
-        try {
-          read(n);
-          return true;
-        } catch {
-          return false;
+      url = await fileUrl(r, month);
+      let text;
+      {
+        const res = await fetch(url, {
+          headers: { "User-Agent": "Mozilla/5.0" },
+          signal: AbortSignal.timeout(120000),
+        });
+        if (!res.ok) {
+          failed.push({ ...r, why: `HTTP ${res.status}` });
+          continue;
         }
-      });
-      if (!name) {
-        failed.push({ ...r, why: "archive sans fichier reconnaissable" });
-        continue;
+        if (r.plain) {
+          text = await res.text();
+        } else {
+          const read = zipEntries(Buffer.from(await res.arrayBuffer()));
+          const name =
+            read.names.find((n) => /\.(dat|txt)$/i.test(n)) ||
+            [`T${r.ric}${month}.dat`, `T${r.ric}${month}.txt`].find((n) => {
+              try {
+                read(n);
+                return true;
+              } catch {
+                return false;
+              }
+            });
+          if (!name) {
+            failed.push({ ...r, why: "archive sans fichier reconnaissable" });
+            continue;
+          }
+          text = read(name);
+        }
       }
-      reports.push({ ...r, url, ...parseReport(read(name)) });
+      reports.push({ ...r, url, ...parseReport(text, { participant: r.participant }) });
     } catch (e) {
       failed.push({ ...r, why: String(e.message || e).slice(0, 80) });
     }
@@ -295,7 +344,7 @@ async function download(month) {
       symbols: r.bySymbol.size,
       counts: r.counts,
     })),
-    unreachable: [...OUT_OF_REACH, ...failed.map((f) => ({ ric: f.ric, name: f.name, why: f.why }))],
+    unreachable: failed.map((f) => ({ ric: f.ric, name: f.name, why: f.why })),
     symbols: table,
   };
 }

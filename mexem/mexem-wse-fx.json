@@ -1,0 +1,98 @@
+{
+  "live": false,
+  "pairsStatus": 200,
+  "pln": {
+    "symbol": "EUR.PLN",
+    "conid": 75015682,
+    "ccyPair": "PLN"
+  },
+  "searchHits": [
+    {
+      "conid": "75015682",
+      "companyHeader": "European Monetary Union Euro",
+      "companyName": null,
+      "symbol": "EUR.PLN",
+      "description": null,
+      "restricted": null,
+      "sections": [
+        {
+          "secType": "CASH",
+          "exchange": "IDEALPRO",
+          "conid": "75015682"
+        },
+        {
+          "secType": "CFD",
+          "exchange": "SMART",
+          "showPrips": true,
+          "conid": "230947650"
+        }
+      ]
+    }
+  ],
+  "conid": 75015682,
+  "preview": {
+    "amount": {
+      "amount": "174.46 PLN",
+      "commission": "—",
+      "total": "—"
+    },
+    "equity": {
+      "current": "158",
+      "change": "-4",
+      "after": "155"
+    },
+    "initial": {
+      "current": "0",
+      "change": "2",
+      "after": "2"
+    },
+    "maintenance": {
+      "current": "0",
+      "change": "2",
+      "after": "2"
+    },
+    "position": {
+      "current": "0",
+      "change": "40",
+      "after": "40"
+    },
+    "warn": "Important Note: Your order size is below the EUR 20000 IdealPro minimum.\nYou may cancel and increase the order size if you wish to route to IdealPro\nor select the Transmit button to route as an odd lot order.\nNote that odd lot orders are not guaranteed executions at the IdealPro displayed quotes.",
+    "error": "FX trade would expose account to currency leverage.",
+    "warns": [
+      "Important Note: Your order size is below the EUR 20000 IdealPro minimum.\nYou may cancel and increase the order size if you wish to route to IdealPro\nor select the Transmit button to route as an odd lot order.\nNote that odd lot orders are not guaranteed executions at the IdealPro displayed quotes.",
+      "20/You are trying to submit an order without having market data for this instrument. \nMEXEM strongly recommends against this kind of blind trading which may result in \nerroneous or unexpected trades.",
+      "22/<h4>Market Order Confirmation</h4>&nbsp;&nbsp;&nbsp;A Market Order is an instruction to trade your order at any available price and presents significant risk of trading at an undesirable price. Large market orders may also be split into smaller orders and traded over time to minimize impacting and disrupting prices.",
+      "25/<h4>Confirm Mandatory Cap Price</h4>To avoid trading at a price that is not consistent with a fair and orderly market, Clearing Broker may set a cap (for a buy order) or floor (for a sell order). THIS MAY CAUSE AN ORDER THAT WOULD OTHERWISE BE MARKETABLE NOT TO BE TRADED."
+    ],
+    "errors": [
+      "FX trade would expose account to currency leverage."
+    ],
+    "accruedInterest": null,
+    "action": "leverage_brx_reject",
+    "order_id": "029608d7.0001c0eb.6aab6a76.0001",
+    "cqe": {
+      "query": {
+        "account_id": "U28294463",
+        "sec_type": "CASH",
+        "order_currency": "PLN",
+        "exchange": "IDEALPRO",
+        "conid": "75015682",
+        "order_total": "174.4580078125",
+        "order_id": "029608d7.0001c0eb.6aab6a76.0001"
+      },
+      "request_method": "GET"
+    },
+    "currencies": [
+      {
+        "current": 0,
+        "currency": "PLN",
+        "after_trade": -174.468
+      },
+      {
+        "current": 126.32,
+        "currency": "EUR",
+        "after_trade": 166.32
+      }
+    ]
+  }
+}

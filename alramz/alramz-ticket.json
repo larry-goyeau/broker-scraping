@@ -1,0 +1,32 @@
+{
+  "on": "2026-09-18",
+  "how": "getClientAccDetails + GetBuyingPower on webtrade, no order placed",
+  "cashAed": 250,
+  "usBuyingPower": 67.7506775,
+  "impliedAedPerUsd": 3.69,
+  "listedPeg": 3.669,
+  "formula": {
+    "us": "max(notional * equity, min) + notional * additionalMarketFees",
+    "other": "notional * equity + additionalMarketFees; then floor at min"
+  },
+  "exchanges": {
+    "ADSM": { "equity": 0.001575, "min": 0, "ccy": "AED" },
+    "DFM": { "equity": 0.0028625, "min": 0, "ccy": "AED" },
+    "BHB": { "equity": 0.002805, "min": 0, "ccy": "AED" },
+    "MSX": { "equity": 0.0035, "min": 0, "ccy": "AED" },
+    "DIFX": { "equity": 0, "flat": 3.15, "min": 0, "ccy": "AED" },
+    "NSDQ": {
+      "equity": 0.0021,
+      "min": 10.5,
+      "ccy": "USD",
+      "sellAdd": 0.0000294
+    },
+    "NYSE": {
+      "equity": 0.0021,
+      "min": 10.5,
+      "ccy": "USD",
+      "sellAdd": 0.0000294
+    },
+    "TDWL": { "equity": 0.0016275, "min": 0, "ccy": "SAR" }
+  }
+}

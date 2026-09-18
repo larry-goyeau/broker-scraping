@@ -1,5 +1,6 @@
 import puppeteer from "puppeteer-core";
 import { stampRows } from "../accepted.mjs";
+import { listingKey } from "../venues.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -92,6 +93,60 @@ function venueOf(exchangeId, type) {
   return code || "TIB";
 }
 
+// CFD / turbo books are not cash listings. `homeInstrumentExchange` is always
+// TIB (Bestpreis); the other slugs are Direktpreis venues on `instrument`.
+const SKIP_VENUE = new Set(["SLT"]);
+
+function isCfdListing(listing) {
+  const slug = normalize(listing?.slug).toUpperCase();
+  const symbol = String(listing?.symbolAtExchange || "");
+  return SKIP_VENUE.has(slug) || /CFD/i.test(slug) || /CFD/i.test(symbol);
+}
+
+function placeSourced(place, type) {
+  if (type === "CRYPTO") return true;
+  return Boolean(listingKey({ exchange: place.exchange, currency: place.currency }).venue);
+}
+
+function preferSourced(places, type) {
+  const known = places.filter((place) => placeSourced(place, type));
+  return known.length ? known : places;
+}
+
+function placesOf(instrument, type) {
+  if (type === "CRYPTO") return [{ exchange: "CRYPTO", currency: "EUR" }];
+
+  const out = [];
+  const seenPlace = new Set();
+  const add = (exchangeId, currencyId) => {
+    const exchange = venueOf(exchangeId, type);
+    const currency = normalize(currencyId).toUpperCase() || "EUR";
+    if (!exchange || SKIP_VENUE.has(exchange)) return;
+    const key = `${exchange}:${currency}`;
+    if (seenPlace.has(key)) return;
+    seenPlace.add(key);
+    out.push({ exchange, currency });
+  };
+
+  for (const listing of instrument.listings || []) {
+    if (listing?.active === false || isCfdListing(listing)) continue;
+    const slug = normalize(listing.slug).toUpperCase();
+    if (!slug) continue;
+    add(slug, listing.currencyId);
+  }
+  if (!out.length) {
+    for (const row of instrument.exchanges || []) {
+      if (row?.active === false || isCfdListing(row)) continue;
+      add(row.slug, "EUR");
+    }
+    for (const id of instrument.exchangeIds || []) add(id, "EUR");
+  }
+  const known = preferSourced(out, type);
+  if (known.length && known.some((place) => placeSourced(place, type))) return known;
+  if (!out.some((place) => place.exchange === "TIB")) add("TIB", "EUR");
+  return out.length ? out : [{ exchange: "TIB", currency: "EUR" }];
+}
+
 // `--csv=PATH` overrides the fund list, `--stocks-csv=PATH` the share list,
 // `--cryptos-csv=PATH` the coin list. `--etfs-only` / `--stocks-only` /
 // `--crypto-only` answer for one shelf. `--all` keeps lines the catalogues
@@ -141,7 +196,9 @@ if (!fresh && fs.existsSync(outputPath)) {
       for (const entry of existing) {
         results.push(entry);
         if (entry?.isin || entry?.ticker) {
-          seen.add(`${entry.isin || entry.ticker}:${entry.exchange || ""}`.toUpperCase());
+          seen.add(
+            `${entry.isin || entry.ticker}:${entry.exchange || ""}:${entry.currency || ""}`.toUpperCase()
+          );
         }
       }
     }
@@ -418,11 +475,7 @@ for (let offset = startIndex - 1; offset < jobs.length; offset += IN_FLIGHT) {
     }
   }
 
-  const exchangeAnswers = available.length
-    ? await ask(available.map(({ hit }) => ({ type: "homeInstrumentExchange", id: hit.isin })))
-    : [];
-
-  for (const [index, { hit, instrument }] of available.entries()) {
+  for (const { hit, instrument } of available) {
     const name = normalize(instrument.name || instrument.shortName || hit.name);
     const type = listingType(instrument, name);
     if (!type) {
@@ -452,22 +505,21 @@ for (let offset = startIndex - 1; offset < jobs.length; offset += IN_FLIGHT) {
       continue;
     }
 
-    const exchange = venueOf(exchangeAnswers[index]?.data?.exchangeId, type);
-    const currency = normalize(exchangeAnswers[index]?.data?.currency?.id).toUpperCase() || "EUR";
-    const key = `${isin || ticker}:${exchange}:${ticker}:${type}`.toUpperCase();
-    if (seen.has(key)) continue;
-    seen.add(key);
-
-    results.push({
-      query: ticker,
-      ticker,
-      name: name || listed?.names[0] || ticker,
-      exchange,
-      currency,
-      type,
-      raw: [ticker, name, exchange, currency].filter(Boolean).join(" "),
-      isin: isin || "",
-    });
+    for (const { exchange, currency } of placesOf(instrument, type)) {
+      const key = `${isin || ticker}:${exchange}:${currency}`.toUpperCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      results.push({
+        query: ticker,
+        ticker,
+        name: name || listed?.names[0] || ticker,
+        exchange,
+        currency,
+        type,
+        raw: [ticker, name, exchange, currency].filter(Boolean).join(" "),
+        isin: isin || "",
+      });
+    }
   }
 
   if (offset === 0 || (offset + IN_FLIGHT) % 150 === 0 || offset + IN_FLIGHT >= jobs.length) {

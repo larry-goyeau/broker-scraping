@@ -86,17 +86,16 @@
 // with no figure anywhere on the page — VSE, NASDAQ Baltic, BATS Europe,
 // Turquoise, CHIX, ENEXT.BE, SBF, FWB, IBIS, SWB, TradeLink, BUX, BVME, AEB,
 // BVL, EBS, WSE — used to be a hole this file merely named, then a figure taken
-// at Amsterdam and applied to all sixteen others. Nine of them have now been
-// asked on a share, and the answers changed the shape of the charge and not just
-// its size.
+// at Amsterdam and applied to all sixteen others. Eleven western boards have
+// now been asked on a share, and the answers changed the shape of the charge
+// and not just its size.
 //
 // Amsterdam bills nothing on a share and 0,80 € on an ETF, and this file read
 // that as a rule: nothing on a share anywhere. It is not a rule, but it is very
-// nearly the truth. Nine venues have now answered on a share and seven charge
-// nothing — Amsterdam, Xetra, Frankfurt, Stuttgart, Brussels, Lisbon, and Paris
-// at six cents which is nearly nothing. The two that charge, charge a lot: Milan
-// 0,77 € and Vienna 0,90 € on ordinary listed stock, which is most of a second
-// commission. There is no pattern by operator, currency or country to predict it
+// nearly the truth. Eleven western venues have now answered on a share and
+// seven charge nothing — Amsterdam, Xetra, Frankfurt, Stuttgart, Brussels,
+// Lisbon and Warsaw. Paris is six cents, EBS 0,64 €, Milan 0,77 € and Vienna
+// 0,90 €. There is no pattern by operator, currency or country to predict it
 // from, which is why each venue is carried as measured rather than as a rule.
 //
 // German stock permissions landed on 2026-09-15 and Xetra, Frankfurt and
@@ -107,11 +106,13 @@
 // order sent to SWB by name, so the ceiling there is 3,50 € and not 0,80.
 //
 // So `VENUE_FEE` carries what was measured and `VENUE_FEE_DEFAULT` covers the
-// handful nobody could reach — EBS, Warsaw, Budapest, the Baltics and the four
-// MTFs. Charging the widest seen is the right direction to be wrong in, since
-// the total already charges the whole book spread and so assumes the order takes
-// liquidity, which is the case that draws the top of the range. But after nine
-// venues it is a ceiling and not an estimate, and `confidence` says so.
+// handful nobody could reach — the four MTFs, and BUX on a share. Warsaw
+// answered on 2026-09-17 after a 10 € → PLN conversion: TPE came back
+// « 20 PLN » flat, and three WSE funds asked for the notional plus that
+// same 20. EBS and the three Nasdaq Baltic tapes answered the same day.
+// The Baltic 6,80 € is kept on those boards and is not spread: it is an
+// outlier, not the western ceiling (still Vienna 0,90 €). Charging the
+// widest *western* seen is the right direction to be wrong in for the rest.
 //
 // Ten currencies in the catalogue have no printed tier at all — KRW, TWD, INR,
 // BRL, SAR, MYR, ZAR, AED, CZK, RON, CNY — and the page says that where a
@@ -128,13 +129,14 @@
 // `onlineBuy`, or a Taiwanese ETF vanishes from the page when no country is
 // selected.
 //
-// No live trip in this deposit, but the tariff is no longer read off the page
-// alone: `mexem-whatif.mjs` asks the portal to price an order before the order
-// exists, and the answers are recorded beside `MEASURED` below. They confirm the
-// euro floor to the cent, confirm that it is per order and not per share — the
-// same euro at one share and at fifteen — and put a figure on the venue fees the
-// page declines to print: nothing on a share, up to 0,80 € on an ETF, at
-// Amsterdam. Nothing was traded.
+// No stock was bought, but the tariff is no longer read off the page alone:
+// `mexem-whatif.mjs` asks the portal to price an order before the order exists,
+// and the answers are recorded beside `MEASURED` below. They confirm the euro
+// floor to the cent, confirm that it is per order and not per share — the same
+// euro at one share and at fifteen — and put a figure on the venue fees the
+// page declines to print. Warsaw needed a 10 € conversion first: without
+// settled zlotys the preview returned « — ». Once the odd lot filled, TPE
+// answered the 20 PLN floor and nothing else.
 //
 // One of those previews corrected this file rather than confirming it. A single
 // Ford share at 13,65 $ carries 0,005 $ of per-share fee against a 1 $ minimum
@@ -152,9 +154,10 @@
 // notional plus the commission it would have charged. London asked 3,17 £ for a
 // 0,67 £ share, Vienna-EBS 149,88 CHF for 142,38, Warsaw 166,80 PLN for 146,80
 // and Budapest 787 HUF for 287 — leaving 2,50 £, 7,50 CHF, 20 PLN and 500 HUF,
-// which are the four printed floors to the unit. That is why no cash was
-// converted to reach those markets: the conversion would have cost 5,84 € to
-// learn what the refusals already said.
+// which are the four printed floors to the unit. The refusals name the floor
+// and stay silent on a venue surcharge; the funded TPE preview is what
+// showed Warsaw adds nothing on top. The other three still stand on the
+// refusal alone.
 //
 // The conversion was priced all the same, since the portal previews it for
 // nothing: 30 € into pounds announced « Includes commission of 5.84 EUR », and
@@ -162,12 +165,13 @@
 // five units of the currency bought, billed in the currency sold, which is what
 // `FX_CONVERT` says and had never been checked.
 //
-// What no preview has settled is which cap it is. Mexem prints 2 % and IBKR's
-// fixed tariff prints 1 %, and the two only differ where the cap clears the 1 $
-// minimum — past about 50 $ of notional, on a line under 0,50 $ a share. That
-// wants some 400 shares of a sub-dollar stock, about 120 $, where the account
-// holds 36,87 $. `CAP_UNSETTLED` keeps the figures; `maxPct` keeps the page's
-// 2 %, the dearer of the two.
+// The American cap is Mexem's 2 %, not IBKR's 1 %. Settled dollars were
+// enough on 2026-09-18: 400 GNS at 0,1515 $ is 60,60 $, where 2 % is 1,21 $
+// and 1 % would have stayed on the 1 $ floor. The portal answered
+// « 1.21 ... 1.28 USD ». The low of the range is 2 % of the notional to
+// the cent; 350 and 450 shares opened the same way. `maxPct` stays 0,02
+// because that is what the preview charges, not because it is the dearer
+// of two unread tariffs.
 //
 //   https://www.mexem.com/fees
 //
@@ -180,7 +184,7 @@
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
 import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../fx.mjs";
 import { taxesOf, taxRates } from "../taxMap.mjs";
 
 const CATALOGUE = new URL("mexem-parsed.json", import.meta.url);
@@ -267,7 +271,8 @@ const ADR_NAMED = /\b(ADR|GDR|ADS)\b/i;
 // « Exchange and regulatory costs apply » on these, with no amount printed
 // anywhere on the page.
 const VENUE_FEES_UNPRICED = [
-  "VSE", "NASDAQ Baltic", "BATS Europe", "Turquoise", "CHIX", "ENEXT.BE", "SBF",
+  "VSE", "NASDAQ Baltic", "N.TALLINN", "N.VILNIUS", "N.RIGA",
+  "BATS Europe", "Turquoise", "CHIX", "ENEXT.BE", "SBF",
   "FWB", "IBIS", "SWB", "TradeLink", "BUX", "BVME", "AEB", "BVL", "EBS", "WSE",
 ];
 const VENUE_FEES_CODES = new Set(VENUE_FEES_UNPRICED.map((s) => s.toUpperCase().replace(/[^A-Z0-9]/g, "")));
@@ -291,9 +296,11 @@ const VENUE_FEES_CODES = new Set(VENUE_FEES_UNPRICED.map((s) => s.toUpperCase().
 // total below charges the floor, which is therefore a lower bound on a European
 // ETF and exact on a European share.
 const MEASURED = {
-  on: "2026-09-15",
-  how: "aperçu whatif du portail, aucun ordre passé",
-  venues: ["AEB", "SBF", "IBIS", "FWB", "SWB", "BVME", "VSE", "ENEXT.BE", "BVL"],
+  on: "2026-09-17",
+  previously: "2026-09-15",
+  how: "aperçu whatif du portail ; conversion 10 EUR.PLN soumise pour ouvrir l'aperçu Varsovie, aucun titre acheté",
+  venues: ["AEB", "SBF", "IBIS", "FWB", "SWB", "BVME", "VSE", "ENEXT.BE", "BVL", "EBS", "BUX", "N.TALLINN", "N.VILNIUS", "N.RIGA", "WSE"],
+  wseStock: { symbol: "TPE", venue: "WSE", shares: 1, price: 9.174, commission: "20 PLN" },
   floorConfirmed: true,
   // The same euro at one share and at fifteen, so the European tier is per order
   // and not per share. Twenty was refused: 137 € against 128,37 € of settled
@@ -329,16 +336,27 @@ const MEASURED = {
   // the currency bought, billed in the currency sold, exactly as `FX_CONVERT`
   // has it. Nothing was submitted; the balances are unchanged.
   fxConvert: { from: "EUR", to: "GBP", amount: 30, rate: 0.8561, commission: "5.84 EUR", implies: "5 GBP" },
-};
 
-// Still open, and the only one of these that needs money rather than patience.
-// Mexem's page prints a 2 % American cap where IBKR's fixed tariff prints 1 %,
-// and no preview run so far separates them: the cap only rises above the 1 $
-// minimum past about 50 $ of notional, and it only binds at all under 0,50 $ a
-// share, so the question needs roughly 400 shares of a sub-dollar line — 120 $
-// or so of settled dollars, against the 36,87 $ the account holds. Until then
-// `maxPct` below is the page's 2 %, which is the figure that charges more.
-const CAP_UNSETTLED = { page: 0.02, ibkrFixed: 0.01, needsUsd: 120 };
+  // Mexem 2 % against IBKR fixed 1 %, asked on 2026-09-18 once the dollars
+  // from the 17th had settled (71,30 $). 200 GNS is still the 1 $ floor.
+  // 350 / 400 / 450 clear it, and the low of each range is 2 % of the
+  // notional — not 1 $, which is what a 1 % cap would have left.
+  usCap: {
+    on: "2026-09-18",
+    symbol: "GNS",
+    venue: "AMEX",
+    price: 0.1515,
+    settledUsd: 71.3,
+    rows: [
+      { shares: 200, notional: 30.3, commission: "1 USD" },
+      { shares: 350, notional: 53.025, commission: "1.06 ... 1.12 USD" },
+      { shares: 400, notional: 60.6, commission: "1.21 ... 1.28 USD" },
+      { shares: 450, notional: 68.175, commission: "1.36 ... 1.44 USD" },
+    ],
+    page: 0.02,
+    ibkrFixed: 0.01,
+  },
+};
 
 // The unpriced « exchange and regulatory costs », asked of nine of the
 // seventeen venues by preview on 2026-09-15. Each figure is the top of the range
@@ -361,23 +379,33 @@ const VENUE_FEE = {
   VSE: { stock: 0.9, etf: null, saw: "UQA 1.00 ... 1.90" },
   ENEXTBE: { stock: 0, etf: null, saw: "PROX 1 EUR sec" },
   BVL: { stock: 0, etf: null, saw: "BCP 1 EUR sec" },
+  EBS: { stock: 0.64, etf: 1.7, saw: "EPH1 1.00 ... 1.64, E20Y 1.00 ... 2.70" },
+  BUX: { stock: null, etf: 0, saw: "ETFCETOPO 1 EUR sec" },
+  NTALLINN: { stock: 6.8, etf: 6.8, saw: "TPD1T 1 et 10 parts 7.80 EUR sec" },
+  NVILNIUS: { stock: 6.8, etf: 6.8, saw: "ROE1L 7.80 EUR sec" },
+  NRIGA: { stock: 6.8, etf: 6.8, saw: "SAF1R 7.80 EUR sec" },
+  WSE: { stock: 0, etf: 0, saw: "TPE 20 PLN sec, ETFBCASH ETFBW20TR ETFSP500 notionnel + 20" },
 };
 
-// For the venues nobody has been able to ask — EBS, Warsaw, Budapest, the
-// Baltics and the four MTFs — and for the classes a measured venue was not asked
-// about. The fund figure stays 0,80 €, which Amsterdam, Paris, Xetra and the
-// dearer Frankfurt line agree on. Stuttgart's 3,50 € is carried on SWB only:
-// it was one fund of two, and spreading it to Warsaw would invent a fee.
+// For the venues nobody has been able to ask — BATS/CHIX/Turquoise,
+// TradeLink, and a BUX share — and for the classes a measured venue was not
+// asked about. The fund figure stays 0,80 €, which Amsterdam, Paris, Xetra
+// and the dearer Frankfurt line agree on. Stuttgart's 3,50 € stays on SWB
+// and EBS's 1,70 € stays on EBS. The Baltic 6,80 € stays on the Baltic tapes.
+// Warsaw is no longer in this bucket: the funded TPE preview and the three
+// WSE fund credit checks all landed on the 20 PLN floor alone.
 //
-// The share figure is the widest seen and not the typical one, and after nine
-// venues that is worth stating plainly: seven of the nine charge nothing, Paris
-// charges six cents, Milan 0,77 € and Vienna 0,90 €. So 0,90 € is a ceiling
-// rather than an estimate, and `confidence` says so on every line that gets it.
-// It is still the right way to be wrong — a comparison table that rounds an
-// unknown charge down to zero flatters whoever charges it — but a reader
-// comparing an unmeasured venue should know the modal answer was zero.
+// The share figure is the widest seen and not the typical one, and after
+// eleven western venues that is worth stating plainly: seven charge nothing
+// (Amsterdam, Xetra, Frankfurt, Stuttgart, Brussels, Lisbon, Warsaw), Paris
+// charges six cents, EBS 0,64 €, Milan 0,77 € and Vienna 0,90 €. So 0,90 €
+// is a ceiling rather than an estimate, and `confidence` says so on every
+// line that gets it. It is still the right way to be wrong — a comparison
+// table that rounds an unknown charge down to zero flatters whoever charges
+// it — but a reader comparing an unmeasured venue should know the modal
+// answer was zero.
 const VENUE_FEE_DEFAULT = { stock: 0.9, etf: 0.8 };
-const VENUE_FEE_SEEN_ON_STOCK = { zero: 7, of: 9, widest: 0.9, at: "VSE" };
+const VENUE_FEE_SEEN_ON_STOCK = { zero: 7, of: 11, widest: 0.9, at: "VSE" };
 const VENUE_FEE_CCY = "EUR";
 
 // The refusal that priced this tier's floor, where there is one.
@@ -567,8 +595,7 @@ function remarkOf({ listing }) {
   const min = FX_CONVERT.min[settle];
   const said = [
     min != null
-      ? `FX ${(100 * FX_CONVERT.rate).toFixed(3)}% (min ${min} ${settle}) per conversion ` +
-        `if the cash is not already in ${settle}.`
+      ? fxRemark((100 * FX_CONVERT.rate).toFixed(3), ccy, `(min ${min} ${settle})`)
       : `FX conversion into ${settle} is not priced on the fee page.`,
   ];
   if (ADR_NAMED.test(String(listing.name || ""))) {
@@ -829,11 +856,12 @@ function confidenceOf({ market, rule, buyComm, marketBp, marketPerShare, stamp, 
     // Only worth saying where the two published caps would actually differ:
     // above the minimum, which is where the reader's bill changes.
     if (rule.maxPct != null && buyComm.capped) {
+      const cap = MEASURED.usCap;
       said.push(
-        `le plafond retenu est celui de la page Mexem, ${(100 * CAP_UNSETTLED.page).toFixed(0)} %, quand le tarif ` +
-          `fixe IBKR en imprime ${(100 * CAP_UNSETTLED.ibkrFixed).toFixed(0)} % : aucun aperçu ne les sépare encore, ` +
-          `il y faudrait ${CAP_UNSETTLED.needsUsd} $ de liquidités sur une ligne sous 0,50 $, et c'est le plus cher ` +
-          `des deux qui est compté`
+        `plafond ${(100 * cap.page).toFixed(0)} % du montant, celui de la page Mexem : l'aperçu du ${cap.on} ` +
+          `sur ${cap.rows[2].shares} ${cap.symbol} à ${cap.price} $ (${cap.rows[2].notional} $) répond ` +
+          `${cap.rows[2].commission}, soit ${(100 * cap.page).toFixed(0)} % et non le plancher de 1 $ ` +
+          `qu'un plafond IBKR à ${(100 * cap.ibkrFixed).toFixed(0)} % aurait laissé`
       );
     }
   }
@@ -913,7 +941,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
           venueFeesUnpriced: VENUE_FEES_UNPRICED,
           venueFee: { measured: VENUE_FEE, fallback: VENUE_FEE_DEFAULT, onStock: VENUE_FEE_SEEN_ON_STOCK, ccy: VENUE_FEE_CCY },
           measured: MEASURED,
-          capUnsettled: CAP_UNSETTLED,
+          usCap: MEASURED.usCap,
           coverage: coverage(),
         },
         null,

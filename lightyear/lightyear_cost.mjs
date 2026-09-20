@@ -36,8 +36,8 @@
 // on either card. Custody 0. No live trip in this deposit.
 //
 // Catalogue 6 784 lines (6 230 stocks, 510 ETFs, 6 ETC, 2 ETN, 36 crypto).
-// The crypto book is Kraken's, the tape Lightyear names; `spread.mjs` reads
-// its public ticker under MIC KRKN.
+// US shares go to Alpaca (606). The crypto book is Kraken's, the tape
+// Lightyear names; `spread.mjs` reads its public ticker under MIC KRKN.
 // ETN / ETC are typed as such and take the €1 EUR-stock ticket, not the
 // free ETF line. Lightyear's own money-market / Vault fee (0.10–0.15 % a
 // year) is a holding cost on their cash product, not on the one iShares
@@ -278,6 +278,8 @@ function coverage() {
           mic: venue?.mic ?? null,
           currency: r.currency,
           unsourced,
+          broker: "lightyear",
+          ticker: r.ticker,
         });
     const market = feeMarketOf(r, book.mic ?? venue?.mic);
     const slot = (out[type] ||= { n: 0, withBook: 0, byMarket: {} });
@@ -372,6 +374,8 @@ export function roundTrip({
         mic: m.venue?.mic ?? null,
         currency: m.row.currency,
         unsourced: m.unsourced,
+        broker: "lightyear",
+        ticker: m.row.ticker,
       });
   const listing = {
     isin: String(m.row.isin || "").toUpperCase() || null,
@@ -605,7 +609,7 @@ function confidenceOf({
             : "")
     );
   } else if (marketPerShare != null) {
-    said.push(`carnet Rule 605, ${marketPerShare} $ la part`);
+    said.push(`carnet 605 × Q Alpaca, ${marketPerShare} $ la part`);
   } else {
     said.push(`pas de feuille de carnet : ${unsourced?.name || listing.exchange}, ${unsourced?.why || "pas de source"}`);
   }

@@ -110,16 +110,7 @@ function nameTokens(value) {
   );
 }
 
-function resolveListing(tickerCandidates, ticker, scrapedName, type) {
-  const kind = type === "STOCK" ? "STOCK" : "ETF";
-  let candidates = (tickerCandidates.get(ticker) || []).filter(
-    (candidate) => !candidate.kind || candidate.kind === kind
-  );
-  const us = candidates.filter((candidate) => candidate.isin.startsWith("US"));
-  if (us.length > 0) candidates = us;
-  if (candidates.length === 0) return null;
-  if (candidates.length === 1) return candidates[0];
-
+function bestByName(candidates, scrapedName) {
   const scrapedTokens = nameTokens(scrapedName);
   let best = null;
   let bestScore = 0;
@@ -134,6 +125,23 @@ function resolveListing(tickerCandidates, ticker, scrapedName, type) {
     }
   }
   return bestScore > 0 ? best : null;
+}
+
+function resolveListing(tickerCandidates, ticker, scrapedName, type) {
+  const kind = type === "STOCK" ? "STOCK" : "ETF";
+  const candidates = (tickerCandidates.get(ticker) || []).filter(
+    (candidate) => !candidate.kind || candidate.kind === kind
+  );
+  if (!candidates.length) return null;
+  // The ticker alone is not an identity: SSU is SIGNA on NYSE and Samsung's
+  // GDR in Frankfurt. A lone US ISIN under that ticker used to win without a
+  // name check and filed Samsung's book on the wrong share.
+  const named = bestByName(candidates, scrapedName);
+  if (named) return named;
+  return bestByName(
+    candidates.filter((candidate) => candidate.isin.startsWith("US")),
+    scrapedName
+  );
 }
 
 function looksLikeFund(name) {

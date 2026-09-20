@@ -33,6 +33,19 @@
 // `usd` charges the published book because that is what the client paid.
 // Written out to `quantfury-book-trip.json`.
 //
+// That book is the bid and ask Quantfury prints, not a neighbour's tape.
+// Rule 605 is an effective spread after wholesaler improvement, a different
+// grandeur: Ford on 18 September 2026 quoted 13.09 / 13.10 at Quantfury
+// (1 ¢, 7.64 bp) while the 605 leaf was $0.00151 a share. Charging 605
+// understated a ten-share trip sixfold. `quantfury-touches.json` holds the
+// two-sided prints `quantfury-probe.mjs` reads off the price hub; `roundTrip`
+// uses only those, including after the bell: a print taken in session is
+// what the page shows that evening. A missing touch, or a shut book
+// (bid = ask) that was never stored, is N/A — not Rule 605 and not the
+// primary. Those leaves stay in `spread.json` for every other broker.
+// Crypto still reads Binance / Coinbase, the books Quantfury pairs on
+// and that matched the hub to the cent.
+//
 // One half of that promise can be checked without placing an order, and it is
 // the half everything else rests on. The real-time hub behind
 // trading.quantfury.com streams the bid and ask the client is actually shown,
@@ -213,6 +226,7 @@ import { taxesOf, taxRates } from "../taxMap.mjs";
 
 const CATALOGUE = new URL("quantfury-parsed.json", import.meta.url);
 const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const TOUCHES = new URL("quantfury-touches.json", import.meta.url);
 
 const SCHEDULE = {
   conditions: "https://quantfury.com/trading-and-investing-conditions/",
@@ -357,6 +371,26 @@ function remarkOf({ crypto, marketBp, listing, convert }) {
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
 const spreads = fs.existsSync(SPREADS) ? JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {} : {};
+const touches = fs.existsSync(TOUCHES) ? JSON.parse(fs.readFileSync(TOUCHES, "utf8")) : null;
+
+function ownTouch(row) {
+  const isin = String(row?.isin || "").toUpperCase();
+  const ticker = String(row?.ticker || "").toUpperCase();
+  const ccy = String(row?.currency || "").toUpperCase();
+  // Ticker only when the line has no ISIN. ACA the NYSE name must not
+  // price Crédit Agricole.
+  const q = (isin && touches?.byIsin?.[isin]) || (!isin && ticker && touches?.byTicker?.[ticker]) || null;
+  if (!q) return null;
+  if (ccy && q.currency && String(q.currency).toUpperCase() !== ccy) return null;
+  const bid = Number(q.bid);
+  const ask = Number(q.ask);
+  if (!(bid > 0) || !(ask > 0) || !(ask > bid)) return null;
+  const perShare = Number(q.perShare) || ask - bid;
+  const bp = Number(q.bp) || ((ask - bid) / ((ask + bid) / 2)) * 1e4;
+  if (!(perShare > 0) || !(bp > 0)) return null;
+  return { bid, ask, perShare, bp, currency: q.currency || null, at: q.at || null };
+}
+
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 const isCrypto = (row) => row?.type === "CRYPTO" || /^CRYPTO$/i.test(String(row?.exchange || ""));
@@ -449,7 +483,7 @@ function coverage() {
     });
     const slot = (out[type] ||= { n: 0, withBook: 0, taxed: 0, cboeEurope: 0 });
     slot.n += 1;
-    if (book.leaf?.bp != null || book.leaf?.perShare != null) slot.withBook += 1;
+    if (isCrypto(r) ? book.leaf?.bp != null : ownTouch(r)) slot.withBook += 1;
     if (Object.keys(taxRates(taxesOf(r.isin))).length) slot.taxed += 1;
     if (saidVenue(r) === CBOE_EUROPE) slot.cboeEurope += 1;
   }
@@ -522,8 +556,9 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
   };
 
   const leaf = book.leaf;
-  const marketBp = bp ?? leaf?.bp ?? null;
-  const marketPerShare = perShare ?? leaf?.perShare ?? null;
+  const touch = crypto ? null : ownTouch(m.row);
+  const marketBp = bp ?? (crypto ? leaf?.bp ?? null : touch?.bp > 0 ? touch.bp : null) ?? null;
+  const marketPerShare = perShare ?? (touch?.perShare > 0 ? touch.perShare : null) ?? null;
   const american = isAmerican(m.row, bookMic);
   const { tax, rates, taxTotal } = crypto ? { tax: null, rates: {}, taxTotal: 0 } : taxParts(listing.isin);
   const convert = convertRate(listing.currency);
@@ -537,8 +572,7 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
     perShare: marketPerShare,
     url: leaf?.url ?? SCHEDULE.conditions,
     basis:
-      `accord client Quantfury §13 du ${SCHEDULE.agreementVersion} (aucun frais), relu le ${SCHEDULE.readOn}` +
-      (european ? `, carnet ${bookMic || "primaire"} en doublure de ${CBOE_EUROPE}` : ""),
+      `accord client Quantfury §13 du ${SCHEDULE.agreementVersion} (aucun frais), relu le ${SCHEDULE.readOn}`,
     fx: fxNote(listing.currency),
     // Le barème du portefeuille, pour qui convertit à la main. Il ne s'applique
     // pas à un ordre : l'aller-retour du TRIP l'a montré.
@@ -555,7 +589,7 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
     tax,
     taxRates: Object.keys(rates).length ? rates : null,
     remark: remarkOf({ crypto, marketBp, listing, convert }),
-    confidence: confidenceOf({ crypto, european, bookMic, leaf, marketBp, marketPerShare, american, listing, convert }),
+    confidence: confidenceOf({ crypto, european, bookMic, leaf, marketBp, marketPerShare, american, listing, convert, touch }),
   };
 
   // A coin is bought by the dollar, a share by the unit at a price.
@@ -577,8 +611,8 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
     };
   }
 
-  // The book is already a round trip — Rule 605 per share in America, basis
-  // points elsewhere — so it is crossed once, not once per side.
+  // The book is already a round trip — Quantfury's own touch, basis points
+  // or cents per share — so it is crossed once, not once per side.
   const bookUsd =
     marketBp != null
       ? (notionalUsd * marketBp) / 1e4
@@ -612,14 +646,13 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
           // is the stand-in and not the Cboe Europe shown to the reader.
           why: crypto
             ? "ni Binance ni Coinbase ne cote cette pièce contre le dollar"
-            : `aucun carnet pour ${m.unsourced?.name || m.venue?.name || m.row.exchange} : ` +
-              `${m.unsourced?.why || "pas de feuille de spread"}`,
+            : "pas de touche Quantfury à deux côtés",
         }
       : {}),
   };
 }
 
-function confidenceOf({ crypto, european, bookMic, leaf, marketBp, marketPerShare, american, listing, convert }) {
+function confidenceOf({ crypto, european, bookMic, leaf, marketBp, marketPerShare, american, listing, convert, touch }) {
   const lines = [
     `aucun frais chez Quantfury : ni commission, ni portage, ni ticket (accord client §13 du ${SCHEDULE.agreementVersion}, relu le ${SCHEDULE.readOn})`,
     "la colonne « frais du courtier » vaut donc 0 alors que le total ne vaut pas 0 : Quantfury se paie du carnet, mais ce carnet est celui de la place et le client l'aurait croisé ailleurs",
@@ -635,10 +668,10 @@ function confidenceOf({ crypto, european, bookMic, leaf, marketBp, marketPerShar
       "crypto : ni Binance ni Coinbase ne cote cette pièce contre le dollar, donc le carnet reste N/A plutôt que 0"
     );
   } else if (marketBp == null && marketPerShare == null) {
-    lines.push("pas de feuille de carnet pour cet ISIN / cette place : le spread reste N/A");
+    lines.push("pas de touche Quantfury à deux côtés : le spread reste N/A, pas un 605 ni un primaire");
   } else {
     lines.push(
-      `le coût est le carnet croisé, ${american ? "mesuré sur la bande 605" : "lu dans spread.json"}, ` +
+      `le coût est le carnet croisé, lu sur la touche Quantfury, ` +
         "puisque Quantfury exécute au bid et à l'ask de la place sans les élargir" +
         ` — mesuré le ${BOOK_TRIP.on} : ${BOOK_TRIP.shares} ${BOOK_TRIP.ticker} achetées ${BOOK_TRIP.buy} € ` +
         `(l'ask) et revendues ${BOOK_TRIP.sell} € (le bid) ${BOOK_TRIP.heldSeconds} s plus tard, ` +
@@ -648,11 +681,7 @@ function confidenceOf({ crypto, european, bookMic, leaf, marketBp, marketPerShar
 
   if (european) {
     lines.push(
-      `place : Quantfury dit ${CBOE_EUROPE} pour toute l'Europe, et aucune bande ${CBOE_EUROPE} n'est collectée, ` +
-        `donc le carnet ${bookMic || "primaire"} sert de doublure (médiane ${PROBE.standInBp} bp sur ` +
-        `${PROBE.withStandIn} lignes cotées). La doublure a été éprouvée le ${PROBE.on} sur les ${PROBE.lines} lignes ` +
-        `européennes, sans ordre : la touche affichée par Quantfury sort à ${PROBE.quantfuryBp} bp de médiane, soit ` +
-        `${PROBE.gapBp} bp de plus, avec ${PROBE.wider} lignes plus larges et ${PROBE.tighter} plus serrées`
+      `place : Quantfury dit ${CBOE_EUROPE} ; le coût est sa dernière touche à deux côtés, ou N/A, pas le primaire`
     );
     lines.push(
       "ISIN : celui-ci vient de l'appariement par ticker du scraper, pas de Quantfury ; le plancher de nom s'applique désormais à l'Europe, mais l'identité reste déduite"
@@ -687,7 +716,7 @@ function confidenceOf({ crypto, european, bookMic, leaf, marketBp, marketPerShar
   lines.push(
     `commission nulle éprouvée sur un seul aller-retour, à ${TRIP.venue} : ailleurs, cotations en direct et barème lu`
   );
-  if (!crypto && !leaf) lines.push("carnet absent : le total est N/A, pas un total sans marché");
+  if (!crypto && !touch) lines.push("carnet absent : le total est N/A, pas un total sans marché");
 
   return lines.join(" ; ");
 }

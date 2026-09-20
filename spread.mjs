@@ -25,11 +25,17 @@
 //   node spread.mjs                              -- listings from trading212/trading212-parsed.json
 //   node spread.mjs --rows=xtb/xtb-parsed.json
 //   node spread.mjs --rows=a.json,b.json         -- several brokers at once
+//   node spread.mjs --rows=catalogues            -- every <broker>-parsed.json (alias: all)
 //   node spread.mjs --refresh                    -- refetch instead of trusting the file
 //   node spread.mjs --out=other.json             -- write somewhere else
 //   node spread.mjs --min-gap=90                 -- minutes before a listing is resampled
 //   node spread.mjs --jobs=8                     -- listings in flight at once
 //   node spread.mjs --only=lse,six               -- one or more sources, the others left alone
+//   node spread.mjs --only=lse,six,frankfurt --rows=catalogues
+//       while London, Zurich and the Frankfurt floor are all open: every IOB,
+//       every SIX currency line, every ISIN on the DFRA tape (ordinary and CDR).
+//       A neighbour's book is never copied. Out of hours the run adds nothing.
+//   node spread.mjs --chrome=9223                -- another Chrome (Questrade without Fortuneo / LYNX+)
 //
 // Run it a few times across a session and the published figure becomes a median of
 // readings rather than one snapshot, which is what makes it worth costing a trade
@@ -52,6 +58,7 @@ import {
   VENUES,
 } from "./venues.mjs";
 import { GULF_BOARDS, gulfSymbol, readGulfBoard } from "./gulf.mjs";
+import { catalogueFiles } from "./catalogues.mjs";
 import { monthlyXlm } from "./xlm-monthly.mjs";
 import { monthlyEffectiveSpread } from "./rule605-monthly.mjs";
 
@@ -64,6 +71,8 @@ const arg = (name) => {
 };
 const REFRESH = process.argv.includes("--refresh");
 const STORE_PATH = arg("out") || "parsed_json/spread.json";
+const CHROME = arg("chrome") || "9222";
+const CHROME_URL = /^https?:\/\//i.test(CHROME) ? CHROME : `http://127.0.0.1:${CHROME}`;
 const ONLY = (arg("only") || "")
   .split(",")
   .map((s) => s.trim().toLowerCase())
@@ -71,7 +80,20 @@ const ONLY = (arg("only") || "")
 
 // ------------------------------------------------------------------- the listings
 
-const rowFiles = (arg("rows") || "trading212/trading212-parsed.json").split(",").map((s) => s.trim());
+function rowFileList() {
+  const raw = arg("rows") || "trading212/trading212-parsed.json";
+  const parts = raw
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const out = [];
+  for (const part of parts) {
+    if (/^(catalogues|all)$/i.test(part)) out.push(...catalogueFiles());
+    else out.push(part);
+  }
+  return [...new Set(out)];
+}
+const rowFiles = rowFileList();
 
 const listings = new Map();
 
@@ -329,6 +351,8 @@ const CROSSED = {
   frankfurt: 1,
   hamburg: 1,
   hannover: 1,
+  eix: 1,
+  tib: 1,
   stuttgart: 1,
   bmv: 1,
   questrade: 1,
@@ -490,7 +514,7 @@ const pages = [];
 let connecting = null;
 const connect = () =>
   (connecting ||= puppeteer.connect({
-    browserURL: "http://127.0.0.1:9222",
+    browserURL: CHROME_URL,
     defaultViewport: null,
     protocolTimeout: 240000,
   }));
@@ -804,6 +828,8 @@ const delayedQuotes = {
   frankfurt: new Map(),
   hamburg: new Map(),
   hannover: new Map(),
+  eix: new Map(),
+  tib: new Map(),
   lsin: new Map(),
   stuttgart: new Map(),
   bmv: new Map(),
@@ -825,6 +851,8 @@ const delayedTrouble = {
   frankfurt: null,
   hamburg: null,
   hannover: null,
+  eix: null,
+  tib: null,
   lsin: null,
   stuttgart: null,
   bmv: null,
@@ -1116,18 +1144,27 @@ async function loadBmv(lines, ownTab) {
 
 // Canada publishes no free pre-trade book of its own. TMX answers bid and ask only to a
 // signed-in watchlist, Cboe Canada behind a member key and secret, and there is no Rule
-// 605 here to fall back on. The touch does reach the screen of anyone holding a Questrade
-// account, over the socket its trading page keeps open, and what a broker displays about
-// an exchange is still a fact about that exchange rather than about the broker.
+// 605 here to fall back on. The portal's REST `/v1/market-data/{symbol}/quote` is
+// metadata — last trade, listing, fundamentals — and has no bid or ask. The touch
+// still reaches the screen of anyone holding a Questrade account, over the socket its
+// trading page keeps open, and what a broker displays about an exchange is still a
+// fact about that exchange rather than about the broker.
 //
 // The token that socket signs in with is minted for that socket alone: a second
 // connection offering the same token is answered with silence rather than an error. So
-// the reads ride the application's own connection, by keeping a handle on the WebSocket
-// it builds. Only get_symbol_data and get_l1_update are sent, which read and nothing else.
+// the reads ride the application's own connection. Only get_symbol_data and
+// get_l1_update are sent, which read and nothing else.
+//
+// Frames are collected in Node via CDP. Waiting inside `page.evaluate` for the reply
+// used to freeze the tab after a few hundred subscriptions (`Runtime.callFunctionOn
+// timed out`); a send is a few milliseconds, the wait is not, so only the send still
+// crosses into the page. The page is reloaded every few batches so the socket does
+// not keep every symbol subscribed.
 const QUESTRADE_APP = "https://my.questrade.com/trading/quote/XIU.TO";
 // One request carries a whole list. The batch only bounds how much a silent answer costs
-// before the next one is tried.
-const QUESTRADE_BATCH = 150;
+// before the next one is tried, and how many names stay on the socket at once.
+const QUESTRADE_BATCH = 20;
+const QUESTRADE_RELOAD_EVERY = 160;
 
 // What each venue calls itself in the quote's `feed`. TSX and Cboe Canada share the `.TO`
 // suffix, so this is what keeps one venue's book off the other's row.
@@ -1145,116 +1182,131 @@ function questradeSymbol(l) {
   return suffix ? `${ticker}${suffix}` : null;
 }
 
+function questradeRows(raw, requestID) {
+  if (typeof raw !== "string" || !raw.startsWith("42")) return [];
+  let frame;
+  try {
+    frame = JSON.parse(raw.slice(2));
+  } catch {
+    return [];
+  }
+  if (frame?.[1]?.requestID !== requestID) return [];
+  const data = frame[1].data;
+  if (Array.isArray(data)) return data;
+  if (Array.isArray(data?.data)) return data.data;
+  if (data?.symbol || data?.symbolId) return [data];
+  return [];
+}
+
 async function loadQuestrade(lines, ownTab) {
   const page = await ownTab();
   await page.evaluateOnNewDocument(() => {
     const Native = window.WebSocket;
-    window.__qsFrames = [];
-    // How many frames have already been dropped off the front, so that a reader can hold
-    // a position in the stream rather than an index into an array that shifts under it.
-    window.__qsDropped = 0;
     window.WebSocket = function (url, protocols) {
       const socket = new Native(url, protocols);
-      if (String(url).includes("cloud-iq")) {
-        window.__qsSocket = socket;
-        socket.addEventListener("message", (event) => {
-          const data = String(event.data);
-          if (!data.startsWith("42")) return;
-          window.__qsFrames.push(data);
-          // The tape is only ever read back a few seconds, so it is trimmed rather than
-          // kept: a page left open all session would otherwise grow without end.
-          if (window.__qsFrames.length > 4000) {
-            window.__qsDropped += window.__qsFrames.splice(0, 2000).length;
-          }
-        });
-      }
+      if (String(url).includes("cloud-iq")) window.__qsSocket = socket;
       return socket;
     };
     window.WebSocket.prototype = Native.prototype;
     Object.assign(window.WebSocket, Native);
   });
 
-  await page.goto(QUESTRADE_APP, { waitUntil: "domcontentloaded", timeout: 60000 });
-  let live = false;
-  for (let waited = 0; waited < 45000 && !live; waited += 500) {
-    live = await page.evaluate(() => window.__qsSocket?.readyState === 1).catch(() => false);
-    if (!live) await new Promise((r) => setTimeout(r, 500));
-  }
-  if (!live) throw new Error("aucune socket de cotation, session Questrade fermée ?");
-  // The application signs the socket in before it asks anything of it, and a request
-  // posted ahead of that is dropped without a word.
-  await new Promise((r) => setTimeout(r, 6000));
+  const incoming = [];
+  const client = await page.createCDPSession();
+  await client.send("Network.enable");
+  const onFrame = (event) => {
+    const payload = event.response?.payloadData;
+    if (typeof payload === "string" && payload.startsWith("42")) incoming.push(payload);
+  };
+  client.on("Network.webSocketFrameReceived", onFrame);
+
+  const openSession = async () => {
+    incoming.length = 0;
+    await page.goto(QUESTRADE_APP, { waitUntil: "domcontentloaded", timeout: 60000 });
+    let live = false;
+    for (let waited = 0; waited < 45000 && !live; waited += 500) {
+      live = await page.evaluate(() => window.__qsSocket?.readyState === 1).catch(() => false);
+      if (!live) await new Promise((r) => setTimeout(r, 500));
+    }
+    if (!live) throw new Error("aucune socket de cotation, session Questrade fermée ?");
+    // The application signs the socket in before it asks anything of it, and a request
+    // posted ahead of that is dropped without a word.
+    await new Promise((r) => setTimeout(r, 6000));
+  };
+
+  const ask = async (method, params, requestID) => {
+    await page.evaluate(
+      (payload) => {
+        const socket = window.__qsSocket;
+        if (!socket || socket.readyState !== 1) throw new Error("socket refermée");
+        socket.send(payload);
+      },
+      `42${JSON.stringify(["sendRequest", { method, params, requestID }])}`
+    );
+  };
+
+  const reply = async (requestID, expected, ms) => {
+    const held = new Map();
+    const start = Date.now();
+    while (Date.now() - start < ms) {
+      while (incoming.length) {
+        for (const row of questradeRows(incoming.shift(), requestID)) {
+          if (row?.symbol) held.set(row.symbol, row);
+        }
+      }
+      if (expected && held.size >= expected) break;
+      await new Promise((r) => setTimeout(r, 100));
+    }
+    return [...held.values()];
+  };
+
+  await openSession();
 
   const wanted = [...new Set(lines.map(questradeSymbol).filter(Boolean))];
   delayedQuotes.questrade.clear();
   let books = 0;
+  let retries = 0;
   for (let offset = 0; offset < wanted.length; offset += QUESTRADE_BATCH) {
+    if (offset && offset % QUESTRADE_RELOAD_EVERY === 0) {
+      await openSession();
+    }
     const batch = wanted.slice(offset, offset + QUESTRADE_BATCH);
-    const answer = await page.evaluate(
-      async (symbols, stamp) => {
-        const socket = window.__qsSocket;
-        if (!socket || socket.readyState !== 1) return { error: "socket refermée" };
-        const wait = (ms) => new Promise((r) => setTimeout(r, ms));
-        const from = window.__qsDropped + window.__qsFrames.length;
-        // Ids well clear of the application's own numbering, so neither reads the
-        // other's replies.
-        const metaId = 900001 + stamp * 2;
-        const quoteId = 900002 + stamp * 2;
-        const ask = (method, params, requestID) =>
-          socket.send(`42${JSON.stringify(["sendRequest", { method, params, requestID }])}`);
-        // A list comes back over several frames, so they are gathered until the venue has
-        // answered for everything asked or the window runs out.
-        const reply = async (requestID, expected, ms) => {
-          const held = new Map();
-          for (let waited = 0; waited < ms; waited += 250) {
-            for (const raw of window.__qsFrames.slice(Math.max(0, from - window.__qsDropped))) {
-              let frame;
-              try {
-                frame = JSON.parse(raw.slice(2));
-              } catch {
-                continue;
-              }
-              if (frame?.[1]?.requestID !== requestID) continue;
-              for (const row of frame[1]?.data?.data || []) {
-                if (row?.symbol) held.set(row.symbol, row);
-              }
-            }
-            if (held.size >= expected) break;
-            await wait(250);
-          }
-          return [...held.values()];
+    const metaId = 900001 + offset * 2;
+    const quoteId = 900002 + offset * 2;
+    try {
+      incoming.length = 0;
+      await ask("get_symbol_data", { symbols: batch }, metaId);
+      const meta = await reply(metaId, batch.length, 12000);
+      const ids = [...new Set(meta.map((m) => m.symbolId).filter(Boolean))];
+      if (!ids.length) continue;
+      incoming.length = 0;
+      await ask("get_l1_update", { symbolIds: ids }, quoteId);
+      const quotes = await reply(quoteId, ids.length, 12000);
+      for (const q of quotes) {
+        const quote = {
+          symbol: q.symbol,
+          bid: q.bidPrice,
+          ask: q.askPrice,
+          feed: q.feed,
+          delay: q.delay,
+          halt: q.halt,
         };
-
-        ask("get_symbol_data", { symbols }, metaId);
-        const meta = await reply(metaId, symbols.length, 25000);
-        if (!meta.length) return { error: "get_symbol_data sans réponse" };
-        const ids = [...new Set(meta.map((m) => m.symbolId).filter(Boolean))];
-        ask("get_l1_update", { symbolIds: ids }, quoteId);
-        const quotes = await reply(quoteId, ids.length, 25000);
-        return {
-          quotes: quotes.map((q) => ({
-            symbol: q.symbol,
-            bid: q.bidPrice,
-            ask: q.askPrice,
-            feed: q.feed,
-            delay: q.delay,
-            halt: q.halt,
-          })),
-        };
-      },
-      batch,
-      offset
-    );
-
-    if (answer.error) throw new Error(answer.error);
-    for (const quote of answer.quotes) {
-      delayedQuotes.questrade.set(quote.symbol, quote);
-      if (quote.bid > 0 && quote.ask > 0) books += 1;
+        delayedQuotes.questrade.set(quote.symbol, quote);
+        if (quote.bid > 0 && quote.ask > 0) books += 1;
+      }
+      retries = 0;
+    } catch (e) {
+      console.error(`    Questrade : ${String(e.message || e).slice(0, 160)}`);
+      if (++retries > 3) throw e;
+      await openSession();
+      offset -= QUESTRADE_BATCH;
+      continue;
     }
     console.error(
       `    Questrade : ${Math.min(offset + QUESTRADE_BATCH, wanted.length)}/${wanted.length} symboles`
     );
   }
+  await client.detach().catch(() => {});
   return { wanted: wanted.length, quoted: delayedQuotes.questrade.size, books };
 }
 
@@ -1414,6 +1466,72 @@ async function loadHannover(wanted) {
     { mic: "HANB", n: 3 },
     { mic: "HANA", n: 2 },
   ]);
+}
+
+// EIX's own 15-minute tape, not the BÖAG HANA/HANB slices. One gzip is five
+// minutes of the whole book — tens of millions of ticks — so only the newest
+// file is read and the last two-sided print per ISIN is kept.
+const EIX_FILES = "https://european-investor-exchange.com/api/trade-files?tradeFileType=pretrade";
+const eixFileUrl = (key) =>
+  `https://european-investor-exchange.com/api/trade-file-contents?key=${encodeURIComponent(key)}&attachmentFilename=pretrade.csv.gz`;
+
+async function loadEix(wanted) {
+  const files = await (await fetchOk(EIX_FILES)).json();
+  const newest = (Array.isArray(files) ? files : [])
+    .map((f) => f?.fileName)
+    .filter((n) => typeof n === "string" && /Pretrade\.\d+\.csv\.gz$/.test(n))
+    .sort()
+    .at(-1);
+  if (!newest) throw new Error("aucun fichier pre-trade EIX");
+  const wantedIsin = new Set([...wanted].map((k) => k.split("|")[0]));
+  delayedQuotes.eix.clear();
+  await forEachGunzipLine(
+    eixFileUrl(newest),
+    (line) => {
+      if (line.startsWith("Trading day")) return;
+      const p = line.split(",");
+      if (p.length < 7) return;
+      const isin = String(p[1] || "").toUpperCase();
+      if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin)) return;
+      if (wantedIsin.size && !wantedIsin.has(isin)) return;
+      const bid = Number(p[4]);
+      const ask = Number(p[5]);
+      const currency = String(p[6] || "EUR").toUpperCase();
+      if (!(bid > 0) || !(ask > 0) || ask < bid) return;
+      const at = p[0] || "";
+      const key = `${isin}|${currency}`;
+      const prev = delayedQuotes.eix.get(key);
+      if (prev && prev.at > at) return;
+      delayedQuotes.eix.set(key, { bid, ask, currency, at });
+    },
+    400000
+  );
+  return newest;
+}
+
+async function loadTib() {
+  const path = new URL("traderepublic/traderepublic-touches.json", import.meta.url);
+  const data = JSON.parse(fs.readFileSync(path, "utf8"));
+  delayedQuotes.tib.clear();
+  const venue = VENUES.find((v) => v.mic === "TIB");
+  let books = 0;
+  for (const [isin, q] of Object.entries(data.byIsin || {})) {
+    const bid = Number(q.bid);
+    const ask = Number(q.ask);
+    const bp = q.bp ?? bpFrom(bid, ask);
+    if (!(bid > 0) || !(ask > 0) || ask < bid || !(bp > 0)) continue;
+    const currency = String(q.currency || "EUR").toUpperCase();
+    delayedQuotes.tib.set(`${isin}|${currency}`, { bid, ask, currency, bp });
+    // The catalogue almost never stores TIB as a place — Bestpreis is implied —
+    // so the leaves are written here rather than waiting for a visit that never
+    // comes. Only Trade Republic routes here.
+    ((spreads[isin] ||= {})[venue.mic] ||= {})[currency] = {
+      bp: Number(Number(bp).toFixed(2)),
+      url: spreadUrl({ isin, ticker: q.ticker, venue, currency }),
+    };
+    books += 1;
+  }
+  return { asOf: data.asOf, books };
 }
 
 // ------------------------------------------------------------------------ le Golfe
@@ -1880,6 +1998,56 @@ const adapters = {
         return { spreadBp: null, note: delayedTrouble.hannover || "absent du fichier pre-trade Hanovre" };
       }
       return { spreadBp: bpFrom(quote.bid, quote.ask), tradingCurrency: "EUR" };
+    },
+  },
+
+  eix: {
+    measure: "touche du carnet, différé 15 min",
+    async prefetch(lines) {
+      try {
+        const wanted = new Set(lines.map((l) => `${l.isin}|${l.currency}`));
+        const file = await loadEix(wanted);
+        console.error(`    EIX : ${delayedQuotes.eix.size} cotations (${file})\n`);
+      } catch (e) {
+        delayedTrouble.eix = String(e.message || e).slice(0, 160);
+        console.error(`    EIX : ${delayedTrouble.eix}\n`);
+      }
+    },
+    async fetch(l) {
+      if (l.currency !== "EUR") {
+        return { spreadBp: null, note: `EIX cote en EUR, pas en ${l.currency}` };
+      }
+      const quote = delayedQuotes.eix.get(`${l.isin}|EUR`);
+      if (!quote) {
+        return { spreadBp: null, note: delayedTrouble.eix || "absent du fichier pre-trade EIX" };
+      }
+      return { spreadBp: bpFrom(quote.bid, quote.ask), tradingCurrency: "EUR" };
+    },
+  },
+
+  tib: {
+    measure: "touche Bestpreis TIB, temps réel",
+    local: true,
+    async prefetch() {
+      try {
+        const stats = await loadTib();
+        console.error(`    TIB : ${stats.books} carnets (${stats.asOf || "sans date"})\n`);
+      } catch (e) {
+        delayedTrouble.tib = String(e.message || e).slice(0, 160);
+        console.error(`    TIB : ${delayedTrouble.tib}\n`);
+      }
+    },
+    async fetch(l) {
+      const quote = delayedQuotes.tib.get(`${l.isin}|${l.currency}`) || delayedQuotes.tib.get(`${l.isin}|EUR`);
+      if (!quote) {
+        return { spreadBp: null, note: delayedTrouble.tib || `${l.isin} absent des touches TIB` };
+      }
+      return {
+        spreadBp: quote.bp ?? bpFrom(quote.bid, quote.ask),
+        bid: quote.bid,
+        ask: quote.ask,
+        tradingCurrency: quote.currency,
+      };
     },
   },
 

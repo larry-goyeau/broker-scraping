@@ -4,6 +4,17 @@
 broker-scraping*
 *.mp4
 *.tsv
+*.lock
+# Secrets and resumable caches: a token or a pagination cursor is not a source.
+**/.webull-token.json
+**/.robinhood-cache.json
+**/.robinhood-24h-cache.json
+**/.spread-session.json
+**/*-lookedup.json
+**/*-finder-cache.json
+parsed_json/xlm-cache.json
+# A probe is replayable. A paid round trip (*-experiment.json) is not.
+**/*-probe.json
 # Les relevés d'allers-retours réels, eux, se suivent : ils ont coûté de l'argent et ne se
 # rejouent pas, le marché ayant bougé. Tout le reste des .json se régénère en relançant un script.
 !*/*-experiment.json

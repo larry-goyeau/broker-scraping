@@ -1,11 +1,11 @@
 {
-  "asOf": "2026-09-17T19:12:50.862Z",
+  "asOf": "2026-09-18T17:00:11.761Z",
   "source": "wss://api.traderepublic.com ticker ISIN.TIB",
   "measure": "touche Bestpreis TIB, aller-retour (ask − bid), euro",
-  "asked": 12093,
-  "quoted": 8293,
+  "quoted": 8506,
   "empty": 32,
-  "failed": 3768,
+  "failed": 3555,
+  "asked": 12093,
   "byIsin": {
     "IE00BK5BQT80": {
       "ticker": "VWCE",
@@ -100429,13 +100429,15 @@
     },
     "US47759T1007": {
       "ticker": "JKS",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 9.05,
+      "ask": 9.14,
+      "last": 9.05,
+      "mid": 9.095,
+      "perShare": 0.09,
+      "bp": 98.9555,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:26.644Z"
     },
     "NO0013052209": {
       "ticker": "JL80",
@@ -101129,13 +101131,15 @@
     },
     "US36870W1009": {
       "ticker": "K5F",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 0.57,
+      "ask": 0.62,
+      "last": 0.57,
+      "mid": 0.595,
+      "perShare": 0.05,
+      "bp": 840.336,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:20.994Z"
     },
     "LT0000127151": {
       "ticker": "K5Q",
@@ -101499,13 +101503,15 @@
     },
     "US48241A1051": {
       "ticker": "KBIA",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 109,
+      "ask": 111,
+      "last": 109,
+      "mid": 110,
+      "perShare": 2,
+      "bp": 181.818,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:25.625Z"
     },
     "DE000KBX1006": {
       "ticker": "KBX",
@@ -101599,13 +101605,15 @@
     },
     "US48241F1049": {
       "ticker": "KDB0",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 65,
+      "ask": 66,
+      "last": 65,
+      "mid": 65.5,
+      "perShare": 1,
+      "bp": 152.672,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:27.821Z"
     },
     "KYG525681477": {
       "ticker": "KDIC",
@@ -101649,13 +101657,15 @@
     },
     "US4824971042": {
       "ticker": "KE8A",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 14.2,
+      "ask": 14.3,
+      "last": 14.2,
+      "mid": 14.25,
+      "perShare": 0.1,
+      "bp": 70.1754,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:24.417Z"
     },
     "HK0184000948": {
       "ticker": "KEC",
@@ -101729,13 +101739,15 @@
     },
     "US5006311063": {
       "ticker": "KEP",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 9.55,
+      "ask": 9.65,
+      "last": 9.55,
+      "mid": 9.600000000000001,
+      "perShare": 0.1,
+      "bp": 104.167,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:06.457Z"
     },
     "FR0000121485": {
       "ticker": "KER",
@@ -102019,13 +102031,15 @@
     },
     "US4973503067": {
       "ticker": "KIR0",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 15.5,
+      "ask": 16.1,
+      "last": 15.5,
+      "mid": 15.8,
+      "perShare": 0.6,
+      "bp": 379.747,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:14.882Z"
     },
     "US73688F2011": {
       "ticker": "KJ7A",
@@ -102079,13 +102093,15 @@
     },
     "US48581R2058": {
       "ticker": "KKS",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 84.8,
+      "ask": 85,
+      "last": 84.8,
+      "mid": 84.9,
+      "perShare": 0.2,
+      "bp": 23.5571,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:17.887Z"
     },
     "CA03753D1042": {
       "ticker": "KL9",
@@ -102159,13 +102175,15 @@
     },
     "US78440P3064": {
       "ticker": "KMBA",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 31.2,
+      "ask": 31.4,
+      "last": 31.2,
+      "mid": 31.299999999999997,
+      "perShare": 0.2,
+      "bp": 63.8978,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:01.962Z"
     },
     "US49456B1017": {
       "ticker": "KMI",
@@ -102259,13 +102277,15 @@
     },
     "US5011871085": {
       "ticker": "KNIU",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 45,
+      "ask": 46.6,
+      "last": 45,
+      "mid": 45.8,
+      "perShare": 1.6,
+      "bp": 349.345,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:05.555Z"
     },
     "CA50050C1077": {
       "ticker": "KNR",
@@ -102369,13 +102389,15 @@
     },
     "US1912411089": {
       "ticker": "KOF",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 97,
+      "ask": 97.6,
+      "last": 97,
+      "mid": 97.3,
+      "perShare": 0.6,
+      "bp": 61.665,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:18.405Z"
     },
     "JP3297000006": {
       "ticker": "KOK",
@@ -102459,13 +102481,15 @@
     },
     "US50048U2015": {
       "ticker": "KOZ0",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 13.7,
+      "ask": 15.1,
+      "last": 13.7,
+      "mid": 14.399999999999999,
+      "perShare": 1.4,
+      "bp": 972.222,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:03.940Z"
     },
     "NO0013536151": {
       "ticker": "KOZ1",
@@ -102509,13 +102533,15 @@
     },
     "US7806412059": {
       "ticker": "KPNB",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 4.02,
+      "ask": 4.094599,
+      "last": 4.02,
+      "mid": 4.057299499999999,
+      "perShare": 0.074599,
+      "bp": 183.864,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:11.317Z"
     },
     "JP3228600007": {
       "ticker": "KPO",
@@ -102589,13 +102615,15 @@
     },
     "US49989A1097": {
       "ticker": "KRKA",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 18.9,
+      "ask": 20.4,
+      "last": 18.9,
+      "mid": 19.65,
+      "perShare": 1.5,
+      "bp": 763.359,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:37.609Z"
     },
     "CA09369M1077": {
       "ticker": "KRL2",
@@ -102669,23 +102697,27 @@
     },
     "US4924601002": {
       "ticker": "KRZA",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 82,
+      "ask": 85,
+      "last": 82,
+      "mid": 83.5,
+      "perShare": 3,
+      "bp": 359.281,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:30.270Z"
     },
     "US49639K1016": {
       "ticker": "KS7",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 8.55,
+      "ask": 8.65,
+      "last": 8.55,
+      "mid": 8.600000000000001,
+      "perShare": 0.1,
+      "bp": 116.279,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:20.417Z"
     },
     "KYG5264S1012": {
       "ticker": "KS70",
@@ -102749,13 +102781,15 @@
     },
     "US8245961003": {
       "ticker": "KSF1",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 69,
+      "ask": 70,
+      "last": 69,
+      "mid": 69.5,
+      "perShare": 1,
+      "bp": 143.885,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:35.633Z"
     },
     "FI0009900237": {
       "ticker": "KSLA",
@@ -102809,13 +102843,15 @@
     },
     "US48268K1016": {
       "ticker": "KT",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 16.8,
+      "ask": 17,
+      "last": 16.8,
+      "mid": 16.9,
+      "perShare": 0.2,
+      "bp": 118.343,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:36.196Z"
     },
     "US4931441095": {
       "ticker": "KT1",
@@ -103319,13 +103355,15 @@
     },
     "US7802593050": {
       "ticker": "L3H",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 82.5,
+      "ask": 83,
+      "last": 82.5,
+      "mid": 82.75,
+      "perShare": 0.5,
+      "bp": 60.423,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:16.537Z"
     },
     "CA0804995029": {
       "ticker": "L3L2",
@@ -103499,13 +103537,15 @@
     },
     "US50202M1027": {
       "ticker": "L87A",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 10.5,
+      "ask": 10.55,
+      "last": 10.5,
+      "mid": 10.525,
+      "perShare": 0.05,
+      "bp": 47.5059,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:37.365Z"
     },
     "BE0003870871": {
       "ticker": "L8J",
@@ -103669,13 +103709,15 @@
     },
     "US54951L1098": {
       "ticker": "LC0A",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 29.4,
+      "ask": 29.7,
+      "last": 29.4,
+      "mid": 29.549999999999997,
+      "perShare": 0.3,
+      "bp": 101.523,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:35.466Z"
     },
     "FR001400SF56": {
       "ticker": "LC4",
@@ -103899,13 +103941,15 @@
     },
     "US51817R2058": {
       "ticker": "LFL0",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 44.2,
+      "ask": 44.6,
+      "last": 44.2,
+      "mid": 44.400000000000006,
+      "perShare": 0.4,
+      "bp": 90.0901,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:14.397Z"
     },
     "GB00BK9RKT01": {
       "ticker": "LFPB",
@@ -103999,13 +104043,15 @@
     },
     "US50186Q2021": {
       "ticker": "LGLG",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 22.2,
+      "ask": 22.6,
+      "last": 22.2,
+      "mid": 22.4,
+      "perShare": 0.4,
+      "bp": 178.571,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:35.613Z"
     },
     "US53220K5048": {
       "ticker": "LGND",
@@ -104629,13 +104675,15 @@
     },
     "US5262501050": {
       "ticker": "LNVGY",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 82.86,
+      "ask": 83.86,
+      "last": 82.86,
+      "mid": 83.36,
+      "perShare": 1,
+      "bp": 119.962,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:21.536Z"
     },
     "AT0000644505": {
       "ticker": "LNZ",
@@ -104659,13 +104707,15 @@
     },
     "US54338V1017": {
       "ticker": "LO3A",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 57,
+      "ask": 59,
+      "last": 57,
+      "mid": 58,
+      "perShare": 2,
+      "bp": 344.828,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:38.467Z"
     },
     "AU000000LOV7": {
       "ticker": "LO7",
@@ -104719,13 +104769,15 @@
     },
     "US5021172037": {
       "ticker": "LORA",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 75,
+      "ask": 76,
+      "last": 75,
+      "mid": 75.5,
+      "perShare": 1,
+      "bp": 132.45,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:36.686Z"
     },
     "US5486611073": {
       "ticker": "LOW",
@@ -104769,13 +104821,15 @@
     },
     "US50186V1026": {
       "ticker": "LPL",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 2.5,
+      "ask": 2.54,
+      "last": 2.5,
+      "mid": 2.52,
+      "perShare": 0.04,
+      "bp": 158.73,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:13.081Z"
     },
     "US50212V1008": {
       "ticker": "LPLA",
@@ -104989,13 +105043,15 @@
     },
     "US1702721085": {
       "ticker": "LSP1",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 8.9,
+      "ask": 9.5,
+      "last": 8.9,
+      "mid": 9.2,
+      "perShare": 0.6,
+      "bp": 652.174,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:11.210Z"
     },
     "US5150981018": {
       "ticker": "LSTR",
@@ -105099,13 +105155,15 @@
     },
     "USY5217N1183": {
       "ticker": "LTOD",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 34.8,
+      "ask": 35,
+      "last": 34.8,
+      "mid": 34.9,
+      "perShare": 0.2,
+      "bp": 57.3066,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:20.119Z"
     },
     "AU000000LTR4": {
       "ticker": "LTR",
@@ -105269,13 +105327,15 @@
     },
     "US5024413065": {
       "ticker": "LVMUY",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 80.2,
+      "ask": 81,
+      "last": 80.2,
+      "mid": 80.6,
+      "perShare": 0.8,
+      "bp": 99.2556,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:27.948Z"
     },
     "US5178341070": {
       "ticker": "LVS",
@@ -105389,13 +105449,15 @@
     },
     "US5165571051": {
       "ticker": "LX9B",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 2.60153,
+      "ask": 2.874371,
+      "last": 2.60153,
+      "mid": 2.7379505,
+      "perShare": 0.272841,
+      "bp": 996.515,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:33.272Z"
     },
     "FR0000033599": {
       "ticker": "LXB",
@@ -105499,13 +105561,15 @@
     },
     "US5394391099": {
       "ticker": "LYG",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 5.05,
+      "ask": 5.1,
+      "last": 5.05,
+      "mid": 5.074999999999999,
+      "perShare": 0.05,
+      "bp": 98.5222,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:23.224Z"
     },
     "GB0004526900": {
       "ticker": "LYG",
@@ -105529,13 +105593,15 @@
     },
     "US5510733075": {
       "ticker": "LYIC",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 8.7,
+      "ask": 8.9,
+      "last": 8.7,
+      "mid": 8.8,
+      "perShare": 0.2,
+      "bp": 227.273,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:11.229Z"
     },
     "US50216C1080": {
       "ticker": "LYTS",
@@ -106219,23 +106285,27 @@
     },
     "US5894921072": {
       "ticker": "MAH0",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 0.266,
+      "ask": 0.27,
+      "last": 0.266,
+      "mid": 0.268,
+      "perShare": 0.004,
+      "bp": 149.254,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:36.266Z"
     },
     "USY541641194": {
       "ticker": "MAHMG",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 26.8,
+      "ask": 28.4,
+      "last": 26.8,
+      "mid": 27.6,
+      "perShare": 1.6,
+      "bp": 579.71,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:31.913Z"
     },
     "US56035L1044": {
       "ticker": "MAIN",
@@ -106349,13 +106419,15 @@
     },
     "US69832A3041": {
       "ticker": "MAT",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 23.6,
+      "ask": 23.8,
+      "last": 23.6,
+      "mid": 23.700000000000003,
+      "perShare": 0.2,
+      "bp": 84.3882,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:18.093Z"
     },
     "US5770811025": {
       "ticker": "MAT",
@@ -106569,13 +106641,15 @@
     },
     "US59410T1060": {
       "ticker": "MCH1",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 16.4,
+      "ask": 16.8,
+      "last": 16.4,
+      "mid": 16.6,
+      "perShare": 0.4,
+      "bp": 240.964,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:32.857Z"
     },
     "FR001400AJ45": {
       "ticker": "MCHA",
@@ -106759,13 +106833,15 @@
     },
     "US58502K1060": {
       "ticker": "ME90",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 28.2,
+      "ask": 29.2,
+      "last": 28.2,
+      "mid": 28.7,
+      "perShare": 1,
+      "bp": 348.432,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:32.942Z"
     },
     "JP3906000009": {
       "ticker": "MEA",
@@ -106889,13 +106965,15 @@
     },
     "US6067832070": {
       "ticker": "MES0",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 19.8,
+      "ask": 20.6,
+      "last": 19.8,
+      "mid": 20.200000000000003,
+      "perShare": 0.8,
+      "bp": 396.04,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:28.308Z"
     },
     "US59156R1086": {
       "ticker": "MET",
@@ -107079,13 +107157,15 @@
     },
     "US56656T1051": {
       "ticker": "MGP1",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 2.68,
+      "ask": 2.88,
+      "last": 2.68,
+      "mid": 2.7800000000000002,
+      "perShare": 0.2,
+      "bp": 719.424,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:14.169Z"
     },
     "US55303J1060": {
       "ticker": "MGPI",
@@ -107179,13 +107259,15 @@
     },
     "US55302T2042": {
       "ticker": "MHPC",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 5.8,
+      "ask": 6.3,
+      "last": 5.8,
+      "mid": 6.05,
+      "perShare": 0.5,
+      "bp": 826.446,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:33.013Z"
     },
     "CA6025321036": {
       "ticker": "MI5",
@@ -107449,13 +107531,15 @@
     },
     "US5608773009": {
       "ticker": "MK2",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 28.8,
+      "ask": 29.6,
+      "last": 28.8,
+      "mid": 29.200000000000003,
+      "perShare": 0.8,
+      "bp": 273.973,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:09.179Z"
     },
     "JP3862400003": {
       "ticker": "MK2A",
@@ -107469,13 +107553,15 @@
     },
     "US74767N1072": {
       "ticker": "MK60",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 1.58,
+      "ask": 1.6,
+      "last": 1.58,
+      "mid": 1.59,
+      "perShare": 0.02,
+      "bp": 125.786,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:36.670Z"
     },
     "CA01176C2085": {
       "ticker": "MK71",
@@ -107569,13 +107655,15 @@
     },
     "US5854641009": {
       "ticker": "MLCO",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 4.1,
+      "ask": 4.14,
+      "last": 4.1,
+      "mid": 4.119999999999999,
+      "perShare": 0.04,
+      "bp": 97.0874,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:24.472Z"
     },
     "US59064R1095": {
       "ticker": "MLI",
@@ -108019,13 +108107,15 @@
     },
     "US6084642023": {
       "ticker": "MOGG",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 7.35,
+      "ask": 7.75,
+      "last": 7.35,
+      "mid": 7.55,
+      "perShare": 0.4,
+      "bp": 529.801,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:14.417Z"
     },
     "US60855R1005": {
       "ticker": "MOH",
@@ -108399,13 +108489,15 @@
     },
     "US5893392093": {
       "ticker": "MRKC",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 25.6,
+      "ask": 26.4,
+      "last": 25.6,
+      "mid": 26,
+      "perShare": 0.8,
+      "bp": 307.692,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:19.296Z"
     },
     "ES0105025003": {
       "ticker": "MRL",
@@ -108759,13 +108851,15 @@
     },
     "US57667T1007": {
       "ticker": "MTLS",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 6.7,
+      "ask": 6.75,
+      "last": 6.7,
+      "mid": 6.725,
+      "perShare": 0.05,
+      "bp": 74.3494,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:21.400Z"
     },
     "ZAE000042164": {
       "ticker": "MTN",
@@ -109049,13 +109143,15 @@
     },
     "US02390A1016": {
       "ticker": "MV90",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 19.7,
+      "ask": 19.8,
+      "last": 19.7,
+      "mid": 19.75,
+      "perShare": 0.1,
+      "bp": 50.6329,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:31.459Z"
     },
     "MX01AM050019": {
       "ticker": "MV91",
@@ -109349,13 +109445,15 @@
     },
     "US65565D1019": {
       "ticker": "N0S0",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 15.7,
+      "ask": 16.9,
+      "last": 15.7,
+      "mid": 16.299999999999997,
+      "perShare": 1.2,
+      "bp": 736.196,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:30.497Z"
     },
     "IT0005366767": {
       "ticker": "N0XA",
@@ -109429,13 +109527,15 @@
     },
     "US66980N2036": {
       "ticker": "N1V2",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 42.8,
+      "ask": 45.8,
+      "last": 42.8,
+      "mid": 44.3,
+      "perShare": 3,
+      "bp": 677.201,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:32.389Z"
     },
     "FI4000552526": {
       "ticker": "N2S",
@@ -109449,13 +109549,15 @@
     },
     "US00704R1095": {
       "ticker": "N2U0",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 13.6,
+      "ask": 13.7,
+      "last": 13.6,
+      "mid": 13.649999999999999,
+      "perShare": 0.1,
+      "bp": 73.2601,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:15.145Z"
     },
     "SE0006342333": {
       "ticker": "N33",
@@ -109499,13 +109601,15 @@
     },
     "US62914V1061": {
       "ticker": "N3IA",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 3.175,
+      "ask": 3.185,
+      "last": 3.175,
+      "mid": 3.1799999999999997,
+      "perShare": 0.01,
+      "bp": 31.4465,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:38.587Z"
     },
     "FI4000251830": {
       "ticker": "N3Q",
@@ -109879,13 +109983,15 @@
     },
     "US6336438790": {
       "ticker": "NAG",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 16.925,
+      "ask": 17.924999,
+      "last": 16.925,
+      "mid": 17.4249995,
+      "perShare": 0.999999,
+      "bp": 573.888,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:37.781Z"
     },
     "FR0011341205": {
       "ticker": "NANO",
@@ -110509,13 +110615,15 @@
     },
     "US03485P4090": {
       "ticker": "NGL",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 23,
+      "ask": 23.4,
+      "last": 23,
+      "mid": 23.2,
+      "perShare": 0.4,
+      "bp": 172.414,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:35.574Z"
     },
     "GB00BTK05J60": {
       "ticker": "NGL0",
@@ -110639,13 +110747,15 @@
     },
     "US6565316055": {
       "ticker": "NHYDY",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 7.95,
+      "ask": 8.15,
+      "last": 7.95,
+      "mid": 8.05,
+      "perShare": 0.2,
+      "bp": 248.447,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:10.431Z"
     },
     "US65473P1057": {
       "ticker": "NI",
@@ -110799,13 +110909,15 @@
     },
     "US65366E1001": {
       "ticker": "NJB0",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 3.76,
+      "ask": 3.96,
+      "last": 3.76,
+      "mid": 3.86,
+      "perShare": 0.2,
+      "bp": 518.135,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:16.732Z"
     },
     "AU000000NCK1": {
       "ticker": "NJN",
@@ -111119,13 +111231,15 @@
     },
     "US6315122092": {
       "ticker": "NNWN",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 7.6,
+      "ask": 8.1,
+      "last": 7.6,
+      "mid": 7.85,
+      "perShare": 0.5,
+      "bp": 636.943,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:26.244Z"
     },
     "JP3763000001": {
       "ticker": "NO4",
@@ -111199,13 +111313,15 @@
     },
     "US6549022043": {
       "ticker": "NOK",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 9.3,
+      "ask": 9.35,
+      "last": 9.3,
+      "mid": 9.325,
+      "perShare": 0.05,
+      "bp": 53.6193,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:23.915Z"
     },
     "FI0009000681": {
       "ticker": "NOKIA",
@@ -111469,13 +111585,15 @@
     },
     "US65528V1070": {
       "ticker": "NRE0",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 7.817921,
+      "ask": 8.035829,
+      "last": 7.817921,
+      "mid": 7.926875,
+      "perShare": 0.217908,
+      "bp": 274.898,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:36.362Z"
     },
     "AU000000IAG3": {
       "ticker": "NRM",
@@ -111589,23 +111707,27 @@
     },
     "US6410694060": {
       "ticker": "NSRGY",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 80.2,
+      "ask": 81.2,
+      "last": 80.2,
+      "mid": 80.7,
+      "perShare": 1,
+      "bp": 123.916,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:38.968Z"
     },
     "US6536561086": {
       "ticker": "NSY",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 91,
+      "ask": 92,
+      "last": 91,
+      "mid": 91.5,
+      "perShare": 1,
+      "bp": 109.29,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:34.634Z"
     },
     "NO0013740142": {
       "ticker": "NT70",
@@ -111629,23 +111751,27 @@
     },
     "US6544453037": {
       "ticker": "NTDOY",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 11.4,
+      "ask": 11.6,
+      "last": 11.4,
+      "mid": 11.5,
+      "perShare": 0.2,
+      "bp": 173.913,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:31.530Z"
     },
     "US64110W1027": {
       "ticker": "NTES",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 101,
+      "ask": 102,
+      "last": 101,
+      "mid": 101.5,
+      "perShare": 1,
+      "bp": 98.5222,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:21.659Z"
     },
     "DE000A0KPPR7": {
       "ticker": "NTG",
@@ -111939,13 +112065,15 @@
     },
     "US90420M1045": {
       "ticker": "NVJ",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 5.35,
+      "ask": 5.4,
+      "last": 5.35,
+      "mid": 5.375,
+      "perShare": 0.05,
+      "bp": 93.0233,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:30.103Z"
     },
     "BE0974320526": {
       "ticker": "NVJP",
@@ -111969,13 +112097,15 @@
     },
     "US6701002056": {
       "ticker": "NVO",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 37.7,
+      "ask": 37.74,
+      "last": 37.7,
+      "mid": 37.72,
+      "perShare": 0.04,
+      "bp": 10.6045,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:27.362Z"
     },
     "TH0219010R14": {
       "ticker": "NVP5",
@@ -112049,13 +112179,15 @@
     },
     "US66987V1098": {
       "ticker": "NVSN",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 121,
+      "ask": 123,
+      "last": 121,
+      "mid": 122,
+      "perShare": 2,
+      "bp": 163.934,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:34.253Z"
     },
     "US6700024010": {
       "ticker": "NVV1",
@@ -112339,13 +112471,15 @@
     },
     "US6701081092": {
       "ticker": "NZM",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 57,
+      "ask": 58,
+      "last": 57,
+      "mid": 57.5,
+      "perShare": 1,
+      "bp": 173.913,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:10.642Z"
     },
     "GB00BN7DVG54": {
       "ticker": "NZS",
@@ -112799,13 +112933,15 @@
     },
     "US0420682058": {
       "ticker": "O9T",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 232.5,
+      "ask": 233,
+      "last": 232.5,
+      "mid": 232.75,
+      "perShare": 0.5,
+      "bp": 21.4823,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:35.740Z"
     },
     "DK0061277894": {
       "ticker": "OA41",
@@ -112919,13 +113055,15 @@
     },
     "US1914592050": {
       "ticker": "OC50",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 41,
+      "ask": 42.8,
+      "last": 41,
+      "mid": 41.9,
+      "perShare": 1.8,
+      "bp": 429.594,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:13.451Z"
     },
     "SG1S04926220": {
       "ticker": "OCBC",
@@ -112979,13 +113117,15 @@
     },
     "US00089H1068": {
       "ticker": "OCI",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 18.536969,
+      "ask": 18.763031,
+      "last": 18.536969,
+      "mid": 18.65,
+      "perShare": 0.226062,
+      "bp": 121.213,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:21.298Z"
     },
     "JP3689500001": {
       "ticker": "OCJ",
@@ -113179,13 +113319,15 @@
     },
     "US92336Y1073": {
       "ticker": "OEW",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 12.166501,
+      "ask": 12.5665,
+      "last": 12.166501,
+      "mid": 12.3665005,
+      "perShare": 0.399999,
+      "bp": 323.454,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:32.403Z"
     },
     "CA68616T1093": {
       "ticker": "OEX",
@@ -113369,13 +113511,15 @@
     },
     "US6863301015": {
       "ticker": "OIXA",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 34,
+      "ask": 34.4,
+      "last": 34,
+      "mid": 34.2,
+      "perShare": 0.4,
+      "bp": 116.959,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:27.135Z"
     },
     "IE00B1WV4493": {
       "ticker": "OIZ",
@@ -113409,13 +113553,15 @@
     },
     "US6863311097": {
       "ticker": "OKL0",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 8.2,
+      "ask": 9,
+      "last": 8.2,
+      "mid": 8.6,
+      "perShare": 0.8,
+      "bp": 930.233,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:33.341Z"
     },
     "US7292731020": {
       "ticker": "OKO",
@@ -113809,13 +113955,15 @@
     },
     "FR0000120321": {
       "ticker": "OR",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 377.85,
+      "ask": 378.95,
+      "last": 377.85,
+      "mid": 378.4,
+      "perShare": 1.1,
+      "bp": 29.0698,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T17:00:11.126Z"
     },
     "FR0000133308": {
       "ticker": "ORA",
@@ -114729,13 +114877,15 @@
     },
     "US23345V1070": {
       "ticker": "P91A",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 4.46,
+      "ask": 4.6,
+      "last": 4.46,
+      "mid": 4.529999999999999,
+      "perShare": 0.14,
+      "bp": 309.051,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:16.718Z"
     },
     "NO0013483503": {
       "ticker": "P990",
@@ -114859,13 +115009,15 @@
     },
     "US73328P1066": {
       "ticker": "PAHA",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 2.72,
+      "ask": 2.88,
+      "last": 2.72,
+      "mid": 2.8,
+      "perShare": 0.16,
+      "bp": 571.429,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:32.837Z"
     },
     "US71742Q1067": {
       "ticker": "PAHC",
@@ -114899,13 +115051,15 @@
     },
     "US6976602077": {
       "ticker": "PAM",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 71,
+      "ask": 72,
+      "last": 71,
+      "mid": 71.5,
+      "perShare": 1,
+      "bp": 139.86,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:13.279Z"
     },
     "US6974351057": {
       "ticker": "PANW",
@@ -115069,23 +115223,27 @@
     },
     "US02155X2053": {
       "ticker": "PBN0",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 3.28,
+      "ask": 3.46,
+      "last": 3.28,
+      "mid": 3.37,
+      "perShare": 0.18,
+      "bp": 534.125,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:13.281Z"
     },
     "US71654V4086": {
       "ticker": "PBR",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 18.15,
+      "ask": 18.25,
+      "last": 18.15,
+      "mid": 18.2,
+      "perShare": 0.1,
+      "bp": 54.9451,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:27.215Z"
     },
     "CNE1000003W8": {
       "ticker": "PC6",
@@ -115239,13 +115397,15 @@
     },
     "US7223041028": {
       "ticker": "PDD",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 69.2,
+      "ask": 69.6,
+      "last": 69.2,
+      "mid": 69.4,
+      "perShare": 0.4,
+      "bp": 57.6369,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:33.203Z"
     },
     "US6932821050": {
       "ticker": "PDFS",
@@ -115379,23 +115539,27 @@
     },
     "US7142643060": {
       "ticker": "PER0",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 11.6,
+      "ask": 12,
+      "last": 11.6,
+      "mid": 11.8,
+      "perShare": 0.4,
+      "bp": 338.983,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:33.511Z"
     },
     "US7050151056": {
       "ticker": "PESA",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 13.7,
+      "ask": 13.8,
+      "last": 13.7,
+      "mid": 13.75,
+      "perShare": 0.1,
+      "bp": 72.7273,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:12.239Z"
     },
     "US7141572039": {
       "ticker": "PESI",
@@ -115649,13 +115813,15 @@
     },
     "US83569C1027": {
       "ticker": "PHBA",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 48.8,
+      "ask": 50,
+      "last": 48.8,
+      "mid": 49.4,
+      "perShare": 1.2,
+      "bp": 242.915,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:23.224Z"
     },
     "CH0012549785": {
       "ticker": "PHBN",
@@ -115679,13 +115845,15 @@
     },
     "US5004723038": {
       "ticker": "PHG",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 21.4,
+      "ask": 21.6,
+      "last": 21.4,
+      "mid": 21.5,
+      "perShare": 0.2,
+      "bp": 93.0233,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:36.879Z"
     },
     "US71716E1055": {
       "ticker": "PHG",
@@ -115969,13 +116137,15 @@
     },
     "US71654V1017": {
       "ticker": "PJX",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 16.35,
+      "ask": 16.45,
+      "last": 16.35,
+      "mid": 16.4,
+      "perShare": 0.1,
+      "bp": 60.9756,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:14.538Z"
     },
     "BRPETRACNPR6": {
       "ticker": "PJXB",
@@ -116079,13 +116249,15 @@
     },
     "US6934831099": {
       "ticker": "PKX",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 50.5,
+      "ask": 51,
+      "last": 50.5,
+      "mid": 50.75,
+      "perShare": 0.5,
+      "bp": 98.5222,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:15.289Z"
     },
     "US8989201038": {
       "ticker": "PL3",
@@ -116359,13 +116531,15 @@
     },
     "US6246781081": {
       "ticker": "PNDA",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 18.3,
+      "ask": 18.7,
+      "last": 18.3,
+      "mid": 18.5,
+      "perShare": 0.4,
+      "bp": 216.216,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:10.108Z"
     },
     "DK0060252690": {
       "ticker": "PNDORA",
@@ -116619,13 +116793,15 @@
     },
     "US31810T1016": {
       "ticker": "PP3",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 2.92,
+      "ask": 2.96,
+      "last": 2.92,
+      "mid": 2.94,
+      "perShare": 0.04,
+      "bp": 136.054,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:15.197Z"
     },
     "PR7331747001": {
       "ticker": "PP4A",
@@ -116689,13 +116865,15 @@
     },
     "US4920891078": {
       "ticker": "PPXB",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 23.2,
+      "ask": 23.6,
+      "last": 23.2,
+      "mid": 23.4,
+      "perShare": 0.4,
+      "bp": 170.94,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:17.795Z"
     },
     "IT0004240443": {
       "ticker": "PQ",
@@ -117139,13 +117317,15 @@
     },
     "US74463M1062": {
       "ticker": "PU41",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 24.0005,
+      "ask": 24.600499,
+      "last": 24.0005,
+      "mid": 24.3004995,
+      "perShare": 0.599999,
+      "bp": 246.908,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:31.615Z"
     },
     "FR0000130577": {
       "ticker": "PUB",
@@ -117779,13 +117959,15 @@
     },
     "US74728G6052": {
       "ticker": "QBE0",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 14.3,
+      "ask": 14.7,
+      "last": 14.3,
+      "mid": 14.5,
+      "perShare": 0.4,
+      "bp": 275.862,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:10.801Z"
     },
     "SE0010662585": {
       "ticker": "QBT",
@@ -118239,13 +118421,15 @@
     },
     "US86317T1034": {
       "ticker": "QS50",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 9.7,
+      "ask": 10.4,
+      "last": 9.7,
+      "mid": 10.05,
+      "perShare": 0.7,
+      "bp": 696.517,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:33.272Z"
     },
     "CH1175448666": {
       "ticker": "QS51",
@@ -118979,13 +119163,15 @@
     },
     "US7507321096": {
       "ticker": "RAW0",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 15.069999,
+      "ask": 15.83,
+      "last": 15.069999,
+      "mid": 15.4499995,
+      "perShare": 0.760001,
+      "bp": 491.91,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:34.086Z"
     },
     "SE0000111940": {
       "ticker": "RAZB",
@@ -119069,13 +119255,15 @@
     },
     "US03937X1090": {
       "ticker": "RCAA",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 8.75,
+      "ask": 9.05,
+      "last": 8.75,
+      "mid": 8.9,
+      "perShare": 0.3,
+      "bp": 337.079,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:30.361Z"
     },
     "FR0000051807": {
       "ticker": "RCF",
@@ -119089,13 +119277,15 @@
     },
     "US87946F1003": {
       "ticker": "RCF0",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 34,
+      "ask": 36,
+      "last": 34,
+      "mid": 35,
+      "perShare": 2,
+      "bp": 571.429,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:33.637Z"
     },
     "CA7751092007": {
       "ticker": "RCIB",
@@ -119249,13 +119439,15 @@
     },
     "US2561352038": {
       "ticker": "RDY",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 10.5,
+      "ask": 10.7,
+      "last": 10.5,
+      "mid": 10.6,
+      "perShare": 0.2,
+      "bp": 188.679,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:15.535Z"
     },
     "SGXZ53070850": {
       "ticker": "RE0",
@@ -119379,13 +119571,15 @@
     },
     "US76026T2050": {
       "ticker": "REPYY",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 29.4,
+      "ask": 29.8,
+      "last": 29.4,
+      "mid": 29.6,
+      "perShare": 0.4,
+      "bp": 135.135,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:33.528Z"
     },
     "US7496601060": {
       "ticker": "RES",
@@ -119649,13 +119843,15 @@
     },
     "US7711951043": {
       "ticker": "RHHBYN",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 47,
+      "ask": 47.4,
+      "last": 47,
+      "mid": 47.2,
+      "perShare": 0.4,
+      "bp": 84.7458,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:26.766Z"
     },
     "US7703231032": {
       "ticker": "RHI",
@@ -119689,13 +119885,15 @@
     },
     "US76206K1079": {
       "ticker": "RHMB",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 201,
+      "ask": 204,
+      "last": 201,
+      "mid": 202.5,
+      "perShare": 3,
+      "bp": 148.148,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:09.633Z"
     },
     "GB0031775819": {
       "ticker": "RHN",
@@ -119799,13 +119997,15 @@
     },
     "US7594701077": {
       "ticker": "RIGDS",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 44.1,
+      "ask": 44.6,
+      "last": 44.1,
+      "mid": 44.35,
+      "perShare": 0.5,
+      "bp": 112.74,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:23.441Z"
     },
     "AU000000RIO1": {
       "ticker": "RIO",
@@ -119819,13 +120019,15 @@
     },
     "US7672041008": {
       "ticker": "RIO",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 84.2,
+      "ask": 84.6,
+      "last": 84.2,
+      "mid": 84.4,
+      "perShare": 0.4,
+      "bp": 47.3934,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:13.626Z"
     },
     "GB0007188757": {
       "ticker": "RIO1",
@@ -119839,13 +120041,15 @@
     },
     "US2043191079": {
       "ticker": "RIT1",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 17.6,
+      "ask": 18,
+      "last": 17.6,
+      "mid": 17.8,
+      "perShare": 0.4,
+      "bp": 224.719,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:17.654Z"
     },
     "CH0210483332": {
       "ticker": "RITN",
@@ -120019,13 +120223,15 @@
     },
     "US7596551033": {
       "ticker": "RMC0",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 4.06,
+      "ask": 4.18,
+      "last": 4.06,
+      "mid": 4.119999999999999,
+      "perShare": 0.12,
+      "bp": 291.262,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:30.993Z"
     },
     "AU000000RMD6": {
       "ticker": "RMD",
@@ -120439,13 +120645,15 @@
     },
     "US74973Y1038": {
       "ticker": "RRTU",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 3.04,
+      "ask": 3.32,
+      "last": 3.04,
+      "mid": 3.1799999999999997,
+      "perShare": 0.28,
+      "bp": 880.503,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:33.397Z"
     },
     "GB00B63H8491": {
       "ticker": "RRU",
@@ -120459,13 +120667,15 @@
     },
     "US7757812067": {
       "ticker": "RRU1",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 16.8,
+      "ask": 17,
+      "last": 16.8,
+      "mid": 16.9,
+      "perShare": 0.2,
+      "bp": 118.343,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:18.161Z"
     },
     "AU000000RMS4": {
       "ticker": "RRZ",
@@ -120729,13 +120939,15 @@
     },
     "US8270461036": {
       "ticker": "RW40",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 13.1,
+      "ask": 14.1,
+      "last": 13.1,
+      "mid": 13.6,
+      "perShare": 1,
+      "bp": 735.294,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:35.589Z"
     },
     "CA1130041058": {
       "ticker": "RW5",
@@ -120779,13 +120991,15 @@
     },
     "US74975E3036": {
       "ticker": "RWEOY",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 60,
+      "ask": 61,
+      "last": 60,
+      "mid": 60.5,
+      "perShare": 1,
+      "bp": 165.289,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:28.990Z"
     },
     "GB00BVFCZV34": {
       "ticker": "RWJ1",
@@ -120869,13 +121083,15 @@
     },
     "US7835132033": {
       "ticker": "RYAAY",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 46.2,
+      "ask": 46.6,
+      "last": 46.2,
+      "mid": 46.400000000000006,
+      "perShare": 0.4,
+      "bp": 86.2069,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:13.685Z"
     },
     "US75508B1044": {
       "ticker": "RYAM",
@@ -121429,13 +121645,15 @@
     },
     "US86740P2074": {
       "ticker": "S790",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 2.46,
+      "ask": 2.56,
+      "last": 2.46,
+      "mid": 2.51,
+      "perShare": 0.1,
+      "bp": 398.406,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:36.258Z"
     },
     "US79546E1047": {
       "ticker": "S7V",
@@ -121529,13 +121747,15 @@
     },
     "US78446M1099": {
       "ticker": "S93",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 5.65,
+      "ask": 5.75,
+      "last": 5.65,
+      "mid": 5.7,
+      "perShare": 0.1,
+      "bp": 175.439,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:10.232Z"
     },
     "GB00BFMBMT84": {
       "ticker": "S94",
@@ -121649,13 +121869,15 @@
     },
     "US8250641086": {
       "ticker": "SAE1",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 5.65,
+      "ask": 6.15,
+      "last": 5.65,
+      "mid": 5.9,
+      "perShare": 0.5,
+      "bp": 847.458,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:31.238Z"
     },
     "FR0000073272": {
       "ticker": "SAF",
@@ -121689,13 +121911,15 @@
     },
     "US20441A1025": {
       "ticker": "SAJA",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 4.6,
+      "ask": 4.64,
+      "last": 4.6,
+      "mid": 4.619999999999999,
+      "perShare": 0.04,
+      "bp": 86.5801,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:37.193Z"
     },
     "IT0003865570": {
       "ticker": "SAL",
@@ -121739,23 +121963,27 @@
     },
     "US7960542030": {
       "ticker": "SAMDG",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 84.2,
+      "ask": 85,
+      "last": 84.2,
+      "mid": 84.6,
+      "perShare": 0.8,
+      "bp": 94.5626,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:23.587Z"
     },
     "US7960502018": {
       "ticker": "SAMDR",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 3025,
+      "ask": 3065,
+      "last": 3025,
+      "mid": 3045,
+      "perShare": 40,
+      "bp": 131.363,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:12.820Z"
     },
     "FR0000120578": {
       "ticker": "SAN",
@@ -121809,13 +122037,15 @@
     },
     "US8030542042": {
       "ticker": "SAP",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 183,
+      "ask": 184,
+      "last": 183,
+      "mid": 183.5,
+      "perShare": 1,
+      "bp": 54.4959,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:29.293Z"
     },
     "JP3399310006": {
       "ticker": "SAR",
@@ -121889,13 +122119,15 @@
     },
     "US8565522039": {
       "ticker": "SBID",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 90,
+      "ask": 91,
+      "last": 90,
+      "mid": 90.5,
+      "perShare": 1,
+      "bp": 110.497,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:37.781Z"
     },
     "MHY7388L1039": {
       "ticker": "SBL",
@@ -122029,13 +122261,15 @@
     },
     "US8131071099": {
       "ticker": "SCB0",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 16.3,
+      "ask": 17.2,
+      "last": 16.3,
+      "mid": 16.75,
+      "perShare": 0.9,
+      "bp": 537.313,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:21.665Z"
     },
     "US84265V1052": {
       "ticker": "SCCO",
@@ -122089,13 +122323,15 @@
     },
     "US83364L1098": {
       "ticker": "SCGLY",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 14.3,
+      "ask": 14.5,
+      "last": 14.3,
+      "mid": 14.4,
+      "perShare": 0.2,
+      "bp": 138.889,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:31.800Z"
     },
     "CH0024638212": {
       "ticker": "SCHN",
@@ -122209,13 +122445,15 @@
     },
     "US48265W1080": {
       "ticker": "SDF1",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 8.05,
+      "ask": 8.65,
+      "last": 8.05,
+      "mid": 8.350000000000001,
+      "perShare": 0.6,
+      "bp": 718.563,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:29.215Z"
     },
     "AU0000310302": {
       "ticker": "SDL0",
@@ -122249,13 +122487,15 @@
     },
     "US78516J1016": {
       "ticker": "SDV0",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 26.548598,
+      "ask": 28.509403,
+      "last": 26.548598,
+      "mid": 27.5290005,
+      "perShare": 1.960805,
+      "bp": 712.269,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:21.090Z"
     },
     "SE0021921269": {
       "ticker": "SDV1",
@@ -122359,13 +122599,15 @@
     },
     "US7865841024": {
       "ticker": "SEJU",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 80,
+      "ask": 81,
+      "last": 80,
+      "mid": 80.5,
+      "perShare": 1,
+      "bp": 124.224,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:28.632Z"
     },
     "AT0000785555": {
       "ticker": "SEM",
@@ -122859,13 +123101,15 @@
     },
     "US82622J1043": {
       "ticker": "SHL1",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 18.8,
+      "ask": 19.2,
+      "last": 18.8,
+      "mid": 19,
+      "perShare": 0.4,
+      "bp": 210.526,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:25.303Z"
     },
     "JP3358000002": {
       "ticker": "SHM",
@@ -122999,23 +123243,27 @@
     },
     "US82930C1062": {
       "ticker": "SIA",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 8.55,
+      "ask": 9.15,
+      "last": 8.55,
+      "mid": 8.850000000000001,
+      "perShare": 0.6,
+      "bp": 677.966,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:20.019Z"
     },
     "US20440W1053": {
       "ticker": "SID",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 0.98,
+      "ask": 0.985,
+      "last": 0.98,
+      "mid": 0.9824999999999999,
+      "perShare": 0.005,
+      "bp": 50.8906,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:12.327Z"
     },
     "DE0007236101": {
       "ticker": "SIE",
@@ -123029,13 +123277,15 @@
     },
     "US8261975010": {
       "ticker": "SIEB",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 131,
+      "ask": 133,
+      "last": 131,
+      "mid": 132,
+      "perShare": 2,
+      "bp": 151.515,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:34.028Z"
     },
     "CNE100000437": {
       "ticker": "SIELF",
@@ -123059,13 +123309,15 @@
     },
     "US82674R1032": {
       "ticker": "SIKB",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 19.1,
+      "ask": 19.3,
+      "last": 19.1,
+      "mid": 19.200000000000003,
+      "perShare": 0.2,
+      "bp": 104.167,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:23.176Z"
     },
     "DE000A3E5CP0": {
       "ticker": "SIM0",
@@ -123079,13 +123331,15 @@
     },
     "US82706C1080": {
       "ticker": "SIMO",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 230,
+      "ask": 232,
+      "last": 230,
+      "mid": 231,
+      "perShare": 2,
+      "bp": 86.5801,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:28.274Z"
     },
     "BG1100032140": {
       "ticker": "SIRM",
@@ -123169,13 +123423,15 @@
     },
     "US8337921048": {
       "ticker": "SJ70",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 11.3,
+      "ask": 11.6,
+      "last": 11.3,
+      "mid": 11.45,
+      "perShare": 0.3,
+      "bp": 262.009,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:26.305Z"
     },
     "JP3343200006": {
       "ticker": "SJ8",
@@ -123499,13 +123755,15 @@
     },
     "US87089E1001": {
       "ticker": "SLW1",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 48.4,
+      "ask": 49.8,
+      "last": 48.4,
+      "mid": 49.099999999999994,
+      "perShare": 1.4,
+      "bp": 285.132,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:23.082Z"
     },
     "AU000000SLX4": {
       "ticker": "SLX",
@@ -123789,13 +124047,15 @@
     },
     "US80687P1066": {
       "ticker": "SNDB",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 56.98125,
+      "ask": 57.51875,
+      "last": 56.98125,
+      "mid": 57.25,
+      "perShare": 0.5375,
+      "bp": 93.8865,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:09.966Z"
     },
     "US87164F1057": {
       "ticker": "SNDX",
@@ -123809,13 +124069,15 @@
     },
     "US8356993076": {
       "ticker": "SNE",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 20.4,
+      "ask": 20.6,
+      "last": 20.4,
+      "mid": 20.5,
+      "perShare": 0.2,
+      "bp": 97.561,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:17.000Z"
     },
     "US25525P1075": {
       "ticker": "SNF",
@@ -123919,13 +124181,15 @@
     },
     "US80105N1054": {
       "ticker": "SNY",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 36.8,
+      "ask": 37.2,
+      "last": 36.8,
+      "mid": 37,
+      "perShare": 0.4,
+      "bp": 108.108,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:27.352Z"
     },
     "US8425871071": {
       "ticker": "SO",
@@ -124029,13 +124293,15 @@
     },
     "US8344374025": {
       "ticker": "SOL0",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 2.48,
+      "ask": 2.68,
+      "last": 2.48,
+      "mid": 2.58,
+      "perShare": 0.2,
+      "bp": 775.194,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:33.747Z"
     },
     "PTSON0AM0001": {
       "ticker": "SON",
@@ -124189,13 +124455,15 @@
     },
     "US79376W4069": {
       "ticker": "SPE",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 0.82,
+      "ask": 0.88,
+      "last": 0.82,
+      "mid": 0.85,
+      "perShare": 0.06,
+      "bp": 705.882,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:33.087Z"
     },
     "IT0005495657": {
       "ticker": "SPEA",
@@ -124239,13 +124507,15 @@
     },
     "US8160783077": {
       "ticker": "SPH",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 18.3,
+      "ask": 19.1,
+      "last": 18.3,
+      "mid": 18.700000000000003,
+      "perShare": 0.8,
+      "bp": 427.807,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:21.567Z"
     },
     "JP3420600003": {
       "ticker": "SPH1",
@@ -124269,13 +124539,15 @@
     },
     "US8030692029": {
       "ticker": "SPIA",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 0.74,
+      "ask": 0.8,
+      "last": 0.74,
+      "mid": 0.77,
+      "perShare": 0.06,
+      "bp": 779.221,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:31.588Z"
     },
     "FR0012757854": {
       "ticker": "SPIE",
@@ -124299,13 +124571,15 @@
     },
     "US84652A1025": {
       "ticker": "SPKKY",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 4.92,
+      "ask": 5,
+      "last": 4.92,
+      "mid": 4.96,
+      "perShare": 0.08,
+      "bp": 161.29,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:16.981Z"
     },
     "AU000000SPL0": {
       "ticker": "SPL",
@@ -124449,13 +124723,15 @@
     },
     "US8336351056": {
       "ticker": "SQM",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 59.6,
+      "ask": 60,
+      "last": 59.6,
+      "mid": 59.8,
+      "perShare": 0.4,
+      "bp": 66.8896,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:31.091Z"
     },
     "US78709Y1055": {
       "ticker": "SQR",
@@ -124469,13 +124745,15 @@
     },
     "US9273201015": {
       "ticker": "SQUA",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 27.2,
+      "ask": 28,
+      "last": 27.2,
+      "mid": 27.6,
+      "perShare": 0.8,
+      "bp": 289.855,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:31.339Z"
     },
     "US78413P1012": {
       "ticker": "SQZ",
@@ -124669,13 +124947,15 @@
     },
     "US8038663006": {
       "ticker": "SSL",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 12,
+      "ask": 12.1,
+      "last": 12,
+      "mid": 12.05,
+      "perShare": 0.1,
+      "bp": 82.9876,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:17.622Z"
     },
     "IT0003621783": {
       "ticker": "SSL",
@@ -124729,13 +125009,15 @@
     },
     "US8708861088": {
       "ticker": "SSREY",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 36.6,
+      "ask": 37,
+      "last": 36.6,
+      "mid": 36.8,
+      "perShare": 0.4,
+      "bp": 108.696,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:36.002Z"
     },
     "CA7847301032": {
       "ticker": "SSRM",
@@ -124779,13 +125061,15 @@
     },
     "US7960508882": {
       "ticker": "SSU",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 4030,
+      "ask": 4070,
+      "last": 4030,
+      "mid": 4050,
+      "perShare": 40,
+      "bp": 98.7654,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:19.165Z"
     },
     "CA8438142033": {
       "ticker": "SSV",
@@ -125089,13 +125373,15 @@
     },
     "US8643231009": {
       "ticker": "SUBCY",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 29.4,
+      "ask": 29.8,
+      "last": 29.4,
+      "mid": 29.6,
+      "perShare": 0.4,
+      "bp": 135.135,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:22.650Z"
     },
     "SE0000653230": {
       "ticker": "SUD",
@@ -125189,13 +125475,15 @@
     },
     "US8188001049": {
       "ticker": "SUVA",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 9.75,
+      "ask": 10,
+      "last": 9.75,
+      "mid": 9.875,
+      "perShare": 0.25,
+      "bp": 253.165,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:31.029Z"
     },
     "US87162W1009": {
       "ticker": "SUX",
@@ -125209,13 +125497,15 @@
     },
     "US86959K1051": {
       "ticker": "SUZ",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 8.05,
+      "ask": 8.1,
+      "last": 8.05,
+      "mid": 8.075,
+      "perShare": 0.05,
+      "bp": 61.9195,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:18.716Z"
     },
     "US8163001071": {
       "ticker": "SV2",
@@ -125399,13 +125689,15 @@
     },
     "US8710131082": {
       "ticker": "SWJA",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 67,
+      "ask": 73,
+      "last": 67,
+      "mid": 70,
+      "perShare": 6,
+      "bp": 857.143,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:14.473Z"
     },
     "US8545021011": {
       "ticker": "SWK",
@@ -125499,13 +125791,15 @@
     },
     "US87155N1090": {
       "ticker": "SY1U",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 22,
+      "ask": 23,
+      "last": 22,
+      "mid": 22.5,
+      "perShare": 1,
+      "bp": 444.444,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:33.087Z"
     },
     "US8308791024": {
       "ticker": "SY2",
@@ -125659,13 +125953,15 @@
     },
     "US7958422021": {
       "ticker": "SZGA",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 5.1,
+      "ask": 5.3,
+      "last": 5.1,
+      "mid": 5.199999999999999,
+      "perShare": 0.2,
+      "bp": 384.615,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:32.262Z"
     },
     "NO0003080608": {
       "ticker": "SZL",
@@ -126159,13 +126455,15 @@
     },
     "US89465J1097": {
       "ticker": "T7W0",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 3.12,
+      "ask": 3.32,
+      "last": 3.12,
+      "mid": 3.2199999999999998,
+      "perShare": 0.2,
+      "bp": 621.118,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:23.753Z"
     },
     "KYG9898T1058": {
       "ticker": "T810",
@@ -126199,13 +126497,15 @@
     },
     "US40054J1097": {
       "ticker": "T9A",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 13.4,
+      "ask": 13.6,
+      "last": 13.4,
+      "mid": 13.5,
+      "perShare": 0.2,
+      "bp": 148.148,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:24.879Z"
     },
     "US8781553081": {
       "ticker": "T9CA",
@@ -126329,13 +126629,15 @@
     },
     "US8740801043": {
       "ticker": "TAL",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 10.3,
+      "ask": 10.5,
+      "last": 10.3,
+      "mid": 10.4,
+      "perShare": 0.2,
+      "bp": 192.308,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:25.308Z"
     },
     "US87484T1088": {
       "ticker": "TALO",
@@ -126529,13 +126831,15 @@
     },
     "US88032Q1094": {
       "ticker": "TCEHY",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 46.8,
+      "ask": 47.2,
+      "last": 46.8,
+      "mid": 47,
+      "perShare": 0.4,
+      "bp": 85.1064,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:20.179Z"
     },
     "BE0974338700": {
       "ticker": "TCJ",
@@ -126559,13 +126863,15 @@
     },
     "US8815754010": {
       "ticker": "TCO2",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 16.5585,
+      "ask": 16.8,
+      "last": 16.5585,
+      "mid": 16.67925,
+      "perShare": 0.2415,
+      "bp": 144.791,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:29.719Z"
     },
     "JP3567410000": {
       "ticker": "TCW",
@@ -126699,13 +127005,15 @@
     },
     "US8793822086": {
       "ticker": "TEF",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 3.48,
+      "ask": 3.56,
+      "last": 3.48,
+      "mid": 3.52,
+      "perShare": 0.08,
+      "bp": 227.273,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:29.900Z"
     },
     "DE0008303504": {
       "ticker": "TEG",
@@ -126779,23 +127087,27 @@
     },
     "US8792732096": {
       "ticker": "TEO",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 11.8,
+      "ask": 12,
+      "last": 11.8,
+      "mid": 11.9,
+      "perShare": 0.2,
+      "bp": 168.067,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:30.651Z"
     },
     "US87944W1053": {
       "ticker": "TEQA",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 12,
+      "ask": 12.4,
+      "last": 12,
+      "mid": 12.2,
+      "perShare": 0.4,
+      "bp": 327.869,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:13.808Z"
     },
     "US8807701029": {
       "ticker": "TER",
@@ -126909,13 +127221,15 @@
     },
     "US9001487019": {
       "ticker": "TGBD",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 2.22,
+      "ask": 2.42,
+      "last": 2.22,
+      "mid": 2.3200000000000003,
+      "perShare": 0.2,
+      "bp": 862.069,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:23.426Z"
     },
     "LU1618151879": {
       "ticker": "TGHN",
@@ -126979,13 +127293,15 @@
     },
     "US29082P2039": {
       "ticker": "TH93",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 7.2,
+      "ask": 7.7,
+      "last": 7.2,
+      "mid": 7.45,
+      "perShare": 0.5,
+      "bp": 671.141,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:30.034Z"
     },
     "TH0902010014": {
       "ticker": "THBEV",
@@ -127119,13 +127435,15 @@
     },
     "US87927Y1029": {
       "ticker": "TIN",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 7.7,
+      "ask": 7.9,
+      "last": 7.7,
+      "mid": 7.800000000000001,
+      "perShare": 0.2,
+      "bp": 256.41,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:25.127Z"
     },
     "BE0974282148": {
       "ticker": "TINC",
@@ -127289,13 +127607,15 @@
     },
     "US88629Q2075": {
       "ticker": "TKA1",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 15.05,
+      "ask": 15.5,
+      "last": 15.05,
+      "mid": 15.275,
+      "perShare": 0.45,
+      "bp": 294.599,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:28.809Z"
     },
     "US9001112047": {
       "ticker": "TKC",
@@ -127319,13 +127639,15 @@
     },
     "US8740602052": {
       "ticker": "TKDA",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 16.5,
+      "ask": 16.6,
+      "last": 16.5,
+      "mid": 16.55,
+      "perShare": 0.1,
+      "bp": 60.423,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:37.907Z"
     },
     "JP3443600006": {
       "ticker": "TKK1",
@@ -127529,13 +127851,15 @@
     },
     "US8923313071": {
       "ticker": "TM",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 166.5,
+      "ask": 167.5,
+      "last": 166.5,
+      "mid": 167,
+      "perShare": 1,
+      "bp": 59.8802,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:22.600Z"
     },
     "BMG8800F1876": {
       "ticker": "TM4C",
@@ -127629,13 +127953,15 @@
     },
     "US8899052042": {
       "ticker": "TMR0",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 8.35,
+      "ask": 8.55,
+      "last": 8.35,
+      "mid": 8.45,
+      "perShare": 0.2,
+      "bp": 236.686,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:22.003Z"
     },
     "NO0012470089": {
       "ticker": "TMRA",
@@ -127679,13 +128005,15 @@
     },
     "US87816Y1064": {
       "ticker": "TMV1",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 3.1,
+      "ask": 3.26,
+      "last": 3.1,
+      "mid": 3.1799999999999997,
+      "perShare": 0.16,
+      "bp": 503.145,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:26.529Z"
     },
     "CA87649R1047": {
       "ticker": "TN",
@@ -128329,13 +128657,15 @@
     },
     "US88031M1099": {
       "ticker": "TS",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 48.8,
+      "ask": 49,
+      "last": 48.8,
+      "mid": 48.9,
+      "perShare": 0.2,
+      "bp": 40.8998,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:14.020Z"
     },
     "US23335Q1004": {
       "ticker": "TS8A",
@@ -128399,13 +128729,15 @@
     },
     "US8740391003": {
       "ticker": "TSM",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 375.5,
+      "ask": 376,
+      "last": 375.5,
+      "mid": 375.75,
+      "perShare": 0.5,
+      "bp": 13.3067,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:58:38.608Z"
     },
     "US9024941034": {
       "ticker": "TSN",
@@ -128419,13 +128751,15 @@
     },
     "US87936R2058": {
       "ticker": "TSPA",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 10.3,
+      "ask": 10.5,
+      "last": 10.3,
+      "mid": 10.4,
+      "perShare": 0.2,
+      "bp": 192.308,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:15.447Z"
     },
     "DE0005405104": {
       "ticker": "TSS",
@@ -128529,13 +128863,15 @@
     },
     "US87656Y4061": {
       "ticker": "TTST",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 16.8,
+      "ask": 17.4,
+      "last": 16.8,
+      "mid": 17.1,
+      "perShare": 0.6,
+      "bp": 350.877,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:33.438Z"
     },
     "US8740541094": {
       "ticker": "TTWO",
@@ -128669,13 +129005,15 @@
     },
     "US89686D3035": {
       "ticker": "TVA0",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 5.4,
+      "ask": 5.45,
+      "last": 5.4,
+      "mid": 5.425000000000001,
+      "perShare": 0.05,
+      "bp": 92.1659,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:14.931Z"
     },
     "CNE1000004J3": {
       "ticker": "TVL",
@@ -128789,13 +129127,15 @@
     },
     "US8808901081": {
       "ticker": "TX",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 49.2,
+      "ask": 49.6,
+      "last": 49.2,
+      "mid": 49.400000000000006,
+      "perShare": 0.4,
+      "bp": 80.9717,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:37.296Z"
     },
     "CA38076F1053": {
       "ticker": "TX0",
@@ -129039,13 +129379,15 @@
     },
     "US9173022008": {
       "ticker": "U1S0",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 1.18,
+      "ask": 1.26,
+      "last": 1.18,
+      "mid": 1.22,
+      "perShare": 0.08,
+      "bp": 655.738,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:31.983Z"
     },
     "BRUSIMACNPA6": {
       "ticker": "U1S1",
@@ -129489,13 +129831,15 @@
     },
     "US90348R1023": {
       "ticker": "UEN0",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 1.009925,
+      "ask": 1.020075,
+      "last": 1.009925,
+      "mid": 1.0150000000000001,
+      "perShare": 0.01015,
+      "bp": 100,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:26.940Z"
     },
     "US9604131022": {
       "ticker": "UEO",
@@ -129639,13 +129983,15 @@
     },
     "US90400P1012": {
       "ticker": "UGR",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 6.55,
+      "ask": 6.65,
+      "last": 6.55,
+      "mid": 6.6,
+      "perShare": 0.1,
+      "bp": 151.515,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:37.993Z"
     },
     "US31488V1070": {
       "ticker": "UH3",
@@ -129699,13 +130045,15 @@
     },
     "US8701231065": {
       "ticker": "UHRA",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 8.8,
+      "ask": 9.5,
+      "last": 8.8,
+      "mid": 9.15,
+      "perShare": 0.7,
+      "bp": 765.027,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:23.343Z"
     },
     "US4884011002": {
       "ticker": "UI2",
@@ -129869,13 +130217,15 @@
     },
     "US9108734057": {
       "ticker": "UMC",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 21,
+      "ask": 21.4,
+      "last": 21,
+      "mid": 21.2,
+      "perShare": 0.4,
+      "bp": 188.679,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:37.568Z"
     },
     "DE000A40ZVU2": {
       "ticker": "UMD",
@@ -129919,13 +130269,15 @@
     },
     "US9034801012": {
       "ticker": "UNC0",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 103,
+      "ask": 104,
+      "last": 103,
+      "mid": 103.5,
+      "perShare": 1,
+      "bp": 96.6184,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:18.424Z"
     },
     "US9111631035": {
       "ticker": "UNFI",
@@ -130579,13 +130931,15 @@
     },
     "US0412321095": {
       "ticker": "V1SD",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 56.5,
+      "ask": 61.5,
+      "last": 56.5,
+      "mid": 59,
+      "perShare": 5,
+      "bp": 847.458,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:33.238Z"
     },
     "CA26886R1047": {
       "ticker": "V22",
@@ -130989,13 +131343,15 @@
     },
     "US92023R4074": {
       "ticker": "VACE",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 3.8,
+      "ask": 3.9,
+      "last": 3.8,
+      "mid": 3.8499999999999996,
+      "perShare": 0.1,
+      "bp": 259.74,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:33.464Z"
     },
     "CH0311864901": {
       "ticker": "VACN",
@@ -131019,13 +131375,15 @@
     },
     "US91912E1055": {
       "ticker": "VALE",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 12.35,
+      "ask": 12.4,
+      "last": 12.35,
+      "mid": 12.375,
+      "perShare": 0.05,
+      "bp": 40.404,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:23.690Z"
     },
     "FI4000074984": {
       "ticker": "VALMT",
@@ -131049,13 +131407,15 @@
     },
     "US00762U2006": {
       "ticker": "VANA",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 178,
+      "ask": 179,
+      "last": 178,
+      "mid": 178.5,
+      "perShare": 1,
+      "bp": 56.0224,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:17.172Z"
     },
     "AT0000937503": {
       "ticker": "VAS",
@@ -131199,13 +131559,15 @@
     },
     "US92334N1037": {
       "ticker": "VEOEY",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 15.7,
+      "ask": 15.9,
+      "last": 15.7,
+      "mid": 15.8,
+      "perShare": 0.2,
+      "bp": 126.582,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:13.725Z"
     },
     "AT0000746409": {
       "ticker": "VER",
@@ -131429,13 +131791,15 @@
     },
     "US92763W1036": {
       "ticker": "VIPS",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 10.8,
+      "ask": 10.9,
+      "last": 10.8,
+      "mid": 10.850000000000001,
+      "perShare": 0.1,
+      "bp": 92.1659,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:37.111Z"
     },
     "ES0183746314": {
       "ticker": "VIR",
@@ -131649,13 +132013,15 @@
     },
     "US92887H1077": {
       "ticker": "VNAA",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 8.66775,
+      "ask": 9.117749,
+      "last": 8.66775,
+      "mid": 8.8927495,
+      "perShare": 0.449999,
+      "bp": 506.029,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:19.967Z"
     },
     "US9197941076": {
       "ticker": "VNB",
@@ -131739,13 +132105,15 @@
     },
     "US92857W3088": {
       "ticker": "VOD",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 14.7,
+      "ask": 14.8,
+      "last": 14.7,
+      "mid": 14.75,
+      "perShare": 0.1,
+      "bp": 67.7966,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:32.187Z"
     },
     "SE0009143662": {
       "ticker": "VOG",
@@ -131759,13 +132127,15 @@
     },
     "US9288541082": {
       "ticker": "VOL4",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 29.2,
+      "ask": 29.6,
+      "last": 29.2,
+      "mid": 29.4,
+      "perShare": 0.4,
+      "bp": 136.054,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:26.304Z"
     },
     "SE0000115420": {
       "ticker": "VOLVA",
@@ -131839,13 +132209,15 @@
     },
     "US9286626000": {
       "ticker": "VOWA",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 7.55,
+      "ask": 7.75,
+      "last": 7.55,
+      "mid": 7.65,
+      "perShare": 0.2,
+      "bp": 261.438,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:24.889Z"
     },
     "US9286625010": {
       "ticker": "VOWB",
@@ -131899,13 +132271,15 @@
     },
     "US50048T1051": {
       "ticker": "VPK",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 46.6,
+      "ask": 49.4,
+      "last": 46.6,
+      "mid": 48,
+      "perShare": 2.8,
+      "bp": 583.333,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-17T20:59:48.038Z"
     },
     "CA57779K1049": {
       "ticker": "VR61",
@@ -132019,13 +132393,15 @@
     },
     "US9191343048": {
       "ticker": "VSA",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 7.328075,
+      "ask": 7.839175,
+      "last": 7.328075,
+      "mid": 7.583625,
+      "perShare": 0.5111,
+      "bp": 673.952,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:34.800Z"
     },
     "US92552V1008": {
       "ticker": "VSAT",
@@ -132759,13 +133135,15 @@
     },
     "US9485961018": {
       "ticker": "WB",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 5.7,
+      "ask": 5.8,
+      "last": 5.7,
+      "mid": 5.75,
+      "perShare": 0.1,
+      "bp": 173.913,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:14.293Z"
     },
     "US95123P1066": {
       "ticker": "WB3",
@@ -133229,13 +133607,15 @@
     },
     "US9676621074": {
       "ticker": "WIBA",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 3.44555,
+      "ask": 3.585549,
+      "last": 3.44555,
+      "mid": 3.5155494999999997,
+      "perShare": 0.139999,
+      "bp": 398.228,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:11.803Z"
     },
     "US9706461053": {
       "ticker": "WIJ",
@@ -133279,13 +133659,15 @@
     },
     "US97651M1099": {
       "ticker": "WIT",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 1.45,
+      "ask": 1.47,
+      "last": 1.45,
+      "mid": 1.46,
+      "perShare": 0.02,
+      "bp": 136.986,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:12.948Z"
     },
     "IL0011301780": {
       "ticker": "WIX",
@@ -133309,13 +133691,15 @@
     },
     "US6289881079": {
       "ticker": "WK6",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 0.282,
+      "ask": 0.306,
+      "last": 0.282,
+      "mid": 0.294,
+      "perShare": 0.024,
+      "bp": 816.327,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:10.719Z"
     },
     "CH0305951201": {
       "ticker": "WKBN",
@@ -133549,13 +133933,15 @@
     },
     "US9802283088": {
       "ticker": "WOP",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 20.2,
+      "ask": 20.4,
+      "last": 20.2,
+      "mid": 20.299999999999997,
+      "perShare": 0.2,
+      "bp": 98.5222,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:14.228Z"
     },
     "AU0000224040": {
       "ticker": "WOP0",
@@ -133569,13 +133955,15 @@
     },
     "US9778742059": {
       "ticker": "WOS",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 67.5,
+      "ask": 69.5,
+      "last": 67.5,
+      "mid": 68.5,
+      "perShare": 2,
+      "bp": 291.971,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:15.873Z"
     },
     "AU000000WOW2": {
       "ticker": "WOW",
@@ -134159,13 +134547,15 @@
     },
     "IE000DU292E6": {
       "ticker": "X3C",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 9.38,
+      "ask": 9.72,
+      "last": 9.38,
+      "mid": 9.55,
+      "perShare": 0.34,
+      "bp": 356.021,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:37.338Z"
     },
     "FI0009005482": {
       "ticker": "X3H",
@@ -134299,13 +134689,15 @@
     },
     "US03736N1046": {
       "ticker": "X5Z",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 23,
+      "ask": 23.4,
+      "last": 23,
+      "mid": 23.2,
+      "perShare": 0.4,
+      "bp": 172.414,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:20.820Z"
     },
     "SE0017562523": {
       "ticker": "X64",
@@ -134329,13 +134721,15 @@
     },
     "US44970W1036": {
       "ticker": "X6D",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 46.2,
+      "ask": 47.6,
+      "last": 46.2,
+      "mid": 46.900000000000006,
+      "perShare": 1.4,
+      "bp": 298.507,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:32.446Z"
     },
     "CA90387A1012": {
       "ticker": "X6T",
@@ -134539,13 +134933,15 @@
     },
     "US2253131054": {
       "ticker": "XCAU",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 9,
+      "ask": 9.1,
+      "last": 9,
+      "mid": 9.05,
+      "perShare": 0.1,
+      "bp": 110.497,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:24.728Z"
     },
     "HK0000049939": {
       "ticker": "XCI",
@@ -134719,13 +135115,15 @@
     },
     "US20449X4016": {
       "ticker": "XGR",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 26.079,
+      "ask": 26.478999,
+      "last": 26.079,
+      "mid": 26.2789995,
+      "perShare": 0.399999,
+      "bp": 152.212,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:19.683Z"
     },
     "DK0061686714": {
       "ticker": "XH0",
@@ -134849,13 +135247,15 @@
     },
     "US86562M2098": {
       "ticker": "XMFA",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 22.6,
+      "ask": 23,
+      "last": 22.6,
+      "mid": 22.8,
+      "perShare": 0.4,
+      "bp": 175.439,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:35.892Z"
     },
     "US98420P3082": {
       "ticker": "XMS",
@@ -134879,13 +135279,15 @@
     },
     "US98419E1082": {
       "ticker": "XNET",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 4.3,
+      "ask": 4.34,
+      "last": 4.3,
+      "mid": 4.32,
+      "perShare": 0.04,
+      "bp": 92.5926,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:17.591Z"
     },
     "JP3583900000": {
       "ticker": "XO7",
@@ -135009,13 +135411,15 @@
     },
     "US82686Q1013": {
       "ticker": "XRP2",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 10.7,
+      "ask": 10.9,
+      "last": 10.7,
+      "mid": 10.8,
+      "perShare": 0.2,
+      "bp": 185.185,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:09.893Z"
     },
     "JP3421800008": {
       "ticker": "XSC",
@@ -135749,13 +136153,15 @@
     },
     "US11778E1064": {
       "ticker": "YBV0",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 8.8,
+      "ask": 9,
+      "last": 8.8,
+      "mid": 8.9,
+      "perShare": 0.2,
+      "bp": 224.719,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:38.894Z"
     },
     "GB00B2NDK765": {
       "ticker": "YBY",
@@ -136119,13 +136525,15 @@
     },
     "US9842451000": {
       "ticker": "YPF",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 47.6,
+      "ask": 47.8,
+      "last": 47.6,
+      "mid": 47.7,
+      "perShare": 0.2,
+      "bp": 41.9287,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:23.908Z"
     },
     "JP3942400007": {
       "ticker": "YPH",
@@ -136179,13 +136587,15 @@
     },
     "US98585L1008": {
       "ticker": "YRD",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 0.855,
+      "ask": 0.875,
+      "last": 0.855,
+      "mid": 0.865,
+      "perShare": 0.02,
+      "bp": 231.214,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:20.636Z"
     },
     "AU0000218307": {
       "ticker": "YRRA",
@@ -136369,13 +136779,15 @@
     },
     "US9848461052": {
       "ticker": "YZC",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 12.8,
+      "ask": 13.2,
+      "last": 12.8,
+      "mid": 13,
+      "perShare": 0.4,
+      "bp": 307.692,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:26.905Z"
     },
     "CNE1000004Q8": {
       "ticker": "YZCA",
@@ -136459,13 +136871,15 @@
     },
     "US52681J1051": {
       "ticker": "Z1L0",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 7.7,
+      "ask": 8.4,
+      "last": 7.7,
+      "mid": 8.05,
+      "perShare": 0.7,
+      "bp": 869.565,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:34.145Z"
     },
     "GB00BTRC7N37": {
       "ticker": "Z1N",
@@ -136779,13 +137193,15 @@
     },
     "US98887L1052": {
       "ticker": "ZAL1",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 10.6,
+      "ask": 10.9,
+      "last": 10.6,
+      "mid": 10.75,
+      "perShare": 0.3,
+      "bp": 279.07,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:32.786Z"
     },
     "CA98942X1024": {
       "ticker": "ZAY0",
@@ -136949,13 +137365,15 @@
     },
     "US00449R1095": {
       "ticker": "ZH20",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 76,
+      "ask": 81,
+      "last": 76,
+      "mid": 78.5,
+      "perShare": 5,
+      "bp": 636.943,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:25.533Z"
     },
     "LT0000102253": {
       "ticker": "ZH5",
@@ -137049,13 +137467,15 @@
     },
     "US98887Q1040": {
       "ticker": "ZLAB",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 22.6,
+      "ask": 22.8,
+      "last": 22.6,
+      "mid": 22.700000000000003,
+      "perShare": 0.2,
+      "bp": 88.1057,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:39.275Z"
     },
     "CA35954F1080": {
       "ticker": "ZM7A",
@@ -137209,13 +137629,15 @@
     },
     "US98980A1051": {
       "ticker": "ZTO",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 18.2,
+      "ask": 18.4,
+      "last": 18.2,
+      "mid": 18.299999999999997,
+      "perShare": 0.2,
+      "bp": 109.29,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:36.689Z"
     },
     "KYG9897K1058": {
       "ticker": "ZTOB",
@@ -137289,13 +137711,15 @@
     },
     "US9898251049": {
       "ticker": "ZURVY",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 31.4,
+      "ask": 32,
+      "last": 31.4,
+      "mid": 31.7,
+      "perShare": 0.6,
+      "bp": 189.274,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:20.417Z"
     },
     "FR0012819381": {
       "ticker": "ZUY",
@@ -137379,13 +137803,15 @@
     },
     "US23346J1034": {
       "ticker": "ZX61",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 8.85,
+      "ask": 9.35,
+      "last": 8.85,
+      "mid": 9.1,
+      "perShare": 0.5,
+      "bp": 549.451,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-18T15:59:33.669Z"
     },
     "CA37653W1014": {
       "ticker": "ZX7",

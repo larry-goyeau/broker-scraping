@@ -1,12 +1,19 @@
 // Where a US broker-dealer sends held NMS orders, from the quarterly Rule 606(a)
-// reports FINRA publishes as one zip of XML. The cost scripts read the mix so the
-// 605 figure they use is weighted toward the teneurs that broker actually reaches.
+// reports FINRA publishes as one zip of XML. The round trip rereads those files
+// (and the 605 table) whenever they change on disk. Q is never stored:
 //
-// Citadel and Virtu do not publish a 605 we can read. Their weight falls back to
-// the blended 605 already in spread.json. Exchanges and ATS do the same.
+//   Q = Σ_t w_t × mean_n (E_t / E_blend)
+//   book = 605_live × Q
+//
+// w_t is the 606 mix (market + marketable limit). The mean is equal-weight over
+// every name both figures exist for. OTHER (exchanges, ATS, unnamed) is the
+// reconstructed NBBO quoted / blended 605 — a place fill is the touch, not 1.
+// A broker without a 606 is treated as the place: the reconstructed quoted
+// NBBO of that name (or E × OTHER if that field is missing), not E × 1.
+// Taxes, SEC, TAF and the ticket stay out of Q.
 //
 //   node rule606.mjs              -- refresh and list each mapped broker
-//   node rule606.mjs tastytrade   -- that broker's venue mix
+//   node rule606.mjs tastytrade   -- that broker's venue mix and Q
 //
 // https://www.finra.org/finra-data/606-nms-data/bulk-file
 
@@ -37,12 +44,23 @@ export const US_BROKERS = {
   tradezero: { crd: ["282940"], name: "TradeZero America" },
   vested: { crd: ["315194"], name: "VF Securities, Inc." },
   webull: { crd: ["170580"], name: "Webull Financial LLC" },
+  drivewealth: { crd: ["165429"], name: "DriveWealth, LLC" },
 };
 
 // Introducing brokers that do not file their own 606: same mix as the US BD
-// that actually routes the order.
-const ALIASES = {
+// that actually routes the order. An EU name is listed only when that broker
+// names the correspondent. apply606 then uses the BD's Q on a US tape and
+// leaves a European book (bp, no perShare) untouched.
+export const ALIASES = {
   thndr: "alpaca",
+  plum: "alpaca",
+  lightyear: "alpaca",
+  sarwa: "alpaca",
+  revolut: "drivewealth",
+  captrader: "interactivebrokers",
+  mexem: "interactivebrokers",
+  whselfinvest: "interactivebrokers",
+  trading212: "interactivebrokers",
 };
 
 const ricOf = (name) => {
@@ -54,6 +72,7 @@ const ricOf = (name) => {
   if (n.includes("hudson") || /\bhrt\b/.test(n)) return "HRTF";
   if (n.includes("two sigma") || n.includes("soho")) return "SOHO";
   if (/\bg1\b/.test(n) || n.includes("etmm") || n.includes("execution services")) return "ETMM";
+  if (/\bgts\b/.test(n)) return "GTSM";
   return "OTHER";
 };
 
@@ -174,30 +193,35 @@ export async function monthlyRouting({ refresh = false, quiet = false } = {}) {
   }
 }
 
-let cached606 = null;
-let cached605 = null;
+const slot606 = { data: null, mtime: 0 };
+const slot605 = { data: null, mtime: 0 };
+let cachedMeans = null;
+let meansAt = 0;
+
+function readJson(file, slot) {
+  if (!fs.existsSync(file)) {
+    slot.data = null;
+    slot.mtime = 0;
+    return null;
+  }
+  const mtime = fs.statSync(file).mtimeMs;
+  if (slot.data && slot.mtime === mtime) return slot.data;
+  slot.data = JSON.parse(fs.readFileSync(file, "utf8"));
+  slot.mtime = mtime;
+  return slot.data;
+}
 
 function load606() {
-  if (cached606) return cached606;
-  if (!fs.existsSync(CACHE_PATH)) return null;
-  cached606 = JSON.parse(fs.readFileSync(CACHE_PATH, "utf8"));
-  return cached606;
+  return readJson(CACHE_PATH, slot606);
 }
 
 function load605() {
-  if (cached605) return cached605;
-  if (!fs.existsSync(RULE605_PATH)) return null;
-  cached605 = JSON.parse(fs.readFileSync(RULE605_PATH, "utf8"));
-  return cached605;
-}
-
-export function routingOf(broker) {
-  const raw = String(broker || "")
-    .trim()
-    .toLowerCase()
-    .split(":")[0];
-  const key = ALIASES[raw] || raw;
-  return load606()?.brokers?.[key] || null;
+  const data = readJson(RULE605_PATH, slot605);
+  if (slot605.mtime !== meansAt) {
+    cachedMeans = null;
+    meansAt = slot605.mtime;
+  }
+  return data;
 }
 
 function tickerKey(ticker) {
@@ -209,56 +233,119 @@ function tickerKey(ticker) {
   return bare || null;
 }
 
-// 605 of the teneurs this broker reaches, weighted by its 606 mix. A signed
-// negative 605 (Jane Street on a thin name) is treated as zero rather than a rebate.
-export function usBookPerShare({ broker, ticker, fallback = null }) {
+export function routingOf(broker) {
+  const raw = String(broker || "")
+    .trim()
+    .toLowerCase()
+    .split(":")[0];
+  const key = ALIASES[raw] || raw;
+  return load606()?.brokers?.[key] || null;
+}
+
+// Equal-weight mean over names of (that teneur's 605 / the blended 605).
+// OTHER is the place: reconstructed NBBO quoted / blended 605, not 1.
+function reporterMeans() {
+  const table = load605();
+  if (cachedMeans) return cachedMeans;
+  if (!table?.symbols) return null;
+  const acc = {};
+  const place = [];
+  for (const s of Object.values(table.symbols)) {
+    const eg = s.perShare;
+    if (!(eg > 0)) continue;
+    if (s.quoted > 0) place.push(s.quoted / eg);
+    for (const [ric, ew] of Object.entries(s.byReporter || {})) {
+      if (ew == null) continue;
+      (acc[ric] ||= []).push(ew / eg);
+    }
+  }
+  const avg = (rs) => rs.reduce((a, b) => a + b, 0) / rs.length;
+  const means = {};
+  if (place.length) means.OTHER = avg(place);
+  for (const [ric, rs] of Object.entries(acc)) {
+    if (rs.length) means[ric] = avg(rs);
+  }
+  cachedMeans = means;
+  return means;
+}
+
+export function qOf(broker) {
   const routing = routingOf(broker);
-  const key = tickerKey(ticker);
-  const line = key ? load605()?.symbols?.[key] : null;
-  const blend = line?.perShare;
-  if (fallback == null || blend == null || !routing?.mix) return fallback;
-  const by = line.byReporter || {};
+  const means = reporterMeans();
+  if (!routing?.mix || !Object.keys(routing.mix).length || !means) return null;
   let num = 0;
   let den = 0;
   for (const [ric, w] of Object.entries(routing.mix)) {
     if (!(w > 0)) continue;
-    const raw = Object.prototype.hasOwnProperty.call(by, ric) ? by[ric] : blend;
-    const v = raw < 0 ? 0 : raw;
-    num += v * w;
+    num += w * (means[ric] ?? means.OTHER ?? 1);
     den += w;
   }
-  if (!(den > 0)) return fallback;
-  return Number(Math.max(0, num / den).toPrecision(6));
+  if (!(den > 0)) return null;
+  return num / den;
+}
+
+function live605row(ticker) {
+  const key = tickerKey(ticker);
+  return key ? load605()?.symbols?.[key] || null : null;
+}
+
+function live605(ticker) {
+  const v = live605row(ticker)?.perShare;
+  return Number.isFinite(v) ? v : null;
+}
+
+// With a 606: blended 605 × that broker's Q. Without one: the reconstructed
+// NBBO quoted of the name — we do not assume a wholesaler fill. A signed
+// negative 605 is treated as zero rather than a rebate.
+export function usBookPerShare({ broker, ticker, fallback = null }) {
+  const row = live605row(ticker);
+  const base = (row && Number.isFinite(row.perShare) ? row.perShare : null) ?? fallback;
+  if (base == null) return fallback;
+  const q = qOf(broker);
+  if (q != null) return Number(Math.max(0, base * q).toPrecision(6));
+  if (row?.quoted > 0) return Number(Math.max(0, row.quoted).toPrecision(6));
+  const other = reporterMeans()?.OTHER;
+  if (other > 0) return Number(Math.max(0, base * other).toPrecision(6));
+  return Number(Math.max(0, base).toPrecision(6));
 }
 
 export function apply606(book, { broker, ticker }) {
-  if (!book?.leaf || book.leaf.perShare == null || !broker || !ticker) return book;
+  if (!book?.leaf || book.leaf.perShare == null) return book;
   const perShare = usBookPerShare({ broker, ticker, fallback: book.leaf.perShare });
   if (perShare == null || perShare === book.leaf.perShare) return book;
-  return { ...book, leaf: { ...book.leaf, perShare }, via606: true };
+  const q = qOf(broker);
+  return { ...book, leaf: { ...book.leaf, perShare }, via606: q != null, q };
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const asked = process.argv[2]?.toLowerCase();
   const table = await monthlyRouting({ refresh: !asked && !process.argv.includes("--cached") });
   if (asked) {
-    const row = table.brokers[asked];
+    const key = ALIASES[asked] || asked;
+    const row = table.brokers[key];
     if (!row) {
       console.log(`${asked} n'a pas de 606 dans ${table.quarter}`);
       process.exit(0);
     }
-    console.log(`${asked} — ${row.name} (${table.quarter})`);
+    const q = qOf(asked);
+    const via = key !== asked ? ` via ${key}` : "";
+    console.log(`${asked}${via} — ${row.name} (${table.quarter})`);
+    if (q != null) console.log(`  Q            ${q.toFixed(3)}`);
+    const means = reporterMeans();
+    if (means?.OTHER != null) console.log(`  OTHER        ${means.OTHER.toFixed(3)}  (coté NBBO / 605)`);
     for (const [ric, w] of Object.entries(row.mix).sort((a, b) => b[1] - a[1])) {
-      console.log(`  ${ric.padEnd(6)} ${(100 * w).toFixed(1)} %`);
+      const m = means?.[ric] ?? means?.OTHER;
+      console.log(`  ${ric.padEnd(6)} ${(100 * w).toFixed(1)} %   mean ${m == null ? "—" : m.toFixed(3)}`);
     }
     process.exit(0);
   }
   console.log(`table ${table.quarter}`);
   for (const [folder, row] of Object.entries(table.brokers)) {
+    const q = qOf(folder);
     const mix = Object.entries(row.mix)
       .sort((a, b) => b[1] - a[1])
       .map(([k, v]) => `${k} ${(100 * v).toFixed(0)}%`)
       .join("  ");
-    console.log(`  ${folder.padEnd(22)} ${mix}`);
+    console.log(`  ${folder.padEnd(22)} Q ${q == null ? "—" : q.toFixed(3)}  ${mix}`);
   }
 }

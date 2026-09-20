@@ -201,6 +201,8 @@ function coverage() {
       mic: venue?.mic ?? null,
       currency: r.currency || CASH,
       unsourced,
+      broker: "sarwa",
+      ticker: r.ticker,
     });
     if (leaf?.bp != null || leaf?.perShare != null) slot.withBook += 1;
   }
@@ -273,6 +275,8 @@ export function roundTrip({
     mic: m.venue?.mic ?? null,
     currency: m.row.currency || CASH,
     unsourced: m.unsourced,
+    broker: "sarwa",
+    ticker: m.row.ticker,
   });
   const listing = {
     isin: String(m.row.isin || "").toUpperCase() || null,
@@ -515,7 +519,7 @@ function confidenceOf({
   } else if (marketBp != null) {
     said.push(`carnet ${Number(marketBp.toPrecision(4))} bp`);
   } else if (marketPerShare != null) {
-    said.push(`carnet Rule 605, ${marketPerShare} $ la part`);
+    said.push(`carnet 605 × Q Alpaca, ${marketPerShare} $ la part`);
   }
   if (!leaf) said.push(`carnet absent pour cette ligne`);
   said.push(`aucun aller-retour réel dans ce dépôt`);

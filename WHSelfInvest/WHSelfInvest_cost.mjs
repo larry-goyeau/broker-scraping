@@ -9,6 +9,8 @@
 // WH SELFINVEST S.A. (LU, CSSF), introducing broker onto Interactive
 // Brokers. Catalogue `WHSelfInvest_scraping.mjs` — the IBKR book. Until
 // that file has been run, this one answers that the book is missing.
+// `nonEuResident` (no KID) stays priced; `listingAccepts` hides it from an
+// EEA nationality, not from an empty country box.
 // Options, futures, CFDs, turbos and telephone closes are not this trip.
 //
 // Tables re-read 2026-09-18 from
@@ -59,9 +61,10 @@
 // Cash is not imposed — the IBKR account holds the listing currency —
 // so FX (0.2 bp, min printed per pair) stays in the remark. Inactivity
 // (1 $ / month under 1 000 $ NAV with no order), the first withdrawal
-// free then 1 € SEPA / 8 € wire, ADR 0.01–0.02 $/share and real-time
-// quotes stay in the remark. Opening, custody, dividends and TWS are
-// free.
+// free then 1 € SEPA / 8 € wire, and real-time quotes stay in the remark.
+// USA-ADRs print 0.01–0.02 $/share with no floor: the trip uses 0.01, in
+// brokerFees, only on a US-listed name that calls itself ADR / GDR / ADS.
+// Opening, custody, dividends and TWS are free.
 //
 //   https://www.whselfinvest.com/en-lu/investing-best-broker/all-exchanges-and-fees
 //   https://www.whselfinvest.com/en-DE/investing-best-broker/all-exchanges-and-fees
@@ -111,6 +114,9 @@ const FX_BP = 0.00002;
 
 const RULE = {
   us: { perShare: 0.01, min: 1.9, maxPct: 0.01, ccy: "USD" },
+  // The USA-ADRs row: 0.01–0.02 $/share, no minimum, no cap. 0.01 is the
+  // figure they print first; 0.015 would be invented.
+  adr: { perShare: 0.01, ccy: "USD" },
   ca: { perShare: 0.01, min: 1, maxPct: 0.01, ccy: "CAD" },
   otc: { perShareLow: 0.00003, perShareHigh: 0.003, clearPerShare: 0.0002, clearMaxPct: 0.005, ccy: "USD" },
   xetra: { rate: 0.0009, min: 3.9, max: 89, ccy: "EUR" },
@@ -171,6 +177,7 @@ const isStock = (listing) => String(listing?.type || "").toUpperCase() === "STOC
 const isCrypto = (row) =>
   String(row?.type || "").toUpperCase() === "CRYPTO" || /^(ZEROHASH|PAXOS|CRYPTO)$/i.test(String(row?.exchange || ""));
 const isAmerican = (exchange, mic) => US_MICS.has(String(mic || "").toUpperCase()) || US_EX.has(loose(exchange));
+const isAdr = (row) => ADR_NAMED.test(String(row?.name || ""));
 
 export function feeMarketOf(exchange, mic, currency) {
   const code = loose(exchange);
@@ -251,6 +258,8 @@ function coverage() {
           mic: venue?.mic ?? null,
           currency: r.currency,
           unsourced,
+          broker: "whselfinvest",
+          ticker: r.ticker,
         });
     const market = feeMarketOf(r.exchange, book.mic ?? venue?.mic, r.currency) || "?";
     const slot = (out[type] ||= { n: 0, withBook: 0, byMarket: {} });
@@ -290,9 +299,7 @@ function remarkOf({ listing, market } = {}) {
   const lines = [];
   const settle = fxCcy(listing?.currency);
   if (market !== "crypto") lines.push(fxRemark((100 * FX_BP).toFixed(3).replace(/\.?0+$/, ""), settle));
-  if (ADR_NAMED.test(String(listing?.name || ""))) {
-    lines.push("ADR commission prints $0.01–0.02/share; this trip uses the listed US $0.01.");
-  }
+  if (market === "adr") lines.push("USA-ADRs print $0.01–0.02/share; 0.01 used.");
   if (market === "frankfurt" || market === "stuttgart") {
     const s = SPECIALIST_ON_PAGE[market];
     lines.push(
@@ -332,8 +339,14 @@ export function commissionSide({ shares, amount, price, market }) {
     const ceiling = rule.maxPct != null && amount != null ? Number(amount) * rule.maxPct : null;
     const capped = ceiling != null && ceiling < raw;
     const perShareAmount = capped ? ceiling : raw;
-    const charged = Math.max(rule.min, perShareAmount);
-    return { raw, charged, floored: perShareAmount < rule.min, capped, currency: rule.ccy };
+    const charged = rule.min != null ? Math.max(rule.min, perShareAmount) : perShareAmount;
+    return {
+      raw,
+      charged,
+      floored: rule.min != null && perShareAmount < rule.min,
+      capped,
+      currency: rule.ccy,
+    };
   }
 
   if (amount == null || !Number.isFinite(Number(amount))) return null;
@@ -372,6 +385,8 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
         mic: m.venue?.mic ?? null,
         currency: m.row.currency,
         unsourced: m.unsourced,
+        broker: "whselfinvest",
+        ticker: m.row.ticker,
       });
   const listing = {
     isin: String(m.row.isin || "").toUpperCase() || null,
@@ -384,12 +399,13 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     brokerExchange: m.row.exchange || null,
   };
 
-  const market = feeMarketOf(m.row.exchange, listing.mic, listing.currency);
+  const listed = feeMarketOf(m.row.exchange, listing.mic, listing.currency);
+  const market = listed === "us" && isAdr(listing) ? "adr" : listed;
   const rule = market && market !== "crypto" ? RULE[market] : null;
   const leaf = book.leaf;
   const marketBp = bp ?? leaf?.bp ?? null;
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
-  const american = isAmerican(m.row.exchange, listing.mic) || market === "us" || market === "otc";
+  const american = isAmerican(m.row.exchange, listing.mic) || market === "us" || market === "adr" || market === "otc";
   const { tax, rates, added, source: taxSource } = taxesFor(listing.isin, listing);
   const taxPct = Object.values(rates).reduce((s, r) => s + r, 0);
 
@@ -397,7 +413,6 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     ...answer,
     listing,
     feeMarket: market,
-    onlineBuy: m.row.nonEuResident !== true,
     bp: marketBp,
     perShare: marketPerShare,
     url: leaf?.url ?? SCHEDULE.source,
@@ -570,7 +585,9 @@ function confidenceOf({
         : buyComm.floored
           ? `au plancher : le ticket de ${rule.min} ${rule.ccy} est toute la commission, ` +
             `le calcul au barème n'en donnerait que ${Number(buyComm.raw).toPrecision(3)}`
-          : `au-dessus du plancher : ${Number(buyComm.charged).toPrecision(4)} ${rule.ccy} par sens`
+          : rule.min != null
+            ? `au-dessus du plancher : ${Number(buyComm.charged).toPrecision(4)} ${rule.ccy} par sens`
+            : `${Number(buyComm.charged).toPrecision(4)} ${rule.ccy} par sens`
     );
   }
   if (market === "frankfurt" || market === "stuttgart") {
@@ -587,7 +604,7 @@ function confidenceOf({
     );
   }
   if (marketBp != null) said.push(`carnet publié ${Number(marketBp).toPrecision(4)} bp, aller-retour`);
-  else if (marketPerShare != null) said.push(`carnet 605 ${marketPerShare} $ la part, aller-retour`);
+  else if (marketPerShare != null) said.push(`carnet 605 × Q IBKR, ${marketPerShare} $ la part, aller-retour`);
   else said.push(`aucun carnet : ${unsourced?.why || "place sans source de spread"} — le total est N/A et non un total sans marché`);
 
   if (taxPct) {

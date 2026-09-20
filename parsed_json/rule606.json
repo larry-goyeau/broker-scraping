@@ -1,6 +1,6 @@
 {
   "quarter": "2026-Q2",
-  "fetchedAt": "2026-09-17T21:16:56.423Z",
+  "fetchedAt": "2026-09-19T23:03:35.536Z",
   "source": "https://cdn.finra.org/606reportBulk/2026/606_NMS_2026_Q2.zip",
   "brokers": {
     "alpaca": {
@@ -15,7 +15,7 @@
         "NITE": 0.2211,
         "CDRG": 0.413,
         "JNST": 0.2936,
-        "OTHER": 0.07229
+        "GTSM": 0.07229
       }
     },
     "choicetrade": {
@@ -136,9 +136,10 @@
         "CDRG": 0.2172,
         "HRTF": 0.1784,
         "NITE": 0.2039,
-        "OTHER": 0.202,
+        "GTSM": 0.2007,
         "JNST": 0.1815,
-        "ETMM": 0.017
+        "ETMM": 0.017,
+        "OTHER": 0.001337
       }
     },
     "tradestation": {
@@ -189,6 +190,16 @@
         "SOHO": 0.175,
         "OTHER": 0.02108
       }
+    },
+    "drivewealth": {
+      "crd": [
+        "165429"
+      ],
+      "name": "DriveWealth, LLC",
+      "files": [
+        "165429_606_NMS_2026_Q2_DRWW_V1_20260731.xml"
+      ],
+      "mix": {}
     }
   }
 }

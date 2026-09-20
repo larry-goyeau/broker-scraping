@@ -24,7 +24,9 @@
 // instant, where `spread.json` is a month of tape, so a single wide line means
 // less than the shape of the whole shelf.
 //
-// It places no orders and touches no balance.
+// Two-sided prints are merged into `quantfury-touches.json` for `roundTrip`.
+// Closed prints (bid = ask) are left out, so a stale open touch survives the
+// close. It places no orders and touches no balance.
 //
 //   node quantfury/quantfury-probe.mjs                  (les lignes en euros)
 //   node quantfury/quantfury-probe.mjs --currency=USD
@@ -40,6 +42,7 @@ import { roundTrip } from "./quantfury_cost.mjs";
 
 const CATALOGUE = new URL("quantfury-parsed.json", import.meta.url);
 const OUT = new URL("quantfury-probe.json", import.meta.url);
+const TOUCHES = new URL("quantfury-touches.json", import.meta.url);
 const HOST = /trading\.quantfury\.com/i;
 const PRICE = "https://l1.trdngbcknd.com/v13/price";
 
@@ -271,4 +274,25 @@ if (!measured.length) {
 
 fs.writeFileSync(OUT, JSON.stringify({ ...summary, measured, closed, missing }, null, 2));
 console.log(`\nécrit dans ${OUT.pathname.split("/").slice(-2).join("/")}`);
+
+const prev = fs.existsSync(TOUCHES) ? JSON.parse(fs.readFileSync(TOUCHES, "utf8")) : {};
+const byIsin = { ...(prev.byIsin || {}) };
+const byTicker = { ...(prev.byTicker || {}) };
+const at = summary.asOf;
+for (const m of measured) {
+  const rec = {
+    ticker: m.ticker,
+    shortName: m.shortName,
+    bid: m.bid,
+    ask: m.ask,
+    perShare: Number((m.ask - m.bid).toPrecision(8)),
+    bp: Number(m.quantfuryBp?.toFixed(4)),
+    currency: m.currency,
+    at,
+  };
+  if (m.isin) byIsin[String(m.isin).toUpperCase()] = rec;
+  if (m.ticker) byTicker[String(m.ticker).toUpperCase()] = rec;
+}
+fs.writeFileSync(TOUCHES, JSON.stringify({ asOf: at, byIsin, byTicker }, null, 2));
+console.log(`touches : ${Object.keys(byIsin).length} ISIN / ${Object.keys(byTicker).length} tickers → quantfury/quantfury-touches.json`);
 console.log("aucun ordre passé, aucun solde touché.");

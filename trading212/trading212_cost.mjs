@@ -35,11 +35,19 @@
 // disclosure keep the current levy, which is what is used. CAT is not
 // named. NSCC is not named.
 //
-// What is in the number: the book (European bp, Rule 605 $/share, or
-// T212's crypto review); stamp / FTT from the map; PTM when it bites;
-// SEC and TAF on a US / OTC sale. brokerFees is 0 — they bill no
-// ticket. FX is only in the number if a listing currency they cannot
-// hold appears later.
+// What is in the number: the book (European bp, each US / OTC 605 ×
+// Q of Interactive Brokers LLC, the US BD the order-execution policy
+// names, or T212's crypto review); stamp / FTT from the map; PTM when
+// it bites; SEC and TAF on a US / OTC sale. brokerFees is 0 — they
+// bill no ticket. FX is only in the number if a listing currency they
+// cannot hold appears later.
+//
+// Invest does not publish a bid/ask on equities — last only, empty
+// added-costs. A US tape uses IBKR's 606, the same rule as the other
+// brokers that name that correspondent. The Apple Invest fill of
+// 8 September 2026 (0.133 $ against 0.01154 $ in 605) stays as the
+// error bar, not a second scale. A missing 605 is N/A. CFD quotes
+// are another product and are not this file.
 //
 // Card deposits above the free allowance, withdrawals, the card itself
 // and ADR pass-through stay out. ADR is named as a third-party charge
@@ -47,7 +55,7 @@
 //
 // Real trips kept as the error bar, never folded in: EUNL / IWDA /
 // CSPX / IS3N / GC40 / VWCE on Xetra, ETL on Paris, HSBA on London,
-// one Apple odd lot, and €50 of BTC/EUR.
+// Apple on Nasdaq, and €50 of BTC/EUR.
 //
 //   https://helpcentre.trading212.com/hc/en-us/articles/11471996799517-What-are-the-fees-in-the-Invest-ISAs-and-SIPP
 //   https://helpcentre.trading212.com/hc/en-us/articles/360007081637-What-are-the-applicable-stock-exchange-fees
@@ -135,7 +143,7 @@ const CHECKS = {
     trips: 1,
     range: [0.12, 0.12],
     on: "2026-09-08",
-    note: "1 part, 0,12 € tout compris (compte déjà en dollars) ; carnet 0,133 $ contre 0,01154 $ en Rule 605",
+    note: "1 part, 0,12 € tout compris (compte déjà en dollars) ; barre d'erreur, pas une échelle",
   },
 };
 
@@ -169,7 +177,6 @@ const US_CHECK = {
   ratio: 11.5,
   on: "2026-09-08",
 };
-
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
 const spreads = fs.existsSync(SPREADS) ? JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {} : {};
@@ -280,8 +287,9 @@ function remarkOf({ crypto, ukStock, ptmBites, adr, currency, holdable }) {
 const checkFor = (listing, used) => {
   const check = CHECKS[`${listing.isin}|${listing.mic}|${listing.currency}`];
   if (!check) return null;
-  const published = used?.perShare ?? used?.bp;
-  const measured = check.perShare ?? check.bp;
+  const sameShare = check.perShare != null && used?.perShare != null;
+  const published = sameShare ? used.perShare : used?.bp;
+  const measured = sameShare ? check.perShare : check.bp;
   return { ...check, ratio: published ? Number((measured / published).toFixed(2)) : null };
 };
 
@@ -302,7 +310,13 @@ function coverage() {
       mic: venue?.mic ?? null,
       currency: r.currency,
       unsourced,
+      ticker: r.ticker,
+      broker: "trading212",
     });
+    if (isAmerican(r, venue?.mic)) {
+      if (book.leaf?.perShare > 0) slot.withBook += 1;
+      continue;
+    }
     if (book.leaf?.bp != null || book.leaf?.perShare != null) slot.withBook += 1;
   }
   return out;
@@ -351,6 +365,8 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
     mic: m.venue?.mic ?? null,
     currency: m.row.currency,
     unsourced: m.unsourced,
+    ticker: m.row.ticker,
+    broker: "trading212",
   });
   const listing = {
     isin: String(m.row.isin || "").toUpperCase() || null,
@@ -373,7 +389,7 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
   const rates = taxRates(tax);
   const taxTotal = Object.values(rates).reduce((s, r) => s + r, 0);
   const leaf = book.leaf;
-  const marketBp = bp ?? leaf?.bp ?? null;
+  const marketBp = bp ?? (american ? null : leaf?.bp) ?? null;
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
   const fxPct = holdable ? 0 : FX_EACH_WAY;
 
@@ -384,7 +400,7 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
     onlineBuy: true,
     bp: marketBp,
     perShare: marketPerShare,
-    url: leaf?.url ?? SCHEDULE.invest,
+    url: american ? SCHEDULE.invest : leaf?.url ?? SCHEDULE.invest,
     basis: `barème Trading 212 Invest, relu le ${SCHEDULE.readOn} : commission 0, garde 0`,
     tax,
     commission: { each: 0, roundTrip: 0, currency: cash || listing.currency, eachWay: true },
@@ -417,6 +433,7 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
         leaf,
         marketBp,
         marketPerShare,
+        via606: book.via606,
         unsourced: m.unsourced,
         tax,
         taxTotal,
@@ -451,9 +468,11 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
     brokerFees: finite(brokerFees, 6),
     ...(bookUsd == null
       ? {
-          why: `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ${
-            m.unsourced?.why || "pas de feuille de carnet"
-          }`,
+          why: american
+            ? `aucun 605 pour ${listing.isin || listing.ticker}`
+            : `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ${
+                m.unsourced?.why || "pas de feuille de carnet"
+              }`,
         }
       : {}),
     trade: {
@@ -479,6 +498,7 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
       leaf,
       marketBp,
       marketPerShare,
+      via606: book.via606,
       unsourced: m.unsourced,
       tax,
       taxTotal,
@@ -582,6 +602,7 @@ function confidenceOf({
   leaf,
   marketBp,
   marketPerShare,
+  via606,
   unsourced,
   tax,
   taxTotal,
@@ -630,7 +651,17 @@ function confidenceOf({
     );
   }
 
-  if (marketBp != null) {
+  if (american && marketPerShare != null) {
+    said.push(
+      via606
+        ? `carnet 605 × Q IBKR, ${marketPerShare} $ la part`
+        : `carnet NBBO reconstitué, ${marketPerShare} $ la part`
+    );
+    said.push(
+      `barre d'erreur : ${US_CHECK.n} ${US_CHECK.pair} Invest le ${US_CHECK.on} a payé ${US_CHECK.perShare} $ de carnet ` +
+        `contre ${US_CHECK.published} $ de 605, hors du chiffre`
+    );
+  } else if (marketBp != null) {
     const onFunds =
       type === "ETF"
         ? ""
@@ -647,11 +678,6 @@ function confidenceOf({
           ? ` ; à ${marketPerShare} $ par part ce bucket est déjà large`
           : ` ; à ${marketPerShare} $ par part ce bucket est serré`)
     );
-    said.push(
-      `une part de ${US_CHECK.pair} le ${US_CHECK.on} a coûté ${US_CHECK.paid} € (${US_CHECK.perShare} $ de carnet) ` +
-        `contre ${US_CHECK.published} $ publiés, soit ×${US_CHECK.ratio} — un ordre d'une part paie plus que cette moyenne, ` +
-        `et le 605 reste la figure pour un ordre de cent parts`
-    );
   } else {
     said.push(
       `aucun carnet : ${unsourced?.name || listing.exchange}, ${unsourced?.why || "pas de source"}. ` +
@@ -666,7 +692,7 @@ function confidenceOf({
     );
   }
 
-  if (!leaf && type !== "CRYPTO") said.push(`pas de feuille de carnet pour ${listing.isin}`);
+  if (!american && !leaf && type !== "CRYPTO") said.push(`pas de feuille de carnet pour ${listing.isin}`);
   return said.join(" ; ");
 }
 

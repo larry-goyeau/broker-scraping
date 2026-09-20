@@ -12,7 +12,10 @@
 // Revolut Trading Ltd (GIA / ISA): same percentages, no €1 floor, billed
 // in the instrument currency. Trading Pro is an add-on, not a row on the
 // page — `--plan=pro` still prices its 0.12 % on top of Standard's FX and
-// crypto.
+// crypto. US whole shares go to DriveWealth; EEA stocks and ETFs go to
+// Upvest on Tradegate. Fractions stay principal OTC. DriveWealth's 606
+// has no equity mix (options only), so a US tape still uses the
+// reconstructed NBBO until they file one.
 //
 //   EEA / US stock     0.25 %, min €1 (EU) / no min (UK)   Ultra / Pro 0.12 %
 //   EEA ETF / ETC / ETN  0.10 % every plan, no minimum
@@ -280,6 +283,8 @@ function coverage() {
           mic: venue?.mic ?? null,
           currency: r.currency,
           unsourced,
+          broker: "revolut",
+          ticker: r.ticker,
         });
     const market = feeMarketOf(r, book.mic ?? venue?.mic);
     const slot = (out[type] ||= { n: 0, withBook: 0, byMarket: {} });
@@ -374,6 +379,8 @@ export function roundTrip({
         mic: m.venue?.mic ?? null,
         currency: m.row.currency,
         unsourced: m.unsourced,
+        broker: "revolut",
+        ticker: m.row.ticker,
       });
 
   const listing = {
@@ -536,6 +543,7 @@ export function roundTrip({
       rule,
       listing,
       leaf,
+      via606: book.via606,
       crypto,
       american,
       taxTotal,
@@ -557,6 +565,7 @@ function confidenceOf({
   rule,
   listing,
   leaf,
+  via606,
   crypto,
   american,
   taxTotal,
@@ -636,7 +645,11 @@ function confidenceOf({
   } else if (marketBp != null) {
     said.push(`carnet ${Number(marketBp.toPrecision(4))} bp`);
   } else if (marketPerShare != null) {
-    said.push(`carnet Rule 605, ${marketPerShare} $ la part`);
+    said.push(
+      via606
+        ? `carnet 605 × Q DriveWealth, ${marketPerShare} $ la part`
+        : `carnet NBBO reconstitué, ${marketPerShare} $ la part : le 606 DriveWealth n'a pas de mix actions`
+    );
   }
   if (crypto && !stablecoin) {
     said.push(

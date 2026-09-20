@@ -245,6 +245,289 @@
       ],
       "fills": [],
       "finishedAt": "2026-09-08T13:36:42.236Z"
+    },
+    {
+      "startedAt": "2026-09-18T19:33:59.871Z",
+      "ticker": "AAPL_US_EQ",
+      "cfdTicker": "AAPL_US_CFD",
+      "dry": false,
+      "sizes": [
+        1
+      ],
+      "reps": 1,
+      "sequence": null,
+      "plan": [
+        1
+      ],
+      "tradingSession": {
+        "from": "2026-09-16T22:00:00Z",
+        "to": "2026-09-23T21:59:59.999999999Z",
+        "sessions": [
+          {
+            "type": "OPEN",
+            "start": "2026-09-17T07:00:03Z",
+            "end": "2026-09-17T15:30:00Z"
+          },
+          {
+            "type": "OPEN",
+            "start": "2026-09-18T07:00:03Z",
+            "end": "2026-09-18T15:30:00Z"
+          },
+          {
+            "type": "OPEN",
+            "start": "2026-09-21T07:00:03Z",
+            "end": "2026-09-21T15:30:00Z"
+          },
+          {
+            "type": "OPEN",
+            "start": "2026-09-22T07:00:03Z",
+            "end": "2026-09-22T15:30:00Z"
+          },
+          {
+            "type": "OPEN",
+            "start": "2026-09-23T07:00:03Z",
+            "end": "2026-09-23T15:30:00Z"
+          }
+        ]
+      },
+      "costReview": {
+        "1": {
+          "orderQuantity": 1,
+          "orderValue": 336.32,
+          "sharesValue": 336.32,
+          "total": 336.32,
+          "exchangeRate": null,
+          "costs": {}
+        }
+      },
+      "rounds": [
+        {
+          "n": 1,
+          "rep": 1,
+          "before": {
+            "at": 1789760040205,
+            "free": 372.11,
+            "total": 2368.15,
+            "blocked": 0,
+            "pendingOrders": 0,
+            "position": null
+          },
+          "afterBuy": {
+            "at": 1789760041884,
+            "free": 79.35,
+            "total": 2368.12,
+            "blocked": 0,
+            "pendingOrders": 0,
+            "position": {
+              "quantity": 1,
+              "averagePrice": 336.33,
+              "investment": 292.78,
+              "sellable": 1,
+              "value": 292.73
+            }
+          },
+          "afterSell": {
+            "at": 1789760042780,
+            "free": 372.07,
+            "total": 2368.11,
+            "blocked": 0,
+            "pendingOrders": 0,
+            "position": null
+          },
+          "buyResponseStatus": 200,
+          "sellResponseStatus": 200,
+          "heldQuantity": 1,
+          "debited": 292.76,
+          "credited": 292.72,
+          "roundTripCost": 0.04,
+          "quotes": {
+            "beforeBuy": [
+              {
+                "at": 1789760034909,
+                "kind": "last",
+                "ticker": "AAPL_US_EQ",
+                "price": 336.33
+              },
+              {
+                "at": 1789760035185,
+                "kind": "last",
+                "ticker": "AAPL_US_EQ",
+                "price": 336.31
+              },
+              {
+                "at": 1789760036614,
+                "kind": "last",
+                "ticker": "AAPL_US_EQ",
+                "price": 336.31
+              },
+              {
+                "at": 1789760038043,
+                "kind": "last",
+                "ticker": "AAPL_US_EQ",
+                "price": 336.32
+              },
+              {
+                "at": 1789760039475,
+                "kind": "last",
+                "ticker": "AAPL_US_EQ",
+                "price": 336.32
+              }
+            ],
+            "afterBuy": [
+              {
+                "at": 1789760038043,
+                "kind": "last",
+                "ticker": "AAPL_US_EQ",
+                "price": 336.32
+              },
+              {
+                "at": 1789760039475,
+                "kind": "last",
+                "ticker": "AAPL_US_EQ",
+                "price": 336.32
+              },
+              {
+                "at": 1789760040903,
+                "kind": "last",
+                "ticker": "AAPL_US_EQ",
+                "price": 336.33
+              }
+            ],
+            "afterSell": [
+              {
+                "at": 1789760039475,
+                "kind": "last",
+                "ticker": "AAPL_US_EQ",
+                "price": 336.32
+              },
+              {
+                "at": 1789760040903,
+                "kind": "last",
+                "ticker": "AAPL_US_EQ",
+                "price": 336.33
+              },
+              {
+                "at": 1789760042334,
+                "kind": "last",
+                "ticker": "AAPL_US_EQ",
+                "price": 336.3
+              }
+            ]
+          }
+        }
+      ],
+      "opening": {
+        "at": 1789760040073,
+        "free": 372.11,
+        "total": 2368.15,
+        "blocked": 0,
+        "pendingOrders": 0,
+        "position": null
+      },
+      "aborted": null,
+      "closing": {
+        "at": 1789760046850,
+        "free": 372.07,
+        "total": 2368.11,
+        "blocked": 0,
+        "pendingOrders": 0,
+        "position": null
+      },
+      "quoteStream": [
+        {
+          "at": 1789760034909,
+          "kind": "last",
+          "ticker": "AAPL_US_EQ",
+          "price": 336.33
+        },
+        {
+          "at": 1789760035185,
+          "kind": "last",
+          "ticker": "AAPL_US_EQ",
+          "price": 336.31
+        },
+        {
+          "at": 1789760036614,
+          "kind": "last",
+          "ticker": "AAPL_US_EQ",
+          "price": 336.31
+        },
+        {
+          "at": 1789760038043,
+          "kind": "last",
+          "ticker": "AAPL_US_EQ",
+          "price": 336.32
+        },
+        {
+          "at": 1789760039475,
+          "kind": "last",
+          "ticker": "AAPL_US_EQ",
+          "price": 336.32
+        },
+        {
+          "at": 1789760040903,
+          "kind": "last",
+          "ticker": "AAPL_US_EQ",
+          "price": 336.33
+        },
+        {
+          "at": 1789760042334,
+          "kind": "last",
+          "ticker": "AAPL_US_EQ",
+          "price": 336.3
+        },
+        {
+          "at": 1789760043769,
+          "kind": "last",
+          "ticker": "AAPL_US_EQ",
+          "price": 336.29
+        },
+        {
+          "at": 1789760045441,
+          "kind": "last",
+          "ticker": "AAPL_US_EQ",
+          "price": 336.29
+        }
+      ],
+      "fills": [
+        {
+          "id": "57559887825",
+          "date": "2026-09-18T22:34:02.211+03:00",
+          "side": "SELL",
+          "orderId": "EO57559887823",
+          "orderedQuantity": 1,
+          "fillQuantity": 1,
+          "fillPrice": 336.29,
+          "total": 336.29,
+          "result": -0.04,
+          "venue": "otc"
+        },
+        {
+          "id": "57559887818",
+          "date": "2026-09-18T22:34:01.413+03:00",
+          "side": "BUY",
+          "orderId": "EO57559887812",
+          "orderedQuantity": 1,
+          "fillQuantity": 1,
+          "fillPrice": 336.33,
+          "total": 336.33,
+          "result": null,
+          "venue": "otc"
+        },
+        {
+          "id": "57058297637",
+          "date": "2026-09-08T16:36:37.888+03:00",
+          "side": "SELL",
+          "orderId": "EO57058297629",
+          "orderedQuantity": 1,
+          "fillQuantity": 1,
+          "fillPrice": 316.28,
+          "total": 316.28,
+          "result": -0.12,
+          "venue": "otc"
+        }
+      ],
+      "finishedAt": "2026-09-18T19:34:07.469Z"
     }
   ]
 }

@@ -564,6 +564,8 @@ function coverage() {
       mic: venue?.mic ?? null,
       currency: r.currency,
       unsourced,
+      broker: "mexem",
+      ticker: r.ticker,
     });
     const market = feeMarketOf(r.exchange, book.mic ?? venue?.mic, r.currency) || "?";
     const slot = (out[type] ||= { n: 0, withBook: 0, byMarket: {} });
@@ -630,6 +632,8 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     mic: m.venue?.mic ?? null,
     currency: m.row.currency,
     unsourced: m.unsourced,
+    broker: "mexem",
+    ticker: m.row.ticker,
   });
   const listing = {
     isin: String(m.row.isin || "").toUpperCase(),
@@ -872,7 +876,7 @@ function confidenceOf({ market, rule, buyComm, marketBp, marketPerShare, stamp, 
     );
   }
   if (marketBp != null) said.push(`carnet publié ${Number(marketBp).toPrecision(4)} bp, aller-retour`);
-  else if (marketPerShare != null) said.push(`carnet 605 ${marketPerShare} $ la part, aller-retour`);
+  else if (marketPerShare != null) said.push(`carnet 605 × Q IBKR, ${marketPerShare} $ la part, aller-retour`);
   else said.push(`aucun carnet : ${unsourced?.why || "place sans source de spread"} — le total est N/A et non un total sans marché`);
 
   if (stamp.pct) {

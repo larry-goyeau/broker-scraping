@@ -3,20 +3,24 @@
 // file for the Best plan; this script talks to the network.
 //
 // The socket answers `ticker` on `ISIN.TIB`. One instrument per subscribe.
-// The catalogue is ~12 000 names, asked 15 at a time from the signed-in tab.
+// No signed-in tab is required: the public websocket is enough. `--chrome`
+// is the old path, kept for when the socket is blocked from Node.
 //
 //   node traderepublic/traderepublic-touches.mjs
 //   node traderepublic/traderepublic-touches.mjs --only=US0378331005,IE00BK5BQT80
+//   node traderepublic/traderepublic-touches.mjs --refresh-empty --adr
 //   node traderepublic/traderepublic-touches.mjs --limit=200
+//   node traderepublic/traderepublic-touches.mjs --chrome
 
 import fs from "node:fs";
-import puppeteer from "puppeteer-core";
 
 const CATALOGUE = new URL("traderepublic-parsed.json", import.meta.url);
 const OUT = new URL("traderepublic-touches.json", import.meta.url);
 const IN_FLIGHT = 15;
 const SAVE_INTERVAL_MS = 2000;
+const ADR_NAMED = /\b(ADR|GDR|ADS)\b/i;
 
+const flag = (name) => process.argv.slice(2).includes(`--${name}`);
 const arg = (name, fallback) => {
   const hit = process.argv.slice(2).find((a) => a.startsWith(`--${name}=`));
   return hit ? hit.split("=").slice(1).join("=") : fallback;
@@ -28,8 +32,10 @@ const ONLY = new Set(
     .filter(Boolean)
 );
 const LIMIT = Number(arg("limit", "0")) || 0;
+const REFRESH_EMPTY = flag("refresh-empty");
+const ADR_ONLY = flag("adr");
+const USE_CHROME = flag("chrome");
 
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const num = (v) => {
   const n = Number(v);
   return Number.isFinite(n) ? n : null;
@@ -50,6 +56,7 @@ for (const r of rows) {
   if (!byIsinRow.has(isin)) byIsinRow.set(isin, r);
 }
 const wanted = [...byIsinRow.values()].filter((r) => {
+  if (ADR_ONLY && !ADR_NAMED.test(String(r.name || ""))) return false;
   if (!ONLY.size) return true;
   const isin = isinOf(r.isin);
   const ticker = String(r.ticker || "").toUpperCase();
@@ -58,16 +65,15 @@ const wanted = [...byIsinRow.values()].filter((r) => {
 const list = LIMIT > 0 ? wanted.slice(0, LIMIT) : wanted;
 if (!list.length) throw new Error("aucun ISIN à coter.");
 
-const browser = await puppeteer.connect({
-  browserURL: "http://127.0.0.1:9222",
-  defaultViewport: null,
-});
-const pages = await browser.pages();
-const page = pages.find((p) => p.url().includes("traderepublic.com"));
-if (!page) throw new Error("aucun onglet Trade Republic ouvert sur 9222.");
+const CONNECT = {
+  locale: "en",
+  platformId: "webtrading",
+  platformVersion: "chrome",
+  clientId: "app.traderepublic.com",
+  clientVersion: "1.2635.0",
+};
 
-const opened = await page.evaluate(async () => {
-  if (window.__trSub && window.__trSocket?.readyState === WebSocket.OPEN) return true;
+async function openStandalone() {
   const socket = new WebSocket("wss://api.traderepublic.com/");
   const pending = new Map();
   let nextId = 1;
@@ -100,51 +106,146 @@ const opened = await page.evaluate(async () => {
     socket.addEventListener("error", () => resolve(false));
     setTimeout(() => resolve(false), 15000);
   });
-  if (!ready) return false;
+  if (!ready) return null;
   const connected = await new Promise((resolve) => {
     pending.set("connect", resolve);
-    socket.send(
-      `connect 34 ${JSON.stringify({
-        locale: "en",
-        platformId: "webtrading",
-        platformVersion: "chrome",
-        clientId: "app.traderepublic.com",
-        clientVersion: "1.2635.0",
-      })}`
-    );
+    socket.send(`connect 34 ${JSON.stringify(CONNECT)}`);
     setTimeout(() => resolve(false), 15000);
   });
   pending.delete("connect");
-  if (!connected) return false;
-  window.__trSocket = socket;
-  window.__trSub = (payload) =>
-    new Promise((resolve) => {
-      const id = String(nextId++);
-      pending.set(id, resolve);
-      socket.send(`sub ${id} ${JSON.stringify(payload)}`);
-      setTimeout(() => {
-        if (!pending.has(id)) return;
-        pending.delete(id);
-        socket.send(`unsub ${id}`);
-        resolve({ timeout: true });
-      }, 8000);
-    });
-  return true;
-});
-if (!opened) throw new Error("Could not open Trade Republic's WebSocket.");
-
-async function ask(payloads) {
-  return page.evaluate((batch) => Promise.all(batch.map((payload) => window.__trSub(payload))), payloads);
+  if (!connected) {
+    socket.close();
+    return null;
+  }
+  return {
+    ask(payloads) {
+      return Promise.all(
+        payloads.map(
+          (payload) =>
+            new Promise((resolve) => {
+              const id = String(nextId++);
+              pending.set(id, resolve);
+              socket.send(`sub ${id} ${JSON.stringify(payload)}`);
+              setTimeout(() => {
+                if (!pending.has(id)) return;
+                pending.delete(id);
+                socket.send(`unsub ${id}`);
+                resolve({ timeout: true });
+              }, 8000);
+            })
+        )
+      );
+    },
+    async close() {
+      socket.close();
+    },
+  };
 }
 
-const existing = fs.existsSync(OUT) && !ONLY.size && !LIMIT ? JSON.parse(fs.readFileSync(OUT, "utf8")) : {};
-const byIsin = existing.byIsin && typeof existing.byIsin === "object" ? existing.byIsin : {};
-let quoted = Object.values(byIsin).filter((t) => t?.perShare > 0).length;
-let empty = 0;
-let failed = 0;
-let savedAt = 0;
+async function openChrome() {
+  const { default: puppeteer } = await import("puppeteer-core");
+  const browser = await puppeteer.connect({
+    browserURL: "http://127.0.0.1:9222",
+    defaultViewport: null,
+  });
+  const pages = await browser.pages();
+  const page = pages.find((p) => p.url().includes("traderepublic.com"));
+  if (!page) {
+    await browser.disconnect();
+    throw new Error("aucun onglet Trade Republic ouvert sur 9222.");
+  }
+  const opened = await page.evaluate(async (connect) => {
+    if (window.__trSub && window.__trSocket?.readyState === WebSocket.OPEN) return true;
+    const socket = new WebSocket("wss://api.traderepublic.com/");
+    const pending = new Map();
+    let nextId = 1;
+    socket.addEventListener("message", (event) => {
+      const text = String(event.data);
+      if (text === "connected") {
+        pending.get("connect")?.(true);
+        return;
+      }
+      const match = text.match(/^(\d+)\s+([ACDE])\s?([\s\S]*)$/);
+      if (!match) return;
+      const [, id, kind, body] = match;
+      const resolve = pending.get(id);
+      if (!resolve) return;
+      if (kind !== "A" && kind !== "E") return;
+      pending.delete(id);
+      socket.send(`unsub ${id}`);
+      if (kind === "E") {
+        resolve({ error: body });
+        return;
+      }
+      try {
+        resolve({ data: JSON.parse(body) });
+      } catch {
+        resolve({ error: body });
+      }
+    });
+    const ready = await new Promise((resolve) => {
+      socket.addEventListener("open", () => resolve(true));
+      socket.addEventListener("error", () => resolve(false));
+      setTimeout(() => resolve(false), 15000);
+    });
+    if (!ready) return false;
+    const connected = await new Promise((resolve) => {
+      pending.set("connect", resolve);
+      socket.send(`connect 34 ${JSON.stringify(connect)}`);
+      setTimeout(() => resolve(false), 15000);
+    });
+    pending.delete("connect");
+    if (!connected) return false;
+    window.__trSocket = socket;
+    window.__trSub = (payload) =>
+      new Promise((resolve) => {
+        const id = String(nextId++);
+        pending.set(id, resolve);
+        socket.send(`sub ${id} ${JSON.stringify(payload)}`);
+        setTimeout(() => {
+          if (!pending.has(id)) return;
+          pending.delete(id);
+          socket.send(`unsub ${id}`);
+          resolve({ timeout: true });
+        }, 8000);
+      });
+    return true;
+  }, CONNECT);
+  if (!opened) {
+    await browser.disconnect();
+    throw new Error("Could not open Trade Republic's WebSocket.");
+  }
+  return {
+    ask(payloads) {
+      return page.evaluate((batch) => Promise.all(batch.map((payload) => window.__trSub(payload))), payloads);
+    },
+    async close() {
+      await browser.disconnect();
+    },
+  };
+}
 
+const session = USE_CHROME ? await openChrome() : await openStandalone();
+if (!session) throw new Error("Could not open Trade Republic's WebSocket.");
+
+const existing = fs.existsSync(OUT) ? JSON.parse(fs.readFileSync(OUT, "utf8")) : {};
+const byIsin = existing.byIsin && typeof existing.byIsin === "object" ? existing.byIsin : {};
+
+function tally() {
+  let quoted = 0;
+  let empty = 0;
+  let failed = 0;
+  for (const t of Object.values(byIsin)) {
+    if (t?.perShare > 0) quoted += 1;
+    else if (t?.qualityId) empty += 1;
+    else failed += 1;
+  }
+  return { quoted, empty, failed, asked: Object.keys(byIsin).length };
+}
+
+let savedAt = 0;
 function save() {
+  const stats = tally();
   fs.writeFileSync(
     OUT,
     JSON.stringify(
@@ -152,10 +253,7 @@ function save() {
         asOf: new Date().toISOString(),
         source: "wss://api.traderepublic.com ticker ISIN.TIB",
         measure: "touche Bestpreis TIB, aller-retour (ask − bid), euro",
-        asked: list.length,
-        quoted,
-        empty,
-        failed,
+        ...stats,
         byIsin,
       },
       null,
@@ -163,23 +261,26 @@ function save() {
     )
   );
   savedAt = Date.now();
+  return stats;
 }
 
 const pending = list.filter((r) => {
   const isin = isinOf(r.isin);
-  return !byIsin[isin] || (ONLY.size && !LIMIT);
+  const have = byIsin[isin];
+  if (ONLY.size) return true;
+  if (REFRESH_EMPTY) return !(have?.perShare > 0);
+  return !have;
 });
 
 console.error(`${list.length} ISIN, ${pending.length} encore à coter`);
 
 for (let offset = 0; offset < pending.length; offset += IN_FLIGHT) {
   const batch = pending.slice(offset, offset + IN_FLIGHT);
-  const answers = await ask(batch.map((r) => ({ type: "ticker", id: `${isinOf(r.isin)}.TIB` })));
+  const answers = await session.ask(batch.map((r) => ({ type: "ticker", id: `${isinOf(r.isin)}.TIB` })));
   for (const [index, r] of batch.entries()) {
     const isin = isinOf(r.isin);
     const ans = answers[index];
     if (ans?.timeout || ans?.error || !ans?.data) {
-      failed += 1;
       byIsin[isin] = {
         ticker: r.ticker || null,
         bid: null,
@@ -211,17 +312,16 @@ for (let offset = 0; offset < pending.length; offset += IN_FLIGHT) {
       qualityId: ans.data.qualityId || null,
       at: stamp ? new Date(stamp).toISOString() : new Date().toISOString(),
     };
-    if (perShare != null) quoted += 1;
-    else empty += 1;
   }
   if (offset === 0 || (offset + IN_FLIGHT) % 150 === 0 || offset + IN_FLIGHT >= pending.length) {
+    const stats = tally();
     console.error(
-      `[${Math.min(offset + IN_FLIGHT, pending.length)}/${pending.length}] ${quoted} touches, ${empty} vides, ${failed} erreurs`
+      `[${Math.min(offset + IN_FLIGHT, pending.length)}/${pending.length}] ${stats.quoted} touches, ${stats.empty} vides, ${stats.failed} erreurs`
     );
   }
   if (Date.now() - savedAt >= SAVE_INTERVAL_MS) save();
 }
 
-save();
-console.error(`écrit ${quoted} touches / ${list.length} dans ${OUT.pathname}`);
-await browser.disconnect();
+const stats = save();
+console.error(`écrit ${stats.quoted} touches / ${stats.asked} dans ${OUT.pathname}`);
+await session.close();

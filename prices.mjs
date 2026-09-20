@@ -8,12 +8,13 @@
 // and nothing has to be timed against a session. The day's close is enough — these
 // prices size an order, they do not fill one.
 //
-// Most of the world and not all of it: the vendor carries nothing in the Gulf. Asked for
-// GFH Bank it returns an empty list, and it has missed every Gulf ISIN put to it while
-// answering the American ones first time. So the four Gulf boards that publish their own
-// prices are read directly, through `gulf.mjs`, which `spread.mjs` also reads for the
-// touch. That keeps this file the only writer of `prices.json` while letting 347 lines
-// that no vendor sells stop being N/A.
+// Most of the world and not all of it: the vendor carries nothing in the Gulf, and it
+// also misses lines it should know — a Canadian CDR, a local share class — then answers
+// an empty list. A miss used to stamp `fetched` and look fresh, so the front never asked
+// again. The four Gulf boards still publish their own last through `gulf.mjs`. Everywhere
+// else, a miss falls through to Yahoo's chart last, built from the catalogues' ticker and
+// MIC (`F.TO`, `1111.SR`). Enough to size an order, not to fill one. That keeps this file
+// the only writer of `prices.json` while letting the lines no vendor sells stop being N/A.
 //
 // One request per ISIN buys every listing of it at once: `/api/search/{ISIN}` answers
 // with each venue, its currency and its last close, so a single call fills the euro
@@ -83,13 +84,16 @@ const UNIT =
   "cotations ; `price` retient la place principale. Londres cote en pence, donc GBX et " +
   "GBP sont deux entrées, que `fx.mjs` sait distinguer. Ce n'est pas un prix temps " +
   "réel : il sert à dimensionner un ordre, pas à l'exécuter. `fetched` date la dernière " +
-  "interrogation, y compris quand elle n'a rien trouvé, pour ne pas la refaire chaque jour.";
+  "interrogation EODHD, y compris un miss, pour ne pas brûler le quota. `fallback` date " +
+  "le last Yahoo (ou le constat qu'il n'y en a pas), pour ne pas le redemander chaque vue.";
 
 const store = fs.existsSync(STORE_PATH) ? JSON.parse(fs.readFileSync(STORE_PATH, "utf8")) : {};
 /** prices[ISIN][CCY] = { price, at, from } */
 export const prices = (store.prices ||= {});
 /** When each ISIN was last asked about, hit or miss. */
 const fetched = (store.fetched ||= {});
+/** When the free last (Yahoo, after a vendor miss) was last tried. */
+const fallback = (store.fallback ||= {});
 
 // Rewriting the whole file on every lookup would cost more than the lookups do, so it
 // lands on a timer and once more on the way out.
@@ -102,7 +106,14 @@ function save() {
   fs.writeFileSync(
     STORE_PATH,
     JSON.stringify(
-      { generatedAt: new Date().toISOString(), source: "EODHD, et les bourses du Golfe pour ce qu'il n'a pas", unit: UNIT, fetched, prices },
+      {
+        generatedAt: new Date().toISOString(),
+        source: "EODHD, les bourses du Golfe, et Yahoo pour un last quand le vendeur n'a rien",
+        unit: UNIT,
+        fetched,
+        fallback,
+        prices,
+      },
       null,
       2
     )
@@ -119,10 +130,24 @@ function scheduleSave() {
 }
 process.on("exit", save);
 
+function hasPrice(isin) {
+  return Object.values(prices[isin] || {}).some((leaf) => Number(leaf?.price) > 0);
+}
+
 /** True when this ISIN was asked about recently enough to be worth trusting. */
 export function isFresh(isin, maxAge = DAY) {
-  const at = Date.parse(fetched[String(isin || "").toUpperCase()] || 0);
-  return Number.isFinite(at) && Date.now() - at < maxAge;
+  const key = String(isin || "").toUpperCase();
+  if (hasPrice(key)) {
+    const at = Date.parse(fetched[key] || fallback[key] || 0);
+    return Number.isFinite(at) && Date.now() - at < maxAge;
+  }
+  // A dated EODHD miss must not count as a price. The Gulf boards are retried
+  // every view (their tape is free). Elsewhere a miss is fresh only after the
+  // Yahoo last has been tried, so a CDR the vendor never heard of still gets
+  // one shot and then rests for the day.
+  if (GULF_COUNTRIES.has(key.slice(0, 2))) return false;
+  const fb = Date.parse(fallback[key] || 0);
+  return Number.isFinite(fb) && Date.now() - fb < maxAge;
 }
 
 // ---------------------------------------------------------------- the vendor
@@ -277,6 +302,133 @@ async function gulfFresh(isin, { keys = GULF_HEADLESS, page = null } = {}) {
   return found;
 }
 
+// Yahoo's last close, one chart call per symbol. The vendor's search is the
+// normal path; this is what runs when that search comes back empty. The symbol
+// is the catalogues' ticker plus the suffix the MIC uses on Yahoo — F on TSX
+// is F.TO, 1111 on Tadawul is 1111.SR — or the ticker already written that way
+// (Questrade's F.TO). A last in the wrong currency is not stored: the figure
+// sizes the listing the broker named, not a neighbour.
+const YAHOO_SUFFIX = {
+  XTSE: ".TO",
+  XTSX: ".V",
+  XCNQ: ".CN",
+  NEOE: ".NE",
+  XNYS: "",
+  XNAS: "",
+  ARCX: "",
+  XASE: "",
+  BATS: "",
+  XLON: ".L",
+  XETR: ".DE",
+  XFRA: ".F",
+  XSTU: ".SG",
+  XMUN: ".MU",
+  XHAM: ".HM",
+  XHAN: ".HA",
+  XQTX: ".DU",
+  XPAR: ".PA",
+  XAMS: ".AS",
+  XBRU: ".BR",
+  XLIS: ".LS",
+  XMIL: ".MI",
+  XMSM: ".IR",
+  XOSL: ".OL",
+  XWBO: ".VI",
+  XSWX: ".SW",
+  XMEX: ".MX",
+  XADS: ".AD",
+  XDFM: ".AE",
+  XBAH: ".BH",
+  XMUS: ".OM",
+  XCAI: ".CA",
+};
+const YAHOO_US = new Set(["XNYS", "XNAS", "ARCX", "XASE", "BATS"]);
+const YAHOO_ALREADY = /\.[A-Z]{1,3}$/;
+
+function yahooCurrency(raw) {
+  const s = String(raw || "");
+  if (s === "GBp" || s.toUpperCase() === "GBX") return "GBX";
+  return s.toUpperCase();
+}
+
+function yahooSymbol(ticker, mic, isin) {
+  const stem = String(ticker || "")
+    .toUpperCase()
+    .replace(/\*/g, "")
+    .replace(/\s+/g, "")
+    .trim();
+  if (!stem) return null;
+  if (YAHOO_ALREADY.test(stem)) return stem;
+  if (/^\d{4}$/.test(stem) && String(isin || "").startsWith("SA")) return `${stem}.SR`;
+  if (!mic || !(mic in YAHOO_SUFFIX)) return null;
+  return `${stem}${YAHOO_SUFFIX[mic]}`;
+}
+
+let yahooIndexPromise = null;
+/** ISIN -> [{ symbol, currency, mic }], one row per distinct Yahoo symbol. */
+function yahooIndex() {
+  return (yahooIndexPromise ||= (async () => {
+    const [{ catalogueRows }, { resolveVenue }] = await Promise.all([
+      import("./catalogues.mjs"),
+      import("./venues.mjs"),
+    ]);
+    const index = new Map();
+    for (const row of catalogueRows()) {
+      const isin = String(row.isin || "").trim().toUpperCase();
+      if (!ISIN.test(isin)) continue;
+      const mic = resolveVenue(row).venue?.mic || "";
+      const symbol = yahooSymbol(row.ticker || row.symbol, mic, isin);
+      if (!symbol) continue;
+      const currency = String(row.currency || "").trim().toUpperCase();
+      const seen = index.get(isin) || index.set(isin, []).get(isin);
+      if (!seen.some((s) => s.symbol === symbol)) seen.push({ symbol, currency, mic });
+    }
+    return index;
+  })());
+}
+
+function yahooRank(row) {
+  if (row.mic === "XTSE" || row.mic === "XTSX" || row.mic === "XCNQ" || row.mic === "NEOE") return 0;
+  if (row.symbol.endsWith(".SR") || row.symbol.endsWith(".AD") || row.symbol.endsWith(".AE")) return 0;
+  if (YAHOO_US.has(row.mic)) return 2;
+  return 1;
+}
+
+async function yahooChart(symbol) {
+  const res = await fetch(
+    `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=5d`,
+    { headers: { accept: "application/json", "user-agent": "Mozilla/5.0" }, signal: AbortSignal.timeout(15000) }
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const j = await res.json();
+  const meta = j?.chart?.result?.[0]?.meta;
+  const last = Number(meta?.regularMarketPrice ?? meta?.chartPreviousClose);
+  const currency = yahooCurrency(meta?.currency);
+  if (!(last > 0) || !currency) return null;
+  return { last, currency };
+}
+
+async function yahooFresh(isin) {
+  const rows = [...((await yahooIndex()).get(isin) || [])].sort((a, b) => yahooRank(a) - yahooRank(b));
+  const wanted = new Set(rows.map((r) => r.currency).filter(Boolean));
+  let found = false;
+  for (const row of rows.slice(0, 6)) {
+    try {
+      const quote = await yahooChart(row.symbol);
+      if (!quote) continue;
+      // A last in a currency no listing of this ISIN uses is a different
+      // instrument that happens to share a ticker (OR Royalties vs L'Oréal).
+      if (wanted.size && !wanted.has(quote.currency)) continue;
+      noteBoard(isin, { symbol: row.symbol, last: quote.last, currency: quote.currency }, "YAHOO");
+      found = true;
+      if (hasPrice(isin) && [...wanted].every((ccy) => Number(prices[isin]?.[ccy]?.price) > 0)) break;
+    } catch (e) {
+      console.error(`prix ${isin} chez Yahoo ${row.symbol} : ${e.message}`);
+    }
+  }
+  return found;
+}
+
 const inflight = new Map();
 
 /**
@@ -294,12 +446,15 @@ export async function ensureFresh(isin, maxAge = DAY) {
     try {
       // A vendor out of quota throws, and that must not carry off the Gulf lookup with
       // it: the boards below cost nothing and answer exactly where the vendor cannot.
-      if (KEY && spent + 1 <= budget) {
+      const eodhdAt = Date.parse(fetched[key] || 0);
+      const eodhdFresh = Number.isFinite(eodhdAt) && Date.now() - eodhdAt < maxAge;
+      if (KEY && spent + 1 <= budget && !eodhdFresh) {
         try {
           spent++;
           const rows = await get(`${API}/search/${encodeURIComponent(key)}?api_token=${KEY}&fmt=json&limit=30`);
           // A miss is dated too. Without that, an ISIN the vendor does not carry would
-          // be asked about on every single page view.
+          // be asked about on every single page view. The stamp is not a price: an
+          // empty leaf still falls through to the Gulf boards and to Yahoo.
           fetched[key] = new Date().toISOString();
           if (Array.isArray(rows)) noteSearch(key, rows.filter((r) => String(r.ISIN || "").toUpperCase() === key));
           scheduleSave();
@@ -309,8 +464,13 @@ export async function ensureFresh(isin, maxAge = DAY) {
       }
       // The vendor knows nothing east of Suez. Only a Gulf ISIN is worth the catalogue
       // read this costs the first time, and only when the vendor has come back empty.
-      if (!Object.keys(prices[key] || {}).length && GULF_COUNTRIES.has(key.slice(0, 2))) {
+      if (!hasPrice(key) && GULF_COUNTRIES.has(key.slice(0, 2))) {
         await gulfFresh(key);
+      }
+      if (!hasPrice(key)) {
+        await yahooFresh(key);
+        fallback[key] = new Date().toISOString();
+        scheduleSave();
       }
       return prices[key];
     } catch (e) {

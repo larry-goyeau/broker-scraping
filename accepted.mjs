@@ -224,6 +224,8 @@ export const ACCEPTED = {
   lightyear: { countries: LIGHTYEAR },
   revolut: { countries: REVOLUT_STOCKS },
   bitpanda: { countries: BITPANDA },
+  // lynxbroker.com/trading-account/account-country — AT BE CZ FI FR DE NL PL SK.
+  lynxplus: { countries: ["AT", "BE", "CZ", "FI", "FR", "DE", "NL", "PL", "SK"] },
   captrader: { groups: ["EEA"], countries: ["CH"] },
   // CSSF passport, offices in LU/NL/BE/FR/DE/CH, clients in 28 countries.
   whselfinvest: { groups: ["EEA"], countries: ["CH", "GB"] },

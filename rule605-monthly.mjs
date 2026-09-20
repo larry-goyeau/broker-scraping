@@ -47,16 +47,24 @@ const STALE_DAYS = 40;
 // hyperlink off finra.org/filing-reporting/regulation-nms/sec-rule-605-reports — the
 // OTC market maker page is the one that holds the firms retail flow reaches.
 //
-// Four of the five share one host and one naming convention, which is what made them the
-// ones to wire up first: T is FINRA's Designated Participant letter, then the reporter
+// Four of the six share one host and one naming convention: T, then the reporter
 // code, then the month. Jane Street publishes on its own site, uncompressed, and is worth
 // the extra line: it is one of the largest wholesalers in exchange-traded funds, and the
-// same 26-field layout comes out of it.
+// same 26-field layout comes out of it. GTS left that host empty and keeps the files
+// on its own S3 bucket, still the 26-field layout, as `GTSM_YYYY_MM.txt`.
 const REPORTERS = [
   { ric: "SOHO", name: "Two Sigma Securities" },
   { ric: "ETMM", name: "G1 Execution Services" },
   { ric: "UBSS", name: "UBS Securities" },
   { ric: "HRTF", name: "Hudson River Trading" },
+  {
+    ric: "GTSM",
+    name: "GTS Securities",
+    url: (month) =>
+      `https://finra-605.s3.amazonaws.com/GTSM/GTSM_${month.slice(0, 4)}_${month.slice(4)}.txt`,
+    plain: true,
+    participant: "GTSM",
+  },
   {
     ric: "JNST",
     name: "Jane Street Capital",
@@ -131,7 +139,23 @@ const F = {
   improvedAmount: 19,
   atQuoteShares: 21,
   outsideShares: 23,
+  outsideAmount: 24,
 };
+
+// NBBO quoted spread implied by the 605 breakdown: at the quote, Q ≈ E;
+// improved by I, Q ≈ E + 2I; outside by W, Q ≈ E − 2W.
+function quotedOf(f, effective) {
+  const impSh = Number(f[F.improvedShares] || 0);
+  const impAmt = Number(f[F.improvedAmount] || 0);
+  const atSh = Number(f[F.atQuoteShares] || 0);
+  const outSh = Number(f[F.outsideShares] || 0);
+  const outAmt = Number(f[F.outsideAmount] || 0);
+  const parts = impSh + atSh + outSh;
+  if (!(parts > 0)) return null;
+  const q =
+    (impSh * (effective + 2 * impAmt) + atSh * effective + outSh * (effective - 2 * outAmt)) / parts;
+  return Number.isFinite(q) && q > 0 ? q : null;
+}
 
 // The two ways to say "now": a market order, and a limit order priced through the touch.
 // They are charged very differently — wholesalers improved 93% of the shares on IAU
@@ -189,7 +213,7 @@ function weightOf(f) {
 // One reporter's month, reduced to what a cost model asks of it. Everything is
 // share-weighted, because that is how the exchange's own field is defined and because
 // an order-weighted average would let a hundred one-lot orders outvote a real one.
-function parseReport(text, { participant } = {}) {
+export function parseReport(text, { participant } = {}) {
   const bySymbol = new Map();
   let rows = 0;
   let checked = 0;
@@ -216,11 +240,13 @@ function parseReport(text, { participant } = {}) {
     const symbol = f[F.symbol];
     let s = bySymbol.get(symbol);
     if (!s) bySymbol.set(symbol, (s = { cells: {} }));
-    const cell = (s.cells[`${type}|${bucket}`] ||= { shares: 0, sum: 0, orders: 0, improved: 0 });
+    const cell = (s.cells[`${type}|${bucket}`] ||= { shares: 0, sum: 0, quotedSum: 0, orders: 0, improved: 0 });
     cell.shares += shares;
     // Weighted by the shares the exchange itself weighted the figure over, so summing
     // two cells gives what one cell over their union would have said.
     cell.sum += effective * shares;
+    const quoted = quotedOf(f, effective);
+    if (quoted != null) cell.quotedSum += quoted * shares;
     cell.orders += Number(f[F.orders] || 0);
     cell.improved += Number(f[F.improvedShares] || 0);
   }
@@ -289,9 +315,10 @@ async function download(month) {
     for (const [symbol, s] of rep.bySymbol) {
       const out = (symbols[symbol] ||= { cells: {}, byReporter: {} });
       for (const [k, cell] of Object.entries(s.cells)) {
-        const acc = (out.cells[k] ||= { shares: 0, sum: 0, orders: 0, improved: 0 });
+        const acc = (out.cells[k] ||= { shares: 0, sum: 0, quotedSum: 0, orders: 0, improved: 0 });
         acc.shares += cell.shares;
         acc.sum += cell.sum;
+        acc.quotedSum += cell.quotedSum || 0;
         acc.orders += cell.orders;
         acc.improved += cell.improved;
       }
@@ -304,6 +331,7 @@ async function download(month) {
   for (const [symbol, s] of Object.entries(symbols)) {
     const cell = (type, bucket) => s.cells[`${type}|${bucket}`];
     const avg = (c) => (c?.shares ? round(c.sum / c.shares) : null);
+    const quotedAvg = (c) => (c?.shares && c.quotedSum ? round(c.quotedSum / c.shares) : null);
     const retail = merge(IMMEDIATE.map((t) => cell(t, RETAIL_BUCKET)));
     const perShare = avg(retail);
     if (perShare == null) continue;
@@ -311,6 +339,9 @@ async function download(month) {
       // Dollars per share for one round trip, immediately executable orders of 100 to
       // 499 shares. This is the field the cost scripts read.
       perShare,
+      // Reconstructed NBBO quoted spread (the place), same unit. OTHER in Q uses
+      // quoted / perShare: an exchange fill is the touch, not the wholesaler 605.
+      quoted: quotedAvg(retail),
       // The two halves of it, because they can differ by a factor of twenty and the
       // difference is the one thing a reader might want to override.
       market: avg(cell(MARKET, RETAIL_BUCKET)),
@@ -360,10 +391,11 @@ const merge = (cells) => {
     (a, c) => ({
       shares: a.shares + c.shares,
       sum: a.sum + c.sum,
+      quotedSum: a.quotedSum + (c.quotedSum || 0),
       orders: a.orders + c.orders,
       improved: a.improved + c.improved,
     }),
-    { shares: 0, sum: 0, orders: 0, improved: 0 }
+    { shares: 0, sum: 0, quotedSum: 0, orders: 0, improved: 0 }
   );
 };
 
@@ -419,6 +451,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   } else if (asked) {
     console.log(`${asked} — table ${table.month}`);
     console.log(`  aller-retour  ${line.perShare} $ la part, ordres immédiats de 100 à 499 parts`);
+    if (line.quoted != null) console.log(`  coté NBBO     ${line.quoted} $ la part (Q_place ${ (line.quoted / line.perShare).toFixed(2) })`);
     console.log(`  dont          au marché ${line.market ?? "—"}, en limite ${line.limit ?? "—"}`);
     console.log(`  mesuré sur    ${line.shares.toLocaleString("fr-FR")} parts, ${line.orders.toLocaleString("fr-FR")} ordres`);
     console.log(`  amélioré      ${(line.improved * 100).toFixed(0)} % des parts`);

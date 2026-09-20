@@ -43,6 +43,9 @@ export const VENUES = [
       "lseiob",
       "lseiob1",
       "lseintl",
+      "lseaim",
+      "lseseaq",
+      "seaqinternational",
       "londonstockexchange",
       "uklse",
       "londonmainmarket",
@@ -54,7 +57,20 @@ export const VENUES = [
     name: "SIX Swiss Exchange",
     source: "six",
     hours: { open: "09:00", close: "17:20", tz: "Europe/Zurich" },
-    exact: ["xswx", "six", "swx", "swxetf", "ebs", "xvtx", "swissebsstocks", "sixswissexchange"],
+    exact: [
+      "xswx",
+      "six",
+      "swx",
+      "swxetf",
+      "ebs",
+      "xvtx",
+      "swissebsstocks",
+      "sixswissexchange",
+      "swxswissexchange",
+      "swxbndetf",
+      "virtx",
+      "vx",
+    ],
     loose: ["zurich", "switzerland"],
   },
   {
@@ -62,7 +78,7 @@ export const VENUES = [
     name: "Euronext Paris",
     source: "euronext",
     hours: { open: "09:00", close: "17:30", tz: "Europe/Paris" },
-    exact: ["xpar", "euronextparis", "sbf", "par", "epa"],
+    exact: ["xpar", "euronextparis", "sbf", "par", "epa", "paraccess", "parmcetf"],
     loose: ["paris", "france"],
   },
   {
@@ -78,7 +94,7 @@ export const VENUES = [
     name: "Euronext Brussels",
     source: "euronext",
     hours: { open: "09:00", close: "17:30", tz: "Europe/Brussels" },
-    exact: ["xbru", "euronextbrussels", "euronextbruxelles", "bru", "ebr"],
+    exact: ["xbru", "euronextbrussels", "euronextbruxelles", "bru", "ebr", "enextbe", "bruaccess"],
     loose: ["brussels", "bruxelles", "belgium"],
   },
   {
@@ -86,7 +102,7 @@ export const VENUES = [
     name: "Euronext Lisbon",
     source: "euronext",
     hours: { open: "08:00", close: "16:30", tz: "Europe/Lisbon" },
-    exact: ["xlis", "euronextlisbon", "euronextlisbonne", "lis", "eli"],
+    exact: ["xlis", "euronextlisbon", "euronextlisbonne", "lis", "eli", "lisaccess", "lisb"],
     loose: ["lisbon", "lisbonne", "portugal"],
   },
   // The American venues share one figure, and that is a fact about Reg NMS rather than a
@@ -122,7 +138,7 @@ export const VENUES = [
       // among them: EEM, GLD, IAU and VOO all come through labelled AMEX and all four
       // list on Arca. The alias sits here rather than on XASE because that is what the
       // catalogues mean by it, and because the figure is the same either way.
-      ARCX: ["arcx", "arca", "nysearca", "amex", "pcq", "nysemkt"],
+      ARCX: ["arcx", "arca", "nysearca", "amex", "americanamex", "usamex", "pcq", "nysemkt"],
       XNYS: ["xnys", "nyse", "newyorkstockexchange", "nys", "nsy", "usnyse"],
       XASE: ["xase", "nyseamerican", "americanstockexchange", "ase"],
       BATS: ["bats", "batsz", "batsbzx", "cboebzx", "bzx", "cboe"],
@@ -136,7 +152,7 @@ export const VENUES = [
     source: "euronext",
     path: "ETFP",
     hours: { open: "09:00", close: "17:30", tz: "Europe/Rome" },
-    exact: ["xmil", "borsaitaliana", "mil", "miletf", "bvme", "bvmeetf", "etfp", "mta", "mtaa", "bgem"],
+    exact: ["xmil", "borsaitaliana", "mil", "miletf", "bvme", "bvmeetf", "etfp", "mta", "mtaa", "bgem", "milaim"],
     loose: ["milan", "milano", "italy", "italianse", "italiansecontinuous"],
   },
   // Oslo moved onto Euronext's platform. The delayed book is the same live.euronext.com
@@ -147,7 +163,7 @@ export const VENUES = [
     name: "Oslo Børs",
     source: "euronext",
     hours: { open: "09:00", close: "16:20", tz: "Europe/Oslo" },
-    exact: ["xosl", "osl", "ose", "oslo", "oslobors", "oslobrs", "euronextoslo", "norwaynasdaq"],
+    exact: ["xosl", "osl", "ose", "oslo", "oslobors", "oslobrs", "euronextoslo", "norwaynasdaq", "omxno"],
     loose: ["norway"],
   },
   // Euronext Dublin. Brokers still write ISE / ISED; the live book is the XMSM segment
@@ -167,7 +183,18 @@ export const VENUES = [
     name: "Wiener Börse",
     source: "vienna",
     hours: { open: "09:00", close: "17:30", tz: "Europe/Vienna" },
-    exact: ["xwbo", "vie", "vienna", "wienerborse", "wienerboerse", "boersewien", "viennastockexchange", "austriavie", "wen"],
+    exact: [
+      "xwbo",
+      "vie",
+      "vienna",
+      "wienerborse",
+      "wienerboerse",
+      "boersewien",
+      "viennastockexchange",
+      "austriavie",
+      "wen",
+      "vse",
+    ],
     loose: ["austria"],
   },
   // Retail German books. They publish a delayed pre-trade file under MiFID rather than
@@ -244,6 +271,27 @@ export const VENUES = [
     exact: ["xhan", "han", "hannover", "boersehannover", "hana", "hanb"],
     loose: [],
   },
+  // Scalable's home book. BÖAG runs it at Hannover under HANC (regulated) and HAND
+  // (Freiverkehr); Scalable writes SEIX. Not XHAN: that tape is HANA/HANB on the
+  // BÖAG index. EIX publishes its own 15-minute file, 24 hours of slices.
+  {
+    mic: "HANC",
+    name: "European Investor Exchange (EIX)",
+    source: "eix",
+    hours: { open: "08:00", close: "22:00", tz: "Europe/Berlin" },
+    exact: ["seix", "eix", "hanc", "hand", "europeaninvestorexchange"],
+    loose: [],
+  },
+  // Trade Republic Bestpreis. Not a MIC and not a neighbour's tape: the live
+  // touch is what TR prints on TIB, stored by `traderepublic-touches.mjs`.
+  {
+    mic: "TIB",
+    name: "Trade Republic (TIB)",
+    source: "tib",
+    hours: { open: "08:00", close: "22:00", tz: "Europe/Berlin" },
+    exact: ["tib"],
+    loose: [],
+  },
   // The listing page is behind Cloudflare; the 15-minute MiFIR tape is not, once a
   // browser has opened the index. XSTU is the cash book Swissquote writes SWB / SWB2.
   {
@@ -298,7 +346,7 @@ export const VENUES = [
     hours: { open: "09:30", close: "16:00", tz: "America/Toronto" },
     // "cse" is deliberately absent: Saxo writes it for Copenhagen. `resolveVenue` splits
     // on the krone before letting it reach here.
-    exact: ["xcnq", "cnsx", "canadiansecuritiesexchange"],
+    exact: ["xcnq", "cnsx", "canadiansecuritiesexchange", "canadiannationalstockexchange"],
     loose: [],
   },
   {
@@ -450,9 +498,6 @@ export const isCryptoId = (id) => String(id || "").startsWith("CRYPTO:");
 // no adapter yet. Naming them keeps a gap distinguishable from a lookup that failed,
 // and keeps a neighbour's number from being borrowed to fill it.
 export const KNOWN_UNSOURCED = [
-  // Trade Republic Bestpreis. The API names it TIB; it is not a MIC and has no
-  // public tape. Do not file those lines under Tradegate or LS Exchange.
-  { match: ["tib"], name: "Trade Republic (TIB)", why: "carnet Bestpreis, pas de bande publique" },
   // Freedom24 and Elana name the group without the city. Euronext runs a separate book
   // per place, so there is no single one to point at: guessing Paris would repeat the
   // mistake this file exists to prevent.
@@ -469,19 +514,17 @@ export const KNOWN_UNSOURCED = [
     name: "places américaines, sans précision",
     why: "le broker ne dit pas laquelle",
   },
-  { match: ["otc", "pink", "otcmkts"], name: "OTC Markets", why: "gré à gré américain, pas un carnet unique" },
-  // Scalable writes SEIX for the European Investor Exchange, the electronic system
-  // BÖAG runs at the Börse Hannover and Scalable operates technically: MIC HANC pour
-  // le marché réglementé, HAND pour le Freiverkehr. Ce n'est pas Hanovre (XHAN), dont
-  // les tranches HANA / HANB sont un autre carnet, et le fichier différé ne passe pas
-  // par l'index BÖAG : EIX publie le sien sur son propre site.
   {
-    match: ["seix", "eix", "hanc", "hand", "europeaninvestorexchange"],
-    name: "European Investor Exchange (EIX)",
-    why: "adaptateur non écrit ; le fichier pre-trade ne vit que 24 h et la liste était vide",
+    match: ["otc", "pink", "otcmkts", "ootc", "ootcotherotc", "otherotc"],
+    name: "OTC Markets",
+    why: "gré à gré américain, pas un carnet unique",
   },
-  { match: ["bm", "bme", "madrid", "xmad", "spain", "sibe", "mad"], name: "Bolsa de Madrid", why: "adaptateur non écrit" },
-  { match: ["ath", "xath", "athens"], name: "Athens Stock Exchange", why: "adaptateur non écrit" },
+  {
+    match: ["bm", "bme", "madrid", "xmad", "spain", "sibe", "sibespanishstockexchangeinterconnectionsyst", "mad"],
+    name: "Bolsa de Madrid",
+    why: "adaptateur non écrit",
+  },
+  { match: ["ath", "xath", "athens", "athex", "enax"], name: "Athens Stock Exchange", why: "adaptateur non écrit" },
   { match: ["tase", "telaviv"], name: "Tel Aviv", why: "adaptateur non écrit" },
   { match: ["tyo", "tokyo", "tsej"], name: "Tokyo", why: "adaptateur non écrit" },
   // IBKR / CapTrader / Mexem write TSE for Toronto; Swissquote / DEGIRO / eToro
@@ -510,24 +553,42 @@ export const KNOWN_UNSOURCED = [
     name: "Alpha Exchange",
     why: "bande officielle payante (TMX Datalinx), pas de carnet public",
   },
-  { match: ["value"], name: "Value ATS", why: "adaptateur non écrit" },
+  // IBKR / Mexem / WHS write VALUE. That is IB Value Exchange, IBKR's own
+  // OTC / leftover destination — no MIC, no site, no public tape. Not IBKR ATS
+  // (IBKRATS is NMS midpoint) and not a neighbour's book.
+  { match: ["value"], name: "IB Value Exchange", why: "gré à gré IBKR, pas de carnet public" },
   { match: ["pure"], name: "Pure Trading", why: "adaptateur non écrit" },
-  { match: ["asx", "xasx"], name: "ASX", why: "adaptateur non écrit" },
+  { match: ["asx", "xasx", "asxnationalmarket"], name: "ASX", why: "adaptateur non écrit" },
   { match: ["set", "xbkk", "thailand"], name: "Stock Exchange of Thailand", why: "adaptateur non écrit" },
   {
     match: ["omx", "nasdaqomx", "nasdaqnordic"],
     name: "Nasdaq Nordic",
     why: "le broker ne dit pas laquelle des places nordiques",
   },
-  { match: ["xcse", "copenhagen", "omk"], name: "Nasdaq Copenhagen", why: "adaptateur non écrit" },
-  { match: ["xsto", "stockholm", "sfb"], name: "Nasdaq Stockholm", why: "adaptateur non écrit" },
-  { match: ["xhel", "helsinki", "hse"], name: "Nasdaq Helsinki", why: "adaptateur non écrit" },
+  {
+    match: ["xcse", "copenhagen", "omk", "omxcop", "cph", "denmarkcse"],
+    name: "Nasdaq Copenhagen",
+    why: "adaptateur non écrit",
+  },
+  {
+    match: ["xsto", "stockholm", "sfb", "omxsto", "ssefnse"],
+    name: "Nasdaq Stockholm",
+    why: "adaptateur non écrit",
+  },
+  {
+    match: ["xhel", "helsinki", "hse", "omxhex", "omxh", "hex", "hsefn"],
+    name: "Nasdaq Helsinki",
+    why: "adaptateur non écrit",
+  },
+  { match: ["xris", "riga", "nriga", "omxrse"], name: "Nasdaq Riga", why: "adaptateur non écrit" },
+  { match: ["xtal", "tallinn", "ntallinn", "omxtse"], name: "Nasdaq Tallinn", why: "adaptateur non écrit" },
+  { match: ["xlit", "vilnius", "nvilnius", "omxvse"], name: "Nasdaq Vilnius", why: "adaptateur non écrit" },
   { match: ["sgx", "xses", "singapore", "sgxst"], name: "Singapore Exchange", why: "adaptateur non écrit" },
   { match: ["jse", "xjse", "johannesburg"], name: "Johannesburg Stock Exchange", why: "adaptateur non écrit" },
-  { match: ["gpw", "xwar", "warsaw", "wse"], name: "Warsaw Stock Exchange", why: "adaptateur non écrit" },
+  { match: ["gpw", "xwar", "warsaw", "wse", "newconnect"], name: "Warsaw Stock Exchange", why: "adaptateur non écrit" },
   { match: ["myx", "xkls", "malaysia", "bursamy", "malay"], name: "Bursa Malaysia", why: "adaptateur non écrit" },
-  { match: ["luxse", "xlux", "luxembourg"], name: "Luxembourg Stock Exchange", why: "adaptateur non écrit" },
-  { match: ["nzx", "xnze"], name: "NZX", why: "adaptateur non écrit" },
+  { match: ["luxse", "xlux", "luxembourg", "lux"], name: "Luxembourg Stock Exchange", why: "adaptateur non écrit" },
+  { match: ["nzx", "xnze", "nzsenationalmarket"], name: "NZX", why: "adaptateur non écrit" },
   { match: ["biva"], name: "BIVA", why: "adaptateur non écrit" },
   // Nasdaq Dubai shares a building with DFM and not a board: its own site shows last
   // price and no touch, and the DFM feed that covers the emirate stops at DFM's own
@@ -540,17 +601,25 @@ export const KNOWN_UNSOURCED = [
   // not Bucharest (BET / XBSE) and not the Dutch broker of the same letters.
   { match: ["bux", "xbud", "budapest"], name: "Budapest Stock Exchange", why: "adaptateur non écrit" },
   { match: ["csecy", "xcys", "cyprus"], name: "Cyprus Stock Exchange", why: "adaptateur non écrit" },
-  { match: ["psecz", "xpra", "prague", "pse"], name: "Prague Stock Exchange", why: "adaptateur non écrit" },
+  { match: ["psecz", "xpra", "prague", "pse", "pra"], name: "Prague Stock Exchange", why: "adaptateur non écrit" },
   { match: ["bx", "bxswiss"], name: "BX Swiss", why: "adaptateur non écrit" },
   { match: ["bvc", "colombia"], name: "Bolsa de Valores de Colombia", why: "adaptateur non écrit" },
   { match: ["bsesof", "xbul", "sofia"], name: "Bulgarian Stock Exchange", why: "adaptateur non écrit" },
   { match: ["tadawul", "tdwl", "xsau", "saudiexchange"], name: "Tadawul", why: "carnet non publié" },
-  { match: ["shanghaisc", "shenzhensc", "chinext"], name: "bourses chinoises onshore", why: "adaptateur non écrit" },
+  {
+    match: ["shanghaisc", "shenzhensc", "chinext", "sse", "szse"],
+    name: "bourses chinoises onshore",
+    why: "adaptateur non écrit",
+  },
+  { match: ["xber", "berlin", "boerseberlin"], name: "Börse Berlin", why: "adaptateur non écrit" },
+  { match: ["chix", "chixen", "cxe", "cboeeurope"], name: "Cboe Europe (Chi-X)", why: "adaptateur non écrit" },
+  { match: ["chixau", "cboeaustralia"], name: "Cboe Australia", why: "adaptateur non écrit" },
+  { match: ["bist", "xist", "istanbul"], name: "Borsa Istanbul", why: "adaptateur non écrit" },
   { match: ["csefndk"], name: "Nasdaq First North Denmark", why: "adaptateur non écrit" },
   { match: ["eurotlx"], name: "EuroTLX", why: "adaptateur non écrit" },
   { match: ["xphs"], name: "Philippine Stock Exchange", why: "adaptateur non écrit" },
   { match: ["nseke", "xnai", "nairobi"], name: "Nairobi Securities Exchange", why: "adaptateur non écrit" },
-  { match: ["aquis", "aqse"], name: "Aquis", why: "adaptateur non écrit" },
+  { match: ["aquis", "aqse", "plusmarketsgroupformerlyofex", "plusmarkets", "ofex"], name: "Aquis", why: "adaptateur non écrit" },
   { match: ["bsse", "xbra", "bratislava"], name: "Bratislava Stock Exchange", why: "adaptateur non écrit" },
   { match: ["nag", "xnag", "nagoya"], name: "Nagoya", why: "adaptateur non écrit" },
   { match: ["nseng", "xngn", "nigeria"], name: "Nigerian Exchange", why: "adaptateur non écrit" },
@@ -725,6 +794,11 @@ const PAGE = {
   frankfurt: () => "https://www.mds.deutsche-boerse.com/mds-en/real-time-data/Delayed-data",
   hamburg: () => "https://cld42.boersenag.de/m13data/indexpt.html",
   hannover: () => "https://cld42.boersenag.de/m13data/indexpt.html",
+  eix: () => "https://european-investor-exchange.com/en/pretrade",
+  tib: (l) =>
+    l.isin
+      ? `https://app.traderepublic.com/instrument/${encodeURIComponent(String(l.isin).toUpperCase())}`
+      : "https://app.traderepublic.com",
   stuttgart: () =>
     "https://www.boerse-stuttgart.de/en/business-solutions/reports/mifir-ii-delayed-data/xstu-pre-trade/",
   // Behind a login, unlike every other link here, because that is where the Canadian

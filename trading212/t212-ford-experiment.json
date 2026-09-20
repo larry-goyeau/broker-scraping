@@ -1,0 +1,697 @@
+{
+  "runs": [
+    {
+      "startedAt": "2026-09-18T19:26:29.777Z",
+      "ticker": "F_US_EQ",
+      "cfdTicker": "FORD",
+      "dry": false,
+      "sizes": [
+        1,
+        10
+      ],
+      "reps": 1,
+      "sequence": null,
+      "plan": [
+        1,
+        10
+      ],
+      "tradingSession": {
+        "from": "2026-09-16T22:00:00Z",
+        "to": "2026-09-23T21:59:59.999999999Z",
+        "sessions": [
+          {
+            "type": "OPEN",
+            "start": "2026-09-17T07:00:03Z",
+            "end": "2026-09-17T15:30:00Z"
+          },
+          {
+            "type": "OPEN",
+            "start": "2026-09-18T07:00:03Z",
+            "end": "2026-09-18T15:30:00Z"
+          },
+          {
+            "type": "OPEN",
+            "start": "2026-09-21T07:00:03Z",
+            "end": "2026-09-21T15:30:00Z"
+          },
+          {
+            "type": "OPEN",
+            "start": "2026-09-22T07:00:03Z",
+            "end": "2026-09-22T15:30:00Z"
+          },
+          {
+            "type": "OPEN",
+            "start": "2026-09-23T07:00:03Z",
+            "end": "2026-09-23T15:30:00Z"
+          }
+        ]
+      },
+      "costReview": {
+        "1": {
+          "orderQuantity": 1,
+          "orderValue": 13.02,
+          "sharesValue": 13.02,
+          "total": 13.02,
+          "exchangeRate": null,
+          "costs": {}
+        },
+        "10": {
+          "orderQuantity": 10,
+          "orderValue": 130.2,
+          "sharesValue": 130.2,
+          "total": 130.2,
+          "exchangeRate": null,
+          "costs": {}
+        }
+      },
+      "rounds": [
+        {
+          "n": 1,
+          "rep": 1,
+          "before": {
+            "at": 1789759590168,
+            "free": 372.2,
+            "total": 2368.24,
+            "blocked": 0,
+            "pendingOrders": 0,
+            "position": null
+          },
+          "afterBuy": {
+            "at": 1789759592655,
+            "free": 360.86,
+            "total": 2368.23,
+            "blocked": 0,
+            "pendingOrders": 0,
+            "position": {
+              "quantity": 1,
+              "averagePrice": 13.03,
+              "investment": 11.34,
+              "sellable": 1,
+              "value": 11.33
+            }
+          },
+          "afterSell": {
+            "at": 1789759596637,
+            "free": 372.19,
+            "total": 2368.23,
+            "blocked": 0,
+            "pendingOrders": 0,
+            "position": null
+          },
+          "buyResponseStatus": 200,
+          "sellResponseStatus": 200,
+          "heldQuantity": 1,
+          "debited": 11.34,
+          "credited": 11.33,
+          "roundTripCost": 0.01,
+          "quotes": {
+            "beforeBuy": [
+              {
+                "at": 1789759584906,
+                "kind": "last",
+                "ticker": "F_US_EQ",
+                "price": 13.02
+              },
+              {
+                "at": 1789759584906,
+                "kind": "quote",
+                "ticker": "FORD",
+                "bid": 13.01,
+                "ask": 13.04
+              },
+              {
+                "at": 1789759585539,
+                "kind": "last",
+                "ticker": "F_US_EQ",
+                "price": 13.02
+              },
+              {
+                "at": 1789759586030,
+                "kind": "quote",
+                "ticker": "FORD",
+                "bid": 13.01,
+                "ask": 13.04
+              },
+              {
+                "at": 1789759586968,
+                "kind": "last",
+                "ticker": "F_US_EQ",
+                "price": 13.02
+              },
+              {
+                "at": 1789759587321,
+                "kind": "quote",
+                "ticker": "FORD",
+                "bid": 13.01,
+                "ask": 13.04
+              },
+              {
+                "at": 1789759588346,
+                "kind": "quote",
+                "ticker": "FORD",
+                "bid": 13.01,
+                "ask": 13.04
+              },
+              {
+                "at": 1789759589446,
+                "kind": "last",
+                "ticker": "F_US_EQ",
+                "price": 13.02
+              }
+            ],
+            "afterBuy": [
+              {
+                "at": 1789759587321,
+                "kind": "quote",
+                "ticker": "FORD",
+                "bid": 13.01,
+                "ask": 13.04
+              },
+              {
+                "at": 1789759588346,
+                "kind": "quote",
+                "ticker": "FORD",
+                "bid": 13.01,
+                "ask": 13.04
+              },
+              {
+                "at": 1789759589446,
+                "kind": "last",
+                "ticker": "F_US_EQ",
+                "price": 13.02
+              },
+              {
+                "at": 1789759591555,
+                "kind": "last",
+                "ticker": "F_US_EQ",
+                "price": 13.02
+              },
+              {
+                "at": 1789759592330,
+                "kind": "quote",
+                "ticker": "FORD",
+                "bid": 13.01,
+                "ask": 13.04
+              }
+            ],
+            "afterSell": [
+              {
+                "at": 1789759591555,
+                "kind": "last",
+                "ticker": "F_US_EQ",
+                "price": 13.02
+              },
+              {
+                "at": 1789759592330,
+                "kind": "quote",
+                "ticker": "FORD",
+                "bid": 13.01,
+                "ask": 13.04
+              },
+              {
+                "at": 1789759592985,
+                "kind": "last",
+                "ticker": "F_US_EQ",
+                "price": 13.02
+              },
+              {
+                "at": 1789759594415,
+                "kind": "last",
+                "ticker": "F_US_EQ",
+                "price": 13.02
+              },
+              {
+                "at": 1789759595843,
+                "kind": "last",
+                "ticker": "F_US_EQ",
+                "price": 13.02
+              },
+              {
+                "at": 1789759596105,
+                "kind": "quote",
+                "ticker": "FORD",
+                "bid": 13.01,
+                "ask": 13.04
+              }
+            ]
+          }
+        },
+        {
+          "n": 10,
+          "rep": 1,
+          "before": {
+            "at": 1789759599778,
+            "free": 372.19,
+            "total": 2368.23,
+            "blocked": 0,
+            "pendingOrders": 0,
+            "position": null
+          },
+          "afterBuy": {
+            "at": 1789759601452,
+            "free": 258.77,
+            "total": 2368.14,
+            "blocked": 0,
+            "pendingOrders": 0,
+            "position": {
+              "quantity": 10,
+              "averagePrice": 13.03,
+              "investment": 113.43,
+              "sellable": 10,
+              "value": 113.33
+            }
+          },
+          "afterSell": {
+            "at": 1789759602365,
+            "free": 372.11,
+            "total": 2368.15,
+            "blocked": 0,
+            "pendingOrders": 0,
+            "position": null
+          },
+          "buyResponseStatus": 200,
+          "sellResponseStatus": 200,
+          "heldQuantity": 10,
+          "debited": 113.42,
+          "credited": 113.34,
+          "roundTripCost": 0.08,
+          "quotes": {
+            "beforeBuy": [
+              {
+                "at": 1789759584906,
+                "kind": "last",
+                "ticker": "F_US_EQ",
+                "price": 13.02
+              },
+              {
+                "at": 1789759584906,
+                "kind": "quote",
+                "ticker": "FORD",
+                "bid": 13.01,
+                "ask": 13.04
+              },
+              {
+                "at": 1789759585539,
+                "kind": "last",
+                "ticker": "F_US_EQ",
+                "price": 13.02
+              },
+              {
+                "at": 1789759586030,
+                "kind": "quote",
+                "ticker": "FORD",
+                "bid": 13.01,
+                "ask": 13.04
+              },
+              {
+                "at": 1789759586968,
+                "kind": "last",
+                "ticker": "F_US_EQ",
+                "price": 13.02
+              },
+              {
+                "at": 1789759587321,
+                "kind": "quote",
+                "ticker": "FORD",
+                "bid": 13.01,
+                "ask": 13.04
+              },
+              {
+                "at": 1789759588346,
+                "kind": "quote",
+                "ticker": "FORD",
+                "bid": 13.01,
+                "ask": 13.04
+              },
+              {
+                "at": 1789759589446,
+                "kind": "last",
+                "ticker": "F_US_EQ",
+                "price": 13.02
+              },
+              {
+                "at": 1789759591555,
+                "kind": "last",
+                "ticker": "F_US_EQ",
+                "price": 13.02
+              },
+              {
+                "at": 1789759592330,
+                "kind": "quote",
+                "ticker": "FORD",
+                "bid": 13.01,
+                "ask": 13.04
+              },
+              {
+                "at": 1789759592985,
+                "kind": "last",
+                "ticker": "F_US_EQ",
+                "price": 13.02
+              },
+              {
+                "at": 1789759594415,
+                "kind": "last",
+                "ticker": "F_US_EQ",
+                "price": 13.02
+              },
+              {
+                "at": 1789759595843,
+                "kind": "last",
+                "ticker": "F_US_EQ",
+                "price": 13.02
+              },
+              {
+                "at": 1789759596105,
+                "kind": "quote",
+                "ticker": "FORD",
+                "bid": 13.01,
+                "ask": 13.04
+              },
+              {
+                "at": 1789759597134,
+                "kind": "quote",
+                "ticker": "FORD",
+                "bid": 13.01,
+                "ask": 13.04
+              },
+              {
+                "at": 1789759597270,
+                "kind": "last",
+                "ticker": "F_US_EQ",
+                "price": 13.02
+              },
+              {
+                "at": 1789759598341,
+                "kind": "quote",
+                "ticker": "FORD",
+                "bid": 13.01,
+                "ask": 13.04
+              },
+              {
+                "at": 1789759598700,
+                "kind": "last",
+                "ticker": "F_US_EQ",
+                "price": 13.02
+              }
+            ],
+            "afterBuy": [
+              {
+                "at": 1789759597134,
+                "kind": "quote",
+                "ticker": "FORD",
+                "bid": 13.01,
+                "ask": 13.04
+              },
+              {
+                "at": 1789759597270,
+                "kind": "last",
+                "ticker": "F_US_EQ",
+                "price": 13.02
+              },
+              {
+                "at": 1789759598341,
+                "kind": "quote",
+                "ticker": "FORD",
+                "bid": 13.01,
+                "ask": 13.04
+              },
+              {
+                "at": 1789759598700,
+                "kind": "last",
+                "ticker": "F_US_EQ",
+                "price": 13.02
+              },
+              {
+                "at": 1789759600130,
+                "kind": "last",
+                "ticker": "F_US_EQ",
+                "price": 13.02
+              },
+              {
+                "at": 1789759600419,
+                "kind": "quote",
+                "ticker": "FORD",
+                "bid": 13.01,
+                "ask": 13.04
+              }
+            ],
+            "afterSell": [
+              {
+                "at": 1789759598700,
+                "kind": "last",
+                "ticker": "F_US_EQ",
+                "price": 13.02
+              },
+              {
+                "at": 1789759600130,
+                "kind": "last",
+                "ticker": "F_US_EQ",
+                "price": 13.02
+              },
+              {
+                "at": 1789759600419,
+                "kind": "quote",
+                "ticker": "FORD",
+                "bid": 13.01,
+                "ask": 13.04
+              },
+              {
+                "at": 1789759602112,
+                "kind": "quote",
+                "ticker": "FORD",
+                "bid": 13.01,
+                "ask": 13.04
+              }
+            ]
+          }
+        }
+      ],
+      "opening": {
+        "at": 1789759590038,
+        "free": 372.2,
+        "total": 2368.24,
+        "blocked": 0,
+        "pendingOrders": 0,
+        "position": null
+      },
+      "aborted": null,
+      "closing": {
+        "at": 1789759605467,
+        "free": 372.11,
+        "total": 2368.15,
+        "blocked": 0,
+        "pendingOrders": 0,
+        "position": null
+      },
+      "quoteStream": [
+        {
+          "at": 1789759584906,
+          "kind": "last",
+          "ticker": "F_US_EQ",
+          "price": 13.02
+        },
+        {
+          "at": 1789759584906,
+          "kind": "quote",
+          "ticker": "FORD",
+          "bid": 13.01,
+          "ask": 13.04
+        },
+        {
+          "at": 1789759585539,
+          "kind": "last",
+          "ticker": "F_US_EQ",
+          "price": 13.02
+        },
+        {
+          "at": 1789759586030,
+          "kind": "quote",
+          "ticker": "FORD",
+          "bid": 13.01,
+          "ask": 13.04
+        },
+        {
+          "at": 1789759586968,
+          "kind": "last",
+          "ticker": "F_US_EQ",
+          "price": 13.02
+        },
+        {
+          "at": 1789759587321,
+          "kind": "quote",
+          "ticker": "FORD",
+          "bid": 13.01,
+          "ask": 13.04
+        },
+        {
+          "at": 1789759588346,
+          "kind": "quote",
+          "ticker": "FORD",
+          "bid": 13.01,
+          "ask": 13.04
+        },
+        {
+          "at": 1789759589446,
+          "kind": "last",
+          "ticker": "F_US_EQ",
+          "price": 13.02
+        },
+        {
+          "at": 1789759591555,
+          "kind": "last",
+          "ticker": "F_US_EQ",
+          "price": 13.02
+        },
+        {
+          "at": 1789759592330,
+          "kind": "quote",
+          "ticker": "FORD",
+          "bid": 13.01,
+          "ask": 13.04
+        },
+        {
+          "at": 1789759592985,
+          "kind": "last",
+          "ticker": "F_US_EQ",
+          "price": 13.02
+        },
+        {
+          "at": 1789759594415,
+          "kind": "last",
+          "ticker": "F_US_EQ",
+          "price": 13.02
+        },
+        {
+          "at": 1789759595843,
+          "kind": "last",
+          "ticker": "F_US_EQ",
+          "price": 13.02
+        },
+        {
+          "at": 1789759596105,
+          "kind": "quote",
+          "ticker": "FORD",
+          "bid": 13.01,
+          "ask": 13.04
+        },
+        {
+          "at": 1789759597134,
+          "kind": "quote",
+          "ticker": "FORD",
+          "bid": 13.01,
+          "ask": 13.04
+        },
+        {
+          "at": 1789759597270,
+          "kind": "last",
+          "ticker": "F_US_EQ",
+          "price": 13.02
+        },
+        {
+          "at": 1789759598341,
+          "kind": "quote",
+          "ticker": "FORD",
+          "bid": 13.01,
+          "ask": 13.04
+        },
+        {
+          "at": 1789759598700,
+          "kind": "last",
+          "ticker": "F_US_EQ",
+          "price": 13.02
+        },
+        {
+          "at": 1789759600130,
+          "kind": "last",
+          "ticker": "F_US_EQ",
+          "price": 13.02
+        },
+        {
+          "at": 1789759600419,
+          "kind": "quote",
+          "ticker": "FORD",
+          "bid": 13.01,
+          "ask": 13.04
+        },
+        {
+          "at": 1789759602112,
+          "kind": "quote",
+          "ticker": "FORD",
+          "bid": 13.01,
+          "ask": 13.04
+        },
+        {
+          "at": 1789759602445,
+          "kind": "last",
+          "ticker": "F_US_EQ",
+          "price": 13.02
+        },
+        {
+          "at": 1789759603634,
+          "kind": "quote",
+          "ticker": "FORD",
+          "bid": 13.01,
+          "ask": 13.04
+        },
+        {
+          "at": 1789759604895,
+          "kind": "quote",
+          "ticker": "FORD",
+          "bid": 13.01,
+          "ask": 13.04
+        }
+      ],
+      "fills": [
+        {
+          "id": "57559886821",
+          "date": "2026-09-18T22:26:42.225+03:00",
+          "side": "SELL",
+          "orderId": "EO57559886819",
+          "orderedQuantity": 10,
+          "fillQuantity": 10,
+          "fillPrice": 13.02,
+          "total": 130.2,
+          "result": -0.1,
+          "venue": "otc"
+        },
+        {
+          "id": "57559886816",
+          "date": "2026-09-18T22:26:41.093+03:00",
+          "side": "BUY",
+          "orderId": "EO57559886811",
+          "orderedQuantity": 10,
+          "fillQuantity": 10,
+          "fillPrice": 13.03,
+          "total": 130.3,
+          "result": null,
+          "venue": "otc"
+        },
+        {
+          "id": "57559886801",
+          "date": "2026-09-18T22:26:36.226+03:00",
+          "side": "SELL",
+          "orderId": "EO57559886797",
+          "orderedQuantity": 1,
+          "fillQuantity": 1,
+          "fillPrice": 13.02,
+          "total": 13.02,
+          "result": -0.01,
+          "venue": "otc"
+        },
+        {
+          "id": "57559886794",
+          "date": "2026-09-18T22:26:32.477+03:00",
+          "side": "BUY",
+          "orderId": "EO57559886788",
+          "orderedQuantity": 1,
+          "fillQuantity": 1,
+          "fillPrice": 13.03,
+          "total": 13.03,
+          "result": null,
+          "venue": "otc"
+        }
+      ],
+      "finishedAt": "2026-09-18T19:26:46.278Z"
+    }
+  ]
+}

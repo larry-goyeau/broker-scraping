@@ -81,6 +81,7 @@ const FOLDER_NAME = {
   webull: "Webull",
   WHSelfInvest: "WH SelfInvest",
   xtb: "XTB",
+  lynxplus: "LYNX+",
 };
 
 function metaFor(folder, list) {
@@ -133,7 +134,6 @@ function instrumentKey(row) {
 const UNSOURCED_EN = {
   "Euronext, place non précisée": "Euronext",
   "places américaines, sans précision": "US (unspecified)",
-  "Trade Republic (TIB)": "N/A",
   "ATS canadiennes": "Canadian ATS",
   "B3 São Paulo": "B3 São Paulo",
   B3: "B3 São Paulo",

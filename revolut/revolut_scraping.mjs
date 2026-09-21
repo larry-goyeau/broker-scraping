@@ -268,10 +268,15 @@ for (const instrument of instruments) {
     continue;
   }
 
-  // Revolut still quotes names it will not sell (a US ETF has no KID, a
-  // halted line sits as INACTIVE). Search shows them; buying does not.
-  if (instrument.stateDetails && instrument.stateDetails.canBuy === false) {
-    skip("not buyable");
+  // PRICE_ONLY / SELL_ONLY is this EU account's local block: a US ETF has
+  // no KID, a complex or closed-buy line is view-only. The name stays and
+  // carries nonEuResident. INACTIVE, SUSPENDED and CLOSE_POSITIONS are a
+  // halt or a closed line, not a residency rule.
+  const stateName = normalize(instrument.stateDetails?.name || instrument.state).toUpperCase();
+  const localBlock = instrument.stateDetails?.canBuy === false
+    && (stateName === "PRICE_ONLY" || stateName === "SELL_ONLY");
+  if (instrument.stateDetails?.canBuy === false && !localBlock) {
+    skip(stateName ? stateName.toLowerCase().replaceAll("_", " ") : "not buyable");
     continue;
   }
   if (instrument.delistDate && Date.now() >= Number(instrument.delistDate)) {
@@ -303,7 +308,7 @@ for (const instrument of instruments) {
   if (seen.has(key)) continue;
   seen.add(key);
 
-  results.push({
+  const row = {
     query: ticker,
     ticker,
     name,
@@ -312,7 +317,9 @@ for (const instrument of instruments) {
     type,
     raw: [ticker, name, instrument.exchange, currency].filter(Boolean).join(" "),
     isin: isin || "",
-  });
+  };
+  if (localBlock) row.nonEuResident = true;
+  results.push(row);
 }
 
 if (wantCrypto) {
@@ -358,11 +365,16 @@ const outputPath = new URL("revolut-parsed.json", import.meta.url);
 fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
 
 const byType = new Map();
-for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);
+let localOnly = 0;
+for (const row of results) {
+  byType.set(row.type, (byType.get(row.type) || 0) + 1);
+  if (row.nonEuResident) localOnly += 1;
+}
 
 console.error(
   `${results.length} listings over ${new Set(results.map((row) => row.isin || row.ticker)).size} instruments ` +
     `(${[...byType].map(([type, count]) => `${count} ${type}`).join(", ") || "none"})` +
+    (localOnly ? `, ${localOnly} this EU account cannot buy` : "") +
     (unlisted ? `, ${unlisted} the catalogues do not carry` : "") +
     (skipped.size ? `, left out ${[...skipped].map(([reason, count]) => `${count} ${reason}`).join(", ")}` : "")
 );

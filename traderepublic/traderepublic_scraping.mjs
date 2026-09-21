@@ -214,6 +214,7 @@ const browser = await puppeteer.connect({
 
 const pages = await browser.pages();
 const page =
+  pages.find((candidate) => candidate.url().includes("app.traderepublic.com")) ||
   pages.find((candidate) => candidate.url().includes("traderepublic.com")) ||
   (await browser.newPage());
 
@@ -330,12 +331,32 @@ async function ask(payloads) {
 
 const notCarried = (answer) => /NOT_FOUND/.test(answer?.error || "");
 
+// `jurisdictions` is every country Trade Republic books, not only this
+// account. A line this French session cannot buy can still be open in
+// Germany. One with no active country is not offered to anyone.
+function activeCountries(instrument) {
+  return Object.entries(instrument.jurisdictions || {})
+    .filter(([, row]) => row?.active === true)
+    .map(([code]) => String(code).trim().toUpperCase())
+    .filter((code) => /^[A-Z]{2}$/.test(code))
+    .sort();
+}
+
 function isAvailable(instrument) {
-  return (
-    instrument.active !== false &&
-    instrument.tradable !== false &&
-    instrument.jurisdictions?.[jurisdiction]?.active !== false
-  );
+  if (instrument.jurisdictions) return activeCountries(instrument).length > 0;
+  return instrument.active !== false && instrument.tradable !== false;
+}
+
+// The whole map active means every Trade Republic country. A shorter list
+// is the allow-list the front hides by nationality.
+function regionList(instrument) {
+  if (!instrument.jurisdictions) return null;
+  const all = Object.keys(instrument.jurisdictions)
+    .map((code) => String(code).trim().toUpperCase())
+    .filter((code) => /^[A-Z]{2}$/.test(code));
+  const active = activeCountries(instrument);
+  if (!active.length || active.length === all.length) return null;
+  return active;
 }
 
 // Search pagination repeats and skips, so an empty query never yields every
@@ -374,11 +395,10 @@ async function fetchOffered(kind) {
   // Pages have to be asked one at a time: asking several at once makes the
   // search skip or repeat a page, and some instruments then never appear.
   async function walk(extra = [], { label = kind, quiet = false } = {}) {
-    const filter = [
-      { key: "type", value: kind },
-      { key: "jurisdiction", value: jurisdiction },
-      ...extra,
-    ];
+    // No jurisdiction on the search: that filter is this account's country
+    // and drops a fund Germany still sells. The instrument call below still
+    // names the account; the country map on the answer is the full book.
+    const filter = [{ key: "type", value: kind }, ...extra];
     const first = await searchPage(filter, 1, 1);
     const total = first.total;
     if (!Number.isFinite(total) || total === 0) return total;
@@ -505,11 +525,21 @@ for (let offset = startIndex - 1; offset < jobs.length; offset += IN_FLIGHT) {
       continue;
     }
 
+    const regions = regionList(instrument);
     for (const { exchange, currency } of placesOf(instrument, type)) {
       const key = `${isin || ticker}:${exchange}:${currency}`.toUpperCase();
-      if (seen.has(key)) continue;
+      if (seen.has(key)) {
+        if (regions) {
+          const held = results.find(
+            (row) =>
+              `${row.isin || row.ticker}:${row.exchange || ""}:${row.currency || ""}`.toUpperCase() === key
+          );
+          if (held) held.supportedCountries = regions;
+        }
+        continue;
+      }
       seen.add(key);
-      results.push({
+      const row = {
         query: ticker,
         ticker,
         name: name || listed?.names[0] || ticker,
@@ -518,7 +548,9 @@ for (let offset = startIndex - 1; offset < jobs.length; offset += IN_FLIGHT) {
         type,
         raw: [ticker, name, exchange, currency].filter(Boolean).join(" "),
         isin: isin || "",
-      });
+      };
+      if (regions) row.supportedCountries = regions;
+      results.push(row);
     }
   }
 

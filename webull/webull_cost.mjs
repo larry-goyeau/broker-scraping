@@ -73,7 +73,7 @@ const SCHEDULE = {
   hk: "https://www.webull.hk/en/us-stocks",
   readOn: "2026-09-18",
   entity: "Webull Financial LLC",
-  crd: "170580",
+  crd: "289063",
 };
 
 const DEFAULT_PLAN = "us";
@@ -531,6 +531,7 @@ export function roundTrip({
         marketBp,
         marketPerShare,
         unsourced: m.unsourced,
+        via606: book.via606,
         fxPct,
         holdable,
         taxTotal,
@@ -598,6 +599,7 @@ export function roundTrip({
       marketBp,
       marketPerShare,
       unsourced: m.unsourced,
+      via606: book.via606,
       fxPct,
       holdable,
       taxTotal,
@@ -619,6 +621,7 @@ function confidenceOf({
   marketBp,
   marketPerShare,
   unsourced,
+  via606,
   fxPct,
   holdable,
   taxTotal,
@@ -680,7 +683,11 @@ function confidenceOf({
   } else if (market !== "crypto" && marketBp != null) {
     said.push(`carnet ${Number(marketBp.toPrecision(4))} bp`);
   } else if (marketPerShare != null) {
-    said.push(`carnet Rule 605, ${marketPerShare} $ la part`);
+    said.push(
+      via606
+        ? `carnet 605 × Q Webull, ${marketPerShare} $ la part`
+        : `carnet NBBO reconstitué, ${marketPerShare} $ la part`
+    );
   } else {
     said.push(
       `pas de feuille de carnet : ${unsourced?.name || listing.exchange}, ${

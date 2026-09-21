@@ -13,11 +13,15 @@
 // Australia / Hong Kong / Dubai / Abu Dhabi / Tokyo, $1 on every other
 // stock exchange, each way. Australia and New Zealand are $2 everywhere
 // (`--plan=anz`). The United Kingdom, Ireland and the countries that are
-// not in the picker pay $0 (`--plan=uk`). eToro US, Club, CopyTrader,
-// Smart Portfolios, recurring buys, Stock Margin (0.15 %) and futures are
-// not this trip. Catalogue 10 148 lines — 8 800 stocks, 1 176 ETFs, 163
-// coins, 1 124 of them the CFD book (US ETFs on the global platform, some
-// HK names, ENEL, SHEL London).
+// not in the picker pay $0 (`--plan=uk`). Club, CopyTrader, Smart
+// Portfolios, recurring buys, Stock Margin (0.15 %) and futures are not
+// this trip. `--plan=us` is only the Global ETF CFD book sold as a real
+// ETF at eToro USA LLC ($0; they pay SEC / TAF). `--plan=anz` does the
+// same for a x1 BUY in Australia: the PDS puts that line in the eToro
+// Service (custodied ETF), not a CFD. UK / Ireland keep the PRIIPs CFD
+// on US-domiciled names. Stocks, coins and the real UCITS shelf stay on
+// the Global plans. Catalogue 10 148 lines —
+// 8 800 stocks, 1 176 ETFs, 163 coins, 1 124 of them the CFD book.
 //
 //   stocks (real)   $1 or $2 each way, in USD regardless of the listing
 //   ETF / ETC / ETN $0  (the page names ETFs; ETC share the invest book)
@@ -36,6 +40,7 @@
 //
 //   https://www.etoro.com/trading/fees/
 //   https://www.etoro.com/trading/fees/conversion/
+//   https://www.etoro.com/en-us/trading/fees/
 //
 //   node etoro/etoro_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
 //   node etoro/etoro_cost.mjs VUSA EURONEXT EUR --shares=10 --price=100
@@ -43,6 +48,7 @@
 //   node etoro/etoro_cost.mjs AAL LSE GBX --shares=10 --price=2800
 //   node etoro/etoro_cost.mjs BTC --amount=1000
 //   node etoro/etoro_cost.mjs AAPL NASDAQ USD --plan=uk --shares=10 --price=230
+//   node etoro/etoro_cost.mjs SPY AMEX USD --plan=us --shares=10 --price=580
 //   node etoro/etoro_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
@@ -59,11 +65,13 @@ const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
 const SCHEDULE = {
   source: "https://www.etoro.com/trading/fees/",
   conversion: "https://www.etoro.com/trading/fees/conversion/",
+  us: "https://www.etoro.com/en-us/trading/fees/",
   examples:
     "https://www.etoro.com/wp-content/uploads/2025/07/Cost-and-Charges-examples-table-Crypto-Fees-in-May-2025.pdf",
   readOn: "2026-09-15",
   previouslyRead: "2026-09-10",
   entity: "eToro (Europe) Ltd / eToro (UK) Ltd",
+  usEntity: "eToro USA LLC",
 };
 
 const DEFAULT_PLAN = "standard";
@@ -71,6 +79,7 @@ const PLANS = {
   standard: { id: "standard", label: "Standard", asiaMe: 2, other: 1 },
   anz: { id: "anz", label: "Australia / New Zealand", asiaMe: 2, other: 2 },
   uk: { id: "uk", label: "UK / Ireland", asiaMe: 0, other: 0 },
+  us: { id: "us", label: "US", asiaMe: 0, other: 0 },
 };
 const PLAN_ALIAS = {
   standard: "standard",
@@ -87,6 +96,9 @@ const PLAN_ALIAS = {
   ireland: "uk",
   free: "uk",
   zero: "uk",
+  us: "us",
+  usa: "us",
+  etorous: "us",
 };
 
 const CRYPTO_EACH = 0.01;
@@ -126,11 +138,22 @@ export function planOf(name = DEFAULT_PLAN) {
   return PLANS[PLAN_ALIAS[key] || key] || null;
 }
 
-export function feeMarketOf(row, mic) {
+function isUsListed(row, mic) {
+  return US_MICS.has(String(mic || "").toUpperCase()) || /^(NASDAQ|NYSE|AMEX|CBOE|ARCA|NYSEARCA)$/.test(loose(row?.exchange));
+}
+
+export function isUsEtfCfd(row, mic) {
+  return Boolean(row?.cfd) && isTracker(row?.type) && isUsListed(row, mic);
+}
+
+export function feeMarketOf(row, mic, plan) {
   const type = String(row?.type || "").toUpperCase();
   const code = loose(row?.exchange);
   const m = String(mic || "").toUpperCase();
   if (type === "CRYPTO" || code === "CRYPTO") return "crypto";
+  const picked = typeof plan === "string" ? planOf(plan) : plan;
+  if (picked?.id === "us") return isUsEtfCfd(row, mic) ? "etf" : null;
+  if (picked?.id === "anz" && isUsEtfCfd(row, mic)) return "etf";
   if (row?.cfd) return "cfd";
   if (isTracker(type)) return "etf";
   if (ASIA_ME.has(code) || ASIA_ME.has(m)) return "asiaMe";
@@ -147,8 +170,11 @@ export function ticketEach(plan, market) {
 
 function remarkOf({ market, plan, currency } = {}) {
   const lines = [];
-  if (plan?.id === "uk") lines.push("UK / Ireland: no stock ticket.");
-  if (plan?.id === "anz") lines.push("Australia / New Zealand: $2 every stock exchange.");
+  if (plan?.id === "us") return "";
+  if (market === "asiaMe" || market === "other") {
+    if (plan?.id === "uk") lines.push("UK / Ireland: no stock ticket.");
+    if (plan?.id === "anz") lines.push("Australia / New Zealand: $2 every stock exchange.");
+  }
   if (market !== "crypto") lines.push(fxRemark("0.75", currency));
   return lines.join("\n");
 }
@@ -303,7 +329,7 @@ export function roundTrip({
     plan: picked?.id ?? plan,
   };
 
-  if (!picked) return { ...answer, why: `formule inconnue : ${plan} (standard|anz|uk)` };
+  if (!picked) return { ...answer, why: `formule inconnue : ${plan} (standard|anz|uk|us)` };
   if (!catalogue) {
     return {
       ...answer,
@@ -342,10 +368,21 @@ export function roundTrip({
     currency: String(m.row.currency || "").toUpperCase() || (String(m.row.type || "").toUpperCase() === "CRYPTO" ? "USD" : ""),
     brokerExchange: m.row.exchange || null,
     query: m.row.query || null,
-    cfd: Boolean(m.row.cfd),
+    cfd: picked.id !== "us" && !(picked.id === "anz" && isUsEtfCfd(m.row, book.mic ?? m.venue?.mic)) && Boolean(m.row.cfd),
   };
 
-  const market = feeMarketOf(m.row, listing.mic);
+  const market = feeMarketOf(m.row, listing.mic, picked);
+  if (!market) {
+    return {
+      ...answer,
+      listing,
+      onlineBuy: false,
+      why:
+        picked.id === "us"
+          ? "eToro US ne vend en réel que les ETF que le Global vend en CFD"
+          : `${etf} n'a pas de palier chez eToro`,
+    };
+  }
   const leaf = book.leaf;
   const marketBp = bp ?? leaf?.bp ?? null;
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
@@ -361,7 +398,7 @@ export function roundTrip({
     feeMarket: market,
     bp: marketBp,
     perShare: marketPerShare,
-    url: leaf?.url ?? SCHEDULE.source,
+    url: leaf?.url ?? (picked.id === "us" ? SCHEDULE.us : SCHEDULE.source),
     tax,
     fx: fxNote(listing.currency),
     fxIfConverted: 0,
@@ -515,8 +552,10 @@ function confidenceOf({
 }) {
   const said = [];
   said.push(
-    `eToro ${picked.label}, palier ${market}, page relue le ${SCHEDULE.readOn} ` +
-      `(inchangée depuis le ${SCHEDULE.previouslyRead})`
+    picked.id === "us"
+      ? `eToro US, ETF réel, page relue le ${SCHEDULE.readOn}`
+      : `eToro ${picked.label}, palier ${market}, page relue le ${SCHEDULE.readOn} ` +
+          `(inchangée depuis le ${SCHEDULE.previouslyRead})`
   );
   if (market === "crypto") {
     said.push(
@@ -541,7 +580,9 @@ function confidenceOf({
         : `taxe à l'achat ${(100 * taxPct).toFixed(2)} % du montant, depuis taxMap.mjs`
     );
   }
-  if (market !== "crypto" && market !== "cfd") {
+  if (picked.id === "us") {
+    said.push("SEC / TAF hors total : eToro US les règle à la vente");
+  } else if (market !== "crypto" && market !== "cfd") {
     said.push(`SEC / TAF hors total (« no additional broker fees » sur une action réelle)`);
   }
   if (marketBp != null) said.push(`carnet publié ${Number(marketBp.toPrecision(4))} bp, aller-retour`);
@@ -553,9 +594,11 @@ function confidenceOf({
     );
   }
   said.push(
-    `hors total : change 0,75 % si le portefeuille n'est pas dans la devise, ` +
-      `retrait 5 $ depuis un compte USD (gratuit en devise locale), Club, Copy, Smart Portfolios, ` +
-      `Stock Margin, overnight CFD. Aucun aller-retour réel dans ce dépôt`
+    picked.id === "us"
+      ? "hors total : Club, Copy, options. Aucun aller-retour réel dans ce dépôt"
+      : `hors total : change 0,75 % si le portefeuille n'est pas dans la devise, ` +
+          `retrait 5 $ depuis un compte USD (gratuit en devise locale), Club, Copy, Smart Portfolios, ` +
+          `Stock Margin, overnight CFD. Aucun aller-retour réel dans ce dépôt`
   );
   return said.join(" ; ");
 }
@@ -590,12 +633,13 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node etoro_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--amount=usd] [--plan=standard|anz|uk] [--json]\n" +
+      "usage : node etoro_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--amount=usd] [--plan=standard|anz|uk|us] [--json]\n" +
         "        node etoro_cost.mjs --schedule\n" +
         "  ex.   node etoro_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
         "        node etoro_cost.mjs VUSA EURONEXT EUR --shares=10 --price=100\n" +
         "        node etoro_cost.mjs BTC --amount=1000\n" +
-        "        node etoro_cost.mjs AAPL NASDAQ USD --plan=uk --shares=10 --price=230"
+        "        node etoro_cost.mjs AAPL NASDAQ USD --plan=uk --shares=10 --price=230\n" +
+        "        node etoro_cost.mjs SPY AMEX USD --plan=us --shares=10 --price=580"
     );
     process.exit(2);
   }

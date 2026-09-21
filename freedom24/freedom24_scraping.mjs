@@ -46,7 +46,7 @@ function hasFlag(name) {
 
 // Freedom24 files an instrument under the market it trades on rather than the
 // exchange, so a London listing is VUAA.EU and a New York one AAPL.US. Athens
-// is the odd one out: it answers to .GR, not .EU.
+// answers to .GR, Istanbul to .TR (THYAO.TR), Warsaw to .WSE.EU (PKO.WSE.EU).
 const MARKET_SUFFIX = new Map(
   Object.entries({
     LSE: "EU",
@@ -58,7 +58,7 @@ const MARKET_SUFFIX = new Map(
     BX: "EU",
     LSIN: "EU",
     LUXSE: "EU",
-    GPW: "EU",
+    GPW: "WSE.EU",
     BET: "EU",
     OMXCOP: "EU",
     OMXHEX: "EU",
@@ -80,6 +80,7 @@ const MARKET_SUFFIX = new Map(
     HAN: "EU",
     SWB: "EU",
     ATHEX: "GR",
+    BIST: "TR",
     AMEX: "US",
     NASDAQ: "US",
     NYSE: "US",
@@ -104,7 +105,7 @@ const FINDER_EXCHANGES = [
   "ITS",
 ].join(",");
 
-const KEPT_MARKETS = new Set(["FIX", "EU", "HKEX", "ATHEX", "WSE", "EUROBOND", "EUROBONDS", "CRPT"]);
+const KEPT_MARKETS = new Set(["FIX", "EU", "HKEX", "ATHEX", "BIST", "WSE", "KASE", "EUROBOND", "EUROBONDS", "CRPT"]);
 
 function isAliasTicker(ticker) {
   const text = String(ticker || "");
@@ -264,6 +265,75 @@ async function call(cmd, params) {
   );
 }
 
+// The public directory, one market at a time. Kazakhstan shares such as
+// KZAP.KZ are not in the CSV, so a suffix guess never asks for them.
+async function marketTickers(market) {
+  const tickers = [];
+  const take = 50;
+  let skip = 0;
+  let attempt = 0;
+  while (skip < 20000) {
+    const batch = await page.evaluate(
+      async (name, take, skip) => {
+        const form = new FormData();
+        form.append(
+          "q",
+          JSON.stringify({
+            cmd: "getAllSecurities",
+            params: {
+              take,
+              skip,
+              filter: {
+                logic: "and",
+                filters: [
+                  { field: "mkt_name", operator: "eq", value: name },
+                  { field: "instr_type_c", operator: "eq", value: 1 },
+                ],
+              },
+            },
+          })
+        );
+        const response = await fetch("https://freedom24.com/api?cmd=getAllSecurities", {
+          method: "POST",
+          body: form,
+          credentials: "include",
+        });
+        const text = await response.text();
+        if (text.trim().startsWith("<")) return null;
+        const json = JSON.parse(text);
+        if (json.errMsg || json.error) return { error: json.errMsg || json.error };
+        return {
+          total: json.total || 0,
+          tickers: (json.securities || []).map((sec) => (sec.to_delete ? "" : sec.ticker || "")),
+        };
+      },
+      market,
+      take,
+      skip
+    );
+    if (!batch || batch.error) {
+      attempt += 1;
+      if (attempt <= 6) {
+        console.error(`  ${market} pause ${attempt} at ${skip}: ${batch?.error || "empty"}`);
+        await sleep(attempt * 15000);
+        continue;
+      }
+      console.error(`  ${market} directory failed at ${skip}: ${batch?.error || "empty"}`);
+      break;
+    }
+    attempt = 0;
+    for (const ticker of batch.tickers) {
+      if (ticker && !isAliasTicker(ticker)) tickers.push(ticker);
+    }
+    console.error(
+      `  ${market} ${Math.min(skip + batch.tickers.length, batch.total)}/${batch.total}, ${tickers.length} kept`
+    );
+    if (batch.tickers.length === 0 || skip + batch.tickers.length >= batch.total) break;
+    skip += take;
+  }
+  return tickers;
+}
+
 async function callWithRetry(cmd, params, attempts = 6) {
   for (let attempt = 1; attempt <= attempts; attempt += 1) {
     const answer = await call(cmd, params).catch(() => null);
@@ -390,6 +460,9 @@ function catalogueKind(isin, ticker, info) {
     return "CRYPTO";
   }
   if (keepUnlisted) return "";
+  // Warsaw and Kazakhstan shares are on the public book and mostly absent
+  // from the CSV, so the ISIN lookup cannot be what decides to keep them.
+  if (/\.(?:TR|WSE\.EU|KZ)$/i.test(ticker) && !isAliasTicker(ticker)) return "STOCK";
   return null;
 }
 
@@ -400,6 +473,23 @@ function isUsTracker(info, ticker, type) {
   const ex = normalize(info?.codesub_nm || info?.ltr).toUpperCase();
   const isin = toIsin(info?.issue_nb);
   return US_LISTED.has(ex) || /\.US$/i.test(ticker) || /^US/i.test(isin);
+}
+
+// EU retail cannot buy: the ticket asks for professional / qualified status,
+// often with a KID. That is the residency gate (non-EU retail still can).
+// "Temporarily unavailable" is a halt, not this gate.
+function residencyRestriction(permission) {
+  if (!permission || permission.allowed === 1) return false;
+  if (permission.reject_code === "qualified_investor_required") return true;
+  const notes = permission.recommendations || [];
+  return notes.some((note) => {
+    if (note.restrictionType === "marginConsent") return false;
+    const doc = Number(note.docTypeId || note.doc_type_id);
+    if (doc === 10167) return true;
+    return /investisseur professionnel|investisseurs qualifiés|qualified investor/i.test(
+      `${note.title || ""} ${note.text || ""}`
+    );
+  });
 }
 
 function keepRow(info, ticker, extra = {}) {
@@ -483,7 +573,16 @@ async function processTickers(tickers, label) {
       }
       const kind = catalogueKind(toIsin(info.issue_nb), ticker, info);
       const type = listingType(info, kind);
-      if (isUsTracker(info, ticker, type)) keepRow(info, ticker, { notEuResident: true });
+      const permission = permissions[ticker];
+      const halted = permission?.reject_code === "instrument_unavailable" && !residencyRestriction(permission);
+      if (!halted && (residencyRestriction(permission) || isUsTracker(info, ticker, type))) {
+        keepRow(info, ticker, { notEuResident: true });
+        continue;
+      }
+      // Istanbul, Warsaw and Kazakhstan are on the public book. This account's
+      // ticket often says trading is temporarily unavailable, which is a listed
+      // name, not a miss.
+      if (/\.(?:TR|WSE\.EU|KZ)$/i.test(ticker)) keepRow(info, ticker);
     }
 
     save();
@@ -550,6 +649,8 @@ if (cliTickers.length > 0 || cliIsins.length > 0) {
     await processTickers(guessed.slice(Math.max(0, startIndex - 1)), "listed tickers");
   } else {
     console.error(`keeping ${results.length} listings already saved; skipping guessed tickers`);
+    const istanbul = guessed.filter((ticker) => /\.TR$/i.test(ticker));
+    if (istanbul.length) await processTickers(istanbul, "Istanbul tickers");
   }
 
   if (wantBonds) {
@@ -566,6 +667,15 @@ if (cliTickers.length > 0 || cliIsins.length > 0) {
       "Hong Kong listings"
     );
     await processTickers(hkTickers, "Hong Kong tickers");
+  }
+
+  // --recheck walks the guessed tickers that were refused. The Warsaw and
+  // Kazakhstan directories are already in the file and are not that pass.
+  if (!hasFlag("recheck")) {
+    const warsaw = await marketTickers("WSE");
+    await processTickers(warsaw, "Warsaw tickers");
+    const kazakhstan = await marketTickers("KASE");
+    await processTickers(kazakhstan, "Kazakhstan tickers");
   }
 }
 

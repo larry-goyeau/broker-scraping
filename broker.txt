@@ -6,23 +6,15 @@ benchmark
 Syfe
 Exante
 CGS International
+Cobra Trading 
 
 captrader
 mexem
-quantfury
 bhmuae
 alpaca
+firstrade
 Lynx
+lightspeed
 
 
-Swissquote / Swissquote Europe · LSE EUR — vrai IOB, ticker 0NZM. L’API donne encore 373.05 / 380.7 (~203 bp), livre très large. Londres est fermé, donc le chiffre n’a pas été écrit.
-Lundi, un seul passage sur tous les catalogues, pas trois fichiers Ford :
-
-node spread.mjs --only=lse,six,frankfurt --rows=catalogues
---rows=catalogues lit chaque *-parsed.json. --only ne touche que ces trois sources. Chaque ligne garde son ISIN et sa devise : l’IOB 0P4F, le CDR FMC / CA34539A1066, le SIX CHF de Bourse Direct, et toutes les autres du même genre.
-
-LSE : touche ou null — on ne fabrique pas de bid/offer.
-SIX : la ligne CHF si elle existe, sinon la note pas de ligne en CHF (SIX propose USD).
-Francfort : tout ce qui est sur le bandeau DFRA, y compris les CDR. Rien n’est recopié depuis l’ordinaire US.
-
-Donc on peut brancher IATS + IBCO demain comme GTS. RICE, il n’y a rien à scraper de public.
+Voir les broker sur le NBBO

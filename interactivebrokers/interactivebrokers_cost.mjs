@@ -23,7 +23,7 @@
 // since the 11th. NTF reimbursement after 30 days, directed routing (0.10 %
 // / higher mins), fractionals' $0.01 / 1 % special, the PEA 0.50 % cap and
 // IBKR Lite are not this trip. A `nonEuResident` (no KID) line stays priced;
-// `listingAccepts` hides it from an EEA nationality, not from an empty country
+// `listingAccepts` hides it from an EEA or GB nationality, not from an empty country
 // box. Crypto is zerohash europe: 0.18 %, min $1.75, cap 1 % of trade
 // value, no tape. Conversion (0.0008–0.002 % on the FX page) stays out: whether
 // cash has to cross is a fact about the client's balances. Custody is free.

@@ -43,7 +43,7 @@ export const US_BROKERS = {
   tradeup: { crd: ["18483"], name: "TradeUP Securities, Inc." },
   tradezero: { crd: ["282940"], name: "TradeZero America" },
   vested: { crd: ["315194"], name: "VF Securities, Inc." },
-  webull: { crd: ["170580"], name: "Webull Financial LLC" },
+  webull: { crd: ["289063"], name: "Webull Financial LLC" },
   drivewealth: { crd: ["165429"], name: "DriveWealth, LLC" },
 };
 
@@ -61,6 +61,7 @@ export const ALIASES = {
   mexem: "interactivebrokers",
   whselfinvest: "interactivebrokers",
   trading212: "interactivebrokers",
+  vivid: "interactivebrokers",
 };
 
 const ricOf = (name) => {
@@ -73,6 +74,8 @@ const ricOf = (name) => {
   if (n.includes("two sigma") || n.includes("soho")) return "SOHO";
   if (/\bg1\b/.test(n) || n.includes("etmm") || n.includes("execution services")) return "ETMM";
   if (/\bgts\b/.test(n)) return "GTSM";
+  if (n.includes("ibkr ats") || /\biats\b/.test(n)) return "IATS";
+  if (n.includes("interactive brokers corp") || /\bibco\b/.test(n)) return "IBCO";
   return "OTHER";
 };
 
@@ -151,7 +154,9 @@ async function zipBuffer() {
 export async function download606({ quiet = false } = {}) {
   const { url, buf } = await zipBuffer();
   const read = zipEntries(buf);
-  const q = (url.match(/(\d{4}_Q\d)/) || [])[1]?.replace("_", "-") || null;
+  const fromName = read.names.find((n) => /\d{4}_Q\d/.test(n));
+  const q =
+    (url.match(/(\d{4}_Q\d)/) || fromName?.match(/(\d{4}_Q\d)/) || [])[1]?.replace("_", "-") || null;
   const brokers = {};
   for (const [folder, meta] of Object.entries(US_BROKERS)) {
     const files = read.names.filter(

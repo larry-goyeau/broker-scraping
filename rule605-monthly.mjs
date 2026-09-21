@@ -52,6 +52,9 @@ const STALE_DAYS = 40;
 // the extra line: it is one of the largest wholesalers in exchange-traded funds, and the
 // same 26-field layout comes out of it. GTS left that host empty and keeps the files
 // on its own S3 bucket, still the 26-field layout, as `GTSM_YYYY_MM.txt`.
+// IATS and IBCO are Interactive Brokers' two series — IBKR ATS and Interactive
+// Brokers Corp — same 26-field layout, as `tiatsYYYYMM.dat` and `tibcoYYYYMM.dat`.
+// RICE has no public download; it is left out rather than fetched into a 404.
 const REPORTERS = [
   { ric: "SOHO", name: "Two Sigma Securities" },
   { ric: "ETMM", name: "G1 Execution Services" },
@@ -64,6 +67,20 @@ const REPORTERS = [
       `https://finra-605.s3.amazonaws.com/GTSM/GTSM_${month.slice(0, 4)}_${month.slice(4)}.txt`,
     plain: true,
     participant: "GTSM",
+  },
+  {
+    ric: "IATS",
+    name: "IBKR ATS",
+    url: (month) => `https://www.interactivebrokers.com/iats605Reports/tiats${month}.dat`,
+    plain: true,
+    participant: "IATS",
+  },
+  {
+    ric: "IBCO",
+    name: "Interactive Brokers Corp",
+    url: (month) => `https://www.interactivebrokers.com/ibco605Reports/tibco${month}.dat`,
+    plain: true,
+    participant: "IBCO",
   },
   {
     ric: "JNST",

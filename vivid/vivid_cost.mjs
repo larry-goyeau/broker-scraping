@@ -33,6 +33,9 @@
 // Personal help names a markup only on USD. Another listing currency
 // still settles in euro, but no % is printed, so none is charged here.
 // Business help applies conversion whenever the trade is not in euro.
+// Business custody names Interactive Brokers Ireland (among others). A
+// US tape uses IBKR's 606, the same rule as the other IB introducing
+// names.
 //
 //   https://support.vivid.money/en/articles/9278373-what-s-the-cost-of-trading-with-the-invest-pocket
 //   https://support.vivid.money/en/articles/9297890-are-there-any-fees-for-trading-in-the-crypto-pocket
@@ -504,6 +507,7 @@ export function roundTrip({
         marketBp,
         marketPerShare,
         unsourced: m.unsourced,
+        via606: book.via606,
         fxPct,
         taxTotal,
         ticket,
@@ -575,6 +579,7 @@ export function roundTrip({
       marketBp,
       marketPerShare,
       unsourced: m.unsourced,
+      via606: book.via606,
       fxPct,
       taxTotal,
       ticket,
@@ -594,6 +599,7 @@ function confidenceOf({
   marketBp,
   marketPerShare,
   unsourced,
+  via606,
   fxPct,
   taxTotal,
   ticket,
@@ -643,7 +649,11 @@ function confidenceOf({
         (market === "crypto" && assumed ? `, plus large de Coinbase et Binance : Vivid ne nomme pas la place` : "")
     );
   } else if (marketPerShare != null) {
-    said.push(`carnet Rule 605, ${marketPerShare} $ la part`);
+    said.push(
+      via606
+        ? `carnet 605 × Q IBKR, ${marketPerShare} $ la part`
+        : `carnet NBBO reconstitué, ${marketPerShare} $ la part`
+    );
   } else if (market === "crypto") {
     said.push(`pas de feuille crypto : le pourcentage est le seul frais Vivid`);
   } else {

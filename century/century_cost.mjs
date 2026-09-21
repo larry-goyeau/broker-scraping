@@ -47,10 +47,11 @@
 // are free in as many words.
 //
 // The scrape names no US tape, only the settlement currency. The US underlying
-// book is Rule 605, found by trying the NMS MICs. Hong Kong and Tadawul have
-// no sourced book in this deposit, so those lines answer N/A on the total
-// whenever the book is the missing piece — the commission itself is still
-// returned under `brokerFees` where the card printed one.
+// book is the reconstructed NBBO quoted (605 field 19 + 2 × PI), found by
+// trying the NMS MICs: Century names no US BD, so there is no 606 to scale
+// E by. Hong Kong and Tadawul have no sourced book in this deposit, so those
+// lines answer N/A on the total whenever the book is the missing piece — the
+// commission itself is still returned under `brokerFees` where the card printed one.
 //
 //   https://liveapp.century.ae/
 //   https://www.century.ae/en/shares-trading/
@@ -148,14 +149,11 @@ function venueRow(row) {
   return { ...row, exchange: row.exchange || EXCHANGE_OF[market] || row.exchange };
 }
 
-function usBook(isin, currency) {
-  const id = String(isin || "").toUpperCase();
-  const ccy = String(currency || "USD").toUpperCase();
-  for (const mic of US_MICS) {
-    const leaf = spreads[id]?.[mic]?.[ccy];
-    if (leaf && (leaf.bp != null || leaf.perShare != null)) return { leaf, mic };
-  }
-  return { leaf: null, mic: null };
+function usMic(row, venue) {
+  if (venue?.mic && US_MICS.includes(venue.mic)) return venue.mic;
+  const resolved = listingKey(venueRow(row)).venue?.mic;
+  if (resolved && US_MICS.includes(resolved)) return resolved;
+  return "XNAS";
 }
 
 function namedRow(row, asked) {
@@ -204,12 +202,13 @@ const listAlternatives = (named) =>
 
 function bookOf(row, venue) {
   const market = feeMarketOf(row);
-  if (market === "us") return usBook(row.isin, row.currency);
   return spreadLeaf(spreads, {
     isin: row.isin,
-    mic: venue?.mic ?? null,
+    mic: market === "us" ? usMic(row, venue) : venue?.mic ?? null,
     currency: row.currency,
     unsourced: listingKey(venueRow(row)).unsourced,
+    broker: "century",
+    ticker: row.ticker,
   });
 }
 
@@ -480,7 +479,9 @@ function confidenceOf({ market, rule, listing, leaf, marketBp, marketPerShare, u
 
   if (marketBp != null) said.push(`carnet publié ${Number(marketBp.toPrecision(4))} bp, aller-retour`);
   else if (marketPerShare != null) {
-    said.push(`carnet Rule 605, ${marketPerShare} $ la part, moyenne 100–499 parts — Century ne nomme pas la bande`);
+    said.push(
+      `carnet NBBO reconstitué, ${marketPerShare} $ la part — Century ne nomme pas de broker-dealer américain`
+    );
   } else {
     said.push(
       `aucun carnet : ${unsourced?.name || listing.exchange}, ${unsourced?.why || "pas de source"}. ` +

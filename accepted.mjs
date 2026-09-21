@@ -50,6 +50,7 @@ export const COUNTRY_NAMES = {
 const US = { countries: ["US"] };
 const WORLD = { all: true, except: SANCTIONED };
 const WORLD_NO_US = { all: true, except: [...SANCTIONED, "US"] };
+const WORLD_NO_CA = { all: true, except: [...SANCTIONED, "CA"] };
 const WORLD_NO_US_CA = { all: true, except: [...SANCTIONED, "US", "CA"] };
 
 // Trading 212 help centre, four entities (UK / Markets Ltd / AU / EU GmbH).
@@ -237,7 +238,10 @@ export const ACCEPTED = {
   oanda: WORLD,
   admiral: WORLD_NO_US,
   freedom24: { countries: FREEDOM24 },
-  etoro: WORLD_NO_US_CA, // eToro T&Cs: blocked US and Canada
+  // Global T&Cs block US and Canada. The US entity is only the ETF CFD
+  // shelf sold as a real ETF (`--plan=us`); front hides it from everyone
+  // else. Canada has no eToro book.
+  etoro: WORLD_NO_CA,
   quantfury: WORLD_NO_US,
   // FAQ: citizens or residents of most countries except sanctions / local bans.
   mexem: WORLD,
@@ -290,16 +294,42 @@ export function accepts(folder, nat, home = "") {
   return expand(specFor(folder, home)).has(code);
 }
 
+// Packaged products whose ticket can lack a PRIIPs KID while still sitting
+// on the UK OFR (EEA UCITS) or being a UK authorised scheme (GB ISIN).
+const PACKAGED = /^(ETF|ETC|ETN|ETP|FUND)$/i;
+
+function isinCountry(row) {
+  const isin = String(row.isin || "").toUpperCase();
+  return /^[A-Z]{2}[A-Z0-9]{10}$/.test(isin) ? isin.slice(0, 2) : "";
+}
+
+// UK retail can still buy a packaged line the EU ticket withheld when the
+// fund is GB-domiciled (authorised) or EEA-domiciled (OFR). US / AU / CH /
+// Jersey stay blocked on both sides. Stocks are not this test.
+function ukRetailScheme(row) {
+  const cc = isinCountry(row);
+  return cc === "GB" || EEA.includes(cc);
+}
+
+export function ukResidentBlocked(row) {
+  if (!row) return false;
+  if (row.nonUkResident === true) return true;
+  if (row.nonUkResident === false) return false;
+  return Boolean(row.nonEuResident && PACKAGED.test(row.type || "") && !ukRetailScheme(row));
+}
+
 // A listing the broker's own book withholds from this residency, even if the
-// visitor can open an account: T212 `supportedCountries`, a KID notice
-// (`nonEuResident`), an Alpaca PTP (`usResidentsOnly`), or NSE cash
-// (`indianOnly`) that IBKR Europe will not permission.
+// visitor can open an account: T212 `supportedCountries`, a missing KID
+// (`nonEuResident`, EEA only), no UK recognised scheme (`nonUkResident`, GB
+// only), an Alpaca PTP (`usResidentsOnly`), or NSE cash (`indianOnly`).
 export function listingAccepts(row, nat) {
   const code = String(nat || "").trim().toUpperCase();
   if (!code) return true;
   if (row?.usResidentsOnly) return code === "US";
   if (row?.indianOnly) return code === "IN";
+  // CH stays visible: Swiss retail can buy a no-KID line.
   if (row?.nonEuResident && EEA.includes(code)) return false;
+  if (ukResidentBlocked(row) && code === "GB") return false;
   if (Array.isArray(row?.supportedCountries)) {
     return row.supportedCountries.some((c) => String(c).trim().toUpperCase() === code);
   }
@@ -315,17 +345,25 @@ export function countryOptions() {
 // `nonEuResident` is only set when the broker's own ticket says so (KID /
 // NotTradable). An ISIN starting with US is not enough: Elana and tastytrade
 // both sell iShares Gold Trust to a European account.
+// `nonUkResident` is the same ticket fact for Britain (no OFR / s.272). A
+// scraper can set it; otherwise a no-KID packaged line that is not GB/EEA
+// domiciled gets it here so existing catalogues do not need a rewrite.
 export function stampResidency(row) {
   if (!row || typeof row !== "object") return row;
   if (row.notEuResident) {
     row.nonEuResident = true;
     delete row.notEuResident;
   }
+  if (row.notUkResident) {
+    row.nonUkResident = true;
+    delete row.notUkResident;
+  }
   if (row.IndianOnly) {
     row.indianOnly = true;
     delete row.IndianOnly;
   }
   delete row.nonUsResident;
+  if (row.nonUkResident == null && ukResidentBlocked(row)) row.nonUkResident = true;
   return row;
 }
 

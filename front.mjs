@@ -11,7 +11,7 @@ import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { catalogueFiles } from "./catalogues.mjs";
 import { resolveVenue } from "./venues.mjs";
-import { accepts, countryOptions, listingAccepts, EEA } from "./accepted.mjs";
+import { accepts, countryOptions, listingAccepts, stampResidency, EEA } from "./accepted.mjs";
 import { toUsd, usdPer } from "./fx.mjs";
 import { prices, ensureFresh } from "./prices.mjs";
 
@@ -45,7 +45,13 @@ function loadBrokerMeta() {
     for (const line of fs.readFileSync(LIST, "utf8").split(/\r?\n/)) {
       if (!line.trim()) continue;
       const [name, country, type, , url] = line.split("\t");
-      if (name) rows.push({ name, country: country || "", type: type || "", url: url || "" });
+      if (!name || name === "name") continue;
+      rows.push({
+        name,
+        country: country || "",
+        type: type || "",
+        url: url || "",
+      });
     }
   }
   return rows;
@@ -81,6 +87,7 @@ const FOLDER_NAME = {
   webull: "Webull",
   WHSelfInvest: "WH SelfInvest",
   xtb: "XTB",
+  fortuneo: "Fortuneo",
   lynxplus: "LYNX+",
 };
 
@@ -224,13 +231,16 @@ for (const file of catalogueFiles()) {
       isin: rowIsin,
     };
     if (row.nonEuResident) listing.nonEuResident = true;
+    if (row.nonUkResident) listing.nonUkResident = true;
     // Robinhood's catalogue marks with `usOnly` the lines missing from Robinhood
     // Europe's stock-token list. That is not "US residents only": the British
-    // company sells the same American share. It is exactly `nonEuResident`, which
-    // withholds a line from the EEA and from nobody else.
+    // company sells the same American share. It is `nonEuResident` (EEA). A
+    // packaged US/AU/CH line also gets `nonUkResident` in `stampResidency`.
     if (row.usOnly) listing.nonEuResident = true;
+    stampResidency(listing);
     if (row.usResidentsOnly) listing.usResidentsOnly = true;
     if (row.indianOnly) listing.indianOnly = true;
+    if (row.cfd) listing.cfd = true;
     if (Array.isArray(row.supportedCountries)) listing.supportedCountries = row.supportedCountries;
     const held = inst.byBroker.get(folder) || [];
     const dup = held.some(
@@ -721,6 +731,54 @@ const BOURSOBANK_PLANS = [
   { id: "trader", name: "BoursoBank Trader" },
   { id: "ultimate", name: "BoursoBank Ultimate Trader" },
 ];
+
+const FORTUNEO_PLANS = [
+  { id: "starter", name: "Fortuneo Starter" },
+  { id: "progress", name: "Fortuneo Progress" },
+  { id: "traderpro", name: "Fortuneo Trader Pro" },
+];
+
+const ETORO_PLANS = [
+  { id: "us", name: "eToro US" },
+  { id: "standard", name: "eToro" },
+  { id: "anz", name: "eToro Australia / New Zealand" },
+  { id: "uk", name: "eToro UK / Ireland" },
+];
+
+function etoroOpen(plan, nat) {
+  const n = String(nat || "").trim().toUpperCase();
+  if (!n) return true;
+  if (n === "US") return plan === "us";
+  if (n === "CA") return false;
+  if (n === "AU" || n === "NZ") return plan === "anz";
+  if (n === "GB" || n === "IE") return plan === "uk";
+  return plan === "standard";
+}
+
+function collapseEtoro(built) {
+  const groups = [];
+  for (const row of built) {
+    const hit = groups.find(
+      (g) =>
+        sameTripListings(g.listings, row.listings) &&
+        g.listings.every((l, i) => l.remark === row.listings[i].remark)
+    );
+    if (hit) hit.members.push(row);
+    else groups.push({ listings: row.listings, members: [row] });
+  }
+  return groups.map((g) => {
+    if (g.members.length === 1) return g.members[0];
+    const ids = g.members.map((m) => m.plan);
+    return {
+      ...g.members[0],
+      folder: `etoro:${ids.join("-")}`,
+      family: "eToro",
+      name: "eToro",
+      plan: "",
+      planRank: 0,
+    };
+  });
+}
 
 const BUX_PLANS = [
   { id: "basic", name: "BUX Basic" },
@@ -1438,6 +1496,25 @@ function collapseBoursobank(built) {
   });
 }
 
+function collapseFortuneo(built) {
+  const groups = [];
+  for (const row of built) {
+    const hit = groups.find((g) => sameCostListings(g.listings, row.listings));
+    if (hit) hit.members.push(row);
+    else groups.push({ listings: row.listings, members: [row] });
+  }
+  return groups.map((g) => {
+    if (g.members.length === 1) return g.members[0];
+    return {
+      ...g.members[0],
+      folder: `fortuneo:${g.members.map((m) => m.folder.split(":")[1]).join("-")}`,
+      name: g.members[0].family,
+      plan: "",
+      planRank: 0,
+    };
+  });
+}
+
 // Keeps the first of any run of rows the reader could not tell apart. The
 // signature is the columns the page prints and nothing else: a listing may well
 // differ in its name or its query and still be, on screen, the same line twice.
@@ -1505,8 +1582,10 @@ function detail(key, nat = "", size = {}) {
           ({
             buyable,
             nonEuResident,
+            nonUkResident,
             usResidentsOnly,
             indianOnly,
+            cfd,
             supportedCountries,
             exchangeRaw,
             venueExchange,
@@ -1568,6 +1647,25 @@ function detail(key, nat = "", size = {}) {
         if (listed.length) built.push(asPlan(plan, i, listed));
       });
       for (const row of collapseBoursobank(built)) rows.push(row);
+      continue;
+    }
+    if (folder === "fortuneo") {
+      const built = [];
+      FORTUNEO_PLANS.forEach((plan, i) => {
+        const listed = listings({ plan: plan.id });
+        if (listed.length) built.push(asPlan(plan, i, listed));
+      });
+      for (const row of collapseFortuneo(built)) rows.push(row);
+      continue;
+    }
+    if (folder === "etoro") {
+      const built = [];
+      ETORO_PLANS.forEach((plan, i) => {
+        if (!etoroOpen(plan.id, nat)) return;
+        const listed = listings({ plan: plan.id });
+        if (listed.length) built.push(asPlan(plan, i, listed));
+      });
+      for (const row of collapseEtoro(built)) rows.push(row);
       continue;
     }
     if (folder === "bux") {
@@ -1642,11 +1740,16 @@ function detail(key, nat = "", size = {}) {
       } else {
         const built = [];
         revolutEntitiesFor(nat).forEach((ent, i) => {
-          const standard = listings({ entity: ent.id, plan: "standard" });
+          // Trading Ltd only sells to Britain. A line Britain cannot buy is
+          // one that house sells to nobody, so it stays off the UK rows even
+          // when the visitor named no country. The Lithuanian house still
+          // shows it: a Swiss client buys there.
+          const houseNat = ent.id === "uk" && !nat ? "GB" : nat;
+          const standard = listings({ entity: ent.id, plan: "standard" }, houseNat);
           if (standard.length) {
             built.push(asPlan({ id: ent.id, name: revolutEquityName(ent.id, "standard", false) }, i * 2, standard));
           }
-          const ultra = listings({ entity: ent.id, plan: "ultra" });
+          const ultra = listings({ entity: ent.id, plan: "ultra" }, houseNat);
           if (ultra.length && !sameTripListings(standard, ultra)) {
             built.push(
               asPlan({ id: `${ent.id}-ultra`, name: revolutEquityName(ent.id, "ultra", false) }, i * 2 + 1, ultra)

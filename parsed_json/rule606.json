@@ -1,6 +1,6 @@
 {
   "quarter": "2026-Q2",
-  "fetchedAt": "2026-09-19T23:03:35.536Z",
+  "fetchedAt": "2026-09-21T11:38:11.658Z",
   "source": "https://cdn.finra.org/606reportBulk/2026/606_NMS_2026_Q2.zip",
   "brokers": {
     "alpaca": {
@@ -53,7 +53,9 @@
         "36418_606_NMS_2026_Q2_V1_20260727.xml"
       ],
       "mix": {
-        "OTHER": 0.9349,
+        "OTHER": 0.3925,
+        "IATS": 0.4185,
+        "IBCO": 0.1239,
         "CDRG": 0.02948,
         "HRTF": 0.02649,
         "JNST": 0.009145
@@ -189,6 +191,22 @@
         "CDRG": 0.3609,
         "SOHO": 0.175,
         "OTHER": 0.02108
+      }
+    },
+    "webull": {
+      "crd": [
+        "289063"
+      ],
+      "name": "Webull Financial LLC",
+      "files": [
+        "289063_606_NMS_2026_Q2_WBUL_V1_20260730.xml"
+      ],
+      "mix": {
+        "CDRG": 0.4484,
+        "JNST": 0.1814,
+        "NITE": 0.2271,
+        "HRTF": 0.09561,
+        "OTHER": 0.04745
       }
     },
     "drivewealth": {

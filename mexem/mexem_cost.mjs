@@ -125,7 +125,7 @@
 // Stockholm and Shanghai are all priced by Mexem and unsourced by `spread.mjs`.
 //
 // `nonEuResident` (no KID) is a residency fact carried by the catalogue row;
-// `listingAccepts` hides such a row from an EEA visitor. It does not belong in
+// `listingAccepts` hides such a row from an EEA or GB visitor. It does not belong in
 // `onlineBuy`, or a Taiwanese ETF vanishes from the page when no country is
 // selected.
 //

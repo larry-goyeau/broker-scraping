@@ -261,6 +261,23 @@ function venuesFor(priceSource, suffix) {
 // price source eToro assigns is a faithful stand-in for that line.
 const REAL_ETF_SOURCES = new Set(["Xetra", "LSE PLC", "Euronext", "CBOE EU"]);
 
+// `IsVisible: false` on the public trade feed is the Europe account's
+// "view only / regulatory constraints" shelf. eToro (UK) Ltd sells the
+// London share on that shelf (SMT.L and the other closed-end names).
+// Russian lines have no buyer. A UCITS the feed hides is left out: the
+// buyer is not this test.
+const NO_BUYER = /gazprom|lukoil|norilsk|novatek|rosneft|severstal|surgutneftegas|tatneft/i;
+
+function londonShareForUk(instrument, rules, type) {
+  if (rules?.IsVisible !== false) return false;
+  if (instrument.PriceSource !== "LSE PLC") return false;
+  if (type !== "STOCK") return false;
+  const name = instrument.InstrumentDisplayName || "";
+  if (/\b(UCITS|ETF|ETC|ETN)\b/i.test(name)) return false;
+  if (NO_BUYER.test(name)) return false;
+  return true;
+}
+
 const INSTRUMENT_TYPES = {
   1: "FX",
   2: "CMDTY",
@@ -493,6 +510,10 @@ for (const instrument of instruments) {
   const type = refineType(INSTRUMENT_TYPES[typeId] || "STOCK", name);
   const priceSource = instrument.PriceSource || "";
   const venues = venuesFor(priceSource, suffix);
+  // A London share the stock catalogue does not know is looked up in etfs.csv:
+  // investment trusts live there. Only that miss gets the GB buyer. An LSE
+  // name already in stocks.csv stays open to every eToro client.
+  let londonOnly = false;
 
   let match = null;
   if (type === "CRYPTO") {
@@ -501,11 +522,16 @@ for (const instrument of instruments) {
     const kind = type === "STOCK" ? "STOCK" : "ETF";
     match = resolveListing(catalogues[kind], ticker, name, venues);
     if (!match) match = resolveByName(catalogues[kind], name, venues);
+    londonOnly = !match && londonShareForUk(instrument, rules, type);
+    if (londonOnly) {
+      match = resolveListing(catalogues.ETF, ticker, name, venues);
+      if (!match) match = resolveByName(catalogues.ETF, name, venues);
+    }
   }
 
   const isin = match?.isin || "";
   if (!isin && type !== "CRYPTO" && type !== "FX" && type !== "CMDTY" && type !== "INDEX") {
-    if (!keepEverything) {
+    if (!keepEverything && !londonOnly) {
       unmatched += 1;
       continue;
     }
@@ -548,6 +574,7 @@ for (const instrument of instruments) {
     raw: [symbol, name, priceSource, currency].filter(Boolean).join(" "),
     isin: isin || null,
   };
+  if (londonOnly) row.supportedCountries = ["GB"];
 
   const key = entryKey(row);
   const existing = seen.get(key);
@@ -579,7 +606,8 @@ console.error(
     `(${Object.entries(byType)
       .sort((left, right) => right[1] - left[1])
       .map(([type, count]) => `${count} ${type}`)
-      .join(", ")}); ${realCount} real, ${cfdCount} CFD; ${unmatched} with no catalogue match, ${skipped} skipped`
+      .join(", ")}); ${realCount} real, ${cfdCount} CFD; ${unmatched} with no catalogue match, ${skipped} skipped, ` +
+    `${results.filter((row) => row.supportedCountries).length} London shares a GB client can buy`
 );
 console.error(
   `by currency ` +

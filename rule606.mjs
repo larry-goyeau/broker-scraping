@@ -60,6 +60,8 @@ export const ALIASES = {
   captrader: "interactivebrokers",
   mexem: "interactivebrokers",
   whselfinvest: "interactivebrokers",
+  // LYNX transmits to IBIE. IBIE routes US equities to Interactive Brokers LLC.
+  lynx: "interactivebrokers",
   trading212: "interactivebrokers",
   vivid: "interactivebrokers",
 };

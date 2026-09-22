@@ -8,24 +8,34 @@
 // 0.2 % of the sliver. `roundTrip` is given the size — and `--spent=`
 // already booked this month, in euro — and charges what is charged.
 //
-// XTB S.A. (PL, KNF) / XTB Limited (UK). Same Standard OMI card on the
-// 2026 help pages and on the 30.06.2025 table. The Belize INT marketing
-// page prints the same 0 / 0.2 % / 0.5 %. Catalogue
-// `xtb_scraping.mjs` — xStation equities (CFDs dropped). Until that
-// file has been run, this one answers that the book is missing. Stock
-// CFDs, ETF CFDs and crypto CFDs are another product.
+// Five companies print the same 0 / 0.2 % / 0.5 % formula. The round
+// trip still changes, because the cash they can hold is not the same
+// and the UK floor is in pounds. `--entity=` is one of sa, uk, cy,
+// mena, int. Default is S.A. (the French-branch book). The front asks
+// for each company and keeps two rows only when the totals differ.
+// Catalogue `xtb_scraping.mjs` — xStation equities (CFDs dropped).
+// Until that file has been run, this one answers that the book is
+// missing. Stock CFDs, ETF CFDs and crypto CFDs are another product.
 //
 //   OMI stocks / ETFs / ETC / ETN / fractionals
 //                      0 % until 100 000 € monthly turnover
-//                      then 0.2 %, min 10 €, on the excess of that trade
+//                      then 0.2 % on the excess, floored at:
+//                        S.A.            10 €
+//                        UK              10 £
+//                        Cyprus          10 € or 10 $ (the account)
+//                        MENA / Belize   10 €
 //   FX on the trade    0.5 % of mid, each way, when cash ≠ listing
 //   FX weekend transfer 0.8 % — cash-account move, not this trip
 //
-// Cash accounts the pages name: PLN, EUR, USD (PL, max four live
-// books) and GBP, EUR, USD (UK). The union is holdable. GBX settles
-// in GBP. A SEK / CHF / HKD / JPY / CZK / HUF / DKK / NOK listing
-// cannot be held, so that 0.5 % is in `brokerFees` and stays out of
-// the remark. Holdable cash keeps `FX 0.50% when cash ≠ CCY.`
+// Cash the pages name, and only that:
+//   S.A.          PLN, EUR, USD
+//   UK            GBP, EUR, USD
+//   Cyprus        EUR, USD
+//   MENA          USD
+//   Belize        USD
+// GBX settles in GBP. A currency absent from that company's list is
+// converted, so the 0.5 % is in `brokerFees`. Holdable cash keeps
+// `FX 0.50% when cash ≠ CCY.`
 //
 // Stamp / FTT from taxMap by ISIN. The OMI table also names France
 // 0.40 %, Spain 0.20 %, Italy 0.10 %, UK 0.50 % / Irish 1 %, and PTM
@@ -44,9 +54,9 @@
 //   https://www.xtb.com/pl/centrum-pomocy/akcje-i-etf-8/czy-pobierana-jest-oplata-za-przewalutowanie-w-przypadku-handlu-na-akcjach-i-etf-notowanych-w-innych-walutach
 //
 //   node xtb/xtb_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node xtb/xtb_cost.mjs VWCE XETR EUR --shares=10 --price=140
+//   node xtb/xtb_cost.mjs VWCE XETR EUR --shares=10 --price=140 --entity=mena
 //   node xtb/xtb_cost.mjs TTE EURONEXT EUR --shares=10 --price=60
-//   node xtb/xtb_cost.mjs AAPL NASDAQ USD --shares=500 --price=230 --spent=95000
+//   node xtb/xtb_cost.mjs AAPL NASDAQ USD --shares=500 --price=230 --spent=95000 --entity=uk
 //   node xtb/xtb_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
@@ -65,16 +75,79 @@ const SCHEDULE = {
   help: "https://www.xtb.com/en/help-center/stocks-and-etfs-10/what-are-the-commissions-fees-for-trading-shares-stocks",
   helpInt: "https://www.xtb.com/en/help-center/fees-and-payments-3/fees-and-commissions-at-xtb",
   fxPl: "https://www.xtb.com/pl/centrum-pomocy/akcje-i-etf-8/czy-pobierana-jest-oplata-za-przewalutowanie-w-przypadku-handlu-na-akcjach-i-etf-notowanych-w-innych-walutach",
-  readOn: "2026-09-18",
+  readOn: "2026-09-22",
   tableOn: "2025-06-30",
-  entity: "XTB S.A. / XTB Limited",
+  entity: "XTB S.A. / XTB Limited (UK) / XTB Limited (CY) / XTB MENA / XTB International",
 };
 
 const FREE_EUR = 100000;
 const RATE = 0.002;
 const MIN_EUR = 10;
 const FX_EACH = 0.005;
-const HOLD = new Set(["EUR", "GBP", "USD", "PLN"]);
+const FLOOR_EUR = { amount: MIN_EUR, currency: "EUR" };
+const FLOOR_GBP = { amount: 10, currency: "GBP" };
+
+// Deposit currencies printed on each company's account-and-fees page.
+// S.A. wallets are the ones the Polish FX article names.
+export const ENTITIES = {
+  sa: {
+    id: "sa",
+    name: "XTB S.A.",
+    hold: new Set(["PLN", "EUR", "USD"]),
+    floor: FLOOR_EUR,
+    fees: "https://www.xtb.com/pl/centrum-pomocy/akcje-i-etf-8/czy-pobierana-jest-oplata-za-przewalutowanie-w-przypadku-handlu-na-akcjach-i-etf-notowanych-w-innych-walutach",
+  },
+  uk: {
+    id: "uk",
+    name: "XTB UK",
+    hold: new Set(["GBP", "EUR", "USD"]),
+    floor: FLOOR_GBP,
+    fees: "https://www.xtb.com/en/account-and-fees",
+  },
+  cy: {
+    id: "cy",
+    name: "XTB Cyprus",
+    hold: new Set(["EUR", "USD"]),
+    floor: FLOOR_EUR,
+    fees: "https://www.xtb.com/cy/account-and-fees",
+  },
+  mena: {
+    id: "mena",
+    name: "XTB MENA",
+    hold: new Set(["USD"]),
+    floor: FLOOR_EUR,
+    fees: "https://www.xtb.com/ae-en/account-and-fees",
+  },
+  int: {
+    id: "int",
+    name: "XTB International",
+    hold: new Set(["USD"]),
+    floor: FLOOR_EUR,
+    fees: "https://www.xtb.com/int/account-and-fees",
+  },
+};
+const DEFAULT_ENTITY = "sa";
+
+function houseOf(id) {
+  return ENTITIES[String(id || DEFAULT_ENTITY).trim().toLowerCase()] || null;
+}
+
+// Cyprus prints the floor as 10 EUR/USD: the account's own currency.
+// A listing in neither is still floored in euro.
+function floorOf(house, currency) {
+  if (house.id === "cy") {
+    const cash = listingCash(currency);
+    if (cash === "EUR" || cash === "USD") return { amount: MIN_EUR, currency: cash };
+  }
+  return house.floor;
+}
+
+function floorLabel(floor) {
+  if (floor.currency === "EUR") return `${floor.amount} €`;
+  if (floor.currency === "GBP") return `${floor.amount} £`;
+  if (floor.currency === "USD") return `${floor.amount} $`;
+  return `${floor.amount} ${floor.currency}`;
+}
 const PTM = { each: 1.5, currency: "GBP", above: 10000 };
 const UK_STAMP = 0.005;
 const IE_STAMP = 0.01;
@@ -122,15 +195,18 @@ export function feeMarketOf(row) {
  * One side, after `spentEur` of the month has already printed.
  * The floor binds the excess, not the free remainder.
  */
-export function commissionSide({ notionalEur, spentEur = 0 }) {
+export function commissionSide({ notionalEur, spentEur = 0, floorAmount = MIN_EUR, floorCurrency = "EUR" }) {
   if (!(notionalEur > 0)) return null;
   const spent = Number(spentEur) || 0;
   const remaining = Math.max(0, FREE_EUR - spent);
   const excess = Math.max(0, notionalEur - remaining);
-  if (excess <= 0) return { charged: 0, excess: 0, raw: 0, floored: false, currency: "EUR" };
+  const floor = { amount: floorAmount, currency: floorCurrency };
+  if (excess <= 0) return { charged: 0, excess: 0, raw: 0, floored: false, currency: "EUR", floor };
   const raw = excess * RATE;
-  const charged = Math.max(MIN_EUR, raw);
-  return { charged, excess, raw, floored: charged > raw, currency: "EUR" };
+  const floorEur = floorCurrency === "EUR" ? floorAmount : convert(floorAmount, floorCurrency, "EUR");
+  if (!(floorEur > 0)) return null;
+  const charged = Math.max(floorEur, raw);
+  return { charged, excess, raw, floored: charged > raw + 1e-8, currency: "EUR", floor };
 }
 
 export function taxesFor(isin, listing) {
@@ -246,7 +322,9 @@ export function roundTrip({
   bp = null,
   perShare = null,
   spent = 0,
+  entity = DEFAULT_ENTITY,
 }) {
+  const house = houseOf(entity);
   const answer = {
     usd: null,
     brokerFees: null,
@@ -256,7 +334,9 @@ export function roundTrip({
     currency,
     onlineBuy: true,
     cashCurrency: "",
+    entity: house?.id || String(entity || ""),
   };
+  if (!house) return { ...answer, why: `entité XTB inconnue : ${entity}` };
 
   if (!catalogue) {
     return {
@@ -308,7 +388,8 @@ export function roundTrip({
   const marketBp = bp ?? leaf?.bp ?? null;
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
   const settle = listingCash(listing.currency);
-  const holdable = HOLD.has(settle);
+  const floor = floorOf(house, listing.currency);
+  const holdable = house.hold.has(settle);
   const fxPct = holdable ? 0 : FX_EACH;
   const { tax, rates, added, source: taxSource } = taxesFor(listing.isin, listing);
   const taxTotal = Object.values(rates).reduce((s, r) => s + r, 0);
@@ -328,7 +409,7 @@ export function roundTrip({
     remark: remarkOf({ holdable, currency: listing.currency, ukStock, ptmBites: levy.bites }),
     bp: marketBp,
     perShare: marketPerShare,
-    url: leaf?.url ?? SCHEDULE.fees,
+    url: leaf?.url ?? house.fees,
     basis: `barème XTB OMI, relu le ${SCHEDULE.readOn}`,
     tax,
     ccy: QUOTE,
@@ -343,6 +424,8 @@ export function roundTrip({
       why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
       confidence: confidenceOf({
         listing,
+        house,
+        floor,
         leaf,
         marketBp,
         marketPerShare,
@@ -362,8 +445,13 @@ export function roundTrip({
   const notionalUsd = dollars(notional, listing.currency);
   const notionalEur = convert(notional, listing.currency, "EUR");
   const spentEur = Number(spent) || 0;
-  const buy = commissionSide({ notionalEur, spentEur });
-  const sell = commissionSide({ notionalEur, spentEur: spentEur + (notionalEur || 0) });
+  const buy = commissionSide({ notionalEur, spentEur, floorAmount: floor.amount, floorCurrency: floor.currency });
+  const sell = commissionSide({
+    notionalEur,
+    spentEur: spentEur + (notionalEur || 0),
+    floorAmount: floor.amount,
+    floorCurrency: floor.currency,
+  });
   const commissionEur = buy && sell ? buy.charged + sell.charged : null;
   const commissionUsd = commissionEur == null ? null : dollars(commissionEur, "EUR");
 
@@ -401,13 +489,15 @@ export function roundTrip({
     },
     commission: {
       rate: RATE,
-      min: MIN_EUR,
+      min: floor.amount,
+      minCurrency: floor.currency,
       freeUntil: FREE_EUR,
       spent: spentEur,
       buy,
       sell,
       currency: "EUR",
       eachWay: true,
+      house: house.id,
     },
     parts: {
       marché: finite(bookUsd, 6),
@@ -418,6 +508,8 @@ export function roundTrip({
     ptm: levy.bites ? { gbp: levy.gbp, usd: finite(levy.usd, 6), above: PTM.above } : null,
     confidence: confidenceOf({
       listing,
+      house,
+      floor,
       leaf,
       marketBp,
       marketPerShare,
@@ -441,6 +533,8 @@ export function roundTrip({
 
 function confidenceOf({
   listing,
+  house,
+  floor,
   leaf,
   marketBp,
   marketPerShare,
@@ -459,10 +553,11 @@ function confidenceOf({
   spentEur,
   ptmBites,
 }) {
+  const wallets = [...house.hold].join("/");
   const said = [];
   said.push(
-    `barème XTB OMI, relu le ${SCHEDULE.readOn} (table du ${SCHEDULE.tableOn}) : ` +
-      `0 % jusqu'à ${FREE_EUR} € de volume mensuel, ensuite ${100 * RATE} % (plancher ${MIN_EUR} €) sur l'excédent`
+    `${house.name}, barème XTB OMI relu le ${SCHEDULE.readOn} (table du ${SCHEDULE.tableOn}) : ` +
+      `0 % jusqu'à ${FREE_EUR} € de volume mensuel, ensuite ${100 * RATE} % (plancher ${floorLabel(floor)}) sur l'excédent`
   );
   if (notionalEur != null) {
     const booked = (spentEur || 0) + 2 * notionalEur;
@@ -480,18 +575,18 @@ function confidenceOf({
         !leg.excess
           ? `${name} 0`
           : leg.floored
-            ? `${name} au plancher ${MIN_EUR} € (l'excédent ${Number(leg.excess.toPrecision(4))} € ne donnerait que ${Number(leg.raw.toPrecision(3))} €)`
+            ? `${name} au plancher ${floorLabel(leg.floor)} (l'excédent ${Number(leg.excess.toPrecision(4))} € ne donnerait que ${Number(leg.raw.toPrecision(3))} €)`
             : `${name} ${Number(leg.charged.toPrecision(4))} € sur ${Number(leg.excess.toPrecision(4))} €`;
       said.push(`${side(buy, "achat")}, ${side(sell, "vente")}`);
     }
   }
   if (fxPct) {
     said.push(
-      `change ${100 * FX_EACH} % × 2 : ${listingCash(listing.currency)} n'est pas une devise de caisse (PLN/EUR/USD/GBP), donc dans le total`
+      `change ${100 * FX_EACH} % × 2 : ${listingCash(listing.currency)} n'est pas une devise de caisse (${wallets}), donc dans le total`
     );
   } else if (holdable) {
     said.push(
-      `change hors du total : le compte peut tenir ${listingCash(listing.currency)} (${100 * FX_EACH} % seulement si le cash doit traverser)`
+      `change hors du total : ${house.name} peut tenir ${listingCash(listing.currency)} (${100 * FX_EACH} % seulement si le cash doit traverser)`
     );
   }
   if (taxTotal) {
@@ -545,7 +640,12 @@ if (import.meta.url === `file://${process.argv[1]}`) {
           rate: RATE,
           minEur: MIN_EUR,
           fx: FX_EACH,
-          hold: [...HOLD],
+          entities: Object.fromEntries(
+            Object.entries(ENTITIES).map(([id, house]) => [
+              id,
+              { name: house.name, hold: [...house.hold], floor: house.floor, fees: house.fees },
+            ])
+          ),
           ptm: PTM,
           ownFtt: Object.fromEntries(Object.entries(OWN_FTT).map(([k, v]) => [k, { name: v.name, rate: v.rate }])),
           secPrinted: 0,
@@ -562,11 +662,11 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node xtb/xtb_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--spent=eur] [--json]\n" +
+      "usage : node xtb/xtb_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--spent=eur] [--entity=sa|uk|cy|mena|int] [--json]\n" +
         "        node xtb/xtb_cost.mjs --schedule\n" +
         "  ex.   node xtb/xtb_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
-        "        node xtb/xtb_cost.mjs VWCE XETR EUR --shares=10 --price=140\n" +
-        "        node xtb/xtb_cost.mjs AAPL NASDAQ USD --shares=500 --price=230 --spent=95000"
+        "        node xtb/xtb_cost.mjs VWCE XETR EUR --shares=10 --price=140 --entity=mena\n" +
+        "        node xtb/xtb_cost.mjs AAPL NASDAQ USD --shares=500 --price=230 --spent=95000 --entity=uk"
     );
     process.exit(2);
   }
@@ -580,6 +680,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     bp: flag("bp") ? Number(flag("bp")) : null,
     perShare: flag("per-share") ? Number(flag("per-share")) : null,
     spent: flag("spent") ? Number(flag("spent")) : 0,
+    entity: flag("entity") || DEFAULT_ENTITY,
   });
 
   if (process.argv.includes("--json")) {
@@ -594,7 +695,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     process.exit(0);
   }
 
-  console.log(`${l.ticker || l.isin} — ${l.name || ""}`);
+  console.log(`${ENTITIES[out.entity]?.name || out.entity} — ${l.ticker || l.isin} — ${l.name || ""}`);
   console.log(
     `${l.exchange || "—"}${l.mic ? ` (${l.mic})` : ""}, ${l.currency}${l.type ? `, ${l.type.toLowerCase()}` : ""}\n`
   );

@@ -114,8 +114,14 @@ const SAXO = [
   "SG", "TH", "AU",
 ];
 
-// Firstrade international page (plus ordinary US accounts).
-const FIRSTRADE = ["US", "CN", "HK", "IN", "IL", "JP", "KR", "MO", "MY", "MX", "NZ", "SG", "TW"];
+// Firstrade help, 7 May 2026: international individual accounts, plus
+// ordinary US accounts.
+// https://help.firstrade.info/en/articles/9268315-can-i-open-an-international-account
+const FIRSTRADE = [
+  "US", "AT", "BE", "CN", "CZ", "DE", "DK", "ES", "FI", "FR", "GB", "HK", "IE",
+  "IL", "IN", "IT", "JP", "KR", "MO", "MX", "MY", "NO", "NZ", "PL", "PT", "SE",
+  "SG", "TW",
+];
 
 // Tradier KB "Permitted and Blocked Countries". Codes we have a name for;
 // Algeria is on both lists, so it stays out. UK, CA, AU, LV, MT, BG, HR, CY
@@ -226,7 +232,7 @@ export const ACCEPTED = {
   revolut: { countries: REVOLUT_STOCKS },
   bitpanda: { countries: BITPANDA },
   // lynxbroker.com/trading-account/account-country — AT BE CZ FI FR DE NL PL SK.
-  lynxplus: { countries: ["AT", "BE", "CZ", "FI", "FR", "DE", "NL", "PL", "SK"] },
+  lynx: { countries: ["AT", "BE", "CZ", "FI", "FR", "DE", "NL", "PL", "SK"] },
   captrader: { groups: ["EEA"], countries: ["CH"] },
   // CSSF passport, offices in LU/NL/BE/FR/DE/CH, clients in 28 countries.
   whselfinvest: { groups: ["EEA"], countries: ["CH", "GB"] },

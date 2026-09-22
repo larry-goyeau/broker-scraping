@@ -13,8 +13,6 @@ mexem
 bhmuae
 alpaca
 firstrade
-Lynx
 lightspeed
-
-
-Voir les broker sur le NBBO
+tiger trade
+tradeup

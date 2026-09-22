@@ -11,7 +11,7 @@ import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { catalogueFiles } from "./catalogues.mjs";
 import { resolveVenue } from "./venues.mjs";
-import { accepts, countryOptions, listingAccepts, stampResidency, EEA } from "./accepted.mjs";
+import { accepts, countryOptions, listingAccepts, stampResidency, EEA, EU, GCC } from "./accepted.mjs";
 import { toUsd, usdPer } from "./fx.mjs";
 import { prices, ensureFresh } from "./prices.mjs";
 
@@ -88,7 +88,7 @@ const FOLDER_NAME = {
   WHSelfInvest: "WH SelfInvest",
   xtb: "XTB",
   fortuneo: "Fortuneo",
-  lynxplus: "LYNX+",
+  lynx: "LYNX+",
 };
 
 function metaFor(folder, list) {
@@ -1111,6 +1111,106 @@ function tigerOpen(plan, nat) {
   return plan === "sg";
 }
 
+// XTB prints one formula. The trip changes with the cash a company can
+// hold (and, past 100 000 € of monthly turnover, with the UK pound
+// floor). A visitor who names a country sees only that company's row.
+// With no country, each company is priced on the names it actually
+// lists; rows whose totals match are folded back into one line.
+const XTB_SA = new Set(["CA", "CZ", "DE", "ES", "FR", "PL", "PT", "RO", "SK"]);
+const XTB_INTL = new Set([
+  "AO", "BM", "GE", "MK", "MY", "MR", "MD", "ME", "PH", "KN", "RS", "ZA", "TT",
+  "TH", "VN", "ZM",
+]);
+const XTB_MENA = new Set(GCC);
+const XTB_CY = new Set(EU.filter((code) => code !== "BE" && !XTB_SA.has(code)));
+const XTB_PLANS = [
+  { id: "sa", name: "XTB S.A.", probe: "FR" },
+  { id: "uk", name: "XTB UK", probe: "GB" },
+  { id: "cy", name: "XTB Cyprus", probe: "IT" },
+  { id: "mena", name: "XTB MENA", probe: "AE" },
+  { id: "int", name: "XTB International", probe: "ZA" },
+];
+
+function xtbEntityFor(nat) {
+  const code = String(nat || "").trim().toUpperCase();
+  if (!code) return "";
+  if (code === "GB") return "uk";
+  if (XTB_MENA.has(code)) return "mena";
+  if (XTB_INTL.has(code)) return "int";
+  if (XTB_SA.has(code)) return "sa";
+  if (XTB_CY.has(code)) return "cy";
+  return "";
+}
+
+function xtbOpen(plan, nat) {
+  const who = xtbEntityFor(nat);
+  if (!String(nat || "").trim()) return true;
+  return plan === who;
+}
+
+const XTB_PLAN_LABEL = Object.fromEntries(XTB_PLANS.map((p) => [p.id, p.name]));
+
+function xtbName(planIds, allIds) {
+  const order = XTB_PLANS.map((p) => p.id);
+  const ids = [...new Set(planIds)].sort((a, b) => order.indexOf(a) - order.indexOf(b));
+  if (ids.length === allIds.length) return "XTB";
+  return ids.map((id) => XTB_PLAN_LABEL[id] || id).join(" / ");
+}
+
+// One venue stays on one line when every company that lists it bills the
+// same trip. A company drops onto its own line only for the venue where
+// its total or its fees move.
+function collapseXtb(built) {
+  if (built.length <= 1) return built;
+  const allIds = built.map((r) => r.plan);
+  const places = new Map();
+  for (const row of built) {
+    for (const listing of row.listings) {
+      const place = `${listing.exchange}\0${listing.currency}`;
+      const list = places.get(place) || [];
+      list.push({ plan: row.plan, listing, row });
+      places.set(place, list);
+    }
+  }
+
+  const buckets = new Map();
+  for (const items of places.values()) {
+    const clusters = [];
+    for (const item of items) {
+      const hit = clusters.find(
+        (c) => c.listing.total === item.listing.total && c.listing.fees === item.listing.fees
+      );
+      if (hit) hit.plans.push(item.plan);
+      else clusters.push({ listing: item.listing, plans: [item.plan], row: item.row });
+    }
+    for (const c of clusters) {
+      const key = [...c.plans].sort().join(",");
+      const bucket = buckets.get(key);
+      if (bucket) bucket.listings.push(c.listing);
+      else buckets.set(key, { plans: c.plans, listings: [c.listing], row: c.row });
+    }
+  }
+
+  const rankOf = (id) => {
+    const i = XTB_PLANS.findIndex((p) => p.id === id);
+    return i < 0 ? 99 : i + 1;
+  };
+
+  return [...buckets.values()].map((b) => {
+    const name = xtbName(b.plans, allIds);
+    const all = b.plans.length === allIds.length;
+    return {
+      ...b.row,
+      folder: `xtb:${[...b.plans].join("-")}`,
+      family: name,
+      name,
+      plan: all ? "" : [...b.plans].join("-"),
+      planRank: all ? 0 : Math.min(...b.plans.map(rankOf)),
+      listings: b.listings,
+    };
+  });
+}
+
 function collapseTiger(built) {
   const groups = [];
   for (const row of built) {
@@ -1903,6 +2003,16 @@ function detail(key, nat = "", size = {}) {
         if (listed.length) built.push(asPlan(plan, i, listed));
       });
       for (const row of collapsePlum(built)) rows.push(row);
+      continue;
+    }
+    if (folder === "xtb") {
+      const built = [];
+      XTB_PLANS.forEach((plan, i) => {
+        if (!xtbOpen(plan.id, nat)) return;
+        const listed = listings({ entity: plan.id }, nat || plan.probe);
+        if (listed.length) built.push(asPlan(plan, i, listed));
+      });
+      for (const row of collapseXtb(built)) rows.push(row);
       continue;
     }
     const listed = listings({});

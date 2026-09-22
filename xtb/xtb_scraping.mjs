@@ -1,6 +1,9 @@
-import puppeteer from "puppeteer-core";
-import { stampRows } from "../accepted.mjs";
+import { spawnSync } from "node:child_process";
 import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import puppeteer from "puppeteer-core";
+import { EU, GCC, stampRows } from "../accepted.mjs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -406,7 +409,8 @@ const CONTENT = "pl.xtb.ipax.pub.grpc.instrumentinfo.v1.InstrumentInfoService/Ge
 // `--csv=PATH` overrides the fund list, `--stocks-csv=PATH` the share list,
 // `--cryptos-csv=PATH` the coin list. `--etfs-only` / `--stocks-only` /
 // `--crypto-only` answer for one shelf. `--all` keeps lines the catalogues
-// do not carry. `--fresh` starts the file over.
+// do not carry. `--fresh` starts the file over. `--public` reads the five
+// entity OMI tables and does not open the signed-in session.
 const etfsCsvPath = pathArg("csv", "../etfs.csv");
 const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
 const etfsOnly = hasFlag("etfs-only") || hasFlag("funds-only");
@@ -414,6 +418,7 @@ const stocksOnly = hasFlag("stocks-only");
 const cryptoOnly = hasFlag("crypto-only") || hasFlag("cryptos-only");
 const keepUnlisted = hasFlag("all");
 const fresh = hasFlag("fresh");
+const publicOnly = hasFlag("public");
 const startIndex = Math.max(1, numberArg("start", 1));
 
 const wantEtfs = !stocksOnly && !cryptoOnly;
@@ -463,6 +468,256 @@ if (!fresh && fs.existsSync(outputPath)) {
   } catch {
     // Ignore malformed prior output.
   }
+}
+
+// The signed-in session is one company. XTB publishes a separate organised-market
+// table per contracting entity, and the March 2026 help centre says which
+// residence signs with which company:
+//   XTB S.A. branches — 2025 annual report: Poland, Czechia, Spain, Slovakia,
+//     Romania, Germany, France, Portugal. Canada only via the French branch
+//     (xtb.com/fr help, February 2026).
+//   XTB Limited (Cyprus), accounts opened after 26 July 2018 — EU residents
+//     outside those branches. Belgium cannot open an account.
+//   XTB Limited (UK) — GB.
+//   XTB International Limited — the country list on that help page.
+//   XTB MENA Limited — "MENA residents"; the table is labelled for MENA and
+//     the codes are the GCC set already used for XTB.
+const XTB_SA = ["CA", "CZ", "DE", "ES", "FR", "PL", "PT", "RO", "SK"];
+const XTB_CY = EU.filter((code) => code !== "BE" && !XTB_SA.includes(code));
+const XTB_INTL = [
+  "AO", "BM", "GE", "MK", "MY", "MR", "MD", "ME", "PH", "KN", "RS", "ZA", "TT",
+  "TH", "VN", "ZM",
+];
+const ENTITY_BOOKS = [
+  {
+    id: "sa",
+    url: "https://www.xtb.com/pl/pliki/05.-omi-specification-tables-pl.pdf",
+    countries: XTB_SA,
+  },
+  {
+    id: "uk",
+    url: "https://www.xtb.com/en/OMI_specification_tables_UK.pdf",
+    countries: ["GB"],
+  },
+  {
+    id: "cy",
+    url: "https://www.xtb.com/cy/files/OMI_fractional_rights_specification_table_Actual.pdf",
+    countries: XTB_CY,
+  },
+  {
+    id: "int",
+    url: "https://www.xtb.com/int/Specification_Table_Organised_Market_Instruments_OMI.pdf",
+    countries: XTB_INTL,
+  },
+  {
+    id: "mena",
+    url: "https://www.xtb.com/int/omi_specification_tables_BZDU.pdf",
+    countries: [...GCC],
+  },
+];
+
+const SUFFIX_EXCHANGE = {
+  DE: "XETR",
+  UK: "LSE",
+  PL: "WSE",
+  FR: "EURONEXT",
+  NL: "EURONEXT",
+  PT: "EURONEXT",
+  BE: "EURONEXT",
+  ES: "BME",
+  IT: "MIL",
+  CH: "SIX",
+  SE: "OMX",
+  DK: "OMX",
+  FI: "OMX",
+  NO: "OSL",
+  // The MENA table prints .AE and does not say Dubai versus Abu Dhabi.
+  AE: "AE",
+};
+
+const OMI_ROW =
+  /([A-Z0-9][A-Z0-9]{0,16})\s*\.([A-Z]{1,8})\*?\s+(?:CLOSE ONLY\s*\/+\s*)?(.+?)([A-Z]{2}[A-Z0-9]{10})\s*([A-Z]{3})(?![A-Z0-9])/g;
+
+function parseOmi(text) {
+  const listings = [];
+  OMI_ROW.lastIndex = 0;
+  for (const match of text.matchAll(OMI_ROW)) {
+    const ticker = match[1].trim();
+    const suffix = match[2];
+    const raw = match[0];
+    const head = raw.slice(0, ticker.length + suffix.length + 8);
+    const close = head.includes("*") || raw.slice(0, 48).includes("CLOSE ONLY");
+    const name = normalize(
+      match[3]
+        .replace(/^CLOSE ONLY\s*\/+\s*/i, "")
+        .replace(/\s*\(Cboe BZX Real-Time Quote\)/gi, "")
+    );
+    const isin = toIsin(match[4]);
+    const currency = match[5];
+    if (!ticker || !isin || !name || name.length > 120 || !/^[A-Z]{3}$/.test(currency)) continue;
+    listings.push({ symbol: `${ticker}.${suffix}`, name, isin, currency, close });
+  }
+  return listings;
+}
+
+function extractPdfText(bytes) {
+  const pdfPath = path.join(os.tmpdir(), `xtb-omi-${process.pid}.pdf`);
+  fs.writeFileSync(pdfPath, bytes);
+  const script = [
+    "from pypdf import PdfReader",
+    "import sys",
+    "reader = PdfReader(sys.argv[1])",
+    "sys.stdout.write('\\n'.join((page.extract_text() or '') for page in reader.pages))",
+  ].join("; ");
+  const result = spawnSync("python3", ["-c", script, pdfPath], {
+    encoding: "utf8",
+    maxBuffer: 64 * 1024 * 1024,
+  });
+  fs.unlinkSync(pdfPath);
+  if (result.status !== 0) {
+    throw new Error(result.stderr || "python3 could not read an XTB OMI table (pypdf).");
+  }
+  return result.stdout;
+}
+
+async function pdfText(url) {
+  const response = await fetch(url, {
+    headers: { "user-agent": "Mozilla/5.0" },
+    redirect: "follow",
+    signal: AbortSignal.timeout(120000),
+  });
+  if (!response.ok) throw new Error(`XTB catalogue ${url} returned ${response.status}`);
+  return extractPdfText(Buffer.from(await response.arrayBuffer()));
+}
+
+function publicType(name) {
+  if (/\bETNs?\b/i.test(name)) return "ETN";
+  const withoutParens = name.replace(/\([^)]*\)/g, " ");
+  if (/\bETCs?\b/i.test(withoutParens) && !/\bETFs?\b/i.test(name) && !/^ETC\b/i.test(name)) return "ETC";
+  if (/\bETFs?\b/i.test(name)) return "ETF";
+  return "STOCK";
+}
+
+function exchangeFromSuffix(suffix, match) {
+  const code = String(suffix || "").toUpperCase();
+  if (code === "US") {
+    if (match?.exchanges) {
+      for (const venue of US_VENUES) {
+        if (venue === "CBOE") continue;
+        if (match.exchanges.has(venue)) return venue;
+      }
+    }
+    return "NYSE";
+  }
+  return SUFFIX_EXCHANGE[code] || code;
+}
+
+// Names the signed-in French branch already had stay with XTB S.A., and pick
+// up any other entity whose table also lists them. A name only another entity
+// publishes is limited to that entity. Close-only lines are left out: the
+// table itself refuses a new position.
+async function mergeEntityBooks() {
+  const open = new Map();
+  for (const book of ENTITY_BOOKS) {
+    console.error(`reading ${book.id} OMI`);
+    const listings = parseOmi(await pdfText(book.url));
+    let tradable = 0;
+    for (const listing of listings) {
+      if (listing.close) continue;
+      tradable += 1;
+      let entry = open.get(listing.isin);
+      if (!entry) {
+        entry = { listing, countries: new Set() };
+        open.set(listing.isin, entry);
+      }
+      for (const code of book.countries) entry.countries.add(code);
+    }
+    console.error(`${book.id}: ${tradable} open lines`);
+  }
+
+  for (const row of results) {
+    const hit = row.isin ? open.get(row.isin) : null;
+    const countries = new Set(hit ? hit.countries : []);
+    // No list yet: the row came from the signed-in branch. A list that already
+    // holds every XTB S.A. residence stays with that branch, even when the
+    // Polish table omits the name. A name taken from another entity's table
+    // does not carry those residences, and a later pass does not grant them.
+    const tagged = Array.isArray(row.supportedCountries);
+    const branch = !tagged || XTB_SA.every((code) => row.supportedCountries.includes(code));
+    if (!hit || branch) for (const code of XTB_SA) countries.add(code);
+    row.supportedCountries = [...countries].sort();
+  }
+
+  let added = 0;
+  for (const [isin, entry] of open) {
+    if (seenIsins.has(isin)) continue;
+    const type = publicType(entry.listing.name);
+    if ((type === "ETF" || type === "ETC" || type === "ETN") && !wantEtfs) continue;
+    if (type === "STOCK" && !wantStocks) continue;
+    const symbol = entry.listing.symbol;
+    const ticker = preferDottedClass(tickerFromSymbol(symbol));
+    if (!ticker) continue;
+    const match = catalogue.get(isin) || null;
+    const exchange = exchangeFromSuffix(symbol.split(".").pop(), match);
+    const currency = entry.listing.currency;
+    const name = entry.listing.name;
+    const key = `${isin}:${exchange}:${ticker}:${type}`.toUpperCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    seenIsins.add(isin);
+    results.push({
+      query: ticker,
+      ticker,
+      name,
+      exchange,
+      currency,
+      type,
+      raw: [symbol, name, exchange, currency].filter(Boolean).join(" "),
+      isin,
+      supportedCountries: [...entry.countries].sort(),
+    });
+    added += 1;
+  }
+  return added;
+}
+
+function finish(added) {
+  results.sort((left, right) => {
+    const byType = String(left.type).localeCompare(right.type);
+    if (byType !== 0) return byType;
+    const byExchange = String(left.exchange).localeCompare(String(right.exchange));
+    if (byExchange !== 0) return byExchange;
+    return String(left.ticker).localeCompare(String(right.ticker));
+  });
+
+  save();
+
+  const byType = new Map();
+  for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);
+  const byCurrency = new Map();
+  for (const row of results) byCurrency.set(row.currency, (byCurrency.get(row.currency) || 0) + 1);
+  const tagged = results.filter((row) => Array.isArray(row.supportedCountries)).length;
+
+  console.error(
+    `${results.length} listings over ${new Set(results.map((row) => row.isin || row.ticker)).size} instruments ` +
+      `(${[...byType].map(([type, count]) => `${count} ${type}`).join(", ") || "none"}; ` +
+      `${[...byCurrency].map(([currency, count]) => `${count} ${currency}`).join(", ") || "no currency"})` +
+      (unlisted ? `, ${unlisted} the catalogues do not carry` : "") +
+      (skipped.size ? `, left out ${[...skipped].map(([reason, count]) => `${count} ${reason}`).join(", ")}` : "") +
+      `, ${tagged} tagged with the entity's residences` +
+      (added ? `, ${added} names the signed-in book did not have` : "")
+  );
+}
+
+let savedCount = results.length;
+let savedAt = 0;
+let unlisted = 0;
+const skipped = new Map();
+
+if (publicOnly) {
+  const added = await mergeEntityBooks();
+  finish(added);
+  process.exit(0);
 }
 
 const browser = await puppeteer.connect({
@@ -654,17 +909,12 @@ async function basicInfo(instrumentId) {
 }
 
 const SAVE_INTERVAL_MS = 2000;
-let savedCount = results.length;
-let savedAt = 0;
 
 function save() {
   fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
   savedCount = results.length;
   savedAt = Date.now();
 }
-
-let unlisted = 0;
-const skipped = new Map();
 
 function skip(reason) {
   skipped.set(reason, (skipped.get(reason) || 0) + 1);
@@ -830,27 +1080,7 @@ if (onlyTickers.size > 0) {
   });
 }
 
-results.sort((left, right) => {
-  const byType = String(left.type).localeCompare(right.type);
-  if (byType !== 0) return byType;
-  const byExchange = String(left.exchange).localeCompare(String(right.exchange));
-  if (byExchange !== 0) return byExchange;
-  return String(left.ticker).localeCompare(String(right.ticker));
-});
-
-save();
-
-const byType = new Map();
-for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);
-const byCurrency = new Map();
-for (const row of results) byCurrency.set(row.currency, (byCurrency.get(row.currency) || 0) + 1);
-
-console.error(
-  `${results.length} listings over ${new Set(results.map((row) => row.isin || row.ticker)).size} instruments ` +
-    `(${[...byType].map(([type, count]) => `${count} ${type}`).join(", ") || "none"}; ` +
-    `${[...byCurrency].map(([currency, count]) => `${count} ${currency}`).join(", ") || "no currency"})` +
-    (unlisted ? `, ${unlisted} the catalogues do not carry` : "") +
-    (skipped.size ? `, left out ${[...skipped].map(([reason, count]) => `${count} ${reason}`).join(", ")}` : "")
-);
+const added = await mergeEntityBooks();
+finish(added);
 
 await browser.disconnect();

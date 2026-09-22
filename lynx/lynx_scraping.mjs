@@ -7,11 +7,11 @@
 // Do not navigate the tab. A `goto` on lynxplus.com has been seen to
 // fire `/ibapi/v1/api/logout` and drop the bridge.
 //
-//   node lynxplus/lynxplus_scraping.mjs
-//   node lynxplus/lynxplus_scraping.mjs IE00B4L5Y983 US0378331005
-//   node lynxplus/lynxplus_scraping.mjs --fresh --start=400
+//   node lynx/lynx_scraping.mjs
+//   node lynx/lynx_scraping.mjs IE00B4L5Y983 US0378331005
+//   node lynx/lynx_scraping.mjs --fresh --start=400
 //
-// Writes `lynxplus-parsed.json` next to this file.
+// Writes `lynx-parsed.json` next to this file.
 
 import puppeteer from "puppeteer-core";
 import { stampRows } from "../accepted.mjs";
@@ -233,7 +233,7 @@ if (!(await attachPortalPage())) {
   await page.goto(HOME, { waitUntil: "domcontentloaded" });
 }
 
-const outputPath = new URL("lynxplus-parsed.json", import.meta.url);
+const outputPath = new URL("lynx-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 

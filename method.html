@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>How costs are calculated</title>
+    <style>
+      :root {
+        --paper: #f3eee4;
+        --ink: #1c1914;
+        --mute: #6d675c;
+        --line: #d4cbb8;
+        --card: #fffdf7;
+        --green: #0f4d3a;
+        --green-soft: #dceae3;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; background: var(--paper); color: var(--ink); }
+      body {
+        font: 16px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      }
+      main { width: min(52rem, calc(100% - 40px)); margin: 0 auto; padding: 40px 0 80px; }
+      a.back { color: var(--green); text-decoration: none; font-size: 14px; }
+      a.back:hover { text-decoration: underline; text-underline-offset: 2px; }
+      h1 { margin: 18px 0 12px; font-size: 36px; letter-spacing: -0.03em; font-weight: 650; }
+      h2 { margin: 36px 0 10px; font-size: 22px; letter-spacing: -0.02em; font-weight: 650; }
+      p { margin: 0 0 12px; }
+      .lede { color: var(--mute); max-width: 40em; }
+      .eq {
+        margin: 14px 0;
+        padding: 16px 18px;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        font-variant-numeric: tabular-nums;
+        line-height: 1.2;
+      }
+      .eq .row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35em 0.45em; font-size: 20px; }
+      .eq .row + .row { margin-top: 12px; }
+      .var { font-style: italic; }
+      .sub { font-style: italic; font-size: 0.65em; vertical-align: -0.35em; line-height: 0; }
+      .frac {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        vertical-align: middle;
+        margin: 0 0.15em;
+        font-style: italic;
+        line-height: 1.15;
+      }
+      .frac > span:first-child { border-bottom: 1px solid var(--ink); padding: 0 0.4em 2px; }
+      .frac > span:last-child { padding: 2px 0.4em 0; }
+      .mean { font-style: normal; font-size: 0.85em; }
+      .mean .sub { font-size: 0.75em; }
+      dl { margin: 8px 0 0; }
+      dl div { display: grid; grid-template-columns: 4.5rem 1fr; gap: 8px 14px; margin: 0 0 8px; }
+      dt { font-style: italic; }
+      dd { margin: 0; color: var(--mute); }
+      .tree, .tree ul { list-style: none; margin: 8px 0 0; padding: 0; }
+      .tree ul { margin-left: 0.7rem; padding-left: 1rem; border-left: 1px solid var(--line); }
+      .tree li { position: relative; margin: 0; padding: 7px 0 7px 0.9rem; }
+      .tree li::before {
+        content: "";
+        position: absolute;
+        left: -1rem;
+        top: 1.05em;
+        width: 0.9rem;
+        border-top: 1px solid var(--line);
+      }
+      .tree > li { padding-left: 0; }
+      .tree > li::before { display: none; }
+      .node { margin: 0; font-weight: 600; }
+      .case { margin: 2px 0 0; color: var(--mute); font-size: 14px; }
+      .who { margin: 4px 0 0; font-weight: 400; font-size: 14px; }
+      .who li { padding: 2px 0 2px 0.9rem; font-weight: 400; }
+      .bd { font-weight: 600; }
+      .table-wrap { overflow-x: auto; }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 8px;
+      }
+      th, td {
+        text-align: left;
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+      }
+      th {
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--mute);
+        font-weight: 600;
+        border-bottom-color: var(--ink);
+      }
+      td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+      td.route { color: var(--mute); font-size: 14px; }
+      caption { caption-side: bottom; margin-top: 8px; color: var(--mute); font-size: 13px; text-align: left; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <a class="back" href="/">← Where to buy</a>
+      <h1>How costs are calculated</h1>
+      <p class="lede">The round-trip figure is the average cost, in dollars, of buying the quantity you entered and selling it straight back. It adds the book you cross, the broker’s own charges, and a tax when that schedule names one. The fees column is those charges without the book. N/A means the book was not measured.</p>
+
+      <h2>The formula</h2>
+      <p>On a US listing the book starts from Rule 605: the effective spread a retail order of 100 to 499 shares paid, price improvement included, in dollars per share. Nasdaq, NYSE, NYSE Arca, NYSE American and Cboe BZX share that figure. Rule 606 then scales it by where that broker-dealer sends held market and marketable-limit orders.</p>
+      <div class="eq" role="math" aria-label="Q equals the sum over venues of w sub t times the mean over names of E sub t,n over E sub n. The book equals E times Q.">
+        <div class="row">
+          <span class="var">Q</span>
+          <span>=</span>
+          <span>Σ<span class="sub">t</span></span>
+          <span><span class="var">w</span><span class="sub">t</span></span>
+          <span>×</span>
+          <span class="mean">mean<span class="sub">n</span></span>
+          <span class="frac"><span><span class="var">E</span><span class="sub">t,n</span></span><span><span class="var">E</span><span class="sub">n</span></span></span>
+        </div>
+        <div class="row">
+          <span>book</span>
+          <span>=</span>
+          <span class="var">E</span>
+          <span>×</span>
+          <span class="var">Q</span>
+        </div>
+      </div>
+      <dl>
+        <div><dt>E<sub>n</sub></dt><dd>The blended Rule 605 effective spread of name <span class="var">n</span>, dollars per share, already a round trip.</dd></div>
+        <div><dt>E<sub>t,n</sub></dt><dd>The same name, from the firm that venue <span class="var">t</span> is. The mean is equal-weight over every name where both exist.</dd></div>
+        <div><dt>w<sub>t</sub></dt><dd>The share of this broker’s held market and marketable-limit orders sent to <span class="var">t</span>, from its Rule 606 report.</dd></div>
+      </dl>
+      <p>An exchange, an ATS or an unnamed venue is not given a ratio of 1. Its ratio is the reconstructed quoted spread divided by the blended effective spread. A quoted touch is wider than what retail orders actually paid, so a broker that sends most of its flow there has a Q above 1.</p>
+      <p>Outside the US the book is a two-sided bid and ask, in basis points. Each reading is brought back to the average hour of the session, and the published figure is the median of those readings. Q is not applied.</p>
+      <div class="eq" role="math" aria-label="bp equals ask minus bid, over the mid, times 10,000. The book equals the amount times bp over 10,000.">
+        <div class="row">
+          <span>bp</span>
+          <span>=</span>
+          <span class="frac"><span>ask − bid</span><span>mid</span></span>
+          <span>× 10,000</span>
+        </div>
+        <div class="row">
+          <span>book</span>
+          <span>=</span>
+          <span>amount × bp / 10,000</span>
+        </div>
+      </div>
+      <p>The round trip the page prints is that book, plus the broker’s charges, plus a named tax.</p>
+
+      <h2>Which case applies</h2>
+      <ul class="tree">
+        <li>
+          <p class="node">A listing</p>
+          <ul>
+            <li>
+              <p class="node">US book</p>
+              <p class="case">Rule 605, dollars per share. The same figure for every US venue of that symbol.</p>
+              <ul>
+                <li>
+                  <p class="node">A 606 mix exists</p>
+                  <p class="case">book = E × Q</p>
+                  <ul>
+                    <li>
+                      <p class="node">US broker-dealer</p>
+                      <p class="case">It files its own 606.</p>
+                      <p class="who">@@US_WITH_Q@@</p>
+                    </li>
+                    <li>
+                      <p class="node">Broker outside the US</p>
+                      <p class="case">It does not file a 606. The order goes to the US broker-dealer it names, and that dealer’s Q is used.</p>
+                      <ul class="who">@@ALIAS_GROUPS@@</ul>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <p class="node">No 606 mix</p>
+                  <p class="case">The book is the average NBBO: the quoted national best bid and offer of that name, not a wholesaler’s effective spread.</p>
+                  <p class="who">@@NO_Q@@</p>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <p class="node">Book outside the US</p>
+              <p class="case">The book is the average spread of the venue.</p>
+              <ul>
+                <li>
+                  <p class="node">A public tape</p>
+                  <p class="case">book = amount × bp / 10,000, from that venue’s own bid and ask.</p>
+                </li>
+                <li>
+                  <p class="node">No public tape</p>
+                  <p class="case">The book is the bid and ask that broker prints: Trade Republic on TIB, Quantfury, a crypto quote. One side missing leaves the total N/A.</p>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+
+      <h2>Q of each US broker</h2>
+      <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Broker</th>
+            <th class="num">Q</th>
+            <th>Where market orders go</th>
+          </tr>
+        </thead>
+        <tbody>
+          @@Q_ROWS@@
+        </tbody>
+        <caption>Rule 606, @@QUARTER@@. Q is not stored: it is recomputed from that report and the Rule 605 table.</caption>
+      </table>
+      </div>
+    </main>
+  </body>
+</html>

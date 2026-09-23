@@ -624,6 +624,14 @@ export const KNOWN_UNSOURCED = [
   { match: ["nag", "xnag", "nagoya"], name: "Nagoya", why: "adaptateur non écrit" },
   { match: ["nseng", "xngn", "nigeria"], name: "Nigerian Exchange", why: "adaptateur non écrit" },
   { match: ["psx", "xkar", "karachi", "pakistan"], name: "Pakistan Stock Exchange", why: "adaptateur non écrit" },
+  // KASE prints a best bid and a best offer, and on 22 Sep 2026 the bid was
+  // above the offer on 43 of the 49 names that had both. Those are the day's
+  // extremes, not the two sides of one book, so there is nothing to store.
+  {
+    match: ["kase", "xkaz"],
+    name: "Kazakhstan Stock Exchange",
+    why: "pas de touche simultanée : le bid et l'offre publiés se croisent",
+  },
 ];
 
 // "Deutsche Börse Xetra" has to reduce to the same token as "deutscheborsexetra", so

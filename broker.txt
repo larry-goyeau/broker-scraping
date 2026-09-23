@@ -1,6 +1,5 @@
 bluorbank
 fortuneo
-Endowus
 benchmark
 
 Syfe
@@ -13,6 +12,5 @@ mexem
 bhmuae
 alpaca
 firstrade
-lightspeed
 tiger trade
 tradeup

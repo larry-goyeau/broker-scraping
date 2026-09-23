@@ -171,9 +171,8 @@ export function ticketEach(plan, market) {
 function remarkOf({ market, plan, currency } = {}) {
   const lines = [];
   if (plan?.id === "us") return "";
-  if (market === "asiaMe" || market === "other") {
-    if (plan?.id === "uk") lines.push("UK / Ireland: no stock ticket.");
-    if (plan?.id === "anz") lines.push("Australia / New Zealand: $2 every stock exchange.");
+  if ((market === "asiaMe" || market === "other") && plan?.id === "anz") {
+    lines.push("Australia / New Zealand: $2 every stock exchange.");
   }
   if (market !== "crypto") lines.push(fxRemark("0.75", currency));
   return lines.join("\n");

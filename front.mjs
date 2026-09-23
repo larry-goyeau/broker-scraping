@@ -12,8 +12,10 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { catalogueFiles } from "./catalogues.mjs";
 import { resolveVenue } from "./venues.mjs";
 import { accepts, countryOptions, listingAccepts, stampResidency, EEA, EU, GCC } from "./accepted.mjs";
+import { depositHas, splitByPlan, currencyOptions } from "./deposits.mjs";
 import { toUsd, usdPer } from "./fx.mjs";
 import { prices, ensureFresh } from "./prices.mjs";
+import { ALIASES, US_BROKERS, qOf, routingOf } from "./rule606.mjs";
 
 const PORT = (() => {
   const m = process.argv.find((a) => a.startsWith("--port="));
@@ -21,6 +23,7 @@ const PORT = (() => {
 })();
 
 const HTML = new URL("front.html", import.meta.url);
+const METHOD = new URL("method.html", import.meta.url);
 const LIST = new URL("broker-list.txt", import.meta.url);
 
 function slug(value) {
@@ -601,10 +604,28 @@ function listingOpen(listing, nat) {
   return listingAccepts(listing, nat);
 }
 
-function visibleBrokers(inst, nat) {
+function depositPlans(folder, nat) {
+  if (folder === "xtb") return XTB_PLANS.filter((p) => xtbOpen(p.id, nat)).map((p) => p.id);
+  if (folder === "webull") return WEBULL_PLANS.filter((p) => webullOpen(p.id, nat)).map((p) => p.id);
+  if (folder === "lightyear") return lightyearPlansFor(nat).map((p) => p.id);
+  if (folder === "robinhood") return ROBINHOOD_PLANS.filter((p) => robinhoodOpen(p.id, nat)).map((p) => p.id);
+  if (folder === "plum") return PLUM_PLANS.filter((p) => plumOpen(p.id, nat)).map((p) => p.id);
+  if (folder === "swissquote") return SWISSQUOTE_PLANS.map((p) => p.id);
+  if (folder === "etoro") return ETORO_PLANS.filter((p) => etoroOpen(p.id, nat)).map((p) => p.id);
+  return [];
+}
+
+function brokerTakesDeposit(folder, nat, dep) {
+  if (!dep) return true;
+  if (!splitByPlan(folder)) return depositHas(folder, "", dep);
+  return depositPlans(folder, nat).some((id) => depositHas(folder, id, dep));
+}
+
+function visibleBrokers(inst, nat, dep = "") {
   let n = 0;
   for (const [folder, listingsOf] of inst.byBroker) {
     if (!acceptsNat(folder, nat)) continue;
+    if (!brokerTakesDeposit(folder, nat, dep)) continue;
     if (listingsOf.some((listing) => listingOpen(listing, nat))) n += 1;
   }
   return n;
@@ -673,7 +694,7 @@ function score(inst, Q) {
   return s;
 }
 
-function search(q, limit = 20, nat = "") {
+function search(q, limit = 20, nat = "", dep = "") {
   const query = String(q || "").trim();
   if (query.length < 1) return [];
   // Normalised once rather than once per instrument.
@@ -684,7 +705,7 @@ function search(q, limit = 20, nat = "") {
   for (const inst of instruments.values()) {
     const s = score(inst, Q);
     if (s <= 0) continue;
-    const n = visibleBrokers(inst, nat);
+    const n = visibleBrokers(inst, nat, dep);
     if (n <= 0) continue;
     hits.push({ s, brokers: n, inst });
   }
@@ -1637,7 +1658,7 @@ function sameShown(crypto) {
   };
 }
 
-function detail(key, nat = "", size = {}) {
+function detail(key, nat = "", size = {}, dep = "") {
   const inst = resolve(key);
   if (!inst) return null;
   const rows = [];
@@ -1645,6 +1666,7 @@ function detail(key, nat = "", size = {}) {
   const isCrypto = inst.key.startsWith("CRYPTO:");
   for (const [folder, listingsOf] of inst.byBroker) {
     if (!acceptsNat(folder, nat)) continue;
+    if (dep && !splitByPlan(folder) && !depositHas(folder, "", dep)) continue;
     const meta = brokers.get(folder);
     // The quote leg still travels into the estimators, which need it to price the
     // conversion; only the column goes blank, and only where nothing is imposed.
@@ -1761,7 +1783,7 @@ function detail(key, nat = "", size = {}) {
     if (folder === "etoro") {
       const built = [];
       ETORO_PLANS.forEach((plan, i) => {
-        if (!etoroOpen(plan.id, nat)) return;
+        if (!etoroOpen(plan.id, nat) || !depositHas(folder, plan.id, dep)) return;
         const listed = listings({ plan: plan.id });
         if (listed.length) built.push(asPlan(plan, i, listed));
       });
@@ -1795,6 +1817,7 @@ function detail(key, nat = "", size = {}) {
     }
     if (folder === "lightyear") {
       lightyearPlansFor(nat).forEach((plan, i) => {
+        if (!depositHas(folder, plan.id, dep)) return;
         const listed = listings({ plan: plan.id });
         if (listed.length) rows.push(asPlan(plan, i, listed));
       });
@@ -1874,6 +1897,7 @@ function detail(key, nat = "", size = {}) {
     if (folder === "swissquote") {
       const built = [];
       SWISSQUOTE_PLANS.forEach((plan, i) => {
+        if (!depositHas(folder, plan.id, dep)) return;
         const listed = listings({ entity: plan.id });
         if (listed.length) built.push(asPlan(plan, i, listed));
       });
@@ -1902,7 +1926,7 @@ function detail(key, nat = "", size = {}) {
     if (folder === "webull") {
       const built = [];
       WEBULL_PLANS.forEach((plan, i) => {
-        if (!webullOpen(plan.id, nat)) return;
+        if (!webullOpen(plan.id, nat) || !depositHas(folder, plan.id, dep)) return;
         const listed = listings({ plan: plan.id });
         if (listed.length) built.push(asPlan(plan, i, listed));
       });
@@ -1989,7 +2013,7 @@ function detail(key, nat = "", size = {}) {
     }
     if (folder === "robinhood") {
       ROBINHOOD_PLANS.forEach((plan, i) => {
-        if (!robinhoodOpen(plan.id, nat)) return;
+        if (!robinhoodOpen(plan.id, nat) || !depositHas(folder, plan.id, dep)) return;
         const listed = listings({ entity: plan.id }, nat || ROBINHOOD_NAT[plan.id]);
         if (listed.length) rows.push(asPlan(plan, i, listed));
       });
@@ -1998,7 +2022,7 @@ function detail(key, nat = "", size = {}) {
     if (folder === "plum") {
       const built = [];
       PLUM_PLANS.forEach((plan, i) => {
-        if (!plumOpen(plan.id, nat)) return;
+        if (!plumOpen(plan.id, nat) || !depositHas(folder, plan.id, dep)) return;
         const listed = listings({ plan: plan.id });
         if (listed.length) built.push(asPlan(plan, i, listed));
       });
@@ -2008,7 +2032,7 @@ function detail(key, nat = "", size = {}) {
     if (folder === "xtb") {
       const built = [];
       XTB_PLANS.forEach((plan, i) => {
-        if (!xtbOpen(plan.id, nat)) return;
+        if (!xtbOpen(plan.id, nat) || !depositHas(folder, plan.id, dep)) return;
         const listed = listings({ entity: plan.id }, nat || plan.probe);
         if (listed.length) built.push(asPlan(plan, i, listed));
       });
@@ -2070,10 +2094,92 @@ async function warmPrices(key) {
   await Promise.all([...isins].slice(0, 8).map((isin) => ensureFresh(isin)));
 }
 
+const VENUE_606 = {
+  CDRG: "Citadel",
+  NITE: "Virtu",
+  JNST: "Jane Street",
+  UBSS: "UBS",
+  HRTF: "Hudson River",
+  SOHO: "Two Sigma",
+  ETMM: "G1",
+  GTSM: "GTS",
+  IATS: "IBKR ATS",
+  IBCO: "IBKR Corp",
+  OTHER: "exchanges and ATS",
+};
+
+const htmlEsc = (s) =>
+  String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+function shownName(folder) {
+  const want = String(folder || "").toLowerCase();
+  for (const [key, meta] of brokers) {
+    if (key.toLowerCase() === want && meta?.name) return meta.name;
+  }
+  return FOLDER_NAME[folder] || US_BROKERS[folder]?.name || prettyFolder(folder);
+}
+
+// Q is recomputed on each view from the 606 file and the 605 table. A broker
+// outside the US appears only when the dealer it names actually has a mix.
+function methodPage() {
+  const file = new URL("parsed_json/rule606.json", import.meta.url);
+  const stored = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, "utf8")) : {};
+  const quarter = stored.quarter || "the latest 606 file";
+  const us = Object.keys(US_BROKERS).map((folder) => {
+    const routing = routingOf(folder);
+    return { folder, q: qOf(folder), mix: routing?.mix || {}, onFront: [...brokers.keys()].some((k) => k.toLowerCase() === folder) };
+  });
+  const withQ = us.filter((row) => row.q != null && row.onFront).map((row) => shownName(row.folder)).sort((a, b) => a.localeCompare(b, "en"));
+  const groups = new Map();
+  const noQ = [];
+  for (const row of us) {
+    if (row.q != null || !row.onFront) continue;
+    noQ.push(`${shownName(row.folder)} has no 606 mix in ${quarter}.`);
+  }
+  for (const [intro, dealer] of Object.entries(ALIASES)) {
+    const names = groups.get(dealer) || [];
+    if (qOf(dealer) != null) {
+      names.push(shownName(intro));
+      groups.set(dealer, names);
+      continue;
+    }
+    const filed = routingOf(dealer);
+    const why = filed
+      ? `${US_BROKERS[dealer]?.name || dealer} filed a 606 with no market-order mix`
+      : `${US_BROKERS[dealer]?.name || dealer} has no 606 in ${quarter}`;
+    noQ.push(`${shownName(intro)} names ${US_BROKERS[dealer]?.name || dealer}, and ${why}.`);
+  }
+  const aliasHtml = [...groups.entries()]
+    .map(([dealer, intros]) => {
+      const who = intros.sort((a, b) => a.localeCompare(b, "en")).map(htmlEsc).join(", ");
+      return `<li><span class="bd">${htmlEsc(shownName(dealer))}</span> — ${who}</li>`;
+    })
+    .join("");
+  const rows = us
+    .slice()
+    .sort((a, b) => (a.q ?? Infinity) - (b.q ?? Infinity) || shownName(a.folder).localeCompare(shownName(b.folder), "en"))
+    .map((row) => {
+      const route = Object.entries(row.mix)
+        .sort((a, b) => b[1] - a[1])
+        .map(([code, weight]) => `${VENUE_606[code] || code} ${(100 * weight).toFixed(0)}%`)
+        .join(" · ");
+      const q = row.q == null ? "—" : row.q.toFixed(3);
+      return `<tr><td>${htmlEsc(shownName(row.folder))}</td><td class="num">${q}</td><td class="route">${htmlEsc(route || "no market-order mix")}</td></tr>`;
+    })
+    .join("\n");
+  return fs
+    .readFileSync(METHOD, "utf8")
+    .replaceAll("@@QUARTER@@", htmlEsc(quarter))
+    .replace("@@US_WITH_Q@@", htmlEsc(withQ.join(", ")))
+    .replace("@@ALIAS_GROUPS@@", aliasHtml)
+    .replace("@@NO_Q@@", htmlEsc(noQ.join(" ")))
+    .replace("@@Q_ROWS@@", rows);
+}
+
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
   if (url.pathname === "/api/search") {
-    return json(res, 200, search(url.searchParams.get("q") || "", 20, url.searchParams.get("nat") || ""));
+    return json(res, 200, search(url.searchParams.get("q") || "", 20, url.searchParams.get("nat") || "", url.searchParams.get("dep") || ""));
   }
   if (url.pathname === "/api/instrument") {
     const size = {};
@@ -2083,10 +2189,11 @@ const server = http.createServer(async (req, res) => {
     if (Number.isFinite(amount) && amount > 0) size.amount = amount;
     const key = url.searchParams.get("key") || "";
     await warmPrices(key);
-    const found = detail(key, url.searchParams.get("nat") || "", size);
+    const found = detail(key, url.searchParams.get("nat") || "", size, url.searchParams.get("dep") || "");
     return found ? json(res, 200, found) : json(res, 404, { error: "unknown" });
   }
   if (url.pathname === "/api/countries") return json(res, 200, countryOptions());
+  if (url.pathname === "/api/currencies") return json(res, 200, currencyOptions());
   if (url.pathname === "/api/stats") {
     return json(res, 200, {
       instruments: instruments.size,
@@ -2097,6 +2204,10 @@ const server = http.createServer(async (req, res) => {
   if (url.pathname === "/" || url.pathname === "/front.html") {
     res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
     return res.end(fs.readFileSync(HTML));
+  }
+  if (url.pathname === "/method") {
+    res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+    return res.end(methodPage());
   }
   res.writeHead(404);
   res.end();

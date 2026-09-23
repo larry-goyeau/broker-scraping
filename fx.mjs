@@ -11,7 +11,8 @@
 //
 // `GBX` is a penny: one-hundredth of a pound. `AED` is the UAE peg, which the
 // ECB does not print. `EGP` is the Central Bank of Egypt mid of the same day
-// (buy 50.8606 / sell 50.9606 on 2026-09-07).
+// (buy 50.8606 / sell 50.9606 on 2026-09-07). `KZT` is the National Bank of
+// Kazakhstan official rate of that same day, 456.56 tenge per dollar.
 
 export const QUOTE = "USD";
 export const AS_OF = "2026-09-07";
@@ -56,6 +57,9 @@ const FOREIGN_PER_USD = {
   OMR: 0.3845,
   // CBE mid, not an ECB print. Same day as AS_OF.
   EGP: 50.9106,
+  // NBK official rate, not an ECB print. Same day as AS_OF.
+  // https://nationalbank.kz/rss/get_rates.cfm?fdate=07.09.2026
+  KZT: 456.56,
 };
 
 function keyOf(currency) {

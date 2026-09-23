@@ -207,8 +207,19 @@ export const ACCEPTED = {
   sogotrade: WORLD,
   webull: { countries: WEBULL },
 
-  // Official: international residents can open a margin account; US usually cannot.
-  questrade: WORLD_NO_US,
+  // Photo-ID help: US residents usually cannot open; other non-residents can
+  // open a margin account. European residents are left off the selector
+  // (EEA, plus the other European countries this list names).
+  questrade: {
+    all: true,
+    except: [
+      ...SANCTIONED,
+      "US",
+      ...EEA,
+      "AD", "AL", "BA", "CH", "FO", "GB", "GG", "GI", "IM", "JE", "MC", "MD",
+      "ME", "MK", "RS", "SM", "UA", "VA",
+    ],
+  },
   boursobank: { countries: ["FR"] }, // DIY app; foreign tax residents need a desk path
   easybourse: { countries: ["FR"] },
   labanquepostale: { countries: ["FR"] },

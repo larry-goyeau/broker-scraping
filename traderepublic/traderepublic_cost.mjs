@@ -324,7 +324,10 @@ export function roundTrip({
   const p = Number(price);
   const cash = Number(amount);
   const notional = crypto && cash > 0 ? cash : n > 0 && p > 0 ? n * p : null;
-  const touch = best ? touches?.byIsin?.[listing.isin] : null;
+  // Bestpreis is always TIB. A Direktpreis row whose place is TIB uses the
+  // same touch: TIB has no public tape.
+  const onTib = best || loose(m.row.exchange) === "TIB";
+  const touch = onTib ? touches?.byIsin?.[listing.isin] : null;
   const touchUsd = touch?.perShare > 0 ? dollars(touch.perShare, CASH) : null;
   const marketBp = bp ?? (touch?.bp > 0 ? touch.bp : null) ?? leaf?.bp ?? null;
   const marketPerShare = perShare ?? touchUsd ?? leaf?.perShare ?? null;
@@ -377,7 +380,7 @@ export function roundTrip({
 
   const notionalUsd = crypto && cash > 0 ? cash : dollars(notional, listing.currency);
   const bookUsd =
-    best && touch?.perShare > 0 && n > 0
+    onTib && touch?.perShare > 0 && n > 0
       ? dollars(touch.perShare * n, CASH)
       : marketPerShare != null
         ? marketPerShare * n

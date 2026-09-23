@@ -205,7 +205,7 @@ function remarkOf({ market, listing, plan }) {
   const lines = [];
   if (plan?.id === "tier4") {
     lines.push(
-      "If more than 10,000,000 listed NMS shares in a calendar month. Crossing it upgrades you for the rest of that month and the next."
+      "If you buy/sell more than 10,000,000 listed NMS shares in a calendar month."
     );
   }
   if (market === "otc") lines.push("OTC and stocks under $1 are off the volume tiers.");

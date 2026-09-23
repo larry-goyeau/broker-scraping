@@ -1,10 +1,10 @@
 {
-  "asOf": "2026-09-18T17:00:11.761Z",
+  "asOf": "2026-09-23T14:58:51.425Z",
   "source": "wss://api.traderepublic.com ticker ISIN.TIB",
   "measure": "touche Bestpreis TIB, aller-retour (ask − bid), euro",
-  "quoted": 8506,
+  "quoted": 8507,
   "empty": 32,
-  "failed": 3555,
+  "failed": 3554,
   "asked": 12093,
   "byIsin": {
     "IE00BK5BQT80": {
@@ -132199,13 +132199,15 @@
     },
     "DE0007664039": {
       "ticker": "VOW3",
-      "bid": null,
-      "ask": null,
-      "last": null,
-      "mid": null,
-      "perShare": null,
-      "bp": null,
-      "currency": "EUR"
+      "bid": 73.24,
+      "ask": 73.3,
+      "last": 73.24,
+      "mid": 73.27,
+      "perShare": 0.06,
+      "bp": 8.18889,
+      "currency": "EUR",
+      "qualityId": "realtime",
+      "at": "2026-09-23T14:58:50.299Z"
     },
     "US9286626000": {
       "ticker": "VOWA",

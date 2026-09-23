@@ -108,7 +108,7 @@ function save() {
     JSON.stringify(
       {
         generatedAt: new Date().toISOString(),
-        source: "EODHD, les bourses du Golfe, et Yahoo pour un last quand le vendeur n'a rien",
+        source: "EODHD, les bourses du Golfe, KASE pour un last en tenge, et Yahoo pour un last quand le vendeur n'a rien",
         unit: UNIT,
         fetched,
         fallback,
@@ -145,7 +145,9 @@ export function isFresh(isin, maxAge = DAY) {
   // every view (their tape is free). Elsewhere a miss is fresh only after the
   // Yahoo last has been tried, so a CDR the vendor never heard of still gets
   // one shot and then rests for the day.
-  if (GULF_COUNTRIES.has(key.slice(0, 2))) return false;
+  // KASE publishes the last for nothing, the same way the Gulf boards do. A miss
+  // from the vendor must not sit on that page for a day.
+  if (GULF_COUNTRIES.has(key.slice(0, 2)) || key.startsWith("KZ")) return false;
   const fb = Date.parse(fallback[key] || 0);
   return Number.isFinite(fb) && Date.now() - fb < maxAge;
 }
@@ -467,6 +469,12 @@ export async function ensureFresh(isin, maxAge = DAY) {
       if (!hasPrice(key) && GULF_COUNTRIES.has(key.slice(0, 2))) {
         await gulfFresh(key);
       }
+      // EODHD does not carry the Kazakhstan Stock Exchange. The share page prints
+      // the last in tenge; the bid and offer beside it are the day's extremes and
+      // are not a book, so only the last is kept.
+      if (!hasPrice(key) && key.startsWith("KZ")) {
+        await kaseFresh(key);
+      }
       if (!hasPrice(key)) {
         await yahooFresh(key);
         fallback[key] = new Date().toISOString();
@@ -482,6 +490,77 @@ export async function ensureFresh(isin, maxAge = DAY) {
   })();
   inflight.set(key, job);
   return job;
+}
+
+// ---------------------------------------------------------------- KASE
+
+// The vendor's search comes back empty for a Kazakh ISIN. KASE's own share page
+// prints the last trade (`price`) and the currency. One page per ticker the
+// catalogues already name; the first view builds that index.
+let kaseIndexPromise = null;
+function kaseIndex() {
+  return (kaseIndexPromise ||= (async () => {
+    const { catalogueRows } = await import("./catalogues.mjs");
+    const index = new Map();
+    for (const row of catalogueRows()) {
+      const isin = String(row.isin || "").trim().toUpperCase();
+      if (!ISIN.test(isin) || !isin.startsWith("KZ")) continue;
+      const ex = String(row.exchange || "")
+        .toUpperCase()
+        .replace(/[^A-Z0-9]/g, "");
+      if (ex !== "KASE" && ex !== "XKAZ") continue;
+      const symbol = String(row.ticker || row.symbol || "").trim();
+      if (!symbol) continue;
+      const seen = index.get(isin) || index.set(isin, []).get(isin);
+      if (!seen.includes(symbol)) seen.push(symbol);
+    }
+    return index;
+  })());
+}
+
+function kaseQuote(state, symbol) {
+  const want = String(symbol || "").toUpperCase();
+  let hit = null;
+  const walk = (node) => {
+    if (hit || !node || typeof node !== "object") return;
+    if (String(node.code || "").toUpperCase() === want && Number(node.price) > 0) {
+      hit = node;
+      return;
+    }
+    for (const value of Object.values(node)) walk(value);
+  };
+  walk(state);
+  if (!hit) return null;
+  return {
+    symbol: want,
+    last: Number(hit.price),
+    currency: String(hit.currency_type || "KZT").toUpperCase(),
+  };
+}
+
+async function kaseFresh(isin) {
+  const symbols = (await kaseIndex()).get(isin) || [];
+  for (const symbol of symbols.slice(0, 3)) {
+    try {
+      const res = await fetch(`https://kase.kz/en/investors/shares/${encodeURIComponent(symbol)}`, {
+        headers: { "user-agent": "Mozilla/5.0", accept: "text/html" },
+        signal: AbortSignal.timeout(20000),
+      });
+      if (!res.ok) continue;
+      const html = await res.text();
+      const embedded = html.match(/<script id="ng-state" type="application\/json">(.*?)<\/script>/);
+      if (!embedded) continue;
+      const quote = kaseQuote(JSON.parse(embedded[1]), symbol);
+      if (!quote) continue;
+      noteBoard(isin, quote, "XKAZ");
+      fetched[isin] = new Date().toISOString();
+      scheduleSave();
+      return true;
+    } catch (e) {
+      console.error(`prix ${isin} chez KASE ${symbol} : ${e.message}`);
+    }
+  }
+  return false;
 }
 
 // ---------------------------------------------------------------- the sweep

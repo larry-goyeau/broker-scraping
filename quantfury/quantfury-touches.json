@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-09-18T18:20:42.594Z",
+  "asOf": "2026-09-23T14:52:00.274Z",
   "byIsin": {
     "US37950E2596": {
       "ticker": "ARGT",
@@ -16200,6 +16200,2816 @@
       "bp": 4.3563,
       "currency": "USD",
       "at": "2026-09-18T18:20:42.594Z"
+    },
+    "ES0167050915": {
+      "ticker": "ACS",
+      "shortName": "ACSe.CHI",
+      "bid": 93.3,
+      "ask": 93.45,
+      "perShare": 0.15,
+      "bp": 16.0643,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ES0105046017": {
+      "ticker": "AENA",
+      "shortName": "AENAe.CHI",
+      "bid": 25.86,
+      "ask": 25.9,
+      "perShare": 0.04,
+      "bp": 15.456,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ES0109067019": {
+      "ticker": "AMS",
+      "shortName": "AMS",
+      "bid": 53.86,
+      "ask": 53.88,
+      "perShare": 0.02,
+      "bp": 3.7126,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ES0125220311": {
+      "ticker": "ANA",
+      "shortName": "ANA",
+      "bid": 213.2,
+      "ask": 213.4,
+      "perShare": 0.2,
+      "bp": 9.3765,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ES0105563003": {
+      "ticker": "ANE",
+      "shortName": "ANE",
+      "bid": 22.36,
+      "ask": 22.4,
+      "perShare": 0.04,
+      "bp": 17.8731,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ES0113679I37": {
+      "ticker": "BKT",
+      "shortName": "BKTe.CHI",
+      "bid": 16.665,
+      "ask": 16.68,
+      "perShare": 0.015,
+      "bp": 8.9969,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ES0140609019": {
+      "ticker": "CABK",
+      "shortName": "CABKe.BS",
+      "bid": 13.085,
+      "ask": 13.095,
+      "perShare": 0.01,
+      "bp": 7.6394,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ES0139140174": {
+      "ticker": "COL",
+      "shortName": "COL.MI",
+      "bid": 5.03,
+      "ask": 5.04,
+      "perShare": 0.01,
+      "bp": 19.861,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ES0105223004": {
+      "ticker": "GEST",
+      "shortName": "GEST",
+      "bid": 3.03,
+      "ask": 3.035,
+      "perShare": 0.005,
+      "bp": 16.488,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ES0105027009": {
+      "ticker": "LOG",
+      "shortName": "LOG.MC",
+      "bid": 35.74,
+      "ask": 35.8,
+      "perShare": 0.06,
+      "bp": 16.7738,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ES0116870314": {
+      "ticker": "NTGY",
+      "shortName": "NTGYe.CHI",
+      "bid": 29.2,
+      "ask": 29.22,
+      "perShare": 0.02,
+      "bp": 6.847,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ES0178430E18": {
+      "ticker": "TEF",
+      "shortName": "TEFe.CHI",
+      "bid": 3.394,
+      "ask": 3.396,
+      "perShare": 0.002,
+      "bp": 5.891,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ES0180907000": {
+      "ticker": "UNI",
+      "shortName": "UNI",
+      "bid": 3.586,
+      "ask": 3.592,
+      "perShare": 0.006,
+      "bp": 16.7177,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IT0005239360": {
+      "ticker": "UCG",
+      "shortName": "UCG",
+      "bid": 83.49,
+      "ask": 83.56,
+      "perShare": 0.07,
+      "bp": 8.3807,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NL0000852564": {
+      "ticker": "AALB",
+      "shortName": "AALB",
+      "bid": 41.96,
+      "ask": 42,
+      "perShare": 0.04,
+      "bp": 9.5283,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BE0974293251": {
+      "ticker": "ABI",
+      "shortName": "ABIb.BS",
+      "bid": 67.62,
+      "ask": 67.64,
+      "perShare": 0.02,
+      "bp": 2.9573,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NL0011540547": {
+      "ticker": "ABN",
+      "shortName": "ABNa.BS",
+      "bid": 43.43,
+      "ask": 43.46,
+      "perShare": 0.03,
+      "bp": 6.9053,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000120404": {
+      "ticker": "AC",
+      "shortName": "ACp.BS",
+      "bid": 46.15,
+      "ask": 46.19,
+      "perShare": 0.04,
+      "bp": 8.6636,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000045072": {
+      "ticker": "ACA",
+      "shortName": "ACAp.BS",
+      "bid": 18.08,
+      "ask": 18.09,
+      "perShare": 0.01,
+      "bp": 5.5294,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NL0011794037": {
+      "ticker": "AD",
+      "shortName": "ADa.BS",
+      "bid": 31.22,
+      "ask": 31.23,
+      "perShare": 0.01,
+      "bp": 3.2026,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0010340141": {
+      "ticker": "ADP",
+      "shortName": "ADP",
+      "bid": 109.7,
+      "ask": 109.8,
+      "perShare": 0.1,
+      "bp": 9.1116,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NL0012969182": {
+      "ticker": "ADYEN",
+      "shortName": "ADYEN",
+      "bid": 860.3,
+      "ask": 861.7,
+      "perShare": 1.4,
+      "bp": 16.2602,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR001400J770": {
+      "ticker": "AF",
+      "shortName": "AFp.CHI",
+      "bid": 11.515,
+      "ask": 11.53,
+      "perShare": 0.015,
+      "bp": 13.018,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BMG0112X1056": {
+      "ticker": "AGN",
+      "shortName": "AGNa.CHI",
+      "bid": 7.82,
+      "ask": 7.824,
+      "perShare": 0.004,
+      "bp": 5.1138,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BE0974264930": {
+      "ticker": "AGS",
+      "shortName": "AGSb.CHI",
+      "bid": 74.15,
+      "ask": 74.25,
+      "perShare": 0.1,
+      "bp": 13.4771,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000120073": {
+      "ticker": "AI",
+      "shortName": "AIp.BS",
+      "bid": 168.52,
+      "ask": 168.56,
+      "perShare": 0.04,
+      "bp": 2.3733,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0010313833": {
+      "ticker": "AKE",
+      "shortName": "AKE",
+      "bid": 57.45,
+      "ask": 57.5,
+      "perShare": 0.05,
+      "bp": 8.6994,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NL0013267909": {
+      "ticker": "AKZA",
+      "shortName": "AKZAa.CHI",
+      "bid": 57.12,
+      "ask": 57.16,
+      "perShare": 0.04,
+      "bp": 7.0004,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0010220475": {
+      "ticker": "ALO",
+      "shortName": "ALOp.CHI",
+      "bid": 14.82,
+      "ask": 14.86,
+      "perShare": 0.04,
+      "bp": 26.9542,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0014004L86": {
+      "ticker": "AM",
+      "shortName": "AMp.DXE",
+      "bid": 291.8,
+      "ask": 292.4,
+      "perShare": 0.6,
+      "bp": 20.5409,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0004125920": {
+      "ticker": "AMUN",
+      "shortName": "AMUN",
+      "bid": 91.9,
+      "ask": 92,
+      "perShare": 0.1,
+      "bp": 10.8755,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NL0006237562": {
+      "ticker": "ARCAD",
+      "shortName": "ARCAD",
+      "bid": 41.52,
+      "ask": 41.58,
+      "perShare": 0.06,
+      "bp": 14.4404,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NL0000334118": {
+      "ticker": "ASM",
+      "shortName": "ASM",
+      "bid": 845.4,
+      "ask": 846.2,
+      "perShare": 0.8,
+      "bp": 9.4585,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NL0010273215": {
+      "ticker": "ASML",
+      "shortName": "ASMLa.CHI",
+      "bid": 1505.6,
+      "ask": 1506.2,
+      "perShare": 0.6,
+      "bp": 3.9843,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NL0011872643": {
+      "ticker": "ASRNL",
+      "shortName": "ASRNL",
+      "bid": 72.8,
+      "ask": 72.82,
+      "perShare": 0.02,
+      "bp": 2.7469,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000071946": {
+      "ticker": "ATE",
+      "shortName": "ATE",
+      "bid": 71.45,
+      "ask": 71.6,
+      "perShare": 0.15,
+      "bp": 20.9717,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0013258662": {
+      "ticker": "AYV",
+      "shortName": "ALD",
+      "bid": 10.18,
+      "ask": 10.21,
+      "perShare": 0.03,
+      "bp": 29.4262,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000120966": {
+      "ticker": "BB",
+      "shortName": "BBp",
+      "bid": 67.2,
+      "ask": 67.4,
+      "perShare": 0.2,
+      "bp": 29.7177,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "PTBCP0AM0015": {
+      "ticker": "BCP",
+      "shortName": "BCP",
+      "bid": 1.1825,
+      "ask": 1.186,
+      "perShare": 0.0035,
+      "bp": 29.5546,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BE0974258874": {
+      "ticker": "BEKB",
+      "shortName": "BEKBb.BS",
+      "bid": 38,
+      "ask": 38.1,
+      "perShare": 0.1,
+      "bp": 26.2812,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NL0012866412": {
+      "ticker": "BESI",
+      "shortName": "BESI",
+      "bid": 186.85,
+      "ask": 187,
+      "perShare": 0.15,
+      "bp": 8.0246,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NL0011872650": {
+      "ticker": "BFIT",
+      "shortName": "BFIT",
+      "bid": 29.58,
+      "ask": 29.64,
+      "perShare": 0.06,
+      "bp": 20.2634,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0013280286": {
+      "ticker": "BIM",
+      "shortName": "BIM",
+      "bid": 74.4,
+      "ask": 74.5,
+      "perShare": 0.1,
+      "bp": 13.4318,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000120644": {
+      "ticker": "BN",
+      "shortName": "BNp.BS",
+      "bid": 60.4,
+      "ask": 60.44,
+      "perShare": 0.04,
+      "bp": 6.6203,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0006174348": {
+      "ticker": "BVI",
+      "shortName": "BVI",
+      "bid": 27.28,
+      "ask": 27.3,
+      "perShare": 0.02,
+      "bp": 7.3287,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000120172": {
+      "ticker": "CA",
+      "shortName": "CAp.CHI",
+      "bid": 16.26,
+      "ask": 16.27,
+      "perShare": 0.01,
+      "bp": 6.1482,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000125338": {
+      "ticker": "CAP",
+      "shortName": "CAPp.CHI",
+      "bid": 105.45,
+      "ask": 105.55,
+      "perShare": 0.1,
+      "bp": 9.4787,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000130403": {
+      "ticker": "CDI",
+      "shortName": "CDI",
+      "bid": 364.6,
+      "ask": 365.2,
+      "perShare": 0.6,
+      "bp": 16.4429,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000120628": {
+      "ticker": "CS",
+      "shortName": "CSp.BS",
+      "bid": 43.35,
+      "ask": 43.37,
+      "perShare": 0.02,
+      "bp": 4.6125,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000077919": {
+      "ticker": "DEC",
+      "shortName": "DECp.BS",
+      "bid": 24.92,
+      "ask": 24.96,
+      "perShare": 0.04,
+      "bp": 16.0385,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000125486": {
+      "ticker": "DG",
+      "shortName": "DGp.BS",
+      "bid": 110.8,
+      "ask": 110.9,
+      "perShare": 0.1,
+      "bp": 9.0212,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BE0974259880": {
+      "ticker": "DIE",
+      "shortName": "DIE",
+      "bid": 162.5,
+      "ask": 162.9,
+      "perShare": 0.4,
+      "bp": 24.5851,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0014003TT8": {
+      "ticker": "DSY",
+      "shortName": "DSYp.CHI",
+      "bid": 21.06,
+      "ask": 21.08,
+      "perShare": 0.02,
+      "bp": 9.4922,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0010908533": {
+      "ticker": "EDEN",
+      "shortName": "EDEN",
+      "bid": 27.57,
+      "ask": 27.6,
+      "perShare": 0.03,
+      "bp": 10.8755,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ES0127797019": {
+      "ticker": "EDPR",
+      "shortName": "EDPR",
+      "bid": 13.01,
+      "ask": 13.03,
+      "perShare": 0.02,
+      "bp": 15.361,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000121667": {
+      "ticker": "EL",
+      "shortName": "EIp.BS",
+      "bid": 148,
+      "ask": 148.1,
+      "perShare": 0.1,
+      "bp": 6.7545,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0012435121": {
+      "ticker": "ELIS",
+      "shortName": "ELIS",
+      "bid": 22.44,
+      "ask": 22.48,
+      "perShare": 0.04,
+      "bp": 17.8094,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000120503": {
+      "ticker": "EN",
+      "shortName": "ENp.BS",
+      "bid": 43.21,
+      "ask": 43.24,
+      "perShare": 0.03,
+      "bp": 6.9404,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0010208488": {
+      "ticker": "ENGI",
+      "shortName": "ENGIp.BS",
+      "bid": 23.63,
+      "ask": 23.64,
+      "perShare": 0.01,
+      "bp": 4.231,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NL0006294274": {
+      "ticker": "ENX",
+      "shortName": "ENX",
+      "bid": 160.4,
+      "ask": 160.6,
+      "perShare": 0.2,
+      "bp": 12.4611,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0014000MR3": {
+      "ticker": "ERF",
+      "shortName": "EUFI",
+      "bid": 76.34,
+      "ask": 76.36,
+      "perShare": 0.02,
+      "bp": 2.6195,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NL0012059018": {
+      "ticker": "EXO",
+      "shortName": "EXO",
+      "bid": 72.6,
+      "ask": 72.7,
+      "perShare": 0.1,
+      "bp": 13.7646,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0013451333": {
+      "ticker": "FDJU",
+      "shortName": "FDJ",
+      "bid": 21.58,
+      "ask": 21.59,
+      "perShare": 0.01,
+      "bp": 4.6328,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NL0015001FS8": {
+      "ticker": "FER",
+      "shortName": "FERe.CHI",
+      "bid": 48.5,
+      "ask": 48.53,
+      "perShare": 0.03,
+      "bp": 6.1837,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000130452": {
+      "ticker": "FGR",
+      "shortName": "FGR",
+      "bid": 105.75,
+      "ask": 105.85,
+      "perShare": 0.1,
+      "bp": 9.4518,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0013176526": {
+      "ticker": "FR",
+      "shortName": "FRp.CHI",
+      "bid": 14.99,
+      "ask": 15.05,
+      "perShare": 0.06,
+      "bp": 39.9467,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000121147": {
+      "ticker": "FRVIA",
+      "shortName": "FRVIA",
+      "bid": 9.016,
+      "ask": 9.03,
+      "perShare": 0.014,
+      "bp": 15.5159,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "PTGAL0AM0009": {
+      "ticker": "GALP",
+      "shortName": "GALPu.BS",
+      "bid": 22.32,
+      "ask": 22.34,
+      "perShare": 0.02,
+      "bp": 8.9566,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BE0003797140": {
+      "ticker": "GBLB",
+      "shortName": "GBLB",
+      "bid": 73.65,
+      "ask": 73.7,
+      "perShare": 0.05,
+      "bp": 6.7866,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0010533075": {
+      "ticker": "GET",
+      "shortName": "GET",
+      "bid": 18.59,
+      "ask": 18.61,
+      "perShare": 0.02,
+      "bp": 10.7527,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IE0000669501": {
+      "ticker": "GL9",
+      "shortName": "GL9",
+      "bid": 19.67,
+      "ask": 19.73,
+      "perShare": 0.06,
+      "bp": 30.4569,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000130809": {
+      "ticker": "GLE",
+      "shortName": "GLEp.CHI",
+      "bid": 72.51,
+      "ask": 72.55,
+      "perShare": 0.04,
+      "bp": 5.515,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NL0000009165": {
+      "ticker": "HEIA",
+      "shortName": "HEIAa.CHI",
+      "bid": 71.1,
+      "ask": 71.14,
+      "perShare": 0.04,
+      "bp": 5.6243,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000121329": {
+      "ticker": "HO",
+      "shortName": "HO",
+      "bid": 239.1,
+      "ask": 239.3,
+      "perShare": 0.2,
+      "bp": 8.3612,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NL0010801007": {
+      "ticker": "IMCD",
+      "shortName": "IMCD",
+      "bid": 93.6,
+      "ask": 93.72,
+      "perShare": 0.12,
+      "bp": 12.8123,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "LU2290522684": {
+      "ticker": "INPST",
+      "shortName": "INPST",
+      "bid": 15.57,
+      "ask": 15.58,
+      "perShare": 0.01,
+      "bp": 6.4205,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0010259150": {
+      "ticker": "IPN",
+      "shortName": "IPN",
+      "bid": 148.4,
+      "ask": 148.7,
+      "perShare": 0.3,
+      "bp": 20.1952,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "PTJMT0AE0001": {
+      "ticker": "JMT",
+      "shortName": "JMTu.CHI",
+      "bid": 18.04,
+      "ask": 18.05,
+      "perShare": 0.01,
+      "bp": 5.5417,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BE0003565737": {
+      "ticker": "KBC",
+      "shortName": "KBCb.BS",
+      "bid": 132.2,
+      "ask": 132.3,
+      "perShare": 0.1,
+      "bp": 7.5614,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000121485": {
+      "ticker": "KER",
+      "shortName": "KERp.BS",
+      "bid": 226.65,
+      "ask": 226.75,
+      "perShare": 0.1,
+      "bp": 4.4111,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000121964": {
+      "ticker": "LI",
+      "shortName": "LIp",
+      "bid": 36.36,
+      "ask": 36.38,
+      "perShare": 0.02,
+      "bp": 5.499,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NL0011821392": {
+      "ticker": "LIGHT",
+      "shortName": "LIGHT",
+      "bid": 15.67,
+      "ask": 15.72,
+      "perShare": 0.05,
+      "bp": 31.8573,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BE0003818359": {
+      "ticker": "LKFT",
+      "shortName": "GLPGa.CHI",
+      "bid": 27.56,
+      "ask": 27.66,
+      "perShare": 0.1,
+      "bp": 36.2188,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0010307819": {
+      "ticker": "LR",
+      "shortName": "LRp.CHI",
+      "bid": 138.45,
+      "ask": 138.55,
+      "perShare": 0.1,
+      "bp": 7.2202,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000121014": {
+      "ticker": "MC",
+      "shortName": "MCp.BS",
+      "bid": 397.65,
+      "ask": 397.8,
+      "perShare": 0.15,
+      "bp": 3.7715,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000121204": {
+      "ticker": "MF",
+      "shortName": "MF",
+      "bid": 82.3,
+      "ask": 82.4,
+      "perShare": 0.1,
+      "bp": 12.1433,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR001400AJ45": {
+      "ticker": "ML",
+      "shortName": "MLp.BS",
+      "bid": 33.57,
+      "ask": 33.6,
+      "perShare": 0.03,
+      "bp": 8.9326,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ES0105025003": {
+      "ticker": "MRL",
+      "shortName": "MRLe.CHI",
+      "bid": 12.53,
+      "ask": 12.55,
+      "perShare": 0.02,
+      "bp": 15.949,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "LU1598757687": {
+      "ticker": "MT",
+      "shortName": "MTa.BS",
+      "bid": 63.28,
+      "ask": 63.32,
+      "perShare": 0.04,
+      "bp": 6.3191,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000044448": {
+      "ticker": "NEX",
+      "shortName": "NEX",
+      "bid": 141.4,
+      "ask": 141.6,
+      "perShare": 0.2,
+      "bp": 14.1343,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NL0010773842": {
+      "ticker": "NN",
+      "shortName": "NNa.CHI",
+      "bid": 79.08,
+      "ask": 79.1,
+      "perShare": 0.02,
+      "bp": 2.5288,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "PTPTI0AM0006": {
+      "ticker": "NVG",
+      "shortName": "NVG",
+      "bid": 3.262,
+      "ask": 3.266,
+      "perShare": 0.004,
+      "bp": 12.2549,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NL0010558797": {
+      "ticker": "OCI",
+      "shortName": "OCI",
+      "bid": 4.116,
+      "ask": 4.12,
+      "perShare": 0.004,
+      "bp": 9.7135,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000120321": {
+      "ticker": "OR",
+      "shortName": "ORp.CHI",
+      "bid": 381.8,
+      "ask": 381.95,
+      "perShare": 0.15,
+      "bp": 3.928,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000133308": {
+      "ticker": "ORA",
+      "shortName": "ORAp.CHI",
+      "bid": 14.145,
+      "ask": 14.15,
+      "perShare": 0.005,
+      "bp": 3.5342,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BE0003810273": {
+      "ticker": "PROX",
+      "shortName": "PROXb.CHI",
+      "bid": 6.06,
+      "ask": 6.07,
+      "perShare": 0.01,
+      "bp": 16.488,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NL0013654783": {
+      "ticker": "PRX",
+      "shortName": "PRX",
+      "bid": 35.895,
+      "ask": 35.93,
+      "perShare": 0.035,
+      "bp": 9.7459,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000130577": {
+      "ticker": "PUB",
+      "shortName": "PUBp.BS",
+      "bid": 97.44,
+      "ask": 97.5,
+      "perShare": 0.06,
+      "bp": 6.1557,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NL0000379121": {
+      "ticker": "RAND",
+      "shortName": "RANDa.CHI",
+      "bid": 36.34,
+      "ask": 36.36,
+      "perShare": 0.02,
+      "bp": 5.5021,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000130395": {
+      "ticker": "RCO",
+      "shortName": "RCO",
+      "bid": 43.26,
+      "ask": 43.4,
+      "perShare": 0.14,
+      "bp": 32.3102,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000121121": {
+      "ticker": "RF",
+      "shortName": "RFp.DXE",
+      "bid": 47.66,
+      "ask": 47.72,
+      "perShare": 0.06,
+      "bp": 12.5813,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000120693": {
+      "ticker": "RI",
+      "shortName": "RIp.BS",
+      "bid": 59.5,
+      "ask": 59.54,
+      "perShare": 0.04,
+      "bp": 6.7204,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000052292": {
+      "ticker": "RMS",
+      "shortName": "RMSp.BS",
+      "bid": 1342,
+      "ask": 1343,
+      "perShare": 1,
+      "bp": 7.4488,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000131906": {
+      "ticker": "RNO",
+      "shortName": "RNOp.CHI",
+      "bid": 26.74,
+      "ask": 26.76,
+      "perShare": 0.02,
+      "bp": 7.4766,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0013269123": {
+      "ticker": "RUI",
+      "shortName": "RUI",
+      "bid": 34.76,
+      "ask": 34.82,
+      "perShare": 0.06,
+      "bp": 17.2463,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0010451203": {
+      "ticker": "RXL",
+      "shortName": "RXL",
+      "bid": 37.17,
+      "ask": 37.19,
+      "perShare": 0.02,
+      "bp": 5.3792,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000073272": {
+      "ticker": "SAF",
+      "shortName": "SAFp.CHI",
+      "bid": 335.5,
+      "ask": 335.7,
+      "perShare": 0.2,
+      "bp": 5.9595,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000120578": {
+      "ticker": "SAN",
+      "shortName": "SANp.BS",
+      "bid": 73.12,
+      "ask": 73.14,
+      "perShare": 0.02,
+      "bp": 2.7349,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NL0000360618": {
+      "ticker": "SBMO",
+      "shortName": "SBMOa.CHI",
+      "bid": 36.5,
+      "ask": 36.54,
+      "perShare": 0.04,
+      "bp": 10.9529,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0010411983": {
+      "ticker": "SCR",
+      "shortName": "SCR",
+      "bid": 32.28,
+      "ask": 32.32,
+      "perShare": 0.04,
+      "bp": 12.3839,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "LU0088087324": {
+      "ticker": "SESG",
+      "shortName": "SESG",
+      "bid": 4.686,
+      "ask": 4.704,
+      "perShare": 0.018,
+      "bp": 38.3387,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000125007": {
+      "ticker": "SGO",
+      "shortName": "SGOp.CHI",
+      "bid": 70.6,
+      "ask": 70.66,
+      "perShare": 0.06,
+      "bp": 8.495,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000121709": {
+      "ticker": "SK",
+      "shortName": "SK",
+      "bid": 56.25,
+      "ask": 56.35,
+      "perShare": 0.1,
+      "bp": 17.762,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BE0003717312": {
+      "ticker": "SOF",
+      "shortName": "SOF",
+      "bid": 246.2,
+      "ask": 246.8,
+      "perShare": 0.6,
+      "bp": 24.3408,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0013227113": {
+      "ticker": "SOI",
+      "shortName": "SOI",
+      "bid": 149.3,
+      "ask": 149.5,
+      "perShare": 0.2,
+      "bp": 13.3869,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BE0003470755": {
+      "ticker": "SOLB",
+      "shortName": "SOLBb.BS",
+      "bid": 25.26,
+      "ask": 25.3,
+      "perShare": 0.04,
+      "bp": 15.8228,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0012757854": {
+      "ticker": "SPIE",
+      "shortName": "SPIE",
+      "bid": 44.58,
+      "ask": 44.62,
+      "perShare": 0.04,
+      "bp": 8.9686,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000121972": {
+      "ticker": "SU",
+      "shortName": "SUp.BS",
+      "bid": 292.85,
+      "ask": 293.1,
+      "perShare": 0.25,
+      "bp": 8.5332,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000121220": {
+      "ticker": "SW",
+      "shortName": "SW",
+      "bid": 57.05,
+      "ask": 57.1,
+      "perShare": 0.05,
+      "bp": 8.7604,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000051807": {
+      "ticker": "TEP",
+      "shortName": "TEP",
+      "bid": 73.3,
+      "ask": 73.48,
+      "perShare": 0.18,
+      "bp": 24.5265,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0005691656": {
+      "ticker": "TRI",
+      "shortName": "TRIp",
+      "bid": 131,
+      "ask": 131.8,
+      "perShare": 0.8,
+      "bp": 60.8828,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000120271": {
+      "ticker": "TTE",
+      "shortName": "FPp.CHI",
+      "bid": 79.25,
+      "ask": 79.28,
+      "perShare": 0.03,
+      "bp": 3.7848,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000054470": {
+      "ticker": "UBI",
+      "shortName": "UBIp.CHI",
+      "bid": 5.392,
+      "ask": 5.408,
+      "perShare": 0.016,
+      "bp": 29.6296,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BE0003739530": {
+      "ticker": "UCB",
+      "shortName": "UCBb.BS",
+      "bid": 212.4,
+      "ask": 212.6,
+      "perShare": 0.2,
+      "bp": 9.4118,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NL0015000IY2": {
+      "ticker": "UMG",
+      "shortName": "UMG",
+      "bid": 14.57,
+      "ask": 14.58,
+      "perShare": 0.01,
+      "bp": 6.8611,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BE0974320526": {
+      "ticker": "UMI",
+      "shortName": "UMIb.CHI",
+      "bid": 21.4,
+      "ask": 21.48,
+      "perShare": 0.08,
+      "bp": 37.3134,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000124141": {
+      "ticker": "VIE",
+      "shortName": "VIEp.BS",
+      "bid": 31.39,
+      "ask": 31.4,
+      "perShare": 0.01,
+      "bp": 3.1852,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000127771": {
+      "ticker": "VIV",
+      "shortName": "VIVp.CHI",
+      "bid": 1.482,
+      "ask": 1.486,
+      "perShare": 0.004,
+      "bp": 26.9542,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NL0009432491": {
+      "ticker": "VPK",
+      "shortName": "VPK",
+      "bid": 47.46,
+      "ask": 47.5,
+      "perShare": 0.04,
+      "bp": 8.4246,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NL0000395903": {
+      "ticker": "WKL",
+      "shortName": "WKLa.BS",
+      "bid": 67.08,
+      "ask": 67.14,
+      "perShare": 0.06,
+      "bp": 8.9405,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000TRAT0N7": {
+      "ticker": "8TRA",
+      "shortName": "8TRA",
+      "bid": 35.4,
+      "ask": 35.5,
+      "perShare": 0.1,
+      "bp": 28.2087,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IE00BF0L3536": {
+      "ticker": "A5G",
+      "shortName": "A5G",
+      "bid": 11.62,
+      "ask": 11.63,
+      "perShare": 0.01,
+      "bp": 8.6022,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "AU000000AMP6": {
+      "ticker": "AMP",
+      "shortName": "AMP.MI",
+      "bid": 11.77,
+      "ask": 11.785,
+      "perShare": 0.015,
+      "bp": 12.7361,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000BAY0017": {
+      "ticker": "BAYN",
+      "shortName": "BAYNd.CHI",
+      "bid": 49.42,
+      "ask": 49.46,
+      "perShare": 0.04,
+      "bp": 8.0906,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0005158703": {
+      "ticker": "BC8",
+      "shortName": "BC8",
+      "bid": 34.4,
+      "ask": 34.44,
+      "perShare": 0.04,
+      "bp": 11.6212,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0005190003": {
+      "ticker": "BMW",
+      "shortName": "BMWd.CHI",
+      "bid": 58.16,
+      "ask": 58.22,
+      "perShare": 0.06,
+      "bp": 10.3111,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000CBK1001": {
+      "ticker": "CBK",
+      "shortName": "CBKd.CHI",
+      "bid": 41.72,
+      "ask": 41.76,
+      "perShare": 0.04,
+      "bp": 9.5831,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0005439004": {
+      "ticker": "CON",
+      "shortName": "CONd.CHI",
+      "bid": 69.56,
+      "ask": 69.64,
+      "perShare": 0.08,
+      "bp": 11.4943,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000A2E4K43": {
+      "ticker": "DHER",
+      "shortName": "DHER",
+      "bid": 36.74,
+      "ask": 36.78,
+      "perShare": 0.04,
+      "bp": 10.8814,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000ENER6Y0": {
+      "ticker": "ENR",
+      "shortName": "ENR",
+      "bid": 144.36,
+      "ask": 144.46,
+      "perShare": 0.1,
+      "bp": 6.9247,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0005470306": {
+      "ticker": "EVD",
+      "shortName": "EVD",
+      "bid": 54.95,
+      "ask": 55.1,
+      "perShare": 0.15,
+      "bp": 27.2603,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0005772206": {
+      "ticker": "FIE",
+      "shortName": "FIE",
+      "bid": 37.55,
+      "ask": 37.8,
+      "perShare": 0.25,
+      "bp": 66.357,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0006602006": {
+      "ticker": "G1A",
+      "shortName": "G1A",
+      "bid": 66.65,
+      "ask": 66.7,
+      "perShare": 0.05,
+      "bp": 7.4991,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000A161408": {
+      "ticker": "HFG",
+      "shortName": "HFGG",
+      "bid": 2.67,
+      "ask": 2.68,
+      "perShare": 0.01,
+      "bp": 37.3832,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000HLAG475": {
+      "ticker": "HLAG",
+      "shortName": "HLAG",
+      "bid": 135.5,
+      "ask": 135.9,
+      "perShare": 0.4,
+      "bp": 29.4768,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0008402215": {
+      "ticker": "HNR1",
+      "shortName": "HNR1",
+      "bid": 254,
+      "ask": 254.2,
+      "perShare": 0.2,
+      "bp": 7.8709,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0006070006": {
+      "ticker": "HOT",
+      "shortName": "HOT",
+      "bid": 397.8,
+      "ask": 398.2,
+      "perShare": 0.4,
+      "bp": 10.0503,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000KBX1006": {
+      "ticker": "KBX",
+      "shortName": "KBX",
+      "bid": 106,
+      "ask": 106.3,
+      "perShare": 0.3,
+      "bp": 28.2619,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NL0000009082": {
+      "ticker": "KPN",
+      "shortName": "KPN",
+      "bid": 3.924,
+      "ask": 3.927,
+      "perShare": 0.003,
+      "bp": 7.6423,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IE0004927939": {
+      "ticker": "KRX",
+      "shortName": "KRX",
+      "bid": 98.2,
+      "ask": 98.35,
+      "perShare": 0.15,
+      "bp": 15.2633,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0008232125": {
+      "ticker": "LHA",
+      "shortName": "LHAd.BS",
+      "bid": 7.674,
+      "ask": 7.682,
+      "perShare": 0.008,
+      "bp": 10.4194,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0006599905": {
+      "ticker": "MRK",
+      "shortName": "MRKd.CHI",
+      "bid": 132.65,
+      "ask": 132.75,
+      "perShare": 0.1,
+      "bp": 7.5358,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0008430026": {
+      "ticker": "MUV2",
+      "shortName": "MUV2d.CHI",
+      "bid": 505.6,
+      "ask": 506,
+      "perShare": 0.4,
+      "bp": 7.9083,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0006766504": {
+      "ticker": "NDA",
+      "shortName": "NDA.DE",
+      "bid": 167.9,
+      "ask": 168.2,
+      "perShare": 0.3,
+      "bp": 17.8518,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000PAG9113": {
+      "ticker": "P911",
+      "shortName": "Porsche",
+      "bid": 44.16,
+      "ask": 44.27,
+      "perShare": 0.11,
+      "bp": 24.8784,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0007010803": {
+      "ticker": "RAA",
+      "shortName": "RAA",
+      "bid": 572,
+      "ask": 573,
+      "perShare": 1,
+      "bp": 17.4672,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ES0173516115": {
+      "ticker": "REP",
+      "shortName": "REPe.BS",
+      "bid": 30.69,
+      "ask": 30.71,
+      "perShare": 0.02,
+      "bp": 6.5147,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0007030009": {
+      "ticker": "RHM",
+      "shortName": "RHMG.DE",
+      "bid": 1011.2,
+      "ask": 1012.2,
+      "perShare": 1,
+      "bp": 9.8844,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "LU0061462528": {
+      "ticker": "RRTL",
+      "shortName": "RRTL",
+      "bid": 30.85,
+      "ask": 31,
+      "perShare": 0.15,
+      "bp": 48.5044,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0007164600": {
+      "ticker": "SAP",
+      "shortName": "SAPd.CHI",
+      "bid": 185.88,
+      "ask": 185.98,
+      "perShare": 0.1,
+      "bp": 5.3784,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000SHA0100": {
+      "ticker": "SHA",
+      "shortName": "SHA",
+      "bid": 6.91,
+      "ask": 6.94,
+      "perShare": 0.03,
+      "bp": 43.3213,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0005089031": {
+      "ticker": "UTDI",
+      "shortName": "UTDI",
+      "bid": 25.8,
+      "ask": 25.86,
+      "perShare": 0.06,
+      "bp": 23.2288,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ES0184262212": {
+      "ticker": "VIS",
+      "shortName": "VIS",
+      "bid": 54,
+      "ask": 54.1,
+      "perShare": 0.1,
+      "bp": 18.5014,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0007664039": {
+      "ticker": "VOW3",
+      "shortName": "VOW3d.CHI",
+      "bid": 73.26,
+      "ask": 73.34,
+      "perShare": 0.08,
+      "bp": 10.9141,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000WCH8881": {
+      "ticker": "WCH",
+      "shortName": "WCH",
+      "bid": 89.55,
+      "ask": 89.7,
+      "perShare": 0.15,
+      "bp": 16.7364,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000ZAL1111": {
+      "ticker": "ZAL",
+      "shortName": "ZAL",
+      "bid": 22.22,
+      "ask": 22.25,
+      "perShare": 0.03,
+      "bp": 13.4922,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "GB00BP6MXD84": {
+      "ticker": "SHEL",
+      "shortName": "RDSAa.CHI",
+      "bid": 41.54,
+      "ask": 41.555,
+      "perShare": 0.015,
+      "bp": 3.6103,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IT0001207098": {
+      "ticker": "ACE",
+      "shortName": "ACE",
+      "bid": 20.04,
+      "ask": 20.08,
+      "perShare": 0.04,
+      "bp": 19.9402,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NL0015435975": {
+      "ticker": "CPR",
+      "shortName": "CPR",
+      "bid": 6.028,
+      "ask": 6.032,
+      "perShare": 0.004,
+      "bp": 6.6335,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IT0003492391": {
+      "ticker": "DIA",
+      "shortName": "DIA.MI",
+      "bid": 77.5,
+      "ask": 77.62,
+      "perShare": 0.12,
+      "bp": 15.4719,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IT0000062072": {
+      "ticker": "G",
+      "shortName": "Gm.BS",
+      "bid": 43.6,
+      "ask": 43.61,
+      "perShare": 0.01,
+      "bp": 2.2933,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IT0001250932": {
+      "ticker": "HER",
+      "shortName": "HER",
+      "bid": 3.582,
+      "ask": 3.586,
+      "perShare": 0.004,
+      "bp": 11.1607,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IT0003027817": {
+      "ticker": "IRE",
+      "shortName": "IRE",
+      "bid": 2.48,
+      "ask": 2.484,
+      "perShare": 0.004,
+      "bp": 16.116,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IT0005278236": {
+      "ticker": "PIRC",
+      "shortName": "PIRC",
+      "bid": 6.51,
+      "ask": 6.525,
+      "perShare": 0.015,
+      "bp": 23.015,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IT0005712671": {
+      "ticker": "TIT",
+      "shortName": "TITm.BS",
+      "bid": 7.478,
+      "ask": 7.481,
+      "perShare": 0.003,
+      "bp": 4.011,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IT0005482333": {
+      "ticker": "TPRO",
+      "shortName": "TPRO",
+      "bid": 31,
+      "ask": 31.04,
+      "perShare": 0.04,
+      "bp": 12.8949,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "US7835132033": {
+      "ticker": "RYAAY",
+      "shortName": "RYA",
+      "bid": 23.11,
+      "ask": 23.14,
+      "perShare": 0.03,
+      "bp": 12.973,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FI0009007884": {
+      "ticker": "ELISA",
+      "shortName": "ELISA",
+      "bid": 37.28,
+      "ask": 37.3,
+      "perShare": 0.02,
+      "bp": 5.3634,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FI0009007132": {
+      "ticker": "FORTUM",
+      "shortName": "FORTUM",
+      "bid": 23.75,
+      "ask": 23.78,
+      "perShare": 0.03,
+      "bp": 12.6236,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FI4000571013": {
+      "ticker": "HIAB",
+      "shortName": "CGCBV",
+      "bid": 63.8,
+      "ask": 64.1,
+      "perShare": 0.3,
+      "bp": 46.9116,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FI0009000459": {
+      "ticker": "HUH1V",
+      "shortName": "HUH1V",
+      "bid": 30.64,
+      "ask": 30.66,
+      "perShare": 0.02,
+      "bp": 6.5253,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FI0009005870": {
+      "ticker": "KCR",
+      "shortName": "KCR",
+      "bid": 29.6,
+      "ask": 29.7,
+      "perShare": 0.1,
+      "bp": 33.7268,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FI0009000202": {
+      "ticker": "KESKOB",
+      "shortName": "KESKOB",
+      "bid": 22.58,
+      "ask": 22.62,
+      "perShare": 0.04,
+      "bp": 17.6991,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FI0009013403": {
+      "ticker": "KNEBV",
+      "shortName": "KNEBV",
+      "bid": 51.54,
+      "ask": 51.58,
+      "perShare": 0.04,
+      "bp": 7.758,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FI0009013296": {
+      "ticker": "NESTE",
+      "shortName": "NESTE",
+      "bid": 35.52,
+      "ask": 35.58,
+      "perShare": 0.06,
+      "bp": 16.8776,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FI0009014377": {
+      "ticker": "ORNBV",
+      "shortName": "ORNBV",
+      "bid": 82.7,
+      "ask": 82.75,
+      "perShare": 0.05,
+      "bp": 6.0441,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FI4000552500": {
+      "ticker": "SAMPO",
+      "shortName": "SAMPO",
+      "bid": 8.806,
+      "ask": 8.81,
+      "perShare": 0.004,
+      "bp": 4.5413,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FI0009005961": {
+      "ticker": "STERV",
+      "shortName": "STERV",
+      "bid": 10.72,
+      "ask": 10.735,
+      "perShare": 0.015,
+      "bp": 13.9828,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FI0009000277": {
+      "ticker": "TIETO",
+      "shortName": "TIETO",
+      "bid": 18.59,
+      "ask": 18.6,
+      "perShare": 0.01,
+      "bp": 5.3778,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FI0009005987": {
+      "ticker": "UPM",
+      "shortName": "UPM",
+      "bid": 25.93,
+      "ask": 25.95,
+      "perShare": 0.02,
+      "bp": 7.7101,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FI4000074984": {
+      "ticker": "VALMT",
+      "shortName": "VALMT",
+      "bid": 28.4,
+      "ask": 28.44,
+      "perShare": 0.04,
+      "bp": 14.0746,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FI0009003727": {
+      "ticker": "WRT1V",
+      "shortName": "WRT1V",
+      "bid": 29.3,
+      "ask": 29.36,
+      "perShare": 0.06,
+      "bp": 20.4569,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000A1EWWW0": {
+      "ticker": "ADS",
+      "shortName": "ADSd.BS",
+      "bid": 144.05,
+      "ask": 144.2,
+      "perShare": 0.15,
+      "bp": 10.4076,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0005313704": {
+      "ticker": "AFX",
+      "shortName": "AFX",
+      "bid": 30.5,
+      "ask": 30.62,
+      "perShare": 0.12,
+      "bp": 39.267,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0008404005": {
+      "ticker": "ALV",
+      "shortName": "ALVd.BS",
+      "bid": 413.8,
+      "ask": 413.9,
+      "perShare": 0.1,
+      "bp": 2.4163,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0005104400": {
+      "ticker": "AOF",
+      "shortName": "AOF",
+      "bid": 90.4,
+      "ask": 90.6,
+      "perShare": 0.2,
+      "bp": 22.0994,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0005200000": {
+      "ticker": "BEI",
+      "shortName": "BEId.CHI",
+      "bid": 76.12,
+      "ask": 76.18,
+      "perShare": 0.06,
+      "bp": 7.8792,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IE00BD1RP616": {
+      "ticker": "BIRG",
+      "shortName": "BIRG",
+      "bid": 19.88,
+      "ask": 19.895,
+      "perShare": 0.015,
+      "bp": 7.5424,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000A1DAHH0": {
+      "ticker": "BNR",
+      "shortName": "BNR",
+      "bid": 59.26,
+      "ask": 59.32,
+      "perShare": 0.06,
+      "bp": 10.1198,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000A1PHFF7": {
+      "ticker": "BOSS",
+      "shortName": "BOSS",
+      "bid": 38.36,
+      "ask": 38.38,
+      "perShare": 0.02,
+      "bp": 5.2124,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0005810055": {
+      "ticker": "DB1",
+      "shortName": "DB1d.CHI",
+      "bid": 282.4,
+      "ask": 282.5,
+      "perShare": 0.1,
+      "bp": 3.5404,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0005140008": {
+      "ticker": "DBK",
+      "shortName": "DBKd.CHI",
+      "bid": 31.84,
+      "ask": 31.865,
+      "perShare": 0.025,
+      "bp": 7.8487,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000A2GS5D8": {
+      "ticker": "DMP",
+      "shortName": "DMP",
+      "bid": 39.15,
+      "ask": 39.25,
+      "perShare": 0.1,
+      "bp": 25.5102,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000DWS1007": {
+      "ticker": "DWS",
+      "shortName": "DWS",
+      "bid": 72.75,
+      "ask": 72.85,
+      "perShare": 0.1,
+      "bp": 13.7363,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0005664809": {
+      "ticker": "EVT",
+      "shortName": "EVT",
+      "bid": 2.782,
+      "ask": 2.788,
+      "perShare": 0.006,
+      "bp": 21.544,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000A12DM80": {
+      "ticker": "G24",
+      "shortName": "G24",
+      "bid": 71.05,
+      "ask": 71.15,
+      "perShare": 0.1,
+      "bp": 14.0647,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000A0LD6E6": {
+      "ticker": "GXI",
+      "shortName": "GXI",
+      "bid": 26.66,
+      "ask": 26.72,
+      "perShare": 0.06,
+      "bp": 22.4803,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0006047004": {
+      "ticker": "HEI",
+      "shortName": "HEId.BS",
+      "bid": 145.05,
+      "ask": 145.15,
+      "perShare": 0.1,
+      "bp": 6.8918,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0006048408": {
+      "ticker": "HEN",
+      "shortName": "HENd.BS",
+      "bid": 68.85,
+      "ask": 68.95,
+      "perShare": 0.1,
+      "bp": 14.5138,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0006231004": {
+      "ticker": "IFX",
+      "shortName": "IFXd.CHI",
+      "bid": 58.07,
+      "ask": 58.1,
+      "perShare": 0.03,
+      "bp": 5.1648,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0006335003": {
+      "ticker": "KRN",
+      "shortName": "KRN",
+      "bid": 107.4,
+      "ask": 107.6,
+      "perShare": 0.2,
+      "bp": 18.6047,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IE0004906560": {
+      "ticker": "KRZ",
+      "shortName": "KRZ",
+      "bid": 84.6,
+      "ask": 84.7,
+      "perShare": 0.1,
+      "bp": 11.8133,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000A0D9PT0": {
+      "ticker": "MTX",
+      "shortName": "MTX",
+      "bid": 360,
+      "ask": 360.3,
+      "perShare": 0.3,
+      "bp": 8.3299,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000A0DJ6J9": {
+      "ticker": "S92",
+      "shortName": "S92",
+      "bid": 59.7,
+      "ask": 60,
+      "perShare": 0.3,
+      "bp": 50.1253,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000SHL1006": {
+      "ticker": "SHL",
+      "shortName": "SHL",
+      "bid": 37.29,
+      "ask": 37.31,
+      "perShare": 0.02,
+      "bp": 5.3619,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0007236101": {
+      "ticker": "SIE",
+      "shortName": "SIEd.CHI",
+      "bid": 273.6,
+      "ask": 273.7,
+      "perShare": 0.1,
+      "bp": 3.6543,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0007231326": {
+      "ticker": "SIX2",
+      "shortName": "SIX2",
+      "bid": 68.5,
+      "ask": 68.65,
+      "perShare": 0.15,
+      "bp": 21.8739,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000SYM9999": {
+      "ticker": "SY1",
+      "shortName": "SY1",
+      "bid": 92.28,
+      "ask": 92.34,
+      "perShare": 0.06,
+      "bp": 6.4998,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000A1ML7J1": {
+      "ticker": "VNA",
+      "shortName": "VNAd.BS",
+      "bid": 17.34,
+      "ask": 17.36,
+      "perShare": 0.02,
+      "bp": 11.5274,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "AT0000730007": {
+      "ticker": "ANDR",
+      "shortName": "ANDR",
+      "bid": 85.6,
+      "ask": 85.8,
+      "perShare": 0.2,
+      "bp": 23.3372,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IT0003261697": {
+      "ticker": "AZM",
+      "shortName": "AZMm.BS",
+      "bid": 39.15,
+      "ask": 39.19,
+      "perShare": 0.04,
+      "bp": 10.2119,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IT0005218380": {
+      "ticker": "BAMI",
+      "shortName": "BAMI",
+      "bid": 16.27,
+      "ask": 16.28,
+      "perShare": 0.01,
+      "bp": 6.1444,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "AT0000BAWAG2": {
+      "ticker": "BG",
+      "shortName": "BG",
+      "bid": 177.7,
+      "ask": 177.9,
+      "perShare": 0.2,
+      "bp": 11.2486,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IT0004776628": {
+      "ticker": "BMED",
+      "shortName": "BMED",
+      "bid": 23.43,
+      "ask": 23.45,
+      "perShare": 0.02,
+      "bp": 8.5324,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ES0105630315": {
+      "ticker": "CIE",
+      "shortName": "CIE",
+      "bid": 25.45,
+      "ask": 25.55,
+      "perShare": 0.1,
+      "bp": 39.2157,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ES0105066007": {
+      "ticker": "CLNX",
+      "shortName": "CLNX",
+      "bid": 25.16,
+      "ask": 25.18,
+      "perShare": 0.02,
+      "bp": 7.946,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "AT0000652011": {
+      "ticker": "EBS",
+      "shortName": "EBS",
+      "bid": 121.6,
+      "ask": 121.7,
+      "perShare": 0.1,
+      "bp": 8.2203,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ES0130670112": {
+      "ticker": "ELE",
+      "shortName": "ELEe.BS",
+      "bid": 41.91,
+      "ask": 41.93,
+      "perShare": 0.02,
+      "bp": 4.771,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IT0003128367": {
+      "ticker": "ENEL",
+      "shortName": "ENELm.BS",
+      "bid": 8.854,
+      "ask": 8.856,
+      "perShare": 0.002,
+      "bp": 2.2586,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ES0130960018": {
+      "ticker": "ENG",
+      "shortName": "ENG",
+      "bid": 16.6,
+      "ask": 16.62,
+      "perShare": 0.02,
+      "bp": 12.0409,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ES0137650018": {
+      "ticker": "FDR",
+      "shortName": "FDR",
+      "bid": 17.92,
+      "ask": 17.94,
+      "perShare": 0.02,
+      "bp": 11.1545,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ES0177542018": {
+      "ticker": "IAG",
+      "shortName": "IAG.MC",
+      "bid": 5.028,
+      "ask": 5.032,
+      "perShare": 0.004,
+      "bp": 7.9523,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ES0144580Y14": {
+      "ticker": "IBE",
+      "shortName": "IBEe.CHI",
+      "bid": 20.15,
+      "ask": 20.16,
+      "perShare": 0.01,
+      "bp": 4.9615,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IT0005211237": {
+      "ticker": "IG",
+      "shortName": "IG",
+      "bid": 8.422,
+      "ask": 8.428,
+      "perShare": 0.006,
+      "bp": 7.1217,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IT0000072618": {
+      "ticker": "ISP",
+      "shortName": "ISPm.BS",
+      "bid": 6.731,
+      "ask": 6.734,
+      "perShare": 0.003,
+      "bp": 4.456,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ES0148396007": {
+      "ticker": "ITX",
+      "shortName": "ITXe.BS",
+      "bid": 52.78,
+      "ask": 52.84,
+      "perShare": 0.06,
+      "bp": 11.3615,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NL0015000LU4": {
+      "ticker": "IVG",
+      "shortName": "IVG",
+      "bid": 14.105,
+      "ask": 14.11,
+      "perShare": 0.005,
+      "bp": 3.5442,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IT0003856405": {
+      "ticker": "LDO",
+      "shortName": "LDOm.BS",
+      "bid": 50.23,
+      "ask": 50.27,
+      "perShare": 0.04,
+      "bp": 7.9602,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ES0124244E34": {
+      "ticker": "MAP",
+      "shortName": "MAPe.BS",
+      "bid": 4.346,
+      "ask": 4.352,
+      "perShare": 0.006,
+      "bp": 13.7963,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IT0000062957": {
+      "ticker": "MB",
+      "shortName": "MBm.BS",
+      "bid": 28.79,
+      "ask": 28.81,
+      "perShare": 0.02,
+      "bp": 6.9444,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IT0004965148": {
+      "ticker": "MONC",
+      "shortName": "MONCm.BS",
+      "bid": 44.04,
+      "ask": 44.07,
+      "perShare": 0.03,
+      "bp": 6.8097,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IT0004176001": {
+      "ticker": "PRY",
+      "shortName": "PRY",
+      "bid": 126.5,
+      "ask": 126.6,
+      "perShare": 0.1,
+      "bp": 7.902,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IT0003796171": {
+      "ticker": "PST",
+      "shortName": "PSTm.BS",
+      "bid": 25.41,
+      "ask": 25.43,
+      "perShare": 0.02,
+      "bp": 7.8678,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NL0011585146": {
+      "ticker": "RACE",
+      "shortName": "RACEm.BS",
+      "bid": 363.05,
+      "ask": 363.4,
+      "perShare": 0.35,
+      "bp": 9.6359,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "AT0000606306": {
+      "ticker": "RBI",
+      "shortName": "RBI",
+      "bid": 64.45,
+      "ask": 64.55,
+      "perShare": 0.1,
+      "bp": 15.5039,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ES0173093024": {
+      "ticker": "REE",
+      "shortName": "REEe.BS",
+      "bid": 15.11,
+      "ask": 15.12,
+      "perShare": 0.01,
+      "bp": 6.6159,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IT0005282865": {
+      "ticker": "REY",
+      "shortName": "REY",
+      "bid": 119,
+      "ask": 119.2,
+      "perShare": 0.2,
+      "bp": 16.7926,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IT0004712375": {
+      "ticker": "SFER",
+      "shortName": "SFERm.BS",
+      "bid": 7.58,
+      "ask": 7.62,
+      "perShare": 0.04,
+      "bp": 52.6316,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IT0003153415": {
+      "ticker": "SRG",
+      "shortName": "SRGm.BS",
+      "bid": 5.646,
+      "ask": 5.648,
+      "perShare": 0.002,
+      "bp": 3.5417,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ES0178165017": {
+      "ticker": "TRE",
+      "shortName": "TREe.BS",
+      "bid": 27.28,
+      "ask": 27.34,
+      "perShare": 0.06,
+      "bp": 21.97,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "AT0000821103": {
+      "ticker": "UQA",
+      "shortName": "UQA",
+      "bid": 18.56,
+      "ask": 18.6,
+      "perShare": 0.04,
+      "bp": 21.5285,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "AT0000746409": {
+      "ticker": "VER",
+      "shortName": "VER",
+      "bid": 62.25,
+      "ask": 62.35,
+      "perShare": 0.1,
+      "bp": 16.0514,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ES0183746314": {
+      "ticker": "VID",
+      "shortName": "VID",
+      "bid": 89.2,
+      "ask": 89.4,
+      "perShare": 0.2,
+      "bp": 22.3964,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "AT0000908504": {
+      "ticker": "VIG",
+      "shortName": "VIG",
+      "bid": 68.8,
+      "ask": 69,
+      "perShare": 0.2,
+      "bp": 29.0276,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "AT0000937503": {
+      "ticker": "VOE",
+      "shortName": "VOE",
+      "bid": 45.36,
+      "ask": 45.52,
+      "perShare": 0.16,
+      "bp": 35.2113,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "AT0000831706": {
+      "ticker": "WIE",
+      "shortName": "WIE",
+      "bid": 17.55,
+      "ask": 17.6,
+      "perShare": 0.05,
+      "bp": 28.4495,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NL0000235190": {
+      "ticker": "AIR",
+      "shortName": "AIRp.CHI",
+      "bid": 194.62,
+      "ask": 194.72,
+      "perShare": 0.1,
+      "bp": 5.1369,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000A0WMPJ6": {
+      "ticker": "AIXA",
+      "shortName": "AIXA",
+      "bid": 36.02,
+      "ask": 36.12,
+      "perShare": 0.1,
+      "bp": 27.7239,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000BASF111": {
+      "ticker": "BAS",
+      "shortName": "BASd.CHI",
+      "bid": 52.04,
+      "ask": 52.09,
+      "perShare": 0.05,
+      "bp": 9.6034,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FR0000131104": {
+      "ticker": "BNP",
+      "shortName": "BNPp.BS",
+      "bid": 100.48,
+      "ask": 100.54,
+      "perShare": 0.06,
+      "bp": 5.9696,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0005557508": {
+      "ticker": "DTE",
+      "shortName": "DTEd.CHI",
+      "bid": 26.87,
+      "ask": 26.89,
+      "perShare": 0.02,
+      "bp": 7.4405,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000DTR0CK8": {
+      "ticker": "DTG",
+      "shortName": "DTG",
+      "bid": 42.56,
+      "ask": 42.6,
+      "perShare": 0.04,
+      "bp": 9.3941,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000ENAG999": {
+      "ticker": "EOAN",
+      "shortName": "EOANd.CHI",
+      "bid": 17.21,
+      "ask": 17.22,
+      "perShare": 0.01,
+      "bp": 5.8089,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000EVNK013": {
+      "ticker": "EVK",
+      "shortName": "EVK",
+      "bid": 18.17,
+      "ask": 18.19,
+      "perShare": 0.02,
+      "bp": 11.0011,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0005785802": {
+      "ticker": "FME",
+      "shortName": "FMEd.BS",
+      "bid": 39.69,
+      "ask": 39.71,
+      "perShare": 0.02,
+      "bp": 5.0378,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000A0Z2ZZ5": {
+      "ticker": "FNTN",
+      "shortName": "FNTN",
+      "bid": 23.68,
+      "ask": 23.72,
+      "perShare": 0.04,
+      "bp": 16.8776,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0005773303": {
+      "ticker": "FRA",
+      "shortName": "FRA",
+      "bid": 61.95,
+      "ask": 62.1,
+      "perShare": 0.15,
+      "bp": 24.1838,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000FRE5EN2": {
+      "ticker": "FRE",
+      "shortName": "FREd.CHI",
+      "bid": 46.11,
+      "ask": 46.15,
+      "perShare": 0.04,
+      "bp": 8.6711,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000HAG0005": {
+      "ticker": "HAG",
+      "shortName": "HAGG.DE",
+      "bid": 79.48,
+      "ask": 79.58,
+      "perShare": 0.1,
+      "bp": 12.5739,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0006219934": {
+      "ticker": "JUN3",
+      "shortName": "JUN3",
+      "bid": 24.44,
+      "ask": 24.5,
+      "perShare": 0.06,
+      "bp": 24.5198,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000KGX8881": {
+      "ticker": "KGX",
+      "shortName": "KGX",
+      "bid": 40.42,
+      "ask": 40.47,
+      "perShare": 0.05,
+      "bp": 12.3625,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0005470405": {
+      "ticker": "LXS",
+      "shortName": "LXS",
+      "bid": 13.08,
+      "ask": 13.14,
+      "perShare": 0.06,
+      "bp": 45.7666,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0007100000": {
+      "ticker": "MBG",
+      "shortName": "DAId.CHI",
+      "bid": 42.16,
+      "ask": 42.18,
+      "perShare": 0.02,
+      "bp": 4.7427,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000A0D6554": {
+      "ticker": "NDX1",
+      "shortName": "NDX1",
+      "bid": 40.88,
+      "ask": 40.94,
+      "perShare": 0.06,
+      "bp": 14.6663,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0006452907": {
+      "ticker": "NEM",
+      "shortName": "NEM.DE",
+      "bid": 62.1,
+      "ask": 62.25,
+      "perShare": 0.15,
+      "bp": 24.1255,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "AT0000743059": {
+      "ticker": "OMV",
+      "shortName": "OMV",
+      "bid": 71,
+      "ask": 71.1,
+      "perShare": 0.1,
+      "bp": 14.0746,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0007037129": {
+      "ticker": "RWE",
+      "shortName": "RWEd.CHI",
+      "bid": 60.22,
+      "ask": 60.28,
+      "perShare": 0.06,
+      "bp": 9.9585,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0007165631": {
+      "ticker": "SRT3",
+      "shortName": "SRT3",
+      "bid": 250.8,
+      "ask": 251.4,
+      "perShare": 0.6,
+      "bp": 23.8949,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE0007500001": {
+      "ticker": "TKA",
+      "shortName": "TKAd.BS",
+      "bid": 14.96,
+      "ask": 15.01,
+      "perShare": 0.05,
+      "bp": 33.3667,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000TLX1005": {
+      "ticker": "TLX",
+      "shortName": "TLX",
+      "bid": 119.7,
+      "ask": 119.9,
+      "perShare": 0.2,
+      "bp": 16.6945,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DE000A2YN900": {
+      "ticker": "TMV",
+      "shortName": "TMV",
+      "bid": 6.395,
+      "ask": 6.41,
+      "perShare": 0.015,
+      "bp": 23.4283,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
     }
   },
   "byTicker": {
@@ -16355,13 +19165,13 @@
     },
     "UNI": {
       "ticker": "UNI",
-      "shortName": "UNI-USD",
-      "bid": 8.9045,
-      "ask": 8.9086,
-      "perShare": 0.0041,
-      "bp": 4.6034,
-      "currency": "USD",
-      "at": "2026-09-18T18:20:42.594Z"
+      "shortName": "UNI",
+      "bid": 3.586,
+      "ask": 3.592,
+      "perShare": 0.006,
+      "bp": 16.7177,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
     },
     "XRP": {
       "ticker": "XRP",
@@ -16415,13 +19225,13 @@
     },
     "DIA": {
       "ticker": "DIA",
-      "shortName": "DIA",
-      "bid": 515.55,
-      "ask": 515.59,
-      "perShare": 0.04,
-      "bp": 0.7758,
-      "currency": "USD",
-      "at": "2026-09-18T18:20:42.594Z"
+      "shortName": "DIA.MI",
+      "bid": 77.5,
+      "ask": 77.62,
+      "perShare": 0.12,
+      "bp": 15.4719,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
     },
     "EEM": {
       "ticker": "EEM",
@@ -17305,13 +20115,13 @@
     },
     "ADP": {
       "ticker": "ADP",
-      "shortName": "ADP.OQ",
-      "bid": 271.77,
-      "ask": 271.82,
-      "perShare": 0.05,
-      "bp": 1.8396,
-      "currency": "USD",
-      "at": "2026-09-18T18:20:42.594Z"
+      "shortName": "ADP",
+      "bid": 109.7,
+      "ask": 109.8,
+      "perShare": 0.1,
+      "bp": 9.1116,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
     },
     "ADSK": {
       "ticker": "ADSK",
@@ -20015,13 +22825,13 @@
     },
     "LI": {
       "ticker": "LI",
-      "shortName": "LI",
-      "bid": 12.05,
-      "ask": 12.06,
-      "perShare": 0.01,
-      "bp": 8.2953,
-      "currency": "USD",
-      "at": "2026-09-18T18:20:42.594Z"
+      "shortName": "LIp",
+      "bid": 36.36,
+      "ask": 36.38,
+      "perShare": 0.02,
+      "bp": 5.499,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
     },
     "LIN": {
       "ticker": "LIN",
@@ -22225,13 +25035,13 @@
     },
     "TRI": {
       "ticker": "TRI",
-      "shortName": "TRI",
-      "bid": 93.89,
-      "ask": 93.98,
-      "perShare": 0.09,
-      "bp": 9.5811,
-      "currency": "USD",
-      "at": "2026-09-18T18:20:42.594Z"
+      "shortName": "TRIp",
+      "bid": 131,
+      "ask": 131.8,
+      "perShare": 0.8,
+      "bp": 60.8828,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
     },
     "TRIP": {
       "ticker": "TRIP",
@@ -23075,13 +25885,13 @@
     },
     "ACA": {
       "ticker": "ACA",
-      "shortName": "ACA.N",
-      "bid": 145.55,
-      "ask": 145.56,
+      "shortName": "ACAp.BS",
+      "bid": 18.08,
+      "ask": 18.09,
       "perShare": 0.01,
-      "bp": 0.687,
-      "currency": "USD",
-      "at": "2026-09-18T18:20:42.594Z"
+      "bp": 5.5294,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
     },
     "ACHR": {
       "ticker": "ACHR",
@@ -23245,13 +26055,13 @@
     },
     "AI": {
       "ticker": "AI",
-      "shortName": "AI",
-      "bid": 10.78,
-      "ask": 10.79,
-      "perShare": 0.01,
-      "bp": 9.2721,
-      "currency": "USD",
-      "at": "2026-09-18T18:20:42.594Z"
+      "shortName": "AIp.BS",
+      "bid": 168.52,
+      "ask": 168.56,
+      "perShare": 0.04,
+      "bp": 2.3733,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
     },
     "AIG": {
       "ticker": "AIG",
@@ -23395,13 +26205,13 @@
     },
     "AM": {
       "ticker": "AM",
-      "shortName": "AM",
-      "bid": 21.41,
-      "ask": 21.42,
-      "perShare": 0.01,
-      "bp": 4.6696,
-      "currency": "USD",
-      "at": "2026-09-18T18:20:42.594Z"
+      "shortName": "AMp.DXE",
+      "bid": 291.8,
+      "ask": 292.4,
+      "perShare": 0.6,
+      "bp": 20.5409,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
     },
     "AMCR": {
       "ticker": "AMCR",
@@ -23455,13 +26265,13 @@
     },
     "AMP": {
       "ticker": "AMP",
-      "shortName": "AMP",
-      "bid": 545.45,
-      "ask": 546.05,
-      "perShare": 0.6,
-      "bp": 10.994,
-      "currency": "USD",
-      "at": "2026-09-18T18:20:42.594Z"
+      "shortName": "AMP.MI",
+      "bid": 11.77,
+      "ask": 11.785,
+      "perShare": 0.015,
+      "bp": 12.7361,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
     },
     "AMPX": {
       "ticker": "AMPX",
@@ -24005,13 +26815,13 @@
     },
     "BB": {
       "ticker": "BB",
-      "shortName": "BB",
-      "bid": 8,
-      "ask": 8.01,
-      "perShare": 0.01,
-      "bp": 12.4922,
-      "currency": "USD",
-      "at": "2026-09-18T18:20:42.594Z"
+      "shortName": "BBp",
+      "bid": 67.2,
+      "ask": 67.4,
+      "perShare": 0.2,
+      "bp": 29.7177,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
     },
     "BBAI": {
       "ticker": "BBAI",
@@ -24175,13 +26985,13 @@
     },
     "BG": {
       "ticker": "BG",
-      "shortName": "BG.SA",
-      "bid": 116.03,
-      "ask": 116.16,
-      "perShare": 0.13,
-      "bp": 11.1977,
-      "currency": "USD",
-      "at": "2026-09-18T18:20:42.594Z"
+      "shortName": "BG",
+      "bid": 177.7,
+      "ask": 177.9,
+      "perShare": 0.2,
+      "bp": 11.2486,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
     },
     "BHC": {
       "ticker": "BHC",
@@ -24325,13 +27135,13 @@
     },
     "BN": {
       "ticker": "BN",
-      "shortName": "BN",
-      "bid": 37.4,
-      "ask": 37.41,
-      "perShare": 0.01,
-      "bp": 2.6734,
-      "currency": "USD",
-      "at": "2026-09-18T18:20:42.594Z"
+      "shortName": "BNp.BS",
+      "bid": 60.4,
+      "ask": 60.44,
+      "perShare": 0.04,
+      "bp": 6.6203,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
     },
     "BNL": {
       "ticker": "BNL",
@@ -25075,13 +27885,13 @@
     },
     "CON": {
       "ticker": "CON",
-      "shortName": "CON",
-      "bid": 35.16,
-      "ask": 35.19,
-      "perShare": 0.03,
-      "bp": 8.5288,
-      "currency": "USD",
-      "at": "2026-09-18T18:20:42.594Z"
+      "shortName": "CONd.CHI",
+      "bid": 69.56,
+      "ask": 69.64,
+      "perShare": 0.08,
+      "bp": 11.4943,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
     },
     "COP": {
       "ticker": "COP",
@@ -25535,13 +28345,13 @@
     },
     "DG": {
       "ticker": "DG",
-      "shortName": "DG",
-      "bid": 123.24,
-      "ask": 123.32,
-      "perShare": 0.08,
-      "bp": 6.4893,
-      "currency": "USD",
-      "at": "2026-09-18T18:20:42.594Z"
+      "shortName": "DGp.BS",
+      "bid": 110.8,
+      "ask": 110.9,
+      "perShare": 0.1,
+      "bp": 9.0212,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
     },
     "DGX": {
       "ticker": "DGX",
@@ -25695,13 +28505,13 @@
     },
     "DTE": {
       "ticker": "DTE",
-      "shortName": "DTE",
-      "bid": 128.66,
-      "ask": 128.73,
-      "perShare": 0.07,
-      "bp": 5.4392,
-      "currency": "USD",
-      "at": "2026-09-18T18:20:42.594Z"
+      "shortName": "DTEd.CHI",
+      "bid": 26.87,
+      "ask": 26.89,
+      "perShare": 0.02,
+      "bp": 7.4405,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
     },
     "DTM": {
       "ticker": "DTM",
@@ -25885,13 +28695,13 @@
     },
     "EL": {
       "ticker": "EL",
-      "shortName": "EL",
-      "bid": 93.94,
-      "ask": 94.05,
-      "perShare": 0.11,
-      "bp": 11.7028,
-      "currency": "USD",
-      "at": "2026-09-18T18:20:42.594Z"
+      "shortName": "EIp.BS",
+      "bid": 148,
+      "ask": 148.1,
+      "perShare": 0.1,
+      "bp": 6.7545,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
     },
     "ELAN": {
       "ticker": "ELAN",
@@ -26505,13 +29315,13 @@
     },
     "FR": {
       "ticker": "FR",
-      "shortName": "FR",
-      "bid": 61.5,
-      "ask": 61.54,
-      "perShare": 0.04,
-      "bp": 6.502,
-      "currency": "USD",
-      "at": "2026-09-18T18:20:42.594Z"
+      "shortName": "FRp.CHI",
+      "bid": 14.99,
+      "ask": 15.05,
+      "perShare": 0.06,
+      "bp": 39.9467,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
     },
     "FRO": {
       "ticker": "FRO",
@@ -26605,13 +29415,13 @@
     },
     "G": {
       "ticker": "G",
-      "shortName": "G",
-      "bid": 34.36,
-      "ask": 34.39,
-      "perShare": 0.03,
-      "bp": 8.7273,
-      "currency": "USD",
-      "at": "2026-09-18T18:20:42.594Z"
+      "shortName": "Gm.BS",
+      "bid": 43.6,
+      "ask": 43.61,
+      "perShare": 0.01,
+      "bp": 2.2933,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
     },
     "GAP": {
       "ticker": "GAP",
@@ -28385,13 +31195,13 @@
     },
     "MC": {
       "ticker": "MC",
-      "shortName": "MC.N",
-      "bid": 59.02,
-      "ask": 59.29,
-      "perShare": 0.27,
-      "bp": 45.6428,
-      "currency": "USD",
-      "at": "2026-09-18T18:20:42.594Z"
+      "shortName": "MCp.BS",
+      "bid": 397.65,
+      "ask": 397.8,
+      "perShare": 0.15,
+      "bp": 3.7715,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
     },
     "MCD": {
       "ticker": "MCD",
@@ -28625,13 +31435,13 @@
     },
     "MRK": {
       "ticker": "MRK",
-      "shortName": "MRK",
-      "bid": 146.27,
-      "ask": 146.32,
-      "perShare": 0.05,
-      "bp": 3.4178,
-      "currency": "USD",
-      "at": "2026-09-18T18:20:42.594Z"
+      "shortName": "MRKd.CHI",
+      "bid": 132.65,
+      "ask": 132.75,
+      "perShare": 0.1,
+      "bp": 7.5358,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
     },
     "MRP": {
       "ticker": "MRP",
@@ -28845,13 +31655,13 @@
     },
     "NEM": {
       "ticker": "NEM",
-      "shortName": "NEM",
-      "bid": 123.26,
-      "ask": 123.29,
-      "perShare": 0.03,
-      "bp": 2.4336,
-      "currency": "USD",
-      "at": "2026-09-18T18:20:42.594Z"
+      "shortName": "NEM.DE",
+      "bid": 62.1,
+      "ask": 62.25,
+      "perShare": 0.15,
+      "bp": 24.1255,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
     },
     "NET": {
       "ticker": "NET",
@@ -29285,13 +32095,13 @@
     },
     "ORA": {
       "ticker": "ORA",
-      "shortName": "ORA",
-      "bid": 97.36,
-      "ask": 97.56,
-      "perShare": 0.2,
-      "bp": 20.5212,
-      "currency": "USD",
-      "at": "2026-09-18T18:20:42.594Z"
+      "shortName": "ORAp.CHI",
+      "bid": 14.145,
+      "ask": 14.15,
+      "perShare": 0.005,
+      "bp": 3.5342,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
     },
     "ORCL": {
       "ticker": "ORCL",
@@ -30135,13 +32945,13 @@
     },
     "RF": {
       "ticker": "RF",
-      "shortName": "RF",
-      "bid": 28.46,
-      "ask": 28.47,
-      "perShare": 0.01,
-      "bp": 3.5131,
-      "currency": "USD",
-      "at": "2026-09-18T18:20:42.594Z"
+      "shortName": "RFp.DXE",
+      "bid": 47.66,
+      "ask": 47.72,
+      "perShare": 0.06,
+      "bp": 12.5813,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
     },
     "RGA": {
       "ticker": "RGA",
@@ -31015,13 +33825,13 @@
     },
     "SW": {
       "ticker": "SW",
-      "shortName": "SW.N",
-      "bid": 44.6,
-      "ask": 44.63,
-      "perShare": 0.03,
-      "bp": 6.7242,
-      "currency": "USD",
-      "at": "2026-09-18T18:20:42.594Z"
+      "shortName": "SW",
+      "bid": 57.05,
+      "ask": 57.1,
+      "perShare": 0.05,
+      "bp": 8.7604,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
     },
     "SWK": {
       "ticker": "SWK",
@@ -31925,13 +34735,13 @@
     },
     "VIV": {
       "ticker": "VIV",
-      "shortName": "VIV",
-      "bid": 11.98,
-      "ask": 11.99,
-      "perShare": 0.01,
-      "bp": 8.3438,
-      "currency": "USD",
-      "at": "2026-09-18T18:20:42.594Z"
+      "shortName": "VIVp.CHI",
+      "bid": 1.482,
+      "ask": 1.486,
+      "perShare": 0.004,
+      "bp": 26.9542,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
     },
     "VLO": {
       "ticker": "VLO",
@@ -32572,6 +35382,2566 @@
       "bp": 4.3563,
       "currency": "USD",
       "at": "2026-09-18T18:20:42.594Z"
+    },
+    "ACS": {
+      "ticker": "ACS",
+      "shortName": "ACSe.CHI",
+      "bid": 93.3,
+      "ask": 93.45,
+      "perShare": 0.15,
+      "bp": 16.0643,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "AENA": {
+      "ticker": "AENA",
+      "shortName": "AENAe.CHI",
+      "bid": 25.86,
+      "ask": 25.9,
+      "perShare": 0.04,
+      "bp": 15.456,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "AMS": {
+      "ticker": "AMS",
+      "shortName": "AMS",
+      "bid": 53.86,
+      "ask": 53.88,
+      "perShare": 0.02,
+      "bp": 3.7126,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ANA": {
+      "ticker": "ANA",
+      "shortName": "ANA",
+      "bid": 213.2,
+      "ask": 213.4,
+      "perShare": 0.2,
+      "bp": 9.3765,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ANE": {
+      "ticker": "ANE",
+      "shortName": "ANE",
+      "bid": 22.36,
+      "ask": 22.4,
+      "perShare": 0.04,
+      "bp": 17.8731,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BKT": {
+      "ticker": "BKT",
+      "shortName": "BKTe.CHI",
+      "bid": 16.665,
+      "ask": 16.68,
+      "perShare": 0.015,
+      "bp": 8.9969,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "CABK": {
+      "ticker": "CABK",
+      "shortName": "CABKe.BS",
+      "bid": 13.085,
+      "ask": 13.095,
+      "perShare": 0.01,
+      "bp": 7.6394,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "COL": {
+      "ticker": "COL",
+      "shortName": "COL.MI",
+      "bid": 5.03,
+      "ask": 5.04,
+      "perShare": 0.01,
+      "bp": 19.861,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "GEST": {
+      "ticker": "GEST",
+      "shortName": "GEST",
+      "bid": 3.03,
+      "ask": 3.035,
+      "perShare": 0.005,
+      "bp": 16.488,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "LOG": {
+      "ticker": "LOG",
+      "shortName": "LOG.MC",
+      "bid": 35.74,
+      "ask": 35.8,
+      "perShare": 0.06,
+      "bp": 16.7738,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NTGY": {
+      "ticker": "NTGY",
+      "shortName": "NTGYe.CHI",
+      "bid": 29.2,
+      "ask": 29.22,
+      "perShare": 0.02,
+      "bp": 6.847,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "TEF": {
+      "ticker": "TEF",
+      "shortName": "TEFe.CHI",
+      "bid": 3.394,
+      "ask": 3.396,
+      "perShare": 0.002,
+      "bp": 5.891,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "UCG": {
+      "ticker": "UCG",
+      "shortName": "UCG",
+      "bid": 83.49,
+      "ask": 83.56,
+      "perShare": 0.07,
+      "bp": 8.3807,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "AALB": {
+      "ticker": "AALB",
+      "shortName": "AALB",
+      "bid": 41.96,
+      "ask": 42,
+      "perShare": 0.04,
+      "bp": 9.5283,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ABI": {
+      "ticker": "ABI",
+      "shortName": "ABIb.BS",
+      "bid": 67.62,
+      "ask": 67.64,
+      "perShare": 0.02,
+      "bp": 2.9573,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ABN": {
+      "ticker": "ABN",
+      "shortName": "ABNa.BS",
+      "bid": 43.43,
+      "ask": 43.46,
+      "perShare": 0.03,
+      "bp": 6.9053,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "AC": {
+      "ticker": "AC",
+      "shortName": "ACp.BS",
+      "bid": 46.15,
+      "ask": 46.19,
+      "perShare": 0.04,
+      "bp": 8.6636,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "AD": {
+      "ticker": "AD",
+      "shortName": "ADa.BS",
+      "bid": 31.22,
+      "ask": 31.23,
+      "perShare": 0.01,
+      "bp": 3.2026,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ADYEN": {
+      "ticker": "ADYEN",
+      "shortName": "ADYEN",
+      "bid": 860.3,
+      "ask": 861.7,
+      "perShare": 1.4,
+      "bp": 16.2602,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "AF": {
+      "ticker": "AF",
+      "shortName": "AFp.CHI",
+      "bid": 11.515,
+      "ask": 11.53,
+      "perShare": 0.015,
+      "bp": 13.018,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "AGN": {
+      "ticker": "AGN",
+      "shortName": "AGNa.CHI",
+      "bid": 7.82,
+      "ask": 7.824,
+      "perShare": 0.004,
+      "bp": 5.1138,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "AGS": {
+      "ticker": "AGS",
+      "shortName": "AGSb.CHI",
+      "bid": 74.15,
+      "ask": 74.25,
+      "perShare": 0.1,
+      "bp": 13.4771,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "AKE": {
+      "ticker": "AKE",
+      "shortName": "AKE",
+      "bid": 57.45,
+      "ask": 57.5,
+      "perShare": 0.05,
+      "bp": 8.6994,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "AKZA": {
+      "ticker": "AKZA",
+      "shortName": "AKZAa.CHI",
+      "bid": 57.12,
+      "ask": 57.16,
+      "perShare": 0.04,
+      "bp": 7.0004,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ALO": {
+      "ticker": "ALO",
+      "shortName": "ALOp.CHI",
+      "bid": 14.82,
+      "ask": 14.86,
+      "perShare": 0.04,
+      "bp": 26.9542,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "AMUN": {
+      "ticker": "AMUN",
+      "shortName": "AMUN",
+      "bid": 91.9,
+      "ask": 92,
+      "perShare": 0.1,
+      "bp": 10.8755,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ARCAD": {
+      "ticker": "ARCAD",
+      "shortName": "ARCAD",
+      "bid": 41.52,
+      "ask": 41.58,
+      "perShare": 0.06,
+      "bp": 14.4404,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ASM": {
+      "ticker": "ASM",
+      "shortName": "ASM",
+      "bid": 845.4,
+      "ask": 846.2,
+      "perShare": 0.8,
+      "bp": 9.4585,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ASML": {
+      "ticker": "ASML",
+      "shortName": "ASMLa.CHI",
+      "bid": 1505.6,
+      "ask": 1506.2,
+      "perShare": 0.6,
+      "bp": 3.9843,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ASRNL": {
+      "ticker": "ASRNL",
+      "shortName": "ASRNL",
+      "bid": 72.8,
+      "ask": 72.82,
+      "perShare": 0.02,
+      "bp": 2.7469,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ATE": {
+      "ticker": "ATE",
+      "shortName": "ATE",
+      "bid": 71.45,
+      "ask": 71.6,
+      "perShare": 0.15,
+      "bp": 20.9717,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "AYV": {
+      "ticker": "AYV",
+      "shortName": "ALD",
+      "bid": 10.18,
+      "ask": 10.21,
+      "perShare": 0.03,
+      "bp": 29.4262,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BCP": {
+      "ticker": "BCP",
+      "shortName": "BCP",
+      "bid": 1.1825,
+      "ask": 1.186,
+      "perShare": 0.0035,
+      "bp": 29.5546,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BEKB": {
+      "ticker": "BEKB",
+      "shortName": "BEKBb.BS",
+      "bid": 38,
+      "ask": 38.1,
+      "perShare": 0.1,
+      "bp": 26.2812,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BESI": {
+      "ticker": "BESI",
+      "shortName": "BESI",
+      "bid": 186.85,
+      "ask": 187,
+      "perShare": 0.15,
+      "bp": 8.0246,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BFIT": {
+      "ticker": "BFIT",
+      "shortName": "BFIT",
+      "bid": 29.58,
+      "ask": 29.64,
+      "perShare": 0.06,
+      "bp": 20.2634,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BIM": {
+      "ticker": "BIM",
+      "shortName": "BIM",
+      "bid": 74.4,
+      "ask": 74.5,
+      "perShare": 0.1,
+      "bp": 13.4318,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BVI": {
+      "ticker": "BVI",
+      "shortName": "BVI",
+      "bid": 27.28,
+      "ask": 27.3,
+      "perShare": 0.02,
+      "bp": 7.3287,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "CA": {
+      "ticker": "CA",
+      "shortName": "CAp.CHI",
+      "bid": 16.26,
+      "ask": 16.27,
+      "perShare": 0.01,
+      "bp": 6.1482,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "CAP": {
+      "ticker": "CAP",
+      "shortName": "CAPp.CHI",
+      "bid": 105.45,
+      "ask": 105.55,
+      "perShare": 0.1,
+      "bp": 9.4787,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "CDI": {
+      "ticker": "CDI",
+      "shortName": "CDI",
+      "bid": 364.6,
+      "ask": 365.2,
+      "perShare": 0.6,
+      "bp": 16.4429,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "CS": {
+      "ticker": "CS",
+      "shortName": "CSp.BS",
+      "bid": 43.35,
+      "ask": 43.37,
+      "perShare": 0.02,
+      "bp": 4.6125,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DEC": {
+      "ticker": "DEC",
+      "shortName": "DECp.BS",
+      "bid": 24.92,
+      "ask": 24.96,
+      "perShare": 0.04,
+      "bp": 16.0385,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DIE": {
+      "ticker": "DIE",
+      "shortName": "DIE",
+      "bid": 162.5,
+      "ask": 162.9,
+      "perShare": 0.4,
+      "bp": 24.5851,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DSY": {
+      "ticker": "DSY",
+      "shortName": "DSYp.CHI",
+      "bid": 21.06,
+      "ask": 21.08,
+      "perShare": 0.02,
+      "bp": 9.4922,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "EDEN": {
+      "ticker": "EDEN",
+      "shortName": "EDEN",
+      "bid": 27.57,
+      "ask": 27.6,
+      "perShare": 0.03,
+      "bp": 10.8755,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "EDPR": {
+      "ticker": "EDPR",
+      "shortName": "EDPR",
+      "bid": 13.01,
+      "ask": 13.03,
+      "perShare": 0.02,
+      "bp": 15.361,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ELIS": {
+      "ticker": "ELIS",
+      "shortName": "ELIS",
+      "bid": 22.44,
+      "ask": 22.48,
+      "perShare": 0.04,
+      "bp": 17.8094,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "EN": {
+      "ticker": "EN",
+      "shortName": "ENp.BS",
+      "bid": 43.21,
+      "ask": 43.24,
+      "perShare": 0.03,
+      "bp": 6.9404,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ENGI": {
+      "ticker": "ENGI",
+      "shortName": "ENGIp.BS",
+      "bid": 23.63,
+      "ask": 23.64,
+      "perShare": 0.01,
+      "bp": 4.231,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ENX": {
+      "ticker": "ENX",
+      "shortName": "ENX",
+      "bid": 160.4,
+      "ask": 160.6,
+      "perShare": 0.2,
+      "bp": 12.4611,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ERF": {
+      "ticker": "ERF",
+      "shortName": "EUFI",
+      "bid": 76.34,
+      "ask": 76.36,
+      "perShare": 0.02,
+      "bp": 2.6195,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "EXO": {
+      "ticker": "EXO",
+      "shortName": "EXO",
+      "bid": 72.6,
+      "ask": 72.7,
+      "perShare": 0.1,
+      "bp": 13.7646,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FDJU": {
+      "ticker": "FDJU",
+      "shortName": "FDJ",
+      "bid": 21.58,
+      "ask": 21.59,
+      "perShare": 0.01,
+      "bp": 4.6328,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FER": {
+      "ticker": "FER",
+      "shortName": "FERe.CHI",
+      "bid": 48.5,
+      "ask": 48.53,
+      "perShare": 0.03,
+      "bp": 6.1837,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FGR": {
+      "ticker": "FGR",
+      "shortName": "FGR",
+      "bid": 105.75,
+      "ask": 105.85,
+      "perShare": 0.1,
+      "bp": 9.4518,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FRVIA": {
+      "ticker": "FRVIA",
+      "shortName": "FRVIA",
+      "bid": 9.016,
+      "ask": 9.03,
+      "perShare": 0.014,
+      "bp": 15.5159,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "GALP": {
+      "ticker": "GALP",
+      "shortName": "GALPu.BS",
+      "bid": 22.32,
+      "ask": 22.34,
+      "perShare": 0.02,
+      "bp": 8.9566,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "GBLB": {
+      "ticker": "GBLB",
+      "shortName": "GBLB",
+      "bid": 73.65,
+      "ask": 73.7,
+      "perShare": 0.05,
+      "bp": 6.7866,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "GET": {
+      "ticker": "GET",
+      "shortName": "GET",
+      "bid": 18.59,
+      "ask": 18.61,
+      "perShare": 0.02,
+      "bp": 10.7527,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "GL9": {
+      "ticker": "GL9",
+      "shortName": "GL9",
+      "bid": 19.67,
+      "ask": 19.73,
+      "perShare": 0.06,
+      "bp": 30.4569,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "GLE": {
+      "ticker": "GLE",
+      "shortName": "GLEp.CHI",
+      "bid": 72.51,
+      "ask": 72.55,
+      "perShare": 0.04,
+      "bp": 5.515,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "HEIA": {
+      "ticker": "HEIA",
+      "shortName": "HEIAa.CHI",
+      "bid": 71.1,
+      "ask": 71.14,
+      "perShare": 0.04,
+      "bp": 5.6243,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "HO": {
+      "ticker": "HO",
+      "shortName": "HO",
+      "bid": 239.1,
+      "ask": 239.3,
+      "perShare": 0.2,
+      "bp": 8.3612,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IMCD": {
+      "ticker": "IMCD",
+      "shortName": "IMCD",
+      "bid": 93.6,
+      "ask": 93.72,
+      "perShare": 0.12,
+      "bp": 12.8123,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "INPST": {
+      "ticker": "INPST",
+      "shortName": "INPST",
+      "bid": 15.57,
+      "ask": 15.58,
+      "perShare": 0.01,
+      "bp": 6.4205,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IPN": {
+      "ticker": "IPN",
+      "shortName": "IPN",
+      "bid": 148.4,
+      "ask": 148.7,
+      "perShare": 0.3,
+      "bp": 20.1952,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "JMT": {
+      "ticker": "JMT",
+      "shortName": "JMTu.CHI",
+      "bid": 18.04,
+      "ask": 18.05,
+      "perShare": 0.01,
+      "bp": 5.5417,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "KBC": {
+      "ticker": "KBC",
+      "shortName": "KBCb.BS",
+      "bid": 132.2,
+      "ask": 132.3,
+      "perShare": 0.1,
+      "bp": 7.5614,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "KER": {
+      "ticker": "KER",
+      "shortName": "KERp.BS",
+      "bid": 226.65,
+      "ask": 226.75,
+      "perShare": 0.1,
+      "bp": 4.4111,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "LIGHT": {
+      "ticker": "LIGHT",
+      "shortName": "LIGHT",
+      "bid": 15.67,
+      "ask": 15.72,
+      "perShare": 0.05,
+      "bp": 31.8573,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "LKFT": {
+      "ticker": "LKFT",
+      "shortName": "GLPGa.CHI",
+      "bid": 27.56,
+      "ask": 27.66,
+      "perShare": 0.1,
+      "bp": 36.2188,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "LR": {
+      "ticker": "LR",
+      "shortName": "LRp.CHI",
+      "bid": 138.45,
+      "ask": 138.55,
+      "perShare": 0.1,
+      "bp": 7.2202,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "MF": {
+      "ticker": "MF",
+      "shortName": "MF",
+      "bid": 82.3,
+      "ask": 82.4,
+      "perShare": 0.1,
+      "bp": 12.1433,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ML": {
+      "ticker": "ML",
+      "shortName": "MLp.BS",
+      "bid": 33.57,
+      "ask": 33.6,
+      "perShare": 0.03,
+      "bp": 8.9326,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "MRL": {
+      "ticker": "MRL",
+      "shortName": "MRLe.CHI",
+      "bid": 12.53,
+      "ask": 12.55,
+      "perShare": 0.02,
+      "bp": 15.949,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "MT": {
+      "ticker": "MT",
+      "shortName": "MTa.BS",
+      "bid": 63.28,
+      "ask": 63.32,
+      "perShare": 0.04,
+      "bp": 6.3191,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NEX": {
+      "ticker": "NEX",
+      "shortName": "NEX",
+      "bid": 141.4,
+      "ask": 141.6,
+      "perShare": 0.2,
+      "bp": 14.1343,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NN": {
+      "ticker": "NN",
+      "shortName": "NNa.CHI",
+      "bid": 79.08,
+      "ask": 79.1,
+      "perShare": 0.02,
+      "bp": 2.5288,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NVG": {
+      "ticker": "NVG",
+      "shortName": "NVG",
+      "bid": 3.262,
+      "ask": 3.266,
+      "perShare": 0.004,
+      "bp": 12.2549,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "OCI": {
+      "ticker": "OCI",
+      "shortName": "OCI",
+      "bid": 4.116,
+      "ask": 4.12,
+      "perShare": 0.004,
+      "bp": 9.7135,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "OR": {
+      "ticker": "OR",
+      "shortName": "ORp.CHI",
+      "bid": 381.8,
+      "ask": 381.95,
+      "perShare": 0.15,
+      "bp": 3.928,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "PROX": {
+      "ticker": "PROX",
+      "shortName": "PROXb.CHI",
+      "bid": 6.06,
+      "ask": 6.07,
+      "perShare": 0.01,
+      "bp": 16.488,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "PRX": {
+      "ticker": "PRX",
+      "shortName": "PRX",
+      "bid": 35.895,
+      "ask": 35.93,
+      "perShare": 0.035,
+      "bp": 9.7459,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "PUB": {
+      "ticker": "PUB",
+      "shortName": "PUBp.BS",
+      "bid": 97.44,
+      "ask": 97.5,
+      "perShare": 0.06,
+      "bp": 6.1557,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "RAND": {
+      "ticker": "RAND",
+      "shortName": "RANDa.CHI",
+      "bid": 36.34,
+      "ask": 36.36,
+      "perShare": 0.02,
+      "bp": 5.5021,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "RCO": {
+      "ticker": "RCO",
+      "shortName": "RCO",
+      "bid": 43.26,
+      "ask": 43.4,
+      "perShare": 0.14,
+      "bp": 32.3102,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "RI": {
+      "ticker": "RI",
+      "shortName": "RIp.BS",
+      "bid": 59.5,
+      "ask": 59.54,
+      "perShare": 0.04,
+      "bp": 6.7204,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "RMS": {
+      "ticker": "RMS",
+      "shortName": "RMSp.BS",
+      "bid": 1342,
+      "ask": 1343,
+      "perShare": 1,
+      "bp": 7.4488,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "RNO": {
+      "ticker": "RNO",
+      "shortName": "RNOp.CHI",
+      "bid": 26.74,
+      "ask": 26.76,
+      "perShare": 0.02,
+      "bp": 7.4766,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "RUI": {
+      "ticker": "RUI",
+      "shortName": "RUI",
+      "bid": 34.76,
+      "ask": 34.82,
+      "perShare": 0.06,
+      "bp": 17.2463,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "RXL": {
+      "ticker": "RXL",
+      "shortName": "RXL",
+      "bid": 37.17,
+      "ask": 37.19,
+      "perShare": 0.02,
+      "bp": 5.3792,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "SAF": {
+      "ticker": "SAF",
+      "shortName": "SAFp.CHI",
+      "bid": 335.5,
+      "ask": 335.7,
+      "perShare": 0.2,
+      "bp": 5.9595,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "SAN": {
+      "ticker": "SAN",
+      "shortName": "SANp.BS",
+      "bid": 73.12,
+      "ask": 73.14,
+      "perShare": 0.02,
+      "bp": 2.7349,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "SBMO": {
+      "ticker": "SBMO",
+      "shortName": "SBMOa.CHI",
+      "bid": 36.5,
+      "ask": 36.54,
+      "perShare": 0.04,
+      "bp": 10.9529,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "SCR": {
+      "ticker": "SCR",
+      "shortName": "SCR",
+      "bid": 32.28,
+      "ask": 32.32,
+      "perShare": 0.04,
+      "bp": 12.3839,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "SESG": {
+      "ticker": "SESG",
+      "shortName": "SESG",
+      "bid": 4.686,
+      "ask": 4.704,
+      "perShare": 0.018,
+      "bp": 38.3387,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "SGO": {
+      "ticker": "SGO",
+      "shortName": "SGOp.CHI",
+      "bid": 70.6,
+      "ask": 70.66,
+      "perShare": 0.06,
+      "bp": 8.495,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "SK": {
+      "ticker": "SK",
+      "shortName": "SK",
+      "bid": 56.25,
+      "ask": 56.35,
+      "perShare": 0.1,
+      "bp": 17.762,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "SOF": {
+      "ticker": "SOF",
+      "shortName": "SOF",
+      "bid": 246.2,
+      "ask": 246.8,
+      "perShare": 0.6,
+      "bp": 24.3408,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "SOI": {
+      "ticker": "SOI",
+      "shortName": "SOI",
+      "bid": 149.3,
+      "ask": 149.5,
+      "perShare": 0.2,
+      "bp": 13.3869,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "SOLB": {
+      "ticker": "SOLB",
+      "shortName": "SOLBb.BS",
+      "bid": 25.26,
+      "ask": 25.3,
+      "perShare": 0.04,
+      "bp": 15.8228,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "SPIE": {
+      "ticker": "SPIE",
+      "shortName": "SPIE",
+      "bid": 44.58,
+      "ask": 44.62,
+      "perShare": 0.04,
+      "bp": 8.9686,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "SU": {
+      "ticker": "SU",
+      "shortName": "SUp.BS",
+      "bid": 292.85,
+      "ask": 293.1,
+      "perShare": 0.25,
+      "bp": 8.5332,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "TEP": {
+      "ticker": "TEP",
+      "shortName": "TEP",
+      "bid": 73.3,
+      "ask": 73.48,
+      "perShare": 0.18,
+      "bp": 24.5265,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "TTE": {
+      "ticker": "TTE",
+      "shortName": "FPp.CHI",
+      "bid": 79.25,
+      "ask": 79.28,
+      "perShare": 0.03,
+      "bp": 3.7848,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "UBI": {
+      "ticker": "UBI",
+      "shortName": "UBIp.CHI",
+      "bid": 5.392,
+      "ask": 5.408,
+      "perShare": 0.016,
+      "bp": 29.6296,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "UCB": {
+      "ticker": "UCB",
+      "shortName": "UCBb.BS",
+      "bid": 212.4,
+      "ask": 212.6,
+      "perShare": 0.2,
+      "bp": 9.4118,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "UMG": {
+      "ticker": "UMG",
+      "shortName": "UMG",
+      "bid": 14.57,
+      "ask": 14.58,
+      "perShare": 0.01,
+      "bp": 6.8611,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "UMI": {
+      "ticker": "UMI",
+      "shortName": "UMIb.CHI",
+      "bid": 21.4,
+      "ask": 21.48,
+      "perShare": 0.08,
+      "bp": 37.3134,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "VIE": {
+      "ticker": "VIE",
+      "shortName": "VIEp.BS",
+      "bid": 31.39,
+      "ask": 31.4,
+      "perShare": 0.01,
+      "bp": 3.1852,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "VPK": {
+      "ticker": "VPK",
+      "shortName": "VPK",
+      "bid": 47.46,
+      "ask": 47.5,
+      "perShare": 0.04,
+      "bp": 8.4246,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "WKL": {
+      "ticker": "WKL",
+      "shortName": "WKLa.BS",
+      "bid": 67.08,
+      "ask": 67.14,
+      "perShare": 0.06,
+      "bp": 8.9405,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "8TRA": {
+      "ticker": "8TRA",
+      "shortName": "8TRA",
+      "bid": 35.4,
+      "ask": 35.5,
+      "perShare": 0.1,
+      "bp": 28.2087,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "A5G": {
+      "ticker": "A5G",
+      "shortName": "A5G",
+      "bid": 11.62,
+      "ask": 11.63,
+      "perShare": 0.01,
+      "bp": 8.6022,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BAYN": {
+      "ticker": "BAYN",
+      "shortName": "BAYNd.CHI",
+      "bid": 49.42,
+      "ask": 49.46,
+      "perShare": 0.04,
+      "bp": 8.0906,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BC8": {
+      "ticker": "BC8",
+      "shortName": "BC8",
+      "bid": 34.4,
+      "ask": 34.44,
+      "perShare": 0.04,
+      "bp": 11.6212,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BMW": {
+      "ticker": "BMW",
+      "shortName": "BMWd.CHI",
+      "bid": 58.16,
+      "ask": 58.22,
+      "perShare": 0.06,
+      "bp": 10.3111,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "CBK": {
+      "ticker": "CBK",
+      "shortName": "CBKd.CHI",
+      "bid": 41.72,
+      "ask": 41.76,
+      "perShare": 0.04,
+      "bp": 9.5831,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DHER": {
+      "ticker": "DHER",
+      "shortName": "DHER",
+      "bid": 36.74,
+      "ask": 36.78,
+      "perShare": 0.04,
+      "bp": 10.8814,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ENR": {
+      "ticker": "ENR",
+      "shortName": "ENR",
+      "bid": 144.36,
+      "ask": 144.46,
+      "perShare": 0.1,
+      "bp": 6.9247,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "EVD": {
+      "ticker": "EVD",
+      "shortName": "EVD",
+      "bid": 54.95,
+      "ask": 55.1,
+      "perShare": 0.15,
+      "bp": 27.2603,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FIE": {
+      "ticker": "FIE",
+      "shortName": "FIE",
+      "bid": 37.55,
+      "ask": 37.8,
+      "perShare": 0.25,
+      "bp": 66.357,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "G1A": {
+      "ticker": "G1A",
+      "shortName": "G1A",
+      "bid": 66.65,
+      "ask": 66.7,
+      "perShare": 0.05,
+      "bp": 7.4991,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "HFG": {
+      "ticker": "HFG",
+      "shortName": "HFGG",
+      "bid": 2.67,
+      "ask": 2.68,
+      "perShare": 0.01,
+      "bp": 37.3832,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "HLAG": {
+      "ticker": "HLAG",
+      "shortName": "HLAG",
+      "bid": 135.5,
+      "ask": 135.9,
+      "perShare": 0.4,
+      "bp": 29.4768,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "HNR1": {
+      "ticker": "HNR1",
+      "shortName": "HNR1",
+      "bid": 254,
+      "ask": 254.2,
+      "perShare": 0.2,
+      "bp": 7.8709,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "HOT": {
+      "ticker": "HOT",
+      "shortName": "HOT",
+      "bid": 397.8,
+      "ask": 398.2,
+      "perShare": 0.4,
+      "bp": 10.0503,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "KBX": {
+      "ticker": "KBX",
+      "shortName": "KBX",
+      "bid": 106,
+      "ask": 106.3,
+      "perShare": 0.3,
+      "bp": 28.2619,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "KPN": {
+      "ticker": "KPN",
+      "shortName": "KPN",
+      "bid": 3.924,
+      "ask": 3.927,
+      "perShare": 0.003,
+      "bp": 7.6423,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "KRX": {
+      "ticker": "KRX",
+      "shortName": "KRX",
+      "bid": 98.2,
+      "ask": 98.35,
+      "perShare": 0.15,
+      "bp": 15.2633,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "LHA": {
+      "ticker": "LHA",
+      "shortName": "LHAd.BS",
+      "bid": 7.674,
+      "ask": 7.682,
+      "perShare": 0.008,
+      "bp": 10.4194,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "MUV2": {
+      "ticker": "MUV2",
+      "shortName": "MUV2d.CHI",
+      "bid": 505.6,
+      "ask": 506,
+      "perShare": 0.4,
+      "bp": 7.9083,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NDA": {
+      "ticker": "NDA",
+      "shortName": "NDA.DE",
+      "bid": 167.9,
+      "ask": 168.2,
+      "perShare": 0.3,
+      "bp": 17.8518,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "P911": {
+      "ticker": "P911",
+      "shortName": "Porsche",
+      "bid": 44.16,
+      "ask": 44.27,
+      "perShare": 0.11,
+      "bp": 24.8784,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "RAA": {
+      "ticker": "RAA",
+      "shortName": "RAA",
+      "bid": 572,
+      "ask": 573,
+      "perShare": 1,
+      "bp": 17.4672,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "REP": {
+      "ticker": "REP",
+      "shortName": "REPe.BS",
+      "bid": 30.69,
+      "ask": 30.71,
+      "perShare": 0.02,
+      "bp": 6.5147,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "RHM": {
+      "ticker": "RHM",
+      "shortName": "RHMG.DE",
+      "bid": 1011.2,
+      "ask": 1012.2,
+      "perShare": 1,
+      "bp": 9.8844,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "RRTL": {
+      "ticker": "RRTL",
+      "shortName": "RRTL",
+      "bid": 30.85,
+      "ask": 31,
+      "perShare": 0.15,
+      "bp": 48.5044,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "SAP": {
+      "ticker": "SAP",
+      "shortName": "SAPd.CHI",
+      "bid": 185.88,
+      "ask": 185.98,
+      "perShare": 0.1,
+      "bp": 5.3784,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "SHA": {
+      "ticker": "SHA",
+      "shortName": "SHA",
+      "bid": 6.91,
+      "ask": 6.94,
+      "perShare": 0.03,
+      "bp": 43.3213,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "UTDI": {
+      "ticker": "UTDI",
+      "shortName": "UTDI",
+      "bid": 25.8,
+      "ask": 25.86,
+      "perShare": 0.06,
+      "bp": 23.2288,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "VIS": {
+      "ticker": "VIS",
+      "shortName": "VIS",
+      "bid": 54,
+      "ask": 54.1,
+      "perShare": 0.1,
+      "bp": 18.5014,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "VOW3": {
+      "ticker": "VOW3",
+      "shortName": "VOW3d.CHI",
+      "bid": 73.26,
+      "ask": 73.34,
+      "perShare": 0.08,
+      "bp": 10.9141,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "WCH": {
+      "ticker": "WCH",
+      "shortName": "WCH",
+      "bid": 89.55,
+      "ask": 89.7,
+      "perShare": 0.15,
+      "bp": 16.7364,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ZAL": {
+      "ticker": "ZAL",
+      "shortName": "ZAL",
+      "bid": 22.22,
+      "ask": 22.25,
+      "perShare": 0.03,
+      "bp": 13.4922,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "SHEL": {
+      "ticker": "SHEL",
+      "shortName": "RDSAa.CHI",
+      "bid": 41.54,
+      "ask": 41.555,
+      "perShare": 0.015,
+      "bp": 3.6103,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ACE": {
+      "ticker": "ACE",
+      "shortName": "ACE",
+      "bid": 20.04,
+      "ask": 20.08,
+      "perShare": 0.04,
+      "bp": 19.9402,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "CPR": {
+      "ticker": "CPR",
+      "shortName": "CPR",
+      "bid": 6.028,
+      "ask": 6.032,
+      "perShare": 0.004,
+      "bp": 6.6335,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "HER": {
+      "ticker": "HER",
+      "shortName": "HER",
+      "bid": 3.582,
+      "ask": 3.586,
+      "perShare": 0.004,
+      "bp": 11.1607,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IRE": {
+      "ticker": "IRE",
+      "shortName": "IRE",
+      "bid": 2.48,
+      "ask": 2.484,
+      "perShare": 0.004,
+      "bp": 16.116,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "PIRC": {
+      "ticker": "PIRC",
+      "shortName": "PIRC",
+      "bid": 6.51,
+      "ask": 6.525,
+      "perShare": 0.015,
+      "bp": 23.015,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "TIT": {
+      "ticker": "TIT",
+      "shortName": "TITm.BS",
+      "bid": 7.478,
+      "ask": 7.481,
+      "perShare": 0.003,
+      "bp": 4.011,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "TPRO": {
+      "ticker": "TPRO",
+      "shortName": "TPRO",
+      "bid": 31,
+      "ask": 31.04,
+      "perShare": 0.04,
+      "bp": 12.8949,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "RYAAY": {
+      "ticker": "RYAAY",
+      "shortName": "RYA",
+      "bid": 23.11,
+      "ask": 23.14,
+      "perShare": 0.03,
+      "bp": 12.973,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ELISA": {
+      "ticker": "ELISA",
+      "shortName": "ELISA",
+      "bid": 37.28,
+      "ask": 37.3,
+      "perShare": 0.02,
+      "bp": 5.3634,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FORTUM": {
+      "ticker": "FORTUM",
+      "shortName": "FORTUM",
+      "bid": 23.75,
+      "ask": 23.78,
+      "perShare": 0.03,
+      "bp": 12.6236,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "HIAB": {
+      "ticker": "HIAB",
+      "shortName": "CGCBV",
+      "bid": 63.8,
+      "ask": 64.1,
+      "perShare": 0.3,
+      "bp": 46.9116,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "HUH1V": {
+      "ticker": "HUH1V",
+      "shortName": "HUH1V",
+      "bid": 30.64,
+      "ask": 30.66,
+      "perShare": 0.02,
+      "bp": 6.5253,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "KCR": {
+      "ticker": "KCR",
+      "shortName": "KCR",
+      "bid": 29.6,
+      "ask": 29.7,
+      "perShare": 0.1,
+      "bp": 33.7268,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "KESKOB": {
+      "ticker": "KESKOB",
+      "shortName": "KESKOB",
+      "bid": 22.58,
+      "ask": 22.62,
+      "perShare": 0.04,
+      "bp": 17.6991,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "KNEBV": {
+      "ticker": "KNEBV",
+      "shortName": "KNEBV",
+      "bid": 51.54,
+      "ask": 51.58,
+      "perShare": 0.04,
+      "bp": 7.758,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NESTE": {
+      "ticker": "NESTE",
+      "shortName": "NESTE",
+      "bid": 35.52,
+      "ask": 35.58,
+      "perShare": 0.06,
+      "bp": 16.8776,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ORNBV": {
+      "ticker": "ORNBV",
+      "shortName": "ORNBV",
+      "bid": 82.7,
+      "ask": 82.75,
+      "perShare": 0.05,
+      "bp": 6.0441,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "SAMPO": {
+      "ticker": "SAMPO",
+      "shortName": "SAMPO",
+      "bid": 8.806,
+      "ask": 8.81,
+      "perShare": 0.004,
+      "bp": 4.5413,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "STERV": {
+      "ticker": "STERV",
+      "shortName": "STERV",
+      "bid": 10.72,
+      "ask": 10.735,
+      "perShare": 0.015,
+      "bp": 13.9828,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "TIETO": {
+      "ticker": "TIETO",
+      "shortName": "TIETO",
+      "bid": 18.59,
+      "ask": 18.6,
+      "perShare": 0.01,
+      "bp": 5.3778,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "UPM": {
+      "ticker": "UPM",
+      "shortName": "UPM",
+      "bid": 25.93,
+      "ask": 25.95,
+      "perShare": 0.02,
+      "bp": 7.7101,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "VALMT": {
+      "ticker": "VALMT",
+      "shortName": "VALMT",
+      "bid": 28.4,
+      "ask": 28.44,
+      "perShare": 0.04,
+      "bp": 14.0746,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "WRT1V": {
+      "ticker": "WRT1V",
+      "shortName": "WRT1V",
+      "bid": 29.3,
+      "ask": 29.36,
+      "perShare": 0.06,
+      "bp": 20.4569,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ADS": {
+      "ticker": "ADS",
+      "shortName": "ADSd.BS",
+      "bid": 144.05,
+      "ask": 144.2,
+      "perShare": 0.15,
+      "bp": 10.4076,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "AFX": {
+      "ticker": "AFX",
+      "shortName": "AFX",
+      "bid": 30.5,
+      "ask": 30.62,
+      "perShare": 0.12,
+      "bp": 39.267,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ALV": {
+      "ticker": "ALV",
+      "shortName": "ALVd.BS",
+      "bid": 413.8,
+      "ask": 413.9,
+      "perShare": 0.1,
+      "bp": 2.4163,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "AOF": {
+      "ticker": "AOF",
+      "shortName": "AOF",
+      "bid": 90.4,
+      "ask": 90.6,
+      "perShare": 0.2,
+      "bp": 22.0994,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BEI": {
+      "ticker": "BEI",
+      "shortName": "BEId.CHI",
+      "bid": 76.12,
+      "ask": 76.18,
+      "perShare": 0.06,
+      "bp": 7.8792,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BIRG": {
+      "ticker": "BIRG",
+      "shortName": "BIRG",
+      "bid": 19.88,
+      "ask": 19.895,
+      "perShare": 0.015,
+      "bp": 7.5424,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BNR": {
+      "ticker": "BNR",
+      "shortName": "BNR",
+      "bid": 59.26,
+      "ask": 59.32,
+      "perShare": 0.06,
+      "bp": 10.1198,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BOSS": {
+      "ticker": "BOSS",
+      "shortName": "BOSS",
+      "bid": 38.36,
+      "ask": 38.38,
+      "perShare": 0.02,
+      "bp": 5.2124,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DB1": {
+      "ticker": "DB1",
+      "shortName": "DB1d.CHI",
+      "bid": 282.4,
+      "ask": 282.5,
+      "perShare": 0.1,
+      "bp": 3.5404,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DBK": {
+      "ticker": "DBK",
+      "shortName": "DBKd.CHI",
+      "bid": 31.84,
+      "ask": 31.865,
+      "perShare": 0.025,
+      "bp": 7.8487,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DMP": {
+      "ticker": "DMP",
+      "shortName": "DMP",
+      "bid": 39.15,
+      "ask": 39.25,
+      "perShare": 0.1,
+      "bp": 25.5102,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DWS": {
+      "ticker": "DWS",
+      "shortName": "DWS",
+      "bid": 72.75,
+      "ask": 72.85,
+      "perShare": 0.1,
+      "bp": 13.7363,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "EVT": {
+      "ticker": "EVT",
+      "shortName": "EVT",
+      "bid": 2.782,
+      "ask": 2.788,
+      "perShare": 0.006,
+      "bp": 21.544,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "G24": {
+      "ticker": "G24",
+      "shortName": "G24",
+      "bid": 71.05,
+      "ask": 71.15,
+      "perShare": 0.1,
+      "bp": 14.0647,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "GXI": {
+      "ticker": "GXI",
+      "shortName": "GXI",
+      "bid": 26.66,
+      "ask": 26.72,
+      "perShare": 0.06,
+      "bp": 22.4803,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "HEI": {
+      "ticker": "HEI",
+      "shortName": "HEId.BS",
+      "bid": 145.05,
+      "ask": 145.15,
+      "perShare": 0.1,
+      "bp": 6.8918,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "HEN": {
+      "ticker": "HEN",
+      "shortName": "HENd.BS",
+      "bid": 68.85,
+      "ask": 68.95,
+      "perShare": 0.1,
+      "bp": 14.5138,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IFX": {
+      "ticker": "IFX",
+      "shortName": "IFXd.CHI",
+      "bid": 58.07,
+      "ask": 58.1,
+      "perShare": 0.03,
+      "bp": 5.1648,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "KRN": {
+      "ticker": "KRN",
+      "shortName": "KRN",
+      "bid": 107.4,
+      "ask": 107.6,
+      "perShare": 0.2,
+      "bp": 18.6047,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "KRZ": {
+      "ticker": "KRZ",
+      "shortName": "KRZ",
+      "bid": 84.6,
+      "ask": 84.7,
+      "perShare": 0.1,
+      "bp": 11.8133,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "MTX": {
+      "ticker": "MTX",
+      "shortName": "MTX",
+      "bid": 360,
+      "ask": 360.3,
+      "perShare": 0.3,
+      "bp": 8.3299,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "S92": {
+      "ticker": "S92",
+      "shortName": "S92",
+      "bid": 59.7,
+      "ask": 60,
+      "perShare": 0.3,
+      "bp": 50.1253,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "SHL": {
+      "ticker": "SHL",
+      "shortName": "SHL",
+      "bid": 37.29,
+      "ask": 37.31,
+      "perShare": 0.02,
+      "bp": 5.3619,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "SIE": {
+      "ticker": "SIE",
+      "shortName": "SIEd.CHI",
+      "bid": 273.6,
+      "ask": 273.7,
+      "perShare": 0.1,
+      "bp": 3.6543,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "SIX2": {
+      "ticker": "SIX2",
+      "shortName": "SIX2",
+      "bid": 68.5,
+      "ask": 68.65,
+      "perShare": 0.15,
+      "bp": 21.8739,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "SY1": {
+      "ticker": "SY1",
+      "shortName": "SY1",
+      "bid": 92.28,
+      "ask": 92.34,
+      "perShare": 0.06,
+      "bp": 6.4998,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "VNA": {
+      "ticker": "VNA",
+      "shortName": "VNAd.BS",
+      "bid": 17.34,
+      "ask": 17.36,
+      "perShare": 0.02,
+      "bp": 11.5274,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ANDR": {
+      "ticker": "ANDR",
+      "shortName": "ANDR",
+      "bid": 85.6,
+      "ask": 85.8,
+      "perShare": 0.2,
+      "bp": 23.3372,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "AZM": {
+      "ticker": "AZM",
+      "shortName": "AZMm.BS",
+      "bid": 39.15,
+      "ask": 39.19,
+      "perShare": 0.04,
+      "bp": 10.2119,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BAMI": {
+      "ticker": "BAMI",
+      "shortName": "BAMI",
+      "bid": 16.27,
+      "ask": 16.28,
+      "perShare": 0.01,
+      "bp": 6.1444,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BMED": {
+      "ticker": "BMED",
+      "shortName": "BMED",
+      "bid": 23.43,
+      "ask": 23.45,
+      "perShare": 0.02,
+      "bp": 8.5324,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "CIE": {
+      "ticker": "CIE",
+      "shortName": "CIE",
+      "bid": 25.45,
+      "ask": 25.55,
+      "perShare": 0.1,
+      "bp": 39.2157,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "CLNX": {
+      "ticker": "CLNX",
+      "shortName": "CLNX",
+      "bid": 25.16,
+      "ask": 25.18,
+      "perShare": 0.02,
+      "bp": 7.946,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "EBS": {
+      "ticker": "EBS",
+      "shortName": "EBS",
+      "bid": 121.6,
+      "ask": 121.7,
+      "perShare": 0.1,
+      "bp": 8.2203,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ELE": {
+      "ticker": "ELE",
+      "shortName": "ELEe.BS",
+      "bid": 41.91,
+      "ask": 41.93,
+      "perShare": 0.02,
+      "bp": 4.771,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ENEL": {
+      "ticker": "ENEL",
+      "shortName": "ENELm.BS",
+      "bid": 8.854,
+      "ask": 8.856,
+      "perShare": 0.002,
+      "bp": 2.2586,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ENG": {
+      "ticker": "ENG",
+      "shortName": "ENG",
+      "bid": 16.6,
+      "ask": 16.62,
+      "perShare": 0.02,
+      "bp": 12.0409,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FDR": {
+      "ticker": "FDR",
+      "shortName": "FDR",
+      "bid": 17.92,
+      "ask": 17.94,
+      "perShare": 0.02,
+      "bp": 11.1545,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IAG": {
+      "ticker": "IAG",
+      "shortName": "IAG.MC",
+      "bid": 5.028,
+      "ask": 5.032,
+      "perShare": 0.004,
+      "bp": 7.9523,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IBE": {
+      "ticker": "IBE",
+      "shortName": "IBEe.CHI",
+      "bid": 20.15,
+      "ask": 20.16,
+      "perShare": 0.01,
+      "bp": 4.9615,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IG": {
+      "ticker": "IG",
+      "shortName": "IG",
+      "bid": 8.422,
+      "ask": 8.428,
+      "perShare": 0.006,
+      "bp": 7.1217,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ISP": {
+      "ticker": "ISP",
+      "shortName": "ISPm.BS",
+      "bid": 6.731,
+      "ask": 6.734,
+      "perShare": 0.003,
+      "bp": 4.456,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "ITX": {
+      "ticker": "ITX",
+      "shortName": "ITXe.BS",
+      "bid": 52.78,
+      "ask": 52.84,
+      "perShare": 0.06,
+      "bp": 11.3615,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "IVG": {
+      "ticker": "IVG",
+      "shortName": "IVG",
+      "bid": 14.105,
+      "ask": 14.11,
+      "perShare": 0.005,
+      "bp": 3.5442,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "LDO": {
+      "ticker": "LDO",
+      "shortName": "LDOm.BS",
+      "bid": 50.23,
+      "ask": 50.27,
+      "perShare": 0.04,
+      "bp": 7.9602,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "MAP": {
+      "ticker": "MAP",
+      "shortName": "MAPe.BS",
+      "bid": 4.346,
+      "ask": 4.352,
+      "perShare": 0.006,
+      "bp": 13.7963,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "MB": {
+      "ticker": "MB",
+      "shortName": "MBm.BS",
+      "bid": 28.79,
+      "ask": 28.81,
+      "perShare": 0.02,
+      "bp": 6.9444,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "MONC": {
+      "ticker": "MONC",
+      "shortName": "MONCm.BS",
+      "bid": 44.04,
+      "ask": 44.07,
+      "perShare": 0.03,
+      "bp": 6.8097,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "PRY": {
+      "ticker": "PRY",
+      "shortName": "PRY",
+      "bid": 126.5,
+      "ask": 126.6,
+      "perShare": 0.1,
+      "bp": 7.902,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "PST": {
+      "ticker": "PST",
+      "shortName": "PSTm.BS",
+      "bid": 25.41,
+      "ask": 25.43,
+      "perShare": 0.02,
+      "bp": 7.8678,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "RACE": {
+      "ticker": "RACE",
+      "shortName": "RACEm.BS",
+      "bid": 363.05,
+      "ask": 363.4,
+      "perShare": 0.35,
+      "bp": 9.6359,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "RBI": {
+      "ticker": "RBI",
+      "shortName": "RBI",
+      "bid": 64.45,
+      "ask": 64.55,
+      "perShare": 0.1,
+      "bp": 15.5039,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "REE": {
+      "ticker": "REE",
+      "shortName": "REEe.BS",
+      "bid": 15.11,
+      "ask": 15.12,
+      "perShare": 0.01,
+      "bp": 6.6159,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "REY": {
+      "ticker": "REY",
+      "shortName": "REY",
+      "bid": 119,
+      "ask": 119.2,
+      "perShare": 0.2,
+      "bp": 16.7926,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "SFER": {
+      "ticker": "SFER",
+      "shortName": "SFERm.BS",
+      "bid": 7.58,
+      "ask": 7.62,
+      "perShare": 0.04,
+      "bp": 52.6316,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "SRG": {
+      "ticker": "SRG",
+      "shortName": "SRGm.BS",
+      "bid": 5.646,
+      "ask": 5.648,
+      "perShare": 0.002,
+      "bp": 3.5417,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "TRE": {
+      "ticker": "TRE",
+      "shortName": "TREe.BS",
+      "bid": 27.28,
+      "ask": 27.34,
+      "perShare": 0.06,
+      "bp": 21.97,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "UQA": {
+      "ticker": "UQA",
+      "shortName": "UQA",
+      "bid": 18.56,
+      "ask": 18.6,
+      "perShare": 0.04,
+      "bp": 21.5285,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "VER": {
+      "ticker": "VER",
+      "shortName": "VER",
+      "bid": 62.25,
+      "ask": 62.35,
+      "perShare": 0.1,
+      "bp": 16.0514,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "VID": {
+      "ticker": "VID",
+      "shortName": "VID",
+      "bid": 89.2,
+      "ask": 89.4,
+      "perShare": 0.2,
+      "bp": 22.3964,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "VIG": {
+      "ticker": "VIG",
+      "shortName": "VIG",
+      "bid": 68.8,
+      "ask": 69,
+      "perShare": 0.2,
+      "bp": 29.0276,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "VOE": {
+      "ticker": "VOE",
+      "shortName": "VOE",
+      "bid": 45.36,
+      "ask": 45.52,
+      "perShare": 0.16,
+      "bp": 35.2113,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "WIE": {
+      "ticker": "WIE",
+      "shortName": "WIE",
+      "bid": 17.55,
+      "ask": 17.6,
+      "perShare": 0.05,
+      "bp": 28.4495,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "AIR": {
+      "ticker": "AIR",
+      "shortName": "AIRp.CHI",
+      "bid": 194.62,
+      "ask": 194.72,
+      "perShare": 0.1,
+      "bp": 5.1369,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "AIXA": {
+      "ticker": "AIXA",
+      "shortName": "AIXA",
+      "bid": 36.02,
+      "ask": 36.12,
+      "perShare": 0.1,
+      "bp": 27.7239,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BAS": {
+      "ticker": "BAS",
+      "shortName": "BASd.CHI",
+      "bid": 52.04,
+      "ask": 52.09,
+      "perShare": 0.05,
+      "bp": 9.6034,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "BNP": {
+      "ticker": "BNP",
+      "shortName": "BNPp.BS",
+      "bid": 100.48,
+      "ask": 100.54,
+      "perShare": 0.06,
+      "bp": 5.9696,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "DTG": {
+      "ticker": "DTG",
+      "shortName": "DTG",
+      "bid": 42.56,
+      "ask": 42.6,
+      "perShare": 0.04,
+      "bp": 9.3941,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "EOAN": {
+      "ticker": "EOAN",
+      "shortName": "EOANd.CHI",
+      "bid": 17.21,
+      "ask": 17.22,
+      "perShare": 0.01,
+      "bp": 5.8089,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "EVK": {
+      "ticker": "EVK",
+      "shortName": "EVK",
+      "bid": 18.17,
+      "ask": 18.19,
+      "perShare": 0.02,
+      "bp": 11.0011,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FME": {
+      "ticker": "FME",
+      "shortName": "FMEd.BS",
+      "bid": 39.69,
+      "ask": 39.71,
+      "perShare": 0.02,
+      "bp": 5.0378,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FNTN": {
+      "ticker": "FNTN",
+      "shortName": "FNTN",
+      "bid": 23.68,
+      "ask": 23.72,
+      "perShare": 0.04,
+      "bp": 16.8776,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FRA": {
+      "ticker": "FRA",
+      "shortName": "FRA",
+      "bid": 61.95,
+      "ask": 62.1,
+      "perShare": 0.15,
+      "bp": 24.1838,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "FRE": {
+      "ticker": "FRE",
+      "shortName": "FREd.CHI",
+      "bid": 46.11,
+      "ask": 46.15,
+      "perShare": 0.04,
+      "bp": 8.6711,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "HAG": {
+      "ticker": "HAG",
+      "shortName": "HAGG.DE",
+      "bid": 79.48,
+      "ask": 79.58,
+      "perShare": 0.1,
+      "bp": 12.5739,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "JUN3": {
+      "ticker": "JUN3",
+      "shortName": "JUN3",
+      "bid": 24.44,
+      "ask": 24.5,
+      "perShare": 0.06,
+      "bp": 24.5198,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "KGX": {
+      "ticker": "KGX",
+      "shortName": "KGX",
+      "bid": 40.42,
+      "ask": 40.47,
+      "perShare": 0.05,
+      "bp": 12.3625,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "LXS": {
+      "ticker": "LXS",
+      "shortName": "LXS",
+      "bid": 13.08,
+      "ask": 13.14,
+      "perShare": 0.06,
+      "bp": 45.7666,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "MBG": {
+      "ticker": "MBG",
+      "shortName": "DAId.CHI",
+      "bid": 42.16,
+      "ask": 42.18,
+      "perShare": 0.02,
+      "bp": 4.7427,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "NDX1": {
+      "ticker": "NDX1",
+      "shortName": "NDX1",
+      "bid": 40.88,
+      "ask": 40.94,
+      "perShare": 0.06,
+      "bp": 14.6663,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "OMV": {
+      "ticker": "OMV",
+      "shortName": "OMV",
+      "bid": 71,
+      "ask": 71.1,
+      "perShare": 0.1,
+      "bp": 14.0746,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "RWE": {
+      "ticker": "RWE",
+      "shortName": "RWEd.CHI",
+      "bid": 60.22,
+      "ask": 60.28,
+      "perShare": 0.06,
+      "bp": 9.9585,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "SRT3": {
+      "ticker": "SRT3",
+      "shortName": "SRT3",
+      "bid": 250.8,
+      "ask": 251.4,
+      "perShare": 0.6,
+      "bp": 23.8949,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "TKA": {
+      "ticker": "TKA",
+      "shortName": "TKAd.BS",
+      "bid": 14.96,
+      "ask": 15.01,
+      "perShare": 0.05,
+      "bp": 33.3667,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "TLX": {
+      "ticker": "TLX",
+      "shortName": "TLX",
+      "bid": 119.7,
+      "ask": 119.9,
+      "perShare": 0.2,
+      "bp": 16.6945,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
+    },
+    "TMV": {
+      "ticker": "TMV",
+      "shortName": "TMV",
+      "bid": 6.395,
+      "ask": 6.41,
+      "perShare": 0.015,
+      "bp": 23.4283,
+      "currency": "EUR",
+      "at": "2026-09-23T14:52:00.274Z"
     }
   }
 }

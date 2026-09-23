@@ -107,6 +107,9 @@ const etfsOnly = hasFlag("etfs-only") || hasFlag("funds-only");
 const stocksOnly = hasFlag("stocks-only");
 const cryptoOnly = hasFlag("crypto-only") || hasFlag("cryptos-only");
 const fresh = hasFlag("fresh");
+// Re-read the retail KID block onto rows already in lynx-parsed.json.
+// A what-if preview, not an order: the portal answers before any transmit.
+const restrictionsOnly = hasFlag("restrictions");
 const startIndex = Math.max(1, numberArg("start", 1));
 const walkLimit = numberArg("limit", 0);
 // Several searches can be in flight on the same signed-in tab; the portal
@@ -236,6 +239,7 @@ if (!(await attachPortalPage())) {
 const outputPath = new URL("lynx-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
+const existingByKey = new Map();
 
 const entryKey = (row) =>
   `${row.isin || row.query}:${row.exchange}:${row.ticker}:${row.type}:${row.currency || ""}`.toUpperCase();
@@ -248,8 +252,13 @@ if (!fresh && fs.existsSync(outputPath)) {
     if (Array.isArray(existing)) {
       for (const entry of existing) {
         if (String(entry?.type || "").toUpperCase() === "CRYPTO") continue;
+        if (unsupportedVenue(entry.exchange)) continue;
         results.push(entry);
-        if (entry?.ticker) seen.add(entryKey(entry));
+        if (entry?.ticker) {
+          const key = entryKey(entry);
+          seen.add(key);
+          existingByKey.set(key, entry);
+        }
       }
     }
   } catch {
@@ -481,16 +490,33 @@ async function readInfo(conid) {
 
 const KID_NOTICE = /KID|Retail clients can trade packaged/i;
 const CLOSE_ONLY_NOTICE = /only closing orders|no opening trade/i;
+// The what-if error is the order-ticket sentence. A bare "KID" match would
+// also catch a preview that merely links the document.
+const TICKET_KID = /does not have a KID|Retail clients can trade packaged/i;
+const LOT_SIZE = /multiple of ([\d,]+)/i;
 
 function closeOnlyVenue(listingExchange) {
   return /\.EXPERT\b/i.test(String(listingExchange || ""));
 }
 
-// A US-domiciled fund publishes no KID, and PRIIPs leaves European retail
-// clients unable to buy one. A non-EU resident still can. The portal quotes those
-// listings all the same and admits it in one place only: field 7183, the
-// order-ticket notice. 7184 alone says nothing, since tradable UCITS listings
-// come back with 7184=1 too.
+// These places quote, and the what-if answers "No trading permissions."
+// The order ticket says the instrument is not supported via LYNX (E003).
+// A liquid name gets the same answer as a small one — Samsung on KRX,
+// TSMC on TWSE — so it is the place, not the line. Lynx only opens
+// accounts in AT BE CZ FI FR DE NL PL SK, so a resident of Korea or
+// Taiwan is not a client who could buy it either. Dropped, like a
+// close-only venue.
+function unsupportedVenue(exchange) {
+  const code = String(exchange || "").toUpperCase();
+  return code === "KRX" || code === "TWSE" || code === "TPEX";
+}
+
+// A packaged product with no KID in a language approved for this retail
+// account cannot be bought by an EEA resident. A non-EU resident still can.
+// The portal quotes the listing all the same. Field 7183 sometimes carries
+// that sentence; on this account it stays empty, and the same words come
+// back from a what-if preview. 7184 alone says nothing, since tradable UCITS
+// listings come back with 7184=1 too. The what-if is not an order.
 //
 // PINK.EXPERT (and 7183 "only closing orders") is close-only: the line can
 // be sold if already held, not bought. It is dropped, not flagged.
@@ -538,6 +564,76 @@ async function tradingNotices(conids) {
   return { kid, closeOnly };
 }
 
+let tradingAccountId = "";
+
+async function tradingAccount() {
+  if (tradingAccountId) return tradingAccountId;
+  const answer = await api("iserver/accounts");
+  const id = answer.json?.accounts?.[0];
+  if (!id) return "";
+  tradingAccountId = String(id);
+  return tradingAccountId;
+}
+
+function previewText(answer) {
+  const json = answer?.json;
+  if (!json || Array.isArray(json)) return "";
+  const parts = [json.error, json.warning];
+  for (const list of [json.errors, json.warns, json.warnings]) {
+    if (Array.isArray(list)) parts.push(...list);
+  }
+  return parts.filter(Boolean).join(" ");
+}
+
+// True when this retail account is told the product has no approved KID.
+// False when the preview fails for some other reason (lot size already
+// retried, complex-product permission, a market this account has not
+// enabled). Null when the session itself is gone.
+async function kidFromTicket(conid) {
+  const account = await tradingAccount();
+  if (!account || !conid) return false;
+
+  let quantity = 1;
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const answer = await api(`iserver/account/${encodeURIComponent(account)}/orders/whatif`, {
+      method: "POST",
+      body: JSON.stringify({
+        orders: [
+          {
+            acctId: account,
+            conid: Number(conid),
+            orderType: "MKT",
+            side: "BUY",
+            tif: "DAY",
+            quantity,
+          },
+        ],
+      }),
+    });
+    if (isDeadSession(answer)) return null;
+
+    const err = previewText(answer);
+    if (TICKET_KID.test(err)) return true;
+
+    const lot = err.match(LOT_SIZE);
+    const next = lot ? Number(lot[1].replace(/,/g, "")) : 0;
+    if (next > quantity && next <= 100000) {
+      quantity = next;
+      continue;
+    }
+    return false;
+  }
+  return false;
+}
+
+async function kidFromTicketWhenReady(conid) {
+  for (;;) {
+    const ticket = await kidFromTicket(conid);
+    if (ticket !== null) return ticket;
+    await waitForSession();
+  }
+}
+
 function wantedHits(payload, job) {
   if (!payload) return [];
   const query = job.query.toUpperCase();
@@ -561,12 +657,20 @@ async function scrapeJob(job) {
 
   const notices = await tradingNotices(hits.map((hit) => String(hit.conid)));
   const infos = await Promise.all(hits.map((hit) => readInfo(hit.conid)));
+  // One preview per product. The KID sentence is about the instrument, and
+  // every venue of that search is the same ISIN.
+  let productKid = hits.some((hit) => notices.kid.get(String(hit.conid)) === true);
+  if (!productKid && job.kind === "ETF") {
+    productKid = await kidFromTicketWhenReady(hits[0].conid);
+    if (productKid) console.error("  ticket: no KID for European retail");
+  }
   const rows = [];
 
   for (const [index, hit] of hits.entries()) {
     const conid = String(hit.conid);
     const info = infos[index] || {};
     if (closeOnlyVenue(info.listingExchange) || notices.closeOnly.get(conid)) continue;
+    if (unsupportedVenue(listingVenue(hit, info))) continue;
 
     const ticker = (info.ticker || hit.symbol || "").toUpperCase();
     const name = listingName(hit) || normalize(info.companyName || "");
@@ -583,7 +687,7 @@ async function scrapeJob(job) {
       currency,
       type,
       raw: [hit.companyHeader || hit.companyName || name, exchange].filter(Boolean).join(" "),
-      restricted: notices.kid.get(conid) === true,
+      restricted: productKid || notices.kid.get(conid) === true,
     });
   }
 
@@ -596,6 +700,195 @@ function save() {
 
 const endIndex = walkLimit > 0 ? startIndex - 1 + walkLimit : jobs.length;
 const walk = jobs.slice(startIndex - 1, endIndex);
+
+const checkedPath = "/tmp/lynx-kid-checked.txt";
+
+async function applyStoredRestrictions() {
+  const doneIsins = new Set();
+  if (fs.existsSync(checkedPath)) {
+    for (const line of fs.readFileSync(checkedPath, "utf8").split(/\r?\n/)) {
+      const isin = line.trim().toUpperCase();
+      if (isin) doneIsins.add(isin);
+    }
+  }
+
+  const byIsin = new Map();
+  for (const row of results) {
+    if (!/^(ETF|ETC|ETN)$/.test(row.type || "")) continue;
+    const isin = String(row.isin || "").toUpperCase();
+    if (!isin) continue;
+    if (!byIsin.has(isin)) byIsin.set(isin, []);
+    byIsin.get(isin).push(row);
+  }
+
+  // UCITS domiciles are usually allowed, so they wait. The no-KID
+  // lines (US, CA, AU, …) are what the ticket withholds, and they are
+  // written first.
+  const later = new Set([
+    "IE", "LU", "FR", "NL", "DE", "BE", "SE", "PL", "HU", "EE", "AT", "FI",
+    "PT", "ES", "IT", "NO", "IS", "LI", "DK", "CZ", "SK", "SI", "HR", "BG",
+    "RO", "GR", "CY", "MT", "LV", "LT", "GB",
+  ]);
+  const pending = [...byIsin.keys()]
+    .filter((isin) => !doneIsins.has(isin) && !byIsin.get(isin).some((row) => row.nonEuResident))
+    .sort((a, b) => Number(later.has(a.slice(0, 2))) - Number(later.has(b.slice(0, 2))));
+  console.error(
+    `${pending.length} packaged products to preview (${byIsin.size} in the file` +
+      (lanes > 1 ? `, ${lanes} at a time` : "") +
+      ")"
+  );
+
+  let cursor = 0;
+  let finished = 0;
+  let blocked = 0;
+  const batch = [];
+  const started = Date.now();
+
+  function flush() {
+    if (batch.length === 0) return;
+    const writing = batch.splice(0, batch.length);
+    save();
+    fs.appendFileSync(checkedPath, `${writing.join("\n")}\n`);
+    const secs = (Date.now() - started) / 1000;
+    console.error(
+      `  ${finished}/${pending.length} previewed, ${blocked} without a KID (${(finished / secs).toFixed(2)}/s)`
+    );
+  }
+
+  // Search and the what-if share one page call. The ISIN is recorded only
+  // after the file is written, so a stop cannot skip a block it did not save.
+  async function one(isin) {
+    const account = await tradingAccount();
+    let answer = null;
+    for (;;) {
+      if (!page || page.isClosed()) {
+        await attachPortalPage();
+        if (!page) {
+          await waitForSession();
+          continue;
+        }
+      }
+      try {
+        answer = await page.evaluate(
+          async (isin, account) => {
+            const kidRe = /does not have a KID|Retail clients can trade packaged/i;
+            const lotRe = /multiple of ([\d,]+)/i;
+            const search = await fetch("/ibapi/v1/api/iserver/secdef/search", {
+              credentials: "include",
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ symbol: isin, pattern: true, referrer: "" }),
+            });
+            const searchText = await search.text();
+            let hits;
+            try {
+              hits = JSON.parse(searchText);
+            } catch {
+              return { dead: true };
+            }
+            if (!Array.isArray(hits)) {
+              const err = String(hits?.error || "");
+              if (/unauthorized|not authenticated|no bridge/i.test(err) || search.status === 401) {
+                return { dead: true };
+              }
+              return { kid: false };
+            }
+            const hit = hits.find(
+              (row) => row?.conid && (row.sections || []).some((section) => section?.secType === "STK")
+            );
+            if (!hit || !account) return { kid: false };
+
+            let quantity = 1;
+            for (let attempt = 0; attempt < 3; attempt += 1) {
+              const response = await fetch(
+                `/ibapi/v1/api/iserver/account/${encodeURIComponent(account)}/orders/whatif`,
+                {
+                  credentials: "include",
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    orders: [
+                      {
+                        acctId: account,
+                        conid: Number(hit.conid),
+                        orderType: "MKT",
+                        side: "BUY",
+                        tif: "DAY",
+                        quantity,
+                      },
+                    ],
+                  }),
+                }
+              );
+              const text = await response.text();
+              let json;
+              try {
+                json = JSON.parse(text);
+              } catch {
+                return { dead: true };
+              }
+              if (response.status === 401 || response.status === 403) return { dead: true };
+              const parts = [json?.error, json?.warning];
+              for (const list of [json?.errors, json?.warns, json?.warnings]) {
+                if (Array.isArray(list)) parts.push(...list);
+              }
+              const err = parts.filter(Boolean).join(" ");
+              if (/unauthorized|not authenticated|no bridge/i.test(err)) return { dead: true };
+              if (kidRe.test(err)) return { kid: true };
+              const lot = err.match(lotRe);
+              const next = lot ? Number(lot[1].replace(/,/g, "")) : 0;
+              if (next > quantity && next <= 100000) {
+                quantity = next;
+                continue;
+              }
+              return { kid: false };
+            }
+            return { kid: false };
+          },
+          isin,
+          account
+        );
+      } catch {
+        answer = null;
+      }
+      if (answer && !answer.dead) break;
+      console.error("  no answer");
+      await waitForSession();
+    }
+
+    if (answer.kid) {
+      for (const row of byIsin.get(isin)) row.nonEuResident = true;
+      blocked += 1;
+    }
+    batch.push(isin);
+    finished += 1;
+    if (batch.length >= 40) flush();
+  }
+
+  if (pending.length > 0 && !(await sessionIsLive())) {
+    console.error("LYNX+ is not signed in; waiting...");
+    await waitForSession();
+  }
+
+  await Promise.all(
+    Array.from({ length: Math.min(lanes, pending.length) }, async () => {
+      for (;;) {
+        const offset = cursor++;
+        if (offset >= pending.length) return;
+        await one(pending[offset]);
+      }
+    })
+  );
+
+  flush();
+  console.error(`${finished} previewed, ${blocked} without a KID for European retail`);
+}
+
+if (restrictionsOnly) {
+  await applyStoredRestrictions();
+  await browser.disconnect();
+  process.exit(0);
+}
 
 console.error(
   `${jobs.length} queries to check` +
@@ -646,17 +939,22 @@ async function runJob(queryIndex, job) {
       entry.indianOnly = true;
     }
 
-    const key = entryKey(entry);
-    if (seen.has(key)) continue;
-    seen.add(key);
-    results.push(entry);
-
     if (row.restricted) {
       console.error(`  ${row.ticker}@${row.exchange}: non-EU resident (no KID)`);
     }
     if (entry.indianOnly) {
       console.error(`  ${row.ticker}@${row.exchange}: Indian-resident only`);
     }
+
+    const key = entryKey(entry);
+    if (seen.has(key)) {
+      const existing = existingByKey.get(key);
+      if (existing && entry.nonEuResident) existing.nonEuResident = true;
+      continue;
+    }
+    seen.add(key);
+    existingByKey.set(key, entry);
+    results.push(entry);
   }
 
   save();

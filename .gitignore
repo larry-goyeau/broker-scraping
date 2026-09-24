@@ -18,3 +18,4 @@ parsed_json/xlm-cache.json
 # Les relevés d'allers-retours réels, eux, se suivent : ils ont coûté de l'argent et ne se
 # rejouent pas, le marché ayant bougé. Tout le reste des .json se régénère en relançant un script.
 !*/*-experiment.json
+broker.txt

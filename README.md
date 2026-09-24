@@ -16,8 +16,7 @@ A broker’s scraper, cost script, and catalogue live in `<broker>/`. `<broker>_
 | --- | --- |
 | `<broker>/<broker>_scraping.mjs` | Builds `<broker>/<broker>-parsed.json` |
 | `<broker>/<broker>_cost.mjs` | One round trip at that broker. `roundTrip({ etf, place, currency, shares, price })` |
-| `etfs.csv`, `stocks.csv`, `cryptos.csv` | The names a scraper walks |
-| `broker-list.txt` | Broker, country, kind, URL |
+| `etfs.csv`, `stocks.csv`, `cryptos.csv` | List of all asset |
 | `venues.mjs` | Exchange names, hours, and which tape each one uses |
 | `spread.mjs` | Reads those tapes into `parsed_json/spread.json` |
 | `rule605-monthly.mjs` | US effective spreads, `parsed_json/rule605-monthly.json` |

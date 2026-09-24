@@ -248,7 +248,10 @@ export const ACCEPTED = {
   // CSSF passport, offices in LU/NL/BE/FR/DE/CH, clients in 28 countries.
   whselfinvest: { groups: ["EEA"], countries: ["CH", "GB"] },
   saxo: { countries: SAXO },
-  swissquote: WORLD_NO_US,
+  // Bank SA is the Swiss card. Bank Europe (Luxembourg) is the EU card the
+  // Swiss site sends an EEA visitor to. UK, Singapore, Hong Kong and MEA
+  // are other companies, with another card or none, so they are not here.
+  swissquote: { groups: ["EEA"], countries: ["CH"] },
   interactivebrokers: WORLD, // IBKR: all except OFAC / higher-risk
   xtb: { countries: XTB },
   ig: WORLD_NO_US,

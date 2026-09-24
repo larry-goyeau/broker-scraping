@@ -120,6 +120,7 @@
 //
 //    90// `roundTrip(...)` reads files, not the network.
 
+import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
 import { plus, finite } from "../na.mjs";
@@ -194,6 +195,7 @@ const TO_VENUES = {
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
+warmListingIndex(rows);
 const spreads = fs.existsSync(SPREADS) ? JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {} : {};
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
@@ -247,7 +249,7 @@ function findListing({ etf, place, currency }) {
   const wantPlace = loose(place);
   const wantCurrency = String(currency || "").toUpperCase();
 
-  const named = rows.filter((r) => loose(r.isin) === asked || loose(r.ticker) === asked || loose(r.query) === asked);
+  const named = rowsNamed(rows, asked, (r) => loose(r.isin) === asked || loose(r.ticker) === asked || loose(r.query) === asked);
   const matches = named
     .map((r) => ({ row: r, ...listingKey(venueRow(r)) }))
     .filter((m) => {

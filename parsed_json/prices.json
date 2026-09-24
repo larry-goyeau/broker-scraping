@@ -1,14 +1,14 @@
 {
-  "generatedAt": "2026-09-23T15:03:51.753Z",
+  "generatedAt": "2026-09-24T17:36:02.596Z",
   "source": "EODHD, les bourses du Golfe, KASE pour un last en tenge, et Yahoo pour un last quand le vendeur n'a rien",
   "unit": "prices[ISIN][devise] = { price, at, from } : la clôture du dernier jour de bourse, dans la devise de cotation, pour convertir un nombre de parts en montant. Une même ligne cotée sur plusieurs places dans la même devise garde sous `from` toutes ses cotations ; `price` retient la place principale. Londres cote en pence, donc GBX et GBP sont deux entrées, que `fx.mjs` sait distinguer. Ce n'est pas un prix temps réel : il sert à dimensionner un ordre, pas à l'exécuter. `fetched` date la dernière interrogation EODHD, y compris un miss, pour ne pas brûler le quota. `fallback` date le last Yahoo (ou le constat qu'il n'y en a pas), pour ne pas le redemander chaque vue.",
   "fetched": {
     "IE00B4L5Y983": "2026-09-16T10:45:56.448Z",
-    "US0378331005": "2026-09-23T00:31:10.811Z",
+    "US0378331005": "2026-09-24T11:54:14.750Z",
     "US03748R7474": "2026-09-13T21:29:14.094Z",
     "US46438G4973": "2026-09-23T00:18:51.752Z",
-    "CA89157V1058": "2026-09-23T14:38:21.911Z",
-    "FR0000120271": "2026-09-23T14:38:21.930Z",
+    "CA89157V1058": "2026-09-24T17:36:00.610Z",
+    "FR0000120271": "2026-09-24T17:36:00.593Z",
     "FR0000121014": "2026-09-13T22:17:51.558Z",
     "US29082A1079": "2026-09-18T15:35:22.073Z",
     "SE0023615885": "2026-09-13T23:53:18.247Z",
@@ -397,12 +397,12 @@
     "US7802593050": "2026-09-15T20:26:46.568Z",
     "IE00B3XXRP09": "2026-09-15T21:09:08.058Z",
     "US3899302075": "2026-09-15T21:09:10.752Z",
-    "CA34539A1066": "2026-09-21T11:40:45.440Z",
-    "US3453708600": "2026-09-21T11:40:45.522Z",
+    "CA34539A1066": "2026-09-24T13:59:36.393Z",
+    "US3453708600": "2026-09-24T13:59:36.388Z",
     "INE168P01015": "2026-09-16T22:33:36.800Z",
     "US5949181045": "2026-09-17T22:52:41.878Z",
     "EGS60111C019": "2026-09-18T11:38:03.036Z",
-    "CA03785Y1007": "2026-09-23T00:31:10.762Z",
+    "CA03785Y1007": "2026-09-24T11:54:14.748Z",
     "TH0809121500": "2026-09-18T15:54:59.710Z",
     "US7960508882": "2026-09-18T16:03:30.311Z",
     "US7960502018": "2026-09-18T16:21:27.659Z",
@@ -1734,96 +1734,96 @@
     },
     "US0378331005": {
       "USD": {
-        "price": 339.75,
-        "at": "2026-09-22",
+        "price": 337.02,
+        "at": "2026-09-23",
         "from": {
           "US:AAPL": {
-            "price": 339.75,
-            "at": "2026-09-22",
+            "price": 337.02,
+            "at": "2026-09-23",
             "primary": true
           },
           "LSE:0R2V": {
-            "price": 341.21,
-            "at": "2026-09-22",
+            "price": 337.17,
+            "at": "2026-09-23",
             "primary": false
           },
           "IL:0R2V": {
-            "price": 337.87,
-            "at": "2026-09-21",
+            "price": 341.21,
+            "at": "2026-09-22",
             "primary": false
           }
         }
       },
       "ARS": {
-        "price": 27160,
-        "at": "2026-09-22",
+        "price": 27000,
+        "at": "2026-09-23",
         "from": {
           "BA:AAPL": {
-            "price": 27160,
-            "at": "2026-09-22",
+            "price": 27000,
+            "at": "2026-09-23",
             "primary": false
           }
         }
       },
       "EUR": {
-        "price": 300.3,
-        "at": "2026-09-22",
+        "price": 295.25,
+        "at": "2026-09-23",
         "from": {
           "XETRA:APC": {
-            "price": 300.3,
-            "at": "2026-09-22",
+            "price": 295.25,
+            "at": "2026-09-23",
             "primary": false
           },
           "F:APC": {
-            "price": 296.65,
-            "at": "2026-09-22",
+            "price": 296.25,
+            "at": "2026-09-23",
             "primary": false
           },
           "STU:APC": {
-            "price": 295.9,
-            "at": "2026-09-21",
+            "price": 296.65,
+            "at": "2026-09-22",
             "primary": false
           },
           "MU:APC": {
-            "price": 295.75,
-            "at": "2026-09-22",
+            "price": 295.7,
+            "at": "2026-09-23",
             "primary": false
           },
           "DU:APC": {
-            "price": 298.85,
-            "at": "2026-09-22",
+            "price": 295.4,
+            "at": "2026-09-23",
             "primary": false
           },
           "HA:APC": {
-            "price": 298.7,
-            "at": "2026-09-22",
+            "price": 295.6,
+            "at": "2026-09-23",
             "primary": false
           },
           "HM:APC": {
-            "price": 296.65,
-            "at": "2026-09-22",
+            "price": 295.9,
+            "at": "2026-09-23",
             "primary": false
           }
         }
       },
       "CAD": {
-        "price": 47.77,
-        "at": "2026-09-22",
+        "price": 47.37,
+        "at": "2026-09-23",
         "from": {
           "NEO:AAPL": {
-            "price": 47.77,
-            "at": "2026-09-22",
+            "price": 47.37,
+            "at": "2026-09-23",
             "primary": false
           }
         }
       },
       "MXN": {
-        "price": 5870.6899,
-        "at": "2026-09-22",
+        "price": 5894.9502,
+        "at": "2026-09-23",
         "from": {
           "MX:AAPL": {
-            "price": 5870.6899,
-            "at": "2026-09-22",
+            "price": 5894.9502,
+            "at": "2026-09-23",
             "primary": false
           }
         }
@@ -1868,12 +1868,12 @@
     },
     "CA89157V1058": {
       "CAD": {
-        "price": 15.11,
-        "at": "2026-09-21",
+        "price": 15.48,
+        "at": "2026-09-23",
         "from": {
           "NEO:TTE": {
-            "price": 15.11,
-            "at": "2026-09-21",
+            "price": 15.48,
+            "at": "2026-09-23",
             "primary": false
           }
         }
@@ -1881,38 +1881,38 @@
     },
     "FR0000120271": {
       "EUR": {
-        "price": 78.15,
-        "at": "2026-09-22",
+        "price": 81.05,
+        "at": "2026-09-24",
         "from": {
           "PA:TTE": {
-            "price": 78.15,
-            "at": "2026-09-22",
+            "price": 81.05,
+            "at": "2026-09-24",
             "primary": true
           },
           "XETRA:TOTB": {
-            "price": 78.41,
-            "at": "2026-09-22",
+            "price": 81.16,
+            "at": "2026-09-24",
             "primary": false
           },
           "F:TOTB": {
-            "price": 78.13,
-            "at": "2026-09-22",
+            "price": 79.93,
+            "at": "2026-09-23",
             "primary": false
           },
           "STU:TOTB": {
-            "price": 78.29,
-            "at": "2026-09-21",
+            "price": 78.34,
+            "at": "2026-09-22",
             "primary": false
           }
         }
       },
       "USD": {
-        "price": 89.85,
-        "at": "2026-09-22",
+        "price": 91.67,
+        "at": "2026-09-23",
         "from": {
           "US:TTE": {
-            "price": 89.85,
-            "at": "2026-09-22",
+            "price": 91.67,
+            "at": "2026-09-23",
             "primary": false
           }
         }
@@ -7769,38 +7769,38 @@
     },
     "US3453708600": {
       "USD": {
-        "price": 13.21,
-        "at": "2026-09-18",
+        "price": 12.94,
+        "at": "2026-09-23",
         "from": {
           "US:F": {
-            "price": 13.21,
-            "at": "2026-09-18",
+            "price": 12.94,
+            "at": "2026-09-23",
             "primary": true
           },
           "LSE:0P4F": {
-            "price": 13.1,
-            "at": "2026-09-18",
+            "price": 13.03,
+            "at": "2026-09-23",
             "primary": false
           }
         }
       },
       "EUR": {
-        "price": 11.305,
-        "at": "2026-09-18",
+        "price": 11.295,
+        "at": "2026-09-23",
         "from": {
           "F:FMC1": {
-            "price": 11.305,
-            "at": "2026-09-18",
+            "price": 11.295,
+            "at": "2026-09-23",
             "primary": false
           },
           "XETRA:FMC1": {
-            "price": 11.355,
-            "at": "2026-09-18",
+            "price": 11.4,
+            "at": "2026-09-23",
             "primary": false
           },
           "STU:FMC1": {
-            "price": 11.65,
-            "at": "2026-09-17",
+            "price": 11.425,
+            "at": "2026-09-22",
             "primary": false
           }
         }
@@ -7891,23 +7891,23 @@
     },
     "CA03785Y1007": {
       "CAD": {
-        "price": 47.8,
-        "at": "2026-09-22",
+        "price": 47.37,
+        "at": "2026-09-23",
         "from": {
           "TO:AAPL": {
-            "price": 47.8,
-            "at": "2026-09-22",
+            "price": 47.37,
+            "at": "2026-09-23",
             "primary": false
           }
         }
       },
       "EUR": {
-        "price": 29.6,
-        "at": "2026-09-22",
+        "price": 29.2,
+        "at": "2026-09-23",
         "from": {
           "F:APC8": {
-            "price": 29.6,
-            "at": "2026-09-22",
+            "price": 29.2,
+            "at": "2026-09-23",
             "primary": true
           }
         }

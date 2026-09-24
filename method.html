@@ -22,6 +22,8 @@
       main { width: min(52rem, calc(100% - 40px)); margin: 0 auto; padding: 40px 0 80px; }
       a.back { color: var(--green); text-decoration: none; font-size: 14px; }
       a.back:hover { text-decoration: underline; text-underline-offset: 2px; }
+      .links { margin: 0; }
+      .lede a { color: var(--green); }
       h1 { margin: 18px 0 12px; font-size: 36px; letter-spacing: -0.03em; font-weight: 650; }
       h2 { margin: 36px 0 10px; font-size: 22px; letter-spacing: -0.02em; font-weight: 650; }
       p { margin: 0 0 12px; }
@@ -101,9 +103,11 @@
   </head>
   <body>
     <main>
-      <a class="back" href="/">← Where to buy</a>
+      <p class="links">
+        <a class="back" href="/">← Where to buy</a>
+      </p>
       <h1>How costs are calculated</h1>
-      <p class="lede">The round-trip figure is the average cost, in dollars, of buying the quantity you entered and selling it straight back. It adds the book you cross, the broker’s own charges, and a tax when that schedule names one. The fees column is those charges without the book. N/A means the book was not measured.</p>
+      <p class="lede">The round-trip figure is the average cost, in dollars, of buying the quantity you entered and selling it straight back. It adds the book you cross, the broker’s own charges, and a tax when that schedule names one. The fees column is those charges without the book. N/A means the book was not measured. For more information, the project code is available at <a href="https://github.com/larry-goyeau/broker-scraping">github.com/larry-goyeau/broker-scraping</a>.</p>
 
       <h2>The formula</h2>
       <p>On a US listing the book starts from Rule 605: the effective spread a retail order of 100 to 499 shares paid, price improvement included, in dollars per share. Nasdaq, NYSE, NYSE Arca, NYSE American and Cboe BZX share that figure. Rule 606 then scales it by where that broker-dealer sends held market and marketable-limit orders.</p>

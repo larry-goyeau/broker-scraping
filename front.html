@@ -415,34 +415,36 @@
           meta.textContent = `${s.instruments.toLocaleString("en-US")} instruments · ${s.listings.toLocaleString("en-US")} listings · ${s.brokers} brokers`;
         });
 
-      fetch("/api/countries")
-        .then((r) => r.json())
-        .then((rows) => {
-          const saved = localStorage.getItem("nat") || "";
-          for (const row of rows) {
-            const opt = document.createElement("option");
-            opt.value = row.code;
-            opt.textContent = row.name;
-            nat.appendChild(opt);
-          }
-          if (saved && [...nat.options].some((o) => o.value === saved)) nat.value = saved;
-        });
+      // A saved choice wins. With none, the country of the visitor's IP fills
+      // both selects, and the currency is the one that country uses.
+      Promise.all([
+        fetch("/api/countries").then((r) => r.json()),
+        fetch("/api/currencies").then((r) => r.json()),
+        fetch("/api/locale").then((r) => r.json()).catch(() => ({})),
+      ]).then(([countries, currencies, locale]) => {
+        const savedNat = localStorage.getItem("nat");
+        for (const row of countries) {
+          const opt = document.createElement("option");
+          opt.value = row.code;
+          opt.textContent = row.name;
+          nat.appendChild(opt);
+        }
+        const natPick = savedNat != null ? savedNat : locale.country || "";
+        if (natPick && [...nat.options].some((o) => o.value === natPick)) nat.value = natPick;
 
-      fetch("/api/currencies")
-        .then((r) => r.json())
-        .then((rows) => {
-          const saved = localStorage.getItem("dep") || "";
-          for (const row of rows) {
-            const opt = document.createElement("option");
-            opt.value = row.code;
-            opt.textContent = row.code;
-            dep.appendChild(opt);
-          }
-          if (saved && [...dep.options].some((o) => o.value === saved)) {
-            dep.value = saved;
-            if (shown) show(shown);
-          }
-        });
+        const savedDep = localStorage.getItem("dep");
+        for (const row of currencies) {
+          const opt = document.createElement("option");
+          opt.value = row.code;
+          opt.textContent = row.code;
+          dep.appendChild(opt);
+        }
+        const depPick = savedDep != null ? savedDep : locale.currency || "";
+        if (depPick && [...dep.options].some((o) => o.value === depPick)) {
+          dep.value = depPick;
+          if (shown) show(shown);
+        }
+      });
 
       function renderSuggest() {
         if (!hits.length) {

@@ -11,7 +11,7 @@ import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { catalogueFiles } from "./catalogues.mjs";
 import { resolveVenue } from "./venues.mjs";
-import { accepts, countryOptions, listingAccepts, stampResidency, EEA, EU, GCC } from "./accepted.mjs";
+import { accepts, COUNTRY_NAMES, countryOptions, listingAccepts, stampResidency, EEA, EU, GCC } from "./accepted.mjs";
 import { depositHas, splitByPlan, currencyOptions } from "./deposits.mjs";
 import { toUsd, usdPer } from "./fx.mjs";
 import { prices, ensureFresh } from "./prices.mjs";
@@ -610,7 +610,7 @@ function depositPlans(folder, nat) {
   if (folder === "lightyear") return lightyearPlansFor(nat).map((p) => p.id);
   if (folder === "robinhood") return ROBINHOOD_PLANS.filter((p) => robinhoodOpen(p.id, nat)).map((p) => p.id);
   if (folder === "plum") return PLUM_PLANS.filter((p) => plumOpen(p.id, nat)).map((p) => p.id);
-  if (folder === "swissquote") return SWISSQUOTE_PLANS.map((p) => p.id);
+  if (folder === "swissquote") return SWISSQUOTE_PLANS.filter((p) => swissquoteOpen(p.id, nat)).map((p) => p.id);
   if (folder === "etoro") return ETORO_PLANS.filter((p) => etoroOpen(p.id, nat)).map((p) => p.id);
   return [];
 }
@@ -942,7 +942,9 @@ function collapseWebull(built) {
       ...g.members[0],
       folder: `webull:${ids.join("-")}`,
       family: "Webull",
-      name: g.members.map((m) => m.name).join(" / "),
+      name: g.members
+        .map((m, i) => (i === 0 ? m.name : m.name.replace(/^Webull\s+/, "")))
+        .join(" / "),
       plan: "",
       planRank: 0,
     };
@@ -1115,6 +1117,17 @@ const SWISSQUOTE_PLANS = [
   { id: "ch", name: "Swissquote" },
   { id: "lu", name: "Swissquote Europe" },
 ];
+
+// Bank SA prices Switzerland. Bank Europe prices the EEA: the Swiss site
+// tells an EEA visitor it is not authorised there and points at Luxembourg.
+// No country still shows both cards. Any other residence is another company.
+function swissquoteOpen(plan, nat) {
+  const n = String(nat || "").trim().toUpperCase();
+  if (!n) return true;
+  if (n === "CH") return plan === "ch";
+  if (EEA.includes(n)) return plan === "lu";
+  return false;
+}
 
 const TIGER_PLANS = [
   { id: "sg", name: "Tiger Brokers SG" },
@@ -1897,7 +1910,7 @@ function detail(key, nat = "", size = {}, dep = "") {
     if (folder === "swissquote") {
       const built = [];
       SWISSQUOTE_PLANS.forEach((plan, i) => {
-        if (!depositHas(folder, plan.id, dep)) return;
+        if (!swissquoteOpen(plan.id, nat) || !depositHas(folder, plan.id, dep)) return;
         const listed = listings({ entity: plan.id });
         if (listed.length) built.push(asPlan(plan, i, listed));
       });
@@ -2176,6 +2189,69 @@ function methodPage() {
     .replace("@@Q_ROWS@@", rows);
 }
 
+// Deposit currency of the visitor's country, and only a currency some account
+// here can hold. A country whose money is not in that list leaves the box empty.
+const DEPOSIT_CCY = {
+  AD: "EUR", AT: "EUR", BE: "EUR", CY: "EUR", DE: "EUR", EE: "EUR", ES: "EUR", FI: "EUR", FR: "EUR",
+  GR: "EUR", HR: "EUR", IE: "EUR", IT: "EUR", LT: "EUR", LU: "EUR", LV: "EUR", MC: "EUR", ME: "EUR",
+  MT: "EUR", NL: "EUR", PT: "EUR", SI: "EUR", SK: "EUR", SM: "EUR", VA: "EUR",
+  GB: "GBP", GG: "GBP", GI: "GBP", IM: "GBP", JE: "GBP",
+  CH: "CHF", LI: "CHF",
+  US: "USD", CA: "CAD", AU: "AUD", JP: "JPY", SG: "SGD", HK: "HKD", AE: "AED", ZA: "ZAR", IN: "INR",
+  BR: "BRL", MX: "MXN", CL: "CLP", CO: "COP", AR: "ARS", SE: "SEK", NO: "NOK", DK: "DKK", FO: "DKK",
+  GL: "DKK", PL: "PLN", CZ: "CZK", HU: "HUF", RO: "RON", TR: "TRY", EG: "EGP", SA: "SAR", IL: "ILS",
+  KR: "KRW", TW: "TWD", MY: "MYR", CN: "CNH",
+};
+const DEPOSIT_CURRENCIES = new Set(currencyOptions().map((row) => row.code));
+const localeCache = new Map();
+
+function clientIp(req) {
+  const fwd = req.headers["x-forwarded-for"];
+  const first = typeof fwd === "string" ? fwd.split(",")[0].trim() : "";
+  return (first || req.socket?.remoteAddress || "").replace(/^::ffff:/, "");
+}
+
+function privateIp(ip) {
+  return (
+    !ip ||
+    ip === "127.0.0.1" ||
+    ip === "::1" ||
+    ip.startsWith("10.") ||
+    ip.startsWith("192.168.") ||
+    ip.startsWith("169.254.") ||
+    /^172\.(1[6-9]|2\d|3[0-1])\./.test(ip) ||
+    ip.startsWith("fc") ||
+    ip.startsWith("fd") ||
+    ip.startsWith("fe80:")
+  );
+}
+
+// A loopback request is this machine, so the lookup is of its own public address.
+// A visitor on the server is looked up by the address that connected.
+async function countryFromIp(ip) {
+  const local = privateIp(ip);
+  const key = local ? "*" : ip;
+  const hit = localeCache.get(key);
+  if (hit && Date.now() - hit.at < hit.ttl) return hit.country;
+  const endpoint = local ? "https://ipwho.is/" : `https://ipwho.is/${encodeURIComponent(ip)}`;
+  let country = "";
+  try {
+    const res = await fetch(endpoint, { signal: AbortSignal.timeout(4000) });
+    const body = await res.json();
+    if (body?.success && COUNTRY_NAMES[body.country_code]) country = body.country_code;
+  } catch {
+    country = "";
+  }
+  localeCache.set(key, { at: Date.now(), country, ttl: country ? 6 * 3600 * 1000 : 60 * 1000 });
+  return country;
+}
+
+async function localeOf(req) {
+  const country = await countryFromIp(clientIp(req));
+  const currency = DEPOSIT_CURRENCIES.has(DEPOSIT_CCY[country]) ? DEPOSIT_CCY[country] : "";
+  return { country, currency };
+}
+
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
   if (url.pathname === "/api/search") {
@@ -2194,6 +2270,7 @@ const server = http.createServer(async (req, res) => {
   }
   if (url.pathname === "/api/countries") return json(res, 200, countryOptions());
   if (url.pathname === "/api/currencies") return json(res, 200, currencyOptions());
+  if (url.pathname === "/api/locale") return json(res, 200, await localeOf(req));
   if (url.pathname === "/api/stats") {
     return json(res, 200, {
       instruments: instruments.size,

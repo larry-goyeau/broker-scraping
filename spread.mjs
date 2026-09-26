@@ -360,6 +360,7 @@ const CROSSED = {
   coinbase: 1,
   alpaca: 1,
   kraken: 1,
+  gpw: 1,
   adx: 1,
   dfm: 1,
   bhb: 1,
@@ -1568,6 +1569,8 @@ function gulfAdapter(key) {
 }
 
 
+const gpwBook = new Map();
+
 const adapters = {
   adx: gulfAdapter("adx"),
   dfm: gulfAdapter("dfm"),
@@ -2241,6 +2244,55 @@ const adapters = {
         return { spreadBp: null, note: delayedTrouble.kraken || `${l.ticker} non coté contre le dollar chez Kraken` };
       }
       return { spreadBp: bpFrom(quote.bid, quote.ask), bid: quote.bid, ask: quote.ask, tradingCurrency: CRYPTO_CCY };
+    },
+  },
+  // The main board publishes best bid and best ask on one table. The ETF board on the
+  // same site publishes the last trade only, so a fund with no two-sided touch is left
+  // empty rather than priced from that print. NewConnect is a different market.
+  gpw: {
+    measure: "touche du carnet",
+    async prefetch(_lines, ownTab) {
+      const page = await ownTab();
+      await page.goto("https://www.gpw.pl/akcje", { waitUntil: "networkidle0", timeout: 40000 });
+      const rows = await page.evaluate(() => {
+        const out = [];
+        for (const tr of document.querySelectorAll("tr")) {
+          const cells = [...tr.querySelectorAll("td")].map((td) => (td.textContent || "").replace(/\s+/g, " ").trim());
+          const isinAt = cells.findIndex((c) => /^[A-Z]{2}[A-Z0-9]{10}$/.test(c));
+          if (isinAt < 0) continue;
+          out.push({
+            isin: cells[isinAt],
+            ticker: cells[isinAt + 1] || "",
+            currency: cells[isinAt + 2] || "",
+            bid: cells[isinAt + 14] || "",
+            ask: cells[isinAt + 15] || "",
+          });
+        }
+        return out;
+      });
+      const num = (s) => {
+        const t = String(s || "").replace(/\s/g, "").replace(",", ".");
+        if (!/^\d+(\.\d+)?$/.test(t)) return null;
+        const n = Number(t);
+        return n > 0 ? n : null;
+      };
+      gpwBook.clear();
+      for (const row of rows) {
+        const bid = num(row.bid);
+        const ask = num(row.ask);
+        const bp = bpFrom(bid, ask);
+        if (bp == null || row.currency !== "PLN") continue;
+        gpwBook.set(row.isin, { bp, bid, ask, currency: row.currency });
+      }
+      console.error(`    GPW : ${gpwBook.size} carnets sur ${rows.length} lignes\n`);
+    },
+    async fetch(l) {
+      const quote = gpwBook.get(l.isin);
+      if (!quote) return { spreadBp: null, note: `${l.isin} absent du tableau GPW`, url: "https://www.gpw.pl/akcje" };
+      if (l.currency !== "PLN") {
+        return { spreadBp: null, tradingCurrency: "PLN", note: `${l.isin} est en PLN sur la GPW` };
+      }
+      return { spreadBp: quote.bp, bid: quote.bid, ask: quote.ask, tradingCurrency: "PLN", url: "https://www.gpw.pl/akcje" };
     },
   },
 };

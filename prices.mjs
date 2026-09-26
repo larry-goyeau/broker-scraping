@@ -353,8 +353,8 @@ function yahooCurrency(raw) {
   return s.toUpperCase();
 }
 
-function yahooSymbol(ticker, mic, isin) {
-  const stem = String(ticker || "")
+function yahooSymbol(ticker, mic, isin, exchange) {
+  let stem = String(ticker || "")
     .toUpperCase()
     .replace(/\*/g, "")
     .replace(/\s+/g, "")
@@ -362,8 +362,16 @@ function yahooSymbol(ticker, mic, isin) {
   if (!stem) return null;
   if (YAHOO_ALREADY.test(stem)) return stem;
   if (/^\d{4}$/.test(stem) && String(isin || "").startsWith("SA")) return `${stem}.SR`;
-  if (!mic || !(mic in YAHOO_SUFFIX)) return null;
-  return `${stem}${YAHOO_SUFFIX[mic]}`;
+  if (mic && mic in YAHOO_SUFFIX) return `${stem}${YAHOO_SUFFIX[mic]}`;
+  // EODHD does not carry the small BSE names. Yahoo's own BSE and NSE lasts
+  // use .BO and .NS. The series tail (-EQ, -X, …) is not part of that symbol.
+  // This is the same listing's last, not a book and not another venue's tape.
+  const ex = String(exchange || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+  const india = String(isin || "").toUpperCase().startsWith("IN");
+  const suffix = india && (ex === "BSE" || ex === "XBOM") ? ".BO" : india && (ex === "NSE" || ex === "XNSE") ? ".NS" : "";
+  if (!suffix) return null;
+  stem = stem.replace(/-(EQ|BE|BZ|SM|ST|IV|RR|XT|ZP|MT|TS|MS|A|B|T|X|Z|M|P|R|E)$/, "");
+  return stem ? `${stem}${suffix}` : null;
 }
 
 let yahooIndexPromise = null;
@@ -379,7 +387,7 @@ function yahooIndex() {
       const isin = String(row.isin || "").trim().toUpperCase();
       if (!ISIN.test(isin)) continue;
       const mic = resolveVenue(row).venue?.mic || "";
-      const symbol = yahooSymbol(row.ticker || row.symbol, mic, isin);
+      const symbol = yahooSymbol(row.ticker || row.symbol, mic, isin, row.exchange || row.venue);
       if (!symbol) continue;
       const currency = String(row.currency || "").trim().toUpperCase();
       const seen = index.get(isin) || index.set(isin, []).get(isin);

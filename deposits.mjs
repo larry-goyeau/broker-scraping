@@ -9,18 +9,25 @@
 const FOLDER = {
   // The trips on file are a USD account. The base is the client's choice
   // and no other base is named.
+  "5paisa": ["INR"],
   admiral: ["USD"],
+  angelone: ["INR"],
   alpaca: ["USD"],
   alramz: ["AED"],
   bitpanda: ["EUR", "USD", "GBP", "CHF", "HUF", "PLN", "RON", "CZK", "SEK", "DKK"],
   boursedirect: ["EUR"],
   boursobank: ["EUR"],
+  // Foreign account, FAQ on the foreign-markets page: PLN, USD, EUR, GBP.
+  bossa: ["PLN", "USD", "EUR", "GBP"],
   bunq: ["EUR"],
   bux: ["EUR"],
   century: ["EUR"],
   choicetrade: ["USD"],
   davy: ["EUR"],
   degiro: ["EUR"],
+  // US stocks are funded by an INR transfer under LRS. The dollars are the
+  // conversion, not a currency the client can deposit and leave as cash.
+  dhan: ["INR"],
   easybourse: ["EUR"],
   easyequities: ["ZAR", "USD", "AUD", "GBP", "EUR"],
   efocs: ["EUR"],
@@ -28,6 +35,7 @@ const FOLDER = {
   elana: ["EUR"],
   firstrade: ["USD"],
   fortuneo: ["EUR"],
+  fyers: ["INR"],
   freedom24: ["EUR", "USD"],
   ig: ["EUR"],
   labanquepostale: ["EUR"],
@@ -39,6 +47,7 @@ const FOLDER = {
   sarwa: ["USD"],
   saxo: ["USD", "CAD", "EUR", "GBP", "NOK", "PLN", "CZK", "MYR", "CHF", "DKK", "SEK", "ZAR", "JPY", "HKD", "CNH", "SGD", "AUD"],
   scalablecapital: ["EUR"],
+  shoonya: ["INR"],
   siebert: ["USD"],
   sogotrade: ["USD"],
   tastytrade: ["USD"],
@@ -60,6 +69,7 @@ const FOLDER = {
   mexem: ["AUD", "CAD", "CHF", "CNH", "DKK", "EUR", "GBP", "HKD", "HUF", "ILS", "JPY", "MXN", "NOK", "PLN", "SEK", "SGD", "USD"],
   captrader: ["AUD", "CAD", "CHF", "CNH", "EUR", "GBP", "HKD", "HUF", "ILS", "JPY", "MXN", "NOK", "PLN", "RUB", "SEK", "SGD", "USD"],
   WHSelfInvest: ["AUD", "CAD", "CHF", "EUR", "GBP", "HKD", "JPY", "MXN", "NOK", "USD"],
+  zerodha: ["INR"],
 };
 
 const BY_PLAN = {

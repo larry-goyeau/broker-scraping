@@ -37,7 +37,7 @@ export const COUNTRY_NAMES = {
   LV: "Latvia", MA: "Morocco", MC: "Monaco", MD: "Moldova", ME: "Montenegro",
   MK: "North Macedonia", MO: "Macau", MR: "Mauritania", MT: "Malta", MX: "Mexico", MY: "Malaysia",
   NG: "Nigeria", NL: "Netherlands", NO: "Norway", NZ: "New Zealand", OM: "Oman",
-  PA: "Panama", PE: "Peru", PH: "Philippines", PK: "Pakistan", PL: "Poland",
+  PA: "Panama", PE: "Peru", PF: "French Polynesia", PH: "Philippines", PK: "Pakistan", PL: "Poland",
   PT: "Portugal", QA: "Qatar", RO: "Romania", RS: "Serbia", SA: "Saudi Arabia",
   SE: "Sweden", SG: "Singapore", SI: "Slovenia", SK: "Slovakia", SM: "San Marino",
   SN: "Senegal", SV: "El Salvador", TH: "Thailand", TN: "Tunisia", TR: "Turkey",
@@ -181,11 +181,26 @@ const SARWA_BLOCKED = [
   "AF", "HR", "CY", "NG", "PA", "SN", "UG", "UA", "TZ", "VE", "VN",
 ];
 
+// Named bullets on the help-centre article, not the region headings
+// (those say 15 Asian and 31 European countries; the bullets name 13 and 30).
+// India is eligible for a cash account only.
+// https://support.tastytrade.com/support/s/solutions/articles/43000435355
+const TASTYTRADE = [
+  "EG",
+  "AE", "BH", "ID", "IL", "IN", "KR", "MY", "OM", "PH", "SA", "SG", "TH", "TW",
+  "AD", "AT", "BE", "CH", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "GB", "GR",
+  "HU", "IE", "IM", "IS", "IT", "LI", "LT", "LU", "NL", "NO", "PL", "PT", "RO",
+  "SE", "SI", "SK", "SM",
+  "DO", "MX", "US",
+  "AR", "BR", "CL", "CO", "EC", "PE", "UY",
+  "NZ", "PF",
+];
+
 export const ACCEPTED = {
-  // US retail. tastytrade / Alpaca take many non-US addresses; Canada is out.
+  // US retail. Alpaca takes many non-US addresses; Canada is out.
   alpaca: WORLD_NO_US_CA, // alpaca.markets/learn/live-trading-account-non-us
   firstrade: { countries: FIRSTRADE },
-  tastytrade: { all: true, except: [...SANCTIONED, "CA"] },
+  tastytrade: { countries: TASTYTRADE },
   // TS Securities (US + non-EEA) + TS Europe B.V. (30 EEA). User agreement
   // is not an offer in Hong Kong or Japan.
   tradestation: { all: true, except: [...SANCTIONED, "HK", "JP"] },
@@ -207,19 +222,10 @@ export const ACCEPTED = {
   sogotrade: WORLD,
   webull: { countries: WEBULL },
 
-  // Photo-ID help: US residents usually cannot open; other non-residents can
-  // open a margin account. European residents are left off the selector
-  // (EEA, plus the other European countries this list names).
-  questrade: {
-    all: true,
-    except: [
-      ...SANCTIONED,
-      "US",
-      ...EEA,
-      "AD", "AL", "BA", "CH", "FO", "GB", "GG", "GI", "IM", "JE", "MC", "MD",
-      "ME", "MK", "RS", "SM", "UA", "VA",
-    ],
-  },
+  // Questrade, 26 Sep 2026: a non-registered account (cash, margin, corporation)
+  // is open to every residence except the US and sanctioned countries.
+  // Questwealth, mutual funds and the registered plans are not this book.
+  questrade: { all: true, except: [...SANCTIONED, "US"] },
   boursobank: { countries: ["FR"] }, // DIY app; foreign tax residents need a desk path
   easybourse: { countries: ["FR"] },
   labanquepostale: { countries: ["FR"] },
@@ -281,6 +287,9 @@ export const ACCEPTED = {
   // A French passport is enough in practice (not Bulgaria-only).
   elana: { groups: ["EEA"], countries: ["CH"] },
   efocs: { countries: EFOCS },
+  // The public site is Polish only. Polish is the official language of Poland.
+  // They do not publish a residency list.
+  bossa: { countries: ["PL"] },
 };
 
 const GROUPS = { EEA, EU, GCC };

@@ -74,6 +74,16 @@ export const VENUES = [
     loose: ["zurich", "switzerland"],
   },
   {
+    // Continuous trading ends at 16:50. The closing auction runs on to 17:05, and the
+    // touch still on the board at that time is the close, so the window includes it.
+    mic: "XWAR",
+    name: "Warsaw Stock Exchange",
+    source: "gpw",
+    hours: { open: "09:00", close: "17:05", tz: "Europe/Warsaw" },
+    exact: ["xwar", "gpw", "wse", "warsaw", "warsawstockexchange"],
+    loose: [],
+  },
+  {
     mic: "XPAR",
     name: "Euronext Paris",
     source: "euronext",
@@ -585,7 +595,7 @@ export const KNOWN_UNSOURCED = [
   { match: ["xlit", "vilnius", "nvilnius", "omxvse"], name: "Nasdaq Vilnius", why: "adaptateur non écrit" },
   { match: ["sgx", "xses", "singapore", "sgxst"], name: "Singapore Exchange", why: "adaptateur non écrit" },
   { match: ["jse", "xjse", "johannesburg"], name: "Johannesburg Stock Exchange", why: "adaptateur non écrit" },
-  { match: ["gpw", "xwar", "warsaw", "wse", "newconnect"], name: "Warsaw Stock Exchange", why: "adaptateur non écrit" },
+  { match: ["newconnect"], name: "NewConnect", why: "adaptateur non écrit" },
   { match: ["myx", "xkls", "malaysia", "bursamy", "malay"], name: "Bursa Malaysia", why: "adaptateur non écrit" },
   { match: ["luxse", "xlux", "luxembourg", "lux"], name: "Luxembourg Stock Exchange", why: "adaptateur non écrit" },
   { match: ["nzx", "xnze", "nzsenationalmarket"], name: "NZX", why: "adaptateur non écrit" },
@@ -838,6 +848,7 @@ const PAGE = {
     l.ticker
       ? `https://www.kraken.com/prices/${encodeURIComponent(String(l.ticker).toLowerCase())}`
       : "https://www.kraken.com/prices",
+  gpw: () => "https://www.gpw.pl/akcje",
   bmv: (l) =>
     l.ticker
       ? `https://www.bmv.com.mx/es/emisoras/estadisticas/${encodeURIComponent(

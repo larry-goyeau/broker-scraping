@@ -1,6 +1,6 @@
 {
   "quarter": "2026-Q2",
-  "fetchedAt": "2026-09-21T11:38:11.658Z",
+  "fetchedAt": "2026-09-25T22:25:41.454Z",
   "source": "https://cdn.finra.org/606reportBulk/2026/606_NMS_2026_Q2.zip",
   "brokers": {
     "alpaca": {
@@ -191,6 +191,20 @@
         "CDRG": 0.3609,
         "SOHO": 0.175,
         "OTHER": 0.02108
+      }
+    },
+    "viewtrade": {
+      "crd": [
+        "46987"
+      ],
+      "name": "ViewTrade",
+      "files": [
+        "46987_606_NMS_2026_Q2_V1_20260803.xml"
+      ],
+      "mix": {
+        "SOHO": 0.2461,
+        "NITE": 0.2376,
+        "CDRG": 0.5163
       }
     },
     "webull": {

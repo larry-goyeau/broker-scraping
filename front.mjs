@@ -276,7 +276,7 @@ for (const folder of brokers.keys()) {
   const file = path.join(ROOT_DIR, folder, `${folder}_cost.mjs`);
   if (!fs.existsSync(file)) continue;
   try {
-    const mod = await import(pathToFileURL(file));
+  const mod = await import(pathToFileURL(file));
     const entry = {
       total: typeof mod.roundTrip === "function" ? mod.roundTrip : null,
       abc: typeof mod.roundTripCost === "function" ? mod.roundTripCost : null,
@@ -392,8 +392,8 @@ function estimateListing(folder, listing, inst, extra = {}, size = {}) {
   const crypto = inst.key.startsWith("CRYPTO:");
   const ask = {
     etf: crypto ? listing.query || listing.ticker : listing.isin || inst.isin || listing.ticker,
-    place: listing.exchangeRaw || listing.exchange || "",
-    currency: listing.currency || "",
+      place: listing.exchangeRaw || listing.exchange || "",
+      currency: listing.currency || "",
     ...extra,
   };
   // A coin is bought by the dollar, a share by the unit at a price. The
@@ -678,7 +678,7 @@ function score(inst, Q) {
     else if (Q.length >= 3 && t.startsWith(Q)) s = Math.max(s, 75);
   }
   if (Q.length >= 2) {
-    if (N === Q) s = Math.max(s, 100);
+      if (N === Q) s = Math.max(s, 100);
     else if (Q.length >= 3 && N.startsWith(Q)) s = Math.max(s, 50);
     else if (Q.length >= 3) {
       let i = 0;
@@ -816,6 +816,15 @@ const DAVY_PLANS = [
 const FREEDOM24_PLANS = [
   { id: "smart", name: "Freedom24 Smart" },
   { id: "allinc", name: "Freedom24 All-inclusive" },
+];
+
+// Equity delivery. Optimum is ₹20 per order with no pack. Power Investor is
+// ₹10 per order plus ₹499 a month. Ultra Trader is ₹0 brokerage on delivery
+// plus ₹999 a month. The month is named in the remark and stays out of the trip.
+const PAISA_PLANS = [
+  { id: "optimum", name: "5paisa Optimum" },
+  { id: "power", name: "5paisa Power Investor" },
+  { id: "ultratrader", name: "5paisa Ultra Trader" },
 ];
 
 const LIGHTYEAR_PLANS = [
@@ -2050,6 +2059,13 @@ function detail(key, nat = "", size = {}, dep = "") {
         if (listed.length) built.push(asPlan(plan, i, listed));
       });
       for (const row of collapseXtb(built)) rows.push(row);
+      continue;
+    }
+    if (folder === "5paisa") {
+      PAISA_PLANS.forEach((plan, i) => {
+        const listed = listings({ plan: plan.id });
+        if (listed.length) rows.push(asPlan(plan, i, listed));
+      });
       continue;
     }
     const listed = listings({});

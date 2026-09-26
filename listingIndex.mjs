@@ -22,6 +22,8 @@ function keysOf(row) {
   const ticker = loose(row.ticker);
   const base = ticker.replace(/(USDT|USDC|USD|EUR|GBP)$/, "");
   if (base && base !== ticker) keys.add(base);
+  const series = String(row.ticker || "").toUpperCase().match(/^(.*)-(EQ|BE|BZ|SM|ST|IV|RR|A|B)$/);
+  if (series) add(series[1]);
   return keys;
 }
 

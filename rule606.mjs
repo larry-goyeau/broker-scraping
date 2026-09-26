@@ -43,6 +43,7 @@ export const US_BROKERS = {
   tradeup: { crd: ["18483"], name: "TradeUP Securities, Inc." },
   tradezero: { crd: ["282940"], name: "TradeZero America" },
   vested: { crd: ["315194"], name: "VF Securities, Inc." },
+  viewtrade: { crd: ["46987"], name: "ViewTrade Securities, Inc." },
   webull: { crd: ["289063"], name: "Webull Financial LLC" },
   drivewealth: { crd: ["165429"], name: "DriveWealth, LLC" },
 };
@@ -64,10 +65,16 @@ export const ALIASES = {
   lynx: "interactivebrokers",
   trading212: "interactivebrokers",
   vivid: "interactivebrokers",
+  // Dhan names ViewTrade as the US broker that executes, clears and custodies.
+  dhan: "viewtrade",
 };
 
+const RIC = new Set(["CDRG", "NITE", "JNST", "UBSS", "HRTF", "SOHO", "ETMM", "GTSM", "IATS", "IBCO"]);
+
 const ricOf = (name) => {
-  const n = String(name || "").toLowerCase();
+  const raw = String(name || "").trim().toUpperCase();
+  if (RIC.has(raw)) return raw;
+  const n = raw.toLowerCase();
   if (n.includes("citadel")) return "CDRG";
   if (n.includes("virtu") || n.includes("knight")) return "NITE";
   if (n.includes("jane") && n.includes("street")) return "JNST";

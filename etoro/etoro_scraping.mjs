@@ -246,6 +246,15 @@ const SUFFIX_VENUES = {
   AS: ["EURONEXT"],
 };
 
+// The catalogues write London several ways. eToro's price source is one book.
+const LONDON = new Set(["LSE", "LSEIOB", "LSE_SETS", "LSE_SEAQ", "LSE_AIM", "LSIN", "AIM"]);
+
+function onVenue(exchange, allowed) {
+  const code = String(exchange || "").toUpperCase();
+  if (allowed.has(code)) return true;
+  return LONDON.has(code) && [...allowed].some((venue) => LONDON.has(venue));
+}
+
 function venuesFor(priceSource, suffix) {
   const fromSource = PRICE_SOURCE_VENUES[priceSource] || [];
   const fromSuffix = SUFFIX_VENUES[suffix] || [];
@@ -339,7 +348,7 @@ function resolveListing(tickerCandidates, ticker, name, venues) {
   const allowed = new Set(venues || []);
   const sameVenue =
     allowed.size > 0
-      ? candidates.filter((candidate) => [...candidate.exchanges].some((exchange) => allowed.has(exchange)))
+      ? candidates.filter((candidate) => [...candidate.exchanges].some((exchange) => onVenue(exchange, allowed)))
       : [];
   const shortlist = sameVenue.length > 0 ? sameVenue : candidates;
 
@@ -362,7 +371,7 @@ function resolveListing(tickerCandidates, ticker, name, venues) {
   }
 
   const exchange =
-    [...winner.candidate.exchanges].find((code) => allowed.has(code)) ||
+    [...winner.candidate.exchanges].find((code) => onVenue(code, allowed)) ||
     [...winner.candidate.exchanges][0] ||
     "";
   return { isin: winner.isin, name: winner.name, exchange, kind: winner.candidate.kind };
@@ -378,7 +387,7 @@ function resolveByName(tickerCandidates, name, venues) {
   const scored = [];
   for (const candidates of tickerCandidates.values()) {
     for (const candidate of candidates) {
-      if (![...candidate.exchanges].some((exchange) => allowed.has(exchange))) continue;
+      if (![...candidate.exchanges].some((exchange) => onVenue(exchange, allowed))) continue;
       const ranked = scoreCandidate(name, candidate);
       if (ranked.score < 0.75) continue;
       scored.push({ candidate, isin: candidate.isin, ...ranked });
@@ -389,7 +398,7 @@ function resolveByName(tickerCandidates, name, venues) {
 
   const winner = scored.sort((left, right) => right.score - left.score)[0];
   const exchange =
-    [...winner.candidate.exchanges].find((code) => allowed.has(code)) ||
+    [...winner.candidate.exchanges].find((code) => onVenue(code, allowed)) ||
     [...winner.candidate.exchanges][0] ||
     "";
   return { isin: winner.isin, name: winner.name, exchange, kind: winner.candidate.kind };

@@ -115,6 +115,39 @@ async function loadInstruments() {
   return cached;
 }
 
+// Muscat prints the ISIN on the symbol's own page. The symbol in the page
+// has to be the one we asked for. A bond page often names the issue and
+// leaves the ISIN blank; those stay blank.
+async function msxIsin(symbol) {
+  const response = await fetch(`https://www.msx.om/snapshot.aspx?s=${encodeURIComponent(symbol)}`, {
+    headers: { "User-Agent": "Mozilla/5.0" },
+  });
+  if (!response.ok) return "";
+  const html = await response.text();
+  const field = (id) => {
+    const match = html.match(new RegExp(`id="ctl00_ContentPlaceHolder1_${id}"[^>]*>([^<]*)`));
+    return match ? match[1].replace(/&amp;/g, "&").replace(/\s+/g, " ").trim() : "";
+  };
+  const printed = field("CompanySymbolLabel").replace(/[()]/g, "").toUpperCase();
+  if (printed !== symbol.toUpperCase()) return "";
+  return toIsin(field("ISINLabel"));
+}
+
+// Bahrain Clear publishes one ISIN table. A symbol is used only when it
+// appears once. The site often answers 403 from this network; then the
+// row stays without an ISIN rather than a guessed one.
+async function bhbIsin(symbol) {
+  const response = await fetch("https://bahrainbourse.com/en/Bahrain%20Clear/ISINCodes", {
+    headers: { "User-Agent": "Mozilla/5.0", Accept: "text/html" },
+  });
+  if (!response.ok) return "";
+  const html = await response.text();
+  const found = new Set();
+  const pattern = new RegExp(`\\b${symbol}\\b[\\s\\S]{0,80}?\\b(BH[A-Z0-9]{10})\\b`, "gi");
+  for (const match of html.matchAll(pattern)) found.add(match[1].toUpperCase());
+  return found.size === 1 ? [...found][0] : "";
+}
+
 const instruments = await loadInstruments();
 if (instruments.length === 0) {
   throw new Error("Al Ramz returned no instruments. Is webtrade.alramz.ae signed in?");
@@ -127,7 +160,7 @@ const seen = new Set();
 let untyped = 0;
 
 for (const instrument of instruments) {
-  const isin = toIsin(instrument.sC_ISIN_CODE);
+  let isin = toIsin(instrument.sC_ISIN_CODE);
   const exchange = (instrument.sc_exchange || instrument.sC_EXCHANGE || "").toUpperCase();
   const ticker = (
     instrument.tickeR_ID ||
@@ -147,6 +180,12 @@ for (const instrument of instruments) {
   if (!entry) untyped += 1;
   const name = (instrument.scE_LONG_NAME || entry?.names[0] || ticker).replace(/\s+/g, " ").trim();
   const type = listingType(name, entry?.kind || "");
+  if (!isin && type !== "CRYPTO" && exchange === "MSX") {
+    isin = await msxIsin(ticker.replace(/\.MSX$/i, ""));
+  }
+  if (!isin && type !== "CRYPTO" && exchange === "BHB") {
+    isin = await bhbIsin(ticker.replace(/\.BI$/i, ""));
+  }
   if (etfsOnly && type === "STOCK") continue;
   if (stocksOnly && type !== "STOCK") continue;
   const currency = instrument.cuR_CODE || null;

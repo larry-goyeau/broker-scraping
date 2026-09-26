@@ -134,7 +134,7 @@ function cryptoBase(ticker) {
   return text.split(/[/\-]/)[0].split(".")[0];
 }
 
-function loadCsv(csvPath, kind, index = { byIsin: new Map(), byTicker: new Map() }) {
+function loadCsv(csvPath, kind, index = { byIsin: new Map(), byTicker: new Map(), venueIsin: new Map() }) {
   if (!csvPath || !fs.existsSync(csvPath)) return index;
 
   for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
@@ -153,6 +153,12 @@ function loadCsv(csvPath, kind, index = { byIsin: new Map(), byTicker: new Map()
     if (kind === "CRYPTO") {
       if (ticker) index.cryptoTickers.add(ticker);
       continue;
+    }
+    if (ticker && isin && exchange && kind !== "CRYPTO") {
+      const key = `${exchange}|${ticker}`;
+      const prior = index.venueIsin.get(key);
+      if (prior == null) index.venueIsin.set(key, isin);
+      else if (prior !== isin) index.venueIsin.set(key, "");
     }
     if (ticker) {
       const suffix = MARKET_SUFFIX.get(exchange);
@@ -190,6 +196,7 @@ const wantHk = wantStocks && !skipHk;
 const catalogue = {
   byIsin: new Map(),
   byTicker: new Map(),
+  venueIsin: new Map(),
   candidates: new Set(),
   hkQueries: [],
   bondIsins: [],
@@ -497,12 +504,20 @@ function keepRow(info, ticker, extra = {}) {
   if (Number(info.type) === 10) return false;
   if (isAliasTicker(info.c || ticker)) return false;
 
-  const isin = toIsin(info.issue_nb);
+  let isin = toIsin(info.issue_nb);
   const kind = catalogueKind(isin, ticker, info);
   if (kind === null) return false;
 
   const type = listingType(info, kind);
   if (!type) return false;
+
+  // issue_nb is empty on some cash lines. Fill the ISIN only when this
+  // ticker exists once, on this same venue, in the catalogues.
+  if (!isin && type !== "CRYPTO") {
+    const exchange = normalize(info.codesub_nm || info.ltr).toUpperCase();
+    const symbol = normalizeTicker((info.code_nm || "").trim() || String(ticker).split(/[./]/)[0]);
+    isin = catalogue.venueIsin.get(`${exchange}|${symbol}`) || "";
+  }
 
   const key = (info.c || ticker).toUpperCase();
   if (seen.has(key)) return false;

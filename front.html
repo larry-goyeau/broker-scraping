@@ -412,7 +412,7 @@
       fetch("/api/stats")
         .then((r) => r.json())
         .then((s) => {
-          meta.textContent = `${s.instruments.toLocaleString("en-US")} instruments · ${s.listings.toLocaleString("en-US")} listings · ${s.brokers} brokers`;
+          meta.textContent = `${s.instruments.toLocaleString("en-US")} instruments · ${s.brokers} brokers`;
         });
 
       // A saved choice wins. With none, the country of the visitor's IP fills

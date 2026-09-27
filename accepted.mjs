@@ -267,6 +267,41 @@ export const ACCEPTED = {
   // US persons cannot open. Terms allow an overseas client only at discretion.
   // https://help.investengine.com/hc/en-gb/articles/31149906352029-Who-can-open-an-InvestEngine-account
   investengine: { countries: ["GB"] },
+  // Regulation of 27 June 2026: a Polish citizen who is a Polish tax resident,
+  // with an mBank account. A residence outside Poland cannot open.
+  // https://pdf.mbank.pl/mbankpl/of/gielda/emakler/regulamin_emakler_obowiazujacy_od_27.06.2026.pdf
+  mbank: { countries: ["PL"] },
+  // Account page: must live in Japan. Nationality is not a criterion.
+  // A stay abroad of a year or more, or an open-ended posting, is non-resident
+  // and cannot open.
+  // https://www.matsui.co.jp/apply/account/netstock/
+  // https://support.matsui.co.jp/faq/show/1879?site_domain=faq
+  matsui: { countries: ["JP"] },
+  // Communiqué 118/BM/ZRR/2022: a Polish citizen gives a PESEL. A non-resident
+  // gives the parents' names and a foreign TIN. Citizenship is recorded and
+  // no country is refused.
+  // https://www.pekao.com.pl/dam/jcr:1a8f6c9a-4a19-4d9e-b8a7-49f121087c70/20221229_118_BM_ZRR_2022i.2023-03-23-12-56-45.pdf
+  pekao: WORLD,
+  // Account page: any adult with a Polish ID card or a passport.
+  // Communiqué of 31 Dec 2025, in force 1 Jan 2026: no foreign-markets annex,
+  // and no foreign-currency trading on the home market, for a citizen, a
+  // resident or a tax resident of the high-risk list. The picker is a
+  // nationality, so those citizenships are excluded. Ukraine is only the
+  // named occupied territories, so UA stays. Northern Cyprus has no code here.
+  // https://www.aliorbank.pl/biuro-maklerskie/gielda/rachunek-brokerski.html
+  // https://www.aliorbank.pl/dam/jcr:14ab6be8-57ec-4540-8d1d-806aacbd1c87/Komunikat-Kraje-wysokiego-ryzyka-nie-zawieramy-aneksu-do-umowy.pdf
+  alior: {
+    all: true,
+    except: [
+      ...SANCTIONED,
+      "AE", "AF", "AG", "AO", "AR", "BA", "BB", "BD", "BF", "BI", "BN", "BO", "BS", "BW", "BZ",
+      "CD", "CF", "CI", "CM", "DZ", "EC", "EG", "ER", "ET", "GH", "GI", "GQ", "GW", "GY",
+      "HT", "ID", "IQ", "JM", "JO", "KE", "KG", "KH", "KW", "KY", "LA", "LB", "LK", "LR", "LY",
+      "MA", "ML", "MM", "MN", "MU", "MZ", "NA", "NG", "NI", "NP", "PA", "PG", "PH", "PK",
+      "RS", "SD", "SL", "SN", "SO", "SS", "ST", "TD", "TH", "TJ", "TM", "TN", "TR", "TT", "TZ",
+      "UG", "US", "VE", "VN", "VU", "YE", "ZA", "ZW",
+    ],
+  },
   // Help: principal residence in the EU, and no US person. The site and the
   // help centre are German only, so the picker keeps the German-speaking
   // countries inside that list: Germany and Austria.

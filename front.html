@@ -381,6 +381,7 @@
       table.listings th.num,
       table.listings td.num { font-variant-numeric: tabular-nums; }
       table.listings th.num { white-space: normal; min-width: 124px; }
+      table.listings th.h-total { color: var(--ink); font-weight: 750; }
       table.listings td.num { white-space: nowrap; }
       table.listings td.total { font-size: 15px; font-weight: 650; }
       table.listings td.fees { color: var(--ink-2); }
@@ -497,41 +498,86 @@
 
       @media (max-width: 880px) {
         .table-card { border-radius: 18px; }
-        table.listings thead {
-          position: absolute;
-          width: 1px;
-          height: 1px;
-          overflow: hidden;
-          clip: rect(0 0 0 0);
-        }
         table.listings,
+        table.listings thead,
         table.listings tbody { display: block; }
+        table.listings thead { position: sticky; top: 0; z-index: 2; }
         table.listings tr {
           display: grid;
-          grid-template-columns: minmax(0, 1fr) auto;
-          grid-template-areas: "broker total" "broker fees" "remark remark";
+          grid-template-columns: 32px minmax(0, 1fr) auto;
           column-gap: 12px;
+          row-gap: 2px;
           padding: 14px 16px;
           border-top: 1px solid var(--line);
         }
+        table.listings thead tr {
+          padding-top: 10px;
+          padding-bottom: 9px;
+          border-top: 0;
+          border-radius: 18px 18px 0 0;
+          background: var(--card-2);
+          box-shadow: inset 0 -1px 0 var(--line-strong);
+        }
+        table.listings th {
+          position: static;
+          display: block;
+          grid-row: 1;
+          min-width: 0;
+          padding: 0;
+          border-radius: 0 !important;
+          background: none;
+          box-shadow: none;
+          white-space: normal;
+        }
+        table.listings th.exch,
+        table.listings th.ccy,
+        table.listings th.h-remark { display: none; }
+        table.listings th.h-broker { grid-column: 1 / 3; grid-row: 1 / span 2; align-self: center; }
+        table.listings th.h-total,
+        table.listings th.h-fees { grid-column: 3; min-width: 0; text-align: right; }
+        table.listings th.h-fees { grid-row: 2; }
         table.listings tbody tr:first-child { border-top: 0; }
-        table.listings tbody tr:first-child { border-radius: 18px 18px 0 0; }
         table.listings tbody tr:last-child { border-radius: 0 0 18px 18px; }
-        table.listings tbody tr:only-child { border-radius: 18px; }
-        table.listings td { display: block; padding: 0; border: 0; background: none !important; box-shadow: none !important; }
+        table.listings td { padding: 0; border: 0; background: none !important; box-shadow: none !important; }
         table.listings tbody tr:hover { background: var(--hit); }
         table.listings td.exch,
         table.listings td.ccy { display: none; }
-        table.listings td.broker { grid-area: broker; }
-        table.listings td.total { grid-area: total; align-self: end; font-size: 16px; }
-        table.listings td.fees { grid-area: fees; align-self: start; color: var(--mute); font-size: 12px; }
-        table.listings td.fees::before { content: "fees "; }
-        table.listings td.remark { grid-area: remark; max-width: none; margin-top: 8px; padding-left: 44px; font-size: 12.5px; }
+        table.listings td.broker,
+        table.listings td.broker .bk,
+        table.listings .bk-text { display: contents; }
+        table.listings .avatar { grid-column: 1; grid-row: 1 / span 2; align-self: center; }
+        table.listings .bk-name { grid-column: 2; grid-row: 1; align-self: end; min-width: 0; line-height: 1.3; }
+        table.listings .bk-where { display: block; grid-column: 2; grid-row: 2; align-self: start; min-width: 0; line-height: 1.4; }
+        table.listings td.total,
+        table.listings td.fees { display: block; grid-column: 3; text-align: right; white-space: nowrap; }
+        table.listings td.total { grid-row: 1; align-self: end; font-size: 16px; line-height: 1.3; }
+        table.listings td.fees { grid-row: 2; align-self: start; color: var(--mute); font-size: 12.5px; line-height: 1.4; }
+        table.listings td.remark {
+          display: block;
+          grid-column: 2 / -1;
+          grid-row: 3;
+          max-width: none;
+          margin-top: 8px;
+          font-size: 12.5px;
+        }
         table.listings td.remark:empty { display: none; }
         table.listings tr.none { display: block; }
-        table.listings tr.none td { padding: 28px 8px; }
-        .bk { min-width: 0; }
-        .bk-where { display: block; }
+        table.listings tr.none td { display: block; padding: 28px 8px; text-align: center; }
+      }
+
+      @media (min-width: 761px) and (max-width: 880px) {
+        table.listings tr {
+          grid-template-columns: 32px minmax(0, 1fr) minmax(0, 1fr) minmax(12.5rem, max-content);
+          column-gap: 16px;
+          padding-left: 18px;
+          padding-right: 18px;
+        }
+        table.listings th.h-remark { display: block; grid-column: 3; grid-row: 1 / span 2; align-self: center; }
+        table.listings th.h-total,
+        table.listings th.h-fees,
+        table.listings td.total,
+        table.listings td.fees { grid-column: 4; }
+        table.listings td.remark { grid-column: 3; grid-row: 1 / span 2; align-self: center; margin-top: 0; }
       }
 
       @media (max-width: 760px) {
@@ -554,6 +600,16 @@
         .examples .try { display: none; }
         .examples button { padding: 4px 11px; font-size: 12.5px; }
 
+        table.listings td.remark { position: relative; padding-left: 20px; color: var(--ink-2); }
+        table.listings td.remark::before {
+          content: "";
+          position: absolute;
+          top: 2px;
+          left: 0;
+          width: 14px;
+          height: 14px;
+          background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a0988a' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 11v6M12 7.5v.01'/%3E%3C/svg%3E") center / contain no-repeat;
+        }
         #result, .loading { margin-top: 28px; }
         .instrument { padding: 12px 14px; }
         .instrument h2 { font-size: 24px; }
@@ -752,8 +808,9 @@
         return `<td class="broker"><div class="bk"><span class="avatar tone-${toneOf(brand.key)}" aria-hidden="true">${mark}<span class="mono">${esc(initialsOf(brand.words))}</span></span><div class="bk-text"><span class="bk-name">${name}</span>${where ? `<span class="bk-where">${esc(where)}</span>` : ""}</div></div></td>`;
       };
       const numCell = (v, kind) => {
-        const text = money(v);
-        return `<td class="num ${kind}${text === "N/A" ? " na" : ""}">${esc(text)}</td>`;
+        const missing = costNum(v) == null;
+        const text = missing ? (kind === "total" ? "unknown spread" : "N/A") : money(v);
+        return `<td class="num ${kind}${missing ? " na" : ""}">${esc(text)}</td>`;
       };
       const ccyCell = (currency) => {
         if (!currency) return `<td class="ccy"></td>`;
@@ -805,6 +862,7 @@
           const opt = document.createElement("option");
           opt.value = row.code;
           opt.textContent = row.name;
+          if (row.currency) opt.dataset.ccy = row.currency;
           nat.appendChild(opt);
         }
         const natPick = savedNat != null ? savedNat : locale.country || "";
@@ -954,7 +1012,7 @@
             ? `<p class="note">No price on file for this instrument, so nothing proportional to the amount can be added up. Write parsed_json/prices.json to fill this column.</p>`
             : ""}
           ${merged.length && merged.every((row) => row.total === "N/A")
-            ? `<p class="note">No broker has been moved to the total-cost contract yet: every one of them answers N/A until its *_cost.mjs exports roundTrip().</p>`
+            ? `<p class="note">No broker has been moved to the total-cost contract yet: every one of them answers unknown spread until its *_cost.mjs exports roundTrip().</p>`
             : ""}`;
         const tbody = document.getElementById("costRows");
         if (sizeOnly && tbody) {
@@ -980,12 +1038,12 @@
             <table class="listings">
               <thead>
                 <tr>
-                  <th>broker</th>
+                  <th class="h-broker">broker</th>
                   ${crypto ? "" : "<th class=\"exch\">exchange</th>"}
                   <th class="ccy">currency</th>
-                  <th class="num"><span class="th-label">round trip average cost<a class="star" href="/method">*</a></span></th>
-                  <th class="num"><span class="th-label">broker fees<a class="star" href="/method">*</a></span></th>
-                  <th>remark</th>
+                  <th class="num h-total"><span class="th-label">round trip<span class="th-long"> average cost</span><a class="star" href="/method">*</a></span></th>
+                  <th class="num h-fees"><span class="th-label">broker fees<a class="star" href="/method">*</a></span></th>
+                  <th class="h-remark">remark</th>
                 </tr>
               </thead>
               <tbody id="costRows">${body}</tbody>
@@ -1064,6 +1122,15 @@
       nat.addEventListener("change", () => {
         localStorage.setItem("nat", nationality());
         markEmpty(nat);
+        // The cash follows the country. Picking a currency afterwards leaves
+        // the country where it is, and clearing the country leaves the cash.
+        const code = nationality();
+        if (code) {
+          const cash = nat.selectedOptions[0]?.dataset.ccy || "";
+          dep.value = [...dep.options].some((o) => o.value === cash) ? cash : "";
+          localStorage.setItem("dep", deposit());
+          markEmpty(dep);
+        }
         empty.textContent = emptyText();
         suggest.hidden = true;
         if (shown && !result.hidden) show(shown);

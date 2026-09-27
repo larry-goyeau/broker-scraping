@@ -19,6 +19,16 @@ const FOLDER = {
   boursobank: ["EUR"],
   // Foreign account, FAQ on the foreign-markets page: PLN, USD, EUR, GBP.
   bossa: ["PLN", "USD", "EUR", "GBP"],
+  // Regulation of 27 June 2026: foreign trades settle in zlotys. The broker's
+  // rate is mid-Reuters plus 0.1 %. EUR, USD and GBP belong to the paid
+  // brokerage account, which is another product.
+  // https://pdf.mbank.pl/mbankpl/of/gielda/emakler/regulamin_emakler_obowiazujacy_od_27.06.2026.pdf
+  mBank: ["PLN"],
+  // A bank transfer lands in yen. Dollars in the US-stock account are the
+  // free exchange of that yen, not a currency the client deposits.
+  // https://www.matsui.co.jp/service/money/deposit/
+  // https://www.matsui.co.jp/us-stock/domestic/rule/
+  matsui: ["JPY"],
   bunq: ["EUR"],
   bux: ["EUR"],
   century: ["EUR"],
@@ -58,6 +68,17 @@ const FOLDER = {
   levler: ["SEK"],
   N26: ["EUR"],
   oanda: ["EUR", "PLN", "CZK", "RON", "USD"],
+  // Communiqué 15/1 of 2 March 2026, point 2: a foreign trade settles in PLN
+  // or in the listing currency. Those are the cash the account can hold.
+  // https://www.bm.pkobp.pl/api/public/994a8c6c-d442-47a1-bded-4eb0d5a361a4.pdf
+  pkobp: ["PLN", "EUR", "USD", "CHF", "GBP", "NOK", "HUF", "SEK", "CZK", "DKK"],
+  // Account page: the account can invest in PLN and nine foreign currencies.
+  // https://www.pekao.com.pl/biuro-maklerskie/nowy-klient/rachunek-inwestycyjny-w-bm-pekao.html
+  pekao: ["PLN", "EUR", "USD", "GBP", "CHF", "CAD", "AUD", "SEK", "NOK", "DKK"],
+  // Foreign-markets page: the brokerage account holds PLN and six foreign
+  // currencies. A payment in one of them lands on that currency's sub-account.
+  // https://www.aliorbank.pl/biuro-maklerskie/gielda/rynki-zagraniczne.html
+  alior: ["PLN", "USD", "EUR", "GBP", "NOK", "SEK", "DKK"],
   // Account-opening criteria: Indian nationality. The linked bank account is rupees.
   pocketful: ["INR"],
   // Resident account, and an NRI account (NRE or NRO), including a US or Canadian tax resident. Both are rupees.

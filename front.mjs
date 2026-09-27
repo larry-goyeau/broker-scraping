@@ -2326,7 +2326,12 @@ const server = http.createServer(async (req, res) => {
     const found = detail(key, url.searchParams.get("nat") || "", size, url.searchParams.get("dep") || "");
     return found ? json(res, 200, found) : json(res, 404, { error: "unknown" });
   }
-  if (url.pathname === "/api/countries") return json(res, 200, countryOptions());
+  if (url.pathname === "/api/countries") {
+    return json(res, 200, countryOptions().map((row) => {
+      const currency = DEPOSIT_CCY[row.code];
+      return currency && DEPOSIT_CURRENCIES.has(currency) ? { ...row, currency } : row;
+    }));
+  }
   if (url.pathname === "/api/currencies") return json(res, 200, currencyOptions());
   if (url.pathname === "/api/locale") return json(res, 200, await localeOf(req));
   if (url.pathname === "/api/stats") {

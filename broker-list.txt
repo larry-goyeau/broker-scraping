@@ -288,10 +288,10 @@ XTB	PL	Broker	UCITS ETFs / ETCs	https://www.xtb.com/pl
 Bossa	PL	Broker	UCITS ETFs / ETCs	https://bossa.pl/oferta/otwarcie-rachunku	makler@bossa.pl
 mBank eMakler	PL	Bank	UCITS ETFs / ETCs	https://www.mbank.pl/indywidualny/inwestycje-i-oszczednosci/gielda/emakler/	
 Erste Biuro Maklerskie	PL	Bank	UCITS ETFs / ETCs	https://www.erste.pl/inwestor/oferta	bm.inwestor@erste.pl
-PKO BP Supermakler	PL	Bank	UCITS ETFs / ETCs	https://www.bm.pkobp.pl/oferta/rachunek-inwestycyjny	
-Pekao Biuro Maklerskie	PL	Bank	UCITS ETFs / ETCs	https://www.pekao.com.pl/biuro-maklerskie/nowy-klient/rachunek-inwestycyjny-w-bm-pekao.html	https://www.pekao.com.pl/biuro-maklerskie/kontakt.html
+PKO BP	PL	Bank	UCITS ETFs / ETCs	https://www.bm.pkobp.pl/oferta/rachunek-inwestycyjny	
+Pekao	PL	Bank	UCITS ETFs / ETCs	https://www.pekao.com.pl/biuro-maklerskie/nowy-klient/rachunek-inwestycyjny-w-bm-pekao.html	https://www.pekao.com.pl/biuro-maklerskie/kontakt.html
 Noble Securities	PL	Broker	UCITS ETFs / ETCs	https://noblesecurities.pl/dom-maklerski/rachunek-maklerski/zaloz-rachunek-on-line	
-Alior Bank Biuro Maklerskie	PL	Bank	UCITS ETFs / ETCs	https://www.aliorbank.pl/biuro-maklerskie/gielda/rachunek-brokerski.html	https://www.aliorbank.pl/dodatkowe-informacje/o-banku/kontakt-dla-mediow.html
+Alior Bank	PL	Bank	UCITS ETFs / ETCs	https://www.aliorbank.pl/biuro-maklerskie/gielda/rachunek-brokerski.html	https://www.aliorbank.pl/dodatkowe-informacje/o-banku/kontakt-dla-mediow.html
 ING Biuro Maklerskie	PL	Bank	Local-market ETFs	https://www.ing.pl/indywidualni/inwestycje-i-oszczednosci/konto-maklerskie	https://www.ing.pl/pomoc-i-kontakt
 BNP Paribas Biuro Maklerskie	PL	Bank	Global ETFs / ETPs	https://www.bnpparibas.pl/biuro-maklerskie/rachunek-maklerski	https://www.bnpparibas.pl/kontakt/formularz-umawiania-wizyt-w-oddziale-konto?previewToken=DvQ2vvHYZyqOmhcFy49scHtZ8osIlF&amp;meetingSubject=APPT_GOONE_ODD_MEET_KONTOOTW&amp;dpcProcessId=link_15
 Trigon Dom Maklerski	PL	Broker	Local-market ETFs	https://www.trigon.pl/dom-maklerski/zaloz-rachunek	bok@trigon.pl
@@ -550,7 +550,7 @@ Phillip Securities Hong Kong	HK	Broker	Global ETFs / ETPs	https://www.poems.com.
 SBI Securities	JP	Broker	Local + US ETFs	https://www.sbisec.co.jp/	
 Rakuten Securities	JP	Broker	Local + US ETFs	https://www.rakuten-sec.co.jp/web/account/rsec.html	
 Monex Japan	JP	Broker	Local + US ETFs	https://www.monex.co.jp/	
-Matsui Securities	JP	Broker	Local-market ETFs	https://www.matsui.co.jp/apply/	https://www.matsui.co.jp/support/contact/?mnu=hd
+Matsui	JP	Broker	Local-market ETFs	https://www.matsui.co.jp/apply/	https://www.matsui.co.jp/support/contact/?mnu=hd
 Mitsubishi UFJ eSmart Securities	JP	Broker	Local-market ETFs	https://kabu.com/apply/default.html	https://kabu.com/support/movie.html
 Nomura Securities	JP	Broker	Local-market ETFs	https://www.nomura.co.jp/apply/	https://www.nomura.co.jp/support/
 Daiwa Securities	JP	Broker	Local-market ETFs	https://www.daiwa.jp/open/	https://www.daiwa.jp/contact/

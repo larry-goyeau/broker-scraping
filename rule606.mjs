@@ -65,6 +65,8 @@ export const ALIASES = {
   lynx: "interactivebrokers",
   trading212: "interactivebrokers",
   vivid: "interactivebrokers",
+  // Matsui transmits US cash orders to Interactive Brokers LLC.
+  matsui: "interactivebrokers",
   // Dhan names ViewTrade as the US broker that executes, clears and custodies.
   dhan: "viewtrade",
 };

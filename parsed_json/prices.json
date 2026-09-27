@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-09-27T01:00:38.218Z",
+  "generatedAt": "2026-09-27T20:05:16.584Z",
   "source": "EODHD, les bourses du Golfe, KASE pour un last en tenge, et Yahoo pour un last quand le vendeur n'a rien",
   "unit": "prices[ISIN][devise] = { price, at, from } : la clôture du dernier jour de bourse, dans la devise de cotation, pour convertir un nombre de parts en montant. Une même ligne cotée sur plusieurs places dans la même devise garde sous `from` toutes ses cotations ; `price` retient la place principale. Londres cote en pence, donc GBX et GBP sont deux entrées, que `fx.mjs` sait distinguer. Ce n'est pas un prix temps réel : il sert à dimensionner un ordre, pas à l'exécuter. `fetched` date la dernière interrogation EODHD, y compris un miss, pour ne pas brûler le quota. `fallback` date le last Yahoo (ou le constat qu'il n'y en a pas), pour ne pas le redemander chaque vue.",
   "fetched": {
     "IE00B4L5Y983": "2026-09-26T16:43:50.518Z",
-    "US0378331005": "2026-09-26T16:39:00.921Z",
+    "US0378331005": "2026-09-27T17:14:14.187Z",
     "US03748R7474": "2026-09-13T21:29:14.094Z",
     "US46438G4973": "2026-09-23T00:18:51.752Z",
     "CA89157V1058": "2026-09-26T17:23:10.521Z",
@@ -390,9 +390,9 @@
     "US46284V1017": "2026-09-15T16:54:54.690Z",
     "US88636R6027": "2026-09-15T16:55:08.079Z",
     "US47100L3015": "2026-09-15T16:55:22.486Z",
-    "US4642852044": "2026-09-18T18:05:29.508Z",
+    "US4642852044": "2026-09-27T18:28:58.526Z",
     "IE0004906560": "2026-09-15T17:38:18.572Z",
-    "IE00BK5BQT80": "2026-09-26T15:03:36.168Z",
+    "IE00BK5BQT80": "2026-09-27T15:06:28.884Z",
     "US29364G1031": "2026-09-15T20:11:28.791Z",
     "US7802593050": "2026-09-15T20:26:46.568Z",
     "IE00B3XXRP09": "2026-09-26T22:51:06.693Z",
@@ -402,11 +402,11 @@
     "INE168P01015": "2026-09-16T22:33:36.800Z",
     "US5949181045": "2026-09-17T22:52:41.878Z",
     "EGS60111C019": "2026-09-18T11:38:03.036Z",
-    "CA03785Y1007": "2026-09-26T16:39:00.923Z",
+    "CA03785Y1007": "2026-09-27T17:14:14.187Z",
     "TH0809121500": "2026-09-18T15:54:59.710Z",
     "US7960508882": "2026-09-18T16:03:30.311Z",
     "US7960502018": "2026-09-18T16:21:27.659Z",
-    "US8923313071": "2026-09-18T16:24:02.841Z",
+    "US8923313071": "2026-09-27T20:03:26.613Z",
     "SA15M1HH2NH5": "2026-09-18T16:55:30.900Z",
     "SA15DHKGHBH4": "2026-09-18T16:52:01.997Z",
     "FR0000120321": "2026-09-18T16:55:38.145Z",
@@ -422,7 +422,7 @@
     "GB0007980591": "2026-09-21T18:35:40.133Z",
     "TRATHYAO91M5": "2026-09-21T18:58:08.775Z",
     "KZ1C00001619": "2026-09-21T19:30:18.598Z",
-    "PLPKO0000016": "2026-09-25T16:27:07.373Z",
+    "PLPKO0000016": "2026-09-27T14:17:21.971Z",
     "FR0013416716": "2026-09-21T19:55:21.218Z",
     "LU3047998979": "2026-09-21T19:55:23.900Z",
     "IE00BMXC7V63": "2026-09-21T20:50:12.987Z",
@@ -918,7 +918,13 @@
     "INE336X01012": "2026-09-26T17:23:03.505Z",
     "SE0017937279": "2026-09-26T22:33:40.825Z",
     "US4042804066": "2026-09-26T22:49:56.130Z",
-    "GB0005405286": "2026-09-26T22:49:56.131Z"
+    "GB0005405286": "2026-09-26T22:49:56.131Z",
+    "US1251051066": "2026-09-27T14:24:48.335Z",
+    "PLOPTTC00011": "2026-09-27T14:25:19.027Z",
+    "LU2237380790": "2026-09-27T17:17:52.707Z",
+    "JP3257200000": "2026-09-27T19:43:05.155Z",
+    "US78463V1070": "2026-09-27T19:43:05.460Z",
+    "JP3633400001": "2026-09-27T20:05:14.581Z"
   },
   "fallback": {
     "CA34539A1066": "2026-09-18T17:21:39.427Z",
@@ -7579,23 +7585,23 @@
     },
     "US4642852044": {
       "USD": {
-        "price": 81.69,
-        "at": "2026-09-17",
+        "price": 80.66,
+        "at": "2026-09-25",
         "from": {
           "US:IAU": {
-            "price": 81.69,
-            "at": "2026-09-17",
+            "price": 80.66,
+            "at": "2026-09-25",
             "primary": false
           }
         }
       },
       "MXN": {
-        "price": 1404,
-        "at": "2026-09-17",
+        "price": 1428,
+        "at": "2026-09-25",
         "from": {
           "MX:IAU": {
-            "price": 1404,
-            "at": "2026-09-17",
+            "price": 1428,
+            "at": "2026-09-25",
             "primary": false
           }
         }
@@ -8018,44 +8024,44 @@
     },
     "US8923313071": {
       "USD": {
-        "price": 193.91,
-        "at": "2026-09-17",
+        "price": 190.34,
+        "at": "2026-09-25",
         "from": {
           "US:TM": {
-            "price": 193.91,
-            "at": "2026-09-17",
+            "price": 190.34,
+            "at": "2026-09-25",
             "primary": true
           },
           "LSE:0LG5": {
-            "price": 195.0703,
-            "at": "2026-09-17",
+            "price": 190.39,
+            "at": "2026-09-25",
             "primary": false
           }
         }
       },
       "EUR": {
-        "price": 168,
-        "at": "2026-09-17",
+        "price": 166,
+        "at": "2026-09-25",
         "from": {
           "F:TOMA": {
-            "price": 168,
-            "at": "2026-09-17",
+            "price": 166,
+            "at": "2026-09-25",
             "primary": true
           },
           "STU:TOMA": {
-            "price": 167.5,
-            "at": "2026-09-16",
+            "price": 164,
+            "at": "2026-09-24",
             "primary": false
           }
         }
       },
       "MXN": {
-        "price": 3357,
-        "at": "2026-09-17",
+        "price": 3335,
+        "at": "2026-09-21",
         "from": {
           "MX:TMN": {
-            "price": 3357,
-            "at": "2026-09-17",
+            "price": 3335,
+            "at": "2026-09-21",
             "primary": true
           }
         }
@@ -8501,23 +8507,23 @@
           },
           "LSE:0FMO": {
             "price": 22.59,
-            "at": "2026-09-24",
+            "at": "2026-09-25",
             "primary": false
           }
         }
       },
       "EUR": {
-        "price": 28.995,
-        "at": "2026-09-24",
+        "price": 28.82,
+        "at": "2026-09-25",
         "from": {
           "F:P9O": {
-            "price": 28.995,
-            "at": "2026-09-24",
+            "price": 28.82,
+            "at": "2026-09-25",
             "primary": false
           },
           "STU:P9O": {
-            "price": 28.355,
-            "at": "2026-09-24",
+            "price": 28.305,
+            "at": "2026-09-25",
             "primary": false
           }
         }
@@ -25319,6 +25325,32 @@
             "price": 56.8,
             "at": "2026-09-22",
             "primary": false
+          },
+          "F:7CD": {
+            "price": 56.68,
+            "at": "2026-09-25",
+            "primary": false
+          },
+          "STU:7CD": {
+            "price": 55.68,
+            "at": "2026-09-25",
+            "primary": false
+          }
+        }
+      },
+      "PLN": {
+        "price": 244.6,
+        "at": "2026-09-25",
+        "from": {
+          "WAR:CDR": {
+            "price": 244.6,
+            "at": "2026-09-25",
+            "primary": true
+          },
+          "LSE:0LX1": {
+            "price": 99,
+            "at": "2026-09-25",
+            "primary": false
           }
         }
       }
@@ -25977,6 +26009,22 @@
           "YAHOO:AL0.F": {
             "price": 11.96,
             "at": "2026-09-22",
+            "primary": false
+          }
+        }
+      },
+      "PLN": {
+        "price": 49.555,
+        "at": "2026-09-25",
+        "from": {
+          "WAR:ALE": {
+            "price": 49.555,
+            "at": "2026-09-25",
+            "primary": true
+          },
+          "LSE:0A5O": {
+            "price": 64.74,
+            "at": "2026-09-24",
             "primary": false
           }
         }
@@ -28490,6 +28538,116 @@
           "YAHOO:INVEBN.MX": {
             "price": 739.18,
             "at": "2026-09-26",
+            "primary": false
+          }
+        }
+      }
+    },
+    "US1251051066": {
+      "USD": {
+        "price": 16.05,
+        "at": "2026-09-25",
+        "from": {
+          "US:OTGLY": {
+            "price": 16.05,
+            "at": "2026-09-25",
+            "primary": true
+          }
+        }
+      },
+      "EUR": {
+        "price": 13.7,
+        "at": "2026-09-25",
+        "from": {
+          "F:7CD0": {
+            "price": 13.7,
+            "at": "2026-09-25",
+            "primary": true
+          }
+        }
+      }
+    },
+    "JP3257200000": {
+      "EUR": {
+        "price": 25.6,
+        "at": "2026-09-25",
+        "from": {
+          "F:KYK": {
+            "price": 25.6,
+            "at": "2026-09-25",
+            "primary": false
+          }
+        }
+      }
+    },
+    "US78463V1070": {
+      "USD": {
+        "price": 393.41,
+        "at": "2026-09-25",
+        "from": {
+          "US:GLD": {
+            "price": 393.41,
+            "at": "2026-09-25",
+            "primary": false
+          }
+        }
+      }
+    },
+    "JP3633400001": {
+      "JPY": {
+        "price": 2989.5,
+        "at": "2026-09-25",
+        "from": {
+          "LSE:TYT": {
+            "price": 2989.5,
+            "at": "2026-09-25",
+            "primary": false
+          }
+        }
+      },
+      "USD": {
+        "price": 19.56,
+        "at": "2026-09-25",
+        "from": {
+          "US:TOYOF": {
+            "price": 19.56,
+            "at": "2026-09-25",
+            "primary": false
+          }
+        }
+      },
+      "EUR": {
+        "price": 16.408,
+        "at": "2026-09-25",
+        "from": {
+          "F:TOM": {
+            "price": 16.408,
+            "at": "2026-09-25",
+            "primary": true
+          },
+          "STU:TOM": {
+            "price": 16.404,
+            "at": "2026-09-24",
+            "primary": false
+          },
+          "HA:TOM": {
+            "price": 16.602,
+            "at": "2026-09-25",
+            "primary": false
+          },
+          "HM:TOM": {
+            "price": 16.602,
+            "at": "2026-09-25",
+            "primary": false
+          },
+          "MU:TOM": {
+            "price": 16.664,
+            "at": "2026-09-25",
+            "primary": false
+          },
+          "DU:TOM": {
+            "price": 16.538,
+            "at": "2026-09-25",
             "primary": false
           }
         }

@@ -185,7 +185,8 @@ export function indiaRoundTrip(schedule, query) {
   let txn = notional * txnRate * 2;
   let sebi = notional * schedule.sebiRate * 2;
   let ipft = notional * ipftRate * 2;
-  const dpBase = schedule.dpInr || 0;
+  const dpBase = typeof schedule.dpInr === "function" ? (priced ? schedule.dpInr(notional) : null) : schedule.dpInr || 0;
+  if (dpBase == null) return { ...shared, basis, why: "aucun prix pour cette ligne : lancer node prices.mjs" };
   if (schedule.roundRupee) {
     stt = Math.round(stt);
     stamp = Math.round(stamp);

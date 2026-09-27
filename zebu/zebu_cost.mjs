@@ -8,8 +8,9 @@
 //   Intraday                    0.05%
 //   GST                         18% of brokerage, SEBI and the transaction charge
 //   Statutory charges           as per the rules
-// The on-market DP debit cell is blank. The minimum printed beside it is ₹25.
-// Off-market is 0.03% with the same ₹25 minimum, which is not this trade.
+// The on-market DP debit cell is blank, with a ₹25 minimum. The off-market
+// line is 0.03% of the transaction, same ₹25 minimum. The exchange sell uses
+// that off-market line. GST is extra.
 // AMC is ₹300 a year, or ₹1,111 once.
 //
 // The public calculator (https://zebuetrade.com/calculators/brokerage) is a
@@ -38,9 +39,10 @@ const SCHEDULE = {
   stampRate: pct("0.015"),
   sebiRate: sebiRate(),
   gstRate: 0.18,
-  basis: "Courtage livraison 0,5 % par ordre, tarif signé.",
-  remark:
-    "Intraday is 0.05% per executed order. AMC is ₹300 a year, or ₹1,111 once. The on-market DP debit is blank on the tariff, with a ₹25 minimum.",
+  gstOnDp: true,
+  dpInr: (notional) => Math.max(25, Math.round(notional * pct("0.03") * 100) / 100),
+  basis: "Courtage livraison 0,5 % par ordre, tarif signé. DP 0,03 % de la vente, minimum 25 ₹, plus GST.",
+  remark: "Intraday is 0.05% per executed order. AMC is ₹300 a year, or ₹1,111 once.",
 };
 
 export function roundTrip(query) {

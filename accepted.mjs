@@ -102,8 +102,9 @@ const BITPANDA = [
   "CH", "TR", "GB",
 ];
 
-// Revolut bank signup is wider (US, AU, JP…). The scraped book is Invest/stocks
-// under the UK/EEA entities.
+// UK fees and EEA fees differ, so the lists stay apart. Britain sees
+// Trading Ltd. The EEA and Switzerland see Securities Europe. The Emirates,
+// Australia, Gibraltar, Singapore and the United States are other companies.
 const REVOLUT_STOCKS = [...EEA, "GB", "CH"];
 
 // Saxo onboarding cut of July 2024 (home.saxo country picker), plus usual bans.
@@ -120,12 +121,13 @@ const SAXO = [
 const FIRSTRADE = [
   "US", "AT", "BE", "CN", "CZ", "DE", "DK", "ES", "FI", "FR", "GB", "HK", "IE",
   "IL", "IN", "IT", "JP", "KR", "MO", "MX", "MY", "NO", "NZ", "PL", "PT", "SE",
-  "SG", "TW",
+  "SG", "TW", "TH",
 ];
 
-// Tradier KB "Permitted and Blocked Countries". Codes we have a name for;
-// Algeria is on both lists, so it stays out. UK, CA, AU, LV, MT, BG, HR, CY
-// are on the blocked list.
+// Tradier KB "Permitted and Blocked Countries". UK, CA, AU, LV, MT, BG, HR, CY
+// stay on the blocked list. BrokerChooser also names Algeria (on both of
+// Tradier's own lists), Angola, Bolivia, Monaco, French Polynesia, Taiwan
+// and Venezuela.
 const TRADIER = [
   "AD", "AE", "AM", "AR", "AT", "BD", "BE", "BH", "BM", "BR", "CH", "CL", "CN",
   "CO", "CR", "CZ", "DE", "DK", "DO", "EC", "EE", "EG", "ES", "FI", "FO", "FR",
@@ -133,6 +135,7 @@ const TRADIER = [
   "IT", "JE", "JP", "KN", "KR", "KW", "KZ", "LI", "LT", "LU", "MA", "MO", "MR",
   "MX", "MY", "NL", "NO", "NZ", "OM", "PE", "PL", "PT", "QA", "RO", "RS", "SA",
   "SE", "SG", "SI", "SK", "SM", "SV", "TH", "US", "UY", "UZ", "VA", "ZM",
+  "DZ", "AO", "BO", "MC", "PF", "TW", "VE",
 ];
 
 // Robinhood US (stocks) + UK (stocks) + Europe UAB (EEA stock tokens).
@@ -155,6 +158,8 @@ const XTB_INTL = [
   "AO", "BM", "GE", "MK", "MY", "MR", "MD", "ME", "PH", "KN", "RS", "ZA", "TT",
   "TH", "VN", "ZM",
 ];
+// Each company has its own floor and its own cash, so a BrokerChooser
+// country is not added onto another company's list.
 const XTB = [...EU.filter((c) => c !== "BE"), "GB", "CA", ...GCC, ...XTB_INTL];
 
 // Freedom24 reviews compiled from the CySEC entity: EEA plus a few extras, not UK/US.
@@ -196,14 +201,35 @@ const TASTYTRADE = [
   "NZ", "PF",
 ];
 
+// BrokerChooser countries the picker can name, on top of EEA + Switzerland.
+const CAPTRADER_BC = [
+  "AD", "AE", "AL", "AM", "AO", "AR", "AU", "AZ", "BA", "BD", "BH", "BM", "BO",
+  "BR", "CL", "CN", "CO", "CR", "DO", "DZ", "EC", "EG", "FO", "GE", "GG", "GH",
+  "GI", "GL", "GT", "HK", "HN", "ID", "IM", "IN", "JE", "JO", "JP", "KE", "KR",
+  "KW", "KZ", "LB", "LK", "MA", "MC", "MD", "MK", "MO", "MR", "MX", "MY", "NZ",
+  "OM", "PA", "PE", "PF", "PH", "PK", "QA", "RS", "SA", "SG", "SM", "SN", "SV",
+  "TH", "TN", "TR", "TW", "TZ", "UA", "UG", "UY", "UZ", "VN", "ZA", "ZM",
+];
+
+// BrokerChooser, 29 countries. Germany is the home row. Spain is not listed.
+const FLATEX_COMDIRECT = [
+  "DE", "AT", "BE", "BG", "CH", "CY", "CZ", "DK", "EE", "FI", "FR", "GB", "GR",
+  "HR", "HU", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "NO", "PL", "PT", "RO",
+  "SE", "SI", "SK",
+];
+
+// BrokerChooser. Italy is the home row.
+const DIRECTA = ["IT", "CH", "DE", "DK", "FR", "GB", "HR", "HU", "IE", "PT"];
+
 export const ACCEPTED = {
-  // US retail. Alpaca takes many non-US addresses; Canada is out.
-  alpaca: WORLD_NO_US_CA, // alpaca.markets/learn/live-trading-account-non-us
+  // US account, plus non-US addresses. Canada stays out.
+  alpaca: WORLD_NO_CA, // alpaca.markets/learn/live-trading-account-non-us
   firstrade: { countries: FIRSTRADE },
   tastytrade: { countries: TASTYTRADE },
-  // TS Securities (US + non-EEA) + TS Europe B.V. (30 EEA). User agreement
-  // is not an offer in Hong Kong or Japan.
-  tradestation: { all: true, except: [...SANCTIONED, "HK", "JP"] },
+  // TS Securities (US + non-EEA) + TS Europe B.V. (30 EEA). BrokerChooser
+  // also lists Hong Kong and Japan. The user agreement says the offer is
+  // not made there.
+  tradestation: WORLD,
   tradier: { countries: TRADIER },
   // America (US) + Canada + Europe B.V. (12 EEA) + Bahamas International
   // for other non-US / non-CA residents. Combined brand is worldwide.
@@ -231,8 +257,22 @@ export const ACCEPTED = {
   labanquepostale: { countries: ["FR"] },
   fortuneo: { countries: ["FR"] },
   // Online DIY for EU/UK; non-EU/UK must call. US asked on the form (FATCA).
-  davy: { groups: ["EEA"], countries: ["GB"] },
+  davy: { groups: ["EU"], countries: ["GB"] },
   plum: { countries: PLUM },
+  // Terms 7.2: UK tax resident and living in the UK, and not a US person.
+  // Help, 16 Jul 2025: UK residents only. Moving abroad closes the account.
+  freetrade: { countries: ["GB"] },
+  // Help: UK tax resident, with a UK address and a UK current account.
+  // Non-UK residents, including UK nationals living abroad, cannot open.
+  // US persons cannot open. Terms allow an overseas client only at discretion.
+  // https://help.investengine.com/hc/en-gb/articles/31149906352029-Who-can-open-an-InvestEngine-account
+  investengine: { countries: ["GB"] },
+  // Help: principal residence in the EU, and no US person. The site and the
+  // help centre are German only, so the picker keeps the German-speaking
+  // countries inside that list: Germany and Austria.
+  // Crypto trading and the securities loan are Germany only.
+  // https://support.finanzen-zero.net/hc/de/articles/36630101704477
+  finanzen: { countries: ["DE", "AT"] },
 
   n26: { countries: N26_STOCKS },
   vivid: { countries: VIVID },
@@ -246,29 +286,42 @@ export const ACCEPTED = {
   scalablecapital: { countries: ["DE", "AT", "FR", "IT", "ES", "NL"] },
   trading212: { countries: T212 },
   lightyear: { countries: LIGHTYEAR },
+  // User agreement: tax residency in the EU/EEA, and opening needs BankID.
+  // The site is Swedish only, so the picker keeps Sweden.
+  levler: { countries: ["SE"] },
   revolut: { countries: REVOLUT_STOCKS },
   bitpanda: { countries: BITPANDA },
-  // lynxbroker.com/trading-account/account-country — AT BE CZ FI FR DE NL PL SK.
-  lynx: { countries: ["AT", "BE", "CZ", "FI", "FR", "DE", "NL", "PL", "SK"] },
-  captrader: { groups: ["EEA"], countries: ["CH"] },
+  // lynxbroker.com account-country: AT BE CZ FI FR DE NL PL SK.
+  // lynxbroker.ch opening: primary residence in Germany, Austria or Switzerland.
+  lynx: { countries: ["AT", "BE", "CZ", "FI", "FR", "DE", "NL", "PL", "SK", "CH"] },
+  // EEA + Switzerland, plus the BrokerChooser countries the picker can name.
+  captrader: { groups: ["EEA"], countries: ["CH", ...CAPTRADER_BC] },
   // CSSF passport, offices in LU/NL/BE/FR/DE/CH, clients in 28 countries.
   whselfinvest: { groups: ["EEA"], countries: ["CH", "GB"] },
   saxo: { countries: SAXO },
-  // Bank SA is the Swiss card. Bank Europe (Luxembourg) is the EU card the
-  // Swiss site sends an EEA visitor to. UK, Singapore, Hong Kong and MEA
-  // are other companies, with another card or none, so they are not here.
+  // Bank SA prices Switzerland. Bank Europe prices the EEA. The schedules
+  // differ, so the lists stay apart. UK, Singapore, Hong Kong and MEA are
+  // other companies and are not either card.
   swissquote: { groups: ["EEA"], countries: ["CH"] },
-  interactivebrokers: WORLD, // IBKR: all except OFAC / higher-risk
+  // open-account-country-list.php has Montenegro, the Philippines and the Holy See.
+  // It does not list Afghanistan, Nigeria, Venezuela or Zimbabwe. Russia is on
+  // that page and stays out here with the other sanctioned codes.
+  interactivebrokers: { all: true, except: [...SANCTIONED, "AF", "NG", "VE", "ZW"] },
   xtb: { countries: XTB },
   ig: WORLD_NO_US,
-  oanda: WORLD,
+  // The priced book is OANDA TMS cash shares, sold to the 27 EU countries.
+  // UK, Switzerland, Norway, Liechtenstein, the US, Canada, Australia,
+  // Singapore, Japan and Global Markets are other companies with other fees.
+  oanda: { groups: ["EU"] },
   admiral: WORLD_NO_US,
   freedom24: { countries: FREEDOM24 },
   // Global T&Cs block US and Canada. The US entity is only the ETF CFD
   // shelf sold as a real ETF (`--plan=us`); front hides it from everyone
   // else. Canada has no eToro book.
   etoro: WORLD_NO_CA,
-  quantfury: WORLD_NO_US,
+  // Client agreement: not for the US, Canada, the Bahamas or the British Virgin Islands.
+  // BS and VG are not in the country list.
+  quantfury: { all: true, except: [...SANCTIONED, "US", "CA"] },
   // FAQ: citizens or residents of most countries except sanctions / local bans.
   mexem: WORLD,
   century: { groups: ["GCC"], countries: [...EEA, "GB", "CH", "IN", "PK", "EG", "ZA", "SG", "MY", "HK"] },
@@ -290,6 +343,11 @@ export const ACCEPTED = {
   // The public site is Polish only. Polish is the official language of Poland.
   // They do not publish a residency list.
   bossa: { countries: ["PL"] },
+  // No catalogue yet. BrokerChooser’s 29 countries; Spain is not among them.
+  flatex: { countries: FLATEX_COMDIRECT },
+  comdirect: { countries: FLATEX_COMDIRECT },
+  // No catalogue yet. Italy plus the nine BrokerChooser adds.
+  directa: { countries: DIRECTA },
 };
 
 const GROUPS = { EEA, EU, GCC };

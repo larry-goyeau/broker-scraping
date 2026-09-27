@@ -89,15 +89,22 @@ function isIndexQuote(symbol) {
   return /\bINDEX\b/.test(text);
 }
 
+const SERIES = new Set([...NSE_SOLD, ...BSE_SOLD]);
+
+// Only a known series is a suffix. BAJAJ-AUTO is the symbol; BAJAJ-AUTO-EQ
+// is that symbol in the EQ series.
 export function seriesOf(symbol) {
   const match = String(symbol || "").toUpperCase().match(/-([A-Z0-9]+)$/);
-  return match ? match[1] : "";
+  return match && SERIES.has(match[1]) ? match[1] : "";
 }
 
 export function rootOf(symbol) {
   const text = String(symbol || "").trim().toUpperCase();
-  const series = seriesOf(text);
-  return series ? text.slice(0, -(series.length + 1)) : text;
+  const match = text.match(/-([A-Z0-9]+)$/);
+  // Noren appends the NSE series (-EQ, -BE). A BSE letter such as the B in
+  // KLBRENG-B is the symbol itself, on both venues.
+  if (match && NSE_SOLD.has(match[1])) return text.slice(0, -(match[1].length + 1));
+  return text;
 }
 
 export function soldSeries(exchange, series) {
@@ -120,7 +127,10 @@ export function keepSold(exchange, series, symbol, isin, etf = false) {
 
 function remember(book, exchange, symbol, isin, name, series) {
   const id = isinOf(isin);
-  const ticker = rootOf(symbol);
+  // The cash book is keyed by the exchange symbol. A class marker such as
+  // the B in KLBRENG-B is part of that symbol. The series suffix (-EQ, -A)
+  // is only stripped when a broker ticker still carries it.
+  const ticker = String(symbol || "").trim().toUpperCase();
   if (!exchange || !ticker) return;
   const key = `${exchange}|${ticker}`;
   const prior = book.get(key);

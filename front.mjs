@@ -753,6 +753,15 @@ const BOURSOBANK_PLANS = [
   { id: "ultimate", name: "BoursoBank Ultimate Trader" },
 ];
 
+// Basic, Standard and Plus all deal at zero. They differ only on the FX
+// rate of a non-GBP line, so a pound listing collapses to one row and a
+// dollar or euro listing keeps a row per plan.
+const FREETRADE_PLANS = [
+  { id: "basic", name: "Freetrade Basic" },
+  { id: "standard", name: "Freetrade Standard" },
+  { id: "plus", name: "Freetrade Plus" },
+];
+
 const FORTUNEO_PLANS = [
   { id: "starter", name: "Fortuneo Starter" },
   { id: "progress", name: "Fortuneo Progress" },
@@ -1127,9 +1136,9 @@ const SWISSQUOTE_PLANS = [
   { id: "lu", name: "Swissquote Europe" },
 ];
 
-// Bank SA prices Switzerland. Bank Europe prices the EEA: the Swiss site
-// tells an EEA visitor it is not authorised there and points at Luxembourg.
-// No country still shows both cards. Any other residence is another company.
+// Bank SA prices Switzerland. Bank Europe prices the EEA. The two schedules
+// differ, so a visitor sees only the card of the company that bills them.
+// No country still shows both. Any other residence is another company.
 function swissquoteOpen(plan, nat) {
   const n = String(nat || "").trim().toUpperCase();
   if (!n) return true;
@@ -1197,7 +1206,10 @@ function xtbName(planIds, allIds) {
   const order = XTB_PLANS.map((p) => p.id);
   const ids = [...new Set(planIds)].sort((a, b) => order.indexOf(a) - order.indexOf(b));
   if (ids.length === allIds.length) return "XTB";
-  return ids.map((id) => XTB_PLAN_LABEL[id] || id).join(" / ");
+  return ids
+    .map((id) => XTB_PLAN_LABEL[id] || id)
+    .map((label, i) => (i === 0 ? label : label.replace(/^XTB\s+/, "")))
+    .join(" / ");
 }
 
 // One venue stays on one line when every company that lists it bills the
@@ -1639,6 +1651,27 @@ function collapseBoursobank(built) {
   });
 }
 
+function collapseFreetrade(built) {
+  const groups = [];
+  for (const row of built) {
+    const hit = groups.find((g) => sameTripListings(g.listings, row.listings));
+    if (hit) hit.members.push(row);
+    else groups.push({ listings: row.listings, members: [row] });
+  }
+  return groups.map((g) => {
+    if (g.members.length === 1) return g.members[0];
+    const all = g.members.length === FREETRADE_PLANS.length;
+    return {
+      ...g.members[0],
+      folder: `freetrade:${g.members.map((m) => m.folder.split(":")[1]).join("-")}`,
+      family: "Freetrade",
+      name: all ? "Freetrade" : g.members.map((m) => m.name).join(" / "),
+      plan: "",
+      planRank: 0,
+    };
+  });
+}
+
 function collapseFortuneo(built) {
   const groups = [];
   for (const row of built) {
@@ -1791,6 +1824,15 @@ function detail(key, nat = "", size = {}, dep = "") {
         if (listed.length) built.push(asPlan(plan, i, listed));
       });
       for (const row of collapseBoursobank(built)) rows.push(row);
+      continue;
+    }
+    if (folder === "freetrade") {
+      const built = [];
+      FREETRADE_PLANS.forEach((plan, i) => {
+        const listed = listings({ plan: plan.id });
+        if (listed.length) built.push(asPlan(plan, i, listed));
+      });
+      for (const row of collapseFreetrade(built)) rows.push(row);
       continue;
     }
     if (folder === "fortuneo") {
@@ -2293,6 +2335,16 @@ const server = http.createServer(async (req, res) => {
       listings,
       brokers: brokers.size,
     });
+  }
+  if (url.pathname.startsWith("/logos/")) {
+    const key = path.basename(decodeURIComponent(url.pathname)).toLowerCase().replace(/\.png$/i, "").replace(/[^a-z0-9]/g, "");
+    const file = key ? path.join(ROOT_DIR, "logos", `${key}.png`) : "";
+    if (file && fs.existsSync(file)) {
+      res.writeHead(200, { "Content-Type": "image/png", "Cache-Control": "public, max-age=86400" });
+      return res.end(fs.readFileSync(file));
+    }
+    res.writeHead(404);
+    return res.end();
   }
   if (url.pathname === "/" || url.pathname === "/front.html") {
     res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });

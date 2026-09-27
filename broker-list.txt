@@ -119,7 +119,7 @@ S Broker (Sparkasse)	DE	Bank	UCITS ETFs / ETCs	https://www.sbroker.de/service/le
 maxblue (Deutsche Bank)	DE	Bank	UCITS ETFs / ETCs	https://www.maxblue.de/wertpapierhandel/handeln/depot.html	info.maxblue@db.com
 Smartbroker+	DE	Neobroker	UCITS ETFs / ETCs	https://www.smartbrokerplus.de/de-de/	
 justTRADE	DE	Neobroker	UCITS ETFs / ETCs	https://www.justtrade.com/	
-finanzen.net zero	DE	Neobroker	UCITS ETFs / ETCs	https://www.finanzen.net/zero/	
+finanzen.net	DE	Neobroker	UCITS ETFs / ETCs	https://www.finanzen.net/zero/	
 Traders Place	DE	Neobroker	UCITS ETFs / ETCs	https://www.tradersplace.de/angebot/uebersicht	https://www.tradersplace.de/service/service-tools/kontakt
 Targobank	DE	Bank	UCITS ETFs / ETCs	https://www.targobank.de/de/vermoegen/direkt-depot.html	https://www.targobank.de/de/kontakt/index.html
 Postbank	DE	Bank	UCITS ETFs / ETCs	https://www.postbank.de/privatkunden/produkte/wertpapiere-sparen/wertpapiere/depot-eroeffnen.html	https://www.postbank.de/privatkunden/services/kontakt.html
@@ -628,7 +628,12 @@ Prabhudas Lilladher	IN	Broker	Local-market ETFs	https://www.plindia.com/
 Tradejini	IN	Broker	Local-market ETFs	https://www.tradejini.com/	help@tradejini.com
 Mastertrust	IN	Broker	Local-market ETFs	https://www.mastertrust.co.in/	
 Arihant Capital	IN	Broker	Local-market ETFs	https://www.arihantcapital.com/	https://www.arihantcapital.com/contact-us
-Bigul	IN	Neobroker	Local-market ETFs	https://www.bigul.co/	
+Bigul	IN	Neobroker	Local-market ETFs	https://www.bigul.co/
+Pocketful	IN	Neobroker	Local-market ETFs	https://www.pocketful.in/open-demat-account
+Rupeezy	IN	Neobroker	Local-market ETFs	https://rupeezy.in/
+Zebu	IN	Neobroker	Local-market ETFs	https://zebuetrade.com/open-demat-account
+Firstock	IN	Neobroker	Local-market ETFs	https://firstock.in/support/resident-individual/	
+ProStocks	IN	Broker	Local-market ETFs	https://www.prostocks.com/open-an-account.html	support@prostocks.com
 InnovestX	TH	Broker	Local + US ETFs	https://www.innovestx.co.th/products/stock/Thai-Stock	https://www.innovestx.co.th/contact-us
 Kasikorn Securities	TH	Broker	Local-market ETFs	https://www.kasikornsecurities.com/	
 Bualuang Securities	TH	Broker	Local-market ETFs	https://www.bualuang.co.th/en/account-opening	https://www.bualuang.co.th/en/contact-us

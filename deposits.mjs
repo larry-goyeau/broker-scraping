@@ -34,16 +34,39 @@ const FOLDER = {
   // The open Global Trader account is one euro account. BG Trader shows the same.
   elana: ["EUR"],
   firstrade: ["USD"],
+  // Terms 10.3 and 11.8: the linked bank account and every deposit are pounds.
+  // Help, 28 Mar 2024: cash can be held in GBP only.
+  freetrade: ["GBP"],
+  // Costs: the account deals in sterling and FX is free because every line
+  // is already in pounds. Funding comes from a UK current account.
+  // https://investengine.com/costs/
+  // https://help.investengine.com/hc/en-gb/articles/31146506884893-How-do-I-add-funds
+  investEngine: ["GBP"],
+  // Help: every booking lands in euro on the settlement account. A payment
+  // in another currency is converted to euro by Baader Bank.
+  // https://support.finanzen-zero.net/hc/de/articles/36630083344157
+  finanzen: ["EUR"],
+  // Resident account, and an NRI account funded from NRE or NRO. Both are rupees.
+  firstock: ["INR"],
   fortuneo: ["EUR"],
   fyers: ["INR"],
   freedom24: ["EUR", "USD"],
   ig: ["EUR"],
   labanquepostale: ["EUR"],
+  // The account holds kronor. A foreign line is converted, so USD and EUR
+  // are not cash the client can leave sitting.
+  levler: ["SEK"],
   N26: ["EUR"],
   oanda: ["EUR", "PLN", "CZK", "RON", "USD"],
+  // Account-opening criteria: Indian nationality. The linked bank account is rupees.
+  pocketful: ["INR"],
+  // Resident account, and an NRI account (NRE or NRO), including a US or Canadian tax resident. Both are rupees.
+  prostocks: ["INR"],
   questrade: ["USD", "CAD"],
   quantfury: ["USD", "EUR", "GBP", "CHF", "TRY", "BRL", "MXN", "CLP", "COP", "ARS"],
   revolut: ["EUR", "USD"],
+  // Support, 22 Jul 2026: only a resident Indian can open an account.
+  rupeezy: ["INR"],
   sarwa: ["USD"],
   saxo: ["USD", "CAD", "EUR", "GBP", "NOK", "PLN", "CZK", "MYR", "CHF", "DKK", "SEK", "ZAR", "JPY", "HKD", "CNH", "SGD", "AUD"],
   scalablecapital: ["EUR"],
@@ -70,6 +93,8 @@ const FOLDER = {
   captrader: ["AUD", "CAD", "CHF", "CNH", "EUR", "GBP", "HKD", "HUF", "ILS", "JPY", "MXN", "NOK", "PLN", "RUB", "SEK", "SGD", "USD"],
   WHSelfInvest: ["AUD", "CAD", "CHF", "EUR", "GBP", "HKD", "JPY", "MXN", "NOK", "USD"],
   zerodha: ["INR"],
+  // The KYC offers a resident account and an NRI account (NRE or NRO). Both are rupees.
+  zebu: ["INR"],
 };
 
 const BY_PLAN = {

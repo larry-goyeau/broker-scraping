@@ -277,6 +277,24 @@ export const ACCEPTED = {
   // https://www.matsui.co.jp/apply/account/netstock/
   // https://support.matsui.co.jp/faq/show/1879?site_domain=faq
   matsui: { countries: ["JP"] },
+  // FAQ: the account is limited to a resident of Japan. Nationality is not
+  // a criterion. A foreign national needs a residence card. A non-resident
+  // cannot open.
+  // https://faq.sbisec.co.jp/answer/5ec2341f8504de0011d61467/
+  // https://faq.sbisec.co.jp/answer/5ecb693a8504de0011d61dc1/
+  sbi: { countries: ["JP"] },
+  // No licence to deal outside Japan. A foreign national opens with a
+  // residence card; nationality is not a criterion. Leaving for a year or
+  // more is the non-resident procedure.
+  // https://www.rakuten-sec.co.jp/web/support/procedures/non-resident/
+  // https://account.rakuten-sec.co.jp/ITS/acc_identification.html
+  rakuten: { countries: ["JP"] },
+  // FAQ and PDS: Australian tax resident, 18 or older, with an Australian
+  // residential address. Nationality is not the test. A non-resident for
+  // Australian tax cannot open.
+  // https://www.betashares.com.au/direct/faq
+  // https://public-files.wealth.betashares.com.au/legal/product-disclosure-statement.pdf
+  betashares: { countries: ["AU"] },
   // Communiqué 118/BM/ZRR/2022: a Polish citizen gives a PESEL. A non-resident
   // gives the parents' names and a foreign TIN. Citizenship is recorded and
   // no country is refused.

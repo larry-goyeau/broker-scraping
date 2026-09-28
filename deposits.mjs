@@ -29,6 +29,22 @@ const FOLDER = {
   // https://www.matsui.co.jp/service/money/deposit/
   // https://www.matsui.co.jp/us-stock/domestic/rule/
   matsui: ["JPY"],
+  // Yen lands in the comprehensive account. These seven foreign currencies
+  // can be paid in from a foreign-currency bank account and left as cash.
+  // https://www.sbisec.co.jp/ETGate/WPLETmgR001Control?OutSide=on&getFlg=on&burl=search_home&cat1=home&cat2=service&dir=service&file=home_in_gaika.html
+  sbi: ["JPY", "USD", "EUR", "AUD", "NZD", "CAD", "ZAR", "HKD"],
+  // Yen is the bank transfer into the comprehensive account. These five
+  // can be paid in from a bank in Japan and left as cash. Pound, franc,
+  // lira and rand are an IFA withdrawal, not a deposit. Hong Kong dollars,
+  // yuan and the ASEAN currencies are converted into yen on the trade.
+  // https://www.rakuten-sec.co.jp/web/account-flow/
+  // https://www.rakuten-sec.co.jp/web/service/pay/forex_pay.html
+  rakuten: ["JPY", "USD", "EUR", "AUD", "NZD", "CAD"],
+  // The Cash Wallet is funded by bank transfer or Osko from an Australian
+  // bank account. The PDS states every amount in Australian dollars.
+  // https://www.betashares.com.au/direct/faq
+  // https://public-files.wealth.betashares.com.au/legal/product-disclosure-statement.pdf
+  betashares: ["AUD"],
   bunq: ["EUR"],
   bux: ["EUR"],
   century: ["EUR"],

@@ -53,6 +53,17 @@ export const VENUES = [
     loose: ["london", "uk", "gb"],
   },
   {
+    // CXE is the Chi-X lit book. BXE and DXE are other Cboe Europe books and are
+    // not this one. Continuous trading is 08:00–16:30 London; the close after
+    // that is an auction, not a spread.
+    mic: "CHIX",
+    name: "Cboe Europe (Chi-X)",
+    source: "cxe",
+    hours: { open: "08:00", close: "16:30", tz: "Europe/London" },
+    exact: ["chix", "chixen", "cxe", "bcxe", "cboeeurope"],
+    loose: [],
+  },
+  {
     mic: "XSWX",
     name: "SIX Swiss Exchange",
     source: "six",
@@ -424,6 +435,26 @@ export const VENUES = [
     exact: ["xcai", "egx", "case", "cairo", "egyptianexchange", "theegyptianexchange"],
     loose: [],
   },
+  // Cash session only. The touch is the official book, MarketDepth on the BSE and
+  // quote-equity on the NSE. A last trade is not a substitute when one side is missing.
+  {
+    mic: "XNSE",
+    name: "National Stock Exchange of India",
+    source: "nse",
+    hours: { open: "09:15", close: "15:30", tz: "Asia/Kolkata" },
+    exact: ["xnse", "nse", "nseindia", "nationalstockexchangeofindia"],
+    loose: [],
+  },
+  {
+    mic: "XBOM",
+    name: "BSE",
+    source: "bse",
+    hours: { open: "09:15", close: "15:30", tz: "Asia/Kolkata" },
+    // "bse" is not listed here. Lightyear writes it for Brussels, and `resolveVenue`
+    // only sends an INR line (or an IN ISIN) to Bombay.
+    exact: ["xbom", "bombay", "bombaystockexchange", "bseindia", "bseltd"],
+    loose: [],
+  },
 
   // The two spot books a crypto line can be priced against without a key. Neither has a
   // MIC: these four letters are this file's own, chosen to sit in the same column as the
@@ -551,7 +582,6 @@ export const KNOWN_UNSOURCED = [
   { match: ["krx"], name: "Korea Exchange", why: "adaptateur non écrit" },
   { match: ["twse"], name: "Taiwan Stock Exchange", why: "adaptateur non écrit" },
   { match: ["tpex"], name: "Taipei Exchange", why: "adaptateur non écrit" },
-  { match: ["nse"], name: "National Stock Exchange of India", why: "adaptateur non écrit" },
   {
     match: ["b3", "bovespa", "bmfbovespa", "bvmf", "xbsp", "bvsp"],
     name: "B3 São Paulo",
@@ -622,7 +652,6 @@ export const KNOWN_UNSOURCED = [
     why: "adaptateur non écrit",
   },
   { match: ["xber", "berlin", "boerseberlin"], name: "Börse Berlin", why: "adaptateur non écrit" },
-  { match: ["chix", "chixen", "cxe", "cboeeurope"], name: "Cboe Europe (Chi-X)", why: "adaptateur non écrit" },
   { match: ["chixau", "cboeaustralia"], name: "Cboe Australia", why: "adaptateur non écrit" },
   { match: ["bist", "xist", "istanbul"], name: "Borsa Istanbul", why: "adaptateur non écrit" },
   { match: ["csefndk"], name: "Nasdaq First North Denmark", why: "adaptateur non écrit" },
@@ -674,6 +703,13 @@ export function resolveVenue(row) {
   for (const n of names) {
     const hit = VENUES.find((v) => v.loose.includes(n));
     if (hit) return { venue: hit, assumed: true };
+  }
+  if (names.includes("bse")) {
+    const ccy = String(row.currency || "").toUpperCase();
+    const isin = String(row.isin || "").toUpperCase();
+    if (ccy === "INR" || isin.startsWith("IN")) {
+      return { venue: VENUES.find((v) => v.mic === "XBOM"), assumed: false };
+    }
   }
   if (names.includes("tse")) {
     const ccy = String(row.currency || "").toUpperCase();
@@ -783,6 +819,7 @@ const PAGE = {
   xetra: (l) => `https://www.boerse-frankfurt.de/${l.family === "share" ? "aktie" : "etf"}/${l.isin}`,
   // Keyed by TIDM, which is per currency line -- exactly the granularity a spread has.
   lse: (l) => (l.ticker ? `https://www.londonstockexchange.com/stock/${l.ticker}/x/company-page` : null),
+  cxe: () => "https://www.cboe.com/europe/equities/market_statistics/book_viewer/",
   six: (l) =>
     l.family === "share"
       ? `https://www.six-group.com/en/market-data/shares/share-explorer/share-details.${l.isin}${l.currency}4.html`
@@ -849,6 +886,14 @@ const PAGE = {
       ? `https://www.kraken.com/prices/${encodeURIComponent(String(l.ticker).toLowerCase())}`
       : "https://www.kraken.com/prices",
   gpw: () => "https://www.gpw.pl/akcje",
+  nse: (l) =>
+    l.ticker
+      ? `https://www.nseindia.com/get-quote/equity/${encodeURIComponent(String(l.ticker).toUpperCase())}`
+      : "https://www.nseindia.com/market-data/live-equity-market",
+  bse: (l) =>
+    l.ticker
+      ? `https://www.bseindia.com/stock-share-price/scrip/${encodeURIComponent(String(l.ticker).toUpperCase())}/`
+      : "https://www.bseindia.com/markets/equity.html",
   bmv: (l) =>
     l.ticker
       ? `https://www.bmv.com.mx/es/emisoras/estadisticas/${encodeURIComponent(

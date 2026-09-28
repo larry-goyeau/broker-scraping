@@ -441,7 +441,7 @@ function mostCommon(values) {
   return best;
 }
 
-function preferredName(inst) {
+function votedName(inst) {
   let best = "";
   let n = 0;
   for (const [name, count] of inst.nameCounts) {
@@ -453,6 +453,113 @@ function preferredName(inst) {
     }
   }
   return best;
+}
+
+// stocks.csv and etfs.csv are the reference names. A catalogue row is found
+// by ISIN, then by ticker. Its own wording is only a fallback.
+const NAME_BY_ISIN = new Map();
+const NAME_BY_CODE = new Map();
+
+function parseCsv(text) {
+  const rows = [];
+  let row = [];
+  let cur = "";
+  let quoted = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (quoted) {
+      if (c === '"') {
+        if (text[i + 1] === '"') {
+          cur += '"';
+          i++;
+        } else quoted = false;
+      } else cur += c;
+    } else if (c === '"') quoted = true;
+    else if (c === ",") {
+      row.push(cur);
+      cur = "";
+    } else if (c === "\n") {
+      row.push(cur);
+      rows.push(row);
+      row = [];
+      cur = "";
+    } else if (c !== "\r") cur += c;
+  }
+  if (cur.length || row.length) {
+    row.push(cur);
+    rows.push(row);
+  }
+  return rows;
+}
+
+function pickName(counts) {
+  let best = "";
+  let n = 0;
+  for (const [name, count] of counts) {
+    if (count > n || (count === n && name.length > best.length)) {
+      best = name;
+      n = count;
+    }
+  }
+  return best;
+}
+
+function loadReferenceNames() {
+  const here = path.dirname(fileURLToPath(import.meta.url));
+  const byIsin = new Map();
+  const byCode = new Map();
+  for (const file of ["stocks.csv", "etfs.csv"]) {
+    const table = parseCsv(fs.readFileSync(path.join(here, file), "utf8"));
+    const header = table[0] || [];
+    const iTicker = header.indexOf("ticker");
+    const iIsin = header.indexOf("isin");
+    const iName = header.indexOf("name");
+    for (const cells of table.slice(1)) {
+      const isin = String(cells[iIsin] || "").trim().toUpperCase();
+      const name = String(cells[iName] || "").replace(/\s+/g, " ").trim();
+      const ticker = String(cells[iTicker] || "").trim().toUpperCase();
+      if (!name || name.length <= 1 || !/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin)) continue;
+      if (!byIsin.has(isin)) byIsin.set(isin, new Map());
+      const names = byIsin.get(isin);
+      names.set(name, (names.get(name) || 0) + 1);
+      const code = ticker.split(":").pop();
+      if (!code) continue;
+      if (!byCode.has(code)) byCode.set(code, new Map());
+      byCode.get(code).set(isin, true);
+    }
+  }
+  for (const [isin, names] of byIsin) {
+    const name = pickName(names);
+    if (name) NAME_BY_ISIN.set(isin, name);
+  }
+  for (const [code, isins] of byCode) {
+    if (isins.size !== 1) continue;
+    const isin = [...isins.keys()][0];
+    const name = NAME_BY_ISIN.get(isin);
+    if (name) NAME_BY_CODE.set(code, { isin, name });
+  }
+}
+
+function referenceName(inst) {
+  const ids = [];
+  if (inst.isin) ids.push(inst.isin);
+  if (inst.isins) for (const id of inst.isins) if (!ids.includes(id)) ids.push(id);
+  for (const id of ids) {
+    const name = NAME_BY_ISIN.get(id);
+    if (name) return name;
+  }
+  for (const ticker of inst.tickers || []) {
+    const code = String(ticker).toUpperCase().split(":").pop();
+    const hit = NAME_BY_CODE.get(code);
+    if (!hit) continue;
+    if (ids.length && !ids.includes(hit.isin)) continue;
+    return hit.name;
+  }
+  return "";
+}
+
+function preferredName(inst) {
+  return referenceName(inst) || votedName(inst);
 }
 
 function preferredTicker(inst, hint) {
@@ -536,6 +643,8 @@ function absorbInstrument(into, from) {
     into.byBroker.set(folder, held);
   }
 }
+
+loadReferenceNames();
 
 const aliases = new Map();
 
@@ -657,7 +766,7 @@ function searchable(inst) {
     inst.searchKeys = {
       isins: inst.isins?.size ? [...inst.isins] : inst.isin ? [inst.isin] : [],
       tickers: [...inst.tickers],
-      name: preferredName(inst).toUpperCase(),
+      name: [preferredName(inst), ...inst.names].join("\n").toUpperCase(),
     };
   }
   return inst.searchKeys;

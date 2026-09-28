@@ -547,8 +547,8 @@ Mox Bank	HK	Neobroker	Global ETFs / ETPs	https://mox.com/features/mox-invest/
 Monex Boom	HK	Broker	Global ETFs / ETPs	https://www.boom.com/en/open-account/	service@boomhq.com
 Citibank HK	HK	Bank	Global ETFs / ETPs	https://www.citibank.com.hk/english/wealth-management/investment/	
 Phillip Securities Hong Kong	HK	Broker	Global ETFs / ETPs	https://www.poems.com.hk/en-us/customer-service/online-account-opening/	cs@phillip.com.hk
-SBI Securities	JP	Broker	Local + US ETFs	https://www.sbisec.co.jp/	
-Rakuten Securities	JP	Broker	Local + US ETFs	https://www.rakuten-sec.co.jp/web/account/rsec.html	
+SBI	JP	Broker	Local + US ETFs	https://www.sbisec.co.jp/	
+Rakuten	JP	Broker	Local + US ETFs	https://www.rakuten-sec.co.jp/web/account/rsec.html	
 Monex Japan	JP	Broker	Local + US ETFs	https://www.monex.co.jp/	
 Matsui	JP	Broker	Local-market ETFs	https://www.matsui.co.jp/apply/	https://www.matsui.co.jp/support/contact/?mnu=hd
 Mitsubishi UFJ eSmart Securities	JP	Broker	Local-market ETFs	https://kabu.com/apply/default.html	https://kabu.com/support/movie.html

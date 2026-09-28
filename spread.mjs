@@ -187,19 +187,13 @@ for (const file of rowFiles) {
       // Counted under the place's canonical name rather than the spelling the broker
       // used, or one American line would count once as "AMEX" and again as "ARCX".
       noteGap(why, `${unsourced?.name || named}|${isin}|${currency || "?"}`, `${ticker || isin} ${currency || "devise non dite"}`);
-      continue;
-    }
+    } else if (!currency) {
+      noteGap("devise absente du catalogue du broker", key, `${ticker || isin} chez ${broker}`);
+    } else if (listings.has(key)) listings.get(key).brokers.add(broker);
+    else {
     // The currency is half of a book's identity: the same fund on the same exchange in
     // two currencies is two order books, 1.09 bp and 0.80 bp on the LSE for one of
     // them, so a row that omits it cannot be priced from either.
-    if (!currency) {
-      noteGap("devise absente du catalogue du broker", key, `${ticker || isin} chez ${broker}`);
-      continue;
-    }
-    if (listings.has(key)) {
-      listings.get(key).brokers.add(broker);
-      continue;
-    }
     listings.set(key, {
       key,
       isin,
@@ -214,6 +208,33 @@ for (const file of rowFiles) {
       venueAssumed: assumed,
       brokers: new Set([broker]),
     });
+    }
+    // Quantfury files the primary in `exchange` and names Chi-X only in the
+    // catalogue string. The primary book stays the row above. This is the
+    // other book, the one the client actually crosses.
+    if (currency && /\bCboe Europe\b/.test(String(row.raw || ""))) {
+      const cxe = VENUES.find((v) => v.mic === "CHIX");
+      const cxeKey = `CHIX|${isin}|${currency}`;
+      const batsHint = String(row.raw).trim().split(/\s+/)[0] || "";
+      if (cxe && listings.has(cxeKey)) listings.get(cxeKey).brokers.add(broker);
+      else if (cxe) {
+        listings.set(cxeKey, {
+          key: cxeKey,
+          isin,
+          currency,
+          ticker,
+          name: row.name || "",
+          mic: "CHIX",
+          path: "CHIX",
+          exchange: cxe.name,
+          source: cxe.source,
+          venue: cxe,
+          venueAssumed: false,
+          brokers: new Set([broker]),
+          batsHint,
+        });
+      }
+    }
   }
 }
 
@@ -361,6 +382,7 @@ const CROSSED = {
   alpaca: 1,
   kraken: 1,
   gpw: 1,
+  cxe: 1,
   adx: 1,
   dfm: 1,
   bhb: 1,
@@ -1571,6 +1593,132 @@ function gulfAdapter(key) {
 
 const gpwBook = new Map();
 
+// Cboe Europe CXE, the Chi-X lit book. The symbol file names every live line
+// by ISIN and currency; the book viewer then answers that line's touch.
+// BXE and DXE are different books and are not read here.
+const CXE_SYMBOLS = "https://www.cboe.com/europe/equities/market_statistics/symbols_traded/csv/?mkt=cxe";
+const CXE_VIEWER = "https://ww2.cboe.com/europe/equities/market_statistics/book_viewer_2/";
+const cxeQuotes = new Map();
+let cxeTrouble = null;
+
+function parseCsv(text) {
+  const rows = [];
+  let row = [];
+  let cur = "";
+  let quoted = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (quoted) {
+      if (c === '"') {
+        if (text[i + 1] === '"') {
+          cur += '"';
+          i++;
+        } else quoted = false;
+      } else cur += c;
+    } else if (c === '"') quoted = true;
+    else if (c === ",") {
+      row.push(cur);
+      cur = "";
+    } else if (c === "\n") {
+      row.push(cur);
+      rows.push(row);
+      row = [];
+      cur = "";
+    } else if (c !== "\r") cur += c;
+  }
+  if (cur.length || row.length) {
+    row.push(cur);
+    rows.push(row);
+  }
+  return rows;
+}
+
+async function cxeCookie() {
+  const res = await fetch(CXE_VIEWER, {
+    headers: { ...UA, Accept: "text/html" },
+    redirect: "follow",
+    signal: AbortSignal.timeout(30000),
+  });
+  const parts = typeof res.headers.getSetCookie === "function" ? res.headers.getSetCookie() : [];
+  return parts.map((c) => c.split(";")[0]).filter(Boolean).join("; ");
+}
+
+async function loadCxe(lines) {
+  cxeQuotes.clear();
+  cxeTrouble = null;
+  const text = await (await fetchOk(CXE_SYMBOLS, 60000)).text();
+  const table = parseCsv(text);
+  const headerAt = table.findIndex((r) => r[0] === "company_name");
+  if (headerAt < 0) throw new Error("annuaire CXE illisible");
+  const header = table[headerAt];
+  const col = (name) => header.indexOf(name);
+  const batsAt = col("bats_name");
+  const isinAt = col("isin");
+  const ccyAt = col("currency");
+  const liveAt = col("live");
+  const directory = new Map();
+  for (const r of table.slice(headerAt + 1)) {
+    if (liveAt >= 0 && r[liveAt] !== "t") continue;
+    const isin = String(r[isinAt] || "").toUpperCase();
+    const currency = String(r[ccyAt] || "").toUpperCase();
+    const bats = r[batsAt];
+    if (!isin || !currency || !bats) continue;
+    const key = `${isin}|${currency}`;
+    if (!directory.has(key)) directory.set(key, []);
+    directory.get(key).push(bats);
+  }
+  // The catalogue symbol is "AMSe.CHI" or "AMS". The directory's name is
+  // "AMSe": the stem, plus one lower-case venue letter when the stem omitted it.
+  // A renamed line (ALD → AYVp) matches neither and is left out.
+  const pickBats = (hint, cands) => {
+    const stem = String(hint || "").replace(/\.(CHI|BS|DXE)$/i, "").replace(/\.[A-Z]{2,3}$/i, "");
+    if (cands.includes(hint)) return hint;
+    if (cands.includes(stem)) return stem;
+    const one = cands.filter((c) => c.startsWith(stem) && c.length === stem.length + 1);
+    return one.length === 1 ? one[0] : null;
+  };
+  const wanted = [];
+  for (const l of lines) {
+    const bats = pickBats(l.batsHint, directory.get(`${l.isin}|${l.currency}`) || []);
+    if (bats) wanted.push({ ...l, bats });
+  }
+  const cookie = await cxeCookie();
+  let next = 0;
+  const take = async () => {
+    while (next < wanted.length) {
+      const line = wanted[next++];
+      const url = `https://ww2.cboe.com/json/cxe/book/${encodeURIComponent(line.bats)}`;
+      let body = null;
+      try {
+        for (let attempt = 0; attempt < 2 && !body; attempt++) {
+          const res = await fetch(url, {
+            headers: { ...UA, Accept: "application/json", Referer: CXE_VIEWER, Cookie: cookie },
+            redirect: "follow",
+            signal: AbortSignal.timeout(20000),
+          });
+          if (res.ok) body = await res.json();
+          else if (attempt === 1) cxeTrouble = `HTTP ${res.status}`;
+        }
+      } catch (e) {
+        cxeTrouble = String(e.message || e).slice(0, 160);
+        continue;
+      }
+      const data = body?.data;
+      const bids = (data?.bids || []).map((x) => Number(x[1])).filter((n) => n > 0);
+      const asks = (data?.asks || []).map((x) => Number(x[1])).filter((n) => n > 0);
+      if (!bids.length || !asks.length) continue;
+      cxeQuotes.set(`${line.isin}|${line.currency}`, {
+        bid: Math.max(...bids),
+        ask: Math.min(...asks),
+        currency: line.currency,
+        bats: line.bats,
+      });
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(6, wanted.length) }, take));
+  return { listed: directory.size, wanted: wanted.length };
+}
+
 const adapters = {
   adx: gulfAdapter("adx"),
   dfm: gulfAdapter("dfm"),
@@ -1835,6 +1983,28 @@ const adapters = {
         return { spreadBp: null, note: delayedTrouble.tradegate || "absent du fichier pre-trade Tradegate" };
       }
       return { spreadBp: bpFrom(quote.bid, quote.ask), tradingCurrency: quote.currency };
+    },
+  },
+
+  // Cboe Europe CXE, the Chi-X lit book. One touch per symbol from the
+  // public book viewer. The symbol file says which ISIN that symbol is.
+  cxe: {
+    measure: "touche du carnet CXE",
+    async prefetch(lines) {
+      try {
+        const n = await loadCxe(lines);
+        console.error(`    Cboe Europe (Chi-X) : ${cxeQuotes.size} touches sur ${n.wanted} demandées\n`);
+      } catch (e) {
+        cxeTrouble = String(e.message || e).slice(0, 160);
+        console.error(`    Cboe Europe (Chi-X) : ${cxeTrouble}\n`);
+      }
+    },
+    async fetch(l) {
+      const quote = cxeQuotes.get(`${l.isin}|${l.currency}`);
+      if (!quote) return { spreadBp: null, note: cxeTrouble || "absent du carnet CXE" };
+      const bp = bpFrom(quote.bid, quote.ask);
+      if (bp == null) return { spreadBp: null, note: "carnet à un seul côté" };
+      return { spreadBp: bp, tradingCurrency: quote.currency };
     },
   },
 
@@ -2424,7 +2594,7 @@ async function loadKraken(lines) {
 // that another one would add something. Xetra publishes an average already, so once
 // read it needs no resampling.
 function worthVisiting(l) {
-  if (!l.source) return false;
+  if (!l.source || !adapters[l.source]) return false;
   // A place can be off limits for reasons outside this file — a page that has started
   // answering 503, say — and then the others should still be readable without it.
   if (ONLY.length && !ONLY.includes(l.source)) return false;

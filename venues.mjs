@@ -455,6 +455,25 @@ export const VENUES = [
     exact: ["xbom", "bombay", "bombaystockexchange", "bseindia", "bseltd"],
     loose: [],
   },
+  // Cash session 09:00–15:30 Seoul. The touch is Naver's KRX askingPrice.
+  // Nextrade is a second book at /api/stock/NXT/ and is not this venue.
+  // XKRX is the stock market (KOSPI), where the ETFs and ETNs also trade.
+  {
+    mic: "XKRX",
+    name: "KOSPI",
+    source: "kospi",
+    hours: { open: "09:00", close: "15:30", tz: "Asia/Seoul" },
+    exact: ["xkrx", "kospi"],
+    loose: [],
+  },
+  {
+    mic: "XKOS",
+    name: "KOSDAQ",
+    source: "kosdaq",
+    hours: { open: "09:00", close: "15:30", tz: "Asia/Seoul" },
+    exact: ["xkos", "kosdaq"],
+    loose: [],
+  },
 
   // The two spot books a crypto line can be priced against without a key. Neither has a
   // MIC: these four letters are this file's own, chosen to sit in the same column as the
@@ -626,7 +645,7 @@ export const KNOWN_UNSOURCED = [
   { match: ["sgx", "xses", "singapore", "sgxst"], name: "Singapore Exchange", why: "adaptateur non écrit" },
   { match: ["jse", "xjse", "johannesburg"], name: "Johannesburg Stock Exchange", why: "adaptateur non écrit" },
   { match: ["newconnect"], name: "NewConnect", why: "adaptateur non écrit" },
-  { match: ["myx", "xkls", "malaysia", "bursamy", "malay"], name: "Bursa Malaysia", why: "adaptateur non écrit" },
+  { match: ["myx", "xkls", "malaysia", "bursa", "bursamy", "malay"], name: "Bursa Malaysia", why: "adaptateur non écrit" },
   { match: ["luxse", "xlux", "luxembourg", "lux"], name: "Luxembourg Stock Exchange", why: "adaptateur non écrit" },
   { match: ["nzx", "xnze", "nzsenationalmarket"], name: "NZX", why: "adaptateur non écrit" },
   { match: ["biva"], name: "BIVA", why: "adaptateur non écrit" },
@@ -769,6 +788,8 @@ export function listingKey(row) {
 // to guess.
 const EURONEXT_MICS = ["XPAR", "XAMS", "XBRU", "XLIS"];
 const US_MICS = ["XNAS", "ARCX", "XNYS", "XASE", "BATS"];
+// KOSPI (XKRX) and KOSDAQ (XKOS). A broker that writes KRX has not said which.
+const KOREA_MICS = ["XKRX", "XKOS"];
 
 export function spreadLeaf(spreads, { isin, mic, currency, unsourced, broker, ticker }) {
   const id = String(isin || "").toUpperCase();
@@ -794,9 +815,16 @@ export function spreadLeaf(spreads, { isin, mic, currency, unsourced, broker, ti
     const hit = US_MICS.find((m) => spreads[id]?.[m]?.[ccy]?.perShare != null);
     if (hit) return apply606({ leaf: spreads[id][hit][ccy], mic, assumed: true }, { broker, ticker });
   }
-  const euronext = unsourced?.match?.includes("euronext");
-  if (!euronext || !id || !ccy) return { leaf: null, mic: mic || null };
-  const hits = EURONEXT_MICS.filter((m) => spreads[id]?.[m]?.[ccy]);
+  if (!id || !ccy) return { leaf: null, mic: mic || null };
+  // The broker named the group and not the board. One book on file is that
+  // board; two books would be a guess, and a guess is not written.
+  const group = unsourced?.match?.includes("euronext")
+    ? EURONEXT_MICS
+    : unsourced?.match?.includes("krx")
+      ? KOREA_MICS
+      : null;
+  if (!group) return { leaf: null, mic: mic || null };
+  const hits = group.filter((m) => spreads[id]?.[m]?.[ccy]);
   if (hits.length !== 1) return { leaf: null, mic: mic || null };
   return { leaf: spreads[id][hits[0]][ccy], mic: hits[0], assumed: true };
 }
@@ -813,6 +841,12 @@ export function spreadLeaf(spreads, { isin, mic, currency, unsourced, broker, ti
 // exchange-traded products only, SIX names the product line, Euronext's search returns the
 // family outright -- and pass it back as `family`. Absent, the fund page stands, which is
 // what this file assumed while it held nothing else.
+// KRX book on Naver. The Nextrade book is /api/stock/NXT/ and is not this URL.
+const askingPriceUrl = (ticker) =>
+  ticker
+    ? `https://m.stock.naver.com/api/stock/${encodeURIComponent(String(ticker).toUpperCase())}/askingPrice`
+    : "https://m.stock.naver.com/domestic/stock";
+
 const PAGE = {
   // Boerse Frankfurt rather than live.deutsche-boerse.com, because this is the page the
   // figure is read from: it renders the Xetra book, and its Xetra tab is the default.
@@ -894,6 +928,8 @@ const PAGE = {
     l.ticker
       ? `https://www.bseindia.com/stock-share-price/scrip/${encodeURIComponent(String(l.ticker).toUpperCase())}/`
       : "https://www.bseindia.com/markets/equity.html",
+  kospi: (l) => askingPriceUrl(l.ticker),
+  kosdaq: (l) => askingPriceUrl(l.ticker),
   bmv: (l) =>
     l.ticker
       ? `https://www.bmv.com.mx/es/emisoras/estadisticas/${encodeURIComponent(

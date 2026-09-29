@@ -55,7 +55,10 @@
 // came back `2.00 ... 4.00 EUR`, including Lufthansa directed at FWB. The
 // specialist is therefore on the page and out of the number, same reason FX is.
 // Ireland is on the IBKR book and not on the page, so it answers N/A rather
-// than borrow a neighbour's four euros.
+// than borrow a neighbour's four euros. Korea is not on the page either.
+// The CapTrader preview of 122450 on 2026-09-28 left the commission blank:
+// the account could not cover the margin. The same order on the other two
+// portals is 0.06 % with a 4 000 KRW floor, and that is CapTrader's charge.
 //
 // One live trip, 2026-09-10, account U27604034, euro cash: 1 IWDA market,
 // ticket bound AEB, both legs routed GETTEX2 @ 126,10, 2,00 € each way. The
@@ -219,6 +222,8 @@ const RULE = {
   sg: { rate: 0.001, min: 5, ccy: "SGD" },
   cnh: { rate: 0.002, min: 50, ccy: "CNH" },
   au: { rate: 0.001, min: 10, ccy: "AUD" },
+  // Not on the card. Same 0.06 % / 4 000 KRW as the other two portals.
+  kr: { rate: 0.0006, min: 4000, ccy: "KRW" },
 };
 
 const TO_VENUES = {
@@ -300,6 +305,7 @@ export function feeMarketOf(exchange, mic) {
   if (code === "SGX" || m === "XSES") return "sg";
   if (code === "SEHKNTL" || code === "SHSE" || m === "XSHG") return "cnh";
   if (code === "ASX" || m === "XASX") return "au";
+  if (code === "KRX") return "kr";
   if (code === "MOEX" || m === "MISX") return "ru";
   if (
     /^(TLSE|RSE|NSEL|XTAL|XRIS|XLIT|NVILNIUS|NTALLINN|NRIGA)$/.test(code) ||
@@ -503,7 +509,9 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   }
 
   const basis =
-    `barème CapTrader ${market}, lu le ${SCHEDULE.readOn} (page du ${SCHEDULE.pageUpdated}) : ` +
+    (market === "kr"
+      ? `barème CapTrader ${market}, même palier que les deux autres portails, lu le 2026-09-28 : `
+      : `barème CapTrader ${market}, lu le ${SCHEDULE.readOn} (page du ${SCHEDULE.pageUpdated}) : `) +
     (rule.rate != null
       ? `${(100 * rule.rate).toFixed(4).replace(/0+$/, "").replace(/\.$/, "")} % par sens`
       : `${rule.perShare} ${rule.ccy} par part`) +
@@ -647,7 +655,9 @@ function confidenceOf({
 }) {
   const said = [];
   said.push(
-    `commission CapTrader, palier ${market}, lue le ${SCHEDULE.readOn} sur la page Aktien du ${SCHEDULE.pageUpdated}, ` +
+    (market === "kr"
+      ? `commission CapTrader, palier ${market}, même palier que les deux autres portails, lu le 2026-09-28, `
+      : `commission CapTrader, palier ${market}, lue le ${SCHEDULE.readOn} sur la page Aktien du ${SCHEDULE.pageUpdated}, `) +
       `facturée par sens et convertie en dollars au mid BCE du ${FX_AS_OF}`
   );
   if (buyComm) {

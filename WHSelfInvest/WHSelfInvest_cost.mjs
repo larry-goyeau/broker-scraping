@@ -41,9 +41,13 @@
 //
 // "All exchange fees are included (exceptions are marked)." Frankfurt and
 // Stuttgart specialists are marked, so they stay in the remark — no
-// preview in this deposit has priced them. GETTEX, WSE, SGX, TASE, KRX
-// and the rest of the IBKR book are not on the card: N/A, not a
-// neighbour's floor. Crypto (Zero Hash / Paxos) has no published % .
+// preview in this deposit has priced them. GETTEX, WSE, SGX, TASE and
+// the rest of the IBKR book are not on the card: N/A, not a neighbour's
+// floor. KRX is not on the card either. The portal cash check on 122450,
+// 2026-09-28, named it: 100 shares at 2 550 asked for 170.90 EUR, and
+// 3 000 shares asked for 5 050.90 EUR. That is 4 000 KRW, then 4 590 KRW,
+// which is 0.06 %, not the 0.09 % of the other rows. No order was sent.
+// Crypto (Zero Hash / Paxos) has no published % .
 //
 // The American and Canadian caps bind the per-share amount and the
 // minimum binds the result, in that order. Floor-then-cap would let 1 %
@@ -138,6 +142,8 @@ const RULE = {
   jp: { rate: 0.0009, min: 200, ccy: "JPY" },
   hk: { rate: 0.0009, min: 19, ccy: "HKD" },
   au: { rate: 0.0009, min: 9.9, ccy: "AUD" },
+  // Not on the card. Portal cash check on 122450, 2026-09-28.
+  kr: { rate: 0.0006, min: 4000, ccy: "KRW" },
 };
 
 const TO_VENUES = {
@@ -219,6 +225,7 @@ export function feeMarketOf(exchange, mic, currency) {
   if (code === "MEXI" || m === "XMEX") return "mx";
   if (code === "SEHK" || m === "XHKG") return "hk";
   if (code === "ASX" || m === "XASX") return "au";
+  if (code === "KRX") return "kr";
   return null;
 }
 
@@ -444,7 +451,9 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   }
 
   const basis =
-    `barème WH SelfInvest ${market}, relu le ${SCHEDULE.readOn} : ` +
+    (market === "kr"
+      ? `barème WH SelfInvest ${market}, lu le 2026-09-28 sur le contrôle de trésorerie du portail : `
+      : `barème WH SelfInvest ${market}, relu le ${SCHEDULE.readOn} : `) +
     (rule.rate != null
       ? `${(100 * rule.rate).toFixed(2)} % par sens`
       : market === "otc"
@@ -577,7 +586,9 @@ function confidenceOf({
 }) {
   const said = [];
   said.push(
-    `commission WH SelfInvest, palier ${market}, lue le ${SCHEDULE.readOn} sur la carte all-exchanges, ` +
+    (market === "kr"
+      ? `commission WH SelfInvest, palier ${market}, lue le 2026-09-28 sur le contrôle de trésorerie du portail, `
+      : `commission WH SelfInvest, palier ${market}, lue le ${SCHEDULE.readOn} sur la carte all-exchanges, `) +
       `facturée par sens et convertie en dollars au mid BCE du ${FX_AS_OF}`
   );
   if (buyComm) {

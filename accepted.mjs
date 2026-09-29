@@ -295,6 +295,71 @@ export const ACCEPTED = {
   // https://www.betashares.com.au/direct/faq
   // https://public-files.wealth.betashares.com.au/legal/product-disclosure-statement.pdf
   betashares: { countries: ["AU"] },
+  // Help: a new account needs Australian residence or tax residence. A
+  // resident or tax resident of another country cannot open. Nationality
+  // is not a separate test; the picker is a country, so the country is AU.
+  // https://pearler.com/help/is-pearler-right-for-me/4794103-can-i-invest-with-pearler-if-i-m-not-an-australian-resident
+  // https://pearler.com/help/is-pearler-right-for-me/5155265-am-i-eligible-to-sign-up-for-pearler
+  pearler: { countries: ["AU"] },
+  // The guide is an offer in Australia only. The application requires an
+  // Australian residential address, an Australian mobile number and an
+  // Australian bank account, and it asks for tax residency. Nationality
+  // is not the test. The picker is a country, so the country is AU.
+  // https://fund-docs.vanguard.com/AU-Vanguard_Personal_Investor_Guide_Part_A.pdf
+  // https://www.vanguardinvestor.com.au/initiate.aspx
+  // https://www.vanguard.com.au/personal/support/frequently-asked-questions/my-account
+  vanguard: { countries: ["AU"] },
+  // A resident account is opened with a PAN and Aadhaar. An NRI or OCI
+  // account is another product, with another brokerage. The picker is a
+  // country, so the country is IN.
+  // https://groww.in/open-demat-account
+  // https://groww.in/open-nri-demat-account
+  groww: { countries: ["IN"] },
+  // The February 2026 KYC takes a resident, an NRI, a PIO and a foreign
+  // national. A foreign national may trade subject to RBI and FEMA. The
+  // form's nationality is Indian or Other, and it names no country list.
+  // The picker is a country.
+  // https://www.nuvamawealth.com/ewwebimages/webfiles/disclaimer/KYC-Individual.pdf
+  nuvama: WORLD,
+  // A resident account opens with PAN and Aadhaar. The NRI account is an
+  // Indian citizen abroad, a PIO or an OCI, with a passport and an NRE or
+  // NRO account. US and Canada stay open, with a FATCA form. The page names
+  // no country list; sanctions and some regulatory agreements can block one.
+  // The picker is a country.
+  // https://choiceindia.com/open-free-demat-account
+  // https://choiceindia.com/nri-demat-account
+  choice: WORLD,
+  // A resident account opens with PAN and Aadhaar. m.Stock does not open
+  // an NRI account or a non-individual account. The picker is a country,
+  // so the country is IN.
+  // https://www.mstock.com/articles/nri-demat-account-opening-process
+  // https://www.mstock.com/articles/non-repatriable-demat-account
+  // https://www.mstock.com/open-demat-account
+  "m.stock": { countries: ["IN"] },
+  // A resident, an NRI and a foreign national may open the account. An NRI
+  // uses an NRE or NRO account and a PIS permission. A foreign national
+  // needs RBI or SEBI approval under the portfolio scheme. The page names
+  // no country list. The picker is a country.
+  // https://aliceblueonline.com/support/eligibility-criteria-2
+  aliceblue: WORLD,
+  // A resident account, an NRI account and a foreign-national status are on
+  // the individual KYC. An NRI uses an NRE or NRO account and a PIS
+  // permission. A foreign passport needs a PIO, OCI or resident card. The
+  // form names no country list. The picker is a country.
+  // https://support.arihantcapital.com/support/solutions/articles/33000278528-can-an-nri-open-a-demat-account-
+  // https://download.arihantcapital.com/account/542320261254165865416.pdf
+  arihant: WORLD,
+  // Non-residents may open the Singapore account. US, UK and Canada
+  // restrictions are on certain funds, not on the account. The picker is a
+  // nationality.
+  // https://secure.fundsupermart.com/fsm/account-opening/non-residents
+  // https://secure.fundsupermart.com/fsmone/article/rcms361200/your-biggest-questions-about-investing-with-fsm-global-in-singapore
+  fsmone: WORLD,
+  // A resident of Korea opens with a Korean ID, or with an alien registration
+  // card. Nationality is not the test. The picker is a country, so the
+  // country is KR.
+  // https://krinsider.com/blog/korea-stock-crypto-account-foreigner-2026
+  toss: { countries: ["KR"] },
   // Communiqué 118/BM/ZRR/2022: a Polish citizen gives a PESEL. A non-resident
   // gives the parents' names and a foreign TIN. Citizenship is recorded and
   // no country is refused.

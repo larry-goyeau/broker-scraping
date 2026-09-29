@@ -114,11 +114,15 @@
 // outlier, not the western ceiling (still Vienna 0,90 €). Charging the
 // widest *western* seen is the right direction to be wrong in for the rest.
 //
-// Ten currencies in the catalogue have no printed tier at all — KRW, TWD, INR,
+// Nine currencies in the catalogue have no printed tier at all — TWD, INR,
 // BRL, SAR, MYR, ZAR, AED, CZK, RON, CNY — and the page says that where a
 // product is missing « the price as shown in the platform always applies
-// first ». 6 745 lines therefore answer N/A on the commission rather than borrow
-// a neighbour's percentage.
+// first ». Those lines answer N/A on the commission rather than borrow a
+// neighbour's percentage. KRW is the exception: the card is silent, and the
+// portal's own cash check on 2026-09-28 named the commission. 100 shares of
+// 412350 at 6 030 asked for 607 000, which is 4 000 of commission. 2 000
+// shares asked for 12 067 236, which is 7 236, exactly 0.06 %. The floor is
+// 4 000 KRW and the rate is 0.06 %, each way. No order was sent.
 //
 // 22 045 of the 54 815 lines carry both a tier and a book. The book is the
 // binding constraint, not the tariff: Tokyo, Hong Kong, Toronto, Sydney,
@@ -229,6 +233,8 @@ const RULE = {
   sgd: { rate: 0.0012, min: 4, ccy: "SGD" },
   cnh: { rate: 0.0015, min: 25, ccy: "CNH" },
   mxn: { rate: 0.0015, min: 75, ccy: "MXN" },
+  // Not on the card. Two cash-check refusals on 412350, 2026-09-28.
+  krw: { rate: 0.0006, min: 4000, ccy: "KRW" },
 };
 
 const BY_CCY = {
@@ -469,6 +475,7 @@ export function feeMarketOf(exchange, mic, currency) {
   const code = loose(exchange);
   const m = String(mic || "").toUpperCase();
   const ccy = String(currency || "").toUpperCase();
+  if (code === "KRX") return "krw";
   if (code === "BM" || m === "XMAD" || m === "XMCE") return "madrid";
   if (ccy === "CAD" || ((code === "TSE" || code === "TSX" || code === "VENTURE" || code === "AEQLIT" || m === "XTSE") && !ccy)) {
     return "ca";
@@ -681,7 +688,9 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   }
 
   const basis =
-    `barème Mexem ${market}, lu le ${SCHEDULE.readOn} (page du ${SCHEDULE.pageUpdated}) : ` +
+    (market === "krw"
+      ? `barème Mexem ${market}, lu le 2026-09-28 sur le contrôle de trésorerie du portail : `
+      : `barème Mexem ${market}, lu le ${SCHEDULE.readOn} (page du ${SCHEDULE.pageUpdated}) : `) +
     (rule.rate != null
       ? `${(100 * rule.rate).toFixed(4).replace(/0+$/, "").replace(/\.$/, "")} % par sens`
       : `${rule.perShare} ${rule.ccy} par part`) +
@@ -832,7 +841,9 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
 function confidenceOf({ market, rule, buyComm, marketBp, marketPerShare, stamp, american, venueFees, venueFee, ptmDue, unsourced, listing, n }) {
   const said = [];
   said.push(
-    `commission Mexem, palier ${market}, lue le ${SCHEDULE.readOn} sur la page du ${SCHEDULE.pageUpdated}, ` +
+    (market === "krw"
+      ? `commission Mexem, palier ${market}, lue le 2026-09-28 sur le contrôle de trésorerie du portail, `
+      : `commission Mexem, palier ${market}, lue le ${SCHEDULE.readOn} sur la page du ${SCHEDULE.pageUpdated}, `) +
       `facturée par sens et convertie en dollars au mid BCE du ${FX_AS_OF}`
   );
   if (buyComm) {

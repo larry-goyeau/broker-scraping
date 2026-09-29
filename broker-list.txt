@@ -493,7 +493,7 @@ Pearler	AU	Neobroker	Local + US ETFs	https://pearler.com/	super.inquiry@pearler.
 Superhero	AU	Neobroker	Local + US ETFs	https://www.superhero.com.au/	https://www.superhero.com.au/support/
 Tiger Brokers AU	AU	Neobroker	Global ETFs / ETPs	https://www.itiger.com/au/	service@tigerbrokers.com
 moomoo AU	AU	Neobroker	Global ETFs / ETPs	https://www.moomoo.com/au	
-Vanguard Personal Investor AU	AU	Broker	Local-market ETFs	https://www.vanguard.com.au/personal/onboarding	
+Vanguard AU	AU	Broker	Local-market ETFs	https://www.vanguard.com.au/personal/onboarding	
 Betashares Direct	AU	Neobroker	Local-market ETFs	https://www.betashares.com.au/direct/account-types	
 Webull AU	AU	Neobroker	Local + US ETFs	https://www.webull.com.au	support@webull.com.au
 Interactive Brokers Australia	AU	Broker	Global ETFs / ETPs	https://www.interactivebrokers.com.au/	https://www.interactivebrokers.com/en/general/contact/newContact/contact.php
@@ -571,7 +571,7 @@ Samsung Securities	KR	Broker	Local + US ETFs	https://www.samsungpop.com/ux/kor/c
 NH Investment & Securities	KR	Broker	Local-market ETFs	https://www.nhsec.com/	
 KB Securities	KR	Broker	Local-market ETFs	https://www.kbsec.com/go.able?linkcd=m06010000	
 Korea Investment & Securities	KR	Broker	Local + US ETFs	https://www.truefriend.com/	
-Toss Securities	KR	Neobroker	Local + US ETFs	https://www.tossinvest.com/	
+Toss	KR	Neobroker	Local + US ETFs	https://www.tossinvest.com/	
 Shinhan Securities	KR	Broker	Global ETFs / ETPs	https://www.shinhansec.com	
 Hana Securities	KR	Broker	Global ETFs / ETPs	https://www.hanaw.com	
 Daishin Securities	KR	Broker	Local + US ETFs	https://www.daishin.com/	
@@ -606,7 +606,7 @@ SBI Securities India	IN	Bank	Local-market ETFs	https://www.sbisecurities.in/
 Axis Direct	IN	Bank	Local-market ETFs	https://www.axisdirect.in/open-demat-account	
 FYERS	IN	Broker	Local-market ETFs	https://fyers.in/demat-account	
 Share.Market by PhonePe	IN	Neobroker	Local-market ETFs	https://www.share.market/etf/	
-m.Stock by Mirae Asset	IN	Neobroker	Local-market ETFs	https://www.mstock.com/open-demat-account	help@mstock.com
+m.Stock	IN	Neobroker	Local-market ETFs	https://www.mstock.com/open-demat-account	help@mstock.com
 Mirae Asset Sharekhan	IN	Broker	Local-market ETFs	https://www.sharekhan.com/equity-trading-account	igc@sharekhan.com
 Geojit Financial Services	IN	Broker	Local-market ETFs	https://www.geojit.com/open-demat-account	mailus@geojit.com
 Bajaj Broking	IN	Broker	Local-market ETFs	https://www.bajajbroking.in/knowledge-center/exchange-traded-fund	https://www.bajajbroking.in/contact-us
@@ -619,7 +619,7 @@ Shoonya	IN	Neobroker	Local-market ETFs	https://shoonya.com/	invest@shoonya.com
 Edelweiss Broking	IN	Broker	Local-market ETFs	https://www.edelweiss.in/	
 JM Financial	IN	Broker	Local-market ETFs	https://www.jmfinancialservices.in/	
 Yes Securities	IN	Broker	Local-market ETFs	https://yesinvest.in/	
-Choice Broking	IN	Broker	Local-market ETFs	https://choiceindia.com/	care@choiceindia.com
+Choice	IN	Broker	Local-market ETFs	https://choiceindia.com/	care@choiceindia.com
 Religare Broking	IN	Broker	Local-market ETFs	https://www.religareonline.com/	
 SMC Global	IN	Broker	Local-market ETFs	https://smcindiaonline.com/	dp@smcindiaonline.com
 Ventura Securities	IN	Broker	Local-market ETFs	https://www.ventura1.com/	
@@ -627,7 +627,7 @@ Aditya Birla Money	IN	Broker	Local-market ETFs	https://www.adityabirlamoney.com/
 Prabhudas Lilladher	IN	Broker	Local-market ETFs	https://www.plindia.com/	
 Tradejini	IN	Broker	Local-market ETFs	https://www.tradejini.com/	help@tradejini.com
 Mastertrust	IN	Broker	Local-market ETFs	https://www.mastertrust.co.in/	
-Arihant Capital	IN	Broker	Local-market ETFs	https://www.arihantcapital.com/	https://www.arihantcapital.com/contact-us
+Arihant	IN	Broker	Local-market ETFs	https://www.arihantcapital.com/	https://www.arihantcapital.com/contact-us
 Bigul	IN	Neobroker	Local-market ETFs	https://www.bigul.co/
 Pocketful	IN	Neobroker	Local-market ETFs	https://www.pocketful.in/open-demat-account
 Rupeezy	IN	Neobroker	Local-market ETFs	https://rupeezy.in/

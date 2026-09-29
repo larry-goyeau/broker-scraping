@@ -367,6 +367,10 @@ function yahooSymbol(ticker, mic, isin, exchange) {
   // use .BO and .NS. The series tail (-EQ, -X, …) is not part of that symbol.
   // This is the same listing's last, not a book and not another venue's tape.
   const ex = String(exchange || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+  // EODHD does not carry the newer KRX codes. Yahoo's KOSPI and KOSDAQ lasts
+  // use .KS and .KQ. This is the same listing's last, not a book.
+  if (ex === "KOSPI") return `${stem}.KS`;
+  if (ex === "KOSDAQ") return `${stem}.KQ`;
   const india = String(isin || "").toUpperCase().startsWith("IN");
   const suffix = india && (ex === "BSE" || ex === "XBOM") ? ".BO" : india && (ex === "NSE" || ex === "XNSE") ? ".NS" : "";
   if (!suffix) return null;

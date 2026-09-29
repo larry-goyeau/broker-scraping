@@ -46,6 +46,9 @@ export const US_BROKERS = {
   viewtrade: { crd: ["46987"], name: "ViewTrade Securities, Inc." },
   webull: { crd: ["289063"], name: "Webull Financial LLC" },
   drivewealth: { crd: ["165429"], name: "DriveWealth, LLC" },
+  apex: { crd: ["13071"], name: "Apex Clearing Corporation" },
+  clearstreet: { crd: ["288933"], name: "Clear Street LLC" },
+  ifastsecuritiesus: { crd: ["327903"], name: "iFAST Securities US Corporation" },
 };
 
 // Introducing brokers that do not file their own 606: same mix as the US BD
@@ -69,6 +72,16 @@ export const ALIASES = {
   matsui: "interactivebrokers",
   // Dhan names ViewTrade as the US broker that executes, clears and custodies.
   dhan: "viewtrade",
+  // Pearler FSG of 1 July 2026: Alpaca Securities LLC is the US broker from
+  // 29 July 2025. DriveWealth is marked legacy.
+  pearler: "alpaca",
+  // iFAST board notice of 29 May 2025: iFAST Securities US Corporation routes
+  // the group's US orders and custodies the US securities.
+  fsmone: "ifastsecuritiesus",
+  // Toss routes some US orders through TSA Financial and clears through
+  // Apex and Clear Street. Apex's 2026 Q2 Q is 1.702. Clear Street filed
+  // no market-order mix. TSA Financial has no 606 in that quarter.
+  toss: "apex",
 };
 
 const RIC = new Set(["CDRG", "NITE", "JNST", "UBSS", "HRTF", "SOHO", "ETMM", "GTSM", "IATS", "IBCO"]);

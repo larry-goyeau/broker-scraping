@@ -1,6 +1,6 @@
 {
   "quarter": "2026-Q2",
-  "fetchedAt": "2026-09-25T22:25:41.454Z",
+  "fetchedAt": "2026-09-28T15:56:05.656Z",
   "source": "https://cdn.finra.org/606reportBulk/2026/606_NMS_2026_Q2.zip",
   "brokers": {
     "alpaca": {
@@ -232,6 +232,45 @@
         "165429_606_NMS_2026_Q2_DRWW_V1_20260731.xml"
       ],
       "mix": {}
+    },
+    "apex": {
+      "crd": [
+        "13071"
+      ],
+      "name": "APEX Clearing",
+      "files": [
+        "13071_606_NMS_2026_Q2_APEX_V1_20260731.xml"
+      ],
+      "mix": {
+        "NITE": 0.481,
+        "CDRG": 0.2089,
+        "JNST": 0.0748,
+        "HRTF": 0.01954,
+        "OTHER": 0.2158
+      }
+    },
+    "clearstreet": {
+      "crd": [
+        "288933"
+      ],
+      "name": "Clear Street, LLC",
+      "files": [
+        "288933_606_NMS_2026_Q2_CLST_V1_20260731.xml"
+      ],
+      "mix": {}
+    },
+    "ifastsecuritiesus": {
+      "crd": [
+        "327903"
+      ],
+      "name": "iFAST Securities US Corporation",
+      "files": [
+        "327903_606_NMS_2026_Q2_IFUS_V1_20260721.xml"
+      ],
+      "mix": {
+        "NITE": 0.9263,
+        "OTHER": 0.0737
+      }
     }
   }
 }

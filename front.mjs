@@ -92,6 +92,9 @@ const FOLDER_NAME = {
   xtb: "XTB",
   fortuneo: "Fortuneo",
   lynx: "LYNX+",
+  vanguard: "Vanguard AU",
+  choice: "Choice",
+  "m.stock": "m.Stock",
 };
 
 function metaFor(folder, list) {
@@ -939,10 +942,20 @@ const FREEDOM24_PLANS = [
 // Equity delivery. Optimum is ₹20 per order with no pack. Power Investor is
 // ₹10 per order plus ₹499 a month. Ultra Trader is ₹0 brokerage on delivery
 // plus ₹999 a month. The month is named in the remark and stays out of the trip.
+// Below ₹400 the 2.5% cap makes Optimum and Power Investor the same trip, so
+// Power Investor is not shown.
 const PAISA_PLANS = [
   { id: "optimum", name: "5paisa Optimum" },
   { id: "power", name: "5paisa Power Investor" },
   { id: "ultratrader", name: "5paisa Ultra Trader" },
+];
+
+// Lite Plus is the lower of 2% and ₹20. Elite is 0.30% with a floor of the
+// lower of ₹25 and 2.5%. The DP debit is the same, so only the brokerage
+// splits the row.
+const NUVAMA_PLANS = [
+  { id: "lite", name: "Nuvama Lite Plus" },
+  { id: "elite", name: "Nuvama Elite" },
 ];
 
 const LIGHTYEAR_PLANS = [
@@ -1527,7 +1540,70 @@ function collapseScalable(built) {
   });
 }
 
+const FSMONE_PLANS = [
+  { id: "standard", name: "FSMOne" },
+  { id: "gold", name: "FSMOne Gold / Diamond" },
+];
+
 const SAXO_PLAN_LABEL = { classic: "Classic", platinum: "Platinum", vip: "VIP" };
+
+function fsmoneName(planIds, allIds) {
+  const order = FSMONE_PLANS.map((p) => p.id);
+  const ids = [...new Set(planIds)].sort((a, b) => order.indexOf(a) - order.indexOf(b));
+  if (ids.length === allIds.length) return "FSMOne";
+  if (ids.length === 1 && ids[0] === "standard") return "FSMOne";
+  if (ids.length === 1 && ids[0] === "gold") return "FSMOne Gold / Diamond";
+  return `FSMOne ${ids.map((id) => (id === "gold" ? "Gold / Diamond" : "FSMOne")).join(" / ")}`;
+}
+
+function collapseFsmone(built) {
+  if (built.length <= 1) return built;
+  const allIds = built.map((r) => r.plan);
+  const places = new Map();
+  for (const row of built) {
+    for (const listing of row.listings) {
+      const place = `${listing.exchange}\0${listing.currency}`;
+      const list = places.get(place) || [];
+      list.push({ plan: row.plan, listing, row });
+      places.set(place, list);
+    }
+  }
+
+  const buckets = new Map();
+  for (const items of places.values()) {
+    const clusters = [];
+    for (const item of items) {
+      const hit = clusters.find((c) => c.listing.total === item.listing.total && c.listing.fees === item.listing.fees);
+      if (hit) hit.plans.push(item.plan);
+      else clusters.push({ listing: item.listing, plans: [item.plan], row: item.row });
+    }
+    for (const c of clusters) {
+      const key = [...c.plans].sort().join(",");
+      const bucket = buckets.get(key);
+      if (bucket) bucket.listings.push(c.listing);
+      else buckets.set(key, { plans: c.plans, listings: [c.listing], row: c.row });
+    }
+  }
+
+  const rankOf = (id) => {
+    const i = FSMONE_PLANS.findIndex((p) => p.id === id);
+    return i < 0 ? 99 : i + 1;
+  };
+
+  return [...buckets.values()].map((b) => {
+    const name = fsmoneName(b.plans, allIds);
+    const all = b.plans.length === allIds.length;
+    return {
+      ...b.row,
+      folder: `FSMOne:${[...b.plans].join("-")}`,
+      family: name,
+      name,
+      plan: all ? "" : [...b.plans].join("-"),
+      planRank: all ? 0 : Math.min(...b.plans.map(rankOf)),
+      listings: b.listings,
+    };
+  });
+}
 
 function saxoName(planIds, allIds) {
   const order = SAXO_PLANS.map((p) => p.id);
@@ -2058,6 +2134,17 @@ function detail(key, nat = "", size = {}, dep = "") {
     }
     // A listing that costs the same on every plan is one "Saxo" line. Nasdaq
     // still splits Classic / Platinum / VIP once the 1 $ floor no longer binds.
+    // Gold and Diamond are a flat 50 HKD on an HKEX share once 0.08% exceeds
+    // that. The remark on that row is the assets the tier takes.
+    if (folder === "FSMOne") {
+      const built = [];
+      FSMONE_PLANS.forEach((plan, i) => {
+        const listed = listings({ plan: plan.id });
+        if (listed.length) built.push(asPlan(plan, i, listed));
+      });
+      for (const row of collapseFsmone(built)) rows.push(row);
+      continue;
+    }
     if (folder === "saxo") {
       const built = [];
       SAXO_PLANS.forEach((plan, i) => {
@@ -2213,7 +2300,29 @@ function detail(key, nat = "", size = {}, dep = "") {
       continue;
     }
     if (folder === "5paisa") {
+      const built = [];
       PAISA_PLANS.forEach((plan, i) => {
+        const listed = listings({ plan: plan.id });
+        if (listed.length) built.push(asPlan(plan, i, listed));
+      });
+      const optimum = built.find((row) => row.plan === "optimum");
+      for (const row of built) {
+        if (row.plan !== "power" || !optimum) {
+          rows.push(row);
+          continue;
+        }
+        const listed = row.listings.filter((listing) => {
+          const other = optimum.listings.find(
+            (item) => item.exchange === listing.exchange && item.currency === listing.currency
+          );
+          return !other || other.fees !== listing.fees || other.total !== listing.total;
+        });
+        if (listed.length) rows.push({ ...row, listings: listed });
+      }
+      continue;
+    }
+    if (folder === "nuvama") {
+      NUVAMA_PLANS.forEach((plan, i) => {
         const listed = listings({ plan: plan.id });
         if (listed.length) rows.push(asPlan(plan, i, listed));
       });

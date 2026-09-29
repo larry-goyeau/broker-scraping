@@ -45,6 +45,59 @@ const FOLDER = {
   // https://www.betashares.com.au/direct/faq
   // https://public-files.wealth.betashares.com.au/legal/product-disclosure-statement.pdf
   betashares: ["AUD"],
+  // AU Cash is funded by PayID or an Australian bank transfer and stays in
+  // AUD. US Cash takes an ACH or a wire from a US bank and stays in USD.
+  // Buying a US share out of AUD cash converts; that conversion is not a
+  // deposit.
+  // https://pearler.com/help/transactions/5035921-how-do-i-make-deposits-into-pearler-to-be-invested
+  // https://pearler.com/help/transactions/5155285-what-cash-accounts-do-i-have-on-pearler
+  pearler: ["AUD", "USD"],
+  // The cash account takes Australian dollars from an Australian bank
+  // account and leaves them in dollars. No other currency is accepted.
+  // https://fund-docs.vanguard.com/AU-Vanguard_Personal_Investor_Guide_Part_A.pdf
+  vanguard: ["AUD"],
+  // Rupees added by UPI, net banking or a bank transfer stay in the stock
+  // balance. Dollars sent to Apex Clearing stay in the US-stocks balance.
+  // Changing rupees into dollars is a conversion, not a deposit.
+  // https://groww.in/help/payments-&-withdrawals/deposit/how-do-i-add-transfer-money-to-groww-balance--13
+  // https://groww.in/help/us-stocks/funding-usd-balance/what-is-apex-clearing--is-it-safe-to-transfer-money-to-them--51
+  groww: ["INR", "USD"],
+  // A pay-in from the linked bank, by UPI or a transfer, is credited to the
+  // rupee ledger. An NRE or NRO account is also rupees. No other currency
+  // is left unconverted.
+  // https://www.nuvamawealth.com/cas/pdf/Xtreme-Trader-Guide.pdf
+  // https://www.nuvamawealth.com/ewwebimages/webfiles/disclaimer/KYC-Individual.pdf
+  nuvama: ["INR"],
+  // A pay-in by UPI or a bank transfer is credited in rupees. An NRE or NRO
+  // transfer is also rupees. No other currency is left unconverted.
+  // https://choiceindia.com/blog/how-to-transfer-money-from-a-demat-account-to-a-bank-account
+  // https://choiceindia.com/nri-demat-account
+  choice: ["INR"],
+  // A pay-in by UPI, net banking, IMPS, NEFT or RTGS is credited to the
+  // rupee trading ledger. No other currency is left unconverted.
+  // https://www.mstock.com/pricing
+  // https://www.mstock.com/articles/how-to-transfer-money-from-demat-account-to-bank-account
+  "m.stock": ["INR"],
+  // A pay-in by UPI, net banking, IMPS, NEFT or RTGS is an INR transfer
+  // from an Indian bank account. An NRE or NRO transfer is also rupees.
+  // An international remittance is not accepted.
+  // https://aliceblueonline.com/support/adding-funds-fund-deposit
+  // https://aliceblueonline.com/support/failed-transactions-issues
+  aliceblue: ["INR"],
+  // A pay-in by UPI, the payment gateway, NEFT, RTGS or a cheque comes from
+  // the registered bank account and is credited in rupees. An NRE or NRO
+  // transfer is also rupees. No other currency is left unconverted.
+  // https://www.arihantcapital.com/fund-transfer
+  arihant: ["INR"],
+  // A deposit in one of these twelve is credited to that currency's cash
+  // account and left there. The cash page calls the renminbi account CNH.
+  // https://secure.fundsupermart.com/fsm/advice-services/faq/0/9021/
+  // https://fsm.global/sg/cash
+  FSMOne: ["SGD", "USD", "AUD", "CAD", "EUR", "GBP", "CNH", "HKD", "NZD", "JPY", "CHF", "MYR"],
+  // Won is the cash account. Dollars can be transferred in through the Hana
+  // virtual account and left as dollars.
+  // https://www.yna.co.kr/view/AKR20241230044400008
+  toss: ["KRW", "USD"],
   bunq: ["EUR"],
   bux: ["EUR"],
   century: ["EUR"],

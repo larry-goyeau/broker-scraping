@@ -55,22 +55,22 @@
 //   https://www.davyselect.ie/binaries/content/assets/davyselect/pdfs/fees--charges/davy-select-execution-only-fees-and-charges-schedule.pdf
 //   https://www.davyselect.ie/binaries/content/assets/davyselect/pdfs/fees--charges/davy-select-execution-only-intermediary-clients-fees-and-charges-schedule.pdf
 //
-//   node davy/davy_cost.mjs IWDA --shares=1 --price=126
-//   node davy/davy_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node davy/davy_cost.mjs KRZ IRISHMAIN EUR --plan=io --shares=10 --price=80
-//   node davy/davy_cost.mjs --schedule
+//   node brokers/davy/davy_cost.mjs IWDA --shares=1 --price=126
+//   node brokers/davy/davy_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/davy/davy_cost.mjs KRZ IRISHMAIN EUR --plan=io --shares=10 --price=80
+//   node brokers/davy/davy_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("davy-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source:
@@ -341,7 +341,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
 
   if (!picked) return { ...answer, why: `formule inconnue : ${plan} (pia|io|tradingplus)` };
   if (!catalogue) {
-    return { ...answer, why: "le catalogue Davy n'existe pas encore : lancer `node davy/davy_scraping.mjs`" };
+    return { ...answer, why: "le catalogue Davy n'existe pas encore : lancer `node brokers/davy/davy_scraping.mjs`" };
   }
 
   const { named, matches } = findListing({ etf, place, currency });
@@ -408,7 +408,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     return {
       ...shared,
       basis,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({ picked, market, listing, leaf, marketBp, marketPerShare, unsourced: m.unsourced, taxPct, taxSource }),
     };
   }

@@ -6,7 +6,7 @@
 
 import fs from "node:fs";
 
-const OUT = new URL("parsed_json/bxswiss-touch.json", import.meta.url);
+const OUT = new URL("./bxswiss-touch.json", import.meta.url);
 const SIZE = 500;
 const LIST = (page) =>
   `https://www.bxswiss.com/instruments/az/-/-/-/-/-/-/-/-/${page}/${SIZE}`;

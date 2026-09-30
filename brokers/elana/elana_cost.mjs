@@ -52,24 +52,24 @@
 //   https://globaltrader.elana.net/en/en-tc/trading-conditions-etf/
 //   https://www.elana.net/web/files/documents/202/files/elana-trading-tarifa-en.pdf
 //
-//   node elana/elana_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node elana/elana_cost.mjs VWCE XETR EUR --shares=1 --price=140
-//   node elana/elana_cost.mjs SHEL LSE GBP --shares=500 --price=28
-//   node elana/elana_cost.mjs 00700 HKEX HKD --shares=10 --price=400
-//   node elana/elana_cost.mjs AAPL NASDAQ USD --plan=vip --shares=10 --price=230
-//   node elana/elana_cost.mjs --schedule
+//   node brokers/elana/elana_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/elana/elana_cost.mjs VWCE XETR EUR --shares=1 --price=140
+//   node brokers/elana/elana_cost.mjs SHEL LSE GBP --shares=500 --price=28
+//   node brokers/elana/elana_cost.mjs 00700 HKEX HKD --shares=10 --price=400
+//   node brokers/elana/elana_cost.mjs AAPL NASDAQ USD --plan=vip --shares=10 --price=230
+//   node brokers/elana/elana_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("elana-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://globaltrader.elana.net/en/en-tc/trading-conditions-stocks/",
@@ -376,7 +376,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Elana n'existe pas encore : lancer `node elana/elana_scraping.mjs`",
+      why: "le catalogue Elana n'existe pas encore : lancer `node brokers/elana/elana_scraping.mjs`",
     };
   }
 
@@ -455,7 +455,7 @@ export function roundTrip({
     return {
       ...shared,
       basis,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({
         picked,
         market,

@@ -12,8 +12,8 @@
 // Nothing is sent either way — this clicks « Valider » once to reach the recap
 // and stops. « Confirmer » is never clicked.
 //
-//   node boursobank/bourso-ticket.mjs --sym=MEDP --qty=3 --limit=75
-//   node boursobank/bourso-ticket.mjs --sym=1rTCC4 --qty=40 --limit=5
+//   node brokers/boursobank/bourso-ticket.mjs --sym=MEDP --qty=3 --limit=75
+//   node brokers/boursobank/bourso-ticket.mjs --sym=1rTCC4 --qty=40 --limit=5
 
 import puppeteer from "puppeteer-core";
 
@@ -32,8 +32,8 @@ let LIMIT = flag("limit");
 const TARGET = flag("target") ? Number(flag("target")) : null;
 const ATP = process.argv.includes("--atp");
 if (!SYM || (!TARGET && !QTY) || (!ATP && !TARGET && !LIMIT)) {
-  console.error("usage : node boursobank/bourso-ticket.mjs --sym=MEDP --qty=3 --limit=75\n" +
-    "        node boursobank/bourso-ticket.mjs --sym=1rTCC4 --target=210");
+  console.error("usage : node brokers/boursobank/bourso-ticket.mjs --sym=MEDP --qty=3 --limit=75\n" +
+    "        node brokers/boursobank/bourso-ticket.mjs --sym=1rTCC4 --target=210");
   process.exit(2);
 }
 

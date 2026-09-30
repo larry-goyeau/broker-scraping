@@ -46,23 +46,23 @@
 //   https://help.sarwa.co/hc/en-us/articles/4407308904337-What-FX-rates-are-charged
 //   https://www.sarwa.co/blog/how-to-buy-bitcoin-in-uae/
 //
-//   node sarwa/sarwa_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node sarwa/sarwa_cost.mjs AAPL NASDAQ USD --shares=1 --price=230
-//   node sarwa/sarwa_cost.mjs VOO
-//   node sarwa/sarwa_cost.mjs BTC --amount=1000
-//   node sarwa/sarwa_cost.mjs --schedule
+//   node brokers/sarwa/sarwa_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/sarwa/sarwa_cost.mjs AAPL NASDAQ USD --shares=1 --price=230
+//   node brokers/sarwa/sarwa_cost.mjs VOO
+//   node brokers/sarwa/sarwa_cost.mjs BTC --amount=1000
+//   node brokers/sarwa/sarwa_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("sarwa-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   pricing: "https://www.sarwa.co/en/pricing",
@@ -256,7 +256,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Sarwa n'existe pas encore : lancer `node sarwa/sarwa_scraping.mjs`",
+      why: "le catalogue Sarwa n'existe pas encore : lancer `node brokers/sarwa/sarwa_scraping.mjs`",
     };
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Sarwa` };
@@ -328,7 +328,7 @@ export function roundTrip({
   if (!(n > 0) || !(p > 0)) {
     return {
       ...shared,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({
         listing,
         leaf,
@@ -590,12 +590,12 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node sarwa/sarwa_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--amount=usd]\n" +
+      "usage : node brokers/sarwa/sarwa_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--amount=usd]\n" +
         "        [--json] [--schedule]\n" +
-        "  ex.   node sarwa/sarwa_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
-        "        node sarwa/sarwa_cost.mjs AAPL NASDAQ USD --shares=1 --price=230\n" +
-        "        node sarwa/sarwa_cost.mjs VOO\n" +
-        "        node sarwa/sarwa_cost.mjs BTC --amount=1000"
+        "  ex.   node brokers/sarwa/sarwa_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
+        "        node brokers/sarwa/sarwa_cost.mjs AAPL NASDAQ USD --shares=1 --price=230\n" +
+        "        node brokers/sarwa/sarwa_cost.mjs VOO\n" +
+        "        node brokers/sarwa/sarwa_cost.mjs BTC --amount=1000"
     );
     process.exit(1);
   }

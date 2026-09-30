@@ -23,22 +23,22 @@
 //   https://freetrade.io/compare-plans
 //   https://help.freetrade.io/en/articles/1771978-what-types-of-account-do-you-offer
 //
-//   node freetrade/freetrade_cost.mjs HSBA --shares=10 --price=10
-//   node freetrade/freetrade_cost.mjs AAPL --shares=1 --price=230
-//   node freetrade/freetrade_cost.mjs AAPL --plan=plus --shares=1 --price=230
-//   node freetrade/freetrade_cost.mjs --schedule
+//   node brokers/freetrade/freetrade_cost.mjs HSBA --shares=10 --price=10
+//   node brokers/freetrade/freetrade_cost.mjs AAPL --shares=1 --price=230
+//   node brokers/freetrade/freetrade_cost.mjs AAPL --plan=plus --shares=1 --price=230
+//   node brokers/freetrade/freetrade_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("freetrade-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   url: "https://freetrade.io/compare-plans",
@@ -137,7 +137,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
 
   if (!picked) return { ...answer, why: `formule inconnue : ${plan} (basic|standard|plus)` };
   if (!catalogue) {
-    return { ...answer, why: "le catalogue Freetrade n'existe pas encore : lancer `node freetrade/freetrade_scraping.mjs`" };
+    return { ...answer, why: "le catalogue Freetrade n'existe pas encore : lancer `node brokers/freetrade/freetrade_scraping.mjs`" };
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Freetrade` };
   if (!matches.length) {
@@ -194,7 +194,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   if (notional == null) {
     return {
       ...shared,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
     };
   }
 
@@ -263,7 +263,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node freetrade/freetrade_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--plan=basic|standard|plus]"
+      "usage : node brokers/freetrade/freetrade_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--plan=basic|standard|plus]"
     );
     process.exit(2);
   }

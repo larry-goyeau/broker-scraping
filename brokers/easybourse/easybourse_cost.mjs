@@ -49,23 +49,23 @@
 //
 //   https://documents.easybourse.com/formulaires_clients/brochure-tarifaire-bourse_01062026.pdf
 //
-//   node easybourse/easybourse_cost.mjs TTE EURONEXT EUR --shares=1 --price=77.8
-//   node easybourse/easybourse_cost.mjs MC EURONEXT EUR --shares=1 --price=700
-//   node easybourse/easybourse_cost.mjs MC EURONEXT EUR --shares=1 --price=700 --plan=expert
-//   node easybourse/easybourse_cost.mjs AAPL NASDAQ USD --shares=1 --price=230
-//   node easybourse/easybourse_cost.mjs --schedule
+//   node brokers/easybourse/easybourse_cost.mjs TTE EURONEXT EUR --shares=1 --price=77.8
+//   node brokers/easybourse/easybourse_cost.mjs MC EURONEXT EUR --shares=1 --price=700
+//   node brokers/easybourse/easybourse_cost.mjs MC EURONEXT EUR --shares=1 --price=700 --plan=expert
+//   node brokers/easybourse/easybourse_cost.mjs AAPL NASDAQ USD --shares=1 --price=230
+//   node brokers/easybourse/easybourse_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("easybourse-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://documents.easybourse.com/formulaires_clients/brochure-tarifaire-bourse_01062026.pdf",
@@ -375,7 +375,7 @@ export function roundTrip({
     return { ...answer, why: `formule inconnue : ${plan} (decouverte|premium|start|expert|intense)` };
   }
   if (!catalogue) {
-    return { ...answer, why: "le catalogue EasyBourse n'existe pas encore : lancer `node easybourse/easybourse_scraping.mjs`" };
+    return { ...answer, why: "le catalogue EasyBourse n'existe pas encore : lancer `node brokers/easybourse/easybourse_scraping.mjs`" };
   }
 
   const { named, matches } = findListing({ etf, place, currency });
@@ -444,7 +444,7 @@ export function roundTrip({
     return {
       ...shared,
       basis,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({
         picked,
         market,

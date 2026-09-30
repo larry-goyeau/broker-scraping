@@ -50,22 +50,22 @@
 //   https://boubyancapital.com/media/filer_public/b0/63/b063e80b-c56d-49a8-9de9-211048de0df8/individual_agreement-24aug2026.pdf
 //   https://boubyancapital.com/media/filer_public/5e/e4/5ee40e02-7b24-4e81-b4fb-21658880eb12/appendixb-24aug2026.pdf
 //
-//   node boubyan/boubyan_cost.mjs AAPL NYSE USD --shares=10 --price=230
-//   node boubyan/boubyan_cost.mjs ISDW LSE --shares=10 --price=5
-//   node boubyan/boubyan_cost.mjs --schedule
+//   node brokers/boubyan/boubyan_cost.mjs AAPL NYSE USD --shares=10 --price=230
+//   node brokers/boubyan/boubyan_cost.mjs ISDW LSE --shares=10 --price=5
+//   node brokers/boubyan/boubyan_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { usBookPerShare } from "../rule606.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { usBookPerShare } from "../../spreads/rule606.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("boubyan-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   page: "https://boubyancapital.com/brokerage/",
@@ -244,7 +244,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   };
 
   if (!catalogue) {
-    return { ...answer, why: "the Boubyan catalogue is not here yet: run `node boubyan/boubyan_scraping.mjs`" };
+    return { ...answer, why: "the Boubyan catalogue is not here yet: run `node brokers/boubyan/boubyan_scraping.mjs`" };
   }
 
   const { named, matches } = findListing({ etf, place, currency });
@@ -320,7 +320,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   if (notional == null) {
     return {
       ...shared,
-      why: !(n > 0) ? "no share count" : "no price for this line: run node prices.mjs",
+      why: !(n > 0) ? "no share count" : "no price for this line: run node assets/prices.mjs",
     };
   }
 
@@ -384,8 +384,8 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage: node boubyan/boubyan_cost.mjs <ticker> [venue] [currency] [--shares=n] [--price=p]\n" +
-        "        node boubyan/boubyan_cost.mjs --schedule"
+      "usage: node brokers/boubyan/boubyan_cost.mjs <ticker> [venue] [currency] [--shares=n] [--price=p]\n" +
+        "        node brokers/boubyan/boubyan_cost.mjs --schedule"
     );
     process.exit(2);
   }

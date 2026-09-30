@@ -13,12 +13,12 @@
 // that list. Those rows come from Bankier's GPW share board, and only
 // where the quote is in zlotys.
 //
-//   node bossa/bossa_scraping.mjs
-//   node bossa/bossa_scraping.mjs --pdf=./Lista.pdf
+//   node brokers/bossa/bossa_scraping.mjs
+//   node brokers/bossa/bossa_scraping.mjs --pdf=./Lista.pdf
 //
 // Text is read with PyMuPDF (`python3 -c "import fitz"`).
 
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 

@@ -7,7 +7,7 @@
 //
 // Abroad, each country page is the selection, with a market column and no
 // ISIN. Ordinary shares, ETFs and depositary receipts stay. A REIT section
-// stays out. The code is then joined to ../stocks.csv and ../etfs.csv when
+// stays out. The code is then joined to ../../assets/stocks.csv and ../../assets/etfs.csv when
 // that place has exactly one ISIN.
 //
 //   https://www.sbisec.co.jp/ETGate/?OutSide=on&burl=search_home&cat1=home&cat2=lineup&dir=lineup%2F&file=home_lineup.html
@@ -15,10 +15,10 @@
 //   https://site0.sbisec.co.jp/marble/domestic/etfetn/etfetnsearch.do
 //   https://www.jpx.co.jp/markets/statistics-equities/misc/01.html
 //
-//   node sbi/sbi_scraping.mjs
-//   node sbi/sbi_scraping.mjs --tokyo=./data_j.xlsx
+//   node brokers/sbi/sbi_scraping.mjs
+//   node brokers/sbi/sbi_scraping.mjs --tokyo=./data_j.xlsx
 
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 
@@ -31,8 +31,8 @@ const LIST = "https://search.sbisec.co.jp/v2/popwin/info/stock/";
 
 const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
 
-const STOCKS = new URL("../stocks.csv", import.meta.url);
-const ETFS = new URL("../etfs.csv", import.meta.url);
+const STOCKS = new URL("../../assets/stocks.csv", import.meta.url);
+const ETFS = new URL("../../assets/etfs.csv", import.meta.url);
 const JP_FILE = ["TSE", "NAG", "FSE", "SAPSE", "TYO"];
 const FILE_EXCHANGE = {
   XNAS: ["NASDAQ"],

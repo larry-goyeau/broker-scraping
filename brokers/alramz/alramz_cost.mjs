@@ -91,7 +91,7 @@
 // The FAQ also sets a minimum order value of 200 AED: below it there is no
 // trade to price.
 //
-// Market spread comes from `parsed_json/spread.json` and is already a round
+// Market spread comes from `spreads/spread.json` and is already a round
 // trip: the Rule 605 effective spread per share in America, basis points
 // elsewhere. It is added once, not per side.
 //
@@ -114,21 +114,21 @@
 //   https://www.alramz.ae/sites/default/files/2026-05/AL_RAMZ_SERVICE_FEES_V4%20(2).pdf
 //   https://alramz.ae/index.php/faqs
 //
-//   node alramz/alramz_cost.mjs VOO
-//   node alramz/alramz_cost.mjs GLD NYSE USD --shares=1 --price=400
-//   node alramz/alramz_cost.mjs --schedule
+//   node brokers/alramz/alramz_cost.mjs VOO
+//   node brokers/alramz/alramz_cost.mjs GLD NYSE USD --shares=1 --price=400
+//   node brokers/alramz/alramz_cost.mjs --schedule
 //
 //    90// `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("alramz-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://www.alramz.ae/our-platform",
@@ -349,7 +349,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   if (!catalogue) {
     return {
       ...base,
-      why: "le catalogue Al Ramz n'existe pas encore : lancer `node alramz/alramz_scraping.mjs` avec webtrade.alramz.ae ouvert",
+      why: "le catalogue Al Ramz n'existe pas encore : lancer `node brokers/alramz/alramz_scraping.mjs` avec webtrade.alramz.ae ouvert",
     };
   }
   const { named, matches } = findListing({ etf, place, currency });
@@ -424,7 +424,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     return {
       ...answer,
       basis,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
     };
   }
 

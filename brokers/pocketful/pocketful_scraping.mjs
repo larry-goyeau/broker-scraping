@@ -6,11 +6,11 @@
 //   the Upstox cash book. The ISIN is on the row. NFO, BFO, MCX,
 //   bonds and the mutual-fund rows are not part of this catalogue.
 //
-//   node pocketful/pocketful_scraping.mjs
+//   node brokers/pocketful/pocketful_scraping.mjs
 
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
-import { parseCsv, isinOf, seriesOf, keepSold, cashBook, lookup, companyName } from "../indianCash.mjs";
+import { parseCsv, isinOf, seriesOf, keepSold, cashBook, lookup, companyName } from "../../indianCash.mjs";
 
 const FILE = "https://media.pocketful.in/contracts_dump/latest/contracts_dump.csv";
 

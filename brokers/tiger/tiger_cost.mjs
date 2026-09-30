@@ -46,22 +46,22 @@
 //   https://www.itiger.com/hk/commissions/fees/stocks_etf
 //   https://www.itiger.com/nz/commissions/brokerage/stocks_etf
 //
-//   node tiger/tiger_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node tiger/tiger_cost.mjs AAPL NASDAQ USD --entity=au --shares=10 --price=230
-//   node tiger/tiger_cost.mjs 700 HKEX HKD --shares=10 --price=400
-//   node tiger/tiger_cost.mjs --schedule
+//   node brokers/tiger/tiger_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/tiger/tiger_cost.mjs AAPL NASDAQ USD --entity=au --shares=10 --price=230
+//   node brokers/tiger/tiger_cost.mjs 700 HKEX HKD --shares=10 --price=400
+//   node brokers/tiger/tiger_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("tiger-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   sg: "https://www.itiger.com/sg/commissions/fees/stocks_etf",
@@ -373,7 +373,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Tiger n'existe pas encore : lancer `node tiger/tiger_scraping.mjs`",
+      why: "le catalogue Tiger n'existe pas encore : lancer `node brokers/tiger/tiger_scraping.mjs`",
     };
   }
 
@@ -452,7 +452,7 @@ export function roundTrip({
   if (notional == null) {
     return {
       ...shared,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({ entity, market, listing, leaf, marketBp, marketPerShare, unsourced: m.unsourced, taxPct }),
     };
   }
@@ -684,10 +684,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node tiger/tiger_cost.mjs <ticker|ISIN> [place] [devise] [--entity=sg|au|hk|nz] [--shares=n] [--price=p]\n" +
-        "        node tiger/tiger_cost.mjs --schedule\n" +
-        "  ex.   node tiger/tiger_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
-        "        node tiger/tiger_cost.mjs AAPL NASDAQ USD --entity=au --shares=10 --price=230"
+      "usage : node brokers/tiger/tiger_cost.mjs <ticker|ISIN> [place] [devise] [--entity=sg|au|hk|nz] [--shares=n] [--price=p]\n" +
+        "        node brokers/tiger/tiger_cost.mjs --schedule\n" +
+        "  ex.   node brokers/tiger/tiger_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
+        "        node brokers/tiger/tiger_cost.mjs AAPL NASDAQ USD --entity=au --shares=10 --price=230"
     );
     process.exit(2);
   }

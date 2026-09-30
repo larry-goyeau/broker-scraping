@@ -44,23 +44,23 @@
 //   https://www.swissquote.com/en-lu/private/trade/pricing/cryptocurrencies
 //   https://www.swissquote.com/en-lu/private/trade/pricing/account-fees
 //
-//   node swissquote/swissquote_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node swissquote/swissquote_cost.mjs AAPL NASDAQ USD --shares=10 --price=230 --entity=lu
-//   node swissquote/swissquote_cost.mjs NESN SIX CHF --shares=10 --price=100
-//   node swissquote/swissquote_cost.mjs BTC CRYPTO USD --amount=1000
-//   node swissquote/swissquote_cost.mjs --schedule
+//   node brokers/swissquote/swissquote_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/swissquote/swissquote_cost.mjs AAPL NASDAQ USD --shares=10 --price=230 --entity=lu
+//   node brokers/swissquote/swissquote_cost.mjs NESN SIX CHF --shares=10 --price=100
+//   node brokers/swissquote/swissquote_cost.mjs BTC CRYPTO USD --amount=1000
+//   node brokers/swissquote/swissquote_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("swissquote-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   ch: {
@@ -428,7 +428,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Swissquote n'existe pas encore : lancer `node swissquote/swissquote_scraping.mjs`",
+      why: "le catalogue Swissquote n'existe pas encore : lancer `node brokers/swissquote/swissquote_scraping.mjs`",
     };
   }
 
@@ -516,7 +516,7 @@ export function roundTrip({
         ? "aucun montant pour cette ligne crypto"
         : !(n > 0)
           ? "aucun nombre de parts"
-          : "aucun prix pour cette ligne : lancer node prices.mjs",
+          : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({ bank, market, listing, leaf, marketBp, marketPerShare, unsourced: m.unsourced, taxPct, swissEach }),
     };
   }
@@ -705,11 +705,11 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node swissquote/swissquote_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--entity=ch|lu]\n" +
-        "        node swissquote/swissquote_cost.mjs --schedule\n" +
-        "  ex.   node swissquote/swissquote_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
-        "        node swissquote/swissquote_cost.mjs AAPL NASDAQ USD --shares=10 --price=230 --entity=lu\n" +
-        "        node swissquote/swissquote_cost.mjs NESN SIX CHF --shares=10 --price=100"
+      "usage : node brokers/swissquote/swissquote_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--entity=ch|lu]\n" +
+        "        node brokers/swissquote/swissquote_cost.mjs --schedule\n" +
+        "  ex.   node brokers/swissquote/swissquote_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
+        "        node brokers/swissquote/swissquote_cost.mjs AAPL NASDAQ USD --shares=10 --price=230 --entity=lu\n" +
+        "        node brokers/swissquote/swissquote_cost.mjs NESN SIX CHF --shares=10 --price=100"
     );
     process.exit(2);
   }

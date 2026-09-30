@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer-core";
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -254,8 +254,8 @@ function looksGeneric(name) {
   return /^(common units|ishares trust|spdr series trust|n\/a)\b/.test(text);
 }
 
-const etfsCsvPath = pathArg("csv", "../etfs.csv");
-const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
+const etfsCsvPath = pathArg("csv", "../../assets/etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../../assets/stocks.csv");
 const etfsOnly = hasFlag("etfs-only");
 const stocksOnly = hasFlag("stocks-only");
 const keepEverything = hasFlag("all");

@@ -39,21 +39,21 @@
 //   https://content.sogotrade.com/pdf/en-us/commissionsfeesen.pdf
 //   https://www.sogotrade.com/en-us/home/commissionfeeshare.aspx/commissions-and-fees.aspx
 //
-//   node sogotrade/sogotrade_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node sogotrade/sogotrade_cost.mjs F NYSE USD --shares=10 --price=13.5
-//   node sogotrade/sogotrade_cost.mjs --schedule
+//   node brokers/sogotrade/sogotrade_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/sogotrade/sogotrade_cost.mjs F NYSE USD --shares=10 --price=13.5
+//   node brokers/sogotrade/sogotrade_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("sogotrade-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://content.sogotrade.com/pdf/en-us/commissionsfeesen.pdf",
@@ -251,7 +251,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue SogoTrade n'existe pas encore : lancer `node sogotrade/sogotrade_scraping.mjs`",
+      why: "le catalogue SogoTrade n'existe pas encore : lancer `node brokers/sogotrade/sogotrade_scraping.mjs`",
     };
   }
 
@@ -371,7 +371,7 @@ export function roundTrip({
         ? "aucun montant pour cette ligne crypto"
         : !(n > 0)
           ? "aucun nombre de parts"
-          : "aucun prix pour cette ligne : lancer node prices.mjs",
+          : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({
         market,
         listing,
@@ -556,10 +556,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node sogotrade/sogotrade_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]\n" +
-        "        node sogotrade/sogotrade_cost.mjs --schedule\n" +
-        "  ex.   node sogotrade/sogotrade_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
-        "        node sogotrade/sogotrade_cost.mjs F NYSE USD --shares=10 --price=13.5"
+      "usage : node brokers/sogotrade/sogotrade_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]\n" +
+        "        node brokers/sogotrade/sogotrade_cost.mjs --schedule\n" +
+        "  ex.   node brokers/sogotrade/sogotrade_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
+        "        node brokers/sogotrade/sogotrade_cost.mjs F NYSE USD --shares=10 --price=13.5"
     );
     process.exit(2);
   }

@@ -5,7 +5,7 @@
 // shares, ETFs and ADRs. AMEX in that file is NYSE American, so the row
 // stores XASE. Cboe stores BATS. The NISA column is eligibility, not a
 // second product. Neither file prints an ISIN. The code is joined to
-// ../stocks.csv and ../etfs.csv. One match on that place is kept. Several
+// ../../assets/stocks.csv and ../../assets/etfs.csv. One match on that place is kept. Several
 // matches are left blank. Arca names are filed under AMEX in that table.
 // A Japanese code is the same security on Tokyo, Nagoya, Fukuoka and
 // Sapporo, so those places share the one ISIN.
@@ -29,10 +29,10 @@
 //   https://www.matsui.co.jp/market/stock/regulations/kisei.html
 //   https://www.jpx.co.jp/markets/statistics-equities/misc/01.html
 //
-//   node matsui/matsui_scraping.mjs
-//   node matsui/matsui_scraping.mjs --us=./symbollist.csv --tokyo=./data_j.xlsx
+//   node brokers/matsui/matsui_scraping.mjs
+//   node brokers/matsui/matsui_scraping.mjs --us=./symbollist.csv --tokyo=./data_j.xlsx
 
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 
@@ -76,8 +76,8 @@ const TOKYO_DROP = new Set([
 ]);
 
 const NAGOYA_SECTION = { 1: "Premier", 2: "Main", 3: "Next" };
-const STOCKS = new URL("../stocks.csv", import.meta.url);
-const ETFS = new URL("../etfs.csv", import.meta.url);
+const STOCKS = new URL("../../assets/stocks.csv", import.meta.url);
+const ETFS = new URL("../../assets/etfs.csv", import.meta.url);
 const JP_FILE = ["TSE", "NAG", "FSE", "SAPSE", "TYO"];
 const US_FILE = { XNAS: "NASDAQ", XNYS: "NYSE", XASE: "AMEX", ARCX: "AMEX", BATS: "CBOE" };
 const JAPAN = new Set(["Tokyo", "Nagoya", "Fukuoka", "Sapporo"]);

@@ -46,24 +46,24 @@
 //   https://www.degiro.nl/data/pdf/Tarievenoverzicht.pdf
 //   https://www.degiro.nl/tarieven/etf-kernselectie
 //
-//   node degiro/degiro_cost.mjs AAPL NDQ USD --shares=1 --price=230
-//   node degiro/degiro_cost.mjs EUNL TDG EUR --shares=1 --price=108
-//   node degiro/degiro_cost.mjs EUNL XET EUR --shares=1 --price=108
-//   node degiro/degiro_cost.mjs IWDA EAM EUR --shares=1 --price=108
-//   node degiro/degiro_cost.mjs BTC --amount=1000
-//   node degiro/degiro_cost.mjs --schedule
+//   node brokers/degiro/degiro_cost.mjs AAPL NDQ USD --shares=1 --price=230
+//   node brokers/degiro/degiro_cost.mjs EUNL TDG EUR --shares=1 --price=108
+//   node brokers/degiro/degiro_cost.mjs EUNL XET EUR --shares=1 --price=108
+//   node brokers/degiro/degiro_cost.mjs IWDA EAM EUR --shares=1 --price=108
+//   node brokers/degiro/degiro_cost.mjs BTC --amount=1000
+//   node brokers/degiro/degiro_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("degiro-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://www.degiro.nl/data/pdf/Tarievenoverzicht.pdf",
@@ -318,7 +318,7 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
   };
 
   if (!catalogue) {
-    return { ...answer, why: "le catalogue DEGIRO n'existe pas encore : lancer `node degiro/degiro_scraping.mjs`" };
+    return { ...answer, why: "le catalogue DEGIRO n'existe pas encore : lancer `node brokers/degiro/degiro_scraping.mjs`" };
   }
 
   let { named, matches } = findListing({ etf, place, currency });
@@ -404,7 +404,7 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
         ? "aucun montant pour cette ligne"
         : !(n > 0)
           ? "aucun nombre de parts"
-          : "aucun prix pour cette ligne : lancer node prices.mjs",
+          : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({
         ticket,
         listing,

@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer-core";
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -172,10 +172,10 @@ function loadCsv(csvPath, kind, index = { byIsin: new Map(), byTicker: new Map()
   return index;
 }
 
-const etfsCsvPath = pathArg("csv", "../etfs.csv");
-const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
-const bondsCsvPath = pathArg("bonds-csv", "../bonds.csv");
-const cryptosCsvPath = pathArg("cryptos-csv", "../cryptos.csv");
+const etfsCsvPath = pathArg("csv", "../../assets/etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../../assets/stocks.csv");
+const bondsCsvPath = pathArg("bonds-csv", "../../assets/bonds.csv");
+const cryptosCsvPath = pathArg("cryptos-csv", "../../assets/cryptos.csv");
 const etfsOnly = hasFlag("etfs-only") || hasFlag("funds-only");
 const stocksOnly = hasFlag("stocks-only");
 const bondsOnly = hasFlag("bonds-only");

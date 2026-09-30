@@ -9,11 +9,11 @@
 // this catalogue. There is no public flag for a mutual fund that can be
 // bought, so only the exchange-listed share and ETF stay.
 //
-//   node fyers/fyers_scraping.mjs
+//   node brokers/fyers/fyers_scraping.mjs
 
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
-import { parseGrid, isinOf, seriesOf, keepSold } from "../indianCash.mjs";
+import { parseGrid, isinOf, seriesOf, keepSold } from "../../indianCash.mjs";
 
 const FILES = [
   ["NSE", "https://public.fyers.in/sym_details/NSE_CM.csv"],

@@ -9,13 +9,14 @@
 
 import fs from "node:fs";
 import { createRequire } from "node:module";
-import { catalogueFiles } from "./catalogues.mjs";
+import { catalogueFiles } from "../catalogues.mjs";
+import { fileURLToPath } from "node:url";
 
 const require = createRequire("/Users/larry/Downloads/broker-scraping/x.js");
 const puppeteer = require("puppeteer-core");
 
-const STORE = new URL("parsed_json/tadawul-touch.json", import.meta.url);
-const SPREAD = "parsed_json/spread.json";
+const STORE = new URL("./tadawul-touch.json", import.meta.url);
+const SPREAD = fileURLToPath(new URL("./spread.json", import.meta.url));
 const API = "/portal.proxy/v1/portal";
 const FIELDS = "84,86,85,88,6509";
 const VENUES = new Set(["TADAWUL", "TDWL", "SAUDI", "XSAU", "SAUDIEXCHANGE"]);

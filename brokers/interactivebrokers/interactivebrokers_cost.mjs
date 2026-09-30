@@ -46,23 +46,23 @@
 //   https://www.interactivebrokers.ie/en/pricing/commissions-crypto-assets.php
 //   https://www.interactivebrokers.ie/en/trading/products-etfs.php
 //
-//   node interactivebrokers/interactivebrokers_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node interactivebrokers/interactivebrokers_cost.mjs IWDA AEB EUR --shares=10 --price=100
-//   node interactivebrokers/interactivebrokers_cost.mjs VWCE IBIS EUR --shares=1 --price=140
-//   node interactivebrokers/interactivebrokers_cost.mjs BTC ZEROHASH USD --amount=1000
-//   node interactivebrokers/interactivebrokers_cost.mjs --schedule
+//   node brokers/interactivebrokers/interactivebrokers_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/interactivebrokers/interactivebrokers_cost.mjs IWDA AEB EUR --shares=10 --price=100
+//   node brokers/interactivebrokers/interactivebrokers_cost.mjs VWCE IBIS EUR --shares=1 --price=140
+//   node brokers/interactivebrokers/interactivebrokers_cost.mjs BTC ZEROHASH USD --amount=1000
+//   node brokers/interactivebrokers/interactivebrokers_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("interactivebrokers-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   stocks: "https://www.interactivebrokers.ie/en/pricing/commissions-stocks.php",
@@ -416,7 +416,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Interactive Brokers n'existe pas encore : lancer `node interactivebrokers/interactivebrokers_scraping.mjs`",
+      why: "le catalogue Interactive Brokers n'existe pas encore : lancer `node brokers/interactivebrokers/interactivebrokers_scraping.mjs`",
     };
   }
 
@@ -518,7 +518,7 @@ export function roundTrip({
         ? "aucun montant pour cette ligne"
         : !(n > 0)
           ? "aucun nombre de parts"
-          : "aucun prix pour cette ligne : lancer node prices.mjs",
+          : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({
         market,
         rule,

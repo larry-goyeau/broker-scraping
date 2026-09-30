@@ -97,24 +97,24 @@
 // calls "without fee" is quoted lower to sell than to buy. It quotes that sell
 // side to someone holding nothing, so the gap is read per coin for free.
 //
-//   node bitpanda/bitpanda_cost.mjs AAPL --shares=10 --price=200
-//   node bitpanda/bitpanda_cost.mjs IE00B4L5Y983 QUOTRIX EUR --shares=1 --price=126
-//   node bitpanda/bitpanda_cost.mjs BTC --shares=1 --price=60000
-//   node bitpanda/bitpanda_cost.mjs --schedule
-//   node bitpanda/bitpanda-live-experiment.mjs --probe --amount=25
-//   node bitpanda/bitpanda-live-experiment.mjs --live --amount=25
+//   node brokers/bitpanda/bitpanda_cost.mjs AAPL --shares=10 --price=200
+//   node brokers/bitpanda/bitpanda_cost.mjs IE00B4L5Y983 QUOTRIX EUR --shares=1 --price=126
+//   node brokers/bitpanda/bitpanda_cost.mjs BTC --shares=1 --price=60000
+//   node brokers/bitpanda/bitpanda_cost.mjs --schedule
+//   node brokers/bitpanda/bitpanda-live-experiment.mjs --probe --amount=25
+//   node brokers/bitpanda/bitpanda-live-experiment.mjs --live --amount=25
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("bitpanda-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   stocks: "https://support.bitpanda.com/hc/en-us/articles/24575224671516-Real-Stocks-ETFs-on-Bitpanda",
@@ -458,7 +458,7 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Bitpanda n'existe pas encore : lancer `node bitpanda/bitpanda_scraping.mjs` avec app.bitpanda.com ouvert",
+      why: "le catalogue Bitpanda n'existe pas encore : lancer `node brokers/bitpanda/bitpanda_scraping.mjs` avec app.bitpanda.com ouvert",
     };
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Bitpanda` };
@@ -549,7 +549,7 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
   if (!(n > 0) || !(p > 0)) {
     return {
       ...shared,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
     };
   }
 

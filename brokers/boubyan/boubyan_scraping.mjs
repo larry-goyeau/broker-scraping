@@ -12,10 +12,10 @@
 //   is an ETF. London and CHIX print no currency. The Kuwait, Gulf and
 //   on every sheet; it is not a second list.
 //
-//   node boubyan/boubyan_scraping.mjs
+//   node brokers/boubyan/boubyan_scraping.mjs
 
-import { stampRows } from "../accepted.mjs";
-import { parseCsv } from "../indianCash.mjs";
+import { stampRows } from "../../accepted.mjs";
+import { parseCsv } from "../../indianCash.mjs";
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import { pathToFileURL } from "node:url";
@@ -246,7 +246,7 @@ function nameTokens(name) {
 function catalogueIsins() {
   const byVenue = new Map();
   const byTicker = new Map();
-  for (const file of ["../stocks.csv", "../etfs.csv"]) {
+  for (const file of ["../../assets/stocks.csv", "../../assets/etfs.csv"]) {
     for (const row of parseCsv(fs.readFileSync(new URL(file, import.meta.url), "utf8"))) {
       const venue = String(row.exchange || "").toUpperCase();
       const ticker = String(row.ticker || "").split(":").pop().trim().toUpperCase();

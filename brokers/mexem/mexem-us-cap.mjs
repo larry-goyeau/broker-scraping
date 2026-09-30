@@ -1,7 +1,7 @@
 // Separate Mexem's 2 % US cap from IBKR's 1 %: needs a sub-dollar name
 // and a notional the $1 floor no longer hides. Preview only.
 //
-//   node mexem/mexem-us-cap.mjs
+//   node brokers/mexem/mexem-us-cap.mjs
 
 import fs from "node:fs";
 import puppeteer from "puppeteer-core";

@@ -15,12 +15,12 @@
 //   https://www.bm.pkobp.pl/oferta/rynki-zagraniczne
 //   https://www.bm.pkobp.pl/api/default/a71c0e31-f9a2-455f-9121-821dfef914e4.pdf
 //
-//   node pkobp/pkobp_scraping.mjs
-//   node pkobp/pkobp_scraping.mjs --shares=./akcje.pdf --etf=./etf.pdf
+//   node brokers/pkobp/pkobp_scraping.mjs
+//   node brokers/pkobp/pkobp_scraping.mjs --shares=./akcje.pdf --etf=./etf.pdf
 //
 // Text is read with PyMuPDF (`python3 -c "import fitz"`).
 
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 

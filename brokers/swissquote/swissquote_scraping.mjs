@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer-core";
-import { stampResidency, stampRows } from "../accepted.mjs";
+import { stampResidency, stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -223,9 +223,9 @@ function flattenHits(payload) {
 // `--cryptos-csv=PATH` the coin list. `--etfs-only` / `--stocks-only` /
 // `--crypto-only` answer for one shelf. `--all` keeps lines the catalogues
 // do not carry. `--fresh` starts the file over. `--start=` resumes the scanner.
-const etfsCsvPath = pathArg("csv", "../etfs.csv");
-const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
-const cryptosCsvPath = pathArg("cryptos-csv", "../cryptos.csv");
+const etfsCsvPath = pathArg("csv", "../../assets/etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../../assets/stocks.csv");
+const cryptosCsvPath = pathArg("cryptos-csv", "../../assets/cryptos.csv");
 const etfsOnly = hasFlag("etfs-only") || hasFlag("funds-only");
 const stocksOnly = hasFlag("stocks-only");
 const cryptoOnly = hasFlag("crypto-only") || hasFlag("cryptos-only");

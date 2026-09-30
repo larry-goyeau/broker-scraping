@@ -25,23 +25,23 @@
 //   https://www.finanzen.net/zero/wp-content/uploads/2026/08/Preis-Leistungsverzeichnis-V12_Wertpapiere.pdf
 //   https://www.finanzen.net/zero/krypto/
 //
-//   node finanzen/finanzen_cost.mjs US0378331005 --shares=10 --price=200
-//   node finanzen/finanzen_cost.mjs IE00B4L5Y983 --shares=1 --price=90
-//   node finanzen/finanzen_cost.mjs DE000A1E0HR8 --shares=10 --price=30
-//   node finanzen/finanzen_cost.mjs BTC --amount=1000
-//   node finanzen/finanzen_cost.mjs --schedule
+//   node brokers/finanzen/finanzen_cost.mjs US0378331005 --shares=10 --price=200
+//   node brokers/finanzen/finanzen_cost.mjs IE00B4L5Y983 --shares=1 --price=90
+//   node brokers/finanzen/finanzen_cost.mjs DE000A1E0HR8 --shares=10 --price=30
+//   node brokers/finanzen/finanzen_cost.mjs BTC --amount=1000
+//   node brokers/finanzen/finanzen_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, spreadLeaf } from "../venues.mjs";
-import { bookParts, plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, spreadLeaf } from "../../spreads/venues.mjs";
+import { bookParts, plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("finanzen-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   securities: "https://www.finanzen.net/zero/wp-content/uploads/2026/08/Preis-Leistungsverzeichnis-V12_Wertpapiere.pdf",
@@ -148,7 +148,7 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
   };
 
   if (!catalogue) {
-    return { ...answer, why: "le catalogue finanzen.net ZERO n'existe pas encore : lancer `node finanzen/finanzen_scraping.mjs`" };
+    return { ...answer, why: "le catalogue finanzen.net ZERO n'existe pas encore : lancer `node brokers/finanzen/finanzen_scraping.mjs`" };
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue finanzen.net ZERO` };
   if (!matches.length) {
@@ -213,7 +213,7 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
   if (crypto ? !(a > 0) : !(n > 0 && p > 0)) {
     return {
       ...shared,
-      why: crypto ? "aucun montant pour cette crypto" : !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: crypto ? "aucun montant pour cette crypto" : !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
     };
   }
 
@@ -301,7 +301,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node finanzen/finanzen_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--amount=usd]"
+      "usage : node brokers/finanzen/finanzen_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--amount=usd]"
     );
     process.exit(2);
   }

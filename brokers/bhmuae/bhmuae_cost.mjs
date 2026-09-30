@@ -45,22 +45,22 @@
 //
 //   https://www.bhmuae.ae/pricing/
 //
-//   node bhmuae/bhmuae_cost.mjs CHAE --shares=100 --price=2
-//   node bhmuae/bhmuae_cost.mjs AIRARABIA DFM AED --shares=1000 --price=3
-//   node bhmuae/bhmuae_cost.mjs ABTC NASDAQDUBAI USD --shares=100 --price=20
-//   node bhmuae/bhmuae_cost.mjs --schedule
+//   node brokers/bhmuae/bhmuae_cost.mjs CHAE --shares=100 --price=2
+//   node brokers/bhmuae/bhmuae_cost.mjs AIRARABIA DFM AED --shares=1000 --price=3
+//   node brokers/bhmuae/bhmuae_cost.mjs ABTC NASDAQDUBAI USD --shares=100 --price=20
+//   node brokers/bhmuae/bhmuae_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("bhmuae-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://www.bhmuae.ae/pricing/",
@@ -251,7 +251,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue BHM n'existe pas encore : lancer `node bhmuae/bhmuae_scraping.mjs` avec trading.bhmuae.ae ouvert",
+      why: "le catalogue BHM n'existe pas encore : lancer `node brokers/bhmuae/bhmuae_scraping.mjs` avec trading.bhmuae.ae ouvert",
     };
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue BHM` };
@@ -340,7 +340,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   if (!(n > 0) || !(p > 0)) {
     return {
       ...shared,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
     };
   }
 

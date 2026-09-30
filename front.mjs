@@ -10,12 +10,12 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { catalogueFiles } from "./catalogues.mjs";
-import { resolveVenue } from "./venues.mjs";
+import { resolveVenue } from "./spreads/venues.mjs";
 import { accepts, COUNTRY_NAMES, countryOptions, listingAccepts, stampResidency, EEA, EU, GCC } from "./accepted.mjs";
 import { depositHas, splitByPlan, currencyOptions } from "./deposits.mjs";
 import { toUsd, usdPer } from "./fx.mjs";
-import { prices, ensureFresh } from "./prices.mjs";
-import { ALIASES, US_BROKERS, qOf, routingOf } from "./rule606.mjs";
+import { prices, ensureFresh } from "./assets/prices.mjs";
+import { ALIASES, US_BROKERS, qOf, routingOf } from "./spreads/rule606.mjs";
 
 const PORT = (() => {
   const m = process.argv.find((a) => a.startsWith("--port="));
@@ -277,7 +277,7 @@ const NA = "N/A";
 const estimators = new Map();
 const ROOT_DIR = path.dirname(fileURLToPath(import.meta.url));
 for (const folder of brokers.keys()) {
-  const file = path.join(ROOT_DIR, folder, `${folder}_cost.mjs`);
+  const file = path.join(ROOT_DIR, "brokers", folder, `${folder}_cost.mjs`);
   if (!fs.existsSync(file)) continue;
   try {
   const mod = await import(pathToFileURL(file));
@@ -515,7 +515,7 @@ function loadReferenceNames() {
   const here = path.dirname(fileURLToPath(import.meta.url));
   const byIsin = new Map();
   const byCode = new Map();
-  for (const file of ["stocks.csv", "etfs.csv"]) {
+  for (const file of ["assets/stocks.csv", "assets/etfs.csv"]) {
     const table = parseCsv(fs.readFileSync(path.join(here, file), "utf8"));
     const header = table[0] || [];
     const iTicker = header.indexOf("ticker");
@@ -2472,7 +2472,7 @@ function shownName(folder) {
 // Q is recomputed on each view from the 606 file and the 605 table. A broker
 // outside the US appears only when the dealer it names actually has a mix.
 function methodPage() {
-  const file = new URL("parsed_json/rule606.json", import.meta.url);
+  const file = new URL("spreads/rule606.json", import.meta.url);
   const stored = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, "utf8")) : {};
   const quarter = stored.quarter || "the latest 606 file";
   const us = Object.keys(US_BROKERS).map((folder) => {
@@ -2589,6 +2589,16 @@ async function localeOf(req) {
   return { country, currency };
 }
 
+// The page asks for /logos/{slug}.png. The file is brokers/<folder>/logo.png.
+// The slug is the folder with capitals and punctuation removed, the same rule
+// brandOf uses, so m.stock and FSMOne still find their picture.
+const logoBySlug = new Map();
+for (const folder of fs.readdirSync(path.join(ROOT_DIR, "brokers"))) {
+  const slug = folder.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const file = path.join(ROOT_DIR, "brokers", folder, "logo.png");
+  if (slug && fs.existsSync(file)) logoBySlug.set(slug, file);
+}
+
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
   if (url.pathname === "/api/search") {
@@ -2622,7 +2632,7 @@ const server = http.createServer(async (req, res) => {
   }
   if (url.pathname.startsWith("/logos/")) {
     const key = path.basename(decodeURIComponent(url.pathname)).toLowerCase().replace(/\.png$/i, "").replace(/[^a-z0-9]/g, "");
-    const file = key ? path.join(ROOT_DIR, "logos", `${key}.png`) : "";
+    const file = key ? logoBySlug.get(key) : "";
     if (file && fs.existsSync(file)) {
       res.writeHead(200, { "Content-Type": "image/png", "Cache-Control": "public, max-age=86400" });
       return res.end(fs.readFileSync(file));

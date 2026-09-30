@@ -23,9 +23,9 @@
 //   Stamp                       0.015% on the buy
 //   IPFT                        not printed
 //
-//   node zebu/zebu_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
+//   node brokers/zebu/zebu_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
 
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../indianDelivery.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
 
 const SCHEDULE = {
   broker: "Zebu",

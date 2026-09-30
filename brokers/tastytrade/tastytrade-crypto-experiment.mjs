@@ -3,8 +3,8 @@
 // the same role `t212-crypto-experiment.mjs` plays for Trading212. A probe quotes and dry-runs
 // at no cost. `--live` trades a small notional and sells the exact quantity received.
 //
-//   node tastytrade/tastytrade-crypto-experiment.mjs --probe --amount=50
-//   node tastytrade/tastytrade-crypto-experiment.mjs --live --amount=50
+//   node brokers/tastytrade/tastytrade-crypto-experiment.mjs --probe --amount=50
+//   node brokers/tastytrade/tastytrade-crypto-experiment.mjs --live --amount=50
 //
 // The measurement is cash in minus cash out over the notional, not a mid-based effective
 // spread. Crypto here is a dealer product: the markup is inside the fill, and there is no
@@ -264,7 +264,7 @@ if (!LIVE) {
   fs.writeFileSync(OUT, JSON.stringify({ runs: [...history, log] }, null, 2));
   const shown = OUT instanceof URL ? OUT.pathname.split("/").slice(-2).join("/") : String(OUT);
   console.error(`\nlecture seule. écrit dans ${shown}`);
-  console.error(`pour mesurer réellement : node tastytrade/tastytrade-crypto-experiment.mjs --live --amount=${AMOUNT}`);
+  console.error(`pour mesurer réellement : node brokers/tastytrade/tastytrade-crypto-experiment.mjs --live --amount=${AMOUNT}`);
   await browser.disconnect();
   process.exit(0);
 }

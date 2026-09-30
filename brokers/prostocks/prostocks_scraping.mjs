@@ -7,12 +7,12 @@
 // company name is joined from the cash book when the symbol column is
 // only the ticker. Indices and debt series are not part of this catalogue.
 //
-//   node prostocks/prostocks_scraping.mjs
+//   node brokers/prostocks/prostocks_scraping.mjs
 
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
 import { inflateRawSync } from "node:zlib";
-import { parseCsv, isinOf, keepSold, cashBook, lookup, companyName } from "../indianCash.mjs";
+import { parseCsv, isinOf, keepSold, cashBook, lookup, companyName } from "../../indianCash.mjs";
 
 function zipText(buffer) {
   const signature = buffer.readUInt32LE(0);

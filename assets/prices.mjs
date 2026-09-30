@@ -1,6 +1,6 @@
 // What one share costs, so that a fee expressed in percent can be turned into money.
-// A fact about the instrument and not about any broker, so it sits at the root beside
-// `fx.mjs` and `taxes.mjs`, and every `*_cost.mjs` reads the same figure.
+// A fact about the instrument and not about any broker, so it sits in `assets/`
+// beside the lists, and every `*_cost.mjs` reads the same figure.
 //
 // The source is EODHD, one vendor for most of the world, because the alternative is one
 // scraper per venue and a price that only exists while that venue is open. Here the
@@ -25,23 +25,23 @@
 // pays for what somebody actually reads rather than for a catalogue of sixty-six
 // thousand. `prices.mjs` run on its own sweeps the whole catalogue instead.
 //
-//   node prices.mjs                   balaie tout le catalogue
-//   node prices.mjs --limit=200       s'arrête après deux cents instruments
-//   node prices.mjs --isin=IE00B4L5Y983  un seul, pour voir
-//   node prices.mjs --refresh         réinterroge même ce qui est frais
-//   node prices.mjs --out=/tmp/p.json pour essayer sans écraser le vrai fichier
-//   node prices.mjs --dry-run         dit ce que ça coûterait et ne demande rien
-//   node prices.mjs --budget=50       ne dépense pas plus de cinquante appels
-//   node prices.mjs --use-reserve     autorise à entamer la réserve non renouvelable
-//   node prices.mjs --gulf            lit les carnets du Golfe, sans clé et sans quota
-//   node prices.mjs --yahoo           clôtures Yahoo pour tout ISIN encore sans prix, sans clé
+//   node assets/prices.mjs                   balaie tout le catalogue
+//   node assets/prices.mjs --limit=200       s'arrête après deux cents instruments
+//   node assets/prices.mjs --isin=IE00B4L5Y983  un seul, pour voir
+//   node assets/prices.mjs --refresh         réinterroge même ce qui est frais
+//   node assets/prices.mjs --out=/tmp/p.json pour essayer sans écraser le vrai fichier
+//   node assets/prices.mjs --dry-run         dit ce que ça coûterait et ne demande rien
+//   node assets/prices.mjs --budget=50       ne dépense pas plus de cinquante appels
+//   node assets/prices.mjs --use-reserve     autorise à entamer la réserve non renouvelable
+//   node assets/prices.mjs --gulf            lit les carnets du Golfe, sans clé et sans quota
+//   node assets/prices.mjs --yahoo           clôtures Yahoo pour tout ISIN encore sans prix, sans clé
 //
 // The key lives in `.env` as EODHD_API_KEY, which `.gitignore` already keeps out of the
 // repository.
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { resolveVenue } from "./venues.mjs";
+import { resolveVenue } from "../spreads/venues.mjs";
 
 const arg = (name) => {
   for (const a of process.argv.slice(2)) {
@@ -56,7 +56,7 @@ const HERE = fileURLToPath(new URL("./", import.meta.url));
 const IS_CLI = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 // `--out` is a thing the sweep is given; imported into the front there is no such flag
 // and the real file is the only one meant.
-const STORE_PATH = (IS_CLI && arg("out")) || path.join(HERE, "parsed_json/prices.json");
+const STORE_PATH = (IS_CLI && arg("out")) || path.join(HERE, "prices.json");
 
 // ---------------------------------------------------------------- the key
 
@@ -65,7 +65,7 @@ const STORE_PATH = (IS_CLI && arg("out")) || path.join(HERE, "parsed_json/prices
 // to do.
 function readKey() {
   if (process.env.EODHD_API_KEY) return process.env.EODHD_API_KEY.trim();
-  const env = path.join(HERE, ".env");
+  const env = path.join(HERE, "..", ".env");
   if (fs.existsSync(env)) {
     const m = fs.readFileSync(env, "utf8").match(/^\s*EODHD_API_KEY\s*=\s*(.+?)\s*$/m);
     if (m) return m[1].trim();
@@ -231,12 +231,12 @@ let gulfIndexPromise = null;
 function gulfIndex() {
   return (gulfIndexPromise ||= (async () => {
     const [{ catalogueRows }, { resolveVenue }, { GULF_BOARDS }] = await Promise.all([
-      import("./catalogues.mjs"),
-      import("./venues.mjs"),
-      import("./gulf.mjs"),
+      import("../catalogues.mjs"),
+      import("../spreads/venues.mjs"),
+      import("../spreads/gulf.mjs"),
     ]);
     const mics = new Set(Object.values(GULF_BOARDS).map((b) => b.mic));
-    const { gulfSymbol } = await import("./gulf.mjs");
+    const { gulfSymbol } = await import("../spreads/gulf.mjs");
     const index = new Map();
     for (const row of catalogueRows()) {
       const isin = String(row.isin || "").trim().toUpperCase();
@@ -258,7 +258,7 @@ function gulfBoard(key, page = null) {
   const held = boards.get(key);
   if (held && Date.now() - held.at < BOARD_TTL) return held.rows;
   const rows = (async () => {
-    const { readGulfBoard } = await import("./gulf.mjs");
+    const { readGulfBoard } = await import("../spreads/gulf.mjs");
     const list = await readGulfBoard(key, page ? { page } : {});
     return new Map(list.filter((r) => r.last != null).map((r) => [r.isin || r.symbol, r]));
   })().catch((e) => {
@@ -287,7 +287,7 @@ function noteBoard(isin, row, mic) {
  * cannot drive a browser, so it never asks Manama.
  */
 async function gulfFresh(isin, { keys = GULF_HEADLESS, page = null } = {}) {
-  const { GULF_BOARDS } = await import("./gulf.mjs");
+  const { GULF_BOARDS } = await import("../spreads/gulf.mjs");
   const where = (await gulfIndex()).get(isin) || [];
   let found = false;
   for (const key of keys) {
@@ -466,8 +466,8 @@ let yahooIndexPromise = null;
 function yahooIndex() {
   return (yahooIndexPromise ||= (async () => {
     const [{ catalogueRows }, { resolveVenue }] = await Promise.all([
-      import("./catalogues.mjs"),
-      import("./venues.mjs"),
+      import("../catalogues.mjs"),
+      import("../spreads/venues.mjs"),
     ]);
     const index = new Map();
     for (const row of catalogueRows()) {
@@ -682,7 +682,7 @@ export async function ensureFresh(isin, maxAge = DAY, listings = null) {
 let kaseIndexPromise = null;
 function kaseIndex() {
   return (kaseIndexPromise ||= (async () => {
-    const { catalogueRows } = await import("./catalogues.mjs");
+    const { catalogueRows } = await import("../catalogues.mjs");
     const index = new Map();
     for (const row of catalogueRows()) {
       const isin = String(row.isin || "").trim().toUpperCase();
@@ -751,7 +751,7 @@ async function kaseFresh(isin) {
 // needs a tab; without one the other three are still swept and the gap is said out loud
 // rather than passed off as an empty board.
 async function sweepGulf() {
-  const { GULF_BOARDS } = await import("./gulf.mjs");
+  const { GULF_BOARDS } = await import("../spreads/gulf.mjs");
   let page = null;
   let browser = null;
   try {
@@ -831,7 +831,7 @@ async function main() {
     console.error("Pas de clé : mettre EODHD_API_KEY dans .env ou dans l'environnement.");
     process.exit(1);
   }
-  const { catalogueRows } = await import("./catalogues.mjs");
+  const { catalogueRows } = await import("../catalogues.mjs");
   const one = arg("isin");
   const wanted = one
     ? [one.trim().toUpperCase()]

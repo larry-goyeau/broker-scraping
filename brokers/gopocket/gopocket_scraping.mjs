@@ -14,10 +14,10 @@
 //   join stays out. An indicative NAV stays out. Rights, InvIT and REIT
 //   stay out.
 //
-//   node gopocket/gopocket_scraping.mjs
+//   node brokers/gopocket/gopocket_scraping.mjs
 
-import { stampRows } from "../accepted.mjs";
-import { parseCsv, cashBook, lookup, companyName, isinOf, debtIsin, isInav } from "../indianCash.mjs";
+import { stampRows } from "../../accepted.mjs";
+import { parseCsv, cashBook, lookup, companyName, isinOf, debtIsin, isInav } from "../../indianCash.mjs";
 import fs from "node:fs";
 
 const ROOT = "https://web.gopocket.in/contract/csv/";

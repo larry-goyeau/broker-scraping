@@ -62,23 +62,23 @@
 //   https://helpcentre.trading212.com/hc/en-us/articles/360018909758-What-is-the-FX-fee-Invest-Stocks-ISA
 //   https://helpcentre.trading212.com/hc/en-us/articles/11669719976093-What-is-a-multi-currency-account
 //
-//   node trading212/trading212_cost.mjs IUSQ "Deutsche Börse Xetra" EUR --shares=20 --price=10
-//   node trading212/trading212_cost.mjs HSBA "London Stock Exchange" GBX --shares=100 --price=1578
-//   node trading212/trading212_cost.mjs AAPL NASDAQ USD --shares=100 --price=320
-//   node trading212/trading212_cost.mjs BTC/EUR --amount=50
-//   node trading212/trading212_cost.mjs --schedule
+//   node brokers/trading212/trading212_cost.mjs IUSQ "Deutsche Börse Xetra" EUR --shares=20 --price=10
+//   node brokers/trading212/trading212_cost.mjs HSBA "London Stock Exchange" GBX --shares=100 --price=1578
+//   node brokers/trading212/trading212_cost.mjs AAPL NASDAQ USD --shares=100 --price=320
+//   node brokers/trading212/trading212_cost.mjs BTC/EUR --amount=50
+//   node brokers/trading212/trading212_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf, isListedUsTape } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("trading212-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 const CRYPTO = new URL("t212-crypto.json", import.meta.url);
 
 const SCHEDULE = {
@@ -345,7 +345,7 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Trading212 n'existe pas encore : lancer `node trading212/trading212_scraping.mjs`",
+      why: "le catalogue Trading212 n'existe pas encore : lancer `node brokers/trading212/trading212_scraping.mjs`",
     };
   }
 
@@ -386,15 +386,14 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
   const cash = cashOf(listing.currency);
   const holdable = HOLD.has(cash);
   const american = isAmerican(m.row, listing.mic);
-  const otc = listing.mic === "OTCM" || /OTC/i.test(m.row.exchange || "");
   const ukStock = isUkStock(m.row, listing.mic);
   const tax = taxesOf(listing.isin);
   const rates = taxRates(tax);
   const taxTotal = Object.values(rates).reduce((s, r) => s + r, 0);
   const leaf = book.leaf;
-  // Listed US tapes are the Rule 605 per-share figure. OTC does not file
-  // one, so the touch (bp) is the book.
-  const marketBp = bp ?? (american && !otc ? null : leaf?.bp) ?? null;
+  // A listed US tape is the Rule 605 per-share figure. Every other place,
+  // OTC included, keeps the basis-point touch.
+  const marketBp = bp ?? (isListedUsTape(listing.mic) ? null : leaf?.bp) ?? null;
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
   const fxPct = holdable ? 0 : FX_EACH_WAY;
 
@@ -432,7 +431,7 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
   if (notional == null) {
     return {
       ...shared,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({
         listing,
         leaf,
@@ -473,7 +472,7 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
     brokerFees: finite(brokerFees, 6),
     ...(bookUsd == null
       ? {
-          why: american && !otc
+          why: isListedUsTape(listing.mic)
             ? `aucun 605 pour ${listing.isin || listing.ticker}`
             : `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ${
                 m.unsourced?.why || "pas de feuille de carnet"

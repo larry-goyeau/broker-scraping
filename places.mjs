@@ -8,7 +8,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { catalogueFiles } from "./catalogues.mjs";
-import { resolveVenue } from "./venues.mjs";
+import { resolveVenue } from "./spreads/venues.mjs";
 
 const UNSOURCED_EN = {
   "Euronext, place non précisée": "Euronext",

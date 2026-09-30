@@ -1038,7 +1038,7 @@
         const notes = `
           <p class="note"><a class="star" href="/method">*</a> Average cost if you buy ${crypto ? `${esc(String(sizeValue()))} USD of` : `${esc(String(sizeValue()))} shares of`} ${esc(d.ticker || d.isin || d.key)} and sell them back at once. <a class="method-link" href="/method">How costs are calculated</a></p>
           ${!crypto && d.trade && d.trade.price == null
-            ? `<p class="note">No price on file for this instrument, so nothing proportional to the amount can be added up. Write parsed_json/prices.json to fill this column.</p>`
+            ? `<p class="note">No price on file for this instrument, so nothing proportional to the amount can be added up. Write assets/prices.json to fill this column.</p>`
             : ""}
           ${merged.length && merged.every((row) => row.total === "N/A")
             ? `<p class="note">No broker has been moved to the total-cost contract yet: every one of them answers unknown spread until its *_cost.mjs exports roundTrip().</p>`

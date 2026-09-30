@@ -57,22 +57,22 @@
 //   https://www.century.ae/en/shares-trading/
 //   https://www.century.ae/custom_scripts/pdfs/web/cfc-schedule-of-charges.pdf
 //
-//   node century/century_cost.mjs AAPL --shares=1 --price=230
-//   node century/century_cost.mjs AAPL NASDAQ USD --shares=500 --price=230
-//   node century/century_cost.mjs 1772 HKEX HKD --shares=200 --price=30
-//   node century/century_cost.mjs 1120 TADAWUL SAR --shares=1 --price=100
-//   node century/century_cost.mjs --schedule
+//   node brokers/century/century_cost.mjs AAPL --shares=1 --price=230
+//   node brokers/century/century_cost.mjs AAPL NASDAQ USD --shares=500 --price=230
+//   node brokers/century/century_cost.mjs 1772 HKEX HKD --shares=200 --price=30
+//   node brokers/century/century_cost.mjs 1120 TADAWUL SAR --shares=1 --price=100
+//   node brokers/century/century_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
 
 const CATALOGUE = new URL("century-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://liveapp.century.ae/",
@@ -263,7 +263,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Century n'existe pas encore : lancer `node century/century_scraping.mjs` avec liveapp.century.ae ouvert",
+      why: "le catalogue Century n'existe pas encore : lancer `node brokers/century/century_scraping.mjs` avec liveapp.century.ae ouvert",
     };
   }
 
@@ -345,7 +345,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     return {
       ...shared,
       basis,
-      why: "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({ market, rule, listing, leaf, marketBp, marketPerShare, unsourced: m.unsourced, n }),
     };
   }

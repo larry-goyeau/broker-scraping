@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer-core";
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -191,9 +191,9 @@ async function discoverListUrl(page) {
 // `--crypto-only` answer for one shelf. `--all` keeps lines the catalogues
 // do not carry. `--fresh` starts the file over. `--start=` is accepted so
 // a resumed run can reload oanda-parsed.json; the book arrives in one PDF.
-const etfsCsvPath = pathArg("csv", "../etfs.csv");
-const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
-const cryptosCsvPath = pathArg("cryptos-csv", "../cryptos.csv");
+const etfsCsvPath = pathArg("csv", "../../assets/etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../../assets/stocks.csv");
+const cryptosCsvPath = pathArg("cryptos-csv", "../../assets/cryptos.csv");
 const etfsOnly = hasFlag("etfs-only") || hasFlag("funds-only");
 const stocksOnly = hasFlag("stocks-only");
 const cryptoOnly = hasFlag("crypto-only") || hasFlag("cryptos-only");

@@ -120,22 +120,22 @@
 //   https://n26.com/en-eu/crypto
 //   https://eu-assets.contentstack.com/v3/assets/blt4a5ee0113ab335fb/bltc1b2304cb5f11b46/6a4775fe310892726ee90bc1/upvest_best_execution_policy.pdf
 //
-//   node N26/N26_cost.mjs EUNL --shares=10 --price=100
-//   node N26/N26_cost.mjs BTC --amount=1000
-//   node N26/N26_cost.mjs BTC --amount=1000 --plan=metal
-//   node N26/N26_cost.mjs --schedule
+//   node brokers/N26/N26_cost.mjs EUNL --shares=10 --price=100
+//   node brokers/N26/N26_cost.mjs BTC --amount=1000
+//   node brokers/N26/N26_cost.mjs BTC --amount=1000 --plan=metal
+//   node brokers/N26/N26_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("n26-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   stocks: "https://n26.com/en-eu/stocks-and-etfs",
@@ -609,7 +609,7 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
 
   if (!picked) return { ...answer, why: `formule inconnue : ${plan} (standard|smart|go|metal)` };
   if (!catalogue) {
-    return { ...answer, why: "le catalogue N26 n'existe pas encore : lancer `node N26/N26_scraping.mjs`" };
+    return { ...answer, why: "le catalogue N26 n'existe pas encore : lancer `node brokers/N26/N26_scraping.mjs`" };
   }
 
   const { named, matches } = findListing({ etf, place, currency });
@@ -698,7 +698,7 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
   if (!(n > 0) || !(p > 0)) {
     return {
       ...shared,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({ picked, at, marketBp: shared.bp, taxPct, rates, dropped, listing, rowCcy }),
     };
   }

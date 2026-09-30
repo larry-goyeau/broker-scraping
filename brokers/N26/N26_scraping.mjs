@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 
@@ -52,9 +52,9 @@ const wantEtfs = !stocksOnly && !cryptoOnly;
 const wantStocks = !etfsOnly && !cryptoOnly;
 const wantCrypto = !etfsOnly && !stocksOnly;
 
-const etfsCsvPath = readArg("csv", path.join(here, "../etfs.csv"));
-const stocksCsvPath = readArg("stocks-csv", path.join(here, "../stocks.csv"));
-const cryptosCsvPath = readArg("cryptos-csv", path.join(here, "../cryptos.csv"));
+const etfsCsvPath = readArg("csv", path.join(here, "../../assets/etfs.csv"));
+const stocksCsvPath = readArg("stocks-csv", path.join(here, "../../assets/stocks.csv"));
+const cryptosCsvPath = readArg("cryptos-csv", path.join(here, "../../assets/cryptos.csv"));
 
 if (!fs.existsSync(photoDir)) {
   throw new Error(`No photo directory at ${photoDir}.`);

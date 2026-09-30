@@ -3,7 +3,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import puppeteer from "puppeteer-core";
-import { EU, GCC, stampRows } from "../accepted.mjs";
+import { EU, GCC, stampRows } from "../../accepted.mjs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -411,8 +411,8 @@ const CONTENT = "pl.xtb.ipax.pub.grpc.instrumentinfo.v1.InstrumentInfoService/Ge
 // `--crypto-only` answer for one shelf. `--all` keeps lines the catalogues
 // do not carry. `--fresh` starts the file over. `--public` reads the five
 // entity OMI tables and does not open the signed-in session.
-const etfsCsvPath = pathArg("csv", "../etfs.csv");
-const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
+const etfsCsvPath = pathArg("csv", "../../assets/etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../../assets/stocks.csv");
 const etfsOnly = hasFlag("etfs-only") || hasFlag("funds-only");
 const stocksOnly = hasFlag("stocks-only");
 const cryptoOnly = hasFlag("crypto-only") || hasFlag("cryptos-only");

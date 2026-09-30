@@ -6,7 +6,7 @@
 // The final « Buy » is never clicked. The script types an amount, advances one
 // screen, reads it, and leaves.
 //
-//   node bunq/bunq-preview.mjs IT0003132476 ES0113900J37 --amount=100
+//   node brokers/bunq/bunq-preview.mjs IT0003132476 ES0113900J37 --amount=100
 //
 // Needs web.bunq.com signed in on the Chrome at 9222.
 
@@ -21,7 +21,7 @@ const flag = (n, d = null) => {
 const AMOUNT = flag("amount", "100");
 const ISINS = process.argv.slice(2).filter((a) => !a.startsWith("--"));
 if (!ISINS.length) {
-  console.error("usage : node bunq/bunq-preview.mjs <ISIN…> [--amount=100]");
+  console.error("usage : node brokers/bunq/bunq-preview.mjs <ISIN…> [--amount=100]");
   process.exit(2);
 }
 

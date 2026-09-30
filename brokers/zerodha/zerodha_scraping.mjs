@@ -19,9 +19,9 @@
 // Strikes the exchange has withdrawn are absent. The GLOBAL rows are
 // indices, not a foreign share book.
 //
-//   node zerodha/zerodha_scraping.mjs
+//   node brokers/zerodha/zerodha_scraping.mjs
 
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
 import { gunzipSync } from "node:zlib";
 

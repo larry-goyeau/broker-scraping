@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer-core";
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -121,7 +121,7 @@ function hasFlag(name) {
 // the coins (defaults to cryptos.csv); `--no-crypto` leaves the pairs out;
 // `--crypto-only` answers for the pairs alone.
 const listPaths = ["csv", "stocks-csv"].map(flagValue).filter(Boolean);
-const cryptosCsvPath = flagValue("cryptos-csv") || new URL("../cryptos.csv", import.meta.url);
+const cryptosCsvPath = flagValue("cryptos-csv") || new URL("../../assets/cryptos.csv", import.meta.url);
 const etfsOnly = hasFlag("etfs-only");
 const stocksOnly = hasFlag("stocks-only");
 const cryptoOnly = hasFlag("crypto-only");
@@ -465,7 +465,7 @@ async function sellOnlyTickers(tickers, targetType = "EQUITY", client = traderCl
 // and it made the catalogue impossible to keep honest: a cost is a fact about a broker
 // and a moment, while a listing is a fact about a broker and a fund. What a round trip
 // costs now lives in `trading212_cost.mjs`, which reads the exchange's figure from
-// `parsed_json/spread.json` and applies this broker's own terms to it.
+// `spreads/spread.json` and applies this broker's own terms to it.
 
 function rowFrom(query, instrument, extra = {}) {
   const exchange = exchangeById.get(instrument.exchangeId);

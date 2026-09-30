@@ -14,11 +14,11 @@
 //   https://fsm.global/sg/rest/stock/stock-screener-v3
 //   https://fsm.global/sg/rest/fund/get-etf-selector-table-info-with-pagination
 //
-//   node FSMOne/FSMOne_scraping.mjs
+//   node brokers/FSMOne/FSMOne_scraping.mjs
 
-import { stampRows } from "../accepted.mjs";
-import { catalogueFiles } from "../catalogues.mjs";
-import { resolveVenue } from "../venues.mjs";
+import { stampRows } from "../../accepted.mjs";
+import { catalogueFiles } from "../../catalogues.mjs";
+import { resolveVenue } from "../../spreads/venues.mjs";
 import fs from "node:fs";
 import path from "node:path";
 

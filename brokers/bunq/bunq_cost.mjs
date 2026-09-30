@@ -41,22 +41,22 @@
 //   https://help.bunq.com/articles/how-are-trading-fees-calculated
 //   https://help.bunq.com/articles/start-investing-on-the-go-with-stocks
 //
-//   node bunq/bunq_cost.mjs EUNL --shares=1 --price=126
-//   node bunq/bunq_cost.mjs IE00B4L5Y983 --amount=1000 --plan=pro
-//   node bunq/bunq_cost.mjs TOTB --amount=500 --plan=elite
-//   node bunq/bunq_cost.mjs --schedule
+//   node brokers/bunq/bunq_cost.mjs EUNL --shares=1 --price=126
+//   node brokers/bunq/bunq_cost.mjs IE00B4L5Y983 --amount=1000 --plan=pro
+//   node brokers/bunq/bunq_cost.mjs TOTB --amount=500 --plan=elite
+//   node brokers/bunq/bunq_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("bunq-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://help.bunq.com/articles/how-are-trading-fees-calculated",
@@ -281,7 +281,7 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
 
   if (!picked) return { ...answer, why: `formule inconnue : ${plan} (free|core|pro|elite|promo)` };
   if (!catalogue) {
-    return { ...answer, why: "le catalogue bunq n'existe pas encore : lancer `node bunq/bunq_scraping.mjs` avec web.bunq.com ouvert" };
+    return { ...answer, why: "le catalogue bunq n'existe pas encore : lancer `node brokers/bunq/bunq_scraping.mjs` avec web.bunq.com ouvert" };
   }
 
   const { named, matches } = findListing({ etf, place, currency });
@@ -337,7 +337,7 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
   const n = Number(shares);
   const p = Number(price);
   const notional = typed > 0 ? typed : n > 0 && p > 0 ? n * p : null;
-  if (notional == null) return said(n > 0 && !(p > 0) ? "aucun prix pour cette ligne : lancer node prices.mjs" : "aucun montant ni nombre de parts");
+  if (notional == null) return said(n > 0 && !(p > 0) ? "aucun prix pour cette ligne : lancer node assets/prices.mjs" : "aucun montant ni nombre de parts");
   if (notional < MIN_ORDER_EUR) {
     return said(`ordre de ${notional.toFixed(2)} € sous le minimum de ${MIN_ORDER_EUR} € chez bunq`);
   }

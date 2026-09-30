@@ -35,20 +35,20 @@
 //   https://bossa.pl/oferta/rynek-zagraniczny/oplaty-i-dokumenty
 //   https://online.bossa.pl/bossa/pdfdocument?name=APXPDF103
 //
-//   node bossa/bossa_cost.mjs PLPKO0000016 GPW PLN --shares=10 --price=50
-//   node bossa/bossa_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/bossa/bossa_cost.mjs PLPKO0000016 GPW PLN --shares=10 --price=50
+//   node brokers/bossa/bossa_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { QUOTE, toUsd, listingCash } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { QUOTE, toUsd, listingCash } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("bossa-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   domestic: "https://bossa.pl/oferta/oplaty-i-prowizje",
@@ -178,7 +178,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     cashCurrency: "",
   };
   if (!catalogue) {
-    return { ...answer, why: "le catalogue Bossa n'existe pas encore : lancer `node bossa/bossa_scraping.mjs`" };
+    return { ...answer, why: "le catalogue Bossa n'existe pas encore : lancer `node brokers/bossa/bossa_scraping.mjs`" };
   }
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Bossa` };
@@ -270,7 +270,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
       : `table étrangère du ${SCHEDULE.tableOn}, relue le ${SCHEDULE.readOn}, internet : ${label} par ordre`;
 
   if (!(n > 0) || !(p > 0)) {
-    return { ...shared, basis, why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs" };
+    return { ...shared, basis, why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs" };
   }
 
   const notional = n * p;

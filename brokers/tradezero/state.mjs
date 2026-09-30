@@ -1,6 +1,6 @@
 // Positions, today's orders and today's fills, as the platform reports them. Reads only.
 //
-//   node tradezero/state.mjs
+//   node brokers/tradezero/state.mjs
 
 import puppeteer from "puppeteer-core";
 

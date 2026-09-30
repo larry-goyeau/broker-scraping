@@ -2,7 +2,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 
 // Plum has no web app and its Android app pins its certificates, so the book
 // cannot be read from the network. What the app will show is its screen, so
@@ -41,8 +41,8 @@ function hasFlag(name) {
 }
 
 const videoPath = readArg("video", new URL("az_recorder_20260904_191159.mp4", import.meta.url));
-const etfsCsvPath = readArg("csv", new URL("../etfs.csv", import.meta.url));
-const stocksCsvPath = readArg("stocks-csv", new URL("../stocks.csv", import.meta.url));
+const etfsCsvPath = readArg("csv", new URL("../../assets/etfs.csv", import.meta.url));
+const stocksCsvPath = readArg("stocks-csv", new URL("../../assets/stocks.csv", import.meta.url));
 const fps = Number(readArg("fps", "6"));
 // A row stays on screen across many frames. One-frame tickers are kept only
 // when they already sit in a catalogue and a name was read above them.

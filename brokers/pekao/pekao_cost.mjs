@@ -43,22 +43,22 @@
 //   https://www.pekao.com.pl/dam/jcr:e208b3ef-1ba3-47f6-89e8-e1defdc24dd6/20251222_104_BM_ZWS_2025.2026-01-07-10-31-56.pdf
 //   https://www.pekao.com.pl/dam/jcr:ae52d6d4-7522-44b7-ac1f-c01a6929e0e7/20251222_105_BM_ZWS_2025.2026-01-07-10-32-18.pdf
 //
-//   node pekao/pekao_cost.mjs PLPKO0000016 GPW PLN --shares=10 --price=50
-//   node pekao/pekao_cost.mjs US0378331005 USA USD --shares=10 --price=230
-//   node pekao/pekao_cost.mjs --schedule
+//   node brokers/pekao/pekao_cost.mjs PLPKO0000016 GPW PLN --shares=10 --price=50
+//   node brokers/pekao/pekao_cost.mjs US0378331005 USA USD --shares=10 --price=230
+//   node brokers/pekao/pekao_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { usBookPerShare } from "../rule606.mjs";
-import { bookParts, plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, listingCash, fxRemark } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { usBookPerShare } from "../../spreads/rule606.mjs";
+import { bookParts, plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, listingCash, fxRemark } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("pekao-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   url: "https://www.pekao.com.pl/dam/jcr:cd6ba73a-187e-4fad-96a8-fd1244f4e547/taryfa-prowizji-i-oplat-biura-maklerskiego-pekao-2021.2025-11-30-17-08-03.pdf",
@@ -269,7 +269,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     cashCurrency: "",
   };
   if (!catalogue) {
-    return { ...answer, why: "le catalogue Pekao n'existe pas encore : lancer `node pekao/pekao_scraping.mjs`" };
+    return { ...answer, why: "le catalogue Pekao n'existe pas encore : lancer `node brokers/pekao/pekao_scraping.mjs`" };
   }
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Pekao` };
@@ -327,7 +327,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     fx: { quote: QUOTE, asOf: FX_AS_OF, listing: usdPer(listing.currency) },
   };
   if (!priced) {
-    return { ...shared, why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs" };
+    return { ...shared, why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs" };
   }
 
   const notional = n * p;
@@ -441,7 +441,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const positional = process.argv.slice(2).filter((a) => !a.startsWith("--"));
   const [etf, place, currency] = positional;
   if (!etf) {
-    console.error("usage : node pekao/pekao_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]");
+    console.error("usage : node brokers/pekao/pekao_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]");
     process.exit(2);
   }
 

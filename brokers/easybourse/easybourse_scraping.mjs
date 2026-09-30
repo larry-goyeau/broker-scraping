@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer-core";
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -185,8 +185,8 @@ function hasFlag(name) {
 // will accept. There is no spot crypto and no US-residents-only flag.
 // `--funds-only` / `--etfs-only` answer for the trackers alone; `--stocks-only`
 // for the shares.
-const csvPath = pathArg("csv", "../etfs.csv");
-const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
+const csvPath = pathArg("csv", "../../assets/etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../../assets/stocks.csv");
 const fundsOnly = hasFlag("funds-only") || hasFlag("etfs-only");
 const stocksOnly = hasFlag("stocks-only");
 

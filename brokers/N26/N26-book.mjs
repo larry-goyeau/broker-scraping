@@ -17,9 +17,9 @@
 // same tape for the whole sweep and keeps one quote per line; here every quote of
 // the window is kept, since the question is about one minute in particular.
 //
-//   node N26/N26-book.mjs IE00B4L5Y983
-//   node N26/N26-book.mjs IE00B4L5Y983 --at=14:57
-//   node N26/N26-book.mjs IE00B4L5Y983 --at=14:57 --shown=112.34
+//   node brokers/N26/N26-book.mjs IE00B4L5Y983
+//   node brokers/N26/N26-book.mjs IE00B4L5Y983 --at=14:57
+//   node brokers/N26/N26-book.mjs IE00B4L5Y983 --at=14:57 --shown=112.34
 //
 // Times are Berlin time, as printed on the phone.
 
@@ -144,8 +144,8 @@ const isins = new Set(
 
 if (!isins.size) {
   console.error(
-    "usage : node N26/N26-book.mjs <ISIN...> [--at=HH:MM] [--shown=prix] [--venue=tradegate|quotrix]\n" +
-      "  ex.  node N26/N26-book.mjs IE00B4L5Y983 --at=14:57 --shown=112.34"
+    "usage : node brokers/N26/N26-book.mjs <ISIN...> [--at=HH:MM] [--shown=prix] [--venue=tradegate|quotrix]\n" +
+      "  ex.  node brokers/N26/N26-book.mjs IE00B4L5Y983 --at=14:57 --shown=112.34"
   );
   process.exit(2);
 }

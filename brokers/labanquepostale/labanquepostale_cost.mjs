@@ -37,22 +37,22 @@
 //   https://www.moneyvox.fr/tarif-bancaire/la-banque-postale/pdf/tarifs-2026-b.pdf
 //   https://www.labanquepostale.fr/particulier/epargner/univers-bourse/cto.html
 //
-//   node labanquepostale/labanquepostale_cost.mjs TTE --shares=10 --price=60
-//   node labanquepostale/labanquepostale_cost.mjs IWDA EURONEXT EUR --shares=10 --price=100
-//   node labanquepostale/labanquepostale_cost.mjs MC EURONEXT EUR --shares=1 --price=700
-//   node labanquepostale/labanquepostale_cost.mjs --schedule
+//   node brokers/labanquepostale/labanquepostale_cost.mjs TTE --shares=10 --price=60
+//   node brokers/labanquepostale/labanquepostale_cost.mjs IWDA EURONEXT EUR --shares=10 --price=100
+//   node brokers/labanquepostale/labanquepostale_cost.mjs MC EURONEXT EUR --shares=1 --price=700
+//   node brokers/labanquepostale/labanquepostale_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("labanquepostale-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://www.moneyvox.fr/tarif-bancaire/la-banque-postale/pdf/tarifs-2026-b.pdf",
@@ -191,7 +191,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue La Banque Postale n'existe pas encore : lancer `node labanquepostale/labanquepostale_scraping.mjs`",
+      why: "le catalogue La Banque Postale n'existe pas encore : lancer `node brokers/labanquepostale/labanquepostale_scraping.mjs`",
     };
   }
 
@@ -268,7 +268,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     return {
       ...shared,
       basis,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({ pea, rate, listing, marketBp, marketPerShare, unsourced: m.unsourced, taxPct, taxSource }),
     };
   }

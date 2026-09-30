@@ -8,10 +8,11 @@
 //   node sina-touch.mjs
 
 import fs from "node:fs";
-import { catalogueFiles } from "./catalogues.mjs";
+import { catalogueFiles } from "../catalogues.mjs";
+import { fileURLToPath } from "node:url";
 
-const SPREAD = "parsed_json/spread.json";
-const STORE = "parsed_json/sina-touch.json";
+const SPREAD = fileURLToPath(new URL("./spread.json", import.meta.url));
+const STORE = fileURLToPath(new URL("./sina-touch.json", import.meta.url));
 const LIST = "https://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.";
 const NODES = [
   ["sh_a", "stock"],
@@ -186,7 +187,7 @@ for (const [node, kind] of NODES) {
   }
 }
 
-fs.mkdirSync("parsed_json", { recursive: true });
+fs.mkdirSync(fileURLToPath(new URL("./", import.meta.url)), { recursive: true });
 fs.writeFileSync(
   STORE,
   JSON.stringify({ at: new Date().toISOString(), rows: found, noIsin, noTouch }, null, 2)

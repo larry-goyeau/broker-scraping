@@ -12,10 +12,10 @@
 //   the NSE list and from Upstox. A line with no join stays out. An
 //   indicative NAV stays out. Rights stay out.
 //
-//   node arihant/arihant_scraping.mjs
+//   node brokers/arihant/arihant_scraping.mjs
 
-import { stampRows } from "../accepted.mjs";
-import { cashBook, lookup, companyName, isinOf, debtIsin, isInav } from "../indianCash.mjs";
+import { stampRows } from "../../accepted.mjs";
+import { cashBook, lookup, companyName, isinOf, debtIsin, isInav } from "../../indianCash.mjs";
 import fs from "node:fs";
 
 const ROOT = "https://tradebridge.arihantplus.com/wrapper-service/api/symbol/v1/master?exch=";

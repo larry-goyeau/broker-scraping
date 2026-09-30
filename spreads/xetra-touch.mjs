@@ -10,7 +10,7 @@ import { createRequire } from "node:module";
 const require = createRequire("/Users/larry/Downloads/broker-scraping/x.js");
 const puppeteer = require("puppeteer-core");
 
-const STORE = new URL("parsed_json/xetra-touch.json", import.meta.url);
+const STORE = new URL("./xetra-touch.json", import.meta.url);
 const MISSING = "/tmp/xetra-missing.json";
 const API = "/portal.proxy/v1/portal";
 const FIELDS = "84,86,85,88,6509";
@@ -220,4 +220,4 @@ for (let i = 0; i < quoted.length && berlin().open; i += 30) {
 
 save();
 await browser.disconnect();
-console.error(`${found.length} touches, ${missed.length} écartées. Écrit dans parsed_json/xetra-touch.json.`);
+console.error(`${found.length} touches, ${missed.length} écartées. Écrit dans spreads/xetra-touch.json.`);

@@ -48,21 +48,21 @@
 //   https://support.thndr.app/en/articles/680053-uae-uae-transaction-fees
 //   https://support.thndr.app/en/articles/657048-thndr-trader-subscription
 //
-//   node thndr/thndr_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node thndr/thndr_cost.mjs COMI EGX EGP --shares=10 --price=80
-//   node thndr/thndr_cost.mjs --schedule
+//   node brokers/thndr/thndr_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/thndr/thndr_cost.mjs COMI EGX EGP --shares=10 --price=80
+//   node brokers/thndr/thndr_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("thndr-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   fees: "https://support.thndr.app/en/articles/638558-thndr-order-fees",
@@ -281,7 +281,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Thndr n'existe pas encore : lancer `node thndr/thndr_scraping.mjs`",
+      why: "le catalogue Thndr n'existe pas encore : lancer `node brokers/thndr/thndr_scraping.mjs`",
     };
   }
 
@@ -364,7 +364,7 @@ export function roundTrip({
   if (notional == null) {
     return {
       ...shared,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({ market, listing, leaf, marketBp, marketPerShare, unsourced: m.unsourced, taxPct }),
     };
   }
@@ -614,10 +614,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node thndr/thndr_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]\n" +
-        "        node thndr/thndr_cost.mjs --schedule\n" +
-        "  ex.   node thndr/thndr_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
-        "        node thndr/thndr_cost.mjs COMI EGX EGP --shares=10 --price=80"
+      "usage : node brokers/thndr/thndr_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]\n" +
+        "        node brokers/thndr/thndr_cost.mjs --schedule\n" +
+        "  ex.   node brokers/thndr/thndr_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
+        "        node brokers/thndr/thndr_cost.mjs COMI EGX EGP --shares=10 --price=80"
     );
     process.exit(2);
   }

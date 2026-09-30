@@ -213,25 +213,25 @@
 //   https://quantfury.com/business-model/
 //   https://quantfury.com/quantfury-client-agreement.pdf
 //
-//   node quantfury/quantfury_cost.mjs AAPL --shares=10 --price=230
-//   node quantfury/quantfury_cost.mjs SHEL LSE EUR --shares=100 --price=30
-//   node quantfury/quantfury_cost.mjs ACA EURONEXT EUR --shares=15 --price=18.465
-//   node quantfury/quantfury_cost.mjs BTC --amount=1000
-//   node quantfury/quantfury_cost.mjs --schedule
-//   node quantfury/quantfury-probe.mjs            (la touche Cboe Europe, en séance)
+//   node brokers/quantfury/quantfury_cost.mjs AAPL --shares=10 --price=230
+//   node brokers/quantfury/quantfury_cost.mjs SHEL LSE EUR --shares=100 --price=30
+//   node brokers/quantfury/quantfury_cost.mjs ACA EURONEXT EUR --shares=15 --price=18.465
+//   node brokers/quantfury/quantfury_cost.mjs BTC --amount=1000
+//   node brokers/quantfury/quantfury_cost.mjs --schedule
+//   node brokers/quantfury/quantfury-probe.mjs            (la touche Cboe Europe, en séance)
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { usBookPerShare } from "../rule606.mjs";
-import { cryptoId, listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { usBookPerShare } from "../../spreads/rule606.mjs";
+import { cryptoId, isListedUsTape, listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("quantfury-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 const TOUCHES = new URL("quantfury-touches.json", import.meta.url);
 
 const SCHEDULE = {
@@ -519,7 +519,7 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
     return {
       ...base,
       brokerFees: null,
-      why: "le catalogue Quantfury n'existe pas encore : lancer `node quantfury/quantfury_scraping.mjs`",
+      why: "le catalogue Quantfury n'existe pas encore : lancer `node brokers/quantfury/quantfury_scraping.mjs`",
     };
   }
 
@@ -569,13 +569,13 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
 
   const leaf = book.leaf;
   const american = !crypto && isAmerican(m.row, bookMic);
-  // US: quoted NBBO. No 606, so this is the place's quoted spread.
-  // Everywhere else: that venue's leaf. A missing book stays unknown.
-  const quoted = american
+  // A listed US tape is the quoted NBBO. OTC and every other place keep
+  // the basis-point touch; a missing book stays unknown.
+  const quoted = isListedUsTape(bookMic)
     ? usBookPerShare({ broker: "quantfury", ticker: m.row.ticker, fallback: null })
     : null;
-  let marketBp = bp ?? (american ? null : leaf?.bp ?? null);
-  let marketPerShare = perShare ?? (american ? quoted : leaf?.perShare > 0 ? leaf.perShare : null) ?? null;
+  let marketBp = bp ?? (isListedUsTape(bookMic) ? null : leaf?.bp ?? null);
+  let marketPerShare = perShare ?? quoted ?? (leaf?.perShare > 0 ? leaf.perShare : null) ?? null;
   // The place publishes nothing: Quantfury's own touch stands in. A missing
   // touch stays unknown.
   let fromQuantfury = false;
@@ -643,7 +643,7 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
         : !(n > 0)
           ? "aucun nombre de parts"
           : !(p > 0)
-            ? "aucun prix pour cette ligne : lancer node prices.mjs"
+            ? "aucun prix pour cette ligne : lancer node assets/prices.mjs"
             : `aucun taux ${listing.currency} → ${QUOTE}`,
     };
   }

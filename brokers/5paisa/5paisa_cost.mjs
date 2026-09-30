@@ -17,9 +17,9 @@
 //                                ₹20 per transaction per ISIN, on every
 //                                plan. The cell does not add GST.
 //
-//   node 5paisa/5paisa_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
+//   node brokers/5paisa/5paisa_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
 
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../indianDelivery.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
 
 const SEBI_CAP = 0.025;
 

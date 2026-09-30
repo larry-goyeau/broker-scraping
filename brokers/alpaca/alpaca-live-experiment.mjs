@@ -1,9 +1,9 @@
 // One live equity round trip on the funded account, to see whether the published
 // SEC / TAF / CAT lines actually leave. The paper ledger does not charge them.
 //
-//   node alpaca/alpaca-live-experiment.mjs            # quote + buying power, no order
-//   node alpaca/alpaca-live-experiment.mjs --live     # 1 IAU, then sell
-//   node alpaca/alpaca-live-experiment.mjs --live --crypto --amount=25
+//   node brokers/alpaca/alpaca-live-experiment.mjs            # quote + buying power, no order
+//   node brokers/alpaca/alpaca-live-experiment.mjs --live     # 1 IAU, then sell
+//   node brokers/alpaca/alpaca-live-experiment.mjs --live --crypto --amount=25
 //
 // A bought leg that fails to sell aborts and says so.
 

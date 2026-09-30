@@ -67,22 +67,22 @@
 //   https://www.questrade.com/pricing/self-directed-commissions-plans-fees/transaction
 //   https://www.questrade.com/learning/options-active-trading/ecn-fees-explained
 //
-//   node questrade/questrade_cost.mjs AAPL
-//   node questrade/questrade_cost.mjs AAB.TO TSX CAD --shares=100 --price=0.5
-//   node questrade/questrade_cost.mjs AAPL NASDAQ USD --shares=100 --price=230
-//   node questrade/questrade_cost.mjs --schedule
+//   node brokers/questrade/questrade_cost.mjs AAPL
+//   node brokers/questrade/questrade_cost.mjs AAB.TO TSX CAD --shares=100 --price=0.5
+//   node brokers/questrade/questrade_cost.mjs AAPL NASDAQ USD --shares=100 --price=230
+//   node brokers/questrade/questrade_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("questrade-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   transaction: "https://www.questrade.com/pricing/self-directed-commissions-plans-fees/transaction",
@@ -244,7 +244,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Questrade n'existe pas encore : lancer `node questrade/questrade_scraping.mjs`",
+      why: "le catalogue Questrade n'existe pas encore : lancer `node brokers/questrade/questrade_scraping.mjs`",
     };
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Questrade` };
@@ -336,7 +336,7 @@ export function roundTrip({
   if (!(n > 0) || !(p > 0)) {
     return {
       ...shared,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
     };
   }
 

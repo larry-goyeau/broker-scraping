@@ -36,21 +36,21 @@
 //   https://blog.siebert.com/siebert-launches-siebert.pro-for-active-self-directed-investors
 //   https://www.siebert.com/resources/rate-fees
 //
-//   node siebert/siebert_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node siebert/siebert_cost.mjs AAPI OTC USD --shares=100 --price=1
-//   node siebert/siebert_cost.mjs --schedule
+//   node brokers/siebert/siebert_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/siebert/siebert_cost.mjs AAPI OTC USD --shares=100 --price=1
+//   node brokers/siebert/siebert_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("siebert-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://www.siebert.com/pro",
@@ -184,7 +184,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Siebert n'existe pas encore : lancer `node siebert/siebert_scraping.mjs`",
+      why: "le catalogue Siebert n'existe pas encore : lancer `node brokers/siebert/siebert_scraping.mjs`",
     };
   }
 
@@ -268,7 +268,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   if (!(n > 0) || !(p > 0)) {
     return {
       ...shared,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({
         market,
         listing,
@@ -423,10 +423,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node siebert/siebert_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]\n" +
-        "        node siebert/siebert_cost.mjs --schedule\n" +
-        "  ex.   node siebert/siebert_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
-        "        node siebert/siebert_cost.mjs AAPI OTC USD --shares=100 --price=1"
+      "usage : node brokers/siebert/siebert_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]\n" +
+        "        node brokers/siebert/siebert_cost.mjs --schedule\n" +
+        "  ex.   node brokers/siebert/siebert_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
+        "        node brokers/siebert/siebert_cost.mjs AAPI OTC USD --shares=100 --price=1"
     );
     process.exit(2);
   }

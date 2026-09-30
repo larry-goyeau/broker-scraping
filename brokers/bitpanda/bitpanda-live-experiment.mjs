@@ -1,8 +1,8 @@
 // Measures what a Real Stocks buy followed immediately by a sell costs on Bitpanda.
 // `--probe` asks for a createOffer quote (no fill). `--live` accepts the offer both ways.
 //
-//   node bitpanda/bitpanda-live-experiment.mjs --probe --amount=25
-//   node bitpanda/bitpanda-live-experiment.mjs --live --amount=25
+//   node brokers/bitpanda/bitpanda-live-experiment.mjs --probe --amount=25
+//   node brokers/bitpanda/bitpanda-live-experiment.mjs --live --amount=25
 //
 // web.bitpanda.com must be signed in on Chrome :9222. A bought leg that fails to
 // sell aborts and says so.
@@ -304,7 +304,7 @@ const log = {
 
 if (!LIVE) {
   fs.writeFileSync(OUT, JSON.stringify(log, null, 2));
-  console.error(`\nlecture seule. pour mesurer : node bitpanda/bitpanda-live-experiment.mjs --live --amount=${AMOUNT} --symbol=${SYMBOL}`);
+  console.error(`\nlecture seule. pour mesurer : node brokers/bitpanda/bitpanda-live-experiment.mjs --live --amount=${AMOUNT} --symbol=${SYMBOL}`);
   await browser.disconnect();
   process.exit(0);
 }

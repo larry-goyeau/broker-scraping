@@ -13,13 +13,14 @@
 import fs from "node:fs";
 import { gunzipSync } from "node:zlib";
 import { createRequire } from "node:module";
-import { debtIsin, isinOf, isInav, keepSold, rootOf } from "./indianCash.mjs";
+import { debtIsin, isinOf, isInav, keepSold, rootOf } from "../indianCash.mjs";
+import { fileURLToPath } from "node:url";
 
 const require = createRequire("/Users/larry/Downloads/broker-scraping/x.js");
 const puppeteer = require("puppeteer-core");
 
 const UPSTOX = "https://assets.upstox.com/market-quote/instruments/exchange/complete.json.gz";
-const STORE = "parsed_json/spread.json";
+const STORE = fileURLToPath(new URL("./spread.json", import.meta.url));
 const JOBS = Math.max(1, Number((process.argv.find((a) => a.startsWith("--jobs=")) || "").slice(7) || 8));
 const CLOSE = 15 * 60 + 30;
 

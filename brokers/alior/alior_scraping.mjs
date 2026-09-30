@@ -17,12 +17,12 @@
 //   https://www.aliorbank.pl/biuro-maklerskie/gielda/rachunek-brokerski.html
 //   https://www.gpw.pl/etfy
 //
-//   node alior/alior_scraping.mjs
-//   node alior/alior_scraping.mjs --shares=./akcje.xlsx --etf=./etf.xlsx
+//   node brokers/alior/alior_scraping.mjs
+//   node brokers/alior/alior_scraping.mjs --shares=./akcje.xlsx --etf=./etf.xlsx
 //
 // The workbooks are read with Python's zipfile. Warsaw profiles come from Bankier.
 
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 

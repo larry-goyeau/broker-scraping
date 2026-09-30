@@ -30,20 +30,20 @@
 //
 //   https://tradier.com/pricing
 //
-//   node tradier/tradier_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node tradier/tradier_cost.mjs AQLT CBOE USD --shares=10 --price=31.5 --plan=pro
-//   node tradier/tradier_cost.mjs --schedule
+//   node brokers/tradier/tradier_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/tradier/tradier_cost.mjs AQLT CBOE USD --shares=10 --price=31.5 --plan=pro
+//   node brokers/tradier/tradier_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
 
 const CATALOGUE = new URL("tradier-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://tradier.com/pricing",
@@ -200,7 +200,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Tradier n'existe pas encore : lancer `node tradier/tradier_scraping.mjs`",
+      why: "le catalogue Tradier n'existe pas encore : lancer `node brokers/tradier/tradier_scraping.mjs`",
     };
   }
 
@@ -289,7 +289,7 @@ export function roundTrip({
   if (notional == null) {
     return {
       ...shared,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({
         market,
         listing,
@@ -439,10 +439,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node tradier/tradier_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--plan=lite|pro|proplus]\n" +
-        "        node tradier/tradier_cost.mjs --schedule\n" +
-        "  ex.   node tradier/tradier_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
-        "        node tradier/tradier_cost.mjs AQLT CBOE USD --shares=10 --price=31.5 --plan=pro"
+      "usage : node brokers/tradier/tradier_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--plan=lite|pro|proplus]\n" +
+        "        node brokers/tradier/tradier_cost.mjs --schedule\n" +
+        "  ex.   node brokers/tradier/tradier_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
+        "        node brokers/tradier/tradier_cost.mjs AQLT CBOE USD --shares=10 --price=31.5 --plan=pro"
     );
     process.exit(2);
   }

@@ -7,11 +7,11 @@
 //   so the symbol is what drops a quote. Bonds and contracts are not
 //   part of this catalogue.
 //
-//   node 5paisa/5paisa_scraping.mjs
+//   node brokers/5paisa/5paisa_scraping.mjs
 
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
-import { parseCsv, isinOf, keepSold, cashBook, lookup, companyName } from "../indianCash.mjs";
+import { parseCsv, isinOf, keepSold, cashBook, lookup, companyName } from "../../indianCash.mjs";
 
 const FILE = "https://images.5paisa.com/website/scripmaster-csv-format.csv";
 const VENUE = { N: "NSE", B: "BSE" };

@@ -1,6 +1,7 @@
 import sys
 import time
 from copy import deepcopy
+from pathlib import Path
 from typing import Optional
 import pandas as pd
 from tradingview_screener import Column, Query
@@ -132,12 +133,12 @@ if __name__ == "__main__":
     if pairs:
         df = list_all_pairs(page_size=1000)
         export_df = tidy_pairs(df)[["ticker", "exchange", "isin", "name"]]
-        output_path = positional[0] if positional else "cryptos-pairs.csv"
+        output_path = positional[0] if positional else str(Path(__file__).with_name("cryptos-pairs.csv"))
         print(f"\nTotal pairs: {len(export_df)} listings kept out of {len(df)} scanned")
     else:
         df = list_all_coins(page_size=1000)
         export_df = tidy_coins(df)[["ticker", "exchange", "isin", "name"]]
-        output_path = positional[0] if positional else "cryptos.csv"
+        output_path = positional[0] if positional else str(Path(__file__).with_name("cryptos.csv"))
         print(export_df.head(20).to_string(index=False))
         print(f"\nTotal coins: {len(export_df)} kept out of {len(df)} scanned")
 

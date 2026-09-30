@@ -42,21 +42,21 @@
 //   https://www.bm.pkobp.pl/oferta/rynki-zagraniczne
 //   https://www.bm.pkobp.pl/api/public/994a8c6c-d442-47a1-bded-4eb0d5a361a4.pdf
 //
-//   node pkobp/pkobp_cost.mjs PLPKO0000016 GPW PLN --shares=10 --price=50
-//   node pkobp/pkobp_cost.mjs US0378331005 XNAS USD --shares=10 --price=230
-//   node pkobp/pkobp_cost.mjs --schedule
+//   node brokers/pkobp/pkobp_cost.mjs PLPKO0000016 GPW PLN --shares=10 --price=50
+//   node brokers/pkobp/pkobp_cost.mjs US0378331005 XNAS USD --shares=10 --price=230
+//   node brokers/pkobp/pkobp_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { bookParts, plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, listingCash } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { bookParts, plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, listingCash } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("pkobp-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   url: "https://www.bm.pkobp.pl/api/public/9eaf7796-f0e5-458a-b5e6-6a20d94ab130.pdf",
@@ -208,7 +208,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     cashCurrency: "",
   };
   if (!catalogue) {
-    return { ...answer, why: "le catalogue PKO BP n'existe pas encore : lancer `node pkobp/pkobp_scraping.mjs`" };
+    return { ...answer, why: "le catalogue PKO BP n'existe pas encore : lancer `node brokers/pkobp/pkobp_scraping.mjs`" };
   }
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue PKO BP` };
@@ -265,7 +265,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const n = Number(shares);
   const p = Number(price);
   if (!(n > 0 && p > 0)) {
-    return { ...shared, why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs" };
+    return { ...shared, why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs" };
   }
 
   const notional = n * p;
@@ -375,7 +375,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const positional = process.argv.slice(2).filter((a) => !a.startsWith("--"));
   const [etf, place, currency] = positional;
   if (!etf) {
-    console.error("usage : node pkobp/pkobp_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]");
+    console.error("usage : node brokers/pkobp/pkobp_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]");
     process.exit(2);
   }
 

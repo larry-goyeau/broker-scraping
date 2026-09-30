@@ -14,10 +14,10 @@
 //   from the NSE list and from Upstox. A line with no join stays out. An
 //   indicative NAV stays out. Rights, InvIT and REIT stay out.
 //
-//   node aliceblue/aliceblue_scraping.mjs
+//   node brokers/aliceblue/aliceblue_scraping.mjs
 
-import { stampRows } from "../accepted.mjs";
-import { parseCsv, cashBook, lookup, companyName, isinOf, debtIsin, isInav } from "../indianCash.mjs";
+import { stampRows } from "../../accepted.mjs";
+import { parseCsv, cashBook, lookup, companyName, isinOf, debtIsin, isInav } from "../../indianCash.mjs";
 import fs from "node:fs";
 
 const ROOT = "https://v2api.aliceblueonline.com/restpy/static/contract_master/V2/";

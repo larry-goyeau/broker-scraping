@@ -17,9 +17,9 @@
 //                               is not a second rate.
 // Intraday is another table.
 //
-//   node firstock/firstock_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
+//   node brokers/firstock/firstock_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
 
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../indianDelivery.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
 
 const CRORE = 10_000_000;
 

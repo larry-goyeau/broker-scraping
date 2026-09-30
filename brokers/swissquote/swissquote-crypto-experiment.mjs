@@ -2,8 +2,8 @@
 // The published card is 1 % taker each way at Standard I. This run is the check against
 // that figure, the same role the T212 and tastytrade crypto experiments play.
 //
-//   node swissquote/swissquote-crypto-experiment.mjs --probe --amount=50
-//   node swissquote/swissquote-crypto-experiment.mjs --live --amount=50
+//   node brokers/swissquote/swissquote-crypto-experiment.mjs --probe --amount=50
+//   node brokers/swissquote/swissquote-crypto-experiment.mjs --live --amount=50
 //
 // The account holds euros, so the EUR pair is the one that can be traded without a
 // conversion. A bought leg that fails to sell aborts and says so.
@@ -177,7 +177,7 @@ if (!LIVE) {
     }
   })();
   fs.writeFileSync(OUT, JSON.stringify({ runs: [...history, log] }, null, 2));
-  console.error(`\nlecture seule. pour mesurer : node swissquote/swissquote-crypto-experiment.mjs --live --amount=${AMOUNT}`);
+  console.error(`\nlecture seule. pour mesurer : node brokers/swissquote/swissquote-crypto-experiment.mjs --live --amount=${AMOUNT}`);
   await browser.disconnect();
   process.exit(0);
 }

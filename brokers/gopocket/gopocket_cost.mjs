@@ -29,11 +29,11 @@
 //
 // The catalogue has no US line, so no Rule 606 mix is applied.
 //
-//   node gopocket/gopocket_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
+//   node brokers/gopocket/gopocket_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../indianDelivery.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
 
 function schedule({ brokerageEach, basis }) {
   return {

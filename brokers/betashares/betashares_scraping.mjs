@@ -3,22 +3,22 @@
 // disable_sell stays out: those names cannot be traded. Two unlisted funds
 // have no exchange and stay out. What remains is a selection of ASX shares
 // and the ETFs on ASX and Cboe Australia. There is no ETC or ETN kind.
-// The file has no ISIN. An ASX code is joined to ../stocks.csv and
-// ../etfs.csv when that place has exactly one ISIN.
+// The file has no ISIN. An ASX code is joined to ../../assets/stocks.csv and
+// ../../assets/etfs.csv when that place has exactly one ISIN.
 //
 //   https://www.betashares.com.au/direct/
 //   https://instruments.wealth.betashares.com.au/instruments.json
 //
-//   node betashares/betashares_scraping.mjs
+//   node brokers/betashares/betashares_scraping.mjs
 
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
 
 const FILE = "https://instruments.wealth.betashares.com.au/instruments.json";
 const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
 
-const STOCKS = new URL("../stocks.csv", import.meta.url);
-const ETFS = new URL("../etfs.csv", import.meta.url);
+const STOCKS = new URL("../../assets/stocks.csv", import.meta.url);
+const ETFS = new URL("../../assets/etfs.csv", import.meta.url);
 const FILE_EXCHANGE = { ASX: ["ASX"], "Cboe Australia": ["CXA"] };
 
 const EXCHANGE = { ASX: "ASX", CXA: "Cboe Australia" };

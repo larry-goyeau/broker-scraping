@@ -72,22 +72,22 @@
 //   https://www.home.saxo/en-au/rates-and-conditions/stocks/commissions
 //   https://www.home.saxo/fr-fr/rates-and-conditions/stocks/commissions
 //
-//   node saxo/saxo_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node saxo/saxo_cost.mjs AAPL NASDAQ USD --shares=1 --price=230 --plan=vip
-//   node saxo/saxo_cost.mjs IWDA EURONEXT EUR --shares=1 --price=100
-//   node saxo/saxo_cost.mjs --schedule
+//   node brokers/saxo/saxo_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/saxo/saxo_cost.mjs AAPL NASDAQ USD --shares=1 --price=230 --plan=vip
+//   node brokers/saxo/saxo_cost.mjs IWDA EURONEXT EUR --shares=1 --price=100
+//   node brokers/saxo/saxo_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { VENUES, listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { VENUES, listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("saxo-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://www.home.saxo/rates-and-conditions/stocks/commissions",
@@ -441,7 +441,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Saxo n'existe pas encore : lancer `node saxo/saxo_scraping.mjs`",
+      why: "le catalogue Saxo n'existe pas encore : lancer `node brokers/saxo/saxo_scraping.mjs`",
     };
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Saxo` };
@@ -541,7 +541,7 @@ export function roundTrip({
   if (!(n > 0) || !(p > 0)) {
     return {
       ...shared,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({
         picked,
         house,
@@ -745,12 +745,12 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node saxo/saxo_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]\n" +
+      "usage : node brokers/saxo/saxo_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]\n" +
         "                          [--plan=classic|platinum|vip] [--nat=FR] [--json]\n" +
-        "        node saxo/saxo_cost.mjs --schedule\n" +
-        "  ex.   node saxo/saxo_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
-        "        node saxo/saxo_cost.mjs IWDA EURONEXT EUR --shares=1 --price=100\n" +
-        "        node saxo/saxo_cost.mjs AAPL NASDAQ USD --shares=1 --price=230 --plan=vip"
+        "        node brokers/saxo/saxo_cost.mjs --schedule\n" +
+        "  ex.   node brokers/saxo/saxo_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
+        "        node brokers/saxo/saxo_cost.mjs IWDA EURONEXT EUR --shares=1 --price=100\n" +
+        "        node brokers/saxo/saxo_cost.mjs AAPL NASDAQ USD --shares=1 --price=230 --plan=vip"
     );
     process.exit(2);
   }

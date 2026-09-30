@@ -13,9 +13,9 @@
 //   Stamp                       0.015% on the buy
 //   DP on a delivery sell       ₹20 + GST per equity ISIN
 //
-//   node angelone/angelone_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
+//   node brokers/angelone/angelone_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
 
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../indianDelivery.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
 
 const SEBI_CAP = 0.025;
 

@@ -16,12 +16,12 @@
 //
 //   https://www.hl.co.uk/funds/fund-discounts,-prices--and--factsheets/search-results/a
 //
-//   node hargreaveslansdown/hargreaveslansdown_scraping.mjs
-//   node hargreaveslansdown/hargreaveslansdown_scraping.mjs --letters=a --limit=5
+//   node brokers/hargreaveslansdown/hargreaveslansdown_scraping.mjs
+//   node brokers/hargreaveslansdown/hargreaveslansdown_scraping.mjs --letters=a --limit=5
 //
 // `--limit` reads a sample and does not write the catalogue.
 
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
 
 const ORIGIN = "https://www.hl.co.uk";

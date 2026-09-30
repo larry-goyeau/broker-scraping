@@ -11,13 +11,14 @@
 
 import fs from "node:fs";
 import { createRequire } from "node:module";
-import { parseCsv } from "./indianCash.mjs";
+import { parseCsv } from "../indianCash.mjs";
+import { fileURLToPath } from "node:url";
 
 const require = createRequire("/Users/larry/Downloads/broker-scraping/x.js");
 const puppeteer = require("puppeteer-core");
 
-const STORE = new URL("parsed_json/mx-touch.json", import.meta.url);
-const SPREAD = "parsed_json/spread.json";
+const STORE = new URL("./mx-touch.json", import.meta.url);
+const SPREAD = fileURLToPath(new URL("./spread.json", import.meta.url));
 const API = "/portal.proxy/v1/portal";
 const FIELDS = "84,86,85,88,6509";
 
@@ -55,7 +56,7 @@ const mexico = () => {
 function names() {
   const jobs = [];
   const seen = new Set();
-  for (const file of ["etfs.csv", "stocks.csv"]) {
+  for (const file of ["../assets/etfs.csv", "../assets/stocks.csv"]) {
     for (const row of parseCsv(fs.readFileSync(new URL(file, import.meta.url), "utf8"))) {
       if (row.exchange !== "BMV") continue;
       const isin = String(row.isin || "").trim().toUpperCase();

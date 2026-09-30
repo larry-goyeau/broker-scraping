@@ -13,9 +13,9 @@
 //   DP on a delivery sell       ₹13.5 + GST per transaction
 // Intraday is another table.
 //
-//   node pocketful/pocketful_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
+//   node brokers/pocketful/pocketful_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
 
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../indianDelivery.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
 
 const SCHEDULE = {
   broker: "Pocketful",

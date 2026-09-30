@@ -26,21 +26,21 @@
 // The sell stays on the card. Stamp is unchanged. Pillar 3a is
 // Swisscanto funds at another foundation and is not this catalogue.
 //
-//   node neon/neon_cost.mjs US0378331005 --shares=1 --price=180
-//   node neon/neon_cost.mjs CH0038863350 --shares=1 --price=80
-//   node neon/neon_cost.mjs --schedule
+//   node brokers/neon/neon_cost.mjs US0378331005 --shares=1 --price=180
+//   node brokers/neon/neon_cost.mjs CH0038863350 --shares=1 --price=80
+//   node brokers/neon/neon_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("neon-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   fees: "https://www.neon-free.ch/en/faq/what-fees-do-i-pay-when-i-invest",
@@ -127,7 +127,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   };
 
   if (!catalogue) {
-    return { ...answer, why: "the neon catalogue is not here yet: run `node neon/neon_scraping.mjs`" };
+    return { ...answer, why: "the neon catalogue is not here yet: run `node brokers/neon/neon_scraping.mjs`" };
   }
 
   const { named, matches } = findListing({ etf, place, currency });
@@ -187,7 +187,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   if (notional == null) {
     return {
       ...shared,
-      why: !(n > 0) ? "no share count" : "no price for this line: run node prices.mjs",
+      why: !(n > 0) ? "no share count" : "no price for this line: run node assets/prices.mjs",
     };
   }
 
@@ -250,8 +250,8 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = process.argv.slice(2).filter((a) => !a.startsWith("--"));
   if (!etf) {
     console.error(
-      "usage: node neon/neon_cost.mjs <isin> [venue] [currency] [--shares=n] [--price=p]\n" +
-        "       node neon/neon_cost.mjs --schedule"
+      "usage: node brokers/neon/neon_cost.mjs <isin> [venue] [currency] [--shares=n] [--price=p]\n" +
+        "       node brokers/neon/neon_cost.mjs --schedule"
     );
     process.exit(2);
   }

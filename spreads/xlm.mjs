@@ -6,15 +6,16 @@
 // The measure belongs to the fund on Xetra, not to a broker, so the cache it builds
 // is shared: any broker parser can read it.
 //
-//   node xlm.mjs                     -- ISINs from trading212/trading212-parsed.json
+//   node xlm.mjs                     -- ISINs from brokers/trading212/trading212-parsed.json
 //   node xlm.mjs --isins=a.csv       -- ISINs from a CSV
 //   node xlm.mjs IE00B4L5Y983 ...    -- ISINs on the command line
 //   node xlm.mjs --refresh           -- refetch instead of trusting the cache
 
 import puppeteer from "puppeteer-core";
 import fs from "node:fs";
+import { fileURLToPath } from "node:url";
 
-const CACHE_PATH = "parsed_json/xlm-cache.json";
+const CACHE_PATH = fileURLToPath(new URL("./xlm-cache.json", import.meta.url));
 const arg = (name) => {
   for (const a of process.argv.slice(2)) {
     const m = a.match(new RegExp(`^--${name}=(.+)$`, "i"));
@@ -34,7 +35,7 @@ const isins = positional.length
   ? isinsFrom(positional.join(" "))
   : isinsFile
     ? isinsFrom(fs.readFileSync(isinsFile, "utf8"))
-    : isinsFrom(fs.readFileSync("trading212/trading212-parsed.json", "utf8"));
+    : isinsFrom(fs.readFileSync(new URL("../brokers/trading212/trading212-parsed.json", import.meta.url), "utf8"));
 
 if (!isins.length) throw new Error("No ISINs to look up.");
 
@@ -121,7 +122,7 @@ if (todo.length) {
             fetchedAt: new Date().toISOString(),
           };
 
-    fs.mkdirSync("parsed_json", { recursive: true });
+    fs.mkdirSync(fileURLToPath(new URL("./", import.meta.url)), { recursive: true });
     fs.writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 2));
   }
 

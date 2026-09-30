@@ -1,8 +1,8 @@
 // Find the EUR.PLN pair and preview (or place) a small conversion so a
 // Warsaw share can be priced. `--live` submits the FX order only.
 //
-//   node mexem/mexem-wse-fx.mjs
-//   node mexem/mexem-wse-fx.mjs --live
+//   node brokers/mexem/mexem-wse-fx.mjs
+//   node brokers/mexem/mexem-wse-fx.mjs --live
 
 import puppeteer from "puppeteer-core";
 import fs from "node:fs";

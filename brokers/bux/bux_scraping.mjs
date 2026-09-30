@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import os from "node:os";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
@@ -54,8 +54,8 @@ const mediaPaths = [
 
 if (mediaPaths.length === 0) mediaPaths.push(readArg("video", "bux.mp4"));
 
-const csvPath = readArg("csv", new URL("../etfs.csv", import.meta.url));
-const stocksCsvPath = readArg("stocks-csv", new URL("../stocks.csv", import.meta.url));
+const csvPath = readArg("csv", new URL("../../assets/etfs.csv", import.meta.url));
+const stocksCsvPath = readArg("stocks-csv", new URL("../../assets/stocks.csv", import.meta.url));
 const outPath = readArg("out", new URL("bux-parsed.json", import.meta.url));
 const fps = Number(readArg("fps", "6"));
 // A row stays on screen for several frames while scrolling slowly, but the

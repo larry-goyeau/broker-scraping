@@ -1,6 +1,6 @@
 import puppeteer from "puppeteer-core";
-import { stampRows } from "../accepted.mjs";
-import { listingKey } from "../venues.mjs";
+import { stampRows } from "../../accepted.mjs";
+import { listingKey } from "../../spreads/venues.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -151,9 +151,9 @@ function placesOf(instrument, type) {
 // `--cryptos-csv=PATH` the coin list. `--etfs-only` / `--stocks-only` /
 // `--crypto-only` answer for one shelf. `--all` keeps lines the catalogues
 // do not carry. `--fresh` starts the file over.
-const etfsCsvPath = pathArg("csv", "../etfs.csv");
-const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
-const cryptosCsvPath = pathArg("cryptos-csv", "../cryptos.csv");
+const etfsCsvPath = pathArg("csv", "../../assets/etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../../assets/stocks.csv");
+const cryptosCsvPath = pathArg("cryptos-csv", "../../assets/cryptos.csv");
 const etfsOnly = hasFlag("etfs-only") || hasFlag("funds-only");
 const stocksOnly = hasFlag("stocks-only");
 const cryptoOnly = hasFlag("crypto-only") || hasFlag("cryptos-only");

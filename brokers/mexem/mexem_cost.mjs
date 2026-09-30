@@ -179,21 +179,21 @@
 //
 //   https://www.mexem.com/fees
 //
-//   node mexem/mexem_cost.mjs IWDA AEB EUR
-//   node mexem/mexem_cost.mjs SPY ARCA USD --shares=10 --price=600
-//   node mexem/mexem_cost.mjs --schedule
+//   node brokers/mexem/mexem_cost.mjs IWDA AEB EUR
+//   node brokers/mexem/mexem_cost.mjs SPY ARCA USD --shares=10 --price=600
+//   node brokers/mexem/mexem_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("mexem-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://www.mexem.com/fees",
@@ -623,7 +623,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const answer = { usd: null, etf, place, currency, onlineBuy: true, cashCurrency: "" };
 
   if (!catalogue) {
-    return { ...answer, why: "le catalogue Mexem n'existe pas encore : lancer `node mexem/mexem_scraping.mjs`" };
+    return { ...answer, why: "le catalogue Mexem n'existe pas encore : lancer `node brokers/mexem/mexem_scraping.mjs`" };
   }
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Mexem` };
@@ -703,7 +703,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     return {
       ...shared,
       basis,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
     };
   }
 

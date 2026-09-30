@@ -1,7 +1,7 @@
 // Convert 10 € to zlotys, then preview (and optionally buy) 1 TPE on WSE.
 //
-//   node mexem/mexem-wse-live.mjs              # FX + whatif only
-//   node mexem/mexem-wse-live.mjs --buy-stock  # also buy/sell 1 TPE if whatif is still blank
+//   node brokers/mexem/mexem-wse-live.mjs              # FX + whatif only
+//   node brokers/mexem/mexem-wse-live.mjs --buy-stock  # also buy/sell 1 TPE if whatif is still blank
 
 import puppeteer from "puppeteer-core";
 import fs from "node:fs";

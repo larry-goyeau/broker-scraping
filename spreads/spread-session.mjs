@@ -26,7 +26,8 @@
 
 import fs from "node:fs";
 import { spawn } from "node:child_process";
-import { catalogueFiles } from "./catalogues.mjs";
+import { catalogueFiles } from "../catalogues.mjs";
+import { fileURLToPath } from "node:url";
 
 const arg = (name) => {
   for (const a of process.argv.slice(2)) {
@@ -38,7 +39,7 @@ const arg = (name) => {
 const NOW_ONLY = process.argv.includes("--now");
 const JOBS = Number(arg("jobs") || 4);
 const SLOTS = (arg("at") || "11:00,13:00,15:00").split(",").map((s) => s.trim());
-const STATE_PATH = "parsed_json/.spread-session.json";
+const STATE_PATH = fileURLToPath(new URL("./.spread-session.json", import.meta.url));
 
 // Paris rather than the machine's zone: the hours that matter are the exchanges', and
 // three of the four places keep them. Compared as wall-clock minutes so that a suspend,
@@ -75,7 +76,7 @@ const asMinutes = (hhmm) => {
 const done = fs.existsSync(STATE_PATH) ? JSON.parse(fs.readFileSync(STATE_PATH, "utf8")) : {};
 const markDone = (date, slot) => {
   (done[date] ||= []).push(slot);
-  fs.mkdirSync("parsed_json", { recursive: true });
+  fs.mkdirSync(fileURLToPath(new URL("./", import.meta.url)), { recursive: true });
   fs.writeFileSync(STATE_PATH, JSON.stringify(done, null, 2));
 };
 
@@ -90,7 +91,7 @@ const run = (script, args) =>
     child.on("exit", (code) => resolve(code ?? 1));
   });
 
-const pass = () => run("spread.mjs", [`--rows=${rows}`, `--jobs=${JOBS}`]);
+const pass = () => run(fileURLToPath(new URL("./spread.mjs", import.meta.url)), [`--rows=${rows}`, `--jobs=${JOBS}`]);
 
 // Euronext decrypts its quotes in the page, so that quarter of the work needs the
 // browser this connects to. Said once, at the start, rather than discovered as 824
@@ -152,4 +153,4 @@ for (const slot of SLOTS) {
 }
 
 console.error("\n===== calibration =====\n");
-await run("spread-calibrate.mjs", ["--min-readings=2"]);
+await run(fileURLToPath(new URL("./spread-calibrate.mjs", import.meta.url)), ["--min-readings=2"]);

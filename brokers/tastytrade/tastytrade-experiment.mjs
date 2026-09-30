@@ -6,8 +6,8 @@
 // for that quote and compares it with the model, at no cost. The market side is the effective
 // spread, and only a real order can say what it was, so `--live` trades.
 //
-//   node tastytrade/tastytrade-experiment.mjs --probe                      # nothing traded
-//   node tastytrade/tastytrade-experiment.mjs --live --plan=IAU:1,AQLT:1
+//   node brokers/tastytrade/tastytrade-experiment.mjs --probe                      # nothing traded
+//   node brokers/tastytrade/tastytrade-experiment.mjs --live --plan=IAU:1,AQLT:1
 //
 // The measurement is the Rule 605 one, so that it can be held against the reports the cost
 // script reads: the mid is noted just before each leg, and the effective spread per share is

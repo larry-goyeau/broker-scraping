@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer-core";
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -163,9 +163,9 @@ function listedType(asset) {
 // `--etfs-only` answer for the funds and notes; `--stocks-only` for the
 // shares; `--no-crypto` leaves the coins out; `--crypto-only` answers for
 // the coins alone.
-const csvPath = pathArg("csv", "../etfs.csv");
-const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
-const cryptosCsvPath = pathArg("cryptos-csv", "../cryptos.csv");
+const csvPath = pathArg("csv", "../../assets/etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../../assets/stocks.csv");
+const cryptosCsvPath = pathArg("cryptos-csv", "../../assets/cryptos.csv");
 const fundsOnly = hasFlag("funds-only") || hasFlag("etfs-only");
 const stocksOnly = hasFlag("stocks-only");
 const cryptoOnly = hasFlag("crypto-only");

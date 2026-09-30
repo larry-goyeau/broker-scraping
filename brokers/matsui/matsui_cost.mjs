@@ -31,22 +31,22 @@
 //   https://www.matsui.co.jp/us-stock/domestic/fee/
 //   https://www.matsui.co.jp/us-stock/domestic/rule/
 //
-//   node matsui/matsui_cost.mjs 1301 Tokyo JPY --shares=10 --price=3000
-//   node matsui/matsui_cost.mjs AAPL XNAS USD --shares=10 --price=230
-//   node matsui/matsui_cost.mjs --schedule
+//   node brokers/matsui/matsui_cost.mjs 1301 Tokyo JPY --shares=10 --price=3000
+//   node brokers/matsui/matsui_cost.mjs AAPL XNAS USD --shares=10 --price=230
+//   node brokers/matsui/matsui_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { bookParts, plus, finite } from "../na.mjs";
-import { usBookPerShare } from "../rule606.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { bookParts, plus, finite } from "../../na.mjs";
+import { usBookPerShare } from "../../spreads/rule606.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("matsui-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   url: "https://www.matsui.co.jp/stock/domestic/fee/",
@@ -130,7 +130,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     cashCurrency: "",
   };
   if (!catalogue) {
-    return { ...answer, why: "le catalogue Matsui n'existe pas encore : lancer `node matsui/matsui_scraping.mjs`" };
+    return { ...answer, why: "le catalogue Matsui n'existe pas encore : lancer `node brokers/matsui/matsui_scraping.mjs`" };
   }
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Matsui` };
@@ -186,7 +186,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const n = Number(shares);
   const p = Number(price);
   if (!(n > 0 && p > 0)) {
-    return { ...shared, why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs" };
+    return { ...shared, why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs" };
   }
 
   const notional = n * p;
@@ -281,7 +281,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const positional = process.argv.slice(2).filter((a) => !a.startsWith("--"));
   const [etf, place, currency] = positional;
   if (!etf) {
-    console.error("usage : node matsui/matsui_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]");
+    console.error("usage : node brokers/matsui/matsui_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]");
     process.exit(2);
   }
 

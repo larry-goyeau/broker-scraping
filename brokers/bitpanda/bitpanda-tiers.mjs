@@ -20,8 +20,8 @@
 // Writes `bitpanda-tiers.json`, which `bitpanda_cost.mjs` prefers over its own
 // guess. Re-running skips what is already measured unless `--force`.
 //
-//   node bitpanda/bitpanda-tiers.mjs
-//   node bitpanda/bitpanda-tiers.mjs --only=ADA,AKITA --force
+//   node brokers/bitpanda/bitpanda-tiers.mjs
+//   node brokers/bitpanda/bitpanda-tiers.mjs --only=ADA,AKITA --force
 //
 // web.bitpanda.com must be signed in on Chrome :9222.
 

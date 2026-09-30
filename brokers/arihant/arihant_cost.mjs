@@ -29,11 +29,11 @@
 //
 // The catalogue has no US line, so no Rule 606 mix is applied.
 //
-//   node arihant/arihant_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
+//   node brokers/arihant/arihant_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../indianDelivery.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
 
 function brokerageEach(notional) {
   return notional * pct("0.30");

@@ -26,9 +26,9 @@
 // closes what it opens. What it leaves behind, if anything goes wrong between
 // the two, is one share of a twelve-dollar company.
 //
-//   node oanda/oanda-trip.mjs                    (lecture seule : cotations, solde)
-//   node oanda/oanda-trip.mjs --go               (l'aller-retour, pour de bon)
-//   node oanda/oanda-trip.mjs --symbol=F.US --volume=1 --go
+//   node brokers/oanda/oanda-trip.mjs                    (lecture seule : cotations, solde)
+//   node brokers/oanda/oanda-trip.mjs --go               (l'aller-retour, pour de bon)
+//   node brokers/oanda/oanda-trip.mjs --symbol=F.US --volume=1 --go
 //
 // Chrome must already be listening on 9222, with the terminal signed in.
 

@@ -7,7 +7,7 @@
 // a reason rather than filled from a neighbour.
 //
 // It describes exchanges, not brokers, so one file serves every broker parser:
-// `parsed_json/spread.json`, holding what one round trip costs on each order book and
+// `spreads/spread.json`, holding what one round trip costs on each order book and
 // nothing else. Everything derivable is derived instead of stored — the venue's name and
 // hours from `venues.mjs`, the page behind the figure from `spreadUrl` — which leaves the
 // file readable at a glance.
@@ -33,7 +33,7 @@
 // the average hour of the session. The multiples come from Deutsche Börse's intraday XLM
 // and are published beside the figure, so an hour can be put back.
 //
-//   node spread.mjs                              -- listings from trading212/trading212-parsed.json
+//   node spread.mjs                              -- listings from brokers/trading212/trading212-parsed.json
 //   node spread.mjs --rows=xtb/xtb-parsed.json
 //   node spread.mjs --rows=a.json,b.json         -- several brokers at once
 //   node spread.mjs --rows=catalogues            -- every <broker>-parsed.json (alias: all)
@@ -70,9 +70,10 @@ import {
   VENUES,
 } from "./venues.mjs";
 import { GULF_BOARDS, gulfSymbol, readGulfBoard } from "./gulf.mjs";
-import { catalogueFiles } from "./catalogues.mjs";
+import { catalogueFiles } from "../catalogues.mjs";
 import { monthlyXlm } from "./xlm-monthly.mjs";
 import { monthlyEffectiveSpread } from "./rule605-monthly.mjs";
+import { fileURLToPath } from "node:url";
 
 const arg = (name) => {
   for (const a of process.argv.slice(2)) {
@@ -82,7 +83,7 @@ const arg = (name) => {
   return "";
 };
 const REFRESH = process.argv.includes("--refresh");
-const STORE_PATH = arg("out") || "parsed_json/spread.json";
+const STORE_PATH = arg("out") || fileURLToPath(new URL("./spread.json", import.meta.url));
 const CHROME = arg("chrome") || "9222";
 const CHROME_URL = /^https?:\/\//i.test(CHROME) ? CHROME : `http://127.0.0.1:${CHROME}`;
 const ONLY = (arg("only") || "")
@@ -93,7 +94,7 @@ const ONLY = (arg("only") || "")
 // ------------------------------------------------------------------- the listings
 
 function rowFileList() {
-  const raw = arg("rows") || "trading212/trading212-parsed.json";
+  const raw = arg("rows") || "brokers/trading212/trading212-parsed.json";
   const parts = raw
     .split(",")
     .map((s) => s.trim())
@@ -290,7 +291,7 @@ if (fs.existsSync(LOCK_PATH) && !process.argv.includes("--force")) {
     process.exit(1);
   }
 }
-fs.mkdirSync("parsed_json", { recursive: true });
+fs.mkdirSync(path.dirname(STORE_PATH), { recursive: true });
 fs.writeFileSync(LOCK_PATH, JSON.stringify({ pid: process.pid, since: new Date().toISOString() }));
 // Released on the way out however that happens, including the interrupt that stopping a
 // long pass always takes.
@@ -527,7 +528,7 @@ const bpFrom = (bid, ask) => {
 // au-touch.json. A missing side is not stored. A monthly ETP average already
 // in the file is a better figure than one morning's touch, so it stays.
 function loadAuTouch() {
-  const path = new URL("parsed_json/au-touch.json", import.meta.url);
+  const path = new URL("./au-touch.json", import.meta.url);
   if (!fs.existsSync(path)) return { books: 0 };
   const data = JSON.parse(fs.readFileSync(path, "utf8"));
   let books = 0;
@@ -1582,7 +1583,7 @@ async function loadEix(wanted) {
 }
 
 async function loadTib() {
-  const path = new URL("traderepublic/traderepublic-touches.json", import.meta.url);
+  const path = new URL("../brokers/traderepublic/traderepublic-touches.json", import.meta.url);
   const data = JSON.parse(fs.readFileSync(path, "utf8"));
   delayedQuotes.tib.clear();
   const venue = VENUES.find((v) => v.mic === "TIB");
@@ -1607,7 +1608,7 @@ async function loadTib() {
 }
 
 async function loadBxswiss() {
-  const path = new URL("parsed_json/bxswiss-touch.json", import.meta.url);
+  const path = new URL("./bxswiss-touch.json", import.meta.url);
   const data = JSON.parse(fs.readFileSync(path, "utf8"));
   delayedQuotes.bxswiss.clear();
   const venue = VENUES.find((v) => v.mic === "XBRN");
@@ -3077,7 +3078,7 @@ for (const l of listings.values()) {
 let done = 0;
 const notes = new Map();
 const flush = () => {
-  fs.mkdirSync("parsed_json", { recursive: true });
+  fs.mkdirSync(path.dirname(STORE_PATH), { recursive: true });
   fs.writeFileSync(
     STORE_PATH,
     JSON.stringify(

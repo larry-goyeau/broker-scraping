@@ -11,8 +11,8 @@
 // rounding to the cent is a fiftieth of the effect being measured, small enough to be a
 // measurement rather than a position.
 //
-//   node trading212/t212-crypto-experiment.mjs --probe          (ne fait que lire les deux prix)
-//   node trading212/t212-crypto-experiment.mjs --live BTC/EUR --amount=50
+//   node brokers/trading212/t212-crypto-experiment.mjs --probe          (ne fait que lire les deux prix)
+//   node brokers/trading212/t212-crypto-experiment.mjs --live BTC/EUR --amount=50
 
 import puppeteer from "puppeteer-core";
 import fs from "node:fs";
@@ -121,7 +121,7 @@ const log = {
 if (!LIVE) {
   fs.writeFileSync(OUT, JSON.stringify(log, null, 2));
   console.log(`\nlecture seule. ${(100 * quotedBefore.quoted).toFixed(2)} % d'aller-retour annoncés sur ${WANTED}.`);
-  console.log(`pour mesurer réellement : node trading212/t212-crypto-experiment.mjs --live ${WANTED} --amount=${AMOUNT}`);
+  console.log(`pour mesurer réellement : node brokers/trading212/t212-crypto-experiment.mjs --live ${WANTED} --amount=${AMOUNT}`);
   await browser.disconnect();
   process.exit(0);
 }

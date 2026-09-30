@@ -11,11 +11,11 @@
 //   US cash stocks. NYSE Arca is written AMEX, which is the name the
 //   catalogues use for that tape. Every row carries an ISIN.
 //
-//   node dhan/dhan_scraping.mjs
+//   node brokers/dhan/dhan_scraping.mjs
 
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
-import { parseCsv, isinOf, keepSold, cashBook, lookup, companyName } from "../indianCash.mjs";
+import { parseCsv, isinOf, keepSold, cashBook, lookup, companyName } from "../../indianCash.mjs";
 
 const FILE = "https://images.dhan.co/api-data/api-scrip-master-detailed.csv";
 const US_FILE = "https://api-global-stocks.dhan.co/api-data/us-stock-scrip-master.csv";

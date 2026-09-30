@@ -12,9 +12,9 @@
 //   DP                          ₹9 + GST per scrip on the pricing page
 // Clearing on NSE and BSE is ₹0. Intraday is another table.
 //
-//   node shoonya/shoonya_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
+//   node brokers/shoonya/shoonya_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
 
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../indianDelivery.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
 
 const SCHEDULE = {
   broker: "Shoonya",

@@ -63,21 +63,21 @@
 // refusé le 2026-09-08 : la caisse ACH instantanée sert aux actions et reste
 // invisible à la crypto (`available: 0`).
 //
-//   node alpaca/alpaca_cost.mjs IAU --shares=1 --price=82.685
-//   node alpaca/alpaca_cost.mjs AAPL NASDAQ USD --shares=1000 --price=230
-//   node alpaca/alpaca_cost.mjs BTC/USD --amount=1000
-//   node alpaca/alpaca_cost.mjs --schedule
+//   node brokers/alpaca/alpaca_cost.mjs IAU --shares=1 --price=82.685
+//   node brokers/alpaca/alpaca_cost.mjs AAPL NASDAQ USD --shares=1000 --price=230
+//   node brokers/alpaca/alpaca_cost.mjs BTC/USD --amount=1000
+//   node brokers/alpaca/alpaca_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { cryptoId, listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { QUOTE, fxRemark } from "../fx.mjs";
+import { cryptoId, listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { QUOTE, fxRemark } from "../../fx.mjs";
 
 const CATALOGUE = new URL("alpaca-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://files.alpaca.markets/disclosures/library/BrokFeeSched.pdf",
@@ -227,7 +227,7 @@ export function roundTrip({
   if (!rows.length) {
     return {
       ...base,
-      why: "le catalogue Alpaca est vide : lancer `node alpaca/alpaca_scraping.mjs`",
+      why: "le catalogue Alpaca est vide : lancer `node brokers/alpaca/alpaca_scraping.mjs`",
     };
   }
 
@@ -283,7 +283,7 @@ export function roundTrip({
   if (!(n > 0) || !(p > 0)) {
     return {
       ...answer,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       remark: remarkOf({ adr }),
     };
   }
@@ -617,10 +617,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node alpaca/alpaca_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--amount=usd] [--json] [--schedule]\n" +
-        "  ex.   node alpaca/alpaca_cost.mjs IAU --shares=1 --price=82.685\n" +
-        "        node alpaca/alpaca_cost.mjs AAPL NASDAQ USD --shares=1000 --price=230\n" +
-        "        node alpaca/alpaca_cost.mjs BTC/USD --amount=1000"
+      "usage : node brokers/alpaca/alpaca_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--amount=usd] [--json] [--schedule]\n" +
+        "  ex.   node brokers/alpaca/alpaca_cost.mjs IAU --shares=1 --price=82.685\n" +
+        "        node brokers/alpaca/alpaca_cost.mjs AAPL NASDAQ USD --shares=1000 --price=230\n" +
+        "        node brokers/alpaca/alpaca_cost.mjs BTC/USD --amount=1000"
     );
     process.exit(1);
   }

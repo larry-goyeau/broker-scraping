@@ -49,23 +49,23 @@
 //   https://cdn.revolut.com/legal/terms/Revolut_Trading_Ltd/Ex-ante_Costs_and_Charges_Disclosure_US_Stocks_10042025.pdf
 //   https://www.revolut.com/en-SI/legal/exchangingcryptocurrenciespersonalfees/
 //
-//   node revolut/revolut_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node revolut/revolut_cost.mjs AAPL NASDAQ USD --entity=uk --shares=10 --price=230
-//   node revolut/revolut_cost.mjs VWCE TRADEGATE EUR --plan=ultra --shares=10 --price=120
-//   node revolut/revolut_cost.mjs BTC --amount=1000
-//   node revolut/revolut_cost.mjs --schedule
+//   node brokers/revolut/revolut_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/revolut/revolut_cost.mjs AAPL NASDAQ USD --entity=uk --shares=10 --price=230
+//   node brokers/revolut/revolut_cost.mjs VWCE TRADEGATE EUR --plan=ultra --shares=10 --price=120
+//   node brokers/revolut/revolut_cost.mjs BTC --amount=1000
+//   node brokers/revolut/revolut_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("revolut-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   eeaStocks: "https://cdn.revolut.com/legal/terms/RSEUAB-ex-ante-costs-report-EEA-stocks-v3.2-EN.pdf",
@@ -360,7 +360,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Revolut n'existe pas encore : lancer `node revolut/revolut_scraping.mjs`",
+      why: "le catalogue Revolut n'existe pas encore : lancer `node brokers/revolut/revolut_scraping.mjs`",
     };
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Revolut` };
@@ -463,7 +463,7 @@ export function roundTrip({
         ? "aucun montant"
         : !(n > 0)
           ? "aucun nombre de parts"
-          : "aucun prix pour cette ligne : lancer node prices.mjs",
+          : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({
         picked,
         house,

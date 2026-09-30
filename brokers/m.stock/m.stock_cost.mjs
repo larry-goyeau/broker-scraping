@@ -19,11 +19,11 @@
 //
 // The catalogue has no US line, so no Rule 606 mix is applied.
 //
-//   node m.stock/m.stock_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
+//   node brokers/m.stock/m.stock_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../indianDelivery.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
 
 const SCHEDULE = {
   broker: "m.Stock",

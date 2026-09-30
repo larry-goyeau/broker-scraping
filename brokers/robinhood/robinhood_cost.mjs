@@ -165,23 +165,23 @@
 // So the two European shelves fail differently: the crypto hides a percent in the
 // price, the token hides a tenth of one in the exchange rate.
 //
-//   node robinhood/robinhood_cost.mjs AAPL --shares=10 --price=230
-//   node robinhood/robinhood_cost.mjs AAPL --shares=10 --price=230 --nat=FR
-//   node robinhood/robinhood_cost.mjs AAPL --shares=10 --price=230 --nat=GB --isa
-//   node robinhood/robinhood_cost.mjs BTC --amount=1000 --nat=FR
-//   node robinhood/robinhood_cost.mjs --schedule
+//   node brokers/robinhood/robinhood_cost.mjs AAPL --shares=10 --price=230
+//   node brokers/robinhood/robinhood_cost.mjs AAPL --shares=10 --price=230 --nat=FR
+//   node brokers/robinhood/robinhood_cost.mjs AAPL --shares=10 --price=230 --nat=GB --isa
+//   node brokers/robinhood/robinhood_cost.mjs BTC --amount=1000 --nat=FR
+//   node brokers/robinhood/robinhood_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../fx.mjs";
-import { EEA } from "../accepted.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../../fx.mjs";
+import { EEA } from "../../accepted.mjs";
 
 const CATALOGUE = new URL("robinhood-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://cdn.robinhood.com/assets/robinhood/legal/RHF+Fee+Schedule.pdf",
@@ -481,7 +481,7 @@ export function roundTrip({
   };
 
   if (!catalogue) {
-    return { ...base, why: "le catalogue Robinhood n'existe pas encore : lancer `node robinhood/robinhood_scraping.mjs`" };
+    return { ...base, why: "le catalogue Robinhood n'existe pas encore : lancer `node brokers/robinhood/robinhood_scraping.mjs`" };
   }
 
   const { named, matches } = findListing({ etf, place, currency });
@@ -555,7 +555,7 @@ export function roundTrip({
   if (!(n > 0) || !(p > 0)) {
     return {
       ...answer,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       remark: remarkOf({ who, isa, adr, ukFx, currency: listing.currency }),
     };
   }
@@ -966,12 +966,12 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node robinhood/robinhood_cost.mjs <ticker|ISIN> [place] [devise]\n" +
+      "usage : node brokers/robinhood/robinhood_cost.mjs <ticker|ISIN> [place] [devise]\n" +
         "        [--nat=FR] [--entity=us|uk|eu] [--isa] [--weekend] [--shares=n] [--price=p] [--amount=x] [--json] [--schedule]\n" +
-        "  ex.   node robinhood/robinhood_cost.mjs AAPL --shares=10 --price=230\n" +
-        "        node robinhood/robinhood_cost.mjs AAPL --shares=10 --price=230 --nat=FR    (Classic Stock Token)\n" +
-        "        node robinhood/robinhood_cost.mjs AAPL --shares=10 --price=230 --nat=GB --isa\n" +
-        "        node robinhood/robinhood_cost.mjs BTC --amount=1000 --nat=FR"
+        "  ex.   node brokers/robinhood/robinhood_cost.mjs AAPL --shares=10 --price=230\n" +
+        "        node brokers/robinhood/robinhood_cost.mjs AAPL --shares=10 --price=230 --nat=FR    (Classic Stock Token)\n" +
+        "        node brokers/robinhood/robinhood_cost.mjs AAPL --shares=10 --price=230 --nat=GB --isa\n" +
+        "        node brokers/robinhood/robinhood_cost.mjs BTC --amount=1000 --nat=FR"
     );
     process.exit(1);
   }

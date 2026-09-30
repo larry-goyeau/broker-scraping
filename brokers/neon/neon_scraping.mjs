@@ -8,9 +8,9 @@
 //   https://static-assets.neon-free.ch/website/asset_list.json
 //   https://www.neon-free.ch/en/faq/where-are-my-investments-traded
 //
-//   node neon/neon_scraping.mjs
+//   node brokers/neon/neon_scraping.mjs
 
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
 
 const LIST = "https://static-assets.neon-free.ch/website/asset_list.json";

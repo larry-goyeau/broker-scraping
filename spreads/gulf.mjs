@@ -1,6 +1,6 @@
 // The four Gulf order books that publish themselves for nothing, read once and handed
 // to whoever asks. A fact about exchanges rather than about any broker, so it sits at
-// the root beside `venues.mjs`, and two scripts read it: `spread.mjs` takes the touch,
+// `spreads/` beside `venues.mjs`, and two scripts read it: `spread.mjs` takes the touch,
 // `prices.mjs` takes the last price. One request returns the whole board either way,
 // so asking twice for two different fields would be a waste of the same call.
 //

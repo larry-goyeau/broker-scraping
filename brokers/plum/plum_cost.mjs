@@ -48,24 +48,24 @@
 //   https://help.withplum.com/en/articles/12699453-stocks-fees
 //   https://help.withplum.com/en/articles/9324666-etfs-fees
 //
-//   node plum/plum_cost.mjs AAPL --shares=10 --price=230
-//   node plum/plum_cost.mjs AAPL --plan=max --shares=10 --price=230
-//   node plum/plum_cost.mjs VWCE --plan=eu --shares=10 --price=120
-//   node plum/plum_cost.mjs --schedule
+//   node brokers/plum/plum_cost.mjs AAPL --shares=10 --price=230
+//   node brokers/plum/plum_cost.mjs AAPL --plan=max --shares=10 --price=230
+//   node brokers/plum/plum_cost.mjs VWCE --plan=eu --shares=10 --price=120
+//   node brokers/plum/plum_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("plum-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
-const ETFS_CSV = new URL("../etfs.csv", import.meta.url);
-const STOCKS_CSV = new URL("../stocks.csv", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
+const ETFS_CSV = new URL("../../assets/etfs.csv", import.meta.url);
+const STOCKS_CSV = new URL("../../assets/stocks.csv", import.meta.url);
 
 const SCHEDULE = {
   uk: "https://withplum.com/en-gb/legal/fees",
@@ -467,7 +467,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Plum n'existe pas encore : lancer `node plum/plum_scraping.mjs`",
+      why: "le catalogue Plum n'existe pas encore : lancer `node brokers/plum/plum_scraping.mjs`",
     };
   }
 
@@ -573,7 +573,7 @@ export function roundTrip({
   if (!(n > 0) || !(p > 0)) {
     return {
       ...shared,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({
         picked,
         market,

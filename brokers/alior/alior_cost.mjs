@@ -35,21 +35,21 @@
 //   https://www.aliorbank.pl/dam/jcr:375c7199-4817-452d-994d-1903e8584110/brak-prowizji-od-obrotu-instrumentami-ETFETCETN-notowanymi-na-GPW-032026-1-6-2-1.pdf
 //   https://www.aliorbank.pl/dam/jcr:5e3db0b4-dde1-420e-ac21-035bbee91caa/Komunikat-Wykaz-depozytariuszy-zagranicznych-i-brokerow-zagranicznych.pdf
 //
-//   node alior/alior_cost.mjs PLPKO0000016 GPW PLN --shares=10 --price=50
-//   node alior/alior_cost.mjs US0378331005 XNAS USD --shares=10 --price=230
-//   node alior/alior_cost.mjs --schedule
+//   node brokers/alior/alior_cost.mjs PLPKO0000016 GPW PLN --shares=10 --price=50
+//   node brokers/alior/alior_cost.mjs US0378331005 XNAS USD --shares=10 --price=230
+//   node brokers/alior/alior_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { bookParts, plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, listingCash } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { bookParts, plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, listingCash } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("alior-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   url: "https://www.aliorbank.pl/dam/jcr:ca1b9ef9-7529-4aed-9ac1-3fd5ff8a63ff/Taryfa-oplat-i-prowizji-Biura-Maklerskiego-Alior-Banku-S.A-z-dnia-12.11.2025.pdf",
@@ -196,7 +196,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     cashCurrency: "",
   };
   if (!catalogue) {
-    return { ...answer, why: "le catalogue Alior n'existe pas encore : lancer `node alior/alior_scraping.mjs`" };
+    return { ...answer, why: "le catalogue Alior n'existe pas encore : lancer `node brokers/alior/alior_scraping.mjs`" };
   }
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Alior` };
@@ -252,7 +252,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     fx: { quote: QUOTE, asOf: FX_AS_OF, listing: usdPer(listing.currency) },
   };
   if (!priced) {
-    return { ...shared, why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs" };
+    return { ...shared, why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs" };
   }
 
   const notional = n * p;
@@ -348,7 +348,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const positional = process.argv.slice(2).filter((a) => !a.startsWith("--"));
   const [etf, place, currency] = positional;
   if (!etf) {
-    console.error("usage : node alior/alior_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]");
+    console.error("usage : node brokers/alior/alior_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]");
     process.exit(2);
   }
 

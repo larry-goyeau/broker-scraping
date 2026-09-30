@@ -1,6 +1,6 @@
 // US / OTC / Ireland previews on the CapTrader portal. Nothing is submitted.
 //
-//   node captrader/captrader-us-whatif.mjs
+//   node brokers/captrader/captrader-us-whatif.mjs
 
 import fs from "node:fs";
 import puppeteer from "puppeteer-core";

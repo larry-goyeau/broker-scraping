@@ -14,9 +14,9 @@
 //   https://investengine.com/etfs/all/
 //   https://help.investengine.com/hc/en-gb/articles/10467247601309-How-does-InvestEngine-place-its-trades
 //
-//   node investEngine/investEngine_scraping.mjs
+//   node brokers/investEngine/investEngine_scraping.mjs
 
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
 
 const PAGE = "https://investengine.com/etfs/all/";

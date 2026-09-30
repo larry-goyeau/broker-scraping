@@ -30,7 +30,8 @@
 
 import fs from "node:fs";
 import { listingKey, VENUES } from "./venues.mjs";
-import { catalogueRows } from "./catalogues.mjs";
+import { catalogueRows } from "../catalogues.mjs";
+import { fileURLToPath } from "node:url";
 
 const arg = (name) => {
   for (const a of process.argv.slice(2)) {
@@ -41,7 +42,7 @@ const arg = (name) => {
 };
 const MIN_READINGS = Number(arg("min-readings") || 0);
 const CROSS_CURRENCY = process.argv.includes("--cross-currency");
-const STORE_PATH = arg("store") || "parsed_json/spread.json";
+const STORE_PATH = arg("store") || fileURLToPath(new URL("./spread.json", import.meta.url));
 const REFERENCE = "XETR";
 
 const store = JSON.parse(fs.readFileSync(STORE_PATH, "utf8"));

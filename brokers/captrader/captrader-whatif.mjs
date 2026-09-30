@@ -4,9 +4,9 @@
 // CapTrader tab. It previews and returns; there is no path to `orders` without
 // `whatif` on the end.
 //
-//   node captrader/captrader-whatif.mjs
-//   node captrader/captrader-whatif.mjs --only=amsterdam_dirige
-//   node captrader/captrader-whatif.mjs --symbol=ORA --venue=SBF
+//   node brokers/captrader/captrader-whatif.mjs
+//   node brokers/captrader/captrader-whatif.mjs --only=amsterdam_dirige
+//   node brokers/captrader/captrader-whatif.mjs --symbol=ORA --venue=SBF
 //
 // Answers land in `captrader-whatif.json`.
 

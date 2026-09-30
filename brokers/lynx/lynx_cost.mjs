@@ -102,23 +102,23 @@
 // Conversion is the client's own order. The list prints no FX commission,
 // so none is invented. Custody of an ordinary line is not a ticket.
 //
-//   node lynx/lynx_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node lynx/lynx_cost.mjs TTE SBF EUR --shares=10 --price=60
-//   node lynx/lynx_cost.mjs IWDA AEB EUR --shares=1 --price=126
-//   node lynx/lynx_cost.mjs --schedule
+//   node brokers/lynx/lynx_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/lynx/lynx_cost.mjs TTE SBF EUR --shares=10 --price=60
+//   node brokers/lynx/lynx_cost.mjs IWDA AEB EUR --shares=1 --price=126
+//   node brokers/lynx/lynx_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
 import { pathToFileURL } from "node:url";
-import { listingKey, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("lynx-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://documents.lynxbroker.com/documents/IE/NL_List_of_Prices_and_Services_ENG.pdf",
@@ -419,7 +419,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const answer = { usd: null, brokerFees: null, etf, place, currency, onlineBuy: true, cashCurrency: "" };
 
   if (!catalogue) {
-    return { ...answer, why: "le catalogue LYNX n'existe pas encore : lancer `node lynx/lynx_scraping.mjs`" };
+    return { ...answer, why: "le catalogue LYNX n'existe pas encore : lancer `node brokers/lynx/lynx_scraping.mjs`" };
   }
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue LYNX` };
@@ -489,7 +489,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     return {
       ...shared,
       basis,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
     };
   }
 
@@ -665,11 +665,11 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node lynx/lynx_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--json]\n" +
-        "        node lynx/lynx_cost.mjs --schedule\n" +
-        "  ex.   node lynx/lynx_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
-        "        node lynx/lynx_cost.mjs TTE SBF EUR --shares=10 --price=60\n" +
-        "        node lynx/lynx_cost.mjs IWDA AEB EUR --shares=1 --price=126"
+      "usage : node brokers/lynx/lynx_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--json]\n" +
+        "        node brokers/lynx/lynx_cost.mjs --schedule\n" +
+        "  ex.   node brokers/lynx/lynx_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
+        "        node brokers/lynx/lynx_cost.mjs TTE SBF EUR --shares=10 --price=60\n" +
+        "        node brokers/lynx/lynx_cost.mjs IWDA AEB EUR --shares=1 --price=126"
     );
     process.exit(2);
   }

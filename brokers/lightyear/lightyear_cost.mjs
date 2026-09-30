@@ -48,24 +48,24 @@
 //   https://lightyear.com/en-eu/help/deposits-conversions-and-withdrawals/fees-and-taxes
 //   https://lightyear.com/en-gb/help/deposits-conversions-and-withdrawals/fees-and-taxes
 //
-//   node lightyear/lightyear_cost.mjs IWDA
-//   node lightyear/lightyear_cost.mjs AAPL NASDAQ USD --shares=1 --price=230
-//   node lightyear/lightyear_cost.mjs TTE EURONEXT EUR --shares=1 --price=80
-//   node lightyear/lightyear_cost.mjs HSBA LSE GBP --plan=uk
-//   node lightyear/lightyear_cost.mjs BTC --amount=1000
-//   node lightyear/lightyear_cost.mjs --schedule
+//   node brokers/lightyear/lightyear_cost.mjs IWDA
+//   node brokers/lightyear/lightyear_cost.mjs AAPL NASDAQ USD --shares=1 --price=230
+//   node brokers/lightyear/lightyear_cost.mjs TTE EURONEXT EUR --shares=1 --price=80
+//   node brokers/lightyear/lightyear_cost.mjs HSBA LSE GBP --plan=uk
+//   node brokers/lightyear/lightyear_cost.mjs BTC --amount=1000
+//   node brokers/lightyear/lightyear_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { cryptoId, listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { cryptoId, listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("lightyear-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   eu: "https://lightyear.com/en-eu/pricing",
@@ -339,7 +339,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Lightyear n'existe pas encore : lancer `node lightyear/lightyear_scraping.mjs`",
+      why: "le catalogue Lightyear n'existe pas encore : lancer `node brokers/lightyear/lightyear_scraping.mjs`",
     };
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Lightyear` };
@@ -444,7 +444,7 @@ export function roundTrip({
         ? "aucun montant"
         : !(n > 0)
           ? "aucun nombre de parts"
-          : "aucun prix pour cette ligne : lancer node prices.mjs",
+          : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({
         picked,
         market,

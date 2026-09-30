@@ -11,12 +11,12 @@
 import { rowsNamed, warmListingIndex } from "./listingIndex.mjs";
 import fs from "node:fs";
 import { pathToFileURL } from "node:url";
-import { listingKey, resolveVenue, spreadLeaf } from "./venues.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "./spreads/venues.mjs";
 import { plus, finite } from "./na.mjs";
 import { QUOTE, toUsd } from "./fx.mjs";
 
 const CRORE = 10_000_000;
-const SPREADS = new URL("./parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("./spreads/spread.json", import.meta.url);
 
 let spreadsCache;
 function spreadsOf() {
@@ -165,7 +165,7 @@ export function indiaRoundTrip(schedule, query) {
     const low = schedule.brokerageEach(0);
     const high = schedule.brokerageEach(1e12);
     if (low === high && Number.isFinite(low)) flatEach = low;
-    else return { ...shared, basis, why: "aucun prix pour cette ligne : lancer node prices.mjs" };
+    else return { ...shared, basis, why: "aucun prix pour cette ligne : lancer node assets/prices.mjs" };
   }
 
   const notional = priced ? n * p : 0;
@@ -186,7 +186,7 @@ export function indiaRoundTrip(schedule, query) {
   let sebi = notional * schedule.sebiRate * 2;
   let ipft = notional * ipftRate * 2;
   const dpBase = typeof schedule.dpInr === "function" ? (priced ? schedule.dpInr(notional) : null) : schedule.dpInr || 0;
-  if (dpBase == null) return { ...shared, basis, why: "aucun prix pour cette ligne : lancer node prices.mjs" };
+  if (dpBase == null) return { ...shared, basis, why: "aucun prix pour cette ligne : lancer node assets/prices.mjs" };
   if (schedule.roundRupee) {
     stt = Math.round(stt);
     stamp = Math.round(stamp);
@@ -226,7 +226,7 @@ export function indiaRoundTrip(schedule, query) {
     perShare: marketPerShare,
     basis,
     ...(!priced
-      ? { why: "aucun prix pour cette ligne : lancer node prices.mjs" }
+      ? { why: "aucun prix pour cette ligne : lancer node assets/prices.mjs" }
       : bookUsd == null
         ? { why: `aucun carnet pour ${listing.exchange} : ${m.unsourced?.why || "pas de source de spread"}` }
         : {}),

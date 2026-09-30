@@ -19,11 +19,11 @@
 // The catalogue has no US line. Choice Equity Broking does not name a US
 // broker-dealer. ChoiceTrade is a different firm. No Rule 606 mix.
 //
-//   node choice/choice_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
+//   node brokers/choice/choice_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../indianDelivery.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
 
 function brokerageEach(notional) {
   return Math.min(20, notional * pct("0.20"));

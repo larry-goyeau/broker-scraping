@@ -45,23 +45,23 @@
 //
 //   https://www.choicetrade.com/pricing.php
 //
-//   node choicetrade/choicetrade_cost.mjs IAU --shares=1 --price=82
-//   node choicetrade/choicetrade_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node choicetrade/choicetrade_cost.mjs AGSCF OTC USD --shares=1 --price=2
-//   node choicetrade/choicetrade_cost.mjs AGSCF OTC USD --shares=12000 --price=2
-//   node choicetrade/choicetrade_cost.mjs --schedule
+//   node brokers/choicetrade/choicetrade_cost.mjs IAU --shares=1 --price=82
+//   node brokers/choicetrade/choicetrade_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/choicetrade/choicetrade_cost.mjs AGSCF OTC USD --shares=1 --price=2
+//   node brokers/choicetrade/choicetrade_cost.mjs AGSCF OTC USD --shares=12000 --price=2
+//   node brokers/choicetrade/choicetrade_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("choicetrade-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://www.choicetrade.com/pricing.php",
@@ -194,7 +194,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue ChoiceTrade n'existe pas encore : lancer `node choicetrade/choicetrade_scraping.mjs`",
+      why: "le catalogue ChoiceTrade n'existe pas encore : lancer `node brokers/choicetrade/choicetrade_scraping.mjs`",
     };
   }
 
@@ -272,7 +272,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     return {
       ...shared,
       basis,
-      why: "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({ market, listing, leaf, marketBp, marketPerShare, unsourced: m.unsourced, taxPct, n }),
     };
   }

@@ -11,8 +11,9 @@
 //   node korea-touch.mjs --jobs=8
 
 import fs from "node:fs";
+import { fileURLToPath } from "node:url";
 
-const STORE = "parsed_json/spread.json";
+const STORE = fileURLToPath(new URL("./spread.json", import.meta.url));
 const LOCK = `${STORE}.lock`;
 const JOBS = Math.max(1, Number((process.argv.find((a) => a.startsWith("--jobs=")) || "").slice(7) || 8));
 const CLOSE = 15 * 60 + 30;
@@ -209,7 +210,7 @@ if (fs.existsSync(LOCK)) {
     process.exit(1);
   }
 }
-fs.mkdirSync("parsed_json", { recursive: true });
+fs.mkdirSync(fileURLToPath(new URL("./", import.meta.url)), { recursive: true });
 fs.writeFileSync(LOCK, JSON.stringify({ pid: process.pid, since: new Date().toISOString() }));
 
 try {

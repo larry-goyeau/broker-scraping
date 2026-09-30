@@ -42,26 +42,26 @@
 //   https://www.etoro.com/trading/fees/conversion/
 //   https://www.etoro.com/en-us/trading/fees/
 //
-//   node etoro/etoro_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node etoro/etoro_cost.mjs VUSA EURONEXT EUR --shares=10 --price=100
-//   node etoro/etoro_cost.mjs 0700 HKEX HKD --shares=10 --price=400
-//   node etoro/etoro_cost.mjs AAL LSE GBX --shares=10 --price=2800
-//   node etoro/etoro_cost.mjs BTC --amount=1000
-//   node etoro/etoro_cost.mjs AAPL NASDAQ USD --plan=uk --shares=10 --price=230
-//   node etoro/etoro_cost.mjs SPY AMEX USD --plan=us --shares=10 --price=580
-//   node etoro/etoro_cost.mjs --schedule
+//   node brokers/etoro/etoro_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/etoro/etoro_cost.mjs VUSA EURONEXT EUR --shares=10 --price=100
+//   node brokers/etoro/etoro_cost.mjs 0700 HKEX HKD --shares=10 --price=400
+//   node brokers/etoro/etoro_cost.mjs AAL LSE GBX --shares=10 --price=2800
+//   node brokers/etoro/etoro_cost.mjs BTC --amount=1000
+//   node brokers/etoro/etoro_cost.mjs AAPL NASDAQ USD --plan=uk --shares=10 --price=230
+//   node brokers/etoro/etoro_cost.mjs SPY AMEX USD --plan=us --shares=10 --price=580
+//   node brokers/etoro/etoro_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("etoro-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://www.etoro.com/trading/fees/",
@@ -334,7 +334,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue eToro n'existe pas encore : lancer `node etoro/etoro_scraping.mjs`",
+      why: "le catalogue eToro n'existe pas encore : lancer `node brokers/etoro/etoro_scraping.mjs`",
     };
   }
 
@@ -429,7 +429,7 @@ export function roundTrip({
         ? "aucun montant pour cette ligne"
         : !(n > 0)
           ? "aucun nombre de parts"
-          : "aucun prix pour cette ligne : lancer node prices.mjs",
+          : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({
         picked,
         market,

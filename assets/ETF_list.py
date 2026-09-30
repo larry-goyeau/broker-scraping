@@ -2,6 +2,7 @@ import re
 import sys
 import time
 from copy import deepcopy
+from pathlib import Path
 from typing import Optional, Sequence
 import pandas as pd
 from tradingview_screener import Column, Query
@@ -265,7 +266,7 @@ if __name__ == "__main__":
     print(export_df["kind"].value_counts().to_string())
 
     # Optional: save to CSV. Output path can be overridden as the first CLI arg
-    # (defaults to etfs.csv).
-    output_path = positional[0] if positional else "etfs.csv"
+    # (defaults to assets/etfs.csv, beside this script).
+    output_path = positional[0] if positional else str(Path(__file__).with_name("etfs.csv"))
     export_df[["ticker", "exchange", "isin", "name"]].to_csv(output_path, index=False)
     write_kinds(export_df, output_path)

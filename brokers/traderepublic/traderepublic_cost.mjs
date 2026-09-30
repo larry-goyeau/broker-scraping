@@ -30,23 +30,23 @@
 //   https://support.traderepublic.com/de-de/835f9deb-b864-4587-b428-7facfc55296c
 //   https://support.traderepublic.com/de-de/88-Wie-funktioniert-die-
 //
-//   node traderepublic/traderepublic_cost.mjs VWCE --shares=10 --price=140
-//   node traderepublic/traderepublic_cost.mjs AAPL --shares=10 --price=200
-//   node traderepublic/traderepublic_cost.mjs AAPL --plan=direct --shares=10 --price=200
-//   node traderepublic/traderepublic_cost.mjs BTC --amount=1000
-//   node traderepublic/traderepublic_cost.mjs --schedule
+//   node brokers/traderepublic/traderepublic_cost.mjs VWCE --shares=10 --price=140
+//   node brokers/traderepublic/traderepublic_cost.mjs AAPL --shares=10 --price=200
+//   node brokers/traderepublic/traderepublic_cost.mjs AAPL --plan=direct --shares=10 --price=200
+//   node brokers/traderepublic/traderepublic_cost.mjs BTC --amount=1000
+//   node brokers/traderepublic/traderepublic_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { cryptoId, listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { cryptoId, listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("traderepublic-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 const TOUCHES = new URL("traderepublic-touches.json", import.meta.url);
 
 const SCHEDULE = {
@@ -277,7 +277,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Trade Republic n'existe pas encore : lancer `node traderepublic/traderepublic_scraping.mjs`",
+      why: "le catalogue Trade Republic n'existe pas encore : lancer `node brokers/traderepublic/traderepublic_scraping.mjs`",
     };
   }
 
@@ -363,7 +363,7 @@ export function roundTrip({
         ? "aucun montant pour cette ligne crypto"
         : !(n > 0)
           ? "aucun nombre de parts"
-          : "aucun prix pour cette ligne : lancer node prices.mjs",
+          : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({
         plan,
         crypto,
@@ -528,10 +528,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node traderepublic/traderepublic_cost.mjs <ticker|ISIN> [place] [devise] [--plan=best|direct] [--shares=n] [--price=p]\n" +
-        "        node traderepublic/traderepublic_cost.mjs --schedule\n" +
-        "  ex.   node traderepublic/traderepublic_cost.mjs VWCE --shares=10 --price=140\n" +
-        "        node traderepublic/traderepublic_cost.mjs AAPL NASDAQ USD --plan=direct --shares=10 --price=230"
+      "usage : node brokers/traderepublic/traderepublic_cost.mjs <ticker|ISIN> [place] [devise] [--plan=best|direct] [--shares=n] [--price=p]\n" +
+        "        node brokers/traderepublic/traderepublic_cost.mjs --schedule\n" +
+        "  ex.   node brokers/traderepublic/traderepublic_cost.mjs VWCE --shares=10 --price=140\n" +
+        "        node brokers/traderepublic/traderepublic_cost.mjs AAPL NASDAQ USD --plan=direct --shares=10 --price=230"
     );
     process.exit(2);
   }

@@ -8,11 +8,11 @@
 // on the row. NFO, BFO, indices and debt series are not part of this
 // catalogue.
 //
-//   node firstock/firstock_scraping.mjs
+//   node brokers/firstock/firstock_scraping.mjs
 
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
-import { parseCsv, isinOf, seriesOf, keepSold, cashBook, lookup, companyName } from "../indianCash.mjs";
+import { parseCsv, isinOf, seriesOf, keepSold, cashBook, lookup, companyName } from "../../indianCash.mjs";
 
 const FILES = [
   "https://api.firstock.in/V1/symbols/NSE",

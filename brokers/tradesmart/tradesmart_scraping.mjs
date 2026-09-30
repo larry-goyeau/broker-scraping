@@ -11,10 +11,10 @@
 //   ISIN is joined from the NSE list and from Upstox. A line with no
 //   join stays out. An indicative NAV stays out.
 //
-//   node tradesmart/tradesmart_scraping.mjs
+//   node brokers/tradesmart/tradesmart_scraping.mjs
 
-import { stampRows } from "../accepted.mjs";
-import { parseCsv, cashBook, lookup, companyName, isinOf, debtIsin, isInav } from "../indianCash.mjs";
+import { stampRows } from "../../accepted.mjs";
+import { parseCsv, cashBook, lookup, companyName, isinOf, debtIsin, isInav } from "../../indianCash.mjs";
 import { inflateRawSync } from "node:zlib";
 import fs from "node:fs";
 

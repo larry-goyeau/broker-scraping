@@ -26,12 +26,12 @@
 //   https://www.nuvama.com/disclaimer/
 //   https://files.brokercheck.finra.org/firm/firm_172455.pdf
 //
-//   node nuvama/nuvama_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
-//   node nuvama/nuvama_cost.mjs RELIANCE NSE INR --shares=10 --price=1400 --plan=elite
+//   node brokers/nuvama/nuvama_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
+//   node brokers/nuvama/nuvama_cost.mjs RELIANCE NSE INR --shares=10 --price=1400 --plan=elite
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../indianDelivery.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
 
 const REMARK = "Depository settlement fee is ₹4 at NSDL or ₹5.50 at CDSL.";
 

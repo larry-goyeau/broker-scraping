@@ -13,9 +13,9 @@
 // The grid is the rate. A paragraph under it still quotes the older NSE
 // ₹325 + ₹10 IPFT. There is no US broker-dealer on this page.
 //
-//   node prostocks/prostocks_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
+//   node brokers/prostocks/prostocks_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
 
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../indianDelivery.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
 
 const CRORE = 10_000_000;
 

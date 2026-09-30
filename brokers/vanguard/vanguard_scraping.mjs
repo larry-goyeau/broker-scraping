@@ -3,21 +3,21 @@
 // menu. Figure 3 is the ASX shares, and the footnote dates that table on
 // its own. A managed fund is an unlisted APIR and stays out. The kids
 // menu repeats four of those funds and stays out. There is no ETC and no
-// ETN. The page has no ISIN. A code is joined to ../stocks.csv and
-// ../etfs.csv when exactly one ASX ISIN matches.
+// ETN. The page has no ISIN. A code is joined to ../../assets/stocks.csv and
+// ../../assets/etfs.csv when exactly one ASX ISIN matches.
 //
 //   https://fund-docs.vanguard.com/AU-Vanguard_Personal_Investor_Investment_Menu.pdf
 //
-//   node vanguard/vanguard_scraping.mjs
+//   node brokers/vanguard/vanguard_scraping.mjs
 
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
 import zlib from "node:zlib";
 
 const MENU = "https://fund-docs.vanguard.com/AU-Vanguard_Personal_Investor_Investment_Menu.pdf";
 const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36";
-const STOCKS = new URL("../stocks.csv", import.meta.url);
-const ETFS = new URL("../etfs.csv", import.meta.url);
+const STOCKS = new URL("../../assets/stocks.csv", import.meta.url);
+const ETFS = new URL("../../assets/etfs.csv", import.meta.url);
 
 function normalize(value) {
   return String(value ?? "").replace(/\s+/g, " ").trim();

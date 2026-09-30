@@ -10,9 +10,9 @@
 // basicUniverse false is Freetrade's own flag that the line is not for sale.
 // A crypto ETN stays: it is an ETN. Freetrade does not sell the coin itself.
 //
-//   node freetrade/freetrade_scraping.mjs
+//   node brokers/freetrade/freetrade_scraping.mjs
 
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
 
 const ORIGIN = "https://web.freetrade.io";

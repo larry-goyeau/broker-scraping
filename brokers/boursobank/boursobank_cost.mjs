@@ -62,24 +62,24 @@
 //
 //   https://www.boursobank.com/content/brochure_tarifaire/boursorama_bt.pdf
 //
-//   node boursobank/boursobank_cost.mjs TTE --shares=10 --price=78
-//   node boursobank/boursobank_cost.mjs IWDA EURONEXT EUR --shares=10 --price=100
-//   node boursobank/boursobank_cost.mjs MC EURONEXT EUR --shares=5 --price=600 --plan=trader
-//   node boursobank/boursobank_cost.mjs MEDP NASDAQ USD --shares=1 --price=300
-//   node boursobank/boursobank_cost.mjs --schedule
+//   node brokers/boursobank/boursobank_cost.mjs TTE --shares=10 --price=78
+//   node brokers/boursobank/boursobank_cost.mjs IWDA EURONEXT EUR --shares=10 --price=100
+//   node brokers/boursobank/boursobank_cost.mjs MC EURONEXT EUR --shares=5 --price=600 --plan=trader
+//   node brokers/boursobank/boursobank_cost.mjs MEDP NASDAQ USD --shares=1 --price=300
+//   node brokers/boursobank/boursobank_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("boursobank-parsed.json", import.meta.url);
 const PARTNERS_FILE = new URL("boursomarkets.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://www.boursobank.com/content/brochure_tarifaire/boursorama_bt.pdf",
@@ -466,7 +466,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue BoursoBank n'existe pas encore : lancer `node boursobank/boursobank_scraping.mjs`",
+      why: "le catalogue BoursoBank n'existe pas encore : lancer `node brokers/boursobank/boursobank_scraping.mjs`",
     };
   }
   const { named, matches } = findListing({ etf, place, currency });
@@ -554,7 +554,7 @@ export function roundTrip({
     return {
       ...shared,
       basis,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
     };
   }
 

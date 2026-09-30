@@ -12,9 +12,9 @@
 //   DP on a delivery sell       ₹25 plus the NSDL ₹4 per debit, GST extra
 // Intraday is another table. The ETF delivery row prints the same 0.1%.
 //
-//   node rupeezy/rupeezy_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
+//   node brokers/rupeezy/rupeezy_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
 
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../indianDelivery.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
 
 const CRORE = 10_000_000;
 

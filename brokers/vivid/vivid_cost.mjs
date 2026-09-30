@@ -43,24 +43,24 @@
 //   https://help-business.vivid.money/en/articles/12259477-what-is-the-cost-of-trading-in-business-brokerage
 //   https://vivid.money/en-eu/business/plans/treasury/
 //
-//   node vivid/vivid_cost.mjs VWCE TRADEGATE EUR --shares=10 --price=140
-//   node vivid/vivid_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node vivid/vivid_cost.mjs AAPL NASDAQ USD --plan=prime --shares=10 --price=230
-//   node vivid/vivid_cost.mjs AAPL NASDAQ USD --entity=business --shares=10 --price=230
-//   node vivid/vivid_cost.mjs BTC --amount=1000
-//   node vivid/vivid_cost.mjs --schedule
+//   node brokers/vivid/vivid_cost.mjs VWCE TRADEGATE EUR --shares=10 --price=140
+//   node brokers/vivid/vivid_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/vivid/vivid_cost.mjs AAPL NASDAQ USD --plan=prime --shares=10 --price=230
+//   node brokers/vivid/vivid_cost.mjs AAPL NASDAQ USD --entity=business --shares=10 --price=230
+//   node brokers/vivid/vivid_cost.mjs BTC --amount=1000
+//   node brokers/vivid/vivid_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { cryptoId, listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { cryptoId, listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("vivid-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   invest: "https://support.vivid.money/en/articles/9278373-what-s-the-cost-of-trading-with-the-invest-pocket",
@@ -395,7 +395,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Vivid n'existe pas encore : lancer `node vivid/vivid_scraping.mjs`",
+      why: "le catalogue Vivid n'existe pas encore : lancer `node brokers/vivid/vivid_scraping.mjs`",
     };
   }
 
@@ -499,7 +499,7 @@ export function roundTrip({
         ? "aucun montant"
         : !(n > 0)
           ? "aucun nombre de parts"
-          : "aucun prix pour cette ligne : lancer node prices.mjs",
+          : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({
         house,
         picked,
@@ -705,12 +705,12 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node vivid/vivid_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--amount=a] [--plan=…] [--entity=personal|business] [--json]\n" +
-        "        node vivid/vivid_cost.mjs --schedule\n" +
-        "  ex.   node vivid/vivid_cost.mjs VWCE TRADEGATE EUR --shares=10 --price=140\n" +
-        "        node vivid/vivid_cost.mjs AAPL NASDAQ USD --shares=10 --price=230 --plan=prime\n" +
-        "        node vivid/vivid_cost.mjs AAPL NASDAQ USD --entity=business --shares=10 --price=230\n" +
-        "        node vivid/vivid_cost.mjs BTC --amount=1000"
+      "usage : node brokers/vivid/vivid_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--amount=a] [--plan=…] [--entity=personal|business] [--json]\n" +
+        "        node brokers/vivid/vivid_cost.mjs --schedule\n" +
+        "  ex.   node brokers/vivid/vivid_cost.mjs VWCE TRADEGATE EUR --shares=10 --price=140\n" +
+        "        node brokers/vivid/vivid_cost.mjs AAPL NASDAQ USD --shares=10 --price=230 --plan=prime\n" +
+        "        node brokers/vivid/vivid_cost.mjs AAPL NASDAQ USD --entity=business --shares=10 --price=230\n" +
+        "        node brokers/vivid/vivid_cost.mjs BTC --amount=1000"
     );
     process.exit(2);
   }

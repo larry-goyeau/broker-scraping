@@ -20,12 +20,12 @@
 //   that firm's 606, not a place fill.
 //   https://dhan.co/support/platforms/us-stocks/who-are-dhan-s-partners-for-us-stocks/
 //
-//   node dhan/dhan_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
-//   node dhan/dhan_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/dhan/dhan_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
+//   node brokers/dhan/dhan_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
 
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../indianDelivery.mjs";
-import { plus, finite } from "../na.mjs";
-import { QUOTE, toUsd } from "../fx.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
+import { plus, finite } from "../../na.mjs";
+import { QUOTE, toUsd } from "../../fx.mjs";
 
 const US_RATE = 0.0025;
 const US_MIN = 0.01;
@@ -48,7 +48,7 @@ function usRoundTrip({ listing, leafBook, shared, query }) {
   const remark =
     "A pay-in below $100 costs $1. The FX markup is quoted on the INR transfer.";
   if (!(n > 0) || !(p > 0)) {
-    return { ...shared, cashCurrency: "USD", basis, remark, why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs" };
+    return { ...shared, cashCurrency: "USD", basis, remark, why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs" };
   }
   const notional = n * p;
   const each = Math.max(US_MIN, notional * US_RATE);

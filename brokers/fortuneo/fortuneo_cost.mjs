@@ -49,23 +49,23 @@
 //   https://www.fortuneo.fr/bourse
 //   https://www.fortuneo.fr/bourse/ordre-offert-starter
 //
-//   node fortuneo/fortuneo_cost.mjs TTE EURONEXT EUR --shares=10 --price=78
-//   node fortuneo/fortuneo_cost.mjs IWDA EURONEXT EUR --shares=10 --price=100
-//   node fortuneo/fortuneo_cost.mjs AAPL NASDAQ USD --shares=1 --price=230
-//   node fortuneo/fortuneo_cost.mjs AAPL NASDAQ USD --shares=1 --price=230 --plan=traderpro
-//   node fortuneo/fortuneo_cost.mjs --schedule
+//   node brokers/fortuneo/fortuneo_cost.mjs TTE EURONEXT EUR --shares=10 --price=78
+//   node brokers/fortuneo/fortuneo_cost.mjs IWDA EURONEXT EUR --shares=10 --price=100
+//   node brokers/fortuneo/fortuneo_cost.mjs AAPL NASDAQ USD --shares=1 --price=230
+//   node brokers/fortuneo/fortuneo_cost.mjs AAPL NASDAQ USD --shares=1 --price=230 --plan=traderpro
+//   node brokers/fortuneo/fortuneo_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("fortuneo-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://www.fortuneo.fr/datas/files/tarifs_fortuneo.pdf",
@@ -354,7 +354,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Fortuneo n'existe pas encore : lancer `node fortuneo/fortuneo_scraping.mjs`",
+      why: "le catalogue Fortuneo n'existe pas encore : lancer `node brokers/fortuneo/fortuneo_scraping.mjs`",
     };
   }
 
@@ -453,7 +453,7 @@ export function roundTrip({
     return {
       ...shared,
       basis,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({
         picked,
         market,

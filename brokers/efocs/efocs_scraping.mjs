@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer-core";
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
 
 function toIsin(value) {
@@ -116,8 +116,8 @@ function hasFlag(name) {
 // shares and UCITS trackers on Xetra, plus the Sofia board, in one dump.
 // There is no spot crypto and no US-residents-only flag. `--funds-only` /
 // `--etfs-only` keep the trackers; `--stocks-only` the shares.
-const csvPath = pathArg("csv", "../etfs.csv");
-const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
+const csvPath = pathArg("csv", "../../assets/etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../../assets/stocks.csv");
 const fundsOnly = hasFlag("funds-only") || hasFlag("etfs-only");
 const stocksOnly = hasFlag("stocks-only");
 

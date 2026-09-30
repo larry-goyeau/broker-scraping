@@ -47,22 +47,22 @@
 //   https://de.scalable.capital/kryptowaehrung
 //   https://fr.scalable.capital/en/trading
 //
-//   node scalablecapital/scalablecapital_cost.mjs EUNL --shares=10 --price=100
-//   node scalablecapital/scalablecapital_cost.mjs APC XMUN EUR --shares=10 --price=200
-//   node scalablecapital/scalablecapital_cost.mjs BTC --amount=1000 --plan=prime
-//   node scalablecapital/scalablecapital_cost.mjs --schedule
+//   node brokers/scalablecapital/scalablecapital_cost.mjs EUNL --shares=10 --price=100
+//   node brokers/scalablecapital/scalablecapital_cost.mjs APC XMUN EUR --shares=10 --price=200
+//   node brokers/scalablecapital/scalablecapital_cost.mjs BTC --amount=1000 --plan=prime
+//   node brokers/scalablecapital/scalablecapital_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("scalablecapital-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://de.scalable.capital/en/trading",
@@ -271,7 +271,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Scalable n'existe pas encore : lancer `node scalablecapital/scalablecapital_scraping.mjs`",
+      why: "le catalogue Scalable n'existe pas encore : lancer `node brokers/scalablecapital/scalablecapital_scraping.mjs`",
     };
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Scalable` };
@@ -365,7 +365,7 @@ export function roundTrip({
         ? "aucun montant pour cette crypto"
         : !(n > 0)
           ? "aucun nombre de parts"
-          : "aucun prix pour cette ligne : lancer node prices.mjs",
+          : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({
         picked,
         market,
@@ -551,12 +551,12 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node scalablecapital/scalablecapital_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]\n" +
+      "usage : node brokers/scalablecapital/scalablecapital_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]\n" +
         "                          [--amount=usd] [--plan=free|prime] [--json]\n" +
-        "        node scalablecapital/scalablecapital_cost.mjs --schedule\n" +
-        "  ex.   node scalablecapital/scalablecapital_cost.mjs EUNL --shares=10 --price=100\n" +
-        "        node scalablecapital/scalablecapital_cost.mjs APC XMUN EUR --shares=10 --price=200\n" +
-        "        node scalablecapital/scalablecapital_cost.mjs BTC --amount=1000 --plan=prime"
+        "        node brokers/scalablecapital/scalablecapital_cost.mjs --schedule\n" +
+        "  ex.   node brokers/scalablecapital/scalablecapital_cost.mjs EUNL --shares=10 --price=100\n" +
+        "        node brokers/scalablecapital/scalablecapital_cost.mjs APC XMUN EUR --shares=10 --price=200\n" +
+        "        node brokers/scalablecapital/scalablecapital_cost.mjs BTC --amount=1000 --plan=prime"
     );
     process.exit(2);
   }

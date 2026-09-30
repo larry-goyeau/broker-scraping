@@ -29,14 +29,14 @@
 // line and Euronext take the buy. FI / FR / NL on Xetra, LU on LSE
 // (CBSE), Diageo LSE and CH / US / FR / NL / XS on SIX stayed open.
 //
-//   node boursedirect/boursedirect_scraping.mjs
-//   node boursedirect/boursedirect_scraping.mjs FR0000121014 IE00B4L5Y983
-//   node boursedirect/boursedirect_scraping.mjs --refresh --start=400
-//   node boursedirect/boursedirect_scraping.mjs --stocks-only --start=400
+//   node brokers/boursedirect/boursedirect_scraping.mjs
+//   node brokers/boursedirect/boursedirect_scraping.mjs FR0000121014 IE00B4L5Y983
+//   node brokers/boursedirect/boursedirect_scraping.mjs --refresh --start=400
+//   node brokers/boursedirect/boursedirect_scraping.mjs --stocks-only --start=400
 //
 // Writes `boursedirect-parsed.json` next to this file.
 
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -279,8 +279,8 @@ const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--
 // and SIX. There is no spot crypto.
 // `--funds-only` / `--etfs-only` answer for the trackers alone; `--stocks-only`
 // for the shares.
-const csvPath = pathArg("csv", "../etfs.csv");
-const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
+const csvPath = pathArg("csv", "../../assets/etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../../assets/stocks.csv");
 const fundsOnly = hasFlag("funds-only") || hasFlag("etfs-only");
 const stocksOnly = hasFlag("stocks-only");
 const refresh = hasFlag("refresh");

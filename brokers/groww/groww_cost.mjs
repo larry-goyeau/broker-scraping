@@ -29,13 +29,13 @@
 //   https://groww.in/help/payments-&-withdrawals/payments-charges/what-fees-does-groww-charge--58
 //   https://groww.in/help/us-stocks/my-us-stocks-account/where-is-my-us-stocks-account-held--who-is-responsible-for-custody-and-clearing--91
 //
-//   node groww/groww_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
+//   node brokers/groww/groww_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../indianDelivery.mjs";
-import { toUsd } from "../fx.mjs";
-import { finite } from "../na.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
+import { toUsd } from "../../fx.mjs";
+import { finite } from "../../na.mjs";
 
 const SEBI_CAP = 0.025;
 

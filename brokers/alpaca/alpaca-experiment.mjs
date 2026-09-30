@@ -19,8 +19,8 @@
 // with a market order — which is a fact about Alpaca's simulator that anyone testing a strategy
 // on it should know.
 //
-//   node alpaca/alpaca-experiment.mjs                       # rien n'est envoyé
-//   node alpaca/alpaca-experiment.mjs --live --plan=IAU:10,ACWI:10,AQLT:10
+//   node brokers/alpaca/alpaca-experiment.mjs                       # rien n'est envoyé
+//   node brokers/alpaca/alpaca-experiment.mjs --live --plan=IAU:10,ACWI:10,AQLT:10
 
 import puppeteer from "puppeteer-core";
 import fs from "node:fs";

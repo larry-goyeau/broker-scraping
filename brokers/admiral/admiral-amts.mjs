@@ -1,8 +1,8 @@
 // Signed AMTS snapshot / close for the live Invest.MT5 USD account.
 // Does not open. Chrome must be on admiralmarkets.com with the session live.
 //
-//   node admiral/admiral-amts.mjs            # positions + recent deals
-//   node admiral/admiral-amts.mjs --close    # close the first open position
+//   node brokers/admiral/admiral-amts.mjs            # positions + recent deals
+//   node brokers/admiral/admiral-amts.mjs --close    # close the first open position
 
 import puppeteer from "puppeteer-core";
 import crypto from "node:crypto";

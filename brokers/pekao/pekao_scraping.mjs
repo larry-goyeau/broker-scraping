@@ -23,12 +23,12 @@
 //   https://www.pekao.com.pl/biuro-maklerskie/klient-indywidualny/aktywne-inwestowanie/instrumenty-rynku-kasowego.html
 //   https://www.gpw.pl/etfy
 //
-//   node pekao/pekao_scraping.mjs
-//   node pekao/pekao_scraping.mjs --list=./lista.pdf --etf=./etf.pdf
+//   node brokers/pekao/pekao_scraping.mjs
+//   node brokers/pekao/pekao_scraping.mjs --list=./lista.pdf --etf=./etf.pdf
 //
 // Text is read with PyMuPDF (`python3 -c "import fitz"`).
 
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 

@@ -1,8 +1,8 @@
 // One AAPL Nasdaq share, market both ways, on the signed-in DEGIRO NL trader.
 // Chrome :9222. Does not touch other tabs. `--probe` stops after checkOrder.
 //
-//   node degiro/degiro-live-experiment.mjs --probe
-//   node degiro/degiro-live-experiment.mjs --live
+//   node brokers/degiro/degiro-live-experiment.mjs --probe
+//   node brokers/degiro/degiro-live-experiment.mjs --live
 //
 // A bought leg that fails to sell aborts and leaves the position; the JSON
 // still writes what it has.

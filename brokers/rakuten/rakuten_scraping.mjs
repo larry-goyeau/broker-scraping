@@ -13,7 +13,7 @@
 // out. ASEAN ETFs are the Singapore rows of that CSV. A US ETF keeps the
 // venue from the ETF file when that file names NYSE Arca, Nasdaq or Cboe:
 // the stock CSV writes NYSE for an Arca ETF. The code is then joined to
-// ../stocks.csv and ../etfs.csv when that place has exactly one ISIN.
+// ../../assets/stocks.csv and ../../assets/etfs.csv when that place has exactly one ISIN.
 //
 //   https://www.rakuten-sec.co.jp/web/domestic/stock/lineup/
 //   https://www.rakuten-sec.co.jp/web/us/stock/lineup/
@@ -21,10 +21,10 @@
 //   https://www.rakuten-sec.co.jp/web/foreign/asean/
 //   https://www.jpx.co.jp/markets/statistics-equities/misc/01.html
 //
-//   node rakuten/rakuten_scraping.mjs
-//   node rakuten/rakuten_scraping.mjs --tokyo=./data_j.xlsx
+//   node brokers/rakuten/rakuten_scraping.mjs
+//   node brokers/rakuten/rakuten_scraping.mjs --tokyo=./data_j.xlsx
 
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 
@@ -47,8 +47,8 @@ const JP_ETF = `${TRKD}result_ja.jsp?name=&code=&sect5=on&sector=na&c=ja&p=resul
 
 const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
 
-const STOCKS = new URL("../stocks.csv", import.meta.url);
-const ETFS = new URL("../etfs.csv", import.meta.url);
+const STOCKS = new URL("../../assets/stocks.csv", import.meta.url);
+const ETFS = new URL("../../assets/etfs.csv", import.meta.url);
 const JP_FILE = ["TSE", "NAG", "FSE", "SAPSE", "TYO"];
 const FILE_EXCHANGE = {
   XNAS: ["NASDAQ"],

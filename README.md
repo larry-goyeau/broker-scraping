@@ -16,12 +16,12 @@ A broker’s scraper, cost script, and catalogue live in `<broker>/`. `<broker>_
 | --- | --- |
 | `<broker>/<broker>_scraping.mjs` | Builds `<broker>/<broker>-parsed.json` |
 | `<broker>/<broker>_cost.mjs` | One round trip at that broker. `roundTrip({ etf, place, currency, shares, price })` |
-| `etfs.csv`, `stocks.csv`, `cryptos.csv` | List of all asset |
+| `assets/etfs.csv`, `assets/stocks.csv`, `assets/cryptos.csv` | List of all asset |
 | `venues.mjs` | Exchange names, hours, and which tape each one uses |
 | `spread.mjs` | Reads those tapes into `parsed_json/spread.json` |
 | `rule605-monthly.mjs` | US effective spreads, `parsed_json/rule605-monthly.json` |
 | `rule606.mjs` | Where US broker-dealers send orders. Q is computed, not stored |
-| `prices.mjs` | Last close per ISIN, `parsed_json/prices.json`, so a percent fee can become money |
+| `assets/prices.mjs` | Last close per ISIN, `assets/prices.json`, so a percent fee can become money |
 | `taxes.mjs`, `taxMap.mjs` | Stamp and transaction taxes by ISIN |
 | `fx.mjs` | Mid rates into dollars |
 | `accepted.mjs` | Countries a broker will open an account for |

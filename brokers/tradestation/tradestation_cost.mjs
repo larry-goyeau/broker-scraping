@@ -37,22 +37,22 @@
 //   https://www.tradestation.com/stocks-etfs-pricing-disclosures/
 //   https://www.tradestation.com/trading-products/stocks/
 //
-//   node tradestation/tradestation_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node tradestation/tradestation_cost.mjs AQLT CBOE USD --shares=10 --price=31.5
-//   node tradestation/tradestation_cost.mjs --plan=tier4 AAPL NASDAQ USD --shares=10 --price=230
-//   node tradestation/tradestation_cost.mjs --schedule
+//   node brokers/tradestation/tradestation_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/tradestation/tradestation_cost.mjs AQLT CBOE USD --shares=10 --price=31.5
+//   node brokers/tradestation/tradestation_cost.mjs --plan=tier4 AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/tradestation/tradestation_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("tradestation-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://www.tradestation.com/pricing/",
@@ -246,7 +246,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue TradeStation n'existe pas encore : lancer `node tradestation/tradestation_scraping.mjs`",
+      why: "le catalogue TradeStation n'existe pas encore : lancer `node brokers/tradestation/tradestation_scraping.mjs`",
     };
   }
 
@@ -324,7 +324,7 @@ export function roundTrip({
   if (notional == null || ticket == null) {
     return {
       ...shared,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({
         market,
         listing,
@@ -494,10 +494,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node tradestation/tradestation_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--plan=tier1|tier4|intl]\n" +
-        "        node tradestation/tradestation_cost.mjs --schedule\n" +
-        "  ex.   node tradestation/tradestation_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
-        "        node tradestation/tradestation_cost.mjs AQLT CBOE USD --shares=10 --price=31.5 --plan=tier4"
+      "usage : node brokers/tradestation/tradestation_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--plan=tier1|tier4|intl]\n" +
+        "        node brokers/tradestation/tradestation_cost.mjs --schedule\n" +
+        "  ex.   node brokers/tradestation/tradestation_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
+        "        node brokers/tradestation/tradestation_cost.mjs AQLT CBOE USD --shares=10 --price=31.5 --plan=tier4"
     );
     process.exit(2);
   }

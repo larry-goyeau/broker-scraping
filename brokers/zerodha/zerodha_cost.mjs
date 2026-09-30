@@ -12,9 +12,9 @@
 //   DP on a delivery sell       ₹15.34 per scrip, GST already inside
 // Direct mutual funds are ₹0 commission and ₹0 DP. Intraday is another table.
 //
-//   node zerodha/zerodha_cost.mjs INE002A01018 NSE INR --shares=10 --price=1400
+//   node brokers/zerodha/zerodha_cost.mjs INE002A01018 NSE INR --shares=10 --price=1400
 
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../indianDelivery.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
 
 const SCHEDULE = {
   broker: "Zerodha",

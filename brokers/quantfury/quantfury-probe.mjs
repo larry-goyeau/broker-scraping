@@ -28,10 +28,10 @@
 // Closed prints (bid = ask) are left out, so a stale open touch survives the
 // close. It places no orders and touches no balance.
 //
-//   node quantfury/quantfury-probe.mjs                  (les lignes en euros)
-//   node quantfury/quantfury-probe.mjs --currency=USD
-//   node quantfury/quantfury-probe.mjs --all
-//   node quantfury/quantfury-probe.mjs --limit=40
+//   node brokers/quantfury/quantfury-probe.mjs                  (les lignes en euros)
+//   node brokers/quantfury/quantfury-probe.mjs --currency=USD
+//   node brokers/quantfury/quantfury-probe.mjs --all
+//   node brokers/quantfury/quantfury-probe.mjs --limit=40
 //
 // Chrome must already be listening: --remote-debugging-port=9222, signed in at
 // https://trading.quantfury.com/
@@ -75,7 +75,7 @@ const shortNameOf = (row) => String(row.raw || "").split(/\s+/)[0] || null;
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 if (!catalogue) {
-  console.error("aucun catalogue Quantfury : lancer `node quantfury/quantfury_scraping.mjs`");
+  console.error("aucun catalogue Quantfury : lancer `node brokers/quantfury/quantfury_scraping.mjs`");
   process.exit(2);
 }
 

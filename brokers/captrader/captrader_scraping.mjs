@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer-core";
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -257,8 +257,8 @@ function loadQueryFile(filePath) {
 // and the shares are the same kind of contract behind the same search.
 // `--etfs-only` and `--stocks-only` answer for one shelf alone, which is what
 // makes a walk of a catalogue this size resumable in parts.
-const csvPath = pathArg("csv", "../etfs.csv");
-const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
+const csvPath = pathArg("csv", "../../assets/etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../../assets/stocks.csv");
 const queryFile = (() => {
   for (const arg of process.argv.slice(2)) {
     const match = arg.match(/^--file=(.+)$/i);

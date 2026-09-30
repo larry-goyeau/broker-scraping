@@ -12,8 +12,8 @@
 // instant and the round trip falls out of the difference. Note what that costs on the way in —
 // around two per cent on Bitcoin, against two hundredths of a per cent on a large ETF.
 //
-//   node trading212/t212-crypto.mjs
-//   node trading212/t212-crypto.mjs BTC/EUR ETH/EUR
+//   node brokers/trading212/t212-crypto.mjs
+//   node brokers/trading212/t212-crypto.mjs BTC/EUR ETH/EUR
 
 import puppeteer from "puppeteer-core";
 import fs from "node:fs";

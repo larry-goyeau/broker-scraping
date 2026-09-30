@@ -1,14 +1,14 @@
 ---
-description: Broker-specific files live in that broker's folder; shared market data stays at the repo root.
+description: Broker files live in brokers/; order books live in spreads/.
 alwaysApply: true
 ---
 
 # Layout
 
-Broker-specific code and output go in `<broker>/`. Shared facts about the market (order books, taxes, catalogues) stay at the repo root.
+Broker-specific code and output go in `brokers/<broker>/`. Shared facts about the market stay out of broker folders: order books in `spreads/`, taxes and catalogues at the repo root.
 
-- Scrapers (`*_scraping.mjs`), probes, cost scripts, experiments, and `<broker>-parsed.json` live in `<broker>/`. Never leave a copy of a scraper at the root.
-- `spread.mjs`, `venues.mjs`, `taxes.mjs`, `taxMap.mjs`, `xlm.mjs`, `rule605-monthly.mjs`, `catalogues.mjs`, `front.mjs` / `front.html`, and `etfs.csv` / `stocks.csv` / `cryptos.csv` stay at the root: they describe exchanges or instruments, not a broker.
-- Shared output goes in `parsed_json/` (`spread.json`, `taxes.json`, XLM, Rule 605). A catalogue belongs in its broker folder, not there. `taxes.json` is keyed by ISIN (`byIsin`) for every `*_cost.mjs`; `byCode` is only the Trading212 sweep.
-- A tax or spread sourced from one broker still belongs at the root if every other broker can use the figure. The reader may sit at the root even when it talks to Trading212.
-- From a broker script, shared files are `../etfs.csv` (via `import.meta.url`), not a root-relative path that only works if cwd is the repo.
+- Scrapers (`*_scraping.mjs`), probes, cost scripts, experiments, `<broker>-parsed.json`, and `logo.png` live in `brokers/<broker>/`. Never leave a copy of a scraper at the root or directly under `brokers/`.
+- Spread scripts and their JSON live in `spreads/` (`spread.mjs`, `venues.mjs`, `gulf.mjs`, `rule606.mjs`, `rule605-monthly.mjs`, `xlm.mjs`, `xlm-monthly.mjs`, the `*-touch.mjs` readers, `spread.json`, the touch files, Rule 605/606). `taxes.mjs`, `taxMap.mjs`, `catalogues.mjs`, and `front.mjs` / `front.html` stay at the root. Instrument lists and prices live in `assets/` (`ETF_list.py`, `Stock_list.py`, `Crypto_list.py`, `etfs.csv`, `stocks.csv`, `cryptos.csv`, `prices.mjs`, `prices.json`).
+- `taxes.json` stays at the root, next to `taxes.mjs`. It is keyed by ISIN (`byIsin`) for every `*_cost.mjs`; `byCode` is only the Trading212 sweep. A catalogue belongs in its broker folder. From a broker script the spread file is `../../spreads/spread.json`.
+- A tax or spread sourced from one broker still belongs with the shared files if every other broker can use the figure: taxes at the root, order books in `spreads/`. The tax reader may sit at the root even when it talks to Trading212.
+- From a broker script, shared files are `../../assets/etfs.csv` (via `import.meta.url`), not a root-relative path that only works if cwd is the repo.

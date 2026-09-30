@@ -97,25 +97,25 @@
 //   https://www.captrader.com/konditionen/aktien-handel/
 //   https://www.captrader.com/konditionen/etf-handel/
 //
-//   node captrader/captrader_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node captrader/captrader_cost.mjs TTE SBF EUR --shares=10 --price=60
-//   node captrader/captrader_cost.mjs IWDA AEB EUR --shares=1 --price=126.1
-//   node captrader/captrader_cost.mjs --schedule
+//   node brokers/captrader/captrader_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/captrader/captrader_cost.mjs TTE SBF EUR --shares=10 --price=60
+//   node brokers/captrader/captrader_cost.mjs IWDA AEB EUR --shares=1 --price=126.1
+//   node brokers/captrader/captrader_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const LOCAL = new URL("captrader-parsed.json", import.meta.url);
 const IBKR_BOOK = new URL("../mexem/mexem-parsed.json", import.meta.url);
 const CATALOGUE = fs.existsSync(LOCAL) ? LOCAL : IBKR_BOOK;
 const catalogueBorrowed = CATALOGUE.href !== LOCAL.href;
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   stocks: "https://www.captrader.com/konditionen/aktien-handel/",
@@ -454,7 +454,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const answer = { usd: null, etf, place, currency, onlineBuy: true, cashCurrency: "" };
 
   if (!catalogue) {
-    return { ...answer, why: "le catalogue CapTrader n'existe pas encore : lancer `node captrader/captrader_scraping.mjs`" };
+    return { ...answer, why: "le catalogue CapTrader n'existe pas encore : lancer `node brokers/captrader/captrader_scraping.mjs`" };
   }
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue CapTrader` };
@@ -538,7 +538,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     return {
       ...shared,
       basis,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
     };
   }
 

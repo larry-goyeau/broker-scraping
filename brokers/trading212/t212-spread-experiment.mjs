@@ -5,8 +5,8 @@
 // disclosure returns zero for every cost line), so the round trip should cost the
 // bid-ask spread and nothing else. This script measures that in euros.
 //
-//   node trading212/t212-spread-experiment.mjs --dry              # plumbing only, no orders
-//   node trading212/t212-spread-experiment.mjs --sizes=1,8 --reps=3
+//   node brokers/trading212/t212-spread-experiment.mjs --dry              # plumbing only, no orders
+//   node brokers/trading212/t212-spread-experiment.mjs --sizes=1,8 --reps=3
 //
 // Cash is read before and after each leg: the drop in free funds is what the buy
 // really cost, and the rise is what the sale really returned, whatever fees may

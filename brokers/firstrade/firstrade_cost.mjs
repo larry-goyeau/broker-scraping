@@ -47,23 +47,23 @@
 //   https://www.firstrade.com/trading/pricing/special-services
 //   https://help.firstrade.info/en/articles/9264120-can-i-trade-otc-listed-penny-stocks-at-firstrade-if-yes-any-trading-restrictions
 //
-//   node firstrade/firstrade_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node firstrade/firstrade_cost.mjs IAU AMEX USD --shares=1 --price=82
-//   node firstrade/firstrade_cost.mjs TTE NYSE USD --shares=10 --price=65
-//   node firstrade/firstrade_cost.mjs ADHC OTC USD --shares=100 --price=0.50
-//   node firstrade/firstrade_cost.mjs --schedule
+//   node brokers/firstrade/firstrade_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/firstrade/firstrade_cost.mjs IAU AMEX USD --shares=1 --price=82
+//   node brokers/firstrade/firstrade_cost.mjs TTE NYSE USD --shares=10 --price=65
+//   node brokers/firstrade/firstrade_cost.mjs ADHC OTC USD --shares=100 --price=0.50
+//   node brokers/firstrade/firstrade_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("firstrade-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://www.firstrade.com/trading/pricing",
@@ -216,7 +216,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Firstrade n'existe pas encore : lancer `node firstrade/firstrade_scraping.mjs`",
+      why: "le catalogue Firstrade n'existe pas encore : lancer `node brokers/firstrade/firstrade_scraping.mjs`",
     };
   }
 
@@ -293,7 +293,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     return {
       ...shared,
       basis,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({ market, listing, leaf, marketBp, marketPerShare, unsourced: m.unsourced, taxPct }),
     };
   }

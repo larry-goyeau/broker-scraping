@@ -7,11 +7,11 @@
 //   list and from Upstox. AMXIDX is an index. Bonds and contracts are
 //   not part of this catalogue.
 //
-//   node angelone/angelone_scraping.mjs
+//   node brokers/angelone/angelone_scraping.mjs
 
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
-import { seriesOf, keepSold, cashBook, lookup, companyName } from "../indianCash.mjs";
+import { seriesOf, keepSold, cashBook, lookup, companyName } from "../../indianCash.mjs";
 
 const FILE = "https://margincalculator.angelone.in/OpenAPI_File/files/OpenAPIScripMaster.json";
 

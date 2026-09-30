@@ -2,6 +2,7 @@ import re
 import sys
 import time
 from copy import deepcopy
+from pathlib import Path
 from typing import Optional
 import pandas as pd
 from tradingview_screener import Column, Query
@@ -194,6 +195,6 @@ if __name__ == "__main__":
     print(f"\nTotal shares: {len(export_df)} listings kept out of {len(df)} scanned")
 
     # Optional: save to CSV. Output path can be overridden as the first CLI arg
-    # (defaults to stocks.csv).
-    output_path = positional[0] if positional else "stocks.csv"
+    # (defaults to assets/stocks.csv, beside this script).
+    output_path = positional[0] if positional else str(Path(__file__).with_name("stocks.csv"))
     export_df.to_csv(output_path, index=False)

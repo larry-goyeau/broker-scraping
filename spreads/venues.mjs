@@ -501,7 +501,7 @@ export const VENUES = [
     name: "OTC Markets",
     source: "otc",
     hours: { open: "09:30", close: "16:00", tz: "America/New_York" },
-    exact: ["otcm", "otc", "pink", "otcmkts", "otcqx", "otcqb", "pinx", "grey", "ootc", "otherotc", "ootcotherotc"],
+    exact: ["otcm", "otc", "otcmarkets", "pink", "otcmkts", "otcqx", "otcqb", "pinx", "grey", "ootc", "otherotc", "ootcotherotc"],
     loose: [],
   },
   // Cash session 09:30–11:30 and 13:00–15:00 Shanghai time. The hours here are
@@ -578,7 +578,7 @@ export const VENUES = [
     loose: [],
   },
   // Cash session 10:00–16:00 Sydney. The touch is the Interactive Brokers
-  // reading in parsed_json/au-touch.json. There is no live adapter, so a
+  // reading in spreads/au-touch.json. There is no live adapter, so a
   // later pass of spread.mjs leaves the stored figure alone.
   {
     mic: "XASX",
@@ -597,7 +597,7 @@ export const VENUES = [
     loose: [],
   },
   // Cash session 09:00–17:30 Madrid. The touch is the Interactive Brokers
-  // reading in parsed_json/es-touch.json. There is no live adapter, so a
+  // reading in spreads/es-touch.json. There is no live adapter, so a
   // later pass of spread.mjs leaves the stored figure alone.
   {
     mic: "XMAD",
@@ -608,7 +608,7 @@ export const VENUES = [
     loose: [],
   },
   // Cash session 09:00–15:00 Tokyo. The touch is the delayed Interactive
-  // Brokers reading in parsed_json/jp-touch.json. There is no live adapter,
+  // Brokers reading in spreads/jp-touch.json. There is no live adapter,
   // so a later pass of spread.mjs leaves the stored figure alone.
   {
     mic: "XTKS",
@@ -791,6 +791,11 @@ export function resolveVenue(row) {
     const hit = VENUES.find((v) => v.loose.includes(n));
     if (hit) return { venue: hit, assumed: true };
   }
+  // "OTC", "OTC Markets", "OTCQX", "Pink Sheets" are one book. Matching the
+  // whole string only ever catches the spellings written out in `exact`.
+  if (names.some((n) => n === "otc" || n.startsWith("otc") || n === "pink" || n.startsWith("pink"))) {
+    return { venue: VENUES.find((v) => v.mic === "OTCM"), assumed: false };
+  }
   if (names.includes("bse")) {
     const ccy = String(row.currency || "").toUpperCase();
     const isin = String(row.isin || "").toUpperCase();
@@ -856,6 +861,11 @@ export function listingKey(row) {
 // to guess.
 const EURONEXT_MICS = ["XPAR", "XAMS", "XBRU", "XLIS"];
 const US_MICS = ["XNAS", "ARCX", "XNYS", "XASE", "BATS"];
+// Rule 605 is the listed US tape. OTC does not file one; its book is the touch.
+const NMS_MICS = new Set([...US_MICS, "IEXG", "MEMX"]);
+export function isListedUsTape(mic) {
+  return NMS_MICS.has(String(mic || "").toUpperCase());
+}
 // KOSPI (XKRX) and KOSDAQ (XKOS). A broker that writes KRX has not said which.
 const KOREA_MICS = ["XKRX", "XKOS"];
 

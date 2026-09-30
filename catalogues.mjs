@@ -1,19 +1,20 @@
-// Where the brokers' catalogues live, now that each broker owns a folder and keeps its own
-// file in it. One place to say so, because two scripts need to walk them — `spread.mjs` to
-// know which listings to price, `spread-calibrate.mjs` to put a ticker beside an ISIN — and a
-// layout described twice is a layout that will be described differently after the next move.
+// Where the brokers' catalogues live. One place to say so, because two scripts need to walk
+// them — `spread.mjs` to know which listings to price, `spread-calibrate.mjs` to put a ticker
+// beside an ISIN — and a layout described twice is a layout that will be described differently
+// after the next move.
 //
-// The convention is the one the scrapers already follow: a folder per broker at the top level,
-// holding `<broker>-parsed.json`. Anything shared by all of them — the order books, the German
-// workbook, the American reports — stays in `parsed_json/` and is not a catalogue.
+// Each broker owns a folder under `brokers/`, holding `<broker>-parsed.json`. Anything shared
+// by all of them — the order books, the German workbook, the American reports — stays in
+// `spreads/` and is not a catalogue.
 
 import fs from "node:fs";
 import path from "node:path";
 
-const ROOT = new URL("./", import.meta.url);
+const ROOT = new URL("./brokers/", import.meta.url);
 
-// Folders that hold no broker: the shared data, the version control, the dependencies.
-const NOT_A_BROKER = new Set(["parsed_json", "node_modules", ".git", ".cursor"]);
+// A folder under brokers/ that is not a broker. Nothing there today; kept so a stray
+// directory is not read as a catalogue.
+const NOT_A_BROKER = new Set(["node_modules", ".git"]);
 
 // Every catalogue on disk, as absolute paths, sorted so a run reads them in the same order
 // twice. A folder without one is a broker whose scraper has never been run, which is normal

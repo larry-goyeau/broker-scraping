@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer-core";
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -58,8 +58,8 @@ function listingType(name, kind) {
 const etfsOnly = hasFlag("etfs-only") || hasFlag("funds-only");
 const stocksOnly = hasFlag("stocks-only");
 const csvIsins = new Map();
-if (!stocksOnly) loadIsinsFromCsv(pathArg("csv", "../etfs.csv"), "ETF", csvIsins);
-if (!etfsOnly) loadIsinsFromCsv(pathArg("stocks-csv", "../stocks.csv"), "STOCK", csvIsins);
+if (!stocksOnly) loadIsinsFromCsv(pathArg("csv", "../../assets/etfs.csv"), "ETF", csvIsins);
+if (!etfsOnly) loadIsinsFromCsv(pathArg("stocks-csv", "../../assets/stocks.csv"), "STOCK", csvIsins);
 console.error(`${csvIsins.size} ISINs typed from the catalogues`);
 
 const browser = await puppeteer.connect({

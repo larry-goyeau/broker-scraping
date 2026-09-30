@@ -47,23 +47,23 @@
 //
 //   https://freedom24.com/download/documents/1203/Appendix_6_Fee_Schedule_19082026
 //
-//   node freedom24/freedom24_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node freedom24/freedom24_cost.mjs VWCE XETRA EUR --shares=10 --price=140
-//   node freedom24/freedom24_cost.mjs 0001 HKEX HKD --shares=10 --price=50
-//   node freedom24/freedom24_cost.mjs AAPL NASDAQ USD --plan=allinc --shares=10 --price=230
-//   node freedom24/freedom24_cost.mjs --schedule
+//   node brokers/freedom24/freedom24_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/freedom24/freedom24_cost.mjs VWCE XETRA EUR --shares=10 --price=140
+//   node brokers/freedom24/freedom24_cost.mjs 0001 HKEX HKD --shares=10 --price=50
+//   node brokers/freedom24/freedom24_cost.mjs AAPL NASDAQ USD --plan=allinc --shares=10 --price=230
+//   node brokers/freedom24/freedom24_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("freedom24-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://freedom24.com/download/documents/1203/Appendix_6_Fee_Schedule_19082026",
@@ -371,7 +371,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Freedom24 n'existe pas encore : lancer `node freedom24/freedom24_scraping.mjs`",
+      why: "le catalogue Freedom24 n'existe pas encore : lancer `node brokers/freedom24/freedom24_scraping.mjs`",
     };
   }
 
@@ -442,7 +442,7 @@ export function roundTrip({
     return {
       ...shared,
       basis,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({ picked, market, rule, listing, leaf, marketBp, marketPerShare, unsourced: m.unsourced, taxPct }),
     };
   }

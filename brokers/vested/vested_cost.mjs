@@ -39,22 +39,22 @@
 //   https://support.vestedfinance.com/portal/en/kb/vested-us-stocks/commission-and-fees-trading-withdrawal-forex/fees-charged-by-vested
 //   https://support.vestedfinance.com/portal/en/kb/vested-us-stocks/features-offered/otc-securities-investing
 //
-//   node vested/vested_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node vested/vested_cost.mjs AAPL NASDAQ USD --shares=100 --price=230 --plan=premium
-//   node vested/vested_cost.mjs BTC AMEX USD --shares=10 --price=40
-//   node vested/vested_cost.mjs --schedule
+//   node brokers/vested/vested_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/vested/vested_cost.mjs AAPL NASDAQ USD --shares=100 --price=230 --plan=premium
+//   node brokers/vested/vested_cost.mjs BTC AMEX USD --shares=10 --price=40
+//   node brokers/vested/vested_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("vested-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://vestedfinance.com/in/pricing/",
@@ -233,7 +233,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Vested n'existe pas encore : lancer `node vested/vested_scraping.mjs`",
+      why: "le catalogue Vested n'existe pas encore : lancer `node brokers/vested/vested_scraping.mjs`",
     };
   }
 
@@ -320,7 +320,7 @@ export function roundTrip({
   if (notional == null) {
     return {
       ...shared,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({
         picked,
         market,
@@ -471,11 +471,11 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node vested/vested_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--plan=basic|premium] [--json]\n" +
-        "        node vested/vested_cost.mjs --schedule\n" +
-        "  ex.   node vested/vested_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
-        "        node vested/vested_cost.mjs AAPL NASDAQ USD --shares=100 --price=230 --plan=premium\n" +
-        "        node vested/vested_cost.mjs BTC AMEX USD --shares=10 --price=40"
+      "usage : node brokers/vested/vested_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--plan=basic|premium] [--json]\n" +
+        "        node brokers/vested/vested_cost.mjs --schedule\n" +
+        "  ex.   node brokers/vested/vested_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
+        "        node brokers/vested/vested_cost.mjs AAPL NASDAQ USD --shares=100 --price=230 --plan=premium\n" +
+        "        node brokers/vested/vested_cost.mjs BTC AMEX USD --shares=10 --price=40"
     );
     process.exit(2);
   }

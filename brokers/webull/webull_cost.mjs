@@ -44,24 +44,24 @@
 //   https://www.webull.com.au/us-stocks
 //   https://www.webull.hk/en/us-stocks
 //
-//   node webull/webull_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node webull/webull_cost.mjs AAPL NASDAQ USD --plan=uk-go --shares=10 --price=230
-//   node webull/webull_cost.mjs AAPL NASDAQ USD --plan=eu --shares=10 --price=230
-//   node webull/webull_cost.mjs 700 HKEX HKD --plan=uk-go --shares=10 --price=400
-//   node webull/webull_cost.mjs BTC --amount=1000
-//   node webull/webull_cost.mjs --schedule
+//   node brokers/webull/webull_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/webull/webull_cost.mjs AAPL NASDAQ USD --plan=uk-go --shares=10 --price=230
+//   node brokers/webull/webull_cost.mjs AAPL NASDAQ USD --plan=eu --shares=10 --price=230
+//   node brokers/webull/webull_cost.mjs 700 HKEX HKD --plan=uk-go --shares=10 --price=400
+//   node brokers/webull/webull_cost.mjs BTC --amount=1000
+//   node brokers/webull/webull_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("webull-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   us: "https://www.webull.com/pricing",
@@ -411,7 +411,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Webull n'existe pas encore : lancer `node webull/webull_scraping.mjs`",
+      why: "le catalogue Webull n'existe pas encore : lancer `node brokers/webull/webull_scraping.mjs`",
     };
   }
 
@@ -524,7 +524,7 @@ export function roundTrip({
         ? "aucun montant"
         : !(n > 0)
           ? "aucun nombre de parts"
-          : "aucun prix pour cette ligne : lancer node prices.mjs",
+          : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({
         picked,
         market,
@@ -737,13 +737,13 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node webull/webull_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--amount=a] [--plan=us|uk-go|uk-meridian|eu|sg|ca|au|hk] [--json]\n" +
-        "        node webull/webull_cost.mjs --schedule\n" +
-        "  ex.   node webull/webull_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
-        "        node webull/webull_cost.mjs AAPL NASDAQ USD --plan=uk-go --shares=10 --price=230\n" +
-        "        node webull/webull_cost.mjs AAPL NASDAQ USD --plan=eu --shares=10 --price=230\n" +
-        "        node webull/webull_cost.mjs 700 HKEX HKD --plan=uk-go --shares=10 --price=400\n" +
-        "        node webull/webull_cost.mjs BTC --amount=1000"
+      "usage : node brokers/webull/webull_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--amount=a] [--plan=us|uk-go|uk-meridian|eu|sg|ca|au|hk] [--json]\n" +
+        "        node brokers/webull/webull_cost.mjs --schedule\n" +
+        "  ex.   node brokers/webull/webull_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
+        "        node brokers/webull/webull_cost.mjs AAPL NASDAQ USD --plan=uk-go --shares=10 --price=230\n" +
+        "        node brokers/webull/webull_cost.mjs AAPL NASDAQ USD --plan=eu --shares=10 --price=230\n" +
+        "        node brokers/webull/webull_cost.mjs 700 HKEX HKD --plan=uk-go --shares=10 --price=400\n" +
+        "        node brokers/webull/webull_cost.mjs BTC --amount=1000"
     );
     process.exit(2);
   }

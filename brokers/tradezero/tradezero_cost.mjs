@@ -43,21 +43,21 @@
 //   https://tradezero.com/en-ee/pricing-and-fees
 //   https://tradezero.com/documents/124b8d88462438877b9bbeeb7e4b81f38b6c7350.pdf
 //
-//   node tradezero/tradezero_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node tradezero/tradezero_cost.mjs AQLT CBOE USD --shares=10 --price=31.5 --plan=tza
-//   node tradezero/tradezero_cost.mjs IAU AMEX USD --shares=200 --order=repos --plan=tzeu
-//   node tradezero/tradezero_cost.mjs --schedule
+//   node brokers/tradezero/tradezero_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/tradezero/tradezero_cost.mjs AQLT CBOE USD --shares=10 --price=31.5 --plan=tza
+//   node brokers/tradezero/tradezero_cost.mjs IAU AMEX USD --shares=200 --order=repos --plan=tzeu
+//   node brokers/tradezero/tradezero_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
 
 const CATALOGUE = new URL("tradezero-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   tza: "https://tradezero.com/en-us/pricing-and-fees",
@@ -285,7 +285,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue TradeZero n'existe pas encore : lancer `node tradezero/tradezero_scraping.mjs`",
+      why: "le catalogue TradeZero n'existe pas encore : lancer `node brokers/tradezero/tradezero_scraping.mjs`",
     };
   }
 
@@ -373,7 +373,7 @@ export function roundTrip({
   if (notional == null || ticket == null) {
     return {
       ...shared,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({
         market,
         listing,
@@ -556,10 +556,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node tradezero/tradezero_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--plan=tza|tzi|tzeu] [--order=immédiat|repos]\n" +
-        "        node tradezero/tradezero_cost.mjs --schedule\n" +
-        "  ex.   node tradezero/tradezero_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
-        "        node tradezero/tradezero_cost.mjs AQLT CBOE USD --shares=10 --price=31.5 --plan=tza"
+      "usage : node brokers/tradezero/tradezero_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--plan=tza|tzi|tzeu] [--order=immédiat|repos]\n" +
+        "        node brokers/tradezero/tradezero_cost.mjs --schedule\n" +
+        "  ex.   node brokers/tradezero/tradezero_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
+        "        node brokers/tradezero/tradezero_cost.mjs AQLT CBOE USD --shares=10 --price=31.5 --plan=tza"
     );
     process.exit(2);
   }

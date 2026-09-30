@@ -33,23 +33,23 @@
 //   https://eurofinance.bg/en/services/trading/deutscheboerse/
 //   https://eurofinance.bg/en/services/trading/bse/
 //
-//   node efocs/efocs_cost.mjs VWCE XETR EUR --shares=1 --price=140
-//   node efocs/efocs_cost.mjs APC XETR EUR --shares=1 --price=230
-//   node efocs/efocs_cost.mjs ETR BSESOF EUR --shares=10 --price=10
-//   node efocs/efocs_cost.mjs ETR BSESOF EUR --plan=professional --shares=10 --price=10
-//   node efocs/efocs_cost.mjs --schedule
+//   node brokers/efocs/efocs_cost.mjs VWCE XETR EUR --shares=1 --price=140
+//   node brokers/efocs/efocs_cost.mjs APC XETR EUR --shares=1 --price=230
+//   node brokers/efocs/efocs_cost.mjs ETR BSESOF EUR --shares=10 --price=10
+//   node brokers/efocs/efocs_cost.mjs ETR BSESOF EUR --plan=professional --shares=10 --price=10
+//   node brokers/efocs/efocs_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("efocs-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://www.eurofinance.bg/wp-content/uploads/documents/legal-documents/Schedule%20of%20fees.pdf",
@@ -237,7 +237,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue EFOCS n'existe pas encore : lancer `node efocs/efocs_scraping.mjs`",
+      why: "le catalogue EFOCS n'existe pas encore : lancer `node brokers/efocs/efocs_scraping.mjs`",
     };
   }
 
@@ -310,7 +310,7 @@ export function roundTrip({
     return {
       ...shared,
       basis,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({
         picked,
         market,

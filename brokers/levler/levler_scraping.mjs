@@ -12,9 +12,9 @@
 // Paid subscription lines (BTA, BTU) sit in the share list. They are not
 // ordinary shares. A bond that is not an ETF is not a share either.
 //
-//   node levler/levler_scraping.mjs
+//   node brokers/levler/levler_scraping.mjs
 
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
 
 const SEARCH = "https://levler.se/api/open/search/v2/orderBooks";

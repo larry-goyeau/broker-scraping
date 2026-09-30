@@ -13,15 +13,15 @@
 // Düsseldorf) and the Nasdaq OTC mirror of a European share are quote
 // satellites: they stay out. Spot crypto is not a Fortuneo product.
 //
-//   node fortuneo/fortuneo_scraping.mjs
-//   node fortuneo/fortuneo_scraping.mjs FR0000120271 IE00B4L5Y983 US0378331005
-//   node fortuneo/fortuneo_scraping.mjs --refresh --start=400
-//   node fortuneo/fortuneo_scraping.mjs --stocks-only --start=400
+//   node brokers/fortuneo/fortuneo_scraping.mjs
+//   node brokers/fortuneo/fortuneo_scraping.mjs FR0000120271 IE00B4L5Y983 US0378331005
+//   node brokers/fortuneo/fortuneo_scraping.mjs --refresh --start=400
+//   node brokers/fortuneo/fortuneo_scraping.mjs --stocks-only --start=400
 //
 // Writes `fortuneo-parsed.json` next to this file.
 
 import puppeteer from "puppeteer-core";
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -242,8 +242,8 @@ const startIndex = (() => {
 })();
 const positionalArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
 
-const csvPath = pathArg("csv", "../etfs.csv");
-const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
+const csvPath = pathArg("csv", "../../assets/etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../../assets/stocks.csv");
 const fundsOnly = hasFlag("funds-only") || hasFlag("etfs-only");
 const stocksOnly = hasFlag("stocks-only");
 const refresh = hasFlag("refresh");

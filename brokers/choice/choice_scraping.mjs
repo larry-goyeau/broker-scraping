@@ -11,10 +11,10 @@
 //   INF line, including the ones filed in BSE group F. The rest of group
 //   F is commercial paper and debentures. Rights, InvIT and REIT stay out.
 //
-//   node choice/choice_scraping.mjs
+//   node brokers/choice/choice_scraping.mjs
 
-import { stampRows } from "../accepted.mjs";
-import { parseCsv, isinOf } from "../indianCash.mjs";
+import { stampRows } from "../../accepted.mjs";
+import { parseCsv, isinOf } from "../../indianCash.mjs";
 import fs from "node:fs";
 
 const STEM = "https://scripmaster.choiceindia.com/scripmaster/SCRIP_MASTER_";

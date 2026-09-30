@@ -1,7 +1,7 @@
 // Live Madrid touch, from the signed-in Interactive Brokers portal.
 // Bid and ask are the quote. A last trade is never written in their place.
 // One side missing stays missing. The top of book comes back in real time.
-// The readings stay in parsed_json/es-touch.json.
+// The readings stay in spreads/es-touch.json.
 //
 // The portal tab is the one already open. Nothing else in that browser is
 // navigated.
@@ -10,12 +10,12 @@
 
 import fs from "node:fs";
 import { createRequire } from "node:module";
-import { parseCsv } from "./indianCash.mjs";
+import { parseCsv } from "../indianCash.mjs";
 
 const require = createRequire("/Users/larry/Downloads/broker-scraping/x.js");
 const puppeteer = require("puppeteer-core");
 
-const STORE = new URL("parsed_json/es-touch.json", import.meta.url);
+const STORE = new URL("./es-touch.json", import.meta.url);
 const API = "/portal.proxy/v1/portal";
 const FIELDS = "84,86,85,88,6509";
 
@@ -35,7 +35,7 @@ const bpFrom = (bid, ask) => {
 function names() {
   const rows = [];
   const seen = new Set();
-  for (const file of ["etfs.csv", "stocks.csv"]) {
+  for (const file of ["../assets/etfs.csv", "../assets/stocks.csv"]) {
     for (const row of parseCsv(fs.readFileSync(new URL(file, import.meta.url), "utf8"))) {
       if (row.exchange !== "BME") continue;
       const ticker = String(row.ticker || "").split(":").pop().trim().toUpperCase();
@@ -221,4 +221,4 @@ for (let i = 0; i < quoted.length; i += 30) {
 
 save();
 await browser.disconnect();
-console.error(`${found.length} touches, ${missed.length} sans touche complète. Écrit dans parsed_json/es-touch.json.`);
+console.error(`${found.length} touches, ${missed.length} sans touche complète. Écrit dans spreads/es-touch.json.`);

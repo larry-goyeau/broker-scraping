@@ -43,23 +43,23 @@
 //   https://www.boursedirect.fr/pdf/tarifs_bd.pdf
 //   https://www.boursedirect.fr/fr/bourse/tarifs
 //
-//   node boursedirect/boursedirect_cost.mjs TTE EURONEXT EUR --shares=10 --price=60
-//   node boursedirect/boursedirect_cost.mjs IWDA EURONEXT EUR --shares=10 --price=100
-//   node boursedirect/boursedirect_cost.mjs MC EURONEXT EUR --shares=1 --price=700
-//   node boursedirect/boursedirect_cost.mjs AAPL NASDAQ USD --shares=1 --price=230
-//   node boursedirect/boursedirect_cost.mjs --schedule
+//   node brokers/boursedirect/boursedirect_cost.mjs TTE EURONEXT EUR --shares=10 --price=60
+//   node brokers/boursedirect/boursedirect_cost.mjs IWDA EURONEXT EUR --shares=10 --price=100
+//   node brokers/boursedirect/boursedirect_cost.mjs MC EURONEXT EUR --shares=1 --price=700
+//   node brokers/boursedirect/boursedirect_cost.mjs AAPL NASDAQ USD --shares=1 --price=230
+//   node brokers/boursedirect/boursedirect_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("boursedirect-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://www.boursedirect.fr/pdf/tarifs_bd.pdf",
@@ -294,7 +294,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Bourse Direct n'existe pas encore : lancer `node boursedirect/boursedirect_scraping.mjs`",
+      why: "le catalogue Bourse Direct n'existe pas encore : lancer `node brokers/boursedirect/boursedirect_scraping.mjs`",
     };
   }
 
@@ -371,7 +371,7 @@ export function roundTrip({
     return {
       ...shared,
       basis,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({
         pea,
         market,

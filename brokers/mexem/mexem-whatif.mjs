@@ -9,8 +9,8 @@
 // It borrows the signed-in tab the way `mexem_scraping.mjs` does, and for the
 // same reason: the session belongs to the browser, not to this process.
 //
-//   node mexem/mexem-whatif.mjs
-//   node mexem/mexem-whatif.mjs --only=cap
+//   node brokers/mexem/mexem-whatif.mjs
+//   node brokers/mexem/mexem-whatif.mjs --only=cap
 //
 // Answers land in `mexem-whatif.json` beside the catalogue.
 
@@ -470,7 +470,7 @@ if (process.argv.includes("--cash")) {
 
 const only = arg("only");
 // One-off question, for when the answer to a case raises another one:
-//   node mexem/mexem-whatif.mjs --symbol=CMCOM --venue=AEB --qty=1
+//   node brokers/mexem/mexem-whatif.mjs --symbol=CMCOM --venue=AEB --qty=1
 const adHoc = arg("symbol")
   ? [
       {

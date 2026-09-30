@@ -7,12 +7,12 @@
 // from the NSE list and the Upstox cash book when the symbol matches.
 // Indices and debt series are not part of this catalogue.
 //
-//   node shoonya/shoonya_scraping.mjs
+//   node brokers/shoonya/shoonya_scraping.mjs
 
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
 import { inflateRawSync } from "node:zlib";
-import { parseCsv, keepSold, cashBook, lookup, companyName } from "../indianCash.mjs";
+import { parseCsv, keepSold, cashBook, lookup, companyName } from "../../indianCash.mjs";
 
 function zipText(buffer) {
   const signature = buffer.readUInt32LE(0);

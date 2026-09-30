@@ -13,10 +13,10 @@
 //   kept; the rest of that group is commercial paper and debentures. An
 //   indicative NAV stays out. Rights, InvIT and REIT stay out.
 //
-//   node m.stock/m.stock_scraping.mjs
+//   node brokers/m.stock/m.stock_scraping.mjs
 
-import { stampRows } from "../accepted.mjs";
-import { cashBook, lookup, companyName, isinOf, debtIsin } from "../indianCash.mjs";
+import { stampRows } from "../../accepted.mjs";
+import { cashBook, lookup, companyName, isinOf, debtIsin } from "../../indianCash.mjs";
 import fs from "node:fs";
 
 const FILE = "https://api.mstock.trade/openapi/typeb/instruments/OpenAPIScripMaster";

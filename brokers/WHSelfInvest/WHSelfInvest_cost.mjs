@@ -78,22 +78,22 @@
 //   https://www.whselfinvest.com/en-lu/investing-best-broker/all-exchanges-and-fees
 //   https://www.whselfinvest.com/en-DE/investing-best-broker/all-exchanges-and-fees
 //
-//   node WHSelfInvest/WHSelfInvest_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node WHSelfInvest/WHSelfInvest_cost.mjs VWCE IBIS2 EUR --shares=10 --price=140
-//   node WHSelfInvest/WHSelfInvest_cost.mjs TTE SBF EUR --shares=10 --price=60
-//   node WHSelfInvest/WHSelfInvest_cost.mjs --schedule
+//   node brokers/WHSelfInvest/WHSelfInvest_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/WHSelfInvest/WHSelfInvest_cost.mjs VWCE IBIS2 EUR --shares=10 --price=140
+//   node brokers/WHSelfInvest/WHSelfInvest_cost.mjs TTE SBF EUR --shares=10 --price=60
+//   node brokers/WHSelfInvest/WHSelfInvest_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("whselfinvest-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://www.whselfinvest.com/en-lu/investing-best-broker/all-exchanges-and-fees",
@@ -385,7 +385,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const answer = { usd: null, brokerFees: null, etf, place, currency, onlineBuy: true, cashCurrency: "" };
 
   if (!catalogue) {
-    return { ...answer, why: "le catalogue WH SelfInvest n'existe pas encore : lancer `node WHSelfInvest/WHSelfInvest_scraping.mjs`" };
+    return { ...answer, why: "le catalogue WH SelfInvest n'existe pas encore : lancer `node brokers/WHSelfInvest/WHSelfInvest_scraping.mjs`" };
   }
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue WH SelfInvest` };
@@ -482,7 +482,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     return {
       ...shared,
       basis,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
     };
   }
 

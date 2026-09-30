@@ -11,9 +11,9 @@
 //   IPFT                        ₹0.01 / crore
 //   DP on a delivery sell       ₹12.5 + GST per scrip
 //
-//   node fyers/fyers_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
+//   node brokers/fyers/fyers_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
 
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../indianDelivery.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
 
 function brokerageEach(notional) {
   return Math.min(20, notional * pct("0.3"));

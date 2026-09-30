@@ -11,8 +11,8 @@
 // and if a buy fills and its sell does not, the script stops and says so loudly rather than
 // carrying on and leaving a position open overnight.
 //
-//   node tradezero/tradezero-experiment.mjs --probe
-//   node tradezero/tradezero-experiment.mjs --live --symbol=IAU --shares=5
+//   node brokers/tradezero/tradezero-experiment.mjs --probe
+//   node brokers/tradezero/tradezero-experiment.mjs --live --symbol=IAU --shares=5
 
 import puppeteer from "puppeteer-core";
 import fs from "node:fs";
@@ -271,7 +271,7 @@ if (LIVE) {
     console.error(
       `\n!!! VENTE REFUSÉE alors que l'achat est passé : ${sold.body?.orderStatus || sold.status} ` +
         `${sold.body?.text || JSON.stringify(sold.body ?? sold.text)}\n` +
-        `!!! une position de ${SHARES} ${SYMBOL} est OUVERTE. La solder : node tradezero/close-now.mjs ${SYMBOL} ${SHARES}`
+        `!!! une position de ${SHARES} ${SYMBOL} est OUVERTE. La solder : node brokers/tradezero/close-now.mjs ${SYMBOL} ${SHARES}`
     );
     run.sellFailed = sold.body ?? sold;
   } else {

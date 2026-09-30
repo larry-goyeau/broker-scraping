@@ -2,7 +2,7 @@
 // disclosure; the fact is about the instrument, so every `*_cost.mjs`
 // reads this rather than the T212 catalogue.
 //
-//   parsed_json/taxes.json  →  byIsin[ISIN]
+//   taxes.json  →  byIsin[ISIN]
 //
 // `taxes.mjs` writes `byIsin` next to `byCode` on every save. Rebuild the
 // index without a sweep:
@@ -11,8 +11,8 @@
 
 import fs from "node:fs";
 
-const TAXES = new URL("parsed_json/taxes.json", import.meta.url);
-const CATALOGUE = new URL("trading212/trading212-parsed.json", import.meta.url);
+const TAXES = new URL("taxes.json", import.meta.url);
+const CATALOGUE = new URL("brokers/trading212/trading212-parsed.json", import.meta.url);
 
 const STAMP_FTT = /STAMP|FRENCH_TRANSACTION|ITALIAN|SPANISH|BELGIAN|IRISH|FTT|TOB/i;
 
@@ -92,10 +92,10 @@ export function taxRates(tax) {
 
 if (import.meta.url === `file://${process.argv[1]}` && process.argv.includes("--rebuild")) {
   if (!taxFile) {
-    console.error("parsed_json/taxes.json absent : lancer node taxes.mjs");
+    console.error("taxes.json absent : lancer node taxes.mjs");
     process.exit(1);
   }
   taxFile.byIsin = rebuildByIsin(taxFile);
   fs.writeFileSync(TAXES, JSON.stringify(taxFile, null, 2));
-  console.log(`${Object.keys(taxFile.byIsin).length} ISIN dans parsed_json/taxes.json → byIsin`);
+  console.log(`${Object.keys(taxFile.byIsin).length} ISIN dans taxes.json → byIsin`);
 }

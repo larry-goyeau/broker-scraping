@@ -5,8 +5,8 @@
 // HSBC wherever it is bought, and the French tax is four tenths of a per cent of a purchase of
 // Eutelsat at every broker in the file. Only the reading is Trading212's — its ex-ante cost
 // disclosure is the cheapest authority available, being free, per instrument, and the broker's own
-// statement of what it will collect. `rule605-monthly.mjs` and `xlm-monthly.mjs` sit here for the
-// same reason, each sourced from one place and useful to all of them.
+// statement of what it will collect. `spreads/rule605-monthly.mjs` and `spreads/xlm-monthly.mjs` sit with the
+// other order-book files for the same reason, each sourced from one place and useful to all of them.
 //
 // A rule by exchange would be wrong, and that is the whole reason this file exists. Two shares
 // quoted side by side in Paris are taxed differently — Eutelsat pays the French transaction tax
@@ -35,11 +35,11 @@ import puppeteer from "puppeteer-core";
 import fs from "node:fs";
 import { indexByIsin } from "./taxMap.mjs";
 
-const OUT = new URL("parsed_json/taxes.json", import.meta.url);
-const CATALOGUE = new URL("trading212/trading212-parsed.json", import.meta.url);
+const OUT = new URL("taxes.json", import.meta.url);
+const CATALOGUE = new URL("brokers/trading212/trading212-parsed.json", import.meta.url);
 // Where the sweep used to write, before it moved to the root. Read once so a run in progress is
 // not thrown away, then never again.
-const MOVED_FROM = new URL("trading212/t212-taxes.json", import.meta.url);
+const MOVED_FROM = new URL("brokers/trading212/t212-taxes.json", import.meta.url);
 
 const flag = (name, fallback = null) => {
   const m = process.argv.find((a) => a.startsWith(`--${name}=`));
@@ -286,6 +286,6 @@ for (const [k, n] of [...tally].sort((a, b) => b[1] - a[1])) {
   const [exchange] = k.split(" · ");
   console.log(`  ${String(n).padStart(5)} / ${String(perExchange.get(exchange)).padStart(5)}   ${k}`);
 }
-console.log(`\nécrit dans parsed_json/taxes.json (byCode + byIsin)`);
+console.log(`\nécrit dans taxes.json (byCode + byIsin)`);
 
 await browser.disconnect();

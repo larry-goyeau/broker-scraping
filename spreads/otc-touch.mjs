@@ -10,13 +10,14 @@
 
 import fs from "node:fs";
 import { createRequire } from "node:module";
-import { catalogueFiles } from "./catalogues.mjs";
+import { catalogueFiles } from "../catalogues.mjs";
+import { fileURLToPath } from "node:url";
 
 const require = createRequire("/Users/larry/Downloads/broker-scraping/x.js");
 const puppeteer = require("puppeteer-core");
 
-const STORE = new URL("parsed_json/otc-touch.json", import.meta.url);
-const SPREAD = "parsed_json/spread.json";
+const STORE = new URL("./otc-touch.json", import.meta.url);
+const SPREAD = fileURLToPath(new URL("./spread.json", import.meta.url));
 const API = "/portal.proxy/v1/portal";
 const FIELDS = "84,86,85,88,6509";
 const OTC = new Set(["OTC", "PINK", "OTCMKTS", "OTCQX", "OTCQB", "PINX", "OTCM", "GREY", "OOTC", "OTHEROTC", "OOTCOTHEROTC"]);

@@ -19,9 +19,9 @@
 //   https://www.finanzen.net/zero/krypto/
 //   https://www.finanzen.net/zero/
 //
-//   node finanzen/finanzen_scraping.mjs
+//   node brokers/finanzen/finanzen_scraping.mjs
 
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
 import zlib from "node:zlib";
 

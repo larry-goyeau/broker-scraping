@@ -59,7 +59,7 @@
 // commission on the day's first order — which is the better reason to keep it
 // out. Inactivity (10 € / month after 24 months) is a holding cost, not a trip.
 //
-// Market spread comes from `parsed_json/spread.json` and is already a round trip:
+// Market spread comes from `spreads/spread.json` and is already a round trip:
 //    50// basis points in Europe, the Rule 605 effective spread per share in America. It
 // is added once, not twice. Where no book was ever read the answer is null and
 // the page prints N/A, which is the honest reading of a hole — 159 of 3 279
@@ -81,22 +81,22 @@
 // the market happened to give back. This file answers 20,59 $ of broker fees for
 // that trip against 20,45 $ paid, the gap being the EURUSD it caches.
 //    60//
-//   node admiral/admiral_cost.mjs AAPL NASDAQ USD
-//   node admiral/admiral_cost.mjs AAPL NASDAQ USD --shares=1000 --price=230
-//   node admiral/admiral_cost.mjs EUNL XETR EUR --shares=10 --price=126
-//   node admiral/admiral_cost.mjs --schedule
+//   node brokers/admiral/admiral_cost.mjs AAPL NASDAQ USD
+//   node brokers/admiral/admiral_cost.mjs AAPL NASDAQ USD --shares=1000 --price=230
+//   node brokers/admiral/admiral_cost.mjs EUNL XETR EUR --shares=10 --price=126
+//   node brokers/admiral/admiral_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("admiral-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://admiralmarkets.com/start-trading/admiral-invest-stocks-and-etfs",
@@ -326,7 +326,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   if (!catalogue) {
     return {
       ...base,
-      why: "le catalogue Admirals n'existe pas encore : lancer `node admiral/admiral_scraping.mjs` avec admiralmarkets.com ouvert",
+      why: "le catalogue Admirals n'existe pas encore : lancer `node brokers/admiral/admiral_scraping.mjs` avec admiralmarkets.com ouvert",
     };
   }
   const { named, matches } = findListing({ etf, place, currency });
@@ -380,7 +380,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   if (!(n > 0) || !(p > 0)) {
     return {
       ...answer,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       remark: remarkOf(listing.currency),
     };
   }

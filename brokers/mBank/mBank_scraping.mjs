@@ -15,12 +15,12 @@
 //   https://www.mbank.pl/pdf/ind/inwestycje/lista-akcji-zagranicznych.pdf
 //   https://www.mbank.pl/indywidualny/inwestycje/pytania-i-odpowiedzi/tabela-funkcjonalnosci-emakler/
 //
-//   node mBank/mBank_scraping.mjs
-//   node mBank/mBank_scraping.mjs --pdf=./list.pdf
+//   node brokers/mBank/mBank_scraping.mjs
+//   node brokers/mBank/mBank_scraping.mjs --pdf=./list.pdf
 //
 // Text is read with PyMuPDF (`python3 -c "import fitz"`).
 
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 

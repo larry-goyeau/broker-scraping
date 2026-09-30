@@ -6,11 +6,11 @@
 //   Upstox cash book when the symbol matches. F&O, MCX, indices and
 //   debt series are not part of this catalogue.
 //
-//   node rupeezy/rupeezy_scraping.mjs
+//   node brokers/rupeezy/rupeezy_scraping.mjs
 
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
-import { parseCsv, isinOf, keepSold, cashBook, lookup, companyName } from "../indianCash.mjs";
+import { parseCsv, isinOf, keepSold, cashBook, lookup, companyName } from "../../indianCash.mjs";
 
 const FILE = "https://static.rupeezy.in/master.csv";
 const VENUE = { NSE_EQ: "NSE", BSE_EQ: "BSE" };

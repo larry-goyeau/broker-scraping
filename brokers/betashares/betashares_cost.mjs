@@ -20,21 +20,21 @@
 //   https://www.betashares.com.au/direct/pricing
 //   https://public-files.wealth.betashares.com.au/legal/product-disclosure-statement.pdf
 //
-//   node betashares/betashares_cost.mjs CTD ASX AUD --shares=10 --price=2.42
-//   node betashares/betashares_cost.mjs IBTC "Cboe Australia" AUD --shares=10 --price=10
-//   node betashares/betashares_cost.mjs --schedule
+//   node brokers/betashares/betashares_cost.mjs CTD ASX AUD --shares=10 --price=2.42
+//   node brokers/betashares/betashares_cost.mjs IBTC "Cboe Australia" AUD --shares=10 --price=10
+//   node brokers/betashares/betashares_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, spreadLeaf } from "../venues.mjs";
-import { bookParts, plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, spreadLeaf } from "../../spreads/venues.mjs";
+import { bookParts, plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("betashares-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   url: "https://www.betashares.com.au/direct/pricing",
@@ -92,7 +92,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     cashCurrency: CASH,
   };
   if (!catalogue) {
-    return { ...answer, why: "le catalogue Betashares n'existe pas encore : lancer `node betashares/betashares_scraping.mjs`" };
+    return { ...answer, why: "le catalogue Betashares n'existe pas encore : lancer `node brokers/betashares/betashares_scraping.mjs`" };
   }
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Betashares` };
@@ -148,7 +148,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const n = Number(shares);
   const p = Number(price);
   if (!(n > 0 && p > 0)) {
-    return { ...shared, why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs" };
+    return { ...shared, why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs" };
   }
 
   const notional = n * p;
@@ -227,7 +227,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const positional = process.argv.slice(2).filter((a) => !a.startsWith("--"));
   const [etf, place, currency] = positional;
   if (!etf) {
-    console.error("usage : node betashares/betashares_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]");
+    console.error("usage : node brokers/betashares/betashares_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]");
     process.exit(2);
   }
 

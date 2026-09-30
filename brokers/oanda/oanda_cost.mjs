@@ -160,23 +160,23 @@
 //   https://www.oanda.com/eu-en/invest/brokerage-account
 //   https://help.oanda.com/eu/en/faqs/trade-etfs-eu.htm
 //
-//   node oanda/oanda_cost.mjs AAPL --shares=10 --price=230
-//   node oanda/oanda_cost.mjs AAPL --shares=10 --price=230 --plan=usd
-//   node oanda/oanda_cost.mjs VWCE XETR EUR --shares=10 --price=120
-//   node oanda/oanda_cost.mjs HSBA LSE GBP --shares=100 --price=9
-//   node oanda/oanda_cost.mjs --schedule
+//   node brokers/oanda/oanda_cost.mjs AAPL --shares=10 --price=230
+//   node brokers/oanda/oanda_cost.mjs AAPL --shares=10 --price=230 --plan=usd
+//   node brokers/oanda/oanda_cost.mjs VWCE XETR EUR --shares=10 --price=120
+//   node brokers/oanda/oanda_cost.mjs HSBA LSE GBP --shares=100 --price=9
+//   node brokers/oanda/oanda_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("oanda-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://www.oanda.com/eu-en/document/81",
@@ -484,7 +484,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const answer = { usd: null, brokerFees: null, etf, place, currency, onlineBuy: true, plan: picked?.id ?? plan };
 
   if (!picked) return { ...answer, why: `formule inconnue : ${plan} (eur|usd|pln|ron|czk)` };
-  if (!catalogue) return { ...answer, why: "le catalogue OANDA n'existe pas encore : lancer `node oanda/oanda_scraping.mjs`" };
+  if (!catalogue) return { ...answer, why: "le catalogue OANDA n'existe pas encore : lancer `node brokers/oanda/oanda_scraping.mjs`" };
 
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue OANDA` };
@@ -568,7 +568,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   if (!(n > 0) || !(p > 0)) {
     return {
       ...shared,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({ picked, rule, market, leg, stamp, american, listing, buy: null, marketBp, n: null }),
     };
   }

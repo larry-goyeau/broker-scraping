@@ -96,23 +96,23 @@
 //
 //   https://getbux.com/fees/
 //
-//   node bux/bux_cost.mjs CAC --shares=10 --price=24
-//   node bux/bux_cost.mjs AAPL NASDAQ USD --plan=plus --shares=10 --price=230
-//   node bux/bux_cost.mjs TXG NASDAQ USD --plan=plus --shares=1 --price=66
-//   node bux/bux_cost.mjs TEF BME EUR --amount=1000 --plan=prime
-//   node bux/bux_cost.mjs --schedule
+//   node brokers/bux/bux_cost.mjs CAC --shares=10 --price=24
+//   node brokers/bux/bux_cost.mjs AAPL NASDAQ USD --plan=plus --shares=10 --price=230
+//   node brokers/bux/bux_cost.mjs TXG NASDAQ USD --plan=plus --shares=1 --price=66
+//   node brokers/bux/bux_cost.mjs TEF BME EUR --amount=1000 --plan=prime
+//   node brokers/bux/bux_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("bux-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://getbux.com/fees/",
@@ -485,7 +485,7 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
   };
 
   if (!catalogue) {
-    return { ...answer, why: "le catalogue BUX n'existe pas encore : lancer `node bux/bux_scraping.mjs`" };
+    return { ...answer, why: "le catalogue BUX n'existe pas encore : lancer `node brokers/bux/bux_scraping.mjs`" };
   }
 
   const { named, matches } = findListing({ etf, place, currency });
@@ -557,7 +557,7 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
   const typed = Number(amount) > 0 ? Number(amount) : null;
   const notional = typed ?? (n && p ? n * p : null);
   if (notional == null) {
-    return said(n && !p ? "aucun prix pour cette ligne : lancer node prices.mjs" : "aucun montant ni nombre de parts");
+    return said(n && !p ? "aucun prix pour cette ligne : lancer node assets/prices.mjs" : "aucun montant ni nombre de parts");
   }
   const units = n ?? (typed && p ? typed / p : null);
 

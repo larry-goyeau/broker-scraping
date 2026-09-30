@@ -10,10 +10,10 @@
 //   group F. The rest of group F is commercial paper and debentures.
 //   InvIT and REIT series stay out.
 //
-//   node nuvama/nuvama_scraping.mjs
+//   node brokers/nuvama/nuvama_scraping.mjs
 
-import { stampRows } from "../accepted.mjs";
-import { parseCsv, isinOf } from "../indianCash.mjs";
+import { stampRows } from "../../accepted.mjs";
+import { parseCsv, isinOf } from "../../indianCash.mjs";
 import { inflateRawSync } from "node:zlib";
 import fs from "node:fs";
 

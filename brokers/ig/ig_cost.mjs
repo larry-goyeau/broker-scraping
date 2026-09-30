@@ -31,22 +31,22 @@
 //   https://www.ig.com/ie/investments/share-dealing/costs-fees
 //   https://www.ig.com/usermanagement/customeragreements?agreementType=costs_and_charges&igCompany=igfr&locale=fr_FR
 //
-//   node ig/ig_cost.mjs AAPL TRADEGATE EUR --shares=10 --price=230
-//   node ig/ig_cost.mjs IE00B4L5Y983 TRADEGATE EUR --shares=10 --price=100
-//   node ig/ig_cost.mjs MC TRADEGATE EUR --shares=1 --price=700
-//   node ig/ig_cost.mjs --schedule
+//   node brokers/ig/ig_cost.mjs AAPL TRADEGATE EUR --shares=10 --price=230
+//   node brokers/ig/ig_cost.mjs IE00B4L5Y983 TRADEGATE EUR --shares=10 --price=100
+//   node brokers/ig/ig_cost.mjs MC TRADEGATE EUR --shares=1 --price=700
+//   node brokers/ig/ig_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("ig-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://www.ig.com/ie/investments/share-dealing/costs-fees",
@@ -156,7 +156,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue IG n'existe pas encore : lancer `node ig/ig_scraping.mjs`",
+      why: "le catalogue IG n'existe pas encore : lancer `node brokers/ig/ig_scraping.mjs`",
     };
   }
 
@@ -218,7 +218,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     return {
       ...shared,
       basis,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({ market, listing, leaf, marketBp, marketPerShare, unsourced: m.unsourced, taxPct }),
     };
   }

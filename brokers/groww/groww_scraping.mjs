@@ -8,9 +8,9 @@
 //   https://growwapi-assets.groww.in/instruments/instrument.csv
 //   https://groww.in/trade-api/docs/curl/instruments
 //
-//   node groww/groww_scraping.mjs
+//   node brokers/groww/groww_scraping.mjs
 
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
 
 const FILE = "https://growwapi-assets.groww.in/instruments/instrument.csv";

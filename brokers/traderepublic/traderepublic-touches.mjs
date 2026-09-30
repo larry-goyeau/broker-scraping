@@ -6,12 +6,12 @@
 // No signed-in tab is required: the public websocket is enough. `--chrome`
 // is the old path, kept for when the socket is blocked from Node.
 //
-//   node traderepublic/traderepublic-touches.mjs
-//   node traderepublic/traderepublic-touches.mjs --only=US0378331005,IE00BK5BQT80
-//   node traderepublic/traderepublic-touches.mjs --refresh
-//   node traderepublic/traderepublic-touches.mjs --refresh-empty --adr
-//   node traderepublic/traderepublic-touches.mjs --limit=200
-//   node traderepublic/traderepublic-touches.mjs --chrome
+//   node brokers/traderepublic/traderepublic-touches.mjs
+//   node brokers/traderepublic/traderepublic-touches.mjs --only=US0378331005,IE00BK5BQT80
+//   node brokers/traderepublic/traderepublic-touches.mjs --refresh
+//   node brokers/traderepublic/traderepublic-touches.mjs --refresh-empty --adr
+//   node brokers/traderepublic/traderepublic-touches.mjs --limit=200
+//   node brokers/traderepublic/traderepublic-touches.mjs --chrome
 
 import fs from "node:fs";
 

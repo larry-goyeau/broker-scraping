@@ -2,7 +2,7 @@
 // a position the wash-sale check refused to let go: a resting buy from an earlier probe was still
 // on the book, and TradeZero blocks a sell that could cross the account's own bid.
 //
-//   node tradezero/close-now.mjs IAU 4
+//   node brokers/tradezero/close-now.mjs IAU 4
 
 import puppeteer from "puppeteer-core";
 

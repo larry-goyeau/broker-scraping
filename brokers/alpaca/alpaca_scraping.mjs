@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer-core";
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -283,9 +283,9 @@ function hasFlag(name) {
   return process.argv.slice(2).some((arg) => new RegExp(`^--${name}$`, "i").test(arg));
 }
 
-const csvPath = pathArg("csv", "../etfs.csv");
-const stocksCsvPath = pathArg("stocks-csv", "../stocks.csv");
-const cryptosCsvPath = pathArg("cryptos-csv", "../cryptos.csv");
+const csvPath = pathArg("csv", "../../assets/etfs.csv");
+const stocksCsvPath = pathArg("stocks-csv", "../../assets/stocks.csv");
+const cryptosCsvPath = pathArg("cryptos-csv", "../../assets/cryptos.csv");
 const fundsOnly = hasFlag("funds-only");
 const cryptoOnly = hasFlag("crypto-only");
 const skipCrypto = hasFlag("no-crypto") || fundsOnly;

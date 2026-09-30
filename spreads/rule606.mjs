@@ -23,8 +23,8 @@ import { fileURLToPath } from "node:url";
 import { zipEntries } from "./xlm-monthly.mjs";
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
-const CACHE_PATH = path.join(ROOT, "parsed_json", "rule606.json");
-const RULE605_PATH = path.join(ROOT, "parsed_json", "rule605-monthly.json");
+const CACHE_PATH = path.join(ROOT, "rule606.json");
+const RULE605_PATH = path.join(ROOT, "rule605-monthly.json");
 const INDEX = "https://www.finra.org/finra-data/606-nms-data/bulk-file";
 const STALE_DAYS = 50;
 

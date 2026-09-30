@@ -4,18 +4,18 @@
 // Sydney time. Past the close the script stops asking.
 //
 // The portal tab is the one already open. Nothing else in that browser is
-// navigated. The readings stay in parsed_json/au-touch.json.
+// navigated. The readings stay in spreads/au-touch.json.
 //
 //   node au-touch.mjs
 
 import fs from "node:fs";
 import { createRequire } from "node:module";
-import { parseCsv } from "./indianCash.mjs";
+import { parseCsv } from "../indianCash.mjs";
 
 const require = createRequire("/Users/larry/Downloads/broker-scraping/x.js");
 const puppeteer = require("puppeteer-core");
 
-const STORE = new URL("parsed_json/au-touch.json", import.meta.url);
+const STORE = new URL("./au-touch.json", import.meta.url);
 const API = "/portal.proxy/v1/portal";
 const FIELDS = "84,86,85,88";
 const isIbPortal = (url) =>
@@ -68,9 +68,9 @@ function names() {
       rows.push({ ticker, isin, name: row.name || "", venue, mic, book: venue === "ASX" });
     }
   };
-  add("etfs.csv", "ASX", "ASX", "XASX");
-  add("stocks.csv", "ASX", "ASX", "XASX");
-  add("etfs.csv", "CXA", "CHIXAU", "CHIA");
+  add("../assets/etfs.csv", "ASX", "ASX", "XASX");
+  add("../assets/stocks.csv", "ASX", "ASX", "XASX");
+  add("../assets/etfs.csv", "CXA", "CHIXAU", "CHIA");
   return rows;
 }
 
@@ -483,4 +483,4 @@ for (const row of found) {
 save();
 await browser.disconnect();
 const session = sydney();
-console.error(`Sydney ${session.clock}. ${found.length} touches, ${books} carnets, ${missed.length} sans touche complète. Écrit dans parsed_json/au-touch.json.`);
+console.error(`Sydney ${session.clock}. ${found.length} touches, ${books} carnets, ${missed.length} sans touche complète. Écrit dans spreads/au-touch.json.`);

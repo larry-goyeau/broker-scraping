@@ -36,8 +36,9 @@
 import fs from "node:fs";
 import puppeteer from "puppeteer-core";
 import { zipEntries } from "./xlm-monthly.mjs";
+import { fileURLToPath } from "node:url";
 
-const CACHE_PATH = "parsed_json/rule605-monthly.json";
+const CACHE_PATH = fileURLToPath(new URL("./rule605-monthly.json", import.meta.url));
 // Reports for a month appear during the following one, so the table goes looking for a
 // newer file about six weeks after the month it describes began.
 const STALE_DAYS = 40;
@@ -442,7 +443,7 @@ export async function monthlyEffectiveSpread({ refresh = false, quiet = false } 
 
   try {
     const fresh = await download(await newestMonth());
-    fs.mkdirSync("parsed_json", { recursive: true });
+    fs.mkdirSync(fileURLToPath(new URL("./", import.meta.url)), { recursive: true });
     fs.writeFileSync(CACHE_PATH, JSON.stringify(fresh, null, 2));
     if (!quiet) {
       console.error(

@@ -7,9 +7,9 @@
 //   https://www.tossinvest.com/sitemap/stocks-order/0-5000.xml
 //   https://wts-info-api.tossinvest.com/api/v2/stock-infos/A005930
 //
-//   node toss/toss_scraping.mjs
+//   node brokers/toss/toss_scraping.mjs
 
-import { stampRows } from "../accepted.mjs";
+import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
 
 const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36";

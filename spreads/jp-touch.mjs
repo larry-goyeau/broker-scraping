@@ -1,7 +1,7 @@
 // Delayed Tokyo touch, from the signed-in Interactive Brokers portal.
 // Bid and ask are the quote. A last trade is never written in their place.
 // One side missing stays missing. The account has no Tokyo depth, and the
-// top of book comes back delayed. The readings stay in parsed_json/jp-touch.json.
+// top of book comes back delayed. The readings stay in spreads/jp-touch.json.
 //
 // The portal tab is the one already open. Nothing else in that browser is
 // navigated.
@@ -10,12 +10,12 @@
 
 import fs from "node:fs";
 import { createRequire } from "node:module";
-import { parseCsv } from "./indianCash.mjs";
+import { parseCsv } from "../indianCash.mjs";
 
 const require = createRequire("/Users/larry/Downloads/broker-scraping/x.js");
 const puppeteer = require("puppeteer-core");
 
-const STORE = new URL("parsed_json/jp-touch.json", import.meta.url);
+const STORE = new URL("./jp-touch.json", import.meta.url);
 const API = "/portal.proxy/v1/portal";
 const FIELDS = "84,86,85,88,6509";
 
@@ -35,7 +35,7 @@ const bpFrom = (bid, ask) => {
 function names() {
   const rows = [];
   const seen = new Set();
-  for (const file of ["etfs.csv", "stocks.csv"]) {
+  for (const file of ["../assets/etfs.csv", "../assets/stocks.csv"]) {
     for (const row of parseCsv(fs.readFileSync(new URL(file, import.meta.url), "utf8"))) {
       if (row.exchange !== "TSE" && row.exchange !== "TYO") continue;
       const ticker = String(row.ticker || "").split(":").pop().trim().toUpperCase();
@@ -221,4 +221,4 @@ for (let i = 0; i < quoted.length; i += 30) {
 
 save();
 await browser.disconnect();
-console.error(`${found.length} touches, ${missed.length} sans touche complète. Écrit dans parsed_json/jp-touch.json.`);
+console.error(`${found.length} touches, ${missed.length} sans touche complète. Écrit dans spreads/jp-touch.json.`);

@@ -53,23 +53,23 @@
 //   https://www.xtb.com/en/help-center/fees-and-payments-3/fees-and-commissions-at-xtb
 //   https://www.xtb.com/pl/centrum-pomocy/akcje-i-etf-8/czy-pobierana-jest-oplata-za-przewalutowanie-w-przypadku-handlu-na-akcjach-i-etf-notowanych-w-innych-walutach
 //
-//   node xtb/xtb_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node xtb/xtb_cost.mjs VWCE XETR EUR --shares=10 --price=140 --entity=mena
-//   node xtb/xtb_cost.mjs TTE EURONEXT EUR --shares=10 --price=60
-//   node xtb/xtb_cost.mjs AAPL NASDAQ USD --shares=500 --price=230 --spent=95000 --entity=uk
-//   node xtb/xtb_cost.mjs --schedule
+//   node brokers/xtb/xtb_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/xtb/xtb_cost.mjs VWCE XETR EUR --shares=10 --price=140 --entity=mena
+//   node brokers/xtb/xtb_cost.mjs TTE EURONEXT EUR --shares=10 --price=60
+//   node brokers/xtb/xtb_cost.mjs AAPL NASDAQ USD --shares=500 --price=230 --spent=95000 --entity=uk
+//   node brokers/xtb/xtb_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { rowsNamed, warmListingIndex } from "../listingIndex.mjs";
+import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../venues.mjs";
-import { plus, finite } from "../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, listingCash, fxRemark } from "../fx.mjs";
-import { taxesOf, taxRates } from "../taxMap.mjs";
+import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { plus, finite } from "../../na.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, listingCash, fxRemark } from "../../fx.mjs";
+import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("xtb-parsed.json", import.meta.url);
-const SPREADS = new URL("../parsed_json/spread.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   fees: "https://www.xtb.com/int/account-and-fees",
@@ -343,7 +343,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue XTB n'existe pas encore : lancer `node xtb/xtb_scraping.mjs`",
+      why: "le catalogue XTB n'existe pas encore : lancer `node brokers/xtb/xtb_scraping.mjs`",
     };
   }
 
@@ -423,7 +423,7 @@ export function roundTrip({
   if (notional == null) {
     return {
       ...shared,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node prices.mjs",
+      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
       confidence: confidenceOf({
         listing,
         house,
@@ -664,11 +664,11 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node xtb/xtb_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--spent=eur] [--entity=sa|uk|cy|mena|int] [--json]\n" +
-        "        node xtb/xtb_cost.mjs --schedule\n" +
-        "  ex.   node xtb/xtb_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
-        "        node xtb/xtb_cost.mjs VWCE XETR EUR --shares=10 --price=140 --entity=mena\n" +
-        "        node xtb/xtb_cost.mjs AAPL NASDAQ USD --shares=500 --price=230 --spent=95000 --entity=uk"
+      "usage : node brokers/xtb/xtb_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--spent=eur] [--entity=sa|uk|cy|mena|int] [--json]\n" +
+        "        node brokers/xtb/xtb_cost.mjs --schedule\n" +
+        "  ex.   node brokers/xtb/xtb_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
+        "        node brokers/xtb/xtb_cost.mjs VWCE XETR EUR --shares=10 --price=140 --entity=mena\n" +
+        "        node brokers/xtb/xtb_cost.mjs AAPL NASDAQ USD --shares=500 --price=230 --spent=95000 --entity=uk"
     );
     process.exit(2);
   }

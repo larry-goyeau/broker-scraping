@@ -24,9 +24,10 @@
 
 import fs from "node:fs";
 import zlib from "node:zlib";
+import { fileURLToPath } from "node:url";
 
 const INDEX = "https://www.cashmarket.deutsche-boerse.com/cash-en/Data-Tech/statistics/etf-etp-statistics";
-const CACHE_PATH = "parsed_json/xlm-monthly.json";
+const CACHE_PATH = fileURLToPath(new URL("./xlm-monthly.json", import.meta.url));
 // The workbook appears in the first days of the following month, so a table older than
 // this is worth a look. Nothing breaks if it is not refreshed: the figure it holds is a
 // monthly average, not a quote.
@@ -286,7 +287,7 @@ export async function monthlyXlm({ refresh = false, quiet = false } = {}) {
 
   try {
     const fresh = await download();
-    fs.mkdirSync("parsed_json", { recursive: true });
+    fs.mkdirSync(fileURLToPath(new URL("./", import.meta.url)), { recursive: true });
     fs.writeFileSync(CACHE_PATH, JSON.stringify(fresh, null, 2));
     if (!quiet) {
       console.error(

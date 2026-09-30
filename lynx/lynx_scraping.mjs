@@ -502,13 +502,14 @@ function closeOnlyVenue(listingExchange) {
 // These places quote, and the what-if answers "No trading permissions."
 // The order ticket says the instrument is not supported via LYNX (E003).
 // A liquid name gets the same answer as a small one — Samsung on KRX,
-// TSMC on TWSE — so it is the place, not the line. Lynx only opens
-// accounts in AT BE CZ FI FR DE NL PL SK, so a resident of Korea or
-// Taiwan is not a client who could buy it either. Dropped, like a
+// TSMC on TWSE, Aramco and Jamjoom on TADAWUL — so it is the place, not
+// the line. Lynx only opens accounts in AT BE CZ FI FR DE NL PL SK, so a
+// resident of Korea or Taiwan is not a client who could buy it either.
+// Saudi Arabia is absent from LYNX's market list. Dropped, like a
 // close-only venue.
 function unsupportedVenue(exchange) {
   const code = String(exchange || "").toUpperCase();
-  return code === "KRX" || code === "TWSE" || code === "TPEX";
+  return code === "KRX" || code === "TWSE" || code === "TPEX" || code === "TADAWUL";
 }
 
 // A packaged product with no KID in a language approved for this retail

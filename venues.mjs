@@ -85,12 +85,13 @@ export const VENUES = [
     loose: ["zurich", "switzerland"],
   },
   {
-    // Continuous trading ends at 16:50. The closing auction runs on to 17:05, and the
-    // touch still on the board at that time is the close, so the window includes it.
+    // Continuous trading ends at 16:50. The closing auction runs on to 17:05.
+    // A touch taken then is the close, so the window stops when continuous
+    // trading ends.
     mic: "XWAR",
     name: "Warsaw Stock Exchange",
     source: "gpw",
-    hours: { open: "09:00", close: "17:05", tz: "Europe/Warsaw" },
+    hours: { open: "09:00", close: "16:50", tz: "Europe/Warsaw" },
     exact: ["xwar", "gpw", "wse", "warsaw", "warsawstockexchange"],
     loose: [],
   },
@@ -154,7 +155,8 @@ export const VENUES = [
     exact: {
       // "nsdq" is Al Ramz's spelling, and on its own it kept 1 113 American lines of
       // that catalogue out of reach of a book they plainly have.
-      XNAS: ["xnas", "nasdaq", "nsdq", "nmq", "ndq", "nasdaqgs", "nasdaqgm", "nasdaqcm", "nsc"],
+      // "nsm" is the Nasdaq code on a Hargreaves Lansdown factsheet.
+      XNAS: ["xnas", "nasdaq", "nsdq", "nmq", "ndq", "nasdaqgs", "nasdaqgm", "nasdaqcm", "nsc", "nsm"],
       // Brokers write "AMEX" for Arca more often than for NYSE American, tastytrade
       // among them: EEM, GLD, IAU and VOO all come through labelled AMEX and all four
       // list on Arca. The alias sits here rather than on XASE because that is what the
@@ -217,6 +219,16 @@ export const VENUES = [
       "vse",
     ],
     loose: ["austria"],
+  },
+  // The public instrument list prints the best bid and the best ask in francs.
+  // One touch, not a session average. Neon sends every line here.
+  {
+    mic: "XBRN",
+    name: "BX Swiss",
+    source: "bxswiss",
+    hours: { open: "09:00", close: "17:30", tz: "Europe/Zurich" },
+    exact: ["xbrn", "bxswiss", "bx", "bern", "berne", "boersebern"],
+    loose: [],
   },
   // Retail German books. They publish a delayed pre-trade file under MiFID rather than
   // a public live book, which is why they sat in KNOWN_UNSOURCED: the file was never
@@ -379,11 +391,10 @@ export const VENUES = [
     loose: [],
   },
 
-  // The Gulf. Four of these five markets publish their own touch for nothing — the
-  // whole board in one call, bid, ask and both volumes — which is better than most of
-  // Europe manages; they sat in KNOWN_UNSOURCED because nobody had looked, not because
-  // the data is paid. Only Tadawul stays there: the Saudi Exchange publishes last
-  // price and volume and sells the book.
+  // The Gulf. Four of these markets publish their own touch for nothing — the
+  // whole board in one call, bid, ask and both volumes. Tadawul sells that book.
+  // The touch kept here is the delayed bid and ask on the Interactive Brokers
+  // portal, both sides present, never a frozen mark and never the last trade.
   //
   // Abu Dhabi and Dubai moved to a Monday–Friday week in January 2022, so the default
   // applies. Manama and Muscat did not, and trade Sunday to Thursday; `days` says so,
@@ -425,6 +436,14 @@ export const VENUES = [
     source: "msx",
     hours: { open: "10:00", close: "13:00", tz: "Asia/Muscat", days: ["Sun", "Mon", "Tue", "Wed", "Thu"] },
     exact: ["xmus", "msx", "msm", "muscat", "muscatstockexchange", "muscatsecuritiesmarket"],
+    loose: [],
+  },
+  {
+    mic: "XSAU",
+    name: "Tadawul",
+    source: "tadawul",
+    hours: { open: "10:00", close: "15:00", tz: "Asia/Riyadh", days: ["Sun", "Mon", "Tue", "Wed", "Thu"] },
+    exact: ["xsau", "tadawul", "tdwl", "saudiexchange", "saudi"],
     loose: [],
   },
   {
@@ -472,6 +491,36 @@ export const VENUES = [
     source: "kosdaq",
     hours: { open: "09:00", close: "15:30", tz: "Asia/Seoul" },
     exact: ["xkos", "kosdaq"],
+    loose: [],
+  },
+  // Cash session 09:30–16:00 New York. The touch is the signed-in IBKR quote,
+  // and only when field 6509 says the book is live. A delayed or frozen mark
+  // is not this venue.
+  {
+    mic: "OTCM",
+    name: "OTC Markets",
+    source: "otc",
+    hours: { open: "09:30", close: "16:00", tz: "America/New_York" },
+    exact: ["otcm", "otc", "pink", "otcmkts", "otcqx", "otcqb", "pinx", "grey", "ootc", "otherotc", "ootcotherotc"],
+    loose: [],
+  },
+  // Cash session 09:30–11:30 and 13:00–15:00 Shanghai time. The hours here are
+  // the outer window; the lunch break is not a second session this file can name.
+  // The touch is Sina's bid and ask, not the last trade.
+  {
+    mic: "XSHG",
+    name: "Shanghai Stock Exchange",
+    source: "sina",
+    hours: { open: "09:30", close: "15:00", tz: "Asia/Shanghai" },
+    exact: ["xshg", "sse", "shanghai", "shanghaisc", "sehkntl", "sehkstar"],
+    loose: [],
+  },
+  {
+    mic: "XSHE",
+    name: "Shenzhen Stock Exchange",
+    source: "sina",
+    hours: { open: "09:30", close: "15:00", tz: "Asia/Shanghai" },
+    exact: ["xshe", "szse", "shenzhen", "shenzhensc", "chinext", "sehkszse"],
     loose: [],
   },
 
@@ -528,6 +577,47 @@ export const VENUES = [
     exact: ["coinbase", "cbse", "gdax", "coinbasepro"],
     loose: [],
   },
+  // Cash session 10:00–16:00 Sydney. The touch is the Interactive Brokers
+  // reading in parsed_json/au-touch.json. There is no live adapter, so a
+  // later pass of spread.mjs leaves the stored figure alone.
+  {
+    mic: "XASX",
+    name: "ASX",
+    source: "asx",
+    hours: { open: "10:00", close: "16:00", tz: "Australia/Sydney" },
+    exact: ["xasx", "asx", "asxnationalmarket"],
+    loose: [],
+  },
+  {
+    mic: "CHIA",
+    name: "Cboe Australia",
+    source: "chia",
+    hours: { open: "10:00", close: "16:00", tz: "Australia/Sydney" },
+    exact: ["chia", "chixau", "cboeaustralia", "cxa"],
+    loose: [],
+  },
+  // Cash session 09:00–17:30 Madrid. The touch is the Interactive Brokers
+  // reading in parsed_json/es-touch.json. There is no live adapter, so a
+  // later pass of spread.mjs leaves the stored figure alone.
+  {
+    mic: "XMAD",
+    name: "Bolsa de Madrid",
+    source: "bme",
+    hours: { open: "09:00", close: "17:30", tz: "Europe/Madrid" },
+    exact: ["xmad", "xmce", "bm", "bme", "madrid", "spain", "sibe", "mad"],
+    loose: [],
+  },
+  // Cash session 09:00–15:00 Tokyo. The touch is the delayed Interactive
+  // Brokers reading in parsed_json/jp-touch.json. There is no live adapter,
+  // so a later pass of spread.mjs leaves the stored figure alone.
+  {
+    mic: "XTKS",
+    name: "Tokyo",
+    source: "tsej",
+    hours: { open: "09:00", close: "15:00", tz: "Asia/Tokyo" },
+    exact: ["xtks", "xjpx", "tyo", "tokyo", "tsej"],
+    loose: [],
+  },
 ];
 
 // A coin has no ISIN, so `spread.json` keys it the way the front already does, by
@@ -574,19 +664,8 @@ export const KNOWN_UNSOURCED = [
     name: "places américaines, sans précision",
     why: "le broker ne dit pas laquelle",
   },
-  {
-    match: ["otc", "pink", "otcmkts", "ootc", "ootcotherotc", "otherotc"],
-    name: "OTC Markets",
-    why: "gré à gré américain, pas un carnet unique",
-  },
-  {
-    match: ["bm", "bme", "madrid", "xmad", "spain", "sibe", "sibespanishstockexchangeinterconnectionsyst", "mad"],
-    name: "Bolsa de Madrid",
-    why: "adaptateur non écrit",
-  },
   { match: ["ath", "xath", "athens", "athex", "enax"], name: "Athens Stock Exchange", why: "adaptateur non écrit" },
   { match: ["tase", "telaviv"], name: "Tel Aviv", why: "adaptateur non écrit" },
-  { match: ["tyo", "tokyo", "tsej"], name: "Tokyo", why: "adaptateur non écrit" },
   // IBKR / CapTrader / Mexem write TSE for Toronto; Swissquote / DEGIRO / eToro
   // write TSE for Tokyo. `resolveVenue` splits on CAD/CA vs JPY/JP before
   // falling through to this leftover.
@@ -596,8 +675,6 @@ export const KNOWN_UNSOURCED = [
   // falling through to this leftover.
   { match: ["cse"], name: "CSE (Canada ou Copenhague)", why: "le sigle nomme les deux places" },
   { match: ["hkex", "sehk", "hongkong", "hks"], name: "Hong Kong", why: "adaptateur non écrit" },
-  { match: ["sehkszse"], name: "Stock Connect Shenzhen", why: "adaptateur non écrit" },
-  { match: ["sehkntl", "sehkstar"], name: "Stock Connect Shanghai", why: "adaptateur non écrit" },
   { match: ["krx"], name: "Korea Exchange", why: "adaptateur non écrit" },
   { match: ["twse"], name: "Taiwan Stock Exchange", why: "adaptateur non écrit" },
   { match: ["tpex"], name: "Taipei Exchange", why: "adaptateur non écrit" },
@@ -617,7 +694,6 @@ export const KNOWN_UNSOURCED = [
   // (IBKRATS is NMS midpoint) and not a neighbour's book.
   { match: ["value"], name: "IB Value Exchange", why: "gré à gré IBKR, pas de carnet public" },
   { match: ["pure"], name: "Pure Trading", why: "adaptateur non écrit" },
-  { match: ["asx", "xasx", "asxnationalmarket"], name: "ASX", why: "adaptateur non écrit" },
   { match: ["set", "xbkk", "thailand"], name: "Stock Exchange of Thailand", why: "adaptateur non écrit" },
   {
     match: ["omx", "nasdaqomx", "nasdaqnordic"],
@@ -661,17 +737,9 @@ export const KNOWN_UNSOURCED = [
   { match: ["bux", "xbud", "budapest"], name: "Budapest Stock Exchange", why: "adaptateur non écrit" },
   { match: ["csecy", "xcys", "cyprus"], name: "Cyprus Stock Exchange", why: "adaptateur non écrit" },
   { match: ["psecz", "xpra", "prague", "pse", "pra"], name: "Prague Stock Exchange", why: "adaptateur non écrit" },
-  { match: ["bx", "bxswiss"], name: "BX Swiss", why: "adaptateur non écrit" },
   { match: ["bvc", "colombia"], name: "Bolsa de Valores de Colombia", why: "adaptateur non écrit" },
   { match: ["bsesof", "xbul", "sofia"], name: "Bulgarian Stock Exchange", why: "adaptateur non écrit" },
-  { match: ["tadawul", "tdwl", "xsau", "saudiexchange"], name: "Tadawul", why: "carnet non publié" },
-  {
-    match: ["shanghaisc", "shenzhensc", "chinext", "sse", "szse"],
-    name: "bourses chinoises onshore",
-    why: "adaptateur non écrit",
-  },
   { match: ["xber", "berlin", "boerseberlin"], name: "Börse Berlin", why: "adaptateur non écrit" },
-  { match: ["chixau", "cboeaustralia"], name: "Cboe Australia", why: "adaptateur non écrit" },
   { match: ["bist", "xist", "istanbul"], name: "Borsa Istanbul", why: "adaptateur non écrit" },
   { match: ["csefndk"], name: "Nasdaq First North Denmark", why: "adaptateur non écrit" },
   { match: ["eurotlx"], name: "EuroTLX", why: "adaptateur non écrit" },
@@ -737,7 +805,7 @@ export function resolveVenue(row) {
       return { venue: VENUES.find((v) => v.mic === "XTSE"), assumed: false };
     }
     if (ccy === "JPY" || isin.startsWith("JP")) {
-      return { venue: null, unsourced: KNOWN_UNSOURCED.find((u) => u.match.includes("tokyo")) };
+      return { venue: VENUES.find((v) => v.mic === "XTKS"), assumed: false };
     }
   }
   // The same split for CSE. Danish evidence wins first: a Copenhagen line sent to the
@@ -809,6 +877,13 @@ export function spreadLeaf(spreads, { isin, mic, currency, unsourced, broker, ti
   if (id && mic && spreads[id]?.[mic]?.[ccy]) {
     return apply606({ leaf: spreads[id][mic][ccy], mic }, { broker, ticker });
   }
+  // Pence and pounds are one London book. The stored figure is a ratio, so it
+  // attaches either way. A per-share figure would be a hundred times off.
+  const twin = ccy === "GBX" ? "GBP" : ccy === "GBP" ? "GBX" : "";
+  const twinLeaf = twin && id && mic ? spreads[id]?.[mic]?.[twin] : null;
+  if (twinLeaf?.bp != null && twinLeaf.perShare == null) {
+    return apply606({ leaf: twinLeaf, mic }, { broker, ticker });
+  }
   // Rule 605 is a monthly average for the symbol, not a per-MIC book. A US
   // line stored under BATS (Trading212) is the same tape as Swissquote's AMEX → ARCX.
   if (id && US_MICS.includes(mic) && ccy === "USD") {
@@ -863,6 +938,7 @@ const PAGE = {
   // for the real path and hands it back. This is what a line with no reading falls to.
   euronext: (l) => `https://live.euronext.com/en/product/etfs/${l.isin}-${l.path}/market-information`,
   vienna: (l) => `https://www.wienerborse.at/en/search/?q=${l.isin}`,
+  bxswiss: (l) => `https://www.bxswiss.com/instruments/${l.isin}`,
   // The American figure is not a book but a monthly average across several firms'
   // published reports, so no single page shows it. The link goes to the directory those
   // reports are found through, which is the nearest thing to a source a reader can open
@@ -930,6 +1006,20 @@ const PAGE = {
       : "https://www.bseindia.com/markets/equity.html",
   kospi: (l) => askingPriceUrl(l.ticker),
   kosdaq: (l) => askingPriceUrl(l.ticker),
+  otc: () => "https://www.interactivebrokers.ie/portal/",
+  tadawul: (l) =>
+    l.ticker
+      ? `https://www.saudiexchange.sa/wps/portal/saudiexchange/ourmarkets/main-market-watch?symbol=${encodeURIComponent(String(l.ticker).toUpperCase())}`
+      : "https://www.saudiexchange.sa/wps/portal/saudiexchange/ourmarkets/main-market-watch",
+  sina: (l) => {
+    const code = String(l.ticker || "").replace(/\D/g, "").padStart(6, "0").slice(-6);
+    const prefix = l.path === "XSHE" || l.venue?.mic === "XSHE" ? "sz" : "sh";
+    return code
+      ? `https://finance.sina.com.cn/realstock/company/${prefix}${code}/nc.shtml`
+      : "https://finance.sina.com.cn/stock/";
+  },
+  tsej: () => "https://www.jpx.co.jp/english/equities/products/etfs/quoting-data/index.html",
+  asx: () => "https://www.asx.com.au/issuers/investment-products/asx-investment-products-monthly-report",
   bmv: (l) =>
     l.ticker
       ? `https://www.bmv.com.mx/es/emisoras/estadisticas/${encodeURIComponent(

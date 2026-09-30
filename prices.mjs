@@ -13,7 +13,7 @@
 // an empty list. A miss used to stamp `fetched` and look fresh, so the front never asked
 // again. The four Gulf boards still publish their own last through `gulf.mjs`. Everywhere
 // else, a miss falls through to Yahoo's chart last, built from the catalogues' ticker and
-// MIC (`F.TO`, `1111.SR`). Enough to size an order, not to fill one. That keeps this file
+// MIC (`F.TO`, `1111.SR`, `3565.T`). Enough to size an order, not to fill one. That keeps this file
 // the only writer of `prices.json` while letting the lines no vendor sells stop being N/A.
 //
 // One request per ISIN buys every listing of it at once: `/api/search/{ISIN}` answers
@@ -34,12 +34,14 @@
 //   node prices.mjs --budget=50       ne dépense pas plus de cinquante appels
 //   node prices.mjs --use-reserve     autorise à entamer la réserve non renouvelable
 //   node prices.mjs --gulf            lit les carnets du Golfe, sans clé et sans quota
+//   node prices.mjs --yahoo           clôtures Yahoo pour tout ISIN encore sans prix, sans clé
 //
 // The key lives in `.env` as EODHD_API_KEY, which `.gitignore` already keeps out of the
 // repository.
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { resolveVenue } from "./venues.mjs";
 
 const arg = (name) => {
   for (const a of process.argv.slice(2)) {
@@ -149,7 +151,8 @@ export function isFresh(isin, maxAge = DAY) {
   // from the vendor must not sit on that page for a day.
   if (GULF_COUNTRIES.has(key.slice(0, 2)) || key.startsWith("KZ")) return false;
   const fb = Date.parse(fallback[key] || 0);
-  return Number.isFinite(fb) && Date.now() - fb < maxAge;
+  if (!(fb >= YAHOO_BOARDS_AT) || !(fb >= YAHOO_OTC_AT)) return false;
+  return Date.now() - fb < maxAge;
 }
 
 // ---------------------------------------------------------------- the vendor
@@ -343,7 +346,58 @@ const YAHOO_SUFFIX = {
   XBAH: ".BH",
   XMUS: ".OM",
   XCAI: ".CA",
+  XTKS: ".T",
+  XASX: ".AX",
+  XKRX: ".KS",
+  XKOS: ".KQ",
+  XMAD: ".MC",
+  XWAR: ".WA",
+  XSAU: ".SR",
+  // Yahoo charts a US OTC name as the bare ticker. There is no suffix.
+  OTCM: "",
 };
+// Venues with no adapter still name themselves in the catalogue. The suffix is
+// Yahoo's, so a last can be read where the vendor's search is empty.
+const YAHOO_EXCHANGE = {
+  HKEX: ".HK",
+  SEHK: ".HK",
+  SSE: ".SS",
+  CNSGSE: ".SS",
+  XSHE: ".SZ",
+  SZSE: ".SZ",
+  CHINEXT: ".SZ",
+  SGX: ".SI",
+  SGXST: ".SI",
+  TWSE: ".TW",
+  TPEX: ".TWO",
+  SET: ".BK",
+  IDX: ".JK",
+  MYX: ".KL",
+  JSE: ".JO",
+  NZX: ".NZ",
+  TASE: ".TA",
+  BIST: ".IS",
+  QSE: ".QA",
+  QATAR: ".QA",
+  PSE: ".PS",
+  ASX: ".AX",
+  TYO: ".T",
+  HOSE: ".VN",
+  HNX: ".HN",
+  // Tadawul sells the book and publishes the last. Yahoo's suffix is .SR, for a
+  // numeric code (4015.SR) and for a name (FLYNAS) once the search has found the code.
+  TADAWUL: ".SR",
+  TDWL: ".SR",
+  SAUDI: ".SR",
+  SAUDIEXCHANGE: ".SR",
+  XSAU: ".SR",
+};
+// A miss recorded before these suffixes existed never asked Tokyo, Hong Kong,
+// Shanghai or the other boards above. It does not count as a try.
+const YAHOO_BOARDS_AT = Date.parse("2026-09-29T19:12:00Z");
+// OTC was not asked at all until the bare ticker was added. A miss from
+// before that is not a try.
+const YAHOO_OTC_AT = Date.parse("2026-09-30T15:50:00Z");
 const YAHOO_US = new Set(["XNYS", "XNAS", "ARCX", "XASE", "BATS"]);
 const YAHOO_ALREADY = /\.[A-Z]{1,3}$/;
 
@@ -353,6 +407,11 @@ function yahooCurrency(raw) {
   return s.toUpperCase();
 }
 
+function yahooBody(stem, suffix) {
+  if (suffix === ".HK" && /^\d+$/.test(stem)) return stem.padStart(4, "0");
+  return stem;
+}
+
 function yahooSymbol(ticker, mic, isin, exchange) {
   let stem = String(ticker || "")
     .toUpperCase()
@@ -360,22 +419,46 @@ function yahooSymbol(ticker, mic, isin, exchange) {
     .replace(/\s+/g, "")
     .trim();
   if (!stem) return null;
+  stem = stem.replace(/\.+$/, "");
+  if (!stem) return null;
   if (YAHOO_ALREADY.test(stem)) return stem;
   if (/^\d{4}$/.test(stem) && String(isin || "").startsWith("SA")) return `${stem}.SR`;
-  if (mic && mic in YAHOO_SUFFIX) return `${stem}${YAHOO_SUFFIX[mic]}`;
+  if (mic && mic in YAHOO_SUFFIX) return `${yahooBody(stem, YAHOO_SUFFIX[mic])}${YAHOO_SUFFIX[mic]}`;
   // EODHD does not carry the small BSE names. Yahoo's own BSE and NSE lasts
   // use .BO and .NS. The series tail (-EQ, -X, …) is not part of that symbol.
   // This is the same listing's last, not a book and not another venue's tape.
   const ex = String(exchange || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+  const id = String(isin || "").toUpperCase();
   // EODHD does not carry the newer KRX codes. Yahoo's KOSPI and KOSDAQ lasts
   // use .KS and .KQ. This is the same listing's last, not a book.
-  if (ex === "KOSPI") return `${stem}.KS`;
-  if (ex === "KOSDAQ") return `${stem}.KQ`;
-  const india = String(isin || "").toUpperCase().startsWith("IN");
+  if (ex === "KOSPI" || ex === "XKRX") return `${stem}.KS`;
+  if (ex === "KOSDAQ" || ex === "XKOS") return `${stem}.KQ`;
+  // stocks.csv writes TSE with no currency. The ISIN is what splits Tokyo from Toronto.
+  if ((ex === "TSE" || ex === "TYO") && id.startsWith("JP")) return `${stem}.T`;
+  if (ex === "TSE" && id.startsWith("CA")) return `${stem}.TO`;
+  if (YAHOO_EXCHANGE[ex]) return `${yahooBody(stem, YAHOO_EXCHANGE[ex])}${YAHOO_EXCHANGE[ex]}`;
+  const india = id.startsWith("IN");
   const suffix = india && (ex === "BSE" || ex === "XBOM") ? ".BO" : india && (ex === "NSE" || ex === "XNSE") ? ".NS" : "";
   if (!suffix) return null;
   stem = stem.replace(/-(EQ|BE|BZ|SM|ST|IV|RR|XT|ZP|MT|TS|MS|A|B|T|X|Z|M|P|R|E)$/, "");
   return stem ? `${stem}${suffix}` : null;
+}
+
+function yahooCandidates(ticker, mic, isin, exchange) {
+  const found = [];
+  const primary = yahooSymbol(ticker, mic, isin, exchange);
+  if (primary) found.push(primary);
+  const ex = String(exchange || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+  // The catalogue writes KRX for both boards. Ask each suffix; a miss is not stored.
+  if (ex === "KRX") {
+    const stem = String(ticker || "")
+      .toUpperCase()
+      .replace(/\*/g, "")
+      .replace(/\s+/g, "")
+      .trim();
+    if (stem && !YAHOO_ALREADY.test(stem)) found.push(`${stem}.KS`, `${stem}.KQ`);
+  }
+  return [...new Set(found)];
 }
 
 let yahooIndexPromise = null;
@@ -391,11 +474,21 @@ function yahooIndex() {
       const isin = String(row.isin || "").trim().toUpperCase();
       if (!ISIN.test(isin)) continue;
       const mic = resolveVenue(row).venue?.mic || "";
-      const symbol = yahooSymbol(row.ticker || row.symbol, mic, isin, row.exchange || row.venue);
-      if (!symbol) continue;
+      const symbols = yahooCandidates(row.ticker || row.symbol, mic, isin, row.exchange || row.venue);
+      if (!symbols.length) continue;
       const currency = String(row.currency || "").trim().toUpperCase();
+      const name = String(row.name || "").trim();
+      const ticker = String(row.ticker || row.symbol || "").trim();
       const seen = index.get(isin) || index.set(isin, []).get(isin);
-      if (!seen.some((s) => s.symbol === symbol)) seen.push({ symbol, currency, mic });
+      for (const symbol of symbols) {
+        const prev = seen.find((s) => s.symbol === symbol);
+        // The same Yahoo symbol can be filed under two catalogue currencies.
+        // Keeping only the first one dropped a riyal last because one row said EUR.
+        if (!prev) seen.push({ symbol, currency, mic, name, ticker });
+        else if (currency && currency !== prev.currency && !seen.some((s) => s.symbol === symbol && s.currency === currency)) {
+          seen.push({ symbol, currency, mic, name, ticker });
+        }
+      }
     }
     return index;
   })());
@@ -408,39 +501,109 @@ function yahooRank(row) {
   return 1;
 }
 
-async function yahooChart(symbol) {
+async function yahooChart(symbol, tries = 0) {
   const res = await fetch(
     `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=5d`,
     { headers: { accept: "application/json", "user-agent": "Mozilla/5.0" }, signal: AbortSignal.timeout(15000) }
   );
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  if (res.status === 429 && tries < 3) {
+    await new Promise((s) => setTimeout(s, 2000 * (tries + 1)));
+    return yahooChart(symbol, tries + 1);
+  }
+  if (!res.ok) return null;
   const j = await res.json();
   const meta = j?.chart?.result?.[0]?.meta;
   const last = Number(meta?.regularMarketPrice ?? meta?.chartPreviousClose);
-  const currency = yahooCurrency(meta?.currency);
+  // Tadawul sometimes prints the last and leaves the currency blank. The board
+  // quotes riyals, and a blank is not a different currency.
+  let currency = yahooCurrency(meta?.currency);
+  if (!currency && String(symbol).endsWith(".SR")) currency = "SAR";
   if (!(last > 0) || !currency) return null;
   return { last, currency };
 }
 
-async function yahooFresh(isin) {
-  const rows = [...((await yahooIndex()).get(isin) || [])].sort((a, b) => yahooRank(a) - yahooRank(b));
+// A Tadawul name (FLYNAS, AZM) is not the code Yahoo charts. The search answer
+// on the Saudi board is the numeric symbol, and only that board is kept.
+async function yahooSaudiCode(ticker, name) {
+  const stem = String(ticker || "")
+    .toUpperCase()
+    .replace(/\.+$/, "")
+    .trim();
+  if (/^\d{4}$/.test(stem)) return `${stem}.SR`;
+  const queries = [stem, stem && `Saudi ${stem}`, name].filter(Boolean);
+  for (const q of queries) {
+    try {
+      const res = await fetch(
+        `https://query1.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(q)}&quotesCount=8&newsCount=0`,
+        { headers: { accept: "application/json", "user-agent": "Mozilla/5.0" }, signal: AbortSignal.timeout(15000) }
+      );
+      if (!res.ok) continue;
+      const hit = ((await res.json()).quotes || []).find(
+        (row) => row?.exchange === "SAU" && String(row.symbol || "").endsWith(".SR")
+      );
+      if (hit) return hit.symbol;
+    } catch {
+      /* the chart miss stands */
+    }
+  }
+  return null;
+}
+
+// Rows the front already holds for this ISIN. Building them here avoids
+// reading every catalogue again: that second copy is what ran the page out
+// of memory the first time a Chinese line missed the vendor.
+function rowsFromListings(isin, listings) {
+  const seen = [];
+  for (const row of listings || []) {
+    // The page's listing names the place as the catalogue wrote it ("LSE") and
+    // does not carry the MIC. Without that, Yahoo never hears of RR.L.
+    const place = row.exchangeRaw || row.exchange || row.venue || "";
+    const mic = row.mic || resolveVenue({ exchange: place, isin, currency: row.currency }).venue?.mic || "";
+    const symbols = yahooCandidates(row.ticker || row.symbol, mic, isin, place);
+    const currency = String(row.currency || "").trim().toUpperCase();
+    const name = String(row.name || "").trim();
+    const ticker = String(row.ticker || row.symbol || "").trim();
+    for (const symbol of symbols) {
+      if (!seen.some((s) => s.symbol === symbol && s.currency === currency)) {
+        seen.push({ symbol, currency, mic: row.mic || "", name, ticker });
+      }
+    }
+  }
+  return seen;
+}
+
+async function yahooFresh(isin, prepared) {
+  // An empty list from the page is not an answer. The catalogues may still
+  // name a ticker Yahoo can chart.
+  const hinted = prepared && prepared.length ? prepared : null;
+  const rows = [...(hinted || (await yahooIndex()).get(isin) || [])].sort((a, b) => yahooRank(a) - yahooRank(b));
   const wanted = new Set(rows.map((r) => r.currency).filter(Boolean));
   let found = false;
+  let asked = 0;
   for (const row of rows.slice(0, 6)) {
     try {
-      const quote = await yahooChart(row.symbol);
+      let symbol = row.symbol;
+      asked += 1;
+      let quote = await yahooChart(symbol);
+      if (!quote && symbol.endsWith(".SR") && !/^\d{4}\.SR$/.test(symbol)) {
+        const code = await yahooSaudiCode(row.ticker, row.name);
+        if (code && code !== symbol) {
+          symbol = code;
+          quote = await yahooChart(symbol);
+        }
+      }
       if (!quote) continue;
       // A last in a currency no listing of this ISIN uses is a different
       // instrument that happens to share a ticker (OR Royalties vs L'Oréal).
       if (wanted.size && !wanted.has(quote.currency)) continue;
-      noteBoard(isin, { symbol: row.symbol, last: quote.last, currency: quote.currency }, "YAHOO");
+      noteBoard(isin, { symbol, last: quote.last, currency: quote.currency }, "YAHOO");
       found = true;
       if (hasPrice(isin) && [...wanted].every((ccy) => Number(prices[isin]?.[ccy]?.price) > 0)) break;
     } catch (e) {
       console.error(`prix ${isin} chez Yahoo ${row.symbol} : ${e.message}`);
     }
   }
-  return found;
+  return { found, asked };
 }
 
 const inflight = new Map();
@@ -450,7 +613,7 @@ const inflight = new Map();
  * Never throws at the caller: a page that cannot refresh still has to render.
  * Returns the per-currency map, which may be undefined if nothing is known.
  */
-export async function ensureFresh(isin, maxAge = DAY) {
+export async function ensureFresh(isin, maxAge = DAY, listings = null) {
   const key = String(isin || "").trim().toUpperCase();
   if (!ISIN.test(key)) return undefined;
   if (isFresh(key, maxAge)) return prices[key];
@@ -488,9 +651,16 @@ export async function ensureFresh(isin, maxAge = DAY) {
         await kaseFresh(key);
       }
       if (!hasPrice(key)) {
-        await yahooFresh(key);
-        fallback[key] = new Date().toISOString();
-        scheduleSave();
+        // `listings` is the page's own rows. Without them the sweep still
+        // walks the catalogues; with them a single view must not.
+        const prepared = listings ? rowsFromListings(key, listings) : null;
+        const yahoo = await yahooFresh(key, prepared);
+        // A line with no symbol was not asked. Stamping it would hide it
+        // until tomorrow, which is how a whole class of prices stayed missing.
+        if (yahoo.asked) {
+          fallback[key] = new Date().toISOString();
+          scheduleSave();
+        }
       }
       return prices[key];
     } catch (e) {
@@ -610,8 +780,53 @@ async function sweepGulf() {
   console.error(`${priced} ISIN du Golfe cotés. Écrit dans ${STORE_PATH}.`);
 }
 
+// The lines the vendor does not sell: the Gulf, which its search leaves empty,
+// and any ISIN already asked of it that came back without a price. Yahoo's last
+// sizes those. The rest of the catalogue stays on the vendor, one view at a time.
+// A miss stamped today is left alone, except a Saudi ISIN: Tadawul was asked
+// under the wrong symbol before the .SR map existed.
+async function sweepYahoo() {
+  const index = await yahooIndex();
+  const todo = [];
+  for (const isin of index.keys()) {
+    if (hasPrice(isin)) continue;
+    const gulf = GULF_COUNTRIES.has(isin.slice(0, 2));
+    const vendorMiss = Boolean(fetched[isin]);
+    if (!gulf && !vendorMiss) continue;
+    const fb = Date.parse(fallback[isin] || 0);
+    const rested = fb >= YAHOO_BOARDS_AT && Date.now() - fb < DAY;
+    if (rested && !isin.startsWith("SA")) continue;
+    todo.push(isin);
+  }
+  console.error(`${todo.length} ISIN sans prix que le vendeur ne cote pas, à demander à Yahoo.`);
+  if (has("dry-run")) return;
+  if (arg("limit")) todo.length = Math.min(todo.length, Number(arg("limit")));
+
+  let done = 0;
+  let hit = 0;
+  const queue = [...todo];
+  const worker = async () => {
+    while (queue.length) {
+      const isin = queue.shift();
+      try {
+        if ((await yahooFresh(isin)).found) hit++;
+      } catch (e) {
+        console.error(`prix ${isin} chez Yahoo : ${e.message}`);
+      }
+      fallback[isin] = new Date().toISOString();
+      scheduleSave();
+      done++;
+      if (done % 100 === 0) console.error(`  ${done}/${todo.length}, ${hit} cotés`);
+    }
+  };
+  await Promise.all(Array.from({ length: 4 }, worker));
+  save();
+  console.error(`${hit} cotés sur ${done}. ${Object.keys(prices).length} ISIN ont un prix en tout. Écrit dans ${STORE_PATH}.`);
+}
+
 async function main() {
   if (has("gulf")) return sweepGulf();
+  if (has("yahoo")) return sweepYahoo();
   if (!KEY) {
     console.error("Pas de clé : mettre EODHD_API_KEY dans .env ou dans l'environnement.");
     process.exit(1);
@@ -651,9 +866,8 @@ async function main() {
   console.error(`Un appel par ISIN, soit ${todo.length} au total.`);
   if (todo.length > budget) {
     console.error(
-      `\nLe quota n'y suffit pas : ${budget} appels disponibles pour ${todo.length} nécessaires.\n` +
-        `La formule « EOD Historical Data — All World » (19,99 $/mois) porte la limite à 100 000 par jour.\n` +
-        `Sinon le front se sert tout seul, un instrument à la fois, à mesure qu'on les consulte.`
+      `\nLe quota du jour couvre ${budget} des ${todo.length} instruments.\n` +
+        `Les places absentes du vendeur sont cotées chez Yahoo dans la même passe.`
     );
   }
   if (has("dry-run")) return;
@@ -672,6 +886,7 @@ async function main() {
   };
   // Six at a time: enough to keep the link busy, far under what the vendor allows.
   await Promise.all(Array.from({ length: 6 }, worker));
+  if (!one) await sweepYahoo();
   save();
 
   const priced = Object.keys(prices).length;

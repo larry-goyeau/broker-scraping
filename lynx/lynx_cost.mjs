@@ -18,20 +18,29 @@
 //
 // A named venue in the currency the row prints beats the currency table.
 // The same venue in another currency falls through to the currency table,
-// which is the note at the top of the stock section. Paris in euros is not
-// on the venue table — only Paris in dollars is — so a euro SBF order is
-// the euro row, 0.10 % , minimum 6 €, cap 145 €. Xetra is not named at all
-// and takes the same euro row. Frankfurt and Stuttgart are named, dearer,
-// and each adds an unpriced third-party fee that stays in the remark.
+// which is the note at the top of the stock section. A euro SBF order is
+// the Paris row below, not the euro currency row.
 //
-//   Vienna VSE          EUR  0.15 %          min 10
+// Cash needed on LYNX+, account U15604371, 2026-09-29, nothing sent. Where
+// the ticket disagrees with the August list, the ticket is the row. Xetra
+// is 0.14 % , minimum 6 €, cap 99 €. Frankfurt uses that same commission
+// and adds only the specialist, 5.04 bp, minimum 2.52 €: the High Volume
+// transaction fee of 0.960 bp is not in the cash line. Stuttgart uses the
+// Xetra commission and adds nothing. Gettex, Tradegate, Paris and Amsterdam
+// are 0.09 % , minimum 6 €, cap 39 €. Vienna is 0.19 % , minimum 6 €.
+//
+//   Vienna VSE          EUR  0.19 %          min 6
 //   Nasdaq Baltic       EUR  1.50 %  max 99  min 25
-//   Paris SBF           USD  0.15 %          min 10     (EUR → currency row)
-//   Frankfurt FWB       EUR  0.15 %          min 10     + unpriced trade/custody
-//   Gettex              EUR  0.06 %  max 45  min 6      + unpriced custody
-//   Stuttgart SWB       EUR  0.15 %          min 10     + unpriced exchange/custody
-//   Tradegate           EUR  0.06 %  max 45  min 6      + unpriced custody
-//   Amsterdam AEB       EUR  0.06 %  max 145 min 6
+//   Paris SBF           EUR  0.09 %  max 39  min 6
+//   Paris SBF           USD  0.15 %          min 10
+//   Xetra IBIS          EUR  0.14 %  max 99  min 6
+//   Frankfurt FWB       EUR  0.14 %  max 99  min 6
+//                       specialist   5.04 bp, min 2.52 €
+//                       custody is still named without a figure
+//   Gettex              EUR  0.09 %  max 39  min 6      + unpriced custody
+//   Stuttgart SWB       EUR  0.14 %          min 6      + unpriced custody
+//   Tradegate           EUR  0.09 %  max 39  min 6      + unpriced custody
+//   Amsterdam AEB       EUR  0.09 %  max 39  min 6
 //   Amsterdam AEB       USD  0.15 %          min 10
 //   Lisbon BVL          EUR  0.15 %          min 6
 //   Singapore SGX       USD  0.15 %          min 10
@@ -63,7 +72,8 @@
 // On a per-share tier the cap binds the per-share amount and the minimum
 // binds the result. Floor-then-cap would let 2 % of a cheap share cut
 // under the 5 $ minimum. That order is how the IBKR tariff this commission
-// already includes actually bills; LYNX itself has not been previewed here.
+// already includes actually bills. The euro venues named in the table above
+// were previewed on LYNX+ on 2026-09-29; the other rows are still the list.
 //
 // A currency the list does not print — KRW, TWD, INR, BRL, MYR, SAR, ZAR,
 // RON, CNY, NZD — answers N/A. Borrowing a neighbour's percentage is how
@@ -76,15 +86,18 @@
 // transaction fees as a class and does not print these two figures); the
 // Toronto auction, 0.003 CAD a share capped at 30 CAD, and the Venture
 // auction, 0.0012 CAD a share capped at 60 CAD, each charged on both
-// sides of the trip. The market spread is added once.
+// sides of the trip. Frankfurt, MIC XFRA, adds the specialist, 5.04 bp
+// with a minimum of 2.52 €, on both sides. The market spread is added once.
 //
 // What is not: the monthly activity fee (€5 minus that month's commissions
 // when NAV excluding cash is under €100,000 and the month's commissions
 // are under €5; waived for the first three full months after funding, and
 // waived outright at €100,000); the withdrawal (first of the calendar
 // month free, then €1 SEPA / €8 wire); ADR/GDR/CDI at 0.05 per share on
-// the record date; Frankfurt, Stuttgart, Gettex, Tradegate, Prague,
-// Budapest and Warsaw pass-throughs the list names without a figure;
+// the record date; Frankfurt custody, which the LYNX list names without a
+// figure; Stuttgart, Gettex and Tradegate custody, which the list names
+// without a figure (the ticket adds no exchange fee on those three);
+// Prague, Budapest and Warsaw pass-throughs the list names without a figure;
 // Venture extended hours (0.002 CAD a share), which are a session and not this trip.
 // Conversion is the client's own order. The list prints no FX commission,
 // so none is invented. Custody of an ordinary line is not a ticket.
@@ -120,6 +133,13 @@ const TAF_PER_SHARE = 0.000195;
 const TAF_CAP = 9.79;
 const ADR_PER_SHARE = 0.05;
 const ADR_NAMED = /\b(ADR|GDR|ADS|CDI)\b/i;
+// Specialist only. The XFRA High Volume transaction fee (0.960 bp, minimum
+// 0.60 €) is on the exchange list and not in the LYNX+ cash line of
+// 2026-09-29. The 5.04 bp has no tier.
+const FRANKFURT_TRADE_RATE = 5.04 / 10000;
+const FRANKFURT_TRADE_MIN = 2.52;
+const PREVIEWED = new Set(["xetra", "frankfurt", "stuttgart", "gettex", "tradegate", "amsterdam", "paris", "vienna"]);
+const PREVIEW = { on: "2026-09-29", account: "U15604371" };
 
 const WITHDRAW = { firstFree: true, sepa: 1, wire: 8, ccy: "EUR" };
 const ACTIVITY = {
@@ -180,14 +200,16 @@ const CCY = {
 // Venue row, and only in the currency the list prints. FWB2 / SWB2 /
 // GETTEX2 are the second IBKR code for the same named exchange.
 const VENUE = [
-  { id: "vienna", exchanges: ["VSE"], currencies: ["EUR"], rule: pct(0.0015, 10, "EUR"), note: null },
+  { id: "vienna", exchanges: ["VSE"], currencies: ["EUR"], rule: pct(0.0019, 6, "EUR"), note: null },
   { id: "baltic", exchanges: ["N.RIGA", "N.TALLINN", "N.VILNIUS"], currencies: ["EUR"], rule: pct(0.015, 25, "EUR", 99), note: null },
+  { id: "paris", exchanges: ["SBF"], currencies: ["EUR"], rule: pct(0.0009, 6, "EUR", 39), note: null },
   { id: "paris-usd", exchanges: ["SBF"], currencies: ["USD"], rule: pct(0.0015, 10, "USD"), note: null },
-  { id: "frankfurt", exchanges: ["FWB", "FWB2"], currencies: ["EUR"], rule: pct(0.0015, 10, "EUR"), note: "frankfurt" },
-  { id: "gettex", exchanges: ["GETTEX", "GETTEX2"], currencies: ["EUR"], rule: pct(0.0006, 6, "EUR", 45), note: "custody" },
-  { id: "stuttgart", exchanges: ["SWB", "SWB2"], currencies: ["EUR"], rule: pct(0.0015, 10, "EUR"), note: "stuttgart" },
-  { id: "tradegate", exchanges: ["TGATE"], currencies: ["EUR"], rule: pct(0.0006, 6, "EUR", 45), note: "custody" },
-  { id: "amsterdam", exchanges: ["AEB"], currencies: ["EUR"], rule: pct(0.0006, 6, "EUR", 145), note: null },
+  { id: "xetra", exchanges: ["IBIS", "IBIS2"], currencies: ["EUR"], rule: pct(0.0014, 6, "EUR", 99), note: null },
+  { id: "frankfurt", exchanges: ["FWB", "FWB2"], currencies: ["EUR"], rule: pct(0.0014, 6, "EUR", 99), note: "frankfurt" },
+  { id: "gettex", exchanges: ["GETTEX", "GETTEX2"], currencies: ["EUR"], rule: pct(0.0009, 6, "EUR", 39), note: "custody" },
+  { id: "stuttgart", exchanges: ["SWB", "SWB2"], currencies: ["EUR"], rule: pct(0.0014, 6, "EUR"), note: "stuttgart" },
+  { id: "tradegate", exchanges: ["TGATE"], currencies: ["EUR"], rule: pct(0.0009, 6, "EUR", 39), note: "custody" },
+  { id: "amsterdam", exchanges: ["AEB"], currencies: ["EUR"], rule: pct(0.0009, 6, "EUR", 39), note: null },
   { id: "amsterdam-usd", exchanges: ["AEB"], currencies: ["USD"], rule: pct(0.0015, 10, "USD"), note: null },
   { id: "lisbon", exchanges: ["BVL"], currencies: ["EUR"], rule: pct(0.0015, 6, "EUR"), note: null },
   { id: "singapore-usd", exchanges: ["SGX"], currencies: ["USD"], rule: pct(0.0015, 10, "USD"), note: null },
@@ -288,10 +310,10 @@ function remarkOf({ listing, note }) {
     lines.push(`ADR/GDR/CDI pass-through ${ADR_PER_SHARE} per share on the record date, not on this trip.`);
   }
   if (note === "frankfurt") {
-    lines.push("Frankfurt adds third-party trade fees and a custody fee. The list names them and prints no figure.");
+    lines.push("Frankfurt adds a custody fee. The list names it and prints no figure.");
   }
   if (note === "stuttgart") {
-    lines.push("Stuttgart adds an exchange fee, a regulatory fee and a custody fee. The list names them and prints no figure.");
+    lines.push("Stuttgart adds a custody fee. The list names it and prints no figure.");
   }
   if (note === "custody") lines.push("This venue adds a custody fee. The list names it and prints no figure.");
   if (note === "bux") lines.push("Forint adds Budapest exchange, regulatory and custody fees. The list names them and prints no figure.");
@@ -356,8 +378,18 @@ function auctionSide(shares, spec) {
   return { raw, charged, capped: raw > spec.max, max: spec.max, currency: spec.ccy };
 }
 
+// One Frankfurt execution. Partial fills on the same day are one order.
+function frankfurtSide(amountEur) {
+  if (!(amountEur > 0)) return null;
+  const raw = amountEur * FRANKFURT_TRADE_RATE;
+  const specialist = Math.max(FRANKFURT_TRADE_MIN, raw);
+  return { specialist, charged: specialist, floored: specialist > raw, currency: "EUR" };
+}
+
 function basisOf(id, rule) {
-  const head = `barème LYNX ${id}, liste du ${SCHEDULE.validAsOf} : `;
+  const head = PREVIEWED.has(id)
+    ? `barème LYNX ${id}, aperçu du ${PREVIEW.on} : `
+    : `barème LYNX ${id}, liste du ${SCHEDULE.validAsOf} : `;
   if (rule.perShare != null) {
     const tier =
       rule.perShareAfter != null
@@ -484,8 +516,11 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const auction = auctionSide(n, auctionOf(m.row.exchange));
   const auctionUsd = auction ? dollars(auction.charged, auction.currency) : 0;
   const auctionRoundUsd = auction ? plus(auctionUsd, auctionUsd) : 0;
+  const frankfurt = note === "frankfurt" ? frankfurtSide(notionalInRule) : null;
+  const frankfurtUsd = frankfurt ? dollars(frankfurt.charged, frankfurt.currency) : 0;
+  const frankfurtRoundUsd = frankfurt ? plus(frankfurtUsd, frankfurtUsd) : 0;
 
-  const usd = plus(bookUsd, buyCommUsd, sellCommUsd, stampUsd, secUsd, tafUsd, auctionRoundUsd);
+  const usd = plus(bookUsd, buyCommUsd, sellCommUsd, stampUsd, secUsd, tafUsd, auctionRoundUsd, frankfurtRoundUsd);
   const brokerFees = plus(buyCommUsd, sellCommUsd);
 
   return {
@@ -531,7 +566,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     parts: {
       marché: finite(bookUsd, 6),
       courtage: finite(plus(buyCommUsd, sellCommUsd), 6),
-      réglementaire: finite(plus(secUsd, tafUsd, auctionRoundUsd), 6),
+      réglementaire: finite(plus(secUsd, tafUsd, auctionRoundUsd, frankfurtRoundUsd), 6),
       taxes: finite(stampUsd, 6),
     },
     commission: {
@@ -546,14 +581,16 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
       eachWay: true,
     },
     basis,
-    confidence: confidenceOf({ id, rule, buyComm, marketBp, marketPerShare, rates, taxPct, taxSource, american, unsourced: m.unsourced, note, auction }),
+    confidence: confidenceOf({ id, rule, buyComm, marketBp, marketPerShare, rates, taxPct, taxSource, american, unsourced: m.unsourced, note, auction, frankfurt }),
   };
 }
 
-function confidenceOf({ id, rule, buyComm, marketBp, marketPerShare, rates, taxPct, taxSource, american, unsourced, note, auction }) {
+function confidenceOf({ id, rule, buyComm, marketBp, marketPerShare, rates, taxPct, taxSource, american, unsourced, note, auction, frankfurt }) {
   const said = [];
   said.push(
-    `commission LYNX, palier ${id}, liste du ${SCHEDULE.validAsOf} lue le ${SCHEDULE.readOn}, ` +
+    (PREVIEWED.has(id)
+      ? `commission LYNX, palier ${id}, aperçu du ${PREVIEW.on}, compte ${PREVIEW.account}, `
+      : `commission LYNX, palier ${id}, liste du ${SCHEDULE.validAsOf} lue le ${SCHEDULE.readOn}, `) +
       `facturée par sens et convertie en dollars au mid BCE du ${FX_AS_OF}`
   );
   if (buyComm) {
@@ -569,7 +606,14 @@ function confidenceOf({ id, rule, buyComm, marketBp, marketPerShare, rates, taxP
   if (rule.perShare != null && rule.maxPct != null) {
     said.push("le plafond borne le montant à la part, puis le plancher borne le résultat");
   }
-  if (note && note !== "canada") said.push("un frais de place est nommé sans chiffre et reste hors total");
+  if (note === "bux" || note === "pra" || note === "pln") said.push("un frais de place est nommé sans chiffre et reste hors total");
+  if (frankfurt) {
+    said.push(
+      `spécialiste Francfort ${Number(frankfurt.specialist).toPrecision(3)} € par sens` +
+        (frankfurt.floored ? `, au plancher de ${FRANKFURT_TRADE_MIN} €` : "") +
+        `. Aperçu du ${PREVIEW.on} : l'écart contre Xetra sur Lufthansa. La garde reste sans chiffre`
+    );
+  }
   if (auction) {
     said.push(
       `enchère ${Number(auction.charged).toPrecision(4)} ${auction.currency} par sens` +

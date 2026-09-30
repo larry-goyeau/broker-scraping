@@ -25,7 +25,7 @@
 //     min $0.99, max $7.95
 //
 // Premarket 4:00–7:00 and Select Routes are not this trip. TZEU does not
-// print an OTC ticket, so OTC stays N/A there.
+// print an OTC ticket, so that line is not offered.
 //
 // SEC 0.00206 % of the sale. TAF uses FINRA's current $0.000195 / $9.79
 // (TZI's June PDF still prints 0.000166; the August calculator charged the
@@ -246,8 +246,7 @@ function remarkOf({ market, listing, plan, penny }) {
   if (!plan.listedAllFree && plan.freeFrom) {
     lines.push(`Resting limit of ${plan.freeFrom}+ listed shares above $1 is $0 broker fees.`);
   }
-  if (market === "otc") lines.push(`OTC is $0.005 a share, min $${plan.min}, max $${plan.cap}, regular hours only.`);
-  else if (penny) lines.push(`Under $1 is $0.005 a share, min $${plan.min}, max $${plan.cap}.`);
+  if (market !== "otc" && penny) lines.push(`Under $1 is $0.005 a share, min $${plan.min}, max $${plan.cap}.`);
   if (plan.id === "tza" && isAdr(listing)) lines.push("ADR fees are a pass-through.");
   return lines.join("\n");
 }
@@ -335,6 +334,7 @@ export function roundTrip({
       listing,
       feeMarket: market,
       cashCurrency: "USD",
+      onlineBuy: false,
       remark: "",
       why: "TradeZero Europe n'imprime pas de ticket OTC",
     };

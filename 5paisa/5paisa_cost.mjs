@@ -11,7 +11,11 @@
 // the exchange pass-through tables print on the same day: STT 0.1% both
 // sides, stamp 0.015% on the buy, NSE 0.00307%, BSE group A and B
 // 0.00375%, SEBI ₹10 / crore, GST 18% of brokerage + SEBI + transaction.
-// The DP rupee amount is left out.
+//   DP                           the CDSL fiche for DP 82500, read on
+//                                2026-09-29:
+//                                https://www.cdslindia.com/dp/dpdetails.aspx?dp_id=82500
+//                                ₹20 per transaction per ISIN, on every
+//                                plan. The cell does not add GST.
 //
 //   node 5paisa/5paisa_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
 
@@ -32,6 +36,8 @@ function schedule({ brokerageEach, basis, remark }) {
     stampRate: pct("0.015"),
     sebiRate: sebiRate(),
     gstRate: 0.18,
+    gstOnDp: false,
+    dpInr: 20,
     basis,
     remark,
   };
@@ -40,17 +46,17 @@ function schedule({ brokerageEach, basis, remark }) {
 const PLANS = {
   optimum: schedule({
     brokerageEach: (notional) => Math.min(20, notional * SEBI_CAP),
-    basis: "Plan Optimum : 20 ₹ par ordre, plafond réglementaire. Pas d'abonnement.",
+    basis: "Plan Optimum : 20 ₹ par ordre, plafond réglementaire. Pas d'abonnement. Pay-in : 20 ₹.",
     remark: "",
   }),
   power: schedule({
     brokerageEach: (notional) => Math.min(10, notional * SEBI_CAP),
-    basis: "Power Investor : 499 ₹ par mois, hors de cet aller-retour. Courtage 10 ₹ par ordre, plafond réglementaire.",
+    basis: "Power Investor : 499 ₹ par mois, hors de cet aller-retour. Courtage 10 ₹ par ordre, plafond réglementaire. Pay-in : 20 ₹.",
     remark: "₹499/month.",
   }),
   ultratrader: schedule({
     brokerageEach: () => 0,
-    basis: "Ultra Trader : 999 ₹ par mois, hors de cet aller-retour. Courtage livraison 0.",
+    basis: "Ultra Trader : 999 ₹ par mois, hors de cet aller-retour. Courtage livraison 0. Pay-in : 20 ₹.",
     remark: "₹999/month.",
   }),
 };

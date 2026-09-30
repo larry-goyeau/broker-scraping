@@ -2,7 +2,8 @@
 // without a login. The stock screener is the share list. The ETF selector
 // types every line ETF. A name that says ETN, ETNs or "Exchange-Traded Notes"
 // is an ETN. A name that says ETC is an ETC. Anything else stays an ETF:
-// a treasury "Note ETF" is still an ETF. There is no ISIN.
+// a treasury "Note ETF" is still an ETF. FSMOne prints no ISIN, so the code is
+// the one the other catalogues already agree on for the same venue and ticker.
 //
 // A line whose buy flag is closed stays out. A share that is also in the ETF
 // selector is the ETF, once. Places the exchange list marks displayFsm N
@@ -16,7 +17,10 @@
 //   node FSMOne/FSMOne_scraping.mjs
 
 import { stampRows } from "../accepted.mjs";
+import { catalogueFiles } from "../catalogues.mjs";
+import { resolveVenue } from "../venues.mjs";
 import fs from "node:fs";
+import path from "node:path";
 
 const ORIGIN = "https://fsm.global";
 const HOME = `${ORIGIN}/sg/tools/etf-selector`;
@@ -81,6 +85,46 @@ function clean(value) {
   return String(value ?? "").replace(/\s+/g, " ").trim();
 }
 
+function tickerKey(value) {
+  const text = String(value || "").trim().toUpperCase().split(/[ .]/)[0];
+  return /^\d{1,6}$/.test(text) ? text.padStart(6, "0") : text;
+}
+
+function isinOf(value) {
+  const text = String(value || "").trim().toUpperCase();
+  return /^[A-Z]{2}[A-Z0-9]{10}$/.test(text) ? text : "";
+}
+
+// Venue and ticker, not the broker's spelling of the place. Two ISINs for the
+// same pair are a disagreement, and a disagreement is left blank.
+function isinBook() {
+  const book = new Map();
+  for (const file of catalogueFiles()) {
+    if (path.basename(path.dirname(file)) === "FSMOne") continue;
+    const parsed = JSON.parse(fs.readFileSync(file, "utf8"));
+    const rows = Array.isArray(parsed) ? parsed : parsed.rows || [];
+    for (const row of rows) {
+      const isin = isinOf(row.isin);
+      const ticker = tickerKey(row.ticker);
+      const { venue } = resolveVenue(row);
+      if (!isin || !ticker || !venue) continue;
+      const key = `${venue.mic}|${ticker}`;
+      const prior = book.get(key);
+      if (!prior) book.set(key, isin);
+      else if (prior !== isin) book.set(key, "");
+    }
+  }
+  return book;
+}
+
+const isins = isinBook();
+
+function joinedIsin(exchange, ticker, currency) {
+  const { venue } = resolveVenue({ exchange, currency });
+  if (!venue) return "";
+  return isins.get(`${venue.mic}|${tickerKey(ticker)}`) || "";
+}
+
 function listingType(name) {
   if (/\bETNs?\b/i.test(name) || /exchange-traded notes/i.test(name)) return "ETN";
   if (/\bETCs?\b/i.test(name)) return "ETC";
@@ -138,7 +182,7 @@ for (const row of funds) {
     currency,
     type,
     raw: [ticker, name, exchange, currency, type].filter(Boolean).join(" "),
-    isin: "",
+    isin: joinedIsin(exchange, ticker, currency),
   });
 }
 
@@ -169,7 +213,7 @@ for (const row of shares) {
     currency,
     type: "STOCK",
     raw: [ticker, name, exchange, currency, "STOCK"].filter(Boolean).join(" "),
-    isin: "",
+    isin: joinedIsin(exchange, ticker, currency),
   });
 }
 
@@ -197,8 +241,9 @@ fs.writeFileSync(new URL("FSMOne-parsed.json", import.meta.url), JSON.stringify(
 const byType = new Map();
 for (const row of unique) byType.set(row.type, (byType.get(row.type) || 0) + 1);
 const instruments = new Set(unique.map((row) => `${row.type}:${row.ticker}:${row.exchange}`)).size;
+const withIsin = unique.filter((row) => row.isin).length;
 console.error(
   `${unique.length} listings over ${instruments} instruments ` +
-    `(${[...byType].map(([type, count]) => `${count} ${type}`).join(", ")})` +
+    `(${[...byType].map(([type, count]) => `${count} ${type}`).join(", ")}), ${withIsin} with an ISIN` +
     (skipped.size ? `; left out ${[...skipped].map(([reason, count]) => `${count} ${reason}`).join(", ")}` : "")
 );

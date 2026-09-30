@@ -89,6 +89,16 @@ const FOLDER = {
   // transfer is also rupees. No other currency is left unconverted.
   // https://www.arihantcapital.com/fund-transfer
   arihant: ["INR"],
+  // A pay-in comes from a bank account registered with GoPocket, by the
+  // payment gateway, NEFT, RTGS or IMPS, into an HDFC or ICICI nodal
+  // account. It is credited in rupees. No other currency is left unconverted.
+  // https://www.gopocket.in/funds-policy
+  gopocket: ["INR"],
+  // A pay-in by UPI or net banking is credited in rupees. The account must
+  // be an Indian savings account. An NRI bank account is not accepted.
+  // https://tradesmartonline.in/open-demat-account/
+  // https://tradesmartonline.in/help/demat-account-queries/which-documents-are-required-to-be-attached-with-the-account-opening-form/
+  tradesmart: ["INR"],
   // A deposit in one of these twelve is credited to that currency's cash
   // account and left there. The cash page calls the renminbi account CNH.
   // https://secure.fundsupermart.com/fsm/advice-services/faq/0/9021/
@@ -116,6 +126,10 @@ const FOLDER = {
   // Terms 10.3 and 11.8: the linked bank account and every deposit are pounds.
   // Help, 28 Mar 2024: cash can be held in GBP only.
   freetrade: ["GBP"],
+  // Online terms: a deposit, transfer, dividend or corporate-action payment
+  // that is not in pounds is converted into sterling, plus a 1% spread.
+  // https://www.hl.co.uk/__data/assets/pdf_file/0015/37122/Online-Ts-and-Cs.pdf
+  hargreaveslansdown: ["GBP"],
   // Costs: the account deals in sterling and FX is free because every line
   // is already in pounds. Funding comes from a UK current account.
   // https://investengine.com/costs/
@@ -166,6 +180,19 @@ const FOLDER = {
   tastytrade: ["USD"],
   thndr: ["EGP", "USD", "AED"],
   bhmuae: ["AED", "USD"],
+  // A payment that stays as cash is francs. The account is at
+  // Hypothekarbank Lenzburg, and every neon invest line is already a
+  // BX Swiss price in CHF, so nothing is converted on the way in.
+  // https://www.neon-free.ch/en/faq/why-are-the-prices-for-shares-and-etfs-displayed-in-chf-in-the-app
+  neon: ["CHF"],
+  // A pay-in is K-net, or a transfer from the client's account at the
+  // bank, and the opening minimum is KD 1,000. Dollars, pounds and euros
+  // on the fee sheet are a transfer into that market, done with customer
+  // service, so they are a conversion. Cash the account already holds in
+  // another currency is a sale proceed.
+  // https://boubyancapital.com/who-we-are/news/global-stock-markets-pr/
+  // https://boubyancapital.com/media/filer_public/b8/45/b8450fda-4958-44f5-813c-3323ddee73f6/china_market_web-a2.pdf
+  boubyan: ["KWD"],
   tiger: ["USD", "HKD", "SGD", "AUD", "CNH"],
   traderepublic: ["EUR"],
   tradestation: ["USD"],

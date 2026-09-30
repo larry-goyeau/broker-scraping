@@ -27,6 +27,13 @@ function sanctionedListing(isin, exchange) {
   return String(exchange || "").toUpperCase() === "MOEX";
 }
 
+// ChiNext via Shenzhen Connect is limited to institutional professional
+// investors. A retail CapTrader account is not that buyer, and the Asia card
+// has no ChiNext tier. Dropped, the same way a sanctioned listing is.
+function chinextListing(exchange) {
+  return String(exchange || "").toUpperCase() === "CHINEXT";
+}
+
 function loadTickersFromCsv(csvPath) {
   if (!fs.existsSync(csvPath)) return [];
   return fs
@@ -298,7 +305,7 @@ if (!hasFlag("fresh") && fs.existsSync(outputPath)) {
     const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
     if (Array.isArray(existing)) {
       for (const entry of existing) {
-        if (sanctionedListing(entry?.isin, entry?.exchange)) continue;
+        if (sanctionedListing(entry?.isin, entry?.exchange) || chinextListing(entry?.exchange)) continue;
         results.push(entry);
         if (entry?.ticker) seen.add(entryKey(entry.query, entry));
       }
@@ -597,7 +604,7 @@ async function scrapeRowsForQuery(query) {
     if (!name) continue;
 
     const info = (await readInfo(entry.conid)) || {};
-    if (sanctionedListing(info.isin || "", exchange)) continue;
+    if (sanctionedListing(info.isin || "", exchange) || chinextListing(exchange)) continue;
 
     rows.push({
       ticker: (entry.symbol || "").toUpperCase(),
@@ -640,7 +647,7 @@ function ingest(query, rows) {
       raw: row.raw,
       isin: listing.isin,
     };
-    if (sanctionedListing(entry.isin, entry.exchange)) continue;
+    if (sanctionedListing(entry.isin, entry.exchange) || chinextListing(entry.exchange)) continue;
     if (row.restricted) entry.nonEuResident = true;
     if (
       String(row.exchange || "").toUpperCase() === "NSE" &&

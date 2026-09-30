@@ -35,9 +35,9 @@
 // disclosure keep the current levy, which is what is used. CAT is not
 // named. NSCC is not named.
 //
-// What is in the number: the book (European bp, each US / OTC 605 ×
-// Q of Interactive Brokers LLC, the US BD the order-execution policy
-// names, or T212's crypto review); stamp / FTT from the map; PTM when
+// What is in the number: the book (European bp, a listed US tape's 605 ×
+// Q of Interactive Brokers LLC, the OTC touch when there is no 605, or
+// T212's crypto review); stamp / FTT from the map; PTM when
 // it bites; SEC and TAF on a US / OTC sale. brokerFees is 0 — they
 // bill no ticket. FX is only in the number if a listing currency they
 // cannot hold appears later.
@@ -386,12 +386,15 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
   const cash = cashOf(listing.currency);
   const holdable = HOLD.has(cash);
   const american = isAmerican(m.row, listing.mic);
+  const otc = listing.mic === "OTCM" || /OTC/i.test(m.row.exchange || "");
   const ukStock = isUkStock(m.row, listing.mic);
   const tax = taxesOf(listing.isin);
   const rates = taxRates(tax);
   const taxTotal = Object.values(rates).reduce((s, r) => s + r, 0);
   const leaf = book.leaf;
-  const marketBp = bp ?? (american ? null : leaf?.bp) ?? null;
+  // Listed US tapes are the Rule 605 per-share figure. OTC does not file
+  // one, so the touch (bp) is the book.
+  const marketBp = bp ?? (american && !otc ? null : leaf?.bp) ?? null;
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
   const fxPct = holdable ? 0 : FX_EACH_WAY;
 
@@ -470,7 +473,7 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
     brokerFees: finite(brokerFees, 6),
     ...(bookUsd == null
       ? {
-          why: american
+          why: american && !otc
             ? `aucun 605 pour ${listing.isin || listing.ticker}`
             : `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ${
                 m.unsourced?.why || "pas de feuille de carnet"

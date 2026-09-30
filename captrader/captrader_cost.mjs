@@ -28,8 +28,8 @@
 //   EUR 4     Xetra (cap 99), Vienna (cap 120), Belgium, France, Italy,
 //             Netherlands, Spain
 //   EUR 2     GETTEX, Tradegate, Turquoise DE, Chi-X, BATS
-//   EUR 4     Frankfurt / Stuttgart in the portal (page adds a specialist
-//             the preview never quotes)
+//   EUR 4     Frankfurt / Stuttgart, plus the specialist the equity check
+//             billed on 2026-09-29: 3.52 € at Frankfurt, 1.90 € at Stuttgart
 //   EUR 6     Portugal
 //   EUR 10    Baltics
 //   GBP 8     London
@@ -50,10 +50,15 @@
 //   RUB 900   Russia, at 0,20 % (cap 8 500)
 //   USD 8,90  OTC / Pink under a dollar, 0,01 $/share, cap 3 %
 //
-// Frankfurt and Stuttgart print a specialist on top of the 0,10 %. The portal
-// does not. On 2026-09-15 every euro preview — SMART, AEB, GETTEX2, IBIS, FWB —
-// came back `2.00 ... 4.00 EUR`, including Lufthansa directed at FWB. The
-// specialist is therefore on the page and out of the number, same reason FX is.
+// Frankfurt and Stuttgart print a specialist on top of the 0,10 %. The
+// commission string on 2026-09-15 was the same `2.00 ... 4.00 EUR` on Xetra
+// and on FWB, which hid it. The equity-with-loan line does not. On
+// 2026-09-29, account U27604034, nothing sent: the same limit cost 3.52 €
+// more at Frankfurt and 1.90 € more at Stuttgart than at Xetra, on Lufthansa
+// from 1 to 200 shares and on Siemens (a DAX name) from 1 to 6. The footnote's
+// 0.0504 % (min 2.52 €) and 0.0672 % / 0.0336 % (min 0.63 €) are not that
+// gap. Past about 2 000 € the margin text stops carrying the fee — the
+// account held 4.39 € — so the percentage is not added on top of the flat.
 // Ireland is on the IBKR book and not on the page, so it answers N/A rather
 // than borrow a neighbour's four euros. Korea is not on the page either.
 // The CapTrader preview of 122450 on 2026-09-28 left the commission blank:
@@ -74,6 +79,8 @@
 // dividends and the trading software are free in as many words.
 //
 // What is in the number: the commission each way at its floor and its cap;
+// the Frankfurt specialist, 3.52 €, and the Stuttgart specialist, 1.90 €,
+// each way, from the equity check and not from the footnote's percentage;
 // UK stamp 0,5 % and Irish 1 % on a purchase
 // of a share, and French / Italian FTT, which the page says it withholds
 // (Italy is carried locally — the root map reads Trading212's off-venue zero);
@@ -176,10 +183,17 @@ const MEASURED = {
   },
 };
 
-// Still printed. Never in a preview, even with `exchange: FWB`.
+// Footnote on the Aktien page, not what the ticket billed.
 const SPECIALIST_ON_PAGE = {
   frankfurt: { rate: 0.000504, min: 2.52 },
   stuttgart: { rate: 0.000672, min: 0.63, dax: 0.000336 },
+};
+
+// Equity with loan minus the Xetra ticket, account U27604034, 2026-09-29.
+// Flat across every size where that line still carried the fee.
+const SPECIALIST = {
+  frankfurt: { flat: 3.52, on: "2026-09-29", versus: "IBIS", names: "LHA 1–200, SIE 1–6" },
+  stuttgart: { flat: 1.9, on: "2026-09-29", versus: "IBIS", names: "LHA 1–200, SIE 1–6" },
 };
 
 const WITHDRAW = { firstFree: true, sepa: 1, wire: 8, ccy: "EUR" };
@@ -190,8 +204,8 @@ const CUSTODY = {
 
 // Per side. `rate` of the amount or `perShare` per share, floored at `min` and,
 // where the page prints one, capped at `max` (absolute) or `maxPct` of the
-// amount. Frankfurt and Stuttgart use the 4 € SMART ceiling the portal quotes,
-// not the specialist the page adds on top.
+// amount. Frankfurt and Stuttgart use the 4 € SMART ceiling the portal quotes.
+// The specialist is added beside that, from the equity check, not from the footnote.
 const RULE = {
   us: { perShare: 0.01, min: 2, maxPct: 0.01, ccy: "USD" },
   ca: { perShare: 0.01, min: 1, maxPct: 0.01, ccy: "CAD" },
@@ -400,14 +414,13 @@ function remarkOf({ listing, market } = {}) {
     const pct = custody != null ? custody : CUSTODY.rate.HUF;
     lines.push(`Custody ${(pct * 100).toFixed(2)}%/year on this currency (and on euro names on BUX).`);
   }
-  if (market === "frankfurt" || market === "stuttgart") {
-    const s = SPECIALIST_ON_PAGE[market];
-    lines.push(
-      `Specialist ${(100 * s.rate).toFixed(4)}% (min ${s.min} €) is on the ${market} row of the page. ` +
-        `The portal quoted ${MEASURED.range} even with the order sent there.`
-    );
-  }
   return lines.join("\n");
+}
+
+function specialistSide(market) {
+  const spec = SPECIALIST[market];
+  if (!spec) return null;
+  return { charged: spec.flat, currency: "EUR" };
 }
 
 /**
@@ -546,6 +559,10 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const buyCommUsd = buyComm ? dollars(buyComm.charged, buyComm.currency) : null;
   const sellCommUsd = sellComm ? dollars(sellComm.charged, sellComm.currency) : null;
 
+  const specialist = specialistSide(market);
+  const specialistUsd = specialist ? dollars(specialist.charged, specialist.currency) : 0;
+  const specialistRoundUsd = specialist ? plus(specialistUsd, specialistUsd) : 0;
+
   const stampUsd = notionalUsd == null ? null : notionalUsd * taxPct;
   const secUsd = american ? (notionalUsd == null ? null : notionalUsd * SEC_RATE) : 0;
   const tafUsd = american ? Math.min(TAF_PER_SHARE * n, TAF_CAP) : 0;
@@ -559,7 +576,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
         : notionalGbp > PTM.above;
   const ptmUsd = ptmDue === false ? 0 : ptmDue === null ? null : dollars(2 * PTM.each, PTM.ccy);
 
-  const usd = plus(bookUsd, buyCommUsd, sellCommUsd, stampUsd, secUsd, tafUsd, ptmUsd);
+  const usd = plus(bookUsd, buyCommUsd, sellCommUsd, specialistRoundUsd, stampUsd, secUsd, tafUsd, ptmUsd);
   const brokerFees = plus(buyCommUsd, sellCommUsd);
 
   return {
@@ -606,8 +623,9 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
       marché: finite(bookUsd, 6),
       commission: finite(plus(buyCommUsd, sellCommUsd), 6),
       taxes: finite(stampUsd, 6),
-      réglementaire: finite(plus(secUsd, tafUsd, ptmUsd), 6),
+      réglementaire: finite(plus(secUsd, tafUsd, ptmUsd, specialistRoundUsd), 6),
     },
+    specialist,
     commission: {
       rate: rule.rate ?? null,
       perShare: rule.perShare ?? null,
@@ -681,11 +699,13 @@ function confidenceOf({
     );
   }
   if (market === "frankfurt" || market === "stuttgart") {
-    const s = SPECIALIST_ON_PAGE[market];
+    const billed = SPECIALIST[market];
+    const printed = SPECIALIST_ON_PAGE[market];
     said.push(
-      `spécialiste ${(100 * s.rate).toFixed(4)} % (min ${s.min} €) sur la page, hors total : ` +
-        `l'aperçu du ${MEASURED.on} sur LHA donne ${MEASURED.seen.LHA.commission} ` +
-        `que l'ordre parte SMART, IBIS ou FWB`
+      `spécialiste ${billed.flat.toFixed(2)} € par sens, dans le total : l'equity with loan du ${billed.on} ` +
+        `sur le compte ${MEASURED.account} demandait ${billed.flat.toFixed(2)} € de plus qu'à Xetra ` +
+        `(${billed.names}). La note de la page imprime ${(100 * printed.rate).toFixed(4)} % ` +
+        `(min ${printed.min} €) et ce n'est pas cet écart`
     );
   }
   if (market === "nl") {
@@ -765,6 +785,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
           check: CHECK,
           measured: MEASURED,
           specialistOnPage: SPECIALIST_ON_PAGE,
+          specialist: SPECIALIST,
           catalogue: catalogueBorrowed ? "mexem-parsed.json (même livre IBKR)" : "captrader-parsed.json",
           coverage: coverage(),
         },

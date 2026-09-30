@@ -135,7 +135,7 @@ UBS key4 / e-banking	CH	Bank	Global ETFs / ETPs	https://www.ubs.com/ch/en/servic
 Cornèrtrader	CH	Bank	Global ETFs / ETPs	https://www.cornertrader.ch/en/	info@cornertrader.ch
 Migros Bank	CH	Bank	Global ETFs / ETPs	https://www.migrosbank.ch/de/privatpersonen/anlegen/anlageloesungen/wertschriftendepot.html	
 Yuh	CH	Neobroker	Global ETFs / ETPs	https://www.yuh.com/en/	https://www.yuh.com/en/contact/
-neon invest	CH	Neobroker	Global ETFs / ETPs	https://www.neon-free.ch/neon-invest	
+Neon	CH	Neobroker	Global ETFs / ETPs	https://www.neon-free.ch/neon-invest	
 Alpian	CH	Bank	Global ETFs / ETPs	https://www.alpian.com/investment	
 Raiffeisen Switzerland	CH	Bank	Global ETFs / ETPs	https://www.raiffeisen.ch/rch/de/privatkunden/anlegen.html	https://www.raiffeisen.ch/rch/de/ueber-uns/kontakt.html
 Banque Cantonale Vaudoise (BCV)	CH	Bank	Global ETFs / ETPs	https://www.bcv.ch/fr/home.html	https://www.bcv.ch/fr/home/aide-et-contact.html
@@ -406,6 +406,7 @@ Qatar Securities Company	QA	Broker	Global ETFs / ETPs	https://qatar-securities.c
 Ahli Brokerage Company	QA	Bank	Global ETFs / ETPs	https://www.ahlibrokerage.com.qa/AccountOpening.aspx	https://www.ahlibrokerage.com.qa/Contactus.aspx
 NBK Capital	KW	Bank	Local-market ETFs	https://brokerage.nbk.com/	
 National Investments Company / NICTRADE	KW	Broker	Global ETFs / ETPs	https://www.nic.com.kw/our-services/online-trading/	
+Boubyan	KW	Broker	Global ETFs / ETPs	https://boubyancapital.com/brokerage/	
 SICO	BH	Bank	Local-market ETFs	https://sicobank.com	https://sicobank.com/en/contact-us
 Mubasher Capital Bahrain	BH	Broker	Global ETFs / ETPs	https://mubashercapital.com/	global@mubashercapital.com
 Meitav Trade	IL	Broker	Local + US ETFs	https://www.meitav.co.il/trade/	
@@ -630,6 +631,8 @@ Mastertrust	IN	Broker	Local-market ETFs	https://www.mastertrust.co.in/
 Arihant	IN	Broker	Local-market ETFs	https://www.arihantcapital.com/	https://www.arihantcapital.com/contact-us
 Bigul	IN	Neobroker	Local-market ETFs	https://www.bigul.co/
 Pocketful	IN	Neobroker	Local-market ETFs	https://www.pocketful.in/open-demat-account
+GoPocket	IN	Neobroker	Local-market ETFs	https://www.gopocket.in/
+TradeSmart	IN	Neobroker	Local-market ETFs	https://tradesmartonline.in/
 Rupeezy	IN	Neobroker	Local-market ETFs	https://rupeezy.in/
 Zebu	IN	Neobroker	Local-market ETFs	https://zebuetrade.com/open-demat-account
 Firstock	IN	Neobroker	Local-market ETFs	https://firstock.in/support/resident-individual/	

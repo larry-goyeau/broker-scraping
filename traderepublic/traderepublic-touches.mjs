@@ -8,6 +8,7 @@
 //
 //   node traderepublic/traderepublic-touches.mjs
 //   node traderepublic/traderepublic-touches.mjs --only=US0378331005,IE00BK5BQT80
+//   node traderepublic/traderepublic-touches.mjs --refresh
 //   node traderepublic/traderepublic-touches.mjs --refresh-empty --adr
 //   node traderepublic/traderepublic-touches.mjs --limit=200
 //   node traderepublic/traderepublic-touches.mjs --chrome
@@ -32,6 +33,7 @@ const ONLY = new Set(
     .filter(Boolean)
 );
 const LIMIT = Number(arg("limit", "0")) || 0;
+const REFRESH = flag("refresh");
 const REFRESH_EMPTY = flag("refresh-empty");
 const ADR_ONLY = flag("adr");
 const USE_CHROME = flag("chrome");
@@ -267,7 +269,7 @@ function save() {
 const pending = list.filter((r) => {
   const isin = isinOf(r.isin);
   const have = byIsin[isin];
-  if (ONLY.size) return true;
+  if (ONLY.size || REFRESH) return true;
   if (REFRESH_EMPTY) return !(have?.perShare > 0);
   return !have;
 });

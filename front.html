@@ -835,9 +835,9 @@
           : "";
         return `<td class="broker"><div class="bk"><span class="avatar tone-${toneOf(brand.key)}" aria-hidden="true">${mark}<span class="mono">${esc(initialsOf(brand.words))}</span></span><div class="bk-text"><span class="bk-name">${name}</span>${where ? `<span class="bk-where">${esc(where)}</span>` : ""}</div></div></td>`;
       };
-      const numCell = (v, kind) => {
+      const numCell = (v, kind, spreadKnown) => {
         const missing = costNum(v) == null;
-        const text = missing ? (kind === "total" ? "unknown spread" : "N/A") : money(v);
+        const text = missing ? (kind === "total" && !spreadKnown ? "unknown spread" : "N/A") : money(v);
         return `<td class="num ${kind}${missing ? " na" : ""}">${esc(text)}</td>`;
       };
       const ccyCell = (currency) => {
@@ -851,7 +851,7 @@
         return ordered
           .map(
             (row) =>
-              `<tr>${brokerCell(row)}${crypto ? "" : `<td class="exch">${esc(row.exchange)}</td>`}${ccyCell(row.currency)}${numCell(row.total, "total")}${numCell(row.fees, "fees")}<td class="remark">${esc(row.remark)}</td></tr>`
+              `<tr>${brokerCell(row)}${crypto ? "" : `<td class="exch">${esc(row.exchange)}</td>`}${ccyCell(row.currency)}${numCell(row.total, "total", row.spreadKnown)}${numCell(row.fees, "fees")}<td class="remark">${esc(row.remark)}</td></tr>`
           )
           .join("");
       };
@@ -1007,6 +1007,7 @@
               currency: l.currency || (crypto ? "" : "N/A"),
               total: l.total || "N/A",
               fees: l.fees || "N/A",
+              spreadKnown: !!l.spreadKnown,
               remark: l.remark || "",
             }));
           })

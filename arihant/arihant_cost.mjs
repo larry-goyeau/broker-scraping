@@ -13,12 +13,18 @@
 //   IPF                      ₹10 / crore. The cell is not split by exchange.
 //   GST                      18% on brokerage, the exchange charge and SEBI.
 //                            IPF is outside that line.
-//   DP                       a sell moves shares out of the demat account.
-//                            The pricing page prints no rupee amount, so
-//                            none is added.
+//   DP                       the pricing page prints no rupee amount. The
+//                            CDSL fiche for DP 43000 does, as a pay-in per
+//                            demat scheme, read on 2026-09-29:
+//                            https://www.cdslindia.com/dp/dpdetails.aspx?dp_id=43000
+//                            MLT ₹10, LT1250 ₹11, ELT ₹15, Freedom3K ₹10,
+//                            Freedom7K nil. The cell does not add GST.
+//                            The general scheme is 0.04% or ₹30 plus
+//                            depository charges with no figure, so it is
+//                            not a row.
 //
-// Equity delivery is the same 0.30% on both plans, so there is one row.
-// Call and trade is zero. AMC depends on the demat plan and stays out.
+// Equity delivery is the same 0.30% on every demat scheme. Call and trade
+// is zero. AMC depends on the scheme and stays out.
 // Direct mutual funds are not in this catalogue.
 //
 // The catalogue has no US line, so no Rule 606 mix is applied.
@@ -33,29 +39,40 @@ function brokerageEach(notional) {
   return notional * pct("0.30");
 }
 
-const SCHEDULE = {
-  broker: "Arihant",
-  folder: "arihant",
-  catalogueUrl: new URL("arihant-parsed.json", import.meta.url),
-  url: "https://www.arihantcapital.com/pricing",
-  readOn: "2026-09-29",
-  brokerageEach,
-  txnRate: (exchange) => (exchange === "NSE" ? pct("0.00297") : exchange === "BSE" ? pct("0.00375") : null),
-  sttRate: pct("0.1"),
-  stampRate: pct("0.015"),
-  sebiRate: sebiRate(),
-  gstRate: 0.18,
-  gstOnIpft: false,
-  gstOnDp: false,
-  ipftRate: () => pct("0.0001"),
-  dpInr: 0,
-  basis: "Courtage livraison : 0,30 % par ordre. Pas de DP chiffré sur la page.",
-  remark: "",
-  rule606: null,
+function schedule(dpInr, basis) {
+  return {
+    broker: "Arihant",
+    folder: "arihant",
+    catalogueUrl: new URL("arihant-parsed.json", import.meta.url),
+    url: "https://www.cdslindia.com/dp/dpdetails.aspx?dp_id=43000",
+    readOn: "2026-09-29",
+    brokerageEach,
+    txnRate: (exchange) => (exchange === "NSE" ? pct("0.00297") : exchange === "BSE" ? pct("0.00375") : null),
+    sttRate: pct("0.1"),
+    stampRate: pct("0.015"),
+    sebiRate: sebiRate(),
+    gstRate: 0.18,
+    gstOnIpft: false,
+    gstOnDp: false,
+    ipftRate: () => pct("0.0001"),
+    dpInr,
+    basis,
+    remark: "",
+    rule606: null,
+  };
+}
+
+const PLANS = {
+  mlt: schedule(10, "Courtage livraison : 0,30 % par ordre. Pay-in MLT : 10 ₹."),
+  lt1250: schedule(11, "Courtage livraison : 0,30 % par ordre. Pay-in LT1250 : 11 ₹."),
+  elt: schedule(15, "Courtage livraison : 0,30 % par ordre. Pay-in ELT : 15 ₹."),
+  freedom3k: schedule(10, "Courtage livraison : 0,30 % par ordre. Pay-in Freedom3K : 10 ₹."),
+  freedom7k: schedule(0, "Courtage livraison : 0,30 % par ordre. Pay-in Freedom7K : 0 ₹."),
 };
 
 export function roundTrip(query) {
-  return indiaRoundTrip(SCHEDULE, query);
+  const id = String(query.plan || "mlt");
+  return indiaRoundTrip(PLANS[id] || PLANS.mlt, query);
 }
 
 printCli(import.meta.url, roundTrip);

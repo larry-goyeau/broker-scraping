@@ -20,7 +20,7 @@
 // table is the one copied.
 //
 //   Xetra              0.09 %, min 3.90 €, cap 89 €
-//   Frankfurt          0.09 %, min 3.90 €  (+ specialist on the page)
+//   Frankfurt          0.09 %, min 3.90 €  + specialist 5.04 bp, min 2.52 €
 //   Stuttgart          0.09 %, min 5.90 €  (+ specialist on the page)
 //   Chi-X / BATS / Tradegate / Turquoise DE
 //                      0.09 %, min 1.90 €
@@ -39,9 +39,13 @@
 //   Hong Kong          0.09 %, min 19 HKD
 //   Australia          0.09 %, min 9.90 AUD
 //
-// "All exchange fees are included (exceptions are marked)." Frankfurt and
-// Stuttgart specialists are marked, so they stay in the remark — no
-// preview in this deposit has priced them. GETTEX, WSE, SGX, TASE and
+// "All exchange fees are included (exceptions are marked)." The Frankfurt
+// specialist is that exception. A cash check on 2026-09-29, account
+// U27795602, Lufthansa at 7.73 €: Xetra asked for the 3.90 € floor, Frankfurt
+// asked for 2.52 € more, on one share and on a hundred. That is the
+// published minimum, so the 5.04 bp on the card is what bills once the
+// order is large enough. Stuttgart's specialist is still only on the page.
+// GETTEX, WSE, SGX, TASE and
 // the rest of the IBKR book are not on the card: N/A, not a neighbour's
 // floor. KRX is not on the card either. The portal cash check on 122450,
 // 2026-09-28, named it: 100 shares at 2 550 asked for 170.90 EUR, and
@@ -54,6 +58,7 @@
 // of a cheap share cut under 1.90 $.
 //
 // What is in the number: the commission each way at its floor and cap;
+// the Frankfurt specialist, 5.04 bp with a minimum of 2.52 €, each way;
 // OTC clearing as printed; UK 0.50 % and Irish 1 % stamp on a share
 // purchase (taxMap, else the rates the page says it passes through);
 // French / Italian FTT, which the page says it withholds (Italy is
@@ -309,13 +314,20 @@ function remarkOf({ listing, market } = {}) {
   const settle = fxCcy(listing?.currency);
   if (market !== "crypto") lines.push(fxRemark((100 * FX_BP).toFixed(3).replace(/\.?0+$/, ""), settle));
   if (market === "adr") lines.push("USA-ADRs print $0.01–0.02/share; 0.01 used.");
-  if (market === "frankfurt" || market === "stuttgart") {
-    const s = SPECIALIST_ON_PAGE[market];
+  if (market === "stuttgart") {
+    const s = SPECIALIST_ON_PAGE.stuttgart;
     lines.push(
-      `Specialist ${(100 * s.rate).toFixed(4)}% (min ${s.min} €) is marked on the ${market} row and is not in the number.`
+      `Specialist ${(100 * s.rate).toFixed(4)}% (min ${s.min} €) is marked on the Stuttgart row and is not in the number.`
     );
   }
   return lines.join("\n");
+}
+
+function specialistSide(amountEur, spec) {
+  if (!spec || !(amountEur > 0)) return null;
+  const raw = amountEur * spec.rate;
+  const charged = Math.max(spec.min, raw);
+  return { raw, charged, floored: charged > raw, currency: "EUR" };
 }
 
 /**
@@ -443,6 +455,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   if (!rule) {
     return {
       ...shared,
+      remark: [shared.remark, "No published commission for this exchange."].filter(Boolean).join("\n"),
       basis: `aucun palier publié pour ${listing.brokerExchange || listing.exchange || "cette place"} chez WH SelfInvest`,
       why:
         `${listing.brokerExchange || listing.exchange || "cette place"} n'a pas de palier sur la carte WHS ` +
@@ -489,12 +502,15 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const sellComm = commissionSide({ shares: n, amount: notionalInRule, price: p, market });
   const buyCommUsd = buyComm ? dollars(buyComm.charged, buyComm.currency) : null;
   const sellCommUsd = sellComm ? dollars(sellComm.charged, sellComm.currency) : null;
+  const specialist = market === "frankfurt" ? specialistSide(notionalInRule, SPECIALIST_ON_PAGE.frankfurt) : null;
+  const specialistUsd = specialist ? dollars(specialist.charged, specialist.currency) : 0;
+  const specialistRoundUsd = specialist ? plus(specialistUsd, specialistUsd) : 0;
 
   const stampUsd = notionalUsd == null ? null : notionalUsd * taxPct;
   const secUsd = american ? (notionalUsd == null ? null : notionalUsd * SEC_RATE) : 0;
   const tafUsd = american ? Math.min(TAF_PER_SHARE * n, TAF_CAP) : 0;
 
-  const usd = plus(bookUsd, buyCommUsd, sellCommUsd, stampUsd, secUsd, tafUsd);
+  const usd = plus(bookUsd, buyCommUsd, sellCommUsd, specialistRoundUsd, stampUsd, secUsd, tafUsd);
   const brokerFees = plus(buyCommUsd, sellCommUsd);
 
   return {
@@ -538,7 +554,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     parts: {
       marché: finite(bookUsd, 6),
       courtage: finite(plus(buyCommUsd, sellCommUsd), 6),
-      réglementaire: finite(plus(secUsd, tafUsd), 6),
+      réglementaire: finite(plus(secUsd, tafUsd, specialistRoundUsd), 6),
       taxes: finite(stampUsd, 6),
     },
     commission: {
@@ -565,6 +581,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
       unsourced: m.unsourced,
       listing,
       n,
+      specialist,
     }),
   };
 }
@@ -583,6 +600,7 @@ function confidenceOf({
   unsourced,
   listing,
   n,
+  specialist,
 }) {
   const said = [];
   said.push(
@@ -603,11 +621,18 @@ function confidenceOf({
             : `${Number(buyComm.charged).toPrecision(4)} ${rule.ccy} par sens`
     );
   }
-  if (market === "frankfurt" || market === "stuttgart") {
-    const s = SPECIALIST_ON_PAGE[market];
+  if (market === "stuttgart") {
+    const s = SPECIALIST_ON_PAGE.stuttgart;
     said.push(
       `spécialiste ${(100 * s.rate).toFixed(4)} % (min ${s.min} €) marqué en exception, hors total : ` +
         `aucun aperçu WHS dans ce dépôt`
+    );
+  }
+  if (specialist) {
+    said.push(
+      `spécialiste Francfort ${Number(specialist.charged).toPrecision(3)} € par sens` +
+        (specialist.floored ? `, au plancher de ${SPECIALIST_ON_PAGE.frankfurt.min} €` : "") +
+        `, aperçu du 2026-09-29 : +2,52 € contre Xetra sur Lufthansa`
     );
   }
   if (rule.perShare != null && rule.min != null && n >= rule.min / rule.perShare) {

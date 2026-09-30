@@ -51,10 +51,14 @@ const FOREIGN_PER_USD = {
   PHP: 62.641,
   RON: 4.5189,
   ISK: 121.15,
-  // GCC pegs. Not ECB prints.
+  // GCC pegs. Not ECB prints. Qatar's published peg is 3.64.
+  // The Saudi riyal is SAMA's peg, 3.75 per dollar. Kuwait floats on a
+  // basket and is not in this table.
   AED: 3.6725,
+  SAR: 3.75,
   BHD: 0.376,
   OMR: 0.3845,
+  QAR: 3.64,
   // CBE mid, not an ECB print. Same day as AS_OF.
   EGP: 50.9106,
   // NBK official rate, not an ECB print. Same day as AS_OF.
@@ -65,6 +69,8 @@ const FOREIGN_PER_USD = {
 function keyOf(currency) {
   const s = String(currency || "").trim();
   if (/^GBX$/i.test(s) || s === "GBp" || /^GBPENCE$/i.test(s)) return "GBX";
+  // Offshore yuan (CNH) is the same unit as the onshore one for sizing an order.
+  if (/^CNH$/i.test(s)) return "CNY";
   return s.toUpperCase();
 }
 

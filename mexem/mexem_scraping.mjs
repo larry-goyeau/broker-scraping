@@ -66,6 +66,13 @@ function listingName(hit) {
   return heading;
 }
 
+// This account's preview of a Tadawul share answered "No trading permissions"
+// before any commission. Mexem's published venue list does not name Saudi
+// Arabia. Dropped.
+function tadawulListing(exchange) {
+  return String(exchange || "").toUpperCase() === "TADAWUL";
+}
+
 function listingVenue(hit, info) {
   const fromSearch = normalize(hit.description || "").toUpperCase();
   if (fromSearch) return fromSearch;
@@ -238,6 +245,7 @@ if (!fresh && fs.existsSync(outputPath)) {
     if (Array.isArray(existing)) {
       for (const entry of existing) {
         if (String(entry?.type || "").toUpperCase() === "CRYPTO") continue;
+        if (tadawulListing(entry?.exchange)) continue;
         results.push(entry);
         if (entry?.ticker) seen.add(entryKey(entry));
       }
@@ -559,7 +567,7 @@ async function scrapeJob(job) {
     const name = listingName(hit) || normalize(info.companyName || "");
     const exchange = listingVenue(hit, info) || (job.kind === "CRYPTO" ? "CRYPTO" : "");
     const currency = info.currency || null;
-    if (!ticker || !exchange || !name) continue;
+    if (!ticker || !exchange || !name || tadawulListing(exchange)) continue;
 
     const type = listingType(name, job.kind);
     if (type === "CRYPTO") continue;
@@ -623,6 +631,7 @@ async function runJob(queryIndex, job) {
       raw: row.raw,
       isin: job.shelf === "isin" ? job.query : "",
     };
+    if (tadawulListing(entry.exchange)) continue;
     if (row.restricted) entry.nonEuResident = true;
     // NSE cash in rupees is on the book but IBKR Europe will not permission
     // it (Indian / NRI account only). Keep the line and mark it.

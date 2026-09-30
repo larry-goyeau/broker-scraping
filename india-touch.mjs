@@ -1,7 +1,8 @@
-// Official NSE and BSE cash touch, and only that. Bid and ask come from the
-// exchange's own book: quote-equity on the NSE, MarketDepth on the BSE. A last
-// trade is never written in their place. One side missing, or a crossed book,
-// leaves the line out.
+// Official BSE cash touch, and the NSE book only while it is being read.
+// Bid and ask come from the exchange's own book: quote-equity on the NSE,
+// MarketDepth on the BSE. A last trade is never written in their place. One
+// side missing, or a crossed book, leaves the line out. The NSE figures are
+// not written: the round trip on file is the six-month impact cost.
 //
 // The cash session is 9:15–15:30 Mumbai time, Monday to Friday. Past the close
 // the script stops asking, so a late run cannot file the closing print as a touch.
@@ -98,8 +99,14 @@ async function pull(page, url) {
   if (sessionOver()) return null;
   try {
     return await page.evaluate(async (url) => {
-      const res = await fetch(url, { credentials: "include", headers: { Accept: "application/json" } });
-      return { status: res.status, text: await res.text() };
+      // The page's own calls are XHR. fetch() is refused by the exchange edge.
+      return await new Promise((resolve) => {
+        const req = new XMLHttpRequest();
+        req.open("GET", url);
+        req.onload = () => resolve({ status: req.status, text: req.responseText });
+        req.onerror = () => resolve(null);
+        req.send();
+      });
     }, url);
   } catch {
     return null;
@@ -160,6 +167,9 @@ function merge() {
   const at = new Date().toISOString();
   let written = 0;
   for (const row of found) {
+    // NSE round trips use the six-month impact cost written by spread.mjs.
+    // A session touch must not replace that average.
+    if (row.mic === "XNSE") continue;
     const byMic = (spreads[row.isin] ||= {});
     const byCcy = (byMic[row.mic] ||= {});
     const prev = state[`${row.isin}|${row.mic}|INR`] || {};

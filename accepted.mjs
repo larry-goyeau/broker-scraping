@@ -262,6 +262,9 @@ export const ACCEPTED = {
   // Terms 7.2: UK tax resident and living in the UK, and not a US person.
   // Help, 16 Jul 2025: UK residents only. Moving abroad closes the account.
   freetrade: { countries: ["GB"] },
+  // Fund and Share Account: open online only if you live in the UK and are a UK tax resident.
+  // https://www.hl.co.uk/investment-services/fund-and-share-account
+  hargreaveslansdown: { countries: ["GB"] },
   // Help: UK tax resident, with a UK address and a UK current account.
   // Non-UK residents, including UK nationals living abroad, cannot open.
   // US persons cannot open. Terms allow an overseas client only at discretion.
@@ -336,12 +339,10 @@ export const ACCEPTED = {
   // https://www.mstock.com/articles/non-repatriable-demat-account
   // https://www.mstock.com/open-demat-account
   "m.stock": { countries: ["IN"] },
-  // A resident, an NRI and a foreign national may open the account. An NRI
-  // uses an NRE or NRO account and a PIS permission. A foreign national
-  // needs RBI or SEBI approval under the portfolio scheme. The page names
-  // no country list. The picker is a country.
-  // https://aliceblueonline.com/support/eligibility-criteria-2
-  aliceblue: WORLD,
+  // The open-account form fixes +91 and an Aadhaar-linked mobile for the
+  // OTP. That number is Indian. The picker is a country, so the country is IN.
+  // https://aliceblueonline.com/open-demat-account
+  aliceblue: { countries: ["IN"] },
   // A resident account, an NRI account and a foreign-national status are on
   // the individual KYC. An NRI uses an NRE or NRO account and a PIS
   // permission. A foreign passport needs a PIO, OCI or resident card. The
@@ -349,6 +350,15 @@ export const ACCEPTED = {
   // https://support.arihantcapital.com/support/solutions/articles/33000278528-can-an-nri-open-a-demat-account-
   // https://download.arihantcapital.com/account/542320261254165865416.pdf
   arihant: WORLD,
+  // Opening an account starts with an Aadhaar-linked mobile number, then
+  // PAN and bank proof. That number is Indian. The picker is a country,
+  // so the country is IN.
+  // https://www.gopocket.in/
+  gopocket: { countries: ["IN"] },
+  // E-sign uses an OTP on the mobile number linked to Aadhaar. That number
+  // is Indian. The picker is a country, so the country is IN.
+  // https://tradesmartonline.in/open-demat-account/
+  tradesmart: { countries: ["IN"] },
   // Non-residents may open the Singapore account. US, UK and Canada
   // restrictions are on certain funds, not on the account. The picker is a
   // nationality.
@@ -445,7 +455,17 @@ export const ACCEPTED = {
   century: { groups: ["GCC"], countries: [...EEA, "GB", "CH", "IN", "PK", "EG", "ZA", "SG", "MY", "HK"] },
   // Open-account page lists a National ID path for non-UAE residents.
   bhmuae: WORLD,
+  // General terms: Swiss residence, and Swiss tax only. A foreign national
+  // needs permit B or C, which is still residence in Switzerland.
+  // https://static-assets.neon-free.ch/legal/neon/neon_general_terms_and_conditions_en.pdf
+  neon: { countries: ["CH"] },
   alramz: WORLD, // FAQ: separate KYC pack for non-UAE residents
+  // The individual KYC asks for a passport number for a non-resident and
+  // leaves nationality and the mobile number free. A Kuwait civil ID is
+  // the resident's document, not a lock on the country. The picker is a
+  // country.
+  // https://boubyancapital.com/media/filer_public/b0/63/b063e80b-c56d-49a8-9de9-211048de0df8/individual_agreement-24aug2026.pdf
+  boubyan: WORLD,
   sarwa: { all: true, except: [...SANCTIONED, "US", ...SARWA_BLOCKED] },
   // Egypt FRA book + ADGM/FSRA UAE book. Not a worldwide app.
   thndr: { countries: ["EG", "AE"] },

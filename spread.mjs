@@ -17,6 +17,17 @@
 // `CROSSED`. Publishing two grandeurs in one field is the other mistake this script
 // exists to prevent, and it took reading Xetra's book to notice it had crept back in.
 //
+// Two published averages are that same grandeur, the best bid against the best ask
+// over the session, so they stand in for the book on the products they actually cover.
+// SIX Market Quality Metrics, one trading day's time-weighted inside spread, for
+// ETFs and for ETPs (ETC and ETN). Tokyo's monthly ETF file, in basis points.
+// The ASX investment-products PDF, the month's weighted average bid/ask for each
+// ETP. The NSE security-category file, the six-month mean impact cost of a
+// ₹1 lakh order, buy side and sell side, which is the round trip once the two
+// sides are added. The American NBBO stays the Rule 605 effective spread.
+// Xetra's XLM prices a 100 000 € order, and London prints the average only
+// for its busiest ETPs, so neither replaces a book.
+//
 // A touch also depends on the hour it was read, so each reading is divided by its own half
 // hour's multiple before the median is taken, and what the file publishes is the cost at
 // the average hour of the session. The multiples come from Deutsche Börse's intraday XLM
@@ -42,10 +53,11 @@
 // with. Out of hours it adds nothing and leaves the stored average alone.
 
 import puppeteer from "puppeteer-core";
+import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { createGunzip, gunzipSync } from "node:zlib";
+import { createGunzip, gunzipSync, inflateRawSync } from "node:zlib";
 import { Readable } from "node:stream";
 import readline from "node:readline";
 import {
@@ -204,10 +216,11 @@ for (const file of rowFiles) {
       path: venue.path || venue.mic,
       exchange: venue.name,
       source: venue.source,
-      venue,
-      venueAssumed: assumed,
-      brokers: new Set([broker]),
-    });
+          venue,
+          venueAssumed: assumed,
+          kind: String(row.type || "").toUpperCase(),
+          brokers: new Set([broker]),
+        });
     }
     // Quantfury files the primary in `exchange` and names Chi-X only in the
     // catalogue string. The primary book stays the row above. This is the
@@ -361,6 +374,7 @@ const CROSSED = {
   xetra: 1,
   lse: 1,
   six: 1,
+  tsej: 1,
   euronext: 1,
   us605: 1,
   tradegate: 1,
@@ -383,10 +397,13 @@ const CROSSED = {
   kraken: 1,
   gpw: 1,
   cxe: 1,
+  bxswiss: 1,
   adx: 1,
   dfm: 1,
   bhb: 1,
   msx: 1,
+  asx: 1,
+  nse: 1,
 };
 
 const CONVENTION =
@@ -505,6 +522,36 @@ const bpFrom = (bid, ask) => {
   if (!(bid > 0) || !(ask > 0) || ask < bid) return null;
   return ((ask - bid) / ((ask + bid) / 2)) * 1e4;
 };
+
+// The ASX and Cboe Australia touches are read once, at the open, into
+// au-touch.json. A missing side is not stored. A monthly ETP average already
+// in the file is a better figure than one morning's touch, so it stays.
+function loadAuTouch() {
+  const path = new URL("parsed_json/au-touch.json", import.meta.url);
+  if (!fs.existsSync(path)) return { books: 0 };
+  const data = JSON.parse(fs.readFileSync(path, "utf8"));
+  let books = 0;
+  for (const row of data.rows || []) {
+    const bid = Number(row.bid);
+    const ask = Number(row.ask);
+    const bp = Number(row.bp) > 0 ? Number(row.bp) : bpFrom(bid, ask);
+    if (!(bp > 0)) continue;
+    const mic = row.mic === "CHIA" || row.venue === "CHIXAU" ? "CHIA" : row.mic === "XASX" || row.venue === "ASX" ? "XASX" : "";
+    if (!mic) continue;
+    const isin = String(row.isin || "").toUpperCase();
+    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin)) continue;
+    const existing = spreads[isin]?.[mic]?.AUD;
+    if (existing?.url && /asx-investment-products/.test(existing.url)) continue;
+    const ticker = String(row.ticker || "").toUpperCase();
+    const url =
+      mic === "XASX"
+        ? `https://www.asx.com.au/markets/company/${encodeURIComponent(ticker)}`
+        : `https://www.cboe.com.au/company/quote/${encodeURIComponent(ticker)}`;
+    ((spreads[isin] ||= {})[mic] ||= {}).AUD = { bp: Number(bp.toFixed(2)), url };
+    books += 1;
+  }
+  return { at: data.at, books };
+}
 
 // A single snapshot is a poor estimate of what a trade will cost: the same fund was
 // measured moving by a factor of 1.7 within a session, and another by 3. So readings
@@ -853,6 +900,7 @@ const delayedQuotes = {
   hannover: new Map(),
   eix: new Map(),
   tib: new Map(),
+  bxswiss: new Map(),
   lsin: new Map(),
   stuttgart: new Map(),
   bmv: new Map(),
@@ -876,6 +924,7 @@ const delayedTrouble = {
   hannover: null,
   eix: null,
   tib: null,
+  bxswiss: null,
   lsin: null,
   stuttgart: null,
   bmv: null,
@@ -1557,6 +1606,30 @@ async function loadTib() {
   return { asOf: data.asOf, books };
 }
 
+async function loadBxswiss() {
+  const path = new URL("parsed_json/bxswiss-touch.json", import.meta.url);
+  const data = JSON.parse(fs.readFileSync(path, "utf8"));
+  delayedQuotes.bxswiss.clear();
+  const venue = VENUES.find((v) => v.mic === "XBRN");
+  let books = 0;
+  for (const [isin, byCurrency] of Object.entries(data.byIsin || {})) {
+    for (const [currency, q] of Object.entries(byCurrency || {})) {
+      const bid = Number(q.bid);
+      const ask = Number(q.ask);
+      const bp = q.bp ?? bpFrom(bid, ask);
+      if (!(bid > 0) || !(ask > 0) || ask <= bid || !(bp > 0)) continue;
+      const ccy = String(currency || "").toUpperCase();
+      delayedQuotes.bxswiss.set(`${isin}|${ccy}`, { bid, ask, currency: ccy, bp });
+      ((spreads[isin] ||= {})[venue.mic] ||= {})[ccy] = {
+        bp: Number(Number(bp).toFixed(2)),
+        url: spreadUrl({ isin, venue, currency: ccy }),
+      };
+      books += 1;
+    }
+  }
+  return { asOf: data.asOf, books };
+}
+
 // ------------------------------------------------------------------------ le Golfe
 //
 // Four boards, one call each, read by `gulf.mjs` because `prices.mjs` wants the last
@@ -1719,6 +1792,227 @@ async function loadCxe(lines) {
   return { listed: directory.size, wanted: wanted.length };
 }
 
+// A zip of stored or deflated members. Enough for the workbooks these exchanges
+// publish; a member whose size is left for a data descriptor is not one of them.
+function unzip(buf) {
+  const files = new Map();
+  const b = Buffer.isBuffer(buf) ? buf : Buffer.from(buf);
+  let o = 0;
+  while (o + 30 <= b.length && b.readUInt32LE(o) === 0x04034b50) {
+    const method = b.readUInt16LE(o + 8);
+    const comp = b.readUInt32LE(o + 18);
+    const nameLen = b.readUInt16LE(o + 26);
+    const extra = b.readUInt16LE(o + 28);
+    const name = b.slice(o + 30, o + 30 + nameLen).toString();
+    const start = o + 30 + nameLen + extra;
+    const data = b.slice(start, start + comp);
+    files.set(name, method === 0 ? data : inflateRawSync(data));
+    o = start + comp;
+  }
+  return files;
+}
+
+// First worksheet of an xlsx, as rows of cell values keyed by column letters.
+function xlsxSheet(buf) {
+  const files = unzip(buf);
+  const ns = "http://schemas.openxmlformats.org/spreadsheetml/2006/main";
+  const strings = [];
+  const shared = files.get("xl/sharedStrings.xml");
+  if (shared) {
+    const xml = shared.toString();
+    for (const si of xml.match(/<si[\s\S]*?<\/si>/g) || []) {
+      strings.push([...si.matchAll(/<t[^>]*>([^<]*)<\/t>/g)].map((m) => m[1]).join(""));
+    }
+  }
+  const sheet = [...files.keys()].find((n) => /^xl\/worksheets\/sheet1\.xml$/.test(n));
+  const xml = files.get(sheet).toString();
+  const rows = [];
+  for (const row of xml.match(/<row[\s\S]*?<\/row>/g) || []) {
+    const cells = {};
+    for (const c of row.match(/<c\b[^>]*(?:\/>|>[\s\S]*?<\/c>)/g) || []) {
+      const ref = c.match(/\br="([A-Z]+)\d+"/);
+      const type = c.match(/\bt="([^"]+)"/);
+      const v = c.match(/<v>([^<]*)<\/v>/);
+      if (!ref || !v) continue;
+      cells[ref[1]] = type?.[1] === "s" ? strings[Number(v[1])] ?? "" : v[1];
+    }
+    rows.push(cells);
+  }
+  return rows;
+}
+
+// SIX Market Quality Metrics. Spread T is the time-weighted inside spread of the
+// trading day, in percent, so 0.047 is 4.7 bp. One file for ETFs, one for ETPs,
+// which is where the ETC and ETN lines are. The latest published day is the
+// session average; it is not divided by the intraday shape afterwards.
+const sixMqm = new Map();
+async function loadSixMqm() {
+  const day = async (kind) => {
+    const year = new Date().getFullYear();
+    let index = await (
+      await fetchOk(`https://www.six-group.com/sheldon/mqm/v1/${kind}/${year}/daily_reports.json`)
+    ).json();
+    if (!index.itemList?.length && year > 2024) {
+      index = await (
+        await fetchOk(`https://www.six-group.com/sheldon/mqm/v1/${kind}/${year - 1}/daily_reports.json`)
+      ).json();
+    }
+    const latest = index.itemList?.at(-1);
+    if (!latest?.url) return null;
+    const path = latest.url.split("/").filter((p) => !["itf", "sido", "ajax"].includes(p)).join("/");
+    const csv = await (await fetchOk(`https://www.six-group.com${path}`)).text();
+    return { csv, url: `https://www.six-group.com${path}`, date: latest.date };
+  };
+  for (const kind of ["etf", "etp"]) {
+    const file = await day(kind);
+    if (!file) continue;
+    const [head, ...lines] = file.csv.trim().split(/\r?\n/);
+    const cols = head.split(";");
+    const at = (name) => cols.indexOf(name);
+    const isin = at("Product ISIN");
+    const ccy = at("Trading Currency Code");
+    const spread = at("Spread T");
+    const active = at("Spread Active Time");
+    for (const line of lines) {
+      const cell = line.split(";");
+      const quoted = Number(cell[active]);
+      const pct = Number(cell[spread]);
+      if (!(pct > 0) || (Number.isFinite(quoted) && quoted < 50)) continue;
+      const key = `${cell[isin]}|${cell[ccy]}`;
+      sixMqm.set(key, {
+        bp: Number((pct * 100).toFixed(2)),
+        url: file.url,
+        date: file.date,
+      });
+    }
+  }
+}
+
+// Tokyo publishes the month's average best-bid/best-ask spread, in basis points,
+// for each ETF. The 10 million yen execution cost is a deeper order and is not
+// this figure. Shares are not in the workbook.
+const jpxSpread = new Map();
+let jpxUrl = "https://www.jpx.co.jp/english/equities/products/etfs/quoting-data/index.html";
+async function loadJpxSpread() {
+  const html = await (await fetchOk(jpxUrl)).text();
+  const hrefs = [...html.matchAll(/href="([^"]+\.xlsx)"/gi)].map((m) => m[1]);
+  const monthly = hrefs
+    .map((href) => {
+      const name = href.split("/").pop();
+      if (/20\d{6}/.test(name)) return null;
+      const month = name.match(/20\d{4}/);
+      return month ? { href, month: month[0] } : null;
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.month.localeCompare(b.month));
+  const picked = monthly.at(-1);
+  if (!picked) return;
+  jpxUrl = new URL(picked.href, "https://www.jpx.co.jp").href;
+  const buf = Buffer.from(await (await fetchOk(jpxUrl)).arrayBuffer());
+  const rows = xlsxSheet(buf);
+  const header = rows.findIndex((r) => r.B === "Code");
+  const names = rows[header + 1] || {};
+  const col = Object.entries(names).find(([, v]) => /Average Spread \(bps\)/.test(String(v)))?.[0];
+  if (!col) return;
+  for (const row of rows.slice(header + 2)) {
+    const code = String(row.B || "").trim().toUpperCase();
+    const bp = Number(row[col]);
+    if (!code || !(bp > 0)) continue;
+    jpxSpread.set(code, { bp: Number(bp.toFixed(2)), url: jpxUrl });
+  }
+}
+
+// The ASX prints the month's weighted average bid/ask, as a percent of the mid,
+// in the ETP pages of the investment-products PDF. The second percentage on a
+// product row is that column (the first is monthly liquidity).
+const asxSpread = new Map();
+let asxUrl = "https://www.asx.com.au/issuers/investment-products/asx-investment-products-monthly-report";
+const MONTHS = {
+  january: 1, jan: 1, february: 2, feb: 2, march: 3, mar: 3, april: 4, apr: 4,
+  may: 5, june: 6, jun: 6, july: 7, jul: 7, august: 8, aug: 8,
+  september: 9, sep: 9, october: 10, oct: 10, november: 11, nov: 11, december: 12, dec: 12,
+};
+async function loadAsxSpread() {
+  const html = await (await fetchOk(asxUrl)).text();
+  const hrefs = [...html.matchAll(/href="([^"]*asx-investment-products-[a-z]+-20\d{2}\.pdf)"/gi)].map((m) => m[1]);
+  const picked = hrefs
+    .map((href) => {
+      const m = href.match(/asx-investment-products-([a-z]+)-(20\d{2})\.pdf/i);
+      if (!m || !MONTHS[m[1].toLowerCase()]) return null;
+      return { href, key: Number(m[2]) * 100 + MONTHS[m[1].toLowerCase()] };
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.key - b.key)
+    .at(-1);
+  if (!picked) return;
+  asxUrl = new URL(picked.href, "https://www.asx.com.au").href;
+  const pdf = Buffer.from(await (await fetchOk(asxUrl)).arrayBuffer());
+  const tmp = path.join(os.tmpdir(), `asx-etp-${process.pid}.pdf`);
+  fs.writeFileSync(tmp, pdf);
+  let text = "";
+  try {
+    text = execFileSync(
+      "python3",
+      [
+        "-c",
+        "from pypdf import PdfReader; import sys; print('\\n'.join((p.extract_text() or '') for p in PdfReader(sys.argv[1]).pages))",
+        tmp,
+      ],
+      { encoding: "utf8", maxBuffer: 20_000_000 }
+    );
+  } finally {
+    fs.unlinkSync(tmp);
+  }
+  const pat = /(?:^|\n)\^?\s*([A-Z][A-Z0-9]{2,5})\s+(?:ETF|Active|Complex)\s+/g;
+  const starts = [...text.matchAll(pat)];
+  for (let i = 0; i < starts.length; i++) {
+    const chunk = text.slice(starts[i].index, starts[i + 1]?.index ?? starts[i].index + 800);
+    const pcts = [...chunk.matchAll(/(\d+\.\d+)\s*%/g)].map((m) => Number(m[1]));
+    if (pcts.length < 2 || !(pcts[1] > 0)) continue;
+    asxSpread.set(starts[i][1], { bp: Number((pcts[1] * 100).toFixed(2)), url: asxUrl });
+  }
+}
+
+// NSE mean impact cost, from the monthly security-category file. One figure is
+// the average of the buy-side and the sell-side move away from the mid for a
+// ₹1 lakh order, over six months of order-book snapshots. The round trip is
+// both sides, so the stored basis points are twice the printed percent.
+const nseImpact = new Map();
+let nseUrl = "https://www.nseindia.com/static/products-services/equity-market-categorisation-stocks-imposition-of-margins";
+async function loadNseImpact() {
+  const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+  const now = new Date();
+  const candidates = [1, 0, -1].map((delta) => {
+    const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + delta, 1));
+    return `https://nsearchives.nseindia.com/content/nsccl/C_CATG_${months[d.getUTCMonth()]}${d.getUTCFullYear()}.T01`;
+  });
+  let text = "";
+  let lastErr = null;
+  for (const url of candidates) {
+    const file = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0", Referer: "https://www.nseindia.com/" }, signal: AbortSignal.timeout(20000) });
+    if (!file.ok) {
+      lastErr = new Error(`NSE impact cost ${file.status}`);
+      continue;
+    }
+    const body = await file.text();
+    if (!body.startsWith("10,")) continue;
+    text = body;
+    nseUrl = url;
+    break;
+  }
+  if (!text) throw lastErr || new Error("NSE : fichier d'impact cost introuvable");
+  for (const line of text.split(/\r?\n/)) {
+    const cell = line.split(",").map((s) => s.trim().replace(/^"|"$/g, ""));
+    if (cell[0] !== "20" || cell.length < 6) continue;
+    const series = cell[2].toUpperCase();
+    const isin = cell[3].toUpperCase();
+    const cost = Number(cell[5]);
+    if (!/^IN[A-Z0-9]{10}$/.test(isin) || !(cost > 0)) continue;
+    if (nseImpact.has(isin) && series !== "EQ") continue;
+    nseImpact.set(isin, { bp: Number((cost * 200).toFixed(2)), url: nseUrl, series });
+  }
+}
+
 const adapters = {
   adx: gulfAdapter("adx"),
   dfm: gulfAdapter("dfm"),
@@ -1860,12 +2154,30 @@ const adapters = {
   },
 
   // SIX returns one row per trading currency for a given ISIN, so the currency picks
-  // the line without needing a symbol at all.
+  // the line without needing a symbol at all. An ETF, ETC or ETN that the day's
+  // Market Quality Metrics file prices is that average, not this touch. A share
+  // is not in the file and stays here.
   six: {
     dataUrl: (l) =>
       `https://www.six-group.com/fqs/snap.json?select=ISIN,ValorSymbol,BidPrice,AskPrice,TradingCurrency,ValorId,ProductLine&where=ISIN=${l.isin}`,
     measure: "touche du carnet, différé 15 min",
+    async prefetch() {
+      if (!sixMqm.size) await loadSixMqm();
+    },
+    averageOf(l) {
+      return sixMqm.get(`${l.isin}|${l.currency}`) || null;
+    },
     async fetch(l) {
+      const avg = adapters.six.averageOf(l);
+      if (avg) {
+        return {
+          spreadBp: avg.bp,
+          tradingCurrency: l.currency,
+          family: "etf",
+          url: avg.url,
+          published: true,
+        };
+      }
       const res = await fetch(adapters.six.dataUrl(l), {
         headers: { "User-Agent": "Mozilla/5.0" },
         signal: AbortSignal.timeout(15000),
@@ -1893,6 +2205,63 @@ const adapters = {
         // products to the fund one, and anything else is left to the default.
         family: { BC: "share", DS: "share", ET: "etf" }[line.ProductLine],
       };
+    },
+  },
+
+  // August's investment-products PDF (and whichever month is newest) prints, for
+  // each ETP, the weighted average of the bid/ask spread over the continuous
+  // session, as a percentage of the mid. That is the round trip. LICs and
+  // A-REITs are other sections and are not read. A share is not in the table.
+  asx: {
+    measure: "spread moyen du mois, meilleur bid contre meilleur ask",
+    async prefetch() {
+      if (!asxSpread.size) await loadAsxSpread();
+    },
+    async fetch(l) {
+      if (l.currency !== "AUD") {
+        return { spreadBp: null, note: `le rapport ASX est en AUD, pas en ${l.currency}` };
+      }
+      const code = String(l.ticker || "").split(":").pop().trim().toUpperCase();
+      const hit = asxSpread.get(code);
+      if (!hit) return { spreadBp: null, note: "pas dans le rapport mensuel des ETP de l'ASX" };
+      return { spreadBp: hit.bp, url: hit.url, tradingCurrency: "AUD", family: "etf", published: true };
+    },
+  },
+
+  // The monthly category file, not the live book. A name it does not price
+  // stays empty rather than borrowing the touch.
+  nse: {
+    measure: "impact cost moyen sur six mois, aller-retour d'un ordre de 1 lakh",
+    async prefetch() {
+      if (!nseImpact.size) await loadNseImpact();
+    },
+    async fetch(l) {
+      if (l.currency !== "INR") {
+        return { spreadBp: null, note: `l'impact cost NSE est en INR, pas en ${l.currency}` };
+      }
+      const hit = nseImpact.get(l.isin);
+      if (!hit) return { spreadBp: null, note: "pas dans le fichier d'impact cost de la NSE" };
+      return { spreadBp: hit.bp, url: hit.url, tradingCurrency: "INR", published: true };
+    },
+  },
+
+  // The monthly quoting file is the session average for each Tokyo ETF. There is
+  // no book to read here; a share, or an ETF the file does not list, stays empty.
+  tsej: {
+    measure: "spread moyen du mois, meilleur bid contre meilleur ask",
+    async prefetch() {
+      if (!jpxSpread.size) await loadJpxSpread();
+    },
+    async fetch(l) {
+      if (l.currency !== "JPY") {
+        return { spreadBp: null, note: `Tokyo cote ses ETF en JPY, pas en ${l.currency}` };
+      }
+      const code = String(l.ticker || "").split(":").pop().trim().toUpperCase();
+      const hit = jpxSpread.get(code);
+      if (!hit) {
+        return { spreadBp: null, note: "pas dans la moyenne mensuelle des ETF de Tokyo" };
+      }
+      return { spreadBp: hit.bp, url: hit.url, tradingCurrency: "JPY", family: "etf", published: true };
     },
   },
 
@@ -2214,6 +2583,32 @@ const adapters = {
       const quote = delayedQuotes.tib.get(`${l.isin}|${l.currency}`) || delayedQuotes.tib.get(`${l.isin}|EUR`);
       if (!quote) {
         return { spreadBp: null, note: delayedTrouble.tib || `${l.isin} absent des touches TIB` };
+      }
+      return {
+        spreadBp: quote.bp ?? bpFrom(quote.bid, quote.ask),
+        bid: quote.bid,
+        ask: quote.ask,
+        tradingCurrency: quote.currency,
+      };
+    },
+  },
+
+  bxswiss: {
+    measure: "touche du carnet public BX Swiss, temps réel",
+    local: true,
+    async prefetch() {
+      try {
+        const stats = await loadBxswiss();
+        console.error(`    BX Swiss : ${stats.books} carnets (${stats.asOf || "sans date"})\n`);
+      } catch (e) {
+        delayedTrouble.bxswiss = String(e.message || e).slice(0, 160);
+        console.error(`    BX Swiss : ${delayedTrouble.bxswiss}\n`);
+      }
+    },
+    async fetch(l) {
+      const quote = delayedQuotes.bxswiss.get(`${l.isin}|${l.currency}`);
+      if (!quote) {
+        return { spreadBp: null, note: delayedTrouble.bxswiss || `${l.isin} absent du carnet BX Swiss` };
       }
       return {
         spreadBp: quote.bp ?? bpFrom(quote.bid, quote.ask),
@@ -2593,8 +2988,36 @@ async function loadKraken(lines) {
 // Worth visiting when there is no figure yet, or when the last reading is old enough
 // that another one would add something. Xetra publishes an average already, so once
 // read it needs no resampling.
+const jpxCode = (l) => String(l.ticker || "").split(":").pop().trim().toUpperCase();
 function worthVisiting(l) {
   if (!l.source || !adapters[l.source]) return false;
+  // The Tokyo file only prices ETFs. A share is not a missing touch.
+  if (l.source === "tsej") {
+    const hit = l.currency === "JPY" ? jpxSpread.get(jpxCode(l)) : null;
+    if (!hit) return false;
+    const leaf = leafOf(l);
+    return REFRESH || leaf?.url !== hit.url;
+  }
+  if (l.source === "asx") {
+    const hit = l.currency === "AUD" ? asxSpread.get(jpxCode(l)) : null;
+    if (!hit) return false;
+    const leaf = leafOf(l);
+    return REFRESH || leaf?.url !== hit.url;
+  }
+  if (l.source === "nse") {
+    const hit = l.currency === "INR" ? nseImpact.get(l.isin) : null;
+    if (!hit) return false;
+    const leaf = leafOf(l);
+    return REFRESH || leaf?.url !== hit.url;
+  }
+  // An ETF or ETP whose day's average is already stored is not read again as a touch.
+  if (l.source === "six") {
+    const avg = sixMqm.get(`${l.isin}|${l.currency}`);
+    if (avg) {
+      const leaf = leafOf(l);
+      return REFRESH || leaf?.url !== avg.url;
+    }
+  }
   // A place can be off limits for reasons outside this file — a page that has started
   // answering 503, say — and then the others should still be readable without it.
   if (ONLY.length && !ONLY.includes(l.source)) return false;
@@ -2615,7 +3038,30 @@ function worthVisiting(l) {
   return Date.now() - (Date.parse(seen.at) || 0) > MIN_GAP_MIN * 60000;
 }
 
-const todo = [...listings.values()].filter(worthVisiting);
+if (!ONLY.length || ONLY.includes("six")) {
+  await loadSixMqm();
+  console.error(`SIX : moyenne de séance pour ${sixMqm.size} ETF et ETP`);
+}
+if (!ONLY.length || ONLY.includes("tsej")) {
+  await loadJpxSpread();
+  console.error(`Tokyo : moyenne mensuelle pour ${jpxSpread.size} ETF`);
+}
+if (!ONLY.length || ONLY.includes("asx")) {
+  await loadAsxSpread();
+  console.error(`ASX : moyenne mensuelle pour ${asxSpread.size} ETP`);
+}
+const auTouchOnly = ONLY.length === 1 && ONLY[0] === "au-touch";
+let auTouchStats = { books: 0 };
+if (!ONLY.length || ONLY.includes("asx") || ONLY.includes("chia") || auTouchOnly) {
+  auTouchStats = loadAuTouch();
+  console.error(`Australie : ${auTouchStats.books} touches du carnet (${auTouchStats.at || "sans date"})`);
+}
+if (!ONLY.length || ONLY.includes("nse")) {
+  await loadNseImpact();
+  console.error(`NSE : impact cost moyen pour ${nseImpact.size} titres`);
+}
+
+const todo = auTouchOnly ? [] : [...listings.values()].filter(worthVisiting);
 console.error(`${todo.length} à visiter, ${listings.size - todo.length} à jour\n`);
 
 // The profiles come from a table already in hand, so every listing that has a value gets
@@ -2657,19 +3103,34 @@ const flush = () => {
   );
 };
 
+if (auTouchOnly) {
+  flush();
+  console.error(`${STORE_PATH} : ${auTouchStats.books} touches australiennes écrites.`);
+  process.exit(0);
+}
+
 async function visit(l, ownTab) {
   const adapter = adapters[l.source];
   console.error(`[${++done}/${todo.length}] ${l.ticker || l.isin} ${l.currency} @ ${l.exchange}`);
 
   const seen = state[stateKey(l)] || {};
-  // Xetra's XLM is a monthly average and can be read any time; a touch snapshot only
-  // means something while the book is open, so outside the session there is nothing
-  // to gain by asking and the stored average simply stands.
-  const snapshot = adapter.measure.startsWith("touche");
+  // A published average is already the cost at the average hour, so it is read with
+  // the book shut and is not divided by the intraday shape. A touch snapshot only
+  // means something while the book is open.
   const session = sessionState(l.venue);
+  const touch = adapter.measure.startsWith("touche");
+  const published = touch ? adapter.averageOf?.(l) : null;
 
   let measured;
-  if (snapshot && session.open === false) {
+  if (published) {
+    measured = {
+      spreadBp: published.bp,
+      url: published.url,
+      tradingCurrency: l.currency,
+      family: "etf",
+      published: true,
+    };
+  } else if (touch && session.open === false) {
     measured = { spreadBp: null, note: `marché fermé (${session.why}), non interrogé` };
   } else {
     try {
@@ -2678,6 +3139,7 @@ async function visit(l, ownTab) {
       measured = { spreadBp: null, note: `échec : ${String(e.message || e).slice(0, 80)}` };
     }
   }
+  const snapshot = touch && !measured.published;
   // A currency the exchange disagrees with means the line measured is not the line
   // the broker sells. Pence and pounds are the same book quoted two ways, so only a
   // real disagreement counts.
@@ -2691,7 +3153,10 @@ async function visit(l, ownTab) {
   // A crypto book is finer still: bitcoin's tick is a cent on seventy-seven thousand
   // dollars, which is thirteen ten-thousandths of a basis point. Two decimals turn that
   // into a zero, and the guard below then throws it out as a locked book.
-  const byShare = adapter.unit === "perShare";
+  // A published percentage (the 30-day median, the ASX column) is basis points
+  // even when the venue's other listings are stored in dollars per share.
+  const quoted = measured.published && measured.spreadBp != null;
+  const byShare = !quoted && adapter.unit === "perShare";
   const digits = adapter.digits ?? (byShare ? 5 : 2);
   const raw = byShare ? measured.perShare : measured.spreadBp;
   const reading = raw == null ? null : Number(raw.toFixed(digits));

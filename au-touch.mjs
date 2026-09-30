@@ -18,6 +18,9 @@ const puppeteer = require("puppeteer-core");
 const STORE = new URL("parsed_json/au-touch.json", import.meta.url);
 const API = "/portal.proxy/v1/portal";
 const FIELDS = "84,86,85,88";
+const isIbPortal = (url) =>
+  /ndcdyn\.interactivebrokers\.com\/portal/.test(url) ||
+  /interactivebrokers\.(ie|com|co\.uk)\/portal/.test(url);
 
 const sydney = () => {
   const parts = Object.fromEntries(
@@ -80,7 +83,7 @@ if (process.argv.includes("--books")) {
     defaultViewport: null,
     protocolTimeout: 180000,
   });
-  const portal = async () => (await browser.pages()).find((page) => page.url().includes("ndcdyn.interactivebrokers.com/portal"));
+  const portal = async () => (await browser.pages()).find((page) => isIbPortal(page.url()));
   let page = await portal();
   if (!page) {
     console.error("Onglet du portail Interactive Brokers introuvable.");
@@ -111,7 +114,9 @@ if (process.argv.includes("--books")) {
       const conid = row.conid || await conidOf(row.ticker);
       if (conid) jobs.push({ isin: row.isin, conid });
     }
-    const books = await page.evaluate(async (base, jobs) => {
+    let books = {};
+    try {
+      books = await page.evaluate(async (base, jobs) => {
       const ws = new WebSocket(location.origin.replace("https", "wss") + `${base}/ws`);
       const textOf = async (data) => (typeof data === "string" ? data : data instanceof Blob ? data.text() : String(data));
       let acct = "";
@@ -169,6 +174,11 @@ if (process.argv.includes("--books")) {
       try { ws.close(); } catch {}
       return out;
     }, API, jobs);
+    } catch (error) {
+      console.error(`lot ignoré (${String(error.message || error).slice(0, 100)})`);
+      page = (await portal()) || page;
+      continue;
+    }
     for (const [isin, book] of Object.entries(books || {})) {
       const row = byIsin.get(isin);
       if (!row) continue;
@@ -211,7 +221,7 @@ const browser = await puppeteer.connect({
 
 async function portal() {
   const pages = await browser.pages();
-  return pages.find((page) => page.url().includes("ndcdyn.interactivebrokers.com/portal")) || null;
+  return pages.find((page) => isIbPortal(page.url())) || null;
 }
 
 let page = await portal();
@@ -222,26 +232,35 @@ if (!page) {
 }
 
 async function api(path, options = {}) {
-  page = (await portal()) || page;
-  return page.evaluate(
-    async (base, target, opts) => {
-      const response = await fetch(`${base}/${target}`, {
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        method: opts.method || "GET",
-        body: opts.body || undefined,
-      });
-      const text = await response.text();
-      try {
-        return { status: response.status, json: JSON.parse(text) };
-      } catch {
-        return { status: response.status, error: text.slice(0, 180) };
-      }
-    },
-    API,
-    path,
-    options
-  );
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    page = (await portal()) || page;
+    if (!page) return { status: 0, error: "portail absent" };
+    try {
+      return await page.evaluate(
+        async (base, target, opts) => {
+          const response = await fetch(`${base}/${target}`, {
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            method: opts.method || "GET",
+            body: opts.body || undefined,
+          });
+          const text = await response.text();
+          try {
+            return { status: response.status, json: JSON.parse(text) };
+          } catch {
+            return { status: response.status, error: text.slice(0, 180) };
+          }
+        },
+        API,
+        path,
+        options
+      );
+    } catch (error) {
+      if (attempt === 2) throw error;
+      console.error(`portail rechargé (${String(error.message || error).slice(0, 80)}). Nouvel essai.`);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
+  }
 }
 
 function pick(hits, venue) {
@@ -256,23 +275,48 @@ function pick(hits, venue) {
 
 const found = [];
 const missed = [];
+const written = new Set();
+const priorAbsent = [];
+const resume = process.argv.includes("--resume") && fs.existsSync(STORE);
+if (resume) {
+  const prior = JSON.parse(fs.readFileSync(STORE, "utf8"));
+  priorAbsent.push(...(prior.absent || []));
+  for (const row of prior.rows || []) {
+    if (row.bid == null || row.ask == null) continue;
+    found.push(row);
+    written.add(`${row.venue}|${row.isin}`);
+  }
+  console.error(
+    `Reprise : ${found.length} touches déjà écrites, ${found.filter((row) => row.book).length} carnets. ` +
+      `${jobs.filter((job) => !written.has(`${job.venue}|${job.isin}`)).length} touches à reprendre.`
+  );
+}
 
 function save() {
+  const attempted = new Set([
+    ...found.map((row) => `${row.venue}|${row.isin}`),
+    ...missed.map((row) => `${row.venue}|${row.isin}`),
+  ]);
+  const absent = [
+    ...missed,
+    ...priorAbsent.filter((row) => !attempted.has(`${row.venue}|${row.isin}`)),
+  ];
   const body = {
     at: new Date().toISOString(),
     session: sydney(),
     asked: jobs.length,
     quoted: found.length,
-    missing: missed.length,
+    missing: absent.length,
     rows: found,
-    absent: missed,
+    absent,
   };
   fs.writeFileSync(STORE, JSON.stringify(body, null, 2));
 }
 
 console.error("Recherche des contrats…");
 let resolved = 0;
-for (const job of jobs) {
+const pendingQuotes = resume ? jobs.filter((job) => !written.has(`${job.venue}|${job.isin}`)) : jobs;
+for (const job of pendingQuotes) {
   if (!sydney().open) break;
   let answer = await api("iserver/secdef/search", {
     method: "POST",
@@ -292,7 +336,7 @@ for (const job of jobs) {
   if (resolved % 100 === 0) console.error(`${resolved} recherchés, ${jobs.filter((row) => row.conid).length} contrats, Sydney ${sydney().clock}`);
 }
 
-const quoted = jobs.filter((job) => job.conid);
+const quoted = pendingQuotes.filter((job) => job.conid);
 console.error(`${quoted.length} contrats. Touches…`);
 
 const quoteOf = (row) => ({
@@ -398,8 +442,25 @@ let books = 0;
 for (const row of found) {
   if (!sydney().open) break;
   if (row.venue !== "ASX") continue;
-  const job = quoted.find((item) => item.isin === row.isin && item.venue === "ASX");
-  if (!job) continue;
+  if (row.book && (row.book.bids?.length || row.book.asks?.length)) continue;
+  let job = quoted.find((item) => item.isin === row.isin && item.venue === "ASX");
+  if (!job) {
+    let answer = await api("iserver/secdef/search", {
+      method: "POST",
+      body: JSON.stringify({ symbol: row.ticker, name: false, secType: "STK" }),
+    });
+    if (!Array.isArray(answer.json)) {
+      await new Promise((resolve) => setTimeout(resolve, 800));
+      answer = await api("iserver/secdef/search", {
+        method: "POST",
+        body: JSON.stringify({ symbol: row.ticker, name: false, secType: "STK" }),
+      });
+    }
+    const conid = pick(answer.json, "ASX");
+    if (!conid) continue;
+    job = { isin: row.isin, venue: "ASX", conid };
+    quoted.push(job);
+  }
   const book = await bookOf(job.conid).catch(() => null);
   if (book && (book.bids.length || book.asks.length)) {
     row.book = book;

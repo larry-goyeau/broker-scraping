@@ -67,6 +67,7 @@ const FOLDER_NAME = {
   century: "Century Financial",
   boursobank: "BoursoBank",
   alramz: "Al Ramz Capital",
+  boubyan: "Boubyan",
   tastytrade: "Tastytrade",
   bux: "BUX",
   davy: "Davy Select",
@@ -359,6 +360,9 @@ function fmtUsd(n) {
 function formatTotal(cost, usd) {
   return {
     total: fmtUsd(usd),
+    // The round-trip column says "unknown spread" only when the book itself
+    // was not measured. A known book with no published commission is N/A.
+    spreadKnown: cost?.bp != null || cost?.perShare != null,
     // The same trip, counting only what the broker bills. Printed beside the
     // total so that a remark cannot be misread: « 3 free trades » waives the
     // commission and leaves the spread, the stamp duty and the regulator's
@@ -387,14 +391,14 @@ function formatTotal(cost, usd) {
 // Robinhood is three, and which one serves the reader is decided by residency
 // alone — an American share, a British one plus its conversion, or a Lithuanian
 // derivative over the same line.
-const EMPTY_ROW = { total: NA, fees: NA, remark: "", buyable: true, venueExchange: "", venueCurrency: "", cashCurrency: "", venueAuthoritative: false };
+const EMPTY_ROW = { total: NA, fees: NA, remark: "", buyable: true, venueExchange: "", venueCurrency: "", cashCurrency: "", venueAuthoritative: false, spreadKnown: false };
 
 function estimateListing(folder, listing, inst, extra = {}, size = {}) {
   const entry = estimators.get(folder);
   if (!entry) return { ...EMPTY_ROW };
   const crypto = inst.key.startsWith("CRYPTO:");
   const ask = {
-    etf: crypto ? listing.query || listing.ticker : listing.isin || inst.isin || listing.ticker,
+    etf: crypto ? listing.query || listing.ticker : listing.isin || listing.ticker || inst.isin,
       place: listing.exchangeRaw || listing.exchange || "",
       currency: listing.currency || "",
     ...extra,
@@ -603,9 +607,11 @@ function issuerStem(name) {
 }
 
 function tickerStem(ticker) {
-  return String(ticker || "")
-    .toUpperCase()
-    .replace(/\.[A-Z]{1,4}$/, "");
+  const raw = String(ticker || "").toUpperCase();
+  // A corporate-action line (C shares, a spin-off, a merger stub) is not the
+  // ordinary share. Stripping .CSHS off RR.CSHS was folding it onto RR.
+  if (/\.(CSHS|SPO|MRG|OLD)$/.test(raw)) return raw;
+  return raw.replace(/\.[A-Z]{1,4}$/, "");
 }
 
 function clusterTokens(inst) {
@@ -956,6 +962,23 @@ const PAISA_PLANS = [
 const NUVAMA_PLANS = [
   { id: "lite", name: "Nuvama Lite Plus" },
   { id: "elite", name: "Nuvama Elite" },
+];
+
+// The brokerage is 0.30% on every row. The CDSL pay-in is the part that
+// changes: MLT ₹10, LT1250 ₹11, ELT ₹15, Freedom3K ₹10, Freedom7K nil.
+const ARIHANT_PLANS = [
+  { id: "mlt", name: "Arihant MLT" },
+  { id: "lt1250", name: "Arihant LT1250" },
+  { id: "elt", name: "Arihant ELT" },
+  { id: "freedom3k", name: "Arihant Freedom3K" },
+  { id: "freedom7k", name: "Arihant Freedom7K" },
+];
+
+// Standard is the lower of 0.03% and ₹20. Prime is 0.30%. The pay-in is
+// ₹20 plus GST on both, so a line is dropped only when the whole trip matches.
+const GOPOCKET_PLANS = [
+  { id: "standard", name: "GoPocket Standard" },
+  { id: "prime", name: "GoPocket Prime" },
 ];
 
 const LIGHTYEAR_PLANS = [
@@ -2328,6 +2351,35 @@ function detail(key, nat = "", size = {}, dep = "") {
       });
       continue;
     }
+    if (folder === "arihant") {
+      ARIHANT_PLANS.forEach((plan, i) => {
+        const listed = listings({ plan: plan.id });
+        if (listed.length) rows.push(asPlan(plan, i, listed));
+      });
+      continue;
+    }
+    if (folder === "gopocket") {
+      const built = [];
+      GOPOCKET_PLANS.forEach((plan, i) => {
+        const listed = listings({ plan: plan.id });
+        if (listed.length) built.push(asPlan(plan, i, listed));
+      });
+      const standard = built.find((row) => row.plan === "standard");
+      for (const row of built) {
+        if (row.plan !== "prime" || !standard) {
+          rows.push(row);
+          continue;
+        }
+        const listed = row.listings.filter((listing) => {
+          const other = standard.listings.find(
+            (item) => item.exchange === listing.exchange && item.currency === listing.currency
+          );
+          return !other || other.fees !== listing.fees || other.total !== listing.total;
+        });
+        if (listed.length) rows.push({ ...row, listings: listed });
+      }
+      continue;
+    }
     const listed = listings({});
     if (!listed.length) continue;
     rows.push({
@@ -2380,7 +2432,16 @@ async function warmPrices(key) {
   }
   // A handful at most: one instrument quoted under a dozen ISINs is a catalogue error,
   // not a reason to spend a dozen requests on one page view.
-  await Promise.all([...isins].slice(0, 8).map((isin) => ensureFresh(isin)));
+  const hintsFor = (isin) => {
+    const hints = [];
+    for (const listings of inst.byBroker.values()) {
+      for (const listing of listings) {
+        if ((listing.isin || inst.isin) === isin) hints.push(listing);
+      }
+    }
+    return hints;
+  };
+  await Promise.all([...isins].slice(0, 8).map((isin) => ensureFresh(isin, undefined, hintsFor(isin))));
 }
 
 const VENUE_606 = {
@@ -2476,7 +2537,7 @@ const DEPOSIT_CCY = {
   US: "USD", CA: "CAD", AU: "AUD", JP: "JPY", SG: "SGD", HK: "HKD", AE: "AED", ZA: "ZAR", IN: "INR",
   BR: "BRL", MX: "MXN", CL: "CLP", CO: "COP", AR: "ARS", SE: "SEK", NO: "NOK", DK: "DKK", FO: "DKK",
   GL: "DKK", PL: "PLN", CZ: "CZK", HU: "HUF", RO: "RON", TR: "TRY", EG: "EGP", SA: "SAR", IL: "ILS",
-  KR: "KRW", TW: "TWD", MY: "MYR", CN: "CNH",
+  KR: "KRW", TW: "TWD", MY: "MYR", CN: "CNH", KW: "KWD",
 };
 const DEPOSIT_CURRENCIES = new Set(currencyOptions().map((row) => row.code));
 const localeCache = new Map();

@@ -169,20 +169,21 @@ export function indiaRoundTrip(schedule, query) {
   }
 
   const notional = priced ? n * p : 0;
-  const txnRate = schedule.txnRate(code(listing.brokerExchange));
+  const txnRate = schedule.txnRate(code(listing.brokerExchange), m.row);
   if (txnRate == null) {
     return { ...shared, basis, why: `${listing.brokerExchange} n'a pas de taux de transaction publié pour cette ligne` };
   }
   const brokerageEach = priced ? schedule.brokerageEach(notional) : flatEach;
   const brokerage = brokerageEach * 2;
   const sides = schedule.sttSides ? schedule.sttSides(m.row) : 2;
+  const txnSides = schedule.txnSides ? schedule.txnSides(m.row) : 2;
   const ipftRate = typeof schedule.ipftRate === "function" ? schedule.ipftRate(code(listing.brokerExchange)) : schedule.ipftRate || 0;
   if (ipftRate == null) {
     return { ...shared, basis, why: `${listing.brokerExchange} n'a pas de taux IPFT publié pour cette ligne` };
   }
   let stt = notional * schedule.sttRate * sides;
   let stamp = notional * schedule.stampRate;
-  let txn = notional * txnRate * 2;
+  let txn = notional * txnRate * txnSides;
   let sebi = notional * schedule.sebiRate * 2;
   let ipft = notional * ipftRate * 2;
   const dpBase = typeof schedule.dpInr === "function" ? (priced ? schedule.dpInr(notional) : null) : schedule.dpInr || 0;

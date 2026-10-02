@@ -75,6 +75,14 @@ export const ALIASES = {
   // Pearler FSG of 1 July 2026: Alpaca Securities LLC is the US broker from
   // 29 July 2025. DriveWealth is marked legacy.
   pearler: "alpaca",
+  // FINRA 606 bulk, 2026 Q2 disclosures: Kraken Securities (CRD 324343)
+  // adopts Alpaca Securities LLC (CRD 288202) by reference, quarter 2025 Q4.
+  kraken: "alpaca",
+  // Air Bank transmits the order to Interactive Brokers Ireland. IBIE routes
+  // US equities to Interactive Brokers LLC.
+  airbank: "interactivebrokers",
+  // Zesty: US stocks are operated and custodied by Alpaca Securities.
+  zesty: "alpaca",
   // iFAST board notice of 29 May 2025: iFAST Securities US Corporation routes
   // the group's US orders and custodies the US securities.
   fsmone: "ifastsecuritiesus",

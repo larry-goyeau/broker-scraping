@@ -64,6 +64,12 @@ const FOREIGN_PER_USD = {
   // NBK official rate, not an ECB print. Same day as AS_OF.
   // https://nationalbank.kz/rss/get_rates.cfm?fdate=07.09.2026
   KZT: 456.56,
+  // Banco Central de Chile, dólar observado, same day. Not an ECB print.
+  // https://si3.bcentral.cl/Siete/ES/Siete/Cuadro/CAP_TIPO_CAMBIO/MN_TIPO_CAMBIO4/DOLAR_OBS_ADO
+  CLP: 934.35,
+  // CBN NFEM central rate, same day. Not an ECB print.
+  // https://www.cbn.gov.ng/api/GetAllExchangeRates
+  NGN: 1320.0574,
 };
 
 function keyOf(currency) {

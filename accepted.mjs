@@ -224,6 +224,18 @@ const DIRECTA = ["IT", "CH", "DE", "DK", "FR", "GB", "HR", "HU", "IE", "PT"];
 export const ACCEPTED = {
   // US account, plus non-US addresses. Canada stays out.
   alpaca: WORLD_NO_CA, // alpaca.markets/learn/live-trading-account-non-us
+  // Help, 30 Sep 2026: clients worldwide, except the prohibited list.
+  // Crimea, Donetsk and Luhansk are named, not Ukraine as a whole.
+  // Maine and New York are refused too, and the picker has no US state.
+  // https://support.kraken.com/articles/where-is-kraken-licensed-or-regulated
+  kraken: { all: true, except: [...SANCTIONED, "AF", "CD", "IQ", "JP", "LY", "SD", "SS"] },
+  // Registration, and the foreigner article: a current Chilean identity
+  // card. Nationality does not matter. The card comes with residence in
+  // Chile. A passport, or a RUT without the card, is refused. Once the
+  // account exists the app works from anywhere.
+  // https://help.zestyfinance.com/es/articles/15937663-que-documentos-necesito-para-registrarme
+  // https://help.zestyfinance.com/es/articles/15937662-puedo-usar-la-app-si-soy-una-persona-extranjera
+  zesty: { countries: ["CL"] },
   firstrade: { countries: FIRSTRADE },
   tastytrade: { countries: TASTYTRADE },
   // TS Securities (US + non-EEA) + TS Europe B.V. (30 EEA). BrokerChooser
@@ -259,6 +271,11 @@ export const ACCEPTED = {
   // Online DIY for EU/UK; non-EU/UK must call. US asked on the form (FATCA).
   davy: { groups: ["EU"], countries: ["GB"] },
   plum: { countries: PLUM },
+  // Terms 1.3: 18 or over and UK resident. A Crown employee posted overseas,
+  // or their spouse or civil partner, may also open. A US person cannot.
+  // New investments stop if the client ceases to be UK resident.
+  // https://www.fidelity.co.uk/media/PI%20UK/pdf/legal/fidelity-client-terms.pdf
+  fidelity: { countries: ["GB"] },
   // Terms 7.2: UK tax resident and living in the UK, and not a US person.
   // Help, 16 Jul 2025: UK residents only. Moving abroad closes the account.
   freetrade: { countries: ["GB"] },
@@ -270,6 +287,13 @@ export const ACCEPTED = {
   // US persons cannot open. Terms allow an overseas client only at discretion.
   // https://help.investengine.com/hc/en-gb/articles/31149906352029-Who-can-open-an-InvestEngine-account
   investengine: { countries: ["GB"] },
+  // Terms: the platform is for UK residents only. Opening is refused if you
+  // are not a UK resident. The application also requires that you are not a
+  // US person. The ISA form's "UK resident" box uses the statutory wording,
+  // which also covers a Crown employee serving overseas, or their spouse.
+  // https://www.willisowen.co.uk/important/terms-introduction
+  // https://www.willisowen.co.uk/gia/apply-for-a-gia
+  willisowen: { countries: ["GB"] },
   // Regulation of 27 June 2026: a Polish citizen who is a Polish tax resident,
   // with an mBank account. A residence outside Poland cannot open.
   // https://pdf.mbank.pl/mbankpl/of/gielda/emakler/regulamin_emakler_obowiazujacy_od_27.06.2026.pdf
@@ -280,6 +304,13 @@ export const ACCEPTED = {
   // https://www.matsui.co.jp/apply/account/netstock/
   // https://support.matsui.co.jp/faq/show/1879?site_domain=faq
   matsui: { countries: ["JP"] },
+  // A Taiwanese natural person, a foreign natural person who is not a US
+  // person, a Taiwanese company, or an OBU company not registered in the
+  // United States. Becoming a US citizen or a US resident means the
+  // holdings must be sold. The picker is a country, so the United States
+  // is out.
+  // https://www.megabank.com.tw/personal/wealth/product/intro/etf-and-stocks
+  megabank: WORLD_NO_US,
   // FAQ: the account is limited to a resident of Japan. Nationality is not
   // a criterion. A foreign national needs a residence card. A non-resident
   // cannot open.
@@ -292,6 +323,21 @@ export const ACCEPTED = {
   // https://www.rakuten-sec.co.jp/web/support/procedures/non-resident/
   // https://account.rakuten-sec.co.jp/ITS/acc_identification.html
   rakuten: { countries: ["JP"] },
+  // Account page: anyone living in Japan may apply. A minor uses the minor
+  // account. Foreign PEPs and US nationals cannot open. The picker is a
+  // country of residence, so the country is JP.
+  // https://www.paypay-sec.co.jp/account/
+  paypay: { countries: ["JP"] },
+  // Terms, 26 Aug 2025: a Nigerian citizen or a legal resident in Nigeria,
+  // with a BVN. The picker is a country of residence, so the country is NG.
+  // https://cowrywise.com/terms
+  cowrywise: { countries: ["NG"] },
+  // Payment terms: Czech citizens and foreigners, 15 or older. A Czech
+  // phone number is required. A non-EU foreigner shows a residence permit.
+  // The picker is a country, so the country is CZ.
+  // https://www.airbank.cz/file-download/5118-podminky-platebniho-styku.pdf
+  // https://www.airbank.cz/co-vas-nejvic-zajima/zalozeni-uctu-cizinec/
+  airbank: { countries: ["CZ"] },
   // FAQ and PDS: Australian tax resident, 18 or older, with an Australian
   // residential address. Nationality is not the test. A non-resident for
   // Australian tax cannot open.
@@ -311,13 +357,13 @@ export const ACCEPTED = {
   // https://fund-docs.vanguard.com/AU-Vanguard_Personal_Investor_Guide_Part_A.pdf
   // https://www.vanguardinvestor.com.au/initiate.aspx
   // https://www.vanguard.com.au/personal/support/frequently-asked-questions/my-account
-  vanguard: { countries: ["AU"] },
-  // A resident account is opened with a PAN and Aadhaar. An NRI or OCI
-  // account is another product, with another brokerage. The picker is a
-  // country, so the country is IN.
-  // https://groww.in/open-demat-account
-  // https://groww.in/open-nri-demat-account
-  groww: { countries: ["IN"] },
+  vanguardau: { countries: ["AU"] },
+  // Terms 1.3: an ISA needs a UK resident who pays UK tax. A General Account
+  // needs a UK resident who pays tax only in the UK. A pension needs a UK
+  // tax resident. Channel Islands and Crown Dependency residents cannot
+  // open. A US person cannot. The country is GB.
+  // https://www.vanguardinvestor.co.uk/content/dam/intl/uk-retail-direct/documents/vanguard-client-terms-conditions-feb-2025.pdf
+  vanguarduk: { countries: ["GB"] },
   // The February 2026 KYC takes a resident, an NRI, a PIO and a foreign
   // national. A foreign national may trade subject to RBI and FEMA. The
   // form's nationality is Indian or Other, and it names no country list.
@@ -339,6 +385,16 @@ export const ACCEPTED = {
   // https://www.mstock.com/articles/non-repatriable-demat-account
   // https://www.mstock.com/open-demat-account
   "m.stock": { countries: ["IN"] },
+  // The online form fixes +91 and asks for a mobile number, then an OTP.
+  // That number is Indian. The picker is a country, so the country is IN.
+  // https://kyc.arrow.trade/
+  arrow: { countries: ["IN"] },
+  // Opening uses Digilocker and the mobile linked to Aadhaar. Without an
+  // Aadhaar number the account cannot be opened. An NRI is not supported.
+  // The picker is a country, so the country is IN.
+  // https://www.sahi.com/faq/account-opening/can-nr-is-open-an-account-on-sahi
+  // https://www.sahi.com/faq/account-opening/i-do-not-have-an-aadhaar-number-can-i-still-open-a-demat-account-on-sahi
+  sahi: { countries: ["IN"] },
   // The open-account form fixes +91 and an Aadhaar-linked mobile for the
   // OTP. That number is Indian. The picker is a country, so the country is IN.
   // https://aliceblueonline.com/open-demat-account
@@ -355,6 +411,11 @@ export const ACCEPTED = {
   // so the country is IN.
   // https://www.gopocket.in/
   gopocket: { countries: ["IN"] },
+  // The online form is for a resident individual. The mobile field is fixed
+  // at +91 and asks for a 10-digit number, then an OTP. A company or an NRI
+  // is told to email instead. The picker is a country, so the country is IN.
+  // https://signup.definedgesecurities.com/
+  definedge: { countries: ["IN"] },
   // E-sign uses an OTP on the mobile number linked to Aadhaar. That number
   // is Indian. The picker is a country, so the country is IN.
   // https://tradesmartonline.in/open-demat-account/

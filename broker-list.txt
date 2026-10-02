@@ -23,7 +23,6 @@ Webull	US	Neobroker	US ETFs / ETNs	https://www.webull.com/trading-investing	supp
 moomoo (Futu US)	US	Neobroker	US ETFs / ETNs	https://www.moomoo.com/us	
 SoFi Invest	US	Neobroker	US ETFs / ETNs	https://www.sofi.com/invest/active/	
 Public.com	US	Neobroker	US ETFs / ETNs	https://public.com/signup	
-M1 Finance	US	Neobroker	US ETFs / ETNs	https://m1.com/	
 Cash App Investing	US	Neobroker	US ETFs / ETNs	https://cash.app/stocks	
 Stash	US	Neobroker	US ETFs / ETNs	https://www.stash.com	
 Fennel	US	Neobroker	US ETFs / ETNs	https://fennel.com/product	
@@ -42,7 +41,6 @@ TradeUP	US	Neobroker	US ETFs / ETNs	https://www.tradeup.com/
 Hapi	US	Neobroker	US ETFs / ETNs	https://hapi.trade	
 Truist Trade	US	Bank	US ETFs / ETNs	https://www.truist.com/investing-retirement/self-directed-investing	https://www.truist.com/contact
 PNC Brokerage Plus	US	Bank	US ETFs / ETNs	https://www.pnc.com/en/personal-banking/investments-and-retirement/brokerage-accounts/brokerage-accounts-faqs.html	
-Betterment	US	Neobroker	US ETFs / ETNs	https://www.betterment.com/self-directed-investing	
 Titan	US	Neobroker	US ETFs / ETNs	https://www.titan.com/	support@titan.com
 Questrade	CA	Broker	Local + US ETFs	https://www.questrade.com/	https://www.questrade.com/learning/support
 Interactive Brokers Canada	CA	Broker	Global ETFs / ETPs	https://www.interactivebrokers.ca/	https://www.interactivebrokers.com/en/general/contact/newContact/contact.php
@@ -74,8 +72,8 @@ AJ Bell Dodl	UK	Neobroker	UCITS ETFs / ETCs	https://dodl.co.uk/investments	hello
 interactive investor	UK	Broker	UCITS ETFs / ETCs	https://www.ii.co.uk/ii-accounts/trading-account	
 Freetrade	UK	Neobroker	UCITS ETFs / ETCs	https://freetrade.io/general-investment-account	hello@freetrade.io
 InvestEngine	UK	Neobroker	UCITS ETFs / ETCs	https://investengine.com/accounts/	
-Vanguard Investor UK	UK	Broker	UCITS ETFs / ETCs	https://www.vanguardinvestor.co.uk/open-an-account	
-Fidelity Personal Investing UK	UK	Broker	UCITS ETFs / ETCs	https://www.fidelity.co.uk/open-account/	
+Vanguard UK	UK	Broker	UCITS ETFs / ETCs	https://www.vanguardinvestor.co.uk/open-an-account	
+Fidelity	UK	Broker	UCITS ETFs / ETCs	https://www.fidelity.co.uk/open-account/	
 Charles Stanley Direct	UK	Broker	UCITS ETFs / ETCs	https://www.charles-stanley-direct.co.uk/	
 Bestinvest	UK	Broker	UCITS ETFs / ETCs	https://www.bestinvest.co.uk/accounts	
 Willis Owen	UK	Broker	UCITS ETFs / ETCs	https://www.willisowen.co.uk/isa/apply-for-an-isa	enquiries@willisowen.co.uk
@@ -86,7 +84,6 @@ Barclays Smart Investor	UK	Bank	UCITS ETFs / ETCs	https://www.barclays.co.uk/sma
 HSBC InvestDirect UK	UK	Bank	UCITS ETFs / ETCs	https://www.hsbc.co.uk/investments/products/invest-direct/	
 Santander Investment Hub	UK	Bank	UCITS ETFs / ETCs	https://www.santander.co.uk/personal/savings-and-investments/investments/investment-account	https://www.santander.co.uk/personal/support/contact-us
 Webull UK	UK	Neobroker	UCITS ETFs / ETCs	https://www.webull-uk.com/trading-investing	clientservices@webull-uk.com
-Moneybox	UK	Neobroker	UCITS ETFs / ETCs	https://www.moneyboxapp.com/	
 Plum	UK	Neobroker	UCITS ETFs / ETCs	https://withplum.com/en-gb/investments	help@withplum.com
 Quilter Invest	UK	Neobroker	UCITS ETFs / ETCs	https://www.quilterinvest.com	support@quilterinvest.com
 Chip	UK	Neobroker	UCITS ETFs / ETCs	https://getchip.uk/investing	
@@ -299,6 +296,7 @@ Millennium Biuro Maklerskie	PL	Bank	UCITS ETFs / ETCs	https://www.millenniumbm.p
 Citi Handlowy Dom Maklerski	PL	Bank	Global ETFs / ETPs	https://www.citibank.pl/biuro-maklerskie/	https://www.citibank.pl/kontakt/
 IPOPEMA Securities	PL	Broker	UCITS ETFs / ETCs	https://www.ipopema.pl/	
 Fio banka e-Broker	CZ	Bank	UCITS ETFs / ETCs	https://www.fio.cz/akcie-investice/e-broker	https://www.fio.cz/kontakty
+Air Bank	CZ	Bank	US stocks + UCITS ETFs	https://www.airbank.cz/produkty/akcie/	
 Patria Finance	CZ	Broker	UCITS ETFs / ETCs	https://finance.patria.cz/otevrit-ucet	patria@patria.cz
 Česká spořitelna	CZ	Bank	Global ETFs / ETPs	https://www.csas.cz/cs/osobni-finance/investovani	
 Komerční banka	CZ	Bank	UCITS ETFs / ETCs	https://www.kb.cz/cs/obcane/investice	https://www.kb.cz/cs/o-bance/kontakty
@@ -442,6 +440,7 @@ Investec Online	ZA	Bank	Global ETFs / ETPs	https://www.investec.com/en_za/invest
 SatrixNOW	ZA	Neobroker	Local-market ETFs	https://satrix.co.za/platform	
 Sharenet Securities	ZA	Broker	Global ETFs / ETPs	https://www.sharenet.co.za/securities/	support@sharenet.co.za
 Bamboo	NG	Neobroker	Local + US ETFs	https://investbamboo.com/	
+Cowrywise	NG	Neobroker	Local-market ETFs	https://cowrywise.com/stocks	
 Trove Finance	NG	Neobroker	US ETFs / ETNs	https://trovefinance.com/	
 Hisa Nigeria (formerly Chaka)	NG	Neobroker	Local + US ETFs	https://hisa.co/	
 Stanbic IBTC Stockbrokers	NG	Bank	Local-market ETFs	https://www.sislbrokerage.com/IW/NewAccount/Account	
@@ -556,7 +555,7 @@ Mitsubishi UFJ eSmart Securities	JP	Broker	Local-market ETFs	https://kabu.com/ap
 Nomura Securities	JP	Broker	Local-market ETFs	https://www.nomura.co.jp/apply/	https://www.nomura.co.jp/support/
 Daiwa Securities	JP	Broker	Local-market ETFs	https://www.daiwa.jp/open/	https://www.daiwa.jp/contact/
 SMBC Nikko	JP	Broker	Local-market ETFs	https://www.smbcnikko.co.jp/apply/	https://www.smbcnikko.co.jp/support/
-PayPay Securities	JP	Neobroker	Local + US ETFs	https://www.paypay-sec.co.jp/account/	
+PayPay	JP	Neobroker	Local + US ETFs	https://www.paypay-sec.co.jp/account/	
 moomoo Japan	JP	Neobroker	Local + US ETFs	https://www.moomoo.com/jp	
 Interactive Brokers Japan	JP	Broker	Global ETFs / ETPs	https://www.interactivebrokers.co.jp/	https://www.interactivebrokers.com/en/general/contact/newContact/contact.php
 Plus500 Japan	JP	Broker	Global ETFs / ETPs	https://www.plus500.com/	
@@ -592,7 +591,6 @@ E.SUN Securities	TW	Broker	Local-market ETFs	https://www.esunsec.com.tw/new-acco
 Taishin Securities	TW	Broker	Local-market ETFs	https://www.tssco.com.tw/open-account/	
 Zerodha	IN	Broker	Local-market ETFs	https://zerodha.com/open-account/	
 Interactive Brokers India	IN	Broker	Global ETFs / ETPs	https://www.interactivebrokers.co.in/	https://www.interactivebrokers.com/en/general/contact/newContact/contact.php
-Groww	IN	Neobroker	Local-market ETFs	https://groww.in/open-demat-account	
 Angel One	IN	Broker	Local-market ETFs	https://www.angelone.in/open-demat-account	
 ICICI Direct	IN	Bank	Local-market ETFs	https://www.icicidirect.com/open-a-demat-account	complianceofficer@icicisecurities.com
 HDFC Securities	IN	Bank	Local-market ETFs	https://www.hdfcsec.com/open-demat-account	https://www.hdfcsec.com/NewsRoom/MediaContact
@@ -749,6 +747,7 @@ Itaú Corredores de Bolsa	CL	Bank	Global ETFs / ETPs	https://www.itau.cl/persona
 LarrainVial	CL	Broker	Global ETFs / ETPs	https://haztecliente.larrainvial.com/	
 Santander Corredores de Bolsa Chile	CL	Bank	Local-market ETFs	https://banco.santander.cl/personas/corredores-de-bolsa	
 Fintual Acciones	CL	Neobroker	US ETFs / ETNs	https://fintual.cl/que-es-fintual/	
+Zesty	CL	Neobroker	Local + US ETFs	https://www.zestyfinance.com/	
 Trii	CO	Neobroker	Global ETFs / ETPs	https://trii.co/	https://trii.co/contact
 Tyba	CO	Neobroker	US ETFs / ETNs	https://tyba.com.co/	https://tyba.com.co/contacto/
 Valores Bancolombia	CO	Bank	Local-market ETFs	https://valores.bancolombia.com/	

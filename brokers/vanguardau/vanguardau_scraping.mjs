@@ -8,7 +8,7 @@
 //
 //   https://fund-docs.vanguard.com/AU-Vanguard_Personal_Investor_Investment_Menu.pdf
 //
-//   node brokers/vanguard/vanguard_scraping.mjs
+//   node brokers/vanguardau/vanguardau_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
 import fs from "node:fs";
@@ -392,7 +392,7 @@ rows.sort((left, right) => {
   return left.ticker.localeCompare(right.ticker);
 });
 
-fs.writeFileSync(new URL("vanguard-parsed.json", import.meta.url), JSON.stringify(stampRows(rows), null, 2));
+fs.writeFileSync(new URL("vanguardau-parsed.json", import.meta.url), JSON.stringify(stampRows(rows), null, 2));
 const instruments = new Set(rows.map((row) => row.isin || row.ticker)).size;
 console.error(
   `${rows.length} listings over ${instruments} instruments (${etf} ASX ETF, ${stock} ASX STOCK)`

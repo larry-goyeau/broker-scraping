@@ -92,10 +92,12 @@ const FOLDER_NAME = {
   WHSelfInvest: "WH SelfInvest",
   xtb: "XTB",
   fortuneo: "Fortuneo",
+  fidelity: "Fidelity",
   lynx: "LYNX+",
-  vanguard: "Vanguard AU",
+  vanguarduk: "Vanguard UK",
   choice: "Choice",
   "m.stock": "m.Stock",
+  megabank: "Mega Bank",
 };
 
 function metaFor(folder, list) {
@@ -369,6 +371,9 @@ function formatTotal(cost, usd) {
     // levies exactly where they were. A broker still on the old contract has no
     // such figure and says N/A here as it does for the total.
     fees: fmtUsd(cost?.brokerFees),
+    // The book's own dollars: the round trip minus what the broker bills.
+    // Missing stays missing, so a hole is not printed as a free book.
+    spread: fmtUsd(bookUsd(cost, usd)),
     remark: String(cost?.remark || "").trim(),
     buyable: cost?.onlineBuy !== false,
     venueExchange: displayExchange(cost?.listing?.exchange || "", {
@@ -391,7 +396,15 @@ function formatTotal(cost, usd) {
 // Robinhood is three, and which one serves the reader is decided by residency
 // alone — an American share, a British one plus its conversion, or a Lithuanian
 // derivative over the same line.
-const EMPTY_ROW = { total: NA, fees: NA, remark: "", buyable: true, venueExchange: "", venueCurrency: "", cashCurrency: "", venueAuthoritative: false, spreadKnown: false };
+const EMPTY_ROW = { total: NA, fees: NA, spread: NA, remark: "", buyable: true, venueExchange: "", venueCurrency: "", cashCurrency: "", venueAuthoritative: false, spreadKnown: false };
+
+function bookUsd(cost, usd) {
+  const total = Number(usd);
+  const fees = Number(cost?.brokerFees);
+  if (!Number.isFinite(total) || !Number.isFinite(fees)) return null;
+  const spread = Number((total - fees).toFixed(2));
+  return spread >= 0 ? spread : null;
+}
 
 function estimateListing(folder, listing, inst, extra = {}, size = {}) {
   const entry = estimators.get(folder);
@@ -2377,6 +2390,31 @@ function detail(key, nat = "", size = {}, dep = "") {
           return !other || other.fees !== listing.fees || other.total !== listing.total;
         });
         if (listed.length) rows.push({ ...row, listings: listed });
+      }
+      continue;
+    }
+    if (folder === "kraken") {
+      const listed = listings({});
+      const shares = listed.filter((listing) => listing.exchange !== "xStock");
+      const token = listed.some((listing) => listing.exchange === "xStock");
+      if (shares.length) {
+        rows.push({
+          ...base,
+          name: meta?.name || prettyFolder(folder),
+          listings: shares,
+        });
+      }
+      // The Pro book and the EEA instant price are different trips. Each is
+      // its own line. A share or a coin stays on the single Kraken line.
+      if (token) {
+        const code = String(nat || "").trim().toUpperCase();
+        // The xStock book is closed to the EEA. With no country picked, both lines stay.
+        const pro = EEA.includes(code)
+          ? []
+          : listings({ plan: "pro" }).filter((listing) => listing.exchange === "xStock");
+        const eea = listings({ plan: "eea" }).filter((listing) => listing.exchange === "xStock");
+        if (pro.length) rows.push(asPlan({ id: "pro", name: "Kraken Pro" }, 0, pro));
+        if (eea.length) rows.push(asPlan({ id: "eea", name: "Kraken EEA" }, 1, eea));
       }
       continue;
     }

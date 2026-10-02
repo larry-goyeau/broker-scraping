@@ -12,6 +12,12 @@ const FOLDER = {
   "5paisa": ["INR"],
   admiral: ["USD"],
   angelone: ["INR"],
+  // The kit's bank line is a savings account, a current account, or an NRE
+  // or NRO account. Those are rupee accounts. The client nodal accounts are
+  // at Indian banks. No foreign-currency balance is named.
+  // https://arrow.trade/bank-accounts
+  // https://assets.arrow.trade/documents/compliance/Individual-KYC-form.pdf
+  arrow: ["INR"],
   alpaca: ["USD"],
   alramz: ["AED"],
   bitpanda: ["EUR", "USD", "GBP", "CHF", "HUF", "PLN", "RON", "CZK", "SEK", "DKK"],
@@ -29,6 +35,11 @@ const FOLDER = {
   // https://www.matsui.co.jp/service/money/deposit/
   // https://www.matsui.co.jp/us-stock/domestic/rule/
   matsui: ["JPY"],
+  // A foreign-currency passbook holds one of these and leaves it there.
+  // The renminbi account is printed CNY. The Hong Kong lines are quoted
+  // CNH, the same unit. New Taiwan dollars are the domestic account.
+  // https://www.megabank.com.tw/personal/savings/deposit-service/foreign-deposit/demand-deposit
+  megabank: ["TWD", "USD", "EUR", "GBP", "AUD", "JPY", "CNY", "CNH", "HKD", "ZAR", "NZD", "SGD", "THB", "CAD", "CHF", "SEK"],
   // Yen lands in the comprehensive account. These seven foreign currencies
   // can be paid in from a foreign-currency bank account and left as cash.
   // https://www.sbisec.co.jp/ETGate/WPLETmgR001Control?OutSide=on&getFlg=on&burl=search_home&cat1=home&cat2=service&dir=service&file=home_in_gaika.html
@@ -40,6 +51,22 @@ const FOLDER = {
   // https://www.rakuten-sec.co.jp/web/account-flow/
   // https://www.rakuten-sec.co.jp/web/service/pay/forex_pay.html
   rakuten: ["JPY", "USD", "EUR", "AUD", "NZD", "CAD"],
+  // A bank transfer, PayPay Bank and PayPay Money are credited in yen and
+  // left there. A US dividend arrives in dollars and is converted to yen
+  // before it is credited. There is no dollar cash.
+  // https://www.paypay-sec.co.jp/support/charge/
+  // https://www.paypay-sec.co.jp/support/ca/
+  paypay: ["JPY"],
+  // A deposit and a withdrawal are naira, through a Nigerian bank account.
+  // A dollar fund is bought with naira. There is no dollar cash.
+  // https://help.cowrywise.com/en/articles/9148093-what-bank-can-i-use-to-receive-my-funds-on-cowrywise
+  cowrywise: ["NGN"],
+  // A current account can be opened in crowns, euros or dollars and the
+  // money stays there. A purchase from a different currency is converted
+  // at the rate in the order.
+  // https://www.airbank.cz/co-vas-nejvic-zajima/cizomenove-ucty/
+  // https://www.airbank.cz/file-download/4302-pravidla-provadeni-pokynu.pdf
+  airbank: ["CZK", "EUR", "USD"],
   // The Cash Wallet is funded by bank transfer or Osko from an Australian
   // bank account. The PDS states every amount in Australian dollars.
   // https://www.betashares.com.au/direct/faq
@@ -55,13 +82,12 @@ const FOLDER = {
   // The cash account takes Australian dollars from an Australian bank
   // account and leaves them in dollars. No other currency is accepted.
   // https://fund-docs.vanguard.com/AU-Vanguard_Personal_Investor_Guide_Part_A.pdf
-  vanguard: ["AUD"],
-  // Rupees added by UPI, net banking or a bank transfer stay in the stock
-  // balance. Dollars sent to Apex Clearing stay in the US-stocks balance.
-  // Changing rupees into dollars is a conversion, not a deposit.
-  // https://groww.in/help/payments-&-withdrawals/deposit/how-do-i-add-transfer-money-to-groww-balance--13
-  // https://groww.in/help/us-stocks/funding-usd-balance/what-is-apex-clearing--is-it-safe-to-transfer-money-to-them--51
-  groww: ["INR", "USD"],
+  vanguardau: ["AUD"],
+  // Key features: every investment is in pounds sterling. Terms: a withdrawal
+  // to a UK bank is paid in sterling. No other currency is held.
+  // https://www.vanguardinvestor.co.uk/content/dam/intl/uk-retail-direct/documents/key-features-isa-gia.pdf
+  // https://www.vanguardinvestor.co.uk/content/dam/intl/uk-retail-direct/documents/vanguard-client-terms-conditions-feb-2025.pdf
+  vanguarduk: ["GBP"],
   // A pay-in from the linked bank, by UPI or a transfer, is credited to the
   // rupee ledger. An NRE or NRO account is also rupees. No other currency
   // is left unconverted.
@@ -117,12 +143,22 @@ const FOLDER = {
   // US stocks are funded by an INR transfer under LRS. The dollars are the
   // conversion, not a currency the client can deposit and leave as cash.
   dhan: ["INR"],
+  // The FAQ offers a resident account and an NRI account. The cash segment
+  // settles in rupees. The page names no foreign-currency balance.
+  // https://www.definedgesecurities.com/
+  definedge: ["INR"],
   easybourse: ["EUR"],
   easyequities: ["ZAR", "USD", "AUD", "GBP", "EUR"],
   efocs: ["EUR"],
   // The open Global Trader account is one euro account. BG Trader shows the same.
   elana: ["EUR"],
   firstrade: ["USD"],
+  // Terms: every payment in and out is sterling. The international-shares
+  // page says no other currency is held. A foreign receipt is converted
+  // into pounds, so it is not a deposit currency.
+  // https://www.fidelity.co.uk/international-shares/
+  // https://www.fidelity.co.uk/media/PI%20UK/pdf/legal/fidelity-client-terms.pdf
+  fidelity: ["GBP"],
   // Terms 10.3 and 11.8: the linked bank account and every deposit are pounds.
   // Help, 28 Mar 2024: cash can be held in GBP only.
   freetrade: ["GBP"],
@@ -135,6 +171,11 @@ const FOLDER = {
   // https://investengine.com/costs/
   // https://help.investengine.com/hc/en-gb/articles/31146506884893-How-do-I-add-funds
   investEngine: ["GBP"],
+  // Explore: the share range is traded in sterling, and there is one platform
+  // cash account. A dollar price on a London line is the quote, not a balance
+  // left in dollars.
+  // https://www.willisowen.co.uk/explore/
+  willisowen: ["GBP"],
   // Help: every booking lands in euro on the settlement account. A payment
   // in another currency is converted to euro by Baader Bank.
   // https://support.finanzen-zero.net/hc/de/articles/36630083344157
@@ -166,11 +207,29 @@ const FOLDER = {
   pocketful: ["INR"],
   // Resident account, and an NRI account (NRE or NRO), including a US or Canadian tax resident. Both are rupees.
   prostocks: ["INR"],
+  // A deposit is credited in the currency of the method and left there.
+  // Sending another currency to that account is returned, not converted.
+  // US residents can deposit dollars only. Texas and New Hampshire cannot
+  // hold euros. The nine below are the methods on the cash page.
+  // https://support.kraken.com/articles/360000381846-cash-deposit-options-fees-minimums-and-processing-times-
+  // https://support.kraken.com/articles/where-is-kraken-licensed-or-regulated
+  kraken: ["USD", "EUR", "GBP", "CAD", "AUD", "CHF", "ARS", "BRL", "MXN"],
+  // A peso transfer from a Chilean bank is credited in pesos and left there.
+  // A dollar deposit is credited in the dollar wallet and left there.
+  // Pesos become dollars only if that wallet is set as the main one, or at
+  // the moment of a US or crypto trade.
+  // https://help.zestyfinance.com/es/articles/15937626-como-puedo-depositar-en-la-app
+  zesty: ["CLP", "USD"],
   questrade: ["USD", "CAD"],
   quantfury: ["USD", "EUR", "GBP", "CHF", "TRY", "BRL", "MXN", "CLP", "COP", "ARS"],
   revolut: ["EUR", "USD"],
   // Support, 22 Jul 2026: only a resident Indian can open an account.
   rupeezy: ["INR"],
+  // Funds are added by UPI or from a linked bank account, in rupees. The
+  // page names no foreign-currency balance.
+  // https://www.sahi.com/faq/adding-transfer-money/how-can-i-transfer-funds-to-my-sahi-account
+  // https://www.sahi.com/faq/adding-transfer-money/what-is-the-maximum-amount-i-can-add-to-my-sahi-account-in-a-single-transfer
+  sahi: ["INR"],
   sarwa: ["USD"],
   saxo: ["USD", "CAD", "EUR", "GBP", "NOK", "PLN", "CZK", "MYR", "CHF", "DKK", "SEK", "ZAR", "JPY", "HKD", "CNH", "SGD", "AUD"],
   scalablecapital: ["EUR"],

@@ -372,7 +372,7 @@
         border-radius: var(--r-lg);
         box-shadow: var(--shadow-sm);
       }
-      table.listings { width: 100%; border-collapse: separate; border-spacing: 0; }
+      table.listings { width: 100%; table-layout: fixed; border-collapse: separate; border-spacing: 0; }
       table.listings th,
       table.listings td { padding: 14px 18px; text-align: left; vertical-align: middle; }
       table.listings th {
@@ -409,10 +409,16 @@
       table.listings th.h-total { color: var(--ink); font-weight: 750; }
       table.listings td.num { white-space: nowrap; }
       table.listings td.total { font-size: 15px; font-weight: 650; }
-      table.listings td.fees { color: var(--ink-2); }
+      table.listings td.fees,
+      table.listings td.spread { color: var(--ink-2); }
       table.listings td.na { color: var(--faint); font-weight: 400; }
       table.listings td.exch { color: var(--ink-2); }
-      table.listings td.remark { max-width: 26em; color: var(--mute); font-size: 13px; line-height: 1.45; white-space: pre-line; }
+      table.listings th.h-broker { width: 20%; }
+      table.listings th.h-total { width: 13%; }
+      table.listings th.h-fees,
+      table.listings th.h-spread { width: 11%; }
+      table.listings th.h-remark { width: 22%; }
+      table.listings td.remark { max-width: none; color: var(--mute); font-size: 13px; line-height: 1.45; white-space: pre-line; }
       table.listings tr.none td { padding: 36px 18px; color: var(--mute); text-align: center; }
       a.star { color: inherit; text-decoration: none; }
       .ccy-na { color: var(--faint); }
@@ -518,7 +524,6 @@
 
       @media (max-width: 1024px) {
         table.listings th, table.listings td { padding-left: 14px; padding-right: 14px; }
-        table.listings td.remark { max-width: 18em; }
       }
 
       @media (max-width: 880px) {
@@ -559,8 +564,10 @@
         table.listings th.h-remark { display: none; }
         table.listings th.h-broker { grid-column: 1 / 3; grid-row: 1 / span 2; align-self: center; }
         table.listings th.h-total,
-        table.listings th.h-fees { grid-column: 3; min-width: 0; text-align: right; }
+        table.listings th.h-fees,
+        table.listings th.h-spread { grid-column: 3; min-width: 0; text-align: right; }
         table.listings th.h-fees { grid-row: 2; }
+        table.listings th.h-spread { grid-row: 3; }
         table.listings tbody tr:first-child { border-top: 0; }
         table.listings tbody tr:last-child { border-radius: 0 0 18px 18px; }
         table.listings td { padding: 0; border: 0; background: none !important; box-shadow: none !important; }
@@ -574,9 +581,16 @@
         table.listings .bk-name { grid-column: 2; grid-row: 1; align-self: end; min-width: 0; line-height: 1.3; }
         table.listings .bk-where { display: block; grid-column: 2; grid-row: 2; align-self: start; min-width: 0; line-height: 1.4; }
         table.listings td.total,
-        table.listings td.fees { display: block; grid-column: 3; text-align: right; white-space: nowrap; }
+        table.listings td.fees,
+        table.listings td.spread { display: block; grid-column: 3; text-align: right; white-space: nowrap; }
         table.listings td.total { grid-row: 1; align-self: end; font-size: 16px; line-height: 1.3; }
         table.listings td.fees { grid-row: 2; align-self: start; color: var(--mute); font-size: 12.5px; line-height: 1.4; }
+        table.listings td.spread { grid-row: 3; align-self: start; color: var(--mute); font-size: 12.5px; line-height: 1.4; }
+        table.listings th.h-broker,
+        table.listings th.h-total,
+        table.listings th.h-fees,
+        table.listings th.h-spread,
+        table.listings th.h-remark { width: auto; }
         table.listings td.remark {
           display: block;
           grid-column: 2 / -1;
@@ -600,12 +614,16 @@
         table.listings th.h-remark { display: block; grid-column: 3; grid-row: 1 / span 2; align-self: center; }
         table.listings th.h-total,
         table.listings th.h-fees,
+        table.listings th.h-spread,
         table.listings td.total,
-        table.listings td.fees { grid-column: 4; }
+        table.listings td.fees,
+        table.listings td.spread { grid-column: 4; }
         table.listings td.remark { grid-column: 3; grid-row: 1 / span 2; align-self: center; margin-top: 0; }
       }
 
       @media (max-width: 760px) {
+        table.listings th.h-spread,
+        table.listings td.spread { display: none; }
         main { width: calc(100% - 28px); padding-top: 36px; }
         .foot { width: calc(100% - 28px); }
         .eyebrow { font-size: 12px; }
@@ -774,7 +792,7 @@
       };
       const money = (v) => {
         const n = costNum(v);
-        if (n == null) return "N/A";
+        if (n == null) return "unknown";
         const text = Math.abs(n).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         return `${n < 0 ? "−" : ""}$${text}`;
       };
@@ -835,23 +853,23 @@
           : "";
         return `<td class="broker"><div class="bk"><span class="avatar tone-${toneOf(brand.key)}" aria-hidden="true">${mark}<span class="mono">${esc(initialsOf(brand.words))}</span></span><div class="bk-text"><span class="bk-name">${name}</span>${where ? `<span class="bk-where">${esc(where)}</span>` : ""}</div></div></td>`;
       };
-      const numCell = (v, kind, spreadKnown) => {
+      const numCell = (v, kind) => {
         const missing = costNum(v) == null;
-        const text = missing ? (kind === "total" && !spreadKnown ? "unknown spread" : "N/A") : money(v);
+        const text = missing ? "unknown" : money(v);
         return `<td class="num ${kind}${missing ? " na" : ""}">${esc(text)}</td>`;
       };
       const ccyCell = (currency) => {
         if (!currency) return `<td class="ccy"></td>`;
-        if (currency === "N/A") return `<td class="ccy"><span class="ccy-na">N/A</span></td>`;
+        if (currency === "N/A") return `<td class="ccy"><span class="ccy-na">unknown</span></td>`;
         return `<td class="ccy">${esc(currency)}</td>`;
       };
       const rowsHtml = (rows, crypto) => {
         const ordered = orderRows(rows);
-        if (!ordered.length) return `<tr class="none"><td colspan="${crypto ? 5 : 6}">${esc(emptyText())}</td></tr>`;
+        if (!ordered.length) return `<tr class="none"><td colspan="${crypto ? 6 : 7}">${esc(emptyText())}</td></tr>`;
         return ordered
           .map(
             (row) =>
-              `<tr>${brokerCell(row)}${crypto ? "" : `<td class="exch">${esc(row.exchange)}</td>`}${ccyCell(row.currency)}${numCell(row.total, "total", row.spreadKnown)}${numCell(row.fees, "fees")}<td class="remark">${esc(row.remark)}</td></tr>`
+              `<tr>${brokerCell(row)}${crypto ? "" : `<td class="exch">${esc(row.exchange)}</td>`}${ccyCell(row.currency)}${numCell(row.total, "total")}${numCell(row.fees, "fees")}${numCell(row.spread, "spread")}<td class="remark">${esc(row.remark)}</td></tr>`
           )
           .join("");
       };
@@ -1007,6 +1025,7 @@
               currency: l.currency || (crypto ? "" : "N/A"),
               total: l.total || "N/A",
               fees: l.fees || "N/A",
+              spread: l.spread || "N/A",
               spreadKnown: !!l.spreadKnown,
               remark: l.remark || "",
             }));
@@ -1029,6 +1048,7 @@
               g.currency === row.currency &&
               g.total === row.total &&
               g.fees === row.fees &&
+              g.spread === row.spread &&
               g.remark === row.remark
           );
           if (hit) hit.n += 1;
@@ -1041,7 +1061,7 @@
             ? `<p class="note">No price on file for this instrument, so nothing proportional to the amount can be added up. Write assets/prices.json to fill this column.</p>`
             : ""}
           ${merged.length && merged.every((row) => row.total === "N/A")
-            ? `<p class="note">No broker has been moved to the total-cost contract yet: every one of them answers unknown spread until its *_cost.mjs exports roundTrip().</p>`
+            ? `<p class="note">No broker has been moved to the total-cost contract yet: every one of them answers unknown until its *_cost.mjs exports roundTrip().</p>`
             : ""}`;
         const tbody = document.getElementById("costRows");
         if (sizeOnly && tbody) {
@@ -1072,6 +1092,7 @@
                   <th class="ccy">currency</th>
                   <th class="num h-total"><span class="th-label">round trip<span class="th-long"> average cost</span><a class="star" href="/method">*</a></span></th>
                   <th class="num h-fees"><span class="th-label">broker fees<a class="star" href="/method">*</a></span></th>
+                  <th class="num h-spread"><span class="th-label">spread<a class="star" href="/method">*</a></span></th>
                   <th class="h-remark">remark</th>
                 </tr>
               </thead>

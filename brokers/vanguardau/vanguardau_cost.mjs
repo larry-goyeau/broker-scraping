@@ -18,9 +18,9 @@
 //
 //   https://fund-docs.vanguard.com/AU-Vanguard_Personal_Investor_Guide_Part_A.pdf
 //
-//   node brokers/vanguard/vanguard_cost.mjs VAS ASX AUD --shares=10 --price=100
-//   node brokers/vanguard/vanguard_cost.mjs BHP ASX AUD --shares=10 --price=40
-//   node brokers/vanguard/vanguard_cost.mjs --schedule
+//   node brokers/vanguardau/vanguardau_cost.mjs VAS ASX AUD --shares=10 --price=100
+//   node brokers/vanguardau/vanguardau_cost.mjs BHP ASX AUD --shares=10 --price=40
+//   node brokers/vanguardau/vanguardau_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
@@ -31,7 +31,7 @@ import { bookParts, plus, finite } from "../../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
 
-const CATALOGUE = new URL("vanguard-parsed.json", import.meta.url);
+const CATALOGUE = new URL("vanguardau-parsed.json", import.meta.url);
 const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
@@ -92,7 +92,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     cashCurrency: CASH,
   };
   if (!catalogue) {
-    return { ...answer, why: "le catalogue Vanguard n'existe pas encore : lancer `node brokers/vanguard/vanguard_scraping.mjs`" };
+    return { ...answer, why: "le catalogue Vanguard n'existe pas encore : lancer `node brokers/vanguardau/vanguardau_scraping.mjs`" };
   }
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Vanguard` };
@@ -110,7 +110,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     mic: m.venue?.mic ?? null,
     currency: m.row.currency,
     unsourced: m.unsourced,
-    broker: "vanguard",
+    broker: "vanguardau",
     ticker: m.row.ticker,
   });
   const listing = {
@@ -221,7 +221,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const positional = process.argv.slice(2).filter((a) => !a.startsWith("--"));
   const [etf, place, currency] = positional;
   if (!etf) {
-    console.error("usage : node brokers/vanguard/vanguard_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]");
+    console.error("usage : node brokers/vanguardau/vanguardau_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]");
     process.exit(2);
   }
 

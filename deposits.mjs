@@ -40,6 +40,34 @@ const FOLDER = {
   // CNH, the same unit. New Taiwan dollars are the domestic account.
   // https://www.megabank.com.tw/personal/savings/deposit-service/foreign-deposit/demand-deposit
   megabank: ["TWD", "USD", "EUR", "GBP", "AUD", "JPY", "CNY", "CNH", "HKD", "ZAR", "NZD", "SGD", "THB", "CAD", "CHF", "SEK"],
+  // One foreign-currency account holds these fourteen and leaves each one
+  // there. The renminbi account is printed CNY. The Hong Kong lines are
+  // quoted CNH, the same unit. New Taiwan dollars are the domestic account.
+  // A trade is debited in the listing currency. The client converts.
+  // https://www.dbs.com.tw/treasures-zh/deposits/your-accounts/multi-currency-account
+  dbs: ["TWD", "USD", "EUR", "GBP", "CAD", "AUD", "CHF", "NZD", "SGD", "CNY", "CNH", "HKD", "JPY", "THB", "SEK", "ZAR"],
+  // One passbook holds these fifteen and leaves each one there. The
+  // renminbi account is printed CNY. The shelf quotes it as CNH, the
+  // same unit. New Taiwan dollars are the domestic account. A trade in
+  // another currency is the client's conversion.
+  // https://www.esunbank.com/zh-tw/personal/deposit/foreign-service/current-account
+  "e.sun": ["TWD", "USD", "EUR", "GBP", "CAD", "AUD", "NZD", "CHF", "SGD", "CNY", "CNH", "ZAR", "SEK", "HKD", "MXN", "THB", "JPY"],
+  // One passbook holds these sixteen and leaves each one there. The
+  // client may convert between them. That is not a conversion the
+  // deposit is forced through. The page prints renminbi. The interest
+  // board prints CNH and the shelf quotes CNH. New Taiwan dollars are
+  // the domestic account. A stock order is debited from the
+  // foreign-currency passbook, so a trade in another currency is the
+  // client's conversion.
+  // https://www.scsb.com.tw/content/dep/dep02_d1.jsp
+  scsb: ["TWD", "USD", "JPY", "HKD", "GBP", "CHF", "AUD", "CAD", "SGD", "EUR", "SEK", "DKK", "THB", "NZD", "ZAR", "CNY", "CNH", "KRW"],
+  // One passbook holds these thirteen and leaves each one there. New
+  // Taiwan dollars are the domestic account. The page prints renminbi,
+  // and the shelf quotes CNY. A trade is debited in the listing
+  // currency. The client converts.
+  // https://www.sc.com/tw/save/foreign-currency-current-account/
+  // https://www.sc.com/tw/frequently-asked-questions/deposit/
+  standardchartered: ["TWD", "USD", "HKD", "GBP", "AUD", "CAD", "CHF", "JPY", "EUR", "NZD", "SGD", "ZAR", "SEK", "CNY"],
   // Yen lands in the comprehensive account. These seven foreign currencies
   // can be paid in from a foreign-currency bank account and left as cash.
   // https://www.sbisec.co.jp/ETGate/WPLETmgR001Control?OutSide=on&getFlg=on&burl=search_home&cat1=home&cat2=service&dir=service&file=home_in_gaika.html
@@ -50,7 +78,13 @@ const FOLDER = {
   // yuan and the ASEAN currencies are converted into yen on the trade.
   // https://www.rakuten-sec.co.jp/web/account-flow/
   // https://www.rakuten-sec.co.jp/web/service/pay/forex_pay.html
-  rakuten: ["JPY", "USD", "EUR", "AUD", "NZD", "CAD"],
+  rakutenjp: ["JPY", "USD", "EUR", "AUD", "NZD", "CAD"],
+  // A deposit is ringgit: online transfer, DuitNow, cheque or GIRO.
+  // USD and HKD cannot be paid in. They appear only after converting
+  // ringgit, and a withdrawal is ringgit again.
+  // https://www.rakutentrade.my/faqs/foreign-equity-cash-portfolio-management/can-i-deposit-or-withdraw-funds-in-usd-or-hkd
+  // https://www.rakutentrade.my/faqs/cash-deposits-and-withdrawals
+  rakutenma: ["MYR"],
   // A bank transfer, PayPay Bank and PayPay Money are credited in yen and
   // left there. A US dividend arrives in dollars and is converted to yen
   // before it is credited. There is no dollar cash.
@@ -125,6 +159,10 @@ const FOLDER = {
   // https://tradesmartonline.in/open-demat-account/
   // https://tradesmartonline.in/help/demat-account-queries/which-documents-are-required-to-be-attached-with-the-account-opening-form/
   tradesmart: ["INR"],
+  // A pay-in by NEFT, RTGS or IMPS goes to a client bank account in India
+  // and is credited in rupees. No other currency is left unconverted.
+  // https://profitmart.in/bank-details/
+  profitmart: ["INR"],
   // A deposit in one of these twelve is credited to that currency's cash
   // account and left there. The cash page calls the renminbi account CNH.
   // https://secure.fundsupermart.com/fsm/advice-services/faq/0/9021/
@@ -230,6 +268,12 @@ const FOLDER = {
   // https://www.sahi.com/faq/adding-transfer-money/how-can-i-transfer-funds-to-my-sahi-account
   // https://www.sahi.com/faq/adding-transfer-money/what-is-the-maximum-amount-i-can-add-to-my-sahi-account-in-a-single-transfer
   sahi: ["INR"],
+  // Indian cash is added by UPI or net banking and left in rupees. Dollars
+  // in the US wallet are the bank's exchange of those rupees, not a
+  // currency the client deposits.
+  // https://www.indmoney.com/us-stocks
+  // https://www.indmoney.com/blog/us-stocks/how-to-transfer-money-to-your-us-stocks-account
+  indmoney: ["INR"],
   sarwa: ["USD"],
   saxo: ["USD", "CAD", "EUR", "GBP", "NOK", "PLN", "CZK", "MYR", "CHF", "DKK", "SEK", "ZAR", "JPY", "HKD", "CNH", "SGD", "AUD"],
   scalablecapital: ["EUR"],
@@ -269,6 +313,55 @@ const FOLDER = {
   captrader: ["AUD", "CAD", "CHF", "CNH", "EUR", "GBP", "HKD", "HUF", "ILS", "JPY", "MXN", "NOK", "PLN", "RUB", "SEK", "SGD", "USD"],
   WHSelfInvest: ["AUD", "CAD", "CHF", "EUR", "GBP", "HKD", "JPY", "MXN", "NOK", "USD"],
   zerodha: ["INR"],
+  // Sale proceeds are paid into the ZSE Direct wallet. A deposit arrives by
+  // Zipit, RTGS or EcoCash and is left there. Dollars are VFEX Direct, a
+  // separate platform.
+  // https://seczim.co.zw/capital-markets-in-zimbabwe/
+  // https://www.zse.co.zw/zse-direct-terms-and-conditions/
+  zsedirect: ["ZWG"],
+  // A transfer into one of VPS's Vietnamese bank accounts is credited to
+  // the securities cash account and left there. The sheet names no other
+  // currency. A foreign investor's indirect investment account is a dong
+  // account, so a wire in another currency is converted before it is cash.
+  // https://smartone.vps.com.vn/Templates/Huong_dan_nop_tien_tai_khoan_chung_khoan.pdf
+  vps: ["VND"],
+  // A QR payment, a linked Vietnamese bank, or the VND01 account at BIDV
+  // is credited to the securities cash account and left there. The sheets
+  // name no other currency. A non-resident is sent to an indirect
+  // investment account, which is a dong account, so a wire in another
+  // currency is converted before it is cash.
+  // https://support.vndirect.com.vn/hc/vi/articles/40896126440985
+  // https://support.vndirect.com.vn/hc/en-us/articles/29870967103641
+  vndirect: ["VND"],
+  // A transfer into one of the Vietnamese bank accounts is credited to the
+  // securities cash account and left there. The sheet names no other currency.
+  // https://www.vietcap.com.vn/huong-dan-chung/ngan-hang-chi-nhanh-ho-chi-minh
+  vietcap: ["VND"],
+  // A transfer to the BIDV account printed on the sheet, or a QR from a
+  // Vietnamese bank, is credited to the securities cash account and left
+  // there. The sheet names no other currency.
+  // https://www.ssi.com.vn/khach-hang-ca-nhan/huong-dan-nop-tien
+  ssi: ["VND"],
+  // A transfer to the euro clearing account is credited and left there.
+  // The price list prices that one account. A coupon in another currency
+  // is credited in euros unless the customer already holds an account in
+  // that currency, and no such account is offered.
+  // https://www.visualvest.de/wissen/faq
+  visualvest: ["EUR"],
+  // Yen can be paid in by a realtime transfer or a bank transfer and left
+  // as yen. Dollars can be paid in by a bank transfer from a bank in Japan
+  // and left as dollars. No other currency can be paid in.
+  // https://www.moomoo.com/jp/manual/topic-deposit-withdrawal-12-78
+  // https://www.moomoo.com/jp/support/topic7_81
+  moomoo: ["JPY", "USD"],
+  // Rupiah lands by a BCA transfer, a virtual account, an e-wallet or
+  // QRIS and is left in rupiah. Dollars land by a USD transfer into the
+  // USD balance and are left in dollars. The minimum is $10,000. Pluang
+  // charges nothing on that transfer. Converting rupiah into dollars is
+  // a separate 0.25% fee, so it is not a deposit.
+  // https://pluang.com/biaya/biaya-lainnya
+  // https://pluang.com/faq/top-up/usd-direct-deposit/langkah-langkah-top-up-deposit-menggunakan-usd-direct-pada-aplikasi-pluang
+  pluang: ["IDR", "USD"],
   // The KYC offers a resident account and an NRI account (NRE or NRO). Both are rupees.
   zebu: ["INR"],
 };

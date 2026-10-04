@@ -18,6 +18,7 @@
 //   node brokers/vanguarduk/vanguarduk_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 
 const LIST = "https://www.vanguardinvestor.co.uk/api/productList";
@@ -142,7 +143,7 @@ results.sort((left, right) => {
   return left.ticker.localeCompare(right.ticker);
 });
 
-fs.writeFileSync(OUTPUT, JSON.stringify(stampRows(results), null, 2));
+fs.writeFileSync(OUTPUT, JSON.stringify(stampRows(withoutObligations(results)), null, 2));
 
 const byType = new Map();
 for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);

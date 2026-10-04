@@ -22,6 +22,8 @@
 //   node brokers/zesty/zesty_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
+import { stampIsinMatches } from "../../isinMatches.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 
 const APP = "YL9L52U78A";
@@ -158,6 +160,21 @@ function pickIsin(rows, name, minScore, acceptSole) {
   return popular.length === 1 ? popular[0].isin : "";
 }
 
+function venueGroups(index, ticker, place) {
+  const key = place === "BCS" ? ticker.replace(/-/g, "_") : ticker;
+  const candidates = index.get(key) || index.get(ticker) || [];
+  const allowed = new Set(CSV_VENUES[place] || []);
+  const groups = new Map();
+  for (const row of candidates) {
+    for (const exchange of row.exchanges) {
+      if (!allowed.has(exchange)) continue;
+      if (!groups.has(exchange)) groups.set(exchange, new Set());
+      groups.get(exchange).add(row.isin);
+    }
+  }
+  return groups;
+}
+
 function resolveIsin(index, ticker, name, place) {
   // Santiago writes SQM-B. The lists write SQM_B.
   const key = place === "BCS" ? ticker.replace(/-/g, "_") : ticker;
@@ -274,7 +291,7 @@ for (const exchange of Object.keys(VENUES)) {
       const id = crypto ? `${ticker}:CRYPTO:${currency}:CRYPTO` : `${isin || ticker}:${place}:${currency}:${type}`;
       if (seen.has(id)) continue;
       seen.add(id);
-      results.push({
+      const line = {
         query: ticker,
         ticker,
         name,
@@ -283,7 +300,9 @@ for (const exchange of Object.keys(VENUES)) {
         type,
         raw: [rawSymbol, name, place, currency, isin].filter(Boolean).join(" "),
         isin,
-      });
+      };
+      if (!crypto && !isin) stampIsinMatches(line, venueGroups(isins, ticker, place), ticker);
+      results.push(line);
     }
   }
   console.error(`${exchange} fait`);
@@ -299,7 +318,7 @@ results.sort((left, right) => {
 
 fs.writeFileSync(
   new URL("zesty-parsed.json", import.meta.url),
-  JSON.stringify(stampRows(results), null, 2)
+  JSON.stringify(stampRows(withoutObligations(results)), null, 2)
 );
 
 const byType = new Map();

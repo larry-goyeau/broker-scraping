@@ -12,6 +12,7 @@
 //   node brokers/cowrywise/cowrywise_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 
 const STOCKS = "https://dashboard.cowrywise.com/api/v2/stocks/public/";
@@ -192,7 +193,7 @@ results.sort((left, right) => left.ticker.localeCompare(right.ticker, "en"));
 
 fs.writeFileSync(
   new URL("cowrywise-parsed.json", import.meta.url),
-  JSON.stringify(stampRows(results), null, 2)
+  JSON.stringify(stampRows(withoutObligations(results)), null, 2)
 );
 
 const named = results.filter((row) => row.isin).length;

@@ -15,6 +15,7 @@
 //   node brokers/arihant/arihant_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import { cashBook, lookup, companyName, isinOf, debtIsin, isInav } from "../../indianCash.mjs";
 import fs from "node:fs";
 
@@ -121,7 +122,7 @@ rows.sort((left, right) => {
   return left.ticker.localeCompare(right.ticker);
 });
 
-fs.writeFileSync(new URL("arihant-parsed.json", import.meta.url), JSON.stringify(stampRows(rows), null, 2));
+fs.writeFileSync(new URL("arihant-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(rows)), null, 2));
 
 const byBook = new Map();
 for (const row of rows) byBook.set(`${row.exchange} ${row.type}`, (byBook.get(`${row.exchange} ${row.type}`) || 0) + 1);

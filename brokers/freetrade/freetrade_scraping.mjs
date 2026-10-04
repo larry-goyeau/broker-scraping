@@ -13,6 +13,7 @@
 //   node brokers/freetrade/freetrade_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 
 const ORIGIN = "https://web.freetrade.io";
@@ -208,7 +209,7 @@ results.sort((left, right) => {
 
 fs.writeFileSync(
   new URL("freetrade-parsed.json", import.meta.url),
-  JSON.stringify(stampRows(results), null, 2)
+  JSON.stringify(stampRows(withoutObligations(results)), null, 2)
 );
 
 const byType = new Map();

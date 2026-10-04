@@ -22,6 +22,7 @@
 //   node brokers/finanzen/finanzen_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 import zlib from "node:zlib";
 
@@ -141,7 +142,7 @@ results.sort((left, right) => {
 
 fs.writeFileSync(
   new URL("finanzen-parsed.json", import.meta.url),
-  JSON.stringify(stampRows(results), null, 2)
+  JSON.stringify(stampRows(withoutObligations(results)), null, 2)
 );
 
 const byType = new Map();

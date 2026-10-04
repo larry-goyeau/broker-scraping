@@ -51,6 +51,18 @@
 // 2026-09-28, named it: 100 shares at 2 550 asked for 170.90 EUR, and
 // 3 000 shares asked for 5 050.90 EUR. That is 4 000 KRW, then 4 590 KRW,
 // which is 0.06 %, not the 0.09 % of the other rows. No order was sent.
+//
+// Bursa is not on the card either. On 2026-10-02 the open portal
+// (account DUR224479) previewed 3REN on BURSAMY and nothing was sent.
+// The commission line is IBKR tier I, not the 0.09 % of the other rows:
+// 0.08 % minimum 12 MYR, plus stamp 0.1 % rounded up to the next ringgit
+// (maximum 1 000; none on an ETF), clearing 0.03 % (maximum 1 000) and
+// 43.40 MYR of settlement. The same line was measured on CapTrader.
+//   100 at 0.375     56.41 MYR
+//   200 at 0.375     56.42
+//   1 000 at 0.375   56.51
+//   10 000 at 0.375  60.52
+//   100 000 at 0.375 122.65
 // Crypto (Zero Hash / Paxos) has no published % .
 //
 // The American and Canadian caps bind the per-share amount and the
@@ -149,6 +161,9 @@ const RULE = {
   au: { rate: 0.0009, min: 9.9, ccy: "AUD" },
   // Not on the card. Portal cash check on 122450, 2026-09-28.
   kr: { rate: 0.0006, min: 4000, ccy: "KRW" },
+  // Not on the card. Portal preview of 3REN, 2026-10-02. Statutory pieces
+  // are added beside this rate in bursaStatutory.
+  my: { rate: 0.0008, min: 12, ccy: "MYR" },
 };
 
 const TO_VENUES = {
@@ -231,6 +246,7 @@ export function feeMarketOf(exchange, mic, currency) {
   if (code === "SEHK" || m === "XHKG") return "hk";
   if (code === "ASX" || m === "XASX") return "au";
   if (code === "KRX") return "kr";
+  if ((code === "BURSAMY" || code === "BURSA" || m === "XKLS") && (!ccy || ccy === "MYR")) return "my";
   return null;
 }
 
@@ -333,7 +349,16 @@ function specialistSide(amountEur, spec) {
 /**
  * One side's commission, at the floor and under the cap.
  */
-export function commissionSide({ shares, amount, price, market }) {
+export // Stamp, clearing and the flat settlement the portal folds into the
+// commission line. An ETF pays no stamp.
+function bursaStatutory(notional, type) {
+  const fund = /^(ETF|ETN|ETC)$/.test(String(type || "").toUpperCase());
+  const stamp = fund ? 0 : Math.min(1000, Math.ceil(Number(notional) * 0.001 - 1e-9));
+  const clearing = Math.min(1000, Number(notional) * 0.0003);
+  return stamp + clearing + 43.4;
+}
+
+function commissionSide({ shares, amount, price, market }) {
   const rule = RULE[market];
   if (!rule) return null;
 
@@ -466,7 +491,9 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const basis =
     (market === "kr"
       ? `barème WH SelfInvest ${market}, lu le 2026-09-28 sur le contrôle de trésorerie du portail : `
-      : `barème WH SelfInvest ${market}, relu le ${SCHEDULE.readOn} : `) +
+      : market === "my"
+        ? `barème WH SelfInvest ${market}, aperçu du portail le 2026-10-02 : `
+        : `barème WH SelfInvest ${market}, relu le ${SCHEDULE.readOn} : `) +
     (rule.rate != null
       ? `${(100 * rule.rate).toFixed(2)} % par sens`
       : market === "otc"
@@ -474,7 +501,10 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
         : `${rule.perShare} ${rule.ccy} par part`) +
     (rule.min != null ? `, plancher ${rule.min} ${rule.ccy}` : "") +
     (rule.max != null ? `, plafond ${rule.max} ${rule.ccy}` : "") +
-    (rule.maxPct != null ? `, plafond ${(100 * rule.maxPct).toFixed(0)} % du montant` : "");
+    (rule.maxPct != null ? `, plafond ${(100 * rule.maxPct).toFixed(0)} % du montant` : "") +
+    (market === "my"
+      ? `, plus timbre 0,1 % arrondi au ringgit supérieur (plafond 1 000, aucun sur un ETF), compensation 0,03 % (plafond 1 000) et 43,40 MYR de règlement`
+      : "");
 
   const n = Number(shares);
   const p = Number(price);
@@ -500,8 +530,11 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
 
   const buyComm = commissionSide({ shares: n, amount: notionalInRule, price: p, market });
   const sellComm = commissionSide({ shares: n, amount: notionalInRule, price: p, market });
-  const buyCommUsd = buyComm ? dollars(buyComm.charged, buyComm.currency) : null;
-  const sellCommUsd = sellComm ? dollars(sellComm.charged, sellComm.currency) : null;
+  const bursaExtra = market === "my" && notionalInRule != null ? bursaStatutory(notionalInRule, listing.type) : 0;
+  const buyCharged = buyComm ? buyComm.charged + bursaExtra : null;
+  const sellCharged = sellComm ? sellComm.charged + bursaExtra : null;
+  const buyCommUsd = buyCharged != null ? dollars(buyCharged, buyComm.currency) : null;
+  const sellCommUsd = sellCharged != null ? dollars(sellCharged, sellComm.currency) : null;
   const specialist = market === "frankfurt" ? specialistSide(notionalInRule, SPECIALIST_ON_PAGE.frankfurt) : null;
   const specialistUsd = specialist ? dollars(specialist.charged, specialist.currency) : 0;
   const specialistRoundUsd = specialist ? plus(specialistUsd, specialistUsd) : 0;
@@ -606,7 +639,9 @@ function confidenceOf({
   said.push(
     (market === "kr"
       ? `commission WH SelfInvest, palier ${market}, lue le 2026-09-28 sur le contrôle de trésorerie du portail, `
-      : `commission WH SelfInvest, palier ${market}, lue le ${SCHEDULE.readOn} sur la carte all-exchanges, `) +
+      : market === "my"
+        ? `commission WH SelfInvest, palier ${market}, aperçu 3REN sur BURSAMY le 2026-10-02, `
+        : `commission WH SelfInvest, palier ${market}, lue le ${SCHEDULE.readOn} sur la carte all-exchanges, `) +
       `facturée par sens et convertie en dollars au mid BCE du ${FX_AS_OF}`
   );
   if (buyComm) {

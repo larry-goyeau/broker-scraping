@@ -1,5 +1,6 @@
 import puppeteer from "puppeteer-core";
 import { stampRows } from "../../accepted.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -71,6 +72,14 @@ function listingName(hit) {
 // Arabia. Dropped.
 function tadawulListing(exchange) {
   return String(exchange || "").toUpperCase() === "TADAWUL";
+}
+
+// Malaysia is absent from the published exchange list, so a BURSAMY quote
+// from the search is not a list Mexem prints.
+// https://www.mexem.com/exchange-listings
+function bursaListing(exchange) {
+  const code = String(exchange || "").toUpperCase();
+  return code === "BURSAMY" || code === "BURSA MALAYSIA";
 }
 
 function listingVenue(hit, info) {
@@ -245,7 +254,7 @@ if (!fresh && fs.existsSync(outputPath)) {
     if (Array.isArray(existing)) {
       for (const entry of existing) {
         if (String(entry?.type || "").toUpperCase() === "CRYPTO") continue;
-        if (tadawulListing(entry?.exchange)) continue;
+        if (tadawulListing(entry?.exchange) || bursaListing(entry?.exchange)) continue;
         results.push(entry);
         if (entry?.ticker) seen.add(entryKey(entry));
       }
@@ -567,7 +576,7 @@ async function scrapeJob(job) {
     const name = listingName(hit) || normalize(info.companyName || "");
     const exchange = listingVenue(hit, info) || (job.kind === "CRYPTO" ? "CRYPTO" : "");
     const currency = info.currency || null;
-    if (!ticker || !exchange || !name || tadawulListing(exchange)) continue;
+    if (!ticker || !exchange || !name || tadawulListing(exchange) || bursaListing(exchange)) continue;
 
     const type = listingType(name, job.kind);
     if (type === "CRYPTO") continue;
@@ -586,7 +595,7 @@ async function scrapeJob(job) {
 }
 
 function save() {
-  fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
+  fs.writeFileSync(outputPath, JSON.stringify(stampRows(withoutObligations(results), import.meta.url), null, 2));
 }
 
 const endIndex = walkLimit > 0 ? startIndex - 1 + walkLimit : jobs.length;
@@ -631,7 +640,7 @@ async function runJob(queryIndex, job) {
       raw: row.raw,
       isin: job.shelf === "isin" ? job.query : "",
     };
-    if (tadawulListing(entry.exchange)) continue;
+    if (tadawulListing(entry.exchange) || bursaListing(entry.exchange)) continue;
     if (row.restricted) entry.nonEuResident = true;
     // NSE cash in rupees is on the book but IBKR Europe will not permission
     // it (Indian / NRI account only). Keep the line and mark it.

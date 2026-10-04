@@ -65,6 +65,19 @@
 // the account could not cover the margin. The same order on the other two
 // portals is 0.06 % with a 4 000 KRW floor, and that is CapTrader's charge.
 //
+// Bursa is not on the stock card. On 2026-10-02 the paper account DUR223858
+// previewed MSC (conid 841837884) on BURSAMY and nothing was sent. The
+// commission line is IBKR's tier I, 0.08 % minimum 12 MYR, plus the
+// third-party schedule on the Malaysia stock-fee page: stamp 0.1 % rounded
+// up to the next ringgit (maximum 1 000; none on an ETF), clearing 0.03 %
+// (maximum 1 000) and a 43.40 MYR settlement on every order.
+//   100 MSC at 1.65   56.45 MYR
+//   200 at 1.65       56.50
+//   1 000 at 1.65     57.90
+//   5 000 at 1.65     66.88
+//   10 000 at 1.65    78.55
+//   100 000 at 1.65   389.90
+//
 // One live trip, 2026-09-10, account U27604034, euro cash: 1 IWDA market,
 // ticket bound AEB, both legs routed GETTEX2 @ 126,10, 2,00 € each way. The
 // 2026-09-15 previews quote that trip as the bottom of a 2 … 4 € range. The
@@ -238,6 +251,9 @@ const RULE = {
   au: { rate: 0.001, min: 10, ccy: "AUD" },
   // Not on the card. Same 0.06 % / 4 000 KRW as the other two portals.
   kr: { rate: 0.0006, min: 4000, ccy: "KRW" },
+  // Not on the card. Measured on the portal, 2026-10-02. The statutory
+  // pieces are added beside this rate in bursaStatutory.
+  my: { rate: 0.0008, min: 12, ccy: "MYR" },
 };
 
 const TO_VENUES = {
@@ -320,6 +336,7 @@ export function feeMarketOf(exchange, mic) {
   if (code === "SEHKNTL" || code === "SHSE" || m === "XSHG") return "cnh";
   if (code === "ASX" || m === "XASX") return "au";
   if (code === "KRX") return "kr";
+  if (code === "BURSAMY" || code === "BURSA" || m === "XKLS") return "my";
   if (code === "MOEX" || m === "MISX") return "ru";
   if (
     /^(TLSE|RSE|NSEL|XTAL|XRIS|XLIT|NVILNIUS|NTALLINN|NRIGA)$/.test(code) ||
@@ -415,6 +432,15 @@ function remarkOf({ listing, market } = {}) {
     lines.push(`Custody ${(pct * 100).toFixed(2)}%/year on this currency (and on euro names on BUX).`);
   }
   return lines.join("\n");
+}
+
+// Stamp, clearing and the flat settlement the portal folds into the
+// commission line. An ETF pays no stamp.
+function bursaStatutory(notional, type) {
+  const fund = /^(ETF|ETN|ETC)$/.test(String(type || "").toUpperCase());
+  const stamp = fund ? 0 : Math.min(1000, Math.ceil(Number(notional) * 0.001 - 1e-9));
+  const clearing = Math.min(1000, Number(notional) * 0.0003);
+  return stamp + clearing + 43.4;
 }
 
 function specialistSide(market) {
@@ -524,13 +550,18 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const basis =
     (market === "kr"
       ? `barème CapTrader ${market}, même palier que les deux autres portails, lu le 2026-09-28 : `
-      : `barème CapTrader ${market}, lu le ${SCHEDULE.readOn} (page du ${SCHEDULE.pageUpdated}) : `) +
+      : market === "my"
+        ? `barème CapTrader ${market}, aperçu du portail le 2026-10-02 : `
+        : `barème CapTrader ${market}, lu le ${SCHEDULE.readOn} (page du ${SCHEDULE.pageUpdated}) : `) +
     (rule.rate != null
       ? `${(100 * rule.rate).toFixed(4).replace(/0+$/, "").replace(/\.$/, "")} % par sens`
       : `${rule.perShare} ${rule.ccy} par part`) +
     `, plancher ${rule.min} ${rule.ccy}` +
     (rule.max != null ? `, plafond ${rule.max} ${rule.ccy}` : "") +
-    (rule.maxPct != null ? `, plafond ${(100 * rule.maxPct).toFixed(0)} % du montant` : "");
+    (rule.maxPct != null ? `, plafond ${(100 * rule.maxPct).toFixed(0)} % du montant` : "") +
+    (market === "my"
+      ? `, plus timbre 0,1 % arrondi au ringgit supérieur (plafond 1 000, aucun sur un ETF), compensation 0,03 % (plafond 1 000) et 43,40 MYR de règlement`
+      : "");
 
   const n = Number(shares);
   const p = Number(price);
@@ -556,8 +587,11 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
 
   const buyComm = commissionSide({ shares: n, amount: notionalInRule, market });
   const sellComm = commissionSide({ shares: n, amount: notionalInRule, market });
-  const buyCommUsd = buyComm ? dollars(buyComm.charged, buyComm.currency) : null;
-  const sellCommUsd = sellComm ? dollars(sellComm.charged, sellComm.currency) : null;
+  const bursaExtra = market === "my" && notionalInRule != null ? bursaStatutory(notionalInRule, listing.type) : 0;
+  const buyCharged = buyComm ? buyComm.charged + bursaExtra : null;
+  const sellCharged = sellComm ? sellComm.charged + bursaExtra : null;
+  const buyCommUsd = buyCharged != null ? dollars(buyCharged, buyComm.currency) : null;
+  const sellCommUsd = sellCharged != null ? dollars(sellCharged, sellComm.currency) : null;
 
   const specialist = specialistSide(market);
   const specialistUsd = specialist ? dollars(specialist.charged, specialist.currency) : 0;
@@ -675,7 +709,9 @@ function confidenceOf({
   said.push(
     (market === "kr"
       ? `commission CapTrader, palier ${market}, même palier que les deux autres portails, lu le 2026-09-28, `
-      : `commission CapTrader, palier ${market}, lue le ${SCHEDULE.readOn} sur la page Aktien du ${SCHEDULE.pageUpdated}, `) +
+      : market === "my"
+        ? `commission CapTrader, palier ${market}, aperçu MSC sur BURSAMY le 2026-10-02, `
+        : `commission CapTrader, palier ${market}, lue le ${SCHEDULE.readOn} sur la page Aktien du ${SCHEDULE.pageUpdated}, `) +
       `facturée par sens et convertie en dollars au mid BCE du ${FX_AS_OF}`
   );
   if (buyComm) {

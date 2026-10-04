@@ -22,6 +22,7 @@
 
 import puppeteer from "puppeteer-core";
 import { stampRows } from "../../accepted.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -430,7 +431,7 @@ const skipped = new Map();
 const bump = (reason) => skipped.set(reason, (skipped.get(reason) || 0) + 1);
 
 function saveResults() {
-  fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
+  fs.writeFileSync(outputPath, JSON.stringify(stampRows(withoutObligations(results), import.meta.url), null, 2));
 }
 
 const CONCURRENCY = 1;

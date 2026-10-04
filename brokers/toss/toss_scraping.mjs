@@ -10,6 +10,7 @@
 //   node brokers/toss/toss_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 
 const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36";
@@ -180,7 +181,7 @@ if (unread.length) {
   console.error(`left unread ${unread.map((reason) => `${skipped.get(reason)} ${reason}`).join(", ")}`);
   process.exit(1);
 }
-fs.writeFileSync(new URL("toss-parsed.json", import.meta.url), JSON.stringify(stampRows(unique), null, 2));
+fs.writeFileSync(new URL("toss-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(unique)), null, 2));
 fs.rmSync(CACHE, { force: true });
 
 const byBook = new Map();

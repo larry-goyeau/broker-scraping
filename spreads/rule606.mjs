@@ -49,6 +49,7 @@ export const US_BROKERS = {
   apex: { crd: ["13071"], name: "Apex Clearing Corporation" },
   clearstreet: { crd: ["288933"], name: "Clear Street LLC" },
   ifastsecuritiesus: { crd: ["327903"], name: "iFAST Securities US Corporation" },
+  futuclearing: { crd: ["298769"], name: "Futu Clearing Inc." },
 };
 
 // Introducing brokers that do not file their own 606: same mix as the US BD
@@ -86,6 +87,18 @@ export const ALIASES = {
   // iFAST board notice of 29 May 2025: iFAST Securities US Corporation routes
   // the group's US orders and custodies the US securities.
   fsmone: "ifastsecuritiesus",
+  // Rakuten Trade's foreign-equity FAQ names Interactive Brokers as the
+  // partner that can suspend the service. US cash follows that firm's NMS
+  // flow, so the book is Interactive Brokers LLC's 606.
+  rakutenma: "interactivebrokers",
+  // moomoo証券's December 2025 trading booklet, chapter 1 article 13:
+  // a US stock order is transmitted to Futu Clearing Inc.
+  moomoo: "futuclearing",
+  // Pluang sends a US share or ETF through PT PG Berjangka and KBI to
+  // Alpaca Securities LLC, the only overseas broker that executes it.
+  // Options go to Atomic Vaults and are not this book.
+  // https://pluang.com/faq/us-stocks/about-us-stocks/penyaluran-dana-saat-transaksi-saham-as-di-pluang
+  pluang: "alpaca",
   // Toss routes some US orders through TSA Financial and clears through
   // Apex and Clear Street. Apex's 2026 Q2 Q is 1.702. Clear Street filed
   // no market-order mix. TSA Financial has no 606 in that quarter.

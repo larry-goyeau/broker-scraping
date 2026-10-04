@@ -1,5 +1,6 @@
 import puppeteer from "puppeteer-core";
 import { stampRows } from "../../accepted.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -516,7 +517,7 @@ if (unnamedCrypto > 0) {
 
 results.sort((left, right) => left.ticker.localeCompare(right.ticker) || left.type.localeCompare(right.type));
 
-fs.writeFileSync(new URL("bitpanda-parsed.json", import.meta.url), JSON.stringify(stampRows(results, import.meta.url), null, 2));
+fs.writeFileSync(new URL("bitpanda-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(results), import.meta.url), null, 2));
 
 const byType = new Map();
 for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);

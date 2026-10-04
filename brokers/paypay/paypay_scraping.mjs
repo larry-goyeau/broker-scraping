@@ -17,6 +17,8 @@
 //   node brokers/paypay/paypay_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
+import { stampIsinMatches } from "../../isinMatches.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 
 const LISTS = [
@@ -115,8 +117,11 @@ function loadIsins(csvPath, into) {
 
 function tokyo(index, ticker) {
   const rows = (index.get(ticker) || []).filter((row) => row.exchanges.has("TSE"));
-  const isins = [...new Set(rows.map((row) => row.isin))];
-  return isins.length === 1 ? isins[0] : "";
+  const ids = [...new Set(rows.map((row) => row.isin))];
+  if (ids.length === 1) return { isin: ids[0], matches: undefined };
+  const held = { ticker };
+  if (ids.length > 1) stampIsinMatches(held, new Map([["TSE", new Set(ids)]]), ticker);
+  return { isin: "", matches: held.matches };
 }
 
 function america(index, ticker, name) {
@@ -124,13 +129,25 @@ function america(index, ticker, name) {
   const isins = [...new Set(rows.map((row) => row.isin))];
   if (isins.length === 1) return { isin: isins[0], place: placeOf(rows) };
   if (isins.length === 0) return { isin: "", place: "US" };
+  const groups = new Map();
+  for (const row of rows) {
+    for (const exchange of row.exchanges) {
+      if (!US_LISTED.has(exchange)) continue;
+      if (!groups.has(exchange)) groups.set(exchange, new Set());
+      groups.get(exchange).add(row.isin);
+    }
+  }
+  const held = { ticker };
   const scored = rows.map((row) => ({
     isin: row.isin,
     venues: row.exchanges.size,
     score: Math.max(0, ...row.names.map((candidate) => nameScore(name, candidate))),
   }));
   const best = Math.max(...scored.map((row) => row.score));
-  if (!(best >= 0.5)) return { isin: "", place: "US" };
+  if (!(best >= 0.5)) {
+    stampIsinMatches(held, groups, ticker);
+    return { isin: "", place: "US", matches: held.matches };
+  }
   const byIsin = new Map();
   for (const row of scored) {
     if (row.score !== best) continue;
@@ -140,7 +157,10 @@ function america(index, ticker, name) {
   const winners = [...byIsin.values()];
   const most = Math.max(...winners.map((row) => row.venues));
   const popular = winners.filter((row) => row.venues === most);
-  if (popular.length !== 1) return { isin: "", place: "US" };
+  if (popular.length !== 1) {
+    stampIsinMatches(held, groups, ticker);
+    return { isin: "", place: "US", matches: held.matches };
+  }
   const kept = rows.filter((row) => row.isin === popular[0].isin);
   return { isin: popular[0].isin, place: placeOf(kept) };
 }
@@ -204,7 +224,7 @@ for (const list of LISTS) {
     }
     const name = String(row.brand || "").replace(/\s+/g, " ").trim() || ticker;
     const japan = list.market === "JP";
-    const found = japan ? { isin: tokyo(isins, ticker), place: "XTKS" } : america(isins, ticker, name);
+    const found = japan ? { ...tokyo(isins, ticker), place: "XTKS" } : america(isins, ticker, name);
     const currency = japan ? "JPY" : "USD";
     const id = `${found.isin || ticker}:${found.place}:${currency}:${list.type}`;
     if (seen.has(id)) continue;
@@ -218,6 +238,7 @@ for (const list of LISTS) {
       type: list.type,
       raw: [ticker, name, found.place, currency, found.isin].filter(Boolean).join(" "),
       isin: found.isin,
+      ...(found.matches ? { matches: found.matches } : {}),
     });
   }
 }
@@ -232,7 +253,7 @@ results.sort((left, right) => {
 
 fs.writeFileSync(
   new URL("paypay-parsed.json", import.meta.url),
-  JSON.stringify(stampRows(results), null, 2)
+  JSON.stringify(stampRows(withoutObligations(results)), null, 2)
 );
 
 const byType = new Map();

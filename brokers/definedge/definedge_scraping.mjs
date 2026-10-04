@@ -18,6 +18,7 @@
 //   node brokers/definedge/definedge_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 import { inflateRawSync } from "node:zlib";
 import { debtIsin, isinOf, isInav } from "../../indianCash.mjs";
@@ -143,7 +144,7 @@ rows.sort((left, right) => {
   return left.ticker.localeCompare(right.ticker);
 });
 
-fs.writeFileSync(new URL("definedge-parsed.json", import.meta.url), JSON.stringify(stampRows(rows), null, 2));
+fs.writeFileSync(new URL("definedge-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(rows)), null, 2));
 
 const byBook = new Map();
 for (const row of rows) byBook.set(`${row.exchange} ${row.type}`, (byBook.get(`${row.exchange} ${row.type}`) || 0) + 1);

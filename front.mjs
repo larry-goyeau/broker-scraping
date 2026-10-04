@@ -98,6 +98,18 @@ const FOLDER_NAME = {
   choice: "Choice",
   "m.stock": "m.Stock",
   megabank: "Mega Bank",
+  zsedirect: "ZSE Direct",
+  vps: "VPS",
+  vndirect: "VNDirect",
+  vietcap: "Vietcap",
+  rakutenjp: "Rakuten Japan",
+  rakutenma: "Rakuten Malaysia",
+  profitmart: "Profitmart",
+  dbs: "DBS Taiwan",
+  "e.sun": "E.SUN",
+  scsb: "SCSB",
+  standardchartered: "Standard Chartered Taiwan",
+  moomoo: "moomoo Japan",
 };
 
 function metaFor(folder, list) {
@@ -188,6 +200,7 @@ const imposesCurrency = (folder) =>
 console.error("indexation des catalogues…");
 const t0 = Date.now();
 let listings = 0;
+const matchedListings = [];
 for (const file of catalogueFiles()) {
   const folder = file.split("/").slice(-2, -1)[0];
   if (!brokers.has(folder)) brokers.set(folder, { folder, ...metaFor(folder, list) });
@@ -260,7 +273,33 @@ for (const file of catalogueFiles()) {
     );
     if (!dup) held.push(listing);
     inst.byBroker.set(folder, held);
+    // A line with no single ISIN carries the correspondences the shared lists
+    // did print: every ISIN on the allowed places, or the market code when
+    // none did. Searching any of them has to find this listing.
+    if (Array.isArray(row.matches)) {
+      for (const token of row.matches) {
+        const text = String(token || "").trim().toUpperCase();
+        if (!text) continue;
+        if (/^[A-Z]{2}[A-Z0-9]{10}$/.test(text)) {
+          inst.isins.add(text);
+          matchedListings.push({ isin: text, folder, listing });
+        } else {
+          inst.tickers.add(text);
+          inst.tickerCounts.set(text, (inst.tickerCounts.get(text) || 0) + 1);
+        }
+      }
+    }
   }
+}
+for (const { isin, folder, listing } of matchedListings) {
+  const host = instruments.get(isin);
+  if (!host) continue;
+  const held = host.byBroker.get(folder) || [];
+  const dup = held.some(
+    (h) => h.ticker === listing.ticker && h.exchange === listing.exchange && h.currency === listing.currency
+  );
+  if (!dup) held.push(listing);
+  host.byBroker.set(folder, held);
 }
 console.error(
   `${instruments.size} instruments, ${listings} cotations, ${brokers.size} brokers en ${Date.now() - t0} ms`
@@ -371,9 +410,11 @@ function formatTotal(cost, usd) {
     // levies exactly where they were. A broker still on the old contract has no
     // such figure and says N/A here as it does for the total.
     fees: fmtUsd(cost?.brokerFees),
-    // The book's own dollars: the round trip minus what the broker bills.
-    // Missing stays missing, so a hole is not printed as a free book.
-    spread: fmtUsd(bookUsd(cost, usd)),
+    // The book's own dollars: the spread per share times the shares, or the
+    // basis-point book times the amount. Levies that sit in the total stay
+    // out of this column. Missing stays missing, so a hole is not printed
+    // as a free book.
+    spread: fmtUsd(bookUsd(cost)),
     remark: String(cost?.remark || "").trim(),
     buyable: cost?.onlineBuy !== false,
     venueExchange: displayExchange(cost?.listing?.exchange || "", {
@@ -398,12 +439,18 @@ function formatTotal(cost, usd) {
 // derivative over the same line.
 const EMPTY_ROW = { total: NA, fees: NA, spread: NA, remark: "", buyable: true, venueExchange: "", venueCurrency: "", cashCurrency: "", venueAuthoritative: false, spreadKnown: false };
 
-function bookUsd(cost, usd) {
-  const total = Number(usd);
-  const fees = Number(cost?.brokerFees);
-  if (!Number.isFinite(total) || !Number.isFinite(fees)) return null;
-  const spread = Number((total - fees).toFixed(2));
-  return spread >= 0 ? spread : null;
+function bookUsd(cost) {
+  const shares = Number(cost?.trade?.shares);
+  const notional = Number(cost?.trade?.notional);
+  const notionalUsd = Number(cost?.trade?.notionalUsd);
+  const perShare = cost?.perShare == null ? null : Number(cost.perShare);
+  const bp = cost?.bp == null ? null : Number(cost.bp);
+  const ccy = String(cost?.trade?.currency || cost?.listing?.currency || "").toUpperCase();
+  const usdPer =
+    notional > 0 && Number.isFinite(notionalUsd) ? notionalUsd / notional : ccy === "USD" ? 1 : null;
+  if (perShare != null && Number.isFinite(perShare) && shares > 0 && usdPer != null) return perShare * shares * usdPer;
+  if (bp != null && Number.isFinite(bp) && Number.isFinite(notionalUsd) && notionalUsd > 0) return (notionalUsd * bp) / 1e4;
+  return null;
 }
 
 function estimateListing(folder, listing, inst, extra = {}, size = {}) {
@@ -830,8 +877,11 @@ function search(q, limit = 20, nat = "", dep = "") {
   if (query.length < 1) return [];
   // Normalised once rather than once per instrument.
   const raw = query.toUpperCase();
-  const { base } = cryptoPair(raw, "");
-  const Q = base && base !== raw ? base : raw;
+  const { base, quote } = cryptoPair(raw, "");
+  // BTC-USD is the coin. IDX:WIKA and NASDAQ:ACB are catalogue codes, and
+  // the part after the colon is not a currency.
+  const quoteCcy = new Set(["USD", "EUR", "GBP", "IDR", "JPY", "USDT", "USDC", "CHF", "AUD", "CAD", "SGD", "HKD", "CNH", "CNY"]);
+  const Q = base && quote && quoteCcy.has(quote) ? base : raw;
   const hits = [];
   for (const inst of instruments.values()) {
     const s = score(inst, Q);
@@ -2575,7 +2625,7 @@ const DEPOSIT_CCY = {
   US: "USD", CA: "CAD", AU: "AUD", JP: "JPY", SG: "SGD", HK: "HKD", AE: "AED", ZA: "ZAR", IN: "INR",
   BR: "BRL", MX: "MXN", CL: "CLP", CO: "COP", AR: "ARS", SE: "SEK", NO: "NOK", DK: "DKK", FO: "DKK",
   GL: "DKK", PL: "PLN", CZ: "CZK", HU: "HUF", RO: "RON", TR: "TRY", EG: "EGP", SA: "SAR", IL: "ILS",
-  KR: "KRW", TW: "TWD", MY: "MYR", CN: "CNH", KW: "KWD",
+  KR: "KRW", TW: "TWD", MY: "MYR", CN: "CNH", KW: "KWD", ZW: "ZWG", VN: "VND",
 };
 const DEPOSIT_CURRENCIES = new Set(currencyOptions().map((row) => row.code));
 const localeCache = new Map();

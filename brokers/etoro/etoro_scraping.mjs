@@ -1,5 +1,7 @@
 import fs from "node:fs";
 import { stampRows } from "../../accepted.mjs";
+import { stampIsinMatches } from "../../isinMatches.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -332,6 +334,21 @@ function refineType(type, name) {
 // matches where the CSV carries the ticker, the venue settles it and a verbose
 // legal name need not be re-derived; without venue agreement the name must
 // carry the match so a cross-border ticker clash cannot slip through.
+function listingGroups(tickerCandidates, ticker, venues) {
+  const allowed = new Set(venues || []);
+  const groups = new Map();
+  for (const alias of tickerAliases(ticker)) {
+    for (const candidate of tickerCandidates.get(alias) || []) {
+      for (const exchange of candidate.exchanges) {
+        if (allowed.size > 0 && !onVenue(exchange, allowed)) continue;
+        if (!groups.has(exchange)) groups.set(exchange, new Set());
+        groups.get(exchange).add(candidate.isin);
+      }
+    }
+  }
+  return groups;
+}
+
 function resolveListing(tickerCandidates, ticker, name, venues) {
   const candidates = [];
   const seen = new Set();
@@ -583,6 +600,10 @@ for (const instrument of instruments) {
     raw: [symbol, name, priceSource, currency].filter(Boolean).join(" "),
     isin: isin || null,
   };
+  if (!isin && (type === "STOCK" || type === "ETF" || type === "ETC" || type === "ETN")) {
+    const kind = type === "STOCK" ? "STOCK" : "ETF";
+    stampIsinMatches(row, listingGroups(catalogues[kind], ticker, venues), ticker);
+  }
   if (londonOnly) row.supportedCountries = ["GB"];
 
   const key = entryKey(row);
@@ -605,7 +626,7 @@ for (const instrument of instruments) {
 
 results.sort((left, right) => left.ticker.localeCompare(right.ticker) || left.query.localeCompare(right.query));
 
-fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
+fs.writeFileSync(outputPath, JSON.stringify(stampRows(withoutObligations(results), import.meta.url), null, 2));
 
 const byCurrency = {};
 for (const row of results) byCurrency[row.currency || "?"] = (byCurrency[row.currency || "?"] || 0) + 1;

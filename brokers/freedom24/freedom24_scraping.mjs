@@ -1,5 +1,6 @@
 import puppeteer from "puppeteer-core";
 import { stampRows } from "../../accepted.mjs";
+import { isObligation, withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -183,13 +184,12 @@ const cryptoOnly = hasFlag("crypto-only") || hasFlag("cryptos-only");
 const usEtfsOnly = hasFlag("us-etfs");
 const fresh = hasFlag("fresh");
 const keepUnlisted = hasFlag("all");
-const skipBonds = hasFlag("no-bonds");
 const skipHk = hasFlag("no-hk") || hasFlag("no-hkex");
 const startIndex = Math.max(1, numberArg("start", 1));
 
 const wantEtfs = !stocksOnly && !bondsOnly && !cryptoOnly;
 const wantStocks = !etfsOnly && !bondsOnly && !cryptoOnly && !usEtfsOnly;
-const wantBonds = !etfsOnly && !stocksOnly && !cryptoOnly && !skipBonds && !usEtfsOnly;
+const wantBonds = false;
 const wantCrypto = !etfsOnly && !stocksOnly && !bondsOnly && !usEtfsOnly;
 const wantHk = wantStocks && !skipHk;
 
@@ -442,7 +442,7 @@ function readDetails(batch) {
 }
 
 function save() {
-  fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
+  fs.writeFileSync(outputPath, JSON.stringify(stampRows(withoutObligations(results), import.meta.url), null, 2));
 }
 
 function isCryptoInstrument(info, ticker) {
@@ -509,7 +509,7 @@ function keepRow(info, ticker, extra = {}) {
   if (kind === null) return false;
 
   const type = listingType(info, kind);
-  if (!type) return false;
+  if (!type || type === "BND" || isObligation(normalize(info.name) || ticker, type)) return false;
 
   // issue_nb is empty on some cash lines. Fill the ISIN only when this
   // ticker exists once, on this same venue, in the catalogues.

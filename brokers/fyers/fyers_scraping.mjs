@@ -12,6 +12,7 @@
 //   node brokers/fyers/fyers_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 import { parseGrid, isinOf, seriesOf, keepSold } from "../../indianCash.mjs";
 
@@ -50,6 +51,6 @@ for (const [exchange, url] of FILES) {
 }
 
 listings.sort((left, right) => left.exchange.localeCompare(right.exchange) || left.ticker.localeCompare(right.ticker));
-fs.writeFileSync(new URL("fyers-parsed.json", import.meta.url), JSON.stringify(stampRows(listings), null, 2));
+fs.writeFileSync(new URL("fyers-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(listings)), null, 2));
 const withIsin = listings.filter((row) => row.isin).length;
 console.error(`${listings.length} listings (${withIsin} with an ISIN)`);

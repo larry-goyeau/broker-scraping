@@ -17,8 +17,8 @@
 // The peso-dollar spread is a conversion, not this trip: dollars can sit
 // on the account.
 //
-// Santiago and the coins have no book here, so the total stays unknown
-// and the commission is the fee column.
+// Santiago and the coins have no book stored. The commission sits in the
+// round trip, so the total stays unknown until a book is stored.
 //
 //   https://help.zestyfinance.com/es/articles/9227889-que-comisiones-se-cobran-en-zesty
 //   https://help.zestyfinance.com/es/articles/15937647-que-son-los-gastos-de-gestion-que-aparecen-en-mi-actividad
@@ -121,16 +121,14 @@ export function roundTrip({ etf, place, currency, shares, price, amount }) {
   const crypto = isCrypto(m.row);
   const mic = m.venue?.mic ?? (US.has(loose(m.row.exchange)) ? loose(m.row.exchange) : null);
   const us = !crypto && US.has(mic || loose(m.row.exchange));
-  const book = us
-    ? spreadLeaf(spreads, {
-        isin: m.row.isin,
-        mic,
-        currency: m.row.currency || "USD",
-        unsourced: m.unsourced,
-        broker: "zesty",
-        ticker: m.row.ticker,
-      })
-    : { leaf: null, mic: null };
+  const book = spreadLeaf(spreads, {
+    isin: crypto ? `CRYPTO:${String(m.row.ticker || "").toUpperCase()}` : m.row.isin,
+    mic: crypto ? null : mic,
+    currency: crypto ? "USD" : m.row.currency || (us ? "USD" : "CLP"),
+    unsourced: crypto ? null : m.unsourced,
+    broker: "zesty",
+    ticker: m.row.ticker,
+  });
   const listing = {
     isin: String(m.row.isin || "").toUpperCase() || null,
     ticker: m.row.ticker || null,
@@ -142,8 +140,8 @@ export function roundTrip({ etf, place, currency, shares, price, amount }) {
     brokerExchange: m.row.exchange || null,
   };
   const leaf = book.leaf;
-  const marketBp = us ? leaf?.bp ?? null : null;
-  const marketPerShare = us ? leaf?.perShare ?? null : null;
+  const marketBp = leaf?.bp ?? null;
+  const marketPerShare = leaf?.perShare ?? null;
   const otc = mic === "OTCM" || loose(m.row.exchange) === "OTCM";
 
   const shared = {
@@ -192,17 +190,15 @@ export function roundTrip({ etf, place, currency, shares, price, amount }) {
         : marketPerShare != null
           ? marketPerShare * n
           : null;
-  const usd = us ? plus(bookUsd, brokerFees, sec, taf, cat) : null;
+  const usd = plus(bookUsd, brokerFees, sec, taf, cat);
 
   return {
     ...shared,
     usd: finite(usd, 6),
     brokerFees: finite(brokerFees, 6),
-    ...(usd == null
+    ...(bookUsd == null
       ? {
-          why: us
-            ? `no book for ${m.unsourced?.name || listing.exchange}: ${m.unsourced?.why || "no 605 leaf"}`
-            : undefined,
+          why: `no book for ${m.unsourced?.name || listing.exchange}: ${m.unsourced?.why || (us ? "no 605 leaf" : "no book page")}`,
         }
       : {}),
     trade: {
@@ -230,7 +226,9 @@ export function roundTrip({ etf, place, currency, shares, price, amount }) {
         : `Zesty Chile ${CHILE * 100}% + VAT ${IVA * 100}% a side, re-read ${SCHEDULE.readOn}`,
     confidence: us
       ? "commission 0.30% a side; CAT, TAF and SEC on the sale, each rounded up to the next cent; Alpaca 606 on the US book"
-      : "no book; commission only",
+      : bookUsd == null
+        ? "commission is in the round trip; no book is stored, so the total stays unknown"
+        : "commission plus the stored book",
   };
 }
 

@@ -234,7 +234,30 @@ export function feeMarketOf(exchange, mic, type, currency) {
   if (/^(TSE|TSX|VENTURE|PURE|AEQLIT)$/.test(code) || ["XTSE", "XTSX"].includes(m)) {
     return ccy === "USD" ? "caUsd" : "ca";
   }
-  if (code === "VALUE") return ccy === "CAD" ? "ca" : null;
+  // VALUE names no board. A currency the card prices on exactly one market
+  // is that market. USD, EUR, GBP, HKD and AED are each printed for more
+  // than one, so those lines stay off the card.
+  if (code === "VALUE") {
+    return (
+      {
+        CAD: "ca",
+        TWD: "tw",
+        JPY: "jp",
+        AUD: "au",
+        KRW: "kr",
+        MYR: "my",
+        BRL: "br",
+        INR: "in",
+        ILS: "il",
+        SAR: "sa",
+        MXN: "mx",
+        HUF: "hu",
+        CZK: "cz",
+        RON: "ro",
+        PLN: "pl",
+      }[ccy] || null
+    );
+  }
   if (code === "KRX") return "kr";
   if (code === "TWSE" || code === "TPEX") return "tw";
   if (code === "BURSAMY") return "my";

@@ -11,6 +11,8 @@
 //   node brokers/vanguardau/vanguardau_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
+import { stampIsinMatches } from "../../isinMatches.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 import zlib from "node:zlib";
 
@@ -354,9 +356,13 @@ function attachIsins(rows) {
       row.isin = found[0];
       row.query = found[0];
       tally.one += 1;
+    } else if (found.length === 0) {
+      row.isin = "";
+      tally.none += 1;
     } else {
       row.isin = "";
-      tally[found.length === 0 ? "none" : "several"] += 1;
+      tally.several += 1;
+      stampIsinMatches(row, new Map([["ASX", new Set(found)]]), row.ticker);
     }
   }
   return tally;
@@ -392,7 +398,7 @@ rows.sort((left, right) => {
   return left.ticker.localeCompare(right.ticker);
 });
 
-fs.writeFileSync(new URL("vanguardau-parsed.json", import.meta.url), JSON.stringify(stampRows(rows), null, 2));
+fs.writeFileSync(new URL("vanguardau-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(rows)), null, 2));
 const instruments = new Set(rows.map((row) => row.isin || row.ticker)).size;
 console.error(
   `${rows.length} listings over ${instruments} instruments (${etf} ASX ETF, ${stock} ASX STOCK)`

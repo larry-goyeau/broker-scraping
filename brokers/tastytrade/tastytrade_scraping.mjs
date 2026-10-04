@@ -1,5 +1,6 @@
 import puppeteer from "puppeteer-core";
 import { stampRows } from "../../accepted.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 
 function normalizeTicker(value) {
@@ -517,7 +518,7 @@ if (!skipCrypto) {
   }
 }
 
-fs.writeFileSync(new URL("tastytrade-parsed.json", import.meta.url), JSON.stringify(stampRows(results, import.meta.url), null, 2));
+fs.writeFileSync(new URL("tastytrade-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(results), import.meta.url), null, 2));
 
 const matchedFunds = results.filter((row) => row.type === "ETF").length;
 const matchedShares = results.filter((row) => row.type === "STOCK").length;

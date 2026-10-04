@@ -22,6 +22,7 @@
 //   node brokers/zerodha/zerodha_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 import { gunzipSync } from "node:zlib";
 
@@ -147,13 +148,14 @@ const DEBT_SERIES = new Set([
 ]);
 
 function isBond(row, isin) {
+  const name = row.name.toUpperCase();
+  const id = isin.toUpperCase();
+  // A gilt ETF is still an ETF. A fund code (INF) is not a bond.
+  if (/\bETF\b/.test(name) || id.startsWith("INF")) return false;
   const series = row.tradingsymbol.toUpperCase().match(/-([A-Z0-9]+)$/);
   if (series && DEBT_SERIES.has(series[1])) return true;
-  const id = isin.toUpperCase();
   if (/^IN\d/.test(id)) return true;
   if (/^INE.{4}(07|08|09)/.test(id)) return true;
-  const name = row.name.toUpperCase();
-  if (/\bETF\b/.test(name)) return false;
   if (/^SDL /.test(name) || /^GOI (LOAN|TBILL)/.test(name) || /^\d+(\.\d+)?% (CENTRAL )?(GOI|CENTRAL GOVT)/.test(name)) return true;
   // NSE also codes a debenture as the coupon plus a two-letter series
   // (1003SCL30-BW, IIFL060326-YA). The name is the code itself. A share
@@ -165,8 +167,11 @@ function isBond(row, isin) {
   if (coded && /^(SM|ST|SO|BE|BZ|IV|RR|EQ|BL)$/.test(coded[1])) return false;
   // S1–SZ, apart from the SME series, are fully convertible debentures.
   if (coded && /^S[0-9A-Z]$/.test(coded[1])) return true;
-  if (!coded || label !== ticker) return false;
-  return /^\d/.test(ticker) || /^(IIFL|SCL)/.test(ticker);
+  // BSE prints a debenture as the code itself, with no series suffix:
+  // 0IFL29, ABHF090326, MOTHERSON-D1. A share that starts with a digit
+  // keeps its company name. An ETF was returned above.
+  if (label === ticker && (/\d/.test(ticker) || /^(IIFL|SCL)/.test(ticker))) return true;
+  return false;
 }
 
 // A cash order exists on the NSE or BSE segment. Indices live in their own
@@ -230,7 +235,7 @@ listings.sort((left, right) => {
 });
 
 const outputPath = new URL("zerodha-parsed.json", import.meta.url);
-fs.writeFileSync(outputPath, JSON.stringify(stampRows(listings), null, 2));
+fs.writeFileSync(outputPath, JSON.stringify(stampRows(withoutObligations(listings)), null, 2));
 
 const byType = new Map();
 for (const row of listings) byType.set(row.type, (byType.get(row.type) || 0) + 1);

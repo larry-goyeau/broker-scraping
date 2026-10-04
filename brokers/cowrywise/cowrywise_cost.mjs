@@ -16,9 +16,9 @@
 //
 // The brokerage is a range, and Cowrywise does not say where it sits. The
 // processing fee is not on the exchange card. Neither is in the number.
-// The 10% buffer is returned, so it is not a fee. There is no Lagos book
-// here, so the total stays unknown and the fixed charges are the fee column.
-// Cash is naira.
+// The 10% buffer is returned, so it is not a fee. The fixed NGX card sits
+// in the round trip. There is no Lagos book here, so the total stays
+// unknown until one is stored. Cash is naira.
 //
 //   https://cowrywise.com/blog/how-to-invest-nigerian-stocks-cowrywise-10000-naira/
 //   https://ngxgroup.com/exchange/trade/equities/trading-market-structure/
@@ -30,11 +30,12 @@
 
 import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey } from "../../spreads/venues.mjs";
-import { plus, finite } from "../../na.mjs";
+import { listingKey, spreadLeaf } from "../../spreads/venues.mjs";
+import { bookParts, plus, finite } from "../../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
 
 const CATALOGUE = new URL("cowrywise-parsed.json", import.meta.url);
+const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   fees: "https://ngxgroup.com/exchange/trade/equities/trading-market-structure/",
@@ -54,6 +55,7 @@ const VAT = 0.075;
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
 warmListingIndex(rows);
+const spreads = fs.existsSync(SPREADS) ? JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {} : {};
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 
@@ -76,8 +78,8 @@ function findListing({ etf, place, currency }) {
 
 /**
  * The whole bill for buying `shares` at `price` and selling straight back.
- * `usd` stays empty: Lagos has no book here. `brokerFees` is the fixed
- * NGX card, not the brokerage range.
+ * `usd` is the book plus the fixed NGX card. `brokerFees` is that card,
+ * not the brokerage range. With no Lagos book the total stays unknown.
  */
 export function roundTrip({ etf, place, currency, shares, price }) {
   const answer = { usd: null, brokerFees: null, etf, place, currency, onlineBuy: true, cashCurrency: "NGN" };
@@ -132,12 +134,40 @@ export function roundTrip({ etf, place, currency, shares, price }) {
   const vat = VAT * sec + VAT * (ngx + cscs);
   const local = sec + ngx + cscs + stamp + alert + vat;
   const brokerFees = toUsd(local, listing.currency);
+  const notionalUsd = toUsd(notional, listing.currency);
+  const book = spreadLeaf(spreads, {
+    isin: m.row.isin,
+    mic: m.venue?.mic ?? null,
+    currency: listing.currency,
+    unsourced: m.unsourced,
+    broker: "cowrywise",
+    ticker: m.row.ticker,
+  });
+  const parts = bookParts({
+    bp: book.leaf?.bp ?? null,
+    perShare: book.leaf?.perShare ?? null,
+    venue: m.venue,
+    unsourced: m.unsourced,
+    toUsd: (amount) => toUsd(amount, listing.currency),
+  });
+  const bookUsd =
+    parts.a == null || notionalUsd == null ? null : parts.b == null ? null : parts.a * notionalUsd + parts.b * n;
+  const usd = plus(bookUsd, brokerFees);
 
   return {
     ...shared,
-    usd: null,
+    usd: finite(usd, 6),
     brokerFees: finite(brokerFees, 6),
-    ...(brokerFees == null ? { why: `no dollar rate for ${listing.currency}` } : {}),
+    bp: book.leaf?.bp ?? null,
+    perShare: book.leaf?.perShare ?? null,
+    ...(usd == null
+      ? {
+          why:
+            bookUsd == null
+              ? `aucun carnet pour ${listing.exchange} : ${m.unsourced?.why || "pas de feuille de carnet"}`
+              : `no dollar rate for ${listing.currency}`,
+        }
+      : {}),
     trade: {
       shares: n,
       price: p,
@@ -148,12 +178,15 @@ export function roundTrip({ etf, place, currency, shares, price }) {
     buy: { sec, stamp: notional * STAMP, alert: ALERT, vat: VAT * sec },
     sell: { ngx, cscs, stamp: notional * STAMP, alert: ALERT, vat: VAT * (ngx + cscs) },
     parts: {
-      market: null,
+      market: finite(bookUsd, 6),
       statutory: finite(brokerFees, 6),
       statutoryNgn: finite(local, 6),
     },
     basis: `NGX equities card, re-read ${SCHEDULE.readOn}: SEC, NGX, CSCS, stamp duty and the ₦4 alert. Brokerage is a range.`,
-    confidence: "no Lagos book; brokerage and the processing fee are not in the number",
+    confidence:
+      bookUsd == null
+        ? "NGX card is in the round trip; no Lagos book is stored, so the total stays unknown. Brokerage is a range and the processing fee has no rate."
+        : "NGX card plus the stored Lagos book. Brokerage is a range and the processing fee has no rate.",
   };
 }
 

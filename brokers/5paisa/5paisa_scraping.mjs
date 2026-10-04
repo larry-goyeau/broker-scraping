@@ -10,6 +10,7 @@
 //   node brokers/5paisa/5paisa_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 import { parseCsv, isinOf, keepSold, cashBook, lookup, companyName } from "../../indianCash.mjs";
 
@@ -48,6 +49,6 @@ for (const row of parseCsv(await response.text())) {
 }
 
 listings.sort((left, right) => left.exchange.localeCompare(right.exchange) || left.ticker.localeCompare(right.ticker));
-fs.writeFileSync(new URL("5paisa-parsed.json", import.meta.url), JSON.stringify(stampRows(listings), null, 2));
+fs.writeFileSync(new URL("5paisa-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(listings)), null, 2));
 const withIsin = listings.filter((row) => row.isin).length;
 console.error(`${listings.length} listings (${withIsin} with an ISIN)`);

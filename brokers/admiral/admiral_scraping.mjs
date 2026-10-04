@@ -1,5 +1,6 @@
 import puppeteer from "puppeteer-core";
 import { stampRows } from "../../accepted.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -706,7 +707,7 @@ for (const [index, instrument] of instruments.entries()) {
   });
 
   if (results.length % 250 === 0) {
-    fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
+    fs.writeFileSync(outputPath, JSON.stringify(stampRows(withoutObligations(results), import.meta.url), null, 2));
     console.error(`  ${results.length} matched`);
   }
 }
@@ -770,7 +771,7 @@ if (!skipCrypto) {
   }
 }
 
-fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
+fs.writeFileSync(outputPath, JSON.stringify(stampRows(withoutObligations(results), import.meta.url), null, 2));
 
 const byType = new Map();
 for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);

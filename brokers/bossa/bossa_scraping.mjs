@@ -8,10 +8,11 @@
 // currency, a fee and a KID. Rows whose ISIN, venue and currency are
 // not already in the PDF are taken from the table.
 //
-// Warsaw shares are not in either file. Their mail says every name
-// quoted on the WSE in PLN is offered, and that they do not hand out
-// that list. Those rows come from Bankier's GPW share board, and only
-// where the quote is in zlotys.
+// Warsaw shares are not in either file. The cash-market orders in force
+// on 2 October 2026 are accepted on the main GPW board and on
+// NewConnect. Those rows come from Bankier's boards, and only where
+// the quote is in zlotys.
+// https://online.bossa.pl/bossa/pdfdocument?name=APXPDF1015
 //
 //   node brokers/bossa/bossa_scraping.mjs
 //   node brokers/bossa/bossa_scraping.mjs --pdf=./Lista.pdf
@@ -19,6 +20,7 @@
 // Text is read with PyMuPDF (`python3 -c "import fitz"`).
 
 import { stampRows } from "../../accepted.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 
@@ -252,12 +254,25 @@ async function offerListings(existing) {
 }
 
 const SHARE_BOARD = "https://www.bankier.pl/gielda/notowania/akcje";
+const NC_BOARD = "https://www.bankier.pl/gielda/notowania/new-connect";
 const ETF_BOARD = "https://www.bankier.pl/etf/notowania";
 
 function profileSymbols(html) {
   return [...new Set(html.match(/data-symbol="([^"]+)"/g) ?? [])].map((hit) =>
     hit.slice('data-symbol="'.length, -1)
   );
+}
+
+function quoteSymbols(html) {
+  const body = html.split("<tbody>").at(-1)?.split("</tbody>")[0] ?? "";
+  const symbols = [];
+  const seen = new Set();
+  for (const match of body.matchAll(/quote\.html\?symbol=([^"&]+)/g)) {
+    if (seen.has(match[1])) continue;
+    seen.add(match[1]);
+    symbols.push(match[1]);
+  }
+  return symbols;
 }
 
 function etfNames(html) {
@@ -286,7 +301,7 @@ async function profileHead(symbol) {
   return Buffer.concat(chunks).toString("utf8");
 }
 
-function profileRow(html, fallbackName, type) {
+function profileRow(html, fallbackName, type, exchange) {
   const isin = toIsin(html.match(/data-isin="([^"]+)"/)?.[1]);
   const unit = html.match(/data-unit="([^"]+)"/)?.[1] ?? "";
   if (!isin || unit !== "zł") return null;
@@ -299,22 +314,32 @@ function profileRow(html, fallbackName, type) {
     query: isin,
     ticker,
     name: name || ticker,
-    exchange: "GPW",
+    exchange,
     currency: "PLN",
     type,
-    raw: [ticker, name, "GPW", "PLN", type].filter(Boolean).join(" "),
+    raw: [ticker, name, exchange, "PLN", type].filter(Boolean).join(" "),
     isin,
   };
 }
 
 async function warsawListings() {
-  const [sharesPage, etfPage] = await Promise.all([fetch(SHARE_BOARD), fetch(ETF_BOARD)]);
+  const [sharesPage, ncPage, etfPage] = await Promise.all([
+    fetch(SHARE_BOARD),
+    fetch(NC_BOARD),
+    fetch(ETF_BOARD),
+  ]);
   if (!sharesPage.ok) throw new Error(`GPW share board answered ${sharesPage.status}`);
+  if (!ncPage.ok) throw new Error(`NewConnect board answered ${ncPage.status}`);
   if (!etfPage.ok) throw new Error(`GPW ETF board answered ${etfPage.status}`);
-  const [sharesHtml, etfHtml] = await Promise.all([sharesPage.text(), etfPage.text()]);
+  const [sharesHtml, ncHtml, etfHtml] = await Promise.all([
+    sharesPage.text(),
+    ncPage.text(),
+    etfPage.text(),
+  ]);
   const jobs = [
-    ...profileSymbols(sharesHtml).map((symbol) => ({ symbol, type: "STOCK", name: "" })),
-    ...[...etfNames(etfHtml)].map(([symbol, name]) => ({ symbol, type: "ETF", name })),
+    ...profileSymbols(sharesHtml).map((symbol) => ({ symbol, type: "STOCK", name: "", exchange: "GPW" })),
+    ...quoteSymbols(ncHtml).map((symbol) => ({ symbol, type: "STOCK", name: "", exchange: "NewConnect" })),
+    ...[...etfNames(etfHtml)].map(([symbol, name]) => ({ symbol, type: "ETF", name, exchange: "GPW" })),
   ];
   const rows = [];
   let cursor = 0;
@@ -323,7 +348,7 @@ async function warsawListings() {
       const job = jobs[cursor];
       cursor += 1;
       const html = await profileHead(job.symbol);
-      const row = profileRow(html, job.name, job.type);
+      const row = profileRow(html, job.name, job.type, job.exchange);
       if (row) rows.push(row);
     }
   }
@@ -349,7 +374,7 @@ results.sort((left, right) => {
   return String(left.ticker).localeCompare(right.ticker);
 });
 const outputPath = new URL("bossa-parsed.json", import.meta.url);
-fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
+fs.writeFileSync(outputPath, JSON.stringify(stampRows(withoutObligations(results), import.meta.url), null, 2));
 
 const byType = new Map();
 for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);

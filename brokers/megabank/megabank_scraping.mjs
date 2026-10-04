@@ -20,6 +20,8 @@
 //   node brokers/megabank/megabank_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
+import { stampIsinMatches } from "../../isinMatches.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 
 const ROOT = "https://fund.megabank.com.tw";
@@ -134,18 +136,26 @@ function attachIsins(rows, index) {
   let none = 0;
   let several = 0;
   for (const row of rows) {
-    const found = new Set();
+    const groups = new Map();
     for (const code of codesOf(row)) {
       const book = index.get(code);
       for (const place of placesOf(row)) {
-        for (const isin of book?.get(place) || []) found.add(isin);
+        const ids = book?.get(place);
+        if (!ids?.size) continue;
+        if (!groups.has(place)) groups.set(place, new Set());
+        for (const isin of ids) groups.get(place).add(isin);
       }
     }
+    const found = new Set();
+    for (const ids of groups.values()) for (const isin of ids) found.add(isin);
     if (found.size === 1) {
       row.isin = [...found][0];
       one += 1;
     } else if (found.size === 0) none += 1;
-    else several += 1;
+    else {
+      several += 1;
+      stampIsinMatches(row, groups, row.ticker);
+    }
   }
   return { one, none, several };
 }
@@ -225,7 +235,7 @@ rows.sort((left, right) => {
   return left.ticker.localeCompare(right.ticker);
 });
 
-fs.writeFileSync(new URL("megabank-parsed.json", import.meta.url), JSON.stringify(stampRows(rows), null, 2));
+fs.writeFileSync(new URL("megabank-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(rows)), null, 2));
 const byBook = new Map();
 for (const row of rows) byBook.set(`${row.exchange} ${row.type}`, (byBook.get(`${row.exchange} ${row.type}`) || 0) + 1);
 console.error(

@@ -102,6 +102,7 @@ Interactive Brokers Ireland	IE	Broker	Global ETFs / ETPs	https://www.interactive
 Trade Republic	DE	Neobroker	UCITS ETFs / ETCs	https://traderepublic.com/de-de	
 CapTrader	DE	Broker	Global ETFs / ETPs	https://www.captrader.com/	info@captrader.com
 Scalable Capital	DE	Neobroker	UCITS ETFs / ETCs	https://de.scalable.capital/trading	service@scalable.capital
+VisualVest	DE	Neobroker	UCITS ETFs / ETCs	https://www.visualvest.de/selectetf	select@kundenservice.visualvest.de
 comdirect	DE	Bank	UCITS ETFs / ETCs	https://www.comdirect.de/depot/comdirect-depot.html	
 ING Deutschland	DE	Bank	UCITS ETFs / ETCs	https://www.ing.de/sparen-anlegen/direkt-depot/	
 DKB Broker	DE	Bank	UCITS ETFs / ETCs	https://www.dkb.de/privatkunden/investieren/depot	
@@ -548,7 +549,7 @@ Monex Boom	HK	Broker	Global ETFs / ETPs	https://www.boom.com/en/open-account/	se
 Citibank HK	HK	Bank	Global ETFs / ETPs	https://www.citibank.com.hk/english/wealth-management/investment/	
 Phillip Securities Hong Kong	HK	Broker	Global ETFs / ETPs	https://www.poems.com.hk/en-us/customer-service/online-account-opening/	cs@phillip.com.hk
 SBI	JP	Broker	Local + US ETFs	https://www.sbisec.co.jp/	
-Rakuten	JP	Broker	Local + US ETFs	https://www.rakuten-sec.co.jp/web/account/rsec.html	
+Rakuten Japan	JP	Broker	Local + US ETFs	https://www.rakuten-sec.co.jp/web/account/rsec.html	
 Monex Japan	JP	Broker	Local + US ETFs	https://www.monex.co.jp/	
 Matsui	JP	Broker	Local-market ETFs	https://www.matsui.co.jp/apply/	https://www.matsui.co.jp/support/contact/?mnu=hd
 Mitsubishi UFJ eSmart Securities	JP	Broker	Local-market ETFs	https://kabu.com/apply/default.html	https://kabu.com/support/movie.html
@@ -584,6 +585,9 @@ Cathay Securities	TW	Broker	Local-market ETFs	https://www.cathaysec.com.tw/catha
 KGI Securities	TW	Broker	Local-market ETFs	https://eoa.kgi.com.tw/OOA/open-description.html	
 SinoPac Securities	TW	Broker	Global ETFs / ETPs	https://www.sinotrade.com.tw/newweb/opening-account/beginner/	
 CTBC Securities	TW	Broker	Local-market ETFs	https://www.ctbcsec.com/	https://www.ctbcsec.com/Customer/Contact
+DBS Taiwan	TW	Bank	Global ETFs / ETPs	https://www.dbs.com.tw/personal-zh/investments/equities-etf/foreign-stocks
+E.SUN	TW	Bank	Global ETFs / ETPs	https://wealth.esunbank.com/zh-tw/etf/intro
+SCSB	TW	Bank	Global ETFs / ETPs	https://fund.scsb.com.tw/invest-overseas-etfs-stocks.html
 Capital Securities	TW	Broker	Local-market ETFs	https://iopen.capital.com.tw/eopenWeb/	
 Mega Securities	TW	Broker	Local-market ETFs	https://www.emega.com.tw/	
 President Securities	TW	Broker	Local-market ETFs	https://www.pscnet.com.tw/	
@@ -615,6 +619,7 @@ Nuvama	IN	Broker	Local-market ETFs	https://www.nuvamawealth.com/
 Anand Rathi	IN	Broker	Local-market ETFs	https://anandrathi.com/open-demat-account	
 Samco	IN	Broker	Local-market ETFs	https://www.samco.in/open-free-demat-account	https://www.samco.in/help-support/
 Shoonya	IN	Neobroker	Local-market ETFs	https://shoonya.com/	invest@shoonya.com
+Profitmart	IN	Broker	Local-market ETFs	https://profitmart.in/
 Edelweiss Broking	IN	Broker	Local-market ETFs	https://www.edelweiss.in/	
 JM Financial	IN	Broker	Local-market ETFs	https://www.jmfinancialservices.in/	
 Yes Securities	IN	Broker	Local-market ETFs	https://yesinvest.in/	
@@ -649,7 +654,7 @@ KGI Securities Thailand	TH	Broker	Local-market ETFs	https://www.kgieworld.co.th/
 ttb wealth securities	TH	Broker	Local-market ETFs	https://www.ttbwealth.co.th/home/th	
 Tisco Securities	TH	Broker	Local-market ETFs	https://www.tiscosec.com/e-open-account-ejip/	tiscoetrade@tisco.co.th
 Daol Securities	TH	Broker	Local-market ETFs	https://www.daolsecurities.co.th/account-opening/openaccount-with-daol-sec	contactcenter@daol.co.th
-Rakuten Trade	MY	Broker	Local + US ETFs	https://rakutentrade.my/	customerservice@rakutentrade.my
+Rakuten Malaysia	MY	Broker	Local + US ETFs	https://rakutentrade.my/	customerservice@rakutentrade.my
 Maybank Investment Bank	MY	Bank	Local-market ETFs	https://www.maybank2u.com.my/maybank2u/malaysia/en/personal/wealth/share_trading/online_stocks.page	
 CGS International Securities Malaysia	MY	Broker	Local-market ETFs	https://www.cgsi.com.my/info/account-opening?lang=EN	
 moomoo MY	MY	Neobroker	Global ETFs / ETPs	https://www.moomoo.com/my	support@my.moomoo.com
@@ -686,10 +691,10 @@ RCBC Securities	PH	Bank	Local-market ETFs	https://www.rcbcsec.com/registration/a
 Maybank Securities Philippines	PH	Broker	Local-market ETFs	https://www.maybank-atrke.com/	
 SSI iBoard	VN	Broker	Local-market ETFs	https://www.ssi.com.vn/khach-hang-ca-nhan/gioi-thieu-mo-tai-khoan	
 VNDirect	VN	Broker	Local-market ETFs	https://mydgo.vndirect.com.vn/mo-tai-khoan	
-VPS Securities	VN	Broker	Local-market ETFs	https://www.vps.com.vn/	
+VPS	VN	Broker	Local-market ETFs	https://www.vps.com.vn/	
 TCBS	VN	Broker	Local-market ETFs	https://www.tcbs.com.vn/mo-tai-khoan-tcbs	
 HSC (Ho Chi Minh City Securities)	VN	Broker	Local-market ETFs	https://register.hsc.com.vn/	
-Vietcap Securities	VN	Broker	Local-market ETFs	https://www.vietcap.com.vn/mo-tai-khoan	info@vietcap.com.vn
+Vietcap	VN	Broker	Local-market ETFs	https://www.vietcap.com.vn/mo-tai-khoan	info@vietcap.com.vn
 FPT Securities	VN	Broker	Local-market ETFs	https://www.fpts.com.vn/open-account/	
 Vietcombank Securities	VN	Bank	Local-market ETFs	https://www.vcbs.com.vn/	
 DNSE	VN	Neobroker	Local-market ETFs	https://www.dnse.com.vn/	
@@ -809,6 +814,6 @@ XTB International	BZ	Broker	UCITS ETFs / ETCs	https://www.xtb.com/int
 Plus500 Bahamas	BS	Broker	Global ETFs / ETPs	https://www.plus500.com/	
 Plus500 Seychelles	SC	Broker	Global ETFs / ETPs	https://www.plus500.com/	
 eToro	Global	Neobroker	Global ETFs / ETPs	https://www.etoro.com/	https://help.etoro.com/s/contactsupport
-Quantfury	Global	Neobroker	Global ETFs / ETPs	https://quantfury.com/	
+Quantfury	Global	Neobroker	Global ETFs / ETPs	https://quantfury.com/
 MEXEM	Global	Broker	Global ETFs / ETPs	https://www.mexem.com/	support@mexem.com
 Plus500 Invest	Global	Broker	Global ETFs / ETPs	https://www.plus500.com/	

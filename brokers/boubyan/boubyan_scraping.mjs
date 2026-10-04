@@ -15,6 +15,8 @@
 //   node brokers/boubyan/boubyan_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
+import { stampIsinMatches } from "../../isinMatches.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import { parseCsv } from "../../indianCash.mjs";
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
@@ -205,7 +207,7 @@ function localRow(line) {
 
 // The PDF prints a ticker, not an ISIN. stocks.csv and etfs.csv are keyed
 // by venue and ticker. A ticker that points at two ISINs on the same venue
-// is left blank. A US ticker filed on the wrong American venue is kept when
+// keeps both on the row. A US ticker filed on the wrong American venue is kept when
 // the other American venues agree on one ISIN. A ticker found on some other
 // venue is kept only when that venue's name starts with the same word.
 const ISIN_VENUES = {
@@ -302,8 +304,24 @@ export function attachIsins(rows, index = catalogueIsins()) {
     }
     row.isin = isin;
     if (isin) filled += 1;
+    else {
+      let use = venues || [];
+      const named = venueGroups(byVenue, use, ticker);
+      const namedCount = [...named.values()].reduce((count, ids) => count + ids.size, 0);
+      if (namedCount < 2 && (row.exchange === "NYSE" || row.exchange === "NSDQ" || row.exchange === "AMEX")) use = US_VENUES;
+      stampIsinMatches(row, use === venues ? named : venueGroups(byVenue, use, ticker), ticker);
+    }
   }
   return filled;
+}
+
+function venueGroups(byVenue, venues, ticker) {
+  const groups = new Map();
+  for (const venue of venues) {
+    const hit = byVenue.get(venue)?.get(ticker);
+    if (hit?.size) groups.set(venue, hit);
+  }
+  return groups;
 }
 
 const isMain = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
@@ -366,7 +384,7 @@ rows.sort((left, right) => {
 });
 
 const filled = attachIsins(rows);
-fs.writeFileSync(new URL("boubyan-parsed.json", import.meta.url), JSON.stringify(stampRows(rows), null, 2));
+fs.writeFileSync(new URL("boubyan-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(rows)), null, 2));
 
 const byBook = new Map();
 for (const row of rows) byBook.set(`${row.exchange} ${row.type}`, (byBook.get(`${row.exchange} ${row.type}`) || 0) + 1);

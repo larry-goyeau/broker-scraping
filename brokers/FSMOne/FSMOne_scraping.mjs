@@ -17,6 +17,8 @@
 //   node brokers/FSMOne/FSMOne_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
+import { stampIsinMatches } from "../../isinMatches.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import { catalogueFiles } from "../../catalogues.mjs";
 import { resolveVenue } from "../../spreads/venues.mjs";
 import fs from "node:fs";
@@ -95,8 +97,8 @@ function isinOf(value) {
   return /^[A-Z]{2}[A-Z0-9]{10}$/.test(text) ? text : "";
 }
 
-// Venue and ticker, not the broker's spelling of the place. Two ISINs for the
-// same pair are a disagreement, and a disagreement is left blank.
+// Venue and ticker, not the broker's spelling of the place. One ISIN the
+// other catalogues agree on is this line. Several stay on the row.
 function isinBook() {
   const book = new Map();
   for (const file of catalogueFiles()) {
@@ -109,9 +111,8 @@ function isinBook() {
       const { venue } = resolveVenue(row);
       if (!isin || !ticker || !venue) continue;
       const key = `${venue.mic}|${ticker}`;
-      const prior = book.get(key);
-      if (!prior) book.set(key, isin);
-      else if (prior !== isin) book.set(key, "");
+      if (!book.has(key)) book.set(key, new Set());
+      book.get(key).add(isin);
     }
   }
   return book;
@@ -119,10 +120,16 @@ function isinBook() {
 
 const isins = isinBook();
 
-function joinedIsin(exchange, ticker, currency) {
+function joined(exchange, ticker, currency) {
   const { venue } = resolveVenue({ exchange, currency });
-  if (!venue) return "";
-  return isins.get(`${venue.mic}|${tickerKey(ticker)}`) || "";
+  if (!venue) return { isin: "" };
+  const code = tickerKey(ticker);
+  const ids = isins.get(`${venue.mic}|${code}`);
+  if (!ids || ids.size === 0) return { isin: "" };
+  if (ids.size === 1) return { isin: [...ids][0] };
+  const held = { ticker: code };
+  stampIsinMatches(held, new Map([[venue.mic, ids]]), code);
+  return { isin: "", matches: held.matches };
 }
 
 function listingType(name) {
@@ -182,7 +189,7 @@ for (const row of funds) {
     currency,
     type,
     raw: [ticker, name, exchange, currency, type].filter(Boolean).join(" "),
-    isin: joinedIsin(exchange, ticker, currency),
+    ...joined(exchange, ticker, currency),
   });
 }
 
@@ -213,7 +220,7 @@ for (const row of shares) {
     currency,
     type: "STOCK",
     raw: [ticker, name, exchange, currency, "STOCK"].filter(Boolean).join(" "),
-    isin: joinedIsin(exchange, ticker, currency),
+    ...joined(exchange, ticker, currency),
   });
 }
 
@@ -236,7 +243,7 @@ unique.sort((left, right) => {
   return left.ticker.localeCompare(right.ticker);
 });
 
-fs.writeFileSync(new URL("FSMOne-parsed.json", import.meta.url), JSON.stringify(stampRows(unique), null, 2));
+fs.writeFileSync(new URL("FSMOne-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(unique)), null, 2));
 
 const byType = new Map();
 for (const row of unique) byType.set(row.type, (byType.get(row.type) || 0) + 1);

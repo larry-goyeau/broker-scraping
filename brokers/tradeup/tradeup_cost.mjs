@@ -10,8 +10,19 @@
 // with a US address; `--plan=foreign` is a non-US tax resident with a
 // foreign address. Algo ($0.01 / share) is not this trip. The catalogue
 // is `tradeup_scraping.mjs` — US listed plus HKEX. Until that file has
-// been run, this one answers that the book is missing. HKEX has no printed
-// stock ticket, so it stays N/A. Options and Treasuries are not this book.
+// been run, this one answers that the book is missing. Options and
+// Treasuries are not this book.
+//
+// Hong Kong is the Commission (HK) tab on the same pricing page, read
+// 2026-10-02. The 0.08 % line is a promotion that ended on 30 July 2020.
+//   SEHK commission     0.12 % of the trade, minimum 18 HKD an order
+//   Trading fee         0.00565 %
+//   Clearing            0.002 %, minimum 2 HKD, maximum 100 HKD
+//   SFC levy            0.0027 %
+//   FRC levy            0.00015 %
+//   Stamp               0.13 % of a stock, rounded up to the next HKD,
+//                       each execution. The note names stocks, so an ETF
+//                       pays none.
 //
 //   US tax resident, listed NMS                         $0
 //   US tax resident, OTC                                $0.0002 / share
@@ -55,6 +66,7 @@ const SCHEDULE = {
   detail: "https://www.tradeup.com/pricing/detail",
   commissions: "https://www.tradeup.com/pricing/commissions-us",
   readOn: "2026-09-17",
+  hkReadOn: "2026-10-02",
   entity: "TradeUP Securities, Inc. (US)",
   crd: "18483",
 };
@@ -114,15 +126,25 @@ export function commissionSide({ market, plan, shares, notional }) {
   const n = Number(shares);
   const amt = Number(notional);
   if (!(n > 0) || !(amt > 0)) return null;
-  if (market === "hk") return null;
+  if (market === "hk") return Math.max(18, amt * 0.0012);
   const resolved = resolvePlan(plan);
   if (market === "otc") {
     const raw = resolved.otcPerShare * n;
     const capped = resolved.otcCap != null ? Math.min(raw, resolved.otcCap * amt) : raw;
     return Math.max(resolved.min, capped);
   }
-  if (market === "listed") return Math.max(resolved.min, resolved.listed * n);
+  if (market === "listed")   return Math.max(resolved.min, resolved.listed * n);
   return null;
+}
+
+// The exchange lines on the Hong Kong tab, one execution. Stamp is the
+// stock note: rounded up to the next dollar, and not charged on an ETF.
+function hkStatutory(notional, type) {
+  const amt = Number(notional);
+  const stock = !/^(ETF|ETN|ETC)$/.test(String(type || "").toUpperCase());
+  const stamp = stock ? Math.ceil(amt * 0.0013 - 1e-9) : 0;
+  const clearing = Math.min(100, Math.max(2, amt * 0.00002));
+  return amt * (0.0000565 + 0.000027 + 0.0000015) + clearing + stamp;
 }
 
 function findListing({ etf, place, currency }) {
@@ -256,7 +278,16 @@ export function roundTrip({
   };
 
   const market = feeMarketOf(m.row, listing.mic);
-  if (!market || market === "hk") {
+  if (market === "hk" && code(m.row.currency) !== "HKD") {
+    return {
+      ...answer,
+      listing,
+      cashCurrency: "USD",
+      remark: "",
+      why: `${listing.brokerExchange || listing.exchange} en ${listing.currency} n'est pas sur le barème Hong Kong en dollars de Hong Kong`,
+    };
+  }
+  if (!market) {
     return {
       ...answer,
       listing,
@@ -284,10 +315,13 @@ export function roundTrip({
     bp: marketBp,
     perShare: marketPerShare,
     url: leaf?.url ?? (resolved.id === "us" ? SCHEDULE.source : SCHEDULE.detail),
-    basis: `barème ${resolved.name}, palier ${market}, relu le ${SCHEDULE.readOn}`,
+    basis:
+      market === "hk"
+        ? `barème Hong Kong TradeUP, relu le ${SCHEDULE.hkReadOn} : 0,12 % par ordre, plancher 18 HKD, plus les frais de place et le timbre 0,13 % arrondi au dollar`
+        : `barème ${resolved.name}, palier ${market}, relu le ${SCHEDULE.readOn}`,
     commission: {
       each: ticket,
-      currency: "USD",
+      currency: market === "hk" ? "HKD" : "USD",
       eachWay: true,
       platform: "online",
       hours: "regular",
@@ -316,15 +350,17 @@ export function roundTrip({
   }
 
   const notionalUsd = toUsd(notional, listing.currency);
-  const commissionUsd = ticket * 2;
+  const hkExtra = market === "hk" ? hkStatutory(notional, listing.type) : 0;
+  const commissionNative = ticket + hkExtra;
+  const commissionUsd = toUsd(commissionNative * 2, market === "hk" ? "HKD" : "USD");
   const bookUsd =
     marketPerShare != null
       ? marketPerShare * n
       : marketBp != null && notionalUsd != null
         ? (notionalUsd * marketBp) / 1e4
         : null;
-  const secUsd = notionalUsd == null ? null : Math.max(SEC_MIN, notionalUsd * SEC_RATE);
-  const tafUsd = Math.min(n * TAF_PER_SHARE, TAF_CAP);
+  const secUsd = market === "hk" || notionalUsd == null ? (market === "hk" ? 0 : null) : Math.max(SEC_MIN, notionalUsd * SEC_RATE);
+  const tafUsd = market === "hk" ? 0 : Math.min(n * TAF_PER_SHARE, TAF_CAP);
   const usd = plus(bookUsd, commissionUsd, secUsd, tafUsd);
 
   return {
@@ -385,7 +421,12 @@ function confidenceOf({
   tafCapped,
 }) {
   const said = [];
-  if (plan.id === "us") {
+  if (market === "hk") {
+    said.push(
+      `commission Hong Kong, page lue le ${SCHEDULE.hkReadOn} : 0,12 % du montant, plancher 18 HKD, ` +
+        `plus frais de place et timbre 0,13 % arrondi au dollar`
+    );
+  } else if (plan.id === "us") {
     said.push(
       `commission ${plan.name}, page lue le ${SCHEDULE.readOn} : ` +
         `NMS 0 $, OTC ${plan.otcPerShare} $/part plafonné à ${100 * plan.otcCap} % du notionnel`
@@ -396,12 +437,14 @@ function confidenceOf({
         `${plan.listed} $/part, plancher ${plan.min} $ (listé et OTC)`
     );
   }
-  if (ticket != null) said.push(`ticket ${Number(ticket.toPrecision(4))} $ par sens`);
-  said.push(
-    `SEC ${SEC_RATE} du montant à la vente, minimum ${SEC_MIN} $, TAF ${TAF_PER_SHARE} $/part plafonnée à ${TAF_CAP} $` +
-      (tafCapped ? `, le plafond mord` : "") +
-      ` ; CAT et FTT non nommés, laissés dehors`
-  );
+  if (ticket != null && market !== "hk") said.push(`ticket ${Number(ticket.toPrecision(4))} $ par sens`);
+  if (market !== "hk") {
+    said.push(
+      `SEC ${SEC_RATE} du montant à la vente, minimum ${SEC_MIN} $, TAF ${TAF_PER_SHARE} $/part plafonnée à ${TAF_CAP} $` +
+        (tafCapped ? `, le plafond mord` : "") +
+        ` ; CAT et FTT non nommés, laissés dehors`
+    );
+  }
   if (marketBp != null) said.push(`carnet ${Number(marketBp.toPrecision(4))} bp`);
   else if (marketPerShare != null) said.push(`carnet Rule 605, ${marketPerShare} $ la part`);
   else {
@@ -415,7 +458,7 @@ function confidenceOf({
   said.push(
     `hors trajet : algo +${ALGO} $/part, virement ${WIRE.domestic} $, ` +
       `ACAT sortant ${ACAT.full} $ / ${ACAT.partial} $, ACH reversal ${ACH_REVERSAL} $. ` +
-      `Compte en dollars, pas de change. HKEX sans barème imprimé. ` +
+      `Compte en dollars. Le change USD/HKD est à 2 $ par exécution quand il a lieu, et reste hors du nombre. ` +
       `Aucun aller-retour réel dans ce dépôt`
   );
   return said.join(" ; ");

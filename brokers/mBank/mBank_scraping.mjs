@@ -21,6 +21,7 @@
 // Text is read with PyMuPDF (`python3 -c "import fitz"`).
 
 import { stampRows } from "../../accepted.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 
@@ -335,7 +336,7 @@ results.sort((left, right) => {
   return String(left.ticker).localeCompare(right.ticker);
 });
 const outputPath = new URL("mBank-parsed.json", import.meta.url);
-fs.writeFileSync(outputPath, JSON.stringify(stampRows(results), null, 2));
+fs.writeFileSync(outputPath, JSON.stringify(stampRows(withoutObligations(results)), null, 2));
 
 const byType = new Map();
 for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);

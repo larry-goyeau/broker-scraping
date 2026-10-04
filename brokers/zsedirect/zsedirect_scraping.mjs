@@ -14,6 +14,7 @@
 //   node brokers/zsedirect/zsedirect_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 
 const ROOT = "https://ds88jcmqc11je.cloudfront.net";
@@ -62,7 +63,7 @@ function score(line, issuer) {
   let value = overlap(words(line.name), issuer.words);
   const packed = issuer.words.join("");
   const compact = String(line.name || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
-  if (packed.length >= 6 && compact.includes(packed)) value += 2;
+  if (issuer.words.length >= 2 && packed.length >= 6 && compact.includes(packed)) value += 2;
   if (issuer.type === MARKET_TYPE[line.marketId]) value += 10;
   return value;
 }
@@ -141,7 +142,7 @@ for (const pair of joined) {
 
 const leftOut = issuers.filter((_, index) => !takenIssuer.has(index));
 rows.sort((left, right) => left.type.localeCompare(right.type) || left.ticker.localeCompare(right.ticker));
-fs.writeFileSync(new URL("zsedirect-parsed.json", import.meta.url), JSON.stringify(stampRows(rows), null, 2));
+fs.writeFileSync(new URL("zsedirect-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(rows)), null, 2));
 
 const byType = new Map();
 for (const row of rows) byType.set(row.type, (byType.get(row.type) || 0) + 1);

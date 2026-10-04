@@ -37,6 +37,7 @@
 // Writes `boursedirect-parsed.json` next to this file.
 
 import { stampRows } from "../../accepted.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -377,7 +378,7 @@ function pruneGbxTwins() {
 
 function saveResults() {
   pruneGbxTwins();
-  fs.writeFileSync(outputPath, JSON.stringify(stampRows(results), null, 2));
+  fs.writeFileSync(outputPath, JSON.stringify(stampRows(withoutObligations(results)), null, 2));
 }
 
 function forgetListings(isin) {

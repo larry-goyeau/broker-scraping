@@ -21,7 +21,9 @@
 // Orders go to Winterflood Business Services or J.P. Morgan Securities Ltd.
 // A US or European share is a sterling CDI. The quote is one side, for
 // fifteen seconds, and Fidelity does not print the other side. That spread
-// is unknown: the NBBO is not used. A London line keeps the exchange book.
+// is unknown: the exchange book is not used. The commission, the FX, the
+// stamp and PTM sit in the round trip, so the total stays unknown until
+// that quote is stored. A London line keeps the exchange book.
 //
 //   https://www.fidelity.co.uk/services/charges-fees/
 //   https://www.fidelity.co.uk/international-shares/
@@ -255,16 +257,18 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const fxUsd = fxGbp == null ? null : dollars(fxGbp, CASH);
   const ptmUsd = ptmGbp == null ? null : dollars(ptmGbp, CASH);
   const brokerFees = plus(commissionUsd, fxUsd);
-  const usd = cdi ? null : plus(bookUsd, brokerFees, taxUsd, ptmUsd);
+  const usd = plus(bookUsd, brokerFees, taxUsd, ptmUsd);
 
   return {
     ...shared,
     usd: finite(usd, 6),
     brokerFees: finite(brokerFees, 6),
     commission: { each: picked.share, currency: CASH, eachWay: true, plan: picked.id },
-    ...(bookUsd == null && !cdi
+    ...(bookUsd == null
       ? {
-          why: `aucun carnet pour ${m.unsourced?.name || listing.exchange || "cette ligne"} : ${m.unsourced?.why || "pas de feuille de carnet"}`,
+          why: cdi
+            ? "CDI : Fidelity ne publie qu'un côté du prix, le carnet de la place n'est pas ce prix"
+            : `aucun carnet pour ${m.unsourced?.name || listing.exchange || "cette ligne"} : ${m.unsourced?.why || "pas de feuille de carnet"}`,
         }
       : {}),
     trade: {

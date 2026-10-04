@@ -18,6 +18,7 @@
 //   node brokers/airbank/airbank_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
@@ -248,7 +249,7 @@ const results = [...byIsin.values()]
     return (left.ticker || left.isin).localeCompare(right.ticker || right.isin, "en");
   });
 
-fs.writeFileSync(new URL("airbank-parsed.json", import.meta.url), JSON.stringify(stampRows(results), null, 2));
+fs.writeFileSync(new URL("airbank-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(results)), null, 2));
 
 const byType = new Map();
 for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);

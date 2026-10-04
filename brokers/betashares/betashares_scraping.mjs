@@ -12,6 +12,7 @@
 //   node brokers/betashares/betashares_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 
 const FILE = "https://instruments.wealth.betashares.com.au/instruments.json";
@@ -166,7 +167,7 @@ results.sort((left, right) => {
   return left.ticker.localeCompare(right.ticker);
 });
 
-fs.writeFileSync(new URL("betashares-parsed.json", import.meta.url), JSON.stringify(stampRows(results), null, 2));
+fs.writeFileSync(new URL("betashares-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(results)), null, 2));
 
 const byBook = new Map();
 for (const row of results) byBook.set(`${row.exchange} ${row.type}`, (byBook.get(`${row.exchange} ${row.type}`) || 0) + 1);

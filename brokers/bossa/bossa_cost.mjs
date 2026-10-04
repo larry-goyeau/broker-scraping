@@ -11,7 +11,8 @@
 // A same-day reversing trade is the same 0.29 % on those venues.
 // Phone and branch orders add an offline fee that is not in this number.
 //
-// Warsaw is the domestic table on the fees page, not that PDF.
+// Warsaw is the domestic table on the fees page, not that PDF. The
+// same line prices GPW and the ASO, so NewConnect uses it.
 //   shares                 0.38 % min 5 zł, or 0.15 % min 5 zł when the
 //                          position is closed the same day (this trip)
 //   ETF, ETC, ETN, ETP     0.25 % min 5 zł, promotion through 2026-12-30
@@ -96,7 +97,7 @@ const dollars = (amount, currency) => {
 
 function feeMarketOf(exchange) {
   const ex = code(exchange);
-  if (ex === "GPW") return "gpw";
+  if (ex === "GPW" || ex === "NEWCONNECT") return "gpw";
   if (ex === "NASDAQ" || ex === "NYSE" || ex === "AMEX") return "us";
   if (ex === "LSE") return "uk";
   if (ex === "XETR") return "de";

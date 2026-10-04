@@ -15,6 +15,7 @@
 
 import puppeteer from "puppeteer-core";
 import { stampRows } from "../../accepted.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -506,10 +507,11 @@ function closeOnlyVenue(listingExchange) {
 // the line. Lynx only opens accounts in AT BE CZ FI FR DE NL PL SK, so a
 // resident of Korea or Taiwan is not a client who could buy it either.
 // Saudi Arabia is absent from LYNX's market list. Dropped, like a
-// close-only venue.
+// close-only venue. Malaysia is absent from the same page, so a
+// BURSAMY quote from the search is not a list LYNX prints.
 function unsupportedVenue(exchange) {
   const code = String(exchange || "").toUpperCase();
-  return code === "KRX" || code === "TWSE" || code === "TPEX" || code === "TADAWUL";
+  return code === "KRX" || code === "TWSE" || code === "TPEX" || code === "TADAWUL" || code === "BURSAMY" || code === "BURSA MALAYSIA";
 }
 
 // A packaged product with no KID in a language approved for this retail
@@ -696,7 +698,7 @@ async function scrapeJob(job) {
 }
 
 function save() {
-  fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
+  fs.writeFileSync(outputPath, JSON.stringify(stampRows(withoutObligations(results), import.meta.url), null, 2));
 }
 
 const endIndex = walkLimit > 0 ? startIndex - 1 + walkLimit : jobs.length;

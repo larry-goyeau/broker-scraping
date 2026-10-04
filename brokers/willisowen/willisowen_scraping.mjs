@@ -18,6 +18,7 @@
 //   node brokers/willisowen/willisowen_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 
 const ORIGIN = "https://www.willisowen.co.uk";
@@ -152,7 +153,7 @@ results.sort((left, right) => {
   return left.name.localeCompare(right.name);
 });
 
-fs.writeFileSync(OUTPUT, JSON.stringify(stampRows(results), null, 2));
+fs.writeFileSync(OUTPUT, JSON.stringify(stampRows(withoutObligations(results)), null, 2));
 
 const byType = new Map();
 for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);

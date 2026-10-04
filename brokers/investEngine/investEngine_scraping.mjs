@@ -17,6 +17,7 @@
 //   node brokers/investEngine/investEngine_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 
 const PAGE = "https://investengine.com/etfs/all/";
@@ -111,7 +112,7 @@ results.sort((left, right) => {
 
 fs.writeFileSync(
   new URL("investEngine-parsed.json", import.meta.url),
-  JSON.stringify(stampRows(results), null, 2)
+  JSON.stringify(stampRows(withoutObligations(results)), null, 2)
 );
 
 const byType = new Map();

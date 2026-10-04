@@ -11,8 +11,10 @@
 // Most of the world and not all of it: the vendor carries nothing in the Gulf, and it
 // also misses lines it should know — a Canadian CDR, a local share class — then answers
 // an empty list. A miss used to stamp `fetched` and look fresh, so the front never asked
-// again. The four Gulf boards still publish their own last through `gulf.mjs`. Everywhere
-// else, a miss falls through to Yahoo's chart last, built from the catalogues' ticker and
+// again. The four Gulf boards still publish their own last through `gulf.mjs`. The
+// Zimbabwe sheet publishes its own last, in cents of a ZiG. VNDirect publishes
+// the session close for HOSE, HNX and UPCoM, in thousands of dong. Everywhere else, a miss
+// falls through to Yahoo's chart last, built from the catalogues' ticker and
 // MIC (`F.TO`, `1111.SR`, `3565.T`). Enough to size an order, not to fill one. That keeps this file
 // the only writer of `prices.json` while letting the lines no vendor sells stop being N/A.
 //
@@ -110,7 +112,7 @@ function save() {
     JSON.stringify(
       {
         generatedAt: new Date().toISOString(),
-        source: "EODHD, les bourses du Golfe, KASE pour un last en tenge, et Yahoo pour un last quand le vendeur n'a rien",
+        source: "EODHD, les bourses du Golfe, KASE pour un last en tenge, la clôture VNDirect pour une action ou un ETF du Vietnam, et Yahoo pour un last quand le vendeur n'a rien",
         unit: UNIT,
         fetched,
         fallback,
@@ -149,9 +151,10 @@ export function isFresh(isin, maxAge = DAY) {
   // one shot and then rests for the day.
   // KASE publishes the last for nothing, the same way the Gulf boards do. A miss
   // from the vendor must not sit on that page for a day.
-  if (GULF_COUNTRIES.has(key.slice(0, 2)) || key.startsWith("KZ")) return false;
+  if (GULF_COUNTRIES.has(key.slice(0, 2)) || key.startsWith("KZ") || key.startsWith("ZW") || key.startsWith("VN")) return false;
   const fb = Date.parse(fallback[key] || 0);
-  if (!(fb >= YAHOO_BOARDS_AT) || !(fb >= YAHOO_OTC_AT)) return false;
+  // A miss from before the ISIN search never asked Yahoo for the identifier.
+  if (!(fb >= YAHOO_BOARDS_AT) || !(fb >= YAHOO_OTC_AT) || !(fb >= YAHOO_ISIN_AT)) return false;
   return Date.now() - fb < maxAge;
 }
 
@@ -398,6 +401,9 @@ const YAHOO_BOARDS_AT = Date.parse("2026-09-29T19:12:00Z");
 // OTC was not asked at all until the bare ticker was added. A miss from
 // before that is not a try.
 const YAHOO_OTC_AT = Date.parse("2026-09-30T15:50:00Z");
+// VALUE and the other unnamed boards had no suffix, so the ISIN was never
+// searched. A miss from before that search is not a try.
+const YAHOO_ISIN_AT = Date.parse("2026-10-02T23:28:00Z");
 const YAHOO_US = new Set(["XNYS", "XNAS", "ARCX", "XASE", "BATS"]);
 const YAHOO_ALREADY = /\.[A-Z]{1,3}$/;
 
@@ -549,6 +555,40 @@ async function yahooSaudiCode(ticker, name) {
   return null;
 }
 
+// VALUE and the other unnamed boards build no Yahoo symbol: there is no
+// suffix for a place the catalogue does not name. The ISIN search returns
+// the equity Yahoo charts (6274 on VALUE is 6274.TWO). A last in a currency
+// no listing of this ISIN uses is still refused by the caller.
+async function yahooIsinSymbols(isin) {
+  try {
+    const res = await fetch(
+      `https://query1.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(isin)}&quotesCount=6&newsCount=0`,
+      { headers: { accept: "application/json", "user-agent": "Mozilla/5.0" }, signal: AbortSignal.timeout(15000) }
+    );
+    if (!res.ok) return [];
+    const quotes = (await res.json()).quotes || [];
+    const symbols = [];
+    for (const row of quotes) {
+      const kind = String(row?.quoteType || "").toUpperCase();
+      const symbol = String(row?.symbol || "").trim();
+      if (!symbol || (kind !== "EQUITY" && kind !== "ETF")) continue;
+      if (!symbols.includes(symbol)) symbols.push(symbol);
+    }
+    return symbols.slice(0, 4);
+  } catch {
+    return [];
+  }
+}
+
+function currenciesOf(listings) {
+  const set = new Set();
+  for (const row of listings || []) {
+    const ccy = String(row.currency || "").trim().toUpperCase();
+    if (ccy) set.add(ccy);
+  }
+  return set;
+}
+
 // Rows the front already holds for this ISIN. Building them here avoids
 // reading every catalogue again: that second copy is what ran the page out
 // of memory the first time a Chinese line missed the vendor.
@@ -572,17 +612,20 @@ function rowsFromListings(isin, listings) {
   return seen;
 }
 
-async function yahooFresh(isin, prepared) {
-  // An empty list from the page is not an answer. The catalogues may still
-  // name a ticker Yahoo can chart.
-  const hinted = prepared && prepared.length ? prepared : null;
-  const rows = [...(hinted || (await yahooIndex()).get(isin) || [])].sort((a, b) => yahooRank(a) - yahooRank(b));
+async function yahooFresh(isin, prepared, currencies = null) {
+  // A page that already handed over its rows must not walk every catalogue.
+  // An empty list means those rows named no board. The sweep passes nothing
+  // and still uses the index.
+  const rows = [...(prepared != null ? prepared : (await yahooIndex()).get(isin) || [])].sort((a, b) => yahooRank(a) - yahooRank(b));
   const wanted = new Set(rows.map((r) => r.currency).filter(Boolean));
+  if (currencies) for (const ccy of currencies) wanted.add(ccy);
   let found = false;
   let asked = 0;
+  const known = new Set();
   for (const row of rows.slice(0, 6)) {
     try {
       let symbol = row.symbol;
+      known.add(symbol);
       asked += 1;
       let quote = await yahooChart(symbol);
       if (!quote && symbol.endsWith(".SR") && !/^\d{4}\.SR$/.test(symbol)) {
@@ -601,6 +644,24 @@ async function yahooFresh(isin, prepared) {
       if (hasPrice(isin) && [...wanted].every((ccy) => Number(prices[isin]?.[ccy]?.price) > 0)) break;
     } catch (e) {
       console.error(`prix ${isin} chez Yahoo ${row.symbol} : ${e.message}`);
+    }
+  }
+  // The venue named no board, or the suffix it implied was a miss. The ISIN
+  // is the same question for every country Yahoo files.
+  if (!found) {
+    for (const symbol of await yahooIsinSymbols(isin)) {
+      if (known.has(symbol)) continue;
+      asked += 1;
+      try {
+        const quote = await yahooChart(symbol);
+        if (!quote) continue;
+        if (wanted.size && !wanted.has(quote.currency)) continue;
+        noteBoard(isin, { symbol, last: quote.last, currency: quote.currency }, "YAHOO");
+        found = true;
+        if (hasPrice(isin) && [...wanted].every((ccy) => Number(prices[isin]?.[ccy]?.price) > 0)) break;
+      } catch (e) {
+        console.error(`prix ${isin} chez Yahoo ${symbol} : ${e.message}`);
+      }
     }
   }
   return { found, asked };
@@ -650,11 +711,22 @@ export async function ensureFresh(isin, maxAge = DAY, listings = null) {
       if (!hasPrice(key) && key.startsWith("KZ")) {
         await kaseFresh(key);
       }
+      // The vendor does not carry the Zimbabwe Stock Exchange. The published
+      // price sheet is the last, in cents of a ZiG, for every line on the board.
+      if (!hasPrice(key) && key.startsWith("ZW")) {
+        await zseFresh(key);
+      }
+      // The vendor does not carry HOSE, HNX or UPCoM. VNDirect's session
+      // file prints the close for every listed share and fund, in
+      // thousands of dong.
+      if (!hasPrice(key) && key.startsWith("VN")) {
+        await vnFresh(key);
+      }
       if (!hasPrice(key)) {
         // `listings` is the page's own rows. Without them the sweep still
         // walks the catalogues; with them a single view must not.
         const prepared = listings ? rowsFromListings(key, listings) : null;
-        const yahoo = await yahooFresh(key, prepared);
+        const yahoo = await yahooFresh(key, prepared, listings ? currenciesOf(listings) : null);
         // A line with no symbol was not asked. Stamping it would hide it
         // until tomorrow, which is how a whole class of prices stayed missing.
         if (yahoo.asked) {
@@ -672,6 +744,148 @@ export async function ensureFresh(isin, maxAge = DAY, listings = null) {
   })();
   inflight.set(key, job);
   return job;
+}
+
+// ---------------------------------------------------------------- Vietnam
+
+// One session file for HOSE, HNX and UPCoM. `close` is in thousands of dong:
+// VNM's 57.3 is the 57,300 VND Yahoo prints for the same close. The file
+// names a ticker, and the catalogues say which ISIN that ticker is.
+const VN_PRICES = "https://api-finfo.vndirect.com.vn/v4/stock_prices";
+let vnSheetPromise = null;
+let vnIndexPromise = null;
+
+function vnIndex() {
+  return (vnIndexPromise ||= (async () => {
+    const { catalogueRows } = await import("../catalogues.mjs");
+    const index = new Map();
+    const banned = new Set();
+    for (const row of catalogueRows()) {
+      const isin = String(row.isin || "").trim().toUpperCase();
+      const exchange = String(row.exchange || "").trim().toUpperCase();
+      const ticker = String(row.ticker || row.symbol || "").trim().toUpperCase();
+      if (!ISIN.test(isin) || !isin.startsWith("VN") || !ticker) continue;
+      if (exchange !== "HOSE" && exchange !== "HNX" && exchange !== "UPCOM") continue;
+      const prev = index.get(ticker);
+      if (prev && prev !== isin) banned.add(ticker);
+      else index.set(ticker, isin);
+    }
+    for (const ticker of banned) index.delete(ticker);
+    return index;
+  })());
+}
+
+function vnSheet() {
+  if (vnSheetPromise && Date.now() - vnSheetPromise.at < BOARD_TTL) return vnSheetPromise.rows;
+  const rows = (async () => {
+    const headers = { Accept: "application/json", "User-Agent": "Mozilla/5.0" };
+    const probe = await fetch(`${VN_PRICES}?sort=date&size=1`, {
+      headers,
+      signal: AbortSignal.timeout(30_000),
+    });
+    if (!probe.ok) throw new Error(`${probe.status}`);
+    const day = String((await probe.json())?.data?.[0]?.date || "");
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(day)) throw new Error("aucune séance");
+    const response = await fetch(`${VN_PRICES}?q=date:${day}&size=5000`, {
+      headers,
+      signal: AbortSignal.timeout(30_000),
+    });
+    if (!response.ok) throw new Error(`${response.status}`);
+    const body = await response.json();
+    const map = new Map();
+    for (const row of Array.isArray(body?.data) ? body.data : []) {
+      const kind = String(row.type || "").toUpperCase();
+      if (kind !== "STOCK" && kind !== "ETF") continue;
+      const ticker = String(row.code || "").trim().toUpperCase();
+      const close = Number(row.close);
+      if (!ticker || !(close > 0)) continue;
+      map.set(ticker, {
+        price: close * 1000,
+        at: day,
+        floor: String(row.floor || "").trim().toUpperCase() || "VN",
+      });
+    }
+    return map;
+  })().catch((error) => {
+    vnSheetPromise = null;
+    console.error(`séance Vietnam : ${error.message}`);
+    return new Map();
+  });
+  vnSheetPromise = { at: Date.now(), rows };
+  return rows;
+}
+
+async function vnFresh(isin) {
+  const [sheet, index] = await Promise.all([vnSheet(), vnIndex()]);
+  let found = false;
+  for (const [ticker, row] of sheet) {
+    const id = index.get(ticker);
+    if (!id) continue;
+    const price = Number(row.price.toPrecision(8));
+    const leaf = ((prices[id] ||= {})["VND"] ||= { price: null, at: null, from: {} });
+    leaf.from[`${row.floor}:${ticker}`] = { price, at: row.at, primary: true };
+    leaf.price = price;
+    leaf.at = row.at;
+    fallback[id] = new Date().toISOString();
+    if (id === isin) found = true;
+  }
+  if (sheet.size) scheduleSave();
+  return found;
+}
+
+// ---------------------------------------------------------------- ZSE
+
+// One sheet for the whole board. `closePrice` is ZiG cents: Delta's previous
+// close of 3150.482 cents is the 31.50 ZWG printed elsewhere for that day.
+const ZSE_SHEET = "https://ds88jcmqc11je.cloudfront.net/api/fetch/price-sheet?exchange=ZSE";
+let zseSheetPromise = null;
+
+function zseDay(parts) {
+  if (!Array.isArray(parts) || parts.length < 3) return null;
+  const [year, month, day] = parts;
+  return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+}
+
+function zseSheet() {
+  if (zseSheetPromise && Date.now() - zseSheetPromise.at < BOARD_TTL) return zseSheetPromise.rows;
+  const rows = (async () => {
+    const response = await fetch(ZSE_SHEET, {
+      headers: { Accept: "application/json", "User-Agent": "Mozilla/5.0" },
+      signal: AbortSignal.timeout(30_000),
+    });
+    if (!response.ok) throw new Error(`${response.status}`);
+    const body = await response.json();
+    const map = new Map();
+    for (const row of Array.isArray(body?.data) ? body.data : []) {
+      const isin = String(row.isin || "").trim().toUpperCase();
+      const cents = Number(row.closePrice ?? row.prevClosingPrice);
+      if (!ISIN.test(isin) || !(cents > 0)) continue;
+      map.set(isin, { price: cents / 100, at: zseDay(row.statsDate) });
+    }
+    return map;
+  })().catch((error) => {
+    zseSheetPromise = null;
+    console.error(`feuille ZSE : ${error.message}`);
+    return new Map();
+  });
+  zseSheetPromise = { at: Date.now(), rows };
+  return rows;
+}
+
+async function zseFresh(isin) {
+  const map = await zseSheet();
+  let found = false;
+  for (const [id, row] of map) {
+    const leaf = ((prices[id] ||= {})["ZWG"] ||= { price: null, at: null, from: {} });
+    const price = Number(row.price.toPrecision(8));
+    leaf.from["ZSE"] = { price, at: row.at, primary: true };
+    leaf.price = price;
+    leaf.at = row.at;
+    fallback[id] = new Date().toISOString();
+    if (id === isin) found = true;
+  }
+  if (map.size) scheduleSave();
+  return found;
 }
 
 // ---------------------------------------------------------------- KASE
@@ -794,7 +1008,7 @@ async function sweepYahoo() {
     const vendorMiss = Boolean(fetched[isin]);
     if (!gulf && !vendorMiss) continue;
     const fb = Date.parse(fallback[isin] || 0);
-    const rested = fb >= YAHOO_BOARDS_AT && Date.now() - fb < DAY;
+    const rested = fb >= YAHOO_ISIN_AT && Date.now() - fb < DAY;
     if (rested && !isin.startsWith("SA")) continue;
     todo.push(isin);
   }

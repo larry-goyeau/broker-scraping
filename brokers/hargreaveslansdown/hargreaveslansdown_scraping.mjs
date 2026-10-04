@@ -2,8 +2,9 @@
 // is not on it is not for sale, and the telephone is the same book at a
 // higher charge.
 //
-// Shares, ETFs, investment trusts, gilts and other listed lines are one
-// page per letter. The comment after each line is the SEDOL. The place
+// Shares, ETFs and investment trusts are one page per letter. A gilt or
+// a corporate bond stays out. A bond ETF stays. The comment after each
+// line is the SEDOL. The place
 // and the ISIN are on the factsheet (`marketListing`, `isin`). A factsheet
 // with `internetTradable` false is a price page, not a sale: an OTC line,
 // an escrow line, a corporate-action line. Those are left out.
@@ -22,6 +23,7 @@
 // `--limit` reads a sample and does not write the catalogue.
 
 import { stampRows } from "../../accepted.mjs";
+import { isObligation, withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 
 const ORIGIN = "https://www.hl.co.uk";
@@ -73,13 +75,6 @@ const PLACE = {
   CVE: "XTSX",
   VAN: "XTSX",
 };
-
-const BOND_LISTS = [
-  "/shares/corporate-bonds-gilts/bond-prices/gbp-bonds",
-  "/shares/corporate-bonds-gilts/bond-prices/uk-gilts",
-  "/shares/corporate-bonds-gilts/bond-prices/uk-index-linked-gilts",
-  "/shares/corporate-bonds-gilts/bond-prices/pibs-and-others",
-];
 
 function arg(name) {
   const hit = process.argv.find((item) => item.startsWith(`--${name}=`));
@@ -190,7 +185,7 @@ function placeOf(code) {
 function listingType(kind, name) {
   if (kind === "etf") return /\bETC\b/i.test(name) ? "ETC" : /\bETN\b/i.test(name) ? "ETN" : "ETF";
   if (kind === "fund") return "FUND";
-  if (kind === "bond" || kind === "gilt") return "BOND";
+  if (kind === "bond" || kind === "gilt") return "";
   if (kind === "share" || kind === "equity") return "STOCK";
   return "";
 }
@@ -205,7 +200,7 @@ function parseShare(html, index) {
   const name = decode(html.match(/"Instrument Name":"([^"]+)"/)?.[1] || html.match(/"name":"([^"]+)"/)?.[1] || "");
   const exchange = placeOf(market);
   const type = listingType(kind, name || index.name);
-  if (!exchange || !type) return null;
+  if (!exchange || !type || isObligation(name || index.name, type)) return null;
   const ticker = (epic || index.sedol || "").toUpperCase();
   if (!ticker) return null;
   const printed = name || [index.name, index.description].filter(Boolean).join(" ");
@@ -268,20 +263,6 @@ async function loadIndex() {
     console.error(`${count} ${kind === "share" ? "listed lines" : "funds"} on the letter pages`);
   }
 
-  if (!fundsOnly) {
-    let added = 0;
-    for (const path of BOND_LISTS) {
-      const html = await get(`${ORIGIN}${path}`);
-      for (const row of shareRows(html)) {
-        const key = `share:${row.slug}`;
-        if (seen.has(key)) continue;
-        seen.add(key);
-        jobs.push(row);
-        added += 1;
-      }
-    }
-    if (added) console.error(`${added} bond lines were not on a letter page`);
-  }
   return jobs;
 }
 
@@ -398,5 +379,5 @@ console.error(
 if (limit > 0) {
   console.log(JSON.stringify(results, null, 2));
 } else {
-  fs.writeFileSync(OUTPUT, JSON.stringify(stampRows(results), null, 2));
+  fs.writeFileSync(OUTPUT, JSON.stringify(stampRows(withoutObligations(results)), null, 2));
 }

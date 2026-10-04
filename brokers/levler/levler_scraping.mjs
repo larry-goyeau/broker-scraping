@@ -15,6 +15,7 @@
 //   node brokers/levler/levler_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 
 const SEARCH = "https://levler.se/api/open/search/v2/orderBooks";
@@ -195,7 +196,7 @@ results.sort((left, right) => {
 
 fs.writeFileSync(
   new URL("levler-parsed.json", import.meta.url),
-  JSON.stringify(stampRows(results), null, 2)
+  JSON.stringify(stampRows(withoutObligations(results)), null, 2)
 );
 
 const byType = new Map();

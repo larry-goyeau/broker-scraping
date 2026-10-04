@@ -1,5 +1,6 @@
 import puppeteer from "puppeteer-core";
 import { stampRows } from "../../accepted.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -419,7 +420,7 @@ for (const shelf of SHELVES) {
 // nothing to resume, and a sweep the session cut short must not be left in
 // place of a whole one.
 const outputPath = new URL("elana-parsed.json", import.meta.url);
-fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
+fs.writeFileSync(outputPath, JSON.stringify(stampRows(withoutObligations(results), import.meta.url), null, 2));
 
 const byType = new Map();
 for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);

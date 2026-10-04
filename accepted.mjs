@@ -16,6 +16,8 @@ export const EU = EEA.filter((c) => c !== "IS" && c !== "LI" && c !== "NO");
 
 export const GCC = ["AE", "BH", "KW", "OM", "QA", "SA"];
 
+// Only where the broker's own page names these countries. A line that says
+// "sanctions" or "where legal", without naming them, does not use this list.
 const SANCTIONED = ["BY", "CU", "IR", "KP", "RU", "SY"];
 
 export const COUNTRY_NAMES = {
@@ -48,10 +50,10 @@ export const COUNTRY_NAMES = {
 };
 
 const US = { countries: ["US"] };
-const WORLD = { all: true, except: SANCTIONED };
-const WORLD_NO_US = { all: true, except: [...SANCTIONED, "US"] };
-const WORLD_NO_CA = { all: true, except: [...SANCTIONED, "CA"] };
-const WORLD_NO_US_CA = { all: true, except: [...SANCTIONED, "US", "CA"] };
+const WORLD = { all: true };
+const WORLD_NO_US = { all: true, except: ["US"] };
+const WORLD_NO_CA = { all: true, except: ["CA"] };
+const WORLD_NO_US_CA = { all: true, except: ["US", "CA"] };
 
 // Trading 212 help centre, four entities (UK / Markets Ltd / AU / EU GmbH).
 // Belgium is not on that page.
@@ -181,7 +183,8 @@ const EFOCS = [
 const PLUM = ["GB", "IE", "FR", "ES", "PT", "IT", "BE", "NL", "GR", "CY"];
 
 // Sarwa help "Who can open a Sarwa account": world except US persons and
-// this residency/tax list (codes we name). Passport bans IR/KP sit in SANCTIONED.
+// this residency/tax list (codes we name). The same page names Belarus,
+// Cuba, Iran, North Korea, Russia and Syria.
 const SARWA_BLOCKED = [
   "AF", "HR", "CY", "NG", "PA", "SN", "UG", "UA", "TZ", "VE", "VN",
 ];
@@ -225,6 +228,7 @@ export const ACCEPTED = {
   // US account, plus non-US addresses. Canada stays out.
   alpaca: WORLD_NO_CA, // alpaca.markets/learn/live-trading-account-non-us
   // Help, 30 Sep 2026: clients worldwide, except the prohibited list.
+  // That list names Belarus, Cuba, Iran, North Korea, Russia and Syria.
   // Crimea, Donetsk and Luhansk are named, not Ukraine as a whole.
   // Maine and New York are refused too, and the picker has no US state.
   // https://support.kraken.com/articles/where-is-kraken-licensed-or-regulated
@@ -252,7 +256,7 @@ export const ACCEPTED = {
   robinhood: { countries: ROBINHOOD },
   // TradeUP Global: US + non-US. Help centre (Aug 2026): CN and TW onboarding
   // is paused.
-  tradeup: { all: true, except: [...SANCTIONED, "CN", "TW"] },
+  tradeup: { all: true, except: ["CN", "TW"] },
   // W-8 / non-resident alien on the application; no published block list.
   siebert: WORLD,
   // sogotrade.com/products/intaccout.aspx: any foreign citizen+resident,
@@ -261,9 +265,10 @@ export const ACCEPTED = {
   webull: { countries: WEBULL },
 
   // Questrade, 26 Sep 2026: a non-registered account (cash, margin, corporation)
-  // is open to every residence except the US and sanctioned countries.
+  // is open to every residence except the US. The page says sanctioned
+  // countries are out and does not name them, so those residencies stay.
   // Questwealth, mutual funds and the registered plans are not this book.
-  questrade: { all: true, except: [...SANCTIONED, "US"] },
+  questrade: { all: true, except: ["US"] },
   boursobank: { countries: ["FR"] }, // DIY app; foreign tax residents need a desk path
   easybourse: { countries: ["FR"] },
   labanquepostale: { countries: ["FR"] },
@@ -304,13 +309,40 @@ export const ACCEPTED = {
   // https://www.matsui.co.jp/apply/account/netstock/
   // https://support.matsui.co.jp/faq/show/1879?site_domain=faq
   matsui: { countries: ["JP"] },
-  // A Taiwanese natural person, a foreign natural person who is not a US
-  // person, a Taiwanese company, or an OBU company not registered in the
-  // United States. Becoming a US citizen or a US resident means the
-  // holdings must be sold. The picker is a country, so the United States
-  // is out.
+  // The stock page lists the documents in Chinese. Opening is the
+  // online bank or a branch. The English site has no opening form.
+  // Chinese is an official language of these countries, so the picker
+  // keeps them.
   // https://www.megabank.com.tw/personal/wealth/product/intro/etf-and-stocks
-  megabank: WORLD_NO_US,
+  // https://www.megabank.com.tw/en-us/english
+  megabank: { countries: ["CN", "HK", "MO", "SG", "TW"] },
+  // The foreign-stock page opens the digital account in Chinese. The
+  // English personal site has no opening form. Chinese is an official
+  // language of these countries, so the picker keeps them.
+  // https://www.dbs.com.tw/personal-zh/investments/equities-etf/foreign-stocks
+  // https://internet-banking.dbs.com.tw/dao/
+  // https://www.dbs.com.tw/personal/default.page
+  dbs: { countries: ["CN", "HK", "MO", "SG", "TW"] },
+  // The foreign-currency account, which the trust uses, opens for a person
+  // with a Taiwan national ID or a foreigner with an alien resident
+  // certificate. That certificate is residence in Taiwan. The first US
+  // order needs a W-8BEN. The picker is a country of residence, so the
+  // country is Taiwan.
+  // https://www.esunbank.com/zh-tw/personal/deposit/foreign-service/current-account
+  // https://www.esunbank.com/zh-tw/about/faq/content?q=wealth/018
+  "e.sun": { countries: ["TW"] },
+  // Online opening of the digital account asks for a valid Taiwan
+  // national identity card. The picker is residence, so the country
+  // is Taiwan.
+  // https://www.scsb.com.tw/content/dig/dig27_a.html
+  // https://apply.scsb.com.tw/openaccount/client/
+  scsb: { countries: ["TW"] },
+  // Online opening is an adult with ROC nationality, a national identity
+  // card and a health-insurance card. A foreigner, a minor and a US
+  // taxpayer cannot open online. The picker is residence, so the country
+  // is Taiwan.
+  // https://service.standardchartered.com.tw/tw/ssl/campaign/casa/faq.html
+  standardchartered: { countries: ["TW"] },
   // FAQ: the account is limited to a resident of Japan. Nationality is not
   // a criterion. A foreign national needs a residence card. A non-resident
   // cannot open.
@@ -322,7 +354,12 @@ export const ACCEPTED = {
   // more is the non-resident procedure.
   // https://www.rakuten-sec.co.jp/web/support/procedures/non-resident/
   // https://account.rakuten-sec.co.jp/ITS/acc_identification.html
-  rakuten: { countries: ["JP"] },
+  rakutenjp: { countries: ["JP"] },
+  // Any adult with a Malaysian bank account. Nationality is not a test:
+  // a non-Malaysian uses a passport. The account is funded from that bank,
+  // and the picker is a country of residence, so the country is MY.
+  // https://www.rakutentrade.my/faqs/account-opening-general-qs/what-do-i-need-to-open-an-account
+  rakutenma: { countries: ["MY"] },
   // Account page: anyone living in Japan may apply. A minor uses the minor
   // account. Foreign PEPs and US nationals cannot open. The picker is a
   // country of residence, so the country is JP.
@@ -365,19 +402,16 @@ export const ACCEPTED = {
   // https://www.vanguardinvestor.co.uk/content/dam/intl/uk-retail-direct/documents/vanguard-client-terms-conditions-feb-2025.pdf
   vanguarduk: { countries: ["GB"] },
   // The February 2026 KYC takes a resident, an NRI, a PIO and a foreign
-  // national. A foreign national may trade subject to RBI and FEMA. The
-  // form's nationality is Indian or Other, and it names no country list.
-  // The picker is a country.
+  // national. The mobile line asks for a country code and ten digits, and
+  // the printed example is 91. The SMS line is +91. The picker is a
+  // country, so the country is IN.
   // https://www.nuvamawealth.com/ewwebimages/webfiles/disclaimer/KYC-Individual.pdf
-  nuvama: WORLD,
-  // A resident account opens with PAN and Aadhaar. The NRI account is an
-  // Indian citizen abroad, a PIO or an OCI, with a passport and an NRE or
-  // NRO account. US and Canada stay open, with a FATCA form. The page names
-  // no country list; sanctions and some regulatory agreements can block one.
-  // The picker is a country.
+  nuvama: { countries: ["IN"] },
+  // The online opening registers a mobile, then an OTP, then PAN and
+  // Aadhaar. The Aadhaar OTP goes to the number linked to that card.
+  // The picker is a country, so the country is IN.
   // https://choiceindia.com/open-free-demat-account
-  // https://choiceindia.com/nri-demat-account
-  choice: WORLD,
+  choice: { countries: ["IN"] },
   // A resident account opens with PAN and Aadhaar. m.Stock does not open
   // an NRI account or a non-individual account. The picker is a country,
   // so the country is IN.
@@ -399,13 +433,11 @@ export const ACCEPTED = {
   // OTP. That number is Indian. The picker is a country, so the country is IN.
   // https://aliceblueonline.com/open-demat-account
   aliceblue: { countries: ["IN"] },
-  // A resident account, an NRI account and a foreign-national status are on
-  // the individual KYC. An NRI uses an NRE or NRO account and a PIS
-  // permission. A foreign passport needs a PIO, OCI or resident card. The
-  // form names no country list. The picker is a country.
-  // https://support.arihantcapital.com/support/solutions/articles/33000278528-can-an-nri-open-a-demat-account-
+  // The KYC mobile asks for a country code and ten digits, and the
+  // printed example is 91. The SMS line is +91. The picker is a country,
+  // so the country is IN.
   // https://download.arihantcapital.com/account/542320261254165865416.pdf
-  arihant: WORLD,
+  arihant: { countries: ["IN"] },
   // Opening an account starts with an Aadhaar-linked mobile number, then
   // PAN and bank proof. That number is Indian. The picker is a country,
   // so the country is IN.
@@ -420,6 +452,13 @@ export const ACCEPTED = {
   // is Indian. The picker is a country, so the country is IN.
   // https://tradesmartonline.in/open-demat-account/
   tradesmart: { countries: ["IN"] },
+  // The online opening is PAN, Aadhaar through DigiLocker, and an Indian
+  // bank account. The KYC instruction mentions a non-resident passport,
+  // subject to RBI and FEMA, and does not open a separate country list.
+  // The picker is a country of residence, so the country is IN.
+  // https://profitmart.in/how-to-open-demat-account/
+  // https://profitmart.in/downloads/Forms/Profitmart-Equity-KYC.pdf
+  profitmart: { countries: ["IN"] },
   // Non-residents may open the Singapore account. US, UK and Canada
   // restrictions are on certain funds, not on the account. The picker is a
   // nationality.
@@ -431,16 +470,19 @@ export const ACCEPTED = {
   // country is KR.
   // https://krinsider.com/blog/korea-stock-crypto-account-foreigner-2026
   toss: { countries: ["KR"] },
-  // Communiqué 118/BM/ZRR/2022: a Polish citizen gives a PESEL. A non-resident
-  // gives the parents' names and a foreign TIN. Citizenship is recorded and
-  // no country is refused.
-  // https://www.pekao.com.pl/dam/jcr:1a8f6c9a-4a19-4d9e-b8a7-49f121087c70/20221229_118_BM_ZRR_2022i.2023-03-23-12-56-45.pdf
-  pekao: WORLD,
+  // Communiqué 118/BM/ZRR/2022 records citizenship and refuses no country.
+  // The brokerage agreement is Polish only. The English site does not carry
+  // that form. Polish is the official language of Poland, so the picker
+  // keeps Poland.
+  // https://www.pekao.com.pl/dam/jcr:2959a3f3-a892-47b9-96c6-5b54bc17f792/Umowa%20%C5%9Bwiadczenia%20us%C5%82ug%20maklerskich%20-%20rachunek%20indywidualny.2025-11-25-15-47-00.pdf
+  // https://www.pekao.com.pl/en/
+  pekao: { countries: ["PL"] },
   // Account page: any adult with a Polish ID card or a passport.
   // Communiqué of 31 Dec 2025, in force 1 Jan 2026: no foreign-markets annex,
   // and no foreign-currency trading on the home market, for a citizen, a
   // resident or a tax resident of the high-risk list. The picker is a
-  // nationality, so those citizenships are excluded. Ukraine is only the
+  // nationality, so those citizenships are excluded. The communiqué names
+  // Belarus, Cuba, Iran, North Korea, Russia and Syria. Ukraine is only the
   // named occupied territories, so UA stays. Northern Cyprus has no code here.
   // https://www.aliorbank.pl/biuro-maklerskie/gielda/rachunek-brokerski.html
   // https://www.aliorbank.pl/dam/jcr:14ab6be8-57ec-4540-8d1d-806aacbd1c87/Komunikat-Kraje-wysokiego-ryzyka-nie-zawieramy-aneksu-do-umowy.pdf
@@ -493,9 +535,9 @@ export const ACCEPTED = {
   // other companies and are not either card.
   swissquote: { groups: ["EEA"], countries: ["CH"] },
   // open-account-country-list.php has Montenegro, the Philippines and the Holy See.
-  // It does not list Afghanistan, Nigeria, Venezuela or Zimbabwe. Russia is on
-  // that page and stays out here with the other sanctioned codes.
-  interactivebrokers: { all: true, except: [...SANCTIONED, "AF", "NG", "VE", "ZW"] },
+  // It does not list Afghanistan, Nigeria, Venezuela or Zimbabwe. Russia is
+  // on that page.
+  interactivebrokers: { all: true, except: ["AF", "NG", "VE", "ZW"] },
   xtb: { countries: XTB },
   ig: WORLD_NO_US,
   // The priced book is OANDA TMS cash shares, sold to the 27 EU countries.
@@ -510,7 +552,7 @@ export const ACCEPTED = {
   etoro: WORLD_NO_CA,
   // Client agreement: not for the US, Canada, the Bahamas or the British Virgin Islands.
   // BS and VG are not in the country list.
-  quantfury: { all: true, except: [...SANCTIONED, "US", "CA"] },
+  quantfury: { all: true, except: ["US", "CA"] },
   // FAQ: citizens or residents of most countries except sanctions / local bans.
   mexem: WORLD,
   century: { groups: ["GCC"], countries: [...EEA, "GB", "CH", "IN", "PK", "EG", "ZA", "SG", "MY", "HK"] },
@@ -547,6 +589,46 @@ export const ACCEPTED = {
   comdirect: { countries: FLATEX_COMDIRECT },
   // No catalogue yet. Italy plus the nine BrokerChooser adds.
   directa: { countries: DIRECTA },
+  // The launch notice still on the commission's site: only Zimbabweans with
+  // a valid ID and a Zimbabwean bank account register, in the initial phase.
+  // The wallet is funded by Zipit, RTGS or EcoCash. A foreign investor uses
+  // a stockbroker, not this platform. The current terms do not add a country.
+  // https://seczim.co.zw/capital-markets-in-zimbabwe/
+  // https://www.zse.co.zw/zse-direct-terms-and-conditions/
+  zsedirect: { countries: ["ZW"] },
+  // The online account is the Vietnamese one.
+  vps: { countries: ["VN"] },
+  // The online account takes a Vietnamese citizen card.
+  // https://support.vndirect.com.vn/hc/vi/articles/14250597614745
+  vndirect: { countries: ["VN"] },
+  // The online account is opened by photographing a Vietnamese citizen card.
+  // https://www.vietcap.com.vn/huong-dan-chung/mo-tai-khoan-ekyc
+  vietcap: { countries: ["VN"] },
+  // The online account is opened with a chip Vietnamese citizen card.
+  // https://www.ssi.com.vn/khach-hang-ca-nhan/gioi-thieu-mo-tai-khoan
+  ssi: { countries: ["VN"] },
+  // Select is offered only to a natural person whose only tax residence
+  // is Germany. §2 of the Select framework agreement.
+  // https://www.visualvest.de/rechtliches/rechtliche-hinweise
+  visualvest: { countries: ["DE"] },
+  // The service is only for a person living in Japan. A foreign national
+  // opens with a residence card. A US citizen, a green-card holder or a US
+  // resident cannot open. The picker is residence, so the country is JP.
+  // https://www.moomoo.com/jp/support/topic7_299
+  // https://www.moomoo.com/jp/support/topic7_287
+  moomoo: { countries: ["JP"] },
+  // Indonesian shares are for an Indonesian citizen. A foreigner opens
+  // with a passport and needs a KITAS to reach US shares, so that
+  // residence is Indonesia. A US citizen adds a FATCA form.
+  // https://pluang.com/faq/identity-verification/basic-verification/apakah-warga-negara-asing-wna-bisa-berinvestasi-di-pluang
+  // https://pluang.com/faq/us-stocks/about-us-stocks/faktor-tidak-dapat-investasi-di-saham-as
+  pluang: { countries: ["ID"] },
+  // The online account is opened with a PAN. US stocks are for an Indian
+  // resident under LRS. NRI US stocks are marked coming soon, and the NRI
+  // Indian account is a document flow.
+  // https://www.indmoney.com/us-stocks
+  // https://www.indmoney.com/features/nri
+  indmoney: { countries: ["IN"] },
 };
 
 const GROUPS = { EEA, EU, GCC };
@@ -571,7 +653,7 @@ export function specFor(folder, home = "") {
   if (spec) return spec;
   const country = String(home || "").toUpperCase();
   if (/^[A-Z]{2}$/.test(country)) return { countries: [country] };
-  return { all: true, except: SANCTIONED };
+  return { all: true };
 }
 
 export function accepts(folder, nat, home = "") {

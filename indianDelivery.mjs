@@ -199,7 +199,7 @@ export function indiaRoundTrip(schedule, query) {
   const gstDp = schedule.dpIncludesGst || !schedule.gstOnDp ? 0 : schedule.gstRate * dpBase;
   const gstLevy =
     schedule.gstRate *
-    (txn + (schedule.gstOnSebi === false ? 0 : sebi) + (schedule.gstOnIpft ? ipft : 0));
+    ((schedule.gstOnTxn === false ? 0 : txn) + (schedule.gstOnSebi === false ? 0 : sebi) + (schedule.gstOnIpft ? ipft : 0));
   const dpBill = schedule.dpIncludesGst ? dpBase : dpBase + gstDp;
   const brokerRaw = brokerage + gstBroker + dpBill;
   const brokerInr = schedule.roundRupee ? paise(brokerRaw) : brokerRaw;

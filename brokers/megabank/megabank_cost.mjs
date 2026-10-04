@@ -16,6 +16,10 @@
 //   Tokyo                       that exchange's book, when one is stored
 //   Hong Kong                   no book is published here
 //   Dividend tax, the ADR fee and the lot size stay out of the number.
+//   The order adds no exchange charge. The public board versus the
+//   Taiwan dollar is a bid and an ask. The remark is half that spread,
+//   as "FX 0.157% when cash ≠ USD". Read 2026-10-03 01:58.
+//   https://www.megabank.com.tw/personal/savings/foreign-service/forex
 //
 //   node brokers/megabank/megabank_cost.mjs AA US USD --shares=10 --price=42
 //
@@ -48,8 +52,35 @@ const dollars = (amount, currency) => {
   return v == null ? null : Number(v.toPrecision(12));
 };
 
-const REMARK =
-  "Custody is 0.2% a year, min NT$200.";
+const CUSTODY = "Custody is 0.2% a year, min NT$200.";
+// Spot bid and ask versus the Taiwan dollar. Half the pair's spread,
+// over the mid, is how far the ask sits above the middle. CNH is the
+// renminbi line; the board prints it as CNY.
+const BOARD = {
+  USD: [31.78, 31.88],
+  HKD: [4.03, 4.09],
+  JPY: [0.1998, 0.2039],
+  CNY: [4.723, 4.773],
+  CNH: [4.723, 4.773],
+  EUR: [35.65, 36.05],
+  GBP: [41.96, 42.36],
+  AUD: [22.01, 22.25],
+  CAD: [22.25, 22.45],
+  SGD: [24.81, 24.99],
+  ZAR: [1.86, 1.96],
+  SEK: [3.12, 3.22],
+  CHF: [38.32, 38.52],
+  THB: [0.929, 0.971],
+  NZD: [17.77, 17.97],
+};
+
+function remarkOf(currency) {
+  const pair = BOARD[code(currency)];
+  if (!pair) return CUSTODY;
+  const [bid, ask] = pair;
+  const gap = ((ask - bid) / (ask + bid)) * 100;
+  return `${CUSTODY}\nFX ${gap.toFixed(3)}% when cash ≠ ${code(currency)}.`;
+}
 
 function findListing({ etf, place, currency }) {
   const asked = loose(etf);
@@ -79,7 +110,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     onlineBuy: true,
     cashCurrency: "",
     url: PAGE,
-    remark: REMARK,
+    remark: CUSTODY,
   };
   if (!catalogue) {
     return { ...answer, why: "le catalogue Mega Bank n'existe pas encore : lancer `node brokers/megabank/megabank_scraping.mjs`" };
@@ -121,6 +152,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     ...answer,
     listing,
     cashCurrency: listing.currency,
+    remark: remarkOf(listing.currency),
     basis: `livraison en ligne, page relue le ${READ_ON}. Achat 1 %. Vente : plafond 0,15 %.`,
     fx: { quote: QUOTE, asOf: FX_AS_OF, listing: usdPer(listing.currency) },
     bp: marketBp,

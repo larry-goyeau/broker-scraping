@@ -23,6 +23,8 @@
 //   node brokers/fidelity/fidelity_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
+import { stampIsinMatches } from "../../isinMatches.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 
 const SCREEN = "https://lt.morningstar.com/api/rest.svc/9vehuxllxs/security/screener";
@@ -137,6 +139,37 @@ for (const universeId of [SHARES, LISTED]) {
   }
 }
 
+const listed = new Map();
+for (const file of [new URL("../../assets/stocks.csv", import.meta.url), new URL("../../assets/etfs.csv", import.meta.url)]) {
+  for (const line of fs.readFileSync(file, "utf8").split(/\r?\n/)) {
+    if (!line.trim() || /^ticker\s*,/i.test(line)) continue;
+    const cells = line.split(",");
+    const code = String(cells[0] || "").trim().toUpperCase().split(":").pop();
+    const exchange = String(cells[1] || "").trim().toUpperCase();
+    const isin = toIsin(cells[2]);
+    if (!code || !exchange || !isin) continue;
+    if (!listed.has(code)) listed.set(code, new Map());
+    const book = listed.get(code);
+    if (!book.has(exchange)) book.set(exchange, new Set());
+    book.get(exchange).add(isin);
+  }
+}
+for (const row of results) {
+  if (row.isin) continue;
+  const places = row.exchange === "LSE" ? ["LSE", "LSE_SETS", "LSE_SEAQ", "LSIN"] : [row.exchange];
+  const groups = new Map();
+  const book = listed.get(row.ticker);
+  for (const place of places) {
+    const ids = book?.get(place);
+    if (ids?.size) groups.set(place, ids);
+  }
+  const only = stampIsinMatches(row, groups, row.ticker);
+  if (only) {
+    row.isin = only;
+    if (!row.query || row.query === row.ticker) row.query = only;
+  }
+}
+
 results.sort((left, right) => {
   const byType = left.type.localeCompare(right.type);
   if (byType !== 0) return byType;
@@ -145,7 +178,7 @@ results.sort((left, right) => {
   return left.ticker.localeCompare(right.ticker);
 });
 
-fs.writeFileSync(OUTPUT, JSON.stringify(stampRows(results), null, 2));
+fs.writeFileSync(OUTPUT, JSON.stringify(stampRows(withoutObligations(results)), null, 2));
 
 const byType = new Map();
 for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);

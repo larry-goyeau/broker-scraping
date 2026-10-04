@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import { stampRows } from "../../accepted.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import os from "node:os";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
@@ -452,7 +453,7 @@ results.sort((left, right) => {
   return String(left.ticker).localeCompare(String(right.ticker));
 });
 
-fs.writeFileSync(outputPath, JSON.stringify(stampRows(results, import.meta.url), null, 2));
+fs.writeFileSync(outputPath, JSON.stringify(stampRows(withoutObligations(results), import.meta.url), null, 2));
 
 const byType = new Map();
 for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);

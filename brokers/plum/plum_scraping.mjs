@@ -3,6 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
 import { stampRows } from "../../accepted.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 
 // Plum has no web app and its Android app pins its certificates, so the book
 // cannot be read from the network. What the app will show is its screen, so
@@ -441,7 +442,7 @@ for (const ticker of seenTickers) {
   });
 }
 
-fs.writeFileSync(new URL("plum-parsed.json", import.meta.url), JSON.stringify(stampRows(results, import.meta.url), null, 2));
+fs.writeFileSync(new URL("plum-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(results), import.meta.url), null, 2));
 fs.rmSync(workDir, { recursive: true, force: true });
 
 const byType = new Map();

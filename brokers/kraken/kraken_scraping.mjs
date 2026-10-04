@@ -36,6 +36,8 @@
 //   node brokers/kraken/kraken_scraping.mjs
 
 import { accepts, COUNTRY_NAMES, EEA, stampRows } from "../../accepted.mjs";
+import { stampIsinMatches } from "../../isinMatches.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 
 const EQUITIES = "https://iapi.kraken.com/api/internal/markets/all/equities";
@@ -223,6 +225,19 @@ function pickIsin(rows, name, minScore, acceptSole) {
 // one. A ticker that the lists file on another American place still counts
 // when the name is the same and there is only one such ISIN. A namesake
 // abroad does not.
+function venueGroups(index, ticker, mic) {
+  const allowed = new Set(CSV_VENUES[mic] || []);
+  const groups = new Map();
+  for (const row of index.get(ticker) || []) {
+    for (const exchange of row.exchanges) {
+      if (!allowed.has(exchange)) continue;
+      if (!groups.has(exchange)) groups.set(exchange, new Set());
+      groups.get(exchange).add(row.isin);
+    }
+  }
+  return groups;
+}
+
 function resolveIsin(index, ticker, name, mic) {
   const candidates = index.get(ticker) || [];
   const allowed = new Set(CSV_VENUES[mic] || []);
@@ -403,6 +418,7 @@ for (const row of await loadEquities()) {
     raw: [symbol, name, exchange, "USD", isin].filter(Boolean).join(" "),
     isin,
   };
+  if (!isin) stampIsinMatches(line, venueGroups(isins, symbol, exchange), symbol);
   if (type === "ETF" || type === "ETC" || type === "ETN") line.nonEuResident = true;
   if (type === "STOCK") line.supportedCountries = STOCK_COUNTRIES;
   results.push(line);
@@ -490,7 +506,7 @@ results.sort((left, right) => {
 
 fs.writeFileSync(
   new URL("kraken-parsed.json", import.meta.url),
-  JSON.stringify(stampRows(results), null, 2)
+  JSON.stringify(stampRows(withoutObligations(results)), null, 2)
 );
 
 const byType = new Map();

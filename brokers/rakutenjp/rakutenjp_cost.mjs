@@ -47,9 +47,9 @@
 //   https://www.rakuten-sec.co.jp/web/foreign/asean/rule/ground_rules.html
 //   https://www.rakuten-sec.co.jp/web/us/stock/rule/ground_rules.html
 //
-//   node brokers/rakuten/rakuten_cost.mjs 1305 Tokyo JPY --shares=10 --price=400
-//   node brokers/rakuten/rakuten_cost.mjs AAPL XNAS USD --shares=10 --price=230
-//   node brokers/rakuten/rakuten_cost.mjs --schedule
+//   node brokers/rakutenjp/rakutenjp_cost.mjs 1305 Tokyo JPY --shares=10 --price=400
+//   node brokers/rakutenjp/rakutenjp_cost.mjs AAPL XNAS USD --shares=10 --price=230
+//   node brokers/rakutenjp/rakutenjp_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
@@ -61,7 +61,7 @@ import { usBookPerShare } from "../../spreads/rule606.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
 
-const CATALOGUE = new URL("rakuten-parsed.json", import.meta.url);
+const CATALOGUE = new URL("rakutenjp-parsed.json", import.meta.url);
 const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
@@ -197,7 +197,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     cashCurrency: "JPY",
   };
   if (!catalogue) {
-    return { ...answer, why: "le catalogue Rakuten n'existe pas encore : lancer `node brokers/rakuten/rakuten_scraping.mjs`" };
+    return { ...answer, why: "le catalogue Rakuten n'existe pas encore : lancer `node brokers/rakutenjp/rakutenjp_scraping.mjs`" };
   }
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Rakuten` };
@@ -215,7 +215,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     mic: m.venue?.mic ?? null,
     currency: m.row.currency,
     unsourced: m.unsourced,
-    broker: "rakuten",
+    broker: "rakutenjp",
     ticker: m.row.ticker,
   });
   const listing = {
@@ -270,7 +270,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   let marketPerShare = perShare ?? leaf?.perShare ?? null;
   if (american) {
     const quoted = usBookPerShare({
-      broker: "rakuten",
+      broker: "rakutenjp",
       ticker: listing.ticker,
       fallback: marketPerShare,
     });
@@ -378,7 +378,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const positional = process.argv.slice(2).filter((a) => !a.startsWith("--"));
   const [etf, place, currency] = positional;
   if (!etf) {
-    console.error("usage : node brokers/rakuten/rakuten_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]");
+    console.error("usage : node brokers/rakutenjp/rakutenjp_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]");
     process.exit(2);
   }
 

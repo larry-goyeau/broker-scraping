@@ -1,9 +1,9 @@
 // What Pearler sells on the ASX and on Wall St. The product pages are
 // /invest/asx/asset and /invest/us/asset. A compare page is not a listing.
 // Keep a row only when active is true. A closeOnly row is sell-only and stays
-// out. The page has no ISIN. An ASX code is joined to ../../assets/stocks.csv and
+// out. Fixed interest and a convertible note stay out. A bond ETF stays. The page has no ISIN. An ASX code is joined to ../../assets/stocks.csv and
 // ../../assets/etfs.csv on ASX. A Wall St code is joined when exactly one ISIN matches
-// NASDAQ, NYSE, AMEX, Cboe or OTC. An ETN is filed as EQUITY. There is no ETC
+// NASDAQ, NYSE, AMEX or Cboe. Several matches stay on the row. An ETN is filed as EQUITY. There is no ETC
 // kind.
 //
 //   https://pearler.com/invest/asx/asset/BHP
@@ -12,6 +12,8 @@
 //   node brokers/pearler/pearler_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
+import { stampIsinMatches } from "../../isinMatches.mjs";
+import { isObligation, withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 
 const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36";
@@ -100,7 +102,18 @@ function attachIsins(rows) {
       row.query = isin;
       if (row.exchange !== "ASX" && where.size === 1) row.exchange = [...where][0];
       tally.one += 1;
-    } else tally[found.size === 0 ? "none" : "several"] += 1;
+    } else if (found.size === 0) tally.none += 1;
+    else {
+      tally.several += 1;
+      const groups = new Map();
+      for (const [isin, where] of found) {
+        for (const place of where) {
+          if (!groups.has(place)) groups.set(place, new Set());
+          groups.get(place).add(isin);
+        }
+      }
+      stampIsinMatches(row, groups, row.ticker);
+    }
   }
   return tally;
 }
@@ -206,6 +219,7 @@ async function worker() {
     const name = normalize(asset.name);
     // EQUITY is a US share. A listed investment company is a share. An ETN
     // arrives as EQUITY. A blank type is a share unless the name says otherwise.
+    // Fixed interest and a convertible note are bonds and stay out.
     const type =
       kind === "ETF" || (!kind && /\bETF\b/i.test(name))
         ? "ETF"
@@ -216,6 +230,10 @@ async function worker() {
             : kind === "STOCK" || kind === "EQUITY" || kind === "LIC" || !kind
               ? "STOCK"
               : kind;
+    if (isObligation(name, type)) {
+      skip("bond");
+      continue;
+    }
     const book = asset.__typename === "AsxAsset" ? "ASX" : asset.__typename === "UsAsset" ? "US" : "";
     if (!book) throw new Error(`unread book ${asset.__typename} ${asset.ticker}`);
     const ticker = normalize(asset.ticker).toUpperCase();
@@ -258,7 +276,7 @@ unique.sort((left, right) => {
   return left.ticker.localeCompare(right.ticker);
 });
 
-fs.writeFileSync(new URL("pearler-parsed.json", import.meta.url), JSON.stringify(stampRows(unique), null, 2));
+fs.writeFileSync(new URL("pearler-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(unique)), null, 2));
 
 const byBook = new Map();
 for (const row of unique) byBook.set(`${row.exchange} ${row.type}`, (byBook.get(`${row.exchange} ${row.type}`) || 0) + 1);

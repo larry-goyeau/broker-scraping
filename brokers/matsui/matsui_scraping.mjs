@@ -33,6 +33,8 @@
 //   node brokers/matsui/matsui_scraping.mjs --us=./symbollist.csv --tokyo=./data_j.xlsx
 
 import { stampRows } from "../../accepted.mjs";
+import { stampIsinMatches } from "../../isinMatches.mjs";
+import { withoutObligations } from "../../obligation.mjs";
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 
@@ -229,17 +231,24 @@ function attachIsins(rows) {
   for (const row of rows) {
     const fileExchange = US_FILE[row.exchange];
     const places = fileExchange ? [fileExchange] : JAPAN.has(row.exchange) ? JP_FILE : [];
-    const found = new Set();
+    const groups = new Map();
     const book = index.get(row.ticker);
     for (const place of places) {
-      for (const isin of book?.get(place) || []) found.add(isin);
+      const ids = book?.get(place);
+      if (ids?.size) groups.set(place, ids);
     }
+    const found = new Set();
+    for (const ids of groups.values()) for (const isin of ids) found.add(isin);
     if (found.size === 1) {
       const isin = [...found][0];
       row.isin = isin;
       row.query = isin;
       tally.one += 1;
-    } else tally[found.size === 0 ? "none" : "several"] += 1;
+    } else if (found.size === 0) tally.none += 1;
+    else {
+      tally.several += 1;
+      stampIsinMatches(row, groups, row.ticker);
+    }
   }
   return tally;
 }
@@ -511,7 +520,7 @@ results.sort((left, right) => {
 });
 
 const outputPath = new URL("matsui-parsed.json", import.meta.url);
-fs.writeFileSync(outputPath, JSON.stringify(stampRows(results), null, 2));
+fs.writeFileSync(outputPath, JSON.stringify(stampRows(withoutObligations(results)), null, 2));
 
 const byBook = new Map();
 for (const row of results) {

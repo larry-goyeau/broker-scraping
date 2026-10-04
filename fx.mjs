@@ -70,6 +70,12 @@ const FOREIGN_PER_USD = {
   // CBN NFEM central rate, same day. Not an ECB print.
   // https://www.cbn.gov.ng/api/GetAllExchangeRates
   NGN: 1320.0574,
+  // RBZ interbank mid, ZiG per dollar, same day. Not an ECB print.
+  // https://www.rbz.co.zw/documents/Exchange_Rates/2026/September/RATES_7_SEPTEMBER_2026.pdf
+  ZWG: 26.8547,
+  // SBV central rate, dong per dollar, same day. Not an ECB print.
+  // https://vov.vn/thi-truong/ty-gia-usd-hom-nay-79-ty-gia-trung-tam-tang-len-moc-25611-dongusd-post1330446.vov
+  VND: 25611,
 };
 
 function keyOf(currency) {

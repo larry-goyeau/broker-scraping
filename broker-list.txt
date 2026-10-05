@@ -53,7 +53,7 @@ BMO InvestorLine	CA	Bank	Local + US ETFs	https://www.bmo.com/en-ca/main/personal
 Scotia iTRADE	CA	Bank	Local + US ETFs	https://www.scotiaitrade.com/en/home/open-trading-account.html	service@scotiaitrade.com
 CIBC Investor's Edge	CA	Bank	Local + US ETFs	https://www.investorsedge.cibc.com/en/home.html	https://www.investorsedge.cibc.com/en/contact-us.html
 National Bank Direct Brokerage	CA	Bank	Local + US ETFs	https://www.nbc.ca/en/direct-brokerage.html	
-Desjardins Online Brokerage	CA	Bank	Local + US ETFs	https://www.disnat.com/en/	
+Desjardins	CA	Bank	Local + US ETFs	https://www.disnat.com/en/	
 CI Direct Trading	CA	Broker	Local + US ETFs	https://www.cifinancial.com/ci-dt/ca/en/trade/account-types.html	
 Webull Canada	CA	Neobroker	Local + US ETFs	https://www.webull.ca/trading-investing/stocks	support@webull.ca
 Moomoo Canada	CA	Neobroker	Local + US ETFs	https://www.moomoo.com/ca/	
@@ -295,7 +295,7 @@ BNP Paribas Biuro Maklerskie	PL	Bank	Global ETFs / ETPs	https://www.bnpparibas.p
 Trigon Dom Maklerski	PL	Broker	Local-market ETFs	https://www.trigon.pl/dom-maklerski/zaloz-rachunek	bok@trigon.pl
 Millennium Biuro Maklerskie	PL	Bank	UCITS ETFs / ETCs	https://www.millenniumbm.pl/rachunki-maklerskie/rachunek-indywidualny	https://www.millenniumbm.pl/kontakt
 Citi Handlowy Dom Maklerski	PL	Bank	Global ETFs / ETPs	https://www.citibank.pl/biuro-maklerskie/	https://www.citibank.pl/kontakt/
-IPOPEMA Securities	PL	Broker	UCITS ETFs / ETCs	https://www.ipopema.pl/	
+IPOPEMA	PL	Broker	UCITS ETFs / ETCs	https://www.ipopema.pl/	
 Fio banka e-Broker	CZ	Bank	UCITS ETFs / ETCs	https://www.fio.cz/akcie-investice/e-broker	https://www.fio.cz/kontakty
 Air Bank	CZ	Bank	US stocks + UCITS ETFs	https://www.airbank.cz/produkty/akcie/	
 Patria Finance	CZ	Broker	UCITS ETFs / ETCs	https://finance.patria.cz/otevrit-ucet	patria@patria.cz
@@ -672,7 +672,7 @@ Growin’ by Mandiri Sekuritas	ID	Bank	Local-market ETFs	https://growin.id/
 Nanovest	ID	Neobroker	US ETFs / ETNs	https://play.google.com/store/apps/details?id=com.nanovest.prod	
 Gotrade Indonesia	ID	Neobroker	US ETFs / ETNs	https://www.heygotrade.com/id/	
 Pluang	ID	Neobroker	US ETFs / ETNs	https://pluang.com/id/signup	
-BNI Sekuritas (BIONS)	ID	Bank	Local-market ETFs	https://www.bions.id/	
+BNI Sekuritas	ID	Bank	Local-market ETFs	https://www.bions.id/	
 BCA Sekuritas	ID	Bank	Local-market ETFs	https://bcasekuritas.co.id/	halo@bcasekuritas.co.id
 Mirae Asset Sekuritas Indonesia	ID	Broker	Local-market ETFs	https://login.miraeasset.co.id	
 BRI Danareksa Sekuritas	ID	Broker	Local-market ETFs	https://eform.brights.co.id/BukaRekeningNOW	
@@ -687,7 +687,7 @@ AB Capital Securities	PH	Broker	Local-market ETFs	https://securities.abcapitalon
 Philstocks	PH	Neobroker	Local-market ETFs	https://philstocks.ph/	
 DragonFi	PH	Neobroker	Local-market ETFs	https://www.dragonfi.ph/register	
 BDO Securities	PH	Bank	Local-market ETFs	https://www.bdo.com.ph/bdo-securities/online-trading	
-RCBC Securities	PH	Bank	Local-market ETFs	https://www.rcbcsec.com/registration/application_online.asp	
+RCBC	PH	Bank	Local-market ETFs	https://www.rcbcsec.com/registration/application_online.asp	
 Maybank Securities Philippines	PH	Broker	Local-market ETFs	https://www.maybank-atrke.com/	
 SSI iBoard	VN	Broker	Local-market ETFs	https://www.ssi.com.vn/khach-hang-ca-nhan/gioi-thieu-mo-tai-khoan	
 VNDirect	VN	Broker	Local-market ETFs	https://mydgo.vndirect.com.vn/mo-tai-khoan	
@@ -727,7 +727,7 @@ Kuspit	MX	Broker	Local-market ETFs	https://kuspit.com/
 Webull México	MX	Neobroker	US ETFs / ETNs	https://www.webull.com.mx/	
 Hey Banco	MX	Neobroker	Local + US ETFs	https://banco.hey.inc/universo-hey/ahorra-e-invierte/acciones	
 BBVA Trader México	MX	Bank	Global ETFs / ETPs	https://www.bbva.mx/personas/productos/inversion/bbva-trader.html	
-Finamex Trading	MX	Broker	Global ETFs / ETPs	https://www.finamex.com.mx/general/finamex-trading/	
+Finamex	MX	Broker	Global ETFs / ETPs	https://www.finamex.com.mx/general/finamex-trading/	
 Monex Casa de Bolsa	MX	Bank	Global ETFs / ETPs	https://www.monex.com.mx	
 Casa de Bolsa Banorte (BeTrading)	MX	Bank	Local + US ETFs	https://www.banorte.com/Casa-de-Bolsa/BeTrading/Que-es-BeTrading.html	
 InvertirOnline (IOL)	AR	Broker	ETF CEDEARs	https://www.invertironline.com/servicios/cuenta-de-inversion	

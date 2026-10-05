@@ -63,7 +63,7 @@ const dollars = (amount, currency) => {
 };
 
 const CUSTODY = "Custody is free the first year, then 0.2% a year, min NT$200 (DBU) or USD 10 (OBU).";
-const EXTRA = "A market charge above the 1.5% is taken extra.";
+const EXTRA = "A market may charge extra fees.";
 // Spot bid and ask versus the Taiwan dollar, bank buy then bank sell.
 // Half the pair's spread, over the mid, is how far the ask sits above
 // the middle. CNH is the renminbi line; the board prints it as CNY.

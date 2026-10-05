@@ -383,6 +383,9 @@ const YAHOO_EXCHANGE = {
   QSE: ".QA",
   QATAR: ".QA",
   PSE: ".PS",
+  // Bucharest. EODHD's search is empty for the small names. Yahoo's last
+  // is the ticker plus .RO, the same listing, not a book.
+  BVB: ".RO",
   ASX: ".AX",
   TYO: ".T",
   HOSE: ".VN",

@@ -30,6 +30,51 @@ const FOLDER = {
   // brokerage account, which is another product.
   // https://pdf.mbank.pl/mbankpl/of/gielda/emakler/regulamin_emakler_obowiazujacy_od_27.06.2026.pdf
   mBank: ["PLN"],
+  // The cash account is zloty. A foreign-currency cash account is kept for
+  // each currency the market order names, and that order is zloty and euro.
+  // https://ipopemasecurities.pl/wp-content/uploads/2026/05/Regulaminmaklerskidlaklientowindywid_20260512.pdf
+  // https://ipopemasecurities.pl/wp-content/uploads/2023/05/dkizarzadzenierynkizorganizowane171216.pdf
+  ipopema: ["PLN", "EUR"],
+  // A transfer to the client's RDN at BNI is the deposit, and the sale
+  // proceeds land in the same account. The one-day-trade minimum is
+  // printed in rupiah. No other currency is named.
+  // https://help.bions.id/docs/cara-melakukan-deposit-dana-ke-rdn-bions-trading-mobile-android-ios/
+  // https://help.bions.id/docs/one-day-trade/
+  bni: ["IDR"],
+  // A transfer to the client's CLABE at Finamex is the deposit, in pesos.
+  // The peso-dollar line is a forward, not cash left in dollars. No other
+  // currency is named.
+  // https://www.finamex.com.mx/general/finamex-trading/
+  // https://www.finamex.com.mx/servicios-de-inversion/guia-de-servicios-de-inversion
+  finamex: ["MXN"],
+  // The brokerage account is opened in Canadian dollars, and a US-dollar
+  // account can be added and left there. A US line traded from that
+  // account is not converted. Opening the US-dollar account requires the
+  // Canadian one beside it.
+  // https://www.disnat.com/en/platforms-and-fees/pricing
+  // https://www.disnat.com/aide-contact/document-formulaire/DX01
+  disnat: ["CAD", "USD"],
+  // Bills payment at a Philippine bank credits pesos. An overseas
+  // remittance is credited to the same account. No dollar balance is named.
+  // https://www.colfinancial.com/ape/final2/home/open_an_account.asp
+  // https://colfinancial.freshdesk.com/support/solutions/articles/6000054480-how-do-i-fund-my-col-account-through-online-banking-via-merchant-payment-
+  col: ["PHP"],
+  // The normal Independence account is funded only in lei. The Independence
+  // EURO account is funded only in euro and left there. A lei account is
+  // not credited in euro.
+  // https://primet.ro/intrebari-frecvente
+  // https://primet.ro/ce-oferim-alimentarea-contului-de-investitii
+  prime: ["RON", "EUR"],
+  // Cash, a check or an RCBC transfer credits one securities account.
+  // Telemoney from abroad credits that same account. The fees are in
+  // pesos. No other balance is named.
+  // https://www.rcbcsec.com/corporate/faqs.html
+  rcbc: ["PHP"],
+  // A GCash top-up credits the trading wallet in pesos. A dollar deposit
+  // is converted into pesos. A dollar withdrawal is paid out of that peso
+  // balance. No other balance is left unconverted.
+  // https://securities.abcapitalonline.com/frequently-asked-questions/
+  abcapital: ["PHP"],
   // A bank transfer lands in yen. Dollars in the US-stock account are the
   // free exchange of that yen, not a currency the client deposits.
   // https://www.matsui.co.jp/service/money/deposit/
@@ -68,6 +113,31 @@ const FOLDER = {
   // https://www.sc.com/tw/save/foreign-currency-current-account/
   // https://www.sc.com/tw/frequently-asked-questions/deposit/
   standardchartered: ["TWD", "USD", "HKD", "GBP", "AUD", "CAD", "CHF", "JPY", "EUR", "NZD", "SGD", "ZAR", "SEK", "CNY"],
+  // One passbook holds these twelve and leaves each one there. The page
+  // prints renminbi. The shelf quotes CNH, the same unit. New Taiwan
+  // dollars are the domestic account. A trade is debited in the listing
+  // currency. The client converts.
+  // https://www.ubot.com.tw/foreign_deposit
+  // https://www.ubot.com.tw/rates/foreign/deposit_rate
+  unionbank: ["TWD", "USD", "JPY", "GBP", "AUD", "HKD", "CAD", "CNY", "CNH", "SGD", "ZAR", "CHF", "NZD", "EUR"],
+  // One passbook holds these thirteen and leaves each one there. The
+  // page prints renminbi. The shelf quotes CNH, the same unit. New
+  // Taiwan dollars are the domestic account. A trade is debited in
+  // the listing currency. The client converts.
+  // https://bank.sinopac.com/sinopacBT/personal/desposit-forex/forex/demand-deposit.html
+  sinopac: ["TWD", "USD", "JPY", "GBP", "AUD", "HKD", "CAD", "CNY", "CNH", "SGD", "ZAR", "CHF", "NZD", "EUR", "SEK"],
+  // One passbook holds these fourteen and leaves each one there. The
+  // page prints renminbi. The shelf quotes CNH, the same unit. New
+  // Taiwan dollars are the domestic account. A trade is debited in
+  // the listing currency. The client converts.
+  // https://www.taishinbank.com.tw/TSB/personal/deposit/foreign-service/current-account/
+  taishin: ["TWD", "USD", "JPY", "GBP", "AUD", "HKD", "CAD", "CNY", "CNH", "SGD", "ZAR", "CHF", "NZD", "EUR", "SEK", "THB"],
+  // One passbook holds these fourteen and leaves each one there. The
+  // page prints renminbi as CNY. The shelf quotes CNY. New Taiwan
+  // dollars are the domestic account. A trade is debited in the
+  // listing currency. The client converts.
+  // https://www.ctbcbank.com/twrbo/zh_tw/dep_index/dep_product/dep_foreign_index/dep_foreign_demand.html
+  ctbc: ["TWD", "USD", "JPY", "GBP", "AUD", "HKD", "CAD", "CNY", "SGD", "ZAR", "CHF", "NZD", "EUR", "SEK", "THB"],
   // Yen lands in the comprehensive account. These seven foreign currencies
   // can be paid in from a foreign-currency bank account and left as cash.
   // https://www.sbisec.co.jp/ETGate/WPLETmgR001Control?OutSide=on&getFlg=on&burl=search_home&cat1=home&cat2=service&dir=service&file=home_in_gaika.html
@@ -362,6 +432,14 @@ const FOLDER = {
   // https://pluang.com/biaya/biaya-lainnya
   // https://pluang.com/faq/top-up/usd-direct-deposit/langkah-langkah-top-up-deposit-menggunakan-usd-direct-pada-aplikasi-pluang
   pluang: ["IDR", "USD"],
+  // Belgium's current account is euro, and the client can open another
+  // in pounds, dollars, kroner or francs and leave it there. Malta's
+  // current account holds those and also Australian dollars, Canadian
+  // dollars, yen, Danish kroner and Swedish kronor. A fixed-term deposit
+  // is not this cash.
+  // https://www.medirect.be/wp-content/uploads/MeDirect-BE-Fee-InformationDocument-EN.pdf
+  // https://www.medirect.com.mt/pay/account/
+  medirect: ["EUR", "GBP", "USD", "NOK", "CHF", "AUD", "CAD", "JPY", "DKK", "SEK"],
   // The KYC offers a resident account and an NRI account (NRE or NRO). Both are rupees.
   zebu: ["INR"],
 };

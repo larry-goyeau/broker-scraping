@@ -97,7 +97,9 @@
 // the record date; Frankfurt custody, which the LYNX list names without a
 // figure; Stuttgart, Gettex and Tradegate custody, which the list names
 // without a figure (the ticket adds no exchange fee on those three);
-// Prague, Budapest and Warsaw pass-throughs the list names without a figure;
+// Prague and Budapest pass-throughs the list names without a figure.
+// Warsaw custody is the IBIE pass-through: 0.03 % a year of a PLN stock,
+// calculated daily, and it stays out of the ticket;
 // Venture extended hours (0.002 CAD a share), which are a session and not this trip.
 // Conversion is the client's own order. The list prints no FX commission,
 // so none is invented. Custody of an ordinary line is not a ticket.
@@ -318,7 +320,7 @@ function remarkOf({ listing, note }) {
   if (note === "custody") lines.push("This venue adds a custody fee. The list names it and prints no figure.");
   if (note === "bux") lines.push("Forint adds Budapest exchange, regulatory and custody fees. The list names them and prints no figure.");
   if (note === "pra") lines.push("Koruna adds a Prague pass-through and a custody fee. The list names them and prints no figure.");
-  if (note === "pln") lines.push("Zloty adds a custody fee. The list names it and prints no figure.");
+  if (note === "pln") lines.push("Custody of a PLN stock is 0.03% a year of the position, calculated daily.");
   const place = loose(listing?.brokerExchange);
   if (place === "VENTURE") {
     lines.push("Venture extended hours is 0.002 CAD/share. Not in this trip.");
@@ -606,7 +608,8 @@ function confidenceOf({ id, rule, buyComm, marketBp, marketPerShare, rates, taxP
   if (rule.perShare != null && rule.maxPct != null) {
     said.push("le plafond borne le montant à la part, puis le plancher borne le résultat");
   }
-  if (note === "bux" || note === "pra" || note === "pln") said.push("un frais de place est nommé sans chiffre et reste hors total");
+  if (note === "bux" || note === "pra") said.push("un frais de place est nommé sans chiffre et reste hors total");
+  if (note === "pln") said.push("garde des actions en zloty : 0,03 % par an de la position, calculée chaque jour, hors total");
   if (frankfurt) {
     said.push(
       `spécialiste Francfort ${Number(frankfurt.specialist).toPrecision(3)} € par sens` +

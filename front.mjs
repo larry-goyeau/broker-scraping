@@ -109,7 +109,13 @@ const FOLDER_NAME = {
   "e.sun": "E.SUN",
   scsb: "SCSB",
   standardchartered: "Standard Chartered Taiwan",
+  unionbank: "Union Bank of Taiwan",
+  sinopac: "SinoPac",
+  taishin: "Taishin",
+  ctbc: "CTBC",
   moomoo: "moomoo Japan",
+  disnat: "Desjardins",
+  prime: "Prime Transaction",
 };
 
 function metaFor(folder, list) {
@@ -265,11 +271,15 @@ for (const file of catalogueFiles()) {
     if (row.cfd) listing.cfd = true;
     if (Array.isArray(row.supportedCountries)) listing.supportedCountries = row.supportedCountries;
     const held = inst.byBroker.get(folder) || [];
+    // MeDirect files the same Nasdaq name twice, NAS on the Belgian book
+    // and NMS on the Maltese one. Both display as Nasdaq. The residence
+    // lists differ, so both lines stay.
     const dup = held.some(
       (h) =>
         h.ticker === listing.ticker &&
         h.exchange === listing.exchange &&
-        h.currency === listing.currency
+        h.currency === listing.currency &&
+        (folder !== "medirect" || h.exchangeRaw === listing.exchangeRaw)
     );
     if (!dup) held.push(listing);
     inst.byBroker.set(folder, held);
@@ -1806,8 +1816,12 @@ function sameTripListings(a, b) {
 }
 
 function collapseEasyBourse(built) {
+  const cheap = built.find((row) => row.plan === "premium");
+  const kept = cheap
+    ? built.filter((row) => row.plan === "premium" || !sameTradeListings(cheap.listings, row.listings))
+    : built;
   const groups = [];
-  for (const row of built) {
+  for (const row of kept) {
     const hit = groups.find((g) => sameCostListings(g.listings, row.listings));
     if (hit) hit.members.push(row);
     else groups.push({ listings: row.listings, members: [row] });
@@ -1903,9 +1917,29 @@ function collapsePlum(built) {
   });
 }
 
+// The trade columns, not the remark. The remark is the subscription, which
+// is what still differs once the fill costs the same.
+function sameTradeListings(a, b) {
+  if (a.length !== b.length) return false;
+  return a.every((l, i) => {
+    const r = b[i];
+    return (
+      l.exchange === r.exchange &&
+      l.currency === r.currency &&
+      l.total === r.total &&
+      l.fees === r.fees &&
+      l.spread === r.spread
+    );
+  });
+}
+
 function collapseBoursobank(built) {
+  const free = built.find((row) => row.plan === "decouverte");
+  const kept = free
+    ? built.filter((row) => row.plan === "decouverte" || !sameTradeListings(free.listings, row.listings))
+    : built;
   const groups = [];
-  for (const row of built) {
+  for (const row of kept) {
     const hit = groups.find((g) => sameCostListings(g.listings, row.listings));
     if (hit) hit.members.push(row);
     else groups.push({ listings: row.listings, members: [row] });

@@ -156,7 +156,9 @@ export const VENUES = [
       // "nsdq" is Al Ramz's spelling, and on its own it kept 1 113 American lines of
       // that catalogue out of reach of a book they plainly have.
       // "nsm" is the Nasdaq code on a Hargreaves Lansdown factsheet.
-      XNAS: ["xnas", "nasdaq", "nsdq", "nmq", "ndq", "nasdaqgs", "nasdaqgm", "nasdaqcm", "nsc", "nsm"],
+      // "nas" is MeDirect Belgium's Nasdaq. "nms" is MeDirect Malta's, the
+      // same tape: Apple is NAS on one book and NMS on the other.
+      XNAS: ["xnas", "nasdaq", "nsdq", "nmq", "ndq", "nasdaqgs", "nasdaqgm", "nasdaqcm", "nsc", "nsm", "nas", "nms"],
       // Brokers write "AMEX" for Arca more often than for NYSE American, tastytrade
       // among them: EEM, GLD, IAU and VOO all come through labelled AMEX and all four
       // list on Arca. The alias sits here rather than on XASE because that is what the
@@ -824,6 +826,15 @@ export function resolveVenue(row) {
     }
     if (ccy === "CAD" || isin.startsWith("CA")) {
       return { venue: VENUES.find((v) => v.mic === "XCNQ"), assumed: false };
+    }
+  }
+  // TradingView and COL write PSE for the Philippine Stock Exchange. Prague
+  // uses the same three letters; a peso line or a Philippine ISIN is Manila.
+  if (names.includes("pse")) {
+    const ccy = String(row.currency || "").toUpperCase();
+    const isin = String(row.isin || "").toUpperCase();
+    if (ccy === "PHP" || isin.startsWith("PH")) {
+      return { venue: null, unsourced: KNOWN_UNSOURCED.find((u) => u.match.includes("xphs")) };
     }
   }
   for (const n of names) {

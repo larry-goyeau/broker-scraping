@@ -343,6 +343,89 @@ export const ACCEPTED = {
   // is Taiwan.
   // https://service.standardchartered.com.tw/tw/ssl/campaign/casa/faq.html
   standardchartered: { countries: ["TW"] },
+  // The foreign-stock page sells to an adult ROC national, an overseas
+  // Chinese with a national identity card, or a foreigner with an alien
+  // resident certificate. A US taxpayer and an EU person are excluded.
+  // The certificate is residence in Taiwan. The picker is residence, so
+  // the country is Taiwan.
+  // https://www.ubot.com.tw/stocks_ETF
+  unionbank: { countries: ["TW"] },
+  // Online opening of DAWHO is an adult with ROC nationality and a
+  // national identity card. A foreigner cannot open that account. A
+  // foreigner with an alien resident certificate can open a branch
+  // account. The certificate is residence in Taiwan. The picker is
+  // residence, so the country is Taiwan.
+  // https://dawho.tw/how/apply/
+  sinopac: { countries: ["TW"] },
+  // A digital account is an adult with a national identity card, or a
+  // foreigner of 18 with an alien resident certificate. The certificate
+  // is residence in Taiwan. The picker is residence, so the country is
+  // Taiwan.
+  // https://richart.tw/TSDIB_RichartWeb/RC02/RC020201?announceNo=34307
+  taishin: { countries: ["TW"] },
+  // A foreign-currency account is a ROC national with a national identity
+  // card, or a foreigner with a passport and a unified number, or a
+  // residence certificate that carries one, plus proof of a Taiwan
+  // address. The certificate is residence in Taiwan. The picker is
+  // residence, so the country is Taiwan.
+  // https://www.ctbcbank.com/twrbo/zh_tw/dep_index/dep_product/dep_foreign_index/dep_foreign_demand.html
+  ctbc: { countries: ["TW"] },
+  // The rules serve residents and non-residents. An electronic contract
+  // is only a natural person who is a resident. The service is provided
+  // on the territory of Poland. No other country of residence is named.
+  // https://ipopemasecurities.pl/wp-content/uploads/2026/05/Regulaminmaklerskidlaklientowindywid_20260512.pdf
+  ipopema: { countries: ["PL"] },
+  // Online opening asks for an e-KTP, an NPWP and a photo with the card.
+  // An e-KTP is an Indonesian citizen's card. A foreign national who is
+  // already a client updates data with a passport. No other country of
+  // residence is named.
+  // https://www.bions.id/edukasi/saham/cara-buka-rekening-saham-di-bni-sekuritas
+  // https://help.bions.id/docs/cara-mengubah-data/
+  bni: { countries: ["ID"] },
+  // Online opening asks for an INE, an RFC and a CLABE in the client's
+  // name. An INE is a Mexican voter's card. A company account is opened
+  // by phone. No other country of residence is named.
+  // https://www.finamex.com.mx/general/finamex-trading/
+  finamex: { countries: ["MX"] },
+  // The form says only a Canadian resident can open. The FAQ adds that a
+  // non-resident cannot, and that a Canadian citizen or resident of 18
+  // can. Citizenship may be other than Canadian. No other country of
+  // residence is named.
+  // https://www.disnat.com/en/help-contact
+  // https://www.disnat.com/aide-contact/document-formulaire/DX01
+  disnat: { countries: ["CA"] },
+  // The opening page takes a Filipino citizen, a resident foreigner and a
+  // non-resident foreigner. A US person sends a W-9 or a W-8BEN. No
+  // country of residence is refused.
+  // https://www.colfinancial.com/ape/final2/home/open_an_account.asp
+  col: { all: true },
+  // Online opening asks for a Romanian identity card and a bank statement
+  // in the client's name. The tax page tells a non-resident client to name
+  // their tax country. It does not name another country of residence for
+  // opening.
+  // https://primet.ro/intrebari-frecvente
+  // https://www.primet.ro/impozitarea-veniturilor-din-tranzactionarea-titlurilor-de-valoare
+  prime: { countries: ["RO"] },
+  // Online opening asks for a Philippine government ID and a Philippine
+  // mobile number. A foreigner sends a current passport and an Alien
+  // Certificate of Registration, which is residence in the Philippines.
+  // An OFW card is an identity document, not another country of residence.
+  // Telemoney is how a client already abroad sends money.
+  // https://www.rcbcsec.com/corporate/faqs.html
+  rcbc: { countries: ["PH"] },
+  // GStocks opening takes a Filipino with a government ID, a foreigner
+  // residing abroad with a passport, and a foreigner residing in the
+  // Philippines with a passport and an AEP, an ACR or an SRRV. No
+  // country of residence is refused.
+  // https://securities.abcapitalonline.com/frequently-asked-questions/
+  abcapital: { all: true },
+  // Belgium takes a natural person of 18 whose official and fiscal
+  // residence is Belgium. Malta takes a resident of an EEA country,
+  // Switzerland or the UK. A name carries only the residences of the
+  // book it is on.
+  // https://www.medirect.be/nieuws-research/faqs/what-are-the-requirements-to-open-an-account/
+  // https://www.medirect.com.mt/pay/account/
+  medirect: { groups: ["EEA"], countries: ["CH", "GB"] },
   // FAQ: the account is limited to a resident of Japan. Nationality is not
   // a criterion. A foreign national needs a residence card. A non-resident
   // cannot open.

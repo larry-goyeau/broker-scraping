@@ -45,9 +45,13 @@
 // asked for 2.52 € more, on one share and on a hundred. That is the
 // published minimum, so the 5.04 bp on the card is what bills once the
 // order is large enough. Stuttgart's specialist is still only on the page.
-// GETTEX, WSE, SGX, TASE and
+// GETTEX, SGX, TASE and
 // the rest of the IBKR book are not on the card: N/A, not a neighbour's
-// floor. KRX is not on the card either. The portal cash check on 122450,
+// floor. Warsaw is not on the card either. On 2026-10-05 the open portal
+// (account DUR224479) previewed PKO and ETFBCASH on WSE and nothing was
+// sent. One share and a hundred shares asked for 15 PLN. A thousand shares
+// asked for 0.10 % of the consideration (118.58 PLN on PKO at 118.58,
+// 146.98 PLN on ETFBCASH at 146.98). KRX is not on the card either. The portal cash check on 122450,
 // 2026-09-28, named it: 100 shares at 2 550 asked for 170.90 EUR, and
 // 3 000 shares asked for 5 050.90 EUR. That is 4 000 KRW, then 4 590 KRW,
 // which is 0.06 %, not the 0.09 % of the other rows. No order was sent.
@@ -164,6 +168,8 @@ const RULE = {
   // Not on the card. Portal preview of 3REN, 2026-10-02. Statutory pieces
   // are added beside this rate in bursaStatutory.
   my: { rate: 0.0008, min: 12, ccy: "MYR" },
+  // Not on the card. Portal preview of PKO and ETFBCASH, 2026-10-05.
+  wse: { rate: 0.001, min: 15, ccy: "PLN" },
 };
 
 const TO_VENUES = {
@@ -247,6 +253,7 @@ export function feeMarketOf(exchange, mic, currency) {
   if (code === "ASX" || m === "XASX") return "au";
   if (code === "KRX") return "kr";
   if ((code === "BURSAMY" || code === "BURSA" || m === "XKLS") && (!ccy || ccy === "MYR")) return "my";
+  if (code === "WSE" || m === "XWAR") return "wse";
   return null;
 }
 
@@ -493,7 +500,9 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
       ? `barème WH SelfInvest ${market}, lu le 2026-09-28 sur le contrôle de trésorerie du portail : `
       : market === "my"
         ? `barème WH SelfInvest ${market}, aperçu du portail le 2026-10-02 : `
-        : `barème WH SelfInvest ${market}, relu le ${SCHEDULE.readOn} : `) +
+        : market === "wse"
+          ? `barème WH SelfInvest ${market}, aperçu du portail le 2026-10-05 : `
+          : `barème WH SelfInvest ${market}, relu le ${SCHEDULE.readOn} : `) +
     (rule.rate != null
       ? `${(100 * rule.rate).toFixed(2)} % par sens`
       : market === "otc"

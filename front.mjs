@@ -116,14 +116,21 @@ const FOLDER_NAME = {
   moomoo: "moomoo Japan",
   disnat: "Desjardins",
   prime: "Prime Transaction",
+  mirae: "Mirae",
+};
+
+// Display name above, broker-list row below, when the two differ.
+const FOLDER_LIST = {
+  mirae: "Mirae Asset Securities Vietnam",
 };
 
 function metaFor(folder, list) {
   const aliased = FOLDER_NAME[folder];
-  if (aliased) {
-    const hit = list.find((row) => row.name === aliased) || list.find((row) => slug(row.name) === slug(aliased));
-    if (hit) return { ...hit, name: aliased };
-    return { name: aliased, country: "", type: "", url: "" };
+  const listedAs = FOLDER_LIST[folder] || aliased;
+  if (aliased || FOLDER_LIST[folder]) {
+    const hit = list.find((row) => row.name === listedAs) || list.find((row) => slug(row.name) === slug(listedAs));
+    if (hit) return { ...hit, name: aliased || hit.name };
+    return { name: aliased || listedAs, country: "", type: "", url: "" };
   }
   const s = slug(folder);
   const exact = list.find((row) => slug(row.name) === s);

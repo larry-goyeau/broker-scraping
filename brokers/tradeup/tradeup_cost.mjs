@@ -139,6 +139,17 @@ export function commissionSide({ market, plan, shares, notional }) {
 
 // The exchange lines on the Hong Kong tab, one execution. Stamp is the
 // stock note: rounded up to the next dollar, and not charged on an ETF.
+// The floor, the clearing bounds and the stamp are printed in Hong Kong
+// dollars. A renminbi counter is the same schedule after the trade is
+// turned into that dollar.
+function hkdOf(amount, currency) {
+  if (code(currency) === "HKD") return Number(amount);
+  const usd = toUsd(amount, currency);
+  const per = usdPer("HKD");
+  if (!(usd > 0) || !(per > 0)) return null;
+  return usd / per;
+}
+
 function hkStatutory(notional, type) {
   const amt = Number(notional);
   const stock = !/^(ETF|ETN|ETC)$/.test(String(type || "").toUpperCase());
@@ -278,15 +289,6 @@ export function roundTrip({
   };
 
   const market = feeMarketOf(m.row, listing.mic);
-  if (market === "hk" && code(m.row.currency) !== "HKD") {
-    return {
-      ...answer,
-      listing,
-      cashCurrency: "USD",
-      remark: "",
-      why: `${listing.brokerExchange || listing.exchange} en ${listing.currency} n'est pas sur le barème Hong Kong en dollars de Hong Kong`,
-    };
-  }
   if (!market) {
     return {
       ...answer,
@@ -304,7 +306,13 @@ export function roundTrip({
   const n = Number(shares);
   const p = Number(price);
   const notional = n > 0 && p > 0 ? n * p : null;
-  const ticket = commissionSide({ market, plan: resolved.id, shares: n, notional });
+  const hkNotional = market === "hk" && notional != null ? hkdOf(notional, listing.currency) : notional;
+  const ticket = commissionSide({
+    market,
+    plan: resolved.id,
+    shares: n,
+    notional: market === "hk" ? hkNotional : notional,
+  });
 
   const shared = {
     ...answer,
@@ -350,7 +358,7 @@ export function roundTrip({
   }
 
   const notionalUsd = toUsd(notional, listing.currency);
-  const hkExtra = market === "hk" ? hkStatutory(notional, listing.type) : 0;
+  const hkExtra = market === "hk" ? hkStatutory(hkNotional, listing.type) : 0;
   const commissionNative = ticket + hkExtra;
   const commissionUsd = toUsd(commissionNative * 2, market === "hk" ? "HKD" : "USD");
   const bookUsd =

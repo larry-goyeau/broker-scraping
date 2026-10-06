@@ -389,6 +389,24 @@ const FOLDER = {
   // https://seczim.co.zw/capital-markets-in-zimbabwe/
   // https://www.zse.co.zw/zse-direct-terms-and-conditions/
   zsedirect: ["ZWG"],
+  // A transfer to the client's virtual account at a linked Vietnamese
+  // bank, or a QR from any Vietnamese bank, is credited to the securities
+  // cash account and left there. The sheets name no other currency.
+  // https://hdsd.dnse.com.vn/huong-dan-giao-dich-tien/huong-dan-nop-tien
+  dnse: ["VND"],
+  // A transfer to the virtual account at BIDV, a QR, or one of the
+  // Vietnamese collection accounts is credited to the securities cash
+  // account and left there. The sheets name no other currency. The
+  // foreign-investor line at Vietcombank is the same dong account, so a
+  // wire in another currency is converted before it is cash.
+  // https://kisvn.vn/danh-sach-tai-khoan-tong
+  // https://kisvn.vn/ho-tro/nop-tien
+  kis: ["VND"],
+  // A QR payment into Mirae Asset's account at BIDV is credited to the
+  // securities cash account, the ordinary sub-account or the margin one,
+  // and left there. The sheet names no other currency.
+  // https://masvn.com/cate/nop-tienchuyen-tien-890
+  mirae: ["VND"],
   // A transfer into one of VPS's Vietnamese bank accounts is credited to
   // the securities cash account and left there. The sheet names no other
   // currency. A foreign investor's indirect investment account is a dong
@@ -432,14 +450,12 @@ const FOLDER = {
   // https://pluang.com/biaya/biaya-lainnya
   // https://pluang.com/faq/top-up/usd-direct-deposit/langkah-langkah-top-up-deposit-menggunakan-usd-direct-pada-aplikasi-pluang
   pluang: ["IDR", "USD"],
-  // Belgium's current account is euro, and the client can open another
-  // in pounds, dollars, kroner or francs and leave it there. Malta's
-  // current account holds those and also Australian dollars, Canadian
-  // dollars, yen, Danish kroner and Swedish kronor. A fixed-term deposit
-  // is not this cash.
-  // https://www.medirect.be/wp-content/uploads/MeDirect-BE-Fee-InformationDocument-EN.pdf
+  // Cash that can be paid in and left: euro, dollar, pound, Australian
+  // dollar, Norwegian krone, Canadian dollar, yen. A franc, a Danish
+  // krone or a Swedish krona is not one of those balances. A fixed-term
+  // deposit is not this cash.
   // https://www.medirect.com.mt/pay/account/
-  medirect: ["EUR", "GBP", "USD", "NOK", "CHF", "AUD", "CAD", "JPY", "DKK", "SEK"],
+  medirect: ["EUR", "USD", "GBP", "AUD", "NOK", "CAD", "JPY"],
   // The KYC offers a resident account and an NRI account (NRE or NRO). Both are rupees.
   zebu: ["INR"],
 };

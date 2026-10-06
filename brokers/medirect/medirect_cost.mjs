@@ -24,6 +24,11 @@
 // execution, shares and ETFs, the same 0.10% on the listed venues.
 //   EUR 2.50, GBP 2.50, USD 3, CHF 2.50, NOK 25, SEK 25, DKK 20
 //   A currency the table does not name is agreed case by case.
+//   Cash can be left in EUR, USD, GBP, AUD, NOK, CAD or JPY. The order
+//   preview of 2026-10-06 charges FxMarginFee at 1.5% of the
+//   consideration plus the commission, each way, when that cash is not
+//   the listing currency. The client can hold the listing currency, so
+//   the margin stays in the remark. No exchange fee appeared beside it.
 //   A stamp or a transaction tax the shared tax file has read for the
 //   ISIN is added. The Malta Stock Exchange's own notice bills its
 //   member, not the client: 0.03% of monthly turnover and €4.50 a
@@ -217,10 +222,14 @@ export function roundTrip({ etf, place, currency, shares, price, nat = "", bp = 
   const tax = taxesOf(listing.isin);
   const rates = taxRates(tax);
   const taxPct = Object.values(rates).reduce((sum, rate) => sum + rate, 0);
+  const maltaExchange =
+    "The Malta Stock Exchange bills its member 0.03% of monthly turnover and €4.50 a contract note. MeDirect does not reprint that as a client charge.";
   const remark = belgian
     ? fxRemark("0.8", listing.currency)
-    : bank === "MT" && venueOf(listing.brokerExchange) === "malta"
-      ? "The Malta Stock Exchange bills its member 0.03% of monthly turnover and €4.50 a contract note. MeDirect does not reprint that as a client charge."
+    : bank === "MT"
+      ? venueOf(listing.brokerExchange) === "malta"
+        ? `${fxRemark("1.5", listing.currency)} ${maltaExchange}`
+        : fxRemark("1.5", listing.currency)
       : "";
   const freeEtf = quote && !(quote.rate > 0);
   const basis = belgian

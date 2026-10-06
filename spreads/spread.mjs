@@ -65,12 +65,13 @@ import {
   cryptoMicsFor,
   cryptoId,
   listingKey,
+  norm,
   sessionState,
   spreadUrl,
   VENUES,
 } from "./venues.mjs";
 import { GULF_BOARDS, gulfSymbol, readGulfBoard } from "./gulf.mjs";
-import { catalogueFiles } from "../catalogues.mjs";
+import { catalogueFiles, catalogueRows } from "../catalogues.mjs";
 import { monthlyXlm } from "./xlm-monthly.mjs";
 import { monthlyEffectiveSpread } from "./rule605-monthly.mjs";
 import { fileURLToPath } from "node:url";
@@ -549,6 +550,161 @@ function loadAuTouch() {
         ? `https://www.asx.com.au/markets/company/${encodeURIComponent(ticker)}`
         : `https://www.cboe.com.au/company/quote/${encodeURIComponent(ticker)}`;
     ((spreads[isin] ||= {})[mic] ||= {}).AUD = { bp: Number(bp.toFixed(2)), url };
+    books += 1;
+  }
+  return { at: data.at, books };
+}
+
+// The Singapore touch is read once, during continuous matching, into
+// sgx-touch.json. A counter whose catalogues disagree on the currency is
+// left out: one basis-point figure cannot serve two books.
+function loadSgxTouch() {
+  const path = new URL("./sgx-touch.json", import.meta.url);
+  if (!fs.existsSync(path)) return { books: 0 };
+  const data = JSON.parse(fs.readFileSync(path, "utf8"));
+  const SG = new Set(["sgx", "xses", "singapore", "sgxst"]);
+  const byIsin = new Map();
+  for (const row of catalogueRows()) {
+    if (!SG.has(norm(row.exchange))) continue;
+    const isin = String(row.isin || "").toUpperCase();
+    const currency = String(row.currency || "").toUpperCase();
+    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin) || !/^[A-Z]{3}$/.test(currency)) continue;
+    const counts = byIsin.get(isin) || new Map();
+    counts.set(currency, (counts.get(currency) || 0) + 1);
+    byIsin.set(isin, counts);
+  }
+  let books = 0;
+  for (const row of data.rows || []) {
+    const bp = Number(row.bp) > 0 ? Number(row.bp) : bpFrom(Number(row.bid), Number(row.ask));
+    if (!(bp > 0)) continue;
+    const isin = String(row.isin || "").toUpperCase();
+    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin)) continue;
+    const counts = byIsin.get(isin);
+    if (!counts || counts.size !== 1) continue;
+    const currency = [...counts.keys()][0];
+    const url = row.url || `https://www.sgx.com/securities/equities/${encodeURIComponent(row.code || "")}`;
+    ((spreads[isin] ||= {})["XSES"] ||= {})[currency] = { bp: Number(bp.toFixed(2)), url };
+    books += 1;
+  }
+  return { at: data.at, books };
+}
+
+// The Hong Kong touch is read once, during continuous matching, into
+// hk-touch.json. The dollar counter and the renminbi counter share an ISIN
+// and not a book, so the currency is taken from the code, not the ISIN.
+// A code whose catalogues disagree takes the currency named most often.
+// CNH and CNY are the two labels of that renminbi counter, so the book
+// is filed under both.
+function loadHkTouch() {
+  const path = new URL("./hk-touch.json", import.meta.url);
+  if (!fs.existsSync(path)) return { books: 0 };
+  const data = JSON.parse(fs.readFileSync(path, "utf8"));
+  const HK = new Set(["hkex", "sehk", "hongkong", "hks", "xhkg"]);
+  const byCode = new Map();
+  for (const row of catalogueRows()) {
+    if (!HK.has(norm(row.exchange))) continue;
+    const digits = String(row.ticker || "").replace(/\D/g, "").replace(/^0+/, "");
+    if (!digits) continue;
+    const code = digits.padStart(5, "0");
+    if (code.length !== 5) continue;
+    const currency = String(row.currency || "").toUpperCase();
+    if (!/^[A-Z]{3}$/.test(currency)) continue;
+    const counts = byCode.get(code) || new Map();
+    counts.set(currency, (counts.get(currency) || 0) + 1);
+    byCode.set(code, counts);
+  }
+  let books = 0;
+  for (const row of data.rows || []) {
+    const bp = Number(row.bp) > 0 ? Number(row.bp) : bpFrom(Number(row.bid), Number(row.ask));
+    if (!(bp > 0)) continue;
+    const isin = String(row.isin || "").toUpperCase();
+    const code = String(row.code || "").replace(/\D/g, "").padStart(5, "0");
+    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin) || code.length !== 5) continue;
+    const counts = byCode.get(code);
+    if (!counts) continue;
+    const ranked = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+    if (ranked.length > 1 && ranked[0][1] === ranked[1][1]) continue;
+    const currency = ranked[0][0];
+    const url = row.url || `https://stock.finance.sina.com.cn/hkstock/quotes/${code}.html`;
+    const leaf = { bp: Number(bp.toFixed(2)), url };
+    const book = (spreads[isin] ||= {})["XHKG"] ||= {};
+    const currencies = currency === "CNH" || currency === "CNY" ? ["CNH", "CNY"] : [currency];
+    for (const ccy of currencies) book[ccy] = leaf;
+    books += 1;
+  }
+  return { at: data.at, books };
+}
+
+// The Bursa touch is read once, during continuous matching, into
+// bursa-touch.json. The currency is the one the Bursa catalogues name
+// for that ISIN. A tie is left out.
+function loadBursaTouch() {
+  const path = new URL("./bursa-touch.json", import.meta.url);
+  if (!fs.existsSync(path)) return { books: 0 };
+  const data = JSON.parse(fs.readFileSync(path, "utf8"));
+  const MY = new Set(["myx", "xkls", "malaysia", "bursa", "bursamy", "malay"]);
+  const byIsin = new Map();
+  for (const row of catalogueRows()) {
+    if (!MY.has(norm(row.exchange))) continue;
+    const isin = String(row.isin || "").toUpperCase();
+    const currency = String(row.currency || "").toUpperCase();
+    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin) || !/^[A-Z]{3}$/.test(currency)) continue;
+    const counts = byIsin.get(isin) || new Map();
+    counts.set(currency, (counts.get(currency) || 0) + 1);
+    byIsin.set(isin, counts);
+  }
+  let books = 0;
+  for (const row of data.rows || []) {
+    const bp = Number(row.bp) > 0 ? Number(row.bp) : bpFrom(Number(row.bid), Number(row.ask));
+    if (!(bp > 0)) continue;
+    const isin = String(row.isin || "").toUpperCase();
+    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin)) continue;
+    const counts = byIsin.get(isin);
+    if (!counts) continue;
+    const ranked = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+    if (ranked.length > 1 && ranked[0][1] === ranked[1][1]) continue;
+    const url = row.url || `https://www.klsescreener.com/v2/stocks/view/${encodeURIComponent(row.code || "")}`;
+    ((spreads[isin] ||= {})["XKLS"] ||= {})[ranked[0][0]] = { bp: Number(bp.toFixed(2)), url };
+    books += 1;
+  }
+  return { at: data.at, books };
+}
+
+// The Philippine touch is read once, during continuous matching, into
+// pse-touch.json. The currency is the one the Manila catalogues name
+// for that ISIN. A tie is left out.
+function loadPseTouch() {
+  const path = new URL("./pse-touch.json", import.meta.url);
+  if (!fs.existsSync(path)) return { books: 0 };
+  const data = JSON.parse(fs.readFileSync(path, "utf8"));
+  const byIsin = new Map();
+  for (const row of catalogueRows()) {
+    const exchange = norm(row.exchange);
+    const isin = String(row.isin || "").toUpperCase();
+    const currency = String(row.currency || "").toUpperCase();
+    const onPse =
+      exchange === "xphs" ||
+      exchange.includes("philip") ||
+      exchange.includes("manila") ||
+      (exchange === "pse" && (currency === "PHP" || isin.startsWith("PH")));
+    if (!onPse) continue;
+    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin) || !/^[A-Z]{3}$/.test(currency)) continue;
+    const counts = byIsin.get(isin) || new Map();
+    counts.set(currency, (counts.get(currency) || 0) + 1);
+    byIsin.set(isin, counts);
+  }
+  let books = 0;
+  for (const row of data.rows || []) {
+    const bp = Number(row.bp) > 0 ? Number(row.bp) : bpFrom(Number(row.bid), Number(row.ask));
+    if (!(bp > 0)) continue;
+    const isin = String(row.isin || "").toUpperCase();
+    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin)) continue;
+    const counts = byIsin.get(isin);
+    if (!counts) continue;
+    const ranked = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+    if (ranked.length > 1 && ranked[0][1] === ranked[1][1]) continue;
+    const url = row.url || `https://frames.pse.com.ph/security/${encodeURIComponent(String(row.code || "").toLowerCase())}`;
+    ((spreads[isin] ||= {})["XPHS"] ||= {})[ranked[0][0]] = { bp: Number(bp.toFixed(2)), url };
     books += 1;
   }
   return { at: data.at, books };
@@ -3057,12 +3213,39 @@ if (!ONLY.length || ONLY.includes("asx") || ONLY.includes("chia") || auTouchOnly
   auTouchStats = loadAuTouch();
   console.error(`Australie : ${auTouchStats.books} touches du carnet (${auTouchStats.at || "sans date"})`);
 }
+const sgxTouchOnly = ONLY.length === 1 && ONLY[0] === "sgx-touch";
+let sgxTouchStats = { books: 0 };
+if (!ONLY.length || ONLY.includes("sgx") || sgxTouchOnly) {
+  sgxTouchStats = loadSgxTouch();
+  console.error(`Singapour : ${sgxTouchStats.books} touches du carnet (${sgxTouchStats.at || "sans date"})`);
+}
+const hkTouchOnly = ONLY.length === 1 && ONLY[0] === "hk-touch";
+let hkTouchStats = { books: 0 };
+if (!ONLY.length || ONLY.includes("hk") || hkTouchOnly) {
+  hkTouchStats = loadHkTouch();
+  console.error(`Hong Kong : ${hkTouchStats.books} touches du carnet (${hkTouchStats.at || "sans date"})`);
+}
+const bursaTouchOnly = ONLY.length === 1 && ONLY[0] === "bursa-touch";
+let bursaTouchStats = { books: 0 };
+if (!ONLY.length || ONLY.includes("bursa") || bursaTouchOnly) {
+  bursaTouchStats = loadBursaTouch();
+  console.error(`Bursa : ${bursaTouchStats.books} touches du carnet (${bursaTouchStats.at || "sans date"})`);
+}
+const pseTouchOnly = ONLY.length === 1 && ONLY[0] === "pse-touch";
+let pseTouchStats = { books: 0 };
+if (!ONLY.length || ONLY.includes("pse") || pseTouchOnly) {
+  pseTouchStats = loadPseTouch();
+  console.error(`Manille : ${pseTouchStats.books} touches du carnet (${pseTouchStats.at || "sans date"})`);
+}
 if (!ONLY.length || ONLY.includes("nse")) {
   await loadNseImpact();
   console.error(`NSE : impact cost moyen pour ${nseImpact.size} titres`);
 }
 
-const todo = auTouchOnly ? [] : [...listings.values()].filter(worthVisiting);
+const todo =
+  auTouchOnly || sgxTouchOnly || hkTouchOnly || bursaTouchOnly || pseTouchOnly
+    ? []
+    : [...listings.values()].filter(worthVisiting);
 console.error(`${todo.length} à visiter, ${listings.size - todo.length} à jour\n`);
 
 // The profiles come from a table already in hand, so every listing that has a value gets
@@ -3107,6 +3290,26 @@ const flush = () => {
 if (auTouchOnly) {
   flush();
   console.error(`${STORE_PATH} : ${auTouchStats.books} touches australiennes écrites.`);
+  process.exit(0);
+}
+if (sgxTouchOnly) {
+  flush();
+  console.error(`${STORE_PATH} : ${sgxTouchStats.books} touches de Singapour écrites.`);
+  process.exit(0);
+}
+if (hkTouchOnly) {
+  flush();
+  console.error(`${STORE_PATH} : ${hkTouchStats.books} touches de Hong Kong écrites.`);
+  process.exit(0);
+}
+if (bursaTouchOnly) {
+  flush();
+  console.error(`${STORE_PATH} : ${bursaTouchStats.books} touches de Bursa écrites.`);
+  process.exit(0);
+}
+if (pseTouchOnly) {
+  flush();
+  console.error(`${STORE_PATH} : ${pseTouchStats.books} touches de Manille écrites.`);
   process.exit(0);
 }
 

@@ -1,14 +1,15 @@
 // Hong Kong cash touch from Sina. Bid and ask are the quote. A last trade
 // is never written in their place.
 //
-// The continuous session is 09:30–12:00 and 13:00–16:00 Hong Kong time,
-// five and a half hours. This reads once, at 13:15, the middle of that
-// session. The closing auction starts at 16:00. A quote stamped 16:00 or
-// later is left out, and so is a stamp from another day.
+// The continuous session is 09:30–12:00 and 13:00–16:00 Hong Kong time.
+// A quote from either of those windows is kept. The closing auction
+// starts at 16:00. A stamp from the auction, from lunch, or from another
+// day is left out.
 //
-// Launch it the evening before. It waits by watching the clock, so a
-// machine that suspends still reads on the next weekday. The reading is
-// hk-touch.json. It is not copied into spread.json.
+// Launched before the open, it waits for 13:15, the middle of the
+// continuous time. Launched during a session, it reads then. A machine
+// that suspends still reads on the next weekday. The reading is
+// hk-touch.json. spread.mjs copies it into spread.json (`--only=hk-touch`).
 //
 //   node spreads/hk-touch.mjs
 
@@ -73,12 +74,17 @@ const stampMinutes = (time) => {
   return hour * 60 + minute;
 };
 
-// Afternoon continuous book only. 13:00 is the reopen. 16:00 is the auction.
+// 09:30 opens the morning book, 13:00 the afternoon book. 16:00 is the auction.
 const liveStamp = (date, time, today) => {
   if (date !== today) return false;
   const minutes = stampMinutes(time);
-  return minutes != null && minutes >= 13 * 60 && minutes < 16 * 60;
+  if (minutes == null) return false;
+  const morning = minutes >= 9 * 60 + 30 && minutes < 12 * 60;
+  const afternoon = minutes >= 13 * 60 && minutes < 16 * 60;
+  return morning || afternoon;
 };
+
+const inSession = (at) => at.day && liveStamp(at.date, at.clock, at.date);
 
 function listings() {
   const byCode = new Map();
@@ -192,6 +198,7 @@ async function readBook(jobs) {
 let announced = "";
 for (;;) {
   const now = hongKong();
+  if (inSession(now)) break;
   if (now.day && now.minutes >= TARGET && now.minutes < STOP) break;
   const when = !now.day || now.minutes >= STOP ? "le prochain jour de bourse" : "aujourd'hui";
   const mark = `${now.date}|${when}`;

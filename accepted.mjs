@@ -679,6 +679,20 @@ export const ACCEPTED = {
   // https://seczim.co.zw/capital-markets-in-zimbabwe/
   // https://www.zse.co.zw/zse-direct-terms-and-conditions/
   zsedirect: { countries: ["ZW"] },
+  // The online account is opened by linking a level-2 VNeID or by
+  // scanning the chip of a Vietnamese citizen card.
+  // https://hdsd.dnse.com.vn/master/huong-dan-mo-tai-khoan-ekyc
+  dnse: { countries: ["VN"] },
+  // The online form is the Vietnamese citizen card. "I am foreigner"
+  // does not open a form: it sends the client to a KIS office.
+  // https://trading.kisvn.vn/ekyc/
+  // https://kisvn.vn/hoc-dau-tu/mo-tai-khoan-chung-khoan-kis-online-ekyc
+  kis: { countries: ["VN"] },
+  // The online form asks for a chip citizen card. A foreign investor or
+  // an institution is told to call the hotline.
+  // https://www.masvn.com/register
+  // https://masvn.com/en/register
+  mirae: { countries: ["VN"] },
   // The online account is the Vietnamese one.
   vps: { countries: ["VN"] },
   // The online account takes a Vietnamese citizen card.

@@ -45,9 +45,12 @@
 // asked for 2.52 € more, on one share and on a hundred. That is the
 // published minimum, so the 5.04 bp on the card is what bills once the
 // order is large enough. Stuttgart's specialist is still only on the page.
-// GETTEX, SGX, TASE and
-// the rest of the IBKR book are not on the card: N/A, not a neighbour's
-// floor. Warsaw is not on the card either. On 2026-10-05 the open portal
+// GETTEX, TASE and the rest of the IBKR book are not on the card: N/A,
+// not a neighbour's floor. Singapore is not on the card either. The
+// published IBKR tier I for an SGD line is what the portal previews
+// reproduced for Korea and Bursa: 0.08 %, minimum 2.50 SGD. Exchange
+// fees are not in that line. Read 2026-10-06.
+// https://www.interactivebrokers.com/en/pricing/commissions-stocks-asia-pacific.php Warsaw is not on the card either. On 2026-10-05 the open portal
 // (account DUR224479) previewed PKO and ETFBCASH on WSE and nothing was
 // sent. One share and a hundred shares asked for 15 PLN. A thousand shares
 // asked for 0.10 % of the consideration (118.58 PLN on PKO at 118.58,
@@ -170,6 +173,8 @@ const RULE = {
   my: { rate: 0.0008, min: 12, ccy: "MYR" },
   // Not on the card. Portal preview of PKO and ETFBCASH, 2026-10-05.
   wse: { rate: 0.001, min: 15, ccy: "PLN" },
+  // Not on the card. IBKR tier I for an SGD listing, read 2026-10-06.
+  sg: { rate: 0.0008, min: 2.5, ccy: "SGD" },
 };
 
 const TO_VENUES = {
@@ -254,6 +259,7 @@ export function feeMarketOf(exchange, mic, currency) {
   if (code === "KRX") return "kr";
   if ((code === "BURSAMY" || code === "BURSA" || m === "XKLS") && (!ccy || ccy === "MYR")) return "my";
   if (code === "WSE" || m === "XWAR") return "wse";
+  if ((code === "SGX" || code === "SGXST" || m === "XSES") && (!ccy || ccy === "SGD")) return "sg";
   return null;
 }
 
@@ -502,7 +508,9 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
         ? `barème WH SelfInvest ${market}, aperçu du portail le 2026-10-02 : `
         : market === "wse"
           ? `barème WH SelfInvest ${market}, aperçu du portail le 2026-10-05 : `
-          : `barème WH SelfInvest ${market}, relu le ${SCHEDULE.readOn} : `) +
+          : market === "sg"
+            ? `barème WH SelfInvest ${market}, palier IBKR I relu le 2026-10-06 : `
+            : `barème WH SelfInvest ${market}, relu le ${SCHEDULE.readOn} : `) +
     (rule.rate != null
       ? `${(100 * rule.rate).toFixed(2)} % par sens`
       : market === "otc"

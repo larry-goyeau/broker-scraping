@@ -620,6 +620,58 @@ export const VENUES = [
     exact: ["xtks", "xjpx", "tyo", "tokyo", "tsej"],
     loose: [],
   },
+  // Continuous matching is 09:00–12:00 and 13:00–17:00 Singapore time.
+  // The touch is the exchange's own file, read into spreads/sgx-touch.json.
+  // There is no live adapter, so a later pass of spread.mjs leaves the
+  // stored figure alone. Lunch is not a second window here: the touch
+  // file already drops a stamp that falls inside it.
+  {
+    mic: "XSES",
+    name: "Singapore Exchange",
+    source: "sgx",
+    hours: { open: "09:00", close: "17:00", tz: "Asia/Singapore" },
+    exact: ["sgx", "xses", "singapore", "sgxst"],
+    loose: [],
+  },
+  // Continuous matching is 09:30–12:00 and 13:00–16:00 Hong Kong time.
+  // The touch is the Sina reading in spreads/hk-touch.json. There is no
+  // live adapter, so a later pass of spread.mjs leaves the stored figure
+  // alone. A renminbi counter is a second book on the same ISIN: 00388 is
+  // the Hong Kong dollar line, 80388 the offshore renminbi line.
+  {
+    mic: "XHKG",
+    name: "Hong Kong",
+    source: "hk",
+    hours: { open: "09:30", close: "16:00", tz: "Asia/Hong_Kong" },
+    exact: ["hkex", "sehk", "hongkong", "hks", "xhkg"],
+    loose: [],
+  },
+  // Continuous matching is 09:00–12:30 and 14:30–16:45 in Kuala Lumpur.
+  // The touch is the KLSE Screener reading in spreads/bursa-touch.json.
+  // There is no live adapter, so a later pass of spread.mjs leaves the
+  // stored figure alone. Lunch is not a second window here: the touch
+  // file is only written during continuous matching.
+  {
+    mic: "XKLS",
+    name: "Bursa Malaysia",
+    source: "bursa",
+    hours: { open: "09:00", close: "16:45", tz: "Asia/Kuala_Lumpur" },
+    exact: ["myx", "xkls", "malaysia", "bursa", "bursamy", "malay"],
+    loose: [],
+  },
+  // Continuous matching is 09:30–12:00 and 13:00–14:45 in Manila.
+  // The touch is the exchange page in spreads/pse-touch.json. There is
+  // no live adapter, so a later pass of spread.mjs leaves the stored
+  // figure alone. "PSE" stays out of the aliases: Prague uses the same
+  // three letters, and resolveVenue sends a peso line here.
+  {
+    mic: "XPHS",
+    name: "Philippine Stock Exchange",
+    source: "pse",
+    hours: { open: "09:30", close: "14:45", tz: "Asia/Manila" },
+    exact: ["xphs", "philippines", "manila"],
+    loose: [],
+  },
 ];
 
 // A coin has no ISIN, so `spread.json` keys it the way the front already does, by
@@ -676,7 +728,6 @@ export const KNOWN_UNSOURCED = [
   // Securities Exchange. `resolveVenue` splits on the currency and the ISIN before
   // falling through to this leftover.
   { match: ["cse"], name: "CSE (Canada ou Copenhague)", why: "le sigle nomme les deux places" },
-  { match: ["hkex", "sehk", "hongkong", "hks"], name: "Hong Kong", why: "adaptateur non écrit" },
   { match: ["krx"], name: "Korea Exchange", why: "adaptateur non écrit" },
   { match: ["twse"], name: "Taiwan Stock Exchange", why: "adaptateur non écrit" },
   { match: ["tpex"], name: "Taipei Exchange", why: "adaptateur non écrit" },
@@ -720,10 +771,8 @@ export const KNOWN_UNSOURCED = [
   { match: ["xris", "riga", "nriga", "omxrse"], name: "Nasdaq Riga", why: "adaptateur non écrit" },
   { match: ["xtal", "tallinn", "ntallinn", "omxtse"], name: "Nasdaq Tallinn", why: "adaptateur non écrit" },
   { match: ["xlit", "vilnius", "nvilnius", "omxvse"], name: "Nasdaq Vilnius", why: "adaptateur non écrit" },
-  { match: ["sgx", "xses", "singapore", "sgxst"], name: "Singapore Exchange", why: "adaptateur non écrit" },
   { match: ["jse", "xjse", "johannesburg"], name: "Johannesburg Stock Exchange", why: "adaptateur non écrit" },
   { match: ["newconnect"], name: "NewConnect", why: "adaptateur non écrit" },
-  { match: ["myx", "xkls", "malaysia", "bursa", "bursamy", "malay"], name: "Bursa Malaysia", why: "adaptateur non écrit" },
   { match: ["luxse", "xlux", "luxembourg", "lux"], name: "Luxembourg Stock Exchange", why: "adaptateur non écrit" },
   { match: ["nzx", "xnze", "nzsenationalmarket"], name: "NZX", why: "adaptateur non écrit" },
   { match: ["biva"], name: "BIVA", why: "adaptateur non écrit" },
@@ -745,7 +794,6 @@ export const KNOWN_UNSOURCED = [
   { match: ["bist", "xist", "istanbul"], name: "Borsa Istanbul", why: "adaptateur non écrit" },
   { match: ["csefndk"], name: "Nasdaq First North Denmark", why: "adaptateur non écrit" },
   { match: ["eurotlx"], name: "EuroTLX", why: "adaptateur non écrit" },
-  { match: ["xphs"], name: "Philippine Stock Exchange", why: "adaptateur non écrit" },
   { match: ["nseke", "xnai", "nairobi"], name: "Nairobi Securities Exchange", why: "adaptateur non écrit" },
   { match: ["aquis", "aqse", "plusmarketsgroupformerlyofex", "plusmarkets", "ofex"], name: "Aquis", why: "adaptateur non écrit" },
   { match: ["bsse", "xbra", "bratislava"], name: "Bratislava Stock Exchange", why: "adaptateur non écrit" },
@@ -834,7 +882,7 @@ export function resolveVenue(row) {
     const ccy = String(row.currency || "").toUpperCase();
     const isin = String(row.isin || "").toUpperCase();
     if (ccy === "PHP" || isin.startsWith("PH")) {
-      return { venue: null, unsourced: KNOWN_UNSOURCED.find((u) => u.match.includes("xphs")) };
+      return { venue: VENUES.find((v) => v.mic === "XPHS"), assumed: false };
     }
   }
   for (const n of names) {

@@ -28,11 +28,11 @@ import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
 import { pathToFileURL } from "node:url";
 import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { spreads } from "../../spreads/book.mjs";
 import { bookParts, plus, finite } from "../../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
 
 const CATALOGUE = new URL("vietcap-parsed.json", import.meta.url);
-const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 const PAGE = "https://www.vietcap.com.vn/huong-dan-chung/bieu-phi-dich-vu";
 const READ_ON = "2026-10-03";
 const RATE = 0.001;
@@ -42,7 +42,6 @@ const CUSTODY = "Custody is 0.3 VND a share a month.";
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
 if (rows.length) warmListingIndex(rows);
-const spreads = fs.existsSync(SPREADS) ? JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {} : {};
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 const code = (s) => String(s || "").trim().toUpperCase();

@@ -52,12 +52,12 @@ import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
 import { pathToFileURL } from "node:url";
 import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { spreads } from "../../spreads/book.mjs";
 import { bookParts, plus, finite } from "../../na.mjs";
 import { usBookPerShare } from "../../spreads/rule606.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
 
 const CATALOGUE = new URL("sinopac-parsed.json", import.meta.url);
-const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 const PAGE = "https://mma.sinopac.com/StockandETF/index";
 const READ_ON = "2026-10-05";
 const RATE = 0.01;
@@ -69,7 +69,6 @@ const HK_LEVY = 0.000027 + 0.0000015 + 0.0000565;
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
 if (rows.length) warmListingIndex(rows);
-const spreads = fs.existsSync(SPREADS) ? JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {} : {};
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 const code = (s) => String(s || "").trim().toUpperCase();

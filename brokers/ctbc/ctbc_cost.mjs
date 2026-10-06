@@ -60,12 +60,12 @@ import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
 import { pathToFileURL } from "node:url";
 import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { spreads } from "../../spreads/book.mjs";
 import { bookParts, plus, finite } from "../../na.mjs";
 import { usBookPerShare } from "../../spreads/rule606.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
 
 const CATALOGUE = new URL("ctbc-parsed.json", import.meta.url);
-const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 const PAGE = "https://www.ctbcbank.com/twrbo/zh_tw/inv_index/inv_etf/inv_ETF_int_transaction_notice.html";
 const READ_ON = "2026-10-05";
 const FOREIGN = 0.015;
@@ -79,7 +79,6 @@ const SH_STAMP = 0.0005;
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
 if (rows.length) warmListingIndex(rows);
-const spreads = fs.existsSync(SPREADS) ? JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {} : {};
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 const code = (s) => String(s || "").trim().toUpperCase();

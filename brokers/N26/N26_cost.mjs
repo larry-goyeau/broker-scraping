@@ -130,12 +130,12 @@
 import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { spreads } from "../../spreads/book.mjs";
 import { plus, finite } from "../../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("n26-parsed.json", import.meta.url);
-const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   stocks: "https://n26.com/en-eu/stocks-and-etfs",
@@ -315,7 +315,6 @@ const PLAN_ALIAS = { standard: "standard", std: "standard", free: "standard", sm
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
 warmListingIndex(rows);
-const spreads = fs.existsSync(SPREADS) ? JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {} : {};
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 const isCrypto = (row) => row?.type === "CRYPTO" || /^CRYPTO$/i.test(String(row?.exchange || ""));

@@ -120,6 +120,7 @@
 import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { spreads } from "../../spreads/book.mjs";
 import { plus, finite } from "../../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../../fx.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
@@ -128,7 +129,6 @@ const LOCAL = new URL("captrader-parsed.json", import.meta.url);
 const IBKR_BOOK = new URL("../mexem/mexem-parsed.json", import.meta.url);
 const CATALOGUE = fs.existsSync(LOCAL) ? LOCAL : IBKR_BOOK;
 const catalogueBorrowed = CATALOGUE.href !== LOCAL.href;
-const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   stocks: "https://www.captrader.com/konditionen/aktien-handel/",
@@ -267,7 +267,6 @@ const TO_VENUES = {
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
 warmListingIndex(rows);
-const spreads = fs.existsSync(SPREADS) ? JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {} : {};
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 const fxCcy = (currency) => (String(currency || "").toUpperCase() === "CNH" ? "CNY" : currency);

@@ -73,11 +73,11 @@
 import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
 import { cryptoId, listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { spreads } from "../../spreads/book.mjs";
 import { plus, finite } from "../../na.mjs";
 import { QUOTE, fxRemark } from "../../fx.mjs";
 
 const CATALOGUE = new URL("alpaca-parsed.json", import.meta.url);
-const SPREADS = new URL("../../spreads/spread.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://files.alpaca.markets/disclosures/library/BrokFeeSched.pdf",
@@ -132,7 +132,6 @@ const CHECK = {
 const catalogue = JSON.parse(fs.readFileSync(CATALOGUE, "utf8"));
 const rows = Array.isArray(catalogue) ? catalogue : catalogue.rows || [];
 warmListingIndex(rows);
-const spreads = JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {};
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 const cryptoBase = (ticker) => String(ticker || "").split("/")[0].toUpperCase();

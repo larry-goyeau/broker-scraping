@@ -12,17 +12,14 @@ import { rowsNamed, warmListingIndex } from "./listingIndex.mjs";
 import fs from "node:fs";
 import { pathToFileURL } from "node:url";
 import { listingKey, resolveVenue, spreadLeaf } from "./spreads/venues.mjs";
+import { spreads } from "./spreads/book.mjs";
 import { plus, finite } from "./na.mjs";
 import { QUOTE, toUsd } from "./fx.mjs";
 
 const CRORE = 10_000_000;
-const SPREADS = new URL("./spreads/spread.json", import.meta.url);
 
-let spreadsCache;
 function spreadsOf() {
-  if (spreadsCache) return spreadsCache;
-  spreadsCache = fs.existsSync(SPREADS) ? JSON.parse(fs.readFileSync(SPREADS, "utf8")).spreads || {} : {};
-  return spreadsCache;
+  return spreads;
 }
 
 export function sebiRate() {

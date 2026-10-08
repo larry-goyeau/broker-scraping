@@ -11,6 +11,7 @@
 import fs from "node:fs";
 import puppeteer from "puppeteer-core";
 import { fileURLToPath } from "node:url";
+import { catalogueFiles } from "../catalogues.mjs";
 import { listingKey } from "./venues.mjs";
 
 const TOUCH = fileURLToPath(new URL("./sq-touch.json", import.meta.url));
@@ -34,6 +35,8 @@ const VENUE = {
   XASX: { id: 111, name: /australia/i },
   XNAS: { id: 67, name: /nasdaq/i },
   XHEL: { id: 40, name: /helsinki/i },
+  // The quote screen for a Stockholm line is /fullQuote/{isin}/53_SEK.
+  XSTO: { id: 53, name: /stockholm/i },
 };
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -61,8 +64,18 @@ const hasLeaf = (spreads, isin, mic, currency) => {
   return present(book[currency]) || (twin && present(book[twin]));
 };
 
-function jobsOf(spreads) {
-  const rows = JSON.parse(fs.readFileSync(CATALOGUE, "utf8"));
+function jobsOf(spreads, onlyMic = "") {
+  const files = onlyMic ? catalogueFiles() : [CATALOGUE];
+  const rows = [];
+  for (const file of files) {
+    let parsed;
+    try {
+      parsed = JSON.parse(fs.readFileSync(file, "utf8"));
+    } catch {
+      continue;
+    }
+    rows.push(...(Array.isArray(parsed) ? parsed : parsed.rows || []));
+  }
   const jobs = new Map();
   for (const row of rows) {
     if (String(row.type || "").toUpperCase() === "CRYPTO") continue;
@@ -70,6 +83,7 @@ function jobsOf(spreads) {
     if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin)) continue;
     const { venue } = listingKey(row);
     if (!venue?.mic) continue;
+    if (onlyMic && venue.mic !== onlyMic) continue;
     const currency = String(row.currency || "").toUpperCase();
     if (!/^[A-Z]{3}$/.test(currency)) continue;
     if (hasLeaf(spreads, isin, venue.mic, currency)) continue;
@@ -172,8 +186,9 @@ function currenciesOf(row) {
   return [currency];
 }
 
+const onlyMic = (process.argv.find((arg) => arg.startsWith("--only=")) || "").slice(7).toUpperCase();
 const spreads = JSON.parse(fs.readFileSync(STORE, "utf8")).spreads;
-const jobs = jobsOf(spreads);
+const jobs = jobsOf(spreads, onlyMic);
 console.error(`${jobs.length} lignes sans carnet. Londres d'abord.`);
 const london = jobs.filter((job) => job.mic === "XLON").length;
 console.error(`${london} à Londres, ${jobs.length - london} ailleurs.`);

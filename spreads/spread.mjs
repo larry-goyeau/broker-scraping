@@ -385,6 +385,12 @@ const CROSSED = {
   lsin: 1,
   quotrix: 1,
   vienna: 1,
+  xice: 1,
+  fnis: 1,
+  xcse: 1,
+  xsto: 1,
+  xhel: 1,
+  xpra: 1,
   frankfurt: 1,
   hamburg: 1,
   hannover: 1,
@@ -665,6 +671,95 @@ function loadBursaTouch() {
     if (ranked.length > 1 && ranked[0][1] === ranked[1][1]) continue;
     const url = row.url || `https://www.klsescreener.com/v2/stocks/view/${encodeURIComponent(row.code || "")}`;
     ((spreads[isin] ||= {})["XKLS"] ||= {})[ranked[0][0]] = { bp: Number(bp.toFixed(2)), url };
+    books += 1;
+  }
+  return { at: data.at, books };
+}
+
+// HOSE and UPCOM touches are read once, during each board's continuous
+// matching, into vn-touch.json. The currency is the one the Vietnam
+// catalogues name for that ISIN on that board. A tie is left out. A
+// file from another Ho Chi Minh day is left out.
+function loadVnTouch() {
+  const path = new URL("./vn-touch.json", import.meta.url);
+  if (!fs.existsSync(path)) return { books: 0 };
+  const data = JSON.parse(fs.readFileSync(path, "utf8"));
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Ho_Chi_Minh",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+  if (data.date !== today) return { books: 0, at: data.at, stale: true };
+  const boards = { hose: "XSTC", hsx: "XSTC", xstc: "XSTC", hochiminh: "XSTC", upcom: "UPCM" };
+  const byIsin = new Map();
+  for (const row of catalogueRows()) {
+    const mic = boards[norm(row.exchange)];
+    if (!mic) continue;
+    const isin = String(row.isin || "").toUpperCase();
+    const currency = String(row.currency || "").toUpperCase();
+    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin) || !/^[A-Z]{3}$/.test(currency)) continue;
+    const key = `${isin}|${mic}`;
+    const counts = byIsin.get(key) || new Map();
+    counts.set(currency, (counts.get(currency) || 0) + 1);
+    byIsin.set(key, counts);
+  }
+  const micOf = { HOSE: "XSTC", UPCOM: "UPCM" };
+  const url = "https://priceapi.bsc.com.vn/datafeed/instruments";
+  let books = 0;
+  for (const row of data.rows || []) {
+    const bp = Number(row.bp) > 0 ? Number(row.bp) : bpFrom(Number(row.bid), Number(row.ask));
+    if (!(bp > 0)) continue;
+    const isin = String(row.isin || "").toUpperCase();
+    const mic = micOf[row.exchange];
+    if (!mic || !/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin)) continue;
+    const counts = byIsin.get(`${isin}|${mic}`);
+    if (!counts) continue;
+    const ranked = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+    if (ranked.length > 1 && ranked[0][1] === ranked[1][1]) continue;
+    ((spreads[isin] ||= {})[mic] ||= {})[ranked[0][0]] = { bp: Number(bp.toFixed(2)), url: row.url || url };
+    books += 1;
+  }
+  return { at: data.at, books };
+}
+
+// GlobalConnect touches are read once, during continuous trading, into
+// gc-touch.json. The currency is the one the catalogues name for that
+// ISIN on that board. A tie is left out. A file from another Warsaw day
+// is left out. The same ISIN on its home market stays under that market's MIC.
+function loadGcTouch() {
+  const path = new URL("./gc-touch.json", import.meta.url);
+  if (!fs.existsSync(path)) return { books: 0 };
+  const data = JSON.parse(fs.readFileSync(path, "utf8"));
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Europe/Warsaw",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+  if (data.date !== today) return { books: 0, at: data.at, stale: true };
+  const byIsin = new Map();
+  for (const row of catalogueRows()) {
+    if (norm(row.exchange) !== "globalconnect") continue;
+    const isin = String(row.isin || "").toUpperCase();
+    const currency = String(row.currency || "").toUpperCase();
+    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin) || !/^[A-Z]{3}$/.test(currency)) continue;
+    const counts = byIsin.get(isin) || new Map();
+    counts.set(currency, (counts.get(currency) || 0) + 1);
+    byIsin.set(isin, counts);
+  }
+  const url = "https://gpwglobalconnect.pl/etfy-pelna-wersja-notowan";
+  let books = 0;
+  for (const row of data.rows || []) {
+    const bp = Number(row.bp) > 0 ? Number(row.bp) : bpFrom(Number(row.bid), Number(row.ask));
+    if (!(bp > 0)) continue;
+    const isin = String(row.isin || "").toUpperCase();
+    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin)) continue;
+    const counts = byIsin.get(isin);
+    if (!counts) continue;
+    const ranked = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+    if (ranked.length > 1 && ranked[0][1] === ranked[1][1]) continue;
+    ((spreads[isin] ||= {})["XGLO"] ||= {})[ranked[0][0]] = { bp: Number(bp.toFixed(2)), url: row.url || url };
     books += 1;
   }
   return { at: data.at, books };
@@ -2170,6 +2265,164 @@ async function loadNseImpact() {
   }
 }
 
+const xiceQuotes = new Map();
+let xiceTrouble = "";
+const fnisQuotes = new Map();
+let fnisTrouble = "";
+const xcseQuotes = new Map();
+let xcseTrouble = "";
+const xstoQuotes = new Map();
+let xstoTrouble = "";
+const xstoCurrencies = new Set();
+const xhelQuotes = new Map();
+let xhelTrouble = "";
+const xhelCurrencies = new Set();
+
+function nordicNumber(value) {
+  const text = String(value || "").replace(/,/g, "").trim();
+  if (!text) return null;
+  const n = Number(text);
+  return n > 0 ? n : null;
+}
+
+async function loadNordic(market, books = [
+  ["shares", "MAIN_MARKET", 500],
+  ["etp", "ETF", 200],
+]) {
+  const headers = {
+    "User-Agent": "Mozilla/5.0",
+    Accept: "application/json",
+    Origin: "https://www.nasdaq.com",
+    Referer: "https://www.nasdaq.com/",
+  };
+  const quotes = new Map();
+  const urls = books.map(
+    ([kind, category, size]) =>
+      `https://api.nasdaq.com/api/nordic/screener/${kind}?category=${category}&market=${market}&lang=en&size=${size}`
+  );
+  for (const url of urls) {
+    const response = await fetch(url, { headers, signal: AbortSignal.timeout(30_000) });
+    if (!response.ok) throw new Error(`Nasdaq ${market} a répondu ${response.status}`);
+    const body = await response.json();
+    if (body?.status?.rCode !== 200) throw new Error(`Nasdaq ${market} rCode ${body?.status?.rCode}`);
+    const rows = body?.data?.instrumentListing?.rows;
+    if (!Array.isArray(rows)) throw new Error(`Nasdaq ${market} n'a pas de liste`);
+    for (const row of rows) {
+      const isin = String(row.isin || "").trim().toUpperCase();
+      const currency = String(row.currency || "").trim().toUpperCase();
+      if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin) || !currency) continue;
+      quotes.set(`${isin}|${currency}`, {
+        bid: nordicNumber(row.bidPrice),
+        ask: nordicNumber(row.askPrice),
+        symbol: String(row.symbol || "").trim().toUpperCase(),
+        orderbookId: String(row.orderbookId || "").trim(),
+        currency,
+      });
+    }
+  }
+  return quotes;
+}
+
+async function loadXice() {
+  const quotes = await loadNordic("ICE");
+  for (const [key, quote] of quotes) {
+    if (quote.currency === "ISK") xiceQuotes.set(key, quote);
+  }
+}
+
+async function loadFnis() {
+  const quotes = await loadNordic("ICE", [["shares", "FIRST_NORTH", 100]]);
+  for (const [key, quote] of quotes) {
+    if (quote.currency === "ISK") fnisQuotes.set(key, quote);
+  }
+}
+
+async function loadXcse() {
+  const quotes = await loadNordic("CPH");
+  for (const [key, quote] of quotes) {
+    if (quote.currency === "DKK") xcseQuotes.set(key, quote);
+  }
+}
+
+async function loadXsto() {
+  const quotes = await loadNordic("STO");
+  xstoCurrencies.clear();
+  for (const [key, quote] of quotes) {
+    xstoQuotes.set(key, quote);
+    xstoCurrencies.add(quote.currency);
+  }
+}
+
+async function loadXhel() {
+  const quotes = await loadNordic("HEL");
+  xhelCurrencies.clear();
+  for (const [key, quote] of quotes) {
+    xhelQuotes.set(key, quote);
+    xhelCurrencies.add(quote.currency);
+  }
+}
+
+function nordicTouch(l, { quotes, currencies, trouble, place }) {
+  if (currencies.size && !currencies.has(l.currency)) {
+    const said = [...currencies].join(" ou ");
+    return { spreadBp: null, note: `${place} cote en ${said}, pas en ${l.currency}` };
+  }
+  const quote = quotes.get(`${l.isin}|${l.currency}`);
+  if (!quote) return { spreadBp: null, note: trouble || `absent du crible ${place}` };
+  const bp = bpFrom(quote.bid, quote.ask);
+  const symbol = quote.symbol.toLowerCase();
+  return {
+    spreadBp: bp,
+    bid: quote.bid,
+    ask: quote.ask,
+    tradingCurrency: quote.currency,
+    url: quote.orderbookId
+      ? `https://www.nasdaq.com/european-market-activity/shares/${encodeURIComponent(symbol)}?id=${encodeURIComponent(quote.orderbookId)}`
+      : undefined,
+    ...(bp == null ? { note: "carnet à un seul côté" } : {}),
+  };
+}
+
+// Latest best bid and best ask on the Prague MiFIR page. The feed is every
+// change of the day, so one ISIN is asked for sorted by time and only the
+// newest row in each currency is kept. The regulated market wins. The MTF
+// is used only when that currency has no regulated quote.
+const xpraCache = new Map();
+
+async function xpraBook(isin) {
+  const id = String(isin || "").toUpperCase();
+  if (xpraCache.has(id)) return xpraCache.get(id);
+  const book = { quotes: new Map(), trouble: "" };
+  try {
+    const url = new URL("https://www.pse.cz/api/mifir");
+    url.searchParams.set("dataset", "pretrade_exchange");
+    url.searchParams.set("isin", id);
+    url.searchParams.set("page", "1");
+    url.searchParams.set("perPage", "30");
+    url.searchParams.set("sort", "-quoteTime");
+    url.searchParams.set("lang", "en");
+    const response = await fetch(url, {
+      headers: { "User-Agent": "Mozilla/5.0", Accept: "application/json" },
+      signal: AbortSignal.timeout(20_000),
+    });
+    if (!response.ok) throw new Error(`Prague a répondu ${response.status}`);
+    const body = await response.json();
+    const rows = Array.isArray(body.rows) ? body.rows : [];
+    const ranked = [...rows.filter((row) => String(row.venueOfExecution || "").toUpperCase() === "XPRA"), ...rows.filter((row) => String(row.venueOfExecution || "").toUpperCase() === "XPRM")];
+    for (const row of ranked) {
+      const currency = String(row.tradingCurrency || "").toUpperCase();
+      if (!currency || book.quotes.has(currency)) continue;
+      const bid = Number(row.bestBidPrice);
+      const ask = Number(row.bestAskPrice);
+      book.quotes.set(currency, { bid: bid > 0 ? bid : null, ask: ask > 0 ? ask : null, currency });
+    }
+  } catch (e) {
+    book.trouble = String(e.message || e).slice(0, 120);
+  }
+  xpraCache.set(id, book);
+  return book;
+}
+
 const adapters = {
   adx: gulfAdapter("adx"),
   dfm: gulfAdapter("dfm"),
@@ -2454,6 +2707,164 @@ const adapters = {
         // again: only it knows that this ISIN is an `etvs` on ALXP rather than an `etfs`.
         url: found.url,
       };
+    },
+  },
+
+  xice: {
+    measure: "touche du carnet",
+    async prefetch() {
+      try {
+        await loadXice();
+        console.error(`    Nasdaq Iceland : ${xiceQuotes.size} cotations\n`);
+      } catch (e) {
+        xiceTrouble = String(e.message || e).slice(0, 160);
+        console.error(`    Nasdaq Iceland : ${xiceTrouble}\n`);
+      }
+    },
+    async fetch(l) {
+      if (l.currency !== "ISK") return { spreadBp: null, note: `Nasdaq Iceland cote en ISK, pas en ${l.currency}` };
+      const quote = xiceQuotes.get(`${l.isin}|ISK`);
+      if (!quote) return { spreadBp: null, note: xiceTrouble || "absent du crible Nasdaq Iceland" };
+      const bp = bpFrom(quote.bid, quote.ask);
+      const symbol = quote.symbol.toLowerCase();
+      return {
+        spreadBp: bp,
+        bid: quote.bid,
+        ask: quote.ask,
+        tradingCurrency: "ISK",
+        url: quote.orderbookId
+          ? `https://www.nasdaq.com/european-market-activity/shares/${encodeURIComponent(symbol)}?id=${encodeURIComponent(quote.orderbookId)}`
+          : undefined,
+        ...(bp == null ? { note: "carnet à un seul côté" } : {}),
+      };
+    },
+  },
+
+  fnis: {
+    measure: "touche du carnet",
+    async prefetch() {
+      try {
+        await loadFnis();
+        console.error(`    First North Iceland : ${fnisQuotes.size} cotations\n`);
+      } catch (e) {
+        fnisTrouble = String(e.message || e).slice(0, 160);
+        console.error(`    First North Iceland : ${fnisTrouble}\n`);
+      }
+    },
+    async fetch(l) {
+      if (l.currency !== "ISK") return { spreadBp: null, note: `First North Iceland cote en ISK, pas en ${l.currency}` };
+      const quote = fnisQuotes.get(`${l.isin}|ISK`);
+      if (!quote) return { spreadBp: null, note: fnisTrouble || "absent du crible First North Iceland" };
+      const bp = bpFrom(quote.bid, quote.ask);
+      const symbol = quote.symbol.toLowerCase();
+      return {
+        spreadBp: bp,
+        bid: quote.bid,
+        ask: quote.ask,
+        tradingCurrency: "ISK",
+        url: quote.orderbookId
+          ? `https://www.nasdaq.com/european-market-activity/shares/${encodeURIComponent(symbol)}?id=${encodeURIComponent(quote.orderbookId)}`
+          : undefined,
+        ...(bp == null ? { note: "carnet à un seul côté" } : {}),
+      };
+    },
+  },
+
+  xcse: {
+    measure: "touche du carnet",
+    async prefetch() {
+      try {
+        await loadXcse();
+        console.error(`    Nasdaq Copenhagen : ${xcseQuotes.size} cotations\n`);
+      } catch (e) {
+        xcseTrouble = String(e.message || e).slice(0, 160);
+        console.error(`    Nasdaq Copenhagen : ${xcseTrouble}\n`);
+      }
+    },
+    async fetch(l) {
+      if (l.currency !== "DKK") return { spreadBp: null, note: `Nasdaq Copenhagen cote en DKK, pas en ${l.currency}` };
+      const quote = xcseQuotes.get(`${l.isin}|DKK`);
+      if (!quote) return { spreadBp: null, note: xcseTrouble || "absent du crible Nasdaq Copenhagen" };
+      const bp = bpFrom(quote.bid, quote.ask);
+      const symbol = quote.symbol.toLowerCase();
+      return {
+        spreadBp: bp,
+        bid: quote.bid,
+        ask: quote.ask,
+        tradingCurrency: "DKK",
+        url: quote.orderbookId
+          ? `https://www.nasdaq.com/european-market-activity/shares/${encodeURIComponent(symbol)}?id=${encodeURIComponent(quote.orderbookId)}`
+          : undefined,
+        ...(bp == null ? { note: "carnet à un seul côté" } : {}),
+      };
+    },
+  },
+
+  xsto: {
+    measure: "touche du carnet",
+    async prefetch() {
+      try {
+        await loadXsto();
+        console.error(`    Nasdaq Stockholm : ${xstoQuotes.size} cotations\n`);
+      } catch (e) {
+        xstoTrouble = String(e.message || e).slice(0, 160);
+        console.error(`    Nasdaq Stockholm : ${xstoTrouble}\n`);
+      }
+    },
+    async fetch(l) {
+      return nordicTouch(l, {
+        quotes: xstoQuotes,
+        currencies: xstoCurrencies,
+        trouble: xstoTrouble,
+        place: "Nasdaq Stockholm",
+      });
+    },
+  },
+
+  xpra: {
+    measure: "touche du carnet, différé 15 min",
+    async prefetch() {
+      console.error("    Prague : meilleure offre et meilleure demande, page MiFIR\n");
+    },
+    async fetch(l) {
+      const book = await xpraBook(l.isin);
+      if (book.trouble && !book.quotes.size) return { spreadBp: null, note: book.trouble };
+      const quote = book.quotes.get(l.currency);
+      if (!quote) {
+        const said = [...book.quotes.keys()];
+        if (said.length) return { spreadBp: null, note: `Prague cote en ${said.join(" ou ")}, pas en ${l.currency}` };
+        return { spreadBp: null, note: book.trouble || "absent de la publication MiFIR de Prague" };
+      }
+      const bp = bpFrom(quote.bid, quote.ask);
+      return {
+        spreadBp: bp,
+        bid: quote.bid,
+        ask: quote.ask,
+        tradingCurrency: quote.currency,
+        url: "https://www.pse.cz/en/mifir",
+        ...(bp == null ? { note: "carnet à un seul côté" } : {}),
+      };
+    },
+  },
+
+  xhel: {
+    measure: "touche du carnet",
+    async prefetch() {
+      try {
+        await loadXhel();
+        console.error(`    Nasdaq Helsinki : ${xhelQuotes.size} cotations\n`);
+      } catch (e) {
+        xhelTrouble = String(e.message || e).slice(0, 160);
+        console.error(`    Nasdaq Helsinki : ${xhelTrouble}\n`);
+      }
+    },
+    async fetch(l) {
+      return nordicTouch(l, {
+        quotes: xhelQuotes,
+        currencies: xhelCurrencies,
+        trouble: xhelTrouble,
+        place: "Nasdaq Helsinki",
+      });
     },
   },
 
@@ -3237,13 +3648,25 @@ if (!ONLY.length || ONLY.includes("pse") || pseTouchOnly) {
   pseTouchStats = loadPseTouch();
   console.error(`Manille : ${pseTouchStats.books} touches du carnet (${pseTouchStats.at || "sans date"})`);
 }
+const vnTouchOnly = ONLY.length === 1 && ONLY[0] === "vn-touch";
+let vnTouchStats = { books: 0 };
+if (!ONLY.length || ONLY.includes("hose") || ONLY.includes("upcom") || vnTouchOnly) {
+  vnTouchStats = loadVnTouch();
+  console.error(`Vietnam : ${vnTouchStats.books} touches du carnet (${vnTouchStats.at || "sans date"})`);
+}
+const gcTouchOnly = ONLY.length === 1 && ONLY[0] === "gc-touch";
+let gcTouchStats = { books: 0 };
+if (!ONLY.length || ONLY.includes("globalconnect") || ONLY.includes("xglo") || gcTouchOnly) {
+  gcTouchStats = loadGcTouch();
+  console.error(`GlobalConnect : ${gcTouchStats.books} touches du carnet (${gcTouchStats.at || "sans date"})`);
+}
 if (!ONLY.length || ONLY.includes("nse")) {
   await loadNseImpact();
   console.error(`NSE : impact cost moyen pour ${nseImpact.size} titres`);
 }
 
 const todo =
-  auTouchOnly || sgxTouchOnly || hkTouchOnly || bursaTouchOnly || pseTouchOnly
+  auTouchOnly || sgxTouchOnly || hkTouchOnly || bursaTouchOnly || pseTouchOnly || vnTouchOnly || gcTouchOnly
     ? []
     : [...listings.values()].filter(worthVisiting);
 console.error(`${todo.length} à visiter, ${listings.size - todo.length} à jour\n`);
@@ -3310,6 +3733,16 @@ if (bursaTouchOnly) {
 if (pseTouchOnly) {
   flush();
   console.error(`${STORE_PATH} : ${pseTouchStats.books} touches de Manille écrites.`);
+  process.exit(0);
+}
+if (vnTouchOnly) {
+  flush();
+  console.error(`${STORE_PATH} : ${vnTouchStats.books} touches du Vietnam écrites.`);
+  process.exit(0);
+}
+if (gcTouchOnly) {
+  flush();
+  console.error(`${STORE_PATH} : ${gcTouchStats.books} touches de GlobalConnect écrites.`);
   process.exit(0);
 }
 

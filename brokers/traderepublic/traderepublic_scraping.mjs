@@ -96,7 +96,10 @@ function venueOf(exchangeId, type) {
 
 // CFD / turbo books are not cash listings. `homeInstrumentExchange` is always
 // TIB (Bestpreis); the other slugs are Direktpreis venues on `instrument`.
-const SKIP_VENUE = new Set(["SLT"]);
+// London is an active listing on the instrument, and the order ticket still
+// shows it as "Coming soon" (`ongoingOutage`). Checked 2026-10-06 on 24
+// names across the currencies the catalogue carries.
+const SKIP_VENUE = new Set(["SLT", "XLON"]);
 
 function isCfdListing(listing) {
   const slug = normalize(listing?.slug).toUpperCase();

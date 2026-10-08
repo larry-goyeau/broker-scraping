@@ -25,6 +25,13 @@ const FOLDER = {
   boursobank: ["EUR"],
   // Foreign account, FAQ on the foreign-markets page: PLN, USD, EUR, GBP.
   bossa: ["PLN", "USD", "EUR", "GBP"],
+  // Four collection accounts, one per currency. A transfer into the matching
+  // account is left in that currency. Paying a foreign order in zloty is a
+  // conversion at KBC's mid-Reuters rate plus 0.1%. IKE and IKZE take zloty
+  // only; that is another account.
+  // https://www.bdm.pl/polecane/wplaty-na-rachunek-inwestycyjny
+  // https://www.bdm.pl/rynki-zagraniczne
+  bdm: ["PLN", "EUR", "USD", "GBP"],
   // Regulation of 27 June 2026: foreign trades settle in zlotys. The broker's
   // rate is mid-Reuters plus 0.1 %. EUR, USD and GBP belong to the paid
   // brokerage account, which is another product.
@@ -41,6 +48,11 @@ const FOLDER = {
   // https://help.bions.id/docs/cara-melakukan-deposit-dana-ke-rdn-bions-trading-mobile-android-ios/
   // https://help.bions.id/docs/one-day-trade/
   bni: ["IDR"],
+  // The client cash account is the RDN: it pays for a purchase and receives
+  // a sale. The idle balance is named in rupiah. No other currency is named.
+  // https://www.brights.id/id/faq/apa-yang-dimaksud-dengan-rdn
+  // https://www.brights.id/id/faq/berapa-minimum-dana-mengendap-yang-ada-di-rdn
+  bri: ["IDR"],
   // A transfer to the client's CLABE at Finamex is the deposit, in pesos.
   // The peso-dollar line is a forward, not cash left in dollars. No other
   // currency is named.
@@ -142,6 +154,30 @@ const FOLDER = {
   // can be paid in from a foreign-currency bank account and left as cash.
   // https://www.sbisec.co.jp/ETGate/WPLETmgR001Control?OutSide=on&getFlg=on&burl=search_home&cat1=home&cat2=service&dir=service&file=home_in_gaika.html
   sbi: ["JPY", "USD", "EUR", "AUD", "NZD", "CAD", "ZAR", "HKD"],
+  // The online book settles on a SpareBank 1 bank account. A purchase is
+  // debited there and a sale is credited there. The account is in kroner.
+  // No other currency is named.
+  // https://www.sb1markets.no/globalassets/alle-dokumenter-2025/general-terms--conditions/special-business-terms-for-trading-financial-instrument-via-online-platform-for-private-individuals.pdf
+  // https://www.sparebank1.no/nb/bank/privat/sparing/investering/aksjehandel.html
+  spare: ["NOK"],
+  // A listed domestic share in the app settles in krónur. The worked
+  // example is in ISK, and the online commission is charged in ISK.
+  // A foreign-currency payment account is another product.
+  // https://docs.arionbanki.is/themes/arionbanki/arionbanki/documents/05_Bankinn/Fleira/Vextir-og-verdskra/Verdskra/Verdskra-VL.pdf
+  // https://docs.arionbanki.is/themes/arionbanki/arionbanki/documents/04_Markadir/Fleira/Fjarfestavernd/EN/Overview_of_Cost_and_Charges.pdf
+  arion: ["ISK"],
+  // A listed domestic share in the app settles in krónur. The online
+  // commission and the processing fee are charged in ISK. Seeing the
+  // portfolio in another currency is a display, not a cash balance.
+  // A foreign-currency payment account is another product.
+  // https://www.landsbankinn.is/uploads/documents/verdskra/verdskra-2026-08-25.pdf
+  // https://www.landsbankinn.is/verdbrefavidskipti-a-netinu
+  landsbankinn: ["ISK"],
+  // Funds are added in rupees, by UPI or net banking, from the bank account
+  // registered on the trading account. The pages name no other currency.
+  // https://www.share.market/support/home/manage-your-funds/adding-funds/what-should-i-know-before-adding-funds-2/
+  // https://www.share.market/support/home/manage-your-funds/addition-of-funds/other-related-questions/what-are-the-transaction-modes-using-which-i-can-add-funds/
+  sharemarket: ["INR"],
   // Yen is the bank transfer into the comprehensive account. These five
   // can be paid in from a bank in Japan and left as cash. Pound, franc,
   // lira and rand are an IFA withdrawal, not a deposit. Hong Kong dollars,
@@ -267,6 +303,20 @@ const FOLDER = {
   // https://www.fidelity.co.uk/international-shares/
   // https://www.fidelity.co.uk/media/PI%20UK/pdf/legal/fidelity-client-terms.pdf
   fidelity: ["GBP"],
+  // The account holds sterling only. A payment in, a dividend or a deal in
+  // another currency is converted into pounds. That conversion is not a
+  // deposit the client can leave as cash.
+  // https://www.ajbell.co.uk/faq/can-i-hold-foreign-currency-my-account
+  // https://www.ajbell.co.uk/faq/how-can-i-pay-money-my-account
+  ajbell: ["GBP"],
+  // A UK share settles in pounds. A US share settles in pounds too: the
+  // order is a CDI, and the 0.95% FX converts the dollars. A dividend in
+  // another currency is credited in pounds. Cash added from the nominated
+  // bank is left in sterling.
+  // https://www.bestinvest.co.uk/help/dealing
+  // https://www.bestinvest.co.uk/us-shares
+  // https://www.bestinvest.co.uk/help/adding-and-withdrawing-money
+  bestinvest: ["GBP"],
   // Terms 10.3 and 11.8: the linked bank account and every deposit are pounds.
   // Help, 28 Mar 2024: cash can be held in GBP only.
   freetrade: ["GBP"],
@@ -407,12 +457,33 @@ const FOLDER = {
   // and left there. The sheet names no other currency.
   // https://masvn.com/cate/nop-tienchuyen-tien-890
   mirae: ["VND"],
+  // A linked BIDV securities account is credited in dong and left there.
+  // A foreign investor's indirect-investment account is opened at a bank
+  // that converts the wire before the cash is dong. The sheets name no
+  // other currency that stays unconverted.
+  // https://www.bsc.com.vn/lien-ket-tai-khoan-tien-ngan-hang/
+  // https://www.bsc.com.vn/en/open-trading-account/
+  bsc: ["VND"],
+  // The Iraqi individual contract funds the account in dinar, by a cheque
+  // from a central-bank bank or in cash. Zain Cash is the same dinar. A
+  // non-Iraqi who wires from a foreign bank is paid back into that bank
+  // account; the contract does not leave another currency as cash.
+  // https://rs.iq/wp-content/uploads/2026/03/RS-Contract-Individual_-ARABIC.pdf
+  // https://rs.iq/
+  rabee: ["IQD"],
   // A transfer into one of VPS's Vietnamese bank accounts is credited to
   // the securities cash account and left there. The sheet names no other
   // currency. A foreign investor's indirect investment account is a dong
   // account, so a wire in another currency is converted before it is cash.
   // https://smartone.vps.com.vn/Templates/Huong_dan_nop_tien_tai_khoan_chung_khoan.pdf
   vps: ["VND"],
+  // A transfer into one of the six collection accounts, or the VIB
+  // identification account, is credited in dong and left there. The sheet
+  // names no other currency. A foreign investor's indirect investment
+  // account is a dong account, so a wire in another currency is converted
+  // before it is cash.
+  // https://pinetree.vn/en/post/dich-vu/deposit/
+  pinetree: ["VND"],
   // A QR payment, a linked Vietnamese bank, or the VND01 account at BIDV
   // is credited to the securities cash account and left there. The sheets
   // name no other currency. A non-resident is sent to an indirect
@@ -458,6 +529,32 @@ const FOLDER = {
   medirect: ["EUR", "USD", "GBP", "AUD", "NOK", "CAD", "JPY"],
   // The KYC offers a resident account and an NRI account (NRE or NRO). Both are rupees.
   zebu: ["INR"],
+  // A dirham account and a convertible-dirham account are both dirhams.
+  // The foreign-currency account leaves a transfer in euro, dollar, Swiss
+  // franc, pound or Canadian dollar. Any other currency is "nous consulter",
+  // so it is not a published balance. The securities account is attached
+  // to one of these and does not convert the deposit.
+  // https://www.cfgbank.com/particuliers/notre-offre/banque-quotidien/les-comptes/
+  // https://www.cfgbank.com/wp-content/uploads/2024/01/LIVRET-TARIFICATION-JANVIER-2024.pdf
+  cfgbank: ["MAD", "EUR", "USD", "CHF", "GBP", "CAD"],
+  // The agency opens a cash account beside the securities account. The
+  // minimum is 500 dirhams, paid by cheque, cash or a transfer. The FAQ
+  // names no other currency.
+  // https://www.wafabourse.com/fr/faq
+  wafabourse: ["MAD"],
+  // The cheque account and the convertible-dirham account are dirhams.
+  // A foreign-currency account exists, and the guide does not name its
+  // currencies, so they are not listed.
+  // https://www.cihbank.ma/particuliers/nos-offres/gerer-mes-comptes
+  // https://www.cihbank.ma/themes/ciht/pdf/Tarification_particuliers_VF.pdf
+  cih: ["MAD"],
+  // An Australian resident settles in a Macquarie cash management account.
+  // A non-resident sends money through OFX into the Openmarkets trust
+  // account, which the guide says is in Australian dollars. A transfer
+  // in another currency is a conversion at OFX.
+  // https://marketech.com.au/financial-services-guide/
+  // https://marketech.com.au/focus/pricing/
+  marketech: ["AUD"],
 };
 
 const BY_PLAN = {

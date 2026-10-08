@@ -69,6 +69,7 @@ const FOLDER_NAME = {
   alramz: "Al Ramz Capital",
   boubyan: "Boubyan",
   tastytrade: "Tastytrade",
+  bri: "BRI Danareksa Sekuritas",
   bux: "BUX",
   davy: "Davy Select",
   oanda: "OANDA TMS",
@@ -103,6 +104,7 @@ const FOLDER_NAME = {
   vndirect: "VNDirect",
   vietcap: "Vietcap",
   rakutenjp: "Rakuten Japan",
+  spare: "SpareBank",
   rakutenma: "Rakuten Malaysia",
   profitmart: "Profitmart",
   dbs: "DBS Taiwan",
@@ -117,11 +119,21 @@ const FOLDER_NAME = {
   disnat: "Desjardins",
   prime: "Prime Transaction",
   mirae: "Mirae",
+  bsc: "BSC",
+  bdm: "BDM",
+  rabee: "Rabee Securities",
+  pinetree: "Pinetree",
+  cfgbank: "CFG Bank",
+  wafabourse: "Wafa Bourse",
+  cih: "CIH",
+  marketech: "Marketech Focus",
 };
 
 // Display name above, broker-list row below, when the two differ.
 const FOLDER_LIST = {
   mirae: "Mirae Asset Securities Vietnam",
+  bsc: "BIDV Securities (BSC)",
+  boursobank: "BoursoBank (Boursorama)",
 };
 
 function metaFor(folder, list) {
@@ -967,10 +979,10 @@ const FORTUNEO_PLANS = [
 ];
 
 const ETORO_PLANS = [
-  { id: "us", name: "eToro US" },
-  { id: "standard", name: "eToro" },
-  { id: "anz", name: "eToro Australia / New Zealand" },
-  { id: "uk", name: "eToro UK / Ireland" },
+  { id: "us", name: "eToro US", url: "https://www.etoro.com" },
+  { id: "standard", name: "eToro", url: "https://www.etoro.com" },
+  { id: "anz", name: "eToro Australia / New Zealand", url: "https://www.etoro.com" },
+  { id: "uk", name: "eToro UK / Ireland", url: "https://www.etoro.com" },
 ];
 
 function etoroOpen(plan, nat) {
@@ -988,6 +1000,7 @@ function collapseEtoro(built) {
   for (const row of built) {
     const hit = groups.find(
       (g) =>
+        sameLink(g.members[0], row) &&
         sameTripListings(g.listings, row.listings) &&
         g.listings.every((l, i) => l.remark === row.listings[i].remark)
     );
@@ -1020,10 +1033,68 @@ const DAVY_PLANS = [
   { id: "tradingplus", name: "Davy Select Trading Plus" },
 ];
 
+// Australian resident: the higher of 0.03% and 5 AUD. A resident of New
+// Zealand or Singapore: the higher of 0.04% and 6 AUD. With no country
+// picked, both rows stay.
+const MARKETECH_PLANS = [
+  { id: "au", name: "Marketech AU" },
+  { id: "nzsg", name: "Marketech NZ & Singapour" },
+];
+
+function marketechOpen(id, nat) {
+  const code = String(nat || "").trim().toUpperCase();
+  if (!code) return true;
+  if (id === "au") return code === "AU";
+  return code === "NZ" || code === "SG";
+}
+
 const FREEDOM24_PLANS = [
   { id: "smart", name: "Freedom24 Smart" },
   { id: "allinc", name: "Freedom24 All-inclusive" },
 ];
+
+// Hong Kong and the Middle East print the same ticket on every plan. A line
+// both plans price alike is one Freedom24 row. A line they price apart, such
+// as a US share, stays on its plan.
+function freedom24Line(listing) {
+  return [listing.exchange, listing.currency, listing.total, listing.fees, listing.spread, listing.remark].join("\0");
+}
+
+function collapseFreedom24(built) {
+  if (built.length < 2) return built;
+  const present = new Map();
+  for (const row of built) {
+    for (const key of new Set(row.listings.map(freedom24Line))) {
+      present.set(key, (present.get(key) || 0) + 1);
+    }
+  }
+  const shared = new Set([...present].filter(([, n]) => n === built.length).map(([key]) => key));
+  if (!shared.size) return built;
+  const seen = new Set();
+  const common = [];
+  for (const listing of built[0].listings) {
+    const key = freedom24Line(listing);
+    if (!shared.has(key) || seen.has(key)) continue;
+    seen.add(key);
+    common.push(listing);
+  }
+  const out = [
+    {
+      ...built[0],
+      folder: `freedom24:${built.map((row) => row.folder.split(":")[1]).join("-")}`,
+      family: "Freedom24",
+      name: "Freedom24",
+      plan: "",
+      planRank: 0,
+      listings: common,
+    },
+  ];
+  for (const row of built) {
+    const rest = row.listings.filter((listing) => !shared.has(freedom24Line(listing)));
+    if (rest.length) out.push({ ...row, listings: rest });
+  }
+  return out;
+}
 
 // Equity delivery. Optimum is ₹20 per order with no pack. Power Investor is
 // ₹10 per order plus ₹499 a month. Ultra Trader is ₹0 brokerage on delivery
@@ -1062,8 +1133,8 @@ const GOPOCKET_PLANS = [
 ];
 
 const LIGHTYEAR_PLANS = [
-  { id: "eu", name: "Lightyear Europe" },
-  { id: "uk", name: "Lightyear UK" },
+  { id: "eu", name: "Lightyear Europe", url: "https://lightyear.com" },
+  { id: "uk", name: "Lightyear UK", url: "https://lightyear.com" },
 ];
 
 // Crypto is the shelf where the plan changes the fill: Metal is 1 % / 2 %,
@@ -1143,14 +1214,14 @@ const VIVID_PLANS = [
 ];
 
 const WEBULL_PLANS = [
-  { id: "us", name: "Webull US" },
-  { id: "uk-go", name: "Webull UK Go" },
-  { id: "uk-meridian", name: "Webull UK Meridian" },
-  { id: "eu", name: "Webull Europe" },
-  { id: "sg", name: "Webull Singapore" },
-  { id: "ca", name: "Webull Canada" },
-  { id: "au", name: "Webull Australia" },
-  { id: "hk", name: "Webull Hong Kong" },
+  { id: "us", name: "Webull US", url: "https://www.webull.com" },
+  { id: "uk-go", name: "Webull UK Go", url: "https://www.webull-uk.com" },
+  { id: "uk-meridian", name: "Webull UK Meridian", url: "https://www.webull-uk.com" },
+  { id: "eu", name: "Webull Europe", url: "https://www.webull.eu" },
+  { id: "sg", name: "Webull Singapore", url: "https://www.webull.com.sg" },
+  { id: "ca", name: "Webull Canada", url: "https://www.webull.ca" },
+  { id: "au", name: "Webull Australia", url: "https://www.webull.com.au" },
+  { id: "hk", name: "Webull Hong Kong", url: "https://www.webull.hk" },
 ];
 
 const WEBULL_EU = new Set([
@@ -1174,7 +1245,7 @@ function webullOpen(plan, nat) {
 function collapseWebull(built) {
   const groups = [];
   for (const row of built) {
-    const hit = groups.find((g) => sameTripListings(g.listings, row.listings));
+    const hit = groups.find((g) => sameLink(g.members[0], row) && sameTripListings(g.listings, row.listings));
     if (hit) hit.members.push(row);
     else groups.push({ listings: row.listings, members: [row] });
   }
@@ -1195,9 +1266,9 @@ function collapseWebull(built) {
 }
 
 const TRADEZERO_PLANS = [
-  { id: "tza", name: "TradeZero America" },
-  { id: "tzi", name: "TradeZero International" },
-  { id: "tzeu", name: "TradeZero Europe" },
+  { id: "tza", name: "TradeZero America", url: "https://tradezero.com" },
+  { id: "tzi", name: "TradeZero International", url: "https://tradezero.com" },
+  { id: "tzeu", name: "TradeZero Europe", url: "https://tradezero.com" },
 ];
 
 function tradezeroOpen(plan, nat) {
@@ -1211,7 +1282,7 @@ function tradezeroOpen(plan, nat) {
 function collapseVivid(built) {
   const groups = [];
   for (const row of built) {
-    const hit = groups.find((g) => sameTripListings(g.listings, row.listings));
+    const hit = groups.find((g) => sameLink(g.members[0], row) && sameTripListings(g.listings, row.listings));
     if (hit) hit.members.push(row);
     else groups.push({ listings: row.listings, members: [row] });
   }
@@ -1232,7 +1303,7 @@ function collapseVivid(built) {
 function collapseVested(built) {
   const groups = [];
   for (const row of built) {
-    const hit = groups.find((g) => sameTripListings(g.listings, row.listings));
+    const hit = groups.find((g) => sameLink(g.members[0], row) && sameTripListings(g.listings, row.listings));
     if (hit) hit.members.push(row);
     else groups.push({ listings: row.listings, members: [row] });
   }
@@ -1253,7 +1324,7 @@ function collapseVested(built) {
 function collapseTradier(built) {
   const groups = [];
   for (const row of built) {
-    const hit = groups.find((g) => sameTripListings(g.listings, row.listings));
+    const hit = groups.find((g) => sameLink(g.members[0], row) && sameTripListings(g.listings, row.listings));
     if (hit) hit.members.push(row);
     else groups.push({ listings: row.listings, members: [row] });
   }
@@ -1275,7 +1346,7 @@ function collapseTradier(built) {
 function collapseTradezero(built) {
   const groups = [];
   for (const row of built) {
-    const hit = groups.find((g) => sameTripListings(g.listings, row.listings));
+    const hit = groups.find((g) => sameLink(g.members[0], row) && sameTripListings(g.listings, row.listings));
     if (hit) hit.members.push(row);
     else groups.push({ listings: row.listings, members: [row] });
   }
@@ -1296,7 +1367,7 @@ function collapseTradezero(built) {
 function collapseTradeup(built) {
   const groups = [];
   for (const row of built) {
-    const hit = groups.find((g) => sameTripListings(g.listings, row.listings));
+    const hit = groups.find((g) => sameLink(g.members[0], row) && sameTripListings(g.listings, row.listings));
     if (hit) hit.members.push(row);
     else groups.push({ listings: row.listings, members: [row] });
   }
@@ -1317,7 +1388,7 @@ function collapseTradeup(built) {
 function collapseTradestation(built) {
   const groups = [];
   for (const row of built) {
-    const hit = groups.find((g) => sameTripListings(g.listings, row.listings));
+    const hit = groups.find((g) => sameLink(g.members[0], row) && sameTripListings(g.listings, row.listings));
     if (hit) hit.members.push(row);
     else groups.push({ listings: row.listings, members: [row] });
   }
@@ -1339,7 +1410,7 @@ function collapseTradestation(built) {
 function collapseTraderepublic(built) {
   const groups = [];
   for (const row of built) {
-    const hit = groups.find((g) => sameTripListings(g.listings, row.listings));
+    const hit = groups.find((g) => sameLink(g.members[0], row) && sameTripListings(g.listings, row.listings));
     if (hit) hit.members.push(row);
     else groups.push({ listings: row.listings, members: [row] });
   }
@@ -1357,8 +1428,8 @@ function collapseTraderepublic(built) {
 }
 
 const SWISSQUOTE_PLANS = [
-  { id: "ch", name: "Swissquote" },
-  { id: "lu", name: "Swissquote Europe" },
+  { id: "ch", name: "Swissquote", url: "https://www.swissquote.ch" },
+  { id: "lu", name: "Swissquote Europe", url: "https://www.swissquote.com" },
 ];
 
 // Bank SA prices Switzerland. Bank Europe prices the EEA. The two schedules
@@ -1372,11 +1443,17 @@ function swissquoteOpen(plan, nat) {
   return false;
 }
 
+// MeDirect Bank SA opens the account of a Belgian resident. Any other
+// residence, or none, is MeDirect Bank (Malta) plc.
+function medirectUrl(nat) {
+  return String(nat || "").trim().toUpperCase() === "BE" ? "https://www.medirect.be/" : "https://www.medirect.com.mt/";
+}
+
 const TIGER_PLANS = [
-  { id: "sg", name: "Tiger Brokers SG" },
-  { id: "au", name: "Tiger Brokers AU" },
-  { id: "hk", name: "Tiger Brokers HK" },
-  { id: "nz", name: "Tiger Brokers NZ" },
+  { id: "sg", name: "Tiger Brokers SG", url: "https://www.itiger.com" },
+  { id: "au", name: "Tiger Brokers AU", url: "https://www.itiger.com" },
+  { id: "hk", name: "Tiger Brokers HK", url: "https://www.itiger.com" },
+  { id: "nz", name: "Tiger Brokers NZ", url: "https://www.itiger.com" },
 ];
 
 function tigerOpen(plan, nat) {
@@ -1401,11 +1478,11 @@ const XTB_INTL = new Set([
 const XTB_MENA = new Set(GCC);
 const XTB_CY = new Set(EU.filter((code) => code !== "BE" && !XTB_SA.has(code)));
 const XTB_PLANS = [
-  { id: "sa", name: "XTB S.A.", probe: "FR" },
-  { id: "uk", name: "XTB UK", probe: "GB" },
-  { id: "cy", name: "XTB Cyprus", probe: "IT" },
-  { id: "mena", name: "XTB MENA", probe: "AE" },
-  { id: "int", name: "XTB International", probe: "ZA" },
+  { id: "sa", name: "XTB S.A.", probe: "FR", url: "https://www.xtb.com" },
+  { id: "uk", name: "XTB UK", probe: "GB", url: "https://www.xtb.com" },
+  { id: "cy", name: "XTB Cyprus", probe: "IT", url: "https://www.xtb.com" },
+  { id: "mena", name: "XTB MENA", probe: "AE", url: "https://www.xtb.com" },
+  { id: "int", name: "XTB International", probe: "ZA", url: "https://www.xtb.com" },
 ];
 
 function xtbEntityFor(nat) {
@@ -1458,7 +1535,10 @@ function collapseXtb(built) {
     const clusters = [];
     for (const item of items) {
       const hit = clusters.find(
-        (c) => c.listing.total === item.listing.total && c.listing.fees === item.listing.fees
+        (c) =>
+          sameLink(c.row, item.row) &&
+          c.listing.total === item.listing.total &&
+          c.listing.fees === item.listing.fees
       );
       if (hit) hit.plans.push(item.plan);
       else clusters.push({ listing: item.listing, plans: [item.plan], row: item.row });
@@ -1494,7 +1574,7 @@ function collapseXtb(built) {
 function collapseTiger(built) {
   const groups = [];
   for (const row of built) {
-    const hit = groups.find((g) => sameTripListings(g.listings, row.listings));
+    const hit = groups.find((g) => sameLink(g.members[0], row) && sameTripListings(g.listings, row.listings));
     if (hit) hit.members.push(row);
     else groups.push({ listings: row.listings, members: [row] });
   }
@@ -1511,16 +1591,18 @@ function collapseTiger(built) {
   });
 }
 
+const PLUM_UK = "https://withplum.com";
+const PLUM_EU = "https://withplum.com";
 const PLUM_PLANS = [
-  { id: "basic", name: "Plum UK Basic" },
-  { id: "plus", name: "Plum UK Plus" },
-  { id: "boost", name: "Plum UK Boost" },
-  { id: "max", name: "Plum UK Max" },
-  { id: "eu", name: "Plum UE Basic" },
-  { id: "pro", name: "Plum UE Pro" },
-  { id: "eu-boost", name: "Plum UE Boost" },
-  { id: "premium", name: "Plum UE Premium" },
-  { id: "eu-max", name: "Plum UE Max" },
+  { id: "basic", name: "Plum UK Basic", url: PLUM_UK },
+  { id: "plus", name: "Plum UK Plus", url: PLUM_UK },
+  { id: "boost", name: "Plum UK Boost", url: PLUM_UK },
+  { id: "max", name: "Plum UK Max", url: PLUM_UK },
+  { id: "eu", name: "Plum UE Basic", url: PLUM_EU },
+  { id: "pro", name: "Plum UE Pro", url: PLUM_EU },
+  { id: "eu-boost", name: "Plum UE Boost", url: PLUM_EU },
+  { id: "premium", name: "Plum UE Premium", url: PLUM_EU },
+  { id: "eu-max", name: "Plum UE Max", url: PLUM_EU },
 ];
 
 function plumEntity(plan) {
@@ -1549,9 +1631,9 @@ function plumOpen(plan, nat) {
 // row per company, and `collapseRobinhood` puts back together any that a given
 // instrument happens to price alike.
 const ROBINHOOD_PLANS = [
-  { id: "us", name: "Robinhood US" },
-  { id: "uk", name: "Robinhood UK" },
-  { id: "eu", name: "Robinhood UE" },
+  { id: "us", name: "Robinhood US", url: "https://robinhood.com" },
+  { id: "uk", name: "Robinhood UK", url: "https://robinhood.com" },
+  { id: "eu", name: "Robinhood UE", url: "https://robinhood.com" },
 ];
 
 // The country each company is built for when the visitor named none, so that a
@@ -1604,7 +1686,7 @@ function revolutHouse(row) {
 function collapseSwissquote(built) {
   const groups = [];
   for (const row of built) {
-    const hit = groups.find((g) => sameTripListings(g.listings, row.listings));
+    const hit = groups.find((g) => sameLink(g.members[0], row) && sameTripListings(g.listings, row.listings));
     if (hit) hit.members.push(row);
     else groups.push({ listings: row.listings, members: [row] });
   }
@@ -1626,7 +1708,7 @@ function collapseScalable(built) {
   for (const row of built) {
     // gettex / Xetra bill the same ticket on both plans; the 4.99 €/month
     // sits in the remark and must not keep two identical totals on the page.
-    const hit = groups.find((g) => sameTripListings(g.listings, row.listings));
+    const hit = groups.find((g) => sameLink(g.members[0], row) && sameTripListings(g.listings, row.listings));
     if (hit) hit.members.push(row);
     else groups.push({ listings: row.listings, members: [row] });
   }
@@ -1676,7 +1758,12 @@ function collapseFsmone(built) {
   for (const items of places.values()) {
     const clusters = [];
     for (const item of items) {
-      const hit = clusters.find((c) => c.listing.total === item.listing.total && c.listing.fees === item.listing.fees);
+      const hit = clusters.find(
+        (c) =>
+          sameLink(c.row, item.row) &&
+          c.listing.total === item.listing.total &&
+          c.listing.fees === item.listing.fees
+      );
       if (hit) hit.plans.push(item.plan);
       else clusters.push({ listing: item.listing, plans: [item.plan], row: item.row });
     }
@@ -1733,7 +1820,10 @@ function collapseSaxo(built) {
     const clusters = [];
     for (const item of items) {
       const hit = clusters.find(
-        (c) => c.listing.total === item.listing.total && c.listing.fees === item.listing.fees
+        (c) =>
+          sameLink(c.row, item.row) &&
+          c.listing.total === item.listing.total &&
+          c.listing.fees === item.listing.fees
       );
       if (hit) hit.plans.push(item.plan);
       else clusters.push({ listing: item.listing, plans: [item.plan], row: item.row });
@@ -1771,7 +1861,9 @@ function collapseRevolut(built) {
   const groups = [];
   for (const row of built) {
     const plan = String(row.plan || "").includes("ultra") ? "ultra" : "standard";
-    const hit = groups.find((g) => g.plan === plan && sameTripListings(g.listings, row.listings));
+    const hit = groups.find(
+      (g) => g.plan === plan && sameLink(g.members[0], row) && sameTripListings(g.listings, row.listings)
+    );
     if (hit) hit.members.push(row);
     else groups.push({ plan, listings: row.listings, members: [row] });
   }
@@ -1814,6 +1906,10 @@ function sameCostListings(a, b) {
   });
 }
 
+function sameLink(a, b) {
+  return String(a?.url || "") === String(b?.url || "");
+}
+
 function sameTripListings(a, b) {
   if (a.length !== b.length) return false;
   return a.every((l, i) => {
@@ -1829,7 +1925,7 @@ function collapseEasyBourse(built) {
     : built;
   const groups = [];
   for (const row of kept) {
-    const hit = groups.find((g) => sameCostListings(g.listings, row.listings));
+    const hit = groups.find((g) => sameLink(g.members[0], row) && sameCostListings(g.listings, row.listings));
     if (hit) hit.members.push(row);
     else groups.push({ listings: row.listings, members: [row] });
   }
@@ -1848,7 +1944,7 @@ function collapseEasyBourse(built) {
 function collapseBunq(built) {
   const groups = [];
   for (const row of built) {
-    const hit = groups.find((g) => sameCostListings(g.listings, row.listings));
+    const hit = groups.find((g) => sameLink(g.members[0], row) && sameCostListings(g.listings, row.listings));
     if (hit) hit.members.push(row);
     else groups.push({ listings: row.listings, members: [row] });
   }
@@ -1867,7 +1963,7 @@ function collapseBunq(built) {
 function collapseBux(built) {
   const groups = [];
   for (const row of built) {
-    const hit = groups.find((g) => sameCostListings(g.listings, row.listings));
+    const hit = groups.find((g) => sameLink(g.members[0], row) && sameCostListings(g.listings, row.listings));
     if (hit) hit.members.push(row);
     else groups.push({ listings: row.listings, members: [row] });
   }
@@ -1886,7 +1982,7 @@ function collapseBux(built) {
 function collapseDavy(built) {
   const groups = [];
   for (const row of built) {
-    const hit = groups.find((g) => sameCostListings(g.listings, row.listings));
+    const hit = groups.find((g) => sameLink(g.members[0], row) && sameCostListings(g.listings, row.listings));
     if (hit) hit.members.push(row);
     else groups.push({ listings: row.listings, members: [row] });
   }
@@ -1906,7 +2002,9 @@ function collapsePlum(built) {
   const groups = [];
   for (const row of built) {
     const sub = plumSubscription(row);
-    const hit = groups.find((g) => sameAbcListings(g.listings, row.listings) && g.sub === sub);
+    const hit = groups.find(
+      (g) => sameLink(g.members[0], row) && sameAbcListings(g.listings, row.listings) && g.sub === sub
+    );
     if (hit) hit.members.push(row);
     else groups.push({ listings: row.listings, sub, members: [row] });
   }
@@ -1947,7 +2045,7 @@ function collapseBoursobank(built) {
     : built;
   const groups = [];
   for (const row of kept) {
-    const hit = groups.find((g) => sameCostListings(g.listings, row.listings));
+    const hit = groups.find((g) => sameLink(g.members[0], row) && sameCostListings(g.listings, row.listings));
     if (hit) hit.members.push(row);
     else groups.push({ listings: row.listings, members: [row] });
   }
@@ -1966,7 +2064,7 @@ function collapseBoursobank(built) {
 function collapseFreetrade(built) {
   const groups = [];
   for (const row of built) {
-    const hit = groups.find((g) => sameTripListings(g.listings, row.listings));
+    const hit = groups.find((g) => sameLink(g.members[0], row) && sameTripListings(g.listings, row.listings));
     if (hit) hit.members.push(row);
     else groups.push({ listings: row.listings, members: [row] });
   }
@@ -1987,7 +2085,7 @@ function collapseFreetrade(built) {
 function collapseFortuneo(built) {
   const groups = [];
   for (const row of built) {
-    const hit = groups.find((g) => sameCostListings(g.listings, row.listings));
+    const hit = groups.find((g) => sameLink(g.members[0], row) && sameCostListings(g.listings, row.listings));
     if (hit) hit.members.push(row);
     else groups.push({ listings: row.listings, members: [row] });
   }
@@ -2052,7 +2150,17 @@ function detail(key, nat = "", size = {}, dep = "") {
           return {
             ...listing,
             ...cost,
-            exchange: (cost.venueAuthoritative && cost.venueExchange) || listing.exchange || cost.venueExchange || "",
+            // "Nasdaq Nordic" is the group. Once the book is the only Nordic
+            // one in this currency, the column names that city.
+            exchange:
+              (cost.venueAuthoritative && cost.venueExchange) ||
+              (listing.exchange === "Nasdaq Nordic" &&
+              cost.venueExchange &&
+              cost.venueExchange !== "Nasdaq Nordic"
+                ? cost.venueExchange
+                : listing.exchange) ||
+              cost.venueExchange ||
+              "",
             // A coin is not quoted in a currency the way a share is: the column
             // names the cash the account settles in, which the estimator knows
             // and the catalogue does not. Robinhood's book was read in dollars
@@ -2095,7 +2203,7 @@ function detail(key, nat = "", size = {}, dep = "") {
       family: meta?.name || prettyFolder(folder),
       country: meta?.country || "",
       kind: meta?.type || "",
-      url: meta?.url || "",
+      url: folder === "medirect" ? medirectUrl(nat) : meta?.url || "",
       plan: "",
       planRank: 0,
     };
@@ -2107,6 +2215,9 @@ function detail(key, nat = "", size = {}, dep = "") {
       // the two companies happen to cost the same.
       family: plan.name || base.family,
       name: plan.name,
+      // A company keeps the site of its own row in the list. Fee tiers of
+      // one company share the broker's link.
+      url: plan.url || base.url,
       plan: plan.id,
       planRank: i + 1,
       listings: listed,
@@ -2184,11 +2295,21 @@ function detail(key, nat = "", size = {}, dep = "") {
       for (const row of collapseDavy(built)) rows.push(row);
       continue;
     }
-    if (folder === "freedom24") {
-      FREEDOM24_PLANS.forEach((plan, i) => {
+    if (folder === "marketech") {
+      MARKETECH_PLANS.forEach((plan, i) => {
+        if (!marketechOpen(plan.id, nat)) return;
         const listed = listings({ plan: plan.id });
         if (listed.length) rows.push(asPlan(plan, i, listed));
       });
+      continue;
+    }
+    if (folder === "freedom24") {
+      const built = [];
+      FREEDOM24_PLANS.forEach((plan, i) => {
+        const listed = listings({ plan: plan.id });
+        if (listed.length) built.push(asPlan(plan, i, listed));
+      });
+      for (const row of collapseFreedom24(built)) rows.push(row);
       continue;
     }
     if (folder === "lightyear") {
@@ -2666,7 +2787,7 @@ const DEPOSIT_CCY = {
   US: "USD", CA: "CAD", AU: "AUD", JP: "JPY", SG: "SGD", HK: "HKD", AE: "AED", ZA: "ZAR", IN: "INR",
   BR: "BRL", MX: "MXN", CL: "CLP", CO: "COP", AR: "ARS", SE: "SEK", NO: "NOK", DK: "DKK", FO: "DKK",
   GL: "DKK", PL: "PLN", CZ: "CZK", HU: "HUF", RO: "RON", TR: "TRY", EG: "EGP", SA: "SAR", IL: "ILS",
-  KR: "KRW", TW: "TWD", MY: "MYR", CN: "CNH", KW: "KWD", ZW: "ZWG", VN: "VND",
+  KR: "KRW", TW: "TWD", MY: "MYR", CN: "CNH", KW: "KWD", ZW: "ZWG", VN: "VND", IQ: "IQD", MA: "MAD",
 };
 const DEPOSIT_CURRENCIES = new Set(currencyOptions().map((row) => row.code));
 const localeCache = new Map();

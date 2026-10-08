@@ -78,6 +78,33 @@
 //   10 000 at 1.65    78.55
 //   100 000 at 1.65   389.90
 //
+// Copenhagen is not on the stock card. On 2026-10-08 the signed-in portal
+// previewed buys routed to CPH and nothing was sent. The commission is
+// 0.05 % with a 49 DKK floor, on a share and on an ETF. No cap appeared
+// through a 2,328 DKK commission (20,000 BAVA at 232.80). A 100,000-share
+// preview returned a blank line, and a sell preview stayed blank because
+// the account held no share to sell.
+//   1 BAVA at 232.80       49 DKK
+//   200 at 232.80          49
+//   1,000 at 232.80        116.40
+//   5,000 at 232.80        582
+//   20,000 at 232.80       2,328
+//   1 XACTC25 at 200.35    49
+//   999 XACTC25 at 200.35  100.07
+//   861 ISS at 290.40      125.02
+//
+// Helsinki is not on the stock card. On 2026-10-08 the same portal
+// previewed NOKIA routed to HEX and nothing was sent. One, 20, 100 and
+// 500 shares at 9.26 asked for 3 EUR. 2,000 shares asked for 9.26 EUR,
+// which is 0.05 % of 18,520. 20,000 shares asked for 92.60 EUR, still
+// 0.05 %. No cap appeared.
+//
+// Prague is not on the stock card. The same session previewed CEZ
+// routed to PRA and nothing was sent. One share and ten shares at
+// 1,332 asked for 70 CZK. 100 shares asked for 199.80 CZK, which is
+// 0.15 % of 133,200. 1,000 shares asked for 1,998 CZK, still 0.15 %.
+// No cap appeared. The spread is not on this ticket.
+//
 // One live trip, 2026-09-10, account U27604034, euro cash: 1 IWDA market,
 // ticket bound AEB, both legs routed GETTEX2 @ 126,10, 2,00 € each way. The
 // 2026-09-15 previews quote that trip as the bottom of a 2 … 4 € range. The
@@ -239,6 +266,15 @@ const RULE = {
   uk: { rate: 0.001, min: 8, ccy: "GBP" },
   no: { rate: 0.001, min: 60, ccy: "NOK" },
   se: { rate: 0.001, min: 40, max: 300, ccy: "SEK" },
+  // Not on the card. Portal preview of CPH buys, 2026-10-08.
+  // No cap appeared through a 2,328 DKK commission.
+  dk: { rate: 0.0005, min: 49, ccy: "DKK" },
+  // Not on the card. Portal preview of NOKIA on HEX, 2026-10-08.
+  // No cap appeared through a 92.60 EUR commission.
+  hel: { rate: 0.0005, min: 3, ccy: "EUR" },
+  // Not on the card. Portal preview of CEZ on PRA, 2026-10-08.
+  // No cap appeared through a 1,998 CZK commission.
+  pra: { rate: 0.0015, min: 70, ccy: "CZK" },
   pl: { rate: 0.001, min: 20, ccy: "PLN" },
   il: { rate: 0.0014, min: 25, ccy: "ILS" },
   hu: { rate: 0.0015, min: 1500, ccy: "HUF" },
@@ -327,6 +363,9 @@ export function feeMarketOf(exchange, mic) {
   if (code === "BVL" || m === "XLIS") return "pt";
   if (code === "OSE" || code === "OMXNO" || m === "XOSL") return "no";
   if (code === "SFB" || m === "XSTO") return "se";
+  if (code === "CPH" || code === "OMXCOP" || code === "OMK" || m === "XCSE") return "dk";
+  if (code === "HEX" || m === "XHEL") return "hel";
+  if (code === "PRA" || m === "XPRA") return "pra";
   if (code === "TASE" || m === "XTAE") return "il";
   if (code === "BUX" || m === "XBUD") return "hu";
   if (code === "MEXI" || m === "XMEX") return "mx";
@@ -536,8 +575,18 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   };
 
   if (!rule) {
+    // The commission stays N/A. The book, when it was measured, still has to
+    // reach the spread column: that needs the trade the page converts with.
+    const n = Number(shares);
+    const p = Number(price);
+    const notional = n > 0 && p > 0 ? nativeAmount(n, p, listing.currency) : null;
+    const settle = listing.currency === "GBX" ? "GBP" : listing.currency;
+    const notionalUsd = notional == null ? null : dollars(notional, settle);
     return {
       ...shared,
+      ...(notional != null
+        ? { trade: { shares: n, price: p, notional, notionalUsd: finite(notionalUsd, 6), currency: listing.currency } }
+        : {}),
       basis: `aucun palier publié pour ${listing.brokerExchange || listing.exchange || "cette place"} chez CapTrader`,
       why:
         `${listing.brokerExchange || listing.exchange || "cette place"} n'a pas de palier sur la carte CapTrader ` +
@@ -551,7 +600,9 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
       ? `barème CapTrader ${market}, même palier que les deux autres portails, lu le 2026-09-28 : `
       : market === "my"
         ? `barème CapTrader ${market}, aperçu du portail le 2026-10-02 : `
-        : `barème CapTrader ${market}, lu le ${SCHEDULE.readOn} (page du ${SCHEDULE.pageUpdated}) : `) +
+        : market === "dk" || market === "hel" || market === "pra"
+          ? `barème CapTrader ${market}, aperçu du portail le 2026-10-08 : `
+          : `barème CapTrader ${market}, lu le ${SCHEDULE.readOn} (page du ${SCHEDULE.pageUpdated}) : `) +
     (rule.rate != null
       ? `${(100 * rule.rate).toFixed(4).replace(/0+$/, "").replace(/\.$/, "")} % par sens`
       : `${rule.perShare} ${rule.ccy} par part`) +
@@ -710,7 +761,13 @@ function confidenceOf({
       ? `commission CapTrader, palier ${market}, même palier que les deux autres portails, lu le 2026-09-28, `
       : market === "my"
         ? `commission CapTrader, palier ${market}, aperçu MSC sur BURSAMY le 2026-10-02, `
-        : `commission CapTrader, palier ${market}, lue le ${SCHEDULE.readOn} sur la page Aktien du ${SCHEDULE.pageUpdated}, `) +
+        : market === "dk"
+          ? `commission CapTrader, palier ${market}, aperçu BAVA, XACTC25 et ISS sur CPH le 2026-10-08, `
+          : market === "hel"
+            ? `commission CapTrader, palier ${market}, aperçu NOKIA sur HEX le 2026-10-08, `
+            : market === "pra"
+              ? `commission CapTrader, palier ${market}, aperçu CEZ sur PRA le 2026-10-08, `
+              : `commission CapTrader, palier ${market}, lue le ${SCHEDULE.readOn} sur la page Aktien du ${SCHEDULE.pageUpdated}, `) +
       `facturée par sens et convertie en dollars au mid BCE du ${FX_AS_OF}`
   );
   if (buyComm) {

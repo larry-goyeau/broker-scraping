@@ -387,10 +387,12 @@ function resolveListing(tickerCandidates, ticker, name, venues) {
     winner = winners[0];
   }
 
-  const exchange =
-    [...winner.candidate.exchanges].find((code) => onVenue(code, allowed)) ||
-    [...winner.candidate.exchanges][0] ||
-    "";
+  // The CSV often lists the same ISIN on several boards. When none of those
+  // boards is the one eToro named, the first of them is the wrong answer:
+  // NOKIA.PA is Euronext Paris, and Prague happens to be the first Nokia
+  // row in the file. Keep eToro's venue instead of that neighbour.
+  const matched = [...winner.candidate.exchanges].find((code) => allowed.size === 0 || onVenue(code, allowed));
+  const exchange = matched || (allowed.size > 0 ? [...allowed][0] : "") || [...winner.candidate.exchanges][0] || "";
   return { isin: winner.isin, name: winner.name, exchange, kind: winner.candidate.kind };
 }
 
@@ -521,7 +523,15 @@ for (const instrument of instruments) {
   }
 
   const rules = tradeById.get(instrument.InstrumentID);
-  if (instrument.IsInternalInstrument || instrument.HasExpirationDate || rules?.IsDelisted) {
+  // A grey Invest button is AllowBuy false. IsVisible false is a different
+  // shelf: London names on it can still be bought. NOKIA.PA is listed on
+  // Paris and cannot be bought.
+  if (
+    instrument.IsInternalInstrument ||
+    instrument.HasExpirationDate ||
+    rules?.IsDelisted ||
+    rules?.AllowBuy === false
+  ) {
     skipped += 1;
     continue;
   }

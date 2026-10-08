@@ -49,6 +49,7 @@ Wealthsimple	CA	Neobroker	Local + US ETFs	https://www.wealthsimple.com/en-ca/acc
 Qtrade Direct Investing	CA	Broker	Local + US ETFs	https://www.qtrade.ca/en/investor/apply.html	DirectInvesting@qtrade.ca
 TD Direct Investing	CA	Bank	Local + US ETFs	https://www.td.com/ca/en/investing/direct-investing	https://www.td.com/ca/en/investing/contact-us
 RBC Direct Investing	CA	Bank	Local + US ETFs	https://www.rbcdirectinvesting.com/	https://www.rbcdirectinvesting.com/contact-us.html
+RBC Direct Investing	CA	Bank	Local + US ETFs	https://www.rbcplacementsendirect.com/	https://www.rbcdirectinvesting.com/contact-us.html
 BMO InvestorLine	CA	Bank	Local + US ETFs	https://www.bmo.com/en-ca/main/personal/investments/direct-investing/investorline/self-directed/	
 Scotia iTRADE	CA	Bank	Local + US ETFs	https://www.scotiaitrade.com/en/home/open-trading-account.html	service@scotiaitrade.com
 CIBC Investor's Edge	CA	Bank	Local + US ETFs	https://www.investorsedge.cibc.com/en/home.html	https://www.investorsedge.cibc.com/en/contact-us.html
@@ -126,7 +127,8 @@ LYNX Broker	DE	Broker	Global ETFs / ETPs	https://www.lynxbroker.de/wertpapierdep
 Estably	DE	Broker	Global ETFs / ETPs	https://estably.broker/depot/	https://estably.broker/kontakt/
 Vivid Money	DE	Neobroker	UCITS ETFs / ETCs	https://vivid.money/de-de/personal/	
 HypoVereinsbank (HVB)	DE	Bank	UCITS ETFs / ETCs	https://www.hypovereinsbank.de/hvb/privatkunden/geldanlage/depotmodelle/smart-depot	
-Swissquote	CH	Bank	Global ETFs / ETPs	https://www.swissquote.com/	bank@swissquote.com
+Swissquote	CH	Bank	Global ETFs / ETPs	https://www.swissquote.ch	bank@swissquote.com
+Swissquote	CH	Bank	Global ETFs / ETPs	https://www.swissquote.com/en-ch/private	bank@swissquote.com
 IBKR Financial Services	CH	Broker	Global ETFs / ETPs	https://www.interactivebrokers.ch/	https://www.interactivebrokers.com/en/general/contact/newContact/contact.php
 PostFinance	CH	Bank	Global ETFs / ETPs	https://www.postfinance.ch/en/private/investing/solutions/online-trading/e-trading.html	https://www.postfinance.ch/en/support.html
 UBS key4 / e-banking	CH	Bank	Global ETFs / ETPs	https://www.ubs.com/ch/en/services/digital-banking/mobile-banking/key4.html	
@@ -141,6 +143,7 @@ Banque Cantonale de Genève (BCGE)	CH	Bank	Global ETFs / ETPs	https://www.bcge.c
 Basler Kantonalbank	CH	Bank	Global ETFs / ETPs	https://www.bkb.ch/de/die-basler-kantonalbank/kontakt-services/hilfe-und-kontakt-konto	https://www.bkb.ch/de/geschaeftskunden/immobilien/kontakt
 Luzerner Kantonalbank	CH	Bank	Global ETFs / ETPs	https://www.lukb.ch/private/anlegen/selbststaendig-anlegen/e-depot	https://www.lukb.ch/ueber-uns/kontakt/karte-sperren
 Berner Kantonalbank	CH	Bank	Global ETFs / ETPs	https://www.bekb.ch/de/privatkunden/geld-anlegen/anlageprodukte/wertschriftendepot	https://www.bekb.ch/de/hilfe-support/zahlungsmittel/erbschaft-und-todesfall
+Berner Kantonalbank	CH	Bank	Global ETFs / ETPs	https://www.bcbe.ch/fr/clientele-privee/placements/produits-de-placement/depot-de-titres	https://www.bekb.ch/de/hilfe-support/zahlungsmittel/erbschaft-und-todesfall
 Bank Cler	CH	Bank	Global ETFs / ETPs	https://www.cler.ch/de/anlegen	https://www.cler.ch/de/services/kontakt/beraten-werden?thema=Anlegen&amp;interesse=Anlegen
 Valiant	CH	Bank	Global ETFs / ETPs	https://www.valiant.ch/de/privatkunden/anlegen	
 Saxo Bank (Schweiz)	CH	Bank	Global ETFs / ETPs	https://www.home.saxo/de-ch/accounts/individual	solutions-ch@saxobank.com
@@ -160,6 +163,7 @@ TradeZero Europe	NL	Broker	US ETFs / ETNs	https://tradezero.com/en-ee	support@tr
 TradeStation Europe	NL	Broker	US ETFs / ETNs	https://www.tradestation.com/	
 Webull Europe	NL	Neobroker	US ETFs / ETNs	https://www.webull.eu/	support-eu@webull.eu
 BUX	NL	Neobroker	UCITS ETFs / ETCs	https://getbux.com/	
+BUX	NL	Neobroker	UCITS ETFs / ETCs	https://bux.com/	
 Bunq	NL	Neobroker	UCITS ETFs / ETCs	https://www.bunq.com/investments	
 ING Nederland	NL	Bank	UCITS ETFs / ETCs	https://www.ing.nl/particulier/beleggen/beleggen-bij-ing/zelf-op-de-beurs	
 Rabobank	NL	Bank	UCITS ETFs / ETCs	https://www.rabobank.nl/particulieren/beleggen/rabo-zelf-beleggen	
@@ -169,6 +173,7 @@ Easybroker	NL	Broker	Global ETFs / ETPs	https://www.easybroker.nl/start-aanvraag
 Saxo Bank Nederland	NL	Bank	Global ETFs / ETPs	https://www.home.saxo/nl-nl/accounts/openaccount	
 Today's Brokers	NL	Broker	Global ETFs / ETPs	https://todaysgroup.nl/todays-brokers/	https://todaysgroup.nl/contact/
 Alex Beleggersbank	NL	Broker	UCITS ETFs / ETCs	https://www.alex.nl/	https://www.home.saxo/nl-nl/contact-us
+Alex Beleggersbank	NL	Broker	UCITS ETFs / ETCs	https://www.home.saxo/nl-nl	https://www.home.saxo/nl-nl/contact-us
 BGL BNP Paribas	LU	Bank	UCITS ETFs / ETCs	https://www.bgl.lu/fr/particuliers/investir/investir-en-ligne.html	
 Swissquote Bank Europe	LU	Bank	Global ETFs / ETPs	https://www.swissquote.com/en-lu/private	
 Spuerkeess (S-Net Invest)	LU	Bank	UCITS ETFs / ETCs	https://www.spuerkeess.lu/en/private-customers/saving-and-investing/invest-by-yourself/	
@@ -176,9 +181,10 @@ Banque de Luxembourg	LU	Bank	UCITS ETFs / ETCs	https://www.banquedeluxembourg.co
 Banque Raiffeisen	LU	Bank	UCITS ETFs / ETCs	https://www.raiffeisen.lu/en	
 Banque Internationale à Luxembourg	LU	Bank	Global ETFs / ETPs	https://www.bil.com/static/devenir-client/ouvrir-compte-bancaire.html	contact@bil.com
 WH SelfInvest	LU	Broker	Global ETFs / ETPs	https://www.whselfinvest.lu/en-lu/trading/information/clients/relationship	info@whselfinvest.fr
+WH SelfInvest	LU	Broker	Global ETFs / ETPs	https://www.whselfinvest.com/en-lu/trading/information/clients/relationship	info@whselfinvest.fr
 Bolero (KBC)	BE	Bank	UCITS ETFs / ETCs	https://www.bolero.be/nl/word-client	https://www.bolero.be/nl/support
 Keytrade Bank	BE	Bank	UCITS ETFs / ETCs	https://www.keytradebank.be/en/	info@keytradebank.com
-MeDirect	BE	Bank	UCITS ETFs / ETCs	https://www.medirect.be	https://www.medirect.be/contact/
+MeDirect	BE	Bank	UCITS ETFs / ETCs	https://www.medirect.be/	https://www.medirect.be/contact/
 Belfius (Re=Bel)	BE	Bank	UCITS ETFs / ETCs	https://www.belfius.be/retail/nl/producten/sparen-beleggen/rebel/index.aspx	
 BNP Paribas Fortis	BE	Bank	UCITS ETFs / ETCs	https://www.bnpparibasfortis.be/nl/public/particulieren/sparen-en-beleggen/zelf-online-beleggen	
 Argenta	BE	Bank	UCITS ETFs / ETCs	https://www.argenta.be/nl/beleggen/beleggingsplan.html	
@@ -214,6 +220,7 @@ Fideuram Direct	IT	Bank	UCITS ETFs / ETCs	https://www.fideuramdirect.it/it/cta/a
 Widiba	IT	Bank	UCITS ETFs / ETCs	https://www.widiba.it/banca-online/risparmio-e-investimenti/prodotti-di-investimento/widiba-trading	https://www.widiba.it/banca-online/siamo-a-tua-disposizione/contatti-e-assistenza
 Mediobanca Premier (CheBanca!)	IT	Bank	UCITS ETFs / ETCs	https://www.mediobancapremier.com/public/header/diventa-cliente/100-online	https://www.mediobancapremier.com/public/header/contatti
 BG Saxo SIM	IT	Broker	Global ETFs / ETPs	https://www.bgsaxo.it/accounts/individual	https://www.bgsaxo.it/contact-us
+BG Saxo SIM	IT	Broker	Global ETFs / ETPs	https://www.home.saxo/it-it/accounts/individual	https://www.bgsaxo.it/contact-us
 Banca Generali	IT	Bank	UCITS ETFs / ETCs	https://www.bancageneraliprivate.it/prodotti/conto-corrente/bg-piu	
 BancoPosta	IT	Bank	UCITS ETFs / ETCs	https://www.poste.it/investi-con-poste-italiane	
 UniCredit	IT	Bank	Global ETFs / ETPs	https://www.unicredit.it/it/privati/investimenti-e-risparmio/tutti-gli-investimenti/investi-online/conto-titoli-come-aprirlo.html	
@@ -221,10 +228,12 @@ BPER Banca	IT	Bank	UCITS ETFs / ETCs	https://www.bper.it/privati/servizi-digital
 Banca Mediolanum	IT	Bank	UCITS ETFs / ETCs	https://www.bancamediolanum.it/investimenti-online/trading/	negoziazionetitoli@mediolanum.it
 Credem	IT	Bank	UCITS ETFs / ETCs	https://www.credem.it/content/credem/it/privati-e-famiglie/conti-servizi-e-carte/servizi_online/trading_online.html	https://www.credem.it/content/credem/it/contatti.html
 IWBank	IT	Bank	UCITS ETFs / ETCs	https://www.iwbank.it/	
+IWBank	IT	Bank	UCITS ETFs / ETCs	https://www.fideuramdirect.it/	
 Renta 4 Banco	ES	Bank	UCITS ETFs / ETCs	https://www.r4.com/hazte-cliente	clientes@renta4.es
 Bankinter	ES	Bank	UCITS ETFs / ETCs	https://www.bankinter.com/banca/ahorro-inversion/inversion/broker	
 BBVA Trader Bolsa	ES	Bank	UCITS ETFs / ETCs	https://www.bbva.es/personas/productos/bolsa/cuenta-de-valores.html	
 CaixaBank Bolsa	ES	Bank	UCITS ETFs / ETCs	https://www.caixabank.es/particular/bolsa-mercados/acciones.html	https://www.caixabank.es/particular/contacto/contactanos_es.html
+CaixaBank Bolsa	ES	Bank	UCITS ETFs / ETCs	https://www.caixabank.cat/particular/borsa-mercats/accions.html	https://www.caixabank.es/particular/contacto/contactanos_es.html
 Openbank	ES	Bank	UCITS ETFs / ETCs	https://www.openbank.es/inversiones/invertir-bolsa-valores	
 MyInvestor	ES	Neobroker	UCITS ETFs / ETCs	https://myinvestor.es/inversion/broker	
 Singular Bank (SelfBank)	ES	Bank	UCITS ETFs / ETCs	https://www.selfbank.es/	informacion@selfbank.es
@@ -260,7 +269,6 @@ Lunar Invest	DK	Neobroker	UCITS ETFs / ETCs	https://www.lunar.app/dk/privat/inve
 Nykredit	DK	Bank	UCITS ETFs / ETCs	https://www.nykredit.dk/dit-liv/formue/investering/	
 Nordea Danmark	DK	Bank	Global ETFs / ETPs	https://www.nordea.dk/privat/produkter/investering/	https://www.nordea.dk/privat/kontakt-os.html
 Spar Nord	DK	Bank	UCITS ETFs / ETCs	https://www.sparnord.dk/dit-liv/formue/investering/investeringsstrategi/du-investerer-selv/	
-Nordnet	SE	Broker	UCITS ETFs / ETCs	https://www.nordnet.se/kom-igang	
 Avanza	SE	Broker	UCITS ETFs / ETCs	https://www.avanza.se/bli-kund.html	
 SEB	SE	Bank	UCITS ETFs / ETCs	https://seb.se/privat/spara-och-investera/aktier-och-vardepapper/handla-med-aktier	
 Swedbank	SE	Bank	UCITS ETFs / ETCs	https://www.swedbank.se/privat/spara-och-placera/investeringssparkonto.html	https://www.swedbank.se/om-oss/kontakta-oss/kontor.html
@@ -272,7 +280,7 @@ Nordea Sverige	SE	Bank	Global ETFs / ETPs	https://www.nordea.se/privat/produkter
 SAVR	SE	Neobroker	UCITS ETFs / ETCs	https://savr.com/sv/etf	info@savr.com
 DNB	NO	Bank	UCITS ETFs / ETCs	https://www.dnb.no/markets/aksjer/aksjehandel-privat	irt@dnb.no
 Pareto Securities	NO	Broker	UCITS ETFs / ETCs	https://paretosec.no/bli-kunde	clientservice.no@paretosec.com
-SpareBank 1	NO	Bank	UCITS ETFs / ETCs	https://www.sparebank1.no/nb/bank/privat/sparing/investering/aksjehandel.html	
+SpareBank	NO	Bank	UCITS ETFs / ETCs	https://www.sparebank1.no/nb/bank/privat/sparing/investering/aksjehandel.html	
 Nordea Norge	NO	Bank	Global ETFs / ETPs	https://www.nordea.no/privat/vare-produkter/sparing-og-investering/aksjer/aksjesparekonto.html	https://www.nordea.no/privat/vare-produkter/nettbank-og-mobilbank/kontakt-og-meldinger.html
 Norne Securities	NO	Broker	UCITS ETFs / ETCs	https://norne.no/aksjehandel/	https://norne.no/kontakt-oss/
 OP Ryhmä	FI	Bank	UCITS ETFs / ETCs	https://www.op.fi/henkiloasiakkaat/saastot-ja-sijoitukset/osakesijoitukset/arvo-osuustili	
@@ -303,6 +311,7 @@ Patria Finance	CZ	Broker	UCITS ETFs / ETCs	https://finance.patria.cz/otevrit-uce
 Komerční banka	CZ	Bank	UCITS ETFs / ETCs	https://www.kb.cz/cs/obcane/investice	https://www.kb.cz/cs/o-bance/kontakty
 ČSOB	CZ	Bank	UCITS ETFs / ETCs	https://www.csob.cz/lide/investicni-produkty/investovani-s-patria-finance	
 Wood & Company	CZ	Broker	Global ETFs / ETPs	https://wood.cz/	info@wood.cz
+Wood & Company	CZ	Broker	Global ETFs / ETPs	https://wood.com/	info@wood.cz
 Cyrrus	CZ	Broker	UCITS ETFs / ETCs	https://cyrrus.cz/	
 Raiffeisenbank ČR	CZ	Bank	UCITS ETFs / ETCs	https://www.rb.cz/osobni/zhodnoceni-uspor/investice	https://www.rb.cz/informacni-servis/platebni-styk/tuzemske-platby/platba-na-kontakt
 Slovenská sporiteľňa	SK	Bank	UCITS ETFs / ETCs	https://www.slsp.sk/sk/ludia/investovanie	
@@ -364,7 +373,7 @@ Trading 212 Markets	CY	Neobroker	UCITS ETFs / ETCs	https://www.trading212.com/
 Plum Money CY	CY	Neobroker	UCITS ETFs / ETCs	https://withplum.com/	
 XTB Cyprus	CY	Broker	UCITS ETFs / ETCs	https://www.xtb.com/cy	
 Moneybase	MT	Neobroker	Global ETFs / ETPs	https://moneybase.com/invest	
-MeDirect Bank Malta	MT	Bank	UCITS ETFs / ETCs	https://www.medirect.com.mt/invest/	customerservice@medirect.com.mt
+MeDirect Bank Malta	MT	Bank	UCITS ETFs / ETCs	https://www.medirect.com.mt/	customerservice@medirect.com.mt
 Exante	MT	Broker	Global ETFs / ETPs	https://exante.eu/individual-investors/	support@exante.eu
 Swissquote Financial Services	MT	Broker	Global ETFs / ETPs	https://www.swissquote.com/	
 Sarwa	AE	Neobroker	US ETFs / ETNs	https://www.sarwa.co/en	
@@ -405,6 +414,7 @@ Qatar Securities Company	QA	Broker	Global ETFs / ETPs	https://qatar-securities.c
 Ahli Brokerage Company	QA	Bank	Global ETFs / ETPs	https://www.ahlibrokerage.com.qa/AccountOpening.aspx	https://www.ahlibrokerage.com.qa/Contactus.aspx
 NBK Capital	KW	Bank	Local-market ETFs	https://brokerage.nbk.com/	
 National Investments Company / NICTRADE	KW	Broker	Global ETFs / ETPs	https://www.nic.com.kw/our-services/online-trading/	
+National Investments Company / NICTRADE	KW	Broker	Global ETFs / ETPs	https://www.ninv.com/	
 Boubyan	KW	Broker	Global ETFs / ETPs	https://boubyancapital.com/brokerage/	
 SICO	BH	Bank	Local-market ETFs	https://sicobank.com	https://sicobank.com/en/contact-us
 Mubasher Capital Bahrain	BH	Broker	Global ETFs / ETPs	https://mubashercapital.com/	global@mubashercapital.com
@@ -445,6 +455,7 @@ Cowrywise	NG	Neobroker	Local-market ETFs	https://cowrywise.com/stocks
 Trove Finance	NG	Neobroker	US ETFs / ETNs	https://trovefinance.com/	
 Hisa Nigeria (formerly Chaka)	NG	Neobroker	Local + US ETFs	https://hisa.co/	
 Stanbic IBTC Stockbrokers	NG	Bank	Local-market ETFs	https://www.sislbrokerage.com/IW/NewAccount/Account	
+Stanbic IBTC Stockbrokers	NG	Bank	Local-market ETFs	https://www.stanbicibtcstockbrokers.com/nigeriastockbroking/stockbroking	
 Meristem Securities / MeriTrade	NG	Broker	Local-market ETFs	https://meritrade.com/	
 Vetiva Securities	NG	Broker	Local-market ETFs	https://www.vetiva.com/page/securities-brokerage-and-dealing	info@vetiva.com
 CardinalStone Securities	NG	Broker	Local-market ETFs	https://cardinalstonesecurities.com/equities/	https://cardinalstonesecurities.com/contact-us/
@@ -518,6 +529,7 @@ DBS Vickers	SG	Bank	Global ETFs / ETPs	https://www.dbs.com.sg/personal/investmen
 OCBC Securities (iOCBC)	SG	Bank	Global ETFs / ETPs	https://www.iocbc.com/accounts/basic-securities-trading-account	
 UOB Kay Hian	SG	Broker	Global ETFs / ETPs	https://uobkh.com.sg	
 Phillip POEMS	SG	Broker	Global ETFs / ETPs	https://www.poems.com.sg/open-an-account/	apu@phillip.com.sg
+Phillip POEMS	SG	Broker	Global ETFs / ETPs	https://www.phillip.com.sg/	apu@phillip.com.sg
 FSMOne	SG	Broker	Global ETFs / ETPs	https://fsm.global/sg	
 Tiger Brokers SG	SG	Neobroker	Global ETFs / ETPs	https://www.itiger.com/sg/	service@tigerbrokers.com
 moomoo SG	SG	Neobroker	Global ETFs / ETPs	https://www.moomoo.com/sg	
@@ -532,12 +544,14 @@ Syfe	SG	Neobroker	Global ETFs / ETPs	https://www.syfe.com/create-account
 Maybank Securities Singapore	SG	Bank	Global ETFs / ETPs	https://www.maybank.com/investment-banking/sg/services/trading/etf.page	https://www.maybank.com/investment-banking/sg/contact/contact_us.page
 KGI Securities Singapore	SG	Broker	Global ETFs / ETPs	https://www.kgi.sg/securities/stocks	
 Futu / moomoo HK	HK	Neobroker	Global ETFs / ETPs	https://www.futuhk.com/en	
+Futu / moomoo HK	HK	Neobroker	Global ETFs / ETPs	https://www.futunn.com/en	
 Tiger Brokers HK	HK	Neobroker	Global ETFs / ETPs	https://www.itiger.com/hk/	service@tigerbrokers.com
 Webull Hong Kong	HK	Neobroker	Global ETFs / ETPs	https://www.webull.hk/	service@webull.hk
 Interactive Brokers Hong Kong	HK	Broker	Global ETFs / ETPs	https://www.interactivebrokers.com.hk/	https://www.interactivebrokers.com/en/general/contact/newContact/contact.php
 Swissquote Asia	HK	Broker	Global ETFs / ETPs	https://www.swissquote.com/	
 Bright Smart Securities	HK	Broker	Global ETFs / ETPs	https://www.bsgroup.com.hk/account/app	online@bsgroup.com.hk
 uSMART	HK	Neobroker	Global ETFs / ETPs	https://www.usmart.hk/en	
+uSMART	HK	Neobroker	Global ETFs / ETPs	https://hk.usmartglobal.com/en	
 Longbridge	HK	Neobroker	Global ETFs / ETPs	https://longbridge.com/hk	service@longbridge.hk
 HSBC HK	HK	Bank	Global ETFs / ETPs	https://www.hsbc.com.hk/investments/account-opening/	https://www.hsbc.com.hk/help/card-support/credit-limit-change/documents-upload/
 Hang Seng Bank	HK	Bank	Global ETFs / ETPs	https://www.hangseng.com/en-hk/personal/investment/securities-services/	https://www.hangseng.com/en-hk/contact/branch-addresses/
@@ -572,6 +586,7 @@ Samsung Securities	KR	Broker	Local + US ETFs	https://www.samsungpop.com/ux/kor/c
 NH Investment & Securities	KR	Broker	Local-market ETFs	https://www.nhsec.com/	
 KB Securities	KR	Broker	Local-market ETFs	https://www.kbsec.com/go.able?linkcd=m06010000	
 Korea Investment & Securities	KR	Broker	Local + US ETFs	https://www.truefriend.com/	
+Korea Investment & Securities	KR	Broker	Local + US ETFs	https://securities.koreainvestment.com/main/Main.jsp	
 Toss	KR	Neobroker	Local + US ETFs	https://www.tossinvest.com/	
 Shinhan Securities	KR	Broker	Global ETFs / ETPs	https://www.shinhansec.com	
 Hana Securities	KR	Broker	Global ETFs / ETPs	https://www.hanaw.com	
@@ -627,6 +642,7 @@ Choice	IN	Broker	Local-market ETFs	https://choiceindia.com/	care@choiceindia.com
 Religare Broking	IN	Broker	Local-market ETFs	https://www.religareonline.com/	
 SMC Global	IN	Broker	Local-market ETFs	https://smcindiaonline.com/	dp@smcindiaonline.com
 Ventura Securities	IN	Broker	Local-market ETFs	https://www.ventura1.com/	
+Ventura Securities	IN	Broker	Local-market ETFs	https://www.venturasecurities.com/	
 Aditya Birla Money	IN	Broker	Local-market ETFs	https://www.adityabirlamoney.com/	
 Prabhudas Lilladher	IN	Broker	Local-market ETFs	https://www.plindia.com/	
 Tradejini	IN	Broker	Local-market ETFs	https://www.tradejini.com/	help@tradejini.com
@@ -743,6 +759,7 @@ Allaria	AR	Broker	Local + US ETFs	https://allaria.com.ar/
 Eco Valores	AR	Broker	Local + US ETFs	https://www.ecovalores.com.ar/preguntas-frecuentes.php	
 Racional	CL	Neobroker	US ETFs / ETNs	https://racional.cl/	
 BICE Inversiones	CL	Bank	Local + US ETFs	https://biceinversiones.cl/	
+BICE Inversiones	CL	Bank	Local + US ETFs	https://banco.bice.cl/inversiones	
 Banchile Inversiones	CL	Bank	Local-market ETFs	https://sitiospublicos.bancochile.cl/banchileinversiones	SERVICIOALCLIENTE@BANCHILE.CL
 Renta 4 Chile	CL	Broker	Local + US ETFs	https://www.renta4.cl/por-que-renta4/como-hacerse-cliente	https://www.renta4.cl/que-necesitas/contactanos
 BancoEstado Corredores de Bolsa	CL	Bank	Local-market ETFs	https://www.bancoestado.cl/content/bancoestado-public/cl/es/home/home/productos-/ahorro-e-inversiones-/corredora-de-bolsa---bancoestado-personas.html	
@@ -798,6 +815,7 @@ China Merchants Securities	CN	Broker	Local-market ETFs	https://www.cmschina.com
 Guotai Haitong Securities	CN	Broker	Local-market ETFs	https://www.gtht.com	
 GF Securities	CN	Broker	Local-market ETFs	https://www.gf.com.cn/	
 East Money Securities	CN	Neobroker	Local-market ETFs	https://kh.eastmoney.com/Account/Step1	
+East Money Securities	CN	Neobroker	Local-market ETFs	https://www.18.cn/	
 Ping An Securities	CN	Broker	Local-market ETFs	https://stock.pingan.com/	
 Guosen Securities	CN	Broker	Local-market ETFs	https://www.guosen.com.cn/gs/openaccount/	
 CICC Wealth Management	CN	Broker	Local-market ETFs	https://www.ciccwm.com/ciccwmweb/zzt/advsixpc.html	

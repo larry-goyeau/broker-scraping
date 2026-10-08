@@ -13,7 +13,8 @@
 //   floor, so none is added.
 //   Custody               0.27 dong a share a month. The months are
 //                         not an input, so it stays in the remark.
-//   HOSE, HNX, UPCoM      no book is published here
+//   HOSE, UPCOM           the BSC board, read by spreads/vn-touch.mjs
+//   HNX                   no book is published here
 //
 //   node brokers/vps/vps_cost.mjs VNM HOSE VND --shares=10 --price=57300
 //

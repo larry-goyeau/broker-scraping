@@ -589,15 +589,12 @@ async function processTickers(tickers, label) {
       const kind = catalogueKind(toIsin(info.issue_nb), ticker, info);
       const type = listingType(info, kind);
       const permission = permissions[ticker];
+      // A halt is not a book: nobody can buy the name, so it is not written.
+      // A professional-investor or KID gate still is: a non-EU retail client can.
       const halted = permission?.reject_code === "instrument_unavailable" && !residencyRestriction(permission);
       if (!halted && (residencyRestriction(permission) || isUsTracker(info, ticker, type))) {
         keepRow(info, ticker, { notEuResident: true });
-        continue;
       }
-      // Istanbul, Warsaw and Kazakhstan are on the public book. This account's
-      // ticket often says trading is temporarily unavailable, which is a listed
-      // name, not a miss.
-      if (/\.(?:TR|WSE\.EU|KZ)$/i.test(ticker)) keepRow(info, ticker);
     }
 
     save();

@@ -26,10 +26,12 @@
 //             and 1 % of value (min $2) + settlement / SEC / TAF / CAT
 //
 // HKEX, ASX, SGX and Stock Connect sit on the same cards with their own
-// floors. HK's $0 commission + HKD 15 platform is the printed live
-// schedule (standard 0.029 % stays in the remark). AU / NZ first-funding
-// four free trades stay in the remark. Fractional under one share is not
-// this trip (the page asks for ten).
+// floors, except the Hong Kong card, which prices US, HKEX, Stock Connect
+// and SGX and has no ASX line. That market is not offered there. HK's $0
+// commission + HKD 15 platform is the printed live schedule (standard
+// 0.029 % stays in the remark). AU / NZ first-funding four free trades
+// stay in the remark. Fractional under one share is not this trip (the
+// page asks for ten).
 //
 // SEC / TAF use the current levies where the card names them. AU's US
 // card prints SEC $0 and CAT $0 and those stay $0. Stamp / FTT from
@@ -460,6 +462,9 @@ export function roundTrip({
   if (!billed) {
     return {
       ...shared,
+      // The Hong Kong card has no ASX line. Leaving the row up prints three
+      // unknowns for a market that company does not sell.
+      onlineBuy: !(entity === "hk" && market === "asx"),
       why: `pas de barème Tiger ${entity} pour ${market}`,
       confidence: confidenceOf({ entity, market, listing, leaf, marketBp, marketPerShare, unsourced: m.unsourced, taxPct }),
     };

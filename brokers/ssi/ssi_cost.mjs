@@ -20,7 +20,8 @@
 //                         The months are not an input, so it stays in
 //                         the remark.
 //                         https://www.ssi.com.vn/khach-hang-ca-nhan/bieu-phi/bieu-gia-dich-vu-luu-ky
-//   HOSE, HNX, UPCoM      no book is published here
+//   HOSE, UPCOM           the BSC board, read by spreads/vn-touch.mjs
+//   HNX                   no book is published here
 //
 //   node brokers/ssi/ssi_cost.mjs VNM HOSE VND --shares=10 --price=57300
 //

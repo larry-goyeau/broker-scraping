@@ -10,8 +10,10 @@
 // the NewConnect company list and the GPW ETF list, and the 30 June 2026
 // communiqué prices every ETF, ETC and ETN listed on the Warsaw exchange.
 // Bankier tags every Warsaw ETP as "etf"; the symbol prefix is the product.
-// GlobalConnect is named on the same page. Bankier prints those names and
-// not the ISIN, and the exchange site is read when it answers.
+// GlobalConnect is named on the same page. Bankier prints the short name
+// and not the ISIN. The ticker and the ISIN are the Stooq quote for that
+// line, read on 2026-10-06. A short name on the board that is not in that
+// set is an error. A name that has left the board is left out.
 //
 //   https://www.aliorbank.pl/biuro-maklerskie/gielda/rynki-zagraniczne.html
 //   https://www.aliorbank.pl/biuro-maklerskie/gielda/rachunek-brokerski.html
@@ -32,7 +34,65 @@ const SHARE_BOARD = "https://www.bankier.pl/gielda/notowania/akcje";
 const NC_BOARD = "https://www.bankier.pl/gielda/notowania/new-connect";
 const ETF_BOARD = "https://www.bankier.pl/gielda/notowania/etf";
 const GC_BOARD = "https://www.bankier.pl/gielda/notowania/global-connect";
-const GC_PAGE = "https://gpwglobalconnect.pl/spolki";
+
+// Short name on the Bankier board, ticker and ISIN on the Stooq quote.
+const GLOBAL_CONNECT = [
+  ["ADIDAS", "ADS", "DE000A1EWWW0", "Adidas", "STOCK"],
+  ["ADVANCED", "AMD", "US0079031078", "Advanced", "STOCK"],
+  ["ALLIANZ", "ALV", "DE0008404005", "Allianz", "STOCK"],
+  ["ALPHABET", "GOGL", "US02079K3059", "Alphabet", "STOCK"],
+  ["AMAZON", "AMZN", "US0231351067", "Amazon", "STOCK"],
+  ["APPLE", "AAPL", "US0378331005", "Apple", "STOCK"],
+  ["ASML", "ASML", "NL0010273215", "ASML", "STOCK"],
+  ["BAYER", "BAY", "DE000BAY0017", "Bayer", "STOCK"],
+  ["BERKSHIRE", "BRKB", "US0846707026", "Berkshire", "STOCK"],
+  ["BMW", "BMW", "DE0005190003", "BMW", "STOCK"],
+  ["BOEING", "BOEG", "US0970231058", "Boeing", "STOCK"],
+  ["CARLSBERG", "CARL", "DK0010181759", "Carlsberg", "STOCK"],
+  ["COCACOLA", "COLA", "US1912161007", "Cocacola", "STOCK"],
+  ["ELILILLY", "LILY", "US5324571083", "Elililly", "STOCK"],
+  ["EXXONMOB", "EXXN", "US30233Q1085", "Exxonmob", "STOCK"],
+  ["HANDM", "HANM", "SE0000106270", "Handm", "STOCK"],
+  ["INDITEX", "ITX", "ES0148396007", "Inditex", "STOCK"],
+  ["INPOST", "INPT", "LU2290522684", "Inpost", "STOCK"],
+  ["INTEL", "INTL", "US4581401001", "Intel", "STOCK"],
+  ["JERONIMO", "JMT", "PTJMT0AE0001", "Jeronimo", "STOCK"],
+  ["JPMORGAN", "JPM", "US46625H1005", "Jpmorgan", "STOCK"],
+  ["MCDONALDS", "MCDL", "US5801351017", "Mcdonalds", "STOCK"],
+  ["MERCEDES", "MBG", "DE0007100000", "Mercedes", "STOCK"],
+  ["META", "META", "US30303M1027", "META", "STOCK"],
+  ["MICRONTEC", "MCRN", "US5951121038", "Microntec", "STOCK"],
+  ["MICROSOFT", "MSFT", "US5949181045", "Microsoft", "STOCK"],
+  ["NETFLIX", "NFLX", "US64110L1061", "Netflix", "STOCK"],
+  ["NIKE", "NIKE", "US6541061031", "NIKE", "STOCK"],
+  ["NVIDIA", "NVDA", "US67066G1040", "Nvidia", "STOCK"],
+  ["NVONORDSK", "NVO", "DK0062498333", "Nvonordsk", "STOCK"],
+  ["ORACLE", "ORCL", "US68389X1054", "Oracle", "STOCK"],
+  ["PALANTIR", "PLTR", "US69608A1088", "Palantir", "STOCK"],
+  ["PORSCHE", "PSHE", "DE000PAH0038", "Porsche", "STOCK"],
+  ["PROCTER", "PCGL", "US7427181091", "Procter", "STOCK"],
+  ["PROSUS", "PRX", "NL0013654783", "Prosus", "STOCK"],
+  ["RHEINMET", "RHM", "DE0007030009", "Rheinmet", "STOCK"],
+  ["ROBINHOOD", "HOOD", "US7707001027", "Robinhood", "STOCK"],
+  ["RWE", "RWE", "DE0007037129", "RWE", "STOCK"],
+  ["SAP", "SAP", "DE0007164600", "SAP", "STOCK"],
+  ["SIEMENS", "SIE", "DE0007236101", "Siemens", "STOCK"],
+  ["SPACEEXPL", "SPCX", "US84615Q1031", "Spaceexpl", "STOCK"],
+  ["TAKETWO", "TTWO", "US8740541094", "Taketwo", "STOCK"],
+  ["TESLA", "TSLA", "US88160R1014", "Tesla", "STOCK"],
+  ["UBER", "UBER", "US90353T1007", "UBER", "STOCK"],
+  ["VESTAS", "VEST", "DK0061539921", "Vestas", "STOCK"],
+  ["VISA", "VISA", "US92826C8394", "VISA", "STOCK"],
+  ["VOLKSWAGEN", "VOW", "DE0007664039", "Volkswagen", "STOCK"],
+  ["VOLVO", "VOLV", "SE0000115446", "Volvo", "STOCK"],
+  ["ZALANDO", "ZAL", "DE000ZAL1111", "Zalando", "STOCK"],
+  ["ETFAIFS", "ETFAIFS", "IE000X59ZHE2", "iShares AI Infrastructure UCITS ETF", "ETF"],
+  ["ETFEUNM", "ETFEUNM", "IE00B4L5YC18", "iShares MSCI EM UCITS ETF", "ETF"],
+  ["ETFISIJPA", "ETFISIJPA", "IE00B4L5YX21", "iShares Core MSCI Japan IMI UCITS ETF", "ETF"],
+  ["ETFIWDA", "ETFIWDA", "IE00B4L5Y983", "iShares Core MSCI World UCITS ETF", "ETF"],
+  ["ETFSLVR", "ETFSLVR", "IE000UL6CLP7", "Global X Silver Miners UCITS ETF", "ETF"],
+  ["ETFV60A", "ETFV60A", "IE00BMVB5P51", "Vanguard LifeStrategy 60% Equity UCITS ETF", "ETF"],
+];
 
 const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
 
@@ -285,35 +345,28 @@ async function warsawRows() {
 
 function globalConnectNames(html) {
   const body = html.split("<tbody>")[1]?.split("</tbody>")[0] ?? "";
-  return [...body.matchAll(/<tr[^>]*>\s*<td>([^<]+)<\/td>/g)].map((match) => normalize(match[1])).filter(Boolean);
+  const names = [];
+  for (const row of body.matchAll(/<tr[^>]*>([\s\S]*?)<\/tr>/g)) {
+    const cell = row[1].match(/<td>([\s\S]*?)<\/td>/);
+    if (!cell) continue;
+    const name = normalize(cell[1]).toUpperCase();
+    if (name) names.push(name);
+  }
+  return [...new Set(names)];
 }
 
 async function globalConnectRows() {
   const board = await fetch(GC_BOARD, { headers: { "user-agent": UA } });
   if (!board.ok) throw new Error(`GlobalConnect board answered ${board.status}`);
-  const names = globalConnectNames(await board.text());
-  let page = "";
-  try {
-    const response = await fetch(GC_PAGE, { headers: { "User-Agent": UA }, signal: AbortSignal.timeout(20_000) });
-    if (response.ok) page = await response.text();
-  } catch {
-    page = "";
-  }
-  const results = [];
-  if (!page) {
-    console.error(`GlobalConnect ${names.length} names on Bankier, ${GC_PAGE} did not answer, no ISIN written`);
-    return results;
-  }
-  for (const name of [...new Set(names)]) {
-    const needle = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const near = page.match(new RegExp(`${needle}[\\s\\S]{0,400}?\\b([A-Z]{2}[A-Z0-9]{9}\\d)\\b|\\b([A-Z]{2}[A-Z0-9]{9}\\d)\\b[\\s\\S]{0,400}?${needle}`, "i"));
-    const isin = toIsin(near?.[1] || near?.[2]);
-    if (!isin) continue;
-    results.push(rowOf({ isin, ticker: name.toUpperCase(), name, exchange: "GlobalConnect", currency: "PLN", type: /^ETF/i.test(name) ? "ETF" : "STOCK" }));
-  }
-  const missed = names.filter((name) => !results.some((row) => row.name === name));
-  if (missed.length) console.error(`GlobalConnect without an ISIN: ${missed.join(", ")}`);
-  return results;
+  const quoted = new Set(globalConnectNames(await board.text()));
+  if (quoted.size < 50) throw new Error(`GlobalConnect board is short: ${quoted.size}`);
+  const known = new Map(GLOBAL_CONNECT.map((row) => [row[0], row]));
+  const missing = [...quoted].filter((name) => !known.has(name));
+  if (missing.length) throw new Error(`GlobalConnect name with no ISIN: ${missing.join(", ")}`);
+  return [...quoted].map((name) => {
+    const [, ticker, isin, label, type] = known.get(name);
+    return rowOf({ isin, ticker, name: label, exchange: "GlobalConnect", currency: "PLN", type });
+  });
 }
 
 const urls = await catalogueUrls();

@@ -54,7 +54,23 @@
 // (account DUR224479) previewed PKO and ETFBCASH on WSE and nothing was
 // sent. One share and a hundred shares asked for 15 PLN. A thousand shares
 // asked for 0.10 % of the consideration (118.58 PLN on PKO at 118.58,
-// 146.98 PLN on ETFBCASH at 146.98). KRX is not on the card either. The portal cash check on 122450,
+// 146.98 PLN on ETFBCASH at 146.98). Copenhagen is not on the card
+// either. On 2026-10-07 the open portal previewed EMBLA on CPH and
+// nothing was sent. One share and 3 500 shares asked for 49 DKK.
+// 3 600 shares at 27.85 asked for 50.13 DKK, which is 0.05 % of
+// 100 260. 50 000 shares asked for 696.25 DKK, still 0.05 %. No cap
+// appeared. Prague is not on the card either. On 2026-10-08 the open
+// portal previewed CEZ routed to PRA and nothing was sent. One share
+// and ten shares at 1 332 asked for 70 CZK. 100 shares asked for
+// 199.80 CZK, which is 0.15 % of 133 200. 1 000 shares asked for
+// 1 998 CZK, still 0.15 %. No cap appeared. That is IBKR fixed for the
+// Czech Republic. The spread is not on this ticket. Helsinki is not on
+// the card either. On 2026-10-08 the open portal previewed NOKIA routed
+// to HEX and nothing was sent. One, 20, 100 and 500 shares at 9.26
+// asked for 3 EUR. 2 000 shares asked for 9.26 EUR, which is 0.05 % of
+// 18 520. 20 000 shares asked for 92.60 EUR, still 0.05 %. No cap
+// appeared. That is IBKR fixed for western Europe. KRX is not on the
+// card either. The portal cash check on 122450,
 // 2026-09-28, named it: 100 shares at 2 550 asked for 170.90 EUR, and
 // 3 000 shares asked for 5 050.90 EUR. That is 4 000 KRW, then 4 590 KRW,
 // which is 0.06 %, not the 0.09 % of the other rows. No order was sent.
@@ -173,6 +189,14 @@ const RULE = {
   my: { rate: 0.0008, min: 12, ccy: "MYR" },
   // Not on the card. Portal preview of PKO and ETFBCASH, 2026-10-05.
   wse: { rate: 0.001, min: 15, ccy: "PLN" },
+  // Not on the card. Portal preview of EMBLA on CPH, 2026-10-07.
+  cph: { rate: 0.0005, min: 49, ccy: "DKK" },
+  // Not on the card. Portal preview of CEZ on PRA, 2026-10-08.
+  // IBKR fixed: 0.15 %, minimum 70 CZK, no cap.
+  pra: { rate: 0.0015, min: 70, ccy: "CZK" },
+  // Not on the card. Portal preview of NOKIA on HEX, 2026-10-08.
+  // IBKR fixed western Europe: 0.05 %, minimum 3 EUR, no cap seen.
+  hel: { rate: 0.0005, min: 3, ccy: "EUR" },
   // Not on the card. IBKR tier I for an SGD listing, read 2026-10-06.
   sg: { rate: 0.0008, min: 2.5, ccy: "SGD" },
 };
@@ -258,6 +282,9 @@ export function feeMarketOf(exchange, mic, currency) {
   if (code === "KRX") return "kr";
   if ((code === "BURSAMY" || code === "BURSA" || m === "XKLS") && (!ccy || ccy === "MYR")) return "my";
   if (code === "WSE" || m === "XWAR") return "wse";
+  if (code === "CPH" || m === "XCSE") return "cph";
+  if (code === "PRA" || m === "XPRA") return "pra";
+  if (code === "HEX" || m === "XHEL") return "hel";
   if ((code === "SGX" || code === "SGXST" || m === "XSES") && (!ccy || ccy === "SGD")) return "sg";
   return null;
 }
@@ -490,8 +517,18 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   }
 
   if (!rule) {
+    // The commission stays N/A. The book, when it was measured, still has to
+    // reach the spread column: that needs the trade the page converts with.
+    const n = Number(shares);
+    const p = Number(price);
+    const notional = n > 0 && p > 0 ? nativeAmount(n, p, listing.currency) : null;
+    const settle = listing.currency === "GBX" ? "GBP" : listing.currency;
+    const notionalUsd = notional == null ? null : dollars(notional, settle);
     return {
       ...shared,
+      ...(notional != null
+        ? { trade: { shares: n, price: p, notional, notionalUsd: finite(notionalUsd, 6), currency: listing.currency } }
+        : {}),
       remark: [shared.remark, "No published commission for this exchange."].filter(Boolean).join("\n"),
       basis: `aucun palier publié pour ${listing.brokerExchange || listing.exchange || "cette place"} chez WH SelfInvest`,
       why:
@@ -507,6 +544,10 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
         ? `barème WH SelfInvest ${market}, aperçu du portail le 2026-10-02 : `
         : market === "wse"
           ? `barème WH SelfInvest ${market}, aperçu du portail le 2026-10-05 : `
+          : market === "cph"
+            ? `barème WH SelfInvest ${market}, aperçu du portail le 2026-10-07 : `
+            : market === "pra" || market === "hel"
+              ? `barème WH SelfInvest ${market}, aperçu du portail le 2026-10-08 : `
           : market === "sg"
             ? `barème WH SelfInvest ${market}, palier IBKR I relu le 2026-10-06 : `
             : `barème WH SelfInvest ${market}, relu le ${SCHEDULE.readOn} : `) +
@@ -655,9 +696,15 @@ function confidenceOf({
   said.push(
     (market === "kr"
       ? `commission WH SelfInvest, palier ${market}, lue le 2026-09-28 sur le contrôle de trésorerie du portail, `
-      : market === "my"
+        : market === "my"
         ? `commission WH SelfInvest, palier ${market}, aperçu 3REN sur BURSAMY le 2026-10-02, `
-        : `commission WH SelfInvest, palier ${market}, lue le ${SCHEDULE.readOn} sur la carte all-exchanges, `) +
+        : market === "cph"
+          ? `commission WH SelfInvest, palier ${market}, aperçu EMBLA sur CPH le 2026-10-07, `
+          : market === "pra"
+            ? `commission WH SelfInvest, palier ${market}, aperçu CEZ sur PRA le 2026-10-08, `
+            : market === "hel"
+              ? `commission WH SelfInvest, palier ${market}, aperçu NOKIA sur HEX le 2026-10-08, `
+              : `commission WH SelfInvest, palier ${market}, lue le ${SCHEDULE.readOn} sur la carte all-exchanges, `) +
       `facturée par sens et convertie en dollars au mid BCE du ${FX_AS_OF}`
   );
   if (buyComm) {

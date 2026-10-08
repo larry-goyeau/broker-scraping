@@ -76,6 +76,17 @@ const FOREIGN_PER_USD = {
   // SBV central rate, dong per dollar, same day. Not an ECB print.
   // https://vov.vn/thi-truong/ty-gia-usd-hom-nay-79-ty-gia-trung-tam-tang-len-moc-25611-dongusd-post1330446.vov
   VND: 25611,
+  // CBI official selling rate, dinar per dollar. Not an ECB print.
+  // The 5 September 2026 denial says this selling rate was unchanged,
+  // so it is the rate on AS_OF. The bulletin is buy 1,300 / sell 1,310 /
+  // a 1,320 ceiling at the banks.
+  // https://channel8.com/english/news/65154
+  IQD: 1310,
+  // Bank Al-Maghrib customer board for 7 September 2026, via MAP.
+  // Not an ECB print. Buy 8.8022 / sell 10.2296 dirhams per dollar.
+  // The figure is the mid of that board.
+  // https://maroc-diplomatique.net/cours-des-devises-du-lundi-7-septembre-2026/
+  MAD: 9.5159,
 };
 
 function keyOf(currency) {

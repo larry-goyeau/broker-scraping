@@ -438,12 +438,13 @@
       }
       .avatar img {
         position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+        inset: 3px;
+        width: calc(100% - 6px);
+        height: calc(100% - 6px);
+        object-fit: contain;
         background: #fff;
       }
+      .avatar:has(img) { background: #fff; }
       .tone-0 { background: #dceae3; color: #0f4d3a; }
       .tone-1 { background: #d6eaec; color: #0e5360; }
       .tone-2 { background: #f2e4c1; color: #75500d; }
@@ -849,7 +850,7 @@
           : esc(label);
         const where = whereOf(row);
         const mark = brand.key
-          ? `<img src="/logos/${esc(brand.key)}.png?v=2" alt="" width="32" height="32" onerror="this.remove()">`
+          ? `<img src="/logos/${esc(brand.key)}.png?v=3" alt="" width="32" height="32" onerror="this.remove()">`
           : "";
         return `<td class="broker"><div class="bk"><span class="avatar tone-${toneOf(brand.key)}" aria-hidden="true">${mark}<span class="mono">${esc(initialsOf(brand.words))}</span></span><div class="bk-text"><span class="bk-name">${name}</span>${where ? `<span class="bk-where">${esc(where)}</span>` : ""}</div></div></td>`;
       };

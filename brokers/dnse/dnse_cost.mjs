@@ -23,7 +23,8 @@
 //                         symbol. Custody is 0.27 dong a share a month.
 //                         The months are not an input, so custody stays
 //                         in the remark.
-//   HOSE, HNX, UPCoM      no book is published here
+//   HOSE, UPCOM           the BSC board, read by spreads/vn-touch.mjs
+//   HNX                   no book is published here
 //
 //   node brokers/dnse/dnse_cost.mjs VNM HOSE VND --shares=10 --price=57300
 //

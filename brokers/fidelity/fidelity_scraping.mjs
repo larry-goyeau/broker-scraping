@@ -10,8 +10,9 @@
 // in the exchange-traded universe stays, as an ETC or an ETF, whichever
 // the name says.
 //
-// The place is the exchange Morningstar prints. An overseas share is dealt
-// as a sterling CDI, so the order does not go to that exchange. The
+// London, Aquis and Chi-X are the book. Anything else is dealt as a
+// sterling CDI, so the stored place is "CDI" plus the code Morningstar
+// prints. That quote is not the foreign book and not the NBBO. The
 // currency on the row is the listing currency, not the sterling settlement.
 // The finder has no flag for a name that has stopped trading, so those
 // lines stay. A second place for the same ISIN stays too.
@@ -43,6 +44,15 @@ const PLACE = {
   STU: "XSTU",
   TBSX: "XSTU",
   WBO: "XWBO",
+  NASDAQ: "XNAS",
+  NYSE: "XNYS",
+  AMEX: "XASE",
+  FRA: "XFRA",
+  MIL: "XMIL",
+  DUS: "XDUS",
+  HAM: "XHAM",
+  HAN: "XHAN",
+  MUN: "XMUN",
 };
 
 const POINTS = ["Name", "isin", "ticker", "exchangeCode", "Currency", "HoldingType"].join("|");
@@ -52,10 +62,14 @@ function toIsin(value) {
   return /^[A-Z]{2}[A-Z0-9]{10}$/.test(text) ? text : "";
 }
 
+const BOOK = new Set(["LSE", "XLON", "AQSE", "CHIX"]);
+
 function placeOf(code) {
   const key = String(code || "").trim().toUpperCase();
   if (!key) return "";
-  return PLACE[key] || key;
+  const place = PLACE[key] || key;
+  if (BOOK.has(place)) return place;
+  return `CDI ${place}`;
 }
 
 function listingType(holding, name) {

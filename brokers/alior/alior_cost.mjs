@@ -13,6 +13,8 @@
 //       on the smaller of the two notionals
 //     GPW ETF, ETC and ETN, communiqué of 30 June 2026, both legs
 //       0 through 31 December 2026
+//     GlobalConnect is that Warsaw market in złoty, so it uses this
+//       schedule. The foreign-currency tariff has no złoty line.
 //   Abroad, one order, in the order currency
 //     0.29 %
 //     min 5 EUR, 5 USD, 5 GBP, 60 SEK, 60 NOK or 60 DKK
@@ -111,12 +113,13 @@ function promoLive(now = new Date()) {
 
 function polishMarket(exchange) {
   const ex = loose(exchange);
-  return ex === "GPW" || ex === "XWAR" || ex === "NEWCONNECT";
+  return ex === "GPW" || ex === "XWAR" || ex === "NEWCONNECT" || ex === "GLOBALCONNECT";
 }
 
 function gpwBoard(exchange) {
   const ex = loose(exchange);
-  return ex === "GPW" || ex === "XWAR";
+  // The waiver names the Warsaw exchange, which runs GlobalConnect.
+  return ex === "GPW" || ex === "XWAR" || ex === "GLOBALCONNECT";
 }
 
 function findListing({ etf, place, currency }) {

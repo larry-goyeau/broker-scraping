@@ -118,7 +118,10 @@
 // BRL, SAR, MYR, ZAR, AED, CZK, RON, CNY — and the page says that where a
 // product is missing « the price as shown in the platform always applies
 // first ». Those lines answer N/A on the commission rather than borrow a
-// neighbour's percentage. KRW is the exception: the card is silent, and the
+// neighbour's percentage. Prague is the exception the catalogue asked for:
+// the CapTrader portal on 2026-10-08 previewed CEZ on PRA at 0.15 % with a
+// 70 CZK floor and no cap, and that rate is used here. A CZK line that is
+// not Prague stays N/A. KRW is the other exception: the card is silent, and the
 // portal's own cash check on 2026-09-28 named the commission. 100 shares of
 // 412350 at 6 030 asked for 607 000, which is 4 000 of commission. 2 000
 // shares asked for 12 067 236, which is 7 236, exactly 0.06 %. The floor is
@@ -235,6 +238,9 @@ const RULE = {
   mxn: { rate: 0.0015, min: 75, ccy: "MXN" },
   // Not on the card. Two cash-check refusals on 412350, 2026-09-28.
   krw: { rate: 0.0006, min: 4000, ccy: "KRW" },
+  // Not on the card. Same rate the CapTrader portal previewed for CEZ on
+  // PRA, 2026-10-08: 0.15 %, minimum 70 CZK, no cap.
+  pra: { rate: 0.0015, min: 70, ccy: "CZK" },
 };
 
 const BY_CCY = {
@@ -475,6 +481,7 @@ export function feeMarketOf(exchange, mic, currency) {
   const m = String(mic || "").toUpperCase();
   const ccy = String(currency || "").toUpperCase();
   if (code === "KRX") return "krw";
+  if (code === "PRA" || m === "XPRA") return "pra";
   if (code === "BM" || m === "XMAD" || m === "XMCE") return "madrid";
   if (ccy === "CAD" || ((code === "TSE" || code === "TSX" || code === "VENTURE" || code === "AEQLIT" || m === "XTSE") && !ccy)) {
     return "ca";
@@ -689,7 +696,9 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const basis =
     (market === "krw"
       ? `barème Mexem ${market}, lu le 2026-09-28 sur le contrôle de trésorerie du portail : `
-      : `barème Mexem ${market}, lu le ${SCHEDULE.readOn} (page du ${SCHEDULE.pageUpdated}) : `) +
+      : market === "pra"
+        ? `barème Mexem ${market}, même taux que l'aperçu CapTrader du 2026-10-08 : `
+        : `barème Mexem ${market}, lu le ${SCHEDULE.readOn} (page du ${SCHEDULE.pageUpdated}) : `) +
     (rule.rate != null
       ? `${(100 * rule.rate).toFixed(4).replace(/0+$/, "").replace(/\.$/, "")} % par sens`
       : `${rule.perShare} ${rule.ccy} par part`) +
@@ -842,7 +851,9 @@ function confidenceOf({ market, rule, buyComm, marketBp, marketPerShare, stamp, 
   said.push(
     (market === "krw"
       ? `commission Mexem, palier ${market}, lue le 2026-09-28 sur le contrôle de trésorerie du portail, `
-      : `commission Mexem, palier ${market}, lue le ${SCHEDULE.readOn} sur la page du ${SCHEDULE.pageUpdated}, `) +
+      : market === "pra"
+        ? `commission Mexem, palier ${market}, même taux que l'aperçu CapTrader de CEZ sur PRA le 2026-10-08, `
+        : `commission Mexem, palier ${market}, lue le ${SCHEDULE.readOn} sur la page du ${SCHEDULE.pageUpdated}, `) +
       `facturée par sens et convertie en dollars au mid BCE du ${FX_AS_OF}`
   );
   if (buyComm) {

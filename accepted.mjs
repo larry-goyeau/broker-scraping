@@ -32,7 +32,7 @@ export const COUNTRY_NAMES = {
   FR: "France", GB: "United Kingdom", GE: "Georgia", GG: "Guernsey", GH: "Ghana",
   GI: "Gibraltar", GL: "Greenland", GR: "Greece", GT: "Guatemala", HK: "Hong Kong",
   HN: "Honduras", HR: "Croatia", HU: "Hungary", ID: "Indonesia", IE: "Ireland",
-  IL: "Israel", IM: "Isle of Man", IN: "India", IS: "Iceland", IT: "Italy",
+  IL: "Israel", IM: "Isle of Man", IN: "India", IQ: "Iraq", IS: "Iceland", IT: "Italy",
   JE: "Jersey", JO: "Jordan", JP: "Japan", KE: "Kenya", KN: "Saint Kitts and Nevis",
   KR: "South Korea", KW: "Kuwait", KZ: "Kazakhstan", LB: "Lebanon",
   LI: "Liechtenstein", LK: "Sri Lanka", LT: "Lithuania", LU: "Luxembourg",
@@ -224,6 +224,11 @@ const FLATEX_COMDIRECT = [
 // BrokerChooser. Italy is the home row.
 const DIRECTA = ["IT", "CH", "DE", "DK", "FR", "GB", "HR", "HU", "IE", "PT"];
 
+// French is an official language, or the language of a banking form in the
+// Maghreb. Arabic is an official language. Only countries the picker names.
+const FRENCH = ["FR", "BE", "CH", "LU", "MC", "CA", "SN", "PF", "MA", "DZ", "TN", "MR"];
+const ARABIC = ["AE", "BH", "DZ", "EG", "IQ", "JO", "KW", "LB", "MA", "MR", "OM", "QA", "SA", "TN"];
+
 export const ACCEPTED = {
   // US account, plus non-US addresses. Canada stays out.
   alpaca: WORLD_NO_CA, // alpaca.markets/learn/live-trading-account-non-us
@@ -281,6 +286,18 @@ export const ACCEPTED = {
   // New investments stop if the client ceases to be UK resident.
   // https://www.fidelity.co.uk/media/PI%20UK/pdf/legal/fidelity-client-terms.pdf
   fidelity: { countries: ["GB"] },
+  // A Dealing account opens for a UK resident. A Crown employee, or their
+  // spouse or dependant, may also open. No other country of residence is
+  // named. The ISA asks the same of someone ordinarily resident in the UK.
+  // https://www.ajbell.co.uk/faq/who-can-open-dealing-account
+  // https://www.ajbell.co.uk/faq/who-can-open-stocks-and-shares-isa
+  ajbell: { countries: ["GB"] },
+  // An Investment Account, an ISA or a SIPP opens for a UK resident. The
+  // footnote includes the Channel Islands and the Isle of Man. Someone
+  // born, living or paying tax in the United States cannot open. The
+  // picker is a country of residence.
+  // https://www.bestinvest.co.uk/help/eligibility
+  bestinvest: { countries: ["GB", "GG", "JE", "IM"] },
   // Terms 7.2: UK tax resident and living in the UK, and not a US person.
   // Help, 16 Jul 2025: UK residents only. Moving abroad closes the account.
   freetrade: { countries: ["GB"] },
@@ -382,6 +399,13 @@ export const ACCEPTED = {
   // https://www.bions.id/edukasi/saham/cara-buka-rekening-saham-di-bni-sekuritas
   // https://help.bions.id/docs/cara-mengubah-data/
   bni: { countries: ["ID"] },
+  // The product page asks for a KTP, an NPWP and a savings account. The
+  // firm's own guide says a citizen shows a KTP and a foreigner a passport
+  // and a KITAS. A KITAS is a stay permit in Indonesia. No other country
+  // of residence is named.
+  // https://www.brights.id/id/produk-dan-layanan/layanan/rekening-saham
+  // https://www.brights.id/id/blog/cara-buka-rekening-saham
+  bri: { countries: ["ID"] },
   // Online opening asks for an INE, an RFC and a CLABE in the client's
   // name. An INE is a Mexican voter's card. A company account is opened
   // by phone. No other country of residence is named.
@@ -432,6 +456,29 @@ export const ACCEPTED = {
   // https://faq.sbisec.co.jp/answer/5ec2341f8504de0011d61467/
   // https://faq.sbisec.co.jp/answer/5ecb693a8504de0011d61dc1/
   sbi: { countries: ["JP"] },
+  // Online share trading settles on an account at a SpareBank 1 bank.
+  // The public forms ask for a Norwegian national identity number and a
+  // Norwegian mobile number. No other country of residence is named.
+  // https://www.sb1markets.no/globalassets/alle-dokumenter-2025/general-terms--conditions/special-business-terms-for-trading-financial-instrument-via-online-platform-for-private-individuals.pdf
+  // https://www.sparebank1.no/nb/bank/privat/kundeservice/bestill/bli-kunde.html
+  spare: { countries: ["NO"] },
+  // The account-opening article for someone who has moved to Iceland says
+  // the only requirement is an Icelandic kennitala. Nationality is not a
+  // test. No other country of residence is named.
+  // https://www.arionbanki.is/en/articles/did-you-just-move-to-iceland-and-need-a-bank-account
+  arion: { countries: ["IS"] },
+  // The account-opening article for someone who has moved to Iceland says
+  // an Icelandic kennitala is required. Online share trading is opened by
+  // signing the service agreement with electronic ID. Nationality is not a
+  // test. No other country of residence is named.
+  // https://www.landsbankinn.is/umraedan/fraedsla/ertu-ad-flytja-til-landsins-og-vantar-bankareikning
+  // https://www.landsbankinn.is/verdbrefavidskipti-a-netinu
+  landsbankinn: { countries: ["IS"] },
+  // Opening asks for a PAN, an Aadhaar linked to a mobile number, and that
+  // the client lives in India. An NRI cannot open this account. The picker
+  // is a country of residence, so the country is IN.
+  // https://www.share.market/support/home/getting-started/creating-a-trading-and-demat-account/who-can-open-a-trading-and-demat-account-on-phonepe-broking/
+  sharemarket: { countries: ["IN"] },
   // No licence to deal outside Japan. A foreign national opens with a
   // residence card; nationality is not a criterion. Leaving for a year or
   // more is the non-resident procedure.
@@ -667,6 +714,12 @@ export const ACCEPTED = {
   // The public site is Polish only. Polish is the official language of Poland.
   // They do not publish a residency list.
   bossa: { countries: ["PL"] },
+  // Opening is a Polish identity card, mObywatel or a trusted profile, plus
+  // a tax-office address. The foreign-instruments clause may refuse a
+  // client who is not a Polish tax resident, and a US person.
+  // https://www.bdm.pl/edukacja/otwarcie-rachunku
+  // https://www.bdm.pl/files/bdm/dokumenty/Regulamin/ws_regulamin.pdf
+  bdm: { countries: ["PL"] },
   // No catalogue yet. BrokerChooser’s 29 countries; Spain is not among them.
   flatex: { countries: FLATEX_COMDIRECT },
   comdirect: { countries: FLATEX_COMDIRECT },
@@ -693,8 +746,16 @@ export const ACCEPTED = {
   // https://www.masvn.com/register
   // https://masvn.com/en/register
   mirae: { countries: ["VN"] },
+  // The app opens an account for a domestic individual. A foreign
+  // individual or a company is sent to a BSC counter or a BIDV branch.
+  // https://www.bsc.com.vn/tai-ung-dung-bsc-smart-invest/
+  bsc: { countries: ["VN"] },
   // The online account is the Vietnamese one.
   vps: { countries: ["VN"] },
+  // The online form is the domestic individual. A foreign individual opens
+  // at the Hanoi counter or by post, after an indirect-investment account.
+  // https://pinetree.vn/en/post/dich-vu/individual-customers/
+  pinetree: { countries: ["VN"] },
   // The online account takes a Vietnamese citizen card.
   // https://support.vndirect.com.vn/hc/vi/articles/14250597614745
   vndirect: { countries: ["VN"] },
@@ -726,6 +787,37 @@ export const ACCEPTED = {
   // https://www.indmoney.com/us-stocks
   // https://www.indmoney.com/features/nri
   indmoney: { countries: ["IN"] },
+  // An Iraqi adult opens with a national ID, a residence certificate and a
+  // passport. A non-Iraqi individual opens with a passport. No country is
+  // named as excluded.
+  // https://rs.iq/open-a-trading-account/
+  rabee: { all: true },
+  // The dirham account takes a Moroccan or a foreigner living in Morocco,
+  // and a Moroccan living abroad. The foreign-currency account also takes
+  // a foreigner living abroad. The securities account opens for every CFG
+  // client. The opening form is French only, so the country is one where
+  // French is spoken.
+  // https://www.cfgbank.com/particuliers/notre-offre/banque-quotidien/les-comptes/
+  // https://devenirclient.cfgbank.com/prospect/
+  cfgbank: { countries: FRENCH },
+  // A Moroccan, resident or not, and a foreigner who lives in Morocco.
+  // A foreigner living abroad is not named. The picker is residence, and
+  // the countries where Moroccans abroad live are not listed, so the
+  // country is Morocco.
+  // https://www.wafabourse.com/fr/faq
+  wafabourse: { countries: ["MA"] },
+  // A Moroccan, resident or not, a foreigner living in Morocco, and a
+  // foreigner living abroad. The opening form is the Arabic version or
+  // the French version, so the country is one where Arabic or French is
+  // spoken.
+  // https://ebourse.cihbank.ma/identite/comptedistant
+  // https://www.cihbank.ma/en/MDM/become-a-client/mdm-Offers
+  cih: { countries: [...new Set([...FRENCH, ...ARABIC])] },
+  // The opening form offers an Australian resident, who must show an
+  // Australian address, or a non-resident living in New Zealand or
+  // Singapore. Any other country is "not listed" and not open yet.
+  // https://marketech.com.au/focus/features/non-resident-accounts/
+  marketech: { countries: ["AU", "NZ", "SG"] },
 };
 
 const GROUPS = { EEA, EU, GCC };

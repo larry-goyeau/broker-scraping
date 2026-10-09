@@ -29,9 +29,9 @@
 //   https://fsm.global/sg/pricing-structure
 //   https://fsm.global/sg/rest/stock/get-stock-fee-details
 //
-//   node brokers/FSMOne/FSMOne_cost.mjs ES3 SGX SGD --shares=100 --price=4
-//   node brokers/FSMOne/FSMOne_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node brokers/FSMOne/FSMOne_cost.mjs --schedule
+//   node brokers/fsmonesg/fsmonesg_cost.mjs ES3 SGX SGD --shares=100 --price=4
+//   node brokers/fsmonesg/fsmonesg_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/fsmonesg/fsmonesg_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
@@ -44,13 +44,13 @@ import { bookParts, plus, finite } from "../../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
 
-const CATALOGUE = new URL("FSMOne-parsed.json", import.meta.url);
+const CATALOGUE = new URL("fsmonesg-parsed.json", import.meta.url);
 
 const SCHEDULE = {
   url: "https://fsm.global/sg/pricing-structure",
   fees: "https://fsm.global/sg/rest/stock/get-stock-fee-details",
   readOn: "2026-09-28",
-  entity: "FSMOne Singapore",
+  entity: "FSMOne SG",
   venue: "the exchange named on the line",
   rule606: "ifastsecuritiesus",
 };
@@ -58,6 +58,32 @@ const SCHEDULE = {
 const GST = 1.09;
 const US = new Set(["NYSE", "NASDAQ", "AMEX", "BATS"]);
 const CASH = new Set(["SGD", "USD", "AUD", "CAD", "EUR", "GBP", "CNH", "HKD", "NZD", "JPY", "CHF", "MYR"]);
+// 1 currency = SGD, bid then offer, cash-account board of 2026-10-09 09:15 SGT.
+// Half the spread stays in the remark. The round trip does not pay it.
+const FX_HOME = "SGD";
+const FX_BOARD = {
+  AUD: [0.886824, 0.897543],
+  CAD: [0.895224, 0.906044],
+  CHF: [1.531548, 1.550075],
+  CNH: [0.190156, 0.191878],
+  EUR: [1.427802, 1.445049],
+  GBP: [1.684852, 1.70521],
+  HKD: [0.162405, 0.163874],
+  JPY: [0.008058, 0.008156],
+  MYR: [0.311029, 0.314938],
+  NZD: [0.713888, 0.722539],
+  USD: [1.276384, 1.284081],
+};
+
+function fxRemark(currency) {
+  const ccy = code(currency) === "GBX" ? "GBP" : code(currency);
+  if (!ccy || ccy === FX_HOME) return "";
+  const pair = FX_BOARD[ccy];
+  if (!pair) return "";
+  const [bid, offer] = pair;
+  const half = ((offer - bid) / (offer + bid)) * 100;
+  return `FX ${half.toFixed(3)}% if cash ≠ ${ccy}.`;
+}
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
@@ -219,14 +245,14 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     cashCurrency: "SGD",
   };
   if (!catalogue) {
-    return { ...answer, why: "le catalogue FSMOne n'existe pas encore : lancer `node brokers/FSMOne/FSMOne_scraping.mjs`" };
+    return { ...answer, why: "le catalogue FSMOne SG n'existe pas encore : lancer `node brokers/fsmonesg/fsmonesg_scraping.mjs`" };
   }
   const { named, matches } = findListing({ etf, place, currency });
-  if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue FSMOne` };
+  if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue FSMOne SG` };
   if (!matches.length) {
     return {
       ...answer,
-      why: `${etf} n'est pas coté sur cette place dans cette devise chez FSMOne`,
+      why: `${etf} n'est pas coté sur cette place dans cette devise chez FSMOne SG`,
       alternatives: named.slice(0, 8).map((r) => `${r.ticker || r.isin} ${r.currency || "?"} @ ${r.exchange || "?"}`),
     };
   }
@@ -237,7 +263,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     mic: m.venue?.mic ?? null,
     currency: m.row.currency,
     unsourced: m.unsourced,
-    broker: "fsmone",
+    broker: "fsmonesg",
     ticker: m.row.ticker,
   });
   const listing = {
@@ -255,7 +281,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   let marketBp = bp ?? leaf?.bp ?? null;
   let marketPerShare = perShare ?? leaf?.perShare ?? null;
   if (american && bp == null && perShare == null && marketBp == null && marketPerShare == null) {
-    const quoted = usBookPerShare({ broker: "fsmone", ticker: listing.ticker });
+    const quoted = usBookPerShare({ broker: "fsmonesg", ticker: listing.ticker });
     if (quoted != null) marketPerShare = quoted;
   }
   const parts = bookParts({
@@ -270,9 +296,9 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     ...answer,
     cashCurrency: CASH.has(listing.currency) ? listing.currency : "SGD",
     listing,
-    remark: "",
+    remark: fxRemark(listing.currency),
     url: SCHEDULE.url,
-    basis: `barème FSMOne, relu le ${SCHEDULE.readOn} : frais de traitement hors GST, puis 9 %`,
+    basis: `barème FSMOne SG, relu le ${SCHEDULE.readOn} : frais de traitement hors GST, puis 9 %`,
     tax,
     ccy: QUOTE,
     fx: { quote: QUOTE, asOf: FX_AS_OF, listing: usdPer(listing.currency) },
@@ -292,7 +318,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
       ? "If ≥ 200,000 SGD portfolio value"
       : "";
   if (!one) {
-    return { ...shared, why: `${listing.brokerExchange} n'a pas de ligne dans le barème FSMOne` };
+    return { ...shared, why: `${listing.brokerExchange} n'a pas de ligne dans le barème FSMOne SG` };
   }
   const processingUsd = dollars(one.amount * 2 * GST, one.currency);
   let exchangeUsd = 0;
@@ -333,7 +359,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     ...shared,
     usd: finite(usd, 6),
     brokerFees: finite(ticketUsd, 6),
-    remark: goldRemark,
+    remark: [goldRemark, fxRemark(listing.currency)].filter(Boolean).join("\n"),
     commission: { each: one.amount, currency: one.currency, eachWay: true, gst: 0.09 },
     bp: marketBp,
     perShare: marketPerShare,
@@ -375,7 +401,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const positional = process.argv.slice(2).filter((a) => !a.startsWith("--"));
   const [etf, place, currency] = positional;
   if (!etf) {
-    console.error("usage : node brokers/FSMOne/FSMOne_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]");
+    console.error("usage : node brokers/fsmonesg/fsmonesg_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]");
     process.exit(2);
   }
 

@@ -246,6 +246,18 @@ export const ACCEPTED = {
   // https://help.zestyfinance.com/es/articles/15937662-puedo-usar-la-app-si-soy-una-persona-extranjera
   zesty: { countries: ["CL"] },
   firstrade: { countries: FIRSTRADE },
+  // A legal US address and a Social Security number. Citizenship can be
+  // American, a green card, or one of the named visas; the address is
+  // still residence in the United States. Accounts outside the United
+  // States, including the UK book, closed in 2024.
+  // https://help.public.com/en/articles/4374819-who-can-create-an-account
+  // https://help.public.com/en/articles/9289437-how-can-former-non-us-members-access-important-documents
+  public: { countries: ["US"] },
+  // A US citizen or a lawful US tax resident, with a Social Security
+  // number or an ITIN, located in the United States, and a checking
+  // account at a US bank. The picker is that residence.
+  // https://cdn.stash.com/disclosures/Stash_Wrap_Fee_Program_Brochure_12.pdf
+  stash: { countries: ["US"] },
   tastytrade: { countries: TASTYTRADE },
   // TS Securities (US + non-EEA) + TS Europe B.V. (30 EEA). BrokerChooser
   // also lists Hong Kong and Japan. The user agreement says the offer is
@@ -304,16 +316,27 @@ export const ACCEPTED = {
   // Fund and Share Account: open online only if you live in the UK and are a UK tax resident.
   // https://www.hl.co.uk/investment-services/fund-and-share-account
   hargreaveslansdown: { countries: ["GB"] },
+  // Terms 4.1: an individual over 18, resident in the UK or, unless the
+  // account is an ISA, in Jersey, Guernsey or the Isle of Man. A crown
+  // employee serving overseas, or their spouse or civil partner, may also
+  // open. A US person and a resident of Canada cannot.
+  // https://www.lloydsbank.com/assets/media/pdfs/investments/direct-investments/terms_conditions.pdf
+  lloyds: { countries: ["GB", "GG", "JE", "IM"] },
+  // Terms 4.1: an individual over 18, resident in the UK or, unless the
+  // account is an ISA, in Jersey, Guernsey or the Isle of Man. A crown
+  // employee serving overseas, or their spouse or civil partner, may also
+  // open. A US person and a resident of Canada cannot.
+  // https://www.halifax.co.uk/assets/pdf/filestore/halifaxsharedealing_termsandconds.pdf
+  halifax: { countries: ["GB", "GG", "JE", "IM"] },
   // Help: UK tax resident, with a UK address and a UK current account.
   // Non-UK residents, including UK nationals living abroad, cannot open.
   // US persons cannot open. Terms allow an overseas client only at discretion.
   // https://help.investengine.com/hc/en-gb/articles/31149906352029-Who-can-open-an-InvestEngine-account
   investengine: { countries: ["GB"] },
-  // Terms: the platform is for UK residents only. Opening is refused if you
-  // are not a UK resident. The application also requires that you are not a
-  // US person. The ISA form's "UK resident" box uses the statutory wording,
-  // which also covers a Crown employee serving overseas, or their spouse.
-  // https://www.willisowen.co.uk/important/terms-introduction
+  // Platform terms 1.3 (February 2025): 18 or over, and resident in the UK
+  // for tax purposes. The GIA and ISA forms also require that you are not a
+  // US person.
+  // https://www.willisowen.co.uk/documents/Willis_Owen_Platform_Terms_and_Conditions_February_2025.pdf
   // https://www.willisowen.co.uk/gia/apply-for-a-gia
   willisowen: { countries: ["GB"] },
   // Regulation of 27 June 2026: a Polish citizen who is a Polish tax resident,
@@ -594,7 +617,22 @@ export const ACCEPTED = {
   // nationality.
   // https://secure.fundsupermart.com/fsm/account-opening/non-residents
   // https://secure.fundsupermart.com/fsmone/article/rcms361200/your-biggest-questions-about-investing-with-fsm-global-in-singapore
-  fsmone: WORLD,
+  fsmonesg: WORLD,
+  // The bank named at opening is a Hong Kong clearing participant. The
+  // picker is a country, so the country is HK.
+  // https://www.fsmglobal.hk/account-opening/personal/account-info
+  fsmonehk: { countries: ["HK"] },
+  // The 2026 store listing says it is not directed at residents of the
+  // United States. The help centre says clients come from over 150
+  // countries. The terms require 18 and a KYC check. The picker is a
+  // nationality, so the United States is excluded.
+  // https://apps.apple.com/ph/app/gotrade-invest-in-us-stocks/id1530178262
+  // https://help.heygotrade.com/en/articles/5977562-is-it-possible-to-invest-in-us-shares-from-outside-the-us
+  gotradeglobal: WORLD_NO_US,
+  // The applicant must be an Indonesian citizen living in Indonesia.
+  // The picker is a nationality, so the country is ID.
+  // https://help.heygotrade.com/en/articles/5985064-siapa-saja-yang-dapat-memiliki-akun-gotrade-indonesia
+  gotradeid: { countries: ["ID"] },
   // A resident of Korea opens with a Korean ID, or with an alien registration
   // card. Nationality is not the test. The picker is a country, so the
   // country is KR.
@@ -647,9 +685,17 @@ export const ACCEPTED = {
   scalablecapital: { countries: ["DE", "AT", "FR", "IT", "ES", "NL"] },
   trading212: { countries: T212 },
   lightyear: { countries: LIGHTYEAR },
-  // User agreement: tax residency in the EU/EEA, and opening needs BankID.
-  // The site is Swedish only, so the picker keeps Sweden.
+  // User agreement: 18 or over, tax residence in the EU/EEA, and BankID to
+  // open. The site is Swedish only, so the picker keeps Sweden.
+  // https://levler.se/dokument/Villkor-for-anvandarkonto-hos-Levler.pdf
   levler: { countries: ["SE"] },
+  // Share-and-fund account: residence and tax residence in the EU/EEA,
+  // and an account at another Swedish bank. The picker keeps Sweden.
+  // https://www.avanza.se/avanzabank/hem/konton/blanketter/aktie-och-fondkonto/villkor_handelsDepaKontoavtal_2018.pdf
+  avanza: { countries: ["SE"] },
+  // Living abroad needs a link to Sweden, so the picker keeps Sweden.
+  // https://www.nordnet.se/faq/bankprodukter-kontohantering/oppna-konto/oppna-konto-for-utlandska-medborgare-eller-utlandsbosatta/oppna-konto-som-utlandska-medborgare-bosatt-utanfor-sverige
+  nordnet: { countries: ["SE"] },
   revolut: { countries: REVOLUT_STOCKS },
   bitpanda: { countries: BITPANDA },
   // lynxbroker.com account-country: AT BE CZ FI FR DE NL PL SK.
@@ -688,6 +734,17 @@ export const ACCEPTED = {
   century: { groups: ["GCC"], countries: [...EEA, "GB", "CH", "IN", "PK", "EG", "ZA", "SG", "MY", "HK"] },
   // Open-account page lists a National ID path for non-UAE residents.
   bhmuae: WORLD,
+  // Residents of the UAE, Oman, Qatar, Bahrain and Kuwait. Saudi Arabia
+  // is not on the list. The US broker refuses some nationalities and does
+  // not name them. The terms also refuse a resident of the United States.
+  // https://getbaraka.com/support/is-baraka-available-in-all-countries
+  baraka: { countries: ["AE", "BH", "KW", "OM", "QA"] },
+  // A resident of Spain can open, of any nationality, with an account at
+  // another Spanish bank. A Spanish national can also live in the EU or
+  // the United Kingdom. Anyone else living abroad cannot, so the picker
+  // stays Spain.
+  // https://myinvestor.es/ayuda/preguntas-frecuentes/cuentas/
+  myinvestor: { countries: ["ES"] },
   // General terms: Swiss residence, and Swiss tax only. A foreign national
   // needs permit B or C, which is still residence in Switzerland.
   // https://static-assets.neon-free.ch/legal/neon/neon_general_terms_and_conditions_en.pdf
@@ -765,6 +822,11 @@ export const ACCEPTED = {
   // The online account is opened with a chip Vietnamese citizen card.
   // https://www.ssi.com.vn/khach-hang-ca-nhan/gioi-thieu-mo-tai-khoan
   ssi: { countries: ["VN"] },
+  // The online account is opened with VNeID or a Vietnamese citizen card.
+  // The counter file is for a Vietnamese national. The picker is a
+  // nationality, so the country is VN.
+  // https://www.vcbs.com.vn/chi-tiet-ho-tro-giao-dich/mo-tai-khoan-giao-dich-chung-khoan
+  vietcombank: { countries: ["VN"] },
   // Select is offered only to a natural person whose only tax residence
   // is Germany. §2 of the Select framework agreement.
   // https://www.visualvest.de/rechtliches/rechtliche-hinweise

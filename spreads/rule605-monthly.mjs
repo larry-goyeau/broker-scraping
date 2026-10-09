@@ -101,6 +101,38 @@ const REPORTERS = [
     participant: "NITE",
     url: (month) => `https://virtu-www.s3.us-east-1.amazonaws.com/uploads/documents/TVIRTU${month}.zip`,
   },
+  // A venue in other firms' 606s, not a retail wholesaler. Its 605 prices
+  // that slice of Q. It is not folded into the blended tape.
+  {
+    ric: "MSCO",
+    name: "Morgan Stanley & Co.",
+    participant: "MSCO",
+    qOnly: true,
+    url: (month) => `https://external.s3.com/rule605/msco/TMSCO${month}.zip`,
+  },
+  // Siebert names itself in its own 606. Its 605 prices that slice.
+  // It is not folded into the blended tape.
+  { ric: "STXG", name: "Muriel Siebert", participant: "STXG", qOnly: true },
+  // Coda published no July 2026 file. The amended report starts in August,
+  // sorted by dollar size rather than the 100-to-499 share band. It prices
+  // that slice of Q and is not folded into the blended tape.
+  {
+    ric: "CODX",
+    name: "Coda Markets",
+    participant: "CODX",
+    qOnly: true,
+    amended: true,
+    url: () => "https://public.s3.com/rule605/coda/CODX202608.zip",
+  },
+  // Instinet LLC files its 605 as the CBX ATS (ICBX). July 2026 is still the
+  // legacy layout, and it has marketable limits only. Not in the blend.
+  {
+    ric: "ICBX",
+    name: "Instinet",
+    participant: "ICBX",
+    qOnly: true,
+    url: () => "https://www.instinet.com/documents/icbx202607zip",
+  },
 ];
 const fileUrl = (r, month) => {
   if (typeof r.url === "function") return r.url(month);
@@ -213,13 +245,17 @@ const RETAIL_BUCKET = "21";
 // and weighted by whichever total the reporter used.
 function weightOf(f) {
   const here = Number(f[F.executedHere]);
-  if (!(here > 0)) return null;
   const away = Number(f[F.executedAway] || 0);
   const parts =
     Number(f[F.improvedShares] || 0) +
     Number(f[F.atQuoteShares] || 0) +
     Number(f[F.outsideShares] || 0);
   const slop = Math.max(2, Math.round(parts * 1e-5));
+  // Siebert fills nothing itself: the breakdown is over what it routed away.
+  if (!(here > 0)) {
+    if (away > 0 && Math.abs(parts - away) <= slop) return { shares: away, counts: "réacheminements" };
+    return null;
+  }
   if (Math.abs(parts - here) <= slop) return { shares: here, counts: "exécutions propres" };
   if (Math.abs(parts - (here + away)) <= slop) return { shares: here + away, counts: "exécutions et réacheminements" };
   throw new Error(
@@ -272,6 +308,50 @@ export function parseReport(text, { participant } = {}) {
   return { bySymbol, rows, checked, counts };
 }
 
+// The amended layout (55 named columns, header on the first line). Dollar size
+// replaces the share buckets, and the order type is five characters: a market
+// order starts with M, a marketable limit is a limit whose second character is
+// Y. The $200,000-and-over bucket is left out. AvgEffctvSprd is already dollars
+// per share, the same unit as field 18 of the legacy file. Rows are stored on
+// the legacy retail cells so the Q weight below can read them unchanged.
+const AMENDED = { entity: 1, symbol: 3, size: 5, type: 6, executedHere: 11, executedAway: 12, effective: 33 };
+const AMENDED_TOP = "200000";
+
+export function parseAmendedReport(text, { participant } = {}) {
+  const bySymbol = new Map();
+  let rows = 0;
+  let checked = 0;
+
+  for (const line of text.split(/\r?\n/)) {
+    if (!line || line.startsWith("DsgntParticipant")) continue;
+    const f = line.split("|");
+    if (f.length <= AMENDED.effective) continue;
+    if (participant && f[AMENDED.entity] !== participant) continue;
+    rows++;
+    const code = f[AMENDED.type];
+    const market = code.startsWith("M");
+    const marketableLimit = code.startsWith("L") && code[1] === "Y";
+    if (!market && !marketableLimit) continue;
+    if (f[AMENDED.size] === AMENDED_TOP) continue;
+    const effective = Number(f[AMENDED.effective]);
+    if (!Number.isFinite(effective)) continue;
+    const shares = Number(f[AMENDED.executedHere] || 0) + Number(f[AMENDED.executedAway] || 0);
+    if (!(shares > 0)) continue;
+    checked++;
+
+    const symbol = f[AMENDED.symbol];
+    let s = bySymbol.get(symbol);
+    if (!s) bySymbol.set(symbol, (s = { cells: {} }));
+    const type = market ? MARKET : MARKETABLE_LIMIT;
+    const cell = (s.cells[`${type}|${RETAIL_BUCKET}`] ||= { shares: 0, sum: 0, quotedSum: 0, orders: 0, improved: 0 });
+    cell.shares += shares;
+    cell.sum += effective * shares;
+    cell.orders += Number(f[7] || 0);
+  }
+  if (!checked) throw new Error("aucune ligne exécutable dans le fichier");
+  return { bySymbol, rows, checked, counts: "exécutions, ordres sous 200 000 $" };
+}
+
 async function download(month) {
   const reports = [];
   const failed = [];
@@ -315,7 +395,10 @@ async function download(month) {
           text = read(name);
         }
       }
-      reports.push({ ...r, url, ...parseReport(text, { participant: r.participant }) });
+      const parsed = r.amended
+        ? parseAmendedReport(text, { participant: r.participant })
+        : parseReport(text, { participant: r.participant });
+      reports.push({ ...r, url, ...parsed });
     } catch (e) {
       failed.push({ ...r, why: String(e.message || e).slice(0, 80) });
     }
@@ -332,13 +415,15 @@ async function download(month) {
   for (const rep of reports) {
     for (const [symbol, s] of rep.bySymbol) {
       const out = (symbols[symbol] ||= { cells: {}, byReporter: {} });
-      for (const [k, cell] of Object.entries(s.cells)) {
-        const acc = (out.cells[k] ||= { shares: 0, sum: 0, quotedSum: 0, orders: 0, improved: 0 });
-        acc.shares += cell.shares;
-        acc.sum += cell.sum;
-        acc.quotedSum += cell.quotedSum || 0;
-        acc.orders += cell.orders;
-        acc.improved += cell.improved;
+      if (!rep.qOnly) {
+        for (const [k, cell] of Object.entries(s.cells)) {
+          const acc = (out.cells[k] ||= { shares: 0, sum: 0, quotedSum: 0, orders: 0, improved: 0 });
+          acc.shares += cell.shares;
+          acc.sum += cell.sum;
+          acc.quotedSum += cell.quotedSum || 0;
+          acc.orders += cell.orders;
+          acc.improved += cell.improved;
+        }
       }
       const retail = merge(IMMEDIATE.map((t) => s.cells[`${t}|${RETAIL_BUCKET}`]));
       if (retail?.shares) out.byReporter[rep.ric] = round(retail.sum / retail.shares);

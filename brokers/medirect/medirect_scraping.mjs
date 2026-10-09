@@ -1,11 +1,15 @@
 // What MeDirect sells in shares and ETFs, with no login. Belgium and
-// Malta each print a navigator, and that navigator is the universe that
-// bank sells. A name that is not in it is not sold until the bank adds
-// it. Mutual funds are another navigator and stay out.
+// Malta each print a navigator. Mutual funds are another navigator and
+// stay out. A row is sold when enabled and viewable are both 1.
 //
-// A row is sold when enabled and viewable are both 1. The navigator
-// still marks names that are no longer listed, and this file does not
-// invent a second filter for them.
+// Belgium's navigator is the book a Belgian client buys. Malta's
+// navigator still lists names the trading screen does not sell, and it
+// misses names that screen does sell. The screen was read on 2026-10-09
+// from Explore investments (equities and ETFs). That book is
+// malta-screen.json. A navigator name the screen does not sell loses
+// Malta. If Belgium does not sell it either, it drops out. A screen
+// name the navigator does not have is added for Malta. A name only
+// Belgium sells stays Belgian.
 //
 // Each name carries the residences of the bank whose list it is on.
 // Belgium is a resident of Belgium. Malta is a resident of an EEA
@@ -90,6 +94,69 @@ function readLine(line, kind, book) {
   return { ticker, name, exchange, currency, isin, type: KINDS[kind] };
 }
 
+function screenOf() {
+  const screen = JSON.parse(fs.readFileSync(new URL("malta-screen.json", import.meta.url), "utf8"));
+  if (!Array.isArray(screen) || !screen.length) throw new Error("the Malta trading screen is empty");
+  return screen;
+}
+
+function rewrite(row) {
+  const countries = [...row.supportedCountries].sort();
+  row.supportedCountries = countries;
+  row.books = [...row.books].sort();
+  row.raw = [row.ticker, row.name, row.exchange, row.isin, row.type, countries.join(" ")].join(" ");
+  return row;
+}
+
+// The public Malta list is wider than the screen and also short of it.
+// Belgium is left as the navigator printed it.
+function alignMalta(rows) {
+  const screen = screenOf();
+  const sold = new Set(screen.map((line) => line.isin));
+  const kept = [];
+  let dropped = 0;
+  let narrowed = 0;
+  let widened = 0;
+  for (const row of rows) {
+    const books = new Set(row.books);
+    if (books.has("MT") && !sold.has(row.isin)) {
+      books.delete("MT");
+      if (!books.size) {
+        dropped += 1;
+        continue;
+      }
+      narrowed += 1;
+      row.books = books;
+      row.supportedCountries = ["BE"];
+    } else if (!books.has("MT") && sold.has(row.isin)) {
+      widened += 1;
+      books.add("MT");
+      row.books = books;
+      row.supportedCountries = [...MALTA];
+    }
+    kept.push(rewrite(row));
+  }
+  const have = new Set(kept.map((row) => row.isin));
+  let added = 0;
+  for (const line of screen) {
+    if (have.has(line.isin)) continue;
+    have.add(line.isin);
+    added += 1;
+    kept.push(rewrite({
+      query: line.ticker,
+      ticker: line.ticker,
+      name: line.name || line.ticker,
+      exchange: line.exchange,
+      currency: line.currency,
+      type: line.type === "ETF" ? "ETF" : "STOCK",
+      isin: line.isin,
+      books: new Set(["MT"]),
+      supportedCountries: [...MALTA],
+    }));
+  }
+  return { rows: kept, dropped, narrowed, widened, added };
+}
+
 const merged = new Map();
 const nameByIsin = new Map();
 let withheld = 0;
@@ -118,13 +185,7 @@ for (const book of BOOKS) {
 }
 
 const rows = [];
-let onBoth = 0;
-let onlyBe = 0;
-let onlyMt = 0;
 for (const row of merged.values()) {
-  if (row.books.has("BE") && row.books.has("MT")) onBoth += 1;
-  else if (row.books.has("BE")) onlyBe += 1;
-  else onlyMt += 1;
   const name = row.name || nameByIsin.get(row.isin) || row.ticker;
   const tickers = [...row.tickers].sort();
   const ticker = tickers[0];
@@ -153,26 +214,57 @@ rows.sort((left, right) => {
   return left.ticker.localeCompare(right.ticker);
 });
 
-const aapl = rows.find((row) => row.isin === "US0378331005" && row.type === "STOCK");
+const aligned = alignMalta(rows);
+const listed = aligned.rows;
+listed.sort((left, right) => {
+  const byType = left.type.localeCompare(right.type);
+  if (byType !== 0) return byType;
+  const byExchange = left.exchange.localeCompare(right.exchange);
+  if (byExchange !== 0) return byExchange;
+  return left.ticker.localeCompare(right.ticker);
+});
+
+const aapl = listed.find((row) => row.isin === "US0378331005" && row.type === "STOCK");
 if (!aapl?.supportedCountries.includes("BE") || !aapl.supportedCountries.includes("MT") || !aapl.supportedCountries.includes("FR")) {
   throw new Error("AAPL does not carry both client lists");
 }
-if (!rows.some((row) => row.supportedCountries.length === 1 && row.supportedCountries[0] === "BE")) {
+if (!listed.some((row) => row.supportedCountries.length === 1 && row.supportedCountries[0] === "BE")) {
   throw new Error("no name is only for a Belgian client");
 }
-if (!rows.some((row) => row.supportedCountries.includes("GB") && row.supportedCountries.length > 1)) {
+if (!listed.some((row) => row.supportedCountries.includes("GB") && row.supportedCountries.length > 1)) {
   throw new Error("no name carries the Malta client list");
 }
+const screenIsin = new Set(screenOf().map((line) => line.isin));
+const maltaIsin = new Set(listed.filter((row) => row.books.includes("MT")).map((row) => row.isin));
+for (const isin of screenIsin) {
+  if (!maltaIsin.has(isin)) throw new Error(`${isin} is on the Malta screen and missing from the catalogue`);
+}
+for (const row of listed) {
+  if (row.books.includes("MT") && !screenIsin.has(row.isin)) throw new Error(`${row.isin} is sold to Malta and is not on the screen`);
+}
 
-const kept = stampRows(withoutObligations(rows));
+const kept = stampRows(withoutObligations(listed));
 fs.writeFileSync(new URL("medirect-parsed.json", import.meta.url), JSON.stringify(kept, null, 2));
 
 const byType = new Map();
-for (const row of kept) byType.set(row.type, (byType.get(row.type) || 0) + 1);
+let onBoth = 0;
+let onlyBe = 0;
+let onlyMt = 0;
+for (const row of kept) {
+  byType.set(row.type, (byType.get(row.type) || 0) + 1);
+  const books = new Set(row.books);
+  if (books.has("BE") && books.has("MT")) onBoth += 1;
+  else if (books.has("BE")) onlyBe += 1;
+  else onlyMt += 1;
+}
 console.error(
   `${kept.length} listings over ${new Set(kept.map((row) => row.isin)).size} instruments ` +
     `(${[...byType].map(([label, count]) => `${count} ${label}`).join(", ")}); ` +
     `${onBoth} on both books, ${onlyBe} Belgium only, ${onlyMt} Malta only`
 );
+console.error(
+  `Malta screen: dropped ${aligned.dropped}, left to Belgium ${aligned.narrowed}, ` +
+    `opened to Malta ${aligned.widened}, added ${aligned.added}`
+);
 if (withheld) console.error(`${withheld} rows not enabled or not viewable`);
-if (kept.length < rows.length) console.error(`${rows.length - kept.length} bonds left out`);
+if (kept.length < listed.length) console.error(`${listed.length - kept.length} bonds left out`);

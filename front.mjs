@@ -62,6 +62,11 @@ function loadBrokerMeta() {
 
 const FOLDER_NAME = {
   saxo: "Saxo Bank",
+  avanza: "Avanza",
+  virtuamericas: "Virtu Americas LLC",
+  lloyds: "Lloyds",
+  halifax: "Halifax",
+  bimi: "Intesa Sanpaolo IMI Securities Corp.",
   bhmuae: "BHM Capital",
   bunq: "Bunq",
   century: "Century Financial",
@@ -127,6 +132,11 @@ const FOLDER_NAME = {
   wafabourse: "Wafa Bourse",
   cih: "CIH",
   marketech: "Marketech Focus",
+  fsmonesg: "FSMOne SG",
+  fsmonehk: "FSMOne HK",
+  gotradeglobal: "Gotrade Global",
+  gotradeid: "Gotrade Indonesia",
+  public: "Public.com",
 };
 
 // Display name above, broker-list row below, when the two differ.
@@ -1726,8 +1736,8 @@ function collapseScalable(built) {
 }
 
 const FSMONE_PLANS = [
-  { id: "standard", name: "FSMOne" },
-  { id: "gold", name: "FSMOne Gold / Diamond" },
+  { id: "standard", name: "FSMOne SG" },
+  { id: "gold", name: "FSMOne SG Gold / Diamond" },
 ];
 
 const SAXO_PLAN_LABEL = { classic: "Classic", platinum: "Platinum", vip: "VIP" };
@@ -1735,10 +1745,10 @@ const SAXO_PLAN_LABEL = { classic: "Classic", platinum: "Platinum", vip: "VIP" }
 function fsmoneName(planIds, allIds) {
   const order = FSMONE_PLANS.map((p) => p.id);
   const ids = [...new Set(planIds)].sort((a, b) => order.indexOf(a) - order.indexOf(b));
-  if (ids.length === allIds.length) return "FSMOne";
-  if (ids.length === 1 && ids[0] === "standard") return "FSMOne";
-  if (ids.length === 1 && ids[0] === "gold") return "FSMOne Gold / Diamond";
-  return `FSMOne ${ids.map((id) => (id === "gold" ? "Gold / Diamond" : "FSMOne")).join(" / ")}`;
+  if (ids.length === allIds.length) return "FSMOne SG";
+  if (ids.length === 1 && ids[0] === "standard") return "FSMOne SG";
+  if (ids.length === 1 && ids[0] === "gold") return "FSMOne SG Gold / Diamond";
+  return `FSMOne SG ${ids.map((id) => (id === "gold" ? "Gold / Diamond" : "FSMOne SG")).join(" / ")}`;
 }
 
 function collapseFsmone(built) {
@@ -1785,7 +1795,7 @@ function collapseFsmone(built) {
     const all = b.plans.length === allIds.length;
     return {
       ...b.row,
-      folder: `FSMOne:${[...b.plans].join("-")}`,
+      folder: `fsmonesg:${[...b.plans].join("-")}`,
       family: name,
       name,
       plan: all ? "" : [...b.plans].join("-"),
@@ -2384,7 +2394,7 @@ function detail(key, nat = "", size = {}, dep = "") {
     // still splits Classic / Platinum / VIP once the 1 $ floor no longer binds.
     // Gold and Diamond are a flat 50 HKD on an HKEX share once 0.08% exceeds
     // that. The remark on that row is the assets the tier takes.
-    if (folder === "FSMOne") {
+    if (folder === "fsmonesg") {
       const built = [];
       FSMONE_PLANS.forEach((plan, i) => {
         const listed = listings({ plan: plan.id });
@@ -2705,6 +2715,10 @@ const VENUE_606 = {
   GTSM: "GTS",
   IATS: "IBKR ATS",
   IBCO: "IBKR Corp",
+  MSCO: "Morgan Stanley & Co.",
+  STXG: "Siebert",
+  CODX: "Coda",
+  ICBX: "Instinet",
   OTHER: "exchanges and ATS",
 };
 
@@ -2841,7 +2855,7 @@ async function localeOf(req) {
 
 // The page asks for /logos/{slug}.png. The file is brokers/<folder>/logo.png.
 // The slug is the folder with capitals and punctuation removed, the same rule
-// brandOf uses, so m.stock and FSMOne still find their picture.
+// brandOf uses, so m.stock and fsmonesg still find their picture.
 const logoBySlug = new Map();
 for (const folder of fs.readdirSync(path.join(ROOT_DIR, "brokers"))) {
   const slug = folder.toLowerCase().replace(/[^a-z0-9]/g, "");

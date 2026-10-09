@@ -14,7 +14,7 @@
 //   https://fsm.global/sg/rest/stock/stock-screener-v3
 //   https://fsm.global/sg/rest/fund/get-etf-selector-table-info-with-pagination
 //
-//   node brokers/FSMOne/FSMOne_scraping.mjs
+//   node brokers/fsmonesg/fsmonesg_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
 import { stampIsinMatches } from "../../isinMatches.mjs";
@@ -102,7 +102,7 @@ function isinOf(value) {
 function isinBook() {
   const book = new Map();
   for (const file of catalogueFiles()) {
-    if (path.basename(path.dirname(file)) === "FSMOne") continue;
+    if (path.basename(path.dirname(file)) === "fsmonesg") continue;
     const parsed = JSON.parse(fs.readFileSync(file, "utf8"));
     const rows = Array.isArray(parsed) ? parsed : parsed.rows || [];
     for (const row of rows) {
@@ -243,7 +243,7 @@ unique.sort((left, right) => {
   return left.ticker.localeCompare(right.ticker);
 });
 
-fs.writeFileSync(new URL("FSMOne-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(unique)), null, 2));
+fs.writeFileSync(new URL("fsmonesg-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(unique)), null, 2));
 
 const byType = new Map();
 for (const row of unique) byType.set(row.type, (byType.get(row.type) || 0) + 1);

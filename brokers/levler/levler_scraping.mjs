@@ -5,12 +5,16 @@
 // the ISIN and the MIC. The ticker is not on the list, so it is read from
 // the order-book page.
 //
-// Stockholm and First North are the whole market. The foreign lines are a
-// selection, and that selection is the whole offering: Nasdaq, NYSE, Xetra,
-// Amsterdam, Copenhagen and Oslo. isAmountOrderBuyable only says whether an
-// order can be placed in kronor, so it is not used. buyable is.
-// Paid subscription lines (BTA, BTU) sit in the share list. They are not
-// ordinary shares. A bond that is not an ETF is not a share either.
+// The share page names Nasdaq Stockholm including First North, US shares on
+// Nasdaq and the NYSE, German shares on Xetra, and Dutch shares on Euronext
+// Amsterdam. The list also has Copenhagen and Oslo. Foreign names are a
+// selection, and that selection is the whole offering. isAmountOrderBuyable
+// only says whether an order can be placed in kronor, so it is not used.
+// buyable is. Paid subscription lines (BTA, BTU) sit in the share list. They
+// are not ordinary shares. A bond that is not an ETF is not a share either.
+//
+//   https://levler.se/aktier/
+//   https://levler.se/api/open/search/v2/orderBooks
 //
 //   node brokers/levler/levler_scraping.mjs
 
@@ -88,6 +92,7 @@ async function loadList() {
     rows.push(...batch);
     offset += batch.length;
   }
+  if (rows.length !== total) throw new Error(`Levler announced ${total} rows and returned ${rows.length}`);
   return rows;
 }
 

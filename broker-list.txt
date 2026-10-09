@@ -79,8 +79,8 @@ Charles Stanley Direct	UK	Broker	UCITS ETFs / ETCs	https://www.charles-stanley-d
 Bestinvest	UK	Broker	UCITS ETFs / ETCs	https://www.bestinvest.co.uk/accounts	
 Willis Owen	UK	Broker	UCITS ETFs / ETCs	https://www.willisowen.co.uk/isa/apply-for-an-isa	enquiries@willisowen.co.uk
 Scottish Widows Share Dealing	UK	Bank	UCITS ETFs / ETCs	https://www.scottishwidows.co.uk/share-dealing	
-Halifax Share Dealing	UK	Bank	UCITS ETFs / ETCs	https://www.halifax.co.uk/investing.html	
-Lloyds Direct Investments	UK	Bank	UCITS ETFs / ETCs	https://www.investments.lloydsbank.com/share-centre/	https://www.investments.lloydsbank.com/share-centre/
+Halifax	UK	Bank	UCITS ETFs / ETCs	https://www.halifax.co.uk/investing.html	
+Lloyds	UK	Bank	UCITS ETFs / ETCs	https://www.investments.lloydsbank.com/share-centre/	https://www.investments.lloydsbank.com/share-centre/
 Barclays Smart Investor	UK	Bank	UCITS ETFs / ETCs	https://www.barclays.co.uk/smart-investor/	https://www.barclays.co.uk/help/contact-us/
 HSBC InvestDirect UK	UK	Bank	UCITS ETFs / ETCs	https://www.hsbc.co.uk/investments/products/invest-direct/	
 Santander Investment Hub	UK	Bank	UCITS ETFs / ETCs	https://www.santander.co.uk/personal/savings-and-investments/investments/investment-account	https://www.santander.co.uk/personal/support/contact-us
@@ -269,6 +269,7 @@ Lunar Invest	DK	Neobroker	UCITS ETFs / ETCs	https://www.lunar.app/dk/privat/inve
 Nykredit	DK	Bank	UCITS ETFs / ETCs	https://www.nykredit.dk/dit-liv/formue/investering/	
 Nordea Danmark	DK	Bank	Global ETFs / ETPs	https://www.nordea.dk/privat/produkter/investering/	https://www.nordea.dk/privat/kontakt-os.html
 Spar Nord	DK	Bank	UCITS ETFs / ETCs	https://www.sparnord.dk/dit-liv/formue/investering/investeringsstrategi/du-investerer-selv/	
+Nordnet	SE	Broker	UCITS ETFs / ETCs	https://www.nordnet.se/kom-igang	
 Avanza	SE	Broker	UCITS ETFs / ETCs	https://www.avanza.se/bli-kund.html	
 SEB	SE	Bank	UCITS ETFs / ETCs	https://seb.se/privat/spara-och-investera/aktier-och-vardepapper/handla-med-aktier	
 Swedbank	SE	Bank	UCITS ETFs / ETCs	https://www.swedbank.se/privat/spara-och-placera/investeringssparkonto.html	https://www.swedbank.se/om-oss/kontakta-oss/kontor.html
@@ -517,7 +518,6 @@ Morgans	AU	Broker	Local + Global ETFs	https://morgans.com.au/stockbroking	https:
 Ord Minnett	AU	Broker	Local + Global ETFs	https://www.ordminnett.com.au/	
 Sharesies	NZ	Neobroker	Local + US ETFs	https://www.sharesies.nz	help@sharesies.co.nz
 Hatch Invest	NZ	Neobroker	US ETFs / ETNs	https://hatchinvest.nz	https://www.hatchinvest.nz/contact-us
-InvestNow	NZ	Broker	Local-market ETFs	https://investnow.co.nz/join-investnow/	
 ASB Securities	NZ	Bank	Global ETFs / ETPs	https://www.asb.co.nz/asb-securities	
 Kernel Wealth	NZ	Neobroker	US ETFs / ETNs	https://kernelwealth.co.nz/how-it-works	support@kernelwealth.co.nz
 BlackBull Markets	NZ	Broker	Global ETFs / ETPs	https://blackbull.com/en/	
@@ -530,7 +530,7 @@ OCBC Securities (iOCBC)	SG	Bank	Global ETFs / ETPs	https://www.iocbc.com/account
 UOB Kay Hian	SG	Broker	Global ETFs / ETPs	https://uobkh.com.sg	
 Phillip POEMS	SG	Broker	Global ETFs / ETPs	https://www.poems.com.sg/open-an-account/	apu@phillip.com.sg
 Phillip POEMS	SG	Broker	Global ETFs / ETPs	https://www.phillip.com.sg/	apu@phillip.com.sg
-FSMOne	SG	Broker	Global ETFs / ETPs	https://fsm.global/sg	
+FSMOne SG	SG	Broker	Global ETFs / ETPs	https://fsm.global/sg	
 Tiger Brokers SG	SG	Neobroker	Global ETFs / ETPs	https://www.itiger.com/sg/	service@tigerbrokers.com
 moomoo SG	SG	Neobroker	Global ETFs / ETPs	https://www.moomoo.com/sg	
 Webull SG	SG	Neobroker	Global ETFs / ETPs	https://www.webull.com.sg	clientservices@webull.com.sg
@@ -712,7 +712,7 @@ TCBS	VN	Broker	Local-market ETFs	https://www.tcbs.com.vn/mo-tai-khoan-tcbs
 HSC (Ho Chi Minh City Securities)	VN	Broker	Local-market ETFs	https://register.hsc.com.vn/	
 Vietcap	VN	Broker	Local-market ETFs	https://www.vietcap.com.vn/mo-tai-khoan	info@vietcap.com.vn
 FPT Securities	VN	Broker	Local-market ETFs	https://www.fpts.com.vn/open-account/	
-Vietcombank Securities	VN	Bank	Local-market ETFs	https://www.vcbs.com.vn/	
+Vietcombank	VN	Bank	Local-market ETFs	https://www.vcbs.com.vn/	
 DNSE	VN	Neobroker	Local-market ETFs	https://www.dnse.com.vn/	
 MB Securities (MBS)	VN	Broker	Local-market ETFs	https://mbs.com.vn/mo-tai-khoan/	
 KIS Vietnam	VN	Broker	Local-market ETFs	https://trading.kisvn.vn/ekyc	

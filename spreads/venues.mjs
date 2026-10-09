@@ -861,8 +861,8 @@ export const KNOWN_UNSOURCED = [
     name: "Nasdaq Nordic",
     why: "le broker ne dit pas laquelle des places nordiques",
   },
-  { match: ["ssefnse"], name: "First North Stockholm", why: "adaptateur non écrit" },
-  { match: ["hsefn"], name: "First North Helsinki", why: "adaptateur non écrit" },
+  { match: ["ssefnse", "fnse"], name: "First North Stockholm", why: "adaptateur non écrit" },
+  { match: ["hsefn", "fnfi"], name: "First North Helsinki", why: "adaptateur non écrit" },
   { match: ["xris", "riga", "nriga", "omxrse"], name: "Nasdaq Riga", why: "adaptateur non écrit" },
   { match: ["xtal", "tallinn", "ntallinn", "omxtse"], name: "Nasdaq Tallinn", why: "adaptateur non écrit" },
   { match: ["xlit", "vilnius", "nvilnius", "omxvse"], name: "Nasdaq Vilnius", why: "adaptateur non écrit" },
@@ -887,7 +887,13 @@ export const KNOWN_UNSOURCED = [
   { match: ["bsesof", "xbul", "sofia"], name: "Bulgarian Stock Exchange", why: "adaptateur non écrit" },
   { match: ["xber", "berlin", "boerseberlin"], name: "Börse Berlin", why: "adaptateur non écrit" },
   { match: ["bist", "xist", "istanbul"], name: "Borsa Istanbul", why: "adaptateur non écrit" },
-  { match: ["csefndk"], name: "Nasdaq First North Denmark", why: "adaptateur non écrit" },
+  { match: ["csefndk", "fndk"], name: "Nasdaq First North Denmark", why: "adaptateur non écrit" },
+  // Börse Berlin's retail book. Avanza's site fills France, Belgium, the
+  // Netherlands and Portugal here, whatever Euronext the list still prints.
+  { match: ["xeqt", "equiduct"], name: "Equiduct", why: "adaptateur non écrit" },
+  { match: ["xxxx"], name: "beQuoted", why: "adaptateur non écrit" },
+  // DXE is not the Chi-X book. Matching it to CHIX would price the wrong venue.
+  { match: ["ceux", "dxe"], name: "Cboe Europe DXE", why: "adaptateur non écrit" },
   { match: ["eurotlx"], name: "EuroTLX", why: "adaptateur non écrit" },
   { match: ["nseke", "xnai", "nairobi"], name: "Nairobi Securities Exchange", why: "adaptateur non écrit" },
   { match: ["aquis", "aqse", "plusmarketsgroupformerlyofex", "plusmarkets", "ofex"], name: "Aquis", why: "adaptateur non écrit" },

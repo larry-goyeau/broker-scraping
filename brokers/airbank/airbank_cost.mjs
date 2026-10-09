@@ -14,9 +14,9 @@
 // unknown and the fee is 0.
 //
 // A dollar account pays a US share, and a euro account an ETF, with no
-// conversion. A crown account is converted at the rate in the order. That
-// rate is not published, so it is the remark. The Žiju refund of the first
-// buy of the month stays out.
+// conversion. A crown account is converted on the public exchange list
+// (devizy, 9 Oct 2026). Half that spread is the remark, not this ticket.
+// The Žiju refund of the first buy of the month stays out.
 //
 //   https://www.airbank.cz/file-download/investice-cenik
 //   https://www.airbank.cz/file-download/4302-pravidla-provadeni-pokynu.pdf
@@ -43,6 +43,21 @@ const SCHEDULE = {
   feesAsOf: "2026-09-20",
   partner: "Interactive Brokers Ireland Limited",
 };
+
+// 1 currency = CZK. Nakupujeme, then prodáváme. Kurzovní lístek 9 Oct 2026.
+const FX_BOARD = {
+  USD: [20.985, 22.417],
+  EUR: [23.559, 25.167],
+};
+
+function fxHalf(currency) {
+  if (currency === "CZK") return "";
+  const pair = FX_BOARD[currency];
+  if (!pair) return fxRemark("", currency);
+  const [bid, offer] = pair;
+  const half = ((offer - bid) / (offer + bid)) * 100;
+  return fxRemark(half.toFixed(3), currency);
+}
 
 const RATE = 0.002;
 const STOCK_MIN = 2;
@@ -132,7 +147,7 @@ export function roundTrip({ etf, place, currency, shares, price }) {
     bp: marketBp,
     perShare: marketPerShare,
     cashCurrency: cash,
-    remark: fund ? "" : fxRemark("", cash),
+    remark: fund ? "" : fxHalf(cash),
     url: SCHEDULE.fees,
     fx: { quote: QUOTE, asOf: FX_AS_OF, listing: usdPer(listing.currency) },
     fxIfConverted: 0,

@@ -1,7 +1,7 @@
 // What one round trip costs at InvestEngine: buy n shares at price p, sell
 // them back at once, in dollars.
 //
-// One schedule, the DIY portfolio, re-read 2026-09-27. The costs page is
+// One schedule, the DIY portfolio, re-read 2026-10-08. The costs page is
 // dated 7 July 2026.
 //
 //   commission     0
@@ -40,7 +40,7 @@ const CATALOGUE = new URL("investEngine-parsed.json", import.meta.url);
 const SCHEDULE = {
   url: "https://investengine.com/costs/",
   execution: "https://investengine.com/order-execution-policy/",
-  readOn: "2026-09-27",
+  readOn: "2026-10-08",
   entity: "InvestEngine (UK) Limited",
   venue: "Winterflood Securities Ltd, London Stock Exchange",
 };

@@ -111,7 +111,7 @@
 
       <h2>The formula</h2>
       <p>On a US listing the book starts from Rule 605: the effective spread a retail order of 100 to 499 shares paid, price improvement included, in dollars per share. Nasdaq, NYSE, NYSE Arca, NYSE American and Cboe BZX share that figure. Rule 606 then scales it by where that broker-dealer sends held market and marketable-limit orders. The calculation starts from that asset's price-improved 605 and multiplies it by a coefficient particular to the broker, which corrects the 605 for the wholesaler that broker uses. Q is the average proportion between the 605 and the 606s of each wholesaler.</p>
-      <div class="eq" role="math" aria-label="Q equals the sum over venues of w sub t times the mean over names of E sub t,n over E sub n. The book equals E times Q.">
+      <div class="eq" role="math" aria-label="Q equals the sum over venues of w sub t times the mean over names of S sub t,n over S sub n. The book equals S times Q.">
         <div class="row">
           <span class="var">Q</span>
           <span>=</span>
@@ -119,19 +119,19 @@
           <span><span class="var">w</span><span class="sub">t</span></span>
           <span>×</span>
           <span class="mean">mean<span class="sub">n</span></span>
-          <span class="frac"><span><span class="var">E</span><span class="sub">t,n</span></span><span><span class="var">E</span><span class="sub">n</span></span></span>
+          <span class="frac"><span><span class="var">S</span><span class="sub">t,n</span></span><span><span class="var">S</span><span class="sub">n</span></span></span>
         </div>
         <div class="row">
           <span>book</span>
           <span>=</span>
-          <span class="var">E</span>
+          <span class="var">S</span>
           <span>×</span>
           <span class="var">Q</span>
         </div>
       </div>
       <dl>
-        <div><dt>E<sub>n</sub></dt><dd>The blended Rule 605 effective spread of name <span class="var">n</span>.</dd></div>
-        <div><dt>E<sub>t,n</sub></dt><dd>The spread of the same name, from the firm that venue <span class="var">t</span> is.</dd></div>
+        <div><dt>S<sub>n</sub></dt><dd>The blended Rule 605 effective spread of name <span class="var">n</span>.</dd></div>
+        <div><dt>S<sub>t,n</sub></dt><dd>The spread of the same name, from the firm that venue <span class="var">t</span> is.</dd></div>
         <div><dt>w<sub>t</sub></dt><dd>The share of this broker’s held market and marketable-limit orders sent to <span class="var">t</span>, from its Rule 606 report.</dd></div>
       </dl>
       <p>An exchange, an ATS or an unnamed venue is not given a ratio of 1. Its ratio is the reconstructed quoted spread divided by the blended effective spread. A quoted touch is wider than what retail orders actually paid, so a broker that sends most of its flow there has a Q above 1.</p>
@@ -162,7 +162,7 @@
               <ul>
                 <li>
                   <p class="node">A 606 mix exists</p>
-                  <p class="case">book = E × Q</p>
+                  <p class="case">book = S × Q</p>
                   <ul>
                     <li>
                       <p class="node">US broker-dealer</p>

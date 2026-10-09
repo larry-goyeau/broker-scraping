@@ -1,6 +1,6 @@
 {
   "quarter": "2026-Q2",
-  "fetchedAt": "2026-10-03T20:42:50.484Z",
+  "fetchedAt": "2026-10-08T18:49:41.955Z",
   "source": "https://cdn.finra.org/606reportBulk/2026/606_NMS_2026_Q2.zip",
   "brokers": {
     "alpaca": {
@@ -27,7 +27,8 @@
         "104021_606_NMS_2026_Q2_V1_20260802.xml"
       ],
       "mix": {
-        "OTHER": 0.958,
+        "OTHER": 0.9184,
+        "CODX": 0.03952,
         "CDRG": 0.04203
       }
     },
@@ -90,7 +91,7 @@
         "5376_606_NMS_2026_Q2_CNTXT-STXG_V1_20260729.xml"
       ],
       "mix": {
-        "OTHER": 0.2857,
+        "STXG": 0.2857,
         "NITE": 0.2714,
         "CDRG": 0.1692,
         "JNST": 0.1713,
@@ -141,7 +142,7 @@
         "GTSM": 0.2007,
         "JNST": 0.1815,
         "ETMM": 0.017,
-        "OTHER": 0.001337
+        "ICBX": 0.001337
       }
     },
     "tradestation": {
@@ -284,6 +285,39 @@
         "CDRG": 0.6266,
         "JNST": 0.2696,
         "NITE": 0.1038
+      }
+    },
+    "citigroup": {
+      "crd": [
+        "7059"
+      ],
+      "name": "Citigroup Global Markets Inc. (\"CGMI\") Wealth",
+      "files": [
+        "7059_606_NMS_2026_Q2_CNTXT-CGWM_V1_20260730.xml"
+      ],
+      "mix": {
+        "CDRG": 0.2537,
+        "JNST": 0.191,
+        "ETMM": 0.1864,
+        "HRTF": 0.1064,
+        "NITE": 0.1266,
+        "OTHER": 0.03701,
+        "SOHO": 0.06082,
+        "UBSS": 0.03809
+      }
+    },
+    "bimi": {
+      "crd": [
+        "19418"
+      ],
+      "name": "Intesa Sanpaolo IMI Securities Corp.",
+      "files": [
+        "19418_606_NMS_2026_Q2_V1_20260731.xml"
+      ],
+      "mix": {
+        "NITE": 0.4613,
+        "CDRG": 0.4602,
+        "OTHER": 0.07847
       }
     }
   }

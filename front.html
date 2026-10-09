@@ -850,7 +850,7 @@
           : esc(label);
         const where = whereOf(row);
         const mark = brand.key
-          ? `<img src="/logos/${esc(brand.key)}.png?v=3" alt="" width="32" height="32" onerror="this.remove()">`
+          ? `<img src="/logos/${esc(brand.key)}.png?v=4" alt="" width="32" height="32" onerror="this.remove()">`
           : "";
         return `<td class="broker"><div class="bk"><span class="avatar tone-${toneOf(brand.key)}" aria-hidden="true">${mark}<span class="mono">${esc(initialsOf(brand.words))}</span></span><div class="bk-text"><span class="bk-name">${name}</span>${where ? `<span class="bk-where">${esc(where)}</span>` : ""}</div></div></td>`;
       };

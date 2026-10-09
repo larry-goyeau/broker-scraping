@@ -1,7 +1,7 @@
 // What one round trip costs at Willis Owen: buy n shares at price p,
 // sell them back at once, in dollars.
 //
-// Re-read 2026-10-02. One ticket. Regular saving into a share, an ETF, an
+// Re-read 2026-10-09. One ticket. Regular saving into a share, an ETF, an
 // ETC or an ETN is not offered.
 //
 //   shares, ETF, ETC, ETN     £7.50 a side
@@ -44,8 +44,8 @@ const CATALOGUE = new URL("willisowen-parsed.json", import.meta.url);
 const SCHEDULE = {
   charges: "https://www.willisowen.co.uk/help/fees-and-charges",
   range: "https://www.willisowen.co.uk/explore/",
-  readOn: "2026-10-02",
-  entity: "Willis Owen",
+  readOn: "2026-10-09",
+  entity: "Willis Owen Limited",
   custodian: "Embark Investment Services Limited",
   usBrokerDealer: null,
 };

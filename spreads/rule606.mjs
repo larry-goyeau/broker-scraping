@@ -2,14 +2,14 @@
 // reports FINRA publishes as one zip of XML. The round trip rereads those files
 // (and the 605 table) whenever they change on disk. Q is never stored:
 //
-//   Q = Σ_t w_t × mean_n (E_t / E_blend)
+//   Q = Σ_t w_t × mean_n (S_t / S_blend)
 //   book = 605_live × Q
 //
 // w_t is the 606 mix (market + marketable limit). The mean is equal-weight over
 // every name both figures exist for. OTHER (exchanges, ATS, unnamed) is the
 // reconstructed NBBO quoted / blended 605 — a place fill is the touch, not 1.
 // A broker without a 606 is treated as the place: the reconstructed quoted
-// NBBO of that name (or E × OTHER if that field is missing), not E × 1.
+// NBBO of that name (or S × OTHER if that field is missing), not S × 1.
 // Taxes, SEC, TAF and the ticket stay out of Q.
 //
 //   node rule606.mjs              -- refresh and list each mapped broker
@@ -50,6 +50,11 @@ export const US_BROKERS = {
   clearstreet: { crd: ["288933"], name: "Clear Street LLC" },
   ifastsecuritiesus: { crd: ["327903"], name: "iFAST Securities US Corporation" },
   futuclearing: { crd: ["298769"], name: "Futu Clearing Inc." },
+  // CRD 7059 files two reports. CGWM is the equity book. SBSH is options;
+  // its stock sections are empty, so it must not replace the equity mix.
+  citigroup: { crd: ["7059"], name: "Citigroup Global Markets Inc.", xml: /CNTXT-CGWM/ },
+  // Banca IMI's US broker-dealer. The filing's <bd> tag is the code "bimi".
+  bimi: { crd: ["19418"], name: "Intesa Sanpaolo IMI Securities Corp." },
 };
 
 // Introducing brokers that do not file their own 606: same mix as the US BD
@@ -85,8 +90,10 @@ export const ALIASES = {
   // Zesty: US stocks are operated and custodied by Alpaca Securities.
   zesty: "alpaca",
   // iFAST board notice of 29 May 2025: iFAST Securities US Corporation routes
-  // the group's US orders and custodies the US securities.
-  fsmone: "ifastsecuritiesus",
+  // the group's US orders and custodies the US securities. Hong Kong uses
+  // the same filing.
+  fsmonesg: "ifastsecuritiesus",
+  fsmonehk: "ifastsecuritiesus",
   // Rakuten Trade's foreign-equity FAQ names Interactive Brokers as the
   // partner that can suspend the service. US cash follows that firm's NMS
   // flow, so the book is Interactive Brokers LLC's 606.
@@ -99,13 +106,59 @@ export const ALIASES = {
   // Options go to Atomic Vaults and are not this book.
   // https://pluang.com/faq/us-stocks/about-us-stocks/penyaluran-dana-saat-transaksi-saham-as-di-pluang
   pluang: "alpaca",
+  // Gotrade's fee schedule names Alpaca Securities LLC: it charges the
+  // options exercise fee, powers USD withdrawals, and may charge further
+  // fees. Gotrade Securities Inc. is a Labuan firm and files no 606.
+  // https://www.heygotrade.com/en/fee/
+  gotradeglobal: "alpaca",
+  // Gotrade Indonesia's fee page names Alpaca Securities LLC for the
+  // option exercise. The share ticket uses that firm's Q.
+  // https://www.heygotrade.com/id/fee/
+  gotradeid: "alpaca",
+  // Baraka's terms route execution-only orders to DriveWealth LLC and
+  // name that firm for payment for order flow.
+  // https://getbaraka.com/terms
+  baraka: "drivewealth",
   // Toss routes some US orders through TSA Financial and clears through
   // Apex and Clear Street. Apex's 2026 Q2 Q is 1.702. Clear Street filed
   // no market-order mix. TSA Financial has no 606 in that quarter.
   toss: "apex",
+  // Public Investing passes listed and OTC orders to Apex Clearing, which
+  // routes the default wholesale path. Smart and lit routes are a choice.
+  // https://public.com/disclosures/sec-rule-606-and-607-disclosures
+  public: "apex",
+  // Stash Capital introduces every order to Apex Clearing, the only
+  // carrying broker. Apex routes it.
+  // https://cdn.stash.com/disclosures/Stash_Wrap_Fee_Program_Brochure_12.pdf
+  stash: "apex",
+  // Nordnet names Citigroup Global Markets for global equities. US stocks
+  // take that firm's equity 606 (Wealth, CGWM).
+  nordnet: "citigroup",
+  // Inversis Banco's 2024 retransmission report names several intermediaries
+  // and no single US broker-dealer. Of the American names, only Citigroup
+  // Global Markets Inc. files a 606. Its 2026 Q2 Q is 1.024. Morgan Stanley
+  // there is the Delaware parent, which files none; the MSCO mean is 0.701.
+  // Instinet Group files none.
+  // https://www.inversis.es/dam/jcr:9665be7b-e7ea-41b5-bb3a-9e2cf771bf52/Banco%20Inversis%20-%20Informe%20Retransmisor%202024.pdf
+  myinvestor: "citigroup",
+  // Avanza files no US 606. US stocks take Virtu Americas' Q, the NITE
+  // mean against the blended 605.
+  avanza: "virtuamericas",
+  // Lloyds and Halifax send every
+  // international order to Banca IMI. That group's US broker-dealer files
+  // CRD 19418. Goldman Sachs is in the mix and has no 605 here, so that
+  // slice is the place.
+  lloyds: "bimi",
+  halifax: "bimi",
 };
 
-const RIC = new Set(["CDRG", "NITE", "JNST", "UBSS", "HRTF", "SOHO", "ETMM", "GTSM", "IATS", "IBCO"]);
+// Not in the FINRA zip. Virtu Americas' own routing is itself, so the Q
+// is the NITE mean and the mix is that one venue.
+const ASSIGNED = {
+  virtuamericas: { name: "Virtu Americas LLC", mix: { NITE: 1 } },
+};
+
+const RIC = new Set(["CDRG", "NITE", "JNST", "UBSS", "HRTF", "SOHO", "ETMM", "GTSM", "IATS", "IBCO", "MSCO", "STXG", "CODX", "ICBX"]);
 
 const ricOf = (name) => {
   const raw = String(name || "").trim().toUpperCase();
@@ -121,6 +174,13 @@ const ricOf = (name) => {
   if (/\bgts\b/.test(n)) return "GTSM";
   if (n.includes("ibkr ats") || /\biats\b/.test(n)) return "IATS";
   if (n.includes("interactive brokers corp") || /\bibco\b/.test(n)) return "IBCO";
+  // J.P. Morgan is a different firm. Morgan Stanley & Co. has its own 605.
+  if (n.includes("morgan stanley")) return "MSCO";
+  if (n.includes("siebert")) return "STXG";
+  if (n.includes("coda")) return "CODX";
+  // Instinet LLC's only public 605 is the CBX ATS. BlockCross and the broker
+  // name in a 606 both land here; there is no second Instinet file.
+  if (n.includes("instinet")) return "ICBX";
   return "OTHER";
 };
 
@@ -205,7 +265,10 @@ export async function download606({ quiet = false } = {}) {
   const brokers = {};
   for (const [folder, meta] of Object.entries(US_BROKERS)) {
     const files = read.names.filter(
-      (n) => n.endsWith(".xml") && meta.crd.some((c) => n.startsWith(`${c}_`) || n.startsWith(`${c.padStart(c.length, "0")}_`))
+      (n) =>
+        n.endsWith(".xml") &&
+        meta.crd.some((c) => n.startsWith(`${c}_`) || n.startsWith(`${c.padStart(c.length, "0")}_`)) &&
+        (!meta.xml || meta.xml.test(n))
     );
     if (!files.length) {
       if (!quiet) console.error(`606 : ${folder} (CRD ${meta.crd.join(",")}) absent du zip ${q}`);
@@ -215,7 +278,8 @@ export async function download606({ quiet = false } = {}) {
     let bd = meta.name;
     for (const name of files) {
       const parsed = parseReport(read(name));
-      if (parsed.bd) bd = parsed.bd;
+      // A tag that is only a code ("bimi") is not the firm's name.
+      if (parsed.bd && /[A-Z]/.test(parsed.bd)) bd = parsed.bd;
       mix = mergeMix(mix, parsed.mix);
     }
     brokers[folder] = { crd: meta.crd, name: bd, files, mix };
@@ -289,7 +353,7 @@ export function routingOf(broker) {
     .toLowerCase()
     .split(":")[0];
   const key = ALIASES[raw] || raw;
-  return load606()?.brokers?.[key] || null;
+  return load606()?.brokers?.[key] || ASSIGNED[key] || null;
 }
 
 // Equal-weight mean over names of (that teneur's 605 / the blended 605).
@@ -372,7 +436,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const table = await monthlyRouting({ refresh: !asked && !process.argv.includes("--cached") });
   if (asked) {
     const key = ALIASES[asked] || asked;
-    const row = table.brokers[key];
+    const row = routingOf(asked);
     if (!row) {
       console.log(`${asked} n'a pas de 606 dans ${table.quarter}`);
       process.exit(0);

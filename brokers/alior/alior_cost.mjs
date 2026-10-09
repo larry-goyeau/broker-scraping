@@ -21,8 +21,9 @@
 //     a US exchange also floors the order at 0.02 USD a share
 //
 // The commission is taken in the currency of the order. A transfer in
-// another currency is converted by the bank that holds the cash, at that
-// bank's rate. No percent is published. That is the remark, not this ticket.
+// another currency uses the bank's dewizy table of 9 Oct 2026, 09:00
+// (the unmarked line, not the card or the kantor). Half that spread is
+// the remark, not this ticket.
 // Custody above the published threshold is not a ticket. Stamp and FTT come
 // from the tax map. The tariff names no PTM levy and no SEC fee.
 //
@@ -48,7 +49,7 @@ import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
 import { spreads } from "../../spreads/book.mjs";
 import { bookParts, plus, finite } from "../../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, listingCash } from "../../fx.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, listingCash, fxRemark } from "../../fx.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("alior-parsed.json", import.meta.url);
@@ -139,9 +140,24 @@ function findListing({ etf, place, currency }) {
   return { named, matches };
 }
 
+// 1 currency = PLN. Skup, then sprzedaż. Dewizy, table 2026100909000.
+const FX_BOARD = {
+  USD: [3.7224, 4.0753],
+  EUR: [4.1791, 4.5745],
+  GBP: [4.9264, 5.3945],
+  NOK: [0.3889, 0.4261],
+  DKK: [0.559, 0.6121],
+  SEK: [0.3737, 0.4093],
+};
+
 function fxNote(currency) {
   const cash = listingCash(currency) || "listing";
-  return `FX at the custodian bank's rate when cash ≠ ${cash}.`;
+  if (cash === "PLN") return "";
+  const pair = FX_BOARD[cash];
+  if (!pair) return `FX at the custodian bank's rate when cash ≠ ${cash}.`;
+  const [bid, offer] = pair;
+  const half = ((offer - bid) / (offer + bid)) * 100;
+  return fxRemark(half.toFixed(3), cash);
 }
 
 function legsOf(listing, notional, shares) {

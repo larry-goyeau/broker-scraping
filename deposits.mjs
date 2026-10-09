@@ -273,7 +273,25 @@ const FOLDER = {
   // account and left there. The cash page calls the renminbi account CNH.
   // https://secure.fundsupermart.com/fsm/advice-services/faq/0/9021/
   // https://fsm.global/sg/cash
-  FSMOne: ["SGD", "USD", "AUD", "CAD", "EUR", "GBP", "CNH", "HKD", "NZD", "JPY", "CHF", "MYR"],
+  fsmonesg: ["SGD", "USD", "AUD", "CAD", "EUR", "GBP", "CNH", "HKD", "NZD", "JPY", "CHF", "MYR"],
+  // Each of these ten has its own cash account and its own receiving
+  // account. A transfer into the matching account is left in that currency.
+  // The page prints renminbi; the shelf quotes CNH.
+  // https://www.fsmglobal.hk/cash-account/interest-rate
+  // https://www.fsmglobal.hk/support/cash-solutions/making-payment
+  fsmonehk: ["HKD", "USD", "CNH", "AUD", "CAD", "CHF", "EUR", "GBP", "JPY", "SGD"],
+  // A wire is a direct dollar deposit and stays dollars. A local-currency
+  // payment through Rapyd is converted on the way to the United States.
+  // The cash that trades is USD. The FX fee is that conversion.
+  // https://help.heygotrade.com/en/articles/10182686-wise-termination
+  // https://help.heygotrade.com/en/articles/5977626-who-is-rapyd
+  // https://www.heygotrade.com/legal/gotrade-fees.pdf
+  gotradeglobal: ["USD"],
+  // A rupiah transfer is converted to dollars on the way in. A dollar
+  // deposit is free and stays dollars. The cash that trades is USD.
+  // https://www.heygotrade.com/id/fee/
+  // https://help.heygotrade.com/id/articles/9804644-kemudahan-baru-dalam-deposit-di-gotrade-indonesia
+  gotradeid: ["USD"],
   // Won is the cash account. Dollars can be transferred in through the Hana
   // virtual account and left as dollars.
   // https://www.yna.co.kr/view/AKR20241230044400008
@@ -297,6 +315,15 @@ const FOLDER = {
   // The open Global Trader account is one euro account. BG Trader shows the same.
   elana: ["EUR"],
   firstrade: ["USD"],
+  // The account is dollars. An ACH or a domestic wire stays dollars. A
+  // deposit in another currency is converted, plus 0.30%.
+  // https://public.com/disclosures/fee-schedule
+  public: ["USD"],
+  // The brokerage is funded from a US bank and the cash stays dollars.
+  // A deposit in another currency is not accepted.
+  // https://cdn.stash.com/disclosures/Stash_Wrap_Fee_Program_Brochure_12.pdf
+  // https://cdn.stash.com/disclosures/stride-deposit-account-agreement.pdf
+  stash: ["USD"],
   // Terms: every payment in and out is sterling. The international-shares
   // page says no other currency is held. A foreign receipt is converted
   // into pounds, so it is not a deposit currency.
@@ -324,15 +351,29 @@ const FOLDER = {
   // that is not in pounds is converted into sterling, plus a 1% spread.
   // https://www.hl.co.uk/__data/assets/pdf_file/0015/37122/Online-Ts-and-Cs.pdf
   hargreaveslansdown: ["GBP"],
-  // Costs: the account deals in sterling and FX is free because every line
-  // is already in pounds. Funding comes from a UK current account.
+  // Terms 4.2 and section 8: every payment to or from the nominated bank
+  // is pounds, and the account settles in pounds. A receipt in another
+  // currency is converted. The nominated bank is in the UK, Jersey,
+  // Guernsey or the Isle of Man.
+  // https://www.lloydsbank.com/assets/media/pdfs/investments/direct-investments/terms_conditions.pdf
+  lloyds: ["GBP"],
+  // Terms 4.2 and section 8: every payment to or from the nominated bank
+  // is pounds, and the account settles in pounds. A receipt in another
+  // currency is converted. The nominated bank is in the UK, Jersey,
+  // Guernsey or the Isle of Man.
+  // https://www.halifax.co.uk/assets/pdf/filestore/halifaxsharedealing_termsandconds.pdf
+  halifax: ["GBP"],
+  // Terms 7.1 and 7.6: a top-up comes from a UK, Channel Island or Isle of
+  // Man current account, and a withdrawal is a sterling amount. No other
+  // currency is left as cash. The costs page charges no FX because every
+  // line is already quoted in pounds.
+  // https://investengine.com/terms/
   // https://investengine.com/costs/
-  // https://help.investengine.com/hc/en-gb/articles/31146506884893-How-do-I-add-funds
   investEngine: ["GBP"],
-  // Explore: the share range is traded in sterling, and there is one platform
-  // cash account. A dollar price on a London line is the quote, not a balance
-  // left in dollars.
-  // https://www.willisowen.co.uk/explore/
+  // Platform terms (February 2025): a contribution is a debit card payment or
+  // a Direct Debit, and a withdrawal is a sterling amount to a UK bank. There
+  // is one cash account. A dollar or euro figure on a line is the London quote.
+  // https://www.willisowen.co.uk/documents/Willis_Owen_Platform_Terms_and_Conditions_February_2025.pdf
   willisowen: ["GBP"],
   // Help: every booking lands in euro on the settlement account. A payment
   // in another currency is converted to euro by Baader Bank.
@@ -345,8 +386,11 @@ const FOLDER = {
   freedom24: ["EUR", "USD"],
   ig: ["EUR"],
   labanquepostale: ["EUR"],
-  // The account holds kronor. A foreign line is converted, so USD and EUR
-  // are not cash the client can leave sitting.
+  // A deposit is Swish, Bankgiro, or a transfer started inside Levler. There
+  // is no clearing number and no foreign-currency balance. A share in another
+  // currency is converted at 0.19% a time.
+  // https://levler.se/kundservice/insattningar-och-uttag/hur-gor-jag-en-insattning/vilket-clearingnummer-har-levler/
+  // https://levler.se/om-oss/prislista/
   levler: ["SEK"],
   N26: ["EUR"],
   oanda: ["EUR", "PLN", "CZK", "RON", "USD"],
@@ -403,11 +447,41 @@ const FOLDER = {
   tastytrade: ["USD"],
   thndr: ["EGP", "USD", "AED"],
   bhmuae: ["AED", "USD"],
+  // A dollar transfer stays in the USD wallet. Dirhams deposited into the
+  // GCC wallet stay dirhams. The two wallets do not convert into each
+  // other. A UAE transfer into the dollar wallet is 0.75% and is not a
+  // deposit that stays dollars.
+  // https://getbaraka.com/gcc-stocks-overview
+  // https://getbaraka.com/terms
+  baraka: ["AED", "USD"],
+  // Euros arrive by SEPA and stay euros. Any other currency paid into
+  // that account is converted, plus 0.30%. Dollars paid into the dollar
+  // account stay dollars. Opening it needs Premium, and it stays linked
+  // to the euro account.
+  // https://myinvestor.es/ayuda/preguntas-frecuentes/transferencias/
+  // https://myinvestor.es/cuentas-tarjetas/cuentas-dolares/
+  // https://myinvestor.es/premium/
+  myinvestor: ["EUR", "USD"],
   // A payment that stays as cash is francs. The account is at
   // Hypothekarbank Lenzburg, and every neon invest line is already a
   // BX Swiss price in CHF, so nothing is converted on the way in.
   // https://www.neon-free.ch/en/faq/why-are-the-prices-for-shares-and-etfs-displayed-in-chf-in-the-app
   neon: ["CHF"],
+  // A transfer from a Swedish bank is left in the currency it arrives in.
+  // SEK is every account. USD, EUR, NOK, DKK and CAD can be paid into a
+  // share-and-fund currency account and left there. An ISK, an endowment,
+  // a savings account and a pension take SEK only. Nothing arrives from
+  // abroad. GBP and CHF have no account.
+  // https://www.nordnet.se/faq/insattningar-uttag/insattningar/hur-gor-jag-insattningar-i-utlandsk-valuta
+  // https://www.nordnet.se/faq/handel-vardepapper/valutakonto/valutakonto-pa-aktie-och-fondkonto-af
+  // SEK is the account. A deposit in a currency that already has a
+  // currency account is credited there and left. Those accounts are
+  // CAD, CHF, DKK, EUR, GBP, NOK and USD. Any other currency is
+  // converted before it becomes cash.
+  // https://www.avanza.se/avanzabank/hem/konton/blanketter/aktie-och-fondkonto/allmanna_villkor_for_kontotjanster.pdf
+  // https://www.avanza.se/kundservice.html/3747/hur-fungerar-manuell-valutavaxling/
+  avanza: ["SEK", "USD", "EUR", "GBP", "CHF", "NOK", "DKK", "CAD"],
+  nordnet: ["SEK", "USD", "EUR", "NOK", "DKK", "CAD"],
   // A pay-in is K-net, or a transfer from the client's account at the
   // bank, and the opening minimum is KD 1,000. Dollars, pounds and euros
   // on the fee sheet are a transfer into that market, done with customer
@@ -501,6 +575,12 @@ const FOLDER = {
   // there. The sheet names no other currency.
   // https://www.ssi.com.vn/khach-hang-ca-nhan/huong-dan-nop-tien
   ssi: ["VND"],
+  // A transfer into the client's Vietcombank identification account is
+  // credited to the securities cash account and left there. The sheet
+  // names no other currency. A foreign client pays in at the counter;
+  // that payment is the same dong account.
+  // https://www.vcbs.com.vn/chi-tiet-ho-tro-giao-dich/nop-tien-chung-khoan
+  vietcombank: ["VND"],
   // A transfer to the euro clearing account is credited and left there.
   // The price list prices that one account. A coupon in another currency
   // is credited in euros unless the customer already holds an account in

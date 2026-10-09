@@ -1,7 +1,7 @@
 // What one round trip costs at Levler: buy n shares at price p, sell them
 // back at once, in dollars.
 //
-// Two plans, re-read 2026-09-27 on the price list. Default is Standard.
+// Two plans, re-read 2026-10-09 on the price list. Default is Standard.
 // Plus is the same tickets at zero, plus a custody charge that is not a
 // trade fee and so stays out of the number.
 //
@@ -26,17 +26,24 @@
 //     stocks and ETFs     0
 //     custody             0.35 % a year of the whole account, not in the total
 //   both
-//     FX                  0.19 % a conversion, stocks and ETFs
-//     cash                SEK only, so a foreign line converts twice
+//     FX                  0.19 % a conversion on a share. Cash is kronor,
+//                         so a foreign share converts twice.
 //     Levler's own ETFs   0 commission on Standard through 31 Dec 2026
+//     crypto ETPs         Standard is 9 kr a side under 1 000 kr, and 0
+//                         from 1 000 kr. Plus is 0. These are the tracker
+//                         certificates. A foreign share's classes do not
+//                         apply.
 //
-// Phone orders are a different ticket and are not this one. Funds,
-// certificates and crypto are not in the catalogue. No stamp is added
+// Phone orders are a different ticket: a floor of 198 and 0.05 %, in the
+// market currency, and Plus makes the phone order free. Leveraged
+// certificates, minifutures and turbos are 9 kr under 1 000 kr on Standard
+// and are not in this catalogue. Funds are not either. No stamp is added
 // beyond the tax map. The price list does not name a US regulatory levy.
 //
 //   https://levler.se/om-oss/prislista/
 //
 //   node brokers/levler/levler_cost.mjs INVEB --shares=10 --price=400
+//   node brokers/levler/levler_cost.mjs STABLE --shares=1 --price=400
 //   node brokers/levler/levler_cost.mjs AAPL --shares=1 --price=230
 //   node brokers/levler/levler_cost.mjs AAPL --plan=plus --shares=1 --price=230
 //   node brokers/levler/levler_cost.mjs --schedule
@@ -55,14 +62,17 @@ const CATALOGUE = new URL("levler-parsed.json", import.meta.url);
 
 const SCHEDULE = {
   url: "https://levler.se/om-oss/prislista/",
-  readOn: "2026-09-27",
-  entity: "Levler",
+  readOn: "2026-10-09",
+  entity: "Levler SPQR AB",
 };
 
 const DEFAULT_PLAN = "standard";
 const FX_RATE = 0.0019;
 const CUSTODY = 0.0035;
 const LEVLER_ETF_FREE_UNTIL = "2026-12-31";
+// Crypto certificates, the tracker lines. Standard is 9 kr a side below
+// 1 000 kr and nothing from 1 000 kr. The table is in kronor.
+const ETP_NOTE = { under: 1000, fee: 9, currency: "SEK" };
 
 // Floors and the flat ticket are in the market's own currency.
 const CLASSES = {
@@ -178,6 +188,12 @@ function levlerEtfFree(row) {
   if (String(row?.type || "").toUpperCase() !== "ETF") return false;
   if (!/^Levler\b/.test(String(row?.name || ""))) return false;
   return new Date().toISOString().slice(0, 10) <= LEVLER_ETF_FREE_UNTIL;
+}
+
+function etpNote(notionalSek) {
+  if (notionalSek == null || !Number.isFinite(Number(notionalSek))) return null;
+  const fee = Number(notionalSek) < ETP_NOTE.under ? ETP_NOTE.fee : 0;
+  return { id: "etp", fee, flat: fee === 0 ? 0 : null, currency: ETP_NOTE.currency };
 }
 
 function findListing({ etf, place, currency }) {
@@ -304,9 +320,18 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   }
 
   const native = toCcy(notional, listing.currency, ticketCcy);
-  const chosen = promo || picked.free ? { id: promo ? "levler-etf" : "plus", fee: 0, flat: 0, currency: ticketCcy } : cheapestClass(market, native);
+  const etp = String(listing.type || "").toUpperCase() === "ETP";
+  const notionalSek = etp ? toCcy(notional, listing.currency, ETP_NOTE.currency) : null;
+  const chosen = picked.free
+    ? { id: "plus", fee: 0, flat: 0, currency: etp ? ETP_NOTE.currency : ticketCcy }
+    : promo
+      ? { id: "levler-etf", fee: 0, flat: 0, currency: ticketCcy }
+      : etp
+        ? etpNote(notionalSek)
+        : cheapestClass(market, native);
   const each = chosen?.fee ?? null;
-  const commissionUsd = each == null ? null : dollars(each * 2, ticketCcy);
+  const commissionCcy = chosen?.currency || ticketCcy;
+  const commissionUsd = each == null ? null : dollars(each * 2, commissionCcy);
   const notionalUsd = dollars(notional, listing.currency);
   const bookUsd =
     marketBp != null && notionalUsd != null
@@ -322,12 +347,16 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const klass = chosen?.id || "?";
   const confidence = [
     `barème ${picked.label} ${market} ${klass}, relu le ${SCHEDULE.readOn}`,
-    each === 0
-      ? "exécution 0"
-      : chosen?.flat != null
-        ? `ticket ${chosen.flat} ${ticketCcy} par jambe`
-        : `${((chosen?.rate || 0) * 100).toFixed(2)} % par jambe` +
-          (chosen?.min && each === chosen.min ? `, le plancher ${chosen.min} ${ticketCcy} mord` : ""),
+    etp && !picked.free
+      ? each === 0
+        ? `exécution 0, ordre d'au moins ${ETP_NOTE.under} kr`
+        : `${ETP_NOTE.fee} kr par jambe, ordre sous ${ETP_NOTE.under} kr`
+      : each === 0
+        ? "exécution 0"
+        : chosen?.flat != null
+          ? `ticket ${chosen.flat} ${commissionCcy} par jambe`
+          : `${((chosen?.rate || 0) * 100).toFixed(2)} % par jambe` +
+            (chosen?.min && each === chosen.min ? `, le plancher ${chosen.min} ${commissionCcy} mord` : ""),
     holdSek ? "ligne en SEK : pas de change" : `change ${(FX_RATE * 100).toFixed(2)} % × 2, dans le total`,
     marketBp != null
       ? `carnet ${Number(marketBp.toPrecision(4))} bp`
@@ -344,7 +373,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
       rate: chosen?.flat != null || each === 0 ? 0 : chosen?.rate || 0,
       min: chosen?.min || 0,
       flat: chosen?.flat ?? (each === 0 ? 0 : null),
-      currency: ticketCcy,
+      currency: commissionCcy,
       class: klass,
       eachWay: true,
       plan: picked.id,

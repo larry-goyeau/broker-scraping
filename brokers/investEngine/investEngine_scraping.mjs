@@ -7,12 +7,13 @@
 // A line titled ETC is an ETC. WisdomTree's physical metals omit that word;
 // a UCITS ETF that merely says Physical stays an ETF.
 //
-// Orders go to the London Stock Exchange through its retail service
-// providers, and the account deals in sterling, so the book is XLON in GBP.
+// The execution policy sends every order to Winterflood Securities Ltd.
+// InvestEngine trades only ETFs listed on the London Stock Exchange, and
+// the account deals in sterling, so the book is XLON in GBP.
 // base_currency on the page is the fund currency, not the listing.
 //
 //   https://investengine.com/etfs/all/
-//   https://help.investengine.com/hc/en-gb/articles/10467247601309-How-does-InvestEngine-place-its-trades
+//   https://investengine.com/order-execution-policy/
 //
 //   node brokers/investEngine/investEngine_scraping.mjs
 

@@ -45,12 +45,27 @@
 // asked for 2.52 € more, on one share and on a hundred. That is the
 // published minimum, so the 5.04 bp on the card is what bills once the
 // order is large enough. Stuttgart's specialist is still only on the page.
-// GETTEX, TASE and the rest of the IBKR book are not on the card: N/A,
-// not a neighbour's floor. Singapore is not on the card either. The
-// published IBKR tier I for an SGD line is what the portal previews
-// reproduced for Korea and Bursa: 0.08 %, minimum 2.50 SGD. Exchange
-// fees are not in that line. Read 2026-10-06.
-// https://www.interactivebrokers.com/en/pricing/commissions-stocks-asia-pacific.php Warsaw is not on the card either. On 2026-10-05 the open portal
+// TASE is not on the card. On 2026-10-10 the open portal previewed TEVA
+// routed to TASE and nothing was sent. The quote is in agorot: a limit of
+// 12,000 was a share at 120 ILS. One, ten and one hundred shares asked for
+// 15 ILS. One thousand shares, notional 120,000, asked for 120 ILS, and
+// five thousand asked for 600 ILS, which is 0.10 %. One share at 1 ILS
+// also asked for 15 ILS, so the floor is 15 ILS. No cap appeared through
+// 600,000 ILS. Taiwan is not on the card either. On 2026-10-10 the
+// open portal previewed 2330 routed to TWSE and nothing was sent. One
+// share at 2,550 asked for 80.51 TWD. Ten shares asked for 85.10. Thirty
+// two shares asked for 96.32. Forty shares asked for 102, which is 0.10 %
+// of 102,000. One thousand shares asked for 2,550 and five thousand for
+// 12,750, still 0.10 %. The charge is the larger of 0.10 % and 80 TWD
+// plus 0.02 %. No cap appeared. The rest of the IBKR book that is not on the card stays N/A,
+// not a neighbour's floor. Singapore is not on the card either. On
+// 2026-10-10 the open portal previewed D05 (DBS) routed to SGX and
+// nothing was sent. One share at 73.36 asked for 2.50 SGD. One hundred
+// shares asked for 5.87 SGD, which is 0.08 % of 7,336. One thousand
+// shares asked for 58.69 SGD and ten thousand asked for 586.88 SGD,
+// still 0.08 % of 733,600. No cap appeared. A one-share order at 1 SGD
+// also asked for 2.50 SGD, so the floor is 2.50 SGD.
+// Warsaw is not on the card either. On 2026-10-05 the open portal
 // (account DUR224479) previewed PKO and ETFBCASH on WSE and nothing was
 // sent. One share and a hundred shares asked for 15 PLN. A thousand shares
 // asked for 0.10 % of the consideration (118.58 PLN on PKO at 118.58,
@@ -69,7 +84,30 @@
 // to HEX and nothing was sent. One, 20, 100 and 500 shares at 9.26
 // asked for 3 EUR. 2 000 shares asked for 9.26 EUR, which is 0.05 % of
 // 18 520. 20 000 shares asked for 92.60 EUR, still 0.05 %. No cap
-// appeared. That is IBKR fixed for western Europe. KRX is not on the
+// appeared. That is IBKR fixed for western Europe. Ljubljana is not on
+// the card either. On 2026-10-10 the open portal previewed KRKG routed
+// to LJSE and nothing was sent. One share at 258 asked for 3 EUR. Ten
+// shares asked for 9.03 EUR, which is 0.35 % of 2 580. Fifty, 100, 400
+// and 2 000 shares stayed on 0.35 %, the last of them at 1 806 EUR. No
+// cap appeared. That is IBKR fixed for Slovenia. gettex is not on the
+// card either. On 2026-10-10 the open portal previewed BMW routed to
+// GETTEX and to GETTEX2 and nothing was sent. One, ten and a hundred
+// shares at 53.60 asked for 3 EUR. Four hundred shares asked for
+// 10.72 EUR, which is 0.05 % of 21,440. Two thousand shares asked for
+// 53.60 EUR, still 0.05 % of 107,200. No cap appeared. São Paulo is not
+// on the card either. On 2026-10-10 the open portal previewed PETR4
+// routed to B3 and nothing was sent. One share at 56 BRL asked for
+// 0.06 BRL. One hundred shares asked for 5.60, one thousand for 56,
+// five thousand for 280 and twenty thousand for 1,120. That is 0.10 %
+// at every size. One share at 0.50 BRL asked for 0.00, so no floor
+// appeared. No cap appeared through 1,120,000 BRL. Tadawul is not on
+// the card either. On 2026-10-10 the open portal previewed 2222 routed
+// to TADAWUL and nothing was sent. One share at 25.74 asked for 0.03 SAR,
+// ten for 0.26, one hundred for 2.57, one thousand for 25.74, five
+// thousand for 128.70 and twenty thousand for 514.80. That is 0.10 %.
+// One share at 1 SAR asked for 0.00, so no floor appeared. No cap
+// appeared through 514,800 SAR. The spread is not on
+// this ticket. KRX is not on the
 // card either. The portal cash check on 122450,
 // 2026-09-28, named it: 100 shares at 2 550 asked for 170.90 EUR, and
 // 3 000 shares asked for 5 050.90 EUR. That is 4 000 KRW, then 4 590 KRW,
@@ -197,8 +235,29 @@ const RULE = {
   // Not on the card. Portal preview of NOKIA on HEX, 2026-10-08.
   // IBKR fixed western Europe: 0.05 %, minimum 3 EUR, no cap seen.
   hel: { rate: 0.0005, min: 3, ccy: "EUR" },
-  // Not on the card. IBKR tier I for an SGD listing, read 2026-10-06.
+  // Not on the card. Portal preview of KRKG on LJSE, 2026-10-10.
+  // IBKR fixed Slovenia: 0.35 %, minimum 3 EUR, no cap seen.
+  si: { rate: 0.0035, min: 3, ccy: "EUR" },
+  // Not on the card. Portal preview of BMW on GETTEX and GETTEX2, 2026-10-10.
+  // 0.05 %, minimum 3 EUR, no cap through 107,200 EUR.
+  gettex: { rate: 0.0005, min: 3, ccy: "EUR" },
+  // Not on the card. Portal preview of PETR4 on B3, 2026-10-10.
+  // 0.10 % at every size. One share at 0.50 BRL asked for 0.00, so no floor.
+  // No cap through 1,120,000 BRL.
+  brl: { rate: 0.001, ccy: "BRL" },
+  // Not on the card. Portal preview of D05 on SGX, 2026-10-10.
+  // 0.08 %, minimum 2.50 SGD, no cap through 733,600 SGD.
   sg: { rate: 0.0008, min: 2.5, ccy: "SGD" },
+  // Not on the card. Portal preview of 2222 on TADAWUL, 2026-10-10.
+  // 0.10 % at every size. One share at 1 SAR asked for 0.00, so no floor.
+  // No cap through 514,800 SAR.
+  sar: { rate: 0.001, ccy: "SAR" },
+  // Not on the card. Portal preview of TEVA on TASE, 2026-10-10.
+  // 0.10 %, minimum 15 ILS. No cap through 600,000 ILS.
+  ils: { rate: 0.001, min: 15, ccy: "ILS" },
+  // Not on the card. Portal preview of 2330 on TWSE, 2026-10-10.
+  // The larger of 0.10 % and 80 TWD plus 0.02 %. No cap through 12,750,000 TWD.
+  twd: { rate: 0.001, min: 80, floorRate: 0.0002, ccy: "TWD" },
 };
 
 const TO_VENUES = {
@@ -285,7 +344,13 @@ export function feeMarketOf(exchange, mic, currency) {
   if (code === "CPH" || m === "XCSE") return "cph";
   if (code === "PRA" || m === "XPRA") return "pra";
   if (code === "HEX" || m === "XHEL") return "hel";
-  if ((code === "SGX" || code === "SGXST" || m === "XSES") && (!ccy || ccy === "SGD")) return "sg";
+  if (code === "LJSE" || m === "XLJU") return "si";
+  if ((code === "GETTEX" || code === "GETTEX2" || m === "XMUN") && (ccy === "EUR" || !ccy)) return "gettex";
+  if ((code === "B3" || code === "BVMF" || m === "BVMF" || m === "XBSP") && (ccy === "BRL" || !ccy)) return "brl";
+  if ((code === "SGX" || m === "XSES") && ccy === "SGD") return "sg";
+  if ((code === "TADAWUL" || m === "XSAU") && (ccy === "SAR" || !ccy)) return "sar";
+  if ((code === "TASE" || m === "XTAE") && (ccy === "ILS" || !ccy)) return "ils";
+  if ((code === "TWSE" || m === "XTAI") && (ccy === "TWD" || !ccy)) return "twd";
   return null;
 }
 
@@ -435,10 +500,17 @@ function commissionSide({ shares, amount, price, market }) {
   }
 
   if (amount == null || !Number.isFinite(Number(amount))) return null;
+  if (rule.floorRate != null) {
+    const n = Number(amount);
+    const pct = n * rule.rate;
+    const floor = rule.min + n * rule.floorRate;
+    const charged = Math.max(pct, floor);
+    return { raw: pct, charged, floored: pct < floor, capped: false, currency: rule.ccy };
+  }
   const raw = Number(amount) * rule.rate;
-  const floored = Math.max(rule.min, raw);
+  const floored = rule.min != null ? Math.max(rule.min, raw) : raw;
   const charged = rule.max != null ? Math.min(floored, rule.max) : floored;
-  return { raw, charged, floored: raw < rule.min, capped: rule.max != null && rule.max < floored, currency: rule.ccy };
+  return { raw, charged, floored: rule.min != null && raw < rule.min, capped: rule.max != null && rule.max < floored, currency: rule.ccy };
 }
 
 /**
@@ -546,19 +618,21 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
           ? `barème WH SelfInvest ${market}, aperçu du portail le 2026-10-05 : `
           : market === "cph"
             ? `barème WH SelfInvest ${market}, aperçu du portail le 2026-10-07 : `
-            : market === "pra" || market === "hel"
-              ? `barème WH SelfInvest ${market}, aperçu du portail le 2026-10-08 : `
-          : market === "sg"
-            ? `barème WH SelfInvest ${market}, palier IBKR I relu le 2026-10-06 : `
+            : market === "si" || market === "gettex" || market === "brl" || market === "sg" || market === "sar" || market === "ils" || market === "twd"
+              ? `barème WH SelfInvest ${market}, aperçu du portail le 2026-10-10 : `
+              : market === "pra" || market === "hel"
+                ? `barème WH SelfInvest ${market}, aperçu du portail le 2026-10-08 : `
             : `barème WH SelfInvest ${market}, relu le ${SCHEDULE.readOn} : `) +
-    (rule.rate != null
+    (rule.floorRate != null
+      ? `0,10 % par sens, ou ${rule.min} ${rule.ccy} plus 0,02 % si c'est davantage`
+      : (rule.rate != null
       ? `${(100 * rule.rate).toFixed(2)} % par sens`
       : market === "otc"
         ? `OTC ${rule.perShareLow}/${rule.perShareHigh} $ la part`
         : `${rule.perShare} ${rule.ccy} par part`) +
     (rule.min != null ? `, plancher ${rule.min} ${rule.ccy}` : "") +
     (rule.max != null ? `, plafond ${rule.max} ${rule.ccy}` : "") +
-    (rule.maxPct != null ? `, plafond ${(100 * rule.maxPct).toFixed(0)} % du montant` : "") +
+    (rule.maxPct != null ? `, plafond ${(100 * rule.maxPct).toFixed(0)} % du montant` : "")) +
     (market === "my"
       ? `, plus timbre 0,1 % arrondi au ringgit supérieur (plafond 1 000, aucun sur un ETF), compensation 0,03 % (plafond 1 000) et 43,40 MYR de règlement`
       : "");
@@ -704,6 +778,20 @@ function confidenceOf({
             ? `commission WH SelfInvest, palier ${market}, aperçu CEZ sur PRA le 2026-10-08, `
             : market === "hel"
               ? `commission WH SelfInvest, palier ${market}, aperçu NOKIA sur HEX le 2026-10-08, `
+              : market === "si"
+                ? `commission WH SelfInvest, palier ${market}, aperçu KRKG sur LJSE le 2026-10-10, `
+                : market === "gettex"
+                  ? `commission WH SelfInvest, palier ${market}, aperçu BMW sur GETTEX le 2026-10-10, `
+                  : market === "brl"
+                    ? `commission WH SelfInvest, palier ${market}, aperçu PETR4 sur B3 le 2026-10-10, `
+                    : market === "sg"
+                      ? `commission WH SelfInvest, palier ${market}, aperçu D05 sur SGX le 2026-10-10, `
+                      : market === "sar"
+                        ? `commission WH SelfInvest, palier ${market}, aperçu 2222 sur TADAWUL le 2026-10-10, `
+                        : market === "ils"
+                          ? `commission WH SelfInvest, palier ${market}, aperçu TEVA sur TASE le 2026-10-10, `
+                          : market === "twd"
+                            ? `commission WH SelfInvest, palier ${market}, aperçu 2330 sur TWSE le 2026-10-10, `
               : `commission WH SelfInvest, palier ${market}, lue le ${SCHEDULE.readOn} sur la carte all-exchanges, `) +
       `facturée par sens et convertie en dollars au mid BCE du ${FX_AS_OF}`
   );

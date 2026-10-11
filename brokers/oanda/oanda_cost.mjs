@@ -492,12 +492,12 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   }
 
   const m = matches[0];
-  let book = spreadLeaf(spreads, { isin: m.row.isin, mic: m.venue?.mic ?? null, currency: m.row.currency, unsourced: m.unsourced });
+  let book = spreadLeaf(spreads, { isin: m.row.isin, mic: m.venue?.mic ?? null, currency: m.row.currency, unsourced: m.unsourced, broker: "oanda", ticker: m.row.ticker });
   const marketGuess = feeMarketOf(m.row, book.mic ?? m.venue?.mic);
   // Rule 605 is a tape figure. A leftover csv venue (BCS, GETTEX, LSX) on a US
   // share still reads the same American report as NYSE or Nasdaq.
   if (marketGuess === "us" && book.leaf?.perShare == null) {
-    const tape = spreadLeaf(spreads, { isin: m.row.isin, mic: "XNYS", currency: "USD" });
+    const tape = spreadLeaf(spreads, { isin: m.row.isin, mic: "XNYS", currency: "USD", broker: "oanda", ticker: m.row.ticker });
     if (tape.leaf?.perShare != null) book = tape;
   }
 

@@ -82,11 +82,22 @@ const FOREIGN_PER_USD = {
   // a 1,320 ceiling at the banks.
   // https://channel8.com/english/news/65154
   IQD: 1310,
+  // BCRP interbank mid, soles per dollar, same day. Not an ECB print.
+  // Compra 3.358, venta 3.360.
+  // https://estadisticas.bcrp.gob.pe/estadisticas/series/api/PD04637PD/json/2026-09-07/2026-09-07
+  // https://estadisticas.bcrp.gob.pe/estadisticas/series/api/PD04638PD/json/2026-09-07/2026-09-07
+  PEN: 3.359,
+  // BCRA wholesale close, pesos per dollar, same day. Not an ECB print.
+  // https://www.rava.com/cotizaciones/historico/dolar-mayorista/2026/09/07/
+  ARS: 1511.5,
   // Bank Al-Maghrib customer board for 7 September 2026, via MAP.
   // Not an ECB print. Buy 8.8022 / sell 10.2296 dirhams per dollar.
   // The figure is the mid of that board.
   // https://maroc-diplomatique.net/cours-des-devises-du-lundi-7-septembre-2026/
   MAD: 9.5159,
+  // Not an ECB print. Same day. New Taiwan dollars per dollar.
+  // https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@2026-09-07/v1/currencies/usd.min.json
+  TWD: 31.618,
 };
 
 function keyOf(currency) {

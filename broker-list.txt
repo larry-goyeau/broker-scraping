@@ -574,7 +574,7 @@ PayPay	JP	Neobroker	Local + US ETFs	https://www.paypay-sec.co.jp/account/
 moomoo Japan	JP	Neobroker	Local + US ETFs	https://www.moomoo.com/jp	
 Interactive Brokers Japan	JP	Broker	Global ETFs / ETPs	https://www.interactivebrokers.co.jp/	https://www.interactivebrokers.com/en/general/contact/newContact/contact.php
 Plus500 Japan	JP	Broker	Global ETFs / ETPs	https://www.plus500.com/	
-GMO Click Securities	JP	Broker	Local-market ETFs	https://www.click-sec.com/corp/kouza/entry/	https://www.click-sec.com/corp/support/
+GMO Click	JP	Broker	Local-market ETFs	https://www.click-sec.com/corp/kouza/entry/	https://www.click-sec.com/corp/support/
 Okasan Online	JP	Broker	Local + US ETFs	https://www.okasan-online.co.jp/support/account/	https://www.okasan-online.co.jp/support/account/
 Daiwa Connect Securities	JP	Neobroker	Local + US ETFs	https://www.connect-sec.co.jp/account/	
 LINE Securities	JP	Neobroker	Local-market ETFs	https://line-sec.co.jp/	
@@ -670,7 +670,7 @@ KGI Securities Thailand	TH	Broker	Local-market ETFs	https://www.kgieworld.co.th/
 ttb wealth securities	TH	Broker	Local-market ETFs	https://www.ttbwealth.co.th/home/th	
 Tisco Securities	TH	Broker	Local-market ETFs	https://www.tiscosec.com/e-open-account-ejip/	tiscoetrade@tisco.co.th
 Daol Securities	TH	Broker	Local-market ETFs	https://www.daolsecurities.co.th/account-opening/openaccount-with-daol-sec	contactcenter@daol.co.th
-Rakuten Malaysia	MY	Broker	Local + US ETFs	https://rakutentrade.my/	customerservice@rakutentrade.my
+Rakuten MY	MY	Broker	Local + US ETFs	https://rakutentrade.my/	customerservice@rakutentrade.my
 Maybank Investment Bank	MY	Bank	Local-market ETFs	https://www.maybank2u.com.my/maybank2u/malaysia/en/personal/wealth/share_trading/online_stocks.page	
 CGS International Securities Malaysia	MY	Broker	Local-market ETFs	https://www.cgsi.com.my/info/account-opening?lang=EN	
 moomoo MY	MY	Neobroker	Global ETFs / ETPs	https://www.moomoo.com/my	support@my.moomoo.com
@@ -680,7 +680,7 @@ RHB TradeSmart	MY	Bank	Local + US ETFs	https://www.rhbtradesmart.com/get-started
 PublicInvest	MY	Bank	Local-market ETFs	https://www.publicinvestbank.com/pbswecos/register.asp?regtype=L	
 Kenanga Trade	MY	Bank	Local-market ETFs	https://www.kentrade.com.my/open-account	https://www.kentrade.com.my/contact
 UOB Kay Hian Malaysia	MY	Broker	Global ETFs / ETPs	https://cob.utrade.com.my/openaccount	mycustomerservice@uobkayhian.com
-FSMOne Malaysia	MY	Broker	Global ETFs / ETPs	https://www.fsmone.com.my/pricing/stocks	
+FSMOne MY	MY	Broker	Global ETFs / ETPs	https://www.fsmone.com.my/pricing/stocks	
 Stockbit Sekuritas	ID	Neobroker	Local-market ETFs	https://stockbit.com/	
 Ajaib	ID	Neobroker	Local-market ETFs	https://ajaib.co.id/	
 Indo Premier (IPOT)	ID	Broker	Local-market ETFs	https://www.indopremier.com/	

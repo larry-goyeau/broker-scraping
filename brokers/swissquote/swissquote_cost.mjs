@@ -15,6 +15,19 @@
 //   Euronext (incl. Norway), Canada             10 / 10 / 10 / 29 / …
 //   Italy, Austria, Scandinavia, Spain, SG, AU  20 until 2 000, then the same
 //   Hong Kong / Tokyo                            own HKD / JPY grids
+//   Dubai                                        measured on the platform
+//                                                2026-10-10, validation only:
+//                                                80.5 AED + 0.305 % of the
+//                                                amount, plus 0.25 % of the
+//                                                amount above 28 000 AED
+//   Bolsa Mexicana (BMV, MXN)                    measured the same day,
+//                                                validation only, realtime off.
+//                                                The larger of 4 436.26 MXN
+//                                                and 1 % of the amount, plus
+//                                                0.15 %. WALMEX*, AMXB and
+//                                                CEMEXCPO agreed. The sell
+//                                                had no position, so the buy
+//                                                ticket is used both ways.
 //   OTC                                          0.5 %, min 100 (listing ccy
 //                                                or CHF if that ccy is not
 //                                                AUD CAD CHF EUR GBP USD)
@@ -184,6 +197,7 @@ const CH_BY_CODE = {
   OMX: "other",
   SGX: "other",
   ASX: "other",
+  BMV: "mx",
 };
 
 const LU_ONLY = { DFM: "dubai" };
@@ -250,6 +264,7 @@ export function feeMarketOf(exchange, mic) {
     return "other";
   }
   if (m === "XDFM") return "dubai";
+  if (raw === "BMV" || m === "XMEX" || m === "XBMV") return "mx";
   return null;
 }
 
@@ -301,7 +316,27 @@ export function commissionEach(bank, { market, notional, currency, exchange }) {
     if (amt == null) return null;
     return { charged: Math.max(OTC_MIN, amt * OTC_RATE), currency: ccy, rate: OTC_RATE };
   }
-  if (market === "dubai") return null;
+  if (market === "mx") {
+    // Platform validation on Mexico SE, 2026-10-10. Nothing sent.
+    // Realtime access off, so the 0.85 is not inside this line.
+    // 1 share at 100 MXN asked for 200.004453825 CHF. 100 shares at
+    // 100 asked for 200.67392895. 100 shares at 10 000 asked for
+    // 518.44875. At the platform rate 0.0450825 that is the larger of
+    // 4 436.26 MXN and 1 % of the amount, plus 0.15 %. AMXB and CEMEXCPO
+    // matched WALMEX*. The account held no shares, so the sell was not read.
+    if (settleCcy(currency) !== "MXN" || !(notional > 0)) return null;
+    const floor = 4436.26;
+    const charged = Math.max(floor, notional * 0.01) + notional * 0.0015;
+    return { charged, currency: "MXN", rate: 0.01 };
+  }
+  if (market === "dubai") {
+    // Platform validation of DFM (AED000901010) on 2026-10-10. Nothing sent.
+    // 100 at 10 AED asked for 83.55 AED, 1 000 at 10 asked for 111, 2 000 at
+    // 10 asked for 141.50: 80.5 AED plus 0.305 %. 3 000 at 10 asked for 177
+    // and 10 000 at 10 asked for 565.50, which adds 0.25 % above 28 000 AED.
+    const excess = notional > 28000 ? (notional - 28000) * 0.0025 : 0;
+    return { charged: 80.5 + notional * 0.00305 + excess, currency: "AED", rate: 0.00305 };
+  }
   const bracket = bracketAmount(notional, currency, market, exchange);
   if (bracket == null) return null;
   const chf = gridChf(bracket, market);
@@ -487,7 +522,10 @@ export function roundTrip({
     bp: marketBp,
     perShare: marketPerShare,
     url: leaf?.url ?? (crypto ? SCHEDULE[bank].crypto : SCHEDULE[bank].source),
-    basis: `barème Swissquote ${bank === "lu" ? "Europe" : "Suisse"}, palier ${market || "?"}, relu le ${SCHEDULE[bank].readOn}`,
+    basis:
+      market === "mx" && bank === "ch"
+        ? "barème Swissquote Suisse, aperçu WALMEX* sur Mexico SE le 2026-10-10 : le plus élevé entre 4 436,26 MXN et 1 %, plus 0,15 %"
+        : `barème Swissquote ${bank === "lu" ? "Europe" : "Suisse"}, palier ${market || "?"}, relu le ${SCHEDULE[bank].readOn}`,
     tax,
     ccy: QUOTE,
     fx: fxNote(listing.currency),
@@ -635,8 +673,10 @@ function confidenceOf({
       ? `commission Europe ${market === "dubai" ? "0,25 %" : market === "otc" ? "250 €" : "0,1 %"}, plancher ${
           market === "jp" || market === "dubai" ? "24,95" : market === "otc" ? "250" : "14,95"
         } €, lue le ${SCHEDULE.lu.readOn}`
-      : `commission Suisse palier ${market}, lue le ${SCHEDULE.ch.readOn}` +
-        (ticket?.currency === "CHF" ? ` : ${ticket.charged} CHF par sens` : "")
+      : market === "mx"
+        ? `commission Suisse Bolsa Mexicana, aperçu WALMEX* le 2026-10-10 : le plus élevé entre 4 436,26 MXN et 1 %, plus 0,15 %`
+        : `commission Suisse palier ${market}, lue le ${SCHEDULE.ch.readOn}` +
+          (ticket?.currency === "CHF" ? ` : ${ticket.charged} CHF par sens` : "")
   );
   if (bank === "ch" && market !== "crypto") {
     said.push(`0,85 de temps réel par jambe en ${settleCcy(listing.currency)}`);

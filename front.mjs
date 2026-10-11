@@ -110,7 +110,7 @@ const FOLDER_NAME = {
   vietcap: "Vietcap",
   rakutenjp: "Rakuten Japan",
   spare: "SpareBank",
-  rakutenma: "Rakuten Malaysia",
+  rakutenma: "Rakuten MY",
   profitmart: "Profitmart",
   dbs: "DBS Taiwan",
   "e.sun": "E.SUN",
@@ -122,6 +122,7 @@ const FOLDER_NAME = {
   ctbc: "CTBC",
   moomoo: "moomoo Japan",
   disnat: "Desjardins",
+  ing: "ING Deutschland",
   prime: "Prime Transaction",
   mirae: "Mirae",
   bsc: "BSC",
@@ -134,8 +135,12 @@ const FOLDER_NAME = {
   marketech: "Marketech Focus",
   fsmonesg: "FSMOne SG",
   fsmonehk: "FSMOne HK",
+  fsmonemy: "FSMOne MY",
   gotradeglobal: "Gotrade Global",
   gotradeid: "Gotrade Indonesia",
+  iol: "InvertirOnline",
+  trii: "Trii Peru",
+  bks: "BKS Bank",
   public: "Public.com",
 };
 
@@ -144,6 +149,8 @@ const FOLDER_LIST = {
   mirae: "Mirae Asset Securities Vietnam",
   bsc: "BIDV Securities (BSC)",
   boursobank: "BoursoBank (Boursorama)",
+  iol: "InvertirOnline (IOL)",
+  bks: "BKS Bank Slovenia",
 };
 
 function metaFor(folder, list) {
@@ -707,9 +714,10 @@ function issuerStem(name) {
 
 function tickerStem(ticker) {
   const raw = String(ticker || "").toUpperCase();
-  // A corporate-action line (C shares, a spin-off, a merger stub) is not the
-  // ordinary share. Stripping .CSHS off RR.CSHS was folding it onto RR.
-  if (/\.(CSHS|SPO|MRG|OLD)$/.test(raw)) return raw;
+  // A corporate-action line (C shares, a spin-off, a merger stub, a
+  // when-issued) is not the ordinary share. Stripping .CSHS off RR.CSHS
+  // was folding it onto RR. Stripping .WI off APTV.WI did the same.
+  if (/\.(CSHS|SPO|MRG|OLD|WI)$/.test(raw)) return raw;
   return raw.replace(/\.[A-Z]{1,4}$/, "");
 }
 

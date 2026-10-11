@@ -13,8 +13,9 @@
 //
 // Zesty prints no ISIN. The stock and ETF lists supply it, matched on the
 // ticker and the place. One candidate on that place is taken. Several need
-// a name, and a tie goes to the ISIN the lists repeat on the most venues:
-// that is the current line, not the old CUSIP filed beside it.
+// a name, and a tie goes to the ISIN the lists repeat on the most venues,
+// including under another ticker. That is the current line, not the old
+// code filed beside it.
 //
 //   https://dividends.zestyfinance.com/
 //   https://help.zestyfinance.com/es/articles/15937643-en-que-puedo-invertir-en-zesty
@@ -57,6 +58,8 @@ const CSV_VENUES = {
 };
 
 const US_LISTED = new Set(["NASDAQ", "NYSE", "AMEX", "CBOE"]);
+// How many rows of the lists carry this ISIN, whatever ticker they use.
+const isinRows = new Map();
 
 const GENERIC_TOKENS = new Set([
   "LTD", "LIMITED", "PLC", "INC", "CORP", "CORPORATION", "LLC", "GMBH",
@@ -117,6 +120,7 @@ function loadIsins(csvPath, into) {
     const ticker = listTicker(columns[0]);
     const isin = toIsin(columns[2]) || columns.map(toIsin).find(Boolean) || "";
     if (!ticker || !isin) continue;
+    isinRows.set(isin, (isinRows.get(isin) || 0) + 1);
     const exchange = String(columns[1] || "").trim().toUpperCase();
     const name = columns.slice(3).join(",").trim();
     const bucket = into.get(ticker) || [];
@@ -157,7 +161,10 @@ function pickIsin(rows, name, minScore, acceptSole) {
   if (winners.length === 1) return winners[0].isin;
   const most = Math.max(...winners.map((row) => row.venues));
   const popular = winners.filter((row) => row.venues === most);
-  return popular.length === 1 ? popular[0].isin : "";
+  if (popular.length === 1) return popular[0].isin;
+  const top = Math.max(...popular.map((row) => isinRows.get(row.isin) || 0));
+  const repeated = popular.filter((row) => (isinRows.get(row.isin) || 0) === top);
+  return repeated.length === 1 && top > 1 ? repeated[0].isin : "";
 }
 
 function venueGroups(index, ticker, place) {

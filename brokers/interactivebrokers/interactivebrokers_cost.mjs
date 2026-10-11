@@ -139,10 +139,10 @@ const RULE = {
   sa: { kind: "pct", rate: 0.001, min: null, ccy: "SAR", tiered: { rate: 0.0005, min: null, ccy: "SAR" } },
   adx: { kind: "pct", rate: 0.001, min: 5, ccy: "AED" },
   dfm: { kind: "pct", rate: 0.0025, min: 5, ccy: "AED" },
-  kr: { kind: "pct", rate: 0.0006, min: 4000, ccy: "KRW", tieredOnly: true },
-  tw: { kind: "pct", rate: 0.0008, min: 80, ccy: "TWD", tieredOnly: true },
-  my: { kind: "pct", rate: 0.0008, min: 12, ccy: "MYR", tieredOnly: true },
-  br: { kind: "pct", rate: 0.0007, min: null, ccy: "BRL", tieredOnly: true },
+  kr: { kind: "pct", rate: 0.0006, min: 4000, ccy: "KRW", tieredOnly: true, volumeBreak: "2,250,000,000 KRW" },
+  tw: { kind: "pct", rate: 0.0008, min: 80, ccy: "TWD", tieredOnly: true, volumeBreak: "50,000,000 TWD" },
+  my: { kind: "pct", rate: 0.0008, min: 12, ccy: "MYR", tieredOnly: true, volumeBreak: "10,000,000 MYR" },
+  br: { kind: "pct", rate: 0.0007, min: null, ccy: "BRL", tieredOnly: true, volumeBreak: "300,000,000 BRL" },
   crypto: { kind: "pct", rate: 0.0018, min: 1.75, maxPct: 0.01, ccy: "USD" },
 };
 
@@ -216,7 +216,7 @@ function remarkOf({ market, rule, usedPlan, currency } = {}) {
   const lines = [];
   if (market === "crypto") lines.push("zerohash europe, no tape.");
   if (rule?.tieredOnly) {
-    lines.push("IBKR publishes Tiered pricing only; this is the lowest volume band.");
+    lines.push(`Commission is lower once monthly volume exceeds ${rule.volumeBreak}.`);
   } else if (usedPlan === "tiered") {
     lines.push("Tiered first bucket. Exchange / clearing extra.");
   }

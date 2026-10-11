@@ -24,7 +24,8 @@
 //                              does not name a US broker-dealer, so no
 //                              Rule 606 mix is applied.
 //   Tokyo                      that exchange's book, when one is stored
-//   Hong Kong, Australia       no book is published here
+//   Hong Kong                  that exchange's book, when one is stored
+//   Australia                  DBS writes the country. It is the ASX book.
 //   The client pays in the listing currency and converts alone. The
 //   order adds no exchange charge. The public board versus the Taiwan
 //   dollar is a bid and an ask. The remark is how far the ask sits

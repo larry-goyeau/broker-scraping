@@ -82,6 +82,25 @@ function bursaListing(exchange) {
   return code === "BURSAMY" || code === "BURSA MALAYSIA";
 }
 
+// This account's preview of BHG on JSE answered "No trading permissions"
+// before any commission. The fee page does not name Johannesburg. Dropped.
+// Ljubljana is LJSE and stays.
+function jseListing(exchange) {
+  return String(exchange || "").toUpperCase() === "JSE";
+}
+
+// BLT.CH in CHF is a corporate-action contract, not a stock exchange. The
+// portal preview routed to CORPACT answered "No trading permissions", and
+// the location list has no such place. Dropped.
+function corpactListing(exchange) {
+  return String(exchange || "").toUpperCase() === "CORPACT";
+}
+
+// IBKR's own over-the-counter desk. Not a stock exchange, and not Xetra (IBIS).
+function valueListing(exchange) {
+  return String(exchange || "").toUpperCase() === "VALUE";
+}
+
 function listingVenue(hit, info) {
   const fromSearch = normalize(hit.description || "").toUpperCase();
   if (fromSearch) return fromSearch;
@@ -254,7 +273,7 @@ if (!fresh && fs.existsSync(outputPath)) {
     if (Array.isArray(existing)) {
       for (const entry of existing) {
         if (String(entry?.type || "").toUpperCase() === "CRYPTO") continue;
-        if (tadawulListing(entry?.exchange) || bursaListing(entry?.exchange)) continue;
+        if (tadawulListing(entry?.exchange) || bursaListing(entry?.exchange) || jseListing(entry?.exchange) || corpactListing(entry?.exchange) || valueListing(entry?.exchange)) continue;
         results.push(entry);
         if (entry?.ticker) seen.add(entryKey(entry));
       }
@@ -576,7 +595,7 @@ async function scrapeJob(job) {
     const name = listingName(hit) || normalize(info.companyName || "");
     const exchange = listingVenue(hit, info) || (job.kind === "CRYPTO" ? "CRYPTO" : "");
     const currency = info.currency || null;
-    if (!ticker || !exchange || !name || tadawulListing(exchange) || bursaListing(exchange)) continue;
+    if (!ticker || !exchange || !name || tadawulListing(exchange) || bursaListing(exchange) || jseListing(exchange) || corpactListing(exchange) || valueListing(exchange)) continue;
 
     const type = listingType(name, job.kind);
     if (type === "CRYPTO") continue;
@@ -640,7 +659,7 @@ async function runJob(queryIndex, job) {
       raw: row.raw,
       isin: job.shelf === "isin" ? job.query : "",
     };
-    if (tadawulListing(entry.exchange) || bursaListing(entry.exchange)) continue;
+    if (tadawulListing(entry.exchange) || bursaListing(entry.exchange) || jseListing(entry.exchange) || corpactListing(entry.exchange) || valueListing(entry.exchange)) continue;
     if (row.restricted) entry.nonEuResident = true;
     // NSE cash in rupees is on the book but IBKR Europe will not permission
     // it (Indian / NRI account only). Keep the line and mark it.

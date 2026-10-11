@@ -19,7 +19,7 @@
 // `path` is the code a source's own URLs use where it differs from the MIC. Euronext
 // serves Milan under its ETF segment, ETFP, and answers 404 for XMIL.
 
-import { apply606 } from "./rule606.mjs";
+import { apply606, usBookPerShare } from "./rule606.mjs";
 export const VENUES = [
   {
     mic: "XETR",
@@ -49,6 +49,7 @@ export const VENUES = [
       "londonstockexchange",
       "uklse",
       "londonmainmarket",
+      "lon",
     ],
     loose: ["london", "uk", "gb"],
   },
@@ -574,7 +575,7 @@ export const VENUES = [
     name: "OTC Markets",
     source: "otc",
     hours: { open: "09:30", close: "16:00", tz: "America/New_York" },
-    exact: ["otcm", "otc", "otcmarkets", "pink", "otcmkts", "otcqx", "otcqb", "pinx", "grey", "ootc", "otherotc", "ootcotherotc"],
+    exact: ["otcm", "otc", "otcmarkets", "pink", "otcmkts", "otcqx", "otcqb", "pinx", "grey", "ootc", "otherotc", "ootcotherotc", "usotc"],
     loose: [],
   },
   // Cash session 09:30–11:30 and 13:00–15:00 Shanghai time. The hours here are
@@ -658,7 +659,7 @@ export const VENUES = [
     name: "ASX",
     source: "asx",
     hours: { open: "10:00", close: "16:00", tz: "Australia/Sydney" },
-    exact: ["xasx", "asx", "asxnationalmarket"],
+    exact: ["xasx", "asx", "asxnationalmarket", "australia"],
     loose: [],
   },
   {
@@ -727,7 +728,7 @@ export const VENUES = [
     name: "Bursa Malaysia",
     source: "bursa",
     hours: { open: "09:00", close: "16:45", tz: "Asia/Kuala_Lumpur" },
-    exact: ["myx", "xkls", "malaysia", "bursa", "bursamy", "malay"],
+    exact: ["myx", "xkls", "malaysia", "bursa", "bursamy", "malay", "klse"],
     loose: [],
   },
   // Continuous matching is 09:30–12:00 and 13:00–14:45 in Manila.
@@ -884,6 +885,8 @@ export const KNOWN_UNSOURCED = [
   { match: ["csecy", "xcys", "cyprus"], name: "Cyprus Stock Exchange", why: "adaptateur non écrit" },
   { match: ["pse"], name: "PSE (Prague ou Manille)", why: "le sigle nomme les deux places" },
   { match: ["bvc", "colombia"], name: "Bolsa de Valores de Colombia", why: "adaptateur non écrit" },
+  { match: ["bcba", "byma", "xbue", "xmev", "merval"], name: "BYMA", why: "adaptateur non écrit" },
+  { match: ["bvl", "xlim", "bolsadevaloresdelima"], name: "Bolsa de Valores de Lima", why: "adaptateur non écrit" },
   { match: ["bsesof", "xbul", "sofia"], name: "Bulgarian Stock Exchange", why: "adaptateur non écrit" },
   { match: ["xber", "berlin", "boerseberlin"], name: "Börse Berlin", why: "adaptateur non écrit" },
   { match: ["bist", "xist", "istanbul"], name: "Borsa Istanbul", why: "adaptateur non écrit" },
@@ -1048,6 +1051,17 @@ export function isListedUsTape(mic) {
 // KOSPI (XKRX) and KOSDAQ (XKOS). A broker that writes KRX has not said which.
 const KOREA_MICS = ["XKRX", "XKOS"];
 
+// A listed American line with no per-share leaf under its ISIN. The 605 file
+// is keyed by ticker. `usBookPerShare` already applies the broker's Q, or the
+// quoted book when the broker files no 606.
+function listedTickerBook(mic, ccy, broker, ticker) {
+  if (!US_MICS.includes(String(mic || "").toUpperCase())) return null;
+  if (String(ccy || "").toUpperCase() !== "USD" || !ticker) return null;
+  const perShare = usBookPerShare({ broker, ticker });
+  if (perShare == null) return null;
+  return { leaf: { perShare, source: "us605" }, mic, via605: true };
+}
+
 export function spreadLeaf(spreads, { isin, mic, currency, unsourced, broker, ticker }) {
   const id = String(isin || "").toUpperCase();
   const ccy = String(currency || "").toUpperCase();
@@ -1079,6 +1093,12 @@ export function spreadLeaf(spreads, { isin, mic, currency, unsourced, broker, ti
     const hit = US_MICS.find((m) => spreads[id]?.[m]?.[ccy]?.perShare != null);
     if (hit) return apply606({ leaf: spreads[id][hit][ccy], mic, assumed: true }, { broker, ticker });
   }
+  // The ISIN on the row is often the home listing. BHP at Admirals keeps
+  // AU000000BHP4, IREN at Zesty keeps the field empty. The American book is
+  // the ticker's 605 figure either way. Already the broker's own number, so
+  // apply606 must not run on it again.
+  const tickerBook = listedTickerBook(mic, ccy, broker, ticker);
+  if (tickerBook) return tickerBook;
   if (!id || !ccy) return { leaf: null, mic: mic || null };
   // The broker named the group and not the board. One book on file is that
   // board; two books would be a guess, and a guess is not written.
@@ -1089,7 +1109,7 @@ export function spreadLeaf(spreads, { isin, mic, currency, unsourced, broker, ti
       : unsourced?.match?.includes("nasdaqnordic")
         ? NORDIC_MICS
         : null;
-  if (!group) return { leaf: null, mic: mic || null };
+  if (!group) return listedTickerBook(mic, ccy, broker, ticker) || { leaf: null, mic: mic || null };
   const hits = group.filter((m) => spreads[id]?.[m]?.[ccy]);
   if (hits.length !== 1) return { leaf: null, mic: mic || null };
   return { leaf: spreads[id][hits[0]][ccy], mic: hits[0], assumed: true };

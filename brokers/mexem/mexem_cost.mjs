@@ -25,26 +25,45 @@
 // which 35 495 are stocks, and it is still running, so any count here is a
 // reading and not a total.
 //
-// Barème relu le 2026-09-14, page inchangée depuis le 22 juillet 2026. Par
-// sens, plancher par ordre, sans plafond sauf où il est dit :
+// Barème relu sur le portail le 2026-10-10, rien n'a été envoyé. La page du
+// 22 juillet (0,06 % et 1 € sur l'euro, 0,12 % au Japon, plafond américain
+// 2 %, …) n'est pas ce que ce compte signe. Coller ce barème euro à chaque
+// ligne en euros était le cas de Ljubljana : le portail demande 0,35 % et
+// 3 €. Les autres places relues le même jour suivent le fixe, pas la page.
 //
-//   USD     0,005 $/part,  min 1 $        plafond 2 % du montant
-//   CAD     0,01 $/part,   min 2 CAD      plafond 1 % du montant
-//   EUR     0,06 %,        min 1 €        (Bolsa de Madrid : même %, min 3 €)
-//   DKK     0,06 %,        min 10
-//   GBP     0,08 %,        min 2,5
-//   HUF     0,08 %,        min 500
-//   NOK     0,08 %,        min 20
-//   CHF     0,10 %,        min 7,5
-//   ILS     0,10 %,        min 15
-//   PLN     0,10 %,        min 20
-//   AUD     0,12 %,        min 8
-//   HKD     0,12 %,        min 20
-//   JPY     0,12 %,        min 200        (imprimé deux fois, mêmes chiffres)
-//   SEK     0,12 %,        min 20
-//   SGD     0,12 %,        min 4
-//   CNH     0,15 %,        min 25
-//   MXN     0,15 %,        min 75
+//   USD coté US     0,005 $/part, min 1 $, plafond 1 % — le plafond passe
+//                   sous le plancher (1 F à 12,17 $ → 0,12 $)
+//   CAD             0,01 $/part, min 1 CAD, plafond 0,5 %
+//   EUR ouest       0,05 %, min 3 €     (Amsterdam, Xetra, Paris, Madrid,
+//                   Helsinki, Athènes, Dublin, Vienne, GETTEX)
+//   GBP             0,05 %, min 3 £
+//   CHF             0,05 %, min 5
+//   USD hors US     0,05 %, min 4 $     (une ligne de Londres en dollars)
+//   DKK             0,05 %, min 49
+//   NOK             0,05 %, min 49
+//   SEK             0,05 %, min 49
+//   Portugal        0,15 %, min 6 €
+//   Baltique        0,20 %, min 10 €    (la ligne à 10 € est toute la
+//                   commission ; l'ancien 6,80 € de place ne s'y ajoute pas)
+//   Ljubljana       0,35 %, min 3 €
+//   Prague          0,15 %, min 70 CZK
+//   Pologne         0,10 %, min 15 PLN
+//   Hongrie         achat 0,55 % jusqu'à 4 444 444 HUF puis 0,10 %,
+//                   vente 0,10 %, min 200 HUF. La vente n'a pas de cours
+//                   dans l'aperçu : le compte ne détenait pas le titre.
+//   AUD             0,08 %, min 6
+//   JPY             0,08 %, min 80
+//   SGD             0,08 %, min 2,50
+//   HKD             0,08 %, min 18      (le timbre est dans la ligne du
+//                   portail et reste hors de cette commission)
+//   MXN             0,10 %, min 60
+//   ILS             0,10 %, min 15      (TEVA, 2026-10-10 : 15 ILS
+//                   jusqu'à 12 000, puis 0,10 % jusqu'à 600 000)
+//   KRW             0,06 %, min 4 000   (contrôle du 2026-09-28)
+//
+// Une devise ou une place qui n'est pas dans cette liste reste sans
+// commission. Le renminbi offshore n'a pas pu être aperçu (pas de
+// permission), ni le dollar à Toronto, ni Stockholm en euros.
 //
 // Three things the old file did not carry, all read off the page on 2026-09-14.
 //
@@ -114,14 +133,36 @@
 // outlier, not the western ceiling (still Vienna 0,90 €). Charging the
 // widest *western* seen is the right direction to be wrong in for the rest.
 //
-// Nine currencies in the catalogue have no printed tier at all — TWD, INR,
-// BRL, SAR, MYR, ZAR, AED, CZK, RON, CNY — and the page says that where a
-// product is missing « the price as shown in the platform always applies
-// first ». Those lines answer N/A on the commission rather than borrow a
-// neighbour's percentage. Prague is the exception the catalogue asked for:
+// Nine currencies in the catalogue have no printed tier at all — SAR, MYR,
+// ZAR, AED, CZK, RON, CNY, a TWD line that is not the Taiwan Stock
+// Exchange, and a BRL line that is not B3 — and
+// the page says that where a product is missing « the price as shown in
+// the platform always applies first ». Those lines answer N/A on the
+// commission rather than borrow a neighbour's percentage. B3 is priced
+// from the same 2026-10-10 preview as WH SelfInvest: PETR4 asked for
+// 0.10 % at every size from 56 BRL to 1,120,000 BRL, and 0.00 on one
+// share at 0.50 BRL, so there is no floor and no cap. The National Stock
+// Exchange of India is priced from this portal on 2026-10-10. RELIANCE
+// routed to NSE, nothing sent. The commission line is 0.01 % of the
+// amount, minimum 6 INR and maximum 20 INR, plus 0.11874 % that stayed
+// in the same line at every size. Above 1,000,000 INR the 20 INR maximum
+// stays and 0.02 % of the excess is added. One share at 1,170.90 asked
+// for 7.39 INR. One hundred shares asked for 150.74. Two hundred and
+// five hundred shares sat on the 20 INR maximum. Eight hundred and
+// fifty-five shares, notional 1,001,119.50, asked for 1,208.96 INR.
+// Taiwan Stock Exchange in TWD was previewed the same day: 2330 routed
+// to TWSE, nothing sent. The commission is the larger of 0.10 % and
+// 80 TWD plus 0.02 %. One share at 2,550 asked for 80.51. Ten shares
+// asked for 85.10. One thousand shares, notional 2,550,000, asked for
+// 2,550. Five thousand asked for 12,750. No cap appeared. Prague is the exception the catalogue asked for:
 // the CapTrader portal on 2026-10-08 previewed CEZ on PRA at 0.15 % with a
 // 70 CZK floor and no cap, and that rate is used here. A CZK line that is
-// not Prague stays N/A. KRW is the other exception: the card is silent, and the
+// not Prague stays N/A. Ljubljana is the same kind of exception. On
+// 2026-10-10 this portal previewed KRKG routed to LJSE and nothing was
+// sent. One share at 258 asked for 3 EUR. Ten shares asked for 9.03 EUR,
+// which is 0.35 % of 2,580. Fifty, 100, 400 and 2,000 shares stayed on
+// 0.35 %, the last of them at 1,806 EUR. No cap appeared. That is not the
+// euro row of 0.06 % with a 1 EUR floor. KRW is the other exception: the card is silent, and the
 // portal's own cash check on 2026-09-28 named the commission. 100 shares of
 // 412350 at 6 030 asked for 607 000, which is 4 000 of commission. 2 000
 // shares asked for 12 067 236, which is 7 236, exactly 0.06 %. The floor is
@@ -212,57 +253,70 @@ const PTM = { each: 1, ccy: "GBP", above: 10000 };
 const UK_STAMP = 0.005;
 const IE_STAMP = 0.01;
 const US_MICS = new Set(["XNAS", "XNYS", "ARCX", "XASE", "BATS"]);
-const US_EX = new Set(["NASDAQ", "NYSE", "AMEX", "ARCA", "BATS"]);
+const US_EX = new Set(["NASDAQ", "NYSE", "AMEX", "ARCA", "BATS", "PINK"]);
 const UK_REGISTERED = /^(GB|GG|JE|IM)/;
 
 // Per side. `rate` of the amount or `perShare` per share, floored at `min` and,
 // where the page prints one, capped at `maxPct` of the amount. All in `ccy`.
 const RULE = {
-  usd: { perShare: 0.005, min: 1, maxPct: 0.02, ccy: "USD" },
-  ca: { perShare: 0.01, min: 2, maxPct: 0.01, ccy: "CAD" },
-  madrid: { rate: 0.0006, min: 3, ccy: "EUR" },
-  eur: { rate: 0.0006, min: 1, ccy: "EUR" },
-  dkk: { rate: 0.0006, min: 10, ccy: "DKK" },
-  gbp: { rate: 0.0008, min: 2.5, ccy: "GBP" },
-  huf: { rate: 0.0008, min: 500, ccy: "HUF" },
-  nok: { rate: 0.0008, min: 20, ccy: "NOK" },
-  chf: { rate: 0.001, min: 7.5, ccy: "CHF" },
-  ils: { rate: 0.001, min: 15, ccy: "ILS" },
-  pln: { rate: 0.001, min: 20, ccy: "PLN" },
-  aud: { rate: 0.0012, min: 8, ccy: "AUD" },
-  hkd: { rate: 0.0012, min: 20, ccy: "HKD" },
-  jpy: { rate: 0.0012, min: 200, ccy: "JPY" },
-  sek: { rate: 0.0012, min: 20, ccy: "SEK" },
-  sgd: { rate: 0.0012, min: 4, ccy: "SGD" },
-  cnh: { rate: 0.0015, min: 25, ccy: "CNH" },
-  mxn: { rate: 0.0015, min: 75, ccy: "MXN" },
-  // Not on the card. Two cash-check refusals on 412350, 2026-09-28.
-  krw: { rate: 0.0006, min: 4000, ccy: "KRW" },
-  // Not on the card. Same rate the CapTrader portal previewed for CEZ on
-  // PRA, 2026-10-08: 0.15 %, minimum 70 CZK, no cap.
+  // Portal 2026-10-10. The cap cuts under the 1 USD floor: 1 F at 12.17
+  // answered 0.12 USD, and 200 GNS at 0.15 answered 0.30 USD, which is 1 %.
+  usd: { perShare: 0.005, min: 1, maxPct: 0.01, ccy: "USD" },
+  // 1 RY answered 1 CAD. 1,000 RY at 0.50 answered 2.50 CAD, which is 0.5 %.
+  ca: { perShare: 0.01, min: 1, maxPct: 0.005, ccy: "CAD" },
+  west: { rate: 0.0005, min: 3, ccy: "EUR" },
+  gbp: { rate: 0.0005, min: 3, ccy: "GBP" },
+  chf: { rate: 0.0005, min: 5, ccy: "CHF" },
+  westUsd: { rate: 0.0005, min: 4, ccy: "USD" },
+  dkk: { rate: 0.0005, min: 49, ccy: "DKK" },
+  nok: { rate: 0.0005, min: 49, ccy: "NOK" },
+  sek: { rate: 0.0005, min: 49, ccy: "SEK" },
+  pt: { rate: 0.0015, min: 6, ccy: "EUR" },
+  baltic: { rate: 0.002, min: 10, ccy: "EUR" },
+  si: { rate: 0.0035, min: 3, ccy: "EUR" },
   pra: { rate: 0.0015, min: 70, ccy: "CZK" },
+  pln: { rate: 0.001, min: 15, ccy: "PLN" },
+  // Buy matched 7,700 HUF on 5,000 OTP at 280, and 200 HUF on one share.
+  // The sale preview was blank. 0.10 % is that schedule's sale leg.
+  huf: { buy: 0.0055, sell: 0.001, buyBand: 4444444, min: 200, ccy: "HUF" },
+  aud: { rate: 0.0008, min: 6, ccy: "AUD" },
+  jpy: { rate: 0.0008, min: 80, ccy: "JPY" },
+  sgd: { rate: 0.0008, min: 2.5, ccy: "SGD" },
+  hkd: { rate: 0.0008, min: 18, ccy: "HKD" },
+  // Portal preview of 80700 (Tencent) on SEHK in CNH, 2026-10-10. Nothing sent.
+  // 200 shares, notional 72,360, commission 132.44 CNH. 1,000 shares, notional
+  // 361,800, commission 662.21. The slope is 0.183%: the 0.08% Hong Kong
+  // commission, the 0.1% stamp and about 0.003% of levy. The stamp stays out
+  // of this fee, as on the HKD row. 100 shares at 10 CNH, notional 1,000,
+  // commission 16.73. After the 1 CNH stamp the broker piece is about 15,
+  // so the floor is 15 CNH.
+  hkCnh: { rate: 0.0008, min: 15, ccy: "CNH" },
+  mxn: { rate: 0.001, min: 60, ccy: "MXN" },
+  // Same PETR4 preview as WH SelfInvest, 2026-10-10. 0.10 % from 56 BRL
+  // to 1,120,000 BRL. One share at 0.50 BRL asked for 0.00, so no floor.
+  brl: { rate: 0.001, min: 0, ccy: "BRL" },
+  // Portal preview of RELIANCE on NSE, 2026-10-10. The line is 0.01 %,
+  // minimum 6 INR, maximum 20 INR, plus the 0.11874 % that was in every
+  // preview. Above 1,000,000 INR, 0.02 % of the excess is added.
+  inr: { rate: 0.0001, min: 6, max: 20, statutory: 0.0011874, excessRate: 0.0002, excessAbove: 1000000, ccy: "INR" },
+  // Portal preview of TEVA on TASE, 2026-10-10. 15 ILS through 12,000 ILS,
+  // then 0.10 %: 24 ILS on 24,000, 120 on 120,000, 600 on 600,000. No cap.
+  ils: { rate: 0.001, min: 15, ccy: "ILS" },
+  // Portal preview of 2330 on TWSE, 2026-10-10. The larger of 0.10 % and
+  // 80 TWD plus 0.02 %. No cap through 12,750,000 TWD.
+  twd: { rate: 0.001, min: 80, floorRate: 0.0002, ccy: "TWD" },
+  krw: { rate: 0.0006, min: 4000, ccy: "KRW" },
 };
 
-const BY_CCY = {
-  USD: "usd",
-  CAD: "ca",
-  EUR: "eur",
-  DKK: "dkk",
-  GBP: "gbp",
-  GBX: "gbp",
-  HUF: "huf",
-  NOK: "nok",
-  CHF: "chf",
-  ILS: "ils",
-  PLN: "pln",
-  AUD: "aud",
-  HKD: "hkd",
-  JPY: "jpy",
-  SEK: "sek",
-  SGD: "sgd",
-  CNH: "cnh",
-  MXN: "mxn",
-};
+const WEST_CODES = new Set([
+  "IBIS", "IBIS2", "FWB", "FWB2", "SWB", "SWB2", "SBF", "AEB", "ENEXTBE",
+  "BVME", "BVMEETF", "GETTEX", "GETTEX2", "VSE", "HEX", "ATH", "ISED", "BM",
+  "AQSE",
+]);
+const WEST_MICS = new Set([
+  "XETR", "XFRA", "XSTU", "XMUN", "XPAR", "XAMS", "XBRU", "XMIL", "XWBO",
+  "XHEL", "XATH", "XDUB", "XMAD", "XMCE", "XGAT",
+]);
 
 // The « FX » tab, which is what converting cash actually costs here. Same rate
 // everywhere, a minimum that is 5 in most currencies and larger where 5 units
@@ -383,7 +437,7 @@ const MEASURED = {
 // 1,00 … 4,50 on BUNH, directed. The number below is the ceiling of what that
 // venue was seen to charge, not the mode.
 const VENUE_FEE = {
-  AEB: { stock: 0, etf: 0.8, saw: "CMCOM 15 parts 1 EUR sec, IWDA 1.00 ... 1.80" },
+  AEB: { stock: 0, etf: 0.75, saw: "IWDA 1 part le 2026-10-10 : 3.00 ... 3.75 EUR" },
   SBF: { stock: 0.06, etf: 0.8, saw: "ORA 1.00 ... 1.06, PAEEM 1.00 ... 1.80" },
   IBIS: { stock: 0, etf: 0.8, saw: "TUI1 1 EUR sec, 0EMU 1.00 ... 1.80" },
   FWB: { stock: 0, etf: 0.8, saw: "02V 1 EUR sec, EQSP CHSZ BCFK ESTE EEAX 1 EUR sec, RCRS 1.00 ... 1.80" },
@@ -394,9 +448,11 @@ const VENUE_FEE = {
   BVL: { stock: 0, etf: null, saw: "BCP 1 EUR sec" },
   EBS: { stock: 0.64, etf: 1.7, saw: "EPH1 1.00 ... 1.64, E20Y 1.00 ... 2.70" },
   BUX: { stock: null, etf: 0, saw: "ETFCETOPO 1 EUR sec" },
-  NTALLINN: { stock: 6.8, etf: 6.8, saw: "TPD1T 1 et 10 parts 7.80 EUR sec" },
-  NVILNIUS: { stock: 6.8, etf: 6.8, saw: "ROE1L 7.80 EUR sec" },
-  NRIGA: { stock: 6.8, etf: 6.8, saw: "SAF1R 7.80 EUR sec" },
+  // The 2026-10-10 commission line is the whole Baltic tier (0.20 %, min
+  // 10 EUR). The old 6.80 was that line read as a venue fee on top of 1 EUR.
+  NTALLINN: { stock: 0, etf: 0, saw: "TPD1T 1 part 10 EUR, 20 000 EUR 40 EUR" },
+  NVILNIUS: { stock: 0, etf: 0, saw: "même palier que Tallinn le 2026-10-10" },
+  NRIGA: { stock: 0, etf: 0, saw: "même palier que Tallinn le 2026-10-10" },
   WSE: { stock: 0, etf: 0, saw: "TPE 20 PLN sec, ETFBCASH ETFBW20TR ETFSP500 notionnel + 20" },
 };
 
@@ -417,7 +473,7 @@ const VENUE_FEE = {
 // table that rounds an unknown charge down to zero flatters whoever charges
 // it — but a reader comparing an unmeasured venue should know the modal
 // answer was zero.
-const VENUE_FEE_DEFAULT = { stock: 0.9, etf: 0.8 };
+const VENUE_FEE_DEFAULT = { stock: 0.9, etf: 0.75 };
 const VENUE_FEE_SEEN_ON_STOCK = { zero: 7, of: 11, widest: 0.9, at: "VSE" };
 const VENUE_FEE_CCY = "EUR";
 
@@ -482,11 +538,47 @@ export function feeMarketOf(exchange, mic, currency) {
   const ccy = String(currency || "").toUpperCase();
   if (code === "KRX") return "krw";
   if (code === "PRA" || m === "XPRA") return "pra";
-  if (code === "BM" || m === "XMAD" || m === "XMCE") return "madrid";
-  if (ccy === "CAD" || ((code === "TSE" || code === "TSX" || code === "VENTURE" || code === "AEQLIT" || m === "XTSE") && !ccy)) {
-    return "ca";
+  if (code === "LJSE" || m === "XLJU") return "si";
+  if (code === "BVL" || m === "XLIS") return "pt";
+  if (/^NTALLINN$/.test(code) || m === "XTAL") return "baltic";
+  if (code === "BUX" || m === "XBUD") return null;
+  if ((code === "TASE" || m === "XTAE") && (ccy === "ILS" || !ccy)) return "ils";
+  if ((code === "TWSE" || m === "XTAI") && (ccy === "TWD" || !ccy)) return "twd";
+  if (code === "WSE" || m === "XWAR") return ccy === "PLN" || !ccy ? "pln" : null;
+  if (code === "TSEJ" || m === "XJPX" || m === "XTKS") return ccy === "JPY" || !ccy ? "jpy" : null;
+  if (code === "ASX" || m === "XASX") return ccy === "AUD" || !ccy ? "aud" : null;
+  if (code === "SEHK" || m === "XHKG") {
+    if (ccy === "CNH") return "hkCnh";
+    if (ccy === "HKD" || !ccy) return "hkd";
+    return null;
   }
-  return BY_CCY[ccy] || null;
+  if (code === "SGX" || m === "XSES") return ccy === "SGD" || !ccy ? "sgd" : null;
+  if (code === "MEXI" || m === "XMEX") return ccy === "MXN" || !ccy ? "mxn" : null;
+  if ((code === "B3" || code === "BVMF" || m === "BVMF" || m === "XBSP") && (ccy === "BRL" || !ccy)) return "brl";
+  if ((code === "NSE" || m === "XNSE") && (ccy === "INR" || !ccy)) return "inr";
+  if (code === "SFB" || m === "XSTO") return ccy === "SEK" ? "sek" : null;
+  if (code === "OSE" || code === "OMXNO" || m === "XOSL") return ccy === "NOK" || !ccy ? "nok" : null;
+  if (code === "CPH" || m === "XCSE") return ccy === "DKK" || !ccy ? "dkk" : null;
+  if (US_MICS.has(m) || US_EX.has(code)) return "usd";
+  if (code === "TSE" || code === "TSX" || code === "VENTURE" || code === "PURE" || code === "AEQLIT" || m === "XTSE" || m === "XTSX") {
+    return ccy === "CAD" || !ccy ? "ca" : null;
+  }
+  const west =
+    WEST_CODES.has(code) ||
+    WEST_MICS.has(m) ||
+    code === "LSE" ||
+    code === "LSEETF" ||
+    code === "LSEIOB1" ||
+    m === "XLON" ||
+    code === "EBS" ||
+    m === "XSWX";
+  if (!west) return null;
+  if (ccy === "EUR" || ccy === "") return "west";
+  if (ccy === "GBP" || ccy === "GBX") return "gbp";
+  if (ccy === "CHF") return "chf";
+  if (ccy === "USD") return "westUsd";
+  if (ccy === "JPY") return null;
+  return null;
 }
 
 // London quotes in pence; every rate on the card is a rate on pounds.
@@ -518,27 +610,56 @@ function stampOf({ listing, tax }) {
  * the tier's own currency, and says which of the two bit, because that is the
  * whole story of this card at retail size.
  */
-export function commissionSide({ shares, amount, market }) {
+export function commissionSide({ shares, amount, market, side = "buy" }) {
   const rule = RULE[market];
   if (!rule) return null;
 
   if (rule.perShare != null) {
     if (shares == null || !Number.isFinite(Number(shares))) return null;
     const raw = rule.perShare * Number(shares);
-    // The cap binds the per-share amount and the floor binds the result, in that
-    // order and not the other. This file used to floor first and cap after,
-    // which let the cap cut below the minimum: one Ford share at 13.65 $ came
-    // out at 0.27 $ where the portal's own preview on 2026-09-15 answered 1 $.
-    // A cap under the minimum is not a cheaper order, it is a minimum.
+    // On 2026-10-10 one Ford share at 12.17 answered 0.12 USD, the 1 % cap,
+    // under the 1 USD floor. The cap wins even when that is the smaller number.
     const ceiling = rule.maxPct != null && amount != null ? Number(amount) * rule.maxPct : null;
-    const capped = ceiling != null && ceiling < raw;
-    const perShareAmount = capped ? ceiling : raw;
+    if (ceiling != null && ceiling < rule.min) {
+      return { raw, charged: ceiling, floored: false, capped: true, currency: rule.ccy };
+    }
+    const perShareAmount = ceiling != null && ceiling < raw ? ceiling : raw;
     const charged = Math.max(rule.min, perShareAmount);
-    return { raw, charged, floored: perShareAmount < rule.min, capped, currency: rule.ccy };
+    return { raw, charged, floored: perShareAmount < rule.min, capped: ceiling != null && ceiling < raw, currency: rule.ccy };
   }
 
   if (amount == null || !Number.isFinite(Number(amount))) return null;
-  const raw = Number(amount) * rule.rate;
+  if (rule.statutory != null) {
+    const n = Number(amount);
+    const pct = n * rule.rate;
+    const broker = n > rule.excessAbove
+      ? rule.max + rule.excessRate * (n - rule.excessAbove)
+      : Math.min(rule.max, Math.max(rule.min, pct));
+    const charged = broker + n * rule.statutory;
+    return {
+      raw: pct + n * rule.statutory,
+      charged,
+      floored: n <= rule.excessAbove && pct < rule.min,
+      capped: n <= rule.excessAbove && pct > rule.max,
+      currency: rule.ccy,
+    };
+  }
+  if (rule.floorRate != null) {
+    const n = Number(amount);
+    const pct = n * rule.rate;
+    const floor = rule.min + n * rule.floorRate;
+    const charged = Math.max(pct, floor);
+    return { raw: pct, charged, floored: pct < floor, capped: false, currency: rule.ccy };
+  }
+  let raw;
+  if (rule.buy != null) {
+    if (side === "sell") raw = Number(amount) * rule.sell;
+    else if (rule.buyBand != null && Number(amount) > rule.buyBand) {
+      raw = rule.buyBand * rule.buy + (Number(amount) - rule.buyBand) * rule.sell;
+    } else raw = Number(amount) * rule.buy;
+  } else {
+    raw = Number(amount) * rule.rate;
+  }
   const charged = Math.max(rule.min, raw);
   return { raw, charged, floored: raw < rule.min, capped: false, currency: rule.ccy };
 }
@@ -696,14 +817,18 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const basis =
     (market === "krw"
       ? `barème Mexem ${market}, lu le 2026-09-28 sur le contrôle de trésorerie du portail : `
-      : market === "pra"
-        ? `barème Mexem ${market}, même taux que l'aperçu CapTrader du 2026-10-08 : `
-        : `barème Mexem ${market}, lu le ${SCHEDULE.readOn} (page du ${SCHEDULE.pageUpdated}) : `) +
-    (rule.rate != null
-      ? `${(100 * rule.rate).toFixed(4).replace(/0+$/, "").replace(/\.$/, "")} % par sens`
-      : `${rule.perShare} ${rule.ccy} par part`) +
-    `, plancher ${rule.min} ${rule.ccy} par ordre` +
-    (rule.maxPct != null ? `, plafond ${(100 * rule.maxPct).toFixed(0)} % du montant` : ", sans plafond");
+      : `barème Mexem ${market}, aperçu du portail le 2026-10-10 : `) +
+    (market === "inr"
+      ? `0,01 % par sens, plancher 6 INR, plafond 20 INR jusqu'à 1 000 000 INR, puis 0,02 % du surplus, plus 0,11874 % mesuré dans la même ligne`
+      : market === "twd"
+        ? `0,10 % par sens, ou 80 TWD plus 0,02 % si c'est davantage, sans plafond`
+      : (rule.buy != null
+      ? `achat ${(100 * rule.buy).toFixed(2)} % jusqu'à ${rule.buyBand} ${rule.ccy}, puis ${(100 * rule.sell).toFixed(2)} %, vente ${(100 * rule.sell).toFixed(2)} %`
+      : rule.rate != null
+        ? `${(100 * rule.rate).toFixed(4).replace(/0+$/, "").replace(/\.$/, "")} % par sens`
+        : `${rule.perShare} ${rule.ccy} par part`) +
+    (rule.min > 0 ? `, plancher ${rule.min} ${rule.ccy} par ordre` : ", sans plancher") +
+    (rule.maxPct != null ? `, plafond ${(100 * rule.maxPct).toFixed(0)} % du montant` : ", sans plafond"));
 
   const n = Number(shares);
   const p = Number(price);
@@ -728,14 +853,23 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
         ? marketPerShare * n
         : null;
 
-  const buyComm = commissionSide({ shares: n, amount: notionalInRule, market });
-  const sellComm = commissionSide({ shares: n, amount: notionalInRule, market });
+  const buyComm = commissionSide({ shares: n, amount: notionalInRule, market, side: "buy" });
+  const sellComm = commissionSide({ shares: n, amount: notionalInRule, market, side: "sell" });
   const buyCommUsd = buyComm ? dollars(buyComm.charged, buyComm.currency) : null;
   const sellCommUsd = sellComm ? dollars(sellComm.charged, sellComm.currency) : null;
 
   // The venue's own fee, per order and so twice over, on one of the seventeen
   // boards the page names without a figure. Seven of them have now been asked.
   const venueFee = venueFees ? venueFeeFor(listing) : null;
+  if (venueFee && !venueFee.measured) {
+    return {
+      ...shared,
+      basis,
+      why:
+        `frais de place non mesurés pour ${listing.brokerExchange || listing.exchange} : ` +
+        `la commission n'est pas affichée tant que ce poste est inconnu`,
+    };
+  }
   const venueFeeSideUsd = venueFee?.amount ? dollars(venueFee.amount, VENUE_FEE_CCY) : 0;
   const venueFeeUsd = venueFee?.amount ? plus(venueFeeSideUsd, venueFeeSideUsd) : 0;
 
@@ -851,14 +985,18 @@ function confidenceOf({ market, rule, buyComm, marketBp, marketPerShare, stamp, 
   said.push(
     (market === "krw"
       ? `commission Mexem, palier ${market}, lue le 2026-09-28 sur le contrôle de trésorerie du portail, `
-      : market === "pra"
-        ? `commission Mexem, palier ${market}, même taux que l'aperçu CapTrader de CEZ sur PRA le 2026-10-08, `
-        : `commission Mexem, palier ${market}, lue le ${SCHEDULE.readOn} sur la page du ${SCHEDULE.pageUpdated}, `) +
+      : market === "huf"
+        ? `commission Mexem, palier ${market}, achat aperçu sur OTP le 2026-10-10, vente au taux du même barème, `
+        : `commission Mexem, palier ${market}, aperçu du portail le 2026-10-10, `) +
       `facturée par sens et convertie en dollars au mid BCE du ${FX_AS_OF}`
   );
   if (buyComm) {
     said.push(
-      buyComm.capped
+      market === "inr"
+        ? `${Number(buyComm.charged).toPrecision(4)} ${rule.ccy} par sens, la ligne entière de l'aperçu RELIANCE`
+        : market === "twd"
+          ? `${Number(buyComm.charged).toPrecision(4)} ${rule.ccy} par sens, aperçu 2330 sur TWSE`
+        : buyComm.capped
         ? `plafonnée à ${(100 * rule.maxPct).toFixed(0)} % du montant : ${Number(buyComm.charged).toPrecision(4)} ${rule.ccy} par sens`
         : buyComm.floored
           ? `au plancher : le ticket de ${rule.min} ${rule.ccy} est toute la commission, ` +
@@ -878,7 +1016,9 @@ function confidenceOf({ market, rule, buyComm, marketBp, marketPerShare, stamp, 
                   `${refusalFloor(rule).venue} s'est vu réclamer ${refusalFloor(rule).asked}, ` +
                   `soit le cours plus ${refusalFloor(rule).implies} ${rule.ccy}`
                 : "")
-          : `au-dessus du plancher : ${Number(buyComm.charged).toPrecision(4)} ${rule.ccy} par sens`
+          : rule.min > 0
+            ? `au-dessus du plancher : ${Number(buyComm.charged).toPrecision(4)} ${rule.ccy} par sens`
+            : `${Number(buyComm.charged).toPrecision(4)} ${rule.ccy} par sens, sans plancher`
     );
     // Only worth saying where the two published caps would actually differ:
     // above the minimum, which is where the reader's bill changes.

@@ -49,6 +49,7 @@ export const US_BROKERS = {
   apex: { crd: ["13071"], name: "Apex Clearing Corporation" },
   clearstreet: { crd: ["288933"], name: "Clear Street LLC" },
   ifastsecuritiesus: { crd: ["327903"], name: "iFAST Securities US Corporation" },
+  ubssecurities: { crd: ["7654"], name: "UBS Securities LLC" },
   futuclearing: { crd: ["298769"], name: "Futu Clearing Inc." },
   // CRD 7059 files two reports. CGWM is the equity book. SBSH is options;
   // its stock sections are empty, so it must not replace the equity mix.
@@ -90,10 +91,14 @@ export const ALIASES = {
   // Zesty: US stocks are operated and custodied by Alpaca Securities.
   zesty: "alpaca",
   // iFAST board notice of 29 May 2025: iFAST Securities US Corporation routes
-  // the group's US orders and custodies the US securities. Hong Kong uses
-  // the same filing.
+  // the group's US orders and custodies the US securities. Hong Kong and
+  // Malaysia use the same filing.
   fsmonesg: "ifastsecuritiesus",
   fsmonehk: "ifastsecuritiesus",
+  fsmonemy: "ifastsecuritiesus",
+  // ING Deutschland forwards a foreign order to UBS Switzerland AG. The US
+  // book is the 606 of UBS Securities LLC (CRD 7654).
+  ing: "ubssecurities",
   // Rakuten Trade's foreign-equity FAQ names Interactive Brokers as the
   // partner that can suspend the service. US cash follows that firm's NMS
   // flow, so the book is Interactive Brokers LLC's 606.
@@ -131,6 +136,10 @@ export const ALIASES = {
   // carrying broker. Apex routes it.
   // https://cdn.stash.com/disclosures/Stash_Wrap_Fee_Program_Brochure_12.pdf
   stash: "apex",
+  // The Cuenta de Inversión EEUU Classic receives securities at Apex
+  // Clearing, DTC 158, account 2QB07076, in the name of InvertirOnline S.A.U.
+  // https://iol.invertironline.com/User/Articulo?articleId=4417761234971
+  iol: "apex",
   // Nordnet names Citigroup Global Markets for global equities. US stocks
   // take that firm's equity 606 (Wealth, CGWM).
   nordnet: "citigroup",

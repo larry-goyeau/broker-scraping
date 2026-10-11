@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer-core";
-import { stampRows } from "../../accepted.mjs";
+import { COUNTRY_NAMES, stampRows } from "../../accepted.mjs";
 import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 
@@ -63,6 +63,149 @@ const EXCHANGE_NAMES = {
 };
 
 const MARKET_EXCHANGES = new Set(["AMEX", "CBOE", "NASDAQ", "NYSE", "BATS", "ARCA", "OTC", "IEX"]);
+
+// TradeZero Canada's guide refuses a security listed in Canada, a security
+// listed in both Canada and the United States, and any security below $0.05.
+// https://portal.tradezero.com/manuals/tzc/Quick_Guide_TradeZero_CA.pdf
+// America and International still sell those lines, so the row stays. A
+// Canadian visitor is the only one `supportedCountries` leaves out. A
+// Canadian tape is TSX, TSXV, CSE or NEO in the share and ETF lists. An
+// interlisted line is the US ticker whose ISIN in those lists also sits on
+// one of those tapes. The stored ISIN is not the test: a ticker collision
+// can stamp Evotec with Evovest's ISIN. The dollar floor is the stored USD
+// close; a line with no close stays open to a Canadian visitor.
+const CANADA_VENUES = new Set(["TSX", "TSXV", "CSE", "NEO"]);
+const DOLLAR_FLOOR = 0.05;
+const OPEN_BESIDES_CANADA = Object.keys(COUNTRY_NAMES)
+  .filter((code) => code !== "CA")
+  .sort();
+
+function csvFields(line) {
+  const fields = [];
+  let current = "";
+  let quoted = false;
+  for (const char of line) {
+    if (char === '"') {
+      quoted = !quoted;
+      continue;
+    }
+    if (char === "," && !quoted) {
+      fields.push(current);
+      current = "";
+      continue;
+    }
+    current += char;
+  }
+  fields.push(current);
+  return fields;
+}
+
+function loadCanadaBook(lists, pricesPath) {
+  const canadianIsins = new Set();
+  const canadianSymbols = new Map();
+  const usIsins = new Map();
+  const usListings = new Map();
+  for (const { path: csvPath, type } of lists) {
+    if (!csvPath || !fs.existsSync(csvPath)) continue;
+    for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
+      if (!line || /^ticker\s*,/i.test(line)) continue;
+      const [ticker, exchange, isin, name] = csvFields(line);
+      if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin || "")) continue;
+      const symbol = (ticker.includes(":") ? ticker.split(":").pop() : ticker).toUpperCase();
+      if (!symbol) continue;
+      if (CANADA_VENUES.has(exchange)) {
+        canadianIsins.add(isin);
+        const symbols = canadianSymbols.get(isin) || new Set();
+        symbols.add(symbol);
+        canadianSymbols.set(isin, symbols);
+      }
+      const key = `${symbol}|${exchange}`;
+      const set = usIsins.get(key) || new Set();
+      set.add(isin);
+      usIsins.set(key, set);
+      const listings = usListings.get(key) || [];
+      listings.push({ isin, name: name || symbol, type });
+      usListings.set(key, listings);
+    }
+  }
+
+  let prices = {};
+  if (pricesPath && fs.existsSync(pricesPath)) {
+    prices = JSON.parse(fs.readFileSync(pricesPath, "utf8")).prices || {};
+  }
+  return { canadianIsins, canadianSymbols, usIsins, usListings, prices };
+}
+
+function trustedIsin(row, book) {
+  const key = `${String(row.ticker || "").toUpperCase()}|${row.exchange || ""}`;
+  const set = book.usIsins.get(key);
+  if (!set || set.size === 0) return "";
+  if (set.size === 1) return [...set][0];
+  return set.has(row.isin) ? row.isin : "";
+}
+
+function canadaRefusal(row, book) {
+  if (CANADA_VENUES.has(row.exchange)) return "Canadian listing";
+  const isin = trustedIsin(row, book);
+  if (isin && book.canadianIsins.has(isin)) return "interlisted";
+  const price = isin ? book.prices[isin]?.USD?.price : null;
+  if (typeof price === "number" && price > 0 && price < DOLLAR_FLOOR) return "under $0.05";
+  return "";
+}
+
+function markCanada(row, book) {
+  if (canadaRefusal(row, book)) row.supportedCountries = OPEN_BESIDES_CANADA;
+  else delete row.supportedCountries;
+  return row;
+}
+
+function pickCanadaListing(candidates, symbol, book) {
+  const onTheTape = candidates.filter((candidate) => book.canadianSymbols.get(candidate.isin)?.has(symbol));
+  const pool = onTheTape.length > 0 ? onTheTape : candidates;
+  return pool.length === 1 ? pool[0] : null;
+}
+
+const TRADED_PLACES = new Set(["AMEX", "NASDAQ", "NYSE", "OTC", "CBOE", "IEX"]);
+
+function restoreCanadaRows(results, seen, book) {
+  let added = 0;
+  let ambiguous = 0;
+  for (const [key, listings] of book.usListings) {
+    const [symbol, exchange] = key.split("|");
+    if (!TRADED_PLACES.has(exchange)) continue;
+    const candidates = [];
+    const seenIsin = new Set();
+    for (const listing of listings) {
+      if (!book.canadianIsins.has(listing.isin) || seenIsin.has(listing.isin)) continue;
+      seenIsin.add(listing.isin);
+      candidates.push(listing);
+    }
+    if (candidates.length === 0) continue;
+    if (results.some((row) => row.ticker === symbol && row.exchange === exchange)) continue;
+    const pick = pickCanadaListing(candidates, symbol, book);
+    if (!pick) {
+      ambiguous += 1;
+      continue;
+    }
+    const row = markCanada(
+      {
+        query: symbol,
+        ticker: symbol,
+        name: pick.name,
+        exchange,
+        currency: "USD",
+        type: pick.type,
+        raw: [symbol, pick.name, exchange].filter(Boolean).join(" "),
+        isin: pick.isin,
+      },
+      book
+    );
+    results.push(row);
+    seen.add(`${row.ticker}:${row.type || ""}:${row.exchange || ""}`.toUpperCase());
+    added += 1;
+  }
+  return { added, ambiguous };
+}
 
 function loadTickerCandidatesFromCsv(csvPath, kind, map = new Map()) {
   if (!csvPath || !fs.existsSync(csvPath)) return map;
@@ -270,6 +413,42 @@ if (!fresh && fs.existsSync(outputPath)) {
   }
 }
 
+const canada = loadCanadaBook(
+  [
+    { path: stocksCsvPath, type: "STOCK" },
+    { path: etfsCsvPath, type: "ETF" },
+  ],
+  new URL("../../assets/prices.json", import.meta.url)
+);
+let canadaLimited = 0;
+for (const row of results) {
+  const why = canadaRefusal(row, canada);
+  markCanada(row, canada);
+  if (why) canadaLimited += 1;
+}
+const restored = restoreCanadaRows(results, seen, canada);
+
+if (hasFlag("rewrite")) {
+  results.sort((left, right) => {
+    const byType = String(left.type).localeCompare(right.type);
+    if (byType !== 0) return byType;
+    const byExchange = String(left.exchange).localeCompare(String(right.exchange));
+    if (byExchange !== 0) return byExchange;
+    return String(left.ticker).localeCompare(String(right.ticker));
+  });
+  fs.writeFileSync(
+    outputPath,
+    JSON.stringify(stampRows(withoutObligations(results), import.meta.url), null, 2)
+  );
+  console.error(
+    `${results.length} listings, ${canadaLimited + restored.added} closed to a Canadian visitor` +
+      ` (${restored.added} put back` +
+      (restored.ambiguous ? `, ${restored.ambiguous} ambiguous` : "") +
+      ")"
+  );
+  process.exit(0);
+}
+
 const browser = await puppeteer.connect({
   browserURL: "http://127.0.0.1:9222",
   defaultViewport: null,
@@ -420,16 +599,21 @@ for (let offset = 0; offset < queries.length; offset += BATCH_SIZE) {
     if (seen.has(key)) continue;
     seen.add(key);
 
-    results.push({
-      query: ticker,
-      ticker,
-      name: name || match?.name || ticker,
-      exchange,
-      currency: "USD",
-      type,
-      raw: [ticker, name, exchange].filter(Boolean).join(" "),
-      isin: match?.isin || "",
-    });
+    results.push(
+      markCanada(
+        {
+          query: ticker,
+          ticker,
+          name: name || match?.name || ticker,
+          exchange,
+          currency: "USD",
+          type,
+          raw: [ticker, name, exchange].filter(Boolean).join(" "),
+          isin: match?.isin || "",
+        },
+        canada
+      )
+    );
   }
 
   if (offset === 0 || (offset + BATCH_SIZE) % 800 === 0 || offset + BATCH_SIZE >= queries.length) {

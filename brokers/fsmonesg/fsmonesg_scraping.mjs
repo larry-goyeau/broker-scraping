@@ -4,6 +4,8 @@
 // is an ETN. A name that says ETC is an ETC. Anything else stays an ETF:
 // a treasury "Note ETF" is still an ETF. FSMOne prints no ISIN, so the code is
 // the one the other catalogues already agree on for the same venue and ticker.
+// A line they leave blank is filled from the stock and ETF lists when the
+// catalogue is stamped.
 //
 // A line whose buy flag is closed stays out. A share that is also in the ETF
 // selector is the ETF, once. Places the exchange list marks displayFsm N
@@ -107,12 +109,15 @@ function isinBook() {
     const rows = Array.isArray(parsed) ? parsed : parsed.rows || [];
     for (const row of rows) {
       const isin = isinOf(row.isin);
+      const exact = String(row.ticker || "").trim().toUpperCase().split(/[ .]/)[0];
       const ticker = tickerKey(row.ticker);
       const { venue } = resolveVenue(row);
-      if (!isin || !ticker || !venue) continue;
-      const key = `${venue.mic}|${ticker}`;
-      if (!book.has(key)) book.set(key, new Set());
-      book.get(key).add(isin);
+      if (!isin || !exact || !venue) continue;
+      for (const code of new Set([exact, ticker])) {
+        const key = `${venue.mic}|${code}`;
+        if (!book.has(key)) book.set(key, new Set());
+        book.get(key).add(isin);
+      }
     }
   }
   return book;
@@ -123,8 +128,9 @@ const isins = isinBook();
 function joined(exchange, ticker, currency) {
   const { venue } = resolveVenue({ exchange, currency });
   if (!venue) return { isin: "" };
+  const exact = String(ticker || "").trim().toUpperCase().split(/[ .]/)[0];
   const code = tickerKey(ticker);
-  const ids = isins.get(`${venue.mic}|${code}`);
+  const ids = isins.get(`${venue.mic}|${exact}`) || isins.get(`${venue.mic}|${code}`);
   if (!ids || ids.size === 0) return { isin: "" };
   if (ids.size === 1) return { isin: [...ids][0] };
   const held = { ticker: code };

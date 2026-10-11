@@ -185,6 +185,12 @@ const FOLDER = {
   // https://www.rakuten-sec.co.jp/web/account-flow/
   // https://www.rakuten-sec.co.jp/web/service/pay/forex_pay.html
   rakutenjp: ["JPY", "USD", "EUR", "AUD", "NZD", "CAD"],
+  // Yen is the securities-account transfer. Dollars are paid into a
+  // separate foreign-currency account and withdrawn in dollars. Any other
+  // currency is sent back.
+  // https://www.click-sec.com/corp/guide/nskin/deposit.html
+  // https://www.click-sec.com/corp/guide/foreign_currency/nskin/
+  gmoclick: ["JPY", "USD"],
   // A deposit is ringgit: online transfer, DuitNow, cheque or GIRO.
   // USD and HKD cannot be paid in. They appear only after converting
   // ringgit, and a withdrawal is ringgit again.
@@ -280,6 +286,12 @@ const FOLDER = {
   // https://www.fsmglobal.hk/cash-account/interest-rate
   // https://www.fsmglobal.hk/support/cash-solutions/making-payment
   fsmonehk: ["HKD", "USD", "CNH", "AUD", "CAD", "CHF", "EUR", "GBP", "JPY", "SGD"],
+  // Cash balances are held in these currencies. A sale is credited in the
+  // currency of the product. Auto-sweep is a fund in MYR, USD or SGD, not
+  // another cash balance. Yen is a stamp-duty rate, not a cash account.
+  // https://www.fsmone.com.my/cash/cash-solutions
+  // https://www.fsmone.com.my/important-notes-for-transacting-stock-etf
+  fsmonemy: ["MYR", "SGD", "HKD", "USD", "CNY", "AUD", "EUR", "GBP"],
   // A wire is a direct dollar deposit and stays dollars. A local-currency
   // payment through Rapyd is converted on the way to the United States.
   // The cash that trades is USD. The FX fee is that conversion.
@@ -462,6 +474,32 @@ const FOLDER = {
   // https://myinvestor.es/cuentas-tarjetas/cuentas-dolares/
   // https://myinvestor.es/premium/
   myinvestor: ["EUR", "USD"],
+  // Pesos paid to the peso account stay pesos. Dollars paid to the dollar
+  // account stay dollars. Each has its own CBU, and both transfers are
+  // free. Another currency is not a deposit that stays.
+  // https://www.invertironline.com/como-ingresar-dinero-cuenta
+  // https://www.invertironline.com/tarifas
+  iol: ["ARS", "USD"],
+  // Pesos paid to a peso account stay pesos. MEP dollars paid to a dollar
+  // account stay dollars. A wire to Citibank New York or Bank of New York
+  // Mellon is cable dollars and stays cable dollars. Cash is not accepted.
+  // Another currency is not a deposit that stays. Taking cable dollars out
+  // costs 10 dollars plus IVA.
+  // https://cms.balanz.com/PFS/055928_cuentas_balanz_2021nuevo.pdf
+  // https://balanz.com/comisiones/
+  balanz: ["ARS", "USD"],
+  // A bank transfer in soles stays soles. A bank transfer in dollars
+  // stays dollars. Both are free. Changing one into the other is
+  // triicambios, inside the app, not a deposit. Another currency is
+  // not a deposit that stays.
+  // https://trii.pe/faq
+  // https://trii.pe/
+  trii: ["PEN", "USD"],
+  // Securities cash is euros, paid to the client-money account. A purchase
+  // in another currency is converted at the bank's commercial rate. Dollars
+  // and pounds can sit on a payment account. That account is not this cash.
+  // https://www.bksbank.si/mbxs8qn54zwj/6Tfee0Dh8W1oOK69bJj9oo/52dab9f27dccc41a506f4417cc5b64eb/Splo%C3%85_ni_pogoji_poslovanja_s_finan%C3%84_nimi_instrumenti_Marec2026_final.pdf
+  bks: ["EUR"],
   // A payment that stays as cash is francs. The account is at
   // Hypothekarbank Lenzburg, and every neon invest line is already a
   // BX Swiss price in CHF, so nothing is converted on the way in.
@@ -587,6 +625,12 @@ const FOLDER = {
   // that currency, and no such account is offered.
   // https://www.visualvest.de/wissen/faq
   visualvest: ["EUR"],
+  // The settlement account is a giro account or an Extra-Konto, in euro.
+  // A foreign-currency securities amount is converted into euro. No
+  // balance is left in another currency.
+  // https://www.ing.de/sparen-anlegen/direkt-depot/
+  // https://www.ing.de/sparen-anlegen/direkt-depot/kundenservice/abrechnung-steuer/
+  ing: ["EUR"],
   // Yen can be paid in by a realtime transfer or a bank transfer and left
   // as yen. Dollars can be paid in by a bank transfer from a bank in Japan
   // and left as dollars. No other currency can be paid in.

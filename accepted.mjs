@@ -6,6 +6,8 @@
 // Lists are taken from the broker's own help or onboarding pages. A broker
 // missing here falls back to the home country in broker-list.txt.
 
+import { fillListIsins } from "./listIsins.mjs";
+
 export const EEA = [
   "AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "GR", "HR",
   "HU", "IE", "IS", "IT", "LI", "LT", "LU", "LV", "MT", "NL", "NO", "PL", "PT",
@@ -518,6 +520,12 @@ export const ACCEPTED = {
   // country of residence, so the country is JP.
   // https://www.paypay-sec.co.jp/account/
   paypay: { countries: ["JP"] },
+  // Opening is a private person living in Japan. A foreign national uses a
+  // residence card. A US citizen or a US resident cannot apply. The picker
+  // is a country of residence, so the country is JP.
+  // https://www.click-sec.com/corp/kouza/entry/kijun.html
+  // https://faq.click-sec.com/faq/show/307?category_id=155&site_domain=default
+  gmoclick: { countries: ["JP"] },
   // Terms, 26 Aug 2025: a Nigerian citizen or a legal resident in Nigeria,
   // with a BVN. The picker is a country of residence, so the country is NG.
   // https://cowrywise.com/terms
@@ -622,6 +630,12 @@ export const ACCEPTED = {
   // picker is a country, so the country is HK.
   // https://www.fsmglobal.hk/account-opening/personal/account-info
   fsmonehk: { countries: ["HK"] },
+  // The opening form refuses a U.S. citizenship, a U.S. permanent resident
+  // status, or a U.S. taxpayer identification number. A non-resident of
+  // Malaysia can open. The picker is residence, so the excluded country
+  // is the United States.
+  // https://www.fsmone.com.my/about-us
+  fsmonemy: WORLD_NO_US,
   // The 2026 store listing says it is not directed at residents of the
   // United States. The help centre says clients come from over 150
   // countries. The terms require 18 and a KYC check. The picker is a
@@ -745,6 +759,42 @@ export const ACCEPTED = {
   // stays Spain.
   // https://myinvestor.es/ayuda/preguntas-frecuentes/cuentas/
   myinvestor: { countries: ["ES"] },
+  // Opening asks for the front and back of a DNI, the document of a
+  // person who lives in Argentina. The US account, opened from the same
+  // login, asks for Argentine tax residence. The picker stays Argentina.
+  // https://www.invertironline.com/preguntas-frecuentes
+  // https://iol.invertironline.com/autorespuesta/quienespuedeninvertirenestadosunidos/423/420364
+  iol: { countries: ["AR"] },
+  // The account FAQ lets a foreigner open with a CUIT, CUIL, CDI or CIE,
+  // and a US citizen files a W-9, so the picker is not Argentina. The
+  // client policy linked from that FAQ refuses someone domiciled or
+  // resident in a FATF high-risk jurisdiction, or in a jurisdiction that
+  // is not on the cooperative list of Decree 589/2013 art. 2(b). That
+  // list is now the non-cooperative enumeration of Decree 398/2026. The
+  // picker only has the countries below. Territories on the decree that
+  // the picker does not name stay out of the list.
+  // https://balanz.com/abrir-cuenta/
+  // http://cms.balanz.com/PFS/067856_bcvpoliticadeclientesnoaceptables0520201.pdf
+  // https://servicios.infoleg.gob.ar/infolegInternet/anexos/425000-429999/426164/norma.htm
+  balanz: {
+    all: true,
+    except: [
+      "AF", "AO", "BD", "BO", "BY", "CU", "DZ", "EG", "HN", "IQ", "IR", "KP",
+      "LK", "SY", "TZ", "UZ", "VA", "ZM", "ZW",
+    ],
+  },
+  // A Peruvian DNI is required. A foreign identity document cannot open
+  // the account. Living in Peru is not required. A US person cannot
+  // finish validation, so the United States stays out.
+  // https://trii.pe/faq
+  trii: WORLD_NO_US,
+  // The catalogue is the individual investment account. Only a natural
+  // person who is a tax resident of Slovenia can open it. The bank checks
+  // that status with the tax authority. A non-resident payment account is
+  // a different product.
+  // https://www.bksbank.si/fizicne-osebe/financni-instrumenti/inr-racun
+  // https://www.bksbank.si/mbxs8qn54zwj/4m8nTvzu1BzMUUx8ciePqy/df2db0183f26319b269761d9ec32a90c/Posebni_pogoji_poslovanja_z_INR_Mar2026_-_Final.pdf
+  bks: { countries: ["SI"] },
   // General terms: Swiss residence, and Swiss tax only. A foreign national
   // needs permit B or C, which is still residence in Switzerland.
   // https://static-assets.neon-free.ch/legal/neon/neon_general_terms_and_conditions_en.pdf
@@ -831,6 +881,13 @@ export const ACCEPTED = {
   // is Germany. §2 of the Select framework agreement.
   // https://www.visualvest.de/rechtliches/rechtliche-hinweise
   visualvest: { countries: ["DE"] },
+  // The offer is only a private customer living in Germany, a natural
+  // person of 18 acting for their own account. A person with a US
+  // connection is refused. The picker is residence, so the country is
+  // Germany.
+  // https://www.ing.de/sparen-anlegen/direkt-depot/
+  // https://www.ing.de/dokumente/agb-direkt-depot-extra-konto/
+  ing: { countries: ["DE"] },
   // The service is only for a person living in Japan. A foreign national
   // opens with a residence card. A US citizen, a green-card holder or a US
   // resident cannot open. The picker is residence, so the country is JP.
@@ -989,5 +1046,6 @@ export function stampResidency(row) {
 export function stampRows(rows) {
   if (!Array.isArray(rows)) return rows;
   for (const row of rows) stampResidency(row);
+  fillListIsins(rows);
   return rows;
 }

@@ -174,6 +174,7 @@ function loadIsins(csvPath, into) {
     const ticker = listTicker(columns[0]);
     const isin = toIsin(columns[2]) || columns.map(toIsin).find(Boolean) || "";
     if (!ticker || !isin) continue;
+    isinRows.set(isin, (isinRows.get(isin) || 0) + 1);
     const exchange = String(columns[1] || "").trim().toUpperCase();
     const name = columns.slice(3).join(",").trim();
     const bucket = into.get(ticker) || [];
@@ -194,6 +195,9 @@ function loadIsins(csvPath, into) {
 }
 
 const US_LISTED = new Set(["NASDAQ", "NYSE", "AMEX", "CBOE"]);
+// How many rows of the lists carry this ISIN, whatever ticker they use.
+// A Mexican line filed as APTV/N is still the same share.
+const isinRows = new Map();
 
 function pickIsin(rows, name, minScore, acceptSole) {
   if (rows.length === 0) return "";
@@ -214,11 +218,14 @@ function pickIsin(rows, name, minScore, acceptSole) {
   }
   const winners = [...byIsin.values()];
   if (winners.length === 1) return winners[0].isin;
-  // The lists keep an old CUSIP beside the current one. The current ISIN
-  // is the one repeated on the other venues.
+  // The lists keep an old code beside the current one. The current ISIN
+  // is the one repeated on the other venues, often under another ticker.
   const most = Math.max(...winners.map((row) => row.venues));
   const popular = winners.filter((row) => row.venues === most);
-  return popular.length === 1 ? popular[0].isin : "";
+  if (popular.length === 1) return popular[0].isin;
+  const top = Math.max(...popular.map((row) => isinRows.get(row.isin) || 0));
+  const repeated = popular.filter((row) => (isinRows.get(row.isin) || 0) === top);
+  return repeated.length === 1 && top > 1 ? repeated[0].isin : "";
 }
 
 // One listing on this place is that ISIN. Several, and the name has to pick

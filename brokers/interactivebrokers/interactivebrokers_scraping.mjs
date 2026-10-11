@@ -245,7 +245,7 @@ if (!fresh && fs.existsSync(outputPath)) {
     const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
     if (Array.isArray(existing)) {
       for (const entry of existing) {
-        if (sanctionedListing(entry?.isin || entry?.query, entry?.exchange)) continue;
+        if (sanctionedListing(entry?.isin || entry?.query, entry?.exchange) || jseListing(entry?.exchange) || corpactListing(entry?.exchange) || valueListing(entry?.exchange)) continue;
         results.push(entry);
         if (entry?.ticker) seen.add(entryKey(entry));
       }
@@ -520,6 +520,23 @@ function sanctionedListing(isin, exchange) {
   return String(exchange || "").toUpperCase() === "MOEX";
 }
 
+// Johannesburg is not on the stock-location list this account can tick.
+// A preview of BHG answered "No trading permissions". Ljubljana is LJSE.
+function jseListing(exchange) {
+  return String(exchange || "").toUpperCase() === "JSE";
+}
+
+// Corporate-action contracts, not a stock exchange. The location list has
+// no such place, and a preview routed there was refused.
+function corpactListing(exchange) {
+  return String(exchange || "").toUpperCase() === "CORPACT";
+}
+
+// IBKR's own over-the-counter desk. Not a stock exchange, and not Xetra (IBIS).
+function valueListing(exchange) {
+  return String(exchange || "").toUpperCase() === "VALUE";
+}
+
 // A US-domiciled fund publishes no KID, and PRIIPs leaves European retail
 // clients unable to buy one. A non-EU resident still can. IBKR quotes those
 // listings all the same and admits it in one place only: field 7183, the
@@ -616,7 +633,7 @@ async function scrapeJob(job) {
     if (!ticker || !exchange || !name) continue;
     readable += 1;
     if (closeOnlyVenue(info.listingExchange) || notices.closeOnly.get(conid)) continue;
-    if (sanctionedListing(job.shelf === "isin" ? job.query : "", exchange)) continue;
+    if (sanctionedListing(job.shelf === "isin" ? job.query : "", exchange) || jseListing(exchange) || corpactListing(exchange) || valueListing(exchange)) continue;
 
     const type = listingType(name, job.kind);
     rows.push({

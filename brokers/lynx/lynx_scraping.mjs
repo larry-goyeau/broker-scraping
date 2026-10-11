@@ -509,9 +509,12 @@ function closeOnlyVenue(listingExchange) {
 // Saudi Arabia is absent from LYNX's market list. Dropped, like a
 // close-only venue. Malaysia is absent from the same page, so a
 // BURSAMY quote from the search is not a list LYNX prints.
+// Korea, Taiwan, Saudi Arabia, Malaysia, Johannesburg, corporate-action
+// lines and IB Value Exchange are absent from the places this account can
+// trade. Ljubljana is LJSE. Xetra is IBIS.
 function unsupportedVenue(exchange) {
   const code = String(exchange || "").toUpperCase();
-  return code === "KRX" || code === "TWSE" || code === "TPEX" || code === "TADAWUL" || code === "BURSAMY" || code === "BURSA MALAYSIA";
+  return code === "KRX" || code === "TWSE" || code === "TPEX" || code === "TADAWUL" || code === "BURSAMY" || code === "BURSA MALAYSIA" || code === "JSE" || code === "CORPACT" || code === "VALUE";
 }
 
 // A packaged product with no KID in a language approved for this retail

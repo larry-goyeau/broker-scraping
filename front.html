@@ -1182,12 +1182,15 @@
       nat.addEventListener("change", () => {
         localStorage.setItem("nat", nationality());
         markEmpty(nat);
-        // The cash follows the country. Picking a currency afterwards leaves
-        // the country where it is, and clearing the country leaves the cash.
+        // A chosen currency follows the country when that country names one
+        // the selector can hold. An empty currency box stays empty. A country
+        // with no currency leaves the chosen one where it is. Picking a
+        // currency afterwards leaves the country where it is, and clearing
+        // the country leaves the cash.
         const code = nationality();
-        if (code) {
-          const cash = nat.selectedOptions[0]?.dataset.ccy || "";
-          dep.value = [...dep.options].some((o) => o.value === cash) ? cash : "";
+        const cash = code ? nat.selectedOptions[0]?.dataset.ccy || "" : "";
+        if (deposit() && cash && [...dep.options].some((o) => o.value === cash)) {
+          dep.value = cash;
           localStorage.setItem("dep", deposit());
           markEmpty(dep);
         }

@@ -24,8 +24,10 @@
 //   Bahrain           0.40 %, minimum 10 BHD (30 USD on a dollar line)
 //   Egypt             0.38 %, minimum 45 EGP
 //
-// Dubai, Abu Dhabi and Muscat print a commission and then a tax with no
-// rate, so those bills are not a number. Tadawul prints 0.155 % and names
+// Dubai and Abu Dhabi print the same commission, 0.30 % with a 65 AED
+// floor plus 10 AED, so that is the fee. VAT is named and has no rate, and
+// stays in the remark. Muscat prints a commission and then a tax with no
+// rate, so that bill is not a number. Tadawul prints 0.155 % and names
 // VAT with no rate: the commission is in the fee, the unnamed tax is not.
 // Each says VAT applies to the intermediary's brokerage and prints no rate.
 // Boursa Kuwait is 0.10 % on Premier, 0.15 % on Main and 0.30 % on Auction,
@@ -102,6 +104,9 @@ const RULE = {
   // The card prints 0.155 % and then names VAT with no rate. The rate is
   // the commission. The unnamed tax stays out of the number, in the remark.
   saudi: { rate: 0.00155, min: 0, ccy: "SAR" },
+  // Same printed commission on DFM and ADX. VAT is named with no rate and
+  // stays in the remark.
+  uae: { rate: 0.003, min: 65, plus: 10, ccy: "AED" },
 };
 
 const MARKET_OF = {
@@ -138,7 +143,7 @@ const BOOK_EXCHANGE = {
 const UNPRICED = {
   kuwait:
     "Boursa Kuwait: 0.10% Premier, 0.15% Main, 0.30% Auction, floor 250 fils. The line does not say which board.",
-  uae: "DFM and ADX: 0.30%, minimum 65 AED, plus 10 AED. VAT is named and has no rate.",
+  uae: "VAT is named on the UAE commission and has no rate.",
   saudi: "Tadawul: 0.155%. VAT is named and has no rate.",
   oman: "Muscat: 0.50%, minimum 5 OMR. VAT is named and has no rate.",
 };
@@ -179,6 +184,7 @@ export function commissionSide({ market, notional, shares, price, currency }) {
     fee += Math.min(Number(shares) * PENNY_PER_SHARE, Number(notional) * PENNY_CAP);
   }
   if (rule.custody) fee += rule.custody;
+  if (rule.plus) fee += rule.plus;
   return fee;
 }
 
@@ -214,6 +220,18 @@ function remarkOf(market) {
     lines.push("Custody 0.10% / year.");
   }
   return lines.join("\n");
+}
+
+function uaeBook(isin, ticker) {
+  const tries = [
+    { mic: "XADS", name: "Abu Dhabi Securities Exchange" },
+    { mic: "XDFM", name: "Dubai Financial Market" },
+  ].map((venue) => ({
+    ...venue,
+    book: spreadLeaf(spreads, { isin, mic: venue.mic, currency: "AED", broker: "boubyan", ticker }),
+  }));
+  const hit = tries.filter((venue) => venue.book.leaf?.bp != null || venue.book.leaf?.perShare != null);
+  return hit.length === 1 ? hit[0] : null;
 }
 
 function bookGap(listing, unsourced, market) {
@@ -259,7 +277,8 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const m = matches[0];
   const market = feeMarketOf(m.row);
   const ccy = listingCurrency(m.row);
-  const book = spreadLeaf(spreads, {
+  const picked = market === "uae" ? uaeBook(m.row.isin, m.row.ticker) : null;
+  const book = picked?.book ?? spreadLeaf(spreads, {
     isin: m.row.isin,
     mic: m.venue?.mic ?? null,
     currency: ccy,
@@ -273,7 +292,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     name: m.row.name || null,
     type: m.row.type || null,
     mic: book.mic ?? m.venue?.mic ?? null,
-    exchange: m.row.exchange === "KSE" ? "Boursa Kuwait" : m.venue?.name || m.unsourced?.name || m.row.exchange,
+    exchange: m.row.exchange === "KSE" ? "Boursa Kuwait" : picked?.name || m.venue?.name || m.unsourced?.name || m.row.exchange,
     currency: ccy,
     brokerExchange: m.row.exchange || null,
   };
@@ -297,7 +316,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     ...answer,
     listing,
     feeMarket: market,
-    venueAuthoritative: m.row.exchange === "KSE",
+    venueAuthoritative: m.row.exchange === "KSE" || Boolean(picked),
     remark: remarkOf(market),
     bp: marketBp,
     perShare: marketPerShare,

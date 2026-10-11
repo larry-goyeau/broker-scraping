@@ -74,6 +74,21 @@ function listingVenue(hit, info) {
   return listed;
 }
 
+// Johannesburg is not a place this account can trade. Ljubljana is LJSE.
+function jseListing(exchange) {
+  return String(exchange || "").toUpperCase() === "JSE";
+}
+
+// Corporate-action contracts, not a stock exchange.
+function corpactListing(exchange) {
+  return String(exchange || "").toUpperCase() === "CORPACT";
+}
+
+// IBKR's own over-the-counter desk. Not a stock exchange, and not Xetra (IBIS).
+function valueListing(exchange) {
+  return String(exchange || "").toUpperCase() === "VALUE";
+}
+
 function unwrapInfo(json, conid) {
   if (!json || json.error) return null;
   if (Array.isArray(json)) {
@@ -259,6 +274,7 @@ if (!fresh && fs.existsSync(outputPath)) {
     const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
     if (Array.isArray(existing)) {
       for (const entry of existing) {
+        if (jseListing(entry?.exchange) || corpactListing(entry?.exchange) || valueListing(entry?.exchange)) continue;
         results.push(entry);
         if (entry?.ticker) seen.add(entryKey(entry));
       }
@@ -567,7 +583,7 @@ async function scrapeJob(job) {
     const name = listingName(hit) || normalize(info.companyName || "");
     const exchange = listingVenue(hit, info) || (job.kind === "CRYPTO" ? "CRYPTO" : "");
     const currency = info.currency || null;
-    if (!ticker || !exchange || !name) continue;
+    if (!ticker || !exchange || !name || jseListing(exchange) || corpactListing(exchange) || valueListing(exchange)) continue;
 
     const type = listingType(name, job.kind);
     rows.push({
@@ -630,6 +646,7 @@ async function runJob(queryIndex, job) {
       raw: row.raw,
       isin: job.shelf === "isin" ? job.query : "",
     };
+    if (jseListing(entry.exchange) || corpactListing(entry.exchange) || valueListing(entry.exchange)) continue;
     if (row.restricted) entry.nonEuResident = true;
 
     const key = entryKey(entry);

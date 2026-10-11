@@ -1,6 +1,6 @@
 {
   "quarter": "2026-Q2",
-  "fetchedAt": "2026-10-08T18:49:41.955Z",
+  "fetchedAt": "2026-10-10T20:16:06.356Z",
   "source": "https://cdn.finra.org/606reportBulk/2026/606_NMS_2026_Q2.zip",
   "brokers": {
     "alpaca": {
@@ -271,6 +271,19 @@
       "mix": {
         "NITE": 0.9263,
         "OTHER": 0.0737
+      }
+    },
+    "ubssecurities": {
+      "crd": [
+        "7654"
+      ],
+      "name": "UBS Securities, LLC",
+      "files": [
+        "7654_606_NMS_2026_Q2_UBSS_V1_20260731.xml"
+      ],
+      "mix": {
+        "UBSS": 0.307,
+        "OTHER": 0.693
       }
     },
     "futuclearing": {

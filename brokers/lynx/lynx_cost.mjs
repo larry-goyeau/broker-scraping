@@ -75,9 +75,19 @@
 // already includes actually bills. The euro venues named in the table above
 // were previewed on LYNX+ on 2026-09-29; the other rows are still the list.
 //
-// A currency the list does not print — KRW, TWD, INR, BRL, MYR, SAR, ZAR,
-// RON, CNY, NZD — answers N/A. Borrowing a neighbour's percentage is how
-// the old Mexem file went wrong.
+// A currency the list does not print — KRW, TWD, INR, MYR, SAR, ZAR,
+// RON, CNY, NZD, and a BRL line that is not B3 — answers N/A. Borrowing a
+// neighbour's percentage is how the old Mexem file went wrong. B3 in BRL
+// is the 2026-10-10 PETR4 preview, the same ticket on the other Interactive
+// Brokers accounts: 0.10 % at every size from 56 BRL to 1,120,000 BRL, and
+// 0.00 on one share at 0.50 BRL, so no floor and no cap. Singapore in SGD
+// uses the same 2026-10-10 D05 preview as WH SelfInvest: 0.08 %, minimum
+// 2.50 SGD, no cap through 733,600 SGD. The August list's 0.15 % and
+// 10 SGD floor are not that ticket. An SGD line that is not the Singapore
+// Exchange, and a Singapore line in another currency, stay N/A. Tel Aviv
+// in ILS uses the same 2026-10-10 TEVA preview as WH SelfInvest: 0.10 %,
+// minimum 15 ILS, no cap through 600,000 ILS. The August list's 0.15 %
+// and 25 ILS floor are not that ticket.
 //
 // What is in the number: the commission each way at its floor and its cap;
 // stamp and transaction tax from `taxMap.mjs` (the list says they are
@@ -140,7 +150,8 @@ const ADR_NAMED = /\b(ADR|GDR|ADS|CDI)\b/i;
 // 2026-09-29. The 5.04 bp has no tier.
 const FRANKFURT_TRADE_RATE = 5.04 / 10000;
 const FRANKFURT_TRADE_MIN = 2.52;
-const PREVIEWED = new Set(["xetra", "frankfurt", "stuttgart", "gettex", "tradegate", "amsterdam", "paris", "vienna"]);
+const PREVIEWED = new Set(["xetra", "frankfurt", "stuttgart", "gettex", "tradegate", "vienna"]);
+const PREVIEWED_NOW = new Set(["amsterdam", "paris", "milan", "madrid", "asx", "six-chf", "baltic"]);
 const PREVIEW = { on: "2026-09-29", account: "U15604371" };
 
 const WITHDRAW = { firstFree: true, sepa: 1, wire: 8, ccy: "EUR" };
@@ -203,21 +214,28 @@ const CCY = {
 // GETTEX2 are the second IBKR code for the same named exchange.
 const VENUE = [
   { id: "vienna", exchanges: ["VSE"], currencies: ["EUR"], rule: pct(0.0019, 6, "EUR"), note: null },
-  { id: "baltic", exchanges: ["N.RIGA", "N.TALLINN", "N.VILNIUS"], currencies: ["EUR"], rule: pct(0.015, 25, "EUR", 99), note: null },
-  { id: "paris", exchanges: ["SBF"], currencies: ["EUR"], rule: pct(0.0009, 6, "EUR", 39), note: null },
-  { id: "paris-usd", exchanges: ["SBF"], currencies: ["USD"], rule: pct(0.0015, 10, "USD"), note: null },
+  { id: "baltic", exchanges: ["N.TALLINN"], currencies: ["EUR"], rule: pct(0.0039, 20, "EUR"), note: null },
+  { id: "paris", exchanges: ["SBF"], currencies: ["EUR"], rule: pct(0.0014, 6, "EUR", 99), note: null },
   { id: "xetra", exchanges: ["IBIS", "IBIS2"], currencies: ["EUR"], rule: pct(0.0014, 6, "EUR", 99), note: null },
   { id: "frankfurt", exchanges: ["FWB", "FWB2"], currencies: ["EUR"], rule: pct(0.0014, 6, "EUR", 99), note: "frankfurt" },
   { id: "gettex", exchanges: ["GETTEX", "GETTEX2"], currencies: ["EUR"], rule: pct(0.0009, 6, "EUR", 39), note: "custody" },
   { id: "stuttgart", exchanges: ["SWB", "SWB2"], currencies: ["EUR"], rule: pct(0.0014, 6, "EUR"), note: "stuttgart" },
   { id: "tradegate", exchanges: ["TGATE"], currencies: ["EUR"], rule: pct(0.0009, 6, "EUR", 39), note: "custody" },
-  { id: "amsterdam", exchanges: ["AEB"], currencies: ["EUR"], rule: pct(0.0009, 6, "EUR", 39), note: null },
-  { id: "amsterdam-usd", exchanges: ["AEB"], currencies: ["USD"], rule: pct(0.0015, 10, "USD"), note: null },
-  { id: "lisbon", exchanges: ["BVL"], currencies: ["EUR"], rule: pct(0.0015, 6, "EUR"), note: null },
-  { id: "singapore-usd", exchanges: ["SGX"], currencies: ["USD"], rule: pct(0.0015, 10, "USD"), note: null },
-  { id: "six-usd", exchanges: ["EBS"], currencies: ["USD"], rule: pct(0.0015, 10, "USD"), note: null },
-  { id: "london-usd", exchanges: ["LSE", "LSEETF", "LSEIOB1"], currencies: ["USD"], rule: pct(0.0015, 10, "USD"), note: null },
-  { id: "otc", exchanges: ["PINK", "VALUE", "OTCBB"], currencies: ["USD"], rule: OTC, note: null },
+  { id: "amsterdam", exchanges: ["AEB"], currencies: ["EUR"], rule: pct(0.0014, 6, "EUR"), note: null },
+  { id: "milan", exchanges: ["BVME", "BVME.ETF"], currencies: ["EUR"], rule: pct(0.0009, 6, "EUR"), note: null },
+  { id: "madrid", exchanges: ["BM"], currencies: ["EUR"], rule: pct(0.0009, 6, "EUR"), note: null },
+  { id: "asx", exchanges: ["ASX"], currencies: ["AUD"], rule: pct(0.0014, 10, "AUD"), note: null },
+  { id: "six-chf", exchanges: ["EBS"], currencies: ["CHF"], rule: pct(0.0014, 15, "CHF"), note: null },
+  { id: "us", exchanges: ["NASDAQ", "NYSE", "AMEX", "ARCA", "BATS", "IEX", "MEMX", "CBOE"], currencies: ["USD"], rule: USD_LISTED, note: null },
+  // Same PETR4 preview as the other Interactive Brokers accounts, 2026-10-10.
+  // 0.10 %, no floor, no cap through 1,120,000 BRL.
+  { id: "b3", exchanges: ["B3", "BVMF"], currencies: ["BRL"], rule: { rate: 0.001, ccy: "BRL" }, note: null },
+  // Same D05 preview as WH SelfInvest, 2026-10-10. 0.08 %, minimum 2.50 SGD,
+  // no cap through 733,600 SGD. The August list's 0.15 % / 10 SGD is not used.
+  { id: "sg", exchanges: ["SGX"], currencies: ["SGD"], rule: pct(0.0008, 2.5, "SGD"), note: null },
+  // Same TEVA preview as WH SelfInvest, 2026-10-10. 0.10 %, minimum 15 ILS,
+  // no cap through 600,000 ILS. The August list's 0.15 % / 25 ILS is not used.
+  { id: "ils", exchanges: ["TASE"], currencies: ["ILS"], rule: pct(0.001, 15, "ILS"), note: null },
 ];
 
 const US_TAPE = new Set(["NASDAQ", "NYSE", "AMEX", "ARCA", "BATS", "IEX", "MEMX", "CBOE"]);
@@ -266,16 +284,12 @@ export function scheduleOf(exchange, currency) {
   const ccy = fxCcy(currency);
   const venue = venueIndex.find((row) => row.exchanges.has(code) && row.currencies.has(ccy));
   if (venue) {
-    return { id: venue.id, rule: venue.rule, note: venue.note, american: venue.id === "otc" };
+    return { id: venue.id, rule: venue.rule, note: venue.note, american: venue.id === "us" };
   }
-  const rule = CCY[ccy];
-  if (!rule) return { id: null, rule: null, note: null, american: false };
-  return {
-    id: ccy.toLowerCase(),
-    rule,
-    note: NOTE_BY_CCY[ccy] || null,
-    american: ccy === "USD" && US_TAPE.has(code),
-  };
+  // The August currency table priced every unnamed place. The 2026-10-10
+  // ticket disagreed with it often enough that an unmeasured place stays
+  // unknown rather than inherit a neighbour's currency.
+  return { id: null, rule: null, note: null, american: false };
 }
 
 function findListing({ etf, place, currency }) {
@@ -356,12 +370,12 @@ export function commissionSide({ shares, amount, rule }) {
 
   if (amount == null || !Number.isFinite(Number(amount))) return null;
   const raw = Number(amount) * rule.rate;
-  const floored = Math.max(rule.min, raw);
+  const floored = rule.min != null ? Math.max(rule.min, raw) : raw;
   const charged = rule.max != null ? Math.min(floored, rule.max) : floored;
   return {
     raw,
     charged,
-    floored: raw < rule.min,
+    floored: rule.min != null && raw < rule.min,
     capped: rule.max != null && charged < floored,
     currency: rule.ccy,
   };
@@ -388,9 +402,17 @@ function frankfurtSide(amountEur) {
 }
 
 function basisOf(id, rule) {
-  const head = PREVIEWED.has(id)
-    ? `barème LYNX ${id}, aperçu du ${PREVIEW.on} : `
-    : `barème LYNX ${id}, liste du ${SCHEDULE.validAsOf} : `;
+  const head = id === "b3"
+    ? `barème LYNX ${id}, même aperçu PETR4 que les autres comptes le 2026-10-10 : `
+    : id === "sg"
+      ? `barème LYNX ${id}, même aperçu D05 que WH SelfInvest le 2026-10-10 : `
+      : id === "ils"
+        ? `barème LYNX ${id}, même aperçu TEVA que WH SelfInvest le 2026-10-10 : `
+    : PREVIEWED_NOW.has(id)
+    ? `barème LYNX ${id}, aperçu du 2026-10-10 : `
+    : PREVIEWED.has(id)
+      ? `barème LYNX ${id}, aperçu du ${PREVIEW.on} : `
+      : `barème LYNX ${id}, liste du ${SCHEDULE.validAsOf} : `;
   if (rule.perShare != null) {
     const tier =
       rule.perShareAfter != null
@@ -478,8 +500,10 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   if (!rule) {
     return {
       ...shared,
-      basis: `aucune devise publiée pour ${listing.currency || "cette ligne"} chez LYNX`,
-      why: `${listing.currency || "cette devise"} n'est pas au barème LYNX du ${SCHEDULE.validAsOf}`,
+      basis: `aucun palier mesuré pour ${listing.brokerExchange || listing.exchange || "cette place"} chez LYNX`,
+      why:
+        `${listing.brokerExchange || listing.exchange || "cette place"} n'a pas de commission mesurée : ` +
+        `la table par devise n'est plus appliquée`,
     };
   }
 
@@ -589,9 +613,17 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
 function confidenceOf({ id, rule, buyComm, marketBp, marketPerShare, rates, taxPct, taxSource, american, unsourced, note, auction, frankfurt }) {
   const said = [];
   said.push(
-    (PREVIEWED.has(id)
-      ? `commission LYNX, palier ${id}, aperçu du ${PREVIEW.on}, compte ${PREVIEW.account}, `
-      : `commission LYNX, palier ${id}, liste du ${SCHEDULE.validAsOf} lue le ${SCHEDULE.readOn}, `) +
+    (id === "b3"
+      ? `commission LYNX, palier ${id}, même aperçu PETR4 que les autres comptes le 2026-10-10, `
+      : id === "sg"
+        ? `commission LYNX, palier ${id}, même aperçu D05 que WH SelfInvest le 2026-10-10, `
+        : id === "ils"
+          ? `commission LYNX, palier ${id}, même aperçu TEVA que WH SelfInvest le 2026-10-10, `
+      : PREVIEWED_NOW.has(id)
+      ? `commission LYNX, palier ${id}, aperçu du 2026-10-10, `
+      : PREVIEWED.has(id)
+        ? `commission LYNX, palier ${id}, aperçu du ${PREVIEW.on}, compte ${PREVIEW.account}, `
+        : `commission LYNX, palier ${id}, liste du ${SCHEDULE.validAsOf} lue le ${SCHEDULE.readOn}, `) +
       `facturée par sens et convertie en dollars au mid BCE du ${FX_AS_OF}`
   );
   if (buyComm) {

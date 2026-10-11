@@ -61,9 +61,9 @@
 // account held 4.39 € — so the percentage is not added on top of the flat.
 // Ireland is on the IBKR book and not on the page, so it answers N/A rather
 // than borrow a neighbour's four euros. Korea is not on the page either.
-// The CapTrader preview of 122450 on 2026-09-28 left the commission blank:
-// the account could not cover the margin. The same order on the other two
-// portals is 0.06 % with a 4 000 KRW floor, and that is CapTrader's charge.
+// The CapTrader preview of 122450 on 2026-09-28 left the commission blank.
+// The charge used is WH SelfInvest's cash check the same day: 0.06 %,
+// floor 4 000 KRW.
 //
 // Bursa is not on the stock card. On 2026-10-02 the paper account DUR223858
 // previewed MSC (conid 841837884) on BURSAMY and nothing was sent. The
@@ -104,6 +104,36 @@
 // 1,332 asked for 70 CZK. 100 shares asked for 199.80 CZK, which is
 // 0.15 % of 133,200. 1,000 shares asked for 1,998 CZK, still 0.15 %.
 // No cap appeared. The spread is not on this ticket.
+//
+// Ljubljana is not on the stock card. On 2026-10-10 the signed-in portal
+// previewed KRKG routed to LJSE and nothing was sent. One share at 258
+// asked for 3 EUR. Ten shares asked for 9.03 EUR, which is 0.35 % of
+// 2,580. Fifty, 100, 400 and 2,000 shares stayed on 0.35 %, the last of
+// them at 1,806 EUR. No cap appeared. The spread is not on this ticket.
+//
+// São Paulo is not on the stock card. On 2026-10-10 the signed-in portal
+// previewed PETR4 routed to B3 and nothing was sent. One share at 56 BRL
+// asked for 0.06 BRL. One hundred shares asked for 5.60, one thousand for
+// 56, five thousand for 280 and twenty thousand for 1,120. That is 0.10 %
+// at every size. One share at 0.50 BRL asked for 0.00, so no floor
+// appeared. No cap appeared through 1,120,000 BRL.
+//
+// The National Stock Exchange of India is not on the stock card. On
+// 2026-10-10 the signed-in portal previewed RELIANCE routed to NSE and
+// nothing was sent. The commission line is 0.01 % of the amount, minimum
+// 6 INR and maximum 20 INR, plus 0.11874 % that stayed in the same line
+// at every size. Above 1,000,000 INR the 20 INR maximum stays and 0.02 %
+// of the excess is added. One share at 1,170.90 asked for 7.39 INR. One
+// hundred shares asked for 150.74. Two hundred and five hundred shares
+// sat on the 20 INR maximum. Eight hundred and fifty-five shares, notional
+// 1,001,119.50, asked for 1,208.96 INR.
+//
+// Tadawul is not on the stock card. On 2026-10-10 the signed-in portal
+// previewed 2222 (Saudi Aramco) routed to TADAWUL and nothing was sent.
+// One share at 25.74 asked for 0.03 SAR, ten for 0.26, one hundred for
+// 2.57, one thousand for 25.74 and five thousand for 128.70. That is
+// 0.10 %. One share at 1 SAR asked for 0.00, so no floor appeared. No
+// cap appeared through 514,800 SAR.
 //
 // One live trip, 2026-09-10, account U27604034, euro cash: 1 IWDA market,
 // ticket bound AEB, both legs routed GETTEX2 @ 126,10, 2,00 € each way. The
@@ -275,6 +305,24 @@ const RULE = {
   // Not on the card. Portal preview of CEZ on PRA, 2026-10-08.
   // No cap appeared through a 1,998 CZK commission.
   pra: { rate: 0.0015, min: 70, ccy: "CZK" },
+  // Not on the card. Portal preview of KRKG on LJSE, 2026-10-10.
+  // No cap appeared through a 1,806 EUR commission.
+  si: { rate: 0.0035, min: 3, ccy: "EUR" },
+  // Not on the card. Portal preview of PETR4 on B3, 2026-10-10.
+  // 0.10 % at every size. One share at 0.50 BRL asked for 0.00, so no floor.
+  // No cap through 1,120,000 BRL.
+  brl: { rate: 0.001, min: 0, ccy: "BRL" },
+  // Not on the card. Portal preview of RELIANCE on NSE, 2026-10-10.
+  // 0.01 %, minimum 6 INR, maximum 20 INR, plus 0.11874 % in the same line.
+  // Above 1,000,000 INR, 0.02 % of the excess is added.
+  inr: { rate: 0.0001, min: 6, max: 20, statutory: 0.0011874, excessRate: 0.0002, excessAbove: 1000000, ccy: "INR" },
+  // Not on the card. Portal preview of 2222 on TADAWUL, 2026-10-10.
+  // 0.10 % at every size. One share at 1 SAR asked for 0.00, so no floor.
+  // No cap through 514,800 SAR.
+  sar: { rate: 0.001, min: 0, ccy: "SAR" },
+  // Same published IBKR Tiered tier I as Interactive Brokers. No Fixed column.
+  // 0.08 %, minimum 80 TWD. CapTrader does not publish the later volume bands.
+  twd: { rate: 0.0008, min: 80, ccy: "TWD" },
   pl: { rate: 0.001, min: 20, ccy: "PLN" },
   il: { rate: 0.0014, min: 25, ccy: "ILS" },
   hu: { rate: 0.0015, min: 1500, ccy: "HUF" },
@@ -285,7 +333,8 @@ const RULE = {
   sg: { rate: 0.001, min: 5, ccy: "SGD" },
   cnh: { rate: 0.002, min: 50, ccy: "CNH" },
   au: { rate: 0.001, min: 10, ccy: "AUD" },
-  // Not on the card. Same 0.06 % / 4 000 KRW as the other two portals.
+  // Not on the card. WH SelfInvest's cash check of 122450 on 2026-09-28:
+  // 0.06 %, floor 4 000 KRW. CapTrader's own preview of that name was blank.
   kr: { rate: 0.0006, min: 4000, ccy: "KRW" },
   // Not on the card. Measured on the portal, 2026-10-02. The statutory
   // pieces are added beside this rate in bursaStatutory.
@@ -324,9 +373,10 @@ const venueRow = (row) => ({ ...row, exchange: TO_VENUES[row.exchange] || row.ex
 const isStock = (listing) => String(listing?.type || "").toUpperCase() === "STOCK";
 const isAmerican = (exchange, mic) => US_MICS.has(String(mic || "").toUpperCase()) || US_EX.has(loose(exchange));
 
-export function feeMarketOf(exchange, mic) {
+export function feeMarketOf(exchange, mic, currency) {
   const code = loose(exchange);
   const m = String(mic || "").toUpperCase();
+  const ccy = String(currency || "").toUpperCase();
   if (code === "PINK" || code === "PURE" || code === "VALUE" || code === "ARCAEDGE" || code === "OTCBB" || /PINK|OTCM/i.test(code)) {
     return "otc";
   }
@@ -366,6 +416,11 @@ export function feeMarketOf(exchange, mic) {
   if (code === "CPH" || code === "OMXCOP" || code === "OMK" || m === "XCSE") return "dk";
   if (code === "HEX" || m === "XHEL") return "hel";
   if (code === "PRA" || m === "XPRA") return "pra";
+  if (code === "LJSE" || m === "XLJU") return "si";
+  if (code === "B3" || code === "BVMF" || m === "BVMF" || m === "XBSP") return "brl";
+  if ((code === "NSE" || m === "XNSE") && (ccy === "INR" || !ccy)) return "inr";
+  if ((code === "TADAWUL" || m === "XSAU") && (ccy === "SAR" || !ccy)) return "sar";
+  if ((code === "TWSE" || m === "XTAI") && (ccy === "TWD" || !ccy)) return "twd";
   if (code === "TASE" || m === "XTAE") return "il";
   if (code === "BUX" || m === "XBUD") return "hu";
   if (code === "MEXI" || m === "XMEX") return "mx";
@@ -373,7 +428,7 @@ export function feeMarketOf(exchange, mic) {
   if (code === "SGX" || m === "XSES") return "sg";
   if (code === "SEHKNTL" || code === "SHSE" || m === "XSHG") return "cnh";
   if (code === "ASX" || m === "XASX") return "au";
-  if (code === "KRX") return "kr";
+  if (code === "KRX" || m === "XKRX") return "kr";
   if (code === "BURSAMY" || code === "BURSA" || m === "XKLS") return "my";
   if (code === "MOEX" || m === "MISX") return "ru";
   if (
@@ -421,7 +476,7 @@ function coverage() {
       broker: "captrader",
       ticker: r.ticker,
     });
-    const market = feeMarketOf(r.exchange, book.mic ?? venue?.mic) || "?";
+    const market = feeMarketOf(r.exchange, book.mic ?? venue?.mic, r.currency) || "?";
     const slot = (out[type] ||= { n: 0, withBook: 0, byMarket: {} });
     slot.n += 1;
     const hasBook = book.leaf?.bp != null || book.leaf?.perShare != null;
@@ -505,6 +560,21 @@ export function commissionSide({ shares, amount, market }) {
   }
 
   if (amount == null || !Number.isFinite(Number(amount))) return null;
+  if (rule.statutory != null) {
+    const n = Number(amount);
+    const pct = n * rule.rate;
+    const broker = n > rule.excessAbove
+      ? rule.max + rule.excessRate * (n - rule.excessAbove)
+      : Math.min(rule.max, Math.max(rule.min, pct));
+    const charged = broker + n * rule.statutory;
+    return {
+      raw: pct + n * rule.statutory,
+      charged,
+      floored: n <= rule.excessAbove && pct < rule.min,
+      capped: n <= rule.excessAbove && pct > rule.max,
+      currency: rule.ccy,
+    };
+  }
   const raw = Number(amount) * rule.rate;
   const floored = Math.max(rule.min, raw);
   const charged = rule.max != null ? Math.min(floored, rule.max) : floored;
@@ -550,7 +620,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     brokerExchange: m.row.exchange || null,
   };
 
-  const market = feeMarketOf(m.row.exchange, listing.mic);
+  const market = feeMarketOf(m.row.exchange, listing.mic, listing.currency);
   const rule = market ? RULE[market] : null;
   const leaf = book.leaf;
   const marketBp = bp ?? leaf?.bp ?? null;
@@ -597,18 +667,24 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
 
   const basis =
     (market === "kr"
-      ? `barème CapTrader ${market}, même palier que les deux autres portails, lu le 2026-09-28 : `
+      ? `barème CapTrader ${market}, même palier que WH SelfInvest, lu le 2026-09-28 : `
       : market === "my"
         ? `barème CapTrader ${market}, aperçu du portail le 2026-10-02 : `
-        : market === "dk" || market === "hel" || market === "pra"
-          ? `barème CapTrader ${market}, aperçu du portail le 2026-10-08 : `
+        : market === "si" || market === "brl" || market === "inr" || market === "sar"
+          ? `barème CapTrader ${market}, aperçu du portail le 2026-10-10 : `
+          : market === "twd"
+            ? `barème CapTrader ${market}, même palier Tiered I qu'Interactive Brokers : `
+          : market === "dk" || market === "hel" || market === "pra"
+            ? `barème CapTrader ${market}, aperçu du portail le 2026-10-08 : `
           : `barème CapTrader ${market}, lu le ${SCHEDULE.readOn} (page du ${SCHEDULE.pageUpdated}) : `) +
-    (rule.rate != null
+    (rule.statutory != null
+      ? `0,01 % par sens, plancher 6 INR, plafond 20 INR jusqu'à 1 000 000 INR, puis 0,02 % du surplus, plus 0,11874 % mesuré dans la même ligne`
+      : (rule.rate != null
       ? `${(100 * rule.rate).toFixed(4).replace(/0+$/, "").replace(/\.$/, "")} % par sens`
       : `${rule.perShare} ${rule.ccy} par part`) +
-    `, plancher ${rule.min} ${rule.ccy}` +
+    (rule.min > 0 ? `, plancher ${rule.min} ${rule.ccy}` : ", sans plancher") +
     (rule.max != null ? `, plafond ${rule.max} ${rule.ccy}` : "") +
-    (rule.maxPct != null ? `, plafond ${(100 * rule.maxPct).toFixed(0)} % du montant` : "") +
+    (rule.maxPct != null ? `, plafond ${(100 * rule.maxPct).toFixed(0)} % du montant` : "")) +
     (market === "my"
       ? `, plus timbre 0,1 % arrondi au ringgit supérieur (plafond 1 000, aucun sur un ETF), compensation 0,03 % (plafond 1 000) et 43,40 MYR de règlement`
       : "");
@@ -758,21 +834,31 @@ function confidenceOf({
   const said = [];
   said.push(
     (market === "kr"
-      ? `commission CapTrader, palier ${market}, même palier que les deux autres portails, lu le 2026-09-28, `
+      ? `commission CapTrader, palier ${market}, même palier que WH SelfInvest, lu le 2026-09-28, `
       : market === "my"
         ? `commission CapTrader, palier ${market}, aperçu MSC sur BURSAMY le 2026-10-02, `
         : market === "dk"
           ? `commission CapTrader, palier ${market}, aperçu BAVA, XACTC25 et ISS sur CPH le 2026-10-08, `
           : market === "hel"
             ? `commission CapTrader, palier ${market}, aperçu NOKIA sur HEX le 2026-10-08, `
-            : market === "pra"
-              ? `commission CapTrader, palier ${market}, aperçu CEZ sur PRA le 2026-10-08, `
-              : `commission CapTrader, palier ${market}, lue le ${SCHEDULE.readOn} sur la page Aktien du ${SCHEDULE.pageUpdated}, `) +
+              : market === "pra"
+                ? `commission CapTrader, palier ${market}, aperçu CEZ sur PRA le 2026-10-08, `
+                : market === "brl"
+                  ? `commission CapTrader, palier ${market}, aperçu PETR4 sur B3 le 2026-10-10, `
+                  : market === "inr"
+                    ? `commission CapTrader, palier ${market}, aperçu RELIANCE sur NSE le 2026-10-10, `
+                    : market === "sar"
+                      ? `commission CapTrader, palier ${market}, aperçu 2222 sur TADAWUL le 2026-10-10, `
+                      : market === "twd"
+                        ? `commission CapTrader, palier ${market}, même palier Tiered I qu'Interactive Brokers, `
+                  : `commission CapTrader, palier ${market}, lue le ${SCHEDULE.readOn} sur la page Aktien du ${SCHEDULE.pageUpdated}, `) +
       `facturée par sens et convertie en dollars au mid BCE du ${FX_AS_OF}`
   );
   if (buyComm) {
     said.push(
-      buyComm.capped
+      market === "inr"
+        ? `${Number(buyComm.charged).toPrecision(4)} ${rule.ccy} par sens, la ligne entière de l'aperçu RELIANCE`
+        : buyComm.capped
         ? `plafonnée : ${Number(buyComm.charged).toPrecision(4)} ${rule.ccy} par sens` +
           (market === "us" && MEASURED.seen.GNS
             ? `. Mesuré le ${MEASURED.on} : ${MEASURED.seen.GNS.shares} GNS à ${MEASURED.seen.GNS.price} $ ` +
@@ -784,7 +870,9 @@ function confidenceOf({
             (market === "us" && MEASURED.seen.F
               ? `. Mesuré le ${MEASURED.on} : ${MEASURED.seen.F.shares} F à ${MEASURED.seen.F.price} $ répond ${MEASURED.seen.F.commission}`
               : "")
-          : `au-dessus du plancher : ${Number(buyComm.charged).toPrecision(4)} ${rule.ccy} par sens` +
+          : (rule.min > 0
+              ? `au-dessus du plancher : ${Number(buyComm.charged).toPrecision(4)} ${rule.ccy} par sens`
+              : `${Number(buyComm.charged).toPrecision(4)} ${rule.ccy} par sens, sans plancher`) +
             (market === "us" && MEASURED.seen.NAK
               ? `. Mesuré le ${MEASURED.on} : ${MEASURED.seen.NAK.shares} NAK à ${MEASURED.seen.NAK.price} $ répond ${MEASURED.seen.NAK.commission}`
               : "")

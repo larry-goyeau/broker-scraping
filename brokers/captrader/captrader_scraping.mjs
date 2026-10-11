@@ -35,6 +35,29 @@ function chinextListing(exchange) {
   return String(exchange || "").toUpperCase() === "CHINEXT";
 }
 
+// Johannesburg is not a place this account can trade. A preview of BHG
+// answered "No trading permissions". Ljubljana is LJSE and stays.
+function jseListing(exchange) {
+  return String(exchange || "").toUpperCase() === "JSE";
+}
+
+// Corporate-action contracts, not a stock exchange. The location list has
+// no such place.
+function corpactListing(exchange) {
+  return String(exchange || "").toUpperCase() === "CORPACT";
+}
+
+// Adjustment lines after a corporate action (BHP1, "ADJ 20220601"). Not a
+// venue a client can trade.
+function basketListing(exchange) {
+  return String(exchange || "").toUpperCase() === "BASKET";
+}
+
+// IBKR's own over-the-counter desk. Not a stock exchange, and not Xetra (IBIS).
+function valueListing(exchange) {
+  return String(exchange || "").toUpperCase() === "VALUE";
+}
+
 function loadTickersFromCsv(csvPath) {
   if (!fs.existsSync(csvPath)) return [];
   return fs
@@ -306,7 +329,7 @@ if (!hasFlag("fresh") && fs.existsSync(outputPath)) {
     const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
     if (Array.isArray(existing)) {
       for (const entry of existing) {
-        if (sanctionedListing(entry?.isin, entry?.exchange) || chinextListing(entry?.exchange)) continue;
+        if (sanctionedListing(entry?.isin, entry?.exchange) || chinextListing(entry?.exchange) || jseListing(entry?.exchange) || corpactListing(entry?.exchange) || basketListing(entry?.exchange) || valueListing(entry?.exchange)) continue;
         results.push(entry);
         if (entry?.ticker) seen.add(entryKey(entry.query, entry));
       }
@@ -605,7 +628,7 @@ async function scrapeRowsForQuery(query) {
     if (!name) continue;
 
     const info = (await readInfo(entry.conid)) || {};
-    if (sanctionedListing(info.isin || "", exchange) || chinextListing(exchange)) continue;
+    if (sanctionedListing(info.isin || "", exchange) || chinextListing(exchange) || jseListing(exchange) || corpactListing(exchange) || basketListing(exchange) || valueListing(exchange)) continue;
 
     rows.push({
       ticker: (entry.symbol || "").toUpperCase(),
@@ -648,7 +671,7 @@ function ingest(query, rows) {
       raw: row.raw,
       isin: listing.isin,
     };
-    if (sanctionedListing(entry.isin, entry.exchange) || chinextListing(entry.exchange)) continue;
+    if (sanctionedListing(entry.isin, entry.exchange) || chinextListing(entry.exchange) || jseListing(entry.exchange) || corpactListing(entry.exchange) || basketListing(entry.exchange) || valueListing(entry.exchange)) continue;
     if (row.restricted) entry.nonEuResident = true;
     if (
       String(row.exchange || "").toUpperCase() === "NSE" &&

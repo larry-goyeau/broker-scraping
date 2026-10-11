@@ -185,6 +185,20 @@ function convert(amount, from, to) {
 }
 const fxNote = (currency) => ({ quote: QUOTE, asOf: FX_AS_OF, listing: usdPer(listingCash(currency)) });
 
+// The MENA table prints .AE and does not name the board. A name whose
+// touch exists on only one of the two Emirati books takes that book.
+function aeBook(isin, ticker) {
+  const tries = [
+    { mic: "XADS", name: "Abu Dhabi Securities Exchange" },
+    { mic: "XDFM", name: "Dubai Financial Market" },
+  ].map((venue) => ({
+    ...venue,
+    book: spreadLeaf(spreads, { isin, mic: venue.mic, currency: "AED", broker: "xtb", ticker }),
+  }));
+  const hit = tries.filter((venue) => venue.book.leaf?.bp != null || venue.book.leaf?.perShare != null);
+  return hit.length === 1 ? hit[0] : null;
+}
+
 export function feeMarketOf(row) {
   const type = code(row?.type);
   if (type === "CRYPTO" || type === "CFD") return null;
@@ -357,7 +371,8 @@ export function roundTrip({
   }
 
   const m = matches[0];
-  const book = spreadLeaf(spreads, {
+  const ae = code(m.row.exchange) === "AE" ? aeBook(m.row.isin, m.row.ticker) : null;
+  const book = ae?.book ?? spreadLeaf(spreads, {
     isin: m.row.isin,
     mic: m.venue?.mic ?? null,
     currency: m.row.currency,
@@ -371,7 +386,7 @@ export function roundTrip({
     name: m.row.name || null,
     type: m.row.type || null,
     mic: book.mic ?? m.venue?.mic ?? null,
-    exchange: m.venue?.name ?? m.unsourced?.name ?? m.row.exchange ?? null,
+    exchange: ae?.name ?? m.venue?.name ?? m.unsourced?.name ?? m.row.exchange ?? null,
     currency: code(m.row.currency) || null,
     brokerExchange: m.row.exchange || null,
   };
@@ -407,6 +422,7 @@ export function roundTrip({
     listing,
     feeMarket: market,
     cashCurrency: holdable ? settle : "",
+    venueAuthoritative: Boolean(ae),
     remark: remarkOf({ holdable, currency: listing.currency, ukStock, ptmBites: levy.bites }),
     bp: marketBp,
     perShare: marketPerShare,

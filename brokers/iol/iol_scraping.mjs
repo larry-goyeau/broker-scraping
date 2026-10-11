@@ -14,7 +14,12 @@
 // the national quote, so the place is US and the currency is dollars. The
 // country on an ADR panel is the company's country. IOL prints no ISIN, so
 // on a US line the code is the one the other catalogues already agree on
-// for that ticker. A CEDEAR keeps no American ISIN.
+// for that ticker, and a single US ISIN wins when several places share it.
+// A CEDEAR takes the Argentine certificate. Comafi prints it beside the
+// BYMA symbol, and Caja de Valores prints it for an ETF certificate.
+// A symbol those two lists skip is read from the BYMA species page.
+// The peso line and the C and D lines share that ISIN. A local share
+// takes the ISIN of its own peso ticker from the same page.
 //
 //   https://iol.invertironline.com/mercado/cotizaciones
 //
@@ -25,8 +30,12 @@ import { stampIsinMatches } from "../../isinMatches.mjs";
 import { withoutObligations } from "../../obligation.mjs";
 import { catalogueFiles } from "../../catalogues.mjs";
 import { resolveVenue } from "../../spreads/venues.mjs";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 import fs from "node:fs";
 import path from "node:path";
+
+const execFileAsync = promisify(execFile);
 
 const ORIGIN = "https://iol.invertironline.com";
 const QUOTES = `${ORIGIN}/mercado/cotizaciones`;
@@ -217,6 +226,8 @@ function joined(ticker, isins) {
     groups.set(mic, ids);
     for (const isin of ids) all.add(isin);
   }
+  const american = [...all].filter((id) => id.startsWith("US"));
+  if (american.length === 1) return { isin: american[0] };
   if (all.size === 1) return { isin: [...all][0] };
   if (all.size < 2) return { isin: "" };
   const held = { ticker };
@@ -226,7 +237,10 @@ function joined(ticker, isins) {
 
 async function board(book) {
   const page = await textOf(`${ORIGIN}${book.path}`);
-  const panels = panelsOf(page);
+  const listed = panelsOf(page);
+  // Todos is the whole board. The other panels are slices of it. A few ETF
+  // slices repeat one unrelated list of shares, so they are not a second book.
+  const panels = listed.includes("Todos") ? ["Todos"] : listed;
   const byTicker = new Map();
   for (const panel of panels) {
     const body = new URLSearchParams({
@@ -340,13 +354,130 @@ if (usShareTickers.size < 1400) throw new Error("the US share board was short");
 if (etfTickers.size < 120) throw new Error("the US ETF board was short");
 if (usAdrTickers.size < 50) throw new Error("the ADR board was short");
 
+const COMAFI = "https://www.comafi.com.ar/custodiaglobal/programasaspx-2483.note.aspx";
+const CAJA = "https://cajadevalores.com.ar/Servicios/Cedears";
+
+function cellsOf(row) {
+  return [...row.matchAll(/<td[^>]*>([\s\S]*?)<\/td>/gi)].map((hit) =>
+    decode(hit[1].replace(/<[^>]+>/g, " "))
+  );
+}
+
+function remember(book, ticker, isin) {
+  const key = String(ticker || "").trim().toUpperCase();
+  const code = String(isin || "").trim().toUpperCase();
+  if (!key || !/^[A-Z]{2}[A-Z0-9]{9}\d$/.test(code)) return;
+  const prev = book.get(key);
+  if (prev === "") return;
+  if (prev && prev !== code) book.set(key, "");
+  else if (!prev) book.set(key, code);
+}
+
+async function cedearCertificates() {
+  const book = new Map();
+  const comafi = await textOf(COMAFI);
+  for (const row of comafi.matchAll(/<tr[^>]*>([\s\S]*?)<\/tr>/gi)) {
+    const cells = cellsOf(row[1]);
+    if (cells.length < 6) continue;
+    remember(book, cells[5], cells[3]);
+  }
+  const caja = await textOf(CAJA);
+  for (const row of caja.matchAll(/<tr[^>]*>([\s\S]*?)<\/tr>/gi)) {
+    const cells = cellsOf(row[1]);
+    const isin = cells.find((cell) => /^AR[A-Z0-9]{9}\d$/.test(cell));
+    const ticker = cells.find((cell) => /^[A-Z0-9.]{1,12}$/.test(cell) && !/^\d+$/.test(cell));
+    remember(book, ticker, isin);
+  }
+  let conflicts = 0;
+  for (const [ticker, isin] of book) {
+    if (!isin) {
+      book.delete(ticker);
+      conflicts += 1;
+    }
+  }
+  if (book.size < 250) throw new Error("the CEDEAR certificate list was short");
+  console.error(`CEDEAR certificates: ${book.size}` + (conflicts ? `; ${conflicts} conflicting symbols left out` : ""));
+  return book;
+}
+
+const certificates = await cedearCertificates();
+
+function buenosAiresBase(row) {
+  if (bcbaCedears.has(row.ticker)) return pesoSibling(row.ticker, bcbaCedears) || row.ticker;
+  if (bcbaShares.has(row.ticker)) return pesoSibling(row.ticker, bcbaShares) || row.ticker;
+  return row.ticker;
+}
+
+const missing = new Map();
+for (const row of unique) {
+  if (row.exchange !== "BCBA") continue;
+  const base = buenosAiresBase(row);
+  if (certificates.get(base)) continue;
+  missing.set(base, bcbaCedears.has(row.ticker) ? "Cedears" : "Acciones");
+}
+
+async function speciesIsin(ticker) {
+  const url = `https://www.ldtbrokers.com/Bursatil/Especie/${encodeURIComponent(ticker)}/MERVAL/24hs.`;
+  let html = "";
+  try {
+    const { stdout } = await execFileAsync("curl", ["-fsSL", "-A", UA, "--max-time", "40", url], {
+      maxBuffer: 2_000_000,
+    });
+    html = stdout;
+  } catch {
+    return "";
+  }
+  const isin = html.match(/digo ISIN:<\/span><span>(AR[A-Z0-9]{9}\d)<\/span>/);
+  const tipo = html.match(/Tipo:<\/span><span>([^<]+)<\/span>/);
+  if (!isin) return "";
+  return { isin: isin[1], tipo: (tipo?.[1] || "").trim() };
+}
+
+const queue = [...missing];
+let cursor = 0;
+let found = 0;
+async function nextSpecies() {
+  while (cursor < queue.length) {
+    const index = cursor;
+    cursor += 1;
+    const [ticker, kind] = queue[index];
+    if (index % 25 === 0) console.error(`BYMA species ${index + 1}/${queue.length}`);
+    const hit = await speciesIsin(ticker);
+    if (!hit) continue;
+    if (kind === "Cedears" && hit.tipo !== "Cedears") continue;
+    if (kind !== "Cedears" && hit.tipo === "Cedears") continue;
+    remember(certificates, ticker, hit.isin);
+    if (certificates.get(ticker) === hit.isin) found += 1;
+  }
+}
+await Promise.all(Array.from({ length: 6 }, nextSpecies));
+console.error(`BYMA species: ${queue.length} looked up, ${found} ISINs`);
+
 const isins = isinBook();
 for (const row of unique) {
-  if (row.exchange === "US") Object.assign(row, joined(row.ticker, isins));
-  else row.isin = "";
+  if (row.exchange === "US") {
+    Object.assign(row, joined(row.ticker, isins));
+    continue;
+  }
+  const base = buenosAiresBase(row);
+  row.isin = certificates.get(base) || certificates.get(row.ticker) || "";
 }
 const apple = unique.find((row) => row.ticker === "AAPL" && row.exchange === "US");
-if (!apple.isin) throw new Error("Apple had no ISIN");
+if (apple.isin !== "US0378331005") throw new Error("Apple's US line had the wrong ISIN");
+const cedear = unique.find((row) => row.ticker === "AAPL" && row.exchange === "BCBA");
+if (cedear.isin !== "ARDEUT116183") throw new Error("the Apple CEDEAR had the wrong ISIN");
+for (const ticker of ["AAPLC", "AAPLD"]) {
+  const line = unique.find((row) => row.ticker === ticker && row.exchange === "BCBA");
+  if (line.isin !== cedear.isin) throw new Error(`${ticker} did not share the Apple CEDEAR ISIN`);
+}
+const spy = unique.find((row) => row.ticker === "SPY" && row.exchange === "BCBA");
+if (spy.isin !== "ARCAVA460131") throw new Error("the SPY CEDEAR had the wrong ISIN");
+for (const ticker of ["ALAB", "ALAC", "ALAD"]) {
+  const line = unique.find((row) => row.ticker === ticker && row.exchange === "BCBA");
+  if (line.isin !== "AR0717084534") throw new Error(`${ticker} did not take the Astera Labs certificate`);
+}
+const galicia = unique.find((row) => row.ticker === "GGAL" && row.exchange === "BCBA");
+if (galicia.isin !== "ARP495251018") throw new Error("Galicia had the wrong ISIN");
 
 const kept = stampRows(withoutObligations(unique));
 fs.writeFileSync(new URL("iol-parsed.json", import.meta.url), JSON.stringify(kept, null, 2));

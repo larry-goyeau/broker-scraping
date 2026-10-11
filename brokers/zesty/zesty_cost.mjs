@@ -34,6 +34,7 @@ import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
 import { listingKey, spreadLeaf } from "../../spreads/venues.mjs";
 import { spreads } from "../../spreads/book.mjs";
+import { usBookPerShare } from "../../spreads/rule606.mjs";
 import { plus, finite } from "../../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
 
@@ -140,7 +141,11 @@ export function roundTrip({ etf, place, currency, shares, price, amount }) {
   };
   const leaf = book.leaf;
   const marketBp = leaf?.bp ?? null;
-  const marketPerShare = leaf?.perShare ?? null;
+  // A line can name the ticker and leave the ISIN blank. IREN does: the
+  // catalogue keeps AU0000185993 in matches, and the 605 book is filed
+  // under the ticker. The ISIN lookup then misses it.
+  const marketPerShare =
+    leaf?.perShare ?? (us ? usBookPerShare({ broker: "zesty", ticker: m.row.ticker }) : null);
   const otc = mic === "OTCM" || loose(m.row.exchange) === "OTCM";
 
   const shared = {

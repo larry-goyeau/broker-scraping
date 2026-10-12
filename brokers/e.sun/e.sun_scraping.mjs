@@ -27,7 +27,15 @@
 import { stampRows } from "../../accepted.mjs";
 import { stampIsinMatches } from "../../isinMatches.mjs";
 import { withoutObligations } from "../../obligation.mjs";
+import { addDepositCurrencies, loadCurrencyEvidence } from "../N26/N26_scraping.mjs";
+import { resolveVenue } from "../../spreads/venues.mjs";
+import { spreads } from "../../spreads/book.mjs";
 import fs from "node:fs";
+
+// deposits.mjs: an E.SUN passbook leaves these currencies unconverted.
+const ESUN_DEPOSIT = new Set([
+  "TWD", "USD", "EUR", "GBP", "CAD", "AUD", "NZD", "CHF", "SGD", "CNY", "CNH", "ZAR", "SEK", "HKD", "MXN", "THB", "JPY",
+]);
 
 const US = "https://wealth.esunbank.com.tw/usstock/esun/rank9001.xdjhtm";
 const PREFERRED = "https://wealth.esunbank.com.tw/usstock/esun2/rank9001.xdjhtm";
@@ -331,15 +339,47 @@ rows.sort((left, right) => {
   return left.ticker.localeCompare(right.ticker);
 });
 
-fs.writeFileSync(new URL("e.sun-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(rows)), null, 2));
+function baseCurrency(exchange) {
+  if (exchange === "Hong Kong") return "HKD";
+  if (exchange === "Tokyo") return "JPY";
+  if (exchange === "Shanghai" || exchange === "Shenzhen") return "CNH";
+  if (exchange === "US") return "USD";
+  return "";
+}
+
+function keepDistinctCurrencies(list) {
+  const groups = new Map();
+  for (const row of list) {
+    const key = `${row.exchange}|${row.ticker}|${String(row.isin || "").toUpperCase()}|${row.type}`;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(row);
+  }
+  const out = [];
+  for (const group of groups.values()) {
+    const base = group.find((row) => row.currency === baseCurrency(row.exchange)) || group[0];
+    const mic = resolveVenue({ exchange: base.exchange, currency: base.currency, isin: base.isin }).venue?.mic;
+    const keptLeaves = [];
+    for (const row of [base, ...group.filter((item) => item !== base)]) {
+      const leaf = mic ? spreads[String(row.isin || "").toUpperCase()]?.[mic]?.[row.currency] : null;
+      if (row !== base && leaf?.url && keptLeaves.some((url) => url === leaf.url)) continue;
+      if (leaf?.url) keptLeaves.push(leaf.url);
+      out.push(row);
+    }
+  }
+  return out;
+}
+
+const evidence = loadCurrencyEvidence("e.sun");
+const expanded = keepDistinctCurrencies(addDepositCurrencies(rows, evidence.listed, evidence.books, ESUN_DEPOSIT));
+fs.writeFileSync(new URL("e.sun-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(expanded)), null, 2));
 const byBook = new Map();
 let professional = 0;
-for (const row of rows) {
+for (const row of expanded) {
   byBook.set(`${row.exchange} ${row.type}`, (byBook.get(`${row.exchange} ${row.type}`) || 0) + 1);
   if (row.raw.endsWith(" professional")) professional += 1;
 }
 console.error(
-  `${rows.length} listings, ${professional} professional ` +
+  `${expanded.length} listings, ${professional} professional ` +
     `(${tally.one} with an ISIN, ${tally.none} unmatched, ${tally.several} ambiguous) ` +
     `(${[...byBook].map(([label, count]) => `${count} ${label}`).join(", ")})`
 );

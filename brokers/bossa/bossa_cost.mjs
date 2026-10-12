@@ -13,8 +13,8 @@
 //
 // Warsaw is the domestic table on the fees page, not that PDF. The
 // same line prices GPW and the ASO, so NewConnect uses it.
-//   shares                 0.38 % min 5 zł, or 0.15 % min 5 zł when the
-//                          position is closed the same day (this trip)
+//   shares                 0.38 % min 5 zł. A same-day close is 0.15 %,
+//                          so the remark is −0.23 point on the fees.
 //   ETF, ETC, ETN, ETP     0.25 % min 5 zł, promotion through 2026-12-30
 //   Beta ETF TBSP and
 //   Beta ETF Obligacji 6M  0.10 % min 3 zł, same promotion
@@ -61,7 +61,7 @@ const SCHEDULE = {
 };
 
 const FOREIGN_RATE = 0.0029;
-const GPW_DAY = 0.0015;
+const GPW_RATE = 0.0038;
 const GPW_FUND = 0.0025;
 const GPW_BETA = 0.001;
 const GPW_MIN = 5;
@@ -129,7 +129,7 @@ function gpwRule(row) {
   if (today > SCHEDULE.gpwPromoUntil && (isFund(code(row?.type)) || betaFund(row))) return null;
   if (betaFund(row)) return { rate: GPW_BETA, min: GPW_BETA_MIN, label: "0.10 % min 3 zł" };
   if (isFund(code(row?.type))) return { rate: GPW_FUND, min: GPW_MIN, label: "0.25 % min 5 zł" };
-  if (code(row?.type) === "STOCK") return { rate: GPW_DAY, min: GPW_MIN, label: "0.15 % min 5 zł" };
+  if (code(row?.type) === "STOCK") return { rate: GPW_RATE, min: GPW_MIN, label: "0.38 % min 5 zł" };
   return null;
 }
 
@@ -252,10 +252,13 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
 
   const remark = [
     held ? `FX ${FX_FLAT.PLN} PLN / ${FX_FLAT.EUR} EUR / ${FX_FLAT.USD} USD / ${FX_FLAT.GBP} GBP if cash ≠ ${cash}.` : "",
+    market === "gpw" && listing.type === "STOCK"
+      ? "If the sale is the same day, -0.23% fees."
+      : "",
     isFund(listing.type) ? "IKE and IKZE: 0 % on ETF, ETP, ETN and ETC through February 2027." : "",
   ]
     .filter(Boolean)
-    .join(" ");
+    .join("\n");
 
   const shared = {
     ...answer,
@@ -266,7 +269,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   };
   const basis =
     market === "gpw"
-      ? `barème GPW, page relue le ${SCHEDULE.readOn} : ${label} par ordre. Clôture dans la séance pour une action.`
+      ? `barème GPW, page relue le ${SCHEDULE.readOn} : ${label} par ordre. La position est gardée plus d'un jour.`
       : `table étrangère du ${SCHEDULE.tableOn}, relue le ${SCHEDULE.readOn}, internet : ${label} par ordre`;
 
   if (!(n > 0) || !(p > 0)) {

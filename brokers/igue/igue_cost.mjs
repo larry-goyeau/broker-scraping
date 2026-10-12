@@ -31,10 +31,10 @@
 //   https://www.ig.com/ie/investments/share-dealing/costs-fees
 //   https://www.ig.com/usermanagement/customeragreements?agreementType=costs_and_charges&igCompany=igfr&locale=fr_FR
 //
-//   node brokers/ig/ig_cost.mjs AAPL TRADEGATE EUR --shares=10 --price=230
-//   node brokers/ig/ig_cost.mjs IE00B4L5Y983 TRADEGATE EUR --shares=10 --price=100
-//   node brokers/ig/ig_cost.mjs MC TRADEGATE EUR --shares=1 --price=700
-//   node brokers/ig/ig_cost.mjs --schedule
+//   node brokers/igue/igue_cost.mjs AAPL TRADEGATE EUR --shares=10 --price=230
+//   node brokers/igue/igue_cost.mjs IE00B4L5Y983 TRADEGATE EUR --shares=10 --price=100
+//   node brokers/igue/igue_cost.mjs MC TRADEGATE EUR --shares=1 --price=700
+//   node brokers/igue/igue_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
@@ -46,7 +46,7 @@ import { plus, finite } from "../../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
 
-const CATALOGUE = new URL("ig-parsed.json", import.meta.url);
+const CATALOGUE = new URL("igue-parsed.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://www.ig.com/ie/investments/share-dealing/costs-fees",
@@ -155,7 +155,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue IG n'existe pas encore : lancer `node brokers/ig/ig_scraping.mjs`",
+      why: "le catalogue IG n'existe pas encore : lancer `node brokers/igue/igue_scraping.mjs`",
     };
   }
 
@@ -338,11 +338,11 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node ig_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--json]\n" +
-        "        node ig_cost.mjs --schedule\n" +
-        "  ex.   node ig_cost.mjs AAPL TRADEGATE EUR --shares=10 --price=230\n" +
-        "        node ig_cost.mjs IE00B4L5Y983 TRADEGATE EUR --shares=10 --price=100\n" +
-        "        node ig_cost.mjs MC TRADEGATE EUR --shares=1 --price=700"
+      "usage : node igue_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--json]\n" +
+        "        node igue_cost.mjs --schedule\n" +
+        "  ex.   node igue_cost.mjs AAPL TRADEGATE EUR --shares=10 --price=230\n" +
+        "        node igue_cost.mjs IE00B4L5Y983 TRADEGATE EUR --shares=10 --price=100\n" +
+        "        node igue_cost.mjs MC TRADEGATE EUR --shares=1 --price=700"
     );
     process.exit(2);
   }

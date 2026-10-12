@@ -149,9 +149,9 @@ export function isFresh(isin, maxAge = DAY) {
   // every view (their tape is free). Elsewhere a miss is fresh only after the
   // Yahoo last has been tried, so a CDR the vendor never heard of still gets
   // one shot and then rests for the day.
-  // KASE publishes the last for nothing, the same way the Gulf boards do. A miss
-  // from the vendor must not sit on that page for a day.
-  if (GULF_COUNTRIES.has(key.slice(0, 2)) || key.startsWith("KZ") || key.startsWith("ZW") || key.startsWith("VN")) return false;
+  // KASE and the PSE publish the last for nothing, the same way the Gulf
+  // boards do. A miss from the vendor must not sit on that page for a day.
+  if (GULF_COUNTRIES.has(key.slice(0, 2)) || key.startsWith("KZ") || key.startsWith("ZW") || key.startsWith("VN") || key.startsWith("PH")) return false;
   const fb = Date.parse(fallback[key] || 0);
   // A miss from before the ISIN search never asked Yahoo for the identifier.
   if (!(fb >= YAHOO_BOARDS_AT) || !(fb >= YAHOO_OTC_AT) || !(fb >= YAHOO_ISIN_AT)) return false;
@@ -714,6 +714,9 @@ export async function ensureFresh(isin, maxAge = DAY, listings = null) {
       if (!hasPrice(key) && key.startsWith("KZ")) {
         await kaseFresh(key);
       }
+      if (!hasPrice(key) && key.startsWith("PH")) {
+        await pseFresh(key, listings);
+      }
       // The vendor does not carry the Zimbabwe Stock Exchange. The published
       // price sheet is the last, in cents of a ZiG, for every line on the board.
       if (!hasPrice(key) && key.startsWith("ZW")) {
@@ -935,6 +938,80 @@ function kaseQuote(state, symbol) {
     last: Number(hit.price),
     currency: String(hit.currency_type || "KZT").toUpperCase(),
   };
+}
+
+// The vendor does not carry the Philippine Stock Exchange, and Yahoo's
+// .PS suffix answers 404. The stock page prints the last traded price,
+// and the previous close when the session has not printed one.
+const PSE_STOCK = "https://edge.pse.com.ph/companyPage/stockData.do";
+const PSE_FIND = "https://edge.pse.com.ph/autoComplete/searchCompanyNameSymbol.ax";
+
+function pseField(html, label) {
+  const match = html.match(new RegExp(`<th>\\s*${label}\\s*</th>\\s*<td[^>]*>\\s*([^<]*)`, "i"));
+  return match ? match[1].replace(/,/g, "").trim() : "";
+}
+
+function pseLast(html) {
+  const raw = pseField(html, "Last Traded Price") || pseField(html, "Previous Close and Date").split("(")[0];
+  const last = Number(raw);
+  return last > 0 ? last : null;
+}
+
+async function pseQuote(ticker) {
+  const found = await fetch(`${PSE_FIND}?term=${encodeURIComponent(ticker)}`, {
+    headers: { "user-agent": "Mozilla/5.0", accept: "application/json" },
+    signal: AbortSignal.timeout(20000),
+  });
+  if (!found.ok) return null;
+  const rows = await found.json();
+  const hit = (Array.isArray(rows) ? rows : []).find((row) => String(row.symbol || "").toUpperCase() === ticker);
+  if (!hit?.cmpyId) return null;
+  const page = await fetch(`${PSE_STOCK}?cmpy_id=${encodeURIComponent(hit.cmpyId)}`, {
+    headers: { "user-agent": "Mozilla/5.0", accept: "text/html" },
+    signal: AbortSignal.timeout(20000),
+  });
+  if (!page.ok) return null;
+  let html = await page.text();
+  const options = [...html.matchAll(/<option\b([^>]*)>([^<]*)<\/option>/gi)];
+  const selected = options.find((match) => /\bselected\b/i.test(match[1]));
+  const shown = String(selected?.[2] || "").trim().toUpperCase();
+  if (shown && shown !== ticker) {
+    const other = options.find((match) => String(match[2] || "").trim().toUpperCase() === ticker);
+    const id = other && (other[1].match(/value="(\d+)"/) || [])[1];
+    if (!id) return null;
+    const next = await fetch(`${PSE_STOCK}?cmpy_id=${encodeURIComponent(hit.cmpyId)}&security_id=${id}`, {
+      headers: { "user-agent": "Mozilla/5.0", accept: "text/html" },
+      signal: AbortSignal.timeout(20000),
+    });
+    if (!next.ok) return null;
+    html = await next.text();
+  }
+  const last = pseLast(html);
+  return last == null ? null : { symbol: ticker, last };
+}
+
+async function pseFresh(isin, listings) {
+  const tickers = [];
+  for (const row of listings || []) {
+    const ticker = String(row.ticker || row.symbol || "").trim().toUpperCase();
+    const place = String(row.exchangeRaw || row.exchange || "").toUpperCase();
+    if (!ticker || tickers.includes(ticker)) continue;
+    if (place === "PSE" || place.includes("PHILIPPINE") || String(row.isin || isin).startsWith("PH")) tickers.push(ticker);
+  }
+  for (const ticker of tickers.slice(0, 4)) {
+    try {
+      const quote = await pseQuote(ticker);
+      if (!quote) continue;
+      const currency = String((listings || []).find((row) => String(row.ticker || "").toUpperCase() === ticker)?.currency || "PHP").toUpperCase();
+      noteBoard(isin, { ...quote, currency }, "XPHS");
+      fetched[isin] = new Date().toISOString();
+      scheduleSave();
+      return true;
+    } catch (e) {
+      console.error(`prix ${isin} chez PSE ${ticker} : ${e.message}`);
+    }
+  }
+  return false;
 }
 
 async function kaseFresh(isin) {

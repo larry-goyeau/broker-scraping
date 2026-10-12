@@ -15,6 +15,10 @@
 //   node brokers/boubyan/boubyan_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
+import { addDepositCurrencies, loadCurrencyEvidence } from "../N26/N26_scraping.mjs";
+
+// deposits.mjs: a Boubyan deposit stays in Kuwaiti dinars.
+const BOUBYAN_DEPOSIT = new Set(["KWD"]);
 import { stampIsinMatches } from "../../isinMatches.mjs";
 import { withoutObligations } from "../../obligation.mjs";
 import { parseCsv } from "../../indianCash.mjs";
@@ -384,12 +388,14 @@ rows.sort((left, right) => {
 });
 
 const filled = attachIsins(rows);
-fs.writeFileSync(new URL("boubyan-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(rows)), null, 2));
+const evidence = loadCurrencyEvidence("boubyan");
+const expanded = addDepositCurrencies(rows, evidence.listed, evidence.books, BOUBYAN_DEPOSIT);
+fs.writeFileSync(new URL("boubyan-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(expanded)), null, 2));
 
 const byBook = new Map();
 for (const row of rows) byBook.set(`${row.exchange} ${row.type}`, (byBook.get(`${row.exchange} ${row.type}`) || 0) + 1);
 console.error(
-  `${lists.length} lists, ${rows.length} listings, ${filled} ISINs ` +
+  `${lists.length} lists, ${expanded.length} listings, ${filled} ISINs ` +
     `(${[...byBook].map(([label, count]) => `${count} ${label}`).join(", ")})` +
     (skipped.size ? `; left out ${[...skipped].map(([reason, count]) => `${count} ${reason}`).join(", ")}` : "")
 );

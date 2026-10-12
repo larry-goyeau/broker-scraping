@@ -1,7 +1,13 @@
 import crypto from "node:crypto";
 import { stampRows } from "../../accepted.mjs";
 import { withoutObligations } from "../../obligation.mjs";
+import { addDepositCurrencies, loadCurrencyEvidence } from "../N26/N26_scraping.mjs";
+import { resolveVenue } from "../../spreads/venues.mjs";
+import { spreads } from "../../spreads/book.mjs";
 import fs from "node:fs";
+
+// deposits.mjs, every Webull company: the cash a plan can hold.
+const WEBULL_DEPOSIT = new Set(["USD", "GBP", "EUR", "SGD", "CAD", "AUD", "HKD"]);
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -600,15 +606,49 @@ results.sort((left, right) => {
   return String(left.ticker).localeCompare(String(right.ticker));
 });
 
-fs.writeFileSync(outputPath, JSON.stringify(stampRows(withoutObligations(results), import.meta.url), null, 2));
+function baseCurrency(exchange) {
+  if (exchange === "HKEX") return "HKD";
+  if (exchange === "SGX") return "SGD";
+  if (exchange === "ASX") return "AUD";
+  if (exchange === "XTSE" || exchange === "TSX") return "CAD";
+  return "USD";
+}
+
+function keepDistinctCurrencies(list) {
+  const groups = new Map();
+  for (const row of list) {
+    const key = `${row.exchange}|${row.ticker}|${String(row.isin || "").toUpperCase()}|${row.type}`;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(row);
+  }
+  const out = [];
+  for (const group of groups.values()) {
+    const base = group.find((row) => row.currency === baseCurrency(row.exchange)) || group[0];
+    const mic = resolveVenue({ exchange: base.exchange, currency: base.currency, isin: base.isin }).venue?.mic;
+    const keptLeaves = [];
+    for (const row of [base, ...group.filter((item) => item !== base)]) {
+      const leaf = mic ? spreads[String(row.isin || "").toUpperCase()]?.[mic]?.[row.currency] : null;
+      if (row !== base && leaf?.url && keptLeaves.some((url) => url === leaf.url)) continue;
+      if (leaf?.url) keptLeaves.push(leaf.url);
+      out.push(row);
+    }
+  }
+  return out;
+}
+
+const currencyEvidence = loadCurrencyEvidence("webull");
+const expanded = keepDistinctCurrencies(
+  addDepositCurrencies(results, currencyEvidence.listed, currencyEvidence.books, WEBULL_DEPOSIT)
+);
+fs.writeFileSync(outputPath, JSON.stringify(stampRows(withoutObligations(expanded), import.meta.url), null, 2));
 
 const byType = new Map();
-for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);
+for (const row of expanded) byType.set(row.type, (byType.get(row.type) || 0) + 1);
 const byCurrency = new Map();
-for (const row of results) byCurrency.set(row.currency, (byCurrency.get(row.currency) || 0) + 1);
+for (const row of expanded) byCurrency.set(row.currency, (byCurrency.get(row.currency) || 0) + 1);
 
 console.error(
-  `${results.length} listings over ${new Set(results.map((row) => row.isin || row.ticker)).size} instruments ` +
+  `${expanded.length} listings over ${new Set(expanded.map((row) => row.isin || row.ticker)).size} instruments ` +
     `(${[...byType].map(([type, count]) => `${count} ${type}`).join(", ") || "none"}; ` +
     `${[...byCurrency].map(([currency, count]) => `${count} ${currency}`).join(", ") || "no currency"})` +
     (unlisted ? `, ${unlisted} the catalogues do not carry` : "") +

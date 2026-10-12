@@ -10,7 +10,8 @@
 //       0.38 % min 3 zł per order
 //     the same session's reverse trade, cash market except bonds
 //       charged at the order rate, then the gap down to 0.20 % is refunded
-//       on the smaller of the two notionals
+//       on the smaller of the two notionals. The figure stays at 0.38 %.
+//       The remark is the gap on that sale, −0.18 point.
 //     GPW ETF, ETC and ETN, communiqué of 30 June 2026, both legs
 //       0 through 31 December 2026
 //     GlobalConnect is that Warsaw market in złoty, so it uses this
@@ -173,13 +174,13 @@ function legsOf(listing, notional, shares) {
       };
     }
     const gross = Math.max(notional * POLISH_RATE, POLISH_MIN);
-    const refund = notional * (POLISH_RATE - DAY_RATE);
     return {
       buy: gross,
-      sell: gross - refund,
+      sell: gross,
       currency: "PLN",
-      label: `${pct(POLISH_RATE)} min ${POLISH_MIN} PLN à l'achat, ${pct(DAY_RATE)} à la vente`,
-      note: "première tranche, sans historique d'ordres ; vente le jour même au day trading",
+      label: `${pct(POLISH_RATE)} min ${POLISH_MIN} PLN`,
+      dayTrade: true,
+      note: "première tranche, sans historique d'ordres ; position gardée plus d'un jour",
     };
   }
   const cash = listingCash(listing.currency);
@@ -262,7 +263,14 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     ...answer,
     listing,
     cashCurrency: rule.currency,
-    remark: fxNote(listing.currency),
+    remark: [
+      fxNote(listing.currency),
+      rule.dayTrade
+        ? `If the sale is the same day, that sale is -${((POLISH_RATE - DAY_RATE) * 100).toFixed(2)}% fees.`
+        : "",
+    ]
+      .filter(Boolean)
+      .join("\n"),
     url: polishMarket(listing.brokerExchange) ? SCHEDULE.url : SCHEDULE.foreign,
     basis: `taryfa Alior relue le ${SCHEDULE.readOn} : ${rule.label}${rule.buy === rule.sell ? " par ordre" : ""}`,
     tax,

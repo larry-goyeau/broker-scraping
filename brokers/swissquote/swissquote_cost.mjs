@@ -28,6 +28,16 @@
 //                                                CEMEXCPO agreed. The sell
 //                                                had no position, so the buy
 //                                                ticket is used both ways.
+//   Thailand SE                                 other-markets sheet of
+//                                                2025-08-20: 0.50 % of the
+//                                                amount, minimum 150 USD,
+//                                                each side
+//   New Zealand SE                              same sheet: 0.50 % of the
+//                                                amount, minimum 75 NZD,
+//                                                each side. An AUD line on
+//                                                that board uses the same
+//                                                rate; the floor is 75 NZD
+//                                                converted.
 //   OTC                                          0.5 %, min 100 (listing ccy
 //                                                or CHF if that ccy is not
 //                                                AUD CAD CHF EUR GBP USD)
@@ -198,6 +208,7 @@ const CH_BY_CODE = {
   SGX: "other",
   ASX: "other",
   BMV: "mx",
+  SET: "th",
 };
 
 const LU_ONLY = { DFM: "dubai" };
@@ -265,6 +276,8 @@ export function feeMarketOf(exchange, mic) {
   }
   if (m === "XDFM") return "dubai";
   if (raw === "BMV" || m === "XMEX" || m === "XBMV") return "mx";
+  if (raw === "SET" || m === "XBKK") return "th";
+  if (raw === "NZX" || raw === "XNZE" || m === "XNZE") return "nz";
   return null;
 }
 
@@ -328,6 +341,24 @@ export function commissionEach(bank, { market, notional, currency, exchange }) {
     const floor = 4436.26;
     const charged = Math.max(floor, notional * 0.01) + notional * 0.0015;
     return { charged, currency: "MXN", rate: 0.01 };
+  }
+  if (market === "th") {
+    // Other accessible markets, equity, 20 Aug 2025. Thailand SE.
+    // 0.50 % of the amount, minimum ticket 150 USD, each side.
+    if (settleCcy(currency) !== "THB" || !(notional > 0)) return null;
+    const floor = amountIn(150, "USD", "THB");
+    if (floor == null) return null;
+    return { charged: Math.max(notional * 0.005, floor), currency: "THB", rate: 0.005 };
+  }
+  if (market === "nz") {
+    // Same sheet, New Zealand SE. 0.50 % of the amount, minimum ticket
+    // 75 NZD, each side. The AUD counter on that board keeps the rate
+    // and converts the floor.
+    if (!(notional > 0)) return null;
+    const ccy = settleCcy(currency);
+    const floor = ccy === "NZD" ? 75 : amountIn(75, "NZD", ccy);
+    if (floor == null) return null;
+    return { charged: Math.max(notional * 0.005, floor), currency: ccy, rate: 0.005 };
   }
   if (market === "dubai") {
     // Platform validation of DFM (AED000901010) on 2026-10-10. Nothing sent.
@@ -525,7 +556,11 @@ export function roundTrip({
     basis:
       market === "mx" && bank === "ch"
         ? "barème Swissquote Suisse, aperçu WALMEX* sur Mexico SE le 2026-10-10 : le plus élevé entre 4 436,26 MXN et 1 %, plus 0,15 %"
-        : `barème Swissquote ${bank === "lu" ? "Europe" : "Suisse"}, palier ${market || "?"}, relu le ${SCHEDULE[bank].readOn}`,
+        : market === "th" && bank === "ch"
+          ? "barème Swissquote Suisse, autres marchés du 2025-08-20 : Thaïlande 0,50 %, minimum 150 USD"
+          : market === "nz" && bank === "ch"
+            ? "barème Swissquote Suisse, autres marchés du 2025-08-20 : Nouvelle-Zélande 0,50 %, minimum 75 NZD"
+            : `barème Swissquote ${bank === "lu" ? "Europe" : "Suisse"}, palier ${market || "?"}, relu le ${SCHEDULE[bank].readOn}`,
     tax,
     ccy: QUOTE,
     fx: fxNote(listing.currency),

@@ -21,10 +21,8 @@
 //                        https://cdn.prod.website-files.com/6697a441a50c6b926e1972e0/6a7f24c87e8bd58f712c02d1_BYMA-Derechos-Mercado-sobre-Operaciones_2026-08-14-vf.pdf
 //   Same session         The starred lines take 50% off the commission
 //                        when the sale is the same term, currency and
-//                        symbol. BYMA takes 50% off the market rights for
-//                        a buy and a sell in the same session and the same
-//                        settlement. The figure assumes another day. Both
-//                        waivers are the remark.
+//                        symbol. The figure assumes another day. That
+//                        waiver is the remark.
 //
 // A dollar trade's market rights are assessed on the peso equivalent at
 // the previous day's Banco Nación seller close. This ticket applies the
@@ -62,7 +60,7 @@ const SCHEDULE = {
 const IVA = 0.21;
 const RATE = 0.005;
 const MARKET = 0.0005;
-const REMARK = "If the sale is the same day, same symbol, currency and term, the commission is half. BYMA halves the market rights for a buy and a sell in the same session and the same settlement.";
+const REMARK = "If the sale is the same day the commission is half.";
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];

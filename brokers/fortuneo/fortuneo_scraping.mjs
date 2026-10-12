@@ -22,6 +22,10 @@
 
 import puppeteer from "puppeteer-core";
 import { stampRows } from "../../accepted.mjs";
+import { addDepositCurrencies, loadCurrencyEvidence } from "../N26/N26_scraping.mjs";
+
+// deposits.mjs: a Fortuneo deposit stays in euros.
+const FORTUNEO_DEPOSIT = new Set(["EUR"]);
 import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 
@@ -430,8 +434,11 @@ console.error(`${pending.length} ISINs to look up (${lookedUp.size} already done
 const skipped = new Map();
 const bump = (reason) => skipped.set(reason, (skipped.get(reason) || 0) + 1);
 
+let currencyEvidence = null;
 function saveResults() {
-  fs.writeFileSync(outputPath, JSON.stringify(stampRows(withoutObligations(results), import.meta.url), null, 2));
+  if (!currencyEvidence) currencyEvidence = loadCurrencyEvidence("fortuneo");
+  const expanded = addDepositCurrencies(results, currencyEvidence.listed, currencyEvidence.books, FORTUNEO_DEPOSIT);
+  fs.writeFileSync(outputPath, JSON.stringify(stampRows(withoutObligations(expanded), import.meta.url), null, 2));
 }
 
 const CONCURRENCY = 1;

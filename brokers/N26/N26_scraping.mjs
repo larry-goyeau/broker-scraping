@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
 import { stampRows } from "../../accepted.mjs";
 import { withoutObligations } from "../../obligation.mjs";
+import { resolveVenue } from "../../spreads/venues.mjs";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 
@@ -201,6 +202,109 @@ for path in CommandLine.arguments.dropFirst() {
     }
 }
 `;
+
+// deposits.mjs: an N26 deposit stays in euros. A second line is added only
+// when this title is already quoted on that venue in euros and in at least
+// one other currency.
+const N26_DEPOSIT = new Set(["EUR"]);
+
+function cleanCurrency(currency) {
+  const ccy = String(currency || "").toUpperCase();
+  return ccy === "GBX" ? "GBP" : ccy;
+}
+
+function placeKey(resolved) {
+  return resolved.venue?.mic || resolved.unsourced?.name || "";
+}
+
+export function loadCurrencyEvidence(skipFolder = "n26") {
+  const listed = new Map();
+  const books = new Map();
+  const note = (key, isin, currency) => {
+    const id = String(isin || "").toUpperCase();
+    const ccy = cleanCurrency(currency);
+    if (!key || !id || !ccy) return;
+    const slot = `${key}|${id}`;
+    if (!listed.has(slot)) listed.set(slot, new Map());
+    const counts = listed.get(slot);
+    counts.set(ccy, (counts.get(ccy) || 0) + 1);
+  };
+  const root = path.join(here, "..");
+  for (const folder of fs.readdirSync(root)) {
+    if (folder.toLowerCase() === String(skipFolder || "").toLowerCase()) continue;
+    const dir = path.join(root, folder);
+    let names = [];
+    try {
+      names = fs.readdirSync(dir);
+    } catch {
+      continue;
+    }
+    for (const name of names) {
+      if (!name.endsWith("-parsed.json")) continue;
+      const data = JSON.parse(fs.readFileSync(path.join(dir, name), "utf8"));
+      const list = Array.isArray(data) ? data : data.rows || [];
+      for (const row of list) {
+        const resolved = resolveVenue(row);
+        note(placeKey(resolved), row.isin, row.currency);
+        if (resolved.venue?.mic && resolved.venue.mic !== placeKey(resolved)) {
+          note(resolved.venue.mic, row.isin, row.currency);
+        }
+      }
+    }
+  }
+  const book = JSON.parse(fs.readFileSync(path.join(here, "../../spreads/spread.json"), "utf8")).spreads || {};
+  for (const [isin, places] of Object.entries(book)) {
+    if (!places || typeof places !== "object") continue;
+    for (const [mic, currencies] of Object.entries(places)) {
+      if (!currencies || typeof currencies !== "object") continue;
+      const id = String(isin || "").toUpperCase();
+      for (const currency of Object.keys(currencies)) {
+        const ccy = cleanCurrency(currency);
+        if (!id || !ccy) continue;
+        const slot = `${mic}|${id}`;
+        if (!books.has(slot)) books.set(slot, new Set());
+        books.get(slot).add(ccy);
+      }
+    }
+  }
+  return { listed, books };
+}
+
+export function addDepositCurrencies(rows, listed, books, deposit = N26_DEPOSIT) {
+  const out = [];
+  const seen = new Set();
+  for (const row of rows) {
+    const push = (line) => {
+      const id = `${line.exchange}|${line.ticker}|${line.type}|${line.currency || ""}|${String(line.isin || "").toUpperCase()}`;
+      if (seen.has(id)) return;
+      seen.add(id);
+      out.push(line);
+    };
+    push(row);
+    if (row.type === "CRYPTO") continue;
+    const isin = String(row.isin || "").toUpperCase();
+    if (!isin) continue;
+    const resolved = resolveVenue({ exchange: row.exchange, currency: row.currency, isin });
+    const mic = resolved.venue?.mic || placeKey(resolved);
+    if (!mic) continue;
+    const have = new Set();
+    const counts = listed.get(`${mic}|${isin}`);
+    if (counts) for (const [ccy, n] of counts) if (n >= 2) have.add(ccy);
+    const bookCcys = books.get(`${mic}|${isin}`);
+    if (bookCcys) for (const ccy of bookCcys) have.add(ccy);
+    if (have.size < 2) continue;
+    const current = cleanCurrency(row.currency);
+    for (const ccy of have) {
+      if (!deposit.has(ccy) || ccy === current) continue;
+      push({ ...row, currency: ccy });
+    }
+  }
+  return out;
+}
+
+const isMain = process.argv[1] && path.resolve(process.argv[1]) === path.resolve(fileURLToPath(import.meta.url));
+
+if (isMain) {
 
 const photos = fs
   .readdirSync(photoDir)
@@ -534,21 +638,25 @@ for (const row of listed.values()) {
   }
 }
 
-results.sort((left, right) => {
+const evidence = loadCurrencyEvidence();
+const expanded = addDepositCurrencies(results, evidence.listed, evidence.books);
+expanded.sort((left, right) => {
   const byType = String(left.type).localeCompare(right.type);
   if (byType !== 0) return byType;
   const byExchange = String(left.exchange).localeCompare(String(right.exchange));
   if (byExchange !== 0) return byExchange;
-  return String(left.ticker).localeCompare(String(right.ticker));
+  const byTicker = String(left.ticker).localeCompare(String(right.ticker));
+  if (byTicker !== 0) return byTicker;
+  return String(left.currency || "").localeCompare(String(right.currency || ""));
 });
 
-fs.writeFileSync(new URL("n26-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(results), import.meta.url), null, 2));
+fs.writeFileSync(new URL("n26-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(expanded), import.meta.url), null, 2));
 
 const byType = new Map();
-for (const row of results) byType.set(row.type, (byType.get(row.type) || 0) + 1);
+for (const row of expanded) byType.set(row.type, (byType.get(row.type) || 0) + 1);
 
 console.error(
-  `${results.length} listings over ${new Set(results.map((row) => row.isin || row.ticker)).size} instruments ` +
+  `${expanded.length} listings over ${new Set(expanded.map((row) => row.isin || row.ticker)).size} instruments ` +
     `(${[...byType].map(([type, count]) => `${count} ${type}`).join(", ") || "none"})` +
     (unmatched.length ? `, ${unmatched.length} the catalogues do not carry` : "")
 );
@@ -556,4 +664,5 @@ if (unmatched.length > 0 && unmatched.length <= 40) {
   console.error(`  ${unmatched.join("; ")}`);
 } else if (unmatched.length > 40) {
   console.error(`  e.g. ${unmatched.slice(0, 12).join("; ")}`);
+}
 }

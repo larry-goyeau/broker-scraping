@@ -247,6 +247,19 @@ export const ACCEPTED = {
   // https://help.zestyfinance.com/es/articles/15937663-que-documentos-necesito-para-registrarme
   // https://help.zestyfinance.com/es/articles/15937662-puedo-usar-la-app-si-soy-una-persona-extranjera
   zesty: { countries: ["CL"] },
+  // A foreigner opens with a current temporary RUT, which is residence in
+  // Chile. An expired one needs a current residence certificate. A Chilean
+  // living abroad can keep the account with a Chilean bank account and
+  // Chilean-source income. The picker is residence, so it stays Chile.
+  // https://ayuda.fintual.cl/es/articles/4292653-puedo-tener-cuenta-si-no-soy-chileno-a
+  // https://ayuda.fintual.cl/es/articles/5327841-puedo-tener-cuenta-si-soy-chileno-y-no-vivo-en-chile
+  fintual: { countries: ["CL"] },
+  // A new customer applies online while living in New Zealand. A New
+  // Zealand citizen living overseas uses the non-resident declaration.
+  // The picker is residence, so it stays New Zealand.
+  // https://www.asb.co.nz/asb-securities/open-an-account.html
+  // https://www.asb.co.nz/documents/asb-securities/non-resident-declaration-form.html
+  asb: { countries: ["NZ"] },
   firstrade: { countries: FIRSTRADE },
   // A legal US address and a Social Security number. Citizenship can be
   // American, a green card, or one of the named visas; the address is
@@ -462,6 +475,13 @@ export const ACCEPTED = {
   // Telemoney is how a client already abroad sends money.
   // https://www.rcbcsec.com/corporate/faqs.html
   rcbc: { countries: ["PH"] },
+  // A Filipino opens with a BPI deposit account. A foreigner sends a
+  // current passport and an Alien Certificate of Registration, or a work
+  // permit. A tourist visa is refused. The picker is residence, so the
+  // country is PH.
+  // https://new.bpitrade.com/faq/who-can-open-a-bpi-trade-account/
+  // https://new.bpitrade.com/faq/what-are-the-requirements-to-open-a-bpi-trade-account/
+  bpi: { countries: ["PH"] },
   // GStocks opening takes a Filipino with a government ID, a foreigner
   // residing abroad with a passport, and a foreigner residing in the
   // Philippines with a passport and an AEP, an ACR or an SRRV. No
@@ -580,6 +600,13 @@ export const ACCEPTED = {
   // https://www.mstock.com/articles/non-repatriable-demat-account
   // https://www.mstock.com/open-demat-account
   "m.stock": { countries: ["IN"] },
+  // Online opening is an Indian citizen who lives in India. An NRI opens
+  // offline with an NRE or NRO account. The picker is a country, so the
+  // country is IN.
+  // https://www.motilaloswal.com/open-demat-account/
+  // https://www.motilaloswal.com/nri-demat-account
+  // https://ekyc.motilaloswal.com/EKYC_Icons/TermsAndConditions.pdf
+  motilaloswal: { countries: ["IN"] },
   // The online form fixes +91 and asks for a mobile number, then an OTP.
   // That number is Indian. The picker is a country, so the country is IN.
   // https://kyc.arrow.trade/
@@ -659,6 +686,11 @@ export const ACCEPTED = {
   // https://www.pekao.com.pl/dam/jcr:2959a3f3-a892-47b9-96c6-5b54bc17f792/Umowa%20%C5%9Bwiadczenia%20us%C5%82ug%20maklerskich%20-%20rachunek%20indywidualny.2025-11-25-15-47-00.pdf
   // https://www.pekao.com.pl/en/
   pekao: { countries: ["PL"] },
+  // Online opening in Erste internet banking is for a client of Erste Bank
+  // Polska who is a resident of Poland. The picker is residence, so the
+  // country is PL.
+  // https://www.erste.pl/klient-indywidualny/oszczednosci-i-inwestycje/rachunek-maklerski-standard
+  erste: { countries: ["PL"] },
   // Account page: any adult with a Polish ID card or a passport.
   // Communiqué of 31 Dec 2025, in force 1 Jan 2026: no foreign-markets annex,
   // and no foreign-currency trading on the home market, for a citizen, a
@@ -729,7 +761,15 @@ export const ACCEPTED = {
   // on that page.
   interactivebrokers: { all: true, except: ["AF", "NG", "VE", "ZW"] },
   xtb: { countries: XTB },
-  ig: WORLD_NO_US,
+  igue: WORLD_NO_US,
+  // UK site, IG Trading and Investments: a GBP share-dealing account, an ISA
+  // and a SIPP. The ISA page says any UK resident over 18. The same site
+  // says it is not directed at residents of any country outside the UK.
+  // Ireland's share dealing is the Ireland site, in euros.
+  // https://www.ig.com/uk/investments/isa
+  // https://www.ig.com/uk/investments/share-dealing
+  // https://www.ig.com/uk/create-account
+  iguk: { countries: ["GB"] },
   // The priced book is OANDA TMS cash shares, sold to the 27 EU countries.
   // UK, Switzerland, Norway, Liechtenstein, the US, Canada, Australia,
   // Singapore, Japan and Global Markets are other companies with other fees.
@@ -765,24 +805,13 @@ export const ACCEPTED = {
   // https://www.invertironline.com/preguntas-frecuentes
   // https://iol.invertironline.com/autorespuesta/quienespuedeninvertirenestadosunidos/423/420364
   iol: { countries: ["AR"] },
-  // The account FAQ lets a foreigner open with a CUIT, CUIL, CDI or CIE,
-  // and a US citizen files a W-9, so the picker is not Argentina. The
-  // client policy linked from that FAQ refuses someone domiciled or
-  // resident in a FATF high-risk jurisdiction, or in a jurisdiction that
-  // is not on the cooperative list of Decree 589/2013 art. 2(b). That
-  // list is now the non-cooperative enumeration of Decree 398/2026. The
-  // picker only has the countries below. Territories on the decree that
-  // the picker does not name stay out of the list.
+  // The picker is residence, and the country is Argentina.
   // https://balanz.com/abrir-cuenta/
-  // http://cms.balanz.com/PFS/067856_bcvpoliticadeclientesnoaceptables0520201.pdf
-  // https://servicios.infoleg.gob.ar/infolegInternet/anexos/425000-429999/426164/norma.htm
-  balanz: {
-    all: true,
-    except: [
-      "AF", "AO", "BD", "BO", "BY", "CU", "DZ", "EG", "HN", "IQ", "IR", "KP",
-      "LK", "SY", "TZ", "UZ", "VA", "ZM", "ZW",
-    ],
-  },
+  balanz: { countries: ["AR"] },
+  // A non-resident foreigner can open after a CDI or a CIE. The picker
+  // stays Argentina.
+  // https://www.ecovalores.com.ar/preguntas-frecuentes.php
+  ecovalores: { countries: ["AR"] },
   // A Peruvian DNI is required. A foreign identity document cannot open
   // the account. Living in Peru is not required. A US person cannot
   // finish validation, so the United States stays out.

@@ -10,6 +10,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { catalogueFiles } from "./catalogues.mjs";
+import { isObligation } from "./obligation.mjs";
 import { resolveVenue } from "./spreads/venues.mjs";
 import { accepts, COUNTRY_NAMES, countryOptions, listingAccepts, stampResidency, EEA, EU, GCC } from "./accepted.mjs";
 import { depositHas, splitByPlan, currencyOptions } from "./deposits.mjs";
@@ -142,6 +143,9 @@ const FOLDER_NAME = {
   trii: "Trii Peru",
   bks: "BKS Bank",
   public: "Public.com",
+  erste: "Erste",
+  iguk: "IG UK",
+  igue: "IG UE",
 };
 
 // Display name above, broker-list row below, when the two differ.
@@ -151,6 +155,9 @@ const FOLDER_LIST = {
   boursobank: "BoursoBank (Boursorama)",
   iol: "InvertirOnline (IOL)",
   bks: "BKS Bank Slovenia",
+  erste: "Erste Biuro Maklerskie",
+  iguk: "IG",
+  igue: "IG Europe",
 };
 
 function metaFor(folder, list) {
@@ -242,6 +249,7 @@ const imposesCurrency = (folder) =>
 console.error("indexation des catalogues…");
 const t0 = Date.now();
 let listings = 0;
+let obligations = 0;
 const matchedListings = [];
 for (const file of catalogueFiles()) {
   const folder = file.split("/").slice(-2, -1)[0];
@@ -249,6 +257,10 @@ for (const file of catalogueFiles()) {
   const parsed = JSON.parse(fs.readFileSync(file, "utf8"));
   const rows = Array.isArray(parsed) ? parsed : parsed.rows || parsed.instruments || [];
   for (const row of rows) {
+    if (isObligation(row.name || row.label, row.type)) {
+      obligations += 1;
+      continue;
+    }
     const key = instrumentKey(row);
     if (!key) continue;
     listings += 1;
@@ -263,6 +275,7 @@ for (const file of catalogueFiles()) {
         names: new Set(),
         nameCounts: new Map(),
         types: new Set(),
+        typeCounts: new Map(),
         byBroker: new Map(),
       };
       instruments.set(key, inst);
@@ -282,7 +295,10 @@ for (const file of catalogueFiles()) {
     if (/^[A-Z]{2}[A-Z0-9]{10}$/.test(rowIsin)) inst.isins.add(rowIsin);
     addName(inst.names, inst.nameCounts, row.name);
     addName(inst.names, inst.nameCounts, row.label);
-    if (row.type) inst.types.add(String(row.type).toUpperCase());
+    if (type) {
+      inst.types.add(type);
+      inst.typeCounts.set(type, (inst.typeCounts.get(type) || 0) + 1);
+    }
     const exchangeRaw = String(row.exchange || "").trim();
     const listing = {
       ticker: ticker || String(row.query || ""),
@@ -348,7 +364,8 @@ for (const { isin, folder, listing } of matchedListings) {
   host.byBroker.set(folder, held);
 }
 console.error(
-  `${instruments.size} instruments, ${listings} cotations, ${brokers.size} brokers en ${Date.now() - t0} ms`
+  `${instruments.size} instruments, ${listings} cotations, ${brokers.size} brokers en ${Date.now() - t0} ms` +
+    (obligations ? `; ${obligations} obligations laissées de côté` : "")
 );
 
 const NA = "N/A";
@@ -505,6 +522,7 @@ function estimateListing(folder, listing, inst, extra = {}, size = {}) {
   const crypto = inst.key.startsWith("CRYPTO:");
   const ask = {
     etf: crypto ? listing.query || listing.ticker : listing.isin || listing.ticker || inst.isin,
+      ticker: listing.ticker || "",
       place: listing.exchangeRaw || listing.exchange || "",
       currency: listing.currency || "",
     ...extra,
@@ -538,6 +556,14 @@ function estimateListing(folder, listing, inst, extra = {}, size = {}) {
   } catch {
     return { ...EMPTY_ROW };
   }
+}
+
+function expandCounts(counts) {
+  const out = [];
+  for (const [value, count] of counts || []) {
+    for (let i = 0; i < count; i += 1) out.push(value);
+  }
+  return out;
 }
 
 function mostCommon(values) {
@@ -675,6 +701,16 @@ function preferredName(inst) {
   return referenceName(inst) || votedName(inst);
 }
 
+// A catalogue often files an ETF as a share. The reference name is the
+// one on screen, so a name that says ETF, ETN or ETC wins over the vote.
+function displayType(inst) {
+  const name = preferredName(inst);
+  if (/\bETNs?\b/i.test(name)) return "ETN";
+  if (/\bETCs?\b/i.test(name) && !/\bETFs?\b/i.test(name)) return "ETC";
+  if (/\bETFs?\b/i.test(name) || /exchange-traded funds/i.test(name)) return "ETF";
+  return mostCommon(expandCounts(inst.typeCounts));
+}
+
 function preferredTicker(inst, hint) {
   const H = String(hint || "").trim().toUpperCase();
   if (H && inst.tickers.has(H)) return H;
@@ -722,7 +758,7 @@ function tickerStem(ticker) {
 }
 
 function clusterTokens(inst) {
-  const type = mostCommon(inst.types);
+  const type = displayType(inst);
   if (type !== "STOCK") return [];
   const issuer = issuerStem(preferredName(inst));
   if (issuer.length < 2) return [];
@@ -744,6 +780,9 @@ function absorbInstrument(into, from) {
     into.nameCounts.set(name, (into.nameCounts.get(name) || 0) + count);
   }
   for (const type of from.types) into.types.add(type);
+  for (const [type, count] of from.typeCounts || []) {
+    into.typeCounts.set(type, (into.typeCounts.get(type) || 0) + count);
+  }
   for (const id of from.isins) into.isins.add(id);
   for (const [folder, listingsOf] of from.byBroker) {
     const held = into.byBroker.get(folder) || [];
@@ -816,6 +855,72 @@ const aliases = new Map();
   if (folded) console.error(`${folded} stock ISINs folded into a shared listing`);
 }
 
+// A depositary certificate whose name contains this name: its brokers belong
+// on this page too. The certificate does not pull the underlying's brokers
+// back. A name shorter than eight characters is left alone.
+const DEPOSITARY =
+  /\b(?:depositary|depository|depoitary)\s+receipts?\b|\bcerts?\s+(?:de\s+)?dep[oó]sitos?\b|\bcertificados?\s+de\s+dep[oó]sitos?\b|\bcedears?\b|\bADRs?\b|\bGDRs?\b|\bBDRs?\b|\bCDRs?\b/i;
+const NAME_WINDOW = 8;
+
+function normName(value) {
+  return String(value || "").replace(/\s+/g, " ").trim().toUpperCase();
+}
+
+function isDepositaryName(name) {
+  return DEPOSITARY.test(name);
+}
+
+const byCertificateWindow = new Map();
+for (const inst of instruments.values()) {
+  inst.wider = [];
+  if (inst.key.startsWith("CRYPTO:")) continue;
+  const name = normName(preferredName(inst));
+  if (!isDepositaryName(name)) continue;
+  inst._normName = name;
+  for (let i = 0; i + NAME_WINDOW <= name.length; i += 1) {
+    const key = name.slice(i, i + NAME_WINDOW);
+    const list = byCertificateWindow.get(key);
+    if (list) list.push(inst);
+    else byCertificateWindow.set(key, [inst]);
+  }
+}
+let widerLinks = 0;
+for (const inst of instruments.values()) {
+  if (inst.key.startsWith("CRYPTO:")) continue;
+  const mine = normName(preferredName(inst));
+  if (mine.length < NAME_WINDOW) continue;
+  const seen = new Set();
+  for (const other of byCertificateWindow.get(mine.slice(0, NAME_WINDOW)) || []) {
+    if (other === inst || seen.has(other)) continue;
+    if (!other._normName.includes(mine)) continue;
+    seen.add(other);
+    inst.wider.push(other);
+  }
+  widerLinks += inst.wider.length;
+}
+console.error(`${widerLinks} listings share brokers with a depositary certificate`);
+
+function widerNames(inst) {
+  return inst.wider || [];
+}
+
+function listingsByBroker(inst) {
+  const merged = new Map();
+  const add = (source) => {
+    for (const [folder, listingsOf] of source.byBroker) {
+      const held = merged.get(folder) || [];
+      for (const listing of listingsOf) {
+        if (held.some((item) => item.listing === listing)) continue;
+        held.push({ listing, source });
+      }
+      merged.set(folder, held);
+    }
+  };
+  add(inst);
+  for (const other of widerNames(inst)) add(other);
+  return merged;
+}
+
 function brokerFolder(folder) {
   return String(folder || "").split(":")[0];
 }
@@ -847,13 +952,17 @@ function brokerTakesDeposit(folder, nat, dep) {
 }
 
 function visibleBrokers(inst, nat, dep = "") {
-  let n = 0;
-  for (const [folder, listingsOf] of inst.byBroker) {
-    if (!acceptsNat(folder, nat)) continue;
-    if (!brokerTakesDeposit(folder, nat, dep)) continue;
-    if (listingsOf.some((listing) => listingOpen(listing, nat))) n += 1;
-  }
-  return n;
+  const folders = new Set();
+  const consider = (source) => {
+    for (const [folder, listingsOf] of source.byBroker) {
+      if (!acceptsNat(folder, nat)) continue;
+      if (!brokerTakesDeposit(folder, nat, dep)) continue;
+      if (listingsOf.some((listing) => listingOpen(listing, nat))) folders.add(folder);
+    }
+  };
+  consider(inst);
+  for (const other of widerNames(inst)) consider(other);
+  return folders.size;
 }
 
 function summarize(inst, hint = "", nat = "") {
@@ -862,7 +971,7 @@ function summarize(inst, hint = "", nat = "") {
     isin: inst.isin,
     ticker: preferredTicker(inst, hint),
     name: preferredName(inst),
-    type: mostCommon(inst.types),
+    type: displayType(inst),
     brokers: visibleBrokers(inst, nat),
   };
 }
@@ -2147,7 +2256,7 @@ function detail(key, nat = "", size = {}, dep = "") {
   const rows = [];
   const easy = [];
   const isCrypto = inst.key.startsWith("CRYPTO:");
-  for (const [folder, listingsOf] of inst.byBroker) {
+  for (const [folder, pairs] of listingsByBroker(inst)) {
     if (!acceptsNat(folder, nat)) continue;
     if (dep && !splitByPlan(folder) && !depositHas(folder, "", dep)) continue;
     const meta = brokers.get(folder);
@@ -2159,12 +2268,12 @@ function detail(key, nat = "", size = {}, dep = "") {
     // for its own residents, including when the visitor named no country at all
     // and sees them side by side.
     const listings = (extra, asNat = nat) =>
-      listingsOf
-        .filter((listing) => listingOpen(listing, asNat))
+      pairs
+        .filter(({ listing }) => listingOpen(listing, asNat))
         .slice()
-        .sort((a, b) => a.exchange.localeCompare(b.exchange, "en") || a.currency.localeCompare(b.currency))
-        .map((listing) => {
-          const cost = estimateListing(folder, listing, inst, { nat, ...extra }, size);
+        .sort((a, b) => a.listing.exchange.localeCompare(b.listing.exchange, "en") || a.listing.currency.localeCompare(b.listing.currency))
+        .map(({ listing, source }) => {
+          const cost = estimateListing(folder, listing, source, { nat, ...extra }, size);
           return {
             ...listing,
             ...cost,
@@ -2693,23 +2802,27 @@ function json(res, status, body) {
 async function warmPrices(key) {
   const inst = resolve(key);
   if (!inst || inst.key.startsWith("CRYPTO:")) return;
+  // A depositary certificate shown on this page is priced under its own ISIN.
+  const sources = [inst, ...widerNames(inst)];
   const isins = new Set();
-  if (inst.isin) isins.add(inst.isin);
-  for (const listings of inst.byBroker.values()) {
-    for (const l of listings) if (l.isin) isins.add(l.isin);
+  for (const source of sources) {
+    if (source.isin) isins.add(source.isin);
+    for (const listings of source.byBroker.values()) {
+      for (const l of listings) if (l.isin) isins.add(l.isin);
+    }
   }
-  // A handful at most: one instrument quoted under a dozen ISINs is a catalogue error,
-  // not a reason to spend a dozen requests on one page view.
   const hintsFor = (isin) => {
     const hints = [];
-    for (const listings of inst.byBroker.values()) {
-      for (const listing of listings) {
-        if ((listing.isin || inst.isin) === isin) hints.push(listing);
+    for (const source of sources) {
+      for (const listings of source.byBroker.values()) {
+        for (const listing of listings) {
+          if ((listing.isin || source.isin) === isin) hints.push(listing);
+        }
       }
     }
     return hints;
   };
-  await Promise.all([...isins].slice(0, 8).map((isin) => ensureFresh(isin, undefined, hintsFor(isin))));
+  await Promise.all([...isins].slice(0, 12).map((isin) => ensureFresh(isin, undefined, hintsFor(isin))));
 }
 
 const VENUE_606 = {

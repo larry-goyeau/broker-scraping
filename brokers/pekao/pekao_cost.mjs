@@ -10,7 +10,8 @@
 //     certificates, ETP, structured products
 //       0.375 % min 5.90 zł per order
 //     the same session's reverse trade, point 12, on shares and ETF
-//       0.25 % min 5.90 zł
+//       0.25 % min 5.90 zł. The figure stays at 0.375 %. The remark
+//       is the gap, −0.125 point.
 //     GPW ETF, ETC and ETN, communiqué 104, both legs
 //       0.10 % min 5.90 zł
 //   Abroad, part II point 2, charged in the order currency
@@ -220,13 +221,11 @@ function legsOf(listing, notional, price) {
     }
     const buy = flat(POLISH_RATE, POLISH_MIN, "PLN");
     const dayTrade = listing.type === "STOCK" || listing.type === "ETF";
-    const sell = dayTrade ? flat(DAY_RATE, POLISH_MIN, "PLN") : buy;
     return {
       buy,
-      sell,
-      note: dayTrade
-        ? "première tranche, sans historique d'ordres ; vente le jour même au day trading"
-        : "première tranche, sans historique d'ordres",
+      sell: buy,
+      dayTrade,
+      note: "première tranche, sans historique d'ordres ; position gardée plus d'un jour",
     };
   }
   if (listing.type === "STOCK" && listingCash(listing.currency) === "USD" && price < PENNY.under) {
@@ -318,7 +317,12 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     ...answer,
     listing,
     cashCurrency: rule.buy.currency,
-    remark: fxRemark("max 0.3", listing.currency, "(min 30 PLN) to buy foreign currency, max 1% (min 100 PLN) to buy PLN"),
+    remark: [
+      fxRemark("max 0.3", listing.currency, "(min 30 PLN) to buy foreign currency, max 1% (min 100 PLN) to buy PLN"),
+      rule.dayTrade
+        ? `If the sale is the same day, -${((POLISH_RATE - DAY_RATE) * 100).toFixed(3)}% fees.`
+        : "",
+    ].filter(Boolean).join("\n"),
     url: SCHEDULE.url,
     basis: `taryfa Pekao du ${SCHEDULE.tariffOn}, relue le ${SCHEDULE.readOn} : ${rateText}`,
     tax,

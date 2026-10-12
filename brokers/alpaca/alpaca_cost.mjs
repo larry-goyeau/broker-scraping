@@ -11,14 +11,14 @@
 // Barème relu le 2026-09-14, révision du 2026-09-01. Rien n'a bougé sur les
 // taux, et quatre choses manquaient au modèle affine :
 //
-// 1. Les trois plafonds au centime étaient hors du chiffre. Alpaca agrège
-//    chaque type de frais par jour et par compte, puis arrondit ce total au
-//    centime supérieur. Un aller-retour paie donc trois types — SEC à la
-//    vente, TAF à la vente, CAT aux deux jambes — soit 0,03 $ et non les
-//    fractions de centime que a × p × n + b × n + c calculait. Sur une part
-//    d'IAU le modèle répondait 0,0005 $ là où la caisse a bougé de 0,03 $,
-//    soixante fois moins. `roundTrip` facture les plafonds, parce qu'un
-//    aller-retour seul dans sa journée les paie en entier.
+// 1. Les plafonds au centime étaient hors du chiffre. Alpaca agrège chaque
+//    type de frais par jour et par compte, puis arrondit ce total au centime
+//    supérieur. La position est gardée plus d'un jour : le jour de l'achat
+//    paie la CAT, le jour de la vente paie la SEC, la TAF et la CAT. Quatre
+//    types, donc 0,04 $ sur un petit ticket, et non les fractions de centime
+//    que a × p × n + b × n + c calculait. Une vente le jour même partagerait
+//    la journée et paierait trois centimes : le 2026-09-08, trois
+//    allers-retours du jour ont fait bouger la caisse de 0,03 $.
 //
 // 2. L'Elite Smart Router est facturé par part, pas en pourcentage. L'ancien
 //    fichier prenait `commission` comme une fraction du montant et la
@@ -102,7 +102,7 @@ const ALPACA_CRYPTO_MIC = "ALPA";
 // to the cent. Three types ride on one round trip, so a lone trip cannot pay
 // less than three cents however small the order.
 const CENT = 0.01;
-const FEE_TYPES = 3;
+const FEE_TYPES = 4;
 const DAILY_FLOOR = FEE_TYPES * CENT;
 // Rounds a charge up to the cent. A charge nobody could compute stays missing:
 // rounding null up to zero would turn an unpriced fee into a free one.
@@ -296,12 +296,14 @@ export function roundTrip({
   // Sell-side levies. The TAF cap is per trade, and one sale is one trade.
   const secRaw = notional * SEC_RATE;
   const tafRaw = Math.min(n * TAF_PER_SHARE, TAF_CAP);
-  // CAT rides on both legs. An OTC share counts for a hundredth of one.
-  const catRaw = 2 * n * CAT_PER_SHARE * (otc ? CAT_OTC_EQUIV : 1);
+  // CAT rides on both legs, and the legs are different days, so each day
+  // rounds its own CAT. An OTC share counts for a hundredth of one.
+  const catLeg = n * CAT_PER_SHARE * (otc ? CAT_OTC_EQUIV : 1);
+  const catRaw = catLeg * 2;
 
   const sec = up(secRaw, CENT);
   const taf = up(tafRaw, CENT);
-  const cat = up(catRaw, CENT);
+  const cat = up(catLeg, CENT) + up(catLeg, CENT);
 
   // Zero unless the reader is on Alpaca Elite and routing through the smart
   // router, in which case it is per share and charged on both legs.
@@ -476,12 +478,12 @@ function confidenceOf({
       `), barème unique actions / ETF, aucune commission et aucune ligne de compensation`
   );
   const exact = secRaw + tafRaw + catRaw;
-  const charged = up(secRaw, CENT) + up(tafRaw, CENT) + up(catRaw, CENT);
+  const catLeg = catRaw / 2;
+  const charged = up(secRaw, CENT) + up(tafRaw, CENT) + up(catLeg, CENT) + up(catLeg, CENT);
   said.push(
     `SEC ${Number(secRaw.toPrecision(3))} $, TAF ${Number(tafRaw.toPrecision(3))} $, ` +
       `CAT ${Number(catRaw.toPrecision(3))} $ : ${Number(exact.toPrecision(3))} $ au calcul, ` +
-      `${charged.toFixed(2)} $ facturés, chacun des trois types étant arrondi au centime ` +
-      `supérieur après agrégation du jour`
+      `${charged.toFixed(2)} $ facturés, la CAT arrondie chaque jour, la vente un autre jour`
   );
   if (exact > DAILY_FLOOR) {
     said.push(
@@ -591,7 +593,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     console.log(`                   0,0025 à 0,0005 en tiered selon le volume mensuel),`);
     console.log(`                   flux non-retail, et options indicielles`);
     console.log(`\n  arrondi : chaque type de frais agrégé par jour et par compte, puis au centime supérieur`);
-    console.log(`  donc plancher ${DAILY_FLOOR.toFixed(2)} $ pour une journée ne contenant qu'un aller-retour`);
+    console.log(`  donc plancher ${DAILY_FLOOR.toFixed(2)} $ quand la vente est un autre jour`);
     console.log(`\n  crypto, palier 1 (< 100 000 $ / 30 j), confirmé sur le compte :`);
     console.log(`    taker          ${CRYPTO_TAKER} chaque sens, prélevé sur l'actif reçu`);
     console.log(`    maker          ${CRYPTO_MAKER} chaque sens`);

@@ -64,7 +64,7 @@ const GOLD = 0.005;
 const MARKET = 0.0005;
 const US_RATE = 0.0035;
 const US_MIN = 2;
-const REMARK = "If the sale is the same day, same symbol and currency, that sale has no commission. Above 7,500,000 pesos traded in Argentina last month, 0.3%. Above 50,000,000, 0.1%.";
+const REMARK = "If the sale is the same day, no commission.\n-0.2% trading fees above 7,500,000 pesos traded in Argentina last month, -0.4% above 50,000,000.";
 // Dólar CCL, ley local (AL30C), compra then venta, 2026-10-09 17:10.
 // Half the spread over the mid.
 const CCL = [1609.1078, 1613.5644];

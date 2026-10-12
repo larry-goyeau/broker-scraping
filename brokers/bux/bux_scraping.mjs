@@ -1,9 +1,14 @@
 import fs from "node:fs";
 import { stampRows } from "../../accepted.mjs";
 import { withoutObligations } from "../../obligation.mjs";
+import { addDepositCurrencies, loadCurrencyEvidence } from "../N26/N26_scraping.mjs";
 import os from "node:os";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
+
+// deposits.mjs: a BUX deposit stays in euros.
+const BUX_DEPOSIT = new Set(["EUR"]);
 
 // BUX is a phone-only broker whose app pins its certificates, so the book
 // cannot be read from the network. It can be filmed, though, and it prints
@@ -228,6 +233,10 @@ for path in CommandLine.arguments.dropFirst() {
     }
 }
 `;
+
+const isMain = process.argv[1] && path.resolve(process.argv[1]) === path.resolve(fileURLToPath(import.meta.url));
+
+if (isMain) {
 
 const workDir = fs.mkdtempSync(path.join(os.tmpdir(), "bux-"));
 const frameDir = path.join(workDir, "frames");
@@ -636,16 +645,19 @@ for (const row of results) {
 }
 
 const merged = [...existing, ...added];
-fs.writeFileSync(outPath, `${JSON.stringify(stampRows(withoutObligations(merged), import.meta.url), null, 2)}\n`);
+const evidence = loadCurrencyEvidence("bux");
+const expanded = addDepositCurrencies(merged, evidence.listed, evidence.books, BUX_DEPOSIT);
+fs.writeFileSync(outPath, `${JSON.stringify(stampRows(withoutObligations(expanded), import.meta.url), null, 2)}\n`);
 fs.rmSync(workDir, { recursive: true, force: true });
 
 const byType = {};
 for (const row of merged) byType[row.type || "?"] = (byType[row.type || "?"] || 0) + 1;
 
 console.error(
-  `${added.length} added, ${existing.length} kept, ${merged.length} listed` +
+  `${added.length} added, ${existing.length} kept, ${expanded.length} listed` +
     ` (${Object.entries(byType).map(([type, count]) => `${count} ${type}`).join(", ")})` +
     `, ${delistedCount} delisted skipped` +
     (unmatched.length > 0 ? `, not in the CSV: ${unmatched.slice(0, 40).join(", ")}${unmatched.length > 40 ? ` … +${unmatched.length - 40}` : ""}` : "")
 );
-console.log(JSON.stringify({ added: added.length, kept: existing.length, listed: merged.length, byType, unmatched: unmatched.length }, null, 2));
+console.log(JSON.stringify({ added: added.length, kept: existing.length, listed: expanded.length, byType, unmatched: unmatched.length }, null, 2));
+}

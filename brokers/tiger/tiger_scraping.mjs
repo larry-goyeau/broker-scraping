@@ -1,6 +1,13 @@
 import puppeteer from "puppeteer-core";
 import { stampRows } from "../../accepted.mjs";
 import { withoutObligations } from "../../obligation.mjs";
+import { addDepositCurrencies, loadCurrencyEvidence } from "../N26/N26_scraping.mjs";
+
+// deposits.mjs: Tiger leaves a deposit in dollars, Hong Kong dollars,
+// Singapore dollars, Australian dollars or offshore yuan.
+const TIGER_DEPOSIT = new Set(["USD", "HKD", "SGD", "AUD", "CNH"]);
+import { resolveVenue } from "../../spreads/venues.mjs";
+import { spreads } from "../../spreads/book.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -449,8 +456,44 @@ const SAVE_INTERVAL_MS = 2000;
 let savedCount = results.length;
 let savedAt = 0;
 
+function baseCurrency(exchange) {
+  if (exchange === "ASX") return "AUD";
+  if (exchange === "HKEX") return "HKD";
+  if (exchange === "SSE" || exchange === "SZSE" || exchange === "BSE") return "CNY";
+  if (exchange === "SGX") return "SGD";
+  return "USD";
+}
+
+function keepDistinctCurrencies(rows) {
+  const groups = new Map();
+  for (const row of rows) {
+    const key = `${row.exchange}|${row.ticker}|${String(row.isin || "").toUpperCase()}|${row.type}`;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(row);
+  }
+  const out = [];
+  for (const list of groups.values()) {
+    const base = list.find((row) => row.currency === baseCurrency(row.exchange)) || list[0];
+    const mic = resolveVenue({ exchange: base.exchange, currency: base.currency, isin: base.isin }).venue?.mic;
+    const baseLeaf = mic ? spreads[String(base.isin || "").toUpperCase()]?.[mic]?.[base.currency] : null;
+    for (const row of list) {
+      if (row !== base) {
+        const leaf = mic ? spreads[String(row.isin || "").toUpperCase()]?.[mic]?.[row.currency] : null;
+        if (baseLeaf?.url && leaf?.url === baseLeaf.url) continue;
+      }
+      out.push(row);
+    }
+  }
+  return out;
+}
+
+let currencyEvidence = null;
 function save() {
-  fs.writeFileSync(outputPath, JSON.stringify(stampRows(withoutObligations(results), import.meta.url), null, 2));
+  if (!currencyEvidence) currencyEvidence = loadCurrencyEvidence("tiger");
+  const expanded = keepDistinctCurrencies(
+    addDepositCurrencies(results, currencyEvidence.listed, currencyEvidence.books, TIGER_DEPOSIT)
+  );
+  fs.writeFileSync(outputPath, JSON.stringify(stampRows(withoutObligations(expanded), import.meta.url), null, 2));
   savedCount = results.length;
   savedAt = Date.now();
 }

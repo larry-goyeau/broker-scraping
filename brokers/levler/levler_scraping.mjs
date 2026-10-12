@@ -10,8 +10,11 @@
 // Amsterdam. The list also has Copenhagen and Oslo. Foreign names are a
 // selection, and that selection is the whole offering. isAmountOrderBuyable
 // only says whether an order can be placed in kronor, so it is not used.
-// buyable is. Paid subscription lines (BTA, BTU) sit in the share list. They
-// are not ordinary shares. A bond that is not an ETF is not a share either.
+// buyable is, except on First North: the segment list keeps a line the
+// order book marks not buyable. Paid subscription lines (BTA, BTU) on
+// First North stay for the same reason. On the other boards they stay
+// out. A bond that is not an ETF is not a share either. A First North
+// name with no order-book page has no ticker and stays out.
 //
 //   https://levler.se/aktier/
 //   https://levler.se/api/open/search/v2/orderBooks
@@ -131,7 +134,8 @@ for (const row of listed) {
   const isin = toIsin(book.isin);
   const mic = String(book.mic || "").trim().toUpperCase();
   const currency = String(book.currencyCode || "").trim().toUpperCase();
-  if (segment === "RIGHTS ETC." || /\bBT[AU]( [AB])?$/.test(name)) {
+  const firstNorth = segment === "First North";
+  if (!firstNorth && (segment === "RIGHTS ETC." || /\bBT[AU]( [AB])?$/.test(name))) {
     skip("subscription share");
     continue;
   }
@@ -151,7 +155,7 @@ for (const row of listed) {
     skip("no venue");
     continue;
   }
-  wanted.push({ kind, name, isin, mic, currency });
+  wanted.push({ kind, name, isin, mic, currency, segment });
 }
 
 const details = await loadDetails(
@@ -166,7 +170,7 @@ for (const row of wanted) {
     skip("no page");
     continue;
   }
-  if (detail.buyable === false) {
+  if (detail.buyable === false && row.segment !== "First North") {
     skip("not for sale");
     continue;
   }

@@ -572,7 +572,8 @@ export function roundTrip({
   // The European token is not a US security, so no American regulator reaches it.
   const sec = european || notional == null || notional <= SEC_FREE_UPTO ? 0 : up(notional * SEC_RATE, 0.01);
   const taf = european || n <= TAF_FREE_UPTO_SHARES ? 0 : penny(Math.min(n * TAF_PER_SHARE, TAF_CAP));
-  const cat = european ? 0 : penny(2 * n * catPerShare(otc));
+  const catLeg = n * catPerShare(otc);
+  const cat = european ? 0 : penny(catLeg) + penny(catLeg);
   const regulators = sec + taf + cat;
 
   // Conversion. Unavoidable in Vilnius, unavoidable in an ISA, optional in a
@@ -616,7 +617,7 @@ export function roundTrip({
       : {
           sec: notional != null && notional <= SEC_FREE_UPTO,
           taf: n <= TAF_FREE_UPTO_SHARES,
-          cat: 2 * n * catPerShare(otc) < 0.01,
+          cat: n * catPerShare(otc) < 0.01,
           secFreeUpto: SEC_FREE_UPTO,
           tafFreeUptoShares: TAF_FREE_UPTO_SHARES,
         },

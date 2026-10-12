@@ -624,8 +624,14 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
 
   const m = matches[0];
   const isin = String(m.row.isin || "").toUpperCase();
-  const at = executionOf(isin);
   const rowCcy = String(m.row.currency || "EUR").toUpperCase();
+  const euroOnThisPlace = named.some(
+    (r) =>
+      String(r.isin || "").toUpperCase() === isin &&
+      loose(r.exchange) === loose(m.row.exchange) &&
+      String(r.currency || "").toUpperCase() === "EUR"
+  );
+  const at = rowCcy === "GBP" && euroOnThisPlace ? null : executionOf(isin);
 
   const listing = {
     isin,

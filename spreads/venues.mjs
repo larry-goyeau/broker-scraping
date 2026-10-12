@@ -567,6 +567,40 @@ export const VENUES = [
     exact: ["xkos", "kosdaq"],
     loose: [],
   },
+  // Continuous matching is 09:00–13:25 Taipei time. The closing call runs
+  // 13:25–13:30 and is not this book. The touch is the exchange's own
+  // five-deep quote. Taipei Exchange (TPEx) is a different book.
+  {
+    mic: "XTAI",
+    name: "Taiwan Stock Exchange",
+    source: "twse",
+    hours: { open: "09:00", close: "13:25", tz: "Asia/Taipei" },
+    exact: ["xtai", "twse", "taiwanstockexchange"],
+    loose: [],
+  },
+  // Same session as the Taiwan Stock Exchange: continuous matching
+  // 09:00–13:25 Taipei time, closing call 13:25–13:30. The touch is the
+  // same five-deep quote, on the otc channel. That channel is this
+  // exchange, not the American OTC book.
+  {
+    mic: "ROCO",
+    name: "Taipei Exchange",
+    source: "tpex",
+    hours: { open: "09:00", close: "13:25", tz: "Asia/Taipei" },
+    exact: ["roco", "tpex", "taipeiexchange", "gretai"],
+    loose: [],
+  },
+  // Continuous trading is 10:00–16:45 Auckland time. The public quote is
+  // about twenty minutes behind the tape. A stamp inside that window is
+  // the touch. The closing auction starts at 16:45.
+  {
+    mic: "XNZE",
+    name: "NZX",
+    source: "nzx",
+    hours: { open: "10:00", close: "16:45", tz: "Pacific/Auckland" },
+    exact: ["xnze", "nzx", "nzsenationalmarket"],
+    loose: [],
+  },
   // Cash session 09:30–16:00 New York. The touch is the signed-in IBKR quote,
   // and only when field 6509 says the book is live. A delayed or frozen mark
   // is not this venue.
@@ -838,8 +872,6 @@ export const KNOWN_UNSOURCED = [
   // falling through to this leftover.
   { match: ["cse"], name: "CSE (Canada ou Copenhague)", why: "le sigle nomme les deux places" },
   { match: ["krx"], name: "Korea Exchange", why: "adaptateur non écrit" },
-  { match: ["twse"], name: "Taiwan Stock Exchange", why: "adaptateur non écrit" },
-  { match: ["tpex"], name: "Taipei Exchange", why: "adaptateur non écrit" },
   {
     match: ["b3", "bovespa", "bmfbovespa", "bvmf", "xbsp", "bvsp"],
     name: "B3 São Paulo",
@@ -870,7 +902,6 @@ export const KNOWN_UNSOURCED = [
   { match: ["jse", "xjse", "johannesburg"], name: "Johannesburg Stock Exchange", why: "adaptateur non écrit" },
   { match: ["newconnect"], name: "NewConnect", why: "adaptateur non écrit" },
   { match: ["luxse", "xlux", "luxembourg", "lux"], name: "Luxembourg Stock Exchange", why: "adaptateur non écrit" },
-  { match: ["nzx", "xnze", "nzsenationalmarket"], name: "NZX", why: "adaptateur non écrit" },
   { match: ["biva"], name: "BIVA", why: "adaptateur non écrit" },
   // Nasdaq Dubai shares a building with DFM and not a board: its own site shows last
   // price and no touch, and the DFM feed that covers the emirate stops at DFM's own
@@ -1238,6 +1269,18 @@ const PAGE = {
       : "https://www.bseindia.com/markets/equity.html",
   kospi: (l) => askingPriceUrl(l.ticker),
   kosdaq: (l) => askingPriceUrl(l.ticker),
+  twse: (l) =>
+    l.ticker
+      ? `https://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=tse_${encodeURIComponent(String(l.ticker).toUpperCase())}.tw&json=1&delay=0`
+      : "https://mis.twse.com.tw/stock/index.jsp",
+  tpex: (l) =>
+    l.ticker
+      ? `https://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=otc_${encodeURIComponent(String(l.ticker).toUpperCase())}.tw&json=1&delay=0`
+      : "https://mis.twse.com.tw/stock/index.jsp",
+  nzx: (l) =>
+    l.ticker
+      ? `https://api.nzx.com/ticker/1.0/instrument/${encodeURIComponent(String(l.ticker).toUpperCase())}/last`
+      : "https://www.nzx.com/markets/NZSX",
   otc: () => "https://www.interactivebrokers.ie/portal/",
   tadawul: (l) =>
     l.ticker

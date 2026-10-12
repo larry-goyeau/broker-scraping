@@ -1,18 +1,20 @@
 // What INDmoney sells in shares and exchange-traded funds, with no login.
 // The public sitemaps are the shelf. A line is sold when its catalogue
 // says is_active. Indian names come from the Indian catalogue. American
-// names come from the US catalogue. The page names the venue, and a name
-// listed on both NSE and BSE is kept twice. Sovereign gold bonds are
-// marked is_sgb and stay out. A warrant, a rights line or a unit stays
-// out. A bond ETF stays. The site challenges a plain request for the
-// sitemaps and the Indian catalogue, so those go through Chrome. The US
-// catalogue answers a normal request. The printed ISIN is kept. When a
+// names come from the US catalogue. UCITS names are the London lines on
+// the category selector. The page names the venue, and a name listed on
+// both NSE and BSE is kept twice. Sovereign gold bonds are marked is_sgb
+// and stay out. A warrant, a rights line or a unit stays out. A bond ETF
+// stays. The site challenges a plain request for the sitemaps and the
+// Indian catalogue, so those go through Chrome. The US catalogue and the
+// UCITS lists answer a normal request. The printed ISIN is kept. When a
 // line has none, one match on the named venue fills it, and several stay
 // on the row.
 //
 //   https://www.indmoney.com/sitemap.xml
 //   https://apixt-in.indmoney.com/isb-bg/catalog/v2/get-entity-details/
 //   https://apixt-us.indmoney.com/us-stock-broker/us/catalog/get-entity-details
+//   https://apixt-us.indmoney.com/us-stock-broker/us/catalog/web/collections/page?group=ucits
 //
 //   node brokers/indmoney/indmoney_scraping.mjs
 
@@ -25,6 +27,8 @@ import puppeteer from "puppeteer-core";
 const SITEMAP = "https://www.indmoney.com/sitemap.xml";
 const INDIAN = "https://apixt-in.indmoney.com/isb-bg/catalog/v2/get-entity-details/";
 const AMERICAN = "https://apixt-us.indmoney.com/us-stock-broker/us/catalog/get-entity-details?response_format=web&id=";
+const UCITS = "https://apixt-us.indmoney.com/us-stock-broker/us/catalog/web/collections/page";
+const UCITS_PAGE = "https://www.indmoney.com/ucits/global-exposure-etfs";
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
 const STOCKS = new URL("../../assets/stocks.csv", import.meta.url);
@@ -324,6 +328,49 @@ try {
   })();
 
   await Promise.all([americanJob, indianJob]);
+
+  const ucitsOpened = await page.goto(UCITS_PAGE, { waitUntil: "networkidle2", timeout: 60_000 });
+  if (!ucitsOpened?.ok()) throw new Error(`${UCITS_PAGE} answered ${ucitsOpened ? ucitsOpened.status() : "nothing"}`);
+  const ucitsSlugs = await page.evaluate(() => [...new Set([...document.querySelectorAll("a")].map((anchor) => {
+    const match = String(anchor.getAttribute("href") || "").match(/\/ucits\/([a-z0-9-]+-etfs)(?:$|[?#])/);
+    return match ? match[1] : "";
+  }).filter(Boolean))]);
+  if (ucitsSlugs.length < 15) throw new Error(`the UCITS selector has ${ucitsSlugs.length} categories`);
+  const ucitsIds = new Map();
+  for (const slug of ucitsSlugs) {
+    let offset = 0;
+    for (;;) {
+      const url = `${UCITS}?group=ucits&category=${encodeURIComponent(slug)}&offset=${offset}&limit=100`;
+      const response = await fetch(url, {
+        headers: { "User-Agent": UA, Accept: "application/json", Origin: "https://www.indmoney.com", Referer: UCITS_PAGE },
+        signal: AbortSignal.timeout(30_000),
+      });
+      if (!response.ok) throw new Error(`${response.status} ${url}`);
+      const body = await response.json();
+      for (const item of Array.isArray(body.stock_list) ? body.stock_list : []) {
+        const ticker = String(item.ticker || "").trim().toUpperCase();
+        const match = ticker.match(/^LSE~([A-Z0-9.]+)$/);
+        if (!match) throw new Error(`unread UCITS ticker ${ticker || slug}`);
+        ucitsIds.set(ticker, match[1]);
+      }
+      if (!body.has_next) break;
+      if (body.next_offset == null || body.next_offset === offset) throw new Error(`the UCITS page ${slug} did not advance`);
+      offset = body.next_offset;
+    }
+  }
+  if (ucitsIds.size < 100) throw new Error(`the UCITS shelf has ${ucitsIds.size} funds`);
+  console.error(`${ucitsSlugs.length} UCITS categories, ${ucitsIds.size} funds`);
+  await pool([...ucitsIds], 4, async ([id, symbol], index) => {
+    const item = await americanOne(id);
+    if (item) {
+      const exchange = item.segments[0]?.exchange || "";
+      if (exchange && exchange !== "LSE") throw new Error(`${symbol} is on ${exchange}`);
+      item.segments = [{ exchange: "LSE", symbol }];
+    }
+    take(item);
+    if ((index + 1) % 100 === 0) console.error(`UCITS ${index + 1}/${ucitsIds.size}`);
+  });
+
   if (tally.other.size) {
     const text = [...tally.other].map(([kind, count]) => `${kind} ${count}`).join(", ");
     throw new Error(`unread catalogue class ${text}`);

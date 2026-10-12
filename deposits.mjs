@@ -82,6 +82,13 @@ const FOLDER = {
   // pesos. No other balance is named.
   // https://www.rcbcsec.com/corporate/faqs.html
   rcbc: ["PHP"],
+  // A bills payment, Instapay, PESONet or an e-wallet credit stays pesos.
+  // A dollar deposit into the dollar-securities account stays dollars.
+  // The two accounts do not convert into each other. A bank transfer fee
+  // is not a conversion.
+  // https://new.bpitrade.com/fund-your-account/
+  // https://new.bpitrade.com/faq/i-have-received-an-email-confirmation-that-my-dds-account-has-been-approved-how-do-i-fund-my-account/
+  bpi: ["PHP", "USD"],
   // A GCash top-up credits the trading wallet in pesos. A dollar deposit
   // is converted into pesos. A dollar withdrawal is paid out of that peso
   // balance. No other balance is left unconverted.
@@ -250,6 +257,12 @@ const FOLDER = {
   // https://www.mstock.com/pricing
   // https://www.mstock.com/articles/how-to-transfer-money-from-demat-account-to-bank-account
   "m.stock": ["INR"],
+  // A pay-in by UPI, net banking, NEFT, IMPS or RTGS is credited in rupees.
+  // An NRE or NRO transfer is rupees too. Rupees moved to the US wallet are
+  // converted to dollars, so that is not a deposit that stays.
+  // https://www.motilaloswal.com/faq/for-investors
+  // https://www.motilaloswal.com/us-stocks
+  motilaloswal: ["INR"],
   // A pay-in by UPI, net banking, IMPS, NEFT or RTGS is an INR transfer
   // from an Indian bank account. An NRE or NRO transfer is also rupees.
   // An international remittance is not accepted.
@@ -396,7 +409,15 @@ const FOLDER = {
   fortuneo: ["EUR"],
   fyers: ["INR"],
   freedom24: ["EUR", "USD"],
-  ig: ["EUR"],
+  igue: ["EUR"],
+  // Investing card: manual conversion lets a deposit stay in the currency
+  // you send, and that trade then has no FX fee. The currencies named there
+  // are pounds, dollars, euros and Australian dollars. The cash-interest
+  // note names the same four balances. A deposit in another currency is
+  // converted, so it is not listed. Instant conversion is the other setting.
+  // https://www.ig.com/uk/charges
+  // https://www.ig.com/uk/help-and-support/articles/682755-earning-interest-on-cash-faqs-and-exclusions
+  iguk: ["GBP", "USD", "EUR", "AUD"],
   labanquepostale: ["EUR"],
   // A deposit is Swish, Bankgiro, or a transfer started inside Levler. There
   // is no clearing number and no foreign-currency balance. A share in another
@@ -413,6 +434,12 @@ const FOLDER = {
   // Account page: the account can invest in PLN and nine foreign currencies.
   // https://www.pekao.com.pl/biuro-maklerskie/nowy-klient/rachunek-inwestycyjny-w-bm-pekao.html
   pekao: ["PLN", "EUR", "USD", "GBP", "CHF", "CAD", "AUD", "SEK", "NOK", "DKK"],
+  // The brokerage cash account is zlotys. Foreign markets open accounts in
+  // euro, dollars, pounds, francs and kronor and leave each currency there.
+  // Settling a foreign order in zlotys is a conversion at KBC's rate, not a
+  // deposit.
+  // https://www.erste.pl/klient-indywidualny/oszczednosci-i-inwestycje/rachunki-dla-gield-zagranicznych
+  erste: ["PLN", "EUR", "USD", "GBP", "CHF", "SEK"],
   // Foreign-markets page: the brokerage account holds PLN and six foreign
   // currencies. A payment in one of them lands on that currency's sub-account.
   // https://www.aliorbank.pl/biuro-maklerskie/gielda/rynki-zagraniczne.html
@@ -434,6 +461,21 @@ const FOLDER = {
   // the moment of a US or crypto trade.
   // https://help.zestyfinance.com/es/articles/15937626-como-puedo-depositar-en-la-app
   zesty: ["CLP", "USD"],
+  // A transfer from a Chilean bank arrives in pesos and stays pesos until
+  // it is assigned. Buying dollars is that assignment, at 4 pesos per
+  // dollar, not a deposit. A dollar transfer is not accepted.
+  // https://ayuda.fintual.cl/es/articles/6458430-puedo-depositar-o-retirar-en-dolares-desde-mis-acciones
+  // https://ayuda.fintual.cl/es/articles/6960455-como-compro-dolares
+  fintual: ["CLP"],
+  // The cash management account is New Zealand dollars and stays
+  // dollars. A foreign-currency account for share trading holds one of
+  // the nine currencies the bank publishes, and a payment in that
+  // currency stays in it. Converting between them is a separate
+  // exchange. An Australian order can settle online in NZD, AUD or USD.
+  // https://www.asb.co.nz/asb-securities/foreign-currency-account-for-share-trading.html
+  // https://www.asb.co.nz/foreign-exchange/foreign-currency-account.html
+  // https://www.asb.co.nz/help/settle-in-usd-or-any-other-currency-for-a-nzx-trade.html
+  asb: ["NZD", "AUD", "USD", "GBP", "EUR", "CAD", "CHF", "HKD", "JPY", "SGD"],
   questrade: ["USD", "CAD"],
   quantfury: ["USD", "EUR", "GBP", "CHF", "TRY", "BRL", "MXN", "CLP", "COP", "ARS"],
   revolut: ["EUR", "USD"],
@@ -488,6 +530,14 @@ const FOLDER = {
   // https://cms.balanz.com/PFS/055928_cuentas_balanz_2021nuevo.pdf
   // https://balanz.com/comisiones/
   balanz: ["ARS", "USD"],
+  // A peso transfer into the local peso account stays pesos. A dollar
+  // transfer into the local dollar account stays dollars. A cable wire
+  // is dollars too, and it stays dollars. Buying MEP or cable with bonds
+  // is a conversion, not a deposit. Another currency is not a deposit
+  // that stays.
+  // https://www.ecovalores.com.ar/tarifario.php
+  // https://www.ecovalores.com.ar/preguntas-frecuentes.php
+  ecovalores: ["ARS", "USD"],
   // A bank transfer in soles stays soles. A bank transfer in dollars
   // stays dollars. Both are free. Changing one into the other is
   // triicambios, inside the app, not a deposit. Another currency is

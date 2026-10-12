@@ -1,14 +1,16 @@
 // What Share.Market sells on the NSE and the BSE. The public plans are
 // the fiches: one page per share, one page per ETF. News, events,
 // financials, technicals and stock-list are tabs of that same page,
-// not extra names. There is no foreign book on the site.
+// not extra names. There is no foreign book on the site. The quote on
+// the page is one board, and instrumentReferences names the other.
+// Both boards are the same symbol.
 //
-// A fiche quotes a symbol, a name and a board. It does not print an
-// ISIN. The ISIN is the same symbol on that board in the shared
-// catalogues, and only when that board has one ISIN for it.
+// A fiche quotes a symbol and a name. It does not print an ISIN. The
+// ISIN is the same symbol on that board in the shared catalogues, and
+// only when that board has one ISIN for it.
 //
-//   https://www.share.market/sitemap-stocks.xml
-//   https://www.share.market/sitemap-etfs.xml
+//   https://www.phonepeinvest.com/sitemap-stocks.xml
+//   https://www.phonepeinvest.com/sitemap-etfs.xml
 //   https://trade.share.market/apis/cube/prelogin/v1/instrument/elements/slug
 //
 //   node brokers/sharemarket/sharemarket_scraping.mjs
@@ -18,8 +20,8 @@ import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 
 const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
-const STOCKS_SITEMAP = "https://www.share.market/sitemap-stocks.xml";
-const ETFS_SITEMAP = "https://www.share.market/sitemap-etfs.xml";
+const STOCKS_SITEMAP = "https://www.phonepeinvest.com/sitemap-stocks.xml";
+const ETFS_SITEMAP = "https://www.phonepeinvest.com/sitemap-etfs.xml";
 const SCRIP = "https://trade.share.market/apis/cube/prelogin/v1/instrument/elements/slug";
 const STOCKS_CSV = new URL("../../assets/stocks.csv", import.meta.url);
 const ETFS_CSV = new URL("../../assets/etfs.csv", import.meta.url);
@@ -55,8 +57,8 @@ async function textOf(url, { missing = false } = {}) {
         headers: {
           "User-Agent": UA,
           Accept: "application/json, application/xml, text/xml, */*",
-          Origin: "https://www.share.market",
-          Referer: "https://www.share.market/",
+          Origin: "https://www.phonepeinvest.com",
+          Referer: "https://www.phonepeinvest.com/",
         },
         signal: AbortSignal.timeout(60_000),
       });
@@ -75,8 +77,13 @@ async function textOf(url, { missing = false } = {}) {
 function slugsOf(xml, section) {
   const slugs = new Set();
   for (const match of xml.matchAll(/<loc>([^<]+)<\/loc>/g)) {
-    const url = decodeXml(match[1]).split("?")[0].replace(/\/+$/, "");
-    const parts = url.split("share.market/")[1]?.split("/") || [];
+    let path = "";
+    try {
+      path = new URL(decodeXml(match[1])).pathname;
+    } catch {
+      continue;
+    }
+    const parts = path.replace(/^\/+|\/+$/g, "").split("/");
     if (parts.length === 2 && parts[0] === section && parts[1]) slugs.add(parts[1]);
   }
   return [...slugs];
@@ -159,29 +166,44 @@ for (const book of BOOKS) {
     if (!info) continue;
     const ticker = normalize(info.instrumentSymbol).toUpperCase();
     const name = normalize(info.instrumentName);
-    const exchange = normalize(info.exchangeSymbol).toUpperCase();
     const kind = normalize(info.instrumentType).toUpperCase();
     if (!ticker || !name) throw new Error(`${info.slug} has no ticker or name`);
-    if (exchange !== "NSE" && exchange !== "BSE") throw new Error(`${ticker} is quoted on ${exchange || "no board"}`);
     if (book.type === "STOCK" && kind !== "EQUITY") throw new Error(`${ticker} is a ${kind}, not a share`);
     if (book.type === "ETF" && kind !== "ETF") throw new Error(`${ticker} is a ${kind}, not an ETF`);
+    const boards = new Set();
+    const quoted = normalize(info.exchangeSymbol).toUpperCase();
+    if (quoted) boards.add(quoted);
+    for (const ref of Array.isArray(info.instrumentReferences) ? info.instrumentReferences : []) {
+      const board = normalize(ref.exchange).toUpperCase();
+      if (board) boards.add(board);
+    }
+    if (![...boards].every((board) => board === "NSE" || board === "BSE")) {
+      throw new Error(`${ticker} is quoted on ${[...boards].join(", ") || "no board"}`);
+    }
+    if (!boards.size) throw new Error(`${ticker} is quoted on no board`);
     const type = book.type;
-    const isin = isinFor(isins, ticker, exchange);
-    rows.push({
-      query: ticker,
-      ticker,
-      name,
-      exchange,
-      currency: "INR",
-      type,
-      isin,
-      raw: [ticker, name, exchange, "INR", isin, type].filter(Boolean).join(" "),
-    });
+    for (const exchange of boards) {
+      const isin = isinFor(isins, ticker, exchange);
+      rows.push({
+        query: ticker,
+        ticker,
+        name,
+        exchange,
+        currency: "INR",
+        type,
+        isin,
+        raw: [ticker, name, exchange, "INR", isin, type].filter(Boolean).join(" "),
+      });
+    }
   }
 }
 
 for (const ticker of ["VOLTAS", "PHARMABEES"]) {
-  if (!rows.some((row) => row.ticker === ticker)) throw new Error(`missing ${ticker}`);
+  for (const exchange of ["NSE", "BSE"]) {
+    if (!rows.some((row) => row.ticker === ticker && row.exchange === exchange)) {
+      throw new Error(`missing ${ticker} on ${exchange}`);
+    }
+  }
 }
 
 const seen = new Set();
@@ -194,7 +216,9 @@ for (const row of rows) {
 rows.sort((left, right) => {
   const byType = left.type.localeCompare(right.type);
   if (byType !== 0) return byType;
-  return left.ticker.localeCompare(right.ticker);
+  const byTicker = left.ticker.localeCompare(right.ticker);
+  if (byTicker !== 0) return byTicker;
+  return left.exchange.localeCompare(right.exchange);
 });
 
 const kept = stampRows(withoutObligations(rows));

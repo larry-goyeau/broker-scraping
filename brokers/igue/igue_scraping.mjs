@@ -1,6 +1,12 @@
 import puppeteer from "puppeteer-core";
 import { stampRows } from "../../accepted.mjs";
 import { withoutObligations } from "../../obligation.mjs";
+import { addDepositCurrencies, loadCurrencyEvidence } from "../N26/N26_scraping.mjs";
+
+// deposits.mjs: an IG UE deposit stays in euros. A share has no
+// listingCurrency, so a second line is the euro quote only when this
+// title is already quoted on that venue in euros and in another currency.
+const IGUE_DEPOSIT = new Set(["EUR"]);
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -270,6 +276,11 @@ function listingType(detail, kind) {
   return kind || "STOCK";
 }
 
+function currencyOf(detail) {
+  const code = String(detail?.listingCurrency || "").trim().toUpperCase();
+  return /^[A-Z]{3}$/.test(code) ? code : "EUR";
+}
+
 function rowFrom(query, detail, kind) {
   const ticker = normalizeTicker(detail.tickerCode);
   const name = normalize(detail.name);
@@ -281,16 +292,16 @@ function rowFrom(query, detail, kind) {
     ticker: ticker || null,
     name,
     exchange,
-    // The account deals every line in euros on Tradegate, whatever the fund
-    // reports as its listing currency.
-    currency: "EUR",
+    // ETF details name listingCurrency. A share's details do not, and the
+    // account then deals the line in euros.
+    currency: currencyOf(detail),
     type,
     raw: `${ticker} ${name} - ${exchange}`.trim(),
     isin: isin || null,
   };
 }
 
-const outputPath = new URL("ig-parsed.json", import.meta.url);
+const outputPath = new URL("igue-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 
@@ -315,8 +326,17 @@ if (!fresh && fs.existsSync(outputPath)) {
   }
 }
 
+let currencyEvidence = null;
+let published = results;
 function save() {
-  fs.writeFileSync(outputPath, JSON.stringify(stampRows(withoutObligations(results), import.meta.url), null, 2));
+  if (!currencyEvidence) currencyEvidence = loadCurrencyEvidence("igue");
+  const stocks = results.filter((row) => row.type === "STOCK");
+  const rest = results.filter((row) => row.type !== "STOCK");
+  published = [
+    ...rest,
+    ...addDepositCurrencies(stocks, currencyEvidence.listed, currencyEvidence.books, IGUE_DEPOSIT),
+  ];
+  fs.writeFileSync(outputPath, JSON.stringify(stampRows(withoutObligations(published), import.meta.url), null, 2));
 }
 
 function keepDetail(detail) {
@@ -340,6 +360,18 @@ function addDetail(detail, query) {
   const kind = isin ? catalogue.get(isin) : "";
   const row = rowFrom(query || isin, detail, kind);
   if (!row.ticker || !row.isin) return false;
+  const identity = `${row.isin}:${row.ticker}:${row.exchange}`.toUpperCase();
+  const existing = results.find(
+    (item) => `${item.isin}:${item.ticker}:${item.exchange}`.toUpperCase() === identity
+  );
+  if (existing) {
+    if (existing.currency !== row.currency) {
+      seen.delete(entryKey(existing));
+      existing.currency = row.currency;
+      seen.add(entryKey(existing));
+    }
+    return true;
+  }
   const key = entryKey(row);
   if (seen.has(key)) return false;
   seen.add(key);
@@ -405,9 +437,9 @@ if (cliIsins.length > 0) {
 save();
 
 const tally = {};
-for (const row of results) tally[row.type] = (tally[row.type] || 0) + 1;
+for (const row of published) tally[row.type] = (tally[row.type] || 0) + 1;
 console.error(
-  `${results.length} listings over ${new Set(results.map((row) => row.isin).filter(Boolean)).size} ISINs ` +
+  `${published.length} listings over ${new Set(published.map((row) => row.isin).filter(Boolean)).size} ISINs ` +
     `(${Object.entries(tally)
       .sort((left, right) => right[1] - left[1])
       .map(([type, count]) => `${count} ${type}`)

@@ -81,7 +81,8 @@ async function listAll(path) {
 }
 
 function isinsByTicker() {
-  const rows = JSON.parse(fs.readFileSync("toss/toss-parsed.json", "utf8"));
+  const file = fileURLToPath(new URL("../brokers/toss/toss-parsed.json", import.meta.url));
+  const rows = JSON.parse(fs.readFileSync(file, "utf8"));
   const map = new Map();
   for (const row of rows) {
     const exchange = String(row.exchange || "").toUpperCase();

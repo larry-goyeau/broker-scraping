@@ -4,7 +4,8 @@
 // https://www.indmoney.com/pricing
 // https://www.indmoney.com/pricing?type=us-stocks
 // https://www.indmoney.com/us-stocks
-// read on 2026-10-04.
+// https://www.indmoney.com/ucits
+// read on 2026-10-04. The UCITS charge table was read on 2026-10-12.
 //
 //   Indian shares and ETFs, delivery. The number follows the delivery
 //   column. The note under it prints a different NSE rate and splits BSE
@@ -47,6 +48,10 @@
 //     Alpaca. The book uses whichever of those two Rule 606 Qs is
 //     higher. DriveWealth's 2026-Q2 file has no market-order mix, so
 //     the book is Alpaca's Q.
+//   London UCITS ETFs use the same dollar wallet. The UCITS page prints
+//   brokerage 0.25% a trade and the same conversion range. It does not
+//   print a cap, GST, SEC, TAF or the IFSCA line, so those stay off
+//   this ticket. The book is London's, not a US Rule 606 Q.
 //
 //   node brokers/indmoney/indmoney_cost.mjs INE144J01027 NSE INR --shares=10 --price=1400
 //   node brokers/indmoney/indmoney_cost.mjs AAPL NASDAQ USD --shares=10 --price=200
@@ -67,7 +72,9 @@ import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
 const CATALOGUE = new URL("indmoney-parsed.json", import.meta.url);
 const PAGE = "https://www.indmoney.com/pricing";
 const US_PAGE = "https://www.indmoney.com/pricing?type=us-stocks";
+const UCITS_PAGE = "https://www.indmoney.com/ucits";
 const READ_ON = "2026-10-04";
+const UCITS_READ_ON = "2026-10-12";
 const GLOBAL_RATE = 0.0025;
 const GLOBAL_CAP = 25;
 const SEC = 0.0000206;
@@ -238,6 +245,40 @@ function usRoundTrip(query, plan) {
   const p = Number(price);
   if (!(n > 0)) return { ...shared, why: "aucun nombre de parts" };
   if (!(p > 0)) return { ...shared, why: "aucun prix pour cette ligne : lancer node assets/prices.mjs" };
+
+  if (code(listing.brokerExchange) === "LSE") {
+    const notional = n * p;
+    const notionalUsd = dollars(notional, "USD");
+    const commissionEach = notional * GLOBAL_RATE;
+    const brokerFees = commissionEach * 2;
+    const marketBp = bp ?? leafBook.leaf?.bp ?? null;
+    const marketPerShare = perShare ?? leafBook.leaf?.perShare ?? null;
+    const parts = bookParts({
+      bp: marketBp,
+      perShare: marketPerShare,
+      venue: m.venue,
+      unsourced: m.unsourced,
+      toUsd: (amount) => dollars(amount, "USD"),
+    });
+    const bookUsd =
+      parts.a == null || notionalUsd == null || parts.b == null ? null : parts.a * notionalUsd + parts.b * n;
+    const usd = plus(bookUsd, brokerFees);
+    return {
+      ...shared,
+      url: UCITS_PAGE,
+      remark: GLOBAL_REMARK,
+      basis: `UCITS, page relue le ${UCITS_READ_ON}. Courtage 0,25 % par ordre. Le carnet est celui de Londres.`,
+      usd: finite(usd, 6),
+      brokerFees: finite(brokerFees, 6),
+      bp: marketBp,
+      perShare: marketPerShare,
+      ...(bookUsd == null
+        ? { why: `aucun carnet pour ${listing.exchange} : ${m.unsourced?.why || "pas de feuille de carnet"}` }
+        : {}),
+      trade: { shares: n, price: p, notional, notionalUsd: finite(notionalUsd, 6), currency: "USD" },
+      commission: { each: commissionEach, currency: "USD" },
+    };
+  }
 
   const notional = n * p;
   const notionalUsd = dollars(notional, "USD");

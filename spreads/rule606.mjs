@@ -120,10 +120,19 @@ export const ALIASES = {
   // option exercise. The share ticket uses that firm's Q.
   // https://www.heygotrade.com/id/fee/
   gotradeid: "alpaca",
+  // Fintual Acciones opens the account at Alpaca Securities LLC and routes
+  // the order there. Fintual A.G.F. files no 606.
+  // https://fintualist.com/chile/tecnologia/algunas-preguntas-y-respuestas-sobre-fintual-acciones/
+  fintual: "alpaca",
   // Baraka's terms route execution-only orders to DriveWealth LLC and
   // name that firm for payment for order flow.
   // https://getbaraka.com/terms
   baraka: "drivewealth",
+  // Riise's US account is held at DriveWealth LLC, the FINRA broker.
+  // The 2026 Q2 stock sections of that filing are empty, so Q is absent
+  // and the book is the quoted NBBO until a stock mix is filed.
+  // https://www.motilaloswal.com/us-stocks
+  motilaloswal: "drivewealth",
   // Toss routes some US orders through TSA Financial and clears through
   // Apex and Clear Street. Apex's 2026 Q2 Q is 1.702. Clear Street filed
   // no market-order mix. TSA Financial has no 606 in that quarter.

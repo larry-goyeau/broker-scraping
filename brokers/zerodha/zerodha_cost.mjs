@@ -14,7 +14,7 @@
 //
 //   node brokers/zerodha/zerodha_cost.mjs INE002A01018 NSE INR --shares=10 --price=1400
 
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate, intradayGap } from "../../indianDelivery.mjs";
 
 const SCHEDULE = {
   broker: "Zerodha",
@@ -33,8 +33,7 @@ const SCHEDULE = {
   dpInr: 15.34,
   dpIncludesGst: true,
   basis: "Courtage livraison 0. DP 15,34 ₹ par titre à la vente, GST comprise.",
-  remark:
-    "Intraday is the lower of ₹20 and 0.03% per executed order.",
+  remark: intradayGap(0, pct("0.03")),
 };
 
 export function roundTrip(query) {

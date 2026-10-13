@@ -511,10 +511,18 @@ function closeOnlyVenue(listingExchange) {
 // BURSAMY quote from the search is not a list LYNX prints.
 // Korea, Taiwan, Saudi Arabia, Malaysia, Johannesburg, corporate-action
 // lines and IB Value Exchange are absent from the places this account can
-// trade. Ljubljana is LJSE. Xetra is IBIS.
+// trade. Xetra is IBIS. Moscow, the Texas Stock Exchange, EUIBSI and
+// DOLLR4LOT answer "no trading permissions". Bucharest and Ljubljana are
+// not supported via LYNX. Gettex and the London ETF book refuse order
+// transmission in the client portal. STAR and ChiNext answer "no trading
+// permissions".
+const UNSUPPORTED = new Set([
+  "KRX", "TWSE", "TPEX", "TADAWUL", "BURSAMY", "BURSA MALAYSIA", "JSE", "CORPACT", "VALUE",
+  "EUIBSI", "DOLLR4LOT", "MOEX", "TXSE", "BVB", "LJSE", "GETTEX", "GETTEX2", "LSEETF",
+  "SEHKSTAR", "CHINEXT",
+]);
 function unsupportedVenue(exchange) {
-  const code = String(exchange || "").toUpperCase();
-  return code === "KRX" || code === "TWSE" || code === "TPEX" || code === "TADAWUL" || code === "BURSAMY" || code === "BURSA MALAYSIA" || code === "JSE" || code === "CORPACT" || code === "VALUE";
+  return UNSUPPORTED.has(String(exchange || "").toUpperCase());
 }
 
 // A packaged product with no KID in a language approved for this retail

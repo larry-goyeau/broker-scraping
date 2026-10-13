@@ -38,9 +38,9 @@
 // there is no FX to put in the total or the remark.
 //
 // Stamp / FTT come from the tax map by ISIN. SEC, TAF, CAT and PTM are not
-// published on these German books and are not invented. The catalogue has
-// no Xetra quote today (10 066 EIX, 2 437 gettex, 25 crypto); Xetra is
-// still a priced venue because the page still sells it.
+// published on these German books and are not invented. The search quote is
+// EIX or gettex. The order ticket also offers Xetra when that venue is
+// tradable, and the catalogue keeps that line beside the quote.
 //
 //   https://de.scalable.capital/en/trading
 //   https://de.scalable.capital/en/trading-costs

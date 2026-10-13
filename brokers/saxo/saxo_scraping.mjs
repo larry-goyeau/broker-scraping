@@ -330,7 +330,9 @@ for (const row of book) {
       unlisted += 1;
       continue;
     }
-  } else {
+  } else if (!(type === "STOCK" && isin)) {
+    // A stock Saxo itself numbers is kept and then kept or dropped on
+    // tradability. Funds still need the CSV, which is where their ISIN is confirmed.
     const listed = isin ? catalogue.get(isin) : null;
     if (!listed && !keepUnlisted) {
       unlisted += 1;

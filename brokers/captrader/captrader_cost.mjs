@@ -25,11 +25,18 @@
 // so a Paris or Milan order was billed the 0,10 % alone. The page prints a
 // floor on every European venue it prices. Those floors are now in `RULE`.
 //
-//   EUR 4     Xetra (cap 99), Vienna (cap 120), Belgium, France, Italy,
-//             Netherlands, Spain
+//   EUR 4     Xetra (cap 99), France
+//   EUR 3     Netherlands and Italy. Real account U27604034, 2026-10-13:
+//             one share at 1 € prints « 2.00 ... 3.00 EUR ». The page's 4 €
+//             is not that ticket. The top of the range is the floor.
+//   EUR 2     Spain. The same account prints « 2 EUR » on one Banco Santander.
+//   EUR 2     Vienna (cap 120) and Belgium. The page's 4 € is not the
+//             ticket: voestalpine, OMV, Erste, RBI and Verbund, and
+//             Proximus, print « 2 EUR » at 1 € and at 2 €.
 //   EUR 2     GETTEX, Tradegate, Turquoise DE, Chi-X, BATS
-//   EUR 4     Frankfurt / Stuttgart, plus the specialist the equity check
-//             billed on 2026-09-29: 3.52 € at Frankfurt, 1.90 € at Stuttgart
+//   EUR 4     Frankfurt / Stuttgart. The 2026-09-29 equity gap is not on
+//             the 2026-10-13 ticket: Lufthansa shows the same −4 € at
+//             Xetra, Frankfurt and Stuttgart.
 //   EUR 6     Portugal
 //   EUR 10    Baltics
 //   GBP 8     London
@@ -135,22 +142,39 @@
 // 0.10 %. One share at 1 SAR asked for 0.00, so no floor appeared. No
 // cap appeared through 514,800 SAR.
 //
+// Shenzhen Connect is not on the stock card. The Shanghai row above is the
+// published 0.20 % and 50 CNH, and this ticket is not that row. On 2026-10-13
+// the paper account DUR223858 previewed Wuliangye (000858) and Ping An Bank
+// (000001) routed to SEHKSZSE and nothing was sent. A-shares trade in lots of
+// 100. 100 shares through 18,750 CNH asked for 15 CNH. 20,000 asked for 16,
+// 100,000 for 80 and 500,000 for 400. That is 0.08 %, floor 15 CNH. No cap
+// appeared. ChiNext (300750) answered "No trading permissions" and stays
+// unpriced.
+//
+// Bucharest is not on the stock card. On 2026-10-13 the paper account
+// DUR223858 previewed Banca Transilvania, OMV Petrom, Fondul Proprietatea
+// and the BET-TR ETF routed to BVB and nothing was sent. 1, 10 and 1,000 RON
+// asked for 10 RON. 10,000 asked for 28, 100,000 for 280 and 1,000,000 for
+// 2,800. That is 0.28 %, floor 10 RON. No cap appeared.
+//
 // One live trip, 2026-09-10, account U27604034, euro cash: 1 IWDA market,
 // ticket bound AEB, both legs routed GETTEX2 @ 126,10, 2,00 € each way. The
 // 2026-09-15 previews quote that trip as the bottom of a 2 … 4 € range. The
 // Netherlands / Xetra / Paris rows stay at the page's 4 €, which is the top
 // of the same range, and `confidence` says SMART paid 2 € on the one fill.
 //
-// Conversion is not on the stock card. Whether cash has to cross is a fact
-// about the client's balances, so FX stays in the remark. Withdrawals (first
+// Conversion is not on the stock card. On 2026-10-13, account U27604034,
+// nothing sent: an IDEALPRO conversion out of dollars asked for a flat
+// euro amount, the same at 10 and at 1,000 (euros: the same 3.36 EUR from
+// 20 through 1,800). The balance cannot show the percentage above that
+// minimum. The figure is the portal's euro charge for that currency.
+// Withdrawals (first
 // in a calendar month free, then 1 € SEPA / 8 € wire), ADR pass-through and
 // the 0,03 % / 0,08 % yearly custody on HUF, PLN, ILS and BUX euro names are
 // the same kind of thing. Account opening, custody of everything else,
 // dividends and the trading software are free in as many words.
 //
 // What is in the number: the commission each way at its floor and its cap;
-// the Frankfurt specialist, 3.52 €, and the Stuttgart specialist, 1.90 €,
-// each way, from the equity check and not from the footnote's percentage;
 // UK stamp 0,5 % and Irish 1 % on a purchase
 // of a share, and French / Italian FTT, which the page says it withholds
 // (Italy is carried locally — the root map reads Trading212's off-venue zero);
@@ -279,35 +303,47 @@ const CUSTODY = {
 const RULE = {
   us: { perShare: 0.01, min: 2, maxPct: 0.01, ccy: "USD" },
   ca: { perShare: 0.01, min: 1, maxPct: 0.01, ccy: "CAD" },
-  otc: { perShare: 0.01, min: 8.9, maxPct: 0.03, ccy: "USD" },
+  // U27604034, 2026-10-13. Tencent near 54 USD. The 8.90 USD floor
+  // is not the ticket. One share asked for 0.18 USD. The top of the
+  // range was 0.22 on 10 shares, 0.26 on 20 and 0.30 on 30.
+  otc: { rate: 0.000075, plus: 0.18, ccy: "USD" },
   xetra: { rate: 0.001, min: 4, max: 99, ccy: "EUR" },
   cheap: { rate: 0.001, min: 2, ccy: "EUR" },
   frankfurt: { rate: 0.001, min: 4, ccy: "EUR" },
   stuttgart: { rate: 0.001, min: 4, ccy: "EUR" },
-  vienna: { rate: 0.001, min: 4, max: 120, ccy: "EUR" },
+  // U27604034, 2026-10-13. VOE, OMV, EBS, RBI and VER at 1 € and at 2 €
+  // print « 2 EUR ». The page's 4 € is not that ticket. The 120 € cap
+  // is still the page: this balance cannot show a percentage.
+  vienna: { rate: 0.001, min: 2, max: 120, ccy: "EUR" },
   fr: { rate: 0.001, min: 4, ccy: "EUR" },
-  nl: { rate: 0.001, min: 4, ccy: "EUR" },
-  be: { rate: 0.001, min: 4, ccy: "EUR" },
-  it: { rate: 0.001, min: 4, ccy: "EUR" },
-  es: { rate: 0.001, min: 4, ccy: "EUR" },
+  // U27604034, 2026-10-13. HEIO at 1 €: « 2.00 ... 3.00 EUR ».
+  nl: { rate: 0.001, min: 3, ccy: "EUR" },
+  // Same account. Proximus at 1 € and at 2 € prints « 2 EUR ».
+  be: { rate: 0.001, min: 2, ccy: "EUR" },
+  // Same day. ENI at 1 €: « 2.00 ... 3.00 EUR ».
+  it: { rate: 0.001, min: 3, ccy: "EUR" },
+  // Same day. SAN at 1 € and at 2 €: « 2 EUR ».
+  es: { rate: 0.001, min: 2, ccy: "EUR" },
   pt: { rate: 0.001, min: 6, ccy: "EUR" },
   baltics: { rate: 0.001, min: 10, ccy: "EUR" },
   ch: { rate: 0.001, min: 15, ccy: "CHF" },
   uk: { rate: 0.001, min: 8, ccy: "GBP" },
   no: { rate: 0.001, min: 60, ccy: "NOK" },
   se: { rate: 0.001, min: 40, max: 300, ccy: "SEK" },
-  // Not on the card. Portal preview of CPH buys, 2026-10-08.
-  // No cap appeared through a 2,328 DKK commission.
-  dk: { rate: 0.0005, min: 49, ccy: "DKK" },
-  // Not on the card. Portal preview of NOKIA on HEX, 2026-10-08.
-  // No cap appeared through a 92.60 EUR commission.
-  hel: { rate: 0.0005, min: 3, ccy: "EUR" },
+  // U27604034, 2026-10-13. Not the 49 DKK of the earlier preview.
+  // XACTC25 and Better Collective asked for 20 DKK through 800 DKK.
+  // The 0.05 % is still under that floor.
+  dk: { rate: 0.0005, min: 20, ccy: "DKK" },
+  // U27604034, 2026-10-13. One share and 1 500 € print « 2.00 ... 4.00 EUR »,
+  // the same band as Xetra, so the floor is the top, 4 €. The 0.05 %
+  // from the 2026-10-08 preview was still under that floor.
+  hel: { rate: 0.0005, min: 4, ccy: "EUR" },
   // Not on the card. Portal preview of CEZ on PRA, 2026-10-08.
   // No cap appeared through a 1,998 CZK commission.
   pra: { rate: 0.0015, min: 70, ccy: "CZK" },
-  // Not on the card. Portal preview of KRKG on LJSE, 2026-10-10.
-  // No cap appeared through a 1,806 EUR commission.
-  si: { rate: 0.0035, min: 3, ccy: "EUR" },
+  // U27604034, 2026-10-13. Not 0.35 % and not a 3 € floor.
+  // Krka asked for 2 EUR from 20 € through 2 000 €.
+  si: { rate: 0.001, min: 2, ccy: "EUR" },
   // Not on the card. Portal preview of PETR4 on B3, 2026-10-10.
   // 0.10 % at every size. One share at 0.50 BRL asked for 0.00, so no floor.
   // No cap through 1,120,000 BRL.
@@ -317,14 +353,18 @@ const RULE = {
   // Above 1,000,000 INR, 0.02 % of the excess is added.
   inr: { rate: 0.0001, min: 6, max: 20, statutory: 0.0011874, excessRate: 0.0002, excessAbove: 1000000, ccy: "INR" },
   // Not on the card. Portal preview of 2222 on TADAWUL, 2026-10-10.
-  // 0.10 % at every size. One share at 1 SAR asked for 0.00, so no floor.
-  // No cap through 514,800 SAR.
-  sar: { rate: 0.001, min: 0, ccy: "SAR" },
-  // Same published IBKR Tiered tier I as Interactive Brokers. No Fixed column.
-  // 0.08 %, minimum 80 TWD. CapTrader does not publish the later volume bands.
-  twd: { rate: 0.0008, min: 80, ccy: "TWD" },
+  // U27604034, 2026-10-13. 2222: 0.105 %. 200 SAR asked for 0.21,
+  // 1 500 for 1.58.
+  sar: { rate: 0.00105, min: 0, ccy: "SAR" },
+  // U27604034, 2026-10-13. 2330: the larger of 0.08 % and 80 TWD
+  // plus 0.02 %. 200 TWD asked for 80.04, 4 000 for 80.80, 15 000 for 83.
+  twd: { rate: 0.0008, min: 80, floorRate: 0.0002, ccy: "TWD" },
   pl: { rate: 0.001, min: 20, ccy: "PLN" },
-  il: { rate: 0.0014, min: 25, ccy: "ILS" },
+  // U27604034, 2026-10-13. TEVA asked for 25 ILS through 30 000 ILS.
+  // 0.14 % of 20 000 would have been 28. 0.08 % still sits under 25.
+  il: { rate: 0.0008, min: 25, ccy: "ILS" },
+  // U27604034, 2026-10-13. OTP asked for 1 500 HUF from 1 000 HUF
+  // through 200 000 HUF. The 0.15 % is still under that floor here.
   hu: { rate: 0.0015, min: 1500, ccy: "HUF" },
   ru: { rate: 0.002, min: 900, max: 8500, ccy: "RUB" },
   mx: { rate: 0.0025, min: 80, ccy: "MXN" },
@@ -332,6 +372,11 @@ const RULE = {
   hk: { rate: 0.001, min: 20, ccy: "HKD" },
   sg: { rate: 0.001, min: 5, ccy: "SGD" },
   cnh: { rate: 0.002, min: 50, ccy: "CNH" },
+  // Real account U27604034, 2026-10-13. Not the paper floor of 15 CNH.
+  // Wuliangye asked for 50 CNH at 1 000, 4 000 and 6 000 CNH. Shanghai
+  // Moutai asked for 50 CNH at 1 000 and 8 000. This balance cannot
+  // reach the notional where 0.08 % would clear 50 CNH.
+  szse: { rate: 0.0008, min: 50, ccy: "CNH" },
   au: { rate: 0.001, min: 10, ccy: "AUD" },
   // Not on the card. WH SelfInvest's cash check of 122450 on 2026-09-28:
   // 0.06 %, floor 4 000 KRW. CapTrader's own preview of that name was blank.
@@ -339,6 +384,9 @@ const RULE = {
   // Not on the card. Measured on the portal, 2026-10-02. The statutory
   // pieces are added beside this rate in bursaStatutory.
   my: { rate: 0.0008, min: 12, ccy: "MYR" },
+  // Real account U27604034, 2026-10-13. Same 0.28 % and 10 RON floor
+  // as the paper account. 1 000 RON asked for 10, 4 000 for 11.20.
+  bvb: { rate: 0.0028, min: 10, ccy: "RON" },
 };
 
 const TO_VENUES = {
@@ -423,10 +471,12 @@ export function feeMarketOf(exchange, mic, currency) {
   if ((code === "TWSE" || m === "XTAI") && (ccy === "TWD" || !ccy)) return "twd";
   if (code === "TASE" || m === "XTAE") return "il";
   if (code === "BUX" || m === "XBUD") return "hu";
+  if ((code === "BVB" || m === "XBSE") && (ccy === "RON" || !ccy)) return "bvb";
   if (code === "MEXI" || m === "XMEX") return "mx";
   if (code === "SEHK" || m === "XHKG") return "hk";
   if (code === "SGX" || m === "XSES") return "sg";
   if (code === "SEHKNTL" || code === "SHSE" || m === "XSHG") return "cnh";
+  if (code === "SEHKSZSE" && (ccy === "CNH" || !ccy)) return "szse";
   if (code === "ASX" || m === "XASX") return "au";
   if (code === "KRX" || m === "XKRX") return "kr";
   if (code === "BURSAMY" || code === "BURSA" || m === "XKLS") return "my";
@@ -511,11 +561,24 @@ export function taxesFor(isin, listing) {
   return { tax, rates, added: Object.keys(added), source: Object.keys(mapped).length ? "taxMap" : null };
 }
 
+// The portal billed euros. These are that charge times the EUR.USD ask
+// of the same preview, 1.12007. U27604034, 2026-10-13, nothing sent.
+const FX_MIN_USD = {
+  ILS: 4.89, HKD: 3.84, PLN: 3.83, EUR: 3.76, GBP: 3.76, CHF: 3.76, AUD: 3.76,
+  ZAR: 3.58, SGD: 3.14, CNH: 3, DKK: 3, HUF: 2.77, MXN: 2.74,
+  CAD: 2.63, NOK: 2.09, SEK: 2, RON: 2, JPY: 1.9, CZK: 0.17,
+};
+
 function remarkOf({ listing, market } = {}) {
   const lines = [];
   const ccy = String(listing?.currency || "").toUpperCase();
   const settle = ccy === "GBX" ? "GBP" : ccy;
-  lines.push(fxRemark("", settle));
+  const fxMin = FX_MIN_USD[settle];
+  lines.push(
+    fxMin != null
+      ? `FX min ${fxMin.toFixed(2)} USD when cash ≠ ${settle}.`
+      : fxRemark("", settle)
+  );
   if (ADR_NAMED.test(String(listing?.name || ""))) {
     lines.push("Depositary receipt $0.01–0.03 per share per year.");
   }
@@ -560,6 +623,17 @@ export function commissionSide({ shares, amount, market }) {
   }
 
   if (amount == null || !Number.isFinite(Number(amount))) return null;
+  if (rule.plus != null) {
+    const raw = Number(amount) * rule.rate + rule.plus;
+    return { raw, charged: raw, floored: false, capped: false, currency: rule.ccy };
+  }
+  if (rule.floorRate != null) {
+    const n = Number(amount);
+    const pct = n * rule.rate;
+    const floor = rule.min + n * rule.floorRate;
+    const charged = Math.max(pct, floor);
+    return { raw: pct, charged, floored: pct < floor, capped: false, currency: rule.ccy };
+  }
   if (rule.statutory != null) {
     const n = Number(amount);
     const pct = n * rule.rate;
@@ -666,7 +740,9 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   }
 
   const basis =
-    (market === "kr"
+    (market === "bvb" || market === "szse"
+      ? `barème CapTrader ${market}, aperçu du portail le 2026-10-13 : `
+      : market === "kr"
       ? `barème CapTrader ${market}, même palier que WH SelfInvest, lu le 2026-09-28 : `
       : market === "my"
         ? `barème CapTrader ${market}, aperçu du portail le 2026-10-02 : `
@@ -674,7 +750,9 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
           ? `barème CapTrader ${market}, aperçu du portail le 2026-10-10 : `
           : market === "twd"
             ? `barème CapTrader ${market}, même palier Tiered I qu'Interactive Brokers : `
-          : market === "dk" || market === "hel" || market === "pra"
+          : market === "hel"
+            ? `barème CapTrader ${market}, aperçu du compte U27604034 le 2026-10-13 : `
+          : market === "dk" || market === "pra"
             ? `barème CapTrader ${market}, aperçu du portail le 2026-10-08 : `
           : `barème CapTrader ${market}, lu le ${SCHEDULE.readOn} (page du ${SCHEDULE.pageUpdated}) : `) +
     (rule.statutory != null
@@ -682,7 +760,10 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
       : (rule.rate != null
       ? `${(100 * rule.rate).toFixed(4).replace(/0+$/, "").replace(/\.$/, "")} % par sens`
       : `${rule.perShare} ${rule.ccy} par part`) +
-    (rule.min > 0 ? `, plancher ${rule.min} ${rule.ccy}` : ", sans plancher") +
+    (rule.plus != null ? ` plus ${rule.plus} ${rule.ccy}` : "") +
+    (rule.floorRate != null
+      ? `, ou ${rule.min} ${rule.ccy} plus ${(100 * rule.floorRate).toFixed(2)} % si c'est davantage`
+      : rule.min > 0 ? `, plancher ${rule.min} ${rule.ccy}` : ", sans plancher") +
     (rule.max != null ? `, plafond ${rule.max} ${rule.ccy}` : "") +
     (rule.maxPct != null ? `, plafond ${(100 * rule.maxPct).toFixed(0)} % du montant` : "")) +
     (market === "my"
@@ -719,7 +800,9 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const buyCommUsd = buyCharged != null ? dollars(buyCharged, buyComm.currency) : null;
   const sellCommUsd = sellCharged != null ? dollars(sellCharged, sellComm.currency) : null;
 
-  const specialist = specialistSide(market);
+  // 2026-10-13, U27604034: equity change −4 € on IBIS, FWB and SWB. The
+  // September specialist gap is not on this ticket.
+  const specialist = null;
   const specialistUsd = specialist ? dollars(specialist.charged, specialist.currency) : 0;
   const specialistRoundUsd = specialist ? plus(specialistUsd, specialistUsd) : 0;
 
@@ -833,7 +916,11 @@ function confidenceOf({
 }) {
   const said = [];
   said.push(
-    (market === "kr"
+    (market === "bvb"
+      ? `commission CapTrader, palier ${market}, aperçu TLV, SNP, FP et BTBETRETF sur BVB le 2026-10-13, `
+      : market === "szse"
+        ? `commission CapTrader, palier ${market}, aperçu 000858 et 000001 sur SEHKSZSE le 2026-10-13, `
+      : market === "kr"
       ? `commission CapTrader, palier ${market}, même palier que WH SelfInvest, lu le 2026-09-28, `
       : market === "my"
         ? `commission CapTrader, palier ${market}, aperçu MSC sur BURSAMY le 2026-10-02, `
@@ -882,10 +969,10 @@ function confidenceOf({
     const billed = SPECIALIST[market];
     const printed = SPECIALIST_ON_PAGE[market];
     said.push(
-      `spécialiste ${billed.flat.toFixed(2)} € par sens, dans le total : l'equity with loan du ${billed.on} ` +
-        `sur le compte ${MEASURED.account} demandait ${billed.flat.toFixed(2)} € de plus qu'à Xetra ` +
-        `(${billed.names}). La note de la page imprime ${(100 * printed.rate).toFixed(4)} % ` +
-        `(min ${printed.min} €) et ce n'est pas cet écart`
+      `spécialiste hors total : le 2026-10-13 l'equity change de −4 € est le même à Xetra, ` +
+        `Francfort et Stuttgart. L'écart du ${billed.on} (${billed.flat.toFixed(2)} €, ${billed.names}) ` +
+        `n'est plus sur le ticket. La note de la page imprime ${(100 * printed.rate).toFixed(4)} % ` +
+        `(min ${printed.min} €)`
     );
   }
   if (market === "nl") {

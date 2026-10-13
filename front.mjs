@@ -140,12 +140,15 @@ const FOLDER_NAME = {
   gotradeglobal: "Gotrade Global",
   gotradeid: "Gotrade Indonesia",
   iol: "InvertirOnline",
-  trii: "Trii Peru",
+  triipe: "Trii Perou",
   bks: "BKS Bank",
   public: "Public.com",
   erste: "Erste",
   iguk: "IG UK",
   igue: "IG UE",
+  icici: "ICICI",
+  hdfcsky: "HDFC Sky",
+  futu: "Futu",
 };
 
 // Display name above, broker-list row below, when the two differ.
@@ -158,6 +161,9 @@ const FOLDER_LIST = {
   erste: "Erste Biuro Maklerskie",
   iguk: "IG",
   igue: "IG Europe",
+  triipe: "Trii Peru",
+  icici: "ICICI Direct",
+  futu: "Futu / moomoo HK",
 };
 
 function metaFor(folder, list) {
@@ -319,6 +325,7 @@ for (const file of catalogueFiles()) {
     if (row.usOnly) listing.nonEuResident = true;
     stampResidency(listing);
     if (row.usResidentsOnly) listing.usResidentsOnly = true;
+    if (row.remark) listing.remark = String(row.remark).replace(/\s+/g, " ").trim();
     if (row.indianOnly) listing.indianOnly = true;
     if (row.cfd) listing.cfd = true;
     if (Array.isArray(row.supportedCountries)) listing.supportedCountries = row.supportedCountries;
@@ -1348,7 +1355,7 @@ const WEBULL_PLANS = [
   { id: "sg", name: "Webull Singapore", url: "https://www.webull.com.sg" },
   { id: "ca", name: "Webull Canada", url: "https://www.webull.ca" },
   { id: "au", name: "Webull Australia", url: "https://www.webull.com.au" },
-  { id: "hk", name: "Webull Hong Kong", url: "https://www.webull.hk" },
+  { id: "hk", name: "Webull HK", url: "https://www.webull.hk" },
 ];
 
 const WEBULL_EU = new Set([
@@ -2277,6 +2284,7 @@ function detail(key, nat = "", size = {}, dep = "") {
           return {
             ...listing,
             ...cost,
+            remark: cost.remark || listing.remark || "",
             // "Nasdaq Nordic" is the group. Once the book is the only Nordic
             // one in this currency, the column names that city.
             exchange:

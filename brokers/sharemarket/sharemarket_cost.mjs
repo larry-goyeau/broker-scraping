@@ -25,9 +25,11 @@
 //
 //   node brokers/sharemarket/sharemarket_cost.mjs VOLTAS NSE INR --shares=10 --price=1400
 
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate, rateGap } from "../../indianDelivery.mjs";
 
 const SEBI_CAP = 0.025;
+const STT = pct("0.1");
+const STAMP = pct("0.015");
 
 function brokerageEach(notional) {
   const ticket = Math.min(20, Math.max(2, notional * pct("0.1")));
@@ -46,8 +48,8 @@ const SCHEDULE = {
   readOn: "2026-10-08",
   brokerageEach,
   txnRate: (exchange) => (exchange === "NSE" ? pct("0.0030699") : exchange === "BSE" ? pct("0.00375") : null),
-  sttRate: pct("0.1"),
-  stampRate: pct("0.015"),
+  sttRate: STT,
+  stampRate: STAMP,
   sebiRate: sebiRate(),
   gstRate: 0.18,
   gstOnIpft: true,
@@ -56,7 +58,7 @@ const SCHEDULE = {
   dpInr,
   basis:
     "Courtage livraison : le plus bas de 20 ₹ et 0,1 %, au moins 2 ₹, plafond SEBI. DP 18,50 ₹ + GST à la vente au-dessus de 300 ₹, sinon 3,50 ₹.",
-  remark: "Intraday STT is 0.025% on the sell and stamp is 0.003% on the buy.",
+  remark: `Intraday STT is ${rateGap(STT, pct("0.025"))}% on the sell and stamp is ${rateGap(STAMP, pct("0.003"))}% on the buy.`,
 };
 
 export function roundTrip(query) {

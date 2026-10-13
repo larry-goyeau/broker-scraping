@@ -13,10 +13,12 @@
 //
 //   node brokers/fyers/fyers_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
 
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate, intradayGap } from "../../indianDelivery.mjs";
+
+const DELIVERY_RATE = pct("0.3");
 
 function brokerageEach(notional) {
-  return Math.min(20, notional * pct("0.3"));
+  return Math.min(20, notional * DELIVERY_RATE);
 }
 
 const SCHEDULE = {
@@ -36,7 +38,7 @@ const SCHEDULE = {
   ipftRate: 0.01 / 10_000_000,
   dpInr: 12.5,
   basis: "Courtage livraison : le plus bas de 20 ₹ et 0,3 % par ordre. DP 12,5 ₹ + GST à la vente.",
-  remark: "Intraday is the lower of ₹20 and 0.03% per executed order.",
+  remark: intradayGap(DELIVERY_RATE, pct("0.03")),
 };
 
 export function roundTrip(query) {

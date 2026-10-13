@@ -82,6 +82,10 @@ const FOREIGN_PER_USD = {
   // a 1,320 ceiling at the banks.
   // https://channel8.com/english/news/65154
   IQD: 1310,
+  // TRM in force on this day, pesos per dollar. Not an ECB print.
+  // The 7 September 2026 rate is the one published for 5–8 September.
+  // https://www.datos.gov.co/resource/32sa-8pi3.json?$where=vigenciadesde%20between%20%272026-09-05%27%20and%20%272026-09-08%27
+  COP: 3126.08,
   // BCRP interbank mid, soles per dollar, same day. Not an ECB print.
   // Compra 3.358, venta 3.360.
   // https://estadisticas.bcrp.gob.pe/estadisticas/series/api/PD04637PD/json/2026-09-07/2026-09-07

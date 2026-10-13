@@ -13,6 +13,7 @@
 // 19 005 stocks, 8 499 ETFs, 457 ETC, 204 ETN, 22 crypto).
 //
 //   Stocks   AMS / BRU                         2.00 € + 1.00 € handling
+//            Euronext Access Paris             2.00 € + 1.00 € handling
 //            US / CA                           1.00 € + 1.00 € handling
 //            Europe (Xetra, LSE, Tradegate, …) 3.90 € + 1.00 € handling
 //            ASX / Frankfurt floor / HK / SG / Tokyo
@@ -20,6 +21,13 @@
 //   Trackers Tradegate (Kernselectie)          0.00 € + 1.00 € handling
 //            other venues                      2.00 € + 1.00 € handling
 //   Crypto   Tradias                           0.29 %, min 0.01 €, no handling
+//
+// Euronext Access Paris is printed with the leverage products, at the
+// same €2 as Amsterdam, and the €1 handling still applies. A DEG line is
+// a subscription or tender offer that names the listing it points at, so
+// it takes that listing's share ticket, including Tradegate's handling
+// waiver. The OTC share is not a BNP or Société Générale warrant and not
+// Tradias, so the brochure gives it no ticket.
 //
 // Handling is €1 on every order except Tradegate stocks and crypto. It
 // covers third-party execution fees (clearing, SEC, TAF), so those stay
@@ -99,6 +107,7 @@ const CHECK = {
 };
 
 const HOME = new Set(["EAM", "EBR"]);
+const ACCESS = new Set(["MLI"]);
 const US_CA = new Set(["NDQ", "NSY", "ASE", "TOR", "TSV", "CSE"]);
 const ASIA = new Set(["ASX", "FRA", "HKS", "SGX", "TSE"]);
 const EUROPE = new Set([
@@ -149,12 +158,28 @@ const fxNote = (currency) => ({
   listing: usdPer(currency),
 });
 
-export function feeMarketOf(row) {
+// A DEG row is not an exchange. The name says which listing the offer
+// points at, and the share table prices a claim on that listing.
+export function bookedCode(row) {
   const code = loose(row?.exchange);
+  if (code !== "DEG") return code;
+  const name = String(row?.name || "");
+  if (/nasdaq/i.test(name)) return "NDQ";
+  if (/tradegate/i.test(name)) return "TDG";
+  if (/vienna/i.test(name)) return "WEN";
+  if (/australian/i.test(name)) return "ASX";
+  if (/stockholm|\(OMS\)/i.test(name)) return "OMX";
+  if (/paris/i.test(name)) return "EPA";
+  return "";
+}
+
+export function feeMarketOf(row) {
+  const code = bookedCode(row);
   const type = String(row?.type || "").toUpperCase();
   if (type === "CRYPTO" || code === "TRD") return "crypto";
   if (isTracker(type)) return code === "TDG" ? "etf_core" : "etf";
   if (HOME.has(code)) return "home";
+  if (ACCESS.has(code)) return "access";
   if (US_CA.has(code)) return "us_ca";
   if (ASIA.has(code)) return "asia";
   if (EUROPE.has(code)) return "europe";
@@ -168,7 +193,7 @@ export function feeMarketOf(row) {
  */
 export function ticketOf(row) {
   const market = feeMarketOf(row);
-  const code = loose(row?.exchange);
+  const code = bookedCode(row);
   if (!market) return null;
   if (market === "crypto") {
     return { market, comm: 0, handling: 0, rate: CRYPTO_RATE, min: CRYPTO_MIN, each: null };
@@ -179,7 +204,7 @@ export function ticketOf(row) {
   if (market === "etf") {
     return { market, comm: 2, handling: 1, rate: 0, min: 0, each: 3 };
   }
-  const comm = market === "home" ? 2 : market === "us_ca" ? 1 : market === "asia" ? 5 : 3.9;
+  const comm = market === "home" || market === "access" ? 2 : market === "us_ca" ? 1 : market === "asia" ? 5 : 3.9;
   const handling = code === "TDG" ? 0 : 1;
   return { market, comm, handling, rate: 0, min: 0, each: comm + handling };
 }
@@ -204,7 +229,7 @@ export function commissionSide({ row, amountEur }) {
 }
 
 function connectivityOf(row, market) {
-  const code = loose(row?.exchange);
+  const code = bookedCode(row);
   if (HOME.has(code) || market === "crypto" || market === "etf_core") return false;
   return true;
 }

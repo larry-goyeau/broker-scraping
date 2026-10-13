@@ -11,9 +11,9 @@
 //                               percent alone.
 //   myStocks                    US and Hong Kong stocks and ETFs,
 //                               0.75% a side. The floor is not halved.
-//                               Japan, London and Europe are not on
-//                               that channel, so they are not in the
-//                               catalogue. The ETF marketing page
+//                               Japan, London and Europe use the
+//                               board rate, 1.5% a side, with the
+//                               floors below. The ETF marketing page
 //                               prints other floors. The agreement
 //                               is the table.
 //   Custody                     0.2% of the sale, by the day, for at
@@ -55,6 +55,8 @@ const ONLINE_RATE = 0.0075;
 const SEC_RATE = 0.0000206;
 const FLOOR = { USD: 10, HKD: 80, JPY: 1500, GBP: 8, EUR: 8 };
 const ONLINE = new Set(["US", "NASDAQ", "NYSE", "ARCA", "HONGKONG"]);
+const BOARD = new Set(["TOKYO", "LONDON", "XETRA", "FRANKFURT", "PARIS"]);
+const BOARD_RATE = 0.015;
 const US_BOOK = new Set(["US", "NASDAQ", "NYSE", "ARCA"]);
 const EUROPE = new Set(["XETRA", "FRANKFURT", "PARIS"]);
 
@@ -164,10 +166,11 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     brokerExchange: m.row.exchange || null,
   };
   const market = loose(listing.brokerExchange);
-  if (!ONLINE.has(market)) {
+  const online = ONLINE.has(market);
+  if (!online && !BOARD.has(market)) {
     return { ...answer, listing, onlineBuy: false, cashCurrency: listing.currency, remark: CUSTODY };
   }
-  const rate = ONLINE_RATE;
+  const rate = online ? ONLINE_RATE : BOARD_RATE;
   const floor = FLOOR[listing.currency] ?? null;
   const american = US_BOOK.has(market) && listing.currency === "USD";
   const quoted = american ? usBookPerShare({ broker: "standardchartered", ticker: listing.ticker }) : null;
@@ -178,7 +181,9 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     listing,
     cashCurrency: listing.currency,
     remark: CUSTODY,
-    basis: `myStocks, accord relu le ${READ_ON}. Achat et vente 0,75 %, plancher non réduit.`,
+    basis: online
+      ? `myStocks, accord relu le ${READ_ON}. Achat et vente 0,75 %, plancher non réduit.`
+      : `accord relu le ${READ_ON}. Achat et vente 1,5 %.`,
     fx: { quote: QUOTE, asOf: FX_AS_OF, listing: usdPer(listing.currency) },
     bp: marketBp,
     perShare: marketPerShare,

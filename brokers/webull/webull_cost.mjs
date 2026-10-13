@@ -204,7 +204,7 @@ const PLANS = {
   },
   hk: {
     id: "hk",
-    name: "Webull Hong Kong",
+    name: "Webull HK",
     hold: new Set(["HKD", "USD"]),
     offers: new Set(["listed", "hk", "china"]),
     ticket: 0,

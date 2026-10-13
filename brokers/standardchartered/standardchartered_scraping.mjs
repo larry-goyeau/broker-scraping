@@ -1,7 +1,6 @@
-// What Standard Chartered Taiwan sells on myStocks, with no login.
-// The form also lists Japan, London and Europe. Those orders are by
-// phone or at a branch, so they stay out. The kept shelves are the
-// United States and Hong Kong. There is no Taiwan board. Every row
+// What Standard Chartered Taiwan sells on the foreign-share list, with
+// no login. The same "order now" button covers the United States, Hong
+// Kong, Japan, London and Europe. There is no Taiwan board. Every row
 // on a kept shelf is sold: the page prints no buy flag and no date.
 //
 // The code is a Bloomberg symbol. "US" does not name the exchange
@@ -35,8 +34,12 @@ const ETFS = new URL("../../assets/etfs.csv", import.meta.url);
 const SHELVES = [
   ["EQ", "US"],
   ["EQ", "HK"],
+  ["EQ", "JP"],
+  ["EQ", "EU"],
+  ["EQ", "GB"],
   ["ETF", "US"],
   ["ETF", "HK"],
+  ["ETF", "JP"],
 ];
 const BOOK = {
   US: "US",

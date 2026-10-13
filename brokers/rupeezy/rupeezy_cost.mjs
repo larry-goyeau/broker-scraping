@@ -14,7 +14,7 @@
 //
 //   node brokers/rupeezy/rupeezy_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
 
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate, intradayGap } from "../../indianDelivery.mjs";
 
 const CRORE = 10_000_000;
 
@@ -38,7 +38,7 @@ const SCHEDULE = {
   ipftRate: (exchange) => (exchange === "NSE" ? 0.01 / CRORE : exchange === "BSE" ? 0 : null),
   dpInr: 29,
   basis: "Courtage livraison 0,1 % par ordre. DP 29 ₹ + GST à la vente, dont 4 ₹ NSDL.",
-  remark: "Intraday is the lower of ₹20 and 0.1% per executed order.",
+  remark: intradayGap(pct("0.1"), pct("0.1")),
 };
 
 export function roundTrip(query) {

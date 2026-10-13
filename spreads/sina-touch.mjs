@@ -19,6 +19,11 @@ const NODES = [
   ["sz_a", "stock"],
   ["etf_hq_fund", "etf"],
 ];
+const ONLY_MIC = String(process.argv.find((arg) => arg.startsWith("--mic=")) || "")
+  .split("=")
+  .slice(1)
+  .join("=")
+  .toUpperCase();
 
 const shanghai = () => {
   const parts = Object.fromEntries(
@@ -164,12 +169,14 @@ const found = [];
 let noIsin = 0;
 let noTouch = 0;
 const seen = new Set();
-for (const [node, kind] of NODES) {
+const nodes =
+  ONLY_MIC === "XSHG" ? NODES.filter(([node]) => node !== "sz_a") : ONLY_MIC === "XSHE" ? NODES.filter(([node]) => node !== "sh_a") : NODES;
+for (const [node, kind] of nodes) {
   const rows = await listNode(node);
   console.error(`${node} : ${rows.length} lignes`);
   for (const row of rows) {
     const item = keep(row);
-    if (!item || seen.has(item.symbol)) continue;
+    if (!item || seen.has(item.symbol) || (ONLY_MIC && item.mic !== ONLY_MIC)) continue;
     seen.add(item.symbol);
     const isin = isins.get(item.code);
     if (!isin) {

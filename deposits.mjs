@@ -210,6 +210,42 @@ const FOLDER = {
   // https://www.paypay-sec.co.jp/support/charge/
   // https://www.paypay-sec.co.jp/support/ca/
   paypay: ["JPY"],
+  // A pay-in by UPI, net banking, NEFT, IMPS or RTGS comes from the linked
+  // Indian bank and is credited in rupees. An NRE, NRO or NRI account
+  // cannot be added. No other currency is left unconverted.
+  // https://www.paytmmoney.com/blog/reality-check-why-you-cant-use-credit-cards-for-stocks-investing/
+  // https://www.paytmmoney.com/blog/ready-trade-verify-bank-account-first/
+  paytmmoney: ["INR"],
+  // The 3-in-1 account allocates cash from the linked ICICI Bank savings
+  // account. An NRI account allocates from an NRE or an NRO account. Those
+  // are rupee accounts. A remittance from abroad, or a transfer out of an
+  // FCNR account, is credited in rupees. Global Invest is an LRS conversion,
+  // not a balance left in the foreign currency.
+  // https://www.icicidirect.com/open-a-demat-account
+  // https://www.icicidirect.com/faqs/nri-account/i-want-to-buy-shares-but-i-do-not-have-any-money-in-my-bank-account-what-do-i-do
+  icici: ["INR"],
+  // Add funds is UPI or net banking from the client's own Indian bank, and
+  // the money is credited in rupees. An NRI account is linked to an NRE or
+  // an NRO account. A foreign-currency deposit into those accounts is
+  // converted into rupees. Global Investing is an LRS conversion, not a
+  // balance left in dollars.
+  // https://hdfcsky.com/blogs/share-market/sebi-validated-upi-framework-enhanced-security-for-hdfc-sky-customers-with-advanced-upi-verification
+  // https://hdfcsky.com/sky-learn/demat-account/what-is-an-nro-account
+  // https://hdfcsky.com/global-investing
+  hdfcsky: ["INR"],
+  // Add funds blocks rupees in the client's own savings account, through
+  // the SEBI UPI handle, or takes them by net banking. An NRI account is
+  // linked to an NRE or an NRO account. A foreign-currency deposit into
+  // those accounts is converted into rupees.
+  // https://beta.iiflcapital.com/demat
+  // https://www.indiainfoline.com/knowledge-center/demat-account/eligibility-criteria-to-open-demat-account
+  iifl: ["INR"],
+  // A deposit is credited in Hong Kong dollars, dollars, offshore yuan or
+  // yen and stays in that currency until the client exchanges it. Singapore
+  // dollars and won can be exchanged into, and are not a deposit.
+  // https://www.futuhk.com/en/support/topic2_30
+  // https://www.futuhk.com/en/support/topic2_83
+  futu: ["HKD", "USD", "CNH", "JPY"],
   // A deposit and a withdrawal are naira, through a Nigerian bank account.
   // A dollar fund is bought with naira. There is no dollar cash.
   // https://help.cowrywise.com/en/articles/9148093-what-bank-can-i-use-to-receive-my-funds-on-cowrywise
@@ -495,6 +531,10 @@ const FOLDER = {
   sarwa: ["USD"],
   saxo: ["USD", "CAD", "EUR", "GBP", "NOK", "PLN", "CZK", "MYR", "CHF", "DKK", "SEK", "ZAR", "JPY", "HKD", "CNH", "SGD", "AUD"],
   scalablecapital: ["EUR"],
+  // One euro clearing account at Sutor Bank. A transfer in or out is a
+  // SEPA payment in euros. There is no foreign-currency balance.
+  // https://www.justtrade.com/fileadmin/Formulare/Preis-und-Leistungsverzeichnis.pdf
+  justtrade: ["EUR"],
   shoonya: ["INR"],
   siebert: ["USD"],
   sogotrade: ["USD"],
@@ -544,7 +584,7 @@ const FOLDER = {
   // not a deposit that stays.
   // https://trii.pe/faq
   // https://trii.pe/
-  trii: ["PEN", "USD"],
+  triipe: ["PEN", "USD"],
   // Securities cash is euros, paid to the client-money account. A purchase
   // in another currency is converted at the bank's commercial rate. Dollars
   // and pounds can sit on a payment account. That account is not this cash.
@@ -591,6 +631,15 @@ const FOLDER = {
   // balance in one of these is not converted when it arrives.
   interactivebrokers: ["AED", "AUD", "BRL", "CAD", "CHF", "CZK", "DKK", "EUR", "GBP", "HKD", "HUF", "ILS", "INR", "JPY", "KRW", "MXN", "MYR", "NOK", "PLN", "RON", "SAR", "SEK", "SGD", "TWD", "USD"],
   lynx: ["AED", "AUD", "CAD", "CHF", "CNH", "CZK", "DKK", "EUR", "GBP", "HKD", "HUF", "ILS", "JPY", "MXN", "NOK", "PLN", "RUB", "SEK", "SGD", "USD"],
+  // A payment in a currency the bank quotes is credited in that currency
+  // and left. A currency it does not quote is converted into the main
+  // currency of the account. Foreign payments quote AUD, CAD, CHF, CZK,
+  // DKK, EUR, GBP, HKD, HUF, JPY, NOK, PLN, RON, SEK and USD. Transfers
+  // between the client's own accounts also leave RUB and NZD.
+  // https://www.lhv.ee/en/payments
+  // https://www.lhv.ee/en/conditions-of-payment-services-agreement
+  // https://www.lhv.ee/en/faq/trader/
+  lhvpank: ["AUD", "CAD", "CHF", "CZK", "DKK", "EUR", "GBP", "HKD", "HUF", "JPY", "NOK", "NZD", "PLN", "RON", "RUB", "SEK", "USD"],
   mexem: ["AUD", "CAD", "CHF", "CNH", "DKK", "EUR", "GBP", "HKD", "HUF", "ILS", "JPY", "MXN", "NOK", "PLN", "SEK", "SGD", "USD"],
   captrader: ["AUD", "CAD", "CHF", "CNH", "EUR", "GBP", "HKD", "HUF", "ILS", "JPY", "MXN", "NOK", "PLN", "RUB", "SEK", "SGD", "USD"],
   WHSelfInvest: ["AUD", "CAD", "CHF", "EUR", "GBP", "HKD", "JPY", "MXN", "NOK", "USD"],
@@ -681,6 +730,12 @@ const FOLDER = {
   // https://www.ing.de/sparen-anlegen/direkt-depot/
   // https://www.ing.de/sparen-anlegen/direkt-depot/kundenservice/abrechnung-steuer/
   ing: ["EUR"],
+  // A transfer into the euro settlement account is credited in euro and
+  // stays there. A transfer in dollars into the currency account is
+  // credited in dollars. The other twelve currencies are bought and sold
+  // through euro, at 1 %, so they are not a deposit.
+  // https://www.comdirect.de/geldanlage/waehrungsanlagen.html
+  comdirect: ["EUR", "USD"],
   // Yen can be paid in by a realtime transfer or a bank transfer and left
   // as yen. Dollars can be paid in by a bank transfer from a bank in Japan
   // and left as dollars. No other currency can be paid in.

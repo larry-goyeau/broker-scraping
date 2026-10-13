@@ -15,9 +15,11 @@
 //
 //   node brokers/prostocks/prostocks_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
 
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate, amountGap } from "../../indianDelivery.mjs";
 
 const CRORE = 10_000_000;
+const DELIVERY = 0;
+const INTRADAY = 15;
 
 const SCHEDULE = {
   broker: "ProStocks",
@@ -25,7 +27,7 @@ const SCHEDULE = {
   catalogueUrl: new URL("prostocks-parsed.json", import.meta.url),
   url: "https://www.prostocks.com/charge-list.html",
   readOn: "2026-09-26",
-  brokerageEach: () => 0,
+  brokerageEach: () => DELIVERY,
   txnRate: (exchange) => (exchange === "NSE" ? 306.99 / CRORE : exchange === "BSE" ? 375 / CRORE : null),
   sttRate: pct("0.1"),
   stampRate: pct("0.015"),
@@ -36,7 +38,7 @@ const SCHEDULE = {
   ipftRate: (exchange) => (exchange === "NSE" ? 0.01 / CRORE : exchange === "BSE" ? 0 : null),
   dpInr: 20,
   basis: "Courtage livraison 0. DP 20 ₹ + GST par scrip à la vente.",
-  remark: "Intraday is ₹15 per executed order.",
+  remark: `Intraday is ${amountGap(DELIVERY, INTRADAY).replace(/^-?/, (sign) => `${sign}₹`)} per executed order.`,
 };
 
 export function roundTrip(query) {

@@ -1,6 +1,7 @@
 // What one round trip costs at Trii Peru: buy n shares at price p, sell
 // them back at once, in dollars. Lima shares and the US shares and ETFs.
-// Mutual funds stay out.
+// Mutual funds stay out. The Bogotá list is Trii Colombia, and the Peru
+// FAQ says an order cannot cross from one app to the other.
 //
 // Re-read 2026-10-10. The app schedule, and Kallpa's form for the Trii
 // app (form 2, in force from 15 Aug 2024; the file's later pages are
@@ -21,10 +22,10 @@
 // Kallpa sends the order. No US broker-dealer is named, so a US line
 // is the national quote. Cash can stay in soles or in dollars.
 //
-//   node brokers/trii/trii_cost.mjs AAPL US USD --shares=10 --price=230
-//   node brokers/trii/trii_cost.mjs CREDITC1 BVL PEN --shares=100 --price=10
-//   node brokers/trii/trii_cost.mjs SPY US USD --shares=10 --price=500
-//   node brokers/trii/trii_cost.mjs --schedule
+//   node brokers/triipe/triipe_cost.mjs AAPL US USD --shares=10 --price=230
+//   node brokers/triipe/triipe_cost.mjs CREDITC1 BVL PEN --shares=100 --price=10
+//   node brokers/triipe/triipe_cost.mjs SPY US USD --shares=10 --price=500
+//   node brokers/triipe/triipe_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
@@ -38,7 +39,7 @@ import { bookParts, plus, finite } from "../../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
 
-const CATALOGUE = new URL("trii-parsed.json", import.meta.url);
+const CATALOGUE = new URL("triipe-parsed.json", import.meta.url);
 
 const SCHEDULE = {
   url: "https://trii.pe/",
@@ -100,7 +101,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     remark: "",
   };
   if (!catalogue) {
-    return { ...answer, why: "le catalogue Trii n'existe pas encore : lancer `node brokers/trii/trii_scraping.mjs`" };
+    return { ...answer, why: "le catalogue Trii n'existe pas encore : lancer `node brokers/triipe/triipe_scraping.mjs`" };
   }
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Trii` };
@@ -118,7 +119,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     mic: m.venue?.mic ?? null,
     currency: m.row.currency,
     unsourced: m.unsourced,
-    broker: "trii",
+    broker: "triipe",
     ticker: m.row.ticker,
   });
   const listing = {
@@ -133,7 +134,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   };
   const american = listing.brokerExchange === "US";
   const quoted = american
-    ? usBookPerShare({ broker: "trii", ticker: listing.ticker, fallback: book.leaf?.perShare ?? null })
+    ? usBookPerShare({ broker: "triipe", ticker: listing.ticker, fallback: book.leaf?.perShare ?? null })
     : null;
   const marketPerShare = perShare ?? quoted ?? book.leaf?.perShare ?? null;
   const marketBp = bp ?? (marketPerShare != null ? null : book.leaf?.bp ?? null);
@@ -152,6 +153,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     cashCurrency: listing.currency,
     bp: marketBp,
     perShare: marketPerShare,
+    url: SCHEDULE.url,
     basis: `barème Trii relu le ${SCHEDULE.readOn} : 0,60 % par exécution, ou S/ 12,50 et 3 $ en dessous du seuil`,
     tax,
     ccy: QUOTE,
@@ -236,7 +238,7 @@ function printCli() {
   const positional = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
   const [etf, place, currency] = positional;
   if (!etf) {
-    console.error("usage : node brokers/trii/trii_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]");
+    console.error("usage : node brokers/triipe/triipe_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]");
     process.exit(2);
   }
   const out = roundTrip({

@@ -59,7 +59,7 @@
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { indiaRoundTrip, pct, sebiRate } from "../../indianDelivery.mjs";
+import { indiaRoundTrip, pct, sebiRate, intradayGap } from "../../indianDelivery.mjs";
 import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
 import { pathToFileURL } from "node:url";
@@ -115,7 +115,7 @@ const SCHEDULE = {
   dpInr: 18.5,
   basis:
     "Courtage livraison : le plus bas de 0,1 % et 20 ₹, et au moins 2 ₹. DP 18,5 ₹ + GST à la vente.",
-  remark: "Intraday is the lower of ₹20 and 0.1%, minimum ₹2.",
+  remark: intradayGap(pct("0.1"), pct("0.1")),
 };
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;

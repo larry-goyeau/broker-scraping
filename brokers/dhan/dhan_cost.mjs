@@ -23,7 +23,7 @@
 //   node brokers/dhan/dhan_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
 //   node brokers/dhan/dhan_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
 
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate, intradayGap } from "../../indianDelivery.mjs";
 import { plus, finite } from "../../na.mjs";
 import { QUOTE, toUsd } from "../../fx.mjs";
 
@@ -100,8 +100,7 @@ const SCHEDULE = {
   sttSides,
   us: usRoundTrip,
   basis: "Courtage livraison 0. DP 12,50 ₹ + GST par ISIN à la vente. STT et stamp arrondis au roupie.",
-  remark:
-    "Intraday is the lower of ₹20 and 0.03% per executed order.",
+  remark: intradayGap(0, pct("0.03")),
 };
 
 export function roundTrip(query) {

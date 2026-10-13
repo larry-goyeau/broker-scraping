@@ -1,4 +1,7 @@
 import crypto from "node:crypto";
+import { execFileSync } from "node:child_process";
+import os from "node:os";
+import path from "node:path";
 import { stampRows } from "../../accepted.mjs";
 import { withoutObligations } from "../../obligation.mjs";
 import { addDepositCurrencies, loadCurrencyEvidence } from "../N26/N26_scraping.mjs";
@@ -635,6 +638,109 @@ function keepDistinctCurrencies(list) {
   }
   return out;
 }
+
+// Webull Hong Kong does not publish its China Connect names. It points at
+// the Hong Kong exchange northbound list. STAR (688) and ChiNext (300, 301)
+// are limited to institutional professional investors, so they stay out.
+// https://www.webull.hk/en/help/faq/1357-List-of-eligible-stocks-for-Northbound-Trading
+const CONNECT_LISTS = [
+  ["https://www.hkex.com.hk/-/media/HKEX-Market/Mutual-Market/Stock-Connect/Eligible-Stocks/View-All-Eligible-Securities_xls/SSE_Securities.xls", "Shanghai"],
+  ["https://www.hkex.com.hk/-/media/HKEX-Market/Mutual-Market/Stock-Connect/Eligible-Stocks/View-All-Eligible-Securities_xls/SZSE_Securities.xls", "Shenzhen"],
+];
+
+function connectIsins() {
+  const index = new Map();
+  for (const file of [stocksCsvPath, etfsCsvPath]) {
+    if (!file || !fs.existsSync(file)) continue;
+    for (const line of fs.readFileSync(file, "utf8").split(/\r?\n/)) {
+      if (!line.trim() || /^ticker\s*,/i.test(line)) continue;
+      const isin = toIsin(line);
+      if (!isin) continue;
+      const cells = line.split(",");
+      const code = normalizeTicker(cells[0]);
+      const exchange = normalize(cells[1]).toUpperCase();
+      if (!code || !/^(SSE|SZSE|XSHG|XSHE)$/.test(exchange)) continue;
+      const board = exchange === "SSE" || exchange === "XSHG" ? "Shanghai" : "Shenzhen";
+      const padded = code.padStart(6, "0");
+      const key = `${board}|${padded}`;
+      if (!index.has(key)) index.set(key, new Set());
+      index.get(key).add(isin);
+    }
+  }
+  return index;
+}
+
+function chinaConnectRows() {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "connect-"));
+  const files = [];
+  for (const [url, board] of CONNECT_LISTS) {
+    const dest = path.join(dir, `${board}.xls`);
+    const bytes = Buffer.from(execFileSync("curl", ["-fsSL", "-A", "Mozilla/5.0", url]));
+    fs.writeFileSync(dest, bytes);
+    files.push([dest, board]);
+  }
+  const parsed = JSON.parse(
+    execFileSync(
+      "python3",
+      [
+        "-c",
+        `
+import json, sys, xlrd
+def code(value):
+    if isinstance(value, float):
+        return str(int(value)).zfill(6)
+    text = str(value).strip()
+    if text.endswith(".0"):
+        text = text[:-2]
+    return text.zfill(6) if text.isdigit() else text
+def restricted(board, code):
+    return (board == "Shanghai" and code.startswith("688")) or (board == "Shenzhen" and (code.startswith("300") or code.startswith("301")))
+out = []
+for path, board in zip(sys.argv[1::2], sys.argv[2::2]):
+    sheet = xlrd.open_workbook(path).sheet_by_index(0)
+    for row in range(5, sheet.nrows):
+        ticker = code(sheet.cell_value(row, 1))
+        kind = str(sheet.cell_value(row, 5)).strip()
+        if not ticker.isdigit() or len(ticker) != 6 or restricted(board, ticker):
+            continue
+        if kind not in ("EQTY", "TRST"):
+            continue
+        out.append({"ticker": ticker, "name": str(sheet.cell_value(row, 3)).strip(), "exchange": board, "type": "ETF" if kind == "TRST" else "STOCK"})
+print(json.dumps(out))
+`,
+        ...files.flat(),
+      ],
+      { encoding: "utf8", maxBuffer: 20_000_000 }
+    )
+  );
+  fs.rmSync(dir, { recursive: true, force: true });
+  const known = connectIsins();
+  return parsed.map((row) => {
+    const ids = known.get(`${row.exchange}|${row.ticker}`);
+    const isin = ids?.size === 1 ? [...ids][0] : "";
+    return {
+      query: row.ticker,
+      ticker: row.ticker,
+      name: row.name,
+      exchange: row.exchange,
+      currency: "CNH",
+      type: row.type,
+      raw: [row.ticker, row.name, row.exchange, "CNH"].filter(Boolean).join(" "),
+      isin,
+    };
+  });
+}
+
+const present = new Set(results.map((row) => `${row.exchange}|${row.ticker}|${row.type}`.toUpperCase()));
+let connectAdded = 0;
+for (const row of chinaConnectRows()) {
+  const key = `${row.exchange}|${row.ticker}|${row.type}`.toUpperCase();
+  if (present.has(key)) continue;
+  present.add(key);
+  results.push(row);
+  connectAdded += 1;
+}
+console.error(`${connectAdded} China Connect listings from the Hong Kong exchange list`);
 
 const currencyEvidence = loadCurrencyEvidence("webull");
 const expanded = keepDistinctCurrencies(

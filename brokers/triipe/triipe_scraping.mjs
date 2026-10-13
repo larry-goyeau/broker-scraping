@@ -4,7 +4,9 @@
 // names the ETF ETFPERUD, and neither page lists it, so it stays out.
 //
 // A Lima card is the ticker, the name and BVL. The card names no
-// currency, so a Lima line is soles. A Nasdaq, NYSE or NYSE American
+// currency, so a Lima line is soles. Trii prints no ISIN. The shared
+// list's BVL line for that ticker is used when it names exactly one.
+// A Nasdaq, NYSE or NYSE American
 // card names that board. Those three are one national quote, so the
 // place is US and the currency is dollars. GDX is on both pages, once
 // as AMEX and once as NYSE, and one row is kept.
@@ -13,12 +15,16 @@
 // VanEck, Vanguard, Global X, Direxion, US Global or Invesco's QQQ or
 // Bitcoin fund is an ETF. Anything else stays a share. Trii prints no
 // ISIN, so on a US line the code is the one the other catalogues
-// already agree on for that ticker. A Lima line keeps none.
+// already agree on for that ticker.
+//
+// Trii Colombia is a different firm. The Peru FAQ says an order cannot
+// cross from one app to the other, so the Bogotá list stays out.
 //
 //   https://trii.pe/stock-list
 //   https://trii.pe/stock-list-global
+//   https://trii.pe/faq
 //
-//   node brokers/trii/trii_scraping.mjs
+//   node brokers/triipe/triipe_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
 import { stampIsinMatches } from "../../isinMatches.mjs";
@@ -27,6 +33,7 @@ import { catalogueFiles } from "../../catalogues.mjs";
 import { resolveVenue } from "../../spreads/venues.mjs";
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 const ORIGIN = "https://trii.pe";
 const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36";
@@ -121,7 +128,7 @@ function globalRows(html) {
 function isinBook() {
   const book = new Map();
   for (const file of catalogueFiles()) {
-    if (path.basename(path.dirname(file)) === "trii") continue;
+    if (path.basename(path.dirname(file)) === "triipe") continue;
     const parsed = JSON.parse(fs.readFileSync(file, "utf8"));
     const rows = Array.isArray(parsed) ? parsed : parsed.rows || [];
     for (const row of rows) {
@@ -135,6 +142,26 @@ function isinBook() {
         if (!book.has(id)) book.set(id, new Set());
         book.get(id).add(isin);
       }
+    }
+  }
+  return book;
+}
+
+function limaIsins() {
+  const book = new Map();
+  for (const name of ["../../assets/stocks.csv", "../../assets/etfs.csv"]) {
+    const file = fileURLToPath(new URL(name, import.meta.url));
+    if (!fs.existsSync(file)) continue;
+    for (const line of fs.readFileSync(file, "utf8").split(/\r?\n/)) {
+      if (!line.trim() || /^ticker\s*,/i.test(line)) continue;
+      const columns = line.split(",");
+      if (String(columns[1] || "").trim().toUpperCase() !== "BVL") continue;
+      const ticker = String(columns[0] || "").split(":").pop().trim().toUpperCase();
+      const isin = isinOf(columns[2]);
+      if (!ticker || !isin) continue;
+      const held = book.get(ticker) || new Set();
+      held.add(isin);
+      book.set(ticker, held);
     }
   }
   return book;
@@ -217,15 +244,19 @@ if (unique.filter((row) => row.exchange === "US" && row.type === "ETF").length <
 if (unique.some((row) => row.ticker === "ETFPERUD")) throw new Error("ETFPERUD was on a list");
 
 const isins = isinBook();
+const limaCodes = limaIsins();
 for (const row of unique) {
   if (row.exchange === "US") Object.assign(row, joined(row.ticker, isins));
-  else row.isin = "";
+  else if (row.exchange === "BVL") {
+    const ids = limaCodes.get(row.ticker);
+    row.isin = ids && ids.size === 1 ? [...ids][0] : "";
+  } else row.isin = "";
 }
 const apple = unique.find((row) => row.ticker === "AAPL");
 if (!apple.isin) throw new Error("Apple had no ISIN");
 
 const kept = stampRows(withoutObligations(unique));
-fs.writeFileSync(new URL("trii-parsed.json", import.meta.url), JSON.stringify(kept, null, 2));
+fs.writeFileSync(new URL("triipe-parsed.json", import.meta.url), JSON.stringify(kept, null, 2));
 
 const byType = new Map();
 const byPlace = new Map();

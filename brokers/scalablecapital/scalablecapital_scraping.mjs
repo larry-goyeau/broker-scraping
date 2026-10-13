@@ -83,11 +83,13 @@ function loadCryptoTickers(csvPath) {
   return tickers;
 }
 
-// Scalable quotes a line on one book and names it with its own code. gettex and
-// Xetra are in the venue registry already; SEIX is the European Investor Exchange,
-// the Börse Hannover system Scalable runs with BÖAG under MIC HANC / HAND, which
-// the registry does not carry yet — so its own name is kept rather than filed
-// under Munich, which is a different order book.
+// Scalable quotes a line on one book and names it with its own code. The order
+// ticket can still offer Xetra beside that quote, and a tradable Xetra line is
+// kept as its own row. gettex and Xetra are in the venue registry already; SEIX
+// is the European Investor Exchange, the Börse Hannover system Scalable runs
+// with BÖAG under MIC HANC / HAND, which the registry does not carry yet — so
+// its own name is kept rather than filed under Munich, which is a different
+// order book.
 //
 // XVES is the fund company (an order at NAV, not an exchange), SCSI Scalable's own
 // crypto book and XOFF off-exchange. None of the three is a listing.
@@ -339,7 +341,16 @@ function searchDocument(size) {
     name
     type
     quoteTick(includeSinceBuy: false) { venue currency }
+    buyTradabilityForTrading { venues { venue tradabilityStatus } }
   }`;
+}
+
+function xetraTradable(hit) {
+  return (hit.buyTradabilityForTrading?.venues || []).some(
+    (venue) =>
+      normalize(venue.venue).toUpperCase() === "XETR" &&
+      String(venue.tradabilityStatus || "").startsWith("TRADABLE")
+  );
 }
 
 async function searchBatch(isins) {
@@ -369,7 +380,8 @@ function ingest(isin, shelves) {
   }
 
   const exchange = venueOf(hit.quoteTick?.venue);
-  if (!exchange) {
+  const xetra = xetraTradable(hit);
+  if (!exchange && !xetra) {
     // No quote venue means the fund company or no book at all, not a listing.
     skip(hit.quoteTick?.venue ? `quoted ${hit.quoteTick.venue}` : "no quote");
     return;
@@ -378,17 +390,20 @@ function ingest(isin, shelves) {
   const currency = normalize(hit.quoteTick?.currency).toUpperCase() || "EUR";
   const ticker = listed?.homeTicker || listed?.ticker || normalize(hit.wkn).toUpperCase();
   const name = normalize(hit.name) || listed?.names[0] || isin;
-
-  push({
+  const type = listingType(hit, listed?.kind);
+  const row = (place, venueCode) => ({
     query: isin,
     ticker,
     name,
-    exchange,
+    exchange: place,
     currency,
-    type: listingType(hit, listed?.kind),
-    raw: [hit.wkn, hit.name, hit.quoteTick?.venue, currency].filter(Boolean).join(" "),
+    type,
+    raw: [hit.wkn, hit.name, venueCode, currency].filter(Boolean).join(" "),
     isin,
   });
+
+  if (exchange) push(row(exchange, hit.quoteTick.venue));
+  if (xetra && exchange !== "XETR") push(row("XETR", "XETR"));
 }
 
 const batches = [];

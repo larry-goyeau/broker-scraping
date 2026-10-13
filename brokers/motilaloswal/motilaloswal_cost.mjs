@@ -43,7 +43,7 @@
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate, intradayGap } from "../../indianDelivery.mjs";
 import { fxRemark, toUsd } from "../../fx.mjs";
 import { qOf } from "../../spreads/rule606.mjs";
 import { plus, finite } from "../../na.mjs";
@@ -66,7 +66,7 @@ const SCHEDULE = {
   gstOnTxn: false,
   gstOnSebi: false,
   basis: "Courtage livraison 0,20 % par exécution, plus GST 18 % sur ce courtage.",
-  remark: "If the sale is the same day, brokerage fees is -0.18%.",
+  remark: intradayGap(pct("0.20"), pct("0.02")),
   us: usBook,
 };
 

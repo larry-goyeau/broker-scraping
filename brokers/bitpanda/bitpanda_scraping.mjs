@@ -308,9 +308,9 @@ const ASSET_FIELDS = `
   name
   symbol
   __typename
-  ... on EquityEtfAsset { wkn issuer legalName exchange { name } }
-  ... on EquityEtcAsset { wkn issuer legalName exchange { name } }
-  ... on EquityStockAsset { wkn legalName exchange { name } }`;
+  ... on EquityEtfAsset { wkn issuer legalName exchange { name } metrics { isin } }
+  ... on EquityEtcAsset { wkn issuer legalName exchange { name } metrics { isin } }
+  ... on EquityStockAsset { wkn legalName exchange { name } metrics { isin } }`;
 
 const LIST_QUERY = `query AssetList($facets: [FacetOptionInput!], $first: Int, $after: String) {
   assets(
@@ -357,8 +357,8 @@ async function loadShelf(facet) {
 // Bitpanda's own search reads ISINs, so an identifier can be put to it and the
 // answer compared against the listing in hand. That turns a likeness of names
 // into a plain yes or no, which matters where a ticker covers several share
-// classes. Shares do not carry an ISIN on the object itself; the search is
-// how the number is recovered.
+// classes. The fiche also carries the ISIN under metrics, which is what keeps
+// a title the CSV does not know.
 async function confirmIsin(asset, candidates) {
   for (const candidate of candidates) {
     const data = await graphql(SEARCH_QUERY, { query: candidate.isin, first: 5 });
@@ -458,20 +458,22 @@ await inParallel(toMatch, 3, async (asset) => {
     : distinct.length > 0
       ? await confirmIsin(asset, distinct.slice(0, MOST_TO_TRY))
       : null;
+  const ownIsin = toIsin(asset.metrics?.isin);
+  const isin = found?.isin || ownIsin;
 
   done += 1;
   if (done % 250 === 0) console.error(`  ${done}/${toMatch.length} settled, ${asked} put to Bitpanda`);
 
-  if (!found) {
+  if (!isin) {
     unmatched += 1;
     return;
   }
-  if (claimed.has(found.isin)) return;
-  claimed.add(found.isin);
+  if (claimed.has(isin)) return;
+  claimed.add(isin);
 
   const name = String(asset.legalName || asset.name || "").replace(/\s+/g, " ").trim();
   results.push({
-    query: found.isin,
+    query: isin,
     ticker,
     name,
     exchange: (asset.exchange?.name || "").toUpperCase() || null,
@@ -480,7 +482,7 @@ await inParallel(toMatch, 3, async (asset) => {
     currency: "EUR",
     type: kind,
     raw: [asset.name, ticker, asset.wkn, asset.issuer].filter(Boolean).join(" "),
-    isin: found.isin,
+    isin,
   });
 });
 

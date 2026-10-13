@@ -25,7 +25,7 @@
 //
 //   node brokers/zebu/zebu_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
 
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate, intradayGap } from "../../indianDelivery.mjs";
 
 const SCHEDULE = {
   broker: "Zebu",
@@ -42,7 +42,7 @@ const SCHEDULE = {
   gstOnDp: true,
   dpInr: (notional) => Math.max(25, Math.round(notional * pct("0.03") * 100) / 100),
   basis: "Courtage livraison 0,5 % par ordre, tarif signé. DP 0,03 % de la vente, minimum 25 ₹, plus GST.",
-  remark: "Intraday is 0.05% per executed order. AMC is ₹300 a year, or ₹1,111 once.",
+  remark: `${intradayGap(pct("0.5"), pct("0.05"))} AMC is ₹300 a year, or ₹1,111 once.`,
 };
 
 export function roundTrip(query) {

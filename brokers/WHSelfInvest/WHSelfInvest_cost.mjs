@@ -19,9 +19,15 @@
 // floor (9.95 vs 14 CHF) and the Xetra cap (99 vs 89 €); the exchange
 // table is the one copied.
 //
-//   Xetra              0.09 %, min 3.90 €, cap 89 €
-//   Frankfurt          0.09 %, min 3.90 €  + specialist 5.04 bp, min 2.52 €
-//   Stuttgart          0.09 %, min 5.90 €  (+ specialist on the page)
+//   Xetra              0.09 %, min 3.90 €
+//                      The page's 89 € cap is not the real account. On
+//                      2026-10-13 U27795602 asked for 180 € on 200 000 €.
+//   Frankfurt          0.09 %, min 3.90 €
+//                      The page prints a specialist. On 2026-10-13
+//                      U27795602 asked for the same 3.90 € as Xetra.
+//   Stuttgart          0.09 %, min 3.90 €
+//                      The page's 5.90 € is not this account: 4 000 €
+//                      asked for 3.90 €.
 //   Chi-X / BATS / Tradegate / Turquoise DE
 //                      0.09 %, min 1.90 €
 //   USA listed         0.01 $/share, min 1.90 $, cap 1 %
@@ -31,20 +37,22 @@
 //   UK                 0.10 %, min 7 £
 //   Switzerland        0.09 %, min 14 CHF
 //   Netherlands        0.09 %, min 1.90 €
-//   AT / BE / FR / ES / IT / SE / Vienna
+//   AT                 0.09 %, min 2.65 €   (voestalpine, same account)
+//   BE / FR / ES / IT / SE
 //                      0.09 %, min 3.90 €
+//   Vienna was grouped with those floors. The ticket is 2.65 €.
 //   Norway             0.09 %, min 59 NOK
 //   Mexico             0.20 %, min 70 MXN
 //   Japan              0.09 %, min 200 JPY
 //   Hong Kong          0.09 %, min 19 HKD
 //   Australia          0.09 %, min 9.90 AUD
 //
-// "All exchange fees are included (exceptions are marked)." The Frankfurt
-// specialist is that exception. A cash check on 2026-09-29, account
-// U27795602, Lufthansa at 7.73 €: Xetra asked for the 3.90 € floor, Frankfurt
-// asked for 2.52 € more, on one share and on a hundred. That is the
-// published minimum, so the 5.04 bp on the card is what bills once the
-// order is large enough. Stuttgart's specialist is still only on the page.
+// "All exchange fees are included (exceptions are marked)." The page marks
+// a Frankfurt specialist. On 2026-10-13, account U27795602, nothing sent:
+// Lufthansa on FWB and on Xetra both asked for 3.90 € on 4 000 €, and one
+// share near the market printed the same 1.90 … 3.90 € range. The
+// specialist is not in the number. Stuttgart's specialist stays on the
+// page only.
 // TASE is not on the card. On 2026-10-10 the open portal previewed TEVA
 // routed to TASE and nothing was sent. The quote is in agorot: a limit of
 // 12,000 was a share at 120 ILS. One, ten and one hundred shares asked for
@@ -84,7 +92,9 @@
 // to HEX and nothing was sent. One, 20, 100 and 500 shares at 9.26
 // asked for 3 EUR. 2 000 shares asked for 9.26 EUR, which is 0.05 % of
 // 18 520. 20 000 shares asked for 92.60 EUR, still 0.05 %. No cap
-// appeared. That is IBKR fixed for western Europe. Ljubljana is not on
+// appeared. That is IBKR fixed for western Europe. The real account
+// U27795602 on 2026-10-13 does not bill it: 0.09 %, minimum 3.90 €.
+// Ljubljana is not on
 // the card either. On 2026-10-10 the open portal previewed KRKG routed
 // to LJSE and nothing was sent. One share at 258 asked for 3 EUR. Ten
 // shares asked for 9.03 EUR, which is 0.35 % of 2 580. Fifty, 100, 400
@@ -94,7 +104,8 @@
 // GETTEX and to GETTEX2 and nothing was sent. One, ten and a hundred
 // shares at 53.60 asked for 3 EUR. Four hundred shares asked for
 // 10.72 EUR, which is 0.05 % of 21,440. Two thousand shares asked for
-// 53.60 EUR, still 0.05 % of 107,200. No cap appeared. São Paulo is not
+// 53.60 EUR, still 0.05 % of 107,200. No cap appeared. The real account
+// U27795602 on 2026-10-13 bills 0.09 %, minimum 3.90 €. São Paulo is not
 // on the card either. On 2026-10-10 the open portal previewed PETR4
 // routed to B3 and nothing was sent. One share at 56 BRL asked for
 // 0.06 BRL. One hundred shares asked for 5.60, one thousand for 56,
@@ -131,7 +142,6 @@
 // of a cheap share cut under 1.90 $.
 //
 // What is in the number: the commission each way at its floor and cap;
-// the Frankfurt specialist, 5.04 bp with a minimum of 2.52 €, each way;
 // OTC clearing as printed; UK 0.50 % and Irish 1 % stamp on a share
 // purchase (taxMap, else the rates the page says it passes through);
 // French / Italian FTT, which the page says it withholds (Italy is
@@ -141,7 +151,10 @@
 // are not on the page and are not invented.
 //
 // Cash is not imposed — the IBKR account holds the listing currency —
-// so FX (0.2 bp, min printed per pair) stays in the remark. Inactivity
+// so FX stays in the remark. On 2026-10-13, account U27795602, nothing
+// sent: selling euros on IDEALPRO asked for a flat euro amount, the same
+// at 100 € and at 1 000 €. The 0.2 bp is still under that minimum here.
+// Inactivity
 // (1 $ / month under 1 000 $ NAV with no order), the first withdrawal
 // free then 1 € SEPA / 8 € wire, and real-time quotes stay in the remark.
 // USA-ADRs print 0.01–0.02 $/share with no floor: the trip uses 0.01, in
@@ -182,8 +195,6 @@ const UK_STAMP = 0.005;
 const IE_STAMP = 0.01;
 const US_MICS = new Set(["XNAS", "XNYS", "ARCX", "XASE", "BATS", "IEXG"]);
 const US_EX = new Set(["NASDAQ", "NYSE", "AMEX", "ARCA", "BATS", "IEX"]);
-const ADR_NAMED = /\b(ADR|GDR|ADS)\b/i;
-
 const OWN_FTT = { IT: { name: "ITALIAN_FTT", rate: 0.001 } };
 
 const SPECIALIST_ON_PAGE = {
@@ -194,6 +205,14 @@ const SPECIALIST_ON_PAGE = {
 const WITHDRAW = { firstFree: true, sepa: 1, wire: 8, ccy: "EUR" };
 const INACTIVITY = { navBelow: 1000, fee: 1, ccy: "USD" };
 const FX_BP = 0.00002;
+// The portal billed euros. These are that charge times the EUR.USD bid
+// of the same preview, 1.12014. U27795602, 2026-10-13, nothing sent.
+const FX_MIN_USD = {
+  USD: 3.52, GBP: 4.64, CHF: 4.21, ZAR: 3.64, PLN: 3.57,
+  ILS: 3.26, SGD: 3.06, CNH: 3, HUF: 2.77, CAD: 2.46,
+  AUD: 2.44, HKD: 2.43, DKK: 2.25, MXN: 2.14,
+  JPY: 2.01, SEK: 2.01, NOK: 2.01, CZK: 2.01,
+};
 
 const RULE = {
   us: { perShare: 0.01, min: 1.9, maxPct: 0.01, ccy: "USD" },
@@ -202,11 +221,16 @@ const RULE = {
   adr: { perShare: 0.01, ccy: "USD" },
   ca: { perShare: 0.01, min: 1, maxPct: 0.01, ccy: "CAD" },
   otc: { perShareLow: 0.00003, perShareHigh: 0.003, clearPerShare: 0.0002, clearMaxPct: 0.005, ccy: "USD" },
-  xetra: { rate: 0.0009, min: 3.9, max: 89, ccy: "EUR" },
+  // U27795602, 2026-10-13. 0.09 % from 10 000 € (9 €) through 200 000 €
+  // (180 €). The page's 89 € cap does not bind.
+  xetra: { rate: 0.0009, min: 3.9, ccy: "EUR" },
   cheap: { rate: 0.0009, min: 1.9, ccy: "EUR" },
   frankfurt: { rate: 0.0009, min: 3.9, ccy: "EUR" },
-  stuttgart: { rate: 0.0009, min: 5.9, ccy: "EUR" },
-  at: { rate: 0.0009, min: 3.9, ccy: "EUR" },
+  // U27795602, 2026-10-13. 4 000 € asked for 3.90 €, not the page's 5.90 €.
+  stuttgart: { rate: 0.0009, min: 3.9, ccy: "EUR" },
+  // Same account. One voestalpine share at 1 € asked for 2.65 €.
+  // 100 000 € asked for 90 €, which is 0.09 %.
+  at: { rate: 0.0009, min: 2.65, ccy: "EUR" },
   ch: { rate: 0.0009, min: 14, ccy: "CHF" },
   uk: { rate: 0.001, min: 7, ccy: "GBP" },
   fr: { rate: 0.0009, min: 3.9, ccy: "EUR" },
@@ -214,7 +238,9 @@ const RULE = {
   nl: { rate: 0.0009, min: 1.9, ccy: "EUR" },
   es: { rate: 0.0009, min: 3.9, ccy: "EUR" },
   it: { rate: 0.0009, min: 3.9, ccy: "EUR" },
-  se: { rate: 0.0009, min: 3.9, ccy: "EUR" },
+  // U27795602, 2026-10-13. Apotea and Axfood asked for 39 SEK
+  // through 2 000 SEK. The 0.09 % is still under that floor.
+  se: { rate: 0.0009, min: 39, ccy: "SEK" },
   no: { rate: 0.0009, min: 59, ccy: "NOK" },
   mx: { rate: 0.002, min: 70, ccy: "MXN" },
   jp: { rate: 0.0009, min: 200, ccy: "JPY" },
@@ -225,22 +251,25 @@ const RULE = {
   // Not on the card. Portal preview of 3REN, 2026-10-02. Statutory pieces
   // are added beside this rate in bursaStatutory.
   my: { rate: 0.0008, min: 12, ccy: "MYR" },
-  // Not on the card. Portal preview of PKO and ETFBCASH, 2026-10-05.
-  wse: { rate: 0.001, min: 15, ccy: "PLN" },
-  // Not on the card. Portal preview of EMBLA on CPH, 2026-10-07.
-  cph: { rate: 0.0005, min: 49, ccy: "DKK" },
+  // U27795602, 2026-10-13. PKO asked for 20 PLN through 1 000 PLN.
+  // The 0.10 % is still under that floor. The 15 PLN was an older preview.
+  wse: { rate: 0.001, min: 20, ccy: "PLN" },
+  // U27795602, 2026-10-13. Not the 49 DKK of the earlier preview.
+  // XACTC25 and Better Collective printed about 10 … 16.31 DKK through
+  // 2 000 DKK. The 0.05 % is still under that top.
+  cph: { rate: 0.0005, min: 16.31, ccy: "DKK" },
   // Not on the card. Portal preview of CEZ on PRA, 2026-10-08.
   // IBKR fixed: 0.15 %, minimum 70 CZK, no cap.
   pra: { rate: 0.0015, min: 70, ccy: "CZK" },
-  // Not on the card. Portal preview of NOKIA on HEX, 2026-10-08.
-  // IBKR fixed western Europe: 0.05 %, minimum 3 EUR, no cap seen.
-  hel: { rate: 0.0005, min: 3, ccy: "EUR" },
+  // U27795602, 2026-10-13. Not the 0.05 % / 3 € of the earlier portal.
+  // 4 000 € asked for 3.90 €, 10 000 € for 9 €. Same 0.09 % as Xetra.
+  hel: { rate: 0.0009, min: 3.9, ccy: "EUR" },
   // Not on the card. Portal preview of KRKG on LJSE, 2026-10-10.
   // IBKR fixed Slovenia: 0.35 %, minimum 3 EUR, no cap seen.
   si: { rate: 0.0035, min: 3, ccy: "EUR" },
-  // Not on the card. Portal preview of BMW on GETTEX and GETTEX2, 2026-10-10.
-  // 0.05 %, minimum 3 EUR, no cap through 107,200 EUR.
-  gettex: { rate: 0.0005, min: 3, ccy: "EUR" },
+  // U27795602, 2026-10-13. Not the 0.05 % / 3 € of the earlier portal.
+  // BMW on GETTEX: 4 000 € asked for 3.90 €, 10 000 € for 9 €.
+  gettex: { rate: 0.0009, min: 3.9, ccy: "EUR" },
   // Not on the card. Portal preview of PETR4 on B3, 2026-10-10.
   // 0.10 % at every size. One share at 0.50 BRL asked for 0.00, so no floor.
   // No cap through 1,120,000 BRL.
@@ -249,15 +278,29 @@ const RULE = {
   // 0.08 %, minimum 2.50 SGD, no cap through 733,600 SGD.
   sg: { rate: 0.0008, min: 2.5, ccy: "SGD" },
   // Not on the card. Portal preview of 2222 on TADAWUL, 2026-10-10.
-  // 0.10 % at every size. One share at 1 SAR asked for 0.00, so no floor.
-  // No cap through 514,800 SAR.
-  sar: { rate: 0.001, ccy: "SAR" },
+  // U27795602, 2026-10-13. 2222: 0.105 %. 200 SAR asked for 0.21,
+  // 2 000 for 2.10. One share at 10 SAR asked for 0.01.
+  sar: { rate: 0.00105, ccy: "SAR" },
   // Not on the card. Portal preview of TEVA on TASE, 2026-10-10.
   // 0.10 %, minimum 15 ILS. No cap through 600,000 ILS.
   ils: { rate: 0.001, min: 15, ccy: "ILS" },
   // Not on the card. Portal preview of 2330 on TWSE, 2026-10-10.
   // The larger of 0.10 % and 80 TWD plus 0.02 %. No cap through 12,750,000 TWD.
   twd: { rate: 0.001, min: 80, floorRate: 0.0002, ccy: "TWD" },
+  // Real account U27795602, 2026-10-13, nothing sent. Not the demo band.
+  // OTP: 200 HUF plus 0.52 %. 100 HUF asked for 200.52, 40 000 for 408,
+  // 80 000 for 616, 400 000 for 2 280. The 200 is added, not a floor.
+  bux: { rate: 0.0052, plus: 200, ccy: "HUF" },
+  // Not on the card. Real account U27795602, 2026-10-13, nothing sent.
+  // Banca Transilvania: 1 000 RON asked for 10, 5 000 for 14, 8 000 for
+  // 22.40. Same 0.28 %, floor 10 RON, as the demo. No cap.
+  bvb: { rate: 0.0028, min: 10, ccy: "RON" },
+  // Not on the card. Real account U27795602, 2026-10-13, nothing sent.
+  // The demo floor was 15 CNH. Moutai and Wuliangye asked for 20 CNH
+  // from 1 000 CNH through 15 000 CNH. This balance cannot reach the
+  // notional where 0.08 % would clear 20 CNH, so the slope stays the
+  // demo's.
+  connect: { rate: 0.0008, min: 20, ccy: "CNH" },
 };
 
 const TO_VENUES = {
@@ -298,14 +341,16 @@ const isStock = (listing) => String(listing?.type || "").toUpperCase() === "STOC
 const isCrypto = (row) =>
   String(row?.type || "").toUpperCase() === "CRYPTO" || /^(ZEROHASH|PAXOS|CRYPTO)$/i.test(String(row?.exchange || ""));
 const isAmerican = (exchange, mic) => US_MICS.has(String(mic || "").toUpperCase()) || US_EX.has(loose(exchange));
-const isAdr = (row) => ADR_NAMED.test(String(row?.name || ""));
-
 export function feeMarketOf(exchange, mic, currency) {
   const code = loose(exchange);
   const m = String(mic || "").toUpperCase();
   const ccy = String(currency || "").toUpperCase();
   if (code === "ZEROHASH" || code === "PAXOS" || code === "CRYPTO") return "crypto";
-  if (code === "PINK" || code === "VALUE" || code === "ARCAEDGE" || code === "OTCBB" || /PINK|OTCM/i.test(code)) {
+  // Tencent on PINK, U27795602, 2026-10-13: 1 share asked for 1.90 USD
+  // and 400 shares at 4 USD asked for 4 USD. That is the listed US
+  // schedule, not the OTC card.
+  if (code === "PINK" || /PINK|OTCM/i.test(code)) return "us";
+  if (code === "VALUE" || code === "ARCAEDGE" || code === "OTCBB") {
     return "otc";
   }
   if (m === "BATE" || m === "CHIX" || m === "TRQX" || code === "BATSEUR" || code === "CHIX" || code === "TRQX") {
@@ -326,7 +371,7 @@ export function feeMarketOf(exchange, mic, currency) {
   if (code === "VSE" || m === "XWBO") return "at";
   if (code === "EBS" || m === "XSWX") return "ch";
   if (code === "LSE" || code === "LSEETF" || code === "LSEIOB1" || code === "AQSE" || m === "XLON") return "uk";
-  if (code === "TSE" || code === "TSX" || code === "VENTURE" || code === "AEQLIT" || m === "XTSE") return "ca";
+  if (code === "TSE" || code === "TSX" || code === "VENTURE" || code === "AEQLIT" || code === "PURE" || m === "XTSE") return "ca";
   if (code === "TSEJ" || m === "XJPX" || m === "XTKS") return "jp";
   if (code === "SBF" || m === "XPAR") return "fr";
   if (code === "AEB" || m === "XAMS") return "nl";
@@ -351,6 +396,9 @@ export function feeMarketOf(exchange, mic, currency) {
   if ((code === "TADAWUL" || m === "XSAU") && (ccy === "SAR" || !ccy)) return "sar";
   if ((code === "TASE" || m === "XTAE") && (ccy === "ILS" || !ccy)) return "ils";
   if ((code === "TWSE" || m === "XTAI") && (ccy === "TWD" || !ccy)) return "twd";
+  if ((code === "SEHKNTL" || code === "SEHKSZSE") && (ccy === "CNH" || !ccy)) return "connect";
+  if (code === "BUX" && (ccy === "HUF" || !ccy)) return "bux";
+  if (code === "BVB" && ccy === "RON") return "bvb";
   return null;
 }
 
@@ -431,8 +479,16 @@ export function taxesFor(isin, listing) {
 
 function remarkOf({ listing, market } = {}) {
   const lines = [];
-  const settle = fxCcy(listing?.currency);
-  if (market !== "crypto") lines.push(fxRemark((100 * FX_BP).toFixed(3).replace(/\.?0+$/, ""), settle));
+  const raw = String(listing?.currency || "").toUpperCase();
+  const settle = fxCcy(raw);
+  const fxMin = FX_MIN_USD[raw === "CNH" ? "CNH" : settle];
+  if (market !== "crypto") {
+    lines.push(
+      fxMin != null
+        ? `FX min ${fxMin.toFixed(2)} USD when cash ≠ ${settle}.`
+        : fxRemark((100 * FX_BP).toFixed(3).replace(/\.?0+$/, ""), settle)
+    );
+  }
   if (market === "adr") lines.push("USA-ADRs print $0.01–0.02/share; 0.01 used.");
   if (market === "stuttgart") {
     const s = SPECIALIST_ON_PAGE.stuttgart;
@@ -450,10 +506,7 @@ function specialistSide(amountEur, spec) {
   return { raw, charged, floored: charged > raw, currency: "EUR" };
 }
 
-/**
- * One side's commission, at the floor and under the cap.
- */
-export // Stamp, clearing and the flat settlement the portal folds into the
+// Stamp, clearing and the flat settlement the portal folds into the
 // commission line. An ETF pays no stamp.
 function bursaStatutory(notional, type) {
   const fund = /^(ETF|ETN|ETC)$/.test(String(type || "").toUpperCase());
@@ -462,7 +515,10 @@ function bursaStatutory(notional, type) {
   return stamp + clearing + 43.4;
 }
 
-function commissionSide({ shares, amount, price, market }) {
+/**
+ * One side's commission, at the floor and under the cap.
+ */
+export function commissionSide({ shares, amount, price, market }) {
   const rule = RULE[market];
   if (!rule) return null;
 
@@ -500,6 +556,16 @@ function commissionSide({ shares, amount, price, market }) {
   }
 
   if (amount == null || !Number.isFinite(Number(amount))) return null;
+  if (rule.plus != null) {
+    const raw = Number(amount) * rule.rate + rule.plus;
+    return { raw, charged: raw, floored: false, capped: false, currency: rule.ccy };
+  }
+  if (rule.band != null && rule.bandRate != null) {
+    const n = Number(amount);
+    const raw = n <= rule.band ? n * rule.rate : rule.band * rule.rate + (n - rule.band) * rule.bandRate;
+    const floored = rule.min != null ? Math.max(rule.min, raw) : raw;
+    return { raw, charged: floored, floored: rule.min != null && raw < rule.min, capped: false, currency: rule.ccy };
+  }
   if (rule.floorRate != null) {
     const n = Number(amount);
     const pct = n * rule.rate;
@@ -557,7 +623,10 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   };
 
   const listed = feeMarketOf(m.row.exchange, listing.mic, listing.currency);
-  const market = listed === "us" && isAdr(listing) ? "adr" : listed;
+  // BABA on NYSE, same account: 1 share asked for 1.90 USD and 200 shares
+  // at 5 USD asked for 2 USD. The order is the US schedule. The printed
+  // 0.01–0.02 $/share ADR fee was not on that preview.
+  const market = listed;
   const rule = market && market !== "crypto" ? RULE[market] : null;
   const leaf = book.leaf;
   const marketBp = bp ?? leaf?.bp ?? null;
@@ -618,12 +687,19 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
           ? `barème WH SelfInvest ${market}, aperçu du portail le 2026-10-05 : `
           : market === "cph"
             ? `barème WH SelfInvest ${market}, aperçu du portail le 2026-10-07 : `
-            : market === "si" || market === "gettex" || market === "brl" || market === "sg" || market === "sar" || market === "ils" || market === "twd"
+            : market === "si" || market === "brl" || market === "sg" || market === "sar" || market === "ils" || market === "twd"
               ? `barème WH SelfInvest ${market}, aperçu du portail le 2026-10-10 : `
-              : market === "pra" || market === "hel"
+              : market === "pra"
                 ? `barème WH SelfInvest ${market}, aperçu du portail le 2026-10-08 : `
+                : market === "hel" || market === "gettex" || market === "bux" || market === "bvb" || market === "connect"
+                  ? `barème WH SelfInvest ${market}, aperçu du compte U27795602 le 2026-10-13 : `
             : `barème WH SelfInvest ${market}, relu le ${SCHEDULE.readOn} : `) +
-    (rule.floorRate != null
+    (rule.plus != null
+      ? `${(100 * rule.rate).toFixed(2)} % plus ${rule.plus} ${rule.ccy} par ordre`
+      : rule.band != null
+      ? `${(100 * rule.rate).toFixed(2)} % jusqu'à ${rule.band} ${rule.ccy}, puis ${(100 * rule.bandRate).toFixed(2)} %` +
+        (rule.min != null ? `, plancher ${rule.min} ${rule.ccy}` : "")
+      : rule.floorRate != null
       ? `0,10 % par sens, ou ${rule.min} ${rule.ccy} plus 0,02 % si c'est davantage`
       : (rule.rate != null
       ? `${(100 * rule.rate).toFixed(2)} % par sens`
@@ -632,7 +708,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
         : `${rule.perShare} ${rule.ccy} par part`) +
     (rule.min != null ? `, plancher ${rule.min} ${rule.ccy}` : "") +
     (rule.max != null ? `, plafond ${rule.max} ${rule.ccy}` : "") +
-    (rule.maxPct != null ? `, plafond ${(100 * rule.maxPct).toFixed(0)} % du montant` : "")) +
+    (rule.maxPct != null ? `, plafond ${(100 * rule.maxPct).toFixed(Number.isInteger(100 * rule.maxPct) ? 0 : 1)} % du montant` : "")) +
     (market === "my"
       ? `, plus timbre 0,1 % arrondi au ringgit supérieur (plafond 1 000, aucun sur un ETF), compensation 0,03 % (plafond 1 000) et 43,40 MYR de règlement`
       : "");
@@ -666,7 +742,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const sellCharged = sellComm ? sellComm.charged + bursaExtra : null;
   const buyCommUsd = buyCharged != null ? dollars(buyCharged, buyComm.currency) : null;
   const sellCommUsd = sellCharged != null ? dollars(sellCharged, sellComm.currency) : null;
-  const specialist = market === "frankfurt" ? specialistSide(notionalInRule, SPECIALIST_ON_PAGE.frankfurt) : null;
+  const specialist = null;
   const specialistUsd = specialist ? dollars(specialist.charged, specialist.currency) : 0;
   const specialistRoundUsd = specialist ? plus(specialistUsd, specialistUsd) : 0;
 
@@ -777,11 +853,11 @@ function confidenceOf({
           : market === "pra"
             ? `commission WH SelfInvest, palier ${market}, aperçu CEZ sur PRA le 2026-10-08, `
             : market === "hel"
-              ? `commission WH SelfInvest, palier ${market}, aperçu NOKIA sur HEX le 2026-10-08, `
+              ? `commission WH SelfInvest, palier ${market}, aperçu NOKIA sur HEX le 2026-10-13, `
               : market === "si"
                 ? `commission WH SelfInvest, palier ${market}, aperçu KRKG sur LJSE le 2026-10-10, `
                 : market === "gettex"
-                  ? `commission WH SelfInvest, palier ${market}, aperçu BMW sur GETTEX le 2026-10-10, `
+                  ? `commission WH SelfInvest, palier ${market}, aperçu BMW sur GETTEX le 2026-10-13, `
                   : market === "brl"
                     ? `commission WH SelfInvest, palier ${market}, aperçu PETR4 sur B3 le 2026-10-10, `
                     : market === "sg"
@@ -805,6 +881,12 @@ function confidenceOf({
           : rule.min != null
             ? `au-dessus du plancher : ${Number(buyComm.charged).toPrecision(4)} ${rule.ccy} par sens`
             : `${Number(buyComm.charged).toPrecision(4)} ${rule.ccy} par sens`
+    );
+  }
+  if (market === "frankfurt") {
+    said.push(
+      `spécialiste Francfort marqué sur la carte, hors total : ` +
+        `le 2026-10-13 U27795602 demande le même 3,90 € que Xetra`
     );
   }
   if (market === "stuttgart") {
@@ -852,7 +934,7 @@ function confidenceOf({
     );
   }
   said.push(
-    `hors total : la conversion à ${FX_BP * 1e4} bp, qui dépend de la trésorerie. ` +
+    `hors total : la conversion, plancher mesuré le 2026-10-13, le 0,2 bp reste en dessous. ` +
       `Le premier retrait du mois civil est gratuit, ensuite ${WITHDRAW.sepa} € SEPA / ${WITHDRAW.wire} € virement`
   );
   said.push(`garde, ouverture et TWS gratuites ; inactivité ${INACTIVITY.fee} $ si NAV < ${INACTIVITY.navBelow} $ sans ordre`);

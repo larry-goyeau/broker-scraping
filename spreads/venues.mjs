@@ -64,6 +64,17 @@ export const VENUES = [
     exact: ["chix", "chixen", "cxe", "bcxe", "cboeeurope"],
     loose: [],
   },
+  // DXE is the Dutch lit book, not Chi-X (CXE) and not BXE. Continuous
+  // trading is the same window, 08:00–16:30 London. The touch is the
+  // public book viewer.
+  {
+    mic: "CEUX",
+    name: "Cboe Europe DXE",
+    source: "dxe",
+    hours: { open: "08:00", close: "16:30", tz: "Europe/London" },
+    exact: ["ceux", "dxe", "cboeeuropedxe"],
+    loose: [],
+  },
   {
     mic: "XSWX",
     name: "SIX Swiss Exchange",
@@ -78,6 +89,7 @@ export const VENUES = [
       "xvtx",
       "swissebsstocks",
       "sixswissexchange",
+      "swissexchange",
       "swxswissexchange",
       "swxbndetf",
       "virtx",
@@ -96,12 +108,24 @@ export const VENUES = [
     exact: ["xwar", "gpw", "wse", "warsaw", "warsawstockexchange"],
     loose: [],
   },
+  // Continuous trading is 09:00–16:50. The closing auction runs on to 17:05.
+  // The touch is the delayed NewConnect book in spreads/nc-touch.json.
+  // There is no live adapter, so a later pass of spread.mjs leaves the
+  // stored figure alone. It is not the main Warsaw board.
+  {
+    mic: "XNCO",
+    name: "NewConnect",
+    source: "newconnect",
+    hours: { open: "09:00", close: "16:50", tz: "Europe/Warsaw" },
+    exact: ["xnco", "newconnect"],
+    loose: [],
+  },
   {
     mic: "XPAR",
     name: "Euronext Paris",
     source: "euronext",
     hours: { open: "09:00", close: "17:30", tz: "Europe/Paris" },
-    exact: ["xpar", "euronextparis", "sbf", "par", "epa", "paraccess", "parmcetf"],
+    exact: ["xpar", "euronextparis", "euronextparismonep", "sbf", "societydesboursesfrancaises", "par", "epa", "paraccess", "parmcetf"],
     loose: ["paris", "france"],
   },
   {
@@ -181,6 +205,18 @@ export const VENUES = [
     exact: ["xmil", "borsaitaliana", "mil", "miletf", "bvme", "bvmeetf", "etfp", "mta", "mtaa", "bgem", "milaim"],
     loose: ["milan", "milano", "italy", "italianse", "italiansecontinuous"],
   },
+  // EuroTLX is Borsa Italiana's own MTF, not the Milan book (MTAA, BGEM,
+  // ETFP). Bond-X and Equity trade continuously 09:00–17:30 Rome, after a
+  // call that runs 07:30–09:00. The touch is the ETLX page on the same
+  // Euronext site, and a Milan figure is not written here.
+  {
+    mic: "ETLX",
+    name: "EuroTLX",
+    source: "eurotlx",
+    hours: { open: "09:00", close: "17:30", tz: "Europe/Rome" },
+    exact: ["eurotlx", "etlx"],
+    loose: [],
+  },
   // Oslo moved onto Euronext's platform. The delayed book is the same live.euronext.com
   // page as Paris. Brokers still write "OSL" or, Admirals, "Norway (NASDAQ)" — that last
   // string must not fall through to the American Nasdaq.
@@ -189,7 +225,7 @@ export const VENUES = [
     name: "Oslo Børs",
     source: "euronext",
     hours: { open: "09:00", close: "16:20", tz: "Europe/Oslo" },
-    exact: ["xosl", "osl", "ose", "oslo", "oslobors", "oslobrs", "euronextoslo", "norwaynasdaq", "omxno"],
+    exact: ["xosl", "osl", "ose", "oslo", "oslostockexchange", "oslobors", "oslobrs", "euronextoslo", "norwaynasdaq", "omxno"],
     loose: ["norway"],
   },
   // Euronext Dublin. Brokers still write ISE / ISED; the live book is the XMSM segment
@@ -236,6 +272,17 @@ export const VENUES = [
     exact: ["xcse", "copenhagen", "omk", "omxcop", "cph", "denmarkcse"],
     loose: [],
   },
+  // The same public screener, category FIRST_NORTH rather than the main
+  // market. Continuous trading is the same window as Nasdaq Copenhagen,
+  // 09:00–16:55. The book is in kroner. It is not the main Copenhagen book.
+  {
+    mic: "DSME",
+    name: "First North Denmark",
+    source: "fndk",
+    hours: { open: "09:00", close: "16:55", tz: "Europe/Copenhagen" },
+    exact: ["dsme", "fndk", "csefndk", "firstnorthdenmark"],
+    loose: [],
+  },
   // The same public Nordic screener, for the Stockholm main market and its
   // ETFs. Admirals writes "Sweden (NASDAQ)"; that must not fall through
   // to the American Nasdaq. Continuous trading is 09:00–17:25 Stockholm. The book is in
@@ -246,7 +293,41 @@ export const VENUES = [
     name: "Nasdaq Stockholm",
     source: "xsto",
     hours: { open: "09:00", close: "17:25", tz: "Europe/Stockholm" },
-    exact: ["xsto", "stockholm", "sfb", "omxsto", "nasdaqstockholm", "swedennasdaq"],
+    exact: ["xsto", "stockholm", "sto", "sfb", "omxsto", "nasdaqstockholm", "swedennasdaq"],
+    loose: [],
+  },
+  // The same public screener, category FIRST_NORTH rather than the main
+  // market. Continuous trading is the same window as Nasdaq Stockholm,
+  // 09:00–17:25. The book is in kronor. It is not the main Stockholm book.
+  {
+    mic: "SSME",
+    name: "First North Stockholm",
+    source: "fnse",
+    hours: { open: "09:00", close: "17:25", tz: "Europe/Stockholm" },
+    exact: ["ssme", "fnse", "ssefnse", "firstnorthstockholm", "firstnorthsweden"],
+    loose: [],
+  },
+  // Avanza writes XXXX for this book. The public prices page prints Köp
+  // and Sälj for the seven names. The session followed here is
+  // 09:00–17:30 Stockholm. There is no live adapter, so a later pass of
+  // spread.mjs leaves the stored figure alone.
+  {
+    mic: "XXXX",
+    name: "beQuoted",
+    source: "bequoted",
+    hours: { open: "09:00", close: "17:30", tz: "Europe/Stockholm" },
+    exact: ["xxxx", "bequoted"],
+    loose: [],
+  },
+  // Pre-trade file, at least fifteen minutes late. Continuous trading is
+  // 08:00–16:30 London. Pence and pounds are one book. AQSE is the growth
+  // market, not the pan-European Aquis order book.
+  {
+    mic: "AQSE",
+    name: "Aquis Stock Exchange",
+    source: "aqse",
+    hours: { open: "08:00", close: "16:30", tz: "Europe/London" },
+    exact: ["aqse", "aquis", "plusmarketsgroupformerlyofex", "plusmarkets", "ofex"],
     loose: [],
   },
   // Admirals writes "Finland (NASDAQ)"; that must not fall through to
@@ -259,6 +340,18 @@ export const VENUES = [
     source: "xhel",
     hours: { open: "10:00", close: "18:25", tz: "Europe/Helsinki" },
     exact: ["xhel", "helsinki", "hse", "omxhex", "omxh", "hex", "hel", "nasdaqhelsinki", "finlandnasdaq"],
+    loose: [],
+  },
+  // The same public screener, category FIRST_NORTH rather than the main
+  // market. Continuous trading is the same window as Nasdaq Helsinki,
+  // 10:00–18:25. The book is in euro. It is not the main Helsinki book.
+  // Saxo writes HSE_FN. Avanza writes FNFI. The official MIC is FSME.
+  {
+    mic: "FSME",
+    name: "First North Helsinki",
+    source: "fnfi",
+    hours: { open: "10:00", close: "18:25", tz: "Europe/Helsinki" },
+    exact: ["fsme", "fnfi", "hsefn", "firstnorthhelsinki", "firstnorthfinland"],
     loose: [],
   },
   // Best bid and best ask on the exchange's own MiFIR page, 15 minutes
@@ -409,6 +502,16 @@ export const VENUES = [
     exact: ["xstu", "swb", "swb2", "stuttgart", "boersestuttgart"],
     loose: [],
   },
+  // The daily bulletin prints propuestas de compra y venta. That is the
+  // touch. A last trade is not used. S/ is soles, US$ is dollars.
+  {
+    mic: "XLIM",
+    name: "Bolsa de Valores de Lima",
+    source: "lima",
+    hours: { open: "08:30", close: "14:52", tz: "America/Lima" },
+    exact: ["xlim", "bvl", "bolsadevaloresdelima", "lima"],
+    loose: [],
+  },
   // The official INTRA tape is paid. The public site still prints a 20-minute delayed
   // touch (posturaCompra / posturaVenta) for the local board and the SIC, which is the
   // book CapTrader and IBKR write MEXI. XMEX is the ISO MIC; XBMV is a vendor spelling.
@@ -417,7 +520,7 @@ export const VENUES = [
     name: "Bolsa Mexicana",
     source: "bmv",
     hours: { open: "08:30", close: "15:00", tz: "America/Mexico_City" },
-    exact: ["xmex", "xbmv", "mexi", "bmv", "mexico", "bolsamexicana"],
+    exact: ["xmex", "xbmv", "mexi", "bmv", "mexico", "mexicanstockexchange", "bolsamexicana"],
     loose: [],
   },
   // Canada publishes no free pre-trade book of its own: TMX serves bid and ask only to a
@@ -454,6 +557,17 @@ export const VENUES = [
     // "cse" is deliberately absent: Saxo writes it for Copenhagen. `resolveVenue` splits
     // on the krone before letting it reach here.
     exact: ["xcnq", "cnsx", "canadiansecuritiesexchange", "canadiannationalstockexchange"],
+    loose: [],
+  },
+  // Brokers write PURE for this book. Questrade returns it on the CSE feed
+  // with a .CN suffix, which is not the Toronto book and not a CSE-listed
+  // line stored under XCNQ.
+  {
+    mic: "PURE",
+    name: "Pure Trading",
+    source: "pure",
+    hours: { open: "09:30", close: "16:00", tz: "America/Toronto" },
+    exact: ["pure", "puretrading"],
     loose: [],
   },
   {
@@ -712,7 +826,7 @@ export const VENUES = [
     name: "Bolsa de Madrid",
     source: "bme",
     hours: { open: "09:00", close: "17:30", tz: "Europe/Madrid" },
-    exact: ["xmad", "xmce", "bm", "bme", "madrid", "spain", "sibe", "mad"],
+    exact: ["xmad", "xmce", "mce", "bm", "bme", "madrid", "spain", "sibe", "sibespanishstockexchangeinterconnectionsyst", "sistemadeinterconexionbursatilespanol", "mad"],
     loose: [],
   },
   // Cash session 09:00–15:00 Tokyo. The touch is the delayed Interactive
@@ -724,6 +838,19 @@ export const VENUES = [
     source: "tsej",
     hours: { open: "09:00", close: "15:00", tz: "Asia/Tokyo" },
     exact: ["xtks", "xjpx", "tyo", "tokyo", "tsej"],
+    loose: [],
+  },
+  // Continuous matching is 09:00–11:30 and 12:30–15:25 in Nagoya. The
+  // hours here are the outer window; lunch and the closing auction are
+  // not a second session this file can name. The touch is the delayed
+  // Nagoya book in spreads/nagoya-touch.json. There is no live adapter,
+  // so a later pass of spread.mjs leaves the stored figure alone.
+  {
+    mic: "XNGO",
+    name: "Nagoya",
+    source: "nagoya",
+    hours: { open: "09:00", close: "15:30", tz: "Asia/Tokyo" },
+    exact: ["xngo", "xnag", "nag", "nagoya"],
     loose: [],
   },
   // Continuous matching is 09:00–12:00 and 13:00–17:00 Singapore time.
@@ -815,6 +942,86 @@ export const VENUES = [
     exact: ["xglo", "globalconnect"],
     loose: [],
   },
+  // Budapest cash market, including the BETa foreign names on the same
+  // page. Continuous trading runs from 09:00 to 17:00. The touch is the
+  // MiFID pre-trade table, fifteen minutes delayed, in the row's own
+  // currency. Bucharest writes BVB, not BET: BET in the catalogues is this
+  // exchange. BUX here is the Budapest MIC brokers print, not the Dutch broker.
+  {
+    mic: "XBUD",
+    name: "Budapest Stock Exchange",
+    source: "budapest",
+    hours: { open: "09:00", close: "17:00", tz: "Europe/Budapest" },
+    exact: ["xbud", "budapest", "budapeststockexchange", "bux", "bet"],
+    loose: [],
+  },
+  // Luxembourg Stock Exchange. Continuous trading is 09:00–17:30. The touch
+  // is the free delayed pre-trade file: one resting bid and one resting ask.
+  // Euro MTF (EMTF) is the same exchange's other segment. A name that has a
+  // regulated-market book is read there; a name that only quotes on the MTF
+  // keeps that book. The two are never averaged.
+  {
+    mic: "XLUX",
+    name: "Luxembourg Stock Exchange",
+    source: "luxse",
+    hours: { open: "09:00", close: "17:30", tz: "Europe/Luxembourg" },
+    exact: ["xlux", "luxse", "luxembourg", "lux", "emtf"],
+    loose: [],
+  },
+  // Bucharest regular market. Continuous trading is 10:00–17:45. The
+  // touch is the BVB book, read late because the exchange site does not
+  // answer from here and its delayed service refuses the call. BET is
+  // Budapest, not this book.
+  {
+    mic: "XBSE",
+    name: "Bucharest Stock Exchange",
+    source: "bvb",
+    hours: { open: "10:00", close: "17:45", tz: "Europe/Bucharest" },
+    exact: ["xbse", "bvb", "bucharest", "buchareststockexchange"],
+    loose: [],
+  },
+  // Johannesburg equity market. Continuous trading is 09:00–16:50, then
+  // a closing auction to 17:00. The touch is the JSE book. Prices are
+  // quoted in cents; the stored spread is the same ratio in rand.
+  {
+    mic: "XJSE",
+    name: "Johannesburg Stock Exchange",
+    source: "jse",
+    hours: { open: "09:00", close: "17:00", tz: "Africa/Johannesburg" },
+    exact: ["jse", "xjse", "johannesburg", "johannesburgstockexchange"],
+    loose: [],
+  },
+  // Nigerian Exchange. Continuous trading is 09:30–15:50 Lagos, then the
+  // pre-close. The touch is the NSENG book. The official quote API is licensed.
+  {
+    mic: "XNGN",
+    name: "Nigerian Exchange",
+    source: "ngx",
+    hours: { open: "09:30", close: "15:50", tz: "Africa/Lagos" },
+    exact: ["nseng", "xngn", "nigeria", "ngx", "nigerianexchange"],
+    loose: [],
+  },
+  // Borsa Istanbul equity session, 10:00–18:00. The touch is the BIST
+  // book in lira. The exchange sells the top of book.
+  {
+    mic: "XIST",
+    name: "Borsa Istanbul",
+    source: "bist",
+    hours: { open: "10:00", close: "18:00", tz: "Europe/Istanbul" },
+    exact: ["bist", "xist", "istanbul", "istanbulstockexchange", "borsaistanbul"],
+    loose: [],
+  },
+  // Bolsa de Valores de Colombia. Pre-open from 09:15, continuous trading
+  // 09:30–16:00 Bogota. The touch is the BVC book in pesos. Swissquote's
+  // BVC lines in pesos mexicanos are not this book.
+  {
+    mic: "XBOG",
+    name: "Bolsa de Valores de Colombia",
+    source: "bvc",
+    hours: { open: "09:30", close: "16:00", tz: "America/Bogota" },
+    exact: ["bvc", "colombia", "xbog", "bolsadevaloresdecolombia"],
+    loose: [],
+  },
 ];
 
 // A coin has no ISIN, so `spread.json` keys it the way the front already does, by
@@ -887,21 +1094,15 @@ export const KNOWN_UNSOURCED = [
   // OTC / leftover destination — no MIC, no site, no public tape. Not IBKR ATS
   // (IBKRATS is NMS midpoint) and not a neighbour's book.
   { match: ["value"], name: "IB Value Exchange", why: "gré à gré IBKR, pas de carnet public" },
-  { match: ["pure"], name: "Pure Trading", why: "adaptateur non écrit" },
   { match: ["set", "xbkk", "thailand"], name: "Stock Exchange of Thailand", why: "adaptateur non écrit" },
   {
     match: ["omx", "nasdaqomx", "nasdaqnordic"],
     name: "Nasdaq Nordic",
     why: "le broker ne dit pas laquelle des places nordiques",
   },
-  { match: ["ssefnse", "fnse"], name: "First North Stockholm", why: "adaptateur non écrit" },
-  { match: ["hsefn", "fnfi"], name: "First North Helsinki", why: "adaptateur non écrit" },
-  { match: ["xris", "riga", "nriga", "omxrse"], name: "Nasdaq Riga", why: "adaptateur non écrit" },
+  { match: ["xris", "riga", "nriga", "omxrse", "rigastockexchange"], name: "Nasdaq Riga", why: "adaptateur non écrit" },
   { match: ["xtal", "tallinn", "ntallinn", "omxtse"], name: "Nasdaq Tallinn", why: "adaptateur non écrit" },
   { match: ["xlit", "vilnius", "nvilnius", "omxvse"], name: "Nasdaq Vilnius", why: "adaptateur non écrit" },
-  { match: ["jse", "xjse", "johannesburg"], name: "Johannesburg Stock Exchange", why: "adaptateur non écrit" },
-  { match: ["newconnect"], name: "NewConnect", why: "adaptateur non écrit" },
-  { match: ["luxse", "xlux", "luxembourg", "lux"], name: "Luxembourg Stock Exchange", why: "adaptateur non écrit" },
   { match: ["biva"], name: "BIVA", why: "adaptateur non écrit" },
   // Nasdaq Dubai shares a building with DFM and not a board: its own site shows last
   // price and no touch, and the DFM feed that covers the emirate stops at DFM's own
@@ -909,31 +1110,20 @@ export const KNOWN_UNSOURCED = [
   // a spread is made of.
   { match: ["difx", "nasdaqdubai", "nasdaqdxb"], name: "Nasdaq Dubai", why: "pas de carnet public" },
   { match: ["crypto", "trd", "tradias", "tradiasotc", "zerohash", "zerohashe"], name: "Crypto", why: "gré à gré, pas un carnet unique" },
-  { match: ["bet", "xbse", "bucharest", "bvb"], name: "Bucharest Stock Exchange", why: "adaptateur non écrit" },
-  // Lightyear and Mexem write BUX for Budapesti Értéktőzsde (XBUD). That is
-  // not Bucharest (BET / XBSE) and not the Dutch broker of the same letters.
-  { match: ["bux", "xbud", "budapest"], name: "Budapest Stock Exchange", why: "adaptateur non écrit" },
+  // BET in the catalogues is Budapest (BÉT), which has its own book.
   { match: ["csecy", "xcys", "cyprus"], name: "Cyprus Stock Exchange", why: "adaptateur non écrit" },
   { match: ["pse"], name: "PSE (Prague ou Manille)", why: "le sigle nomme les deux places" },
-  { match: ["bvc", "colombia"], name: "Bolsa de Valores de Colombia", why: "adaptateur non écrit" },
   { match: ["bcba", "byma", "xbue", "xmev", "merval"], name: "BYMA", why: "adaptateur non écrit" },
-  { match: ["bvl", "xlim", "bolsadevaloresdelima"], name: "Bolsa de Valores de Lima", why: "adaptateur non écrit" },
   { match: ["bsesof", "xbul", "sofia"], name: "Bulgarian Stock Exchange", why: "adaptateur non écrit" },
-  { match: ["xber", "berlin", "boerseberlin"], name: "Börse Berlin", why: "adaptateur non écrit" },
-  { match: ["bist", "xist", "istanbul"], name: "Borsa Istanbul", why: "adaptateur non écrit" },
-  { match: ["csefndk", "fndk"], name: "Nasdaq First North Denmark", why: "adaptateur non écrit" },
+  // Xontro, the Berlin floor, stopped on 1 January 2026 and Börse Berlin
+  // did not replace it. The file that still updates is Equiduct, a different
+  // book, and it is not written here.
+  { match: ["xber", "berlin", "boerseberlin"], name: "Börse Berlin", why: "Xontro arrêté le 1 janvier 2026, pas de carnet de remplacement" },
   // Börse Berlin's retail book. Avanza's site fills France, Belgium, the
   // Netherlands and Portugal here, whatever Euronext the list still prints.
   { match: ["xeqt", "equiduct"], name: "Equiduct", why: "adaptateur non écrit" },
-  { match: ["xxxx"], name: "beQuoted", why: "adaptateur non écrit" },
-  // DXE is not the Chi-X book. Matching it to CHIX would price the wrong venue.
-  { match: ["ceux", "dxe"], name: "Cboe Europe DXE", why: "adaptateur non écrit" },
-  { match: ["eurotlx"], name: "EuroTLX", why: "adaptateur non écrit" },
   { match: ["nseke", "xnai", "nairobi"], name: "Nairobi Securities Exchange", why: "adaptateur non écrit" },
-  { match: ["aquis", "aqse", "plusmarketsgroupformerlyofex", "plusmarkets", "ofex"], name: "Aquis", why: "adaptateur non écrit" },
   { match: ["bsse", "xbra", "bratislava"], name: "Bratislava Stock Exchange", why: "adaptateur non écrit" },
-  { match: ["nag", "xnag", "nagoya"], name: "Nagoya", why: "adaptateur non écrit" },
-  { match: ["nseng", "xngn", "nigeria"], name: "Nigerian Exchange", why: "adaptateur non écrit" },
   { match: ["psx", "xkar", "karachi", "pakistan"], name: "Pakistan Stock Exchange", why: "adaptateur non écrit" },
   // KASE prints a best bid and a best offer, and on 22 Sep 2026 the bid was
   // above the offer on 43 of the 49 names that had both. Those are the day's
@@ -1171,6 +1361,7 @@ const PAGE = {
   // Keyed by TIDM, which is per currency line -- exactly the granularity a spread has.
   lse: (l) => (l.ticker ? `https://www.londonstockexchange.com/stock/${l.ticker}/x/company-page` : null),
   cxe: () => "https://www.cboe.com/europe/equities/market_statistics/book_viewer/",
+  dxe: () => "https://www.cboe.com/europe/equities/market_statistics/book_viewer/",
   six: (l) =>
     l.family === "share"
       ? `https://www.six-group.com/en/market-data/shares/share-explorer/share-details.${l.isin}${l.currency}4.html`
@@ -1179,6 +1370,39 @@ const PAGE = {
   // families and half a dozen segment codes per exchange, so the adapter asks the search
   // for the real path and hands it back. This is what a line with no reading falls to.
   euronext: (l) => `https://live.euronext.com/en/product/etfs/${l.isin}-${l.path}/market-information`,
+  eurotlx: (l) => `https://live.euronext.com/en/product/equities/${l.isin}-ETLX/market-information`,
+  budapest: () => "https://bet.hu/site/Angol/pages/mifid2#pretrade",
+  luxse: () => "https://www.luxse.com/market-overview/trading-data/pre-and-post-trade-data",
+  bvb: (l) => {
+    const code = String(l.ticker || "").trim().toUpperCase();
+    return code
+      ? `https://bvb.ro/FinancialInstruments/Details/FinancialInstrumentsDetails.aspx?s=${encodeURIComponent(code)}`
+      : "https://bvb.ro/TradingAndStatistics/Trading/CurrentTradingDay";
+  },
+  jse: (l) => {
+    const code = String(l.ticker || "").trim().toUpperCase();
+    return code
+      ? `https://www.tradingview.com/symbols/JSE-${encodeURIComponent(code)}/`
+      : "https://www.tradingview.com/markets/stocks-south-africa/market-movers-all-stocks/";
+  },
+  ngx: (l) => {
+    const code = String(l.ticker || "").trim().toUpperCase();
+    return code
+      ? `https://www.tradingview.com/symbols/NSENG-${encodeURIComponent(code)}/`
+      : "https://www.tradingview.com/markets/stocks-nigeria/market-movers-all-stocks/";
+  },
+  bist: (l) => {
+    const code = String(l.ticker || "").trim().toUpperCase().replace(/\.TR$/, "");
+    return code
+      ? `https://www.tradingview.com/symbols/BIST-${encodeURIComponent(code)}/`
+      : "https://www.tradingview.com/markets/stocks-turkey/market-movers-all-stocks/";
+  },
+  bvc: (l) => {
+    const code = String(l.ticker || "").trim().toUpperCase();
+    return code
+      ? `https://www.tradingview.com/symbols/BVC-${encodeURIComponent(code)}/`
+      : "https://www.tradingview.com/markets/stocks-colombia/market-movers-all-stocks/";
+  },
   vienna: (l) => `https://www.wienerborse.at/en/search/?q=${l.isin}`,
   xice: (l) =>
     l.orderbookId
@@ -1193,6 +1417,20 @@ const PAGE = {
       ? `https://www.nasdaq.com/european-market-activity/shares/${encodeURIComponent(String(l.ticker || "").toLowerCase())}?id=${encodeURIComponent(l.orderbookId)}`
       : "https://www.nasdaq.com/european-market-activity/shares",
   xsto: (l) =>
+    l.orderbookId
+      ? `https://www.nasdaq.com/european-market-activity/shares/${encodeURIComponent(String(l.ticker || "").toLowerCase())}?id=${encodeURIComponent(l.orderbookId)}`
+      : "https://www.nasdaq.com/european-market-activity/shares",
+  bequoted: () => "https://secure.bequoted.com/market/prices/",
+  aqse: () => "https://www.aquis.eu/stock-exchange/trade-transparency",
+  fnse: (l) =>
+    l.orderbookId
+      ? `https://www.nasdaq.com/european-market-activity/shares/${encodeURIComponent(String(l.ticker || "").toLowerCase())}?id=${encodeURIComponent(l.orderbookId)}`
+      : "https://www.nasdaq.com/european-market-activity/shares",
+  fndk: (l) =>
+    l.orderbookId
+      ? `https://www.nasdaq.com/european-market-activity/shares/${encodeURIComponent(String(l.ticker || "").toLowerCase())}?id=${encodeURIComponent(l.orderbookId)}`
+      : "https://www.nasdaq.com/european-market-activity/shares",
+  fnfi: (l) =>
     l.orderbookId
       ? `https://www.nasdaq.com/european-market-activity/shares/${encodeURIComponent(String(l.ticker || "").toLowerCase())}?id=${encodeURIComponent(l.orderbookId)}`
       : "https://www.nasdaq.com/european-market-activity/shares",
@@ -1236,6 +1474,13 @@ const PAGE = {
     l.ticker
       ? `https://my.questrade.com/trading/quote/${encodeURIComponent(String(l.ticker).toUpperCase())}`
       : "https://my.questrade.com/trading",
+  pure: (l) => {
+    const ticker = String(l.ticker || "").toUpperCase().trim();
+    const symbol = /\.(TO|VN|CN|NE)$/.test(ticker) ? ticker : ticker ? `${ticker}.CN` : "";
+    return symbol
+      ? `https://my.questrade.com/trading/quote/${encodeURIComponent(symbol)}`
+      : "https://my.questrade.com/trading";
+  },
   // The coin's own page on each exchange. `ticker` holds the base, the pair is rebuilt
   // the way each venue spells it: Binance glues USDT to it, Coinbase hyphenates USD.
   binance: (l) =>
@@ -1259,6 +1504,8 @@ const PAGE = {
       ? `https://www.kraken.com/prices/${encodeURIComponent(String(l.ticker).toLowerCase())}`
       : "https://www.kraken.com/prices",
   gpw: () => "https://www.gpw.pl/akcje",
+  newconnect: (l) =>
+    l.isin ? `https://newconnect.pl/spolka?isin=${encodeURIComponent(String(l.isin).toUpperCase())}` : "https://newconnect.pl/notowania",
   nse: (l) =>
     l.ticker
       ? `https://www.nseindia.com/get-quote/equity/${encodeURIComponent(String(l.ticker).toUpperCase())}`
@@ -1294,11 +1541,18 @@ const PAGE = {
       : "https://finance.sina.com.cn/stock/";
   },
   tsej: () => "https://www.jpx.co.jp/english/equities/products/etfs/quoting-data/index.html",
+  nagoya: (l) => {
+    const code = String(l.ticker || "").trim().toUpperCase();
+    return code
+      ? `https://www.tradingview.com/symbols/NAG-${encodeURIComponent(code)}/`
+      : "https://www.tradingview.com/markets/stocks-japan/market-movers-all-stocks/";
+  },
   asx: () => "https://www.asx.com.au/issuers/investment-products/asx-investment-products-monthly-report",
   // One board for the whole market. A per-symbol page is not what was read.
   hose: () => "https://priceapi.bsc.com.vn/datafeed/instruments",
   upcom: () => "https://priceapi.bsc.com.vn/datafeed/instruments",
   globalconnect: () => "https://gpwglobalconnect.pl/etfy-pelna-wersja-notowan",
+  lima: () => "https://documents.bvl.com.pe/pubdif/boldia/stockq.htm",
   bmv: (l) =>
     l.ticker
       ? `https://www.bmv.com.mx/es/emisoras/estadisticas/${encodeURIComponent(

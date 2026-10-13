@@ -30,6 +30,28 @@ export function pct(text) {
   return Number(text) / 100;
 }
 
+// Gap between the amount this round trip charges and another table's
+// amount, in the same unit. A lower other amount is negative.
+export function amountGap(applied, other) {
+  const points = Number(applied) - Number(other);
+  const rounded = Math.round(Math.abs(points) * 100) / 100;
+  if (rounded === 0) return "";
+  return points > 0 ? `-${rounded}` : `${rounded}`;
+}
+export function rateGap(applied, other) {
+  const points = (Number(applied) - Number(other)) * 100;
+  const rounded = Math.round(Math.abs(points) * 10000) / 10000;
+  if (rounded === 0) return "";
+  return points > 0 ? `-${rounded}` : `${rounded}`;
+}
+
+// The round trip charges `delivery`. Intraday is another table. The remark
+// is the gap between those two rates. The rupee cap stays in its own table.
+export function intradayGap(deliveryRate, intradayRate) {
+  const gap = rateGap(deliveryRate, intradayRate);
+  return gap ? `Intraday commission is ${gap}%.` : "";
+}
+
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 const code = (s) => String(s || "").trim().toUpperCase();
 const dollars = (amount, currency) => {
@@ -159,8 +181,8 @@ export function indiaRoundTrip(schedule, query) {
   // The book is never an input of this bill.
   let flatEach = null;
   if (!priced) {
-    const low = schedule.brokerageEach(0);
-    const high = schedule.brokerageEach(1e12);
+    const low = schedule.brokerageEach(0, m.row);
+    const high = schedule.brokerageEach(1e12, m.row);
     if (low === high && Number.isFinite(low)) flatEach = low;
     else return { ...shared, basis, why: "aucun prix pour cette ligne : lancer node assets/prices.mjs" };
   }
@@ -170,7 +192,10 @@ export function indiaRoundTrip(schedule, query) {
   if (txnRate == null) {
     return { ...shared, basis, why: `${listing.brokerExchange} n'a pas de taux de transaction publié pour cette ligne` };
   }
-  const brokerageEach = priced ? schedule.brokerageEach(notional) : flatEach;
+  // A rupee amount per side, when the page prints one instead of a percent.
+  const txnEachRaw = typeof schedule.txnEach === "function" ? schedule.txnEach(code(listing.brokerExchange), m.row) : schedule.txnEach;
+  const txnEach = txnEachRaw == null ? null : Number(txnEachRaw);
+  const brokerageEach = priced ? schedule.brokerageEach(notional, m.row) : flatEach;
   const brokerage = brokerageEach * 2;
   const sides = schedule.sttSides ? schedule.sttSides(m.row) : 2;
   const txnSides = schedule.txnSides ? schedule.txnSides(m.row) : 2;
@@ -180,7 +205,7 @@ export function indiaRoundTrip(schedule, query) {
   }
   let stt = notional * schedule.sttRate * sides;
   let stamp = notional * schedule.stampRate;
-  let txn = notional * txnRate * txnSides;
+  let txn = txnEach != null ? txnEach * txnSides : notional * txnRate * txnSides;
   let sebi = notional * schedule.sebiRate * 2;
   let ipft = notional * ipftRate * 2;
   const dpBase = typeof schedule.dpInr === "function" ? (priced ? schedule.dpInr(notional) : null) : schedule.dpInr || 0;

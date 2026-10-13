@@ -144,6 +144,9 @@ const EXCHANGES = {
   "SINGAPORE STOCK EXCHANGE": "SGX",
   SGX: "SGX",
   "AUSTRALIAN STOCK EXCHANGE": "ASX",
+  // The quote screen says Mexico SE. That is the Bolsa Mexicana, not BIVA.
+  "MEXICO SE": "BMV",
+  "MEXICO STOCK EXCHANGE": "BMV",
   "DIGITAL ASSET MARKET": "CRYPTO",
 };
 

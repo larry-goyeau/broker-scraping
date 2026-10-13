@@ -26,13 +26,13 @@
 // is 0.14 % , minimum 6 €, cap 99 €. Frankfurt uses that same commission
 // and adds only the specialist, 5.04 bp, minimum 2.52 €: the High Volume
 // transaction fee of 0.960 bp is not in the cash line. Stuttgart uses the
-// Xetra commission and adds nothing. Gettex, Tradegate, Paris and Amsterdam
-// are 0.09 % , minimum 6 €, cap 39 €. Vienna is 0.19 % , minimum 6 €.
+// Xetra commission and adds nothing. Gettex and Tradegate are 0.09 % ,
+// minimum 6 €, cap 39 €. Vienna is 0.19 % , minimum 6 €. Paris and
+// Amsterdam large names are 0.14 % , minimum 6 €, cap 99 €.
 //
 //   Vienna VSE          EUR  0.19 %          min 6
-//   Nasdaq Baltic       EUR  1.50 %  max 99  min 25
-//   Paris SBF           EUR  0.09 %  max 39  min 6
-//   Paris SBF           USD  0.15 %          min 10
+//   Nasdaq Baltic       EUR  0.39 %          min 20     (Riga is the Paris ticket)
+//   Paris SBF           EUR  0.14 %  max 99  min 6   (some smaller names 0.09 % max 39)
 //   Xetra IBIS          EUR  0.14 %  max 99  min 6
 //   Frankfurt FWB       EUR  0.14 %  max 99  min 6
 //                       specialist   5.04 bp, min 2.52 €
@@ -40,19 +40,21 @@
 //   Gettex              EUR  0.09 %  max 39  min 6      + unpriced custody
 //   Stuttgart SWB       EUR  0.14 %          min 6      + unpriced custody
 //   Tradegate           EUR  0.09 %  max 39  min 6      + unpriced custody
-//   Amsterdam AEB       EUR  0.09 %  max 39  min 6
-//   Amsterdam AEB       USD  0.15 %          min 10
-//   Lisbon BVL          EUR  0.15 %          min 6
+//   Amsterdam AEB       EUR  0.14 %  max 99  min 6   (some smaller names 0.09 % max 39)
+//   Lisbon BVL          EUR  0.14 %          min 10
 //   Singapore SGX       USD  0.15 %          min 10
 //   SIX EBS             USD  0.15 %          min 10     (CHF → currency row)
 //   London LSE          USD  0.15 %          min 10     (GBP → currency row)
-//   OTC / Pink          USD  0.01 $/share, max 3 %, min 8.90
+//   OTC / Pink          USD  0.005 $/share, min 1 $, cap 1 %
+//                      Demo DUR256326, 2026-10-13. The list's 0.01 $ and
+//                      8.90 $ floor are not that ticket. The 1 % cap cuts
+//                      under the 1 $ floor on a small order.
 //
 // Every other currency on the list, per side:
 //
 //   AED 0.35 %  min 25        HUF 0.15 %  min 4 000
 //   AUD 0.15 %  min 10        ILS 0.15 %  min 25
-//   CAD 0.02 $/share, max 3 %, min 5
+//   CAD 0.02 $/share for the first 2 000, then 0.01, max 3 %, min 6
 //   CHF 0.15 %  min 15        JPY 0.15 %  min 1 000
 //   CNH 0.15 %  min 50        MXN 0.15 %  min 150
 //   CZK 0.25 %  min 150       NOK 0.15 %  min 90
@@ -81,10 +83,10 @@
 // is the 2026-10-10 PETR4 preview, the same ticket on the other Interactive
 // Brokers accounts: 0.10 % at every size from 56 BRL to 1,120,000 BRL, and
 // 0.00 on one share at 0.50 BRL, so no floor and no cap. Singapore in SGD
-// uses the same 2026-10-10 D05 preview as WH SelfInvest: 0.08 %, minimum
-// 2.50 SGD, no cap through 733,600 SGD. The August list's 0.15 % and
-// 10 SGD floor are not that ticket. An SGD line that is not the Singapore
-// Exchange, and a Singapore line in another currency, stay N/A. Tel Aviv
+// is the 2026-10-13 D05 preview on U15604371: 0.19 %, minimum 8 SGD, no
+// cap through 500,000 SGD. The August list's 0.15 % and the 0.08 % taken
+// from another broker are not that ticket. An SGD line that is not the
+// Singapore Exchange, and a Singapore line in another currency, stay N/A. Tel Aviv
 // in ILS uses the same 2026-10-10 TEVA preview as WH SelfInvest: 0.10 %,
 // minimum 15 ILS, no cap through 600,000 ILS. The August list's 0.15 %
 // and 25 ILS floor are not that ticket.
@@ -151,7 +153,10 @@ const ADR_NAMED = /\b(ADR|GDR|ADS|CDI)\b/i;
 const FRANKFURT_TRADE_RATE = 5.04 / 10000;
 const FRANKFURT_TRADE_MIN = 2.52;
 const PREVIEWED = new Set(["xetra", "frankfurt", "stuttgart", "gettex", "tradegate", "vienna"]);
-const PREVIEWED_NOW = new Set(["amsterdam", "paris", "milan", "madrid", "asx", "six-chf", "baltic"]);
+const PREVIEWED_NOW = new Set([
+  "amsterdam", "paris", "milan", "madrid", "asx", "six-chf", "baltic",
+  "tsej", "sfb", "wse", "ose", "cph", "bvl", "ath", "riga", "adx", "dfm", "iob", "canada", "connect", "otc", "pra", "bux",
+]);
 const PREVIEW = { on: "2026-09-29", account: "U15604371" };
 
 const WITHDRAW = { firstFree: true, sepa: 1, wire: 8, ccy: "EUR" };
@@ -177,8 +182,14 @@ const USD_LISTED = {
   maxPct: 0.02,
   ccy: "USD",
 };
-const OTC = { perShare: 0.01, min: 8.9, maxPct: 0.03, ccy: "USD" };
-const CAD = { perShare: 0.02, min: 5, maxPct: 0.03, ccy: "CAD" };
+// Demo DUR256326, 2026-10-13. Tencent ADR and ICTS. 0.005 $ a share,
+// floor 1 $, and the 1 % cap is applied after the floor so a single
+// Tencent share at 43 $ is 0.43 $, not 1 $.
+const OTC = { perShare: 0.005, min: 1, maxPct: 0.01, capCutsFloor: true, ccy: "USD" };
+// Live account U15604371, 2026-10-13. Royal Bank at 10 CAD: 0.02 for the
+// first 2 000 shares, then 0.01. One share asks for 6. A 0.10 CAD name
+// is cut by the 3 % cap (5 000 shares cost 15 CAD, which is 3 % of 500).
+const CAD = { perShare: 0.02, perShareAfter: 0.01, tierAt: 2000, min: 6, maxPct: 0.03, ccy: "CAD" };
 // Opening, closing and reopening auction. Charged per execution, so a
 // round trip pays it twice. The cap is per execution.
 const AUCTION = {
@@ -214,28 +225,67 @@ const CCY = {
 // GETTEX2 are the second IBKR code for the same named exchange.
 const VENUE = [
   { id: "vienna", exchanges: ["VSE"], currencies: ["EUR"], rule: pct(0.0019, 6, "EUR"), note: null },
-  { id: "baltic", exchanges: ["N.TALLINN"], currencies: ["EUR"], rule: pct(0.0039, 20, "EUR"), note: null },
+  { id: "baltic", exchanges: ["N.TALLINN", "N.VILNIUS"], currencies: ["EUR"], rule: pct(0.0039, 20, "EUR"), note: null },
+  // Riga is not the Tallinn schedule. Eleving, 2026-10-13: 0.14 %, floor 6, cap 99.
+  { id: "riga", exchanges: ["N.RIGA"], currencies: ["EUR"], rule: pct(0.0014, 6, "EUR", 99), note: null },
   { id: "paris", exchanges: ["SBF"], currencies: ["EUR"], rule: pct(0.0014, 6, "EUR", 99), note: null },
   { id: "xetra", exchanges: ["IBIS", "IBIS2"], currencies: ["EUR"], rule: pct(0.0014, 6, "EUR", 99), note: null },
   { id: "frankfurt", exchanges: ["FWB", "FWB2"], currencies: ["EUR"], rule: pct(0.0014, 6, "EUR", 99), note: "frankfurt" },
   { id: "gettex", exchanges: ["GETTEX", "GETTEX2"], currencies: ["EUR"], rule: pct(0.0009, 6, "EUR", 39), note: "custody" },
   { id: "stuttgart", exchanges: ["SWB", "SWB2"], currencies: ["EUR"], rule: pct(0.0014, 6, "EUR"), note: "stuttgart" },
   { id: "tradegate", exchanges: ["TGATE"], currencies: ["EUR"], rule: pct(0.0009, 6, "EUR", 39), note: "custody" },
-  { id: "amsterdam", exchanges: ["AEB"], currencies: ["EUR"], rule: pct(0.0014, 6, "EUR"), note: null },
-  { id: "milan", exchanges: ["BVME", "BVME.ETF"], currencies: ["EUR"], rule: pct(0.0009, 6, "EUR"), note: null },
-  { id: "madrid", exchanges: ["BM"], currencies: ["EUR"], rule: pct(0.0009, 6, "EUR"), note: null },
+  // ASML at 200 000 € came back at the 99 € cap. Heineken Holding, Bever,
+  // TomTom and Randstad came back at 0.09 % and the 39 € cap. One row
+  // cannot tell those names apart; this is the ASML ticket.
+  { id: "amsterdam", exchanges: ["AEB"], currencies: ["EUR"], rule: pct(0.0014, 6, "EUR", 99), note: null },
+  { id: "milan", exchanges: ["BVME", "BVME.ETF"], currencies: ["EUR"], rule: pct(0.0009, 6, "EUR", 39), note: null },
+  { id: "madrid", exchanges: ["BM"], currencies: ["EUR"], rule: pct(0.0009, 6, "EUR", 39), note: null },
+  // National Bank of Greece, 2026-10-13: 0.09 %, floor 6, cap 39.
+  { id: "ath", exchanges: ["ATH"], currencies: ["EUR"], rule: pct(0.0009, 6, "EUR", 39), note: null },
+  // EDP and NOS, 2026-10-13: 0.14 %, floor 10, no cap through 200 000 €.
+  { id: "bvl", exchanges: ["BVL"], currencies: ["EUR"], rule: pct(0.0014, 10, "EUR"), note: null },
   { id: "asx", exchanges: ["ASX"], currencies: ["AUD"], rule: pct(0.0014, 10, "AUD"), note: null },
   { id: "six-chf", exchanges: ["EBS"], currencies: ["CHF"], rule: pct(0.0014, 15, "CHF"), note: null },
   { id: "us", exchanges: ["NASDAQ", "NYSE", "AMEX", "ARCA", "BATS", "IEX", "MEMX", "CBOE"], currencies: ["USD"], rule: USD_LISTED, note: null },
   // Same PETR4 preview as the other Interactive Brokers accounts, 2026-10-10.
   // 0.10 %, no floor, no cap through 1,120,000 BRL.
   { id: "b3", exchanges: ["B3", "BVMF"], currencies: ["BRL"], rule: { rate: 0.001, ccy: "BRL" }, note: null },
-  // Same D05 preview as WH SelfInvest, 2026-10-10. 0.08 %, minimum 2.50 SGD,
-  // no cap through 733,600 SGD. The August list's 0.15 % / 10 SGD is not used.
-  { id: "sg", exchanges: ["SGX"], currencies: ["SGD"], rule: pct(0.0008, 2.5, "SGD"), note: null },
+  // D05 on U15604371, 2026-10-13. 0.19 %, minimum 8 SGD, no cap through
+  // 500 000 SGD. The August list and the other broker's 0.08 % are not used.
+  { id: "sg", exchanges: ["SGX"], currencies: ["SGD"], rule: pct(0.0019, 8, "SGD"), note: null },
   // Same TEVA preview as WH SelfInvest, 2026-10-10. 0.10 %, minimum 15 ILS,
   // no cap through 600,000 ILS. The August list's 0.15 % / 25 ILS is not used.
   { id: "ils", exchanges: ["TASE"], currencies: ["ILS"], rule: pct(0.001, 15, "ILS"), note: null },
+  // Toyota, 2026-10-13. 0.14 %, floor 500 JPY, no cap through 5 000 000 JPY.
+  { id: "tsej", exchanges: ["TSEJ"], currencies: ["JPY"], rule: pct(0.0014, 500, "JPY"), note: null },
+  // Volvo and Scandbook. 0.19 %, floor 40 SEK, no cap through 200 000 SEK.
+  { id: "sfb", exchanges: ["SFB"], currencies: ["SEK"], rule: pct(0.0019, 40, "SEK"), note: null },
+  // Orlen and Reinhold. 0.19 %, floor 20 PLN. Custody stays out of the ticket.
+  { id: "wse", exchanges: ["WSE"], currencies: ["PLN"], rule: pct(0.0019, 20, "PLN"), note: "pln" },
+  // Equinor. 0.14 %, floor 40 NOK, no cap through 200 000 NOK.
+  { id: "ose", exchanges: ["OSE", "OMXNO"], currencies: ["NOK"], rule: pct(0.0014, 40, "NOK"), note: null },
+  // Novo Nordisk. 0.14 %, floor 75 DKK, no cap through 200 000 DKK.
+  { id: "cph", exchanges: ["CPH"], currencies: ["DKK"], rule: pct(0.0014, 75, "DKK"), note: null },
+  // IHC and EMAAR. 0.35 %, floor 25 AED, no cap through 50 000 AED.
+  { id: "adx", exchanges: ["ADX", "DFM"], currencies: ["AED"], rule: pct(0.0035, 25, "AED"), note: null },
+  // Air Astana GDR. 0.14 %, floor 9 USD, no cap through 100 000 USD.
+  { id: "iob", exchanges: ["LSEIOB1"], currencies: ["USD"], rule: pct(0.0014, 9, "USD"), note: null },
+  { id: "canada", exchanges: ["TSE", "VENTURE", "PURE", "AEQLIT"], currencies: ["CAD"], rule: CAD, note: null },
+  // Moutai and Ping An Insurance on Shanghai Connect, Wuliangye and Ping An
+  // Bank on Shenzhen Connect, 2026-10-13. 0.19 %, floor 50 CNH, no cap
+  // through 2 000 000 CNH. STAR and ChiNext still answer "no trading permissions".
+  { id: "connect", exchanges: ["SEHKNTL", "SEHKSZSE"], currencies: ["CNH"], rule: pct(0.0019, 50, "CNH"), note: null },
+  { id: "otc", exchanges: ["PINK"], currencies: ["USD"], rule: OTC, note: null },
+  // Demo DUR256326, 2026-10-13. CEZ and Komercni banka. 0.15 %, floor
+  // 70 CZK. 10 000 CZK asked for 70. 100 000 asked for 150, 1 000 000 for
+  // 1 500, 10 000 000 for 15 000. No cap. The list's 0.25 % and 150 CZK
+  // floor are not that ticket.
+  { id: "pra", exchanges: ["PRA"], currencies: ["CZK"], rule: pct(0.0015, 70, "CZK"), note: null },
+  // Demo DUR256326, 2026-10-13. OTP and Magyar Telekom. 0.55 % up to
+  // 4 444 444 HUF, then 0.10 % on the excess, floor 200 HUF. 10 000 000 HUF
+  // asked for 30 000 HUF. The list's 0.15 % and 4 000 HUF floor are not
+  // that ticket.
+  { id: "bux", exchanges: ["BUX"], currencies: ["HUF"], rule: { rate: 0.0055, min: 200, band: 4444444, bandRate: 0.001, ccy: "HUF" }, note: null },
 ];
 
 const US_TAPE = new Set(["NASDAQ", "NYSE", "AMEX", "ARCA", "BATS", "IEX", "MEMX", "CBOE"]);
@@ -284,7 +334,7 @@ export function scheduleOf(exchange, currency) {
   const ccy = fxCcy(currency);
   const venue = venueIndex.find((row) => row.exchanges.has(code) && row.currencies.has(ccy));
   if (venue) {
-    return { id: venue.id, rule: venue.rule, note: venue.note, american: venue.id === "us" };
+    return { id: venue.id, rule: venue.rule, note: venue.note, american: venue.id === "us" || venue.id === "otc" };
   }
   // The August currency table priced every unnamed place. The 2026-10-10
   // ticket disagreed with it often enough that an unmeasured place stays
@@ -356,6 +406,19 @@ export function commissionSide({ shares, amount, rule }) {
     const rest = Math.max(0, n - tierAt);
     const raw = rule.perShare * first + (rule.perShareAfter ?? rule.perShare) * rest;
     const ceiling = rule.maxPct != null && amount != null ? Number(amount) * rule.maxPct : null;
+    // OTC applies the percentage cap last, so it can cut under the floor.
+    // A listed US share does the opposite: the floor is never cut.
+    if (rule.capCutsFloor) {
+      const floored = rule.min != null ? Math.max(rule.min, raw) : raw;
+      const capped = ceiling != null && ceiling < floored;
+      return {
+        raw,
+        charged: capped ? ceiling : floored,
+        floored: rule.min != null && raw < rule.min,
+        capped,
+        currency: rule.ccy,
+      };
+    }
     const capped = ceiling != null && ceiling < raw;
     const afterCap = capped ? ceiling : raw;
     const charged = rule.min != null ? Math.max(rule.min, afterCap) : afterCap;
@@ -369,6 +432,12 @@ export function commissionSide({ shares, amount, rule }) {
   }
 
   if (amount == null || !Number.isFinite(Number(amount))) return null;
+  if (rule.band != null && rule.bandRate != null) {
+    const n = Number(amount);
+    const raw = n <= rule.band ? n * rule.rate : rule.band * rule.rate + (n - rule.band) * rule.bandRate;
+    const floored = rule.min != null ? Math.max(rule.min, raw) : raw;
+    return { raw, charged: floored, floored: rule.min != null && raw < rule.min, capped: false, currency: rule.ccy };
+  }
   const raw = Number(amount) * rule.rate;
   const floored = rule.min != null ? Math.max(rule.min, raw) : raw;
   const charged = rule.max != null ? Math.min(floored, rule.max) : floored;
@@ -405,11 +474,11 @@ function basisOf(id, rule) {
   const head = id === "b3"
     ? `barème LYNX ${id}, même aperçu PETR4 que les autres comptes le 2026-10-10 : `
     : id === "sg"
-      ? `barème LYNX ${id}, même aperçu D05 que WH SelfInvest le 2026-10-10 : `
+      ? `barème LYNX ${id}, aperçu D05 du 2026-10-13 sur U15604371 : `
       : id === "ils"
         ? `barème LYNX ${id}, même aperçu TEVA que WH SelfInvest le 2026-10-10 : `
     : PREVIEWED_NOW.has(id)
-    ? `barème LYNX ${id}, aperçu du 2026-10-10 : `
+    ? `barème LYNX ${id}, aperçu du 2026-10-13 : `
     : PREVIEWED.has(id)
       ? `barème LYNX ${id}, aperçu du ${PREVIEW.on} : `
       : `barème LYNX ${id}, liste du ${SCHEDULE.validAsOf} : `;
@@ -427,7 +496,9 @@ function basisOf(id, rule) {
   }
   return (
     head +
-    `${(100 * rule.rate).toFixed(2)} % par sens` +
+    (rule.band != null
+      ? `${(100 * rule.rate).toFixed(2)} % jusqu'à ${rule.band} ${rule.ccy}, puis ${(100 * rule.bandRate).toFixed(2)} %`
+      : `${(100 * rule.rate).toFixed(2)} % par sens`) +
     (rule.min != null ? `, plancher ${rule.min} ${rule.ccy}` : "") +
     (rule.max != null ? `, plafond ${rule.max} ${rule.ccy}` : "")
   );
@@ -616,11 +687,11 @@ function confidenceOf({ id, rule, buyComm, marketBp, marketPerShare, rates, taxP
     (id === "b3"
       ? `commission LYNX, palier ${id}, même aperçu PETR4 que les autres comptes le 2026-10-10, `
       : id === "sg"
-        ? `commission LYNX, palier ${id}, même aperçu D05 que WH SelfInvest le 2026-10-10, `
+        ? `commission LYNX, palier ${id}, aperçu D05 du 2026-10-13 sur U15604371, `
         : id === "ils"
           ? `commission LYNX, palier ${id}, même aperçu TEVA que WH SelfInvest le 2026-10-10, `
       : PREVIEWED_NOW.has(id)
-      ? `commission LYNX, palier ${id}, aperçu du 2026-10-10, `
+      ? `commission LYNX, palier ${id}, aperçu du 2026-10-13, `
       : PREVIEWED.has(id)
         ? `commission LYNX, palier ${id}, aperçu du ${PREVIEW.on}, compte ${PREVIEW.account}, `
         : `commission LYNX, palier ${id}, liste du ${SCHEDULE.validAsOf} lue le ${SCHEDULE.readOn}, `) +

@@ -19,7 +19,7 @@
 //
 //   node brokers/firstock/firstock_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
 
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate, intradayGap } from "../../indianDelivery.mjs";
 
 const CRORE = 10_000_000;
 
@@ -40,7 +40,7 @@ const SCHEDULE = {
   ipftRate: (exchange) => (exchange === "NSE" ? 10 / CRORE : exchange === "BSE" ? 0 : null),
   dpInr: 8 + 5.5,
   basis: "Courtage livraison : minimum 0,01 ₹ par contrat. DP 13,5 ₹ + GST à la vente.",
-  remark: "Intraday is the lower of ₹20 and 0.03% per executed order.",
+  remark: intradayGap(0, pct("0.03")),
 };
 
 export function roundTrip(query) {

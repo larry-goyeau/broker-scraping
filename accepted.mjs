@@ -519,6 +519,12 @@ export const ACCEPTED = {
   // https://www.landsbankinn.is/umraedan/fraedsla/ertu-ad-flytja-til-landsins-og-vantar-bankareikning
   // https://www.landsbankinn.is/verdbrefavidskipti-a-netinu
   landsbankinn: { countries: ["IS"] },
+  // The non-resident price list names other EU, Norwegian, Icelandic,
+  // Liechtenstein and Swiss residents, and opening still asks for a link
+  // to Estonia. The picker keeps Estonia.
+  // https://www.lhv.ee/en/customer-data
+  // https://www.lhv.ee/en/price-list-01-08-2026
+  lhvpank: { countries: ["EE"] },
   // Opening asks for a PAN, an Aadhaar linked to a mobile number, and that
   // the client lives in India. An NRI cannot open this account. The picker
   // is a country of residence, so the country is IN.
@@ -540,6 +546,42 @@ export const ACCEPTED = {
   // country of residence, so the country is JP.
   // https://www.paypay-sec.co.jp/account/
   paypay: { countries: ["JP"] },
+  // Opening is PAN, Digilocker Aadhaar and an Aadhaar e-sign. The KYC page
+  // says an NRI cannot invest. An NRE, NRO or NRI bank account cannot be
+  // added. The picker is a country, so the country is IN.
+  // https://www.paytmmoney.com/care/paytm-money-kyc
+  // https://www.paytmmoney.com/blog/open-your-paytm-money-demat-account-in-just-minutes/
+  // https://www.paytmmoney.com/blog/ready-trade-verify-bank-account-first/
+  paytmmoney: { countries: ["IN"] },
+  // A resident Indian living in India opens the regular account. An NRI
+  // opens a 3-in-1 account with a passport, a visa and an overseas address.
+  // That page does not name those countries. The picker is a country, so
+  // the country is IN.
+  // https://www.icicidirect.com/open-a-demat-account
+  // https://www.icicidirect.com/faqs/nri-account/what-are-the-documents-required-to-open-an-icici-direct-account
+  icici: { countries: ["IN"] },
+  // The open-account page takes a resident Indian and an NRI. The 3-in-1
+  // account is an Indian resident of 18, with PAN and Aadhaar. An NRI opens
+  // with a passport and an overseas address, linked to an NRE or NRO account.
+  // That page does not name those countries. The picker is a country, so
+  // the country is IN.
+  // https://hdfcsky.com/open-demat-account
+  // https://hdfcsky.com/sky-learn/demat-account/types-of-demat-account
+  hdfcsky: { countries: ["IN"] },
+  // A resident opens in their own name. An NRI, a PIO or an OCI opens with
+  // a passport and an overseas address, linked to an NRE or NRO account.
+  // That page does not name those countries. The picker is a country, so
+  // the country is IN.
+  // https://www.indiainfoline.com/knowledge-center/demat-account/eligibility-criteria-to-open-demat-account
+  // https://www.indiainfoline.com/nri-services
+  iifl: { countries: ["IN"] },
+  // A Hong Kong resident opens with a Hong Kong identity card and an
+  // address proof. The overseas page lets the client name a country of
+  // residence and witness the form locally, but it does not name those
+  // countries. The picker is a country, so the country is HK.
+  // https://www.futuhk.com/en/support/topic2_10
+  // https://www.futuhk.com/en/support/topic2_9
+  futu: { countries: ["HK"] },
   // Opening is a private person living in Japan. A foreign national uses a
   // residence card. A US citizen or a US resident cannot apply. The picker
   // is a country of residence, so the country is JP.
@@ -812,11 +854,10 @@ export const ACCEPTED = {
   // stays Argentina.
   // https://www.ecovalores.com.ar/preguntas-frecuentes.php
   ecovalores: { countries: ["AR"] },
-  // A Peruvian DNI is required. A foreign identity document cannot open
-  // the account. Living in Peru is not required. A US person cannot
-  // finish validation, so the United States stays out.
+  // A current Peruvian DNI is required. A foreign identity document
+  // cannot open the account. The picker is Peru.
   // https://trii.pe/faq
-  trii: WORLD_NO_US,
+  triipe: { countries: ["PE"] },
   // The catalogue is the individual investment account. Only a natural
   // person who is a tax resident of Slovenia can open it. The bank checks
   // that status with the tax authority. A non-resident payment account is
@@ -917,6 +958,18 @@ export const ACCEPTED = {
   // https://www.ing.de/sparen-anlegen/direkt-depot/
   // https://www.ing.de/dokumente/agb-direkt-depot-extra-konto/
   ing: { countries: ["DE"] },
+  // The application rejects any address that is not a German residence:
+  // "Antragstellungen sind nur für Melde- bzw. Wohnsitzadressen in
+  // Deutschland möglich." A moderator of the comdirect community confirmed
+  // that opening is only for a person living in Germany. The picker is
+  // residence, so the country is DE.
+  // https://community.comdirect.de/t5/konto-depot-karte/kontoeroeffnung-mit-wohnsitz-schweiz/td-p/361506
+  comdirect: { countries: ["DE"] },
+  // Opening requires German citizenship and a German tax residence. A
+  // residence permit is not enough, and a German citizen living abroad
+  // is not onboarded. The picker is residence, so the country is Germany.
+  // https://www.justtrade.com/faq
+  justtrade: { countries: ["DE"] },
   // The service is only for a person living in Japan. A foreign national
   // opens with a residence card. A US citizen, a green-card holder or a US
   // resident cannot open. The picker is residence, so the country is JP.

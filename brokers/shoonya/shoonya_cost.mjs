@@ -14,7 +14,7 @@
 //
 //   node brokers/shoonya/shoonya_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
 
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate, intradayGap } from "../../indianDelivery.mjs";
 
 const SCHEDULE = {
   broker: "Shoonya",
@@ -32,7 +32,7 @@ const SCHEDULE = {
   ipftRate: 0.01 / 10_000_000,
   dpInr: 9,
   basis: "Courtage livraison 0. DP 9 ₹ + GST par titre à la vente.",
-  remark: "Intraday is the lower of ₹5 and 0.03% per executed order.",
+  remark: intradayGap(0, pct("0.03")),
 };
 
 export function roundTrip(query) {

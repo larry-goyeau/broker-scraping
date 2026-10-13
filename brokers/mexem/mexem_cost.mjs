@@ -33,9 +33,12 @@
 //
 //   USD coté US     0,005 $/part, min 1 $, plafond 1 % — le plafond passe
 //                   sous le plancher (1 F à 12,17 $ → 0,12 $)
-//   CAD             0,01 $/part, min 1 CAD, plafond 0,5 %
-//   EUR ouest       0,05 %, min 3 €     (Amsterdam, Xetra, Paris, Madrid,
-//                   Helsinki, Athènes, Dublin, Vienne, GETTEX)
+//   CAD             0,01 $/part, min 2 CAD, plafond 0,5 %
+//   EUR ouest       0,05 %, min 1 €     (compte réel U28294463, 2026-10-13 :
+//                   1 part à 1 € sur Amsterdam, Xetra, Paris et Madrid
+//                   affiche « 1 EUR ». Le 3 € était le compte démo. Le cash
+//                   demandé sur un gros ordre dépasse 0,05 % et n'est pas
+//                   le même d'une place à l'autre.)
 //   GBP             0,05 %, min 3 £
 //   CHF             0,05 %, min 5
 //   USD hors US     0,05 %, min 4 $     (une ligne de Londres en dollars)
@@ -51,7 +54,7 @@
 //   Hongrie         achat 0,55 % jusqu'à 4 444 444 HUF puis 0,10 %,
 //                   vente 0,10 %, min 200 HUF. La vente n'a pas de cours
 //                   dans l'aperçu : le compte ne détenait pas le titre.
-//   AUD             0,08 %, min 6
+//   AUD             0,125 %, min 8     (BHP, compte réel, 2026-10-13)
 //   JPY             0,08 %, min 80
 //   SGD             0,08 %, min 2,50
 //   HKD             0,08 %, min 18      (le timbre est dans la ligne du
@@ -261,27 +264,61 @@ const UK_REGISTERED = /^(GB|GG|JE|IM)/;
 const RULE = {
   // Portal 2026-10-10. The cap cuts under the 1 USD floor: 1 F at 12.17
   // answered 0.12 USD, and 200 GNS at 0.15 answered 0.30 USD, which is 1 %.
-  usd: { perShare: 0.005, min: 1, maxPct: 0.01, ccy: "USD" },
-  // 1 RY answered 1 CAD. 1,000 RY at 0.50 answered 2.50 CAD, which is 0.5 %.
-  ca: { perShare: 0.01, min: 1, maxPct: 0.005, ccy: "CAD" },
-  west: { rate: 0.0005, min: 3, ccy: "EUR" },
+  usd: { perShare: 0.005, min: 1, maxPct: 0.01, capCutsFloor: true, ccy: "USD" },
+  // Real account U28294463, 2026-10-13. 1 RY at 10 CAD, and 1 Draganfly
+  // at 0.40 CAD, asked for 2 CAD: the floor is not cut. 100 RY at 10
+  // stayed on 2. 2,000 RY at 1 CAD asked for 20, and 1,000 Draganfly at
+  // 2.99 asked for 10, which is 0.01 a share. A 0.5 % cap would have
+  // cut the 2,000-share order to 10 CAD.
+  ca: { perShare: 0.01, min: 2, ccy: "CAD" },
+  // Real account, same day. A 1 € limit on Amsterdam, Xetra, Paris and
+  // Madrid printed "1 EUR". The 3 € floor was the demo account.
+  west: { rate: 0.0005, min: 1, ccy: "EUR" },
   gbp: { rate: 0.0005, min: 3, ccy: "GBP" },
-  chf: { rate: 0.0005, min: 5, ccy: "CHF" },
+  // U28294463, 2026-10-13. Nestlé asked for 7.50 CHF at 50 CHF and at
+  // 1 200 CHF. The 0.05 % is still under that floor.
+  chf: { rate: 0.0005, min: 7.5, ccy: "CHF" },
   westUsd: { rate: 0.0005, min: 4, ccy: "USD" },
-  dkk: { rate: 0.0005, min: 49, ccy: "DKK" },
-  nok: { rate: 0.0005, min: 49, ccy: "NOK" },
-  sek: { rate: 0.0005, min: 49, ccy: "SEK" },
-  pt: { rate: 0.0015, min: 6, ccy: "EUR" },
-  baltic: { rate: 0.002, min: 10, ccy: "EUR" },
-  si: { rate: 0.0035, min: 3, ccy: "EUR" },
+  // U28294463, 2026-10-13. 16.31 DKK on a small order, 16.38 on
+  // 2 000 DKK. The old 49 DKK floor is not this ticket.
+  dkk: { rate: 0.0005, min: 16.31, ccy: "DKK" },
+  // Same account. Equinor asked for 20 NOK through 2 000 NOK.
+  nok: { rate: 0.0005, min: 20, ccy: "NOK" },
+  // Same account. Apotea and Axfood asked for 20 SEK through 2 000 SEK.
+  sek: { rate: 0.0005, min: 20, ccy: "SEK" },
+  // Same account. Not 1.5 % and not a 6 € floor. Banco Comercial
+  // Português asked for 1 EUR through 1 800 EUR.
+  pt: { rate: 0.0005, min: 1, ccy: "EUR" },
+  // Same account. Tallinn: 7.80 EUR through 800 EUR, then 7.80 plus
+  // 0.0325 % of the amount above 800. 1 200 asked for 7.92, 1 600 for
+  // 8.06, 1 800 for 8.13.
+  baltic: { min: 7.8, flatUntil: 800, excessRate: 0.000325, ccy: "EUR" },
+  // Same account. Not 0.35 %. Krka asked for 1 EUR through 1 500 EUR
+  // and 1.05 EUR on 1 750, which is 0.06 %.
+  si: { rate: 0.0006, min: 1, ccy: "EUR" },
   pra: { rate: 0.0015, min: 70, ccy: "CZK" },
-  pln: { rate: 0.001, min: 15, ccy: "PLN" },
-  // Buy matched 7,700 HUF on 5,000 OTP at 280, and 200 HUF on one share.
-  // The sale preview was blank. 0.10 % is that schedule's sale leg.
-  huf: { buy: 0.0055, sell: 0.001, buyBand: 4444444, min: 200, ccy: "HUF" },
-  aud: { rate: 0.0008, min: 6, ccy: "AUD" },
-  jpy: { rate: 0.0008, min: 80, ccy: "JPY" },
-  sgd: { rate: 0.0008, min: 2.5, ccy: "SGD" },
+  // U28294463, 2026-10-13. PKO asked for 20 PLN through 1 600 PLN.
+  pln: { rate: 0.001, min: 20, ccy: "PLN" },
+  // Real account U28294463, 2026-10-13, nothing sent. OTP and Magyar
+  // Telekom. The larger of 200 HUF plus 0.52 %, and 0.60 %, with a
+  // floor of 500 HUF. 10 000 HUF asked for 500. 60 000 asked for 512.
+  // 100 000 asked for 720. 250 000 asked for 1 500. 1 000 000 asked
+  // for 6 000. The two lines meet at 250 000 HUF.
+  huf: { rate: 0.0052, plus: 200, altRate: 0.006, min: 500, ccy: "HUF" },
+  // Real account U28294463, 2026-10-13, nothing sent. Same 0.28 % and
+  // 10 RON floor as the demo. 1 000 RON asked for 10, 5 000 for 14,
+  // 8 000 for 22.40.
+  bvb: { rate: 0.0028, min: 10, ccy: "RON" },
+  // Real account U28294463, 2026-10-13. 1 BHP at 10 AUD asked for 8.
+  // 5,000 shares, notional 50,000, asked for 62.50, which is 0.125 %.
+  // The 0.08 % and 6 AUD floor were the demo account.
+  aud: { rate: 0.00125, min: 8, ccy: "AUD" },
+  // U28294463, 2026-10-13. Toyota: 200 JPY through 150 000 JPY,
+  // 247 JPY on 200 000, which is 0.1235 %.
+  jpy: { rate: 0.001235, min: 200, ccy: "JPY" },
+  // Same account. DBS asked for 4 SGD through 1 200 SGD, and 4.09 on
+  // 2 500. The 2.50 SGD floor was not this ticket.
+  sgd: { rate: 0.0008, min: 4, ccy: "SGD" },
   hkd: { rate: 0.0008, min: 18, ccy: "HKD" },
   // Portal preview of 80700 (Tencent) on SEHK in CNH, 2026-10-10. Nothing sent.
   // 200 shares, notional 72,360, commission 132.44 CNH. 1,000 shares, notional
@@ -291,7 +328,13 @@ const RULE = {
   // commission 16.73. After the 1 CNH stamp the broker piece is about 15,
   // so the floor is 15 CNH.
   hkCnh: { rate: 0.0008, min: 15, ccy: "CNH" },
-  mxn: { rate: 0.001, min: 60, ccy: "MXN" },
+  // Real account U28294463, 2026-10-13, nothing sent. Not the demo's
+  // 0.08 % and 15 CNH. Moutai and Wuliangye: 25 CNH through 15 000 CNH,
+  // then 0.1554 %. 18 000 asked for 27.97, 20 000 for 31.08, 30 000 for
+  // 46.62, 40 000 for 62.16.
+  connect: { rate: 0.001554, min: 25, ccy: "CNH" },
+  // U28294463, 2026-10-13. Walmex asked for 75 MXN through 6 000 MXN.
+  mxn: { rate: 0.001, min: 75, ccy: "MXN" },
   // Same PETR4 preview as WH SelfInvest, 2026-10-10. 0.10 % from 56 BRL
   // to 1,120,000 BRL. One share at 0.50 BRL asked for 0.00, so no floor.
   brl: { rate: 0.001, min: 0, ccy: "BRL" },
@@ -340,7 +383,7 @@ const ADR_NAMED = /\b(ADR|GDR|ADS)\b/i;
 const VENUE_FEES_UNPRICED = [
   "VSE", "NASDAQ Baltic", "N.TALLINN", "N.VILNIUS", "N.RIGA",
   "BATS Europe", "Turquoise", "CHIX", "ENEXT.BE", "SBF",
-  "FWB", "IBIS", "SWB", "TradeLink", "BUX", "BVME", "AEB", "BVL", "EBS", "WSE",
+  "FWB", "IBIS", "SWB", "TradeLink", "BVME", "AEB", "BVL", "EBS", "WSE",
 ];
 const VENUE_FEES_CODES = new Set(VENUE_FEES_UNPRICED.map((s) => s.toUpperCase().replace(/[^A-Z0-9]/g, "")));
 
@@ -456,8 +499,8 @@ const VENUE_FEE = {
   WSE: { stock: 0, etf: 0, saw: "TPE 20 PLN sec, ETFBCASH ETFBW20TR ETFSP500 notionnel + 20" },
 };
 
-// For the venues nobody has been able to ask — BATS/CHIX/Turquoise,
-// TradeLink, and a BUX share — and for the classes a measured venue was not
+// For the venues nobody has been able to ask — BATS/CHIX/Turquoise and
+// TradeLink — and for the classes a measured venue was not
 // asked about. The fund figure stays 0,80 €, which Amsterdam, Paris, Xetra
 // and the dearer Frankfurt line agree on. Stuttgart's 3,50 € stays on SWB
 // and EBS's 1,70 € stays on EBS. The Baltic 6,80 € stays on the Baltic tapes.
@@ -541,12 +584,14 @@ export function feeMarketOf(exchange, mic, currency) {
   if (code === "LJSE" || m === "XLJU") return "si";
   if (code === "BVL" || m === "XLIS") return "pt";
   if (/^NTALLINN$/.test(code) || m === "XTAL") return "baltic";
-  if (code === "BUX" || m === "XBUD") return null;
+  if (code === "BUX" || m === "XBUD") return ccy === "HUF" || !ccy ? "huf" : null;
+  if ((code === "BVB" || m === "XBSE") && (ccy === "RON" || !ccy)) return "bvb";
   if ((code === "TASE" || m === "XTAE") && (ccy === "ILS" || !ccy)) return "ils";
   if ((code === "TWSE" || m === "XTAI") && (ccy === "TWD" || !ccy)) return "twd";
   if (code === "WSE" || m === "XWAR") return ccy === "PLN" || !ccy ? "pln" : null;
   if (code === "TSEJ" || m === "XJPX" || m === "XTKS") return ccy === "JPY" || !ccy ? "jpy" : null;
   if (code === "ASX" || m === "XASX") return ccy === "AUD" || !ccy ? "aud" : null;
+  if ((code === "SEHKNTL" || code === "SEHKSZSE") && (ccy === "CNH" || !ccy)) return "connect";
   if (code === "SEHK" || m === "XHKG") {
     if (ccy === "CNH") return "hkCnh";
     if (ccy === "HKD" || !ccy) return "hkd";
@@ -620,7 +665,7 @@ export function commissionSide({ shares, amount, market, side = "buy" }) {
     // On 2026-10-10 one Ford share at 12.17 answered 0.12 USD, the 1 % cap,
     // under the 1 USD floor. The cap wins even when that is the smaller number.
     const ceiling = rule.maxPct != null && amount != null ? Number(amount) * rule.maxPct : null;
-    if (ceiling != null && ceiling < rule.min) {
+    if (rule.capCutsFloor && ceiling != null && ceiling < rule.min) {
       return { raw, charged: ceiling, floored: false, capped: true, currency: rule.ccy };
     }
     const perShareAmount = ceiling != null && ceiling < raw ? ceiling : raw;
@@ -629,6 +674,11 @@ export function commissionSide({ shares, amount, market, side = "buy" }) {
   }
 
   if (amount == null || !Number.isFinite(Number(amount))) return null;
+  if (rule.flatUntil != null) {
+    const n = Number(amount);
+    const raw = n <= rule.flatUntil ? rule.min : rule.min + (n - rule.flatUntil) * rule.excessRate;
+    return { raw, charged: raw, floored: false, capped: false, currency: rule.ccy };
+  }
   if (rule.statutory != null) {
     const n = Number(amount);
     const pct = n * rule.rate;
@@ -643,6 +693,12 @@ export function commissionSide({ shares, amount, market, side = "buy" }) {
       capped: n <= rule.excessAbove && pct > rule.max,
       currency: rule.ccy,
     };
+  }
+  if (rule.altRate != null) {
+    const n = Number(amount);
+    const raw = Math.max(n * rule.rate + (rule.plus || 0), n * rule.altRate);
+    const charged = rule.min != null ? Math.max(rule.min, raw) : raw;
+    return { raw, charged, floored: rule.min != null && raw < rule.min, capped: false, currency: rule.ccy };
   }
   if (rule.floorRate != null) {
     const n = Number(amount);
@@ -817,11 +873,17 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const basis =
     (market === "krw"
       ? `barème Mexem ${market}, lu le 2026-09-28 sur le contrôle de trésorerie du portail : `
+      : market === "huf" || market === "bvb" || market === "connect" || market === "chf" || market === "dkk" || market === "nok" || market === "sek" || market === "pt" || market === "baltic" || market === "si" || market === "pln" || market === "jpy" || market === "sgd" || market === "mxn"
+        ? `barème Mexem ${market}, aperçu du compte U28294463 le 2026-10-13 : `
       : `barème Mexem ${market}, aperçu du portail le 2026-10-10 : `) +
     (market === "inr"
       ? `0,01 % par sens, plancher 6 INR, plafond 20 INR jusqu'à 1 000 000 INR, puis 0,02 % du surplus, plus 0,11874 % mesuré dans la même ligne`
       : market === "twd"
         ? `0,10 % par sens, ou 80 TWD plus 0,02 % si c'est davantage, sans plafond`
+      : rule.altRate != null
+        ? `${(100 * rule.rate).toFixed(2)} % plus ${rule.plus} ${rule.ccy}, ou ${(100 * rule.altRate).toFixed(2)} % si c'est davantage, plancher ${rule.min} ${rule.ccy}`
+      : rule.flatUntil != null
+        ? `${rule.min} ${rule.ccy} jusqu'à ${rule.flatUntil} ${rule.ccy}, puis ${(100 * rule.excessRate).toFixed(4).replace(/0+$/, "")} % du surplus`
       : (rule.buy != null
       ? `achat ${(100 * rule.buy).toFixed(2)} % jusqu'à ${rule.buyBand} ${rule.ccy}, puis ${(100 * rule.sell).toFixed(2)} %, vente ${(100 * rule.sell).toFixed(2)} %`
       : rule.rate != null

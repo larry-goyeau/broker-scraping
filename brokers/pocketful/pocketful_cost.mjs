@@ -15,7 +15,7 @@
 //
 //   node brokers/pocketful/pocketful_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
 
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate, intradayGap } from "../../indianDelivery.mjs";
 
 const SCHEDULE = {
   broker: "Pocketful",
@@ -34,7 +34,7 @@ const SCHEDULE = {
   ipftRate: pct("0.0001"),
   dpInr: 13.5,
   basis: "Courtage livraison 0,01 ₹ par ordre. DP 13,5 ₹ + GST à la vente.",
-  remark: "Intraday is the lower of ₹20 and 0.03% per executed order.",
+  remark: intradayGap(0, pct("0.03")),
 };
 
 export function roundTrip(query) {

@@ -29,7 +29,7 @@
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate, intradayGap } from "../../indianDelivery.mjs";
 
 const SCHEDULE = {
   broker: "Arrow",
@@ -47,7 +47,7 @@ const SCHEDULE = {
   gstOnDp: true,
   dpInr: 20,
   basis: "Courtage livraison 0. DP 20 ₹ + GST à la vente, pay-in vers Arrow.",
-  remark: "Intraday is the lower of ₹20 and 0.03% per executed order.",
+  remark: intradayGap(0, pct("0.03")),
 };
 
 export function roundTrip(query) {

@@ -378,6 +378,9 @@ const CROSSED = {
   six: 1,
   tsej: 1,
   euronext: 1,
+  eurotlx: 1,
+  budapest: 1,
+  luxse: 1,
   us605: 1,
   tradegate: 1,
   gettex: 1,
@@ -389,6 +392,9 @@ const CROSSED = {
   fnis: 1,
   xcse: 1,
   xsto: 1,
+  fnse: 1,
+  fndk: 1,
+  fnfi: 1,
   xhel: 1,
   xpra: 1,
   frankfurt: 1,
@@ -398,13 +404,16 @@ const CROSSED = {
   tib: 1,
   stuttgart: 1,
   bmv: 1,
+  lima: 1,
   questrade: 1,
+  pure: 1,
   binance: 1,
   coinbase: 1,
   alpaca: 1,
   kraken: 1,
   gpw: 1,
   cxe: 1,
+  dxe: 1,
   bxswiss: 1,
   adx: 1,
   dfm: 1,
@@ -765,6 +774,137 @@ function loadGcTouch() {
   return { at: data.at, books };
 }
 
+// NewConnect touches are read once, during continuous trading, into
+// nc-touch.json. The book is zloty. A catalogue line in another currency
+// is left out, and so is a tie. A file from another Warsaw day is left
+// out. The same ISIN on the main Warsaw board stays under that board's MIC.
+function loadNcTouch() {
+  const path = new URL("./nc-touch.json", import.meta.url);
+  if (!fs.existsSync(path)) return { books: 0 };
+  const data = JSON.parse(fs.readFileSync(path, "utf8"));
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Europe/Warsaw",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+  if (data.date !== today) return { books: 0, at: data.at, stale: true };
+  const byIsin = new Map();
+  for (const row of catalogueRows()) {
+    if (norm(row.exchange) !== "newconnect") continue;
+    const isin = String(row.isin || "").toUpperCase();
+    const currency = String(row.currency || "").toUpperCase();
+    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin) || !/^[A-Z]{3}$/.test(currency)) continue;
+    const counts = byIsin.get(isin) || new Map();
+    counts.set(currency, (counts.get(currency) || 0) + 1);
+    byIsin.set(isin, counts);
+  }
+  let books = 0;
+  for (const row of data.rows || []) {
+    const bp = Number(row.bp) > 0 ? Number(row.bp) : bpFrom(Number(row.bid), Number(row.ask));
+    if (!(bp > 0)) continue;
+    const isin = String(row.isin || "").toUpperCase();
+    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin)) continue;
+    const counts = byIsin.get(isin);
+    if (!counts) continue;
+    const ranked = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+    if (ranked.length > 1 && ranked[0][1] === ranked[1][1]) continue;
+    if (ranked[0][0] !== "PLN") continue;
+    const url = row.url || `https://newconnect.pl/spolka?isin=${isin}`;
+    ((spreads[isin] ||= {})["XNCO"] ||= {})["PLN"] = { bp: Number(bp.toFixed(2)), url };
+    books += 1;
+  }
+  return { at: data.at, books };
+}
+
+// beQuoted touches are read once, during the session, into
+// bequoted-touch.json. The book is kronor. A catalogue line in another
+// currency is left out, and so is a tie. A file from another Stockholm
+// day is left out.
+function loadBequotedTouch() {
+  const path = new URL("./bequoted-touch.json", import.meta.url);
+  if (!fs.existsSync(path)) return { books: 0 };
+  const data = JSON.parse(fs.readFileSync(path, "utf8"));
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Europe/Stockholm",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+  if (data.date !== today) return { books: 0, at: data.at, stale: true };
+  const byIsin = new Map();
+  for (const row of catalogueRows()) {
+    if (norm(row.exchange) !== "xxxx") continue;
+    const isin = String(row.isin || "").toUpperCase();
+    const currency = String(row.currency || "").toUpperCase();
+    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin) || !/^[A-Z]{3}$/.test(currency)) continue;
+    const counts = byIsin.get(isin) || new Map();
+    counts.set(currency, (counts.get(currency) || 0) + 1);
+    byIsin.set(isin, counts);
+  }
+  const url = "https://secure.bequoted.com/market/prices/";
+  let books = 0;
+  for (const row of data.rows || []) {
+    const bp = Number(row.bp) > 0 ? Number(row.bp) : bpFrom(Number(row.bid), Number(row.ask));
+    if (!(bp > 0)) continue;
+    const isin = String(row.isin || "").toUpperCase();
+    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin)) continue;
+    const counts = byIsin.get(isin);
+    if (!counts) continue;
+    const ranked = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+    if (ranked.length > 1 && ranked[0][1] === ranked[1][1]) continue;
+    if (ranked[0][0] !== "SEK") continue;
+    ((spreads[isin] ||= {})["XXXX"] ||= {})["SEK"] = { bp: Number(bp.toFixed(2)), url: row.url || url };
+    books += 1;
+  }
+  return { at: data.at, books };
+}
+
+// AQSE touches are read once, during continuous trading, into
+// aqse-touch.json. The currency is the one the catalogues name. A GBX
+// quote is already filed in GBP when that was the only sterling line.
+// A tie is left out. A file from another London day is left out.
+function loadAqseTouch() {
+  const path = new URL("./aqse-touch.json", import.meta.url);
+  if (!fs.existsSync(path)) return { books: 0 };
+  const data = JSON.parse(fs.readFileSync(path, "utf8"));
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Europe/London",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+  if (data.date !== today) return { books: 0, at: data.at, stale: true };
+  const names = new Set(["aqse", "aquis", "plusmarketsgroupformerlyofex", "plusmarkets", "ofex"]);
+  const byIsin = new Map();
+  for (const row of catalogueRows()) {
+    if (!names.has(norm(row.exchange))) continue;
+    const isin = String(row.isin || "").toUpperCase();
+    const currency = String(row.currency || "").toUpperCase();
+    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin) || !/^[A-Z]{3}$/.test(currency)) continue;
+    const counts = byIsin.get(isin) || new Map();
+    counts.set(currency, (counts.get(currency) || 0) + 1);
+    byIsin.set(isin, counts);
+  }
+  const url = "https://www.aquis.eu/stock-exchange/trade-transparency";
+  let books = 0;
+  for (const row of data.rows || []) {
+    const bp = Number(row.bp) > 0 ? Number(row.bp) : bpFrom(Number(row.bid), Number(row.ask));
+    if (!(bp > 0)) continue;
+    const isin = String(row.isin || "").toUpperCase();
+    const currency = String(row.currency || "").toUpperCase();
+    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin) || !/^[A-Z]{3}$/.test(currency)) continue;
+    const counts = byIsin.get(isin);
+    if (!counts || !counts.has(currency)) continue;
+    const ranked = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+    if (ranked.length > 1 && ranked[0][1] === ranked[1][1]) continue;
+    if (ranked[0][0] !== currency) continue;
+    ((spreads[isin] ||= {})["AQSE"] ||= {})[currency] = { bp: Number(bp.toFixed(2)), url: row.url || url };
+    books += 1;
+  }
+  return { at: data.at, books };
+}
+
 // The Philippine touch is read once, during continuous matching, into
 // pse-touch.json. The currency is the one the Manila catalogues name
 // for that ISIN. A tie is left out.
@@ -800,6 +940,216 @@ function loadPseTouch() {
     if (ranked.length > 1 && ranked[0][1] === ranked[1][1]) continue;
     const url = row.url || `https://frames.pse.com.ph/security/${encodeURIComponent(String(row.code || "").toLowerCase())}`;
     ((spreads[isin] ||= {})["XPHS"] ||= {})[ranked[0][0]] = { bp: Number(bp.toFixed(2)), url };
+    books += 1;
+  }
+  return { at: data.at, books };
+}
+
+// The Nagoya touch is read once, during continuous matching, into
+// nagoya-touch.json. The currency is the one the Nagoya catalogues name
+// for that ISIN. A tie is left out. A file from another Nagoya day is
+// left out. The same ISIN on Tokyo stays under Tokyo's MIC.
+function loadNagoyaTouch() {
+  const path = new URL("./nagoya-touch.json", import.meta.url);
+  if (!fs.existsSync(path)) return { books: 0 };
+  const data = JSON.parse(fs.readFileSync(path, "utf8"));
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+  if (data.date !== today) return { books: 0, at: data.at, stale: true };
+  const NAG = new Set(["nagoya", "nag", "xngo", "xnag"]);
+  const byIsin = new Map();
+  for (const row of catalogueRows()) {
+    if (!NAG.has(norm(row.exchange))) continue;
+    const isin = String(row.isin || "").toUpperCase();
+    const currency = String(row.currency || "").toUpperCase();
+    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin) || !/^[A-Z]{3}$/.test(currency)) continue;
+    const counts = byIsin.get(isin) || new Map();
+    counts.set(currency, (counts.get(currency) || 0) + 1);
+    byIsin.set(isin, counts);
+  }
+  let books = 0;
+  for (const row of data.rows || []) {
+    const bp = Number(row.bp) > 0 ? Number(row.bp) : bpFrom(Number(row.bid), Number(row.ask));
+    if (!(bp > 0)) continue;
+    const isin = String(row.isin || "").toUpperCase();
+    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin)) continue;
+    const counts = byIsin.get(isin);
+    if (!counts) continue;
+    const ranked = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+    if (ranked.length > 1 && ranked[0][1] === ranked[1][1]) continue;
+    const url = row.url || `https://www.tradingview.com/symbols/NAG-${encodeURIComponent(row.code || "")}/`;
+    ((spreads[isin] ||= {})["XNGO"] ||= {})[ranked[0][0]] = { bp: Number(bp.toFixed(2)), url };
+    books += 1;
+  }
+  return { at: data.at, books };
+}
+
+function loadBvbTouch() {
+  const path = new URL("./bvb-touch.json", import.meta.url);
+  if (!fs.existsSync(path)) return { books: 0 };
+  const data = JSON.parse(fs.readFileSync(path, "utf8"));
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Europe/Bucharest",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+  if (data.date !== today) return { books: 0, at: data.at, stale: true };
+  const BVB = new Set(["bvb", "xbse", "bucharest", "buchareststockexchange"]);
+  const byIsin = new Map();
+  for (const row of catalogueRows()) {
+    if (!BVB.has(norm(row.exchange))) continue;
+    const isin = String(row.isin || "").toUpperCase();
+    const currency = String(row.currency || "").toUpperCase();
+    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin) || currency !== "RON") continue;
+    byIsin.set(isin, true);
+  }
+  let books = 0;
+  for (const row of data.rows || []) {
+    const bp = Number(row.bp) > 0 ? Number(row.bp) : bpFrom(Number(row.bid), Number(row.ask));
+    if (!(bp > 0)) continue;
+    const isin = String(row.isin || "").toUpperCase();
+    if (!byIsin.has(isin)) continue;
+    const url =
+      row.url ||
+      `https://bvb.ro/FinancialInstruments/Details/FinancialInstrumentsDetails.aspx?s=${encodeURIComponent(row.code || "")}`;
+    ((spreads[isin] ||= {})["XBSE"] ||= {}).RON = { bp: Number(bp.toFixed(2)), url };
+    books += 1;
+  }
+  return { at: data.at, books };
+}
+
+function loadJseTouch() {
+  const path = new URL("./jse-touch.json", import.meta.url);
+  if (!fs.existsSync(path)) return { books: 0 };
+  const data = JSON.parse(fs.readFileSync(path, "utf8"));
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Africa/Johannesburg",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+  if (data.date !== today) return { books: 0, at: data.at, stale: true };
+  const JSE = new Set(["jse", "xjse", "johannesburg", "johannesburgstockexchange"]);
+  const byIsin = new Set();
+  for (const row of catalogueRows()) {
+    if (!JSE.has(norm(row.exchange))) continue;
+    const isin = String(row.isin || "").toUpperCase();
+    const currency = String(row.currency || "").toUpperCase();
+    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin) || currency !== "ZAR") continue;
+    byIsin.add(isin);
+  }
+  let books = 0;
+  for (const row of data.rows || []) {
+    const bp = Number(row.bp) > 0 ? Number(row.bp) : bpFrom(Number(row.bid), Number(row.ask));
+    if (!(bp > 0)) continue;
+    const isin = String(row.isin || "").toUpperCase();
+    if (!byIsin.has(isin)) continue;
+    const url = row.url || `https://www.tradingview.com/symbols/JSE-${encodeURIComponent(row.code || "")}/`;
+    ((spreads[isin] ||= {})["XJSE"] ||= {}).ZAR = { bp: Number(bp.toFixed(2)), url };
+    books += 1;
+  }
+  return { at: data.at, books };
+}
+
+function loadNgxTouch() {
+  const path = new URL("./ngx-touch.json", import.meta.url);
+  if (!fs.existsSync(path)) return { books: 0 };
+  const data = JSON.parse(fs.readFileSync(path, "utf8"));
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Africa/Lagos",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+  if (data.date !== today) return { books: 0, at: data.at, stale: true };
+  const NGX = new Set(["nseng", "xngn", "nigeria", "ngx", "nigerianexchange"]);
+  const byIsin = new Set();
+  for (const row of catalogueRows()) {
+    if (!NGX.has(norm(row.exchange))) continue;
+    const isin = String(row.isin || "").toUpperCase();
+    const currency = String(row.currency || "").toUpperCase();
+    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin) || currency !== "NGN") continue;
+    byIsin.add(isin);
+  }
+  let books = 0;
+  for (const row of data.rows || []) {
+    const bp = Number(row.bp) > 0 ? Number(row.bp) : bpFrom(Number(row.bid), Number(row.ask));
+    if (!(bp > 0)) continue;
+    const isin = String(row.isin || "").toUpperCase();
+    if (!byIsin.has(isin)) continue;
+    const url = row.url || `https://www.tradingview.com/symbols/NSENG-${encodeURIComponent(row.code || "")}/`;
+    ((spreads[isin] ||= {})["XNGN"] ||= {}).NGN = { bp: Number(bp.toFixed(2)), url };
+    books += 1;
+  }
+  return { at: data.at, books };
+}
+
+function loadBistTouch() {
+  const path = new URL("./bist-touch.json", import.meta.url);
+  if (!fs.existsSync(path)) return { books: 0 };
+  const data = JSON.parse(fs.readFileSync(path, "utf8"));
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Europe/Istanbul",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+  if (data.date !== today) return { books: 0, at: data.at, stale: true };
+  const BIST = new Set(["bist", "xist", "istanbul", "istanbulstockexchange", "borsaistanbul"]);
+  const byIsin = new Set();
+  for (const row of catalogueRows()) {
+    if (!BIST.has(norm(row.exchange))) continue;
+    const isin = String(row.isin || "").toUpperCase();
+    const currency = String(row.currency || "").toUpperCase();
+    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin) || currency !== "TRY") continue;
+    byIsin.add(isin);
+  }
+  let books = 0;
+  for (const row of data.rows || []) {
+    const bp = Number(row.bp) > 0 ? Number(row.bp) : bpFrom(Number(row.bid), Number(row.ask));
+    if (!(bp > 0)) continue;
+    const isin = String(row.isin || "").toUpperCase();
+    if (!byIsin.has(isin)) continue;
+    const url = row.url || `https://www.tradingview.com/symbols/BIST-${encodeURIComponent(row.code || "")}/`;
+    ((spreads[isin] ||= {})["XIST"] ||= {}).TRY = { bp: Number(bp.toFixed(2)), url };
+    books += 1;
+  }
+  return { at: data.at, books };
+}
+
+function loadBvcTouch() {
+  const path = new URL("./bvc-touch.json", import.meta.url);
+  if (!fs.existsSync(path)) return { books: 0 };
+  const data = JSON.parse(fs.readFileSync(path, "utf8"));
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Bogota",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+  if (data.date !== today) return { books: 0, at: data.at, stale: true };
+  const BVC = new Set(["bvc", "colombia", "xbog", "bolsadevaloresdecolombia"]);
+  const byIsin = new Set();
+  for (const row of catalogueRows()) {
+    if (!BVC.has(norm(row.exchange))) continue;
+    const isin = String(row.isin || "").toUpperCase();
+    const currency = String(row.currency || "").toUpperCase();
+    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin) || currency !== "COP") continue;
+    byIsin.add(isin);
+  }
+  let books = 0;
+  for (const row of data.rows || []) {
+    const bp = Number(row.bp) > 0 ? Number(row.bp) : bpFrom(Number(row.bid), Number(row.ask));
+    if (!(bp > 0)) continue;
+    const isin = String(row.isin || "").toUpperCase();
+    if (!byIsin.has(isin)) continue;
+    const url = row.url || `https://www.tradingview.com/symbols/BVC-${encodeURIComponent(row.code || "")}/`;
+    ((spreads[isin] ||= {})["XBOG"] ||= {}).COP = { bp: Number(bp.toFixed(2)), url };
     books += 1;
   }
   return { at: data.at, books };
@@ -1028,6 +1378,7 @@ const EURONEXT_SEGMENTS = {
   XBRU: ["XBRU"],
   XLIS: ["XLIS"],
   XMIL: ["MTAA", "BGEM", "ETFP"],
+  ETLX: ["ETLX"],
   XOSL: ["XOSL"],
   XMSM: ["XMSM"],
 };
@@ -1156,6 +1507,7 @@ const delayedQuotes = {
   lsin: new Map(),
   stuttgart: new Map(),
   bmv: new Map(),
+  lima: new Map(),
   questrade: new Map(),
   binance: new Map(),
   coinbase: new Map(),
@@ -1180,6 +1532,7 @@ const delayedTrouble = {
   lsin: null,
   stuttgart: null,
   bmv: null,
+  lima: null,
   questrade: null,
   binance: null,
   coinbase: null,
@@ -1492,8 +1845,8 @@ const QUESTRADE_RELOAD_EVERY = 160;
 
 // What each venue calls itself in the quote's `feed`. TSX and Cboe Canada share the `.TO`
 // suffix, so this is what keeps one venue's book off the other's row.
-const QUESTRADE_FEED = { XTSE: "TSX", XTSX: "TSXV", XCNQ: "CSE", NEOE: "NEO" };
-const QUESTRADE_SUFFIX = { XTSE: ".TO", XTSX: ".VN", XCNQ: ".CN", NEOE: ".TO" };
+const QUESTRADE_FEED = { XTSE: "TSX", XTSX: "TSXV", XCNQ: "CSE", NEOE: "NEO", PURE: "CSE" };
+const QUESTRADE_SUFFIX = { XTSE: ".TO", XTSX: ".VN", XCNQ: ".CN", NEOE: ".TO", PURE: ".CN" };
 
 // Questrade's own catalogue stores the symbol in the form the feed uses, suffix and share
 // class included: AAA.P.VN, AAWH.U.CN. A catalogue that writes the bare ticker instead —
@@ -2044,6 +2397,86 @@ async function loadCxe(lines) {
   return { listed: directory.size, wanted: wanted.length };
 }
 
+// Cboe Europe DXE, the Dutch lit book. Same viewer as Chi-X, a different
+// symbol file and a different book. A CXE touch is not written here.
+const DXE_SYMBOLS = "https://www.cboe.com/europe/equities/market_statistics/symbols_traded/csv/?mkt=dxe";
+const dxeQuotes = new Map();
+let dxeTrouble = null;
+
+async function loadDxe(lines) {
+  dxeQuotes.clear();
+  dxeTrouble = null;
+  const text = await (await fetchOk(DXE_SYMBOLS, 60000)).text();
+  const table = parseCsv(text);
+  const headerAt = table.findIndex((r) => r[0] === "company_name");
+  if (headerAt < 0) throw new Error("annuaire DXE illisible");
+  const header = table[headerAt];
+  const col = (name) => header.indexOf(name);
+  const batsAt = col("bats_name");
+  const isinAt = col("isin");
+  const ccyAt = col("currency");
+  const liveAt = col("live");
+  const directory = new Map();
+  for (const r of table.slice(headerAt + 1)) {
+    if (liveAt >= 0 && r[liveAt] !== "t") continue;
+    const isin = String(r[isinAt] || "").toUpperCase();
+    const currency = String(r[ccyAt] || "").toUpperCase();
+    const bats = r[batsAt];
+    if (!isin || !currency || !bats) continue;
+    const key = `${isin}|${currency}`;
+    if (!directory.has(key)) directory.set(key, []);
+    directory.get(key).push(bats);
+  }
+  const pickBats = (hint, cands) => {
+    if (cands.length === 1) return cands[0];
+    const stem = String(hint || "").replace(/\.(CHI|BS|DXE)$/i, "").replace(/\.[A-Z]{2,3}$/i, "");
+    if (cands.includes(hint)) return hint;
+    if (stem && cands.includes(stem)) return stem;
+    const one = cands.filter((c) => stem && c.startsWith(stem) && c.length === stem.length + 1);
+    return one.length === 1 ? one[0] : null;
+  };
+  const wanted = [];
+  for (const l of lines) {
+    const bats = pickBats(l.batsHint || l.ticker, directory.get(`${l.isin}|${l.currency}`) || []);
+    if (bats) wanted.push({ ...l, bats });
+  }
+  const cookie = await cxeCookie();
+  let next = 0;
+  const take = async () => {
+    while (next < wanted.length) {
+      const line = wanted[next++];
+      const url = `https://ww2.cboe.com/json/dxe/book/${encodeURIComponent(line.bats)}`;
+      let body = null;
+      try {
+        for (let attempt = 0; attempt < 2 && !body; attempt++) {
+          const res = await fetch(url, {
+            headers: { ...UA, Accept: "application/json", Referer: CXE_VIEWER, Cookie: cookie },
+            redirect: "follow",
+            signal: AbortSignal.timeout(20000),
+          });
+          if (res.ok) body = await res.json();
+          else if (attempt === 1) dxeTrouble = `HTTP ${res.status}`;
+        }
+      } catch (e) {
+        dxeTrouble = String(e.message || e).slice(0, 160);
+        continue;
+      }
+      const data = body?.data;
+      const bids = (data?.bids || []).map((x) => Number(x[1])).filter((n) => n > 0);
+      const asks = (data?.asks || []).map((x) => Number(x[1])).filter((n) => n > 0);
+      if (!bids.length || !asks.length) continue;
+      dxeQuotes.set(`${line.isin}|${line.currency}`, {
+        bid: Math.max(...bids),
+        ask: Math.min(...asks),
+        currency: line.currency,
+        bats: line.bats,
+      });
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(6, wanted.length) }, take));
+  return { listed: directory.size, wanted: wanted.length };
+}
+
 // A zip of stored or deflated members. Enough for the workbooks these exchanges
 // publish; a member whose size is left for a data descriptor is not one of them.
 function unzip(buf) {
@@ -2274,6 +2707,15 @@ let xcseTrouble = "";
 const xstoQuotes = new Map();
 let xstoTrouble = "";
 const xstoCurrencies = new Set();
+const fnseQuotes = new Map();
+let fnseTrouble = "";
+const fnseCurrencies = new Set();
+const fndkQuotes = new Map();
+let fndkTrouble = "";
+const fndkCurrencies = new Set();
+const fnfiQuotes = new Map();
+let fnfiTrouble = "";
+const fnfiCurrencies = new Set();
 const xhelQuotes = new Map();
 let xhelTrouble = "";
 const xhelCurrencies = new Set();
@@ -2353,6 +2795,36 @@ async function loadXsto() {
   }
 }
 
+async function loadFnse() {
+  const quotes = await loadNordic("STO", [["shares", "FIRST_NORTH", 500]]);
+  fnseCurrencies.clear();
+  for (const [key, quote] of quotes) {
+    if (quote.currency !== "SEK") continue;
+    fnseQuotes.set(key, quote);
+    fnseCurrencies.add(quote.currency);
+  }
+}
+
+async function loadFndk() {
+  const quotes = await loadNordic("CPH", [["shares", "FIRST_NORTH", 100]]);
+  fndkCurrencies.clear();
+  for (const [key, quote] of quotes) {
+    if (quote.currency !== "DKK") continue;
+    fndkQuotes.set(key, quote);
+    fndkCurrencies.add(quote.currency);
+  }
+}
+
+async function loadFnfi() {
+  const quotes = await loadNordic("HEL", [["shares", "FIRST_NORTH", 100]]);
+  fnfiCurrencies.clear();
+  for (const [key, quote] of quotes) {
+    if (quote.currency !== "EUR") continue;
+    fnfiQuotes.set(key, quote);
+    fnfiCurrencies.add(quote.currency);
+  }
+}
+
 async function loadXhel() {
   const quotes = await loadNordic("HEL");
   xhelCurrencies.clear();
@@ -2423,10 +2895,265 @@ async function xpraBook(isin) {
   return book;
 }
 
+// The daily bulletin's propuestas are the bid and the ask. A last trade
+// is not read. The sheet is the last one the exchange has published.
+const LIMA_BULLETIN = "https://documents.bvl.com.pe/pubdif/boldia/stockq.htm";
+
+function limaIsins() {
+  const book = new Map();
+  for (const name of ["../assets/stocks.csv", "../assets/etfs.csv"]) {
+    let text = "";
+    try {
+      text = fs.readFileSync(fileURLToPath(new URL(name, import.meta.url)), "utf8");
+    } catch {
+      continue;
+    }
+    for (const line of text.split(/\r?\n/)) {
+      if (!line.trim() || /^ticker\s*,/i.test(line)) continue;
+      const columns = line.split(",");
+      if (String(columns[1] || "").trim().toUpperCase() !== "BVL") continue;
+      const ticker = String(columns[0] || "").split(":").pop().trim().toUpperCase();
+      const isin = String(columns[2] || "").trim().toUpperCase();
+      if (!ticker || !/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin)) continue;
+      const held = book.get(ticker) || new Set();
+      held.add(isin);
+      book.set(ticker, held);
+    }
+  }
+  return book;
+}
+
+async function loadLima() {
+  const res = await fetch(LIMA_BULLETIN, {
+    headers: { "User-Agent": "Mozilla/5.0", Accept: "text/html" },
+    signal: AbortSignal.timeout(40_000),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const html = await res.text();
+  const dated = (html.match(/Actualizado al\s+(\d{1,2})\s+de\s+([a-z]+)\s+de\s+(\d{4})/i) || []).slice(1);
+  const months = { enero: "01", febrero: "02", marzo: "03", abril: "04", mayo: "05", junio: "06", julio: "07", agosto: "08", septiembre: "09", octubre: "10", noviembre: "11", diciembre: "12" };
+  const asOf = dated.length === 3 ? `${dated[2]}-${months[dated[1].toLowerCase()] || "??"}-${dated[0].padStart(2, "0")}` : "";
+  const isins = limaIsins();
+  const num = (value) => {
+    const text = String(value || "").replace(/,/g, "").trim();
+    if (!text || text.includes(".")) {
+      if (!text || /^\.+$/.test(text)) return null;
+    }
+    const n = Number(text);
+    return n > 0 ? n : null;
+  };
+  const venue = VENUES.find((v) => v.mic === "XLIM");
+  delayedQuotes.lima.clear();
+  let books = 0;
+  for (const row of html.match(/<tr>([\s\S]*?)<\/tr>/gi) || []) {
+    const cells = [...row.matchAll(/<td[^>]*>([\s\S]*?)<\/td>/gi)].map((cell) =>
+      cell[1].replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim()
+    );
+    if (cells.length < 11) continue;
+    const ticker = cells[0].replace(/\s*\(.*$/, "").trim().toUpperCase();
+    const currency = cells[1] === "S/" ? "PEN" : cells[1] === "US$" ? "USD" : "";
+    if (!currency) continue;
+    const bid = num(cells[9]);
+    const ask = num(cells[10]);
+    if (!(bid > 0) || !(ask > 0) || ask < bid) continue;
+    const ids = isins.get(ticker);
+    if (!ids || ids.size !== 1) continue;
+    const isin = [...ids][0];
+    const bp = bpFrom(bid, ask);
+    if (!(bp > 0)) continue;
+    const rounded = Number(bp.toFixed(2));
+    delayedQuotes.lima.set(`${isin}|${currency}`, { bid, ask, currency, ticker, asOf, bp: rounded });
+    ((spreads[isin] ||= {})[venue.mic] ||= {})[currency] = {
+      bp: rounded,
+      url: spreadUrl({ isin, ticker, venue, currency }),
+    };
+    books += 1;
+  }
+  return { books, asOf };
+}
+
+// Budapest publishes one delayed pre-trade table for the cash market and for
+// BETa. Times on the page are UTC. A quote from the opening auction, or from
+// another day, is not the continuous book.
+const BUDAPEST_PAGE = "https://bet.hu/site/Angol/pages/mifid2";
+const budapestQuotes = new Map();
+let budapestTrouble = null;
+
+function budapestContinuous(trDate, trTime) {
+  const raw = String(trTime || "");
+  const day = String(trDate || "");
+  if (!/^\d{8}$/.test(day) || raw.length < 6) return false;
+  const utc = new Date(
+    `${day.slice(0, 4)}-${day.slice(4, 6)}-${day.slice(6, 8)}T${raw.slice(0, 2)}:${raw.slice(2, 4)}:${raw.slice(4, 6)}Z`
+  );
+  if (Number.isNaN(utc.getTime())) return false;
+  const partsOf = (d) =>
+    Object.fromEntries(
+      new Intl.DateTimeFormat("en-GB", {
+        timeZone: "Europe/Budapest",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hourCycle: "h23",
+      })
+        .formatToParts(d)
+        .map((p) => [p.type, p.value])
+    );
+  const parts = partsOf(utc);
+  const today = partsOf(new Date());
+  if (parts.year !== today.year || parts.month !== today.month || parts.day !== today.day) return false;
+  const minutes = Number(parts.hour) * 60 + Number(parts.minute);
+  return minutes >= 9 * 60 && minutes < 17 * 60;
+}
+
+async function loadBudapest() {
+  budapestQuotes.clear();
+  const html = await (await fetchOk(BUDAPEST_PAGE, 60000)).text();
+  const at = html.indexOf("dataSourceResults=");
+  if (at < 0) throw new Error("page BÉT illisible");
+  const data = JSON.parse(html.slice(at + "dataSourceResults=".length, html.indexOf("</script>", at)));
+  const rows = data.BetPretradeExchangeTableDataSource || [];
+  for (const row of rows) {
+    const isin = String(row.isin || "").toUpperCase();
+    const currency = String(row.trCurrency || "").toUpperCase();
+    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin) || !currency) continue;
+    if (!budapestContinuous(row.trDate, row.trTime)) continue;
+    const bid = Number(String(row.bestBidPrice ?? "").replace(/\s/g, "").replace(",", "."));
+    const ask = Number(String(row.bestAskPrice ?? "").replace(/\s/g, "").replace(",", "."));
+    if (!(bid > 0) || !(ask > 0) || ask < bid) continue;
+    const prev = budapestQuotes.get(`${isin}|${currency}`);
+    if (prev && prev.at > `${row.trDate}${row.trTime}`) continue;
+    budapestQuotes.set(`${isin}|${currency}`, { bid, ask, currency, at: `${row.trDate}${row.trTime}` });
+  }
+}
+
+// Luxembourg's delayed file is one row per resting side, not a trade tape.
+// A bid left from the opening call is not paired with an ask from the
+// continuous book. RTS 2 is the bond file and is not read here.
+const LUXSE_PRE = "https://dl.luxse.com/rts/1/pre-trade";
+const luxseQuotes = new Map();
+let luxseTrouble = null;
+
+function luxseContinuous(stamp) {
+  const utc = new Date(stamp);
+  if (Number.isNaN(utc.getTime())) return false;
+  const partsOf = (d) =>
+    Object.fromEntries(
+      new Intl.DateTimeFormat("en-GB", {
+        timeZone: "Europe/Luxembourg",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hourCycle: "h23",
+      })
+        .formatToParts(d)
+        .map((p) => [p.type, p.value])
+    );
+  const parts = partsOf(utc);
+  const today = partsOf(new Date());
+  if (parts.year !== today.year || parts.month !== today.month || parts.day !== today.day) return false;
+  const minutes = Number(parts.hour) * 60 + Number(parts.minute);
+  return minutes >= 9 * 60 && minutes < 17 * 60 + 30;
+}
+
+async function loadLuxse() {
+  luxseQuotes.clear();
+  const text = await (await fetchOk(LUXSE_PRE, 60000)).text();
+  const table = parseCsv(text);
+  const header = table[0] || [];
+  const col = (name) => header.indexOf(name);
+  const isinAt = col("Instrument identification code");
+  const sideAt = col("Side");
+  const priceAt = col("Price");
+  const ccyAt = col("Price currency");
+  const noteAt = col("Price notation");
+  const venueAt = col("Venue");
+  const phaseAt = col("Trading system phase");
+  const atAt = col("Update date and time");
+  if (isinAt < 0 || sideAt < 0 || priceAt < 0) throw new Error("fichier pré-trade LuxSE illisible");
+  const sides = new Map();
+  for (const row of table.slice(1)) {
+    if (row[phaseAt] !== "COTR") continue;
+    if (noteAt >= 0 && row[noteAt] && row[noteAt] !== "MONE") continue;
+    if (!luxseContinuous(row[atAt])) continue;
+    const isin = String(row[isinAt] || "").toUpperCase();
+    const currency = String(row[ccyAt] || "").toUpperCase();
+    const side = row[sideAt];
+    const price = Number(row[priceAt]);
+    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin) || !currency || !(price > 0)) continue;
+    if (side !== "BUYI" && side !== "SELL") continue;
+    const venue = row[venueAt] || "XLUX";
+    const key = `${isin}|${currency}|${venue}`;
+    const prev = sides.get(key) || {};
+    const was = prev[side];
+    if (was && was.at > row[atAt]) continue;
+    prev[side] = { price, at: row[atAt] };
+    sides.set(key, prev);
+  }
+  const byBook = new Map();
+  for (const [key, quote] of sides) {
+    if (!quote.BUYI || !quote.SELL) continue;
+    const bid = quote.BUYI.price;
+    const ask = quote.SELL.price;
+    if (!(ask >= bid)) continue;
+    const [isin, currency, venue] = key.split("|");
+    const id = `${isin}|${currency}`;
+    if (!byBook.has(id)) byBook.set(id, []);
+    byBook.get(id).push({ bid, ask, currency, venue });
+  }
+  for (const [id, books] of byBook) {
+    const regulated = books.find((b) => b.venue === "XLUX");
+    const chosen = regulated || (books.length === 1 ? books[0] : null);
+    if (chosen) luxseQuotes.set(id, chosen);
+  }
+}
+
 const adapters = {
   adx: gulfAdapter("adx"),
   dfm: gulfAdapter("dfm"),
   msx: gulfAdapter("msx"),
+  budapest: {
+    measure: "touche du carnet Budapest",
+    async prefetch() {
+      try {
+        await loadBudapest();
+        console.error(`    Budapest : ${budapestQuotes.size} touches\n`);
+      } catch (e) {
+        budapestTrouble = String(e.message || e).slice(0, 160);
+        console.error(`    Budapest : ${budapestTrouble}\n`);
+      }
+    },
+    async fetch(l) {
+      const quote = budapestQuotes.get(`${l.isin}|${l.currency}`);
+      if (!quote) return { spreadBp: null, note: budapestTrouble || "absent du carnet de Budapest" };
+      const bp = bpFrom(quote.bid, quote.ask);
+      if (bp == null) return { spreadBp: null, note: "carnet à un seul côté" };
+      return { spreadBp: bp, bid: quote.bid, ask: quote.ask, tradingCurrency: quote.currency };
+    },
+  },
+  luxse: {
+    measure: "touche du carnet Luxembourg",
+    async prefetch() {
+      try {
+        await loadLuxse();
+        console.error(`    Luxembourg : ${luxseQuotes.size} touches\n`);
+      } catch (e) {
+        luxseTrouble = String(e.message || e).slice(0, 160);
+        console.error(`    Luxembourg : ${luxseTrouble}\n`);
+      }
+    },
+    async fetch(l) {
+      const quote = luxseQuotes.get(`${l.isin}|${l.currency}`);
+      if (!quote) return { spreadBp: null, note: luxseTrouble || "absent du carnet du Luxembourg" };
+      const bp = bpFrom(quote.bid, quote.ask);
+      if (bp == null) return { spreadBp: null, note: "carnet à un seul côté" };
+      return { spreadBp: bp, bid: quote.bid, ask: quote.ask, tradingCurrency: quote.currency };
+    },
+  },
   bhb: gulfAdapter("bhb"),
   // Xetra's own book, asked for over the socket the page itself uses. Reading it in the
   // DOM worked and was hopeless at this size: a page load and a wait for the quote to
@@ -2710,6 +3437,44 @@ const adapters = {
     },
   },
 
+  // EuroTLX only. The search also offers this book for a Paris or Milan
+  // name; those adapters keep refusing it, and this one never reads them.
+  eurotlx: {
+    measure: "touche du carnet EuroTLX",
+    async fetch(l, ownTab) {
+      if (l.currency !== "EUR") {
+        return { spreadBp: null, note: `EuroTLX cote en EUR, pas en ${l.currency}` };
+      }
+      const found = await euronextPage({ ...l, mic: "ETLX" });
+      if (!found.url) return { spreadBp: null, note: found.note };
+      const p = await ownTab();
+      try {
+        await p.goto(found.url, { waitUntil: "networkidle2", timeout: 60000 });
+        await new Promise((r) => setTimeout(r, 2500));
+      } catch {
+        return { spreadBp: null, note: "page EuroTLX non chargée" };
+      }
+      const book = await p.evaluate(() => {
+        const text = (document.body?.innerText || "").replace(/\u00a0/g, " ");
+        const grab = (label) => {
+          const m = text.match(new RegExp(`${label}\\s*([\\d.,]+)`, "i"));
+          return m?.[1] ? Number(m[1].replace(/,/g, "")) : null;
+        };
+        return { bid: grab("Best Bid"), ask: grab("Best Ask"), notFound: /instrument not found/i.test(text) };
+      });
+      if (book.notFound) return { spreadBp: null, note: "non coté sur ETLX" };
+      const bp = bpFrom(book.bid, book.ask);
+      return {
+        spreadBp: bp,
+        bid: book.bid,
+        ask: book.ask,
+        tradingCurrency: "EUR",
+        url: found.url,
+        ...(bp == null ? { note: "carnet à un seul côté" } : {}),
+      };
+    },
+  },
+
   xice: {
     measure: "touche du carnet",
     async prefetch() {
@@ -2817,6 +3582,69 @@ const adapters = {
         currencies: xstoCurrencies,
         trouble: xstoTrouble,
         place: "Nasdaq Stockholm",
+      });
+    },
+  },
+
+  fnse: {
+    measure: "touche du carnet",
+    async prefetch() {
+      try {
+        await loadFnse();
+        console.error(`    First North Stockholm : ${fnseQuotes.size} cotations\n`);
+      } catch (e) {
+        fnseTrouble = String(e.message || e).slice(0, 160);
+        console.error(`    First North Stockholm : ${fnseTrouble}\n`);
+      }
+    },
+    async fetch(l) {
+      return nordicTouch(l, {
+        quotes: fnseQuotes,
+        currencies: fnseCurrencies,
+        trouble: fnseTrouble,
+        place: "First North Stockholm",
+      });
+    },
+  },
+
+  fndk: {
+    measure: "touche du carnet",
+    async prefetch() {
+      try {
+        await loadFndk();
+        console.error(`    First North Danemark : ${fndkQuotes.size} cotations\n`);
+      } catch (e) {
+        fndkTrouble = String(e.message || e).slice(0, 160);
+        console.error(`    First North Danemark : ${fndkTrouble}\n`);
+      }
+    },
+    async fetch(l) {
+      return nordicTouch(l, {
+        quotes: fndkQuotes,
+        currencies: fndkCurrencies,
+        trouble: fndkTrouble,
+        place: "First North Danemark",
+      });
+    },
+  },
+
+  fnfi: {
+    measure: "touche du carnet",
+    async prefetch() {
+      try {
+        await loadFnfi();
+        console.error(`    First North Helsinki : ${fnfiQuotes.size} cotations\n`);
+      } catch (e) {
+        fnfiTrouble = String(e.message || e).slice(0, 160);
+        console.error(`    First North Helsinki : ${fnfiTrouble}\n`);
+      }
+    },
+    async fetch(l) {
+      return nordicTouch(l, {
+        quotes: fnfiQuotes,
+        currencies: fnfiCurrencies,
+        trouble: fnfiTrouble,
+        place: "First North Helsinki",
       });
     },
   },
@@ -2939,6 +3767,28 @@ const adapters = {
     async fetch(l) {
       const quote = cxeQuotes.get(`${l.isin}|${l.currency}`);
       if (!quote) return { spreadBp: null, note: cxeTrouble || "absent du carnet CXE" };
+      const bp = bpFrom(quote.bid, quote.ask);
+      if (bp == null) return { spreadBp: null, note: "carnet à un seul côté" };
+      return { spreadBp: bp, tradingCurrency: quote.currency };
+    },
+  },
+
+  // Cboe Europe DXE. One touch per symbol from the same public viewer as
+  // Chi-X, read off the DXE book. A CXE figure is never stored here.
+  dxe: {
+    measure: "touche du carnet DXE",
+    async prefetch(lines) {
+      try {
+        const n = await loadDxe(lines);
+        console.error(`    Cboe Europe DXE : ${dxeQuotes.size} touches sur ${n.wanted} demandées\n`);
+      } catch (e) {
+        dxeTrouble = String(e.message || e).slice(0, 160);
+        console.error(`    Cboe Europe DXE : ${dxeTrouble}\n`);
+      }
+    },
+    async fetch(l) {
+      const quote = dxeQuotes.get(`${l.isin}|${l.currency}`);
+      if (!quote) return { spreadBp: null, note: dxeTrouble || "absent du carnet DXE" };
       const bp = bpFrom(quote.bid, quote.ask);
       if (bp == null) return { spreadBp: null, note: "carnet à un seul côté" };
       return { spreadBp: bp, tradingCurrency: quote.currency };
@@ -3243,6 +4093,31 @@ const adapters = {
     },
   },
 
+  lima: {
+    measure: "propositions du bulletin quotidien",
+    async prefetch() {
+      try {
+        const stats = await loadLima();
+        console.error(`    Lima : ${stats.books} carnets, bulletin du ${stats.asOf || "?"}\n`);
+      } catch (e) {
+        delayedTrouble.lima = String(e.message || e).slice(0, 160);
+        console.error(`    Lima : ${delayedTrouble.lima}\n`);
+      }
+    },
+    async fetch(l) {
+      const quote = delayedQuotes.lima.get(`${l.isin}|${l.currency}`);
+      if (!quote) {
+        return { spreadBp: null, note: delayedTrouble.lima || "absent du bulletin de Lima" };
+      }
+      return {
+        spreadBp: bpFrom(quote.bid, quote.ask),
+        bid: quote.bid,
+        ask: quote.ask,
+        tradingCurrency: quote.currency,
+      };
+    },
+  },
+
   // The four Canadian books, read through a Questrade session. TSX and TSX Venture come
   // live, the CSE and Cboe Canada fifteen minutes late, which the quote says itself.
   questrade: {
@@ -3278,6 +4153,42 @@ const adapters = {
       // A halted book has a touch, and it is not the one a trade would meet.
       if (quote.halt) return { spreadBp: null, note: "titre suspendu" };
       return { spreadBp: bpFrom(quote.bid, quote.ask), bid: quote.bid, ask: quote.ask };
+    },
+  },
+
+  // Pure Trading, the book brokers label PURE. The same Questrade session
+  // as Toronto, but only a .CN symbol whose feed is CSE. A TSX quote is
+  // refused here.
+  pure: {
+    measure: "touche du carnet Pure Trading",
+    async prefetch(lines, ownTab) {
+      try {
+        const stats = await loadQuestrade(lines, ownTab);
+        console.error(
+          `    Pure Trading : ${stats.books} carnets / ${stats.quoted} cotations (${stats.wanted} symboles)\n`
+        );
+      } catch (e) {
+        delayedTrouble.questrade = String(e.message || e).slice(0, 160);
+        console.error(`    Pure Trading : ${delayedTrouble.questrade}\n`);
+      }
+    },
+    async fetch(l) {
+      const symbol = questradeSymbol(l);
+      if (!symbol) return { spreadBp: null, note: "ticker manquant, clé du symbole Questrade" };
+      const quote = delayedQuotes.questrade.get(symbol);
+      if (!quote) {
+        return {
+          spreadBp: null,
+          note: delayedTrouble.questrade || `${symbol} absent de la cote Questrade`,
+        };
+      }
+      if (quote.feed && quote.feed !== "CSE") {
+        return { spreadBp: null, note: `${symbol} cote sur ${quote.feed}, pas sur CSE` };
+      }
+      if (quote.halt) return { spreadBp: null, note: "titre suspendu" };
+      const bp = bpFrom(quote.bid, quote.ask);
+      if (bp == null) return { spreadBp: null, note: "carnet à un seul côté" };
+      return { spreadBp: bp, bid: quote.bid, ask: quote.ask };
     },
   },
 
@@ -3648,11 +4559,65 @@ if (!ONLY.length || ONLY.includes("pse") || pseTouchOnly) {
   pseTouchStats = loadPseTouch();
   console.error(`Manille : ${pseTouchStats.books} touches du carnet (${pseTouchStats.at || "sans date"})`);
 }
+const nagoyaTouchOnly = ONLY.length === 1 && ONLY[0] === "nagoya-touch";
+let nagoyaTouchStats = { books: 0 };
+if (!ONLY.length || ONLY.includes("nagoya") || nagoyaTouchOnly) {
+  nagoyaTouchStats = loadNagoyaTouch();
+  console.error(`Nagoya : ${nagoyaTouchStats.books} touches du carnet (${nagoyaTouchStats.at || "sans date"})`);
+}
+const bvbTouchOnly = ONLY.length === 1 && ONLY[0] === "bvb-touch";
+let bvbTouchStats = { books: 0 };
+if (!ONLY.length || ONLY.includes("bvb") || bvbTouchOnly) {
+  bvbTouchStats = loadBvbTouch();
+  console.error(`Bucarest : ${bvbTouchStats.books} touches du carnet (${bvbTouchStats.at || "sans date"})`);
+}
+const jseTouchOnly = ONLY.length === 1 && ONLY[0] === "jse-touch";
+let jseTouchStats = { books: 0 };
+if (!ONLY.length || ONLY.includes("jse") || jseTouchOnly) {
+  jseTouchStats = loadJseTouch();
+  console.error(`Johannesburg : ${jseTouchStats.books} touches du carnet (${jseTouchStats.at || "sans date"})`);
+}
+const ngxTouchOnly = ONLY.length === 1 && ONLY[0] === "ngx-touch";
+let ngxTouchStats = { books: 0 };
+if (!ONLY.length || ONLY.includes("ngx") || ngxTouchOnly) {
+  ngxTouchStats = loadNgxTouch();
+  console.error(`Nigeria : ${ngxTouchStats.books} touches du carnet (${ngxTouchStats.at || "sans date"})`);
+}
+const bistTouchOnly = ONLY.length === 1 && ONLY[0] === "bist-touch";
+let bistTouchStats = { books: 0 };
+if (!ONLY.length || ONLY.includes("bist") || bistTouchOnly) {
+  bistTouchStats = loadBistTouch();
+  console.error(`Istanbul : ${bistTouchStats.books} touches du carnet (${bistTouchStats.at || "sans date"})`);
+}
+const bvcTouchOnly = ONLY.length === 1 && ONLY[0] === "bvc-touch";
+let bvcTouchStats = { books: 0 };
+if (!ONLY.length || ONLY.includes("bvc") || bvcTouchOnly) {
+  bvcTouchStats = loadBvcTouch();
+  console.error(`Colombie : ${bvcTouchStats.books} touches du carnet (${bvcTouchStats.at || "sans date"})`);
+}
 const vnTouchOnly = ONLY.length === 1 && ONLY[0] === "vn-touch";
 let vnTouchStats = { books: 0 };
 if (!ONLY.length || ONLY.includes("hose") || ONLY.includes("upcom") || vnTouchOnly) {
   vnTouchStats = loadVnTouch();
   console.error(`Vietnam : ${vnTouchStats.books} touches du carnet (${vnTouchStats.at || "sans date"})`);
+}
+const aqseTouchOnly = ONLY.length === 1 && ONLY[0] === "aqse-touch";
+let aqseTouchStats = { books: 0 };
+if (!ONLY.length || ONLY.includes("aqse") || ONLY.includes("aquis") || aqseTouchOnly) {
+  aqseTouchStats = loadAqseTouch();
+  console.error(`AQSE : ${aqseTouchStats.books} touches du carnet (${aqseTouchStats.at || "sans date"})`);
+}
+const bequotedTouchOnly = ONLY.length === 1 && ONLY[0] === "bequoted-touch";
+let bequotedTouchStats = { books: 0 };
+if (!ONLY.length || ONLY.includes("bequoted") || bequotedTouchOnly) {
+  bequotedTouchStats = loadBequotedTouch();
+  console.error(`beQuoted : ${bequotedTouchStats.books} touches du carnet (${bequotedTouchStats.at || "sans date"})`);
+}
+const ncTouchOnly = ONLY.length === 1 && ONLY[0] === "nc-touch";
+let ncTouchStats = { books: 0 };
+if (!ONLY.length || ONLY.includes("newconnect") || ncTouchOnly) {
+  ncTouchStats = loadNcTouch();
+  console.error(`NewConnect : ${ncTouchStats.books} touches du carnet (${ncTouchStats.at || "sans date"})`);
 }
 const gcTouchOnly = ONLY.length === 1 && ONLY[0] === "gc-touch";
 let gcTouchStats = { books: 0 };
@@ -3666,7 +4631,7 @@ if (!ONLY.length || ONLY.includes("nse")) {
 }
 
 const todo =
-  auTouchOnly || sgxTouchOnly || hkTouchOnly || bursaTouchOnly || pseTouchOnly || vnTouchOnly || gcTouchOnly
+  auTouchOnly || sgxTouchOnly || hkTouchOnly || bursaTouchOnly || pseTouchOnly || vnTouchOnly || gcTouchOnly || nagoyaTouchOnly || bvbTouchOnly || jseTouchOnly || ngxTouchOnly || bistTouchOnly || bvcTouchOnly || ncTouchOnly || bequotedTouchOnly || aqseTouchOnly
     ? []
     : [...listings.values()].filter(worthVisiting);
 console.error(`${todo.length} à visiter, ${listings.size - todo.length} à jour\n`);
@@ -3735,6 +4700,36 @@ if (pseTouchOnly) {
   console.error(`${STORE_PATH} : ${pseTouchStats.books} touches de Manille écrites.`);
   process.exit(0);
 }
+if (nagoyaTouchOnly) {
+  flush();
+  console.error(`${STORE_PATH} : ${nagoyaTouchStats.books} touches de Nagoya écrites.`);
+  process.exit(0);
+}
+if (bvbTouchOnly) {
+  flush();
+  console.error(`${STORE_PATH} : ${bvbTouchStats.books} touches de Bucarest écrites.`);
+  process.exit(0);
+}
+if (jseTouchOnly) {
+  flush();
+  console.error(`${STORE_PATH} : ${jseTouchStats.books} touches de Johannesburg écrites.`);
+  process.exit(0);
+}
+if (ngxTouchOnly) {
+  flush();
+  console.error(`${STORE_PATH} : ${ngxTouchStats.books} touches du Nigeria écrites.`);
+  process.exit(0);
+}
+if (bistTouchOnly) {
+  flush();
+  console.error(`${STORE_PATH} : ${bistTouchStats.books} touches d'Istanbul écrites.`);
+  process.exit(0);
+}
+if (bvcTouchOnly) {
+  flush();
+  console.error(`${STORE_PATH} : ${bvcTouchStats.books} touches de Colombie écrites.`);
+  process.exit(0);
+}
 if (vnTouchOnly) {
   flush();
   console.error(`${STORE_PATH} : ${vnTouchStats.books} touches du Vietnam écrites.`);
@@ -3743,6 +4738,21 @@ if (vnTouchOnly) {
 if (gcTouchOnly) {
   flush();
   console.error(`${STORE_PATH} : ${gcTouchStats.books} touches de GlobalConnect écrites.`);
+  process.exit(0);
+}
+if (ncTouchOnly) {
+  flush();
+  console.error(`${STORE_PATH} : ${ncTouchStats.books} touches de NewConnect écrites.`);
+  process.exit(0);
+}
+if (bequotedTouchOnly) {
+  flush();
+  console.error(`${STORE_PATH} : ${bequotedTouchStats.books} touches de beQuoted écrites.`);
+  process.exit(0);
+}
+if (aqseTouchOnly) {
+  flush();
+  console.error(`${STORE_PATH} : ${aqseTouchStats.books} touches d'AQSE écrites.`);
   process.exit(0);
 }
 

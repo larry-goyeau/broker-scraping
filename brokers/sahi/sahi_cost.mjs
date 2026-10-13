@@ -28,7 +28,7 @@
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate, intradayGap } from "../../indianDelivery.mjs";
 
 function seriesOf(row) {
   const parts = String(row?.raw || "").trim().split(/\s+/);
@@ -65,7 +65,7 @@ const SCHEDULE = {
   ipftRate: pct("0.0000001"),
   dpInr: 13.5,
   basis: "Courtage livraison : le plus bas de 10 ₹ et 0,05 % par ordre. DP 13,5 ₹ + GST à la vente.",
-  remark: "Intraday is the lower of ₹10 and 0.05% per executed order. The first 30 days of brokerage are free.",
+  remark: [intradayGap(pct("0.05"), pct("0.05")), "The first 30 days of brokerage are free."].filter(Boolean).join(" "),
 };
 
 export function roundTrip(query) {

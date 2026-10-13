@@ -77,6 +77,12 @@ export const ALIASES = {
   vivid: "interactivebrokers",
   // Matsui transmits US cash orders to Interactive Brokers LLC.
   matsui: "interactivebrokers",
+  // LHV Pank is a member of the Baltic exchanges. On other markets it
+  // transmits the order. Interactive Brokers LLC is the US broker-dealer
+  // on that list, and IBKRATS is an execution venue.
+  // https://www.lhv.ee/en/information-on-investment-services
+  // https://www.lhv.ee/en/list-of-execution-venues-for-securities-transactions
+  lhvpank: "interactivebrokers",
   // Dhan names ViewTrade as the US broker that executes, clears and custodies.
   dhan: "viewtrade",
   // Pearler FSG of 1 July 2026: Alpaca Securities LLC is the US broker from
@@ -106,6 +112,10 @@ export const ALIASES = {
   // moomoo証券's December 2025 trading booklet, chapter 1 article 13:
   // a US stock order is transmitted to Futu Clearing Inc.
   moomoo: "futuclearing",
+  // Futu Hong Kong names Futu Clearing Inc. as the DTC firm for a US
+  // stock transfer, code 4272. Futu Clearing's 606 is the routing report.
+  // https://www.futuhk.com/support/topic2_277
+  futu: "futuclearing",
   // Pluang sends a US share or ETF through PT PG Berjangka and KBI to
   // Alpaca Securities LLC, the only overseas broker that executes it.
   // Options go to Atomic Vaults and are not this book.

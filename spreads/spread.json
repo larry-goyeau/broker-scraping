@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-16T11:34:00.773Z",
+  "generatedAt": "2026-10-16T14:00:58.127Z",
   "unit": "spreads[ISIN][place][devise] = { bp, url } ou { perShare, url } : le coût d'un achat suivi d'une revente immédiate, pour un ordre de particulier. bp -> montant * bp / 10000 (places européennes, mesure en pourcentage). perShare -> parts * perShare (places américaines, spread effectif des rapports 605, en dollars par part, amélioration de prix comprise). url mène à la source. Le double pour le cas pessimiste (ordre internalisé, ou fonds peu liquide).",
   "convention": "coût d'un aller-retour, taille d'un particulier, à la touche, ramené à la moyenne de séance",
   "session": {
@@ -1629391,6 +1629391,12 @@
           "perShare": 0.00406,
           "url": "https://www.finra.org/filing-reporting/regulation-nms/sec-rule-605-reports"
         }
+      },
+      "XBUE": {
+        "ARS": {
+          "bp": 51.15,
+          "url": "https://bonos.ecovalores.com.ar/activo/NG"
+        }
       }
     },
     "AR0142846093": {
@@ -1629506,6 +1629512,12 @@
         "USD": {
           "perShare": 0.28339,
           "url": "https://www.finra.org/filing-reporting/regulation-nms/sec-rule-605-reports"
+        }
+      },
+      "XBUE": {
+        "ARS": {
+          "bp": 52.56,
+          "url": "https://bonos.ecovalores.com.ar/activo/CLS"
         }
       }
     },
@@ -1725001,6 +1725013,12 @@
           "perShare": 0.00614,
           "url": "https://www.finra.org/filing-reporting/regulation-nms/sec-rule-605-reports"
         }
+      },
+      "XBUE": {
+        "ARS": {
+          "bp": 28.73,
+          "url": "https://bonos.ecovalores.com.ar/activo/GFI"
+        }
       }
     },
     "PK0078901011": {
@@ -1725017,6 +1725035,12 @@
           "perShare": 0.00408,
           "url": "https://www.finra.org/filing-reporting/regulation-nms/sec-rule-605-reports"
         }
+      },
+      "XBUE": {
+        "ARS": {
+          "bp": 36.98,
+          "url": "https://bonos.ecovalores.com.ar/activo/IBN"
+        }
       }
     },
     "ARDEUT114022": {
@@ -1725025,6 +1725049,12 @@
           "perShare": 0.00545,
           "url": "https://www.finra.org/filing-reporting/regulation-nms/sec-rule-605-reports"
         }
+      },
+      "XBUE": {
+        "ARS": {
+          "bp": 31.09,
+          "url": "https://bonos.ecovalores.com.ar/activo/HDB"
+        }
       }
     },
     "ARDEUT116001": {
@@ -1725032,6 +1725062,12 @@
         "USD": {
           "perShare": 0.00354,
           "url": "https://www.finra.org/filing-reporting/regulation-nms/sec-rule-605-reports"
+        }
+      },
+      "XBUE": {
+        "ARS": {
+          "bp": 30.56,
+          "url": "https://bonos.ecovalores.com.ar/activo/BBD"
         }
       }
     },
@@ -1725061,6 +1725097,12 @@
           "perShare": 0.00298,
           "url": "https://www.finra.org/filing-reporting/regulation-nms/sec-rule-605-reports"
         }
+      },
+      "XBUE": {
+        "ARS": {
+          "bp": 31.4,
+          "url": "https://bonos.ecovalores.com.ar/activo/HMC"
+        }
       }
     },
     "ARDEUT110558": {
@@ -1725069,6 +1725111,12 @@
           "perShare": 0.00433,
           "url": "https://www.finra.org/filing-reporting/regulation-nms/sec-rule-605-reports"
         }
+      },
+      "XBUE": {
+        "ARS": {
+          "bp": 59.38,
+          "url": "https://bonos.ecovalores.com.ar/activo/PHG"
+        }
       }
     },
     "ARDEUT112216": {
@@ -1725076,6 +1725124,12 @@
         "USD": {
           "perShare": 0.00483,
           "url": "https://www.finra.org/filing-reporting/regulation-nms/sec-rule-605-reports"
+        }
+      },
+      "XBUE": {
+        "ARS": {
+          "bp": 30.17,
+          "url": "https://bonos.ecovalores.com.ar/activo/CX"
         }
       }
     },
@@ -1725099,6 +1725153,12 @@
           "perShare": 0.54576,
           "url": "https://www.finra.org/filing-reporting/regulation-nms/sec-rule-605-reports"
         }
+      },
+      "XBUE": {
+        "ARS": {
+          "bp": 725.39,
+          "url": "https://bonos.ecovalores.com.ar/activo/AKO.B"
+        }
       }
     },
     "ARDEUT115268": {
@@ -1725106,6 +1725166,12 @@
         "USD": {
           "perShare": 0.10151,
           "url": "https://www.finra.org/filing-reporting/regulation-nms/sec-rule-605-reports"
+        }
+      },
+      "XBUE": {
+        "ARS": {
+          "bp": 151.89,
+          "url": "https://bonos.ecovalores.com.ar/activo/KB"
         }
       }
     },
@@ -1725951,6 +1726017,12 @@
           "perShare": 0.00543,
           "url": "https://www.finra.org/filing-reporting/regulation-nms/sec-rule-605-reports"
         }
+      },
+      "XBUE": {
+        "ARS": {
+          "bp": 66.49,
+          "url": "https://bonos.ecovalores.com.ar/activo/GGB"
+        }
       }
     },
     "NGJULI000003": {
@@ -1725980,6 +1726052,12 @@
         "USD": {
           "perShare": 0.00855,
           "url": "https://www.finra.org/filing-reporting/regulation-nms/sec-rule-605-reports"
+        }
+      },
+      "XBUE": {
+        "ARS": {
+          "bp": 64.13,
+          "url": "https://bonos.ecovalores.com.ar/activo/IP"
         }
       }
     },
@@ -1726017,6 +1726095,12 @@
           "perShare": 0.13437,
           "url": "https://www.finra.org/filing-reporting/regulation-nms/sec-rule-605-reports"
         }
+      },
+      "XBUE": {
+        "ARS": {
+          "bp": 125.6,
+          "url": "https://bonos.ecovalores.com.ar/activo/JOYY"
+        }
       }
     },
     "MYL7323OO008": {
@@ -1726039,6 +1726123,12 @@
           "perShare": 0.00369,
           "url": "https://www.finra.org/filing-reporting/regulation-nms/sec-rule-605-reports"
         }
+      },
+      "XBUE": {
+        "ARS": {
+          "bp": 51.5,
+          "url": "https://bonos.ecovalores.com.ar/activo/KEP"
+        }
       }
     },
     "ARDEUT115391": {
@@ -1726046,6 +1726136,12 @@
         "USD": {
           "perShare": 0.00299,
           "url": "https://www.finra.org/filing-reporting/regulation-nms/sec-rule-605-reports"
+        }
+      },
+      "XBUE": {
+        "ARS": {
+          "bp": 30.82,
+          "url": "https://bonos.ecovalores.com.ar/activo/KGC"
         }
       }
     },
@@ -1726081,6 +1726177,12 @@
           "perShare": 0.01347,
           "url": "https://www.finra.org/filing-reporting/regulation-nms/sec-rule-605-reports"
         }
+      },
+      "XBUE": {
+        "ARS": {
+          "bp": 110.5,
+          "url": "https://bonos.ecovalores.com.ar/activo/LND"
+        }
       }
     },
     "ARDEUT114733": {
@@ -1726088,6 +1726190,12 @@
         "USD": {
           "perShare": 0.00354,
           "url": "https://www.finra.org/filing-reporting/regulation-nms/sec-rule-605-reports"
+        }
+      },
+      "XBUE": {
+        "ARS": {
+          "bp": 53.49,
+          "url": "https://bonos.ecovalores.com.ar/activo/MFG"
         }
       }
     },
@@ -1726114,6 +1726222,12 @@
         "USD": {
           "perShare": 0.00958,
           "url": "https://www.finra.org/filing-reporting/regulation-nms/sec-rule-605-reports"
+        }
+      },
+      "XBUE": {
+        "ARS": {
+          "bp": 26.88,
+          "url": "https://bonos.ecovalores.com.ar/activo/NGG"
         }
       }
     },
@@ -1726144,6 +1726258,12 @@
         "USD": {
           "perShare": 0.17376,
           "url": "https://www.finra.org/filing-reporting/regulation-nms/sec-rule-605-reports"
+        }
+      },
+      "XBUE": {
+        "ARS": {
+          "bp": 92.65,
+          "url": "https://bonos.ecovalores.com.ar/activo/SNA"
         }
       }
     },
@@ -1726261,6 +1726381,12 @@
           "perShare": 0.00489,
           "url": "https://www.finra.org/filing-reporting/regulation-nms/sec-rule-605-reports"
         }
+      },
+      "XBUE": {
+        "ARS": {
+          "bp": 76.29,
+          "url": "https://bonos.ecovalores.com.ar/activo/BSBR"
+        }
       }
     },
     "IL0010944739": {
@@ -1726351,6 +1726477,12 @@
           "perShare": 0.00519,
           "url": "https://www.finra.org/filing-reporting/regulation-nms/sec-rule-605-reports"
         }
+      },
+      "XBUE": {
+        "ARS": {
+          "bp": 37.04,
+          "url": "https://bonos.ecovalores.com.ar/activo/ELPC"
+        }
       }
     },
     "AU0000196206": {
@@ -1726427,6 +1726559,12 @@
           "perShare": 0.02683,
           "url": "https://www.finra.org/filing-reporting/regulation-nms/sec-rule-605-reports"
         }
+      },
+      "XBUE": {
+        "ARS": {
+          "bp": 82.3,
+          "url": "https://bonos.ecovalores.com.ar/activo/GLNG"
+        }
       }
     },
     "ARBCOM4603F3": {
@@ -1726443,6 +1726581,12 @@
           "perShare": 0.263,
           "url": "https://www.finra.org/filing-reporting/regulation-nms/sec-rule-605-reports"
         }
+      },
+      "XBUE": {
+        "ARS": {
+          "bp": 41.66,
+          "url": "https://bonos.ecovalores.com.ar/activo/GRMN"
+        }
       }
     },
     "ARBCOM4601Y8": {
@@ -1726450,6 +1726594,12 @@
         "USD": {
           "perShare": 0.00381,
           "url": "https://www.finra.org/filing-reporting/regulation-nms/sec-rule-605-reports"
+        }
+      },
+      "XBUE": {
+        "ARS": {
+          "bp": 27.51,
+          "url": "https://bonos.ecovalores.com.ar/activo/JD"
         }
       }
     },
@@ -1726475,6 +1726625,12 @@
           "perShare": 0.03887,
           "url": "https://www.finra.org/filing-reporting/regulation-nms/sec-rule-605-reports"
         }
+      },
+      "XBUE": {
+        "ARS": {
+          "bp": 52.25,
+          "url": "https://bonos.ecovalores.com.ar/activo/MRSH"
+        }
       }
     },
     "SE0020679025": {
@@ -1726490,6 +1726646,12 @@
         "USD": {
           "perShare": 0.00466,
           "url": "https://www.finra.org/filing-reporting/regulation-nms/sec-rule-605-reports"
+        }
+      },
+      "XBUE": {
+        "ARS": {
+          "bp": 53.51,
+          "url": "https://bonos.ecovalores.com.ar/activo/SBS"
         }
       }
     },
@@ -1726512,6 +1726674,12 @@
         "USD": {
           "perShare": 0.00367,
           "url": "https://www.finra.org/filing-reporting/regulation-nms/sec-rule-605-reports"
+        }
+      },
+      "XBUE": {
+        "ARS": {
+          "bp": 44.81,
+          "url": "https://bonos.ecovalores.com.ar/activo/SLB"
         }
       }
     },
@@ -2052496,6 +2052664,10 @@
         "USD": {
           "bp": 55.45,
           "url": "https://www.tradingview.com/symbols/BCBA-PGD/"
+        },
+        "ARS": {
+          "bp": 11.68,
+          "url": "https://bonos.ecovalores.com.ar/activo/PG"
         }
       }
     },
@@ -2117486,6 +2117658,2082 @@
         "USD": {
           "bp": 13.73,
           "url": "https://live.euronext.com/en/product/etfs/IE000LO4MAC0-XAMS/market-information"
+        }
+      }
+    },
+    "ARBCOM4603M9": {
+      "XBUE": {
+        "ARS": {
+          "bp": 52.15,
+          "url": "https://bonos.ecovalores.com.ar/activo/ABBV"
+        }
+      }
+    },
+    "ARMTBA010010": {
+      "XBUE": {
+        "ARS": {
+          "bp": 582.52,
+          "url": "https://bonos.ecovalores.com.ar/activo/A3"
+        }
+      }
+    },
+    "ARDEUT116183": {
+      "XBUE": {
+        "ARS": {
+          "bp": 21.64,
+          "url": "https://bonos.ecovalores.com.ar/activo/AAPL"
+        }
+      }
+    },
+    "ARCAVA4601I3": {
+      "XBUE": {
+        "ARS": {
+          "bp": 41.93,
+          "url": "https://bonos.ecovalores.com.ar/activo/ABNB"
+        }
+      }
+    },
+    "ARDEUT110608": {
+      "XBUE": {
+        "ARS": {
+          "bp": 18.7,
+          "url": "https://bonos.ecovalores.com.ar/activo/ABT"
+        }
+      }
+    },
+    "AR0219286272": {
+      "XBUE": {
+        "ARS": {
+          "bp": 50.38,
+          "url": "https://bonos.ecovalores.com.ar/activo/ACWI"
+        }
+      }
+    },
+    "ARDEUT110681": {
+      "XBUE": {
+        "ARS": {
+          "bp": 44.84,
+          "url": "https://bonos.ecovalores.com.ar/activo/ADP"
+        }
+      }
+    },
+    "ARDEUT112398": {
+      "XBUE": {
+        "ARS": {
+          "bp": 66.35,
+          "url": "https://bonos.ecovalores.com.ar/activo/AEG"
+        }
+      }
+    },
+    "ARDEUT110640": {
+      "XBUE": {
+        "ARS": {
+          "bp": 46.37,
+          "url": "https://bonos.ecovalores.com.ar/activo/AIG"
+        }
+      }
+    },
+    "AR0717084534": {
+      "XBUE": {
+        "ARS": {
+          "bp": 85.11,
+          "url": "https://bonos.ecovalores.com.ar/activo/ALAB"
+        }
+      }
+    },
+    "ARDEUT112646": {
+      "XBUE": {
+        "ARS": {
+          "bp": 43.34,
+          "url": "https://bonos.ecovalores.com.ar/activo/AMX"
+        }
+      }
+    },
+    "AR0827075372": {
+      "XBUE": {
+        "ARS": {
+          "bp": 59.29,
+          "url": "https://bonos.ecovalores.com.ar/activo/ANET"
+        }
+      }
+    },
+    "ARBCOM460176": {
+      "XBUE": {
+        "ARS": {
+          "bp": 26.28,
+          "url": "https://bonos.ecovalores.com.ar/activo/AMZN"
+        }
+      }
+    },
+    "ARBCOM4601P6": {
+      "XBUE": {
+        "ARS": {
+          "bp": 67.95,
+          "url": "https://bonos.ecovalores.com.ar/activo/ANF"
+        }
+      }
+    },
+    "ARBCOM460135": {
+      "XBUE": {
+        "ARS": {
+          "bp": 53.37,
+          "url": "https://bonos.ecovalores.com.ar/activo/ARCO"
+        }
+      }
+    },
+    "ARCAVA460123": {
+      "XBUE": {
+        "ARS": {
+          "bp": 29.11,
+          "url": "https://bonos.ecovalores.com.ar/activo/ARKK"
+        }
+      }
+    },
+    "AR0725224551": {
+      "XBUE": {
+        "ARS": {
+          "bp": 16.13,
+          "url": "https://bonos.ecovalores.com.ar/activo/ASML"
+        }
+      }
+    },
+    "ARASOL010033": {
+      "XBUE": {
+        "ARS": {
+          "bp": 198.02,
+          "url": "https://bonos.ecovalores.com.ar/activo/AUSO"
+        }
+      }
+    },
+    "ARDEUT110707": {
+      "XBUE": {
+        "ARS": {
+          "bp": 87.55,
+          "url": "https://bonos.ecovalores.com.ar/activo/AVY"
+        }
+      }
+    },
+    "AR0261973801": {
+      "XBUE": {
+        "ARS": {
+          "bp": 114.37,
+          "url": "https://bonos.ecovalores.com.ar/activo/BAK"
+        }
+      }
+    },
+    "ARDEUT112414": {
+      "XBUE": {
+        "ARS": {
+          "bp": 1651.38,
+          "url": "https://bonos.ecovalores.com.ar/activo/BAYN"
+        }
+      }
+    },
+    "ARCAVA4601R4": {
+      "XBUE": {
+        "ARS": {
+          "bp": 638.92,
+          "url": "https://bonos.ecovalores.com.ar/activo/BBAS3"
+        }
+      }
+    },
+    "AR0846288451": {
+      "XBUE": {
+        "ARS": {
+          "bp": 64.77,
+          "url": "https://bonos.ecovalores.com.ar/activo/BBAX"
+        }
+      }
+    },
+    "AR0757349532": {
+      "XBUE": {
+        "ARS": {
+          "bp": 64.92,
+          "url": "https://bonos.ecovalores.com.ar/activo/BBCA"
+        }
+      }
+    },
+    "ARDEUT112489": {
+      "XBUE": {
+        "ARS": {
+          "bp": 29.56,
+          "url": "https://bonos.ecovalores.com.ar/activo/AZN"
+        }
+      }
+    },
+    "ARCAVA4601M5": {
+      "XBUE": {
+        "ARS": {
+          "bp": 1123.97,
+          "url": "https://bonos.ecovalores.com.ar/activo/BBDC3"
+        }
+      }
+    },
+    "ARBHIP010161": {
+      "XBUE": {
+        "ARS": {
+          "bp": 138.75,
+          "url": "https://bonos.ecovalores.com.ar/activo/BHIP"
+        }
+      }
+    },
+    "ARDEUT110061": {
+      "XBUE": {
+        "ARS": {
+          "bp": 54.41,
+          "url": "https://bonos.ecovalores.com.ar/activo/BA"
+        }
+      }
+    },
+    "ARBCOM4601A8": {
+      "XBUE": {
+        "ARS": {
+          "bp": 61.5,
+          "url": "https://bonos.ecovalores.com.ar/activo/BIIB"
+        }
+      }
+    },
+    "AR0302010498": {
+      "XBUE": {
+        "ARS": {
+          "bp": 717.07,
+          "url": "https://bonos.ecovalores.com.ar/activo/BKR"
+        }
+      }
+    },
+    "ARDEUT112992": {
+      "XBUE": {
+        "ARS": {
+          "bp": 25.75,
+          "url": "https://bonos.ecovalores.com.ar/activo/BHP"
+        }
+      }
+    },
+    "ARBCOM4603K3": {
+      "XBUE": {
+        "ARS": {
+          "bp": 256.66,
+          "url": "https://bonos.ecovalores.com.ar/activo/BIOX"
+        }
+      }
+    },
+    "AR0701450691": {
+      "XBUE": {
+        "ARS": {
+          "bp": 48.5,
+          "url": "https://bonos.ecovalores.com.ar/activo/BMNR"
+        }
+      }
+    },
+    "ARBOLD010054": {
+      "XBUE": {
+        "ARS": {
+          "bp": 88.37,
+          "url": "https://bonos.ecovalores.com.ar/activo/BOLT"
+        }
+      }
+    },
+    "ARDEUT110756": {
+      "XBUE": {
+        "ARS": {
+          "bp": 40.26,
+          "url": "https://bonos.ecovalores.com.ar/activo/BNY"
+        }
+      }
+    },
+    "ARDEUT112877": {
+      "XBUE": {
+        "ARS": {
+          "bp": 42.36,
+          "url": "https://bonos.ecovalores.com.ar/activo/BMY"
+        }
+      }
+    },
+    "ARDEUT115029": {
+      "XBUE": {
+        "ARS": {
+          "bp": 34.23,
+          "url": "https://bonos.ecovalores.com.ar/activo/BNG"
+        }
+      }
+    },
+    "ARMERI013163": {
+      "XBUE": {
+        "ARS": {
+          "bp": 313.84,
+          "url": "https://bonos.ecovalores.com.ar/activo/BPAT"
+        }
+      }
+    },
+    "ARBCOM4603L1": {
+      "XBUE": {
+        "ARS": {
+          "bp": 15.33,
+          "url": "https://bonos.ecovalores.com.ar/activo/BRKB"
+        }
+      }
+    },
+    "ARCADO010023": {
+      "XBUE": {
+        "ARS": {
+          "bp": 244.13,
+          "url": "https://bonos.ecovalores.com.ar/activo/CADO"
+        }
+      }
+    },
+    "ARDEUT110798": {
+      "XBUE": {
+        "ARS": {
+          "bp": 43.79,
+          "url": "https://bonos.ecovalores.com.ar/activo/CAH"
+        }
+      }
+    },
+    "ARDEUT110582": {
+      "XBUE": {
+        "ARS": {
+          "bp": 37.43,
+          "url": "https://bonos.ecovalores.com.ar/activo/BP"
+        }
+      }
+    },
+    "ARP2006N1025": {
+      "XBUE": {
+        "ARS": {
+          "bp": 383.73,
+          "url": "https://bonos.ecovalores.com.ar/activo/CAPX"
+        }
+      }
+    },
+    "ARP8723U1058": {
+      "XBUE": {
+        "ARS": {
+          "bp": 236.53,
+          "url": "https://bonos.ecovalores.com.ar/activo/CARC"
+        }
+      }
+    },
+    "ARDEUT110822": {
+      "XBUE": {
+        "ARS": {
+          "bp": 138.33,
+          "url": "https://bonos.ecovalores.com.ar/activo/CAR"
+        }
+      }
+    },
+    "ARCGSU010048": {
+      "XBUE": {
+        "ARS": {
+          "bp": 156.99,
+          "url": "https://bonos.ecovalores.com.ar/activo/CGPA2"
+        }
+      }
+    },
+    "ARP2341J1058": {
+      "XBUE": {
+        "ARS": {
+          "bp": 206.19,
+          "url": "https://bonos.ecovalores.com.ar/activo/CECO2"
+        }
+      }
+    },
+    "AR0110444327": {
+      "XBUE": {
+        "ARS": {
+          "bp": 42.64,
+          "url": "https://bonos.ecovalores.com.ar/activo/CIBR"
+        }
+      }
+    },
+    "AR0313306612": {
+      "XBUE": {
+        "ARS": {
+          "bp": 42.83,
+          "url": "https://bonos.ecovalores.com.ar/activo/COP"
+        }
+      }
+    },
+    "AR0893303633": {
+      "XBUE": {
+        "ARS": {
+          "bp": 74.35,
+          "url": "https://bonos.ecovalores.com.ar/activo/CORN"
+        }
+      }
+    },
+    "ARDEUT110863": {
+      "XBUE": {
+        "ARS": {
+          "bp": 18.07,
+          "url": "https://bonos.ecovalores.com.ar/activo/COST"
+        }
+      }
+    },
+    "ARCAVA460255": {
+      "XBUE": {
+        "ARS": {
+          "bp": 2659.57,
+          "url": "https://bonos.ecovalores.com.ar/activo/CSNA3"
+        }
+      }
+    },
+    "ARDEUT110095": {
+      "XBUE": {
+        "ARS": {
+          "bp": 22.87,
+          "url": "https://bonos.ecovalores.com.ar/activo/CSCO"
+        }
+      }
+    },
+    "ARCTIO010019": {
+      "XBUE": {
+        "ARS": {
+          "bp": 178.04,
+          "url": "https://bonos.ecovalores.com.ar/activo/CTIO"
+        }
+      }
+    },
+    "AR0107022060": {
+      "XBUE": {
+        "ARS": {
+          "bp": 59.7,
+          "url": "https://bonos.ecovalores.com.ar/activo/CVS"
+        }
+      }
+    },
+    "AR0051689021": {
+      "XBUE": {
+        "ARS": {
+          "bp": 50.09,
+          "url": "https://bonos.ecovalores.com.ar/activo/DAL"
+        }
+      }
+    },
+    "ARDEUT110145": {
+      "XBUE": {
+        "ARS": {
+          "bp": 60.31,
+          "url": "https://bonos.ecovalores.com.ar/activo/DD"
+        }
+      }
+    },
+    "ARDEUT110087": {
+      "XBUE": {
+        "ARS": {
+          "bp": 4.42,
+          "url": "https://bonos.ecovalores.com.ar/activo/CVX"
+        }
+      }
+    },
+    "AR0571828273": {
+      "XBUE": {
+        "ARS": {
+          "bp": 62.14,
+          "url": "https://bonos.ecovalores.com.ar/activo/DECK"
+        }
+      }
+    },
+    "AR0195486730": {
+      "XBUE": {
+        "ARS": {
+          "bp": 54.99,
+          "url": "https://bonos.ecovalores.com.ar/activo/DELL"
+        }
+      }
+    },
+    "ARDEUT112505": {
+      "XBUE": {
+        "ARS": {
+          "bp": 46.84,
+          "url": "https://bonos.ecovalores.com.ar/activo/DEO"
+        }
+      }
+    },
+    "ARCAVA460107": {
+      "XBUE": {
+        "ARS": {
+          "bp": 18.85,
+          "url": "https://bonos.ecovalores.com.ar/activo/DIA"
+        }
+      }
+    },
+    "ARDEUT110905": {
+      "XBUE": {
+        "ARS": {
+          "bp": 53.01,
+          "url": "https://bonos.ecovalores.com.ar/activo/DE"
+        }
+      }
+    },
+    "AR0002457668": {
+      "XBUE": {
+        "ARS": {
+          "bp": 21.7,
+          "url": "https://bonos.ecovalores.com.ar/activo/DHR"
+        }
+      }
+    },
+    "ARDEUT110137": {
+      "XBUE": {
+        "ARS": {
+          "bp": 33.26,
+          "url": "https://bonos.ecovalores.com.ar/activo/DISN"
+        }
+      }
+    },
+    "ARP3568E1180": {
+      "XBUE": {
+        "ARS": {
+          "bp": 224.72,
+          "url": "https://bonos.ecovalores.com.ar/activo/DGCU2"
+        }
+      }
+    },
+    "ARP3577N1097": {
+      "XBUE": {
+        "ARS": {
+          "bp": 1095.89,
+          "url": "https://bonos.ecovalores.com.ar/activo/DOME"
+        }
+      }
+    },
+    "ARBCOM4603H9": {
+      "XBUE": {
+        "ARS": {
+          "bp": 114.09,
+          "url": "https://bonos.ecovalores.com.ar/activo/DOCU"
+        }
+      }
+    },
+    "ARBCOM460416": {
+      "XBUE": {
+        "ARS": {
+          "bp": 68.17,
+          "url": "https://bonos.ecovalores.com.ar/activo/DOW"
+        }
+      }
+    },
+    "ARDEUT116167": {
+      "XBUE": {
+        "ARS": {
+          "bp": 39.92,
+          "url": "https://bonos.ecovalores.com.ar/activo/EBAY"
+        }
+      }
+    },
+    "AR0866277863": {
+      "XBUE": {
+        "ARS": {
+          "bp": 76.54,
+          "url": "https://bonos.ecovalores.com.ar/activo/ECL"
+        }
+      }
+    },
+    "ARDEUT110426": {
+      "XBUE": {
+        "ARS": {
+          "bp": 32.86,
+          "url": "https://bonos.ecovalores.com.ar/activo/C"
+        }
+      }
+    },
+    "AREDEH010018": {
+      "XBUE": {
+        "ARS": {
+          "bp": 769.23,
+          "url": "https://bonos.ecovalores.com.ar/activo/EDSH"
+        }
+      }
+    },
+    "ARCAVA4600X4": {
+      "XBUE": {
+        "ARS": {
+          "bp": 29.15,
+          "url": "https://bonos.ecovalores.com.ar/activo/EEM"
+        }
+      }
+    },
+    "ARBCOM460325": {
+      "XBUE": {
+        "ARS": {
+          "bp": 66.69,
+          "url": "https://bonos.ecovalores.com.ar/activo/EFX"
+        }
+      }
+    },
+    "AR0406299526": {
+      "XBUE": {
+        "ARS": {
+          "bp": 26.52,
+          "url": "https://bonos.ecovalores.com.ar/activo/EFA"
+        }
+      }
+    },
+    "AR0626892837": {
+      "XBUE": {
+        "ARS": {
+          "bp": 105.91,
+          "url": "https://bonos.ecovalores.com.ar/activo/EQNR"
+        }
+      }
+    },
+    "AR0572847066": {
+      "XBUE": {
+        "ARS": {
+          "bp": 49.44,
+          "url": "https://bonos.ecovalores.com.ar/activo/ESGU"
+        }
+      }
+    },
+    "AR0757236192": {
+      "XBUE": {
+        "ARS": {
+          "bp": 40,
+          "url": "https://bonos.ecovalores.com.ar/activo/EWY"
+        }
+      }
+    },
+    "ARDEUT110525": {
+      "XBUE": {
+        "ARS": {
+          "bp": 64.16,
+          "url": "https://bonos.ecovalores.com.ar/activo/ERIC"
+        }
+      }
+    },
+    "ARDEUT110962": {
+      "XBUE": {
+        "ARS": {
+          "bp": 45.56,
+          "url": "https://bonos.ecovalores.com.ar/activo/FDX"
+        }
+      }
+    },
+    "ARP395611576": {
+      "XBUE": {
+        "ARS": {
+          "bp": 277.35,
+          "url": "https://bonos.ecovalores.com.ar/activo/FERR"
+        }
+      }
+    },
+    "ARP416191426": {
+      "XBUE": {
+        "ARS": {
+          "bp": 493.83,
+          "url": "https://bonos.ecovalores.com.ar/activo/FIPL"
+        }
+      }
+    },
+    "AR0997854325": {
+      "XBUE": {
+        "ARS": {
+          "bp": 71.28,
+          "url": "https://bonos.ecovalores.com.ar/activo/FISV"
+        }
+      }
+    },
+    "ARDEUT112323": {
+      "XBUE": {
+        "ARS": {
+          "bp": 1153.85,
+          "url": "https://bonos.ecovalores.com.ar/activo/FMCC"
+        }
+      }
+    },
+    "ARDEUT116076": {
+      "XBUE": {
+        "ARS": {
+          "bp": 36.91,
+          "url": "https://bonos.ecovalores.com.ar/activo/FCX"
+        }
+      }
+    },
+    "ARDEUT111853": {
+      "XBUE": {
+        "ARS": {
+          "bp": 77.13,
+          "url": "https://bonos.ecovalores.com.ar/activo/FMX"
+        }
+      }
+    },
+    "ARDEUT110970": {
+      "XBUE": {
+        "ARS": {
+          "bp": 1913.04,
+          "url": "https://bonos.ecovalores.com.ar/activo/FNMA"
+        }
+      }
+    },
+    "ARBOLG010010": {
+      "XBUE": {
+        "ARS": {
+          "bp": 528.19,
+          "url": "https://bonos.ecovalores.com.ar/activo/GAMI"
+        }
+      }
+    },
+    "AR0033445195": {
+      "XBUE": {
+        "ARS": {
+          "bp": 18.2,
+          "url": "https://bonos.ecovalores.com.ar/activo/FXI"
+        }
+      }
+    },
+    "ARP460221020": {
+      "XBUE": {
+        "ARS": {
+          "bp": 1167.11,
+          "url": "https://bonos.ecovalores.com.ar/activo/GARO"
+        }
+      }
+    },
+    "ARGASB010027": {
+      "XBUE": {
+        "ARS": {
+          "bp": 525.5,
+          "url": "https://bonos.ecovalores.com.ar/activo/GBAN"
+        }
+      }
+    },
+    "ARTGLT010015": {
+      "XBUE": {
+        "ARS": {
+          "bp": 528.63,
+          "url": "https://bonos.ecovalores.com.ar/activo/GCDI"
+        }
+      }
+    },
+    "ARGCLA010015": {
+      "XBUE": {
+        "ARS": {
+          "bp": 516.96,
+          "url": "https://bonos.ecovalores.com.ar/activo/GCLA"
+        }
+      }
+    },
+    "AR0727034941": {
+      "XBUE": {
+        "ARS": {
+          "bp": 35.3,
+          "url": "https://bonos.ecovalores.com.ar/activo/GDX"
+        }
+      }
+    },
+    "AR0796715107": {
+      "XBUE": {
+        "ARS": {
+          "bp": 89.15,
+          "url": "https://bonos.ecovalores.com.ar/activo/GEV"
+        }
+      }
+    },
+    "ARDEUT112612": {
+      "XBUE": {
+        "ARS": {
+          "bp": 42.35,
+          "url": "https://bonos.ecovalores.com.ar/activo/E"
+        }
+      }
+    },
+    "ARDEUT111002": {
+      "XBUE": {
+        "ARS": {
+          "bp": 50.68,
+          "url": "https://bonos.ecovalores.com.ar/activo/GLW"
+        }
+      }
+    },
+    "ARBCOM460408": {
+      "XBUE": {
+        "ARS": {
+          "bp": 43.37,
+          "url": "https://bonos.ecovalores.com.ar/activo/GM"
+        }
+      }
+    },
+    "ARP493071046": {
+      "XBUE": {
+        "ARS": {
+          "bp": 364.42,
+          "url": "https://bonos.ecovalores.com.ar/activo/GRIM"
+        }
+      }
+    },
+    "ARDEUT110160": {
+      "XBUE": {
+        "ARS": {
+          "bp": 35.15,
+          "url": "https://bonos.ecovalores.com.ar/activo/GE"
+        }
+      }
+    },
+    "AR0257579893": {
+      "XBUE": {
+        "ARS": {
+          "bp": 30.4,
+          "url": "https://bonos.ecovalores.com.ar/activo/GSG"
+        }
+      }
+    },
+    "AR0539172129": {
+      "XBUE": {
+        "ARS": {
+          "bp": 125.17,
+          "url": "https://bonos.ecovalores.com.ar/activo/GT"
+        }
+      }
+    },
+    "ARBCOM4603E6": {
+      "XBUE": {
+        "ARS": {
+          "bp": 36.81,
+          "url": "https://bonos.ecovalores.com.ar/activo/HAL"
+        }
+      }
+    },
+    "ARHAVH300038": {
+      "XBUE": {
+        "ARS": {
+          "bp": 230.72,
+          "url": "https://bonos.ecovalores.com.ar/activo/HAVA"
+        }
+      }
+    },
+    "AR0162508391": {
+      "XBUE": {
+        "ARS": {
+          "bp": 75.6,
+          "url": "https://bonos.ecovalores.com.ar/activo/HIMS"
+        }
+      }
+    },
+    "ARDEUT111069": {
+      "XBUE": {
+        "ARS": {
+          "bp": 53.66,
+          "url": "https://bonos.ecovalores.com.ar/activo/HOG"
+        }
+      }
+    },
+    "ARDEUT115417": {
+      "XBUE": {
+        "ARS": {
+          "bp": 39.42,
+          "url": "https://bonos.ecovalores.com.ar/activo/HL"
+        }
+      }
+    },
+    "ARDEUT111705": {
+      "XBUE": {
+        "ARS": {
+          "bp": 50.96,
+          "url": "https://bonos.ecovalores.com.ar/activo/HD"
+        }
+      }
+    },
+    "ARDEUT110194": {
+      "XBUE": {
+        "ARS": {
+          "bp": 39.92,
+          "url": "https://bonos.ecovalores.com.ar/activo/HPQ"
+        }
+      }
+    },
+    "AR0956262361": {
+      "XBUE": {
+        "ARS": {
+          "bp": 286.3,
+          "url": "https://bonos.ecovalores.com.ar/activo/HSAT"
+        }
+      }
+    },
+    "ARDEUT112257": {
+      "XBUE": {
+        "ARS": {
+          "bp": 25.72,
+          "url": "https://bonos.ecovalores.com.ar/activo/HSBC"
+        }
+      }
+    },
+    "ARDEUT110020": {
+      "XBUE": {
+        "ARS": {
+          "bp": 28.63,
+          "url": "https://bonos.ecovalores.com.ar/activo/HWM"
+        }
+      }
+    },
+    "AR0377480402": {
+      "XBUE": {
+        "ARS": {
+          "bp": 56.52,
+          "url": "https://bonos.ecovalores.com.ar/activo/IBB"
+        }
+      }
+    },
+    "AR0479909407": {
+      "XBUE": {
+        "ARS": {
+          "bp": 74.21,
+          "url": "https://bonos.ecovalores.com.ar/activo/IBKR"
+        }
+      }
+    },
+    "ARDEUT111127": {
+      "XBUE": {
+        "ARS": {
+          "bp": 68.26,
+          "url": "https://bonos.ecovalores.com.ar/activo/HSY"
+        }
+      }
+    },
+    "ARP3594C1107": {
+      "XBUE": {
+        "ARS": {
+          "bp": 276.89,
+          "url": "https://bonos.ecovalores.com.ar/activo/IEB"
+        }
+      }
+    },
+    "AR0342969240": {
+      "XBUE": {
+        "ARS": {
+          "bp": 55.71,
+          "url": "https://bonos.ecovalores.com.ar/activo/ICLN"
+        }
+      }
+    },
+    "AR0405465953": {
+      "XBUE": {
+        "ARS": {
+          "bp": 54.5,
+          "url": "https://bonos.ecovalores.com.ar/activo/IEUR"
+        }
+      }
+    },
+    "ARDEUT111135": {
+      "XBUE": {
+        "ARS": {
+          "bp": 16.18,
+          "url": "https://bonos.ecovalores.com.ar/activo/IFF"
+        }
+      }
+    },
+    "AR0425509392": {
+      "XBUE": {
+        "ARS": {
+          "bp": 50.56,
+          "url": "https://bonos.ecovalores.com.ar/activo/IJH"
+        }
+      }
+    },
+    "AR0872435588": {
+      "XBUE": {
+        "ARS": {
+          "bp": 29.57,
+          "url": "https://bonos.ecovalores.com.ar/activo/ILF"
+        }
+      }
+    },
+    "ARP577611352": {
+      "XBUE": {
+        "ARS": {
+          "bp": 682.59,
+          "url": "https://bonos.ecovalores.com.ar/activo/INTR"
+        }
+      }
+    },
+    "ARINJU010010": {
+      "XBUE": {
+        "ARS": {
+          "bp": 335.05,
+          "url": "https://bonos.ecovalores.com.ar/activo/INVJ"
+        }
+      }
+    },
+    "ARDEUT111937": {
+      "XBUE": {
+        "ARS": {
+          "bp": 38.14,
+          "url": "https://bonos.ecovalores.com.ar/activo/ING"
+        }
+      }
+    },
+    "ARP588091073": {
+      "XBUE": {
+        "ARS": {
+          "bp": 65.72,
+          "url": "https://bonos.ecovalores.com.ar/activo/IRSA"
+        }
+      }
+    },
+    "AR0902369476": {
+      "XBUE": {
+        "ARS": {
+          "bp": 32.31,
+          "url": "https://bonos.ecovalores.com.ar/activo/ISRG"
+        }
+      }
+    },
+    "AR0864733115": {
+      "XBUE": {
+        "ARS": {
+          "bp": 46.91,
+          "url": "https://bonos.ecovalores.com.ar/activo/IVE"
+        }
+      }
+    },
+    "ARCAVA4600W6": {
+      "XBUE": {
+        "ARS": {
+          "bp": 17.92,
+          "url": "https://bonos.ecovalores.com.ar/activo/IWM"
+        }
+      }
+    },
+    "ARCAVA4601J1": {
+      "XBUE": {
+        "ARS": {
+          "bp": 66.04,
+          "url": "https://bonos.ecovalores.com.ar/activo/JMIA"
+        }
+      }
+    },
+    "AR0664014096": {
+      "XBUE": {
+        "ARS": {
+          "bp": 49.26,
+          "url": "https://bonos.ecovalores.com.ar/activo/KLAC"
+        }
+      }
+    },
+    "ARDEUT115201": {
+      "XBUE": {
+        "ARS": {
+          "bp": 52.52,
+          "url": "https://bonos.ecovalores.com.ar/activo/KOFM"
+        }
+      }
+    },
+    "AR0527954207": {
+      "XBUE": {
+        "ARS": {
+          "bp": 71.54,
+          "url": "https://bonos.ecovalores.com.ar/activo/LAR"
+        }
+      }
+    },
+    "ARP624571096": {
+      "XBUE": {
+        "ARS": {
+          "bp": 199.15,
+          "url": "https://bonos.ecovalores.com.ar/activo/LEDE"
+        }
+      }
+    },
+    "ARDEUT111176": {
+      "XBUE": {
+        "ARS": {
+          "bp": 49.17,
+          "url": "https://bonos.ecovalores.com.ar/activo/KMB"
+        }
+      }
+    },
+    "AR0550890435": {
+      "XBUE": {
+        "ARS": {
+          "bp": 63.29,
+          "url": "https://bonos.ecovalores.com.ar/activo/LIN"
+        }
+      }
+    },
+    "ARDEUT110111": {
+      "XBUE": {
+        "ARS": {
+          "bp": 19.86,
+          "url": "https://bonos.ecovalores.com.ar/activo/KO"
+        }
+      }
+    },
+    "ARP6356B1059": {
+      "XBUE": {
+        "ARS": {
+          "bp": 613.5,
+          "url": "https://bonos.ecovalores.com.ar/activo/LONG"
+        }
+      }
+    },
+    "ARDEUT111200": {
+      "XBUE": {
+        "ARS": {
+          "bp": 13.68,
+          "url": "https://bonos.ecovalores.com.ar/activo/LMT"
+        }
+      }
+    },
+    "ARCAVA4601Q6": {
+      "XBUE": {
+        "ARS": {
+          "bp": 3515.15,
+          "url": "https://bonos.ecovalores.com.ar/activo/LREN3"
+        }
+      }
+    },
+    "ARDEUT116092": {
+      "XBUE": {
+        "ARS": {
+          "bp": 45.03,
+          "url": "https://bonos.ecovalores.com.ar/activo/LVS"
+        }
+      }
+    },
+    "ARDEUT112513": {
+      "XBUE": {
+        "ARS": {
+          "bp": 38.99,
+          "url": "https://bonos.ecovalores.com.ar/activo/LYG"
+        }
+      }
+    },
+    "ARBCOM4603X6": {
+      "XBUE": {
+        "ARS": {
+          "bp": 50.6,
+          "url": "https://bonos.ecovalores.com.ar/activo/LRCX"
+        }
+      }
+    },
+    "ARBCOM4603D8": {
+      "XBUE": {
+        "ARS": {
+          "bp": 19.7,
+          "url": "https://bonos.ecovalores.com.ar/activo/MA"
+        }
+      }
+    },
+    "AR0774942129": {
+      "XBUE": {
+        "ARS": {
+          "bp": 72.25,
+          "url": "https://bonos.ecovalores.com.ar/activo/MDLZ"
+        }
+      }
+    },
+    "ARDEUT111283": {
+      "XBUE": {
+        "ARS": {
+          "bp": 25.65,
+          "url": "https://bonos.ecovalores.com.ar/activo/MDT"
+        }
+      }
+    },
+    "ARP6823S1295": {
+      "XBUE": {
+        "ARS": {
+          "bp": 175.95,
+          "url": "https://bonos.ecovalores.com.ar/activo/MIRG"
+        }
+      }
+    },
+    "ARMOAG300023": {
+      "XBUE": {
+        "ARS": {
+          "bp": 332.54,
+          "url": "https://bonos.ecovalores.com.ar/activo/MOLA"
+        }
+      }
+    },
+    "ARDEUT110293": {
+      "XBUE": {
+        "ARS": {
+          "bp": 51.83,
+          "url": "https://bonos.ecovalores.com.ar/activo/MMM"
+        }
+      }
+    },
+    "ARP698141040": {
+      "XBUE": {
+        "ARS": {
+          "bp": 71.01,
+          "url": "https://bonos.ecovalores.com.ar/activo/MORI"
+        }
+      }
+    },
+    "ARCAVA4601D4": {
+      "XBUE": {
+        "ARS": {
+          "bp": 65.04,
+          "url": "https://bonos.ecovalores.com.ar/activo/MOS"
+        }
+      }
+    },
+    "ARDEUT110277": {
+      "XBUE": {
+        "ARS": {
+          "bp": 33.53,
+          "url": "https://bonos.ecovalores.com.ar/activo/MRK"
+        }
+      }
+    },
+    "ARDEUT110301": {
+      "XBUE": {
+        "ARS": {
+          "bp": 53.39,
+          "url": "https://bonos.ecovalores.com.ar/activo/MSI"
+        }
+      }
+    },
+    "ARDEUT111762": {
+      "XBUE": {
+        "ARS": {
+          "bp": 33.3,
+          "url": "https://bonos.ecovalores.com.ar/activo/MUFG"
+        }
+      }
+    },
+    "AR0829300257": {
+      "XBUE": {
+        "ARS": {
+          "bp": 90.29,
+          "url": "https://bonos.ecovalores.com.ar/activo/MUX"
+        }
+      }
+    },
+    "ARCAVA460271": {
+      "XBUE": {
+        "ARS": {
+          "bp": 489.98,
+          "url": "https://bonos.ecovalores.com.ar/activo/NATU3"
+        }
+      }
+    },
+    "AR0204516899": {
+      "XBUE": {
+        "ARS": {
+          "bp": 22.18,
+          "url": "https://bonos.ecovalores.com.ar/activo/NEE"
+        }
+      }
+    },
+    "ARDEUT112570": {
+      "XBUE": {
+        "ARS": {
+          "bp": 39.78,
+          "url": "https://bonos.ecovalores.com.ar/activo/NEM"
+        }
+      }
+    },
+    "ARDEUT111341": {
+      "XBUE": {
+        "ARS": {
+          "bp": 29.57,
+          "url": "https://bonos.ecovalores.com.ar/activo/NKE"
+        }
+      }
+    },
+    "ARDEUT113024": {
+      "XBUE": {
+        "ARS": {
+          "bp": 52.56,
+          "url": "https://bonos.ecovalores.com.ar/activo/NMR"
+        }
+      }
+    },
+    "ARDEUT110533": {
+      "XBUE": {
+        "ARS": {
+          "bp": 58.46,
+          "url": "https://bonos.ecovalores.com.ar/activo/NOKA"
+        }
+      }
+    },
+    "AR0298258051": {
+      "XBUE": {
+        "ARS": {
+          "bp": 75.58,
+          "url": "https://bonos.ecovalores.com.ar/activo/MS"
+        }
+      }
+    },
+    "ARDEUT113032": {
+      "XBUE": {
+        "ARS": {
+          "bp": 1034.48,
+          "url": "https://bonos.ecovalores.com.ar/activo/NSAN"
+        }
+      }
+    },
+    "ARBCOM4601Z5": {
+      "XBUE": {
+        "ARS": {
+          "bp": 54.61,
+          "url": "https://bonos.ecovalores.com.ar/activo/NTES"
+        }
+      }
+    },
+    "AR0776810878": {
+      "XBUE": {
+        "ARS": {
+          "bp": 62.79,
+          "url": "https://bonos.ecovalores.com.ar/activo/NTRA"
+        }
+      }
+    },
+    "ARDEUT111358": {
+      "XBUE": {
+        "ARS": {
+          "bp": 75.53,
+          "url": "https://bonos.ecovalores.com.ar/activo/NUE"
+        }
+      }
+    },
+    "AR0229808610": {
+      "XBUE": {
+        "ARS": {
+          "bp": 38.45,
+          "url": "https://bonos.ecovalores.com.ar/activo/NVO"
+        }
+      }
+    },
+    "AR0220648593": {
+      "XBUE": {
+        "ARS": {
+          "bp": 614.83,
+          "url": "https://bonos.ecovalores.com.ar/activo/NXE"
+        }
+      }
+    },
+    "ARGCAO010012": {
+      "XBUE": {
+        "ARS": {
+          "bp": 455.15,
+          "url": "https://bonos.ecovalores.com.ar/activo/OEST"
+        }
+      }
+    },
+    "AR0247723296": {
+      "XBUE": {
+        "ARS": {
+          "bp": 58.37,
+          "url": "https://bonos.ecovalores.com.ar/activo/ONDS"
+        }
+      }
+    },
+    "ARDEUT115177": {
+      "XBUE": {
+        "ARS": {
+          "bp": 108.32,
+          "url": "https://bonos.ecovalores.com.ar/activo/PAC"
+        }
+      }
+    },
+    "AR0343130982": {
+      "XBUE": {
+        "ARS": {
+          "bp": 35.97,
+          "url": "https://bonos.ecovalores.com.ar/activo/PATH"
+        }
+      }
+    },
+    "AR0651353770": {
+      "XBUE": {
+        "ARS": {
+          "bp": 82.78,
+          "url": "https://bonos.ecovalores.com.ar/activo/PAGS"
+        }
+      }
+    },
+    "ARDEUT111382": {
+      "XBUE": {
+        "ARS": {
+          "bp": 71.12,
+          "url": "https://bonos.ecovalores.com.ar/activo/PBI"
+        }
+      }
+    },
+    "AR0101251947": {
+      "XBUE": {
+        "ARS": {
+          "bp": 84.95,
+          "url": "https://bonos.ecovalores.com.ar/activo/PDD"
+        }
+      }
+    },
+    "ARCAVA4601L7": {
+      "XBUE": {
+        "ARS": {
+          "bp": 288.02,
+          "url": "https://bonos.ecovalores.com.ar/activo/PETR3"
+        }
+      }
+    },
+    "AR0752208279": {
+      "XBUE": {
+        "ARS": {
+          "bp": 94.88,
+          "url": "https://bonos.ecovalores.com.ar/activo/PINS"
+        }
+      }
+    },
+    "ARDEUT115276": {
+      "XBUE": {
+        "ARS": {
+          "bp": 99.63,
+          "url": "https://bonos.ecovalores.com.ar/activo/PKS"
+        }
+      }
+    },
+    "AR0793346641": {
+      "XBUE": {
+        "ARS": {
+          "bp": 76.63,
+          "url": "https://bonos.ecovalores.com.ar/activo/PLD"
+        }
+      }
+    },
+    "AR0734794420": {
+      "XBUE": {
+        "ARS": {
+          "bp": 29.17,
+          "url": "https://bonos.ecovalores.com.ar/activo/PSQ"
+        }
+      }
+    },
+    "AR0361136887": {
+      "XBUE": {
+        "ARS": {
+          "bp": 65.72,
+          "url": "https://bonos.ecovalores.com.ar/activo/PM"
+        }
+      }
+    },
+    "ARBCOM4601S0": {
+      "XBUE": {
+        "ARS": {
+          "bp": 25.78,
+          "url": "https://bonos.ecovalores.com.ar/activo/PYPL"
+        }
+      }
+    },
+    "AR0227017768": {
+      "XBUE": {
+        "ARS": {
+          "bp": 45.09,
+          "url": "https://bonos.ecovalores.com.ar/activo/RACE"
+        }
+      }
+    },
+    "ARBCOM460333": {
+      "XBUE": {
+        "ARS": {
+          "bp": 40.75,
+          "url": "https://bonos.ecovalores.com.ar/activo/PSX"
+        }
+      }
+    },
+    "ARLRIC300027": {
+      "XBUE": {
+        "ARS": {
+          "bp": 949.03,
+          "url": "https://bonos.ecovalores.com.ar/activo/RICH"
+        }
+      }
+    },
+    "ARROSE010025": {
+      "XBUE": {
+        "ARS": {
+          "bp": 740.74,
+          "url": "https://bonos.ecovalores.com.ar/activo/ROSE"
+        }
+      }
+    },
+    "ARBCOM4600Z7": {
+      "XBUE": {
+        "ARS": {
+          "bp": 33.51,
+          "url": "https://bonos.ecovalores.com.ar/activo/ROST"
+        }
+      }
+    },
+    "AR0436041906": {
+      "XBUE": {
+        "ARS": {
+          "bp": 34.28,
+          "url": "https://bonos.ecovalores.com.ar/activo/RSP"
+        }
+      }
+    },
+    "ARDEUT112034": {
+      "XBUE": {
+        "ARS": {
+          "bp": 20.4,
+          "url": "https://bonos.ecovalores.com.ar/activo/SAP"
+        }
+      }
+    },
+    "ARBCOM4602T6": {
+      "XBUE": {
+        "ARS": {
+          "bp": 31.32,
+          "url": "https://bonos.ecovalores.com.ar/activo/SAN"
+        }
+      }
+    },
+    "ARDEUT110384": {
+      "XBUE": {
+        "ARS": {
+          "bp": 24.44,
+          "url": "https://bonos.ecovalores.com.ar/activo/RTX"
+        }
+      }
+    },
+    "ARDEUT111481": {
+      "XBUE": {
+        "ARS": {
+          "bp": 53.09,
+          "url": "https://bonos.ecovalores.com.ar/activo/SBUX"
+        }
+      }
+    },
+    "ARDEUT116084": {
+      "XBUE": {
+        "ARS": {
+          "bp": 71.43,
+          "url": "https://bonos.ecovalores.com.ar/activo/SCCO"
+        }
+      }
+    },
+    "AR0097548348": {
+      "XBUE": {
+        "ARS": {
+          "bp": 723.68,
+          "url": "https://bonos.ecovalores.com.ar/activo/SDA"
+        }
+      }
+    },
+    "ARP689031069": {
+      "XBUE": {
+        "ARS": {
+          "bp": 108.89,
+          "url": "https://bonos.ecovalores.com.ar/activo/SEMI"
+        }
+      }
+    },
+    "ARDEUT112547": {
+      "XBUE": {
+        "ARS": {
+          "bp": 20.43,
+          "url": "https://bonos.ecovalores.com.ar/activo/SHEL"
+        }
+      }
+    },
+    "ARBCOM460341": {
+      "XBUE": {
+        "ARS": {
+          "bp": 65.15,
+          "url": "https://bonos.ecovalores.com.ar/activo/SHOP"
+        }
+      }
+    },
+    "AR0273529450": {
+      "XBUE": {
+        "ARS": {
+          "bp": 75.14,
+          "url": "https://bonos.ecovalores.com.ar/activo/SHW"
+        }
+      }
+    },
+    "ARDEUT112372": {
+      "XBUE": {
+        "ARS": {
+          "bp": 1250,
+          "url": "https://bonos.ecovalores.com.ar/activo/SIEGY"
+        }
+      }
+    },
+    "AR0998039140": {
+      "XBUE": {
+        "ARS": {
+          "bp": 11.21,
+          "url": "https://bonos.ecovalores.com.ar/activo/SMH"
+        }
+      }
+    },
+    "AR0798622483": {
+      "XBUE": {
+        "ARS": {
+          "bp": 23.09,
+          "url": "https://bonos.ecovalores.com.ar/activo/SH"
+        }
+      }
+    },
+    "ARBCOM4601H3": {
+      "XBUE": {
+        "ARS": {
+          "bp": 77.75,
+          "url": "https://bonos.ecovalores.com.ar/activo/SNAP"
+        },
+        "USD": {
+          "bp": 209.9,
+          "url": "https://bonos.ecovalores.com.ar/activo/SNAPD"
+        }
+      }
+    },
+    "ARBCOM460358": {
+      "XBUE": {
+        "ARS": {
+          "bp": 85.94,
+          "url": "https://bonos.ecovalores.com.ar/activo/SNOW"
+        }
+      }
+    },
+    "ARDEUT112984": {
+      "XBUE": {
+        "ARS": {
+          "bp": 59.06,
+          "url": "https://bonos.ecovalores.com.ar/activo/SONY"
+        }
+      }
+    },
+    "AR0903802343": {
+      "XBUE": {
+        "ARS": {
+          "bp": 80.46,
+          "url": "https://bonos.ecovalores.com.ar/activo/SOYB"
+        }
+      }
+    },
+    "AR0754647243": {
+      "XBUE": {
+        "ARS": {
+          "bp": 25.44,
+          "url": "https://bonos.ecovalores.com.ar/activo/SPHQ"
+        }
+      }
+    },
+    "ARBCOM460366": {
+      "XBUE": {
+        "ARS": {
+          "bp": 58.69,
+          "url": "https://bonos.ecovalores.com.ar/activo/SPOT"
+        }
+      }
+    },
+    "ARBCOM4602E8": {
+      "XBUE": {
+        "ARS": {
+          "bp": 58.18,
+          "url": "https://bonos.ecovalores.com.ar/activo/SUZ"
+        }
+      }
+    },
+    "AR0940941575": {
+      "XBUE": {
+        "ARS": {
+          "bp": 187.18,
+          "url": "https://bonos.ecovalores.com.ar/activo/STLA"
+        }
+      }
+    },
+    "AR0657424591": {
+      "XBUE": {
+        "ARS": {
+          "bp": 113.54,
+          "url": "https://bonos.ecovalores.com.ar/activo/STNE"
+        }
+      }
+    },
+    "ARDEUT111598": {
+      "XBUE": {
+        "ARS": {
+          "bp": 53.65,
+          "url": "https://bonos.ecovalores.com.ar/activo/SYY"
+        }
+      }
+    },
+    "ARBCOM460226": {
+      "XBUE": {
+        "ARS": {
+          "bp": 36.92,
+          "url": "https://bonos.ecovalores.com.ar/activo/TCOM"
+        }
+      }
+    },
+    "ARP9028N1016": {
+      "XBUE": {
+        "ARS": {
+          "bp": 254.7,
+          "url": "https://bonos.ecovalores.com.ar/activo/TECO2"
+        }
+      }
+    },
+    "AR0234754239": {
+      "XBUE": {
+        "ARS": {
+          "bp": 101.25,
+          "url": "https://bonos.ecovalores.com.ar/activo/TEAM"
+        }
+      }
+    },
+    "AR0520934156": {
+      "XBUE": {
+        "ARS": {
+          "bp": 84.34,
+          "url": "https://bonos.ecovalores.com.ar/activo/TEM"
+        }
+      }
+    },
+    "ARTGNO010117": {
+      "XBUE": {
+        "ARS": {
+          "bp": 68.78,
+          "url": "https://bonos.ecovalores.com.ar/activo/TGNO4"
+        }
+      }
+    },
+    "ARBCOM4602A6": {
+      "XBUE": {
+        "ARS": {
+          "bp": 59.98,
+          "url": "https://bonos.ecovalores.com.ar/activo/TIMB"
+        }
+      }
+    },
+    "ARBCOM4602S8": {
+      "XBUE": {
+        "ARS": {
+          "bp": 23.65,
+          "url": "https://bonos.ecovalores.com.ar/activo/TEN"
+        }
+      }
+    },
+    "ARBCOM460101": {
+      "XBUE": {
+        "ARS": {
+          "bp": 55.76,
+          "url": "https://bonos.ecovalores.com.ar/activo/TGT"
+        }
+      }
+    },
+    "ARBCOM4601F7": {
+      "XBUE": {
+        "ARS": {
+          "bp": 48.71,
+          "url": "https://bonos.ecovalores.com.ar/activo/TMO"
+        }
+      }
+    },
+    "AR0964115726": {
+      "XBUE": {
+        "ARS": {
+          "bp": 96.18,
+          "url": "https://bonos.ecovalores.com.ar/activo/TMUS"
+        }
+      }
+    },
+    "ARBCOM4601O9": {
+      "XBUE": {
+        "ARS": {
+          "bp": 84.22,
+          "url": "https://bonos.ecovalores.com.ar/activo/TRIP"
+        }
+      }
+    },
+    "ARDEUT112075": {
+      "XBUE": {
+        "ARS": {
+          "bp": 28.72,
+          "url": "https://bonos.ecovalores.com.ar/activo/TTE"
+        }
+      }
+    },
+    "ARDEUT116100": {
+      "XBUE": {
+        "ARS": {
+          "bp": 65.38,
+          "url": "https://bonos.ecovalores.com.ar/activo/TRVV"
+        }
+      }
+    },
+    "ARDEUT113016": {
+      "XBUE": {
+        "ARS": {
+          "bp": 16.75,
+          "url": "https://bonos.ecovalores.com.ar/activo/TSM"
+        }
+      }
+    },
+    "ARCAVA460164": {
+      "XBUE": {
+        "ARS": {
+          "bp": 42.13,
+          "url": "https://bonos.ecovalores.com.ar/activo/UAL"
+        }
+      }
+    },
+    "ARDEUT111622": {
+      "XBUE": {
+        "ARS": {
+          "bp": 49.86,
+          "url": "https://bonos.ecovalores.com.ar/activo/TXN"
+        }
+      }
+    },
+    "ARDEUT116019": {
+      "XBUE": {
+        "ARS": {
+          "bp": 253.06,
+          "url": "https://bonos.ecovalores.com.ar/activo/TXR"
+        }
+      }
+    },
+    "ARDEUT112133": {
+      "XBUE": {
+        "ARS": {
+          "bp": 189.75,
+          "url": "https://bonos.ecovalores.com.ar/activo/TV"
+        }
+      }
+    },
+    "ARDEUT112091": {
+      "XBUE": {
+        "ARS": {
+          "bp": 22.51,
+          "url": "https://bonos.ecovalores.com.ar/activo/UL"
+        }
+      }
+    },
+    "ARBCOM460382": {
+      "XBUE": {
+        "ARS": {
+          "bp": 63.63,
+          "url": "https://bonos.ecovalores.com.ar/activo/UNP"
+        }
+      }
+    },
+    "ARBCOM4601Q4": {
+      "XBUE": {
+        "ARS": {
+          "bp": 48.21,
+          "url": "https://bonos.ecovalores.com.ar/activo/URBN"
+        }
+      }
+    },
+    "ARDEUT112919": {
+      "XBUE": {
+        "ARS": {
+          "bp": 41.88,
+          "url": "https://bonos.ecovalores.com.ar/activo/USB"
+        }
+      }
+    },
+    "ARCAVA4601K9": {
+      "XBUE": {
+        "ARS": {
+          "bp": 2481.27,
+          "url": "https://bonos.ecovalores.com.ar/activo/VALE3"
+        }
+      }
+    },
+    "AR0810570678": {
+      "XBUE": {
+        "ARS": {
+          "bp": 52.77,
+          "url": "https://bonos.ecovalores.com.ar/activo/VEA"
+        }
+      }
+    },
+    "AR0625060907": {
+      "XBUE": {
+        "ARS": {
+          "bp": 39.64,
+          "url": "https://bonos.ecovalores.com.ar/activo/VIG"
+        }
+      }
+    },
+    "ARCAVA4601X2": {
+      "XBUE": {
+        "ARS": {
+          "bp": 1538.46,
+          "url": "https://bonos.ecovalores.com.ar/activo/VIVT3"
+        }
+      }
+    },
+    "ARDEUT110590": {
+      "XBUE": {
+        "ARS": {
+          "bp": 45.8,
+          "url": "https://bonos.ecovalores.com.ar/activo/VOD"
+        }
+      }
+    },
+    "ARBCOM4601W2": {
+      "XBUE": {
+        "ARS": {
+          "bp": 59.79,
+          "url": "https://bonos.ecovalores.com.ar/activo/VIV"
+        }
+      }
+    },
+    "ARBCOM4600U8": {
+      "XBUE": {
+        "ARS": {
+          "bp": 60.59,
+          "url": "https://bonos.ecovalores.com.ar/activo/VRSN"
+        }
+      }
+    },
+    "AR0468655268": {
+      "XBUE": {
+        "ARS": {
+          "bp": 73.3,
+          "url": "https://bonos.ecovalores.com.ar/activo/VRTX"
+        }
+      }
+    },
+    "AR0691521022": {
+      "XBUE": {
+        "ARS": {
+          "bp": 45.72,
+          "url": "https://bonos.ecovalores.com.ar/activo/VXX"
+        }
+      }
+    },
+    "ARBCOM460259": {
+      "XBUE": {
+        "ARS": {
+          "bp": 165.76,
+          "url": "https://bonos.ecovalores.com.ar/activo/WBO"
+        }
+      }
+    },
+    "AR0307648912": {
+      "XBUE": {
+        "ARS": {
+          "bp": 66.56,
+          "url": "https://bonos.ecovalores.com.ar/activo/WDC"
+        }
+      }
+    },
+    "AR0474385009": {
+      "XBUE": {
+        "ARS": {
+          "bp": 81.99,
+          "url": "https://bonos.ecovalores.com.ar/activo/WELL"
+        }
+      }
+    },
+    "AR0441163851": {
+      "XBUE": {
+        "ARS": {
+          "bp": 70.56,
+          "url": "https://bonos.ecovalores.com.ar/activo/XLB"
+        }
+      }
+    },
+    "ARDEUT110434": {
+      "XBUE": {
+        "ARS": {
+          "bp": 36.46,
+          "url": "https://bonos.ecovalores.com.ar/activo/WFC"
+        }
+      }
+    },
+    "AR0515201439": {
+      "XBUE": {
+        "ARS": {
+          "bp": 52.19,
+          "url": "https://bonos.ecovalores.com.ar/activo/XLC"
+        }
+      }
+    },
+    "AR0595844538": {
+      "XBUE": {
+        "ARS": {
+          "bp": 51.23,
+          "url": "https://bonos.ecovalores.com.ar/activo/XLI"
+        }
+      }
+    },
+    "AR0824137712": {
+      "XBUE": {
+        "ARS": {
+          "bp": 60.88,
+          "url": "https://bonos.ecovalores.com.ar/activo/XLK"
+        }
+      }
+    },
+    "ARDEUT111713": {
+      "XBUE": {
+        "ARS": {
+          "bp": 54.92,
+          "url": "https://bonos.ecovalores.com.ar/activo/T"
+        }
+      }
+    },
+    "AR0068390027": {
+      "XBUE": {
+        "ARS": {
+          "bp": 59.23,
+          "url": "https://bonos.ecovalores.com.ar/activo/XLRE"
+        }
+      }
+    },
+    "AR0449817581": {
+      "XBUE": {
+        "ARS": {
+          "bp": 27.6,
+          "url": "https://bonos.ecovalores.com.ar/activo/XLU"
+        }
+      }
+    },
+    "ARCAVA4600Y2": {
+      "XBUE": {
+        "ARS": {
+          "bp": 26.46,
+          "url": "https://bonos.ecovalores.com.ar/activo/XLF"
+        }
+      }
+    },
+    "AR0427103855": {
+      "XBUE": {
+        "ARS": {
+          "bp": 81.3,
+          "url": "https://bonos.ecovalores.com.ar/activo/XLY"
+        }
+      }
+    },
+    "AR0235356091": {
+      "XBUE": {
+        "ARS": {
+          "bp": 63.09,
+          "url": "https://bonos.ecovalores.com.ar/activo/XME"
+        }
+      }
+    },
+    "ARBCOM460374": {
+      "XBUE": {
+        "ARS": {
+          "bp": 84.07,
+          "url": "https://bonos.ecovalores.com.ar/activo/XYZ"
+        }
+      }
+    },
+    "ARBCOM4600Y0": {
+      "XBUE": {
+        "ARS": {
+          "bp": 100.68,
+          "url": "https://bonos.ecovalores.com.ar/activo/YELP"
+        }
+      }
+    },
+    "ARDEUT110152": {
+      "XBUE": {
+        "ARS": {
+          "bp": 34.93,
+          "url": "https://bonos.ecovalores.com.ar/activo/XOM"
         }
       }
     }

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-16T11:42:58.690Z",
+  "generatedAt": "2026-10-16T14:00:58.518Z",
   "source": "EODHD, les bourses du Golfe, KASE pour un last en tenge, la clôture VNDirect pour une action ou un ETF du Vietnam, le bulletin de Lima pour une clôture en soles ou en dollars, la clôture NSENG pour un last en naira, et Yahoo pour un last quand le vendeur n'a rien",
   "unit": "prices[ISIN][devise] = { price, at, from } : la clôture du dernier jour de bourse, dans la devise de cotation, pour convertir un nombre de parts en montant. Une même ligne cotée sur plusieurs places dans la même devise garde sous `from` toutes ses cotations ; `price` retient la place principale. Londres cote en pence, donc GBX et GBP sont deux entrées, que `fx.mjs` sait distinguer. Ce n'est pas un prix temps réel : il sert à dimensionner un ordre, pas à l'exécuter. `fetched` date la dernière interrogation EODHD, y compris un miss, pour ne pas brûler le quota. `fallback` date le last Yahoo (ou le constat qu'il n'y en a pas), pour ne pas le redemander chaque vue.",
   "fetched": {
@@ -72702,6 +72702,17 @@
             "primary": false
           }
         }
+      },
+      "ARS": {
+        "price": 9925,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:ACWI": {
+            "price": 9925,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
       }
     },
     "BRBACWBDR007": {
@@ -108144,6 +108155,17 @@
           "USOTC:TCMFF.US": {
             "price": 2.05,
             "at": "2026-10-15",
+            "primary": false
+          }
+        }
+      },
+      "ARS": {
+        "price": 4122.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:TECO2": {
+            "price": 4122.5,
+            "at": "2026-10-16",
             "primary": false
           }
         }
@@ -206284,6 +206306,3618 @@
         "from": {
           "YAHOO:AAL.BA": {
             "price": 9975,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM4603M9": {
+      "ARS": {
+        "price": 46020,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:ABBV": {
+            "price": 46020,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARMTBA010010": {
+      "ARS": {
+        "price": 2832.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:A3": {
+            "price": 2832.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARCAVA4601I3": {
+      "ARS": {
+        "price": 19080,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:ABNB": {
+            "price": 19080,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110608": {
+      "ARS": {
+        "price": 42780,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:ABT": {
+            "price": 42780,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110681": {
+      "ARS": {
+        "price": 78050,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:ADP": {
+            "price": 78050,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT112398": {
+      "ARS": {
+        "price": 13565,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:AEG": {
+            "price": 13565,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM4603Q0": {
+      "ARS": {
+        "price": 48250,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:AKO.B": {
+            "price": 48250,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110640": {
+      "ARS": {
+        "price": 25880,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:AIG": {
+            "price": 25880,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0717084534": {
+      "ARS": {
+        "price": 10575,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:ALAB": {
+            "price": 10575,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT112646": {
+      "ARS": {
+        "price": 36920,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:AMX": {
+            "price": 36920,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0827075372": {
+      "ARS": {
+        "price": 10120,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:ANET": {
+            "price": 10120,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM460176": {
+      "ARS": {
+        "price": 2853.75,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:AMZN": {
+            "price": 2853.75,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM4601P6": {
+      "ARS": {
+        "price": 250175,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:ANF": {
+            "price": 250175,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM460135": {
+      "ARS": {
+        "price": 26230,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:ARCO": {
+            "price": 26230,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0725224551": {
+      "ARS": {
+        "price": 18595,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:ASML": {
+            "price": 18595,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARASOL010033": {
+      "ARS": {
+        "price": 2777.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:AUSO": {
+            "price": 2777.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110707": {
+      "ARS": {
+        "price": 15990,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:AVY": {
+            "price": 15990,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0261973801": {
+      "ARS": {
+        "price": 1399,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:BAK": {
+            "price": 1399,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT112414": {
+      "ARS": {
+        "price": 27250,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:BAYN": {
+            "price": 27250,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARCAVA4601R4": {
+      "ARS": {
+        "price": 3873.75,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:BBAS3": {
+            "price": 3873.75,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0846288451": {
+      "ARS": {
+        "price": 7720,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:BBAX": {
+            "price": 7720,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0757349532": {
+      "ARS": {
+        "price": 8472.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:BBCA": {
+            "price": 8472.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT112489": {
+      "ARS": {
+        "price": 67650,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:AZN": {
+            "price": 67650,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARCAVA4601M5": {
+      "ARS": {
+        "price": 6050,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:BBDC3": {
+            "price": 6050,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT116001": {
+      "ARS": {
+        "price": 6545,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:BBD": {
+            "price": 6545,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBHIP010161": {
+      "ARS": {
+        "price": 252.25,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:BHIP": {
+            "price": 252.25,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110061": {
+      "ARS": {
+        "price": 12865,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:BA": {
+            "price": 12865,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM4601A8": {
+      "ARS": {
+        "price": 29270,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:BIIB": {
+            "price": 29270,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0302010498": {
+      "ARS": {
+        "price": 12830,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:BKR": {
+            "price": 12830,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM4603K3": {
+      "ARS": {
+        "price": 506.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:BIOX": {
+            "price": 506.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0701450691": {
+      "ARS": {
+        "price": 4638.75,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:BMNR": {
+            "price": 4638.75,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBOLD010054": {
+      "ARS": {
+        "price": 67.9,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:BOLT": {
+            "price": 67.9,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110756": {
+      "ARS": {
+        "price": 117987.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:BNY": {
+            "price": 117987.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT112877": {
+      "ARS": {
+        "price": 33050,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:BMY": {
+            "price": 33050,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT115029": {
+      "ARS": {
+        "price": 35060,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:BNG": {
+            "price": 35060,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARMERI013163": {
+      "ARS": {
+        "price": 1752.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:BPAT": {
+            "price": 1752.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM4603L1": {
+      "ARS": {
+        "price": 39150,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:BRKB": {
+            "price": 39150,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT115995": {
+      "ARS": {
+        "price": 9175,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:BSBR": {
+            "price": 9175,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARCADO010023": {
+      "ARS": {
+        "price": 532.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:CADO": {
+            "price": 532.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110798": {
+      "ARS": {
+        "price": 137025,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:CAH": {
+            "price": 137025,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110582": {
+      "ARS": {
+        "price": 16030,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:BP": {
+            "price": 16030,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARP2006N1025": {
+      "ARS": {
+        "price": 3257.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:CAPX": {
+            "price": 3257.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARP8723U1058": {
+      "ARS": {
+        "price": 19.025,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:CARC": {
+            "price": 19.025,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110822": {
+      "ARS": {
+        "price": 6867.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:CAR": {
+            "price": 6867.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARCGSU010048": {
+      "ARS": {
+        "price": 1592.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:CGPA2": {
+            "price": 1592.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARP2341J1058": {
+      "ARS": {
+        "price": 485,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:CECO2": {
+            "price": 485,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0110444327": {
+      "ARS": {
+        "price": 16415,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:CIBR": {
+            "price": 16415,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0313306612": {
+      "ARS": {
+        "price": 9340,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:COP": {
+            "price": 9340,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0893303633": {
+      "ARS": {
+        "price": 7397.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:CORN": {
+            "price": 7397.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0777424190": {
+      "ARS": {
+        "price": 24735,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:CLS": {
+            "price": 24735,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110863": {
+      "ARS": {
+        "price": 33210,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:COST": {
+            "price": 33210,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARCAVA460255": {
+      "ARS": {
+        "price": 1880,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:CSNA3": {
+            "price": 1880,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110095": {
+      "ARS": {
+        "price": 34980,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:CSCO": {
+            "price": 34980,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARCTIO010019": {
+      "ARS": {
+        "price": 1685,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:CTIO": {
+            "price": 1685,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0107022060": {
+      "ARS": {
+        "price": 10050,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:CVS": {
+            "price": 10050,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT112216": {
+      "ARS": {
+        "price": 16575,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:CX": {
+            "price": 16575,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0051689021": {
+      "ARS": {
+        "price": 15970,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:DAL": {
+            "price": 15970,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110145": {
+      "ARS": {
+        "price": 43110,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:DD": {
+            "price": 43110,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110087": {
+      "ARS": {
+        "price": 22605,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:CVX": {
+            "price": 22605,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0571828273": {
+      "ARS": {
+        "price": 5632.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:DECK": {
+            "price": 5632.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0195486730": {
+      "ARS": {
+        "price": 10002.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:DELL": {
+            "price": 10002.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT112505": {
+      "ARS": {
+        "price": 25620,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:DEO": {
+            "price": 25620,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARCAVA460107": {
+      "ARS": {
+        "price": 42440,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:DIA": {
+            "price": 42440,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110905": {
+      "ARS": {
+        "price": 26410,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:DE": {
+            "price": 26410,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0002457668": {
+      "ARS": {
+        "price": 6912.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:DHR": {
+            "price": 6912.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110137": {
+      "ARS": {
+        "price": 15035,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:DISN": {
+            "price": 15035,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARP3568E1180": {
+      "ARS": {
+        "price": 1335,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:DGCU2": {
+            "price": 1335,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARP3577N1097": {
+      "ARS": {
+        "price": 73,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:DOME": {
+            "price": 73,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM4603H9": {
+      "ARS": {
+        "price": 5697.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:DOCU": {
+            "price": 5697.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM460416": {
+      "ARS": {
+        "price": 8067.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:DOW": {
+            "price": 8067.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT116167": {
+      "ARS": {
+        "price": 100200,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:EBAY": {
+            "price": 100200,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0866277863": {
+      "ARS": {
+        "price": 8492.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:ECL": {
+            "price": 8492.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110426": {
+      "ARS": {
+        "price": 68462.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:C": {
+            "price": 68462.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AREDEH010018": {
+      "ARS": {
+        "price": 5200,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:EDSH": {
+            "price": 5200,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARCAVA4600X4": {
+      "ARS": {
+        "price": 20580,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:EEM": {
+            "price": 20580,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM460325": {
+      "ARS": {
+        "price": 16495,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:EFX": {
+            "price": 16495,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM460283": {
+      "ARS": {
+        "price": 67500,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:ELPC": {
+            "price": 67500,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0406299526": {
+      "ARS": {
+        "price": 9427.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:EFA": {
+            "price": 9427.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0626892837": {
+      "ARS": {
+        "price": 12275,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:EQNR": {
+            "price": 12275,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0572847066": {
+      "ARS": {
+        "price": 9102.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:ESGU": {
+            "price": 9102.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0757236192": {
+      "ARS": {
+        "price": 5000,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:EWY": {
+            "price": 5000,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110525": {
+      "ARS": {
+        "price": 8572.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:ERIC": {
+            "price": 8572.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110962": {
+      "ARS": {
+        "price": 48290,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:FDX": {
+            "price": 48290,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARP395611576": {
+      "ARS": {
+        "price": 16.225,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:FERR": {
+            "price": 16.225,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARP416191426": {
+      "ARS": {
+        "price": 121.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:FIPL": {
+            "price": 121.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0997854325": {
+      "ARS": {
+        "price": 7015,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:FISV": {
+            "price": 7015,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT112323": {
+      "ARS": {
+        "price": 5200,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:FMCC": {
+            "price": 5200,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT116076": {
+      "ARS": {
+        "price": 37930,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:FCX": {
+            "price": 37930,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT111853": {
+      "ARS": {
+        "price": 33710,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:FMX": {
+            "price": 33710,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110970": {
+      "ARS": {
+        "price": 5750,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:FNMA": {
+            "price": 5750,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBOLG010010": {
+      "ARS": {
+        "price": 350.25,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:GAMI": {
+            "price": 350.25,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0033445195": {
+      "ARS": {
+        "price": 10990,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:FXI": {
+            "price": 10990,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARP460221020": {
+      "ARS": {
+        "price": 377,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:GARO": {
+            "price": 377,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARGASB010027": {
+      "ARS": {
+        "price": 1617.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:GBAN": {
+            "price": 1617.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARTGLT010015": {
+      "ARS": {
+        "price": 11.35,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:GCDI": {
+            "price": 11.35,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARGCLA010015": {
+      "ARS": {
+        "price": 3095,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:GCLA": {
+            "price": 3095,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0727034941": {
+      "ARS": {
+        "price": 14165,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:GDX": {
+            "price": 14165,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0796715107": {
+      "ARS": {
+        "price": 8412.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:GEV": {
+            "price": 8412.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT115425": {
+      "ARS": {
+        "price": 60912.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:GFI": {
+            "price": 60912.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT112612": {
+      "ARS": {
+        "price": 23610,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:E": {
+            "price": 23610,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM460200": {
+      "ARS": {
+        "price": 33090,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:GGB": {
+            "price": 33090,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0051097142": {
+      "ARS": {
+        "price": 7290,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:GLNG": {
+            "price": 7290,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT111002": {
+      "ARS": {
+        "price": 54262.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:GLW": {
+            "price": 54262.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM460408": {
+      "ARS": {
+        "price": 23060,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:GM": {
+            "price": 23060,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARP493071046": {
+      "ARS": {
+        "price": 2332.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:GRIM": {
+            "price": 2332.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110160": {
+      "ARS": {
+        "price": 64012.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:GE": {
+            "price": 64012.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM4601G5": {
+      "ARS": {
+        "price": 156025,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:GRMN": {
+            "price": 156025,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0257579893": {
+      "ARS": {
+        "price": 9870,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:GSG": {
+            "price": 9870,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0539172129": {
+      "ARS": {
+        "price": 3595,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:GT": {
+            "price": 3595,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM4603E6": {
+      "ARS": {
+        "price": 27170,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:HAL": {
+            "price": 27170,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARHAVH300038": {
+      "ARS": {
+        "price": 4117.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:HAVA": {
+            "price": 4117.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT114022": {
+      "ARS": {
+        "price": 19300,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:HDB": {
+            "price": 19300,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0162508391": {
+      "ARS": {
+        "price": 11905,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:HIMS": {
+            "price": 11905,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT111069": {
+      "ARS": {
+        "price": 14910,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:HOG": {
+            "price": 14910,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT112950": {
+      "ARS": {
+        "price": 55737.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:HMC": {
+            "price": 55737.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT115417": {
+      "ARS": {
+        "price": 25370,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:HL": {
+            "price": 25370,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT111705": {
+      "ARS": {
+        "price": 15700,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:HD": {
+            "price": 15700,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110194": {
+      "ARS": {
+        "price": 50100,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:HPQ": {
+            "price": 50100,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0956262361": {
+      "ARS": {
+        "price": 122.25,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:HSAT": {
+            "price": 122.25,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110020": {
+      "ARS": {
+        "price": 357987.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:HWM": {
+            "price": 357987.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0479909407": {
+      "ARS": {
+        "price": 8085,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:IBKR": {
+            "price": 8085,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT114048": {
+      "ARS": {
+        "price": 48670,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:IBN": {
+            "price": 48670,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT111127": {
+      "ARS": {
+        "price": 13185,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:HSY": {
+            "price": 13185,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARP3594C1107": {
+      "ARS": {
+        "price": 2347.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:IEB": {
+            "price": 2347.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0342969240": {
+      "ARS": {
+        "price": 5385,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:ICLN": {
+            "price": 5385,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0405465953": {
+      "ARS": {
+        "price": 11010,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:IEUR": {
+            "price": 11010,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT111135": {
+      "ARS": {
+        "price": 12360,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:IFF": {
+            "price": 12360,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0425509392": {
+      "ARS": {
+        "price": 9890,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:IJH": {
+            "price": 9890,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0872435588": {
+      "ARS": {
+        "price": 10145,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:ILF": {
+            "price": 10145,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARINJU010010": {
+      "ARS": {
+        "price": 388,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:INVJ": {
+            "price": 388,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT111937": {
+      "ARS": {
+        "price": 18355,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:ING": {
+            "price": 18355,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARP588091073": {
+      "ARS": {
+        "price": 2282.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:IRSA": {
+            "price": 2282.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110228": {
+      "ARS": {
+        "price": 14035,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:IP": {
+            "price": 14035,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0902369476": {
+      "ARS": {
+        "price": 7737.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:ISRG": {
+            "price": 7737.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0864733115": {
+      "ARS": {
+        "price": 9592.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:IVE": {
+            "price": 9592.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARCAVA4600W6": {
+      "ARS": {
+        "price": 44640,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:IWM": {
+            "price": 44640,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM4601Y8": {
+      "ARS": {
+        "price": 10905,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:JD": {
+            "price": 10905,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARCAVA4601J1": {
+      "ARS": {
+        "price": 9842.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:JMIA": {
+            "price": 9842.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM460242": {
+      "ARS": {
+        "price": 27070,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:JOYY": {
+            "price": 27070,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT115268": {
+      "ARS": {
+        "price": 97112.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:KB": {
+            "price": 97112.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT115250": {
+      "ARS": {
+        "price": 17475,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:KEP": {
+            "price": 17475,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT115391": {
+      "ARS": {
+        "price": 38940,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:KGC": {
+            "price": 38940,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0664014096": {
+      "ARS": {
+        "price": 8120,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:KLAC": {
+            "price": 8120,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT115201": {
+      "ARS": {
+        "price": 95200,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:KOFM": {
+            "price": 95200,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0527954207": {
+      "ARS": {
+        "price": 7687.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:LAR": {
+            "price": 7687.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARP624571096": {
+      "ARS": {
+        "price": 703,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:LEDE": {
+            "price": 703,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT111176": {
+      "ARS": {
+        "price": 28470,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:KMB": {
+            "price": 28470,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0550890435": {
+      "ARS": {
+        "price": 7900,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:LIN": {
+            "price": 7900,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110111": {
+      "ARS": {
+        "price": 30210,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:KO": {
+            "price": 30210,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0315369394": {
+      "ARS": {
+        "price": 5882.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:LND": {
+            "price": 5882.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARP6356B1059": {
+      "ARS": {
+        "price": 16.3,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:LONG": {
+            "price": 16.3,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT111200": {
+      "ARS": {
+        "price": 43850,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:LMT": {
+            "price": 43850,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARCAVA4601Q6": {
+      "ARS": {
+        "price": 4125,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:LREN3": {
+            "price": 4125,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT116092": {
+      "ARS": {
+        "price": 31090,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:LVS": {
+            "price": 31090,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT112513": {
+      "ARS": {
+        "price": 4488.75,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:LYG": {
+            "price": 4488.75,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM4603X6": {
+      "ARS": {
+        "price": 7905,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:LRCX": {
+            "price": 7905,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM4603D8": {
+      "ARS": {
+        "price": 30450,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:MA": {
+            "price": 30450,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0774942129": {
+      "ARS": {
+        "price": 6920,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:MDLZ": {
+            "price": 6920,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT114733": {
+      "ARS": {
+        "price": 16825,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:MFG": {
+            "price": 16825,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT111283": {
+      "ARS": {
+        "price": 38990,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:MDT": {
+            "price": 38990,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARP6823S1295": {
+      "ARS": {
+        "price": 1705,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:MIRG": {
+            "price": 1705,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARMOAG300023": {
+      "ARS": {
+        "price": 21050,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:MOLA": {
+            "price": 21050,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110293": {
+      "ARS": {
+        "price": 27010,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:MMM": {
+            "price": 27010,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARP698141040": {
+      "ARS": {
+        "price": 21.125,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:MORI": {
+            "price": 21.125,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARCAVA4601D4": {
+      "ARS": {
+        "price": 6150,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:MOS": {
+            "price": 6150,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110277": {
+      "ARS": {
+        "price": 47720,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:MRK": {
+            "price": 47720,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT111309": {
+      "ARS": {
+        "price": 19140,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:MRSH": {
+            "price": 19140,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110301": {
+      "ARS": {
+        "price": 37460,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:MSI": {
+            "price": 37460,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT111762": {
+      "ARS": {
+        "price": 36040,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:MUFG": {
+            "price": 36040,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0829300257": {
+      "ARS": {
+        "price": 13290,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:MUX": {
+            "price": 13290,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARCAVA460271": {
+      "ARS": {
+        "price": 2245,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:NATU3": {
+            "price": 2245,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0204516899": {
+      "ARS": {
+        "price": 6762.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:NEE": {
+            "price": 6762.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT112570": {
+      "ARS": {
+        "price": 62850,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:NEM": {
+            "price": 62850,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM4601N1": {
+      "ARS": {
+        "price": 43010,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:NG": {
+            "price": 43010,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT112620": {
+      "ARS": {
+        "price": 65112.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:NGG": {
+            "price": 65112.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT111341": {
+      "ARS": {
+        "price": 5072.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:NKE": {
+            "price": 5072.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT113024": {
+      "ARS": {
+        "price": 15220,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:NMR": {
+            "price": 15220,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0298258051": {
+      "ARS": {
+        "price": 7277.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:MS": {
+            "price": 7277.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT113032": {
+      "ARS": {
+        "price": 5800,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:NSAN": {
+            "price": 5800,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM4601Z5": {
+      "ARS": {
+        "price": 14650,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:NTES": {
+            "price": 14650,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0776810878": {
+      "ARS": {
+        "price": 12740,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:NTRA": {
+            "price": 12740,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT111358": {
+      "ARS": {
+        "price": 26480,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:NUE": {
+            "price": 26480,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0229808610": {
+      "ARS": {
+        "price": 9102.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:NVO": {
+            "price": 9102.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0220648593": {
+      "ARS": {
+        "price": 13825,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:NXE": {
+            "price": 13825,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARGCAO010012": {
+      "ARS": {
+        "price": 747,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:OEST": {
+            "price": 747,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0247723296": {
+      "ARS": {
+        "price": 5140,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:ONDS": {
+            "price": 5140,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT115177": {
+      "ARS": {
+        "price": 20310,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:PAC": {
+            "price": 20310,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0343130982": {
+      "ARS": {
+        "price": 11120,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:PATH": {
+            "price": 11120,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0651353770": {
+      "ARS": {
+        "price": 6040,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:PAGS": {
+            "price": 6040,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT111382": {
+      "ARS": {
+        "price": 28120,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:PBI": {
+            "price": 28120,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0101251947": {
+      "ARS": {
+        "price": 5297.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:PDD": {
+            "price": 5297.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARCAVA4601L7": {
+      "ARS": {
+        "price": 20485,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:PETR3": {
+            "price": 20485,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110558": {
+      "ARS": {
+        "price": 8420,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:PHG": {
+            "price": 8420,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0752208279": {
+      "ARS": {
+        "price": 5270,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:PINS": {
+            "price": 5270,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT115276": {
+      "ARS": {
+        "price": 30110,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:PKS": {
+            "price": 30110,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0793346641": {
+      "ARS": {
+        "price": 7177.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:PLD": {
+            "price": 7177.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110335": {
+      "ARS": {
+        "price": 17130,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:PG": {
+            "price": 17130,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0734794420": {
+      "ARS": {
+        "price": 5142.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:PSQ": {
+            "price": 5142.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0361136887": {
+      "ARS": {
+        "price": 18260,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:PM": {
+            "price": 18260,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0227017768": {
+      "ARS": {
+        "price": 7762.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:RACE": {
+            "price": 7762.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM460333": {
+      "ARS": {
+        "price": 79762.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:PSX": {
+            "price": 79762.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARLRIC300027": {
+      "ARS": {
+        "price": 1422.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:RICH": {
+            "price": 1422.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARROSE010025": {
+      "ARS": {
+        "price": 148.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:ROSE": {
+            "price": 148.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM4600Z7": {
+      "ARS": {
+        "price": 96987.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:ROST": {
+            "price": 96987.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0436041906": {
+      "ARS": {
+        "price": 11670,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:RSP": {
+            "price": 11670,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT112034": {
+      "ARS": {
+        "price": 61262.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:SAP": {
+            "price": 61262.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM4602T6": {
+      "ARS": {
+        "price": 87812.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:SAN": {
+            "price": 87812.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110384": {
+      "ARS": {
+        "price": 61375,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:RTX": {
+            "price": 61375,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT111481": {
+      "ARS": {
+        "price": 13185,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:SBUX": {
+            "price": 13185,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM4602F5": {
+      "ARS": {
+        "price": 20555,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:SBS": {
+            "price": 20555,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT116084": {
+      "ARS": {
+        "price": 164487.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:SCCO": {
+            "price": 164487.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0097548348": {
+      "ARS": {
+        "price": 304,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:SDA": {
+            "price": 304,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARP689031069": {
+      "ARS": {
+        "price": 13.775,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:SEMI": {
+            "price": 13.775,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT112547": {
+      "ARS": {
+        "price": 85637.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:SHEL": {
+            "price": 85637.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM460341": {
+      "ARS": {
+        "price": 2686.25,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:SHOP": {
+            "price": 2686.25,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0273529450": {
+      "ARS": {
+        "price": 7985,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:SHW": {
+            "price": 7985,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT112372": {
+      "ARS": {
+        "price": 80000,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:SIEGY": {
+            "price": 80000,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0998039140": {
+      "ARS": {
+        "price": 17840,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:SMH": {
+            "price": 17840,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0798622483": {
+      "ARS": {
+        "price": 6497.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:SH": {
+            "price": 6497.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT111515": {
+      "ARS": {
+        "price": 26780,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:SLB": {
+            "price": 26780,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT111549": {
+      "ARS": {
+        "price": 99837.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:SNA": {
+            "price": 99837.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM4601H3": {
+      "ARS": {
+        "price": 10290,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:SNAP": {
+            "price": 10290,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      },
+      "USD": {
+        "price": 6.67,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:SNAPD": {
+            "price": 6.67,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM460358": {
+      "ARS": {
+        "price": 17455,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:SNOW": {
+            "price": 17455,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT112984": {
+      "ARS": {
+        "price": 5080,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:SONY": {
+            "price": 5080,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0903802343": {
+      "ARS": {
+        "price": 8700,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:SOYB": {
+            "price": 8700,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0754647243": {
+      "ARS": {
+        "price": 9827.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:SPHQ": {
+            "price": 9827.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM460366": {
+      "ARS": {
+        "price": 30670,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:SPOT": {
+            "price": 30670,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM4602E8": {
+      "ARS": {
+        "price": 13750,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:SUZ": {
+            "price": 13750,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0940941575": {
+      "ARS": {
+        "price": 1442.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:STLA": {
+            "price": 1442.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0657424591": {
+      "ARS": {
+        "price": 6165,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:STNE": {
+            "price": 6165,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT111598": {
+      "ARS": {
+        "price": 16775,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:SYY": {
+            "price": 16775,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM460226": {
+      "ARS": {
+        "price": 32500,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:TCOM": {
+            "price": 32500,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0234754239": {
+      "ARS": {
+        "price": 7407.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:TEAM": {
+            "price": 7407.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0520934156": {
+      "ARS": {
+        "price": 9485,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:TEM": {
+            "price": 9485,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARTGNO010117": {
+      "ARS": {
+        "price": 3271.25,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:TGNO4": {
+            "price": 3271.25,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM4602A6": {
+      "ARS": {
+        "price": 30010,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:TIMB": {
+            "price": 30010,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM4602S8": {
+      "ARS": {
+        "price": 95137.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:TEN": {
+            "price": 95137.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM460101": {
+      "ARS": {
+        "price": 10760,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:TGT": {
+            "price": 10760,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM4601F7": {
+      "ARS": {
+        "price": 51325,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:TMO": {
+            "price": 51325,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0964115726": {
+      "ARS": {
+        "price": 7797.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:TMUS": {
+            "price": 7797.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM4601O9": {
+      "ARS": {
+        "price": 7717.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:TRIP": {
+            "price": 7717.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT116100": {
+      "ARS": {
+        "price": 103237.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:TRVV": {
+            "price": 103237.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT113016": {
+      "ARS": {
+        "price": 74612.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:TSM": {
+            "price": 74612.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARCAVA460164": {
+      "ARS": {
+        "price": 33230,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:UAL": {
+            "price": 33230,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT111622": {
+      "ARS": {
+        "price": 90250,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:TXN": {
+            "price": 90250,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT116019": {
+      "ARS": {
+        "price": 23315,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:TXR": {
+            "price": 23315,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT112133": {
+      "ARS": {
+        "price": 1317.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:TV": {
+            "price": 1317.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT112091": {
+      "ARS": {
+        "price": 35540,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:UL": {
+            "price": 35540,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM460382": {
+      "ARS": {
+        "price": 23575,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:UNP": {
+            "price": 23575,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM4601Q4": {
+      "ARS": {
+        "price": 72600,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:URBN": {
+            "price": 72600,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT112919": {
+      "ARS": {
+        "price": 19100,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:USB": {
+            "price": 19100,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARCAVA4601K9": {
+      "ARS": {
+        "price": 24020,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:VALE3": {
+            "price": 24020,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0810570678": {
+      "ARS": {
+        "price": 11370,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:VEA": {
+            "price": 11370,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0625060907": {
+      "ARS": {
+        "price": 10090,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:VIG": {
+            "price": 10090,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARCAVA4601X2": {
+      "ARS": {
+        "price": 9750,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:VIVT3": {
+            "price": 9750,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110590": {
+      "ARS": {
+        "price": 26200,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:VOD": {
+            "price": 26200,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM4601W2": {
+      "ARS": {
+        "price": 20070,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:VIV": {
+            "price": 20070,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM4600U8": {
+      "ARS": {
+        "price": 82525,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:VRSN": {
+            "price": 82525,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0468655268": {
+      "ARS": {
+        "price": 8185,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:VRTX": {
+            "price": 8185,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0691521022": {
+      "ARS": {
+        "price": 5467.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:VXX": {
+            "price": 5467.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM460259": {
+      "ARS": {
+        "price": 1749.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:WBO": {
+            "price": 1749.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0307648912": {
+      "ARS": {
+        "price": 6010,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:WDC": {
+            "price": 6010,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0474385009": {
+      "ARS": {
+        "price": 7927.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:WELL": {
+            "price": 7927.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0441163851": {
+      "ARS": {
+        "price": 4606.25,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:XLB": {
+            "price": 4606.25,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110434": {
+      "ARS": {
+        "price": 27430,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:WFC": {
+            "price": 27430,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0515201439": {
+      "ARS": {
+        "price": 9580,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:XLC": {
+            "price": 9580,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0595844538": {
+      "ARS": {
+        "price": 9760,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:XLI": {
+            "price": 9760,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0824137712": {
+      "ARS": {
+        "price": 6570,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:XLK": {
+            "price": 6570,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT111713": {
+      "ARS": {
+        "price": 12745,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:T": {
+            "price": 12745,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0068390027": {
+      "ARS": {
+        "price": 7597.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:XLRE": {
+            "price": 7597.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0449817581": {
+      "ARS": {
+        "price": 4528.75,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:XLU": {
+            "price": 4528.75,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARCAVA4600Y2": {
+      "ARS": {
+        "price": 45360,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:XLF": {
+            "price": 45360,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0427103855": {
+      "ARS": {
+        "price": 4305,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:XLY": {
+            "price": 4305,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "AR0235356091": {
+      "ARS": {
+        "price": 5547.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:XME": {
+            "price": 5547.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM460374": {
+      "ARS": {
+        "price": 6542.5,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:XYZ": {
+            "price": 6542.5,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARBCOM4600Y0": {
+      "ARS": {
+        "price": 16885,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:YELP": {
+            "price": 16885,
+            "at": "2026-10-16",
+            "primary": false
+          }
+        }
+      }
+    },
+    "ARDEUT110152": {
+      "ARS": {
+        "price": 28630,
+        "at": "2026-10-16",
+        "from": {
+          "XBUE:XOM": {
+            "price": 28630,
             "at": "2026-10-16",
             "primary": false
           }

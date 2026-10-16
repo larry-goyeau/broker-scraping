@@ -236,7 +236,7 @@ export const VENUES = [
       ARCX: ["arcx", "arca", "nysearca", "amex", "americanamex", "usamex", "pcq", "nysemkt"],
       XNYS: ["xnys", "nyse", "newyorkstockexchange", "nys", "nsy", "usnyse"],
       XASE: ["xase", "nyseamerican", "americanstockexchange", "ase"],
-      BATS: ["bats", "batsz", "batsbzx", "cboebzx", "bzx", "cboe"],
+      BATS: ["bats", "batsz", "batsbzx", "cboebzx", "bzx", "cboe", "cboeconsolidatedlistings"],
     }[mic],
     loose: { XNAS: ["nasdaqus"], ARCX: [], XNYS: ["newyork"], XASE: [], BATS: ["cboe"] }[mic],
   })),
@@ -849,7 +849,7 @@ export const VENUES = [
     name: "OTC Markets",
     source: "otc",
     hours: { open: "09:30", close: "16:00", tz: "America/New_York" },
-    exact: ["otcm", "otc", "otcmarkets", "pink", "otcmkts", "otcqx", "otcqb", "pinx", "grey", "ootc", "otherotc", "ootcotherotc", "usotc"],
+    exact: ["otcm", "otc", "otcmarkets", "overthecountermarket", "pink", "otcmkts", "otcqx", "otcqb", "pinx", "grey", "greymarket", "expertmarket", "ootc", "otherotc", "ootcotherotc", "usotc"],
     loose: [],
   },
   // Cash session 09:30–11:30 and 13:00–15:00 Shanghai time. The hours here are

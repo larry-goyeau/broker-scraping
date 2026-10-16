@@ -17,7 +17,9 @@
 // £10,000, which the tax map does not price as a flat.
 //
 // A London line keeps the London book. Aquis has no book here. A CDI
-// quote is not the American NBBO, so that spread stays unknown.
+// uses the stored CDI book, the same bid and ask AJ Bell prints. The
+// American NBBO is not that price, so a CDI with no stored book stays
+// unknown.
 //
 //   https://www.bestinvest.co.uk/accounts/fees
 //   https://www.bestinvest.co.uk/help/dealing
@@ -108,16 +110,14 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
 
   const m = matches[0];
   const cdi = String(m.row.exchange || "").toUpperCase().startsWith("CDI");
-  const book = cdi
-    ? { leaf: null, mic: null }
-    : spreadLeaf(spreads, {
-        isin: m.row.isin,
-        mic: m.venue?.mic ?? null,
-        currency: m.row.currency,
-        unsourced: m.unsourced,
-        broker: "bestinvest",
-        ticker: m.row.ticker,
-      });
+  const book = spreadLeaf(spreads, {
+    isin: m.row.isin,
+    mic: m.venue?.mic ?? null,
+    currency: m.row.currency,
+    unsourced: cdi ? null : m.unsourced,
+    broker: "bestinvest",
+    ticker: m.row.ticker,
+  });
   const listing = {
     isin: String(m.row.isin || "").toUpperCase() || null,
     ticker: m.row.ticker || null,
@@ -129,7 +129,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     brokerExchange: m.row.exchange || null,
   };
   const leaf = book.leaf;
-  const marketBp = cdi ? null : bp ?? leaf?.bp ?? null;
+  const marketBp = bp ?? leaf?.bp ?? null;
   const marketPerShare = cdi ? null : perShare ?? leaf?.perShare ?? null;
   const partsBook = bookParts({
     bp: marketBp,
@@ -192,7 +192,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     ...(bookUsd == null
       ? {
           why: cdi
-            ? "CDI : Bestinvest ne publie pas les deux côtés du prix en livres, le NBBO n'est pas ce prix"
+            ? "CDI : pas de carnet CDI stocké, le NBBO n'est pas ce prix"
             : `aucun carnet pour ${m.unsourced?.name || listing.exchange || "cette ligne"} : ${m.unsourced?.why || "pas de feuille de carnet"}`,
         }
       : {}),

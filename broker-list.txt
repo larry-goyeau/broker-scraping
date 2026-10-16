@@ -41,6 +41,79 @@ TradeUP	US	Neobroker	US ETFs / ETNs	https://www.tradeup.com/
 Hapi	US	Neobroker	US ETFs / ETNs	https://hapi.trade
 Truist Trade	US	Bank	US ETFs / ETNs	https://www.truist.com/investing-retirement/self-directed-investing
 PNC Brokerage Plus	US	Bank	US ETFs / ETNs	https://www.pnc.com/en/personal-banking/investments-and-retirement/brokerage-accounts/brokerage-accounts-faqs.html
+T. Rowe Price	US	Broker	US ETFs / ETNs	https://www.troweprice.com/personal-investing/accounts/brokerage/
+American Century	US	Broker	US ETFs / ETNs	https://www.americancentury.com/support-center/individual-investor/faqs/
+Ameriprise	US	Broker	US ETFs / ETNs	https://www.ameriprise.com/secure/help/trading
+Thrivent	US	Broker	US ETFs / ETNs	https://www.thrivent.com/files/34965_Navigating_Wealthscape_Investor.pdf
+SpeedTrader	US	Broker	US ETFs / ETNs	https://speedtrader.com/faq/
+Navy Federal Digital Investor	US	Bank	US ETFs / ETNs	https://www.navyfederal.org/investment-services/investments.html
+Wealthfront	US	Neobroker	US ETFs / ETNs	https://www.wealthfront.com/blog/expanded-brokerage-account/
+M1	US	Neobroker	US ETFs / ETNs	https://help.m1.com/en/articles/9332109-how-to-create-individual-manual-orders
+Betterment	US	Neobroker	US ETFs / ETNs	https://www.betterment.com/self-directed-investing
+Greenlight	US	Neobroker	US ETFs / ETNs	https://help.greenlight.com/hc/en-us/articles/1260801287570-How-do-I-start-investing-in-the-Greenlight-app-How-do-I-access-investing-tools-and-education-through-Greenlight
+Coinbase	US	Neobroker	US ETFs / ETNs	https://help.coinbase.com/en/stocks-funds
+Kraken	US	Neobroker	US ETFs / ETNs	https://support.kraken.com/articles/getting-started-with-equities
+MoneyLion	US	Neobroker	US ETFs / ETNs	https://www.moneylion.com/adv
+Grifin	US	Neobroker	US ETFs / ETNs	https://www.grifin.com/legal/advisory-agreement
+Huntington Bank	US	Bank	US ETFs / ETNs	https://www.huntington.com/Personal/savings-cds-overview/smartinvest-money-market-account
+River Valley Credit Union	US	Bank	US ETFs / ETNs	https://www.rivervalleycu.org/self-directed-investments
+SouthPoint Financial Credit Union	US	Bank	US ETFs / ETNs	https://www.southpointfinancial.com/digital-investing/
+Truity Credit Union	US	Bank	US ETFs / ETNs	https://www.truitycu.org/en/services/accountservices/invest
+WeStreet Credit Union	US	Bank	US ETFs / ETNs	https://westreet.org/member-resource/securities-in-the-investment-portal-faq/
+Panhandle Credit Union	US	Bank	US ETFs / ETNs	https://www.panhandlecu.org/products/digital-investments
+Mid Minnesota Federal Credit Union	US	Bank	US ETFs / ETNs	https://www.mmfcu.org/digital-investing/securities-etfs
+Cincinnati Ohio Police Federal Credit Union	US	Bank	US ETFs / ETNs	https://copfcu.com/resources/digital-investing/
+BBAE	US	Neobroker	US ETFs / ETNs	https://www.bbae.com/faq/fractional-shares/
+Bluestone Federal Credit Union	US	Bank	US ETFs / ETNs	https://www.bluestonefcu.org/investment-tools/
+Create Credit Union	US	Bank	US ETFs / ETNs	https://www.createcu.org/invest/
+Day Air Credit Union	US	Bank	US ETFs / ETNs	https://dayair.org/invest/
+Element Federal Credit Union	US	Bank	US ETFs / ETNs	https://www.elementfcu.org/invest/
+First Commerce Credit Union	US	Bank	US ETFs / ETNs	https://www.firstcommercecu.org/investing/
+Frankenmuth Credit Union	US	Bank	US ETFs / ETNs	https://frankenmuthcu.org/invest/
+Heritage Valley Federal Credit Union	US	Bank	US ETFs / ETNs	https://heritagevalleyfcu.org/digitalinvesting/
+Peninsula Federal Credit Union	US	Bank	US ETFs / ETNs	https://www.peninsulafcu.com/investing-securities
+TRU Federal Credit Union	US	Bank	US ETFs / ETNs	https://tru-fcu.org/investment-portal/
+United Financial Credit Union	US	Bank	US ETFs / ETNs	https://www.unitedfinancialcu.org/invest/securities/
+Albert	US	Neobroker	US ETFs / ETNs	https://albert.com/about/investing
+Lime Trading	US	Broker	US ETFs / ETNs	https://lime.co/lime-trader-web/
+dub	US	Neobroker	US ETFs / ETNs	https://support.dubapp.com/hc/en-us/articles/35785614503067-How-to-Copy-Portfolios-on-dub-Complete-Guide
+BusyKid	US	Neobroker	US ETFs / ETNs	https://busykid.com/investing-for-kids/
+Vision Financial Markets	US	Broker	US ETFs / ETNs	https://www.vfmarkets.com/day-trading/
+Frec	US	Neobroker	US ETFs / ETNs	https://help.frec.com/en-us/exchange-traded-funds-etfs
+StoneX One	US	Broker	US ETFs / ETNs	https://www.stonex.com/en-us/business/self-directed-services/self-directed-accounts/
+City National Bank	US	Bank	US ETFs / ETNs	https://www.cnb.com/personal-banking/wealth-management/self-directed-investing.html
+Acorns	US	Neobroker	US ETFs / ETNs	https://help.acorns.com/hc/en-us/articles/Are-my-trades-instant-for-Custom-Portfolio
+Globalink Securities	US	Broker	US ETFs / ETNs	https://globalinkusa.com/trading/
+Popular Securities	US	Broker	US ETFs / ETNs	https://documents.popular.com/pdfs/PO/Understanding-How-We-Are.pdf
+HSBC Securities (USA)	US	Bank	US ETFs / ETNs	https://www.us.hsbc.com/investments/products/self-directed-brokerage/
+TC2000 Brokerage	US	Broker	US ETFs / ETNs	https://www.tc2000.com/brokerage/formcrs
+Saturna Brokerage Services	US	Broker	US ETFs / ETNs	https://www.saturna.com/sites/saturna.com/files/files/sbs-brochure.pdf
+Guardian Trading	US	Broker	US ETFs / ETNs	https://www.guardiantrading.com/disclosures/
+First Citizens Bank	US	Bank	US ETFs / ETNs	https://www.firstcitizens.com/wealth/investment-solutions
+Frost Bank	US	Bank	US ETFs / ETNs	https://www.frostbank.com/business/investments/online-services/invest-online
+Empower	US	Broker	US ETFs / ETNs	https://www.empower.com/products-solutions/brokerage-accounts
+Great Point Capital	US	Broker	US ETFs / ETNs	https://www.greatpointcapital.com/trading-solutions
+Composer	US	Neobroker	US ETFs / ETNs	https://api.composer.trade/docs/index.html
+OnePay Invest	US	Neobroker	US ETFs / ETNs	https://www.onepay.com/help-center/articles/about-onepay-invest
+GalaxyOne	US	Neobroker	US ETFs / ETNs	https://www.galaxy.app/product/brokerage
+Crypto.com	US	Neobroker	US ETFs / ETNs	https://crypto.com/us/stocks/stock-trading-account
+Gemini	US	Neobroker	US ETFs / ETNs	https://www.gemini.com/legal/form-crs
+Uphold	US	Neobroker	US ETFs / ETNs	https://support.uphold.com/hc/en-us/articles/53122698072859-Get-started-with-Equities
+TradingBlock	US	Broker	US ETFs / ETNs	https://legacy.tradingblock.com/Docs/Agreements/tb/AOS_TradingBlock_Form_CRS.pdf
+Associated Bank	US	Bank	US ETFs / ETNs	https://www.associatedbank.com/wealth/associated-investment-services/brokerage-and-investment-solutions
+UMB Bank	US	Bank	US ETFs / ETNs	https://www.umb.com/wealth-management/investing
+Place Trade	US	Broker	US ETFs / ETNs	https://placetrade.com/investment-types-1
+Investrade	US	Broker	US ETFs / ETNs	https://investrade.com/wp-content/uploads/Discount-Disclosure.pdf
+Chime Invest	US	Neobroker	US ETFs / ETNs	https://www.chime.com/invest/
+BOK Financial	US	Bank	US ETFs / ETNs	https://www.bokfinancial.com/personal/products-and-services/personal-banking/checking-accounts/premier-checking
+Citizens Bank	US	Bank	US ETFs / ETNs	https://www.citizensbank.com/investing-and-wealth-management/frequently-asked-questions.aspx
+Commonwealth Financial Network	US	Broker	US ETFs / ETNs	https://content.commonwealth.com/RepSiteContent/wealthscape-investor-user-guide.pdf
+Tradesk	US	Neobroker	US ETFs / ETNs	https://www.tradesk.co/pdf/tradesk-form-crs-July-2026.pdf
+Opencash	US	Neobroker	US ETFs / ETNs	https://support.opencash.com/article/71-ocs-customer-relationship-summary
+Aries	US	Broker	US ETFs / ETNs	https://help.aries.com/hc/en-us/articles/29042945500444-Extended-Hours-Trading
+Step	US	Neobroker	US ETFs / ETNs	https://help.step.com/en/articles/6967968-how-do-i-buy-and-sell-stocks
+Carry	US	Neobroker	US ETFs / ETNs	https://carry.com/equities
+BNY Brokerage	US	Bank	US ETFs / ETNs	https://www.bny.com/investments/us/en/individual/resources/investment-tools-services/bny-brokerage-account.html
 Questrade	CA	Broker	Local + US ETFs	https://www.questrade.com/
 Interactive Brokers Canada	CA	Broker	Global ETFs / ETPs	https://www.interactivebrokers.ca/
 Plus500 Canada	CA	Broker	Global ETFs / ETPs	https://www.plus500.com/
@@ -57,6 +130,11 @@ Desjardins	CA	Bank	Local + US ETFs	https://www.disnat.com/en/
 CI Direct Trading	CA	Broker	Local + US ETFs	https://www.cifinancial.com/ci-dt/ca/en/trade/account-types.html
 Webull Canada	CA	Neobroker	Local + US ETFs	https://www.webull.ca/trading-investing/stocks
 Moomoo Canada	CA	Neobroker	Local + US ETFs	https://www.moomoo.com/ca/
+Canaccord Genuity Direct	CA	Broker	Local + US ETFs	https://www.canaccordgenuity.com/cgdirect/self-directed-investing/
+Intelligent Investing	CA	Neobroker	Local + US ETFs	https://www.intelligentinvesting.ai/legal-documents/relationship-disclosure
+Independent Direct	CA	Broker	Local + US ETFs	https://independentdirect.ca/trading-with-independent-direct/
+TradeZero Canada	CA	Broker	Local + US ETFs	https://tradezero.com/en-ca/support/questions/what-order-types-are-available-for-equity-trading-tradezero-canada
+CenterPoint Securities Canada	CA	Broker	Local + US ETFs	https://centerpointsecurities.ca/routes/
 IG	UK	Broker	Global ETFs / ETPs	https://www.ig.com/
 Interactive Brokers UK	UK	Broker	Global ETFs / ETPs	https://www.interactivebrokers.co.uk/
 Swissquote UK	UK	Bank	Global ETFs / ETPs	https://www.swissquote.com/
@@ -91,9 +169,25 @@ Robinhood UK	UK	Neobroker	US ETFs / ETNs	https://robinhood.com/gb/en/
 Saxo UK	UK	Bank	Global ETFs / ETPs	https://www.home.saxo/en-gb/accounts/openaccount
 Moneyfarm	UK	Neobroker	UCITS ETFs / ETCs	https://www.moneyfarm.com/uk/
 EQi	UK	Broker	UCITS ETFs / ETCs	https://eqi.co.uk/
+Bank of Scotland	UK	Bank	UCITS ETFs / ETCs	https://www.bankofscotland.co.uk/investing/ways-to-invest/share-dealing-services/share-dealing-account.html
+First Direct	UK	Bank	UCITS ETFs / ETCs	https://www.firstdirect.com/savings-and-investments/sharedealing/sharedealing-services/
+iDealing	UK	Broker	UCITS ETFs / ETCs	https://www.idealing.com/en/help/services_and_prices
+James Brearley	UK	Broker	UCITS ETFs / ETCs	https://www.jbrearley.co.uk/individual-investors/dealing-services/
+Moneybox	UK	Neobroker	Global ETFs / ETPs	https://support.moneyboxapp.com/wp-content/uploads/2025/11/Order-Transmission-Policy-v2025.1.docx.pdf
+Shareview Dealing	UK	Broker	UCITS ETFs / ETCs	https://shareview.co.uk/documentrepository/svd/shareview_dealing_terms_and_conditions.pdf
+Stocktrade	UK	Broker	UCITS ETFs / ETCs	https://stocktrade.co.uk/wp-content/uploads/sites/12/stocktrade-TPIA-service-guide.pdf
+Aviva	UK	Broker	UCITS ETFs / ETCs	https://www.aviva.co.uk/investments/share-dealing/
+Stratiphy	UK	Neobroker	UCITS ETFs / ETCs	https://www.stratiphy.io/pricing
+MUFG PMS Share Deal	UK	Broker	UCITS ETFs / ETCs	https://sharedeal.cm.mpms.mufg.com/services/our-share-dealing-service/
+Monzo	UK	Bank	UCITS ETFs / ETCs	https://monzo.com/learn/money-tomorrow/what-are-etfs
+Tillit	UK	Broker	UCITS ETFs / ETCs	https://tillitinvest.com/why-tillit
+Investa	UK	Neobroker	Global ETFs / ETPs	https://www.investa.co.uk/terms-of-service
+Walker Crips	UK	Broker	UCITS ETFs / ETCs	https://www.walkercrips.co.uk/
+Investwizz	UK	Neobroker	UCITS ETFs / ETCs	https://www.investwizz.co.uk/terms-of-service
 Davy Select	IE	Broker	UCITS ETFs / ETCs	https://www.davyselect.ie/
 Goodbody	IE	Broker	UCITS ETFs / ETCs	https://www.goodbody.ie/individuals/self-invest/
 Interactive Brokers Ireland	IE	Broker	Global ETFs / ETPs	https://www.interactivebrokers.ie/
+Capital.com	IE	Broker	UCITS ETFs / ETCs	https://capital.com/en-eu/ways-to-trade/stocks-and-etfs
 Trade Republic	DE	Neobroker	UCITS ETFs / ETCs	https://traderepublic.com/de-de
 CapTrader	DE	Broker	Global ETFs / ETPs	https://www.captrader.com/
 Scalable Capital	DE	Neobroker	UCITS ETFs / ETCs	https://de.scalable.capital/trading
@@ -121,6 +215,39 @@ LYNX Broker	DE	Broker	Global ETFs / ETPs	https://www.lynxbroker.de/wertpapierdep
 Estably	DE	Broker	Global ETFs / ETPs	https://estably.broker/depot/
 Vivid Money	DE	Neobroker	UCITS ETFs / ETCs	https://vivid.money/de-de/personal/
 HypoVereinsbank (HVB)	DE	Bank	UCITS ETFs / ETCs	https://www.hypovereinsbank.de/hvb/privatkunden/geldanlage/depotmodelle/smart-depot
+UmweltBank	DE	Bank	UCITS ETFs / ETCs	https://www.umweltbank.de/investieren/online-brokerage/
+apoBank	DE	Bank	UCITS ETFs / ETCs	https://www.apobank.de/unsere-leistungen/geldanlage-vermoegen/sparen-anlegen/trading
+Merkur Privatbank	DE	Bank	UCITS ETFs / ETCs	https://www.merkur-privatbank.de/wertpapiere/wertpapiere-kaufen.html
+sino AG	DE	Broker	UCITS ETFs / ETCs	https://www.sino.de/
+tradegate.direct	DE	Broker	UCITS ETFs / ETCs	https://tradegate.direct/thisistrading
+BW-Bank	DE	Bank	UCITS ETFs / ETCs	https://www.bw-bank.de/de/home/privatkunden/geldanlage/bwbank-depot/nextbroker.html
+GLS Bank	DE	Bank	UCITS ETFs / ETCs	https://www.gls.de/sparen-investieren/investieren/digital-investieren/
+OLB	DE	Bank	UCITS ETFs / ETCs	https://www.olb.de/landingpages/-/media/images/internet/dokumente/wp220010425olbwertpapierdepot.pdf?la=de-de
+Haspa	DE	Bank	UCITS ETFs / ETCs	https://www.haspa.de/de/home/privatkunden/online-services/wertpapierdepot.html
+BBBank	DE	Bank	UCITS ETFs / ETCs	https://www.bbbank.de/privatkunden/girokonto/banking/online-broking.html
+ViTrade	DE	Broker	UCITS ETFs / ETCs	https://www.vitrade.de/handel/wertpapierhandel/direkthandel
+Joe Broker	DE	Neobroker	UCITS ETFs / ETCs	https://www.joebroker.de/
+finvesto	DE	Broker	UCITS ETFs / ETCs	https://www.finvesto.de/depots-konten/wertpapierdepot/
+VR PartnerBank	DE	Bank	UCITS ETFs / ETCs	https://www.vr-partnerbank.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html
+Eckernförder Bank	DE	Bank	UCITS ETFs / ETCs	https://www.eckernfoerder-bank.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html
+meine Volksbank Raiffeisenbank	DE	Bank	UCITS ETFs / ETCs	https://www.vb-rb.de/privatkunden/anlegen-sparen/depot-und-brokerage/wertpapierdepot.html
+BISON	DE	Neobroker	UCITS ETFs / ETCs	https://bisonapp.com/aktien-etfs/
+MLP Banking	DE	Bank	Global ETFs / ETPs	https://mlp.de/kontakt-service/service/haeufige-fragen/mlp-online-wertpapierdepot/
+KD-Bank	DE	Bank	UCITS ETFs / ETCs	https://www.kd-bank.de/privatkunden/geldanlange/depot.html
+Pax-Bank	DE	Bank	UCITS ETFs / ETCs	https://www.pax-bkc.de/privatkunden/sparen-und-anlegen/depot-und-brokerage/brokerage.html
+Berliner Volksbank	DE	Bank	UCITS ETFs / ETCs	https://www.berliner-volksbank.de/privatkunden/banking-apps/brokerage.html
+Edekabank	DE	Bank	UCITS ETFs / ETCs	https://www.edekabank.de/privatkunden/geldanlage/depot-brokerage/edeka-depot_aktiv.html
+Märkische Bank	DE	Bank	UCITS ETFs / ETCs	https://www.maerkische-bank.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/wertpapierdepot.html
+Westerwald Bank	DE	Bank	UCITS ETFs / ETCs	https://www.westerwaldbank.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/wertpapierdepot.html
+PSD Bank RheinNeckarSaar	DE	Bank	UCITS ETFs / ETCs	https://www.psd-rheinneckarsaar.de/produkte/geldanlage/depot-brokerage/wertpapierdepot.html
+Bank 1 Saar	DE	Bank	UCITS ETFs / ETCs	https://www.bank1saar.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/depot-aktiv.html
+Evangelische Bank	DE	Bank	UCITS ETFs / ETCs	https://www.eb.de/privatkunden/wertpapiere/depot.html
+envestor	DE	Broker	UCITS ETFs / ETCs	https://envestor.de/neues-software-release-optimiertes-ordering/
+Südwestbank	DE	Bank	Global ETFs / ETPs	https://www.suedwestbank.de/swb/service/brokerage
+Donner & Reuschel	DE	Bank	UCITS ETFs / ETCs	https://www.donner-reuschel.de/electronic-banking/
+HMP Brokers	DE	Broker	Global ETFs / ETPs	https://www.hmpbrokers.com/trading-depot/
+Fürst Fugger Privatbank	DE	Bank	UCITS ETFs / ETCs	https://www.fuggerbank.de/angemessenheitspruefung/
+Weberbank	DE	Bank	UCITS ETFs / ETCs	https://www.weberbank.de/de/home/kontakt.html
 Swissquote	CH	Bank	Global ETFs / ETPs	https://www.swissquote.ch
 Swissquote	CH	Bank	Global ETFs / ETPs	https://www.swissquote.com/en-ch/private
 IBKR Financial Services	CH	Broker	Global ETFs / ETPs	https://www.interactivebrokers.ch/
@@ -143,6 +270,45 @@ Valiant	CH	Bank	Global ETFs / ETPs	https://www.valiant.ch/de/privatkunden/anlege
 Saxo Bank (Schweiz)	CH	Bank	Global ETFs / ETPs	https://www.home.saxo/de-ch/accounts/individual
 Zürcher Kantonalbank	CH	Bank	Global ETFs / ETPs	https://www.zkb.ch/de/private/anlagen/anlageloesungen/execution-only.html
 cash – banking by bank zweiplus	CH	Bank	Global ETFs / ETPs	https://www.cash.ch/online-trading
+Aargauische Kantonalbank	CH	Bank	Global ETFs / ETPs	https://www.akb.ch/private/anlagen/eigenverwaltung
+Basellandschaftliche Kantonalbank	CH	Bank	Global ETFs / ETPs	https://www.blkb.ch/privatpersonen/hilfe/e-banking/depot-boersenhandel
+Walliser Kantonalbank	CH	Bank	Global ETFs / ETPs	https://www.bcvs.ch/de/private/e-service/unser-e-service/e-trade
+Thurgauer Kantonalbank	CH	Bank	Global ETFs / ETPs	https://www.tkb.ch/hilfe-uebersicht/hilfe-und-anleitungen/haeufige-fragen-zum-boersenhandel-im-olivia-banking
+Zuger Kantonalbank	CH	Bank	Global ETFs / ETPs	https://www.zugerkb.ch/e-banking/b%C3%B6rsenhandel
+Graubündner Kantonalbank	CH	Bank	Global ETFs / ETPs	https://www.gkb.ch/de/private/digital-banking/e-banking
+St.Galler Kantonalbank	CH	Bank	Global ETFs / ETPs	https://www.sgkb.ch/de/privatkunden/anlegen/anlagepakete/direct
+Schwyzer Kantonalbank	CH	Bank	Global ETFs / ETPs	https://www.szkb.ch/private/zahlen-sparen/zahlungen/mobile-banking
+Schaffhauser Kantonalbank	CH	Bank	Global ETFs / ETPs	https://www.shkb.ch/664-depot-autonom
+Banque Cantonale Neuchâteloise	CH	Bank	Global ETFs / ETPs	https://www.bcn.ch/e-services/e-banking/banque-en-ligne/bcn-netbanking
+BancaStato	CH	Bank	Global ETFs / ETPs	https://www.bancastato.ch/faq/e-banking/borse-e-orari-di-elaborazione
+Freiburger Kantonalbank	CH	Bank	Global ETFs / ETPs	https://www.bcf.ch/de/privatkunden/digitale-dienstleistungen/digital-banking/e-banking
+Appenzeller Kantonalbank	CH	Bank	Global ETFs / ETPs	https://www.appkb.ch/private/zahlen/e-banking
+Glarner Kantonalbank	CH	Bank	Global ETFs / ETPs	https://glkb.ch/private/konten-karten/zahlungsverkehr/e-banking/mobile-banking
+Obwaldner Kantonalbank	CH	Bank	Global ETFs / ETPs	https://www.okb.ch/private/e-services/digital-banking/e-banking
+Urner Kantonalbank	CH	Bank	Global ETFs / ETPs	https://www.ukb.ch/private/digital-banking/e-banking
+Banque Cantonale du Jura	CH	Bank	Global ETFs / ETPs	https://www.bcj.ch/fr/Particuliers/Produits-d-investissement/Bourse-en-ligne/Bourse-en-ligne.html
+Glarner Regionalbank	CH	Bank	Global ETFs / ETPs	https://grb.ch/fileadmin/user_upload/Anlegen/01_PDFs/Anlageinstrumente_Aktien-und-Aktienfonds.pdf
+Clientis Spar- und Leihkasse Thayngen	CH	Bank	Global ETFs / ETPs	https://thayngen.clientis.ch/de/digital-banking
+VZ VermögensZentrum	CH	Bank	Global ETFs / ETPs	https://www.vermoegenszentrum.ch/geldanlagen/vz-wertschriftendepot
+Helvetia selfTrade	CH	Bank	Global ETFs / ETPs	https://www.helvetia.com/ch/web/de/privatkunden/bank/anlageloesungen/anlegen-ohne-berater.html
+acrevis	CH	Bank	Global ETFs / ETPs	https://www.acrevis.ch/privat/konto-und-karte/rund-ums-e-banking
+Regiobank Solothurn	CH	Bank	Global ETFs / ETPs	https://www.regiobank.ch/hubfs/08_Medien/05_Dokumente/Gebuehren/Gebuehren_Dienstleistungsangebot_Wertschriften_2023.pdf
+Alpha RHEINTAL Bank	CH	Bank	Global ETFs / ETPs	https://www.alpharheintalbank.ch/private-banking/dienstleistungen/alpha-execution-only/
+DC Bank	CH	Bank	Global ETFs / ETPs	https://www.dcbank.ch/angebot/anlegen/
+Hypothekarbank Lenzburg	CH	Bank	Global ETFs / ETPs	https://www.hbl.ch/de/private/anlegen/solo/
+AEK BANK 1826	CH	Bank	Global ETFs / ETPs	https://www.aekbank.ch/privatkunden/Anlagen/Anlageloesungen/Depot-Anlagen-Online
+Bezirks-Sparkasse Dielsdorf	CH	Bank	Global ETFs / ETPs	https://www.sparkasse-dielsdorf.ch/anlagen/self-drive/
+Bank CIC (Schweiz)	CH	Bank	Global ETFs / ETPs	https://www.cic.ch/loesungen/service/elounge/hilfeseite/anlagen.html
+CIM Banque	CH	Bank	Global ETFs / ETPs	https://www.cimbanque.com/de/private-banking/e-banking/
+Banca Popolare di Sondrio (Suisse)	CH	Bank	Global ETFs / ETPs	https://www.bps-suisse.ch/trading_online.shtml
+Nidwaldner Kantonalbank	CH	Bank	Global ETFs / ETPs	https://www.nkb.ch/mobilebanking
+Saanen Bank	CH	Bank	Global ETFs / ETPs	https://www.saanenbank.ch/de/privatkunden/zahlungen-taetigen/e-banking
+Bank BSU	CH	Bank	Global ETFs / ETPs	https://www.bankbsu.ch/online-schalter/e-banking-und-app
+Zürcher Landbank	CH	Bank	Global ETFs / ETPs	https://www.zlb.ch/privatkunden/anlegen/anlageloesungen/execution-only/
+Ersparniskasse Schaffhausen	CH	Bank	Global ETFs / ETPs	https://www.ersparniskasse.ch/de/e-banking
+Bank Avera	CH	Bank	Global ETFs / ETPs	https://bank-avera.ch/rechtliche-hinweise/basisdokumente/e-banking-agb
+Julius Baer	CH	Bank	Global ETFs / ETPs	https://www.juliusbaer.com/en/e-services/switzerland/market-link/equities-etfs/
+Maerki Baumann	CH	Bank	Global ETFs / ETPs	https://www.maerki-baumann.ch/en/about-mobile-banking-app
 Bitpanda	AT	Neobroker	UCITS ETFs / ETCs	https://www.bitpanda.com/de-at
 Erste Bank George	AT	Bank	UCITS ETFs / ETCs	https://www.sparkasse.at/erstebank/privatkunden/digitales-banking/george-kennenlernen/george-wertpapierhandel
 easybank	AT	Bank	UCITS ETFs / ETCs	https://www.easybank.at/easybank/anlegen/wertpapierdepot
@@ -152,6 +318,19 @@ BankDirekt.at	AT	Bank	UCITS ETFs / ETCs	https://www.bankdirekt.at/de/produkte/we
 Bank Austria	AT	Bank	UCITS ETFs / ETCs	https://www.bankaustria.at/geld-anlegen-depot-eroeffnen.jsp
 BAWAG	AT	Bank	UCITS ETFs / ETCs	https://www.bawag.at/bawag/privatkunden/investieren/depot
 Oberbank	AT	Bank	UCITS ETFs / ETCs	https://www.oberbank.at/wertpapier-infos
+bank99	AT	Bank	UCITS ETFs / ETCs	https://bank99.at/investieren
+BTV	AT	Bank	UCITS ETFs / ETCs	https://btv.at/privatkunden/anlegen-und-sparen/wertpapieranlage-brokerage/individuelles-depot/
+Hypo Vorarlberg	AT	Bank	UCITS ETFs / ETCs	https://www.hypovbg.at/anlage-vorsorge/i-brokerage
+HYPO NOE	AT	Bank	UCITS ETFs / ETCs	https://www.hyponoe.at/fileadmin/OE/Recht/AGBs/Electronic-Banking-Bedingungen.pdf
+Volksbank	AT	Bank	UCITS ETFs / ETCs	https://www.volksbank.at/ressourcen/zib/downloads/vb_gruppe/infos_barrierefreiheit/VBW_Infoblatt_Wertpapiergescha%CC%88ft_250527.pdf
+HYPO Oberösterreich	AT	Bank	UCITS ETFs / ETCs	https://www.hypo.at/de/anlegen/aktien.html
+HYPO Salzburg	AT	Bank	UCITS ETFs / ETCs	https://www.hyposalzburg.at/de/privatkunden/anlegen/aktien-anleihen.html
+Schelhammer Capital	AT	Bank	UCITS ETFs / ETCs	https://schelhammer.at/assets/documents/Barrierefreiheit/BaFG_Information_zu_Wertpapieren.pdf
+Austrian Anadi Bank	AT	Bank	UCITS ETFs / ETCs	https://anadibank.com/sites/default/files/media/315f6e8a/allgemeine_bedingungen_internetbanking.pdf
+BKS Bank	AT	Bank	UCITS ETFs / ETCs	https://www.bks.at/privatkunden/anlegen/depots/online-depot
+VKB Bank	AT	Bank	UCITS ETFs / ETCs	https://www.vkb-bank.at/fileadmin/media/PDF-JPG-XLS_Dokumente/BaFG-Information_Wertpapiere_BF.pdf
+Schoellerbank	AT	Bank	UCITS ETFs / ETCs	https://schoellerbank.at/files/Anlegen-und-Investieren/Online-Services/Electronic-Banking-Bedingungen_Deutsch.pdf
+Kathrein Privatbank	AT	Bank	UCITS ETFs / ETCs	https://kathrein.at/assets/Uploads/PDFs/Rechtliches-und-Veroeffentlichungen/Sicherheitshinweis-eBanking_eSecurities/FAQs-eSecurities-Trading_EN_v2509.pdf
 DEGIRO	NL	Broker	UCITS ETFs / ETCs	https://www.degiro.nl/
 TradeZero Europe	NL	Broker	US ETFs / ETNs	https://tradezero.com/en-ee
 TradeStation Europe	NL	Broker	US ETFs / ETNs	https://www.tradestation.com/
@@ -168,6 +347,9 @@ Saxo Bank Nederland	NL	Bank	Global ETFs / ETPs	https://www.home.saxo/nl-nl/accou
 Today's Brokers	NL	Broker	Global ETFs / ETPs	https://todaysgroup.nl/todays-brokers/
 Alex Beleggersbank	NL	Broker	UCITS ETFs / ETCs	https://www.alex.nl/
 Alex Beleggersbank	NL	Broker	UCITS ETFs / ETCs	https://www.home.saxo/nl-nl
+Van Lanschot Kempen	NL	Bank	UCITS ETFs / ETCs	https://www.vanlanschotkempen.com/-/media/files/documents/private-banking/handleiding/handleiding-zelf-beleggen.ashx
+Captin	NL	Broker	UCITS ETFs / ETCs	https://support.captin.com/hc/fr-be/articles/27896901697693-Comment-passer-un-ordre-d-achat-ou-de-vente-sur-Euronext-Amsterdam-via-la-plateforme-Captin
+NPEX	NL	Broker	UCITS ETFs / ETCs	https://www.npex.nl/en/veelgestelde-vragen/
 BGL BNP Paribas	LU	Bank	UCITS ETFs / ETCs	https://www.bgl.lu/fr/particuliers/investir/investir-en-ligne.html
 Swissquote Bank Europe	LU	Bank	Global ETFs / ETPs	https://www.swissquote.com/en-lu/private
 Spuerkeess (S-Net Invest)	LU	Bank	UCITS ETFs / ETCs	https://www.spuerkeess.lu/en/private-customers/saving-and-investing/invest-by-yourself/
@@ -176,6 +358,8 @@ Banque Raiffeisen	LU	Bank	UCITS ETFs / ETCs	https://www.raiffeisen.lu/en
 Banque Internationale à Luxembourg	LU	Bank	Global ETFs / ETPs	https://www.bil.com/static/devenir-client/ouvrir-compte-bancaire.html
 WH SelfInvest	LU	Broker	Global ETFs / ETPs	https://www.whselfinvest.lu/en-lu/trading/information/clients/relationship
 WH SelfInvest	LU	Broker	Global ETFs / ETPs	https://www.whselfinvest.com/en-lu/trading/information/clients/relationship
+ING Luxembourg	LU	Bank	Global ETFs / ETPs	https://www.ing.lu/webing/content/siteing/en/private-banking/contacts-and-information/information/faq/faq-investment.html
+CA Indosuez Wealth (Europe)	LU	Bank	Global ETFs / ETPs	https://luxembourg.ca-indosuez.com/en/pdfPreview/40796
 Bolero (KBC)	BE	Bank	UCITS ETFs / ETCs	https://www.bolero.be/nl/word-client
 Keytrade Bank	BE	Bank	UCITS ETFs / ETCs	https://www.keytradebank.be/en/
 MeDirect	BE	Bank	UCITS ETFs / ETCs	https://www.medirect.be/
@@ -185,6 +369,14 @@ Argenta	BE	Bank	UCITS ETFs / ETCs	https://www.argenta.be/nl/beleggen/beleggingsp
 ING Self Invest	BE	Bank	UCITS ETFs / ETCs	https://www.ing.be/en/individuals/investing/shares
 Saxo Bank Belgium	BE	Bank	Global ETFs / ETPs	https://www.home.saxo/nl-be/accounts/openaccount
 CBC Banque	BE	Bank	UCITS ETFs / ETCs	https://www.cbc.be/particuliers/fr/produits/placements/mes-investissements.html
+Beobank	BE	Bank	UCITS ETFs / ETCs	https://www.beobank.be/nl/beleggen/beleggingen/oplossingen/etf-aandelen-obligaties.html
+vdk bank	BE	Bank	UCITS ETFs / ETCs	https://www.vdk.be/nl/zelf-beleggen
+Nagelmackers	BE	Bank	UCITS ETFs / ETCs	https://www.nagelmackers.be/nl/zelf-beleggen-bij-nagelmackers-beheer-uw-eigen-portefeuille
+Leleux Associated Brokers	BE	Broker	UCITS ETFs / ETCs	https://leleux.be/Leleux/website_xpage.nsf/Main.xsp?Page=5.1_leleux_online
+Fintro	BE	Bank	UCITS ETFs / ETCs	https://www.fintro.be/fr/public/particuliers/epargner-et-placer/investir/compte-titres
+Delen Private Bank	BE	Bank	UCITS ETFs / ETCs	https://www.delen.bank/hubfs/tarieven-NLBE(1).pdf
+Deutsche Bank Belgium	BE	Bank	Global ETFs / ETPs	https://www.deutschebank.be/nl/nieuws-en-advies/artikels/mybank-uw-bank-in-zak-en-handtasformaat.html
+Banque CPH	BE	Bank	UCITS ETFs / ETCs	https://www.cph.be/investir/gerer-mon-portefeuille/compte-titres-cph-broker/
 BoursoBank (Boursorama)	FR	Bank	UCITS ETFs / ETCs	https://www.boursobank.com/bourse
 Fortuneo	FR	Bank	UCITS ETFs / ETCs	https://www.fortuneo.fr/bourse/compte-titres
 Bourse Direct	FR	Broker	UCITS ETFs / ETCs	https://www.boursedirect.fr/fr/bourse/ouvrir-un-compte
@@ -205,6 +397,23 @@ La Banque Postale	FR	Bank	UCITS ETFs / ETCs	https://www.labanquepostale.fr/parti
 AXA Banque	FR	Bank	UCITS ETFs / ETCs	https://www.axa.fr/epargne-retraite/bourse.html
 Milleis Banque	FR	Bank	UCITS ETFs / ETCs	https://www.milleis.fr/devenir-client-milleis
 ODDO BHF	FR	Bank	Global ETFs / ETPs	https://www.oddo-bhf.com/fr/private-clients/
+CCF	FR	Bank	UCITS ETFs / ETCs	https://ccf.fr/particuliers/au-quotidien/conseils/tutoriels-video/connexion-premiere-fois-espace-client-ccf.html
+Monabanq	FR	Bank	UCITS ETFs / ETCs	https://www.monabanq.com/fr/produits-bancaires/cto/en-resume.html
+Shares	FR	Neobroker	UCITS ETFs / ETCs	https://support.shares.io/en/articles/91701-how-do-i-place-a-buy-or-sell-order-for-an-etf-on-shares
+Banque Transatlantique	FR	Bank	UCITS ETFs / ETCs	https://www.banquetransatlantique.com/fr/actualites/comment-passer-un-ordre-de-bourse-depuis-la-banque-a-distance.html
+Portzamparc	FR	Broker	UCITS ETFs / ETCs	https://portzamparc.bnpparibas/fr/clientele-privee/gestion-autonome
+Neuflize OBC	FR	Bank	UCITS ETFs / ETCs	https://www.neuflizeobc.fr/fr/notre-offre/banque-a-distance/index.html
+BRED	FR	Bank	UCITS ETFs / ETCs	https://www.bred.fr/banqueprivee/vos-projets/gerer-vos-comptes-au-quotidien
+Louvre Banque Privée	FR	Bank	UCITS ETFs / ETCs	https://www.louvrebanqueprivee.fr/banque-privee/public/web/pm_7328/decouvrez-nos-services-en-ligne
+Banque Palatine	FR	Bank	UCITS ETFs / ETCs	https://www.img.palatine.fr/app/uploads/sites/35/2025/10/10145801/tarifs-clienteleprivee-2026-rgaa.pdf
+Crédit Coopératif	FR	Bank	UCITS ETFs / ETCs	https://www.img.credit-cooperatif.coop/app/uploads/sites/19/2025/12/30173731/guide-tarifaire-pedagogique-pp-2026.pdf
+Crédit Mutuel de Bretagne	FR	Bank	UCITS ETFs / ETCs	https://www.cmb.fr/reseau-bancaire-cooperatif/web/epargne-et-placements/epargne-financiere/plan-d-epargne-en-actions
+Crédit Mutuel du Sud-Ouest	FR	Bank	UCITS ETFs / ETCs	https://www.cmso.com/reseau-bancaire-cooperatif/web/epargne-et-placements/epargne-financiere/plan-d-epargne-en-actions
+Allianz Banque	FR	Bank	UCITS ETFs / ETCs	https://www.allianzbanque.fr/a/z/upload/docs/application/pdf/2012-08/conditions_generales.pdf
+Crédit Mutuel de Maine-Anjou et Basse-Normandie	FR	Bank	UCITS ETFs / ETCs	https://www.creditmutuel.fr/telechargements/cmmabn/tarifs/bourse/tarification-titre-bourse.pdf
+Crédit Mutuel Nord Europe	FR	Bank	UCITS ETFs / ETCs	https://www.creditmutuel.fr/telechargements/tarifs/convention-clarte/clarte-part-cmne.pdf
+Crédit Mutuel Antilles-Guyane	FR	Bank	UCITS ETFs / ETCs	https://www.creditmutuel.fr/telechargements/tarifs/convention-clarte/clarte-part-cmag.pdf
+Swiss Life Banque Privée	FR	Bank	UCITS ETFs / ETCs	https://banqueprivee.swisslife.fr/clientele-patrimoniale/le-moyen-de-vos-amibtions.html
 FinecoBank	IT	Bank	UCITS ETFs / ETCs	https://it.finecobank.com/trading/
 Directa SIM	IT	Broker	UCITS ETFs / ETCs	https://directa.it/
 Banca Sella	IT	Bank	UCITS ETFs / ETCs	https://www.sella.it/banca-on-line/trader/conti-e-servizi/conto-trader
@@ -223,6 +432,40 @@ Banca Mediolanum	IT	Bank	UCITS ETFs / ETCs	https://www.bancamediolanum.it/invest
 Credem	IT	Bank	UCITS ETFs / ETCs	https://www.credem.it/content/credem/it/privati-e-famiglie/conti-servizi-e-carte/servizi_online/trading_online.html
 IWBank	IT	Bank	UCITS ETFs / ETCs	https://www.iwbank.it/
 IWBank	IT	Bank	UCITS ETFs / ETCs	https://www.fideuramdirect.it/
+Banca Monte dei Paschi di Siena	IT	Bank	UCITS ETFs / ETCs	https://www.mps.it/supporto/trading/index.html
+BNL	IT	Bank	UCITS ETFs / ETCs	https://bnl.it/it/per-te/investimenti/bnl-trading
+Crédit Agricole Italia	IT	Bank	UCITS ETFs / ETCs	https://www.credit-agricole.it/servizi-e-pagamenti-digitali/homebanking-privati
+Banca di Asti	IT	Bank	Global ETFs / ETPs	https://bancadiasti.it/persone-e-famiglie/investimento-e-risparmio/accesso-multicanale-ai-mercati
+Banca Popolare dell'Alto Adige	IT	Bank	UCITS ETFs / ETCs	https://www.volksbank.it/documents/20147/137704/Execution+%26+transmission+policy+-+Cda+11.06.2021.pdf/c71797d4-a6fb-1033-509b-27c725864bc6
+Cassa Raiffeisen Alta Venosta	IT	Bank	UCITS ETFs / ETCs	https://www.raiffeisen.it/en/obervinschgau/wir-sind-genossenschaft/unsere-dienstleistungen/produkte/trading-online.html
+Banca Popolare Pugliese	IT	Bank	UCITS ETFs / ETCs	https://www.bpp.it/privati/persone-e-famiglie/servizi-digitali/prodotti
+Banco Desio	IT	Bank	UCITS ETFs / ETCs	https://www.bancodesio.it/sites/default/files/archivio/bdesiob/documenti/fogliinformativi/Guida_ai_Servizi_DWeb.pdf
+Banca del Piemonte	IT	Bank	Global ETFs / ETPs	https://www.bancadelpiemonte.it/privati-e-famiglie/servizi-online/deposito-titoli-online/
+Banca Valsabbina	IT	Bank	UCITS ETFs / ETCs	https://www.bancavalsabbina.com/v4ls4bB/uploads/2025/02/INFORMATIVA-MIFID-CLEAN.pdf
+Cassa di Risparmio di Bolzano	IT	Bank	UCITS ETFs / ETCs	https://www.sparkasse.it/media/so1nwqkg/guida-ai-servizi-a-distanza-per-i-consumatori-versione-2025-sparkasse.pdf
+Deutsche Bank Italia	IT	Bank	Global ETFs / ETPs	https://www.deutsche-bank.it/servizi-digitali/online/la-mia-banca/trading-online.html
+Banca di Piacenza	IT	Bank	UCITS ETFs / ETCs	https://servizi.bancadipiacenza.it/fogli_informativi/B110.htm
+Banca Agricola Popolare di Sicilia	IT	Bank	UCITS ETFs / ETCs	https://www.baps.it/persone-e-famiglie/investimenti/
+Banca Cambiano	IT	Bank	UCITS ETFs / ETCs	https://cambianonline.it/trading-online/
+Solution Bank	IT	Bank	UCITS ETFs / ETCs	https://solution.bank/wp-content/uploads/2024/06/Foglio-Informativo-Trading-Online.pdf
+BCC Pordenonese e Monsile	IT	Bank	UCITS ETFs / ETCs	https://www.bccpm.it/catalogo/dettaglio.asp?hProdottoCatalogoID=7097&i_catalogoID=29754&i_menuid=29754
+Banca del Fucino	IT	Bank	UCITS ETFs / ETCs	https://bancafucino.it/supporto
+Banca di Credito Popolare	IT	Bank	UCITS ETFs / ETCs	https://www.bcp.it/site/home/privati/i-nostri-prodotti/servizi-digitali/documento17007410.html
+Cassa di Risparmio di Fermo	IT	Bank	UCITS ETFs / ETCs	https://www.carifermo.it/it/SV05-Servizi-Telematici-per-persone-fisiche-pdf/
+Banca Passadore	IT	Bank	UCITS ETFs / ETCs	https://www.bancapassadore.it/it/so_internetBanking.html
+IBL Banca	IT	Bank	UCITS ETFs / ETCs	https://www.iblbanca.it/ContoTitoli_TradingOnline.html
+Banca Popolare del Lazio	IT	Bank	Global ETFs / ETPs	https://www.bplazio.it/wp-content/uploads/BPL-Revisione-e-aggiornamenti-del-documento-Execution-e-Transmission-PolicyNOVEMBRE2023.pdf
+BCC Conversano	IT	Bank	UCITS ETFs / ETCs	https://www.bccconversano.it/news/le-novita-di-inbank-trading/
+BCC Venezia Giulia	IT	Bank	UCITS ETFs / ETCs	https://www.bccveneziagiulia.it/catalogo/dettaglio.asp?hProdottoCatalogoID=452&i_menuID=8161
+ChiantiBanca	IT	Bank	UCITS ETFs / ETCs	https://www.chiantibanca.it/catalogo/dettaglio.asp?hProdottoCatalogoID=28914&i_menuID=71467
+Banca Popolare di Puglia e Basilicata	IT	Bank	UCITS ETFs / ETCs	https://www.bppb.it/privati/servizi-digitali/
+La Cassa di Ravenna	IT	Bank	UCITS ETFs / ETCs	http://www.lacassa.com/ita/Privati/Internet-Banking/Nuovo-Internet-Banking
+Tinaba	IT	Neobroker	UCITS ETFs / ETCs	https://tinaba.bancaprofilo.it/aiuto/cosa-devo-fare-per-effettuare-unoperazione-di-acquisto-vendita
+Banca Popolare di Fondi	IT	Bank	UCITS ETFs / ETCs	https://www.bpfondi.it/privati/investimenti/servizi-di-borsa
+Sanfelice 1893 Banca Popolare	IT	Bank	UCITS ETFs / ETCs	https://www.sanfelice1893.it/privati-e-famiglie/banca-online/app-mobile
+Banco di Sardegna	IT	Bank	UCITS ETFs / ETCs	https://www.bancosardegna.it/documents/232252321/0/BDS+_+Guida+TOL+_+v+1.0.pdf/b8877bd9-dbc5-a4de-54eb-6e95bc4c26e6
+ViViBanca	IT	Bank	UCITS ETFs / ETCs	https://vivibanca.it/public/upload/homebanking_mito.pdf
+Banco Azzoaglio	IT	Bank	UCITS ETFs / ETCs	https://www.azzoaglio.it/assets/trasparenza/Fogli%20Informativi/FIHBWORK.pdf
 Renta 4 Banco	ES	Bank	UCITS ETFs / ETCs	https://www.r4.com/hazte-cliente
 Bankinter	ES	Bank	UCITS ETFs / ETCs	https://www.bankinter.com/banca/ahorro-inversion/inversion/broker
 BBVA Trader Bolsa	ES	Bank	UCITS ETFs / ETCs	https://www.bbva.es/personas/productos/bolsa/cuenta-de-valores.html
@@ -238,6 +481,32 @@ Banco Sabadell	ES	Bank	Global ETFs / ETPs	https://www.bancsabadell.com/bsnaciona
 Kutxabank	ES	Bank	UCITS ETFs / ETCs	https://portal.kutxabank.es/cs/Satellite/kb/es/particulares/productos/bolsa
 Ibercaja	ES	Bank	UCITS ETFs / ETCs	https://www.ibercaja.es/particulares/ahorro-inversion/valores/
 Unicaja	ES	Bank	UCITS ETFs / ETCs	https://www.unicajabanco.es/es/particulares/ahorro-e-inversion/unicaja-broker
+GVC Gaesco	ES	Broker	UCITS ETFs / ETCs	https://gvcgaesco.es/es/inversion/invertir-por-mi-mismo/plataforma-inversion/
+ClickTrade	ES	Broker	UCITS ETFs / ETCs	https://www.clicktrade.es/invertir-en-acciones/comisiones-bolsa
+ABANCA	ES	Bank	UCITS ETFs / ETCs	https://www.abanca.com/es/inversion/broker-online/
+Caja Ingenieros	ES	Bank	UCITS ETFs / ETCs	https://www.caixaenginyers.com/documents/20143/1080191/Operaciones+por+canales_cast.pdf
+LABORAL Kutxa	ES	Bank	UCITS ETFs / ETCs	https://www.laboralkutxa.com/es/personas/ahorro-inversion/bolsa-mercados/
+Banca March	ES	Bank	UCITS ETFs / ETCs	https://avantio.bancamarch.es/es/inversion/valores/
+Cajamar	ES	Bank	UCITS ETFs / ETCs	https://www.cajamar.es/storage/documents/337/contrato-tipo-custodia-administracion-valores.pdf
+Caixa Popular	ES	Bank	Global ETFs / ETPs	https://www.caixapopular.es/es/particulares/ahorro-inversion/servicio-valores/ruralvia-broker
+Link Securities	ES	Broker	UCITS ETFs / ETCs	https://www.linksecurities.com/acceso-a-plataformas/
+Arquia Banca	ES	Bank	Global ETFs / ETPs	https://www.arquia.com/particulares/bolsa-y-mercados
+Cajasiete	ES	Bank	Global ETFs / ETPs	https://www.cajasiete.com/particulares/ahorro-inversion/servicio-valores/ruralvia-broker
+Globalcaja	ES	Bank	UCITS ETFs / ETCs	https://www.globalcaja.es/broker-online
+Caja Rural Granada	ES	Bank	Global ETFs / ETPs	https://www.cajaruralgranada.es/es/particulares/ahorro-inversion/servicio-valores/ruralvia-broker
+Caja Rural de Jaén	ES	Bank	Global ETFs / ETPs	https://www.cajaruraldejaen.com/es/particulares/ahorro-inversion/servicio-valores/ruralvia-broker
+Cajaviva	ES	Bank	Global ETFs / ETPs	https://www.cajaviva.es/particulares/ahorro-inversion/servicio-valores/ruralvia-broker
+Caja Rural de Navarra	ES	Bank	UCITS ETFs / ETCs	https://www.cajaruraldenavarra.com/sites/default/files/2024-06/BROKER-GESTION-CARTERA.pdf
+Caja Rural de Teruel	ES	Bank	UCITS ETFs / ETCs	https://www.ruralteruel.com/es/educacion-financiera/como-gestionar-ordenes-basicas-condicionadas-ruralvia-broker
+Caja Rural de Zamora	ES	Bank	UCITS ETFs / ETCs	https://www.cajaruraldigital.com/banca-privada/bolsa-mercados/acciones-nacionales
+HeyTrade	ES	Neobroker	Global ETFs / ETPs	https://heytrade.com/es/
+Deutsche Bank España	ES	Bank	Global ETFs / ETPs	https://www.deutsche-bank.es/es/guia-ayuda/operativa-banca-online.html
+Banca Pueyo	ES	Bank	UCITS ETFs / ETCs	https://www.bancapueyo.es/ahorro-e-inversion/bolsa
+Colonya	ES	Bank	UCITS ETFs / ETCs	https://colonya.com/es/particulares/servicios-bancarios-particulares/invertir-en-bolsa
+Caixa Ontinyent	ES	Bank	UCITS ETFs / ETCs	https://www.caixaontinyent.es/banca-internet-banca-electronica
+CaixaGuissona	ES	Bank	UCITS ETFs / ETCs	https://www.caixaguissona.com/es/public/gaescoadvantatges
+imagin	ES	Bank	UCITS ETFs / ETCs	https://www.imagin.com/inversion
+Inversis	ES	Bank	UCITS ETFs / ETCs	https://www.inversis.com/servlet/Satellite?c=Page&d=Touch&pagename=bigbang%2FPage%2FTplFAQs&pid=1080719264902
 Banco Best	PT	Bank	UCITS ETFs / ETCs	https://www2.bancobest.pt/
 Banco Invest	PT	Bank	UCITS ETFs / ETCs	https://www.bancoinvest.pt/abertura-de-conta
 ActivoBank	PT	Bank	UCITS ETFs / ETCs	https://www.activobank.pt/bolsa
@@ -249,12 +518,33 @@ Bankinter Broker	PT	Bank	UCITS ETFs / ETCs	https://www.bankinter.pt/investimento
 Santander ONeBroker	PT	Bank	Global ETFs / ETPs	https://www.santander.pt/onebroker
 novobanco Trading Pro	PT	Bank	Global ETFs / ETPs	https://www.novobanco.pt/particulares/investimento/plataforma-de-trading
 Caixa Geral de Depósitos	PT	Bank	UCITS ETFs / ETCs	https://www.cgd.pt/Particulares/Poupanca-Investimento/Intermediacao-Financeira/Pages/Bolsa-e-Mercados.aspx
+Banco Montepio	PT	Bank	UCITS ETFs / ETCs	https://www.bancomontepio.pt/particulares/investimento/comecar-a-investir
+Crédito Agrícola	PT	Bank	UCITS ETFs / ETCs	https://www.creditoagricola.pt/-/media/52a7e9c15a9b475e9052dbd701613922.pdf
+Golden Broker	PT	Broker	UCITS ETFs / ETCs	https://www.goldenwm.pt/legal/
 Eurobank Equities	GR	Broker	UCITS ETFs / ETCs	https://www.eurobankequities.gr/en/individual-investors
 Alpha Finance	GR	Broker	UCITS ETFs / ETCs	https://www.alphafinance.gr/en/services
 Piraeus Securities	GR	Broker	UCITS ETFs / ETCs	https://www.piraeus-sec.gr/el/idiwtes
 National Securities (NBG)	GR	Broker	UCITS ETFs / ETCs	https://www.nbgsecurities.com
 Euroxx Securities	GR	Broker	Global ETFs / ETPs	https://www.euroxx.gr/en/home
 BETA Securities	GR	Broker	Global ETFs / ETPs	https://betasecurities.com/online-trading-beta/
+Optima bank	GR	Bank	Global ETFs / ETPs	https://www.optimabank.gr/en/individuals/investment/online-trading-services/optima-trader-app/
+CrediaPantelakis	GR	Broker	Global ETFs / ETPs	https://www.pantelakis.gr/pantelakis/trade-direct/online-trading/
+Solidus Securities	GR	Broker	UCITS ETFs / ETCs	https://www.solidus.gr/el-GR/investment-services/menu2a2.html
+Merit Securities	GR	Broker	Global ETFs / ETPs	https://www.merit.gr/index.php?Itemid=483&id=13&lang=en&layout=item&option=com_k2&view=item
+Cyclos Securities	GR	Broker	Global ETFs / ETPs	http://www.cyclos.gr/
+Leon Depolas Securities	GR	Broker	Global ETFs / ETPs	https://www.depolas.gr/en/%CF%85%CF%80%CE%B7%CF%81%CE%B5%CF%83%CE%AF%CE%B5%CF%82/online-trading
+Eurotrust	GR	Broker	Global ETFs / ETPs	https://eurotrust.gr/eurotrust-chrimatistiriaki/ypiresies/chrimatistirio-athinon/
+Eurocorp	GR	Broker	Global ETFs / ETPs	https://en.eurocorp.gr/web-trading/
+Vigor Finance	GR	Broker	Global ETFs / ETPs	https://vigor.finance/wp-content/uploads/2024/05/4.6.-%CE%A0%CE%BF%CE%BB%CE%B9%CF%84%CE%B9%CE%BA%CE%AE-%CE%92%CE%AD%CE%BB%CF%84%CE%B9%CF%83%CF%84%CE%B7%CF%82-%CE%95%CE%BA%CF%84%CE%AD%CE%BB%CE%B5%CF%83%CE%B7%CF%82-%CE%95%CE%BD%CF%84%CE%BF%CE%BB%CF%8E%CE%BD.pdf
+Pervanas Securities	GR	Broker	Global ETFs / ETPs	https://pervanas.gr/online-trading/
+Hellenic American Securities	GR	Broker	Global ETFs / ETPs	https://www.hellenicamerican.gr/%ce%b5%ce%bd%ce%b7%ce%bc%ce%ad%cf%81%cf%89%cf%83%ce%b7-%cf%80%ce%b5%ce%bb%ce%b1%cf%84%cf%8e%ce%bd/%ce%b4%ce%b9%ce%b1%ce%b4%ce%b9%ce%ba%ce%b1%cf%83%ce%b9%ce%b1-%ce%bb%ce%b7%cf%88%ce%b7%cf%83-%ce%b5%ce%bd%cf%84%ce%bf%ce%bb%cf%89%ce%bd/
+Mavrikis Securities	GR	Broker	Global ETFs / ETPs	https://www.mavrikis.gr/e-trade.html
+Wealthyhood	GR	Neobroker	Global ETFs / ETPs	https://wealthyhood.com/eu/help-centre/investments-orders-faq/
+Dynamic Securities	GR	Broker	Global ETFs / ETPs	https://dynamicsec.gr/online-services/
+Axon Securities	GR	Broker	Global ETFs / ETPs	https://axontrader.eu/investing/markets/real-stocks
+A. Sarris Securities	GR	Broker	Global ETFs / ETPs	https://sarris-invest.gr/ypiresies/
+National Bank of Greece	GR	Bank	Global ETFs / ETPs	https://www.nbg.gr/el/idiwtes/kathimerines-sunallages/digital-banking/dunatotites-internet-mobile-banking/sunallages-me-metoxes-online
+Piraeus Bank	GR	Bank	Global ETFs / ETPs	https://www.piraeusbank.gr/el/idiwtes/proionta-upiresies/trapezikes-upiresies/xrimatistiriakes-upiresies/piraeus-xrimatistiriakes-upiresies
 Saxo Bank	DK	Bank	Global ETFs / ETPs	https://www.home.saxo/
 Danske Bank	DK	Bank	UCITS ETFs / ETCs	https://danskebank.dk/privat/produkter/investering/online-investering
 Jyske Bank	DK	Bank	UCITS ETFs / ETCs	https://www.jyskebank.dk/investering
@@ -263,6 +553,35 @@ Lunar Invest	DK	Neobroker	UCITS ETFs / ETCs	https://www.lunar.app/dk/privat/inve
 Nykredit	DK	Bank	UCITS ETFs / ETCs	https://www.nykredit.dk/dit-liv/formue/investering/
 Nordea Danmark	DK	Bank	Global ETFs / ETPs	https://www.nordea.dk/privat/produkter/investering/
 Spar Nord	DK	Bank	UCITS ETFs / ETCs	https://www.sparnord.dk/dit-liv/formue/investering/investeringsstrategi/du-investerer-selv/
+Endavu	DK	Neobroker	UCITS ETFs / ETCs	https://endavu.com/
+Pluto Markets	DK	Neobroker	UCITS ETFs / ETCs	https://pluto.markets/
+Middelfart Sparekasse	DK	Bank	UCITS ETFs / ETCs	https://midspar.dk/privat/produkter/digitale-vaerktoejer/netbank/ms-investor-investering-i-din-netbank-og-mobilbank/
+Sparekassen Danmark	DK	Bank	UCITS ETFs / ETCs	https://www.spard.dk/produkter/digitale-loesninger/investor
+Djurslands Bank	DK	Bank	UCITS ETFs / ETCs	https://www.djurslandsbank.dk/media/api/content/mediafiles/mmcb2ykv/djurslands-banks-regler-for-handel-med-vaerdipapirer.pdf
+Skjern Bank	DK	Bank	UCITS ETFs / ETCs	https://www.skjernbank.dk/investering/investeringsmuligheder/aktierogobligationer
+SJF Bank	DK	Bank	UCITS ETFs / ETCs	https://www.sjfbank.dk/privat/investering/i-gang
+Sparekassen Kronjylland	DK	Bank	UCITS ETFs / ETCs	https://www.sparkron.dk/investering
+Lån & Spar Bank	DK	Bank	UCITS ETFs / ETCs	https://www.lsb.dk/privat/produkter/investering/investorbeskyttelse
+Lollands Bank	DK	Bank	UCITS ETFs / ETCs	https://www.lollandsbank.dk/investering/handelstyper/
+Møns Bank	DK	Bank	UCITS ETFs / ETCs	https://moensbank.dk/vp-handel-i-netbank
+Sparekassen for Nørre Nebel og Omegn	DK	Bank	UCITS ETFs / ETCs	https://sparnebel.dk/Investering/Investeringsplatform
+Sydjysk Sparekasse	DK	Bank	UCITS ETFs / ETCs	https://www.sydjysksparekasse.dk/privat/faa-hjaelp/net-og-mobilbank/sydjysk-investor-hjaelp/handel
+Sparekassen Thy	DK	Bank	UCITS ETFs / ETCs	https://www.sparthy.dk/sparthy/produkter/investering/sparekassen-thy---investor
+Ringkjøbing Landbobank	DK	Bank	UCITS ETFs / ETCs	https://www.nordjyskebank.dk/media/api/content/mediafiles/wyynfz5e/regler-for-handel-med-vaerdipapirer-dk.pdf
+Sparekassen Balling	DK	Bank	UCITS ETFs / ETCs	https://www.sparekassenballing.dk/privat/selvbetjening/investering
+Rise Sparekasse	DK	Bank	UCITS ETFs / ETCs	https://www.sparekassen.dk/privat/investering/tips-og-tricks/invester-igennem-netbanken
+Sønderhå-Hørsted Sparekasse	DK	Bank	UCITS ETFs / ETCs	https://sdrhaa.dk/investering/vaerdipapirer
+Klim Sparekasse	DK	Bank	UCITS ETFs / ETCs	https://klimsparekasse.dk/privat/digitale-vaerktoejer
+Sparekassen Bredebro	DK	Bank	UCITS ETFs / ETCs	https://www.sparbredebro.dk/-/media/sparekassenbredebro/om-os/vilkaar-og-betingelser/sparbredebro-vilkaar-for-handel-med-vaerdipapirer.pdf
+Fynske Bank	DK	Bank	Global ETFs / ETPs	https://www.fynskebank.dk/selvbetjening/services/netbank
+Maj Invest Bank	DK	Bank	Global ETFs / ETPs	https://www.majbank.dk/investering/forstaa-din-handelsnota
+Hvidbjerg Bank	DK	Bank	UCITS ETFs / ETCs	https://hvidbjergbank.dk/wp-content/uploads/2023/08/Basisaftale-om-handel-med-vaerdipapirer.pdf
+Kreditbanken	DK	Bank	UCITS ETFs / ETCs	https://www.kreditbanken.dk/goer-det-selv/goer-det-selv/mobilbank-privat
+Coop Bank	DK	Bank	UCITS ETFs / ETCs	https://coopbank.dk/investering
+Borbjerg Sparekasse	DK	Bank	UCITS ETFs / ETCs	https://www.borbjergsparekasse.dk/ref.aspx?id=764
+Faster Andelskasse	DK	Bank	UCITS ETFs / ETCs	https://www.fasteroikos.dk/privat/produkter/investering/kom-i-gang-med-investering
+Frørup Andelskasse	DK	Bank	UCITS ETFs / ETCs	https://www.froerupandelskasse.dk/privat/investeringsmuligheder/
+Frøslev-Mollerup Sparekasse	DK	Bank	UCITS ETFs / ETCs	https://www.fmspks.dk/media/mebfmrwq/basisaftale_om_handel_med_vaerdipapirer.pdf
 Nordnet	SE	Broker	UCITS ETFs / ETCs	https://www.nordnet.se/kom-igang
 Avanza	SE	Broker	UCITS ETFs / ETCs	https://www.avanza.se/bli-kund.html
 SEB	SE	Bank	UCITS ETFs / ETCs	https://seb.se/privat/spara-och-investera/aktier-och-vardepapper/handla-med-aktier
@@ -273,18 +592,42 @@ Levler	SE	Neobroker	UCITS ETFs / ETCs	https://levler.se/
 Montrose Bank	SE	Bank	UCITS ETFs / ETCs	https://www.montrose.io/
 Nordea Sverige	SE	Bank	Global ETFs / ETPs	https://www.nordea.se/privat/produkter/spara-investera/investeringssparkonto.html
 SAVR	SE	Neobroker	UCITS ETFs / ETCs	https://savr.com/sv/etf
+Skandia	SE	Bank	UCITS ETFs / ETCs	https://www.skandia.se/spara-pension/sparprodukter/kapitalforsakringar/kapitalforsakring-depa/
+Mangold	SE	Broker	UCITS ETFs / ETCs	https://mangold.se/private-banking/vardepappershandel/
+Strivo	SE	Broker	UCITS ETFs / ETCs	https://www.strivo.se/vara-tjanster/placeringar/aktier/
+Carnegie	SE	Bank	Global ETFs / ETPs	https://www.carnegie.se/nyheter/handla-aktier-pa-fler-europaborser/
+Sparbanken Skåne	SE	Bank	UCITS ETFs / ETCs	https://www.sparbankenskane.se/privat/spara-och-placera/vardepapper/sa-handlar-du-vardepapper/internetbanken.html
+Sparbanken Sjuhärad	SE	Bank	UCITS ETFs / ETCs	https://www.sparbankensjuharad.se/privat/spara-och-placera/vardepapper/sa-handlar-du-vardepapper/internetbanken.html
+Varbergs Sparbank	SE	Bank	UCITS ETFs / ETCs	https://www.varbergssparbank.se/privat/spara-och-placera/vardepapper/sa-handlar-du-vardepapper/internetbanken.html
+Sparbanken Nord	SE	Bank	UCITS ETFs / ETCs	https://www.sparbankennord.se/privat/spara-och-placera/vardepapper/sa-handlar-du-vardepapper/internetbanken.html
+Sparbanken Skaraborg	SE	Bank	UCITS ETFs / ETCs	https://www.sparbankenskaraborg.se/privat/spara-och-placera/vardepapper/sa-handlar-du-vardepapper/internetbanken.html
+Sparbanken Blekinge	SE	Bank	UCITS ETFs / ETCs	https://www.sparbankenblekinge.se/privat/spara-och-placera/vardepapper/sa-handlar-du-vardepapper/internetbanken.html
+Sparbanken Tranemo	SE	Bank	UCITS ETFs / ETCs	https://www.sparbankentranemo.se/privat/spara-och-placera/aktier-och-andra-placeringar/olika-satt-att-handla-vardepapper/internetbanken.html
+Sparbanken Syd	SE	Bank	UCITS ETFs / ETCs	https://www.sparbankensyd.se/sv/privat/vara-tjanster/placera/investeringssparkonto-isk
+Alpcot	SE	Broker	UCITS ETFs / ETCs	https://alpcot.se/kundservice
+Sparbanken Alingsås	SE	Bank	UCITS ETFs / ETCs	https://www.sparbankenalingsas.se/privat/spara-och-placera/vardepapper/sa-handlar-du-vardepapper/internetbanken.html
+Laholms Sparbank	SE	Bank	UCITS ETFs / ETCs	https://www.laholmssparbank.se/privat/spara-och-placera/vardepapper/sa-handlar-du-vardepapper/internetbanken.html
+Westra Wermlands Sparbank	SE	Bank	UCITS ETFs / ETCs	https://www.wwsparbank.se/privat/spara-och-placera/vardepapper/sa-handlar-du-vardepapper/internetbanken.html
+Roslagens Sparbank	SE	Bank	UCITS ETFs / ETCs	https://www.roslagenssparbank.se/privat/spara-och-placera/vardepapper/sa-handlar-du-vardepapper/internetbanken.html
 DNB	NO	Bank	UCITS ETFs / ETCs	https://www.dnb.no/markets/aksjer/aksjehandel-privat
 Pareto Securities	NO	Broker	UCITS ETFs / ETCs	https://paretosec.no/bli-kunde
 SpareBank	NO	Bank	UCITS ETFs / ETCs	https://www.sparebank1.no/nb/bank/privat/sparing/investering/aksjehandel.html
 Nordea Norge	NO	Bank	Global ETFs / ETPs	https://www.nordea.no/privat/vare-produkter/sparing-og-investering/aksjer/aksjesparekonto.html
 Norne Securities	NO	Broker	UCITS ETFs / ETCs	https://norne.no/aksjehandel/
+Fana Sparebank	NO	Bank	UCITS ETFs / ETCs	https://www.fanasparebank.no/privat/spare/aksjehandel/aksjesparekonto/
+Sparebanken Møre	NO	Bank	UCITS ETFs / ETCs	https://www.sbm.no/privat/sparing/aksjer-og-investering/aksjesparekonto/
 OP Ryhmä	FI	Bank	UCITS ETFs / ETCs	https://www.op.fi/henkiloasiakkaat/saastot-ja-sijoitukset/osakesijoitukset/arvo-osuustili
 Mandatum Trader	FI	Bank	UCITS ETFs / ETCs	https://www.mandatumtrader.fi/onboarding/one/
 Aktia	FI	Bank	UCITS ETFs / ETCs	https://www.aktia.fi/fi/osakesijoitukset
 Nordea	FI	Bank	Global ETFs / ETPs	https://www.nordea.fi/henkiloasiakkaat/palvelumme/saastaminen-sijoittaminen/sijoittaminen/osakesaastotili.html
+Ålandsbanken	FI	Bank	UCITS ETFs / ETCs	https://www.alandsbanken.fi/sv/banktjanster/spara-placera/aktier/aktiehandel-pa-internetkontoret
+Säästöpankki	FI	Bank	Global ETFs / ETPs	https://www.saastopankki.fi/fi-fi/saastaminen-ja-sijoittaminen/osakesijoittaminen
+Evli	FI	Broker	Global ETFs / ETPs	https://www.evli.com/my-evli
+Kvarn X	FI	Neobroker	Global ETFs / ETPs	https://www.kvarnx.com/fi
 Arion banki	IS	Bank	Local-market ETFs	https://www.arionbanki.is/einstaklingar/sparnadur/verdbref-einstaklingar
 Landsbankinn	IS	Bank	Local-market ETFs	https://www.landsbankinn.is/verdbrefavidskipti-a-netinu
 Íslandsbanki	IS	Bank	Local-market ETFs	https://www.islandsbanki.is/en/product/services/security-trading
+ACRO	IS	Broker	Local-market ETFs	https://acro.is/app/
 XTB	PL	Broker	UCITS ETFs / ETCs	https://www.xtb.com/pl
 Bossa	PL	Broker	UCITS ETFs / ETCs	https://bossa.pl/oferta/otwarcie-rachunku
 mBank eMakler	PL	Bank	UCITS ETFs / ETCs	https://www.mbank.pl/indywidualny/inwestycje-i-oszczednosci/gielda/emakler/
@@ -298,6 +641,9 @@ BNP Paribas Biuro Maklerskie	PL	Bank	Global ETFs / ETPs	https://www.bnpparibas.p
 Trigon Dom Maklerski	PL	Broker	Local-market ETFs	https://www.trigon.pl/dom-maklerski/zaloz-rachunek
 Millennium Biuro Maklerskie	PL	Bank	UCITS ETFs / ETCs	https://www.millenniumbm.pl/rachunki-maklerskie/rachunek-indywidualny
 IPOPEMA	PL	Broker	UCITS ETFs / ETCs	https://www.ipopema.pl/
+Dom Maklerski BDM	PL	Broker	Local-market ETFs	https://www.bdm.pl/dokumenty/uchwaly?file=files%2Fbdm%2Fdokumenty%2FUchwaly%2F2025_VI_10_uchwala_bdm_dyspozycji_przyjmowanych_przez_kanaly_bdm.pdf
+OANDA TMS	PL	Broker	UCITS ETFs / ETCs	https://www.tms.pl/oferta/akcje-gieldowe
+VeloBank	PL	Bank	Global ETFs / ETPs	https://www.velobank.pl/biuro-maklerskie/regulacje-i-dokumenty/mifid-ii
 Fio banka e-Broker	CZ	Bank	UCITS ETFs / ETCs	https://www.fio.cz/akcie-investice/e-broker
 Air Bank	CZ	Bank	US stocks + UCITS ETFs	https://www.airbank.cz/produkty/akcie/
 Patria Finance	CZ	Broker	UCITS ETFs / ETCs	https://finance.patria.cz/otevrit-ucet
@@ -307,10 +653,17 @@ Komerční banka	CZ	Bank	UCITS ETFs / ETCs	https://www.kb.cz/cs/obcane/investice
 Wood & Company	CZ	Broker	Global ETFs / ETPs	https://wood.cz/
 Wood & Company	CZ	Broker	Global ETFs / ETPs	https://wood.com/
 Raiffeisenbank ČR	CZ	Bank	UCITS ETFs / ETCs	https://www.rb.cz/osobni/zhodnoceni-uspor/investice
+BH Securities	CZ	Broker	Global ETFs / ETPs	https://www.bhs.cz/investice-do-akcii
+Portu	CZ	Neobroker	Global ETFs / ETPs	https://magazin.portu.cz/pruvodce-obchodovanim-na-portu-v-brokerage-rezimu/
+J&T Banka	CZ	Bank	UCITS ETFs / ETCs	https://assets-eu-01.kc-usercontent.com/23883f12-8a12-01af-3f05-426faedce691/3a29e29b-a3f0-499d-aa68-4eaf0acd22cd/Obchodni_podminky_bankovni_investicni_sluzby_2025_11_20.pdf
+Investona	CZ	Neobroker	UCITS ETFs / ETCs	https://www.investona.cz/static/zakladni_informace_pro_klienty.pdf
 Slovenská sporiteľňa	SK	Bank	UCITS ETFs / ETCs	https://www.slsp.sk/sk/ludia/investovanie
 Tatra banka	SK	Bank	UCITS ETFs / ETCs	https://www.tatrabanka.sk/sk/personal/sporenie-investovanie/investq/
 VÚB banka	SK	Bank	UCITS ETFs / ETCs	https://www.vub.sk/ludia/investovanie.html
 ČSOB Slovensko	SK	Bank	UCITS ETFs / ETCs	https://www.csob.sk/cenne-papiere
+Private Brokers	SK	Broker	UCITS ETFs / ETCs	https://www.privatebrokers.eu/
+RM-S Market	SK	Broker	UCITS ETFs / ETCs	https://rmsmarket.sk/produkty-a-sluzby/finport/
+Capital Markets	SK	Broker	UCITS ETFs / ETCs	https://www.capitalmarkets.sk/produkty/brokerage-sluzby
 Erste Befektetési	HU	Broker	UCITS ETFs / ETCs	https://www.erstemarket.hu/
 OTP SingleMarket	HU	Bank	UCITS ETFs / ETCs	https://www.otpbank.hu/portal/hu/ertekpapirszamla
 K&H Értékpapír	HU	Broker	Global ETFs / ETPs	https://www.khertekpapir.hu
@@ -319,6 +672,8 @@ Equilor	HU	Broker	UCITS ETFs / ETCs	https://www.equilor.hu/szamlanyitasi-informa
 MBH Befektetési Bank	HU	Bank	Global ETFs / ETPs	https://www.mbhbefektetesibank.hu/osszevont-ertekpapir-es-ugyfelszamla
 Raiffeisen Online Befektetés	HU	Bank	Global ETFs / ETPs	https://www.raiffeisen.hu/maganszemely/elektronikus-szolgaltatas/online-broker
 CIB eBroker	HU	Bank	Global ETFs / ETPs	https://www.cib.hu/Maganszemelyek/digitalis_bank/eBroker.html
+Gránit Bank	HU	Bank	Local-market ETFs	https://granitbank.hu/aktualis/2025/06/19/egyre-tobben-intezik-befekteteseiket-a-mobiljukon
+UniCredit Bank Hungary	HU	Bank	UCITS ETFs / ETCs	https://www.unicreditbank.hu/hu/maganszemelyek/napi_penzugyek/elektronikus_bankolas/mbanking_befektetes.html
 BT Trade (Banca Transilvania)	RO	Bank	UCITS ETFs / ETCs	https://www.bancatransilvania.ro/economii-si-investitii/investitii/investitii-la-bursa
 Tradeville	RO	Broker	UCITS ETFs / ETCs	https://tradeville.ro/
 Goldring	RO	Broker	Local-market ETFs	https://www.goldring.ro/
@@ -326,38 +681,81 @@ BRK Financial Group	RO	Broker	Global ETFs / ETPs	https://my.brk.ro
 Swiss Capital	RO	Broker	Global ETFs / ETPs	https://swisscapital.ro/ro/
 Prime Transaction	RO	Broker	Local-market ETFs	https://www.primet.ro/cont-online
 BCR Broker	RO	Bank	Global ETFs / ETPs	https://www.bcr.ro/ro/persoane-fizice/economisire-si-investire/investitii/bcr-broker
+Investimental	RO	Broker	Local-market ETFs	https://www.investimental.ro/ghid/ghid-de-utilizare-al-aplicatiei-de-mobil-investimental/
+IFB Finwest	RO	Broker	Local-market ETFs	https://www.ifbfinwest.ro/ghid/ghid.php?l=tranzactionare_online
+Estinvest	RO	Broker	Local-market ETFs	https://www.estinvest.ro/cont-online/
+Blue Rock Financial Services	RO	Broker	Local-market ETFs	https://bluerock.ro/arena-xt/
+BRD	RO	Bank	Local-market ETFs	https://www.brd.ro/piete-financiare/piata-de-capital/brokeraj-actiuni/anyma-online-trading
+Muntenia Global Invest	RO	Broker	Local-market ETFs	https://mginvest.ro/tranzactionarea-on-line-prin-aplicatia-arena-xt/
+Interdealer Capital Invest	RO	Broker	Local-market ETFs	https://interdealer.ro/wp-content/uploads/2021/07/Tutorial_ArenaXT.pdf
+Interfinbrok	RO	Broker	Local-market ETFs	https://www.interfinbrok.ro/taxe
+BRM SSIF	RO	Broker	Local-market ETFs	https://brm.arenaxt.ro/#/login
+ING Bank Romania	RO	Bank	Global ETFs / ETPs	https://ing.ro/persoane-fizice/economii-si-investitii/investitii
+Salt Bank	RO	Bank	Global ETFs / ETPs	https://salt.bank/investitii
 Elana Trading	BG	Broker	UCITS ETFs / ETCs	https://www.elana.net/en
 Karoll	BG	Broker	UCITS ETFs / ETCs	https://www.karollbroker.bg/en/
 BenchMark Finance	BG	Broker	UCITS ETFs / ETCs	https://www.benchmark.bg/real_account.php
 EuroFinance	BG	Broker	UCITS ETFs / ETCs	https://eurofinance.bg/
 Trading 212 Ltd	BG	Neobroker	UCITS ETFs / ETCs	https://www.trading212.com/
+UG Market	BG	Broker	Local-market ETFs	https://ugmarket.com/en/ug-market-trader/
+Alaric Securities	BG	Broker	UCITS ETFs / ETCs	https://alaricsecurities.com/answers/
+First Financial Brokerage House	BG	Broker	UCITS ETFs / ETCs	https://www.ffbh.bg/en/faq-brokerage-services
+UniCredit Bulbank	BG	Bank	UCITS ETFs / ETCs	https://www.unicreditbulbank.bg/bg/chastno-bankirane/investitsii/targoviya-cenni-knizha-bulbank-online/
+United Bulgarian Bank	BG	Bank	UCITS ETFs / ETCs	https://ubb.bg/individual-clients/spestyavaniya-i-investitsii/brokerski-uslugi
+Capman	BG	Broker	UCITS ETFs / ETCs	https://capman.bg/investment-intermediary/ctrader/
+Real Finance	BG	Broker	UCITS ETFs / ETCs	https://real-finance.net/?lang=en&page_id=326
+Varchev Finance	BG	Broker	UCITS ETFs / ETCs	https://www.varchev.com/invest-service1-bfb.htm
+Sofia International Securities	BG	Broker	UCITS ETFs / ETCs	https://sis.bg/deinosti/sis-bgtrader/
+ABV Investments	BG	Broker	UCITS ETFs / ETCs	https://www.abvinvest.net/абв-трейдър
+Fibank	BG	Bank	UCITS ETFs / ETCs	https://www.fibank.bg/en/personal-banking/banking/distance-banking/investments-in-my-fibank
+InterCapital Markets	BG	Broker	UCITS ETFs / ETCs	https://www.intercapitalmarkets.com/en/node/33
+ABC Finance	BG	Broker	UCITS ETFs / ETCs	https://abc-finance.info/uslugi/brokerski-uslugi/
+DeltaStock	BG	Broker	US ETFs / ETNs	https://www.deltastock.com/
+Bulbrokers	BG	Broker	UCITS ETFs / ETCs	http://bulbrokers.com/en/online-trade/metatrader-4/bse-sofia/
+Zagora Finacorp	BG	Broker	UCITS ETFs / ETCs	https://zf-bg.com/услуги/
 InterCapital	HR	Broker	UCITS ETFs / ETCs	https://inter.capital/
 Zagrebačka banka	HR	Bank	Local-market ETFs	https://www.zaba.hr/home/brokerske-usluge
 Agram Brokeri	HR	Broker	Local-market ETFs	https://www.agram-brokeri.hr/
 Erste Bank Croatia	HR	Bank	Global ETFs / ETPs	https://www.erstebank.hr/hr/gradjanstvo/ulaganje
 FIMA Vrijednosnice	HR	Broker	Global ETFs / ETPs	https://fima-vrijednosnice.hr/en/trading-on-foreign-exchanges/
+HITA	HR	Broker	Local-market ETFs	https://hita.hr/usluge-etrade.php
+HPB	HR	Bank	Local-market ETFs	https://www.hpb.hr/UserDocsImages/investicijsko-bankarstvo/brokeri/HPB%20-%20Informacije%20za%20ulagatelje%20u%20financijske%20instrumente%202023%20zadnje.pdf
+PBZ	HR	Bank	Local-market ETFs	https://www.pbz.hr/gradjani/pbz-investor.html
+OTP banka Hrvatska	HR	Bank	Local-market ETFs	https://www.otpbanka.hr/globalna-trzista/brokersko-poslovanje
+Podravska banka	HR	Bank	Local-market ETFs	https://www.poba.hr/financijska-trzista/poba-ebroker-3/
+Raiffeisenbank Hrvatska	HR	Bank	Local-market ETFs	https://www.rba.hr/hr/gradani/digitalno-bankarstvo/ebroker.html
 NLB Banka / NLB Trading	SI	Bank	Global ETFs / ETPs	https://www.nlb.si/osebno/varcevanja-in-nalozbe/trgovalni-racun
 Ilirika	SI	Broker	UCITS ETFs / ETCs	https://www.ilirika.si/sl-si/odpri-trgovalni-racun/
 Optimtrader	SI	Broker	Global ETFs / ETPs	https://optimtrader.com/
 BKS Bank Slovenia	SI	Bank	UCITS ETFs / ETCs	https://www.bksbank.si/fizicne-osebe/financni-instrumenti/inr-racun
+OTP banka Slovenija	SI	Bank	Global ETFs / ETPs	https://www.otpbanka.si/borzno-posredovanje
 TradeWin24	RS	Broker	Global ETFs / ETPs	https://www.tradewin24.com/
 ILIRIKA Investments	RS	Broker	Global ETFs / ETPs	https://ilirika.rs/berzansko-posredovanje/
 Raiffeisen banka Beograd	RS	Bank	Local-market ETFs	https://www.raiffeisenbank.rs/sr/stanovnistvo/digitalne-usluge/mtrader.html
+NLB Banka Beograd	RS	Bank	Global ETFs / ETPs	https://trader.nlbkb.rs/app/login.jsf
 Advantis Broker	BA	Broker	Global ETFs / ETPs	https://advantisbroker.com/
 Raiffeisen BANK BiH	BA	Bank	Local-market ETFs	https://www.raiffeisenbank.ba/en/personal/digital-services/E-Trading.html
 Raiffeisen CAPITAL	BA	Broker	Local-market ETFs	https://www.raiffeisenbank.ba/en/raiffeisen-grupa/raiffeisen-capital/proizvodi-i-usluge/e-trading.html
 Banka Kombëtare Tregtare	AL	Bank	Local-market ETFs	https://www.bkt.com.al/assets/uploads/documents/SmartInvest-Client-Manual-ENG.pdf
+VIP Broker	ME	Broker	Local-market ETFs	https://www.vipbroker.net/en/e-trader
+TF Capital	ME	Neobroker	US ETFs / ETNs	https://tfcapital.me/en/usa-berza
 LHV Pank	EE	Bank	UCITS ETFs / ETCs	https://www.lhv.ee/et/vaartpaberikonto
 Luminor Investor	EE	Bank	UCITS ETFs / ETCs	https://luminor.ee/
 Lightyear Europe	EE	Neobroker	UCITS ETFs / ETCs	https://lightyear.com/en-eu
 Plus500 Estonia	EE	Broker	Global ETFs / ETPs	https://www.plus500.com/
+Funderbeam	EE	Broker	UCITS ETFs / ETCs	https://www.funderbeam.com/help/how-do-i-start-trading/
 Swedbank Baltics	LV	Bank	UCITS ETFs / ETCs	https://www.swedbank.lv/private/investor/portfolio/investmentAccount
 Citadele C Trade	LV	Bank	UCITS ETFs / ETCs	https://www.citadele.lv/lv/private/c-trade/
 BluOr Bank	LV	Bank	Global ETFs / ETPs	https://bluorbank.lv/en/brokerage-services
+Mintos	LV	Neobroker	Global ETFs / ETPs	https://www.mintos.com/en/investing-in-stocks/
+Signet Bank	LV	Bank	UCITS ETFs / ETCs	https://signetbank.com/en/services/brokerage-services/
 SEB Baltics	LT	Bank	UCITS ETFs / ETCs	https://www.seb.lt/privatiems/taupymas-ir-investavimas/investavimas/vertybiniu-popieriu-saskaita
 Artea Bank	LT	Bank	Global ETFs / ETPs	https://www.artea.lt/lt/privatiems/taupymas-investavimas/apie-investavima/investicine-saskaita
 Revolut Securities Europe	LT	Neobroker	UCITS ETFs / ETCs	https://www.revolut.com/stocks/
 Robinhood Europe	LT	Neobroker	US ETFs / ETNs	https://robinhood.com/eu/en/
+Fundvest	LT	Neobroker	Global ETFs / ETPs	https://fundvest.eu/terms-and-conditions/
+Myriad Capital	LT	Broker	Global ETFs / ETPs	https://myriadcapital.lt/investavimas/
+Orion Securities	LT	Broker	Global ETFs / ETPs	https://www.orion.lt/en/articles/orion-investor-portal/
 Admirals	CY	Broker	Global ETFs / ETPs	https://admiralmarkets.com/
 CISCO	CY	Broker	Global ETFs / ETPs	https://cisco-online.com.cy/
 Bank of Cyprus	CY	Bank	Global ETFs / ETPs	https://www.bankofcyprus.com/en-gb/Personal/investments/markets-hedging/personal-equites-and-funds/
@@ -371,10 +769,14 @@ Argus Stockbrokers	CY	Broker	Local-market ETFs	https://argus.com.cy/tradingplatf
 Global Capital Securities	CY	Broker	Local-market ETFs	https://www.globalcapital.com.cy/services
 Atlantic Securities	CY	Broker	Local-market ETFs	https://atlanticfs.com/
 Mega Equity	CY	Broker	Local-market ETFs	https://megaequity.com/downloads-docs/OnlineTradingAgreementEnglish.pdf
+Prochoice Securities	CY	Broker	Global ETFs / ETPs	https://www.pro-choice.com.cy/index.php/online-trading
+Colmex Pro	CY	Broker	US ETFs / ETNs	https://www.colmexpro.com/faq/
+RoboMarkets	CY	Broker	Global ETFs / ETPs	https://www.robomarkets.com.cy/blog/education/how-to-trade-on-r-stockstrader-platform-traders-guide/
 Moneybase	MT	Neobroker	Global ETFs / ETPs	https://moneybase.com/invest
 MeDirect Bank Malta	MT	Bank	UCITS ETFs / ETCs	https://www.medirect.com.mt/
 Exante	MT	Broker	Global ETFs / ETPs	https://exante.eu/individual-investors/
 Swissquote Financial Services	MT	Broker	Global ETFs / ETPs	https://www.swissquote.com/
+Bank of Valletta	MT	Bank	Global ETFs / ETPs	https://www.bov.com/etrader
 Sarwa	AE	Neobroker	US ETFs / ETNs	https://www.sarwa.co/en
 Swissquote MEA	AE	Bank	Global ETFs / ETPs	https://www.swissquote.com/
 Plus500 Dubai	AE	Broker	Global ETFs / ETPs	https://www.plus500.com/
@@ -392,6 +794,10 @@ International Securities	AE	Broker	Global ETFs / ETPs	https://www.intlsecurities
 BHM Capital	AE	Broker	Local-market ETFs	https://www.bhmuae.ae/
 HSBC WorldTrader UAE	AE	Bank	Global ETFs / ETPs	https://www.hsbc.ae/investments/products/worldtrader/
 CBD Self Investr	AE	Bank	US ETFs / ETNs	https://www.cbd.ae/cbdinvestr/self-investors.html
+ADIB Securities	AE	Broker	Local-market ETFs	https://www.adibsecurities.ae/en/Pages/active_trading.aspx
+xCube	AE	Broker	Global ETFs / ETPs	https://xcube.ae/markets/dfm/
+Daman Securities	AE	Broker	Global ETFs / ETPs	https://www.damansecurities.com/
+Al Dar Shares and Bonds	AE	Broker	Global ETFs / ETPs	http://aldarshares.com/en/cms-pages/view?id=10
 Derayah Financial	SA	Broker	Local + US ETFs	https://online.derayah.com/account/Register
 SNB Capital	SA	Bank	Local-market ETFs	https://www.alahlitadawul.com/
 Al Rajhi Capital	SA	Bank	Local-market ETFs	https://www.alrajhi-capital.sa/
@@ -404,6 +810,17 @@ Aljazira Capital	SA	Bank	Local-market ETFs	https://aljaziracapital.com.sa/open-i
 Albilad Capital	SA	Bank	Local-market ETFs	https://www.albilad-capital.com/
 Yaqeen Capital	SA	Broker	Local-market ETFs	https://yaqeen.sa/en/
 Alistithmar Capital	SA	Broker	Local-market ETFs	https://icap.com.sa/new-client
+Musharaka Capital	SA	Broker	Global ETFs / ETPs	https://musharaka.sa/en/
+Osool & Bakheet	SA	Broker	Local-market ETFs	https://obic.com.sa/en/home-2/
+Alkhabeer Capital	SA	Broker	Local + US ETFs	https://www.alkhabeer.com/brokerage/
+BSF Capital	SA	Broker	Global ETFs / ETPs	https://www.bsfcapital.sa/sfcua/home
+Arbah Capital	SA	Broker	Local-market ETFs	https://www.arbahcapital.com/brokerage
+Al Nefaie Investment Group	SA	Broker	Local-market ETFs	https://www.nefaie.com/en/brokerage/
+Jadwa Investment	SA	Broker	Local-market ETFs	https://www.jadwa.com/en/brokerage
+Alpha Capital	SA	Broker	Local-market ETFs	https://alphacapital.com.sa/sc.html
+GIB Capital	SA	Broker	Local-market ETFs	https://apps.apple.com/us/app/gibc-tadawul/id1499313449
+Awaed	SA	Neobroker	Local + US ETFs	https://apps.apple.com/sa/app/awaed-invest-trade/id1610134585
+Emirates NBD Capital	SA	Bank	Local-market ETFs	https://etrade.emiratesnbdcapital.com.sa/etrade/lib/faq.jsp
 QNB Financial Services	QA	Bank	Local-market ETFs	https://www.qnbfs.com/
 The Group Securities	QA	Broker	Local-market ETFs	https://www.thegroup.com.qa/
 Dlala Brokerage	QA	Broker	Local-market ETFs	https://www.dlalabroker.com/en/
@@ -411,12 +828,29 @@ Commercial Bank Financial Services	QA	Bank	Local-market ETFs	https://www.cbfs.co
 Doha Bank Financial Services	QA	Bank	Local-market ETFs	https://www.dohabank.com.qa/treasury-and-investments/international-brokerage/
 Qatar Securities Company	QA	Broker	Global ETFs / ETPs	https://qatar-securities.com/faq/
 Ahli Brokerage Company	QA	Bank	Global ETFs / ETPs	https://www.ahlibrokerage.com.qa/AccountOpening.aspx
+Wasata Financial Securities	QA	Broker	Local-market ETFs	https://www.wasata.qa/wp-content/uploads/2025/12/Wasata-Account-Opening-form-Individuals-2025.pdf
 NBK Capital	KW	Bank	Local-market ETFs	https://brokerage.nbk.com/
 National Investments Company / NICTRADE	KW	Broker	Global ETFs / ETPs	https://www.nic.com.kw/our-services/online-trading/
 National Investments Company / NICTRADE	KW	Broker	Global ETFs / ETPs	https://www.ninv.com/
 Boubyan	KW	Broker	Global ETFs / ETPs	https://boubyancapital.com/brokerage/
+KFH Trade	KW	Broker	Local-market ETFs	https://www.kfhtrade.com/en/FAQ
+Coast eTRADE	KW	Broker	Global ETFs / ETPs	https://www.coast.com.kw/coast-etrade/
+Al Sharq Financial Brokerage	KW	Broker	Global ETFs / ETPs	https://www.sharqetrade.com/%D8%A3%D8%B3%D8%A6%D9%84%D8%A9-%D8%B4%D8%A7%D8%A6%D8%B9%D8%A9
+KFIC Financial Brokerage	KW	Broker	Global ETFs / ETPs	https://www.kficbrokerage.com/en/our-business/
+Oula Wasata	KW	Broker	Global ETFs / ETPs	https://www.oulawasata.com.kw/
+KMEFIC	KW	Broker	Global ETFs / ETPs	https://kmefic.com/awsat/faqs/
+Arzan Trader	KW	Broker	Global ETFs / ETPs	https://arzan.com.kw/en/service-asset/
+Al-Tijari Financial Brokerage	KW	Broker	Global ETFs / ETPs	https://www.tijarifb.com/en/services/Trading-Information
+KIC Trade	KW	Broker	Global ETFs / ETPs	https://www.kictrade.com/
+Gulf Bank	KW	Bank	Global ETFs / ETPs	https://www.e-gulfbank.com/en/personal/investment/online-trading/
+Al-Waseet Financial Business	KW	Broker	Local-market ETFs	https://apps.apple.com/us/app/al-waseet-etrade/id580784559
+Middle East Financial Brokerage	KW	Broker	Local-market ETFs	https://apps.apple.com/tm/app/awsat-broker/id1347805945
 SICO	BH	Bank	Local-market ETFs	https://sicobank.com
 Mubasher Capital Bahrain	BH	Broker	Global ETFs / ETPs	https://mubashercapital.com/
+Al Watani Trade	BH	Bank	Local-market ETFs	https://nbbonline.com/personal/al-watani-trade/
+Al Salam Invest	BH	Bank	Local-market ETFs	https://www.alsalambank.com/en/al-salam-bank-joins-bahrain-trade-broadening-reach-of-its-digital-trading-platform-al-salam-invest-to-retail-clients/
+eMYAA	BH	Neobroker	Global ETFs / ETPs	https://www.emyaa.com/
+Khaleeji Bank	BH	Bank	Local-market ETFs	https://khaleeji.bank/pages-sidebar-nav/khaleeji-etrade/
 Meitav Trade	IL	Broker	Local + US ETFs	https://www.meitav.co.il/trade/
 IBI Trade	IL	Broker	Local + US ETFs	https://www.ibi.co.il/solutions/trading/new-customers/
 Psagot Trade	IL	Broker	Local + US ETFs	https://www.psagot.co.il/trade_heb/
@@ -427,6 +861,14 @@ Blink	IL	Neobroker	Local + US ETFs	https://heyblink.com
 Plus500 Israel	IL	Broker	Global ETFs / ETPs	https://www.plus500.com/
 Altshuler Shaham Trade	IL	Broker	Local + US ETFs	https://www.as-invest.co.il/trade/
 ONE ZERO Digital Bank	IL	Bank	Global ETFs / ETPs	https://www.onezerobank.com/special/5636
+Israel Discount Bank	IL	Bank	Local + US ETFs	https://www.discountbank.co.il/en/private/communication-channels/personal-online-banking/online-services/
+Mizrahi-Tefahot	IL	Bank	Local + US ETFs	https://www.mizrahi-tefahot.co.il/en/online-banking/
+First International Bank of Israel	IL	Bank	Global ETFs / ETPs	https://www.fibi.co.il/private/capitalmarket/independenttrade/onlinetrade/
+Bank of Jerusalem	IL	Bank	Local + US ETFs	https://www.bankjerusalem.co.il/capital-market/jerusalemtrade_app
+Bank Yahav	IL	Bank	Local + US ETFs	https://bank-yahav.co.il/investments/stock-market/
+Mercantile	IL	Bank	Local + US ETFs	https://www.mercantile.co.il/private/investments-savings/capital-market/advanced-commands/
+Bank Massad	IL	Bank	Local + US ETFs	https://www.bankmassad.co.il/private/capitalmarket/new/new/
+Bank Otsar Ha-Hayal	IL	Bank	Local + US ETFs	https://www.bankotsar.co.il/private/capitalmarket/independenttrade/mischar/
 Midas	TR	Neobroker	Local + US ETFs	https://www.getmidas.com/
 İş Yatırım TradeMaster	TR	Broker	Local + US ETFs	https://www.isyatirim.com.tr/tr-tr/Sayfalar/uzaktan-musteri-olmak.aspx
 Garanti BBVA Yatırım	TR	Bank	Local-market ETFs	https://www.garantibbvayatirim.com.tr/hesap-ac/yurt-ici-hesap-ac
@@ -438,6 +880,50 @@ Ziraat Yatırım	TR	Bank	Local-market ETFs	https://www.ziraatyatirim.com.tr/hesa
 Halk Yatırım	TR	Bank	Local-market ETFs	https://www.halkyatirim.com.tr/content/tr/musterimiz-olun
 Vakıf Yatırım	TR	Bank	Local-market ETFs	https://www.vakifyatirim.com.tr/hesap-acmak
 Deniz Yatırım	TR	Bank	Local-market ETFs	https://www.denizyatirim.com/hesap-acilis-formu
+OYAK Yatırım	TR	Broker	Local-market ETFs	https://www.oyakyatirim.com.tr/Announcements/DownloadFile?fileName=OYAK+YATIRIM+SANAL+%C5%9EUBE+KULLANIM+DOK%C3%9CMANI.pdf
+İnfo Yatırım	TR	Broker	Local-market ETFs	https://infoyatirim.com/islem-platformlari/e-sube-infoweb
+Ata Yatırım	TR	Broker	Local-market ETFs	https://atayatirim.com.tr/hizmet-alin/ata-trader-ts
+A1 Capital	TR	Broker	Local-market ETFs	https://a1capital.com.tr/hisse-senedi/
+Tacirler Yatırım	TR	Broker	Local-market ETFs	https://tacirler.com.tr/tacirler-online-uyeligi
+Osmanlı Yatırım	TR	Broker	Local-market ETFs	https://www.osmanlimenkul.com.tr/finansal-planlama-/platformlarimiz/osmanli-platformlari/e-sube
+TEB Yatırım	TR	Broker	Local-market ETFs	https://www.tebyatirim.com.tr/islem-platformlarimiz/internet/cepteteb-internet-subesi
+PhillipCapital	TR	Broker	Local-market ETFs	https://www.phillipcapital.com.tr/hizmetler/pay-piyasasi
+ÜNLÜ Menkul	TR	Broker	Local-market ETFs	https://www.unlumenkul.com/bireysel-hizmetlerimiz/dijital-kanallar/
+Şeker Yatırım	TR	Broker	Local-market ETFs	https://www.sekeryatirim.com.tr/
+InvestAZ	TR	Broker	Local-market ETFs	https://www.investaz.com.tr/yatirim-platformlari
+Tera Yatırım	TR	Broker	Local-market ETFs	https://www.terayatirim.com/yatirim-araclari/pay-piyasasi-bist/1
+Global Menkul	TR	Broker	Local-market ETFs	https://global.com.tr/tr/sayfa/global-online
+Ahlatcı Yatırım	TR	Broker	Local-market ETFs	https://www.ahlatciyatirim.com.tr/platformlar/e-sube
+Alnus Yatırım	TR	Broker	Local-market ETFs	https://www.alnusyatirim.com/platformlar/alnus-trader
+Piramit Menkul	TR	Broker	Local-market ETFs	https://www.piramitmenkul.com.tr/AlimSatimAraciligi
+İntegral Yatırım	TR	Broker	Local-market ETFs	https://integralyatirim.com.tr/borsa
+Bizim Menkul	TR	Broker	Local-market ETFs	https://www.bmd.com.tr/urunler/islem-kanallari/internet-subesi
+Marbaş Menkul	TR	Broker	Local-market ETFs	https://marbas.com.tr/islem-platformlari/
+Yatırım Finansman	TR	Broker	Local-market ETFs	https://yafi.yf.com.tr/
+HSBC Yatırım	TR	Broker	Local-market ETFs	http://www.hsbcyatirim.com.tr/hizmetlerimiz/pay-senetleri-piyasasi/hsbc-pay-senetleri-piyasasi
+ICBC Turkey Yatırım	TR	Broker	Local-market ETFs	https://www.icbc.com.tr/tr/sizin-icin/detay/Hisse-Senedi/66/40/0
+Kuveyt Türk Yatırım	TR	Broker	Local-market ETFs	https://kuveytturkyatirim.com.tr/trade-plus/
+Burgan Yatırım	TR	Broker	Local-market ETFs	https://basvuru.burganyatirim.com.tr/sifir-komisyon-firsati
+Meksa Yatırım	TR	Broker	Global ETFs / ETPs	https://www.meksa.com.tr/yurtdisi-piyasalar
+Destek Yatırım	TR	Broker	Local-market ETFs	https://www.destekyatirim.com/internet-sube
+Trive Yatırım	TR	Broker	Local-market ETFs	https://trive.com.tr/bist-hisse
+Acar Menkul Değerler	TR	Broker	Local-market ETFs	https://www.acar.com.tr/yatirim-urunleri/hisse-senedi
+Pusula Yatırım	TR	Broker	Local-market ETFs	https://pusulayatirim.com.tr/hisse
+Strateji Menkul Değerler	TR	Broker	Local-market ETFs	https://strateji.com.tr/islem-platformlarimiz/
+Papara Invest	TR	Neobroker	Global ETFs / ETPs	https://paparainvest.com/
+Fiba Yatırım	TR	Broker	Local-market ETFs	https://www.fibayatirim.com.tr/platformlarimiz/fibayatirim-internet-sube
+ING Yatırım	TR	Broker	Local-market ETFs	https://www.ing.com.tr/tr/sizin-icin/yatirim/hisse-senedi-ve-viop
+IKON Menkul	TR	Broker	Local-market ETFs	https://www.ikonmenkul.com.tr/online-sube
+Aktif Yatırım	TR	Broker	Local-market ETFs	https://www.aktifyatirim.com.tr/
+Allbatross Yatırım	TR	Broker	Local-market ETFs	https://allbatrossyatirim.com/islem-platformlari/matriks-e-broker/
+Alternatif Menkul	TR	Broker	Local-market ETFs	https://www.alternatifmenkul.com.tr/islem-kanallari/internet-subesi
+NCM Investment	TR	Broker	Local-market ETFs	https://www.ncminvest.com.tr/ncm-trader-pro.htm
+Turkish Menkul Değerler	TR	Broker	Local-market ETFs	https://www.turkishmenkuldegerler.com/sikca-sorulan-sorular/
+Kuzey Menkul	TR	Broker	Local-market ETFs	https://kuzeymenkul.com/hizmetler/pay-alim-satim
+Dinamik Menkul	TR	Broker	Global ETFs / ETPs	https://www.dinamikmenkul.com.tr/page/islem-platformlari/d-hub
+Anadolu Yatırım	TR	Broker	Local-market ETFs	https://webborsam.com/webborsam/yapabilecekleriniz
+Bulls Yatırım	TR	Broker	Local-market ETFs	https://bullsyatirim.com/en/bulls-trader-free-real-time-market-data
+Galata Menkul	TR	Broker	Local-market ETFs	https://galatamenkul.com/platformlar/hisse-senedi/
 EasyEquities	ZA	Neobroker	Local + US ETFs	https://www.easyequities.co.za/
 Swissquote South Africa	ZA	Broker	Global ETFs / ETPs	https://www.swissquote.com/
 Standard Bank Shyft	ZA	Bank	Global ETFs / ETPs	https://www.standardbank.co.za/southafrica/personal/products-and-services/grow-your-money/share-trading/shyft-app
@@ -449,6 +935,12 @@ Otto1890 Securities	ZA	Broker	Local-market ETFs	https://www.otto1890.com/
 Investec Online	ZA	Bank	Global ETFs / ETPs	https://www.investec.com/en_za/investment/self-managed-investing/online-stockbroking.html
 SatrixNOW	ZA	Neobroker	Local-market ETFs	https://satrix.co.za/platform
 Sharenet Securities	ZA	Broker	Global ETFs / ETPs	https://www.sharenet.co.za/securities/
+Sanlam iTrade	ZA	Broker	Local-market ETFs	https://www.sanlamitrade.co.za/w/content/ourproducts.htm
+Sygnia Securities	ZA	Broker	Local-market ETFs	https://www.sygnia.co.za/for-securities/
+Rand Swiss	ZA	Broker	Global ETFs / ETPs	https://www.randswiss.com/securities-broking/
+etfSA	ZA	Broker	Local-market ETFs	https://etfsa.co.za/product/diy/
+Afrifocus Securities	ZA	Broker	Local-market ETFs	https://afrifocus.co.za/online-trading/
+EQT	ZA	Broker	Local-market ETFs	https://www.oldmutual.co.za/wealth/eqt/
 Chuuma	ZM	Neobroker	Local-market ETFs	https://learn.chuuma.com/stock-market-basics/the-luse-and-chuuma
 Bamboo	NG	Neobroker	Local + US ETFs	https://investbamboo.com/
 Cowrywise	NG	Neobroker	Local-market ETFs	https://cowrywise.com/stocks
@@ -462,6 +954,37 @@ CardinalStone Securities	NG	Broker	Local-market ETFs	https://cardinalstonesecuri
 ARM Securities	NG	Broker	Local-market ETFs	https://www.arm.com.ng/securities/
 Investment One Stockbrokers	NG	Broker	Local-market ETFs	https://www.investment-one.com/new-account/
 United Capital Securities	NG	Broker	Local-market ETFs	https://unitedcapitalplcgroup.com/securities/
+Morgan Capital	NG	Broker	Local-market ETFs	https://www.morgancapitalgroup.com/itrade
+Cordros Cape	NG	Broker	Local-market ETFs	https://cordros.com/securities/cordros-cape
+Afrinvestor	NG	Broker	Local-market ETFs	https://afrinvest.com/stocks/
+CSL Stockbrokers	NG	Broker	Local-market ETFs	https://www.cslstockbrokers.com/blog-details.php?slug=how-to-use-csl-stockbrokers-web-portal---user-guide
+Apel Asset	NG	Broker	Local-market ETFs	https://asset.apel.com.ng/apelalpha
+Coronation Wealth	NG	Broker	Local-market ETFs	https://coronationwealth.ng/faq/
+TRW Stockbrokers	NG	Broker	Local-market ETFs	https://www.trw-stockbrokers.com/products-services.aspx
+GTI Securities	NG	Broker	Local-market ETFs	https://securities.gti.com.ng/wp-content/uploads/2025/01/AGREEMENT.pdf
+Chartwell Securities	NG	Broker	Local-market ETFs	https://etrade.chartwell.com.ng/TermsOfUse.aspx
+i-invest	NG	Neobroker	Local-market ETFs	https://www.parthiansecuritiesng.com/faqs/
+APT Securities	NG	Broker	Local-market ETFs	https://www.aptsecurities.com/e-trading-portal.php
+Integrated Trust & Investment	NG	Broker	Local-market ETFs	https://integratedtrustng.com/forms/Application-Form-Guide-to-Online-Trading.pdf
+InvestNaija	NG	Neobroker	Local-market ETFs	https://investnaija.com/investin
+Quantum Zenith Securities	NG	Broker	Local-market ETFs	https://isecurity.quantumzenithsecurities.com.ng/EBizNew/Home/FAQs
+DLM Securities	NG	Broker	Local-market ETFs	https://dlm.group/etrade/
+Icon Stockbrokers	NG	Broker	Local-market ETFs	https://iconstockbrokersltd.com/etrade/
+Transworld Investment & Securities	NG	Broker	Local-market ETFs	https://terms.transworldltd.com.ng/
+Pilot Securities	NG	Broker	Local-market ETFs	https://pilot-securities.com/
+Falcon Securities	NG	Broker	Local-market ETFs	https://www.falconsecltdonline.com/IW/Home/FAQs
+Futureview Securities	NG	Broker	Local-market ETFs	https://www.futureviewtradeonline.com/IW/Home/FAQs
+Zedcrest Wealth	NG	Neobroker	Local-market ETFs	https://blog.zedcrestwealth.com/take-your-position-with-zedcrest-wealth/
+First Securities Brokers	NG	Broker	Local-market ETFs	https://first-securities.com/solutions/equities-securities-trading/
+Sigma Securities	NG	Broker	Local-market ETFs	https://sigmasecuritiesltd.com.ng/service/equities-trading/
+Tiddo Securities	NG	Broker	Local-market ETFs	https://tiddosecurities.com/faqs
+Bancorp Securities	NG	Broker	Local-market ETFs	https://bancorpsecurities.com/
+Interstate Securities	NG	Broker	Local-market ETFs	https://interstatesecurities.com/about-intertrade/
+WSTC Securities	NG	Broker	Local-market ETFs	https://portal.wstc.com.ng/
+Anchoria Securities	NG	Broker	Local-market ETFs	https://anchoriaonline.com/introducing-a-trade-by-anchoria-securities-ltd/
+Valmon Securities	NG	Broker	Local-market ETFs	https://valmonsecurities.com/etrade/
+Mainstreet Bank Securities	NG	Broker	Local-market ETFs	https://mainstreetbanksecurities.com/mbsl-e-trade/
+Greenwich Securities	NG	Broker	Local-market ETFs	https://www.greenwichbankgroup.com/wp-content/uploads/2025/07/ORDER-HANDLING-AND-BEST-EXECUTION-POLICY-1.pdf
 Hisa	KE	Neobroker	Local + US ETFs	https://hisa.co/
 Standard Investment Bank	KE	Broker	Local-market ETFs	https://sib.co.ke/
 AIB-AXYS Africa	KE	Broker	Global ETFs / ETPs	https://ww2.aib-axysafrica.com/
@@ -470,6 +993,14 @@ Genghis Capital	KE	Broker	Local-market ETFs	https://genghis-capital.com/index.ph
 Faida Investment Bank	KE	Broker	Local-market ETFs	https://fib.co.ke/online-trading/
 Kingdom Securities	KE	Broker	Local-market ETFs	https://kingdomsecurities.co.ke
 Sterling Capital	KE	Broker	Local-market ETFs	https://sterlingib.co.ke/
+Suntra Investments	KE	Broker	Local-market ETFs	https://suntra.co.ke/suntra-faqs/
+NCBA Investment Bank	KE	Broker	Local-market ETFs	https://ncbagroup.com/investment-banking/online-share-trading/
+Ziidi Trader	KE	Neobroker	Local-market ETFs	https://www.safaricom.co.ke/media-center-landing/terms-and-conditions/terms-and-conditions-for-the-ziidi-trader-product
+OMS Africa	KE	Broker	Local-market ETFs	https://www.omsafrica.co.ke/investor-guide
+SBG Securities	KE	Broker	Local-market ETFs	https://www.sbgsecurities.co.ke/sbgsecurities/securities/products-and-services/sbgsecurites-FAQs
+Francis Drummond	KE	Broker	Local-market ETFs	https://drummond.co.ke/online-trading/
+ABC Capital	KE	Broker	Local-market ETFs	https://www.abccapital.co.ke/securities-brokerage/
+Pergamon Investment Bank	KE	Broker	Local-market ETFs	https://pib.africa/client-resources/
 Thndr	EG	Neobroker	Local + US ETFs	https://thndr.app/
 EFG Hermes ONE	EG	Broker	Local-market ETFs	https://www.efghermesone.com/openaccount
 CI Capital	EG	Broker	Local-market ETFs	https://www.cicapital.com/business_lines/securities-brokerage/
@@ -478,21 +1009,57 @@ Mubasher Trade Egypt	EG	Broker	Local-market ETFs	https://egypt.mubashertrade.com
 Naeem Brokerage	EG	Broker	Local-market ETFs	https://egy.naeemonline.com/
 Al Ahly Pharos	EG	Broker	Local-market ETFs	https://pharoslive.com/
 Prime Holding	EG	Broker	Local-market ETFs	https://primeholdingco.com/securities-brokerage/
+Arabeya Online	EG	Broker	Local-market ETFs	https://www.arabeyaonline.com/en/category/frequently-asked-questions/online-trading/
+HC Securities	EG	Broker	Local-market ETFs	https://www.hc-si.com/hc-online
+Pharaonic Securities	EG	Broker	Local-market ETFs	https://www.pharaonicse.com/Services.aspx
+Arab African International Securities	EG	Broker	Local-market ETFs	https://www.aaisecurities.com/ourservices.aspx
+Okaz	EG	Broker	Local-market ETFs	https://www.okazinvest.com/okaz/AboutOnlineTrading.aspx
+Sigma Capital	EG	Broker	Local-market ETFs	https://www.sigma-cap.com/main/system_forms.download?file=Consolidated+Account+Opening+Form+AR.pdf&form_code_p=102
+Cairo Capital Securities	EG	Broker	Local-market ETFs	https://play.google.com/store/apps/details?id=tea.mobile.view.cairoCapitalApp&hl=en
+Ostoul Securities	EG	Broker	Local-market ETFs	https://play.google.com/store/apps/details?id=tea.mobile.view.ostoulApp&hl=en
+Tycoon Securities	EG	Broker	Local-market ETFs	https://play.google.com/store/apps/details?id=tea.mobile.view.tycoonApp&hl=en
+Faisal Securities Brokerage	EG	Broker	Local-market ETFs	https://fbcbrokerage.com/faisalclick/
 Wafa Bourse	MA	Broker	Local-market ETFs	https://www.attijariwafabank.com/fr/marques-et-filiales-marocaines/wafabourse
 CFG Bank	MA	Bank	Local-market ETFs	https://www.cfgbank.com/particuliers/notre-offre/bourse/bourse-en-ligne-7/
 BMCE Capital Bourse	MA	Broker	Local-market ETFs	https://www.bmcecapital.com/actualites/la-nouvelle-application-mobile-qui-reinvente-lexperience-dinvestissement-en-bourse
+Upline Securities	MA	Broker	Local-market ETFs	https://particulier.groupebcp.com/fr/Pages/bourse-en-ligne.aspx
+Valoris Securities	MA	Broker	Local-market ETFs	https://www.valorisgroup.ma/?Id=804&lang=fr
+Red Med Securities	MA	Broker	Local-market ETFs	https://ads-landingpage.redmedsecurities.com/
 Tunisie Valeurs	TN	Broker	Local-market ETFs	https://www.tunisievaleurs.com/faq/
+Banque de Tunisie	TN	Bank	Local-market ETFs	https://www.bt.com.tn/bt-bourse
+Maxula Bourse	TN	Broker	Local-market ETFs	http://www.maxulabourse.com.tn/compte-libre
+Amen Invest	TN	Broker	Local-market ETFs	https://play.google.com/store/apps/details?id=com.TTA.AI&hl=en
+MAC SA	TN	Broker	Local-market ETFs	https://play.google.com/store/apps/details?id=com.tta.macsa&hl=en
+Arab Financial Consultants	TN	Broker	Local-market ETFs	https://www.afc.com.tn/intermediation-boursiere
 Banque Extérieure d'Algérie	DZ	Bank	Local-market ETFs	https://bea.dz/bourse
 Al Arabi Investment Group	JO	Broker	Local-market ETFs	https://ab-invest.net/en/Trading-Platforms-02
 United Arab Jordan Company	JO	Broker	Local-market ETFs	https://www.uajib.com/en/service/trading-via-the-ajib-brokerage-application
+United Financial Investments	JO	Broker	Local-market ETFs	https://apps.apple.com/jo/app/ufico-equities/id6451192627
+Elite Financial Services	JO	Broker	Local-market ETFs	https://elite-fs.com/en/mobile-trade/
+Misk Financial Brokerage	JO	Broker	Local-market ETFs	https://www.safwabank.com/en/product/misc/
+Awraq Investments	JO	Broker	Local-market ETFs	https://apps.apple.com/jo/app/awraq-trader/id1644260805
+ABC Investments	JO	Broker	Local-market ETFs	https://ase.com.jo/en/Membership/Membership-Services/Online-Trading
+Rum Financial Brokerage	JO	Broker	Local-market ETFs	https://www.ruminvest.com/%D8%A7%D9%84%D8%A3%D8%B3%D9%87%D9%85-%D8%A7%D9%84%D9%85%D8%AD%D9%84%D9%8A%D8%A9-%D8%A8%D9%88%D8%B1%D8%B5%D8%A9-%D8%B9%D9%85%D8%A7%D9%86/
+Bank al Etihad	JO	Bank	Local-market ETFs	https://www.bankaletihad.com/en/knowledge-hub/personal/trading-stocks/
+Excel for Financial Investment	JO	Broker	Local-market ETFs	https://excelinvest.jo/en/internet-trading
+Delta Financial Investments	JO	Broker	Local-market ETFs	https://etrade.deltajo.net/
+Al Nadwa	JO	Broker	Local-market ETFs	https://etrade.ndwa.com.jo/Login.aspx
 amana	LB	Neobroker	US ETFs / ETNs	https://amana.app/lb/products/us-shares
+FFA Private Bank	LB	Bank	Global ETFs / ETPs	https://www.ffaprivatebank.com/online-trading.php
 IC Securities	GH	Broker	Local-market ETFs	https://onboarding.ic.africa
 Databank Brokerage	GH	Broker	Local-market ETFs	https://www.databankgroup.com/equity-investing/
 EDC Stockbrokers	GH	Bank	Local-market ETFs	https://ecobank.com/gh/corporate-banking/edc
+Black Star	GH	Broker	Local-market ETFs	https://blackstargroup.ai/terms
+CAL Brokers	GH	Broker	Local-market ETFs	https://calbrokersghana.com/
+CDH Securities	GH	Broker	Local-market ETFs	https://securities.cdhgroup.co/
 Société Générale Capital Securities West Africa	CI	Broker	Local-market ETFs	https://particuliers.societegenerale.ci/fileadmin/user_upload/SG_Cote_ivoire/PDF/GUIDE_UTILISATEUR_E-BOURSE.pdf
 Bridge Securities	CI	Broker	Local-market ETFs	https://www.bridge-securities.com/centre-dinformation/faq
+BOA Capital Securities	CI	Broker	Local-market ETFs	https://boaksdirect.com/mon-carnet.html
+NSIA Capital	CI	Broker	Local-market ETFs	https://nsiacapital.com/nsia-capital-online/
+CGF Bourse	SN	Broker	Local-market ETFs	https://www.cgfaccess.com/
 MCB Securities	MU	Bank	Global ETFs / ETPs	https://mcb.mu/personal/investments/brokerage-investments
 SBM Securities	MU	Bank	Global ETFs / ETPs	https://nbfc.sbmgroup.mu/trading-and-structuring/join-us
+mySEM	MU	Neobroker	Local-market ETFs	https://www.stockexchangeofmauritius.com/media/7323/mysem-specification.pdf
 IJG Securities	NA	Broker	Local-market ETFs	https://ijg.net/stockbroking/
 Vertex International Securities	TZ	Broker	Local-market ETFs	https://vertex.co.tz/
 DSE Hisa Kiganjani	TZ	Neobroker	Local-market ETFs	https://play.google.com/store/apps/details?id=com.datavending_app.dsedatavending
@@ -519,6 +1086,12 @@ Trading 212 AU	AU	Neobroker	UCITS ETFs / ETCs	https://www.trading212.com/
 Bendigo Invest Direct	AU	Bank	Local + Global ETFs	https://www.bendigobank.com.au/personal/investing/share-trading/
 Marketech Focus	AU	Broker	Local-market ETFs	https://onboarding.marketech.com.au/
 Ord Minnett	AU	Broker	Local + Global ETFs	https://www.ordminnett.com.au/
+St.George Directshares	AU	Bank	Local + US ETFs	https://www.stgeorge.com.au/personal/investments/directshares-online-broking
+Sequoia Direct	AU	Broker	Local + US ETFs	https://www.sequoiadirect.com.au/services/trading-shares/
+HALO Technologies	AU	Broker	Local + US ETFs	https://halo-technologies.com/product/invest
+IG Australia	AU	Broker	Local + US ETFs	https://www.ig.com/au/help-and-support/articles/587147-how-does-share-trading-work
+ThinkMarkets	AU	Broker	Local + US ETFs	https://www.thinkmarkets.com/au/cash-equities/
+Totality	AU	Broker	Local-market ETFs	https://www.totality.com.au/products/stocks
 Sharesies	NZ	Neobroker	Local + US ETFs	https://www.sharesies.nz
 Hatch Invest	NZ	Neobroker	US ETFs / ETNs	https://hatchinvest.nz
 ASB Securities	NZ	Bank	Global ETFs / ETPs	https://www.asb.co.nz/asb-securities
@@ -544,6 +1117,9 @@ Plus500 Singapore	SG	Broker	Global ETFs / ETPs	https://www.plus500.com/
 Syfe	SG	Neobroker	Global ETFs / ETPs	https://www.syfe.com/create-account
 Maybank Securities Singapore	SG	Bank	Global ETFs / ETPs	https://www.maybank.com/investment-banking/sg/services/trading/etf.page
 KGI Securities Singapore	SG	Broker	Global ETFs / ETPs	https://www.kgi.sg/securities/stocks
+Standard Chartered Singapore	SG	Bank	Global ETFs / ETPs	https://www.sc.com/sg/wealth/investment/online-trading/
+HSBC Singapore	SG	Bank	Global ETFs / ETPs	https://www.hsbc.com.sg/wealth/investments/products/securities-trading/
+Citibank Singapore	SG	Bank	Global ETFs / ETPs	https://www.citibank.com.sg/investments/investment-products/brokerage
 Futu / moomoo HK	HK	Neobroker	Global ETFs / ETPs	https://www.futuhk.com/en
 Futu / moomoo HK	HK	Neobroker	Global ETFs / ETPs	https://www.futunn.com/en
 Tiger Brokers HK	HK	Neobroker	Global ETFs / ETPs	https://www.itiger.com/hk/
@@ -567,6 +1143,21 @@ Bank of East Asia	HK	Bank	Local-market ETFs	https://www.hkbea.com/html/online/de
 Chief Securities	HK	Broker	Local-market ETFs	https://www.chiefgroup.com.hk/hk/securities/hk-charges
 Victory Securities	HK	Broker	Global ETFs / ETPs	https://www.victorysec.com.hk/en/solutions/securities
 Valuable Capital	HK	Broker	Local-market ETFs	https://www.valuable.com.hk/help/topic2-hong-kong-stock-trading-fees
+Eddid Securities	HK	Broker	Global ETFs / ETPs	https://www.eddid.com.hk/sf/hk-stock-faq/
+CMB International Securities	HK	Broker	Global ETFs / ETPs	https://www.cmbi.com.hk/en-US/guide
+Get Nice Securities	HK	Broker	Global ETFs / ETPs	https://getnicefg.com.hk/mobile-app
+Emperor Securities	HK	Broker	Global ETFs / ETPs	https://www.emperorcapital.com/en/business-overview/global-investment-product/hk-stocks/
+Dah Sing Bank	HK	Bank	Global ETFs / ETPs	https://www.dahsing.com/html/en/wealth_management/stock/mobile_securities_faq.html
+Well Link Securities	HK	Broker	Global ETFs / ETPs	https://www.wlsec.com/stock
+KGI Asia	HK	Broker	Global ETFs / ETPs	https://www.kgi.com.hk/en/products-overview/global-market/hong-kong-stocks
+Guotai Junan Securities (Hong Kong)	HK	Broker	Global ETFs / ETPs	https://www.gtjai.com/cl_notice/tradenote_en.htm
+Hafoo Securities	HK	Broker	Global ETFs / ETPs	https://www.hafoo.com.hk/hk/hant/help/trade-hk
+Fosun International Securities	HK	Broker	Global ETFs / ETPs	https://www.fosunwealth.com/zhTc/global
+BOCOM International Securities	HK	Broker	Global ETFs / ETPs	https://www.bocomgroup.com/BankCommSite/shtml/jygj/en/16639/16665/16684/list.shtml?channelId=16639
+China Construction Bank (Asia)	HK	Bank	Global ETFs / ETPs	https://online.asia.ccb.com/PersonalHKWeb/resources/hongkong/personal/global/faq_securities.html
+First Shanghai Securities	HK	Broker	Global ETFs / ETPs	https://www.mystockhk.com/category.aspx?NodeID=13
+Celestial Securities	HK	Broker	Local-market ETFs	https://www.cfsg.com.hk/eng/Security/TradingPlatform
+Yuanta Securities (Hong Kong)	HK	Broker	Global ETFs / ETPs	https://www.yuanta.com.hk/Portal/hk/IR30/IR3004/IR300401/
 SBI	JP	Broker	Local + US ETFs	https://www.sbisec.co.jp/
 Rakuten Japan	JP	Broker	Local + US ETFs	https://www.rakuten-sec.co.jp/web/account/rsec.html
 Monex Japan	JP	Broker	Local + US ETFs	https://www.monex.co.jp/
@@ -589,6 +1180,32 @@ Tachibana Securities	JP	Broker	Local-market ETFs	https://www.e-shiten.jp/Torihik
 Marusan Securities	JP	Broker	Local-market ETFs	https://www.marusan-sec.co.jp/torihiki/marusannet/userguide/marusannet_09/
 Tokai Tokyo Securities	JP	Broker	Local-market ETFs	https://www.tokaitokyo.co.jp/kantan/online/howto_order/
 Toyo Securities	JP	Broker	Local-market ETFs	https://www.toyo-sec.co.jp/service/hometrade/trading-rule/domestic/
+Aizawa Securities	JP	Broker	Local-market ETFs	https://www.aizawa.co.jp/documents/service/tool/mf_guide.pdf
+Mito Securities	JP	Broker	Local-market ETFs	https://www.mito.co.jp/mitonet/starmf/demo/pdf/mfguide.pdf
+Ando Securities	JP	Broker	Local-market ETFs	https://www.ando-sec.co.jp/services/internet/rule/05_genbtsu.html
+Naito Securities	JP	Broker	Local-market ETFs	https://www.naito-sec.co.jp/rule/nisa/trade_japan.html
+Yutaka Securities	JP	Broker	Local-market ETFs	https://www.yutaka-sec.co.jp/net/torihiki/rule/order.php
+DMM.com Securities	JP	Broker	Local-market ETFs	https://kabu.dmm.com/tool/quick_guide/pc_standard/stock_purchase/
+Musashi Securities	JP	Broker	Local-market ETFs	https://www.treasurenet.jp/guide/m-2-02.html
+Hamagin Tokai Tokyo Securities	JP	Broker	Local-market ETFs	https://www.hamagintt.co.jp/service/online/
+Mitsubishi UFJ Morgan Stanley Securities	JP	Broker	Local-market ETFs	https://www.sc.mufg.jp/trade/int_trade/appeal/index.html
+FFG Securities	JP	Broker	Local-market ETFs	https://www.ffg-sec.co.jp/service/internet_trade/detail/service/
+Chibagin Securities	JP	Broker	Local-market ETFs	https://www.chibagin-sec.co.jp/service/onlinetrade/about.html
+Shizugin TM Securities	JP	Broker	Local-market ETFs	https://www.shizugintm.co.jp/help2/kokunai/index.html
+Hyakugo Securities	JP	Broker	Local-market ETFs	https://www.105sec.co.jp/service/services/
+Hirogin Securities	JP	Broker	Local-market ETFs	https://www.hirogin-sec.co.jp/service/bank-account/net.html
+Juroku TT Securities	JP	Broker	Local-market ETFs	https://www.16ttsec.co.jp/service/direct/
+Hachijuni Securities	JP	Broker	Local-market ETFs	https://www.82sec.co.jp/trade/service.php
+Chugin Securities	JP	Broker	Local-market ETFs	https://www.chugin-sec.co.jp/financial-commodity/stock.html
+Hokuhoku TT Securities	JP	Broker	Local-market ETFs	https://www.hokuhokutt.co.jp/service/direct/
+Daishi Hokuetsu Securities	JP	Broker	Local-market ETFs	https://www.dh-sec.co.jp/home_trade/
+Kyushu FG Securities	JP	Broker	Local-market ETFs	https://www.kyushu-fg-sec.co.jp/service/onlinetrade/contents/
+Nishi-Nippon City TT Securities	JP	Broker	Local-market ETFs	https://www.nctt.co.jp/online/faq/faq08_login.html
+J Trust Global Securities	JP	Broker	Local-market ETFs	https://www.jtg-sec.co.jp/bluesky_net/rule/genbutu/order.htm
+Shikoku Alliance Securities	JP	Broker	Local-market ETFs	https://www.shikoku-alliance-sec.co.jp/onlinetrade/
+Hokuyo Securities	JP	Broker	Local-market ETFs	https://www.hokuyo-sec.co.jp/online/service/
+Imamura Securities	JP	Broker	Local-market ETFs	https://www.imamura.co.jp/service/iroot/haccyu.html
+OKB Securities	JP	Broker	Local-market ETFs	https://www.okb-sec.co.jp/service/onlinetrade/contents/
 Kiwoom Securities	KR	Broker	Local + US ETFs	https://www.kiwoom.com/m/customer/acctopen/VAcctOpenInfoView
 Mirae Asset Securities	KR	Broker	Local + US ETFs	https://securities.miraeasset.com/mka/mka1001/n01.do
 Samsung Securities	KR	Broker	Local + US ETFs	https://www.samsungpop.com/ux/kor/customer/online/registonlineaccount/online0.do
@@ -609,6 +1226,18 @@ Kyobo Securities	KR	Broker	Local-market ETFs	https://m.iprovest.com/weblogic/Bus
 SK Securities	KR	Broker	Local-market ETFs	https://www.sks.co.kr/main/customer/static/CU_11001_T02.htm
 Yuanta Securities Korea	KR	Broker	Global ETFs / ETPs	https://bank.myasset.com/myasset/static/customer/marketing/CU_0301000_P1.jsp
 Hyundai Motor Securities	KR	Broker	Local-market ETFs	https://www.hmsec.com/trading/h_sol/h_sol.to?tab=7
+iM Securities	KR	Broker	Local + US ETFs	https://www.imfnsec.com/t_cykhan_plus/help/1200.html
+IBK Securities	KR	Broker	Local + US ETFs	https://m.ibks.com/ikd/IKD060101.do
+DB Securities	KR	Broker	Local + US ETFs	https://www.dbsec.co.kr/util/authcenter/ac_SmartOut_wrk.do
+BNK Investment & Securities	KR	Broker	Local + US ETFs	https://www.bnkfn.co.kr/service/orderinfo.jsp
+Hanyang Securities	KR	Broker	Local + US ETFs	https://www.hygood.co.kr/doc/pdf/20260402.pdf
+Woori Investment Securities	KR	Broker	Local + US ETFs	https://fundsupermarket.wooriib.com/fmc/FMC3090002/main.do
+Sangsangin Investment & Securities	KR	Broker	Local + US ETFs	https://www.sangsanginib.com/info/customer06_1View
+Cape Investment & Securities	KR	Broker	Local + US ETFs	https://www.capefn.com/mobileWeb/customer/MGF-030000.do
+Leading Investment & Securities	KR	Broker	Local + US ETFs	http://www.leading.co.kr/download?atchFileId=FILE_000000000073202
+Yuhwa Securities	KR	Broker	Local + US ETFs	https://www.yhs.co.kr/html/37
+Shinyoung Securities	KR	Broker	Local + US ETFs	https://play.google.com/store/apps/details?id=com.shinyoung.mts&hl=en
+Bookook Securities	KR	Broker	Local + US ETFs	http://www.bookook.co.kr/view/customers/customers_1
 Yuanta Securities	TW	Broker	Local-market ETFs	https://www.yuanta.com.tw/
 Fubon Securities	TW	Broker	Local-market ETFs	https://www.fubon.com/securities/open-now/
 Cathay Securities	TW	Broker	Local-market ETFs	https://www.cathaysec.com.tw/cathaysec/CustomerService/OpenAccount/securties.aspx
@@ -626,6 +1255,21 @@ Taishin Securities	TW	Broker	Local-market ETFs	https://www.tssco.com.tw/open-acc
 First Securities	TW	Broker	Local-market ETFs	https://www.firstsec.com.tw/DD/DF/eWinnerUserGuideHTML5/html/C02-Trade.htm
 Hua Nan Securities	TW	Broker	Local-market ETFs	https://www.entrust.com.tw/upload/entrust/tradingPlatform/iPhone_teaching.pdf
 IBF Securities	TW	Broker	Local-market ETFs	https://www.ibfs.com.tw/trade/time.aspx
+Horizon Securities	TW	Broker	Local-market ETFs	https://www.honsec.com.tw/service/e_order/network/securities.aspx
+Concord Securities	TW	Broker	Local-market ETFs	https://stock.concords.com.tw/ticker/download/%E5%BA%B7%E5%92%8C%E6%8E%8C%E5%85%88%E6%A9%9FiPhone%E6%93%8D%E4%BD%9C%E6%89%8B%E5%86%8A.pdf
+Taiwan Cooperative Securities	TW	Broker	Local-market ETFs	https://friendly.tcfhc-sec.com.tw/Home/Newhand
+Grand Fortune Securities	TW	Broker	Local-market ETFs	https://www.gfortune.com.tw/Static/%E9%9B%BB%E5%AD%90%E4%BA%A4%E6%98%93/index.html
+BankTaiwan Securities	TW	Broker	Local-market ETFs	https://www.twfhcsec.com.tw/Home/faq
+德信綜合證券	TW	Broker	Local-market ETFs	https://www.rsc.com.tw/rsc_rwd/Content/protoco/daqRSC.html
+Good Finance Securities	TW	Broker	Local-market ETFs	https://www.tcstock.com.tw/web/shares_description.pdf
+Taichung Bank Securities	TW	Broker	Local-market ETFs	https://www.tcbs.com.tw/assets/pdfs/Broker/Download/%E5%A4%A7%E8%B4%8F%E5%AE%B6%E7%B3%BB%E7%B5%B1_%E6%93%8D%E4%BD%9C%E6%89%8B%E5%86%8A_v1.0%E7%89%88.pdf
+Fushan Securities	TW	Broker	Local-market ETFs	https://www.fushan-ewin.com.tw/CustomService.html
+Shin Kong Securities	TW	Broker	Local-market ETFs	https://www.skis.com.tw/CusService_WebAPI/api/file/9a42a62057bf48b89aeac609f8622ec3
+New Hundred King Securities	TW	Broker	Local-market ETFs	https://168.nhks.com.tw/#/login
+Chang Hwa Bank Securities	TW	Bank	Local-market ETFs	https://iwin.chb.com.tw/chbstk/downloads/IWIN_IOS.pdf
+Sunny Securities	TW	Broker	Local-market ETFs	https://www.sunnysec.com.tw/files/GPMhelp.pdf
+Pocket Securities	TW	Neobroker	Local-market ETFs	https://www.pocket.tw/school/articles/5349/
+Oriental Securities	TW	Broker	Local-market ETFs	https://www.osc.com.tw/download/%E4%BA%9E%E6%9D%B1E%E6%8C%87%E8%B3%BAIphon.Android%E6%93%8D%E4%BD%9C%E6%89%8B%E5%86%8A1120424.pdf
 Zerodha	IN	Broker	Local-market ETFs	https://zerodha.com/open-account/
 Interactive Brokers India	IN	Broker	Global ETFs / ETPs	https://www.interactivebrokers.co.in/
 Angel One	IN	Broker	Local-market ETFs	https://www.angelone.in/open-demat-account
@@ -681,6 +1325,19 @@ Jainam Broking	IN	Broker	Local-market ETFs	https://www.jainam.in/jlite/
 Nirmal Bang	IN	Broker	Local-market ETFs	https://www.nirmalbang.com/knowledge-base-odin.aspx
 Share India	IN	Broker	Local-market ETFs	https://www.shareindia.com/knowledge-center/trading-account/understanding-the-schedule-order-feature-on-share-india
 Stoxkart	IN	Broker	Local-market ETFs	https://www.stoxkart.com/stocks
+Findoc	IN	Broker	Local-market ETFs	https://www.findoc.com/stock-trading
+Navia	IN	Broker	Local-market ETFs	https://navia.co.in/
+BlinkX	IN	Neobroker	Local-market ETFs	https://blinkx.in/
+Lemonn	IN	Neobroker	Local-market ETFs	https://lemonn.co.in/trading-app/
+Reliance Securities	IN	Broker	Local-market ETFs	https://www.reliancesmartmoney.com/Insights/classroom-detail/trading-products
+Way2Wealth	IN	Broker	Local-market ETFs	https://www.way2wealth.com/offerings/online-trading/
+Marwadi Shares and Finance	IN	Broker	Local-market ETFs	https://www.marwadionline.com/service/online-trading
+Stocko	IN	Broker	Local-market ETFs	https://stocko.in/support/what-can-cause-a-short-delivery/
+Swastika Investmart	IN	Broker	Local-market ETFs	https://helpdesk.swastika.co.in/portal/en/kb/swastika/trading-orders
+Ashika Stock Services	IN	Broker	Local-market ETFs	https://ashikawealth.in/platform/
+Definedge Securities	IN	Broker	Local-market ETFs	https://www.definedgesecurities.com/faqs/tradepoint/
+Steel City Securities	IN	Broker	Local-market ETFs	https://www.steelcitynettrade.com/StaticContent/Terms-Of-Use.aspx
+Globe Capital	IN	Broker	Local-market ETFs	https://globecapital.com/faqs/
 InnovestX	TH	Broker	Local + US ETFs	https://www.innovestx.co.th/products/stock/Thai-Stock
 Kasikorn Securities	TH	Broker	Local-market ETFs	https://www.kasikornsecurities.com/
 Bualuang Securities	TH	Broker	Local-market ETFs	https://www.bualuang.co.th/en/account-opening
@@ -695,6 +1352,19 @@ KGI Securities Thailand	TH	Broker	Local-market ETFs	https://www.kgieworld.co.th/
 ttb wealth securities	TH	Broker	Local-market ETFs	https://www.ttbwealth.co.th/home/th
 Tisco Securities	TH	Broker	Local-market ETFs	https://www.tiscosec.com/e-open-account-ejip/
 Daol Securities	TH	Broker	Local-market ETFs	https://www.daolsecurities.co.th/account-opening/openaccount-with-daol-sec
+Globlex Securities	TH	Broker	Local-market ETFs	https://www.globlex.co.th/equity.aspx
+GMO-Z.com Securities	TH	Broker	Local-market ETFs	https://th.trade.z.com/
+Beyond Securities	TH	Broker	Local-market ETFs	https://www.beyondsecurities.co.th/openaccount
+Trinity Securities	TH	Broker	Local-market ETFs	https://www.trinitythai.com/en/Faqs/Group/2
+Land and Houses Securities	TH	Broker	Local-market ETFs	https://www.lhsec.co.th/
+Yuanta Securities (Thailand)	TH	Broker	Local-market ETFs	https://www.yuanta.co.th/trade/tools/
+Krungthai XSpring Securities	TH	Broker	Local-market ETFs	https://media.krungthaixspring.com/docs/th/services/Website_manual_TH.pdf
+AIRA Securities	TH	Broker	Local-market ETFs	https://www.aira.co.th/trading_technology.aspx?lang=en
+ASL Securities	TH	Broker	Local-market ETFs	https://www.aslsecurities.com/aboutus.aspx
+Kingsford Securities	TH	Broker	Local-market ETFs	https://kingsfordsec.com/Product/Page/26/28?lang=en
+Kiatnakin Phatra Securities	TH	Broker	Local-market ETFs	https://wealthmanagement.kkpfg.com/landingpage/WhyPhatraEdge/FAQ
+SBI Thai Online Securities	TH	Broker	Local-market ETFs	https://www.sbito.co.th/Online_Trading_Detail.aspx?id=3
+Webull Thailand	TH	Neobroker	Local-market ETFs	https://www.webull.co.th/en/platforms
 Rakuten MY	MY	Broker	Local + US ETFs	https://rakutentrade.my/
 Maybank Investment Bank	MY	Bank	Local-market ETFs	https://www.maybank2u.com.my/maybank2u/malaysia/en/personal/wealth/share_trading/online_stocks.page
 CGS International Securities Malaysia	MY	Broker	Local-market ETFs	https://www.cgsi.com.my/info/account-opening?lang=EN
@@ -706,6 +1376,13 @@ PublicInvest	MY	Bank	Local-market ETFs	https://www.publicinvestbank.com/pbswecos
 Kenanga Trade	MY	Bank	Local-market ETFs	https://www.kentrade.com.my/open-account
 UOB Kay Hian Malaysia	MY	Broker	Global ETFs / ETPs	https://cob.utrade.com.my/openaccount
 FSMOne MY	MY	Broker	Global ETFs / ETPs	https://www.fsmone.com.my/pricing/stocks
+Affin Hwang Investment Bank	MY	Bank	Local-market ETFs	https://einvest.affinhwang.com/gcAHIBPlus/login/
+AmEquities	MY	Bank	Local-market ETFs	https://www.amequities.my/home/equity-markets
+TA Securities	MY	Broker	Local-market ETFs	https://www.tasecurities.com.my/stockbroking/
+Mercury Securities	MY	Broker	Local-market ETFs	https://www.mercurysecurities.com.my/faq/
+Apex Securities	MY	Broker	Local-market ETFs	https://apexsecurities.com.my/
+Berjaya Securities	MY	Broker	Local-market ETFs	https://www.berjayasecurities.com.my/online-mobile-trading/
+BIMB Securities	MY	Broker	Local-market ETFs	https://www.bisonline.com.my/Ecos/agreement.aspx
 Stockbit Sekuritas	ID	Neobroker	Local-market ETFs	https://stockbit.com/
 Ajaib	ID	Neobroker	Local-market ETFs	https://ajaib.co.id/
 Indo Premier (IPOT)	ID	Broker	Local-market ETFs	https://www.indopremier.com/
@@ -720,6 +1397,35 @@ BRI Danareksa Sekuritas	ID	Broker	Local-market ETFs	https://eform.brights.co.id/
 Phillip Sekuritas Indonesia	ID	Broker	Local-market ETFs	https://www.poems.co.id/Home/BukaAkun
 MNC Sekuritas	ID	Broker	Local-market ETFs	https://www.mncsekuritas.id/pages/online-trading-overview/
 Trimegah Sekuritas	ID	Broker	Local-market ETFs	https://eform.trimegah.id/nmb/
+SimInvest	ID	Broker	Local-market ETFs	https://help.siminvest.id/category/saham/transaksi-saham/
+Samuel Sekuritas	ID	Broker	Local-market ETFs	https://star.id/faq
+Panin Sekuritas	ID	Broker	Local-market ETFs	https://pans.co.id/reguler-online-trading
+Sucor Sekuritas	ID	Broker	Local-market ETFs	https://www.sucorsekuritas.com/member/faq
+Mega Capital Sekuritas	ID	Broker	Local-market ETFs	https://www.megaonlinetrading.id/
+Henan Putihrai Sekuritas	ID	Broker	Local-market ETFs	https://henanputihrai.com/hpx-syariah/
+Binaartha Sekuritas	ID	Broker	Local-market ETFs	https://www.binaartha.com/faq.html
+NH Korindo Sekuritas Indonesia	ID	Broker	Local-market ETFs	https://doc.nhsec.co.id/screen_hts.html
+Bahana Sekuritas	ID	Broker	Local-market ETFs	https://bahanasekuritas.id/frequently-asked-questions/
+Phintraco Sekuritas	ID	Broker	Local-market ETFs	https://phintracosekuritas.com/pertanyaan-umum/
+Reliance Sekuritas	ID	Broker	Local-market ETFs	https://reliancesekuritas.com/menu/565/reliance-online-trading-relitrade
+FAC Sekuritas	ID	Broker	Local-market ETFs	https://www.facsekuritas.co.id/pedoman
+KB Valbury Sekuritas	ID	Broker	Local-market ETFs	https://www.kbvalbury.com/akun-reguler
+Profindo Sekuritas	ID	Broker	Local-market ETFs	https://proclick.profindo.com/page/platform
+Minna Padi Sekuritas	ID	Broker	Local-market ETFs	https://www.minnapadi.com/faq
+Aldiracita Sekuritas	ID	Broker	Local-market ETFs	https://aldiracita.com/equity-brokerage/
+Artha Sekuritas	ID	Broker	Local-market ETFs	https://www.arthasekuritas.com/manualaset/manualasetmobile.pdf
+KAF Sekuritas	ID	Broker	Local-market ETFs	https://www.kafsekuritas.co.id/id/faqs
+Victoria Sekuritas Indonesia	ID	Broker	Local-market ETFs	https://victoria-sekuritas.co.id/faq/
+Ciptadana Sekuritas Asia	ID	Broker	Local-market ETFs	https://pinepick.ciptadana.com/
+Kiwoom Sekuritas Indonesia	ID	Broker	Local-market ETFs	https://www.kiwoom.co.id/cs/getFAQ
+Yuanta Sekuritas Indonesia	ID	Broker	Local-market ETFs	https://www.yuanta.co.id/inc/uploads/content/RIPLAY.pdf
+CGS International Sekuritas Indonesia	ID	Broker	Local-market ETFs	https://cgsi.co.id/uploads/USER_GUIDE_CGS_i_Trade_MOBILE_APP_2025_40ae9aa05f.pdf
+bjb Sekuritas	ID	Broker	Local-market ETFs	https://bjbsekuritas.co.id/download/1
+Lotus Andalan Sekuritas	ID	Broker	Local-market ETFs	https://play.google.com/store/apps/details?id=id.co.lots.mobile&hl=en
+Yulie Sekuritas	ID	Broker	Local-market ETFs	https://play.google.com/store/apps/details?id=com.itmandiri.youtrade.youtrade&hl=en
+Tuntun Sekuritas	ID	Neobroker	Local-market ETFs	https://play.google.com/store/apps/details?hl=en&id=com.tuntun.tt
+INA Sekuritas	ID	Broker	Local-market ETFs	https://play.google.com/store/apps/details?hl=en&id=rb.uno.inasekuritas
+Buana Capital Sekuritas	ID	Broker	Local-market ETFs	https://www.buanacapital.com/tcid-legacy
 COL Financial	PH	Broker	Local-market ETFs	https://www.colfinancial.com/ape/final2/home/open_an_account.asp
 First Metro Securities	PH	Broker	Local-market ETFs	https://www.firstmetrosec.com.ph/fmsec/
 BPI Trade	PH	Bank	Local-market ETFs	https://new.bpitrade.com/open-a-trade-account/
@@ -730,6 +1436,21 @@ DragonFi	PH	Neobroker	Local-market ETFs	https://www.dragonfi.ph/register
 BDO Securities	PH	Bank	Local-market ETFs	https://www.bdo.com.ph/bdo-securities/online-trading
 RCBC	PH	Bank	Local-market ETFs	https://www.rcbcsec.com/registration/application_online.asp
 Maybank Securities Philippines	PH	Broker	Local-market ETFs	https://www.maybank-atrke.com/
+China Bank Securities	PH	Broker	Local-market ETFs	https://www.chinabankseconline.ph/CBSEC_DATA/
+MyTrade	PH	Broker	Local-market ETFs	https://www.mytrade.com.ph/trading-services/
+2TradeAsia	PH	Broker	Local-market ETFs	https://www.2tradeasia.com/faqs
+UTrade	PH	Broker	Local-market ETFs	https://utradeph.com/faqs/
+AAA Equities	PH	Broker	Local-market ETFs	https://aaa-equities.com.ph/faq/
+AP Securities	PH	Broker	Local-market ETFs	https://www.apsonline.com.ph/
+Landbank Securities	PH	Broker	Local-market ETFs	https://www.landbanksec.com/
+Wealth Securities	PH	Broker	Local-market ETFs	https://wealthsec.com/faqs/
+Timson Securities	PH	Broker	Local-market ETFs	https://www.timson.com.ph/trading-platform/
+Regina Capital	PH	Broker	Local-market ETFs	https://www.reginacapital.com/portal/company-profile
+Alpha Securities	PH	Broker	Local-market ETFs	https://alpha.psetradex.ph/wp-content/themes/Alpha%20Bootstrap/pdf/FREQUENTLY%20ASKED%20%20QUESTIONS-final.pdf
+Investors Securities	PH	Broker	Local-market ETFs	https://www.investorsonline.ph/
+VC Securities	PH	Broker	Local-market ETFs	https://vcsecurities.biz/faq-page/
+Globalinks Securities	PH	Broker	Local-market ETFs	https://www.globalinks.com.ph/Faqs
+Seedbox Securities	PH	Broker	Local-market ETFs	https://www.sbx.ph/faq/
 SSI iBoard	VN	Broker	Local-market ETFs	https://www.ssi.com.vn/khach-hang-ca-nhan/gioi-thieu-mo-tai-khoan
 VNDirect	VN	Broker	Local-market ETFs	https://mydgo.vndirect.com.vn/mo-tai-khoan
 VPS	VN	Broker	Local-market ETFs	https://www.vps.com.vn/
@@ -743,6 +1464,32 @@ MB Securities (MBS)	VN	Broker	Local-market ETFs	https://mbs.com.vn/mo-tai-khoan/
 KIS Vietnam	VN	Broker	Local-market ETFs	https://trading.kisvn.vn/ekyc
 Mirae Asset Securities Vietnam	VN	Broker	Local-market ETFs	https://masvn.com/register
 BIDV Securities (BSC)	VN	Broker	Local-market ETFs	https://www.bsc.com.vn/mo-tai-khoan/
+ACBS	VN	Broker	Local-market ETFs	https://acbs.com.vn/giao-dich-chung-khoan-web-trading
+VPBank Securities	VN	Broker	Local-market ETFs	https://hdsd.vpbanks.com.vn/web-neo-invest/co-so/dat-lenh-co-ban
+Saigon-Hanoi Securities	VN	Broker	Local-market ETFs	https://www.shs.com.vn/tin-tuc/nang-cap-sh-smart-app-dat-lenh-nhanh-hon-thao-tac-gon-hon-nam-tron-co-hoi-dau-tu-voi-luong-dat-lenh-tieu-chuan-moi
+Pinetree Securities	VN	Broker	Local-market ETFs	https://pinetree.vn/post/dich-vu/place_order/
+Agriseco	VN	Broker	Local-market ETFs	https://agriseco.com.vn/Supports/Trading/vi-VN
+VietinBank Securities	VN	Broker	Local-market ETFs	https://www.vbse.vn/khach-hang-ca-nhan/giao-dich-chung-khoan-3/
+Bao Viet Securities	VN	Broker	Local-market ETFs	https://www.bvsc.com.vn/en/category/services/individual-clients/support/service-manual/place-orders-by-phoneonline/
+Viet Dragon Securities	VN	Broker	Local-market ETFs	https://www.vdsc.com.vn/data/download-attached-files/hdsdidragonvn-web-667849.pdf
+Phu Hung Securities	VN	Broker	Local-market ETFs	https://www.phs.vn/san-pham-dich-vu/cong-cu-giao-dich-truc-tuyen-43
+Shinhan Securities Vietnam	VN	Broker	Local-market ETFs	https://shinhansec.com.vn/en/customer-support/faq.html
+Yuanta Securities Vietnam	VN	Broker	Local-market ETFs	https://yswinner.yuanta.com.vn/User_Guide.aspx?lang=en-us
+KB Securities Vietnam	VN	Broker	Local-market ETFs	https://kbsec.com.vn/vi/huong-dan-giao-dich.htm
+VIX Securities	VN	Broker	Local-market ETFs	https://vixs.vn/ho-tro/thuc-hien-giao-dich
+SBS Securities	VN	Broker	Local-market ETFs	https://sbsc.com.vn/ho-tro/huong-dan-su-dung-webtrading-strade/
+Tiên Phong Securities	VN	Broker	Local-market ETFs	https://tpbs.com.vn/vi/san-pham-dich-vu/dich-vu-chung-khoan/huong-dan-dang-ky-va-su-dung-phuong-thuc-xac-thuc-smart-otp
+Tan Viet Securities	VN	Broker	Local-market ETFs	https://support.tvsi.com.vn/QuestionPage?id=333
+PetroVietnam Securities	VN	Broker	Local-market ETFs	https://www.psi.vn/vi/san-pham/khach-hang-ca-nhan/dich-vu-chung-khoan/moi-gioi-chung-khoan
+HD Securities	VN	Broker	Local-market ETFs	https://hdbs.vn/en/trading-guide/
+SmartInvest Securities	VN	Broker	Local-market ETFs	https://www.aas.com.vn/Content/Archive/FileAttact/4_Dat_Huy_Sua%20Lenh.pdf
+Everest Securities	VN	Broker	Local-market ETFs	https://www.eves.com.vn/san-pham-dich-vu/khach-hang-ca-nhan/co-phieu/
+An Binh Securities	VN	Broker	Local-market ETFs	https://www.abs.vn/huong-dan-thuc-hien-ban-nhieu-ma/
+APEC Securities	VN	Broker	Local-market ETFs	https://apec.com.vn/ho-tro/huong-dan-giao-dich-co-phieu/
+DSC Securities	VN	Broker	Local-market ETFs	https://www.dsc.com.vn/kien-thuc/dau-tu-chung-khoan-tren-dien-thoai-huong-dan-chi-tiet
+Viet First Securities	VN	Broker	Local-market ETFs	https://image.vfs.com.vn/cmsupload/UG-Mobile-Trading.pdf
+AIS Securities	VN	Broker	Local-market ETFs	https://www.aisec.com.vn/transactions-online
+Guotai Junan Vietnam	VN	Broker	Local-market ETFs	https://gtht.com.vn/en/cau-hoi-thuong-gap/
 ACLEDA Bank	KH	Bank	Local-market ETFs	https://www.acledabank.com.kh/qr/toanchet-manual/trade-buy?h=0&l=eng
 PP Link Securities	KH	Broker	Local-market ETFs	https://pplinksecurities.com.kh/frequently-asked-questions/
 Canadia Securities	KH	Broker	Local-market ETFs	https://canasecurities.com.kh/faqs/
@@ -770,6 +1517,23 @@ Banco Safra	BR	Bank	Local-market ETFs	https://www.safra.com.br/investimentos/
 Guide Investimentos	BR	Broker	Local-market ETFs	https://www.guide.com.br/
 C6 Invest	BR	Neobroker	Local-market ETFs	https://www.c6bank.com.br/c6-invest/
 CM Capital	BR	Broker	Local-market ETFs	https://mkt.cmcapital.com.br/abertura-de-conta-versao-2
+Toro	BR	Broker	Local-market ETFs	https://www.toroinvestimentos.com.br/plataformas
+PagBank	BR	Bank	Local-market ETFs	https://faq.pagbank.com.br/duvida/como-comprar-ou-vender-acoes-atraves-do-aplicativo-pagbank/1579
+Nova Futura	BR	Broker	Local-market ETFs	https://www.novafutura.com.br/
+Ativa Investimentos	BR	Broker	Local-market ETFs	https://materiais.ativainvestimentos.com.br/central-conhecimento-ativa/como-realizar-uma-ordem-stop-pelo-home-broker
+Banrisul Corretora	BR	Bank	Local-market ETFs	https://www.banrisulcorretora.com.br/lxa/link/como-realizar-operacoes.html
+Warren	BR	Neobroker	Local-market ETFs	https://faq.warren.com.br/hc/pt-br/articles/360055880533-Como-compro-uma-a%C3%A7%C3%A3o
+PicPay	BR	Neobroker	Local-market ETFs	https://meajuda.picpay.com/hc/pt-br/articles/52896181711251-Como-comprar-investimentos-de-renda-vari%C3%A1vel-pelo-app-do-PicPay
+Banco Daycoval	BR	Bank	Local-market ETFs	https://blog.daycoval.com.br/o-que-e-home-broker/
+Sicredi	BR	Bank	Local-market ETFs	https://www.sicredi.com.br/site/investimentos/renda-variavel/acoes/
+CAIXA Ações Online	BR	Bank	Local-market ETFs	https://acoesonline.caixa.gov.br/sinacstatic/internet/share/pdf/regras.pdf
+Mirae Asset Brasil	BR	Broker	Local-market ETFs	https://corretora.miraeasset.com.br/platforms
+EQI Investimentos	BR	Broker	Local-market ETFs	https://eqi.com.br/renda-variavel
+Sicoob	BR	Bank	Local-market ETFs	https://www.sicoob.com.br/web/sicoob/noticias/-/asset_publisher/xAioIawpOI5S/content/id/187841825
+Terra Investimentos	BR	Broker	Local-market ETFs	https://www.terrainvestimentos.com.br/duvidas-frequentes/
+Ideal CTVM	BR	Broker	Local-market ETFs	https://www.idealctvm.com.br/pt/perguntas?categoria=categoria-faq-11
+Sofisa Direto	BR	Bank	Local-market ETFs	https://www.sofisadireto.com.br/investimentos/renda-variavel/
+Planner Corretora	BR	Broker	Local-market ETFs	https://www.planner.com.br/investimentos-para-voce/bolsa-de-valores/
 GBM+	MX	Broker	Local + US ETFs	https://gbm.com/trading/
 Actinver Trade (formerly Bursanet)	MX	Bank	Local + US ETFs	https://www.actinver.com/
 Kuspit	MX	Broker	Local-market ETFs	https://kuspit.com/
@@ -779,6 +1543,11 @@ BBVA Trader México	MX	Bank	Global ETFs / ETPs	https://www.bbva.mx/personas/prod
 Finamex	MX	Broker	Global ETFs / ETPs	https://www.finamex.com.mx/general/finamex-trading/
 Monex Casa de Bolsa	MX	Bank	Global ETFs / ETPs	https://www.monex.com.mx
 Casa de Bolsa Banorte (BeTrading)	MX	Bank	Local + US ETFs	https://www.banorte.com/Casa-de-Bolsa/BeTrading/Que-es-BeTrading.html
+AcciTrade	MX	Broker	Local-market ETFs	https://www.accitrade.com/accitrdapp/cmng/pdf/Instructivo_Operaciones_R1_130722.pdf
+Bx+	MX	Broker	Local + US ETFs	https://www.vepormas.com/fwpf/portal/documents/servicios-casa-de-bolsa-linea
+HSBC eTrading	MX	Bank	Local + US ETFs	https://www.hsbc.com.mx/digital/hsbc-etrading/
+ScotiaTrade	MX	Broker	Local + US ETFs	https://www.scotiabank.com.mx/servicios-bancarios/scotiatrade-inversiones.aspx
+Punto Casa de Bolsa	MX	Broker	Local + US ETFs	https://www.pcbws.mx/Portal/publicoNuevo/HomePublicoController/descargaDocs.go?categoria=1&idContenido=162&titulo=Punto+Trader
 InvertirOnline (IOL)	AR	Broker	ETF CEDEARs	https://www.invertironline.com/servicios/cuenta-de-inversion
 Balanz	AR	Broker	ETF CEDEARs	https://balanz.com/abrir-cuenta/
 Portfolio Personal (PPI)	AR	Broker	ETF CEDEARs	https://portfoliopersonal.com/servicios/digital
@@ -790,6 +1559,30 @@ Macro Securities	AR	Broker	ETF CEDEARs	https://www.macro.com.ar/
 Ualá	AR	Neobroker	ETF CEDEARs	https://www.uala.com.ar/inversiones
 Allaria	AR	Broker	Local + US ETFs	https://allaria.com.ar/
 Eco Valores	AR	Broker	Local + US ETFs	https://www.ecovalores.com.ar/preguntas-frecuentes.php
+IEB+	AR	Neobroker	Local-market ETFs	https://www.iebmas.com.ar/preguntas-frecuentes/
+Quicktrade	AR	Neobroker	Local-market ETFs	https://quicktrade.com.ar/preguntasfrecuentestrading/
+Santander Valores	AR	Broker	ETF CEDEARs	https://www.santander.com.ar/santander-valores
+Banco Supervielle	AR	Bank	ETF CEDEARs	https://www.supervielle.com.ar/personas/inversiones/bonos-y-acciones
+ICBC	AR	Bank	ETF CEDEARs	https://www.icbc.com.ar/personas/productos-servicios/inversiones/acciones-titulos
+Banco Provincia	AR	Bank	ETF CEDEARs	https://www.bancoprovincia.com.ar/CDN/Get/Compra_de_Acciones
+TSA Bursátil	AR	Broker	ETF CEDEARs	https://tsabursatil.com/Como-operar-online-en-el-Mercado-de-Capitales-3.note.aspx
+Max Capital	AR	Broker	ETF CEDEARs	https://ayuda.max.capital/es/articles/11044794-como-comprar-y-vender-acciones-bonos-cedears-letras-y-obligaciones-negociables-a-traves-del-home
+Puente	AR	Broker	ETF CEDEARs	https://www.puentenet.com/info/ayuda/acciones
+Banco Piano	AR	Bank	ETF CEDEARs	https://www.bancopiano.com.ar/Inversiones/Servicios/OperarOnline/
+Banco Patagonia	AR	Bank	ETF CEDEARs	https://www.bancopatagonia.com.ar/personas/inversiones/preguntas-frecuentes.php
+Rava Bursátil	AR	Broker	ETF CEDEARs	https://www.rava.com/que-ofrecemos
+Banco Ciudad	AR	Bank	ETF CEDEARs	https://www.bancociudad.com.ar/cms/recursos/institucional/carpetarecurso/Informaci%C3%B3n%20al%20Usuario%20Financiero/Apertura_Cuenta_Comitente.pdf
+Brubank	AR	Bank	ETF CEDEARs	https://www.brubank.com/cedears
+Reba	AR	Neobroker	ETF CEDEARs	https://www.reba.com.ar/cedears/
+Alfy Inversiones	AR	Broker	ETF CEDEARs	https://alfyinversiones.com.ar/opera/acciones/
+Rosental	AR	Broker	ETF CEDEARs	https://www.rosental.com/mercado-de-capitales/
+Nación Bursátil	AR	Broker	ETF CEDEARs	https://nacionbursatil.com.ar/assets/pdf/ManualdeusuarioHomeBroker.pdf
+Integrar Inversiones	AR	Broker	ETF CEDEARs	https://integrarinversiones.com.ar/preguntas-frecuentes/
+Sociedad Militar Seguro de Vida	AR	Broker	ETF CEDEARs	https://www.smsv.com.ar/data/2023/05/HBALyC-ANSMSVManualdeUsuarioV.07_02_23.pdf
+Argentina Valores	AR	Broker	ETF CEDEARs	https://www.avsa.com.ar/trading-online/
+Comafi Bursátil	AR	Broker	ETF CEDEARs	https://www.comafi.com.ar/bursatil
+Cohen	AR	Broker	ETF CEDEARs	https://play.google.com/store/apps/details?id=ar.com.cohen.app&hl=es_AR
+LBO	AR	Broker	ETF CEDEARs	https://www.linkedin.com/posts/lbo-sociedad-de-bolsa-s%2Ea%2E_d%C3%B3lar-d%C3%B3larmep-d%C3%B3larhoy-activity-7169384419542134784-GXUf
 Racional	CL	Neobroker	US ETFs / ETNs	https://racional.cl/
 BICE Inversiones	CL	Bank	Local + US ETFs	https://biceinversiones.cl/
 BICE Inversiones	CL	Bank	Local + US ETFs	https://banco.bice.cl/inversiones
@@ -803,6 +1596,10 @@ LarrainVial	CL	Broker	Global ETFs / ETPs	https://haztecliente.larrainvial.com/
 Santander Corredores de Bolsa Chile	CL	Bank	Local-market ETFs	https://banco.santander.cl/personas/corredores-de-bolsa
 Fintual Acciones	CL	Neobroker	US ETFs / ETNs	https://fintual.cl/que-es-fintual/
 Zesty	CL	Neobroker	Local + US ETFs	https://www.zestyfinance.com/
+CCBolsa	CL	Broker	Local-market ETFs	https://www.ccbolsa.cl/apps/script/modulos/productos/productos-acciones.asp
+MBI Corredores de Bolsa	CL	Broker	Local-market ETFs	https://www.mbi.cl/landing-corredora/landing01/index.html
+Vector Capital	CL	Broker	Local + US ETFs	https://vectorcapital.cl/wp-content/uploads/2024/05/Paso-a-paso-para-comprar-y-vender-acciones.pdf
+Scotia Corredora de Bolsa	CL	Broker	Local + US ETFs	https://www.scotiabankchile.cl/personas/inversiones/corredores/inversiones-en-linea/
 Trii	CO	Neobroker	Global ETFs / ETPs	https://trii.co/
 Tyba	CO	Neobroker	US ETFs / ETNs	https://tyba.com.co/
 Valores Bancolombia	CO	Bank	Local-market ETFs	https://valores.bancolombia.com/
@@ -810,6 +1607,10 @@ Davivienda Corredores	CO	Bank	Global ETFs / ETPs	https://www.daviviendacorredore
 Acciones y Valores	CO	Broker	Local-market ETFs	https://www.accivalores.com/quiero-vincularme/
 BTG Pactual Colombia	CO	Broker	Global ETFs / ETPs	https://www.btgpactual.com.co/
 Credicorp Capital Colombia	CO	Broker	Global ETFs / ETPs	https://www.credicorpcapital.com/Colombia/Neg/MerCap/Paginas/Ser.aspx
+Alianza Valores	CO	Broker	Global ETFs / ETPs	https://cdn.modyo.cloud/uploads/23dd3f40-d7d9-4c1f-ac5f-59ab0c988d23/original/MAVGI0029_4_Manual_Libro_Electr_nico_de_rdenes_-_LEO.pdf
+Progresión	CO	Broker	Global ETFs / ETPs	https://www.progresion.com.co/canales-digitales/trader-pro/
+Mercosur Casa de Bolsa	VE	Broker	Local-market ETFs	https://mercosur.com.ve/home/centrode-sopore/
+Statera Casa de Bolsa	VE	Broker	Local-market ETFs	https://www.stateracasadebolsa.com/
 Renta 4 SAB	PE	Broker	Local + US ETFs	https://www.renta4.pe/
 Credicorp Capital	PE	Broker	Global ETFs / ETPs	https://www.credicorpcapital.com/Peru/Bolsa/Paginas/e-trading.aspx
 Inteligo SAB	PE	Broker	Global ETFs / ETPs	https://www.inteligosab.com/
@@ -817,16 +1618,25 @@ Trii Peru	PE	Neobroker	Global ETFs / ETPs	https://trii.pe
 Tyba Peru	PE	Neobroker	US ETFs / ETNs	https://tyba.pe/
 Kallpa Securities SAB	PE	Broker	Global ETFs / ETPs	https://kallpasab.com/
 Seminario y Cía SAB	PE	Broker	Local-market ETFs	https://www.seminariosab.com.pe/hazte-cliente
+Grupo Coril	PE	Broker	Global ETFs / ETPs	https://www.grupocoril.com/uploads/sab/sab081123-manual-extranet.pdf
+BBVA Bolsa	PE	Broker	Global ETFs / ETPs	https://bolsa.bbva.pe/
+Diviso Bolsa	PE	Broker	Local-market ETFs	https://andina.pe/agencia/noticia-lanzan-plataforma-para-invertir-la-bolsa-desde-cualquier-parte-del-peru-983427.aspx
 Sagicor Investments Jamaica	JM	Broker	Local-market ETFs	https://www.sagicor.com/en-jm/personal-solution/investment/jse-online-trading
 VM Wealth Management	JM	Broker	Local-market ETFs	https://vmwealth.myvmgroup.com/digital-access-points/
 JMMB	JM	Broker	Local-market ETFs	https://jm.jmmb.com/our-services
+NCB Capital Markets	JM	Broker	Local-market ETFs	https://www.jamstockex.com/services/jtraderpro/
+GK Capital Management	JM	Broker	Local-market ETFs	https://www.jamstockex.com/services/jtraderpro/
+JN Fund Managers	JM	Broker	Local-market ETFs	https://www.jamstockex.com/services/jtraderpro/
 First Citizens Brokerage and Advisory Services	TT	Broker	Local-market ETFs	https://www.firstcitizensgroup.com/tt/ttse-trading-online-platform/
 Republic Wealth Management	TT	Broker	Local-market ETFs	https://republicwealthmanagement.com/brokerage-services-local-equity/
 West Indies Stockbrokers	TT	Broker	Global ETFs / ETPs	https://wiseequities.com/home/open-a-wise-account.php
 JMMB Securities (T&T)	TT	Broker	Global ETFs / ETPs	https://tt.jmmb.com/investment-products
+Bourse Brokers	TT	Broker	Local-market ETFs	https://bourseinvestment.com/individual-solutions/stockbroking/local-stockbroking/
 Sagicor ebrokerage	BB	Broker	Local-market ETFs	https://www.sagicor.com/en-BB/Blogs/sagicor-ebrokerage-portal-4-facts-you-should-know-about-investing-online
 Gletir Global	UY	Broker	Global ETFs / ETPs	https://www.gletir.com/
 Paullier	UY	Broker	Global ETFs / ETPs	https://paullier.com/
+Prex	UY	Neobroker	US ETFs / ETNs	https://www.prexcard.com/cuentainversion
+Fenix Trading	UY	Broker	US ETFs / ETNs	https://fenix-trading.com/costos-servicios
 Freedom Broker	KZ	Broker	Global ETFs / ETPs	https://fbroker.kz/en
 Halyk Finance	KZ	Broker	Global ETFs / ETPs	https://halykfinance.kz/brokerskoe-obsluzhivanie/
 Alatau City Invest	KZ	Broker	Local + US ETFs	https://alataucityinvest.kz/platform
@@ -836,9 +1646,14 @@ Centras Securities	KZ	Broker	Global ETFs / ETPs	https://cesec.kz/brokerskoe-obsl
 SkyBridge Invest	KZ	Broker	Global ETFs / ETPs	https://sbinvest.kz/investors/
 Teniz Capital	KZ	Broker	Local-market ETFs	https://backend.tenizcap.kz/api/private-documents/9e8892d0-5e26-4ad5-870c-9b16e8760b55/download
 N1broker	KZ	Broker	Local-market ETFs	https://n1broker.kz/trading/kz
+Eurasia Capital	KZ	Broker	Local-market ETFs	https://ecap.kz/en/terminal/opportunities
+Halyk Bank	KZ	Bank	Global ETFs / ETPs	https://halykbank.kz/en/other/halyk-invest
+WindoW Capital	KZ	Broker	Local-market ETFs	https://play.google.com/store/apps/details?id=kz.winin.app&hl=en
 GOINVEST	UZ	Neobroker	Local-market ETFs	https://admin.goinvest.uz/media/files/2025/07/14/privacy_policy_01072025.pdf
 Ard Securities	MN	Broker	Local-market ETFs	https://www.ardsecurities.com/faq-categories/ard-app
 TDB Securities	MN	Broker	Local-market ETFs	https://www.tdbsecurities.mn/page/faq?lang=en
+BDSec	MN	Broker	Local-market ETFs	https://play.google.com/store/apps/details?id=mn.ds.dbx.bdsec&hl=en
+Golomt Capital	MN	Broker	Local-market ETFs	https://golomtcapital.com/faq
 Zaman	KG	Broker	Local-market ETFs	https://zamaninvest.kg/?lang=en
 MInvest	KG	Neobroker	US ETFs / ETNs	https://minvest.kg/en
 Galt & Taggart	GE	Broker	Global ETFs / ETPs	https://galtandtaggart.com/en/brokerage
@@ -860,15 +1675,25 @@ City Brokerage	BD	Broker	Local-market ETFs	https://cityinfinity.citybrokerageltd
 Royal Capital	BD	Broker	Local-market ETFs	https://royalcapitalbd.com/tradefast
 BRAC EPL	BD	Broker	Local-market ETFs	https://www.bracepl.com/brokerage/privacy-policy
 Shahjalal Islami Bank Securities	BD	Broker	Local-market ETFs	https://www.shahjalalbanksecurities.com.bd/faq.php
+Shanta Securities	BD	Broker	Local-market ETFs	https://www.shantasecurities.com/easytrade
+Mika Securities	BD	Broker	Local-market ETFs	https://amarbiniyog.net/
 Capital Alliance	LK	Broker	Local-market ETFs	https://cal.lk/equities/
 First Capital	LK	Broker	Local-market ETFs	https://firstcapital.lk/products/stock-brokering/
 Asia Securities	LK	Broker	Local-market ETFs	https://www.asiasecurities.lk/client-solution/stockbroking/online-and-mobile-trading
 Softlogic Stockbrokers	LK	Broker	Local-market ETFs	https://softlogicstockbrokers.lk/products/online-trading/
 Bartleet Religare Securities	LK	Broker	Local-market ETFs	https://www.bartleetreligare.com/faqs/
+John Keells Stock Brokers	LK	Broker	Local-market ETFs	https://www.jksb.com/storage/JKSB-Online-Trading-Guide.pdf
+Senfin Securities	LK	Broker	Local-market ETFs	https://online.senfinsecurities.com/atsweb/login
+Asha Securities	LK	Broker	Local-market ETFs	https://online.ashasecurities.net/atsweb/login
+Enterprise Ceylon Capital	LK	Broker	Local-market ETFs	https://ecc.lk/wp-content/uploads/2024/10/Atrad-User-Manual.pdf
+NDB Securities	LK	Broker	Local-market ETFs	https://www.ndbs.lk/dwnlds/invest_with_us/2021/Internet_Trading_Agreement_NDBS.pdf
 Sunrise Securities	NP	Broker	Local-market ETFs	https://www.sunrisesecurities.com.np/about/faqs/
 Sumeru Securities	NP	Broker	Local-market ETFs	https://www.sumerusecurities.com/tms-39-login
 Online Securities	NP	Broker	Local-market ETFs	https://onlinesecurities.com.np/services/OnlineTms
 Nabil Stock Dealer	NP	Broker	Local-market ETFs	https://www.nabilstockdealer.com.np/faqs/
+Naasa Securities	NP	Broker	Local-market ETFs	https://naasasecurities.com.np/faqs
+Kumari Securities	NP	Broker	Local-market ETFs	https://www.kumarisecurities.com/pages/services/online
+Himalayan Brokerage	NP	Broker	Local-market ETFs	https://himalayanbroker.com/faq
 JS Global Capital	PK	Broker	Local-market ETFs	https://jsglobalonline.com
 Topline Securities	PK	Broker	Local-market ETFs	https://topline.com.pk/page-trade-with-topline
 Arif Habib Limited	PK	Broker	Local-market ETFs	https://forms.ahletrade.com/forms/
@@ -881,6 +1706,10 @@ Intermarket Securities	PK	Broker	Local-market ETFs	https://imsecurities.com.pk/i
 Abbasi and Company	PK	Broker	Local-market ETFs	https://abbasiandcompany.com/
 IGI Securities	PK	Broker	Local-market ETFs	https://igisecurities.com.pk/ps-itrade.php
 BABA Equities	PK	Broker	Local-market ETFs	https://bel.com.pk/
+OS Capital Investments	PK	Broker	Local-market ETFs	https://oscapitalinvestments.com/
+MRA Securities	PK	Broker	Local-market ETFs	https://mra.com.pk/trading-apps
+AZEE Securities	PK	Broker	Local-market ETFs	https://www.azeetrade.com/mobile-trading-pakistan.php
+Pearl Securities	PK	Broker	Local-market ETFs	https://www.pearlsecurities.com/Downloads/Pearl-Vtrade-User-Manual.pdf
 CITIC Securities	CN	Broker	Local-market ETFs	https://www.citics.com/newsite/index.html
 Huatai Securities	CN	Broker	Local-market ETFs	https://www.htsc.com.cn/hd/promotion/kh/index.html
 China Merchants Securities	CN	Broker	Local-market ETFs	https://www.cmschina.com
@@ -895,15 +1724,35 @@ Everbright Securities	CN	Broker	Local-market ETFs	http://www.ebscn.com/guangda/d
 Orient Securities	CN	Broker	Local-market ETFs	https://www.dfzq.com.cn/m/site/views/jjyw.html?is_new_back=1
 China Galaxy Securities	CN	Broker	Local-market ETFs	http://www.chinastock.com.cn/newsite/cgs-services/stockBroker/smartTrading.html
 Shenwan Hongyuan Securities	CN	Broker	Local-market ETFs	https://www.swhysc.com/swhysc/serve/download
+CSC Financial	CN	Broker	Local-market ETFs	https://sjzqshare.csc108.com/privacy_policy.html
+Industrial Securities	CN	Broker	Local-market ETFs	https://www.xyzq.com.cn/xysec/service/11069?curr=17&word=
+Changjiang Securities	CN	Broker	Local-market ETFs	https://www.95579.com/main/a/20200724/25962.shtml
+Founder Securities	CN	Broker	Local-market ETFs	https://www.foundersc.com/serviceDownloadPC/index.jhtml
+Soochow Securities	CN	Broker	Local-market ETFs	https://www.dwzq.com.cn/main/services/wealth/index.html
+Caitong Securities	CN	Broker	Local-market ETFs	https://www.ctsec.com/onlineService/downList
+Sinolink Securities	CN	Broker	Local-market ETFs	https://www.yongjinbao.com.cn/about.html
+Huaxi Securities	CN	Broker	Local-market ETFs	https://m.hx168.com.cn/article/08e6347f3c63a464bfb34c2b61eaee5f.html
+Sealand Securities	CN	Broker	Local-market ETFs	http://res.ghzq.cn/download/index.html
+Guoyuan Securities	CN	Broker	Local-market ETFs	https://www.gyzq.com.cn/a/20250609/65424262.html
+Great Wall Securities	CN	Broker	Local-market ETFs	https://www.cgws.com/cczq/rjxz/
+Dongxing Securities	CN	Broker	Local-market ETFs	https://www.dxzq.net/main/rjxz/pcrjxz/index.shtml
 LGT Bank	LI	Bank	Global ETFs / ETPs	https://www.lgt.com/li-en/private-banking
 VP Bank	LI	Bank	Global ETFs / ETPs	https://www.vpbank.com/en-li
 Liechtensteinische Landesbank	LI	Bank	Global ETFs / ETPs	https://llb.li/de/support/online-schalter
 Bank Frick	LI	Bank	Global ETFs / ETPs	https://www.bankfrick.li/en/open-an-account/67
+Kaiser Partner	LI	Bank	Global ETFs / ETPs	https://kaiserpartner.bank/online-banking/support/
+willbe	LI	Neobroker	Global ETFs / ETPs	https://mobilep.willbe-invest.com/en/about-willbe/faq
 Andbank	AD	Bank	Global ETFs / ETPs	https://www.andbank.com/andorra/
 MoraBanc	AD	Bank	Global ETFs / ETPs	https://www.morabanc.ad/en/individuals
 Creand	AD	Bank	Global ETFs / ETPs	https://creand.ad/
 United Securities Oman	OM	Broker	Global ETFs / ETPs	https://usoman.com/Download-Forms.html
 Ubhar Capital (U-Capital)	OM	Broker	Global ETFs / ETPs	https://u-capital.net/u-capital-brokerage/
+Financial Services Company SAOG	OM	Broker	Local-market ETFs	https://fscoman.net/faqs
+Global Financial Securities	OM	Broker	Global ETFs / ETPs	https://gfioman.com/wp/gfs/services/brokerage/web-etrade-system/
+Horizons Capital Markets	OM	Broker	Global ETFs / ETPs	https://www.hcmoman.com/brokerage-services/
+QBG Geojit Securities	OM	Broker	Global ETFs / ETPs	https://qbggeojit.com/services/indian-equities/
+Jabal Asset Management	OM	Broker	Local-market ETFs	https://apps.apple.com/us/app/jabal-invest/id6737515373
+National Bank of Oman	OM	Bank	Local-market ETFs	https://www.nbo.om/en/Pages/Corporate-Banking/MarketZone-App.aspx
 XTB International	BZ	Broker	UCITS ETFs / ETCs	https://www.xtb.com/int
 Plus500 Bahamas	BS	Broker	Global ETFs / ETPs	https://www.plus500.com/
 Plus500 Seychelles	SC	Broker	Global ETFs / ETPs	https://www.plus500.com/

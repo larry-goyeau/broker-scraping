@@ -19,11 +19,11 @@
 // deal above £10,000, which the tax map does not price as a flat.
 //
 // Orders go to Winterflood Business Services or J.P. Morgan Securities Ltd.
-// A US or European share is a sterling CDI. The quote is one side, for
-// fifteen seconds, and Fidelity does not print the other side. That spread
-// is unknown: the exchange book is not used. The commission, the FX, the
-// stamp and PTM sit in the round trip, so the total stays unknown until
-// that quote is stored. A London line keeps the exchange book.
+// A US or European share is a CDI. Fidelity prints one side of its own
+// quote, so the Nasdaq NBBO is not used. The stored CDI book is that
+// line's bid and ask, the same one AJ Bell prints, and it is what the
+// spread uses. Without that book the spread stays unknown. A London line
+// keeps the London book.
 //
 //   https://www.fidelity.co.uk/services/charges-fees/
 //   https://www.fidelity.co.uk/international-shares/
@@ -179,16 +179,16 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
 
   const m = matches[0];
   const cdi = cdiOf(m);
-  const book = cdi
-    ? { leaf: null, mic: m.venue?.mic ?? null }
-    : spreadLeaf(spreads, {
-        isin: m.row.isin,
-        mic: m.venue?.mic ?? null,
-        currency: m.row.currency,
-        unsourced: m.unsourced,
-        broker: "fidelity",
-        ticker: m.row.ticker,
-      });
+  // A CDI leaf is stored under CDI plus the underlying MIC. Passing the
+  // unresolved label would let the lookup fall through to the NBBO.
+  const book = spreadLeaf(spreads, {
+    isin: m.row.isin,
+    mic: m.venue?.mic ?? null,
+    currency: m.row.currency,
+    unsourced: cdi ? null : m.unsourced,
+    broker: "fidelity",
+    ticker: m.row.ticker,
+  });
   const listing = {
     isin: String(m.row.isin || "").toUpperCase() || null,
     ticker: m.row.ticker || null,
@@ -200,7 +200,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     brokerExchange: m.row.exchange || null,
   };
   const leaf = book.leaf;
-  const marketBp = cdi ? null : bp ?? leaf?.bp ?? null;
+  const marketBp = bp ?? leaf?.bp ?? null;
   const marketPerShare = cdi ? null : perShare ?? leaf?.perShare ?? null;
   const partsBook = bookParts({
     bp: marketBp,
@@ -266,7 +266,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     ...(bookUsd == null
       ? {
           why: cdi
-            ? "CDI : Fidelity ne publie qu'un côté du prix, le carnet de la place n'est pas ce prix"
+            ? "CDI : pas de carnet CDI stocké, le NBBO n'est pas ce prix"
             : `aucun carnet pour ${m.unsourced?.name || listing.exchange || "cette ligne"} : ${m.unsourced?.why || "pas de feuille de carnet"}`,
         }
       : {}),
@@ -289,8 +289,8 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
       sterling(listing.currency) ? "ligne en sterling : pas de change" : "change par paliers, les deux sens, dans les frais",
       "pas de Rule 606 : Winterflood Business Services et J.P. Morgan Securities Ltd",
       ptmDue ? `PTM ${PTM.each} £ par sens, le montant dépassant ${PTM.above} £` : null,
-      cdi
-        ? "CDI : le bid et l'ask ne sont pas publiés, unknown spread"
+      cdi && marketBp == null
+        ? "CDI : pas de carnet CDI stocké, le NBBO n'est pas ce prix"
         : marketBp != null
           ? `carnet ${Number(marketBp.toPrecision(4))} bp`
           : marketPerShare != null

@@ -1048,8 +1048,32 @@
               a.planRank - b.planRank ||
               a.brokerName.localeCompare(b.brokerName, "en")
           );
+        // A second line of the same broker, place and currency is dropped
+        // when every cell it actually prints matches the other line. An
+        // unknown total or spread is not a difference. A line with neither
+        // is dropped even when the fee differs: the filled line is the one
+        // to show.
+        const blankCost = (v) => costNum(v) == null;
+        const samePlace = (a, b) =>
+          a.family === b.family &&
+          a.brokerName === b.brokerName &&
+          a.exchange === b.exchange &&
+          a.currency === b.currency;
+        const weaker = rows.filter((row) =>
+          rows.some((other) => {
+            if (row === other || !samePlace(row, other)) return false;
+            const noTrip = blankCost(row.total) && blankCost(row.spread);
+            if (noTrip && (!blankCost(other.total) || !blankCost(other.spread))) return true;
+            for (const field of ["total", "fees", "spread"]) {
+              if (!blankCost(row[field]) && row[field] !== other[field]) return false;
+            }
+            if (row.remark && row.remark !== (other.remark || "")) return false;
+            return ["total", "fees", "spread"].some((field) => blankCost(row[field]) && !blankCost(other[field]));
+          })
+        );
+        const kept = rows.filter((row) => !weaker.includes(row));
         const merged = [];
-        for (const row of rows) {
+        for (const row of kept) {
           const hit = merged.find(
             (g) =>
               g.family === row.family &&

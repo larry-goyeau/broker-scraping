@@ -137,6 +137,16 @@ export const VENUES = [
     exact: ["xams", "euronextamsterdam", "aeb", "aex", "eam", "ams", "amsmcetf"],
     loose: ["amsterdam", "netherlands"],
   },
+  // Fortuneo prints this segment apart from the euro book on Euronext
+  // Amsterdam. The cash session is the same. It is not the XAMS book.
+  {
+    mic: "XAMC",
+    name: "Euronext Amsterdam multi-currency",
+    source: "euronext",
+    hours: { open: "09:00", close: "17:30", tz: "Europe/Amsterdam" },
+    exact: ["xamc"],
+    loose: [],
+  },
   {
     mic: "XBRU",
     name: "Euronext Brussels",
@@ -144,6 +154,40 @@ export const VENUES = [
     hours: { open: "09:00", close: "17:30", tz: "Europe/Brussels" },
     exact: ["xbru", "euronextbrussels", "euronextbruxelles", "bru", "ebr", "enextbe", "bruaccess"],
     loose: ["brussels", "bruxelles", "belgium"],
+  },
+  // Saxo writes EGP / EGB / EGD / EGO for the Euronext Growth boards. They
+  // are not the main cash book of the same city.
+  {
+    mic: "ALXP",
+    name: "Euronext Growth Paris",
+    source: "euronext",
+    hours: { open: "09:00", close: "17:30", tz: "Europe/Paris" },
+    exact: ["alxp", "egp", "euronextgrowthparis"],
+    loose: [],
+  },
+  {
+    mic: "ALXB",
+    name: "Euronext Growth Brussels",
+    source: "euronext",
+    hours: { open: "09:00", close: "17:30", tz: "Europe/Brussels" },
+    exact: ["alxb", "egb", "euronextgrowthbrussels"],
+    loose: [],
+  },
+  {
+    mic: "XESM",
+    name: "Euronext Growth Dublin",
+    source: "euronext",
+    hours: { open: "08:00", close: "16:30", tz: "Europe/Dublin" },
+    exact: ["xesm", "egd", "euronextgrowthdublin"],
+    loose: [],
+  },
+  {
+    mic: "XOAS",
+    name: "Euronext Growth Oslo",
+    source: "euronext",
+    hours: { open: "09:00", close: "16:20", tz: "Europe/Oslo" },
+    exact: ["xoas", "ego", "euronextgrowthoslo"],
+    loose: [],
   },
   {
     mic: "XLIS",

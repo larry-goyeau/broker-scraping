@@ -59,7 +59,7 @@
 
 import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
+import { listingKey, resolveVenue, spreadLeaf, VENUES } from "../../spreads/venues.mjs";
 import { spreads } from "../../spreads/book.mjs";
 import { plus, finite } from "../../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
@@ -251,23 +251,54 @@ function usMic(row, venue) {
   return "XNAS";
 }
 
+// The catalogue writes EURONEXT for several books. The city in `raw` is
+// the place Fortuneo named. A label that does not name one book stays
+// unresolved, so Paris is not borrowed for Amsterdam.
+const NAMED_PLACE = [
+  [/^euronext paris$/i, "XPAR"],
+  [/^euronext amsterdam$/i, "XAMS"],
+  [/^euronext amsterdam - multi currency trading$/i, "XAMC"],
+  [/^euronext bruxelles$/i, "XBRU"],
+  [/^euronext lisbonne$/i, "XLIS"],
+  [/^euronext milan$/i, "XMIL"],
+  [/^euronext growth paris$/i, "ALXP"],
+  [/^xetra$/i, "XETR"],
+  [/^lse foreign currency$/i, "XLON"],
+  [/^bourse suisse swx$/i, "XSWX"],
+  [/^six swiss exchange blue chips$/i, "XSWX"],
+];
+
+function placeLabel(row) {
+  const isin = String(row?.isin || "").toUpperCase();
+  const after = String(row?.raw || "").split(isin)[1] || "";
+  return after.replace(/\s+(Action|ETF|ETC|ETN|Tracker|Indiciel).*$/i, "").trim();
+}
+
+function namedVenue(row) {
+  const label = placeLabel(row);
+  const hit = NAMED_PLACE.find(([re]) => re.test(label));
+  return hit ? VENUES.find((venue) => venue.mic === hit[1]) || null : null;
+}
+
 function bookOf(row, venue, unsourced) {
-  const market = feeMarketOf(row.exchange, venue?.mic);
+  const named = namedVenue(row);
+  const market = feeMarketOf(row.exchange, named ? null : venue?.mic);
   return spreadLeaf(spreads, {
     isin: row.isin,
-    mic: market === "us" ? usMic(row, venue) : venue?.mic ?? null,
+    mic: market === "us" ? usMic(row, venue) : named?.mic || venue?.mic || null,
     currency: row.currency,
-    unsourced,
+    unsourced: named ? null : unsourced,
     broker: "fortuneo",
     ticker: row.ticker,
   });
 }
 
-function findListing({ etf, place, currency }) {
+function findListing({ etf, place, currency, ticker }) {
   const asked = loose(etf);
   const wantVenue = place ? resolveVenue({ exchange: place, mic: place }).venue : null;
   const wantPlace = loose(place);
   const wantCurrency = String(currency || "").toUpperCase();
+  const wantTicker = loose(ticker);
 
   const named = rowsNamed(rows, asked, 
     (r) => loose(r.isin) === asked || loose(r.ticker) === asked || loose(r.query) === asked
@@ -284,6 +315,11 @@ function findListing({ etf, place, currency }) {
       return loose(m.row.exchange) === wantPlace || loose(m.row.exchange).includes(wantPlace);
     })
     .filter((m) => !wantCurrency || String(m.row.currency || "").toUpperCase() === wantCurrency);
+
+  if (wantTicker) {
+    const same = matches.filter((m) => loose(m.row.ticker) === wantTicker);
+    if (same.length) matches.splice(0, matches.length, ...same);
+  }
 
   if (!wantPlace && !wantCurrency) {
     matches.sort(
@@ -333,6 +369,7 @@ export function roundTrip({
   price,
   bp = null,
   perShare = null,
+  ticker = "",
   plan = DEFAULT_PLAN,
   pea = false,
   firstFree = false,
@@ -357,7 +394,7 @@ export function roundTrip({
     };
   }
 
-  const { named, matches } = findListing({ etf, place, currency });
+  const { named, matches } = findListing({ etf, place, currency, ticker });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Fortuneo` };
   if (!matches.length) {
     return {
@@ -368,20 +405,21 @@ export function roundTrip({
   }
 
   const m = matches[0];
-  const book = bookOf(m.row, m.venue, m.unsourced);
+  const namedPlace = namedVenue(m.row);
+  const book = bookOf(m.row, namedPlace || m.venue, namedPlace ? null : m.unsourced);
   const listing = {
     isin: String(m.row.isin || "").toUpperCase(),
     ticker: m.row.ticker || null,
     name: m.row.name || null,
     type: m.row.type || null,
-    mic: book.mic ?? m.venue?.mic ?? null,
-    exchange: m.venue?.name ?? m.unsourced?.name ?? m.row.exchange ?? null,
+    mic: book.mic ?? namedPlace?.mic ?? m.venue?.mic ?? null,
+    exchange: namedPlace?.name ?? m.venue?.name ?? m.unsourced?.name ?? m.row.exchange ?? null,
     currency: String(m.row.currency || "").toUpperCase(),
     brokerExchange: m.row.exchange || null,
     query: m.row.query || null,
   };
 
-  const market = feeMarketOf(m.row.exchange, listing.mic);
+  const market = feeMarketOf(m.row.exchange, namedPlace ? null : listing.mic);
   const rule = ruleOf(picked.id, market);
   const leaf = book.leaf;
   const marketBp = bp ?? leaf?.bp ?? null;

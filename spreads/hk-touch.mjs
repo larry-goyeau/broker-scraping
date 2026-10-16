@@ -1,5 +1,8 @@
 // Hong Kong cash touch from Sina. Bid and ask are the quote. A last trade
-// is never written in their place.
+// is never written in their place. The renminbi counter is 8 plus the
+// rest of the Hong Kong dollar code, and its name ends in -R. The US
+// dollar counter is 9 plus that rest, and its name ends in -U. Each is
+// its own book, kept even when no catalogue lists the code.
 //
 // The continuous session is 09:30–12:00 and 13:00–16:00 Hong Kong time.
 // A quote from either of those windows is kept. The closing auction
@@ -20,6 +23,7 @@ import { norm } from "./venues.mjs";
 
 const STORE = fileURLToPath(new URL("./hk-touch.json", import.meta.url));
 const HK = new Set(["hkex", "sehk", "hongkong", "hks", "xhkg"]);
+const LISTS = ["../assets/stocks.csv", "../assets/etfs.csv"].map((name) => fileURLToPath(new URL(name, import.meta.url)));
 const TARGET = 13 * 60 + 15;
 const STOP = 15 * 60 + 50;
 const BATCH = 40;
@@ -86,21 +90,40 @@ const liveStamp = (date, time, today) => {
 
 const inSession = (at) => at.day && liveStamp(at.date, at.clock, at.date);
 
+function codeOf(ticker) {
+  const digits = String(ticker || "").split(":").pop().replace(/\D/g, "").replace(/^0+/, "");
+  if (!digits) return "";
+  const code = digits.padStart(5, "0");
+  return code.length === 5 ? code : "";
+}
+
 function listings() {
   const byCode = new Map();
+  const ccyOf = new Map();
+  const add = (code, isin, currency) => {
+    if (!code || !/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin)) return;
+    const counts = byCode.get(code) || new Map();
+    counts.set(isin, (counts.get(isin) || 0) + 1);
+    byCode.set(code, counts);
+    const ccy = String(currency || "").toUpperCase();
+    if (!/^[A-Z]{3}$/.test(ccy)) return;
+    const votes = ccyOf.get(code) || new Map();
+    votes.set(ccy, (votes.get(ccy) || 0) + 1);
+    ccyOf.set(code, votes);
+  };
   for (const row of catalogueRows()) {
     if (!HK.has(norm(row.exchange))) continue;
     const type = String(row.type || "").toUpperCase();
     if (type && !["STOCK", "ETF", "ETN", "ETC"].includes(type)) continue;
-    const digits = String(row.ticker || "").replace(/\D/g, "").replace(/^0+/, "");
-    if (!digits) continue;
-    const code = digits.padStart(5, "0");
-    if (code.length !== 5) continue;
-    const isin = String(row.isin || "").toUpperCase();
-    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin)) continue;
-    const counts = byCode.get(code) || new Map();
-    counts.set(isin, (counts.get(isin) || 0) + 1);
-    byCode.set(code, counts);
+    add(codeOf(row.ticker), String(row.isin || "").toUpperCase(), row.currency);
+  }
+  for (const file of LISTS) {
+    if (!fs.existsSync(file)) continue;
+    for (const line of fs.readFileSync(file, "utf8").split("\n").slice(1)) {
+      const [ticker, exchange, isin] = line.split(",");
+      if (!HK.has(norm(exchange))) continue;
+      add(codeOf(ticker), String(isin || "").trim().toUpperCase(), "");
+    }
   }
   const jobs = [];
   let tied = 0;
@@ -110,7 +133,9 @@ function listings() {
       tied += 1;
       continue;
     }
-    jobs.push({ code, isin: ranked[0][0] });
+    const votes = [...(ccyOf.get(code) || new Map()).entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+    const currency = !votes.length || (votes.length > 1 && votes[0][1] === votes[1][1]) ? "HKD" : votes[0][0];
+    jobs.push({ code, isin: ranked[0][0], currency: currency === "CNY" ? "CNH" : currency });
   }
   jobs.sort((a, b) => a.code.localeCompare(b.code));
   return { jobs, tied };
@@ -131,6 +156,7 @@ function quotes(body) {
     if (fields.length < 19) continue;
     out.push({
       code: match[1].padStart(5, "0"),
+      name: fields[0] || "",
       bid: num(fields[9]),
       ask: num(fields[10]),
       date: fields[17],
@@ -183,6 +209,8 @@ async function readBook(jobs) {
         isin: job.isin,
         mic: "XHKG",
         code: quote.code,
+        currency: job.currency || "HKD",
+        name: quote.name,
         bid: quote.bid,
         ask: quote.ask,
         bp,
@@ -209,13 +237,42 @@ for (;;) {
   await sleep(30000);
 }
 
-console.error(`Hong Kong ${hongKong().clock}. ISINs des catalogues…`);
+console.error(`Hong Kong ${hongKong().clock}. ISINs des catalogues et des listes…`);
 const { jobs, tied } = listings();
-console.error(`${jobs.length} codes, ${tied} codes à ISIN partagé laissés de côté.`);
+const known = new Set(jobs.map((job) => job.code));
+const twins = [];
+for (const job of jobs) {
+  if (!job.code.startsWith("0")) continue;
+  for (const [prefix, currency, suffix] of [["8", "CNH", "-R"], ["9", "USD", "-U"]]) {
+    const code = `${prefix}${job.code.slice(1)}`;
+    if (known.has(code)) continue;
+    known.add(code);
+    twins.push({ code, isin: job.isin, currency, base: job.code, suffix });
+  }
+}
+console.error(`${jobs.length} codes, ${twins.length} contreparties à vérifier, ${tied} codes à ISIN partagé laissés de côté.`);
 
 let book = { found: [], auction: 0, stale: 0, noTouch: 0 };
 while (hongKong().minutes < STOP) {
   book = await readBook(jobs);
+  const names = new Map(book.found.map((row) => [row.code, row.name]));
+  const accepted = twins.filter((twin) => {
+    const base = String(names.get(twin.base) || "").toUpperCase();
+    return base.length > 1;
+  });
+  if (accepted.length) {
+    const extra = await readBook(accepted.map(({ code, isin, currency }) => ({ code, isin, currency })));
+    const baseName = new Map([...names.entries()].map(([code, name]) => [code, String(name || "").toUpperCase()]));
+    for (const row of extra.found) {
+      const twin = accepted.find((item) => item.code === row.code);
+      const base = baseName.get(twin?.base || "") || "";
+      const name = String(row.name || "").toUpperCase();
+      if (!base || !name.startsWith(base) || !name.endsWith(twin.suffix)) continue;
+      book.found.push(row);
+    }
+    book.noTouch += extra.noTouch;
+    book.stale += extra.stale;
+  }
   console.error(
     `${book.found.length} touches, ${book.auction} enchères, ${book.stale} hors séance, ${book.noTouch} sans bid et ask. Hong Kong ${hongKong().clock}.`
   );

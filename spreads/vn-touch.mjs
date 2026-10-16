@@ -18,7 +18,7 @@ import { catalogueRows } from "../catalogues.mjs";
 
 const STORE = fileURLToPath(new URL("./vn-touch.json", import.meta.url));
 const FEED = "https://priceapi.bsc.com.vn/datafeed/instruments";
-const BOARDS = ["HOSE", "UPCOM"];
+const BOARDS = ["HOSE", "UPCOM", "HNX"];
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -57,6 +57,7 @@ const openBoards = (at) => {
   const afternoon = m >= 13 * 60;
   const open = [];
   if ((morning && m >= 9 * 60 + 15) || (afternoon && m < 14 * 60 + 30)) open.push("HOSE");
+  if ((morning && m >= 9 * 60) || (afternoon && m < 14 * 60 + 30)) open.push("HNX");
   if ((morning && m >= 9 * 60) || (afternoon && m < 15 * 60)) open.push("UPCOM");
   return open;
 };
@@ -79,7 +80,7 @@ const wanted = (row) => {
   if (String(row.Status ?? "") !== "00") return false;
   const type = String(row.StockType ?? "");
   if (type === "2") return true;
-  return row.exchange === "HOSE" && type === "3" && row.FundType === "E";
+  return (row.exchange === "HOSE" || row.exchange === "HNX") && type === "3" && row.FundType === "E";
 };
 
 async function board() {
@@ -109,7 +110,7 @@ async function board() {
 }
 
 function isins() {
-  const byBoard = { HOSE: new Map(), UPCOM: new Map() };
+  const byBoard = { HOSE: new Map(), UPCOM: new Map(), HNX: new Map() };
   for (const row of catalogueRows()) {
     const exchange = String(row.exchange || "").trim().toUpperCase();
     if (!BOARDS.includes(exchange)) continue;
@@ -121,6 +122,20 @@ function isins() {
     const counts = byBoard[exchange].get(ticker) || new Map();
     counts.set(isin, (counts.get(isin) || 0) + 1);
     byBoard[exchange].set(ticker, counts);
+  }
+  const lists = ["../assets/stocks.csv", "../assets/etfs.csv"].map((name) => fileURLToPath(new URL(name, import.meta.url)));
+  for (const file of lists) {
+    if (!fs.existsSync(file)) continue;
+    for (const line of fs.readFileSync(file, "utf8").split("\n").slice(1)) {
+      const [ticker, exchange, isin] = line.split(",");
+      if (String(exchange || "").trim().toUpperCase() !== "HNX") continue;
+      const code = String(ticker || "").split(":").pop().trim().toUpperCase();
+      const id = String(isin || "").trim().toUpperCase();
+      if (!/^[A-Z0-9]{2,8}$/.test(code) || !/^[A-Z]{2}[A-Z0-9]{10}$/.test(id)) continue;
+      const counts = byBoard.HNX.get(code) || new Map();
+      counts.set(id, (counts.get(id) || 0) + 1);
+      byBoard.HNX.set(code, counts);
+    }
   }
   return byBoard;
 }

@@ -10,7 +10,49 @@ const FOLDER = {
   // The trips on file are a USD account. The base is the client's choice
   // and no other base is named.
   "5paisa": ["INR"],
+  // The RDN is rupiah and settles Indonesian shares. The USD pocket
+  // settles US shares and options and is left in dollars. Moving rupiah
+  // into that pocket is a conversion. A direct dollar transfer is not.
+  // https://ajaib.co.id/pusat-bantuan/cash/apa-perbedaan-rdn-rekening-alpha-idr-rekening-alpha-usd-dan-tabungan-ajaib
+  // https://ajaib.co.id/rekening-usd
+  // https://ajaib.co.id/usd-otc
+  ajaib: ["IDR", "USD"],
   admiral: ["USD"],
+  // A cheque or an interbank transfer from the client's own account lands
+  // in a rupee client account. The Roshan equity account is a rupee
+  // account, funded by a remittance that is converted on the way in.
+  // A dollar price on the commodity desk is converted at the State Bank
+  // rate. No dollar balance is left.
+  // https://www.akdsl.com/Files/Equities/FUNDS_TRANSFER_PROCEDURE.pdf
+  // https://akdsl.com/Services/RDA
+  akd: ["PKR"],
+  // Raast from a bank in Pakistan lands in the brokerage account in
+  // rupees. Nafa takes the same transfer, and the order is entered in
+  // rupees. A non-resident funds a Roshan equity account, and that
+  // remittance is converted on the way in. No dollar balance is left.
+  // https://chasesecurities.com/raast-integration/
+  // https://nafa.com.pk/
+  // https://chasesecurities.com/open-your-account/
+  chase: ["PKR"],
+  // An NPSB transfer from the client's own bank lands in the taka
+  // account at Motijheel. The FAQ asks for the value of the shares
+  // plus the commission, in taka. A branch takes cash in taka. No
+  // dollar balance is left.
+  // https://www.lbsbd.com/Platforms?platform=ibroker&tab=open-bo-account
+  // https://www.lbsbd.com/Faq
+  lankabangla: ["BDT"],
+  // A BEFTN transfer lands in the portfolio account. The named banks
+  // are Standard Chartered, BRAC and EXIM, all in Dhaka. No foreign
+  // currency account is named.
+  // https://idlc.com/securities/knowledgebase/faq
+  idlc: ["BDT"],
+  // A transfer lands in the rupee account at Seylan Bank, Millennium
+  // branch, in the name of Capital Alliance Securities. JustPay moves
+  // rupees from the client's bank, up to 150,000 a time. The cash
+  // balance in Atrad is that same money. No foreign-currency account
+  // is named.
+  // https://cal.lk/equities/
+  capitalalliance: ["LKR"],
   angelone: ["INR"],
   // The kit's bank line is a savings account, a current account, or an NRE
   // or NRO account. Those are rupee accounts. The client nodal accounts are
@@ -89,6 +131,16 @@ const FOLDER = {
   // https://new.bpitrade.com/fund-your-account/
   // https://new.bpitrade.com/faq/i-have-received-an-email-confirmation-that-my-dds-account-has-been-approved-how-do-i-fund-my-account/
   bpi: ["PHP", "USD"],
+  // InstaPay, PESONet and a bills payment credit the cash account. Those
+  // rails are pesos. No dollar balance is named.
+  // https://dragonfi.ph/contact-us
+  dragonfi: ["PHP"],
+  // A Pix transfer, or the Santander current account, credits the
+  // brokerage account. Guarantees are preferably in the national currency.
+  // No dollar balance is named.
+  // https://blog.toroinvestimentos.com.br/investimentos/plataforma-aberta-de-investimentos/
+  // https://cdn.toroinvestimentos.com.br/corretora/documents/contrato-de-intermediacao-e-custodia-toro-investimentos.pdf
+  toro: ["BRL"],
   // A GCash top-up credits the trading wallet in pesos. A dollar deposit
   // is converted into pesos. A dollar withdrawal is paid out of that peso
   // balance. No other balance is left unconverted.
@@ -261,6 +313,15 @@ const FOLDER = {
   // https://www.betashares.com.au/direct/faq
   // https://public-files.wealth.betashares.com.au/legal/product-disclosure-statement.pdf
   betashares: ["AUD"],
+  // Nigeria and Ghana each have a local wallet and a dollar wallet. A naira
+  // or cedi deposit is left in the local wallet. A dollar card or a dollar
+  // wire is left in the dollar wallet. Moving local cash into the dollar
+  // wallet is a conversion. South Africa funds by card and the partner
+  // converts that money; no rand balance is left.
+  // https://faq.investbamboo.com/en/articles/6881975-what-is-the-ngn-ghs-wallet
+  // https://faq.investbamboo.com/en/articles/6888706-what-payment-options-are-available
+  // https://investbamboo.co.za/
+  bamboo: ["NGN", "GHS", "USD"],
   // AU Cash is funded by PayID or an Australian bank transfer and stays in
   // AUD. US Cash takes an ACH or a wire from a US bank and stays in USD.
   // Buying a US share out of AUD cash converts; that conversion is not a
@@ -268,6 +329,18 @@ const FOLDER = {
   // https://pearler.com/help/transactions/5035921-how-do-i-make-deposits-into-pearler-to-be-invested
   // https://pearler.com/help/transactions/5155285-what-cash-accounts-do-i-have-on-pearler
   pearler: ["AUD", "USD"],
+  // A deposit is an AUD transfer from an Australian bank account, and it
+  // stays in dollars. A direct USD deposit is refused. Funding the Wall St
+  // wallet converts those dollars, and that conversion is not a deposit.
+  // https://hellostake.com/au/support/funding-and-withdrawal/funding/52905017357209
+  // https://hellostake.com/au/support/funding-and-withdrawal/funding/52906816466201
+  stake: ["AUD"],
+  // A transfer into the multiproducto account is a PSE payment or the
+  // Bancolombia button, in pesos. Local shares and the MGC settle in pesos.
+  // No other currency is left unconverted.
+  // https://www.bancolombia.com/centro-de-ayuda/preguntas-frecuentes/como-transferir-para-comprar-acciones-bancolombia-etrading
+  // https://valores.bancolombia.com/productos-servicios/acciones
+  valores: ["COP"],
   // The cash account takes Australian dollars from an Australian bank
   // account and leaves them in dollars. No other currency is accepted.
   // https://fund-docs.vanguard.com/AU-Vanguard_Personal_Investor_Guide_Part_A.pdf
@@ -535,6 +608,12 @@ const FOLDER = {
   // SEPA payment in euros. There is no foreign-currency balance.
   // https://www.justtrade.com/fileadmin/Formulare/Preis-und-Leistungsverzeichnis.pdf
   justtrade: ["EUR"],
+  // The euro clearing account stays euros. Up to three more accounts, in
+  // dollars, francs and pounds, stay in that currency so a trade in it is
+  // not converted. Any other currency is an FX pair, not a balance.
+  // https://www.tradersplace.de/service/service-tools/waehrungskonten
+  // https://tradersplace.de/konditionen/deine-konditionen
+  tradersplace: ["EUR", "USD", "CHF", "GBP"],
   shoonya: ["INR"],
   siebert: ["USD"],
   sogotrade: ["USD"],

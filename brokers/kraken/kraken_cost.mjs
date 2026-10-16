@@ -23,14 +23,15 @@
 // Kraken says they do not count toward the volume, and does not print
 // them a different rate. Higher tiers are volume the page does not have.
 //
-// An xStock (IEMGx) is neither of those. There is no tape to add, so the
-// published fee is the whole bill, the way a coin's is. Outside the EEA a
-// round trip that sells straight back is taker both ways on the Pro book:
-// 0.10 % a leg from the first tier (fee schedule, 29 September 2026).
-// That book is closed to the EEA. An EEA account can hold dollars, so the
-// trip is a purchase in USD or USDG, which is 0, and no FX is added.
-// Paying with another currency, or converting, is 1 % a leg and is not
-// this trip. The spread inside the quote is not printed, so it is not added.
+// An xStock (AAPLX) is neither of those. Outside the EEA a round trip
+// that sells straight back is taker both ways on the Pro book: 0.10 % a
+// leg from the first tier (fee schedule, 29 September 2026). That book is
+// closed to the EEA. An EEA account can hold dollars, so the trip is a
+// purchase in USD or USDG, which is 0, and no FX is added. Paying with
+// another currency, or converting, is 1 % a leg and is not this trip.
+// The fiche prints bid and ask. That touch is stored under XSTK and added
+// on top of the fee. A coin uses Kraken's own dollar book, KRKN, the same
+// way.
 //
 //   https://support.kraken.com/articles/getting-started-with-equities
 //   https://support.kraken.com/articles/cross-platform-fee-tier-changes
@@ -46,7 +47,7 @@
 import { EEA } from "../../accepted.mjs";
 import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
-import { listingKey, spreadLeaf } from "../../spreads/venues.mjs";
+import { cryptoId, listingKey, spreadLeaf } from "../../spreads/venues.mjs";
 import { spreads } from "../../spreads/book.mjs";
 import { plus, finite, bookParts } from "../../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
@@ -147,12 +148,20 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
     // Dollars can sit on the account, so an EEA purchase in USD or USDG is 0
     // and no conversion is required. The 1 % is another currency.
     const leg = eea ? 0 : XSTOCK_TAKER;
+    const xbook = spreadLeaf(spreads, {
+      isin: m.row.isin,
+      mic: "XSTK",
+      currency: "USD",
+      broker: "kraken",
+      ticker: m.row.ticker,
+    });
+    const marketBp = xbook.leaf?.bp ?? null;
     const listing = {
       isin: String(m.row.isin || "").toUpperCase() || null,
       ticker: m.row.ticker || null,
       name: m.row.name || null,
       type: m.row.type || null,
-      mic: null,
+      mic: marketBp == null ? null : "XSTK",
       exchange: "xStock",
       currency: "USD",
       brokerExchange: m.row.exchange || null,
@@ -160,10 +169,10 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
     const shared = {
       ...answer,
       listing,
-      // The EEA price can hide a spread Kraken does not print. Leaving bp
-      // empty is what makes the total say "unknown spread".
-      ...(eea ? {} : { bp: 0, perShare: 0 }),
-      url: eea ? SCHEDULE.xstocksFaq : SCHEDULE.xstocks,
+      // No touch yet: the EEA total stays unknown, and the other book is
+      // the fee alone. A stored touch replaces both.
+      ...(marketBp == null ? (eea ? {} : { bp: 0, perShare: 0 }) : { bp: marketBp }),
+      url: xbook.leaf?.url || (eea ? SCHEDULE.xstocksFaq : SCHEDULE.xstocks),
       fx: { quote: QUOTE, asOf: FX_AS_OF, listing: usdPer("USD") },
       fxIfConverted: 0,
       remark: eea
@@ -182,9 +191,10 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
     const notionalUsd = toUsd(notional, listing.currency);
     const brokerFees = notionalUsd == null ? null : notionalUsd * leg * 2;
     const one = notionalUsd == null ? null : notionalUsd * leg;
+    const bookUsd = marketBp == null || notionalUsd == null ? null : (notionalUsd * marketBp) / 1e4;
     return {
       ...shared,
-      usd: eea ? null : finite(brokerFees, 6),
+      usd: eea ? (marketBp == null ? null : finite(bookUsd, 6)) : finite(plus(brokerFees, bookUsd ?? 0), 6),
       brokerFees: finite(brokerFees, 6),
       trade: {
         shares: n,
@@ -195,18 +205,30 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
       },
       buy: { fee: finite(one, 6) },
       sell: { fee: finite(one, 6) },
-      parts: { market: eea ? null : 0, commission: finite(brokerFees, 6), regulatory: 0 },
+      parts: {
+        market: marketBp == null ? (eea ? null : 0) : finite(bookUsd, 6),
+        commission: finite(brokerFees, 6),
+        regulatory: 0,
+      },
       basis: eea
         ? `xStocks schedule, re-read ${SCHEDULE.readOn}: purchase in USD or USDG is 0, dollars can be held (page of ${SCHEDULE.xstocksAsOf})`
         : `Pro xStocks book, re-read ${SCHEDULE.readOn}: taker 0.10% a leg from $0 (page of ${SCHEDULE.xstocksAsOf})`,
       confidence: eea
-        ? "USD or USDG purchase is 0; another currency or a conversion is 1% a leg and is not this trip; no FX; no book for the EEA"
-        : `taker ${(XSTOCK_TAKER * 100).toFixed(2)}% a leg from $0 of volume; maker −0.02% is not this trip`,
+        ? marketBp == null
+          ? "USD or USDG purchase is 0; another currency or a conversion is 1% a leg and is not this trip; no FX; no touch on this line"
+          : "USD or USDG purchase is 0; the touch on the xStock fiche is added; another currency or a conversion is 1% a leg and is not this trip; no FX"
+        : `taker ${(XSTOCK_TAKER * 100).toFixed(2)}% a leg from $0 of volume; maker −0.02% is not this trip${marketBp == null ? "" : "; the touch on the xStock fiche is added"}`,
     };
   }
   const crypto = isCrypto(m.row);
   const book = crypto
-    ? { leaf: null, mic: null }
+    ? spreadLeaf(spreads, {
+        isin: cryptoId(m.row.ticker),
+        mic: "KRKN",
+        currency: "USD",
+        broker: "kraken",
+        ticker: m.row.ticker,
+      })
     : spreadLeaf(spreads, {
         isin: m.row.isin,
         mic: m.venue?.mic ?? null,
@@ -220,13 +242,13 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
     ticker: m.row.ticker || null,
     name: m.row.name || null,
     type: m.row.type || null,
-    mic: crypto ? null : book.mic ?? m.venue?.mic ?? null,
-    exchange: crypto ? "Crypto" : m.venue?.name ?? m.unsourced?.name ?? m.row.exchange ?? null,
+    mic: crypto ? (book.leaf ? "KRKN" : null) : book.mic ?? m.venue?.mic ?? null,
+    exchange: crypto ? (book.leaf ? "Kraken" : "Crypto") : m.venue?.name ?? m.unsourced?.name ?? m.row.exchange ?? null,
     currency: String(m.row.currency || "USD").toUpperCase(),
     brokerExchange: m.row.exchange || null,
   };
   const leaf = book.leaf;
-  const marketBp = crypto ? null : bp ?? leaf?.bp ?? null;
+  const marketBp = bp ?? leaf?.bp ?? null;
   const marketPerShare = crypto ? null : perShare ?? leaf?.perShare ?? null;
   const parts = bookParts({
     bp: marketBp,
@@ -239,9 +261,9 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
   const shared = {
     ...answer,
     listing,
-    bp: crypto ? 0 : marketBp,
+    bp: crypto ? (marketBp ?? 0) : marketBp,
     perShare: marketPerShare,
-    url: crypto ? SCHEDULE.tiers : SCHEDULE.equities,
+    url: crypto ? leaf?.url || SCHEDULE.tiers : SCHEDULE.equities,
     fx: { quote: QUOTE, asOf: FX_AS_OF, listing: usdPer(listing.currency) },
     fxIfConverted: 0,
     ...(crypto

@@ -128,7 +128,7 @@ function remarkOf(plan) {
     plan === "private"
       ? "The £18 charge every six months is waived for Private Banking."
       : "Account charge £18 every six months, waived for an Invest Wise account and for Private Banking.";
-  return `${charge} A regular investment is free. Dividend reinvestment fees is 2% of the dividend, capped at £10.`;
+  return `${charge} Dividend reinvestment fees is 2% of the dividend, capped at £10.`;
 }
 
 export function roundTrip({ etf, place, currency, shares, price, bp = null, perShare = null, plan = DEFAULT_PLAN }) {

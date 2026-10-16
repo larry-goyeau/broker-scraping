@@ -113,8 +113,10 @@
 // Warsaw custody is the IBIE pass-through: 0.03 % a year of a PLN stock,
 // calculated daily, and it stays out of the ticket;
 // Venture extended hours (0.002 CAD a share), which are a session and not this trip.
-// Conversion is the client's own order. The list prints no FX commission,
-// so none is invented. Custody of an ordinary line is not a ticket.
+// Conversion is the client's own order. The list valid 01.10.2026 charges
+// spot FX at 0.005 % of the amount, minimum in that currency, billed in
+// the base currency. The line is the remark. It is not in the ticket.
+// Custody of an ordinary line is not a ticket.
 //
 //   node brokers/lynx/lynx_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
 //   node brokers/lynx/lynx_cost.mjs TTE SBF EUR --shares=10 --price=60
@@ -158,6 +160,14 @@ const PREVIEWED_NOW = new Set([
   "tsej", "sfb", "wse", "ose", "cph", "bvl", "ath", "riga", "adx", "dfm", "iob", "canada", "connect", "otc", "pra", "bux",
 ]);
 const PREVIEW = { on: "2026-09-29", account: "U15604371" };
+// Venues the August file left unpriced. The list valid 01.10.2026 is the
+// rate. `floorsToday` printed a different floor on 2026-10-14.
+const FROM_OCTOBER = new Set([
+  "lse-gbp", "lse-eur", "aqse", "wins", "ebs-gbp", "hex", "brussels", "ised",
+  "ebs-eur", "bux-eur", "sehk", "sehk-cnh", "sehk-usd", "canada-usd", "mexi",
+  "ebs-usd", "aeb-usd", "sbf-usd", "sgx-usd", "ebs-jpy",
+]);
+const FLOOR_TODAY = new Set(["lse-gbp", "aqse", "wins", "hex", "brussels", "ised", "sehk"]);
 
 const WITHDRAW = { firstFree: true, sepa: 1, wire: 8, ccy: "EUR" };
 const ACTIVITY = {
@@ -269,27 +279,75 @@ const VENUE = [
   // IHC and EMAAR. 0.35 %, floor 25 AED, no cap through 50 000 AED.
   { id: "adx", exchanges: ["ADX", "DFM"], currencies: ["AED"], rule: pct(0.0035, 25, "AED"), note: null },
   // Air Astana GDR. 0.14 %, floor 9 USD, no cap through 100 000 USD.
-  { id: "iob", exchanges: ["LSEIOB1"], currencies: ["USD"], rule: pct(0.0014, 9, "USD"), note: null },
+  // The October list puts LSE on this same dollar row. The portal would not
+  // preview a London dollar ETF on 2026-10-14, so the measured row stands.
+  { id: "iob", exchanges: ["LSEIOB1", "LSE"], currencies: ["USD"], rule: pct(0.0014, 9, "USD"), note: null },
   { id: "canada", exchanges: ["TSE", "VENTURE", "PURE", "AEQLIT"], currencies: ["CAD"], rule: CAD, note: null },
   // Moutai and Ping An Insurance on Shanghai Connect, Wuliangye and Ping An
   // Bank on Shenzhen Connect, 2026-10-13. 0.19 %, floor 50 CNH, no cap
   // through 2 000 000 CNH. STAR and ChiNext still answer "no trading permissions".
   { id: "connect", exchanges: ["SEHKNTL", "SEHKSZSE"], currencies: ["CNH"], rule: pct(0.0019, 50, "CNH"), note: null },
   { id: "otc", exchanges: ["PINK"], currencies: ["USD"], rule: OTC, note: null },
-  // Demo DUR256326, 2026-10-13. CEZ and Komercni banka. 0.15 %, floor
-  // 70 CZK. 10 000 CZK asked for 70. 100 000 asked for 150, 1 000 000 for
-  // 1 500, 10 000 000 for 15 000. No cap. The list's 0.25 % and 150 CZK
-  // floor are not that ticket.
-  { id: "pra", exchanges: ["PRA"], currencies: ["CZK"], rule: pct(0.0015, 70, "CZK"), note: null },
-  // Demo DUR256326, 2026-10-13. OTP and Magyar Telekom. 0.55 % up to
-  // 4 444 444 HUF, then 0.10 % on the excess, floor 200 HUF. 10 000 000 HUF
-  // asked for 30 000 HUF. The list's 0.15 % and 4 000 HUF floor are not
-  // that ticket.
-  { id: "bux", exchanges: ["BUX"], currencies: ["HUF"], rule: { rate: 0.0055, min: 200, band: 4444444, bandRate: 0.001, ccy: "HUF" }, note: null },
+  // Live account, 2026-10-14. Heineken on Prague. 1 000 CZK and 20 000 CZK
+  // both ask for 150 CZK. The demo's 70 CZK floor is not this ticket.
+  // The 0.15 % slope is the October demo: an order large enough to clear
+  // 150 CZK does not fit in the cash, so the rate was not reprinted.
+  { id: "pra", exchanges: ["PRA"], currencies: ["CZK"], rule: pct(0.0015, 150, "CZK"), note: null },
+  // Live account, 2026-10-14. OTP and Magyar Telekom. 1 500 HUF on a
+  // 1 000 HUF order, on one OTP share (41 470 HUF), on 7 shares and on
+  // 15 shares (623 550 HUF). No percentage. The demo's 0.55 % and its
+  // 200 HUF floor are not this ticket.
+  { id: "bux", exchanges: ["BUX"], currencies: ["HUF"], rule: { flat: 1500, ccy: "HUF" }, note: null },
+  // Places the August file left unknown. The list valid 01.10.2026 prices
+  // them under "other trading venues" (or names the dollar line). Where the
+  // 2026-10-14 ticket printed a floor, that floor replaces the list's.
+  // The percentage still cannot clear the floor inside the cash, so it is
+  // the list's. India is not on the list: it stays unknown.
+  //
+  // HSBC London, 1, 10, 40 and 100 shares: 9 GBP after the 0.5 % stamp.
+  // Aquis and WINS printed the same 9 GBP. The list's 10 GBP is not that ticket.
+  { id: "lse-gbp", exchanges: ["LSE"], currencies: ["GBP"], rule: pct(0.0015, 9, "GBP"), note: null },
+  { id: "lse-eur", exchanges: ["LSE"], currencies: ["EUR"], rule: pct(0.001, 6, "EUR", 145), note: null },
+  { id: "aqse", exchanges: ["AQSE"], currencies: ["GBP"], rule: pct(0.0015, 9, "GBP"), note: null },
+  { id: "wins", exchanges: ["WINS"], currencies: ["GBP"], rule: pct(0.0015, 9, "GBP"), note: null },
+  // A Swiss sterling ETF would not preview. The list's 10 GBP floor stays.
+  { id: "ebs-gbp", exchanges: ["EBS"], currencies: ["GBP"], rule: pct(0.0015, 10, "GBP"), note: null },
+  // Nokia: 6 EUR at 1, 3, 5 and 8 EUR. Brussels: 6 EUR at 5, 20, 80 and 400 EUR.
+  // Glanbia: 6 EUR, and the extra 1 % in the cash line is the Irish stamp.
+  { id: "hex", exchanges: ["HEX"], currencies: ["EUR"], rule: pct(0.001, 6, "EUR", 145), note: null },
+  { id: "brussels", exchanges: ["ENEXT.BE"], currencies: ["EUR"], rule: pct(0.001, 6, "EUR", 145), note: null },
+  { id: "ised", exchanges: ["ISED"], currencies: ["EUR"], rule: pct(0.001, 6, "EUR", 145), note: null },
+  { id: "ebs-eur", exchanges: ["EBS"], currencies: ["EUR"], rule: pct(0.001, 6, "EUR", 145), note: null },
+  { id: "bux-eur", exchanges: ["BUX"], currencies: ["EUR"], rule: pct(0.001, 6, "EUR", 145), note: null },
+  // HSBC Hong Kong, 400 shares at 1 HKD: the cash line is 51.01 HKD, the
+  // list's 50 HKD floor plus about 1 HKD of exchange fees. 0.15 % of a
+  // size the account can pay stays under that floor.
+  { id: "sehk", exchanges: ["SEHK"], currencies: ["HKD"], rule: pct(0.0015, 50, "HKD"), note: null },
+  { id: "sehk-cnh", exchanges: ["SEHK"], currencies: ["CNH"], rule: pct(0.0015, 50, "CNH"), note: null },
+  // A dollar line that the venue table does not name uses the other-USD
+  // schedule, which is the listed-US per-share tier. It is not a US tape,
+  // so it does not carry SEC or TAF.
+  { id: "sehk-usd", exchanges: ["SEHK"], currencies: ["USD"], rule: USD_LISTED, note: null },
+  { id: "canada-usd", exchanges: ["TSE", "VENTURE", "PURE", "AEQLIT"], currencies: ["USD"], rule: USD_LISTED, note: null },
+  // Mexico would not preview (knowledge questionnaire). The list's peso row.
+  { id: "mexi", exchanges: ["MEXI"], currencies: ["MXN"], rule: pct(0.0015, 150, "MXN"), note: null },
+  // Named dollar lines on the October list. The portal refused the ETF preview.
+  { id: "ebs-usd", exchanges: ["EBS"], currencies: ["USD"], rule: pct(0.0015, 10, "USD"), note: null },
+  { id: "aeb-usd", exchanges: ["AEB"], currencies: ["USD"], rule: pct(0.0015, 10, "USD"), note: null },
+  { id: "sbf-usd", exchanges: ["SBF"], currencies: ["USD"], rule: pct(0.0015, 10, "USD"), note: null },
+  { id: "sgx-usd", exchanges: ["SGX"], currencies: ["USD"], rule: pct(0.0015, 10, "USD"), note: null },
+  { id: "ebs-jpy", exchanges: ["EBS"], currencies: ["JPY"], rule: pct(0.0015, 1000, "JPY"), note: null },
 ];
 
 const US_TAPE = new Set(["NASDAQ", "NYSE", "AMEX", "ARCA", "BATS", "IEX", "MEMX", "CBOE"]);
 const NOTE_BY_CCY = { HUF: "bux", CZK: "pra", PLN: "pln", CAD: "canada" };
+// Spot FX, list valid 01.10.2026. The minimum is in the currency converted.
+const FX_MIN = {
+  AED: 20, AUD: 8, BGN: 10, CAD: 7, CHF: 5, CNH: 35, CZK: 125, DKK: 35,
+  EUR: 5, GBP: 4, HKD: 40, HUF: 2000, ILS: 20, JPY: 750, KRW: 7000,
+  MXN: 100, NOK: 50, NZD: 9, PLN: 25, RON: 25, RUB: 500, SAR: 20,
+  SEK: 50, SGD: 7, TRY: 150, USD: 5, ZAR: 100,
+};
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
@@ -371,6 +429,9 @@ export function taxesFor(isin) {
 
 function remarkOf({ listing, note }) {
   const lines = ["€5 / month if no activity and < 100000 € invested."];
+  const settle = fxCcy(listing?.currency);
+  const fxMin = FX_MIN[settle];
+  if (fxMin != null) lines.push(`FX 0.005% (min ${fxMin} ${settle}) when cash ≠ ${settle}.`);
   if (ADR_NAMED.test(String(listing?.name || ""))) {
     lines.push(`ADR/GDR/CDI pass-through ${ADR_PER_SHARE} per share on the record date, not on this trip.`);
   }
@@ -397,6 +458,10 @@ function remarkOf({ listing, note }) {
  */
 export function commissionSide({ shares, amount, rule }) {
   if (!rule) return null;
+
+  if (rule.flat != null) {
+    return { raw: rule.flat, charged: rule.flat, floored: false, capped: false, currency: rule.ccy };
+  }
 
   if (rule.perShare != null) {
     if (shares == null || !Number.isFinite(Number(shares))) return null;
@@ -471,7 +536,11 @@ function frankfurtSide(amountEur) {
 }
 
 function basisOf(id, rule) {
-  const head = id === "b3"
+  const head = id === "bux"
+    ? `barème LYNX ${id}, aperçu OTP du 2026-10-14 : `
+    : id === "pra"
+      ? `barème LYNX ${id}, aperçu HEIA du 2026-10-14 : `
+    : id === "b3"
     ? `barème LYNX ${id}, même aperçu PETR4 que les autres comptes le 2026-10-10 : `
     : id === "sg"
       ? `barème LYNX ${id}, aperçu D05 du 2026-10-13 sur U15604371 : `
@@ -479,9 +548,12 @@ function basisOf(id, rule) {
         ? `barème LYNX ${id}, même aperçu TEVA que WH SelfInvest le 2026-10-10 : `
     : PREVIEWED_NOW.has(id)
     ? `barème LYNX ${id}, aperçu du 2026-10-13 : `
+    : FROM_OCTOBER.has(id)
+      ? `barème LYNX ${id}, liste du 2026-10-01${FLOOR_TODAY.has(id) ? ", plancher de l'aperçu du 2026-10-14" : ""} : `
     : PREVIEWED.has(id)
       ? `barème LYNX ${id}, aperçu du ${PREVIEW.on} : `
       : `barème LYNX ${id}, liste du ${SCHEDULE.validAsOf} : `;
+  if (rule.flat != null) return head + `${rule.flat} ${rule.ccy} par sens`;
   if (rule.perShare != null) {
     const tier =
       rule.perShareAfter != null
@@ -684,7 +756,11 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
 function confidenceOf({ id, rule, buyComm, marketBp, marketPerShare, rates, taxPct, taxSource, american, unsourced, note, auction, frankfurt }) {
   const said = [];
   said.push(
-    (id === "b3"
+    (id === "bux"
+      ? `commission LYNX, palier ${id}, aperçu OTP du 2026-10-14, `
+      : id === "pra"
+        ? `commission LYNX, palier ${id}, aperçu HEIA du 2026-10-14, `
+      : id === "b3"
       ? `commission LYNX, palier ${id}, même aperçu PETR4 que les autres comptes le 2026-10-10, `
       : id === "sg"
         ? `commission LYNX, palier ${id}, aperçu D05 du 2026-10-13 sur U15604371, `
@@ -692,6 +768,8 @@ function confidenceOf({ id, rule, buyComm, marketBp, marketPerShare, rates, taxP
           ? `commission LYNX, palier ${id}, même aperçu TEVA que WH SelfInvest le 2026-10-10, `
       : PREVIEWED_NOW.has(id)
       ? `commission LYNX, palier ${id}, aperçu du 2026-10-13, `
+      : FROM_OCTOBER.has(id)
+        ? `commission LYNX, palier ${id}, liste du 2026-10-01${FLOOR_TODAY.has(id) ? ", plancher de l'aperçu du 2026-10-14" : ""}, `
       : PREVIEWED.has(id)
         ? `commission LYNX, palier ${id}, aperçu du ${PREVIEW.on}, compte ${PREVIEW.account}, `
         : `commission LYNX, palier ${id}, liste du ${SCHEDULE.validAsOf} lue le ${SCHEDULE.readOn}, `) +

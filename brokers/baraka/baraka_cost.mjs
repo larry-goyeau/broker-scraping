@@ -156,6 +156,8 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     currency: code(m.row.currency),
     brokerExchange: m.row.exchange || null,
   };
+  // DriveWealth files no equity mix, so Q is absent and the book is the
+  // quoted NBBO. The day a mix is filed, the same call is that 605 times Q.
   const quoted = american
     ? usBookPerShare({ broker: "baraka", ticker: listing.ticker, fallback: book.leaf?.perShare ?? null })
     : null;
@@ -204,11 +206,11 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const confidence = [
     shared.basis,
     listing.type === "ETF" || listing.type === "ETN" || listing.type === "ETC" ? "barème ETF" : "barème action",
-    american ? "mélange 606 de DriveWealth" : "place du Golfe, sans 606",
+    american ? "606 DriveWealth, sans mix actions" : "place du Golfe, sans 606",
     american
       ? marketPerShare != null
-        ? `carnet ${marketPerShare} $ la part`
-        : `pas de feuille de carnet : ${m.unsourced?.name || listing.exchange}`
+        ? `NBBO coté ${marketPerShare} $ la part : le 606 DriveWealth n'a pas de mix actions`
+        : `pas de relevé NBBO pour cette ligne`
       : marketBp != null
         ? `carnet ${marketBp} bp`
         : `pas de feuille de carnet : ${m.unsourced?.name || listing.exchange}`,

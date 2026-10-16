@@ -58,7 +58,7 @@ const SHARE = 9.5;
 const FX = 0.0125;
 const PTM = { each: 1.5, above: 10000 };
 const REMARK =
-  "Account charge £36 a year, free for an 18–25 year old. A regular investment is free. Dividend reinvestment fees is 2% of the dividend, capped at £9.50.";
+  "Account charge £36 a year, free for an 18–25 year old. Dividend reinvestment fees is 2% of the dividend, capped at £9.50.";
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];

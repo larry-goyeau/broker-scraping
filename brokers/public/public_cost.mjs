@@ -154,6 +154,8 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     : book.leaf?.perShare ?? null;
   const marketPerShare = perShare ?? quoted;
   const marketBp = bp ?? (marketPerShare != null ? null : book.leaf?.bp ?? null);
+  // The directory names the country. Q is Apex's gap against the improved
+  // 605, so the book is that 605 times Q, not the quoted NBBO.
   const parts = bookParts({
     bp: marketBp,
     perShare: marketPerShare,
@@ -192,12 +194,14 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const confidence = [
     shared.basis,
     listing.brokerExchange === "OTC" ? "barème OTC" : "barème coté",
-    "mélange 606 d'Apex Clearing",
-    marketPerShare != null
-      ? `carnet ${marketPerShare} $ la part`
-      : marketBp != null
-        ? `carnet ${marketBp} bp`
-        : `pas de feuille de carnet : ${m.unsourced?.name || listing.exchange}`,
+    listed ? "mélange 606 d'Apex Clearing" : "place du catalogue",
+    listed && marketPerShare != null
+      ? `carnet 605 × Q Apex, ${marketPerShare} $ la part`
+      : marketPerShare != null
+        ? `carnet ${marketPerShare} $ la part`
+        : marketBp != null
+          ? `carnet ${marketBp} bp`
+          : `pas de feuille de carnet : ${m.unsourced?.name || listing.exchange}`,
   ].join(" ; ");
 
   return {

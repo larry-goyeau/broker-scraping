@@ -19,7 +19,8 @@
 // `path` is the code a source's own URLs use where it differs from the MIC. Euronext
 // serves Milan under its ETF segment, ETFP, and answers 404 for XMIL.
 
-import { apply606, usBookPerShare } from "./rule606.mjs";
+import fs from "node:fs";
+import { apply606, qOf, usBookPerShare } from "./rule606.mjs";
 export const VENUES = [
   {
     mic: "XETR",
@@ -159,9 +160,9 @@ export const VENUES = [
   // whether the fund happens to be listed on Arca or Nasdaq — and the source, the Rule
   // 605 monthly reports, is keyed by symbol for exactly that reason.
   //
-  // They are listed separately all the same, because the file's unit of identity is the
-  // triple (place, ISIN, devise) and a broker naming Nasdaq should not be answered with a
-  // leaf filed under Arca. It also leaves room for the day a venue does diverge.
+  // They stay separate rows in the file, one per named place. The number a broker
+  // is shown is still the one NBBO: the 605 of the ticker, times that broker's Q
+  // when a 606 names one. A touch filed under NYSE or Nasdaq is not that number.
   //
   // Hours are the regular session, which is what the rule measures: covered orders are
   // those received during regular trading hours. Pre- and post-market cost more and are
@@ -269,7 +270,9 @@ export const VENUES = [
     name: "Nasdaq Copenhagen",
     source: "xcse",
     hours: { open: "09:00", close: "16:55", tz: "Europe/Copenhagen" },
-    exact: ["xcse", "copenhagen", "omk", "omxcop", "cph", "denmarkcse"],
+    // "nasdaqcopenhagen" is the whole comdirect label. Left to the substring pass it
+    // matches "nasdaq" first and the line is priced on the American book.
+    exact: ["xcse", "copenhagen", "omk", "omxcop", "cph", "denmarkcse", "nasdaqcopenhagen"],
     loose: [],
   },
   // The same public screener, category FIRST_NORTH rather than the main
@@ -380,12 +383,25 @@ export const VENUES = [
       "wienerborse",
       "wienerboerse",
       "boersewien",
+      "wien",
       "viennastockexchange",
       "austriavie",
       "wen",
       "vse",
     ],
     loose: ["austria"],
+  },
+  // Delayed best bid and best ask on the exchange's own instrument page.
+  // Continuous matching is 09:15–15:15. Auction-only names are a different
+  // method and are not this book. The quote names the currency; a second
+  // counter is its own book.
+  {
+    mic: "XLJU",
+    name: "Ljubljana Stock Exchange",
+    source: "ljse",
+    hours: { open: "09:15", close: "15:15", tz: "Europe/Ljubljana" },
+    exact: ["xlju", "ljse", "ljubljana", "ljubljanskaborza", "ljubljanastockexchange"],
+    loose: [],
   },
   // The public instrument list prints the best bid and the best ask in francs.
   // One touch, not a session average. Neon sends every line here.
@@ -415,6 +431,17 @@ export const VENUES = [
     source: "gettex",
     hours: { open: "08:00", close: "22:00", tz: "Europe/Berlin" },
     exact: ["xmun", "gettex", "gettex2", "munc", "mund", "mun", "munich", "bayerischeboerse", "boersemuenchen"],
+    loose: [],
+  },
+  // The Munich floor, not gettex. MUNA is the regulated book and MUNB the
+  // Freiverkehr; both are 15-minute MiFID files. "Munich" stays on gettex:
+  // that is the name ING and comdirect already use for XMUN.
+  {
+    mic: "XMUC",
+    name: "Börse München",
+    source: "munich",
+    hours: { open: "08:00", close: "22:00", tz: "Europe/Berlin" },
+    exact: ["xmuc", "munchen", "boersemunchen", "muna", "munb"],
     loose: [],
   },
   {
@@ -492,6 +519,17 @@ export const VENUES = [
     exact: ["tib"],
     loose: [],
   },
+  // ING's own Direkthandel quote, code TGT. Not Tradegate and not gettex:
+  // the order may be sent on to one of them, but the fiche prints this
+  // book. Open 08:00–22:00. `ing_touch.mjs` reads it.
+  {
+    mic: "TGT",
+    name: "Direkthandel",
+    source: "direkthandel",
+    hours: { open: "08:00", close: "22:00", tz: "Europe/Berlin" },
+    exact: ["direkthandel", "tgt"],
+    loose: [],
+  },
   // The listing page is behind Cloudflare; the 15-minute MiFIR tape is not, once a
   // browser has opened the index. XSTU is the cash book Swissquote writes SWB / SWB2.
   {
@@ -509,7 +547,7 @@ export const VENUES = [
     name: "Bolsa de Valores de Lima",
     source: "lima",
     hours: { open: "08:30", close: "14:52", tz: "America/Lima" },
-    exact: ["xlim", "bvl", "bolsadevaloresdelima", "lima"],
+    exact: ["xlim", "bolsadevaloresdelima", "lima"],
     loose: [],
   },
   // The official INTRA tape is paid. The public site still prints a 20-minute delayed
@@ -521,6 +559,42 @@ export const VENUES = [
     source: "bmv",
     hours: { open: "08:30", close: "15:00", tz: "America/Mexico_City" },
     exact: ["xmex", "xbmv", "mexi", "bmv", "mexico", "mexicanstockexchange", "bolsamexicana"],
+    loose: [],
+  },
+  // BIVA's licensed feed sells the best bid and offer. The public site prints
+  // a delayed last price. The touch read here is the two-sided quote TradingView
+  // streams for the BIVA board, in pesos. Continuous trading is 08:30–14:50.
+  {
+    mic: "BIVA",
+    name: "BIVA",
+    source: "biva",
+    hours: { open: "08:30", close: "14:50", tz: "America/Mexico_City" },
+    exact: ["biva"],
+    loose: [],
+  },
+  // Continuous matching is 10:00–16:55 in São Paulo. The closing call and
+  // the after-hours session are another book. The touch is the delayed
+  // bid and ask on the Interactive Brokers portal. There is no live
+  // adapter, so a later pass of spread.mjs leaves the stored figure
+  // alone. Another currency, if the portal prints one, is its own book.
+  // https://www.b3.com.br/pt_br/solucoes/plataformas/puma-trading-system/para-participantes-e-traders/horario-de-negociacao/acoes/
+  {
+    mic: "BVMF",
+    name: "B3 São Paulo",
+    source: "b3",
+    hours: { open: "10:00", close: "16:55", tz: "America/Sao_Paulo" },
+    exact: ["bvmf", "b3", "bovespa", "bmfbovespa", "xbsp", "bvsp"],
+    loose: [],
+  },
+  // BYMA publishes the best bid and offer on a licensed feed. The touch read
+  // here is the two-sided quote TradingView streams for the Buenos Aires
+  // board. Pesos and dollars are two lines. Continuous trading is 10:30–17:00.
+  {
+    mic: "XBUE",
+    name: "BYMA",
+    source: "byma",
+    hours: { open: "10:30", close: "17:00", tz: "America/Argentina/Buenos_Aires" },
+    exact: ["xbue", "byma", "bcba", "xmev", "merval"],
     loose: [],
   },
   // Canada publishes no free pre-trade book of its own: TMX serves bid and ask only to a
@@ -600,14 +674,22 @@ export const VENUES = [
     name: "Dubai Financial Market",
     source: "dfm",
     hours: { open: "10:00", close: "15:00", tz: "Asia/Dubai" },
-    // "kse" used to be read as Karachi, on the strength of the initials alone. It is
-    // Swissquote's code, it appears on six lines and no others, and all six are Kuwaiti
-    // or Bahraini companies quoted in dirhams — which is what a cross-listing on Dubai
-    // looks like and not what a Pakistani one looks like. All six are on the DFM board
-    // under the same symbol, and five are in Al Ramz's catalogue named DFM outright.
-    // What would falsify this is a catalogue writing KSE for Seoul or Karachi; those
-    // would arrive in won or rupees and so would miss every AED leaf filed here.
-    exact: ["xdfm", "dfm", "dubai", "dubaifinancialmarket", "kse"],
+    // "kse" is not an alias of this board. Swissquote's six dirham lines are
+    // cross-listings and stay here; Boubyan's dinar lines are Boursa Kuwait.
+    // resolveVenue splits the two.
+    exact: ["xdfm", "dfm", "dubai", "dubaifinancialmarket"],
+    loose: [],
+  },
+  {
+    // Continuous matching is 09:00–13:00 Kuwait time, Sunday to Thursday.
+    // The closing auction starts at 13:00. The public quote is in fils;
+    // the ratio is the dinar book. A counter the quote names in another
+    // currency is its own book.
+    mic: "XKUW",
+    name: "Boursa Kuwait",
+    source: "kuwait",
+    hours: { open: "09:00", close: "13:00", tz: "Asia/Kuwait", days: ["Sun", "Mon", "Tue", "Wed", "Thu"] },
+    exact: ["xkuw", "boursakuwait", "kuwaitstockexchange", "kuwait"],
     loose: [],
   },
   {
@@ -734,7 +816,9 @@ export const VENUES = [
     name: "Shanghai Stock Exchange",
     source: "sina",
     hours: { open: "09:30", close: "15:00", tz: "Asia/Shanghai" },
-    exact: ["xshg", "sse", "shanghai", "shanghaisc", "sehkntl", "sehkstar"],
+    // "sse" is also Stockholm's old initials. Saxo and eToro write it on Nordic
+    // lines. resolveVenue sends a krona line, and Verisure's euro line, to Stockholm.
+    exact: ["xshg", "shanghai", "shanghaisc", "sehkntl", "sehkstar"],
     loose: [],
   },
   {
@@ -791,6 +875,17 @@ export const VENUES = [
     exact: ["kraken", "krkn"],
     loose: [],
   },
+  // Kraken's xStock fiche prints the underlying share's bid and ask. That
+  // book is Kraken's, so it stays off the US tape: the same ISIN on Nasdaq
+  // keeps the 605 figure.
+  {
+    mic: "XSTK",
+    name: "xStock",
+    source: "krakenx",
+    hours: { open: "09:30", close: "16:00", tz: "America/New_York" },
+    exact: ["xstock", "xstk"],
+    loose: [],
+  },
   {
     mic: "CBSE",
     name: "Coinbase",
@@ -807,7 +902,7 @@ export const VENUES = [
     name: "ASX",
     source: "asx",
     hours: { open: "10:00", close: "16:00", tz: "Australia/Sydney" },
-    exact: ["xasx", "asx", "asxnationalmarket", "australia"],
+    exact: ["xasx", "asx", "asxnationalmarket", "australia", "australiansecuritiesexchange"],
     loose: [],
   },
   {
@@ -931,6 +1026,30 @@ export const VENUES = [
     loose: [],
   },
   {
+    // ISO 10383. Continuous matching is 09:00–11:30 and 13:00–14:30.
+    // The hours here are the outer window; the lunch break is not a
+    // second session this file can name. The touch reader skips it.
+    mic: "HSTC",
+    name: "Hanoi Stock Exchange",
+    source: "hnx",
+    hours: { open: "09:00", close: "14:30", tz: "Asia/Ho_Chi_Minh" },
+    exact: ["hstc", "hnx", "hanoi"],
+    loose: [],
+  },
+  {
+    // Continuous matching is 09:00–12:00 and 13:30–16:00 Jakarta time.
+    // The hours here are the outer window; the lunch break is not a
+    // second session this file can name. The touch reader skips it.
+    // The book is the rupiah quote. A counter in another currency is
+    // its own book.
+    mic: "XIDX",
+    name: "Indonesia Stock Exchange",
+    source: "idx",
+    hours: { open: "09:00", close: "16:00", tz: "Asia/Jakarta" },
+    exact: ["xidx", "idx", "jakarta", "indonesia"],
+    loose: [],
+  },
+  {
     // ISO 10383: Warsaw's GlobalConnect MTF, not the main board (XWAR) and
     // not NewConnect (XNCO). Continuous trading is 09:05–17:05. The opening
     // auction is the same minute the session starts; the reader uses the
@@ -991,6 +1110,16 @@ export const VENUES = [
     exact: ["jse", "xjse", "johannesburg", "johannesburgstockexchange"],
     loose: [],
   },
+  // Nairobi Securities Exchange. Continuous trading is 09:30–15:00.
+  // The touch is the NSEKE book, in shillings. The official feed is licensed.
+  {
+    mic: "XNAI",
+    name: "Nairobi Securities Exchange",
+    source: "nairobi",
+    hours: { open: "09:30", close: "15:00", tz: "Africa/Nairobi" },
+    exact: ["xnai", "nseke", "nairobi", "nairobisecuritiesexchange"],
+    loose: [],
+  },
   // Nigerian Exchange. Continuous trading is 09:30–15:50 Lagos, then the
   // pre-close. The touch is the NSENG book. The official quote API is licensed.
   {
@@ -1011,15 +1140,148 @@ export const VENUES = [
     exact: ["bist", "xist", "istanbul", "istanbulstockexchange", "borsaistanbul"],
     loose: [],
   },
+  // Bulgarian Stock Exchange, Sofia. Continuous trading is 10:10–16:55.
+  // The touch is the BSESOF book, in euro. Bombay's BSE is not this book.
+  {
+    mic: "XBUL",
+    name: "Bulgarian Stock Exchange",
+    source: "sofia",
+    hours: { open: "10:10", close: "16:55", tz: "Europe/Sofia" },
+    exact: ["bsesof", "xbul", "sofia", "bulgarianstockexchange"],
+    loose: [],
+  },
   // Bolsa de Valores de Colombia. Pre-open from 09:15, continuous trading
-  // 09:30–16:00 Bogota. The touch is the BVC book in pesos. Swissquote's
-  // BVC lines in pesos mexicanos are not this book.
+  // 09:30–16:00 Bogota. The touch is the BVC book in Colombian pesos. A
+  // catalogue line in another currency gets that ratio when the ISIN has
+  // no second line on this board.
   {
     mic: "XBOG",
     name: "Bolsa de Valores de Colombia",
     source: "bvc",
     hours: { open: "09:30", close: "16:00", tz: "America/Bogota" },
     exact: ["bvc", "colombia", "xbog", "bolsadevaloresdecolombia"],
+    loose: [],
+  },
+  // Euronext Athens. Continuous trading is 10:30–17:00. The touch is the
+  // delayed pre-trade file: the best bid and the best ask, rank 1. The
+  // derivatives book (XADE) is not written here. EN.A is used only when
+  // the name has no main-market quote.
+  {
+    mic: "XATH",
+    name: "Athens Stock Exchange",
+    source: "athex",
+    hours: { open: "10:30", close: "17:00", tz: "Europe/Athens" },
+    exact: ["ath", "xath", "athens", "athex", "enax", "euronextathens"],
+    loose: [],
+  },
+  // Nasdaq Baltic. One continuous session, 10:00–15:55 local, on each of the
+  // three exchanges. The touch is the exchange's own bid and ask on the
+  // share list. A Tallinn book is not written onto Riga or Vilnius.
+  {
+    mic: "XTAL",
+    name: "Nasdaq Tallinn",
+    source: "xtal",
+    hours: { open: "10:00", close: "15:55", tz: "Europe/Tallinn" },
+    exact: ["xtal", "tallinn", "ntallinn", "omxtse", "tallinnstockexchange"],
+    loose: [],
+  },
+  {
+    mic: "XRIS",
+    name: "Nasdaq Riga",
+    source: "xris",
+    hours: { open: "10:00", close: "15:55", tz: "Europe/Riga" },
+    exact: ["xris", "riga", "nriga", "omxrse", "rigastockexchange"],
+    loose: [],
+  },
+  {
+    mic: "XLIT",
+    name: "Nasdaq Vilnius",
+    source: "xlit",
+    hours: { open: "10:00", close: "15:55", tz: "Europe/Vilnius" },
+    exact: ["xlit", "vilnius", "nvilnius", "omxvse", "vilniusstockexchange"],
+    loose: [],
+  },
+  // Cyprus Stock Exchange. Continuous trading is 10:30–17:00. The touch is
+  // the exchange's own bid and ask. Copenhagen's CSE and the Canadian CSE
+  // are other books and are not written here.
+  {
+    mic: "XCYS",
+    name: "Cyprus Stock Exchange",
+    source: "csecy",
+    hours: { open: "10:30", close: "17:00", tz: "Europe/Nicosia" },
+    exact: ["csecy", "xcys", "cyprus", "cyprusstockexchange"],
+    loose: [],
+  },
+  // Bratislava. Continuous trading is 11:00–15:30. The touch is level 1 of
+  // the exchange's own delayed pre-trade file, in the currency that file
+  // names. A zloty listing is not given the euro book.
+  {
+    mic: "XBRA",
+    name: "Bratislava Stock Exchange",
+    source: "bsse",
+    hours: { open: "11:00", close: "15:30", tz: "Europe/Bratislava" },
+    exact: ["bsse", "xbra", "bratislava", "bratislavastockexchange"],
+    loose: [],
+  },
+  // Stock Exchange of Thailand. Two continuous sessions, 10:00–12:30 and
+  // 14:00–16:30. The touch is the SET book. An NVDR (.R) is its own book.
+  // The board is baht. A catalogue line in another currency gets that
+  // ratio when the name has no second currency on this board.
+  {
+    mic: "XBKK",
+    name: "Stock Exchange of Thailand",
+    source: "set",
+    hours: { open: "10:00", close: "16:30", tz: "Asia/Bangkok" },
+    exact: ["set", "xbkk", "thailand", "stockexchangeofthailand"],
+    loose: [],
+  },
+  // Pakistan Stock Exchange. Continuous trading is 09:32–15:30 Karachi,
+  // Monday to Thursday. The touch is the PSX book, in rupees. A catalogue
+  // line in another currency gets that ratio when the name has no second
+  // currency on this board. The rupee line is kept even when no broker files it.
+  {
+    mic: "XKAR",
+    name: "Pakistan Stock Exchange",
+    source: "psx",
+    hours: { open: "09:32", close: "15:30", tz: "Asia/Karachi" },
+    exact: ["psx", "xkar", "karachi", "pakistan", "pakistanstockexchange"],
+    loose: [],
+  },
+  // Moscow Exchange. Continuous trading is 10:00–18:45. The touch is the
+  // TQBR book. MOEX names the ruble SUR; it is stored as RUB. A dollar,
+  // yuan or euro book of the same ISIN is kept even when no broker files
+  // that currency. The odd-lot board is not written here.
+  {
+    mic: "MISX",
+    name: "Moscow Exchange",
+    source: "moex",
+    hours: { open: "10:00", close: "18:45", tz: "Europe/Moscow" },
+    exact: ["moex", "misx", "moscow", "moscowexchange"],
+    loose: [],
+  },
+  // Tel Aviv. Continuous trading is 10:00–17:14, Sunday to Thursday.
+  // The touch is the TASE book. Prices arrive in agorot; the ratio is
+  // stored in ILA and in ILS. Another catalogue currency gets that
+  // ratio when the name has no second book. Agorot stay even when no
+  // broker files them.
+  {
+    mic: "XTAE",
+    name: "Tel Aviv Stock Exchange",
+    source: "tase",
+    hours: { open: "10:00", close: "17:14", tz: "Asia/Jerusalem" },
+    exact: ["tase", "xtae", "telaviv", "telavivstockexchange"],
+    loose: [],
+  },
+  // Casablanca. The opening fixing is 09:30, then continuous trading
+  // until 15:20. The touch is the exchange's own bid and ask, in
+  // dirhams. A catalogue line in another currency gets that ratio
+  // when the name has no second book.
+  {
+    mic: "XCAS",
+    name: "Casablanca Stock Exchange",
+    source: "xcas",
+    hours: { open: "09:30", close: "15:20", tz: "Africa/Casablanca" },
+    exact: ["casablanca", "xcas", "csema", "boursedecasablanca"],
     loose: [],
   },
 ];
@@ -1060,16 +1322,19 @@ export const KNOWN_UNSOURCED = [
     name: "Euronext, place non précisée",
     why: "le broker ne dit pas laquelle des places Euronext",
   },
-  // What is left of the American entry now that the venues above are sourced: the labels
-  // that name a country rather than a book, and IEX, which is a venue no retail flow is
-  // routed to and which the 605 table is not keyed by.
+  // A country, not a book. The improved 605 times the broker's Q still
+  // belongs to that tape. IEX stays in the next entry: no retail flow is
+  // routed there, and the 605 table is not keyed by it.
   {
-    match: ["us", "usa", "unitedstates", "chicago", "nygif", "iex", "iexg", "eprl"],
+    match: ["us", "usa", "unitedstates"],
     name: "places américaines, sans précision",
     why: "le broker ne dit pas laquelle",
   },
-  { match: ["ath", "xath", "athens", "athex", "enax"], name: "Athens Stock Exchange", why: "adaptateur non écrit" },
-  { match: ["tase", "telaviv"], name: "Tel Aviv", why: "adaptateur non écrit" },
+  {
+    match: ["chicago", "nygif", "iex", "iexg", "eprl"],
+    name: "places américaines, sans précision",
+    why: "le broker ne dit pas laquelle",
+  },
   // IBKR / CapTrader / Mexem write TSE for Toronto; Swissquote / DEGIRO / eToro
   // write TSE for Tokyo. `resolveVenue` splits on CAD/CA vs JPY/JP before
   // falling through to this leftover.
@@ -1080,12 +1345,6 @@ export const KNOWN_UNSOURCED = [
   { match: ["cse"], name: "CSE (Canada ou Copenhague)", why: "le sigle nomme les deux places" },
   { match: ["krx"], name: "Korea Exchange", why: "adaptateur non écrit" },
   {
-    match: ["b3", "bovespa", "bmfbovespa", "bvmf", "xbsp", "bvsp"],
-    name: "B3 São Paulo",
-    why: "bande officielle payante (UMDF) ; le différé public n'inclut pas la touche",
-  },
-  { match: ["xmuc"], name: "Börse München (plancher)", why: "adaptateur non écrit" },
-  {
     match: ["aeqlit", "xats", "alpha"],
     name: "Alpha Exchange",
     why: "bande officielle payante (TMX Datalinx), pas de carnet public",
@@ -1094,16 +1353,11 @@ export const KNOWN_UNSOURCED = [
   // OTC / leftover destination — no MIC, no site, no public tape. Not IBKR ATS
   // (IBKRATS is NMS midpoint) and not a neighbour's book.
   { match: ["value"], name: "IB Value Exchange", why: "gré à gré IBKR, pas de carnet public" },
-  { match: ["set", "xbkk", "thailand"], name: "Stock Exchange of Thailand", why: "adaptateur non écrit" },
   {
     match: ["omx", "nasdaqomx", "nasdaqnordic"],
     name: "Nasdaq Nordic",
     why: "le broker ne dit pas laquelle des places nordiques",
   },
-  { match: ["xris", "riga", "nriga", "omxrse", "rigastockexchange"], name: "Nasdaq Riga", why: "adaptateur non écrit" },
-  { match: ["xtal", "tallinn", "ntallinn", "omxtse"], name: "Nasdaq Tallinn", why: "adaptateur non écrit" },
-  { match: ["xlit", "vilnius", "nvilnius", "omxvse"], name: "Nasdaq Vilnius", why: "adaptateur non écrit" },
-  { match: ["biva"], name: "BIVA", why: "adaptateur non écrit" },
   // Nasdaq Dubai shares a building with DFM and not a board: its own site shows last
   // price and no touch, and the DFM feed that covers the emirate stops at DFM's own
   // securities. Tadawul publishes a ticker rich in everything except the two numbers
@@ -1111,10 +1365,7 @@ export const KNOWN_UNSOURCED = [
   { match: ["difx", "nasdaqdubai", "nasdaqdxb"], name: "Nasdaq Dubai", why: "pas de carnet public" },
   { match: ["crypto", "trd", "tradias", "tradiasotc", "zerohash", "zerohashe"], name: "Crypto", why: "gré à gré, pas un carnet unique" },
   // BET in the catalogues is Budapest (BÉT), which has its own book.
-  { match: ["csecy", "xcys", "cyprus"], name: "Cyprus Stock Exchange", why: "adaptateur non écrit" },
   { match: ["pse"], name: "PSE (Prague ou Manille)", why: "le sigle nomme les deux places" },
-  { match: ["bcba", "byma", "xbue", "xmev", "merval"], name: "BYMA", why: "adaptateur non écrit" },
-  { match: ["bsesof", "xbul", "sofia"], name: "Bulgarian Stock Exchange", why: "adaptateur non écrit" },
   // Xontro, the Berlin floor, stopped on 1 January 2026 and Börse Berlin
   // did not replace it. The file that still updates is Equiduct, a different
   // book, and it is not written here.
@@ -1122,9 +1373,7 @@ export const KNOWN_UNSOURCED = [
   // Börse Berlin's retail book. Avanza's site fills France, Belgium, the
   // Netherlands and Portugal here, whatever Euronext the list still prints.
   { match: ["xeqt", "equiduct"], name: "Equiduct", why: "adaptateur non écrit" },
-  { match: ["nseke", "xnai", "nairobi"], name: "Nairobi Securities Exchange", why: "adaptateur non écrit" },
-  { match: ["bsse", "xbra", "bratislava"], name: "Bratislava Stock Exchange", why: "adaptateur non écrit" },
-  { match: ["psx", "xkar", "karachi", "pakistan"], name: "Pakistan Stock Exchange", why: "adaptateur non écrit" },
+  { match: ["xkuw", "kuwait", "boursakuwait", "kuwaitstockexchange"], name: "Boursa Kuwait", why: "adaptateur non écrit" },
   // KASE prints a best bid and a best offer, and on 22 Sep 2026 the bid was
   // above the offer on 43 of the 49 names that had both. Those are the day's
   // extremes, not the two sides of one book, so there is nothing to store.
@@ -1157,6 +1406,27 @@ export function resolveVenue(row) {
     .filter(Boolean)
     .map(norm)
     .filter(Boolean);
+
+  // A bare "NASDAQ" priced in kroner is Copenhagen. TORM's dollar line is the
+  // American one; the kroner line is not. "Nasdaq Copenhagen" is an exact alias
+  // and never reaches this test.
+  if (names.includes("nasdaq") && String(row.currency || "").toUpperCase() === "DKK") {
+    return { venue: VENUES.find((v) => v.mic === "XCSE"), assumed: false };
+  }
+  // IBKR's BVL is Euronext Lisbon. The same three letters are also Lima.
+  // A euro line, or a Portuguese ISIN, is Lisbon. A sol line is Lima.
+  // With no currency the code stays unresolved, so a lookup by the raw
+  // exchange code still finds the catalogue row.
+  if (names.includes("bvl")) {
+    const ccy = String(row.currency || "").toUpperCase();
+    const isin = String(row.isin || "").toUpperCase();
+    if (ccy === "EUR" || isin.startsWith("PT")) {
+      return { venue: VENUES.find((v) => v.mic === "XLIS"), assumed: false };
+    }
+    if (ccy === "PEN" || ccy === "USD" || isin.startsWith("PE")) {
+      return { venue: VENUES.find((v) => v.mic === "XLIM"), assumed: false };
+    }
+  }
 
   for (const n of names) {
     const hit = VENUES.find((v) => v.exact.includes(n));
@@ -1200,6 +1470,20 @@ export function resolveVenue(row) {
     if (ccy === "CAD" || isin.startsWith("CA")) {
       return { venue: VENUES.find((v) => v.mic === "XCNQ"), assumed: false };
     }
+    // LankaBangla writes CSE for the Chittagong Stock Exchange, in taka.
+    if (ccy === "BDT" || isin.startsWith("BD")) {
+      return {
+        venue: null,
+        unsourced: { name: "Chittagong Stock Exchange", why: "pas de carnet public", match: ["cse"] },
+      };
+    }
+    // CAL writes CSE for the Colombo Stock Exchange, in rupees.
+    if (ccy === "LKR" || isin.startsWith("LK")) {
+      return {
+        venue: null,
+        unsourced: { name: "Colombo Stock Exchange", why: "pas de carnet public", match: ["cse"] },
+      };
+    }
   }
   // TradingView and COL write PSE for the Philippine Stock Exchange. Prague
   // uses the same three letters. A peso line or a Philippine ISIN is
@@ -1216,19 +1500,53 @@ export function resolveVenue(row) {
   }
   // Stockholm is the only Nordic book quoted in kronor. Helsinki is euro,
   // Copenhagen Danish kroner, Iceland króna. A broker that writes the group
-  // and prices the line in SEK has named Stockholm.
+  // and prices the line in SEK has named Stockholm. SSE is the same split:
+  // Saxo and eToro write it for Stockholm, and it is also Shanghai's initials.
   if (names.some((n) => n === "omx" || n === "nasdaqomx" || n === "nasdaqnordic")) {
     const ccy = String(row.currency || "").toUpperCase();
     if (ccy === "SEK") return { venue: VENUES.find((v) => v.mic === "XSTO"), assumed: false };
+  }
+  if (names.includes("sse")) {
+    const ccy = String(row.currency || "").toUpperCase();
+    const isin = String(row.isin || "").toUpperCase();
+    if (ccy === "SEK" || (ccy === "EUR" && isin && !isin.startsWith("CN"))) {
+      return { venue: VENUES.find((v) => v.mic === "XSTO"), assumed: false };
+    }
+    return { venue: VENUES.find((v) => v.mic === "XSHG"), assumed: false };
+  }
+  // Boubyan writes KSE for Boursa Kuwait, in dinars. Swissquote writes KSE for
+  // six dirham cross-listings that really are on the DFM board.
+  if (names.includes("kse")) {
+    const ccy = String(row.currency || "").toUpperCase();
+    const isin = String(row.isin || "").toUpperCase();
+    if (ccy === "AED") return { venue: VENUES.find((v) => v.mic === "XDFM"), assumed: false };
+    if (ccy === "KWD" || isin.startsWith("KW")) {
+      return { venue: VENUES.find((v) => v.mic === "XKUW"), assumed: false };
+    }
   }
   for (const n of names) {
     const gap = KNOWN_UNSOURCED.find((u) => u.match.includes(n));
     if (gap) return { venue: null, unsourced: gap };
   }
-  // A sterling CDI is settled in pounds. Its quote is not the foreign
-  // book and not the American NBBO. The label starts with "CDI", and
-  // "CDI NASDAQ" must not fall through to Nasdaq on the substring pass.
-  if (names.some((n) => n === "cdi" || n.startsWith("cdi"))) return { venue: null };
+  // AJ Bell's CDI is its own quote. The label starts with "CDI", and
+  // "CDI NASDAQ" must not fall through to Nasdaq. The book is stored
+  // under CDI plus the underlying MIC, never on that MIC itself.
+  if (names.some((n) => n === "cdi" || n.startsWith("cdi"))) {
+    const label = String(row.exchange || row.venue || row.exchangeName || "").trim();
+    const underlying = label.replace(/^cdi\s*/i, "").trim().toUpperCase();
+    const home = VENUES.find((v) => v.mic === underlying);
+    return {
+      venue: {
+        mic: `CDI${underlying}`,
+        name: label || `CDI ${underlying}`,
+        source: "ajbellcdi",
+        hours: home?.hours || null,
+        exact: [],
+        loose: [],
+      },
+      assumed: false,
+    };
+  }
   for (const n of names) {
     if (n.length < 8) continue;
     // A city inside a long name beats the group name around it, or "Euronext -
@@ -1254,15 +1572,9 @@ export function listingKey(row) {
   return { key: `${place}|${isin}|${currency}`, venue, assumed: Boolean(assumed), unsourced };
 }
 
-// Swissquote (and a few others) write "Euronext" without the city. Guessing Paris
-// would be the error this file exists to prevent — unless the cache holds exactly
-// one of the four books for that ISIN and currency, in which case there is nothing
-// to guess.
-const EURONEXT_MICS = ["XPAR", "XAMS", "XBRU", "XLIS"];
-// Stockholm, Helsinki, Copenhagen, Iceland. A broker that writes "Nasdaq
-// Nordic" has not named the city. The Baltic markets and First North are
-// not in this list: they have no book here.
-const NORDIC_MICS = ["XSTO", "XHEL", "XCSE", "XICE"];
+// A label that names several books. Currency and ISIN are tried first. What is
+// left is the book closest to the broker's own country, among those the label
+// confuses — not a guess at a city the label never meant.
 const US_MICS = ["XNAS", "ARCX", "XNYS", "XASE", "BATS"];
 // Rule 605 is the listed US tape. OTC does not file one; its book is the touch.
 const NMS_MICS = new Set([...US_MICS, "IEXG", "MEMX"]);
@@ -1270,17 +1582,198 @@ export function isListedUsTape(mic) {
   return NMS_MICS.has(String(mic || "").toUpperCase());
 }
 // KOSPI (XKRX) and KOSDAQ (XKOS). A broker that writes KRX has not said which.
+// Both sit in Seoul, so the closer one is not a choice.
 const KOREA_MICS = ["XKRX", "XKOS"];
 
-// A listed American line with no per-share leaf under its ISIN. The 605 file
-// is keyed by ticker. `usBookPerShare` already applies the broker's Q, or the
-// quoted book when the broker files no 606.
+// Cities the ambiguous labels mix up. [lat, lon] of the exchange.
+const CONFUSED = {
+  euronext: [
+    ["XPAR", 48.8566, 2.3522],
+    ["XAMS", 52.3676, 4.9041],
+    ["XBRU", 50.8503, 4.3517],
+    ["XLIS", 38.7223, -9.1393],
+    ["XMSM", 53.3498, -6.2603],
+    ["XMIL", 45.4642, 9.19],
+    ["XOSL", 59.9139, 10.7522],
+  ],
+  nasdaqnordic: [
+    ["XSTO", 59.3293, 18.0686],
+    ["XCSE", 55.6761, 12.5683],
+    ["XHEL", 60.1699, 24.9384],
+    ["XICE", 64.1466, -21.9426],
+  ],
+  tse: [
+    ["XTSE", 43.6532, -79.3832],
+    ["XTKS", 35.6762, 139.6503],
+  ],
+  cse: [
+    ["XCNQ", 43.6532, -79.3832],
+    ["XCSE", 55.6761, 12.5683],
+  ],
+  pse: [
+    ["XPRA", 50.0755, 14.4378],
+    ["XPHS", 14.5995, 120.9842],
+  ],
+};
+
+// Capitals, or the city the broker-list country is read from. UK is London.
+const COUNTRY_AT = {
+  AD: [42.5063, 1.5218], AE: [24.4539, 54.3773], AM: [40.1872, 44.5152], AR: [-34.6037, -58.3816],
+  AT: [48.2082, 16.3738], AU: [-33.8688, 151.2093], BA: [43.8563, 18.4131], BE: [50.8503, 4.3517],
+  BG: [42.6977, 23.3219], BH: [26.2235, 50.5876], BN: [4.9031, 114.9398], BR: [-15.7975, -47.8919],
+  BS: [25.0443, -77.3504], BW: [-24.6282, 25.9231], BZ: [17.251, -88.759], CA: [43.6532, -79.3832],
+  CH: [46.948, 7.4474], CL: [-33.4489, -70.6693], CN: [39.9042, 116.4074], CO: [4.711, -74.0721],
+  CY: [35.1856, 33.3823], CZ: [50.0755, 14.4378], DE: [52.52, 13.405], DK: [55.6761, 12.5683],
+  EE: [59.437, 24.7536], EG: [30.0444, 31.2357], ES: [40.4168, -3.7038], FI: [60.1699, 24.9384],
+  FR: [48.8566, 2.3522], GE: [41.7151, 44.8271], GH: [5.6037, -0.187], GR: [37.9838, 23.7275],
+  HK: [22.3193, 114.1694], HR: [45.815, 15.9819], HU: [47.4979, 19.0402], ID: [-6.2088, 106.8456],
+  IE: [53.3498, -6.2603], IL: [32.0853, 34.7818], IN: [19.076, 72.8777], IS: [64.1466, -21.9426],
+  IT: [41.9028, 12.4964], JP: [35.6762, 139.6503], KE: [-1.2921, 36.8219], KR: [37.5665, 126.978],
+  KW: [29.3759, 47.9774], KZ: [51.1694, 71.4491], LI: [47.141, 9.5209], LT: [54.6872, 25.2797],
+  LU: [49.6116, 6.1319], LV: [56.9496, 24.1052], ME: [42.4304, 19.2594], MT: [35.8989, 14.5146],
+  MU: [-20.1609, 57.5012], MX: [19.4326, -99.1332], MY: [3.139, 101.6869], NA: [-22.5609, 17.0658],
+  NG: [9.0765, 7.3986], NL: [52.3676, 4.9041], NO: [59.9139, 10.7522], NZ: [-41.2865, 174.7762],
+  OM: [23.588, 58.3829], PE: [-12.0464, -77.0428], PH: [14.5995, 120.9842], PK: [33.6844, 73.0479],
+  PL: [52.2297, 21.0122], PT: [38.7223, -9.1393], QA: [25.2854, 51.531], RO: [44.4268, 26.1025],
+  RS: [44.7866, 20.4489], SA: [24.7136, 46.6753], SC: [-4.6796, 55.492], SE: [59.3293, 18.0686],
+  SG: [1.3521, 103.8198], SI: [46.0569, 14.5058], SK: [48.1486, 17.1077], TH: [13.7563, 100.5018],
+  TR: [41.0082, 28.9784], TW: [25.033, 121.5654], TZ: [-6.7924, 39.2083], UA: [50.4501, 30.5234],
+  UK: [51.5074, -0.1278], US: [40.7128, -74.006], UY: [-34.9011, -56.1645], VN: [21.0278, 105.8342],
+  ZA: [-33.9249, 18.4241], ZW: [-17.8252, 31.0335],
+};
+
+const slug = (value) => String(value || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
+
+// Same names the page uses, so the country is the one shown for that folder.
+const BROKER_NAME = {
+  saxo: "Saxo Bank", avanza: "Avanza", virtuamericas: "Virtu Americas LLC", lloyds: "Lloyds",
+  halifax: "Halifax", bimi: "Intesa Sanpaolo IMI Securities Corp.", bhmuae: "BHM Capital",
+  bunq: "Bunq", century: "Century Financial", boursobank: "BoursoBank", alramz: "Al Ramz Capital",
+  boubyan: "Boubyan", tastytrade: "Tastytrade", bri: "BRI Danareksa Sekuritas", bux: "BUX",
+  davy: "Davy Select", oanda: "OANDA TMS", plum: "Plum", easyequities: "EasyEquities",
+  efocs: "EuroFinance", elana: "Elana Trading", siebert: "Siebert Financial", sogotrade: "SogoTrade",
+  swissquote: "Swissquote", thndr: "Thndr", tiger: "Tiger Brokers", traderepublic: "Trade Republic",
+  tradestation: "TradeStation", tradeup: "TradeUP", tradezero: "TradeZero", tradier: "Tradier",
+  vested: "Vested Finance", vivid: "Vivid Money",
+  webull: "Webull", WHSelfInvest: "WH SelfInvest", xtb: "XTB", fortuneo: "Fortuneo",
+  fidelity: "Fidelity", lynx: "LYNX+", vanguarduk: "Vanguard UK", choice: "Choice",
+  "m.stock": "m.Stock", megabank: "Mega Bank", zsedirect: "ZSE Direct", vps: "VPS",
+  vndirect: "VNDirect", vietcap: "Vietcap", rakutenjp: "Rakuten Japan", spare: "SpareBank",
+  rakutenma: "Rakuten MY", profitmart: "Profitmart", dbs: "DBS Taiwan", "e.sun": "E.SUN",
+  scsb: "SCSB", standardchartered: "Standard Chartered Taiwan", unionbank: "Union Bank of Taiwan",
+  sinopac: "SinoPac", taishin: "Taishin", ctbc: "CTBC", moomoo: "moomoo Japan", disnat: "Desjardins",
+  ing: "ING Deutschland", prime: "Prime Transaction", mirae: "Mirae", bsc: "BSC", bdm: "BDM",
+  rabee: "Rabee Securities", pinetree: "Pinetree", cfgbank: "CFG Bank", wafabourse: "Wafa Bourse",
+  cih: "CIH", marketech: "Marketech Focus", fsmonesg: "FSMOne SG", fsmonehk: "FSMOne HK",
+  fsmonemy: "FSMOne MY", gotradeglobal: "Gotrade Global", gotradeid: "Gotrade Indonesia",
+  iol: "InvertirOnline", triipe: "Trii Perou", bks: "BKS Bank", public: "Public.com",
+  erste: "Erste", iguk: "IG UK", igue: "IG UE", icici: "ICICI", hdfcsky: "HDFC Sky", futu: "Futu",
+};
+const BROKER_LIST = {
+  mirae: "Mirae Asset Securities Vietnam", bsc: "BIDV Securities (BSC)",
+  boursobank: "BoursoBank (Boursorama)", iol: "InvertirOnline (IOL)", bks: "BKS Bank Slovenia",
+  erste: "Erste Biuro Maklerskie", iguk: "IG", igue: "IG Europe", triipe: "Trii Peru",
+  icici: "ICICI Direct", futu: "Futu / moomoo HK",
+};
+
+let brokerCountries = null;
+function brokerCountry(folder) {
+  if (!brokerCountries) {
+    brokerCountries = new Map();
+    const file = new URL("../broker-list.txt", import.meta.url);
+    const rows = fs.readFileSync(file, "utf8").split("\n").slice(1).map((line) => {
+      const [name, country] = line.split("\t");
+      return { name: name || "", country: country || "" };
+    }).filter((row) => row.name);
+    const find = (wanted) =>
+      rows.find((row) => row.name === wanted) || rows.find((row) => slug(row.name) === slug(wanted));
+    const folders = new Set([...Object.keys(BROKER_NAME), ...Object.keys(BROKER_LIST)]);
+    for (const entry of fs.readdirSync(new URL("../brokers/", import.meta.url), { withFileTypes: true })) {
+      if (entry.isDirectory()) folders.add(entry.name);
+    }
+    for (const key of folders) {
+      const listed = BROKER_LIST[key] || BROKER_NAME[key];
+      const hit = listed ? find(listed) : null;
+      if (hit?.country) {
+        brokerCountries.set(key, hit.country.toUpperCase());
+        continue;
+      }
+      const s = slug(key);
+      const exact = rows.find((row) => slug(row.name) === s);
+      if (exact?.country) {
+        brokerCountries.set(key, exact.country.toUpperCase());
+        continue;
+      }
+      let best = null;
+      for (const row of rows) {
+        const n = slug(row.name);
+        if (n.length < 4 && s.length < 4) continue;
+        if (n.startsWith(s) || (s.startsWith(n) && n.length >= 4)) {
+          if (!best || n.length < slug(best.name).length) best = row;
+        }
+      }
+      if (best?.country) brokerCountries.set(key, best.country.toUpperCase());
+    }
+  }
+  return brokerCountries.get(folder) || "";
+}
+
+function km(a, b) {
+  const rad = Math.PI / 180;
+  const dLat = (b[0] - a[0]) * rad;
+  const dLon = (b[1] - a[1]) * rad;
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(a[0] * rad) * Math.cos(b[0] * rad) * Math.sin(dLon / 2) ** 2;
+  return 2 * 6371 * Math.asin(Math.min(1, Math.sqrt(h)));
+}
+
+function confusedOf(unsourced) {
+  const match = unsourced?.match || [];
+  if (match.includes("euronext")) return "euronext";
+  if (match.includes("nasdaqnordic") || match.includes("omx")) return "nasdaqnordic";
+  if (match.includes("tse")) return "tse";
+  if (match.includes("cse")) return "cse";
+  if (match.includes("pse")) return "pse";
+  return "";
+}
+
+function closestMic(folder, kind) {
+  const at = COUNTRY_AT[brokerCountry(folder)];
+  const cities = CONFUSED[kind];
+  if (!at || !cities) return "";
+  let best = "";
+  let distance = Infinity;
+  for (const [mic, lat, lon] of cities) {
+    const d = km(at, [lat, lon]);
+    if (d < distance) {
+      distance = d;
+      best = mic;
+    }
+  }
+  return best;
+}
+
+// The listed American tape is one book, not a place per exchange. The 605
+// file is keyed by ticker. Q is the gap against that improved 605, so a
+// broker who has one gets `perShare × Q`. A broker with no Q gets the
+// quoted NBBO instead, and that is a different number.
 function listedTickerBook(mic, ccy, broker, ticker) {
-  if (!US_MICS.includes(String(mic || "").toUpperCase())) return null;
+  if (!isListedUsTape(mic)) return null;
   if (String(ccy || "").toUpperCase() !== "USD" || !ticker) return null;
   const perShare = usBookPerShare({ broker, ticker });
   if (perShare == null) return null;
-  return { leaf: { perShare, source: "us605" }, mic, via605: true };
+  const q = qOf(broker);
+  return { leaf: { perShare, source: "us605" }, mic, via605: true, ...(q != null ? { via606: true, q } : {}) };
+}
+
+// "US" names the tape and not Nasdaq or the NYSE. A broker with a Q is
+// priced on the improved 605. One without a Q gets the quoted NBBO.
+function unnamedUsBook(unsourced, ccy, broker, ticker) {
+  if (!unsourced?.match?.includes("us") || unsourced.match.includes("iex")) return null;
+  if (String(ccy || "").toUpperCase() !== "USD" || !ticker) return null;
+  const perShare = usBookPerShare({ broker, ticker });
+  if (perShare == null) return null;
+  const q = qOf(broker);
+  return { leaf: { perShare, source: "us605" }, mic: null, via605: true, ...(q != null ? { via606: true, q } : {}) };
 }
 
 export function spreadLeaf(spreads, { isin, mic, currency, unsourced, broker, ticker }) {
@@ -1298,6 +1791,21 @@ export function spreadLeaf(spreads, { isin, mic, currency, unsourced, broker, ti
     const worst = found.reduce((a, b) => ((b.leaf.bp ?? -1) > (a.leaf.bp ?? -1) ? b : a));
     return { leaf: worst.leaf, mic: worst.m, assumed: true };
   }
+  // Nasdaq, NYSE, Arca, American, BZX, IEX and MEMX print one tape. A touch
+  // stored under the named place does not replace the improved 605. OTC
+  // keeps its own book. A row that only says "US" is that same tape when
+  // the broker has a Q.
+  const unnamed = !isListedUsTape(mic) ? unnamedUsBook(unsourced, ccy, broker, ticker) : null;
+  if (unnamed) return unnamed;
+  if (isListedUsTape(mic) && ccy === "USD") {
+    const tickerBook = listedTickerBook(mic, ccy, broker, ticker);
+    if (tickerBook) return tickerBook;
+    if (id) {
+      const hit = [...US_MICS, "IEXG", "MEMX"].find((m) => spreads[id]?.[m]?.USD?.perShare != null);
+      if (hit) return apply606({ leaf: spreads[id][hit].USD, mic, assumed: hit !== mic }, { broker, ticker });
+    }
+    return { leaf: null, mic: mic || null };
+  }
   if (id && mic && spreads[id]?.[mic]?.[ccy]) {
     return apply606({ leaf: spreads[id][mic][ccy], mic }, { broker, ticker });
   }
@@ -1308,12 +1816,6 @@ export function spreadLeaf(spreads, { isin, mic, currency, unsourced, broker, ti
   if (twinLeaf?.bp != null && twinLeaf.perShare == null) {
     return apply606({ leaf: twinLeaf, mic }, { broker, ticker });
   }
-  // Rule 605 is a monthly average for the symbol, not a per-MIC book. A US
-  // line stored under BATS (Trading212) is the same tape as Swissquote's AMEX → ARCX.
-  if (id && US_MICS.includes(mic) && ccy === "USD") {
-    const hit = US_MICS.find((m) => spreads[id]?.[m]?.[ccy]?.perShare != null);
-    if (hit) return apply606({ leaf: spreads[id][hit][ccy], mic, assumed: true }, { broker, ticker });
-  }
   // The ISIN on the row is often the home listing. BHP at Admirals keeps
   // AU000000BHP4, IREN at Zesty keeps the field empty. The American book is
   // the ticker's 605 figure either way. Already the broker's own number, so
@@ -1321,15 +1823,34 @@ export function spreadLeaf(spreads, { isin, mic, currency, unsourced, broker, ti
   const tickerBook = listedTickerBook(mic, ccy, broker, ticker);
   if (tickerBook) return tickerBook;
   if (!id || !ccy) return { leaf: null, mic: mic || null };
-  // The broker named the group and not the board. One book on file is that
-  // board; two books would be a guess, and a guess is not written.
-  const group = unsourced?.match?.includes("euronext")
-    ? EURONEXT_MICS
-    : unsourced?.match?.includes("krx")
-      ? KOREA_MICS
-      : unsourced?.match?.includes("nasdaqnordic")
-        ? NORDIC_MICS
-        : null;
+  // The label mixes up several books. Currency and ISIN were already tried.
+  // The one left is the book closest to the broker's country. Paris,
+  // Amsterdam, Brussels, Milan and Oslo are too close for that to mean
+  // anything for Swissquote, Elana, Saxo and DEGIRO: several books, and
+  // the tightest one is kept.
+  const EUROPE_AMONG = new Set(["swissquote", "elana", "saxo", "degiro"]);
+  const confused = confusedOf(unsourced);
+  const among = EUROPE_AMONG.has(String(broker || "").split(":")[0]) && (confused === "euronext" || confused === "nasdaqnordic");
+  const picked = confused && !among ? closestMic(broker, confused) : "";
+  if (picked) {
+    const leaf = id ? spreads[id]?.[picked]?.[ccy] : null;
+    if (leaf) return apply606({ leaf, mic: picked, assumed: true }, { broker, ticker });
+    return { leaf: null, mic: picked, assumed: true };
+  }
+  if (among) {
+    const mics = CONFUSED[confused].map(([m]) => m);
+    const hits = mics
+      .map((m) => ({ m, leaf: spreads[id]?.[m]?.[ccy] }))
+      .filter((hit) => hit.leaf && (hit.leaf.bp > 0 || hit.leaf.perShare > 0));
+    if (!hits.length) return { leaf: null, mic: mic || null };
+    const withBp = hits.filter((hit) => hit.leaf.bp > 0);
+    const pool = withBp.length ? withBp : hits;
+    const key = withBp.length ? "bp" : "perShare";
+    const best = pool.reduce((a, b) => (b.leaf[key] < a.leaf[key] ? b : a));
+    return apply606({ leaf: best.leaf, mic: best.m, assumed: true }, { broker, ticker });
+  }
+  // KOSPI and KOSDAQ are the same city. One book on file is that board.
+  const group = unsourced?.match?.includes("krx") ? KOREA_MICS : null;
   if (!group) return listedTickerBook(mic, ccy, broker, ticker) || { leaf: null, mic: mic || null };
   const hits = group.filter((m) => spreads[id]?.[m]?.[ccy]);
   if (hits.length !== 1) return { leaf: null, mic: mic || null };
@@ -1385,6 +1906,12 @@ const PAGE = {
       ? `https://www.tradingview.com/symbols/JSE-${encodeURIComponent(code)}/`
       : "https://www.tradingview.com/markets/stocks-south-africa/market-movers-all-stocks/";
   },
+  nairobi: (l) => {
+    const code = String(l.ticker || "").trim().toUpperCase();
+    return code
+      ? `https://www.tradingview.com/symbols/NSEKE-${encodeURIComponent(code)}/`
+      : "https://www.tradingview.com/markets/stocks-kenya/market-movers-all-stocks/";
+  },
   ngx: (l) => {
     const code = String(l.ticker || "").trim().toUpperCase();
     return code
@@ -1403,6 +1930,48 @@ const PAGE = {
       ? `https://www.tradingview.com/symbols/BVC-${encodeURIComponent(code)}/`
       : "https://www.tradingview.com/markets/stocks-colombia/market-movers-all-stocks/";
   },
+  sofia: (l) => {
+    const code = String(l.ticker || "").trim().toUpperCase();
+    return code
+      ? `https://www.tradingview.com/symbols/BSESOF-${encodeURIComponent(code)}/`
+      : "https://www.bse-sofia.bg/en";
+  },
+  athex: () => "https://athens.euronext.com/en/market-data/data-services/delayed-feed",
+  xtal: (l) => `https://nasdaqbaltic.com/statistics/en/instrument/${l.isin}/trading`,
+  bsse: () => "https://www.bsse.sk/bcpb/en/market-data/pre-trade-and-post-trade-data/",
+  set: (l) => {
+    const code = String(l.ticker || "").trim().toUpperCase().replace(/-R$/, ".R");
+    return code
+      ? `https://www.tradingview.com/symbols/SET-${encodeURIComponent(code)}/`
+      : "https://www.set.or.th/en/market/product/stock/overview";
+  },
+  xcas: () => "https://www.casablanca-bourse.com/live-market/actions",
+  tase: (l) => {
+    const code = String(l.ticker || "").trim().toUpperCase();
+    return code
+      ? `https://www.tradingview.com/symbols/TASE-${encodeURIComponent(code)}/`
+      : "https://market.tase.co.il/en";
+  },
+  moex: (l) => {
+    const code = String(l.ticker || "").trim().toUpperCase();
+    return code
+      ? `https://www.moex.com/en/issue.aspx?board=TQBR&code=${encodeURIComponent(code)}`
+      : "https://www.moex.com/en/trading/stocks";
+  },
+  psx: (l) => {
+    const code = String(l.ticker || "").trim().toUpperCase();
+    return code
+      ? `https://www.tradingview.com/symbols/PSX-${encodeURIComponent(code)}/`
+      : "https://www.psx.com.pk/";
+  },
+  csecy: (l) => {
+    const code = String(l.ticker || "").trim().toUpperCase();
+    return code
+      ? `https://www.tradingview.com/symbols/CSECY-${encodeURIComponent(code)}/`
+      : "https://www.cse.com.cy/en-GB/regulated-market/market-indices/current-prices/stocks-per-market/";
+  },
+  xris: (l) => `https://nasdaqbaltic.com/statistics/en/instrument/${l.isin}/trading`,
+  xlit: (l) => `https://nasdaqbaltic.com/statistics/en/instrument/${l.isin}/trading`,
   vienna: (l) => `https://www.wienerborse.at/en/search/?q=${l.isin}`,
   xice: (l) =>
     l.orderbookId
@@ -1454,6 +2023,7 @@ const PAGE = {
   msx: () => "https://www.msx.om/market-watch-custom.aspx",
   tradegate: (l) => `https://www.tradegate.de/orderbuch.php?isin=${l.isin}`,
   gettex: () => "https://www.gettex.de/handel/delayed-data/pretrade-data",
+  munich: () => "https://www.boerse-muenchen.de/handel-support/kursdaten-delayed-data/",
   lsex: () => "https://www.ls-x.de/de/download",
   lsin: () => "https://www.ls-tc.de/de/download",
   quotrix: () => "https://cld42.boersenag.de/m13data/indexpt.html",

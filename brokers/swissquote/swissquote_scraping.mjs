@@ -198,6 +198,12 @@ function venueOf(item, match) {
     if (market.includes("MILAN") || market.includes("ITALIA")) return "MIL";
     return "EURONEXT";
   }
+  // "Warsaw SE" is not the exact alias "WARSAW". Without this, the stock
+  // list's first venue (Bratislava, for Tatry Mountain) would be used
+  // instead, and the zloty line would be filed as a euro Bratislava line.
+  if (market.includes("WARSAW")) return "GPW";
+  if (market.includes("PRAGUE")) return "PSECZ";
+  if (market.includes("BRATISLAVA")) return "BSSE";
   if (match?.exchanges) {
     const currency = normalize(item.stockKey?.currency).toUpperCase();
     if (currency === "USD") {

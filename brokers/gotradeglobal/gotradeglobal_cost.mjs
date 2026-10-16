@@ -130,9 +130,14 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     currency: code(m.row.currency),
     brokerExchange: m.row.exchange || null,
   };
-  const quoted = usBookPerShare({ broker: "gotradeglobal", ticker: listing.ticker, fallback: book.leaf?.perShare ?? null });
+  const listed = listing.brokerExchange === "US";
+  const quoted = listed
+    ? usBookPerShare({ broker: "gotradeglobal", ticker: listing.ticker, fallback: book.leaf?.perShare ?? null })
+    : book.leaf?.perShare ?? null;
   const marketBp = bp ?? null;
   const marketPerShare = perShare ?? quoted;
+  // The list names the country. Q is Alpaca's gap against the improved
+  // 605, so the book is that 605 times Q, not the quoted NBBO.
   const parts = bookParts({
     bp: marketBp,
     perShare: marketPerShare,
@@ -170,9 +175,9 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     shared.basis,
     listing.type === "ETF" || listing.type === "ETN" || listing.type === "ETC" ? "barème ETF" : "barème action",
     "mélange 606 d'Alpaca Securities",
-    marketPerShare != null
-      ? `carnet ${marketPerShare} $ la part`
-      : `pas de feuille de carnet : ${m.unsourced?.name || listing.exchange}`,
+    listed && marketPerShare != null
+      ? `carnet 605 × Q Alpaca, ${marketPerShare} $ la part`
+      : `pas de 605 pour cette ligne`,
   ].join(" ; ");
 
   return {

@@ -32,6 +32,14 @@
 //                                                2025-08-20: 0.50 % of the
 //                                                amount, minimum 150 USD,
 //                                                each side
+//   Warsaw SE                                   same sheet: 1.00 % of the
+//                                                amount, minimum 250 CHF,
+//                                                each side. The live ticket
+//                                                was not read: validation
+//                                                answered 502.
+//   Prague SE                                   same sheet: 1.00 % of the
+//                                                amount, minimum 200 CHF,
+//                                                each side.
 //   New Zealand SE                              same sheet: 0.50 % of the
 //                                                amount, minimum 75 NZD,
 //                                                each side. An AUD line on
@@ -209,6 +217,8 @@ const CH_BY_CODE = {
   ASX: "other",
   BMV: "mx",
   SET: "th",
+  GPW: "pl",
+  PSECZ: "cz",
 };
 
 const LU_ONLY = { DFM: "dubai" };
@@ -278,6 +288,8 @@ export function feeMarketOf(exchange, mic) {
   if (raw === "BMV" || m === "XMEX" || m === "XBMV") return "mx";
   if (raw === "SET" || m === "XBKK") return "th";
   if (raw === "NZX" || raw === "XNZE" || m === "XNZE") return "nz";
+  if (raw === "GPW" || m === "XWAR") return "pl";
+  if (raw === "PSECZ" || m === "XPRA") return "cz";
   return null;
 }
 
@@ -349,6 +361,22 @@ export function commissionEach(bank, { market, notional, currency, exchange }) {
     const floor = amountIn(150, "USD", "THB");
     if (floor == null) return null;
     return { charged: Math.max(notional * 0.005, floor), currency: "THB", rate: 0.005 };
+  }
+  if (market === "pl") {
+    // Other accessible markets, equity, 20 Aug 2025. Warsaw SE.
+    // 1.00 % of the amount, minimum ticket 250 CHF, each side.
+    if (settleCcy(currency) !== "PLN" || !(notional > 0)) return null;
+    const floor = amountIn(250, "CHF", "PLN");
+    if (floor == null) return null;
+    return { charged: Math.max(notional * 0.01, floor), currency: "PLN", rate: 0.01 };
+  }
+  if (market === "cz") {
+    // Same sheet, 20 Aug 2025. Prague SE. 1.00 % of the amount,
+    // minimum ticket 200 CHF, each side.
+    if (settleCcy(currency) !== "CZK" || !(notional > 0)) return null;
+    const floor = amountIn(200, "CHF", "CZK");
+    if (floor == null) return null;
+    return { charged: Math.max(notional * 0.01, floor), currency: "CZK", rate: 0.01 };
   }
   if (market === "nz") {
     // Same sheet, New Zealand SE. 0.50 % of the amount, minimum ticket
@@ -516,6 +544,8 @@ export function roundTrip({
         mic: m.venue?.mic ?? null,
         currency: m.row.currency,
         unsourced: m.unsourced,
+        broker: "swissquote",
+        ticker: m.row.ticker,
       });
   const listing = {
     isin: code(m.row.isin) || null,
@@ -560,7 +590,11 @@ export function roundTrip({
           ? "barème Swissquote Suisse, autres marchés du 2025-08-20 : Thaïlande 0,50 %, minimum 150 USD"
           : market === "nz" && bank === "ch"
             ? "barème Swissquote Suisse, autres marchés du 2025-08-20 : Nouvelle-Zélande 0,50 %, minimum 75 NZD"
-            : `barème Swissquote ${bank === "lu" ? "Europe" : "Suisse"}, palier ${market || "?"}, relu le ${SCHEDULE[bank].readOn}`,
+            : market === "pl" && bank === "ch"
+              ? "barème Swissquote Suisse, autres marchés du 2025-08-20 : Varsovie 1 %, minimum 250 CHF"
+              : market === "cz" && bank === "ch"
+                ? "barème Swissquote Suisse, autres marchés du 2025-08-20 : Prague 1 %, minimum 200 CHF"
+                : `barème Swissquote ${bank === "lu" ? "Europe" : "Suisse"}, palier ${market || "?"}, relu le ${SCHEDULE[bank].readOn}`,
     tax,
     ccy: QUOTE,
     fx: fxNote(listing.currency),
@@ -568,10 +602,26 @@ export function roundTrip({
   };
 
   if (!market) {
+    const n = Number(shares);
+    const p = Number(price);
+    const notional = !crypto && n > 0 && p > 0 ? n * p : null;
+    const notionalUsd = notional == null ? null : dollars(notional, listing.currency);
     return {
       ...shared,
       remark: remarkOf(bank),
       why: `${listing.brokerExchange || listing.exchange} n'a pas de palier publié chez Swissquote ${bank === "lu" ? "Europe" : "Suisse"}`,
+      ...(notional != null
+        ? {
+            trade: {
+              shares: n,
+              price: p,
+              amount: null,
+              notional,
+              notionalUsd: finite(notionalUsd, 6),
+              currency: listing.currency,
+            },
+          }
+        : {}),
     };
   }
 
@@ -600,9 +650,18 @@ export function roundTrip({
     exchange: m.row.exchange,
   });
   if (!ticket) {
+    const notionalUsd = dollars(notional, listing.currency);
     return {
       ...shared,
       why: `${listing.brokerExchange || listing.exchange} n'a pas de palier publié chez Swissquote ${bank === "lu" ? "Europe" : "Suisse"}`,
+      trade: {
+        shares: n,
+        price: p,
+        amount: null,
+        notional,
+        notionalUsd: finite(notionalUsd, 6),
+        currency: listing.currency,
+      },
       confidence: confidenceOf({ bank, market, listing, leaf, marketBp, marketPerShare, unsourced: m.unsourced, taxPct, swissEach }),
     };
   }
@@ -710,7 +769,11 @@ function confidenceOf({
         } €, lue le ${SCHEDULE.lu.readOn}`
       : market === "mx"
         ? `commission Suisse Bolsa Mexicana, aperçu WALMEX* le 2026-10-10 : le plus élevé entre 4 436,26 MXN et 1 %, plus 0,15 %`
-        : `commission Suisse palier ${market}, lue le ${SCHEDULE.ch.readOn}` +
+        : market === "pl"
+          ? `commission Suisse Warsaw SE, feuille des autres places du 2025-08-20 : 1 % , plancher 250 CHF`
+          : market === "cz"
+            ? `commission Suisse Prague SE, feuille des autres places du 2025-08-20 : 1 % , plancher 200 CHF`
+            : `commission Suisse palier ${market}, lue le ${SCHEDULE.ch.readOn}` +
           (ticket?.currency === "CHF" ? ` : ${ticket.charged} CHF par sens` : "")
   );
   if (bank === "ch" && market !== "crypto") {

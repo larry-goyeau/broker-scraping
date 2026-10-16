@@ -8,9 +8,9 @@
 // The shares screen is the Equity type. The ETF screen is the ETF type.
 // A row there is an ETF unless the name or the legal structure says ETC
 // or ETN. London, Aquis and Chi-X keep the MIC: that book is the quote.
-// Any other line is stored as "CDI" plus the MIC. The online order is a
-// sterling CDI, so the foreign book and the American NBBO are not the
-// spread. The currency stays the listing currency.
+// Any other line is stored as "CDI" plus the MIC. `ajbell_touch.mjs`
+// reads that line's bid and ask and keeps it off the foreign book.
+// The currency stays the listing currency.
 //
 //   node brokers/ajbell/ajbell_scraping.mjs
 

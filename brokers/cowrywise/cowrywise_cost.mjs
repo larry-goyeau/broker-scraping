@@ -1,6 +1,6 @@
 // What one round trip costs at Cowrywise: buy n shares at price p and sell
 // them straight back. The answer is one number in dollars. `brokerFees` is
-// the part of the NGX card that has a single rate.
+// the NGX card, with brokerage taken at 1.35% a side and 7.5% VAT on it.
 //
 // Re-read 2026-10-01.
 //
@@ -12,13 +12,13 @@
 //           VAT 7.5% of the SEC fee
 //   Sell    NGX 0.3%, CSCS 0.3%, stamp duty 0.08%, trade alert ₦4
 //           VAT 7.5% of the NGX and CSCS fees
-//   Both    brokerage 0.75–1.35%, and VAT on that brokerage
+//   Both    brokerage 0.75–1.35%. The bill takes 1.35%, and 7.5% VAT
+//           on that brokerage.
 //
-// The brokerage is a range, and Cowrywise does not say where it sits. The
-// processing fee is not on the exchange card. Neither is in the number.
-// The 10% buffer is returned, so it is not a fee. The fixed NGX card sits
-// in the round trip. There is no Lagos book here, so the total stays
-// unknown until one is stored. Cash is naira.
+// The processing fee is not on the exchange card and has no rate, so it
+// stays out of the number. The 10% buffer is returned, so it is not a fee.
+// The NGX card sits in the round trip. There is no Lagos book here, so the
+// total stays unknown until one is stored. Cash is naira.
 //
 //   https://cowrywise.com/blog/how-to-invest-nigerian-stocks-cowrywise-10000-naira/
 //   https://ngxgroup.com/exchange/trade/equities/trading-market-structure/
@@ -45,6 +45,7 @@ const SCHEDULE = {
   broker: "Meristem Stockbrokers Limited",
 };
 
+const BROKERAGE = 0.0135;
 const SEC = 0.003;
 const NGX = 0.003;
 const CSCS = 0.003;
@@ -77,8 +78,9 @@ function findListing({ etf, place, currency }) {
 
 /**
  * The whole bill for buying `shares` at `price` and selling straight back.
- * `usd` is the book plus the fixed NGX card. `brokerFees` is that card,
- * not the brokerage range. With no Lagos book the total stays unknown.
+ * `usd` is the book plus the NGX card. `brokerFees` is that card,
+ * with brokerage taken at 1.35% a side and 7.5% VAT on it. With no
+ * Lagos book the total stays unknown.
  */
 export function roundTrip({ etf, place, currency, shares, price }) {
   const answer = { usd: null, brokerFees: null, etf, place, currency, onlineBuy: true, cashCurrency: "NGN" };
@@ -109,7 +111,7 @@ export function roundTrip({ etf, place, currency, shares, price }) {
   const shared = {
     ...answer,
     listing,
-    remark: "Brokerage is 0.75–1.35% a side, plus VAT on it. Cowrywise names a processing fee and prints no rate.",
+    remark: "Cowrywise names a processing fee and prints no rate.",
     url: SCHEDULE.fees,
     fx: { quote: QUOTE, asOf: FX_AS_OF, listing: usdPer(listing.currency) },
     fxIfConverted: 0,
@@ -125,13 +127,15 @@ export function roundTrip({ etf, place, currency, shares, price }) {
   }
 
   const notional = n * p;
+  const brokerage = notional * BROKERAGE;
   const sec = notional * SEC;
   const ngx = notional * NGX;
   const cscs = notional * CSCS;
   const stamp = notional * STAMP * 2;
   const alert = ALERT * 2;
-  const vat = VAT * sec + VAT * (ngx + cscs);
-  const local = sec + ngx + cscs + stamp + alert + vat;
+  const brokerageVat = VAT * brokerage * 2;
+  const levyVat = VAT * sec + VAT * (ngx + cscs);
+  const local = sec + ngx + cscs + stamp + alert + levyVat + brokerage * 2 + brokerageVat;
   const brokerFees = toUsd(local, listing.currency);
   const notionalUsd = toUsd(notional, listing.currency);
   const book = spreadLeaf(spreads, {
@@ -174,18 +178,18 @@ export function roundTrip({ etf, place, currency, shares, price }) {
       notionalUsd: finite(toUsd(notional, listing.currency), 6),
       currency: listing.currency,
     },
-    buy: { sec, stamp: notional * STAMP, alert: ALERT, vat: VAT * sec },
-    sell: { ngx, cscs, stamp: notional * STAMP, alert: ALERT, vat: VAT * (ngx + cscs) },
+    buy: { sec, stamp: notional * STAMP, alert: ALERT, brokerage, vat: VAT * (sec + brokerage) },
+    sell: { ngx, cscs, stamp: notional * STAMP, alert: ALERT, brokerage, vat: VAT * (ngx + cscs + brokerage) },
     parts: {
       market: finite(bookUsd, 6),
       statutory: finite(brokerFees, 6),
       statutoryNgn: finite(local, 6),
     },
-    basis: `NGX equities card, re-read ${SCHEDULE.readOn}: SEC, NGX, CSCS, stamp duty and the ₦4 alert. Brokerage is a range.`,
+    basis: `NGX equities card, re-read ${SCHEDULE.readOn}: SEC, NGX, CSCS, stamp duty, the ₦4 alert, and brokerage at 1.35% a side plus 7.5% VAT on it.`,
     confidence:
       bookUsd == null
-        ? "NGX card is in the round trip; no Lagos book is stored, so the total stays unknown. Brokerage is a range and the processing fee has no rate."
-        : "NGX card plus the stored Lagos book. Brokerage is a range and the processing fee has no rate.",
+        ? "NGX card is in the round trip; no Lagos book is stored, so the total stays unknown. The processing fee has no rate."
+        : "NGX card plus the stored Lagos book. The processing fee has no rate.",
   };
 }
 

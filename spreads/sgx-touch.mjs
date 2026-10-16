@@ -1,5 +1,8 @@
 // Singapore cash touch from the exchange's public price file. Bid and
 // ask are the quote. A last trade is never written in their place.
+// A counter whose name says US$, S$, EUR, GBP, HKD, AUD, CNY or JPY is
+// that book. A name with no currency is the Singapore dollar book.
+// The lists add a code no broker catalogue has.
 //
 // Continuous matching is 09:00–12:00 and 13:00–17:00 Singapore time.
 // The file stamps UTC. A stamp outside those two windows, or from
@@ -15,9 +18,11 @@ import { norm } from "./venues.mjs";
 
 const STORE = fileURLToPath(new URL("./sgx-touch.json", import.meta.url));
 const URL_FEED =
-  "https://api.sgx.com/securities/v1.1?excludetypes=bonds&params=nc,b,bv,s,sv,lt,trading_time,type";
+  "https://api.sgx.com/securities/v1.1?excludetypes=bonds&params=nc,n,b,bv,s,sv,lt,trading_time,type";
 const SG = new Set(["sgx", "xses", "singapore", "sgxst"]);
 const KEEP = new Set(["STOCK", "ETF", "ETN", "ETC"]);
+const SKIP_TYPE = new Set(["companywarrants", "structuredwarrants", "dlcertificates", "listedcertificates"]);
+const LISTS = ["../assets/stocks.csv", "../assets/etfs.csv"].map((name) => fileURLToPath(new URL(name, import.meta.url)));
 
 const singapore = (when = new Date()) => {
   const parts = Object.fromEntries(
@@ -75,19 +80,50 @@ const inSession = (at) => {
   return morning || afternoon;
 };
 
-function listings() {
+// US$ is its own counter. A bare S$ must not match the S$ inside US$.
+function currencyOf(name) {
+  const text = String(name || "").toUpperCase();
+  const hits = [];
+  const scan = (ccy, re, source) => {
+    re.lastIndex = 0;
+    let match;
+    while ((match = re.exec(source))) hits.push([match.index, ccy]);
+  };
+  scan("USD", /US\$|\bUSD\b/g, text);
+  scan("SGD", /S\$|SG\$|\bSGD\b/g, text.replace(/US\$/g, "   "));
+  scan("HKD", /HK\$|\bHKD\b/g, text);
+  scan("AUD", /\bAUD\b/g, text);
+  scan("EUR", /\bEUR\b/g, text);
+  scan("GBP", /\bGBP\b/g, text);
+  scan("CNY", /\b(?:CNY|CNH|RMB)\b/g, text);
+  scan("JPY", /\bJPY\b/g, text);
+  if (!hits.length) return "SGD";
+  hits.sort((a, b) => a[0] - b[0]);
+  return hits[hits.length - 1][1];
+}
+
+function listCodes() {
   const byCode = new Map();
+  const add = (code, isin) => {
+    if (!/^[A-Z0-9]{2,6}$/.test(code) || !/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin)) return;
+    const counts = byCode.get(code) || new Map();
+    counts.set(isin, (counts.get(isin) || 0) + 1);
+    byCode.set(code, counts);
+  };
   for (const row of catalogueRows()) {
     if (!SG.has(norm(row.exchange))) continue;
     const type = String(row.type || "").toUpperCase();
     if (type && !KEEP.has(type)) continue;
-    const code = String(row.ticker || "").trim().toUpperCase().replace(/\.SI$/, "");
-    if (!/^[A-Z0-9]{2,6}$/.test(code)) continue;
-    const isin = String(row.isin || "").toUpperCase();
-    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin)) continue;
-    const counts = byCode.get(code) || new Map();
-    counts.set(isin, (counts.get(isin) || 0) + 1);
-    byCode.set(code, counts);
+    add(String(row.ticker || "").trim().toUpperCase().replace(/\.SI$/, ""), String(row.isin || "").toUpperCase());
+  }
+  for (const file of LISTS) {
+    if (!fs.existsSync(file)) continue;
+    const lines = fs.readFileSync(file, "utf8").split("\n").slice(1);
+    for (const line of lines) {
+      const [ticker, exchange, isin] = line.split(",");
+      if (!SG.has(norm(exchange))) continue;
+      add(String(ticker || "").split(":").pop().trim().toUpperCase(), String(isin || "").trim().toUpperCase());
+    }
   }
   const jobs = new Map();
   let tied = 0;
@@ -131,8 +167,8 @@ if (!now.day || !inSession(now)) {
   process.exit(1);
 }
 
-console.error(`Singapour ${now.clock}. ISINs des catalogues…`);
-const { jobs, tied } = listings();
+console.error(`Singapour ${now.clock}. ISINs des catalogues et des listes…`);
+const { jobs, tied } = listCodes();
 console.error(`${jobs.size} codes, ${tied} codes à ISIN partagé laissés de côté.`);
 
 const body = await book();
@@ -146,6 +182,7 @@ let noTouch = 0;
 let unmatched = 0;
 for (const line of prices) {
   const code = String(line.nc || "").trim().toUpperCase();
+  if (SKIP_TYPE.has(String(line.type || "").toLowerCase())) continue;
   const isin = jobs.get(code);
   if (!isin) {
     unmatched += 1;
@@ -167,6 +204,7 @@ for (const line of prices) {
     isin,
     mic: "XSES",
     code,
+    currency: currencyOf(line.n),
     bid,
     ask,
     bp,

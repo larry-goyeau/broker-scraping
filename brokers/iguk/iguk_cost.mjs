@@ -108,6 +108,7 @@ function coverage() {
       currency: r.currency,
       unsourced,
       broker: "iguk",
+      ticker: r.ticker,
     });
     const slot = (out[type] ||= { n: 0, withBook: 0 });
     slot.n += 1;

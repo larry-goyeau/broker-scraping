@@ -748,6 +748,7 @@
       const AMOUNT_DEFAULT = 1000;
       let sizeKind = "shares";
       let sizeVal = SHARES_DEFAULT;
+      let sizeTouched = false;
       let sizeTimer;
       const sizeBox = document.getElementById("size");
       const sizeLabel = document.getElementById("sizeLabel");
@@ -984,6 +985,7 @@
       // what keeps the cursor in it.
       let shownReq = 0;
       async function show(key, sizeOnly = false) {
+        if (!sizeOnly && key !== shown) sizeTouched = false;
         const mine = ++shownReq;
         shown = key;
         empty.hidden = true;
@@ -991,7 +993,9 @@
           result.hidden = true;
           loading.hidden = false;
         }
-        const r = await fetch(withSize(withDep(withNat(`/api/instrument?key=${encodeURIComponent(key)}`))));
+        let path = withDep(withNat(`/api/instrument?key=${encodeURIComponent(key)}`));
+        if (sizeTouched) path = withSize(path);
+        const r = await fetch(path);
         if (mine !== shownReq) return;
         if (!r.ok) {
           loading.hidden = true;
@@ -1008,10 +1012,15 @@
         const kind = crypto ? "amount" : "shares";
         if (kind !== sizeKind) {
           sizeKind = kind;
+          sizeTouched = false;
           sizeVal = crypto ? AMOUNT_DEFAULT : SHARES_DEFAULT;
           sizeBox.value = String(sizeVal);
           sizeLabel.textContent = crypto ? "amount in USD" : "number of shares";
           return show(key);
+        }
+        if (!crypto && !sizeTouched && Number(d.trade?.shares) > 0) {
+          sizeVal = d.trade.shares;
+          sizeBox.value = String(sizeVal);
         }
         const rows = d.soldBy
           .flatMap((b) => {
@@ -1057,7 +1066,7 @@
         }
         const body = rowsHtml(merged, crypto);
         const notes = `
-          <p class="note"><a class="star" href="/method">*</a> Average cost if you buy ${crypto ? `${esc(String(sizeValue()))} USD of` : `${esc(String(sizeValue()))} shares of`} ${esc(d.ticker || d.isin || d.key)} and sell them back at once. <a class="method-link" href="/method">How costs are calculated</a></p>
+          <p class="note"><a class="star" href="/method">*</a> Cost if you buy ${crypto ? `${esc(String(sizeValue()))} USD of` : `${esc(String(sizeValue()))} shares of`} ${esc(d.ticker || d.isin || d.key)} and sell them back at once. Spreads may vary. <a class="method-link" href="/method">How costs are calculated</a></p>
           ${!crypto && d.trade && d.trade.price == null
             ? `<p class="note">No price on file for this instrument, so nothing proportional to the amount can be added up. Write assets/prices.json to fill this column.</p>`
             : ""}`;
@@ -1147,6 +1156,7 @@
       });
 
       sizeBox.addEventListener("input", () => {
+        sizeTouched = true;
         sizeVal = sizeBox.value;
         clearTimeout(sizeTimer);
         // The bill is computed in Node, broker by broker, so a new size is a

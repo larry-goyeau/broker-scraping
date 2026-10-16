@@ -199,6 +199,7 @@ function coverage() {
       mic: venue?.mic ?? null,
       currency: r.currency,
       unsourced,
+      ticker: r.ticker,
     });
     const market = feeMarketOf(r, book.mic ?? venue?.mic) || "?";
     const slot = (out[type] ||= { n: 0, withBook: 0, otc: 0, hk: 0, byMarket: {} });

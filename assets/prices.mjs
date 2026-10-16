@@ -14,10 +14,12 @@
 // again. The four Gulf boards still publish their own last through `gulf.mjs`. The
 // Zimbabwe sheet publishes its own last, in cents of a ZiG. VNDirect publishes
 // the session close for HOSE, HNX and UPCoM, in thousands of dong. Lima's daily
-// bulletin publishes the session close in soles or in dollars. Everywhere else, a miss
-// falls through to Yahoo's chart last, built from the catalogues' ticker and
-// MIC (`F.TO`, `1111.SR`, `3565.T`). Enough to size an order, not to fill one. That keeps this file
-// the only writer of `prices.json` while letting the lines no vendor sells stop being N/A.
+// bulletin publishes the session close in soles or in dollars. TradingView's
+// Nigeria scanner publishes the NSENG session close in naira, at any hour.
+// Everywhere else, a miss falls through to Yahoo's chart last, built from the
+// catalogues' ticker and MIC (`F.TO`, `1111.SR`, `3565.T`). Enough to size an
+// order, not to fill one. That keeps this file the only writer of `prices.json`
+// while letting the lines no vendor sells stop being N/A.
 //
 // One request per ISIN buys every listing of it at once: `/api/search/{ISIN}` answers
 // with each venue, its currency and its last close, so a single call fills the euro
@@ -113,7 +115,7 @@ function save() {
     JSON.stringify(
       {
         generatedAt: new Date().toISOString(),
-        source: "EODHD, les bourses du Golfe, KASE pour un last en tenge, la clôture VNDirect pour une action ou un ETF du Vietnam, le bulletin de Lima pour une clôture en soles ou en dollars, et Yahoo pour un last quand le vendeur n'a rien",
+        source: "EODHD, les bourses du Golfe, KASE pour un last en tenge, la clôture VNDirect pour une action ou un ETF du Vietnam, le bulletin de Lima pour une clôture en soles ou en dollars, la clôture NSENG pour un last en naira, et Yahoo pour un last quand le vendeur n'a rien",
         unit: UNIT,
         fetched,
         fallback,
@@ -152,7 +154,7 @@ export function isFresh(isin, maxAge = DAY) {
   // one shot and then rests for the day.
   // KASE and the PSE publish the last for nothing, the same way the Gulf
   // boards do. A miss from the vendor must not sit on that page for a day.
-  if (GULF_COUNTRIES.has(key.slice(0, 2)) || key.startsWith("KZ") || key.startsWith("ZW") || key.startsWith("VN") || key.startsWith("PH")) return false;
+  if (GULF_COUNTRIES.has(key.slice(0, 2)) || key.startsWith("KZ") || key.startsWith("ZW") || key.startsWith("VN") || key.startsWith("PH") || key.startsWith("BD")) return false;
   const fb = Date.parse(fallback[key] || 0);
   // A miss from before the ISIN search never asked Yahoo for the identifier.
   if (!(fb >= YAHOO_BOARDS_AT) || !(fb >= YAHOO_OTC_AT) || !(fb >= YAHOO_ISIN_AT)) return false;
@@ -353,11 +355,15 @@ const YAHOO_SUFFIX = {
   XCAI: ".CA",
   XTKS: ".T",
   XASX: ".AX",
+  XSES: ".SI",
   XKRX: ".KS",
   XKOS: ".KQ",
   XMAD: ".MC",
   XWAR: ".WA",
   XSAU: ".SR",
+  // Pakistan Stock Exchange. Yahoo's last is the ticker plus .KA, in rupees.
+  // This is the same listing's last, not a book.
+  XKAR: ".KA",
   // Shanghai and Shenzhen A-shares. Yahoo's last is the six-digit code.
   XSHG: ".SS",
   XSHE: ".SZ",
@@ -369,6 +375,8 @@ const YAHOO_SUFFIX = {
 // Venues with no adapter still name themselves in the catalogue. The suffix is
 // Yahoo's, so a last can be read where the vendor's search is empty.
 const YAHOO_EXCHANGE = {
+  SGX: ".SI",
+  SGXST: ".SI",
   HKEX: ".HK",
   SEHK: ".HK",
   SSE: ".SS",
@@ -396,6 +404,8 @@ const YAHOO_EXCHANGE = {
   QSE: ".QA",
   QATAR: ".QA",
   PSE: ".PS",
+  PSX: ".KA",
+  PAKISTANSTOCKEXCHANGE: ".KA",
   // Bucharest. EODHD's search is empty for the small names. Yahoo's last
   // is the ticker plus .RO, the same listing, not a book.
   BVB: ".RO",
@@ -765,8 +775,114 @@ function bequotedFresh(isin) {
 }
 
 // Yahoo has no Lagos suffix for these names. The touch file is today's
-// NSENG book. A last trade prices the line; a name that did not print
-// is priced at the mid of the same two-sided book.
+// NSENG book and only exists during the Lagos session. A last trade prices
+// the line; a name that did not print is priced at the mid of the same
+// two-sided book. Overnight, the Nigeria scanner's session close does the
+// same job. It sizes the order. It is not a book.
+const NGX_SCAN = "https://scanner.tradingview.com/nigeria/scan";
+let ngxClosePromise = null;
+
+function nsengCodes() {
+  const codes = new Set();
+  for (const file of ["stocks.csv", "etfs.csv"]) {
+    const csvPath = new URL(`./${file}`, import.meta.url);
+    if (!fs.existsSync(csvPath)) continue;
+    for (const line of fs.readFileSync(csvPath, "utf8").split(/\r?\n/)) {
+      const match = line.match(/^NSENG:([^,]+),/i);
+      if (match) codes.add(match[1].toUpperCase());
+    }
+  }
+  return [...codes];
+}
+
+function keepNgx(map, row) {
+  const [code, close, currency, isin] = row?.d || [];
+  const id = String(isin || "").trim().toUpperCase();
+  const ccy = String(currency || "").trim().toUpperCase();
+  const last = Number(close);
+  const symbol = String(code || "").trim().toUpperCase();
+  if (!ISIN.test(id) || ccy !== "NGN" || !(last > 0) || !symbol) return;
+  map.set(id, { symbol, last });
+}
+
+function ngxCloses() {
+  if (ngxClosePromise && Date.now() - ngxClosePromise.at < BOARD_TTL) return ngxClosePromise.rows;
+  const rows = (async () => {
+    const map = new Map();
+    let start = 0;
+    for (;;) {
+      const response = await fetch(NGX_SCAN, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Origin: "https://www.tradingview.com",
+          "User-Agent": "Mozilla/5.0",
+        },
+        body: JSON.stringify({
+          symbols: { query: { types: [] }, tickers: [] },
+          columns: ["name", "close", "currency", "isin"],
+          sort: { sortBy: "name", sortOrder: "asc" },
+          range: [start, start + 500],
+        }),
+        signal: AbortSignal.timeout(30_000),
+      });
+      if (!response.ok) throw new Error(`${response.status}`);
+      const data = await response.json();
+      const page = Array.isArray(data.data) ? data.data : [];
+      for (const row of page) keepNgx(map, row);
+      const total = Number(data.totalCount) || page.length;
+      start += page.length;
+      if (!page.length || start >= total) break;
+    }
+    const seen = new Set([...map.values()].map((row) => row.symbol));
+    const missing = nsengCodes().filter((code) => !seen.has(code));
+    for (let i = 0; i < missing.length; i += 80) {
+      const tickers = missing.slice(i, i + 80).map((code) => `NSENG:${code}`);
+      const response = await fetch(NGX_SCAN, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Origin: "https://www.tradingview.com",
+          "User-Agent": "Mozilla/5.0",
+        },
+        body: JSON.stringify({
+          symbols: { tickers },
+          columns: ["name", "close", "currency", "isin"],
+        }),
+        signal: AbortSignal.timeout(30_000),
+      });
+      if (!response.ok) throw new Error(`${response.status}`);
+      const data = await response.json();
+      for (const row of data.data || []) keepNgx(map, row);
+    }
+    return map;
+  })().catch((error) => {
+    ngxClosePromise = null;
+    console.error(`clôture NSENG : ${error.message}`);
+    return new Map();
+  });
+  ngxClosePromise = { at: Date.now(), rows };
+  return rows;
+}
+
+async function ngxClose(isin) {
+  const row = (await ngxCloses()).get(isin);
+  if (!row) return false;
+  noteBoard(isin, { currency: "NGN", last: row.last, symbol: row.symbol }, "XNGN");
+  fallback[isin] = new Date().toISOString();
+  scheduleSave();
+  return true;
+}
+
+async function sweepNgx() {
+  const board = await ngxCloses();
+  let priced = 0;
+  for (const isin of board.keys()) if (await ngxClose(isin)) priced++;
+  save();
+  console.error(`${priced} clôtures NSENG. Écrit dans ${STORE_PATH}.`);
+}
 let ngxRows = null;
 function ngxTouch() {
   if (ngxRows) return ngxRows;
@@ -873,14 +989,417 @@ function bvcFresh(isin) {
   return true;
 }
 
+// Yahoo has no Sofia suffix for these names. The touch file is today's
+// BSESOF book, in euro.
+let sofiaRows = null;
+function sofiaTouch() {
+  if (sofiaRows) return sofiaRows;
+  sofiaRows = new Map();
+  const path = new URL("../spreads/sofia-touch.json", import.meta.url);
+  if (!fs.existsSync(path)) return sofiaRows;
+  const data = JSON.parse(fs.readFileSync(path, "utf8"));
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Europe/Sofia",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+  if (data.date !== today) return sofiaRows;
+  for (const row of data.rows || []) {
+    const isin = String(row.isin || "").toUpperCase();
+    if (isin) sofiaRows.set(isin, row);
+  }
+  return sofiaRows;
+}
+
+let csecyRows = null;
+function csecyTouch() {
+  if (csecyRows) return csecyRows;
+  csecyRows = new Map();
+  const path = new URL("../spreads/csecy-touch.json", import.meta.url);
+  if (!fs.existsSync(path)) return csecyRows;
+  const data = JSON.parse(fs.readFileSync(path, "utf8"));
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Europe/Nicosia",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+  if (data.date !== today) return csecyRows;
+  for (const row of data.rows || []) {
+    const isin = String(row.isin || "").toUpperCase();
+    if (isin) csecyRows.set(isin, row);
+  }
+  return csecyRows;
+}
+
+let setRows = null;
+function setTouch() {
+  if (setRows) return setRows;
+  setRows = new Map();
+  const path = new URL("../spreads/set-touch.json", import.meta.url);
+  if (!fs.existsSync(path)) return setRows;
+  const data = JSON.parse(fs.readFileSync(path, "utf8"));
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Bangkok",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+  if (data.date !== today) return setRows;
+  for (const row of data.rows || []) {
+    const isin = String(row.isin || "").toUpperCase();
+    if (isin && (row.currencies || []).includes("THB")) setRows.set(isin, row);
+  }
+  return setRows;
+}
+
+// Singapore's public book is the session touch. The mid sizes an order
+// when the vendor has no last in that counter. A second currency on the
+// same ISIN is its own price and is not copied.
+let sgxRows = null;
+function sgxTouch() {
+  if (sgxRows) return sgxRows;
+  sgxRows = new Map();
+  const path = new URL("../spreads/sgx-touch.json", import.meta.url);
+  if (!fs.existsSync(path)) return sgxRows;
+  const data = JSON.parse(fs.readFileSync(path, "utf8"));
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Singapore",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+  for (const row of data.rows || []) {
+    if (!String(row.stamp || "").startsWith(today)) continue;
+    const isin = String(row.isin || "").toUpperCase();
+    if (!ISIN.test(isin)) continue;
+    const list = sgxRows.get(isin) || [];
+    list.push(row);
+    sgxRows.set(isin, list);
+  }
+  return sgxRows;
+}
+
+function sgxFresh(isin) {
+  const rows = sgxTouch().get(isin);
+  if (!rows) return false;
+  let wrote = false;
+  for (const row of rows) {
+    const currency = String(row.currency || "").toUpperCase();
+    if (!/^[A-Z]{3}$/.test(currency)) continue;
+    if (Number(prices[isin]?.[currency]?.price) > 0) continue;
+    const bid = Number(row.bid);
+    const ask = Number(row.ask);
+    const price = bid > 0 && ask >= bid ? (bid + ask) / 2 : 0;
+    if (!(price > 0)) continue;
+    noteBoard(isin, { currency, last: price, symbol: row.code || isin }, "XSES");
+    wrote = true;
+  }
+  if (!wrote) return false;
+  fetched[isin] = new Date().toISOString();
+  scheduleSave();
+  return true;
+}
+
+// FSMOne publishes a last close for every US OTC line it sells. That
+// close sizes the broker fee. It is not a bid and an ask, so it is
+// never written as a spread.
+const FSM_OTC = "https://www.fsmone.com.my/rest/stock/stock-data/security-type/read";
+let fsmOtcPromise = null;
+function fsmOtcSheet() {
+  return (fsmOtcPromise ||= (async () => {
+    const sheet = new Map();
+    const headers = {
+      "User-Agent": "Mozilla/5.0",
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Origin: "https://www.fsmone.com.my",
+      Referer: "https://www.fsmone.com.my/stocks/tools/stocks-screener",
+    };
+    let page = 1;
+    let total = Infinity;
+    while (page <= total) {
+      const url = `${FSM_OTC}?page=${page}&size=2000&exchange=USOTC&lastPrice=true&sort=stockCode,asc`;
+      const response = await fetch(url, { method: "POST", headers, body: "{}", signal: AbortSignal.timeout(120_000) });
+      if (!response.ok) throw new Error(`FSMOne OTC ${response.status}`);
+      const payload = await response.json();
+      const data = payload.data || {};
+      const batch = data.result;
+      total = Number(data.totalCounts) || 0;
+      if (!Array.isArray(batch) || !batch.length) break;
+      for (const row of batch) {
+        const isin = String(row.isin || "").trim().toUpperCase();
+        const currency = String(row.stockCurrency || "").trim().toUpperCase();
+        const last = Number(row.lastPrice);
+        if (!ISIN.test(isin) || !/^[A-Z]{3}$/.test(currency) || !(last > 0)) continue;
+        if (!sheet.has(isin)) sheet.set(isin, { currency, last, symbol: row.ifastTicker || row.stockCode || isin });
+      }
+      if (batch.length < 2000) break;
+      page += batch.length;
+    }
+    return sheet;
+  })());
+}
+
+async function fsmOtcFresh(isin) {
+  const row = (await fsmOtcSheet()).get(isin);
+  if (!row) return false;
+  if (Number(prices[isin]?.[row.currency]?.price) > 0) return false;
+  noteBoard(isin, row, "USOTC");
+  fetched[isin] = new Date().toISOString();
+  scheduleSave();
+  return true;
+}
+
+async function sweepFsmOtc() {
+  const sheet = await fsmOtcSheet();
+  let hit = 0;
+  for (const isin of sheet.keys()) if (await fsmOtcFresh(isin)) hit += 1;
+  save();
+  console.error(`${hit} cours OTC écrits. ${Object.keys(prices).length} ISIN ont un prix en tout.`);
+}
+
+function sweepSgx() {
+  let hit = 0;
+  for (const isin of sgxTouch().keys()) if (sgxFresh(isin)) hit += 1;
+  save();
+  console.error(`${hit} cours de Singapour écrits. ${Object.keys(prices).length} ISIN ont un prix en tout.`);
+}
+
+function setFresh(isin) {
+  const row = setTouch().get(isin);
+  const last = Number(row?.last);
+  const bid = Number(row?.bid);
+  const ask = Number(row?.ask);
+  const price = last > 0 ? last : bid > 0 && ask >= bid ? (bid + ask) / 2 : 0;
+  if (!(price > 0)) return false;
+  noteBoard(isin, { currency: "THB", last: price, symbol: row.code || isin }, "XBKK");
+  fetched[isin] = new Date().toISOString();
+  scheduleSave();
+  return true;
+}
+
+let psxRows = null;
+function psxTouch() {
+  if (psxRows) return psxRows;
+  psxRows = new Map();
+  const path = new URL("../spreads/psx-touch.json", import.meta.url);
+  if (!fs.existsSync(path)) return psxRows;
+  const data = JSON.parse(fs.readFileSync(path, "utf8"));
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Karachi",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+  if (data.date !== today) return psxRows;
+  for (const row of data.rows || []) {
+    const isin = String(row.isin || "").toUpperCase();
+    if (isin && (row.currencies || []).includes("PKR")) psxRows.set(isin, row);
+  }
+  return psxRows;
+}
+
+let moexRows = null;
+function moexTouch() {
+  if (moexRows) return moexRows;
+  moexRows = new Map();
+  const path = new URL("../spreads/moex-touch.json", import.meta.url);
+  if (!fs.existsSync(path)) return moexRows;
+  const data = JSON.parse(fs.readFileSync(path, "utf8"));
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Europe/Moscow",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+  if (data.date !== today) return moexRows;
+  for (const row of data.rows || []) {
+    const isin = String(row.isin || "").toUpperCase();
+    if (isin && (row.currencies || []).includes("RUB") && !moexRows.has(isin)) moexRows.set(isin, row);
+  }
+  return moexRows;
+}
+
+let taseRows = null;
+function taseTouch() {
+  if (taseRows) return taseRows;
+  taseRows = new Map();
+  const path = new URL("../spreads/tase-touch.json", import.meta.url);
+  if (!fs.existsSync(path)) return taseRows;
+  const data = JSON.parse(fs.readFileSync(path, "utf8"));
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Jerusalem",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+  if (data.date !== today) return taseRows;
+  for (const row of data.rows || []) {
+    const isin = String(row.isin || "").toUpperCase();
+    if (isin && !taseRows.has(isin)) taseRows.set(isin, row);
+  }
+  return taseRows;
+}
+
+let xcasRows = null;
+function xcasTouch() {
+  if (xcasRows) return xcasRows;
+  xcasRows = new Map();
+  const path = new URL("../spreads/xcas-touch.json", import.meta.url);
+  if (!fs.existsSync(path)) return xcasRows;
+  const data = JSON.parse(fs.readFileSync(path, "utf8"));
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Africa/Casablanca",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+  if (data.date !== today) return xcasRows;
+  for (const row of data.rows || []) {
+    const isin = String(row.isin || "").toUpperCase();
+    if (isin && (row.currencies || []).includes("MAD") && !xcasRows.has(isin)) xcasRows.set(isin, row);
+  }
+  return xcasRows;
+}
+
+function xcasFresh(isin) {
+  const row = xcasTouch().get(isin);
+  const last = Number(row?.last);
+  const bid = Number(row?.bid);
+  const ask = Number(row?.ask);
+  const price = last > 0 ? last : bid > 0 && ask >= bid ? (bid + ask) / 2 : 0;
+  if (!(price > 0)) return false;
+  noteBoard(isin, { currency: "MAD", last: price, symbol: row.code || isin }, "XCAS");
+  fetched[isin] = new Date().toISOString();
+  scheduleSave();
+  return true;
+}
+
+function taseFresh(isin) {
+  const row = taseTouch().get(isin);
+  const scale = String(row?.unit || "ILA").toUpperCase() === "ILS" ? 1 : 100;
+  const last = Number(row?.last) / scale;
+  const bid = Number(row?.bid) / scale;
+  const ask = Number(row?.ask) / scale;
+  const price = last > 0 ? last : bid > 0 && ask >= bid ? (bid + ask) / 2 : 0;
+  if (!(price > 0)) return false;
+  noteBoard(isin, { currency: "ILS", last: price, symbol: row.code || isin }, "XTAE");
+  fetched[isin] = new Date().toISOString();
+  scheduleSave();
+  return true;
+}
+
+function moexFresh(isin) {
+  const row = moexTouch().get(isin);
+  const last = Number(row?.last);
+  const bid = Number(row?.bid);
+  const ask = Number(row?.ask);
+  const price = last > 0 ? last : bid > 0 && ask >= bid ? (bid + ask) / 2 : 0;
+  if (!(price > 0)) return false;
+  noteBoard(isin, { currency: "RUB", last: price, symbol: row.code || isin }, "MISX");
+  fetched[isin] = new Date().toISOString();
+  scheduleSave();
+  return true;
+}
+
+function psxFresh(isin) {
+  const row = psxTouch().get(isin);
+  const last = Number(row?.last);
+  const bid = Number(row?.bid);
+  const ask = Number(row?.ask);
+  const price = last > 0 ? last : bid > 0 && ask >= bid ? (bid + ask) / 2 : 0;
+  if (!(price > 0)) return false;
+  noteBoard(isin, { currency: "PKR", last: price, symbol: row.code || isin }, "XKAR");
+  fetched[isin] = new Date().toISOString();
+  scheduleSave();
+  return true;
+}
+
+function dseTicker(isin, listings) {
+  const scored = [];
+  for (const row of listings || []) {
+    if (String(row.isin || "").toUpperCase() !== isin && listings?.length && row.isin) continue;
+    const ticker = String(row.ticker || row.symbol || "").trim().toUpperCase();
+    if (!/^[A-Z0-9().]{1,16}$/.test(ticker)) continue;
+    const place = String(row.exchange || row.exchangeRaw || "").toUpperCase();
+    const rank = place === "DSE" || place.includes("DHAKA") ? 0 : 1;
+    scored.push([rank, ticker]);
+  }
+  scored.sort((a, b) => a[0] - b[0] || a[1].localeCompare(b[1]));
+  return scored[0]?.[1] || null;
+}
+
+// The Dhaka company page prints lastPrice in taka. One read prices the
+// Chittagong line of the same ISIN. A name that exists only in Chittagong
+// is asked here too; a miss leaves the price missing.
+async function dseFresh(isin, listings) {
+  let ticker = dseTicker(isin, listings);
+  if (!ticker) {
+    const { catalogueRows } = await import("../catalogues.mjs");
+    ticker = dseTicker(
+      isin,
+      catalogueRows().filter((row) => String(row.isin || "").toUpperCase() === isin),
+    );
+  }
+  if (!ticker) return false;
+  const response = await fetch(`https://www.dse.com.bd/company/${encodeURIComponent(ticker)}`, {
+    headers: { "User-Agent": "Mozilla/5.0", Accept: "text/html" },
+    signal: AbortSignal.timeout(20_000),
+  });
+  if (!response.ok) return false;
+  const price = Number((await response.text()).match(/lastPrice\\*":([0-9]+(?:\.[0-9]+)?)/)?.[1]);
+  if (!(price > 0)) return false;
+  noteBoard(isin, { currency: "BDT", last: price, symbol: ticker }, "XDHA");
+  fetched[isin] = new Date().toISOString();
+  scheduleSave();
+  return true;
+}
+
+function csecyFresh(isin) {
+  const row = csecyTouch().get(isin);
+  const last = Number(row?.last);
+  const bid = Number(row?.bid);
+  const ask = Number(row?.ask);
+  const price = last > 0 ? last : bid > 0 && ask >= bid ? (bid + ask) / 2 : 0;
+  if (!(price > 0)) return false;
+  noteBoard(isin, { currency: "EUR", last: price, symbol: row.code || isin }, "XCYS");
+  fetched[isin] = new Date().toISOString();
+  scheduleSave();
+  return true;
+}
+
+function sofiaFresh(isin) {
+  const row = sofiaTouch().get(isin);
+  const last = Number(row?.last);
+  const bid = Number(row?.bid);
+  const ask = Number(row?.ask);
+  const price = last > 0 ? last : bid > 0 && ask >= bid ? (bid + ask) / 2 : 0;
+  if (!(price > 0)) return false;
+  noteBoard(isin, { currency: "EUR", last: price, symbol: row.code || isin }, "XBUL");
+  fetched[isin] = new Date().toISOString();
+  scheduleSave();
+  return true;
+}
+
 export async function ensureFresh(isin, maxAge = DAY, listings = null) {
   const key = String(isin || "").trim().toUpperCase();
   if (!ISIN.test(key)) return undefined;
   if (!hasPrice(key)) nagoyaFresh(key);
   if (!hasPrice(key)) bequotedFresh(key);
   if (!hasPrice(key)) ngxFresh(key);
+  if (!hasPrice(key) && key.startsWith("NG")) await ngxClose(key);
   if (!hasPrice(key)) bistFresh(key);
   if (!hasPrice(key)) bvcFresh(key);
+  if (!hasPrice(key)) sofiaFresh(key);
+  if (!hasPrice(key)) csecyFresh(key);
+  if (!(Number(prices[key]?.THB?.price) > 0)) setFresh(key);
+  if (!(Number(prices[key]?.PKR?.price) > 0)) psxFresh(key);
+  if (!(Number(prices[key]?.RUB?.price) > 0)) moexFresh(key);
+  if (!(Number(prices[key]?.ILS?.price) > 0)) taseFresh(key);
+  if (!(Number(prices[key]?.MAD?.price) > 0)) xcasFresh(key);
+  sgxFresh(key);
   if (isFresh(key, maxAge)) return prices[key];
   // Two readers asking for the same instrument at once is one request, not two.
   if (inflight.has(key)) return inflight.get(key);
@@ -933,6 +1452,11 @@ export async function ensureFresh(isin, maxAge = DAY, listings = null) {
       // bulletin prints the session close, in soles or in dollars.
       if (key.startsWith("PE") && !(Number(prices[key]?.PEN?.price) > 0) && !(Number(prices[key]?.USD?.price) > 0)) {
         await limaFresh(key);
+      }
+      // EODHD does not carry the Dhaka Stock Exchange. The company page
+      // prints the last trade in taka. The same ISIN prices Chittagong.
+      if (key.startsWith("BD") && !(Number(prices[key]?.BDT?.price) > 0)) {
+        await dseFresh(key, listings);
       }
       if (!hasPrice(key)) {
         // `listings` is the page's own rows. Without them the sweep still
@@ -1440,7 +1964,10 @@ async function sweepYahoo() {
 async function main() {
   if (has("gulf")) return sweepGulf();
   if (has("lima")) return sweepLima();
+  if (has("ngx")) return sweepNgx();
   if (has("yahoo")) return sweepYahoo();
+  if (has("sgx")) return sweepSgx();
+  if (has("fsm-otc")) return sweepFsmOtc();
   if (!KEY) {
     console.error("Pas de clé : mettre EODHD_API_KEY dans .env ou dans l'environnement.");
     process.exit(1);

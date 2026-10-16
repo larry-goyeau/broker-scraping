@@ -191,6 +191,7 @@ function coverage() {
           mic: key.venue?.mic ?? null,
           currency: r.currency || "USD",
           unsourced: key.unsourced,
+          ticker: r.ticker,
         });
     if (leaf?.bp != null || leaf?.perShare != null) slot.withBook += 1;
   }

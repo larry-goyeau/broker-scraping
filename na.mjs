@@ -37,7 +37,8 @@ export function bookParts({ bp, perShare, venue, unsourced, toUsd }) {
   const us = venue?.source === "us605";
   const crypto = Boolean(unsourced?.match?.includes("crypto"));
 
-  const a = bp != null ? bp / 1e4 : us || crypto ? 0 : null;
+  // A per-share book (the NBBO, or the 605 times Q) has no percentage leg.
+  const a = bp != null ? bp / 1e4 : perShare != null || us || crypto ? 0 : null;
 
   let b;
   if (perShare != null) {

@@ -94,11 +94,29 @@ const FOREIGN_PER_USD = {
   // BCRA wholesale close, pesos per dollar, same day. Not an ECB print.
   // https://www.rava.com/cotizaciones/historico/dolar-mayorista/2026/09/07/
   ARS: 1511.5,
+  // CBR official rate in force on 7 September 2026. The ECB no longer
+  // prints the ruble. The daily file requested for that Monday is the
+  // 5 September fixing, 86.5857 rubles per dollar; the next fixing is
+  // 8 September.
+  // https://www.cbr.ru/scripts/XML_daily.asp?date_req=07/09/2026
+  RUB: 86.5857,
   // Bank Al-Maghrib customer board for 7 September 2026, via MAP.
   // Not an ECB print. Buy 8.8022 / sell 10.2296 dirhams per dollar.
   // The figure is the mid of that board.
   // https://maroc-diplomatique.net/cours-des-devises-du-lundi-7-septembre-2026/
   MAD: 9.5159,
+  // SBP daily average of banks' floating rates, rupees per dollar, same day.
+  // Not an ECB print. The 7 September column is 277.701786.
+  // https://www.sbp.org.pk/assets/document/BFER_Daily.pdf
+  PKR: 277.701786,
+  // Bangladesh Bank's published average, taka per dollar, same day.
+  // Not an ECB print. Prothom Alo quotes the 7 September figure as 122.79.
+  // https://www.prothomalo.com/business/bank/qrytfuwcfr
+  BDT: 122.79,
+  // CBSL indicative USD/LKR spot, rupees per dollar, same day.
+  // Not an ECB print. The 7 September 2026 daily indicators print 323.7691.
+  // https://www.cbsl.gov.lk/sites/default/files/daily_economic_indicators_20260907_e_0.pdf
+  LKR: 323.7691,
   // Not an ECB print. Same day. New Taiwan dollars per dollar.
   // https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@2026-09-07/v1/currencies/usd.min.json
   TWD: 31.618,

@@ -3,7 +3,8 @@
 // in their place. The feed also keeps a board from a previous session,
 // so a quote is kept only when today's open or last trade falls inside
 // the session: pre-open from 09:15, continuous trading 09:30–16:00
-// Bogota. The exchange sells the order book.
+// Bogota. A print from this morning, including the minutes before the
+// call, is this session. The exchange sells the order book.
 //
 // The clock may be twenty minutes past 16:00, which is how a delayed
 // board from that session still gets filed. Outside that window nothing
@@ -54,7 +55,7 @@ const fromUnix = (unix) => bogota(new Date(Number(unix) * 1000));
 
 const canRead = (at) => at?.day && at.minutes >= 9 * 60 + 15 && at.minutes < 16 * 60 + 20;
 
-const inCash = (at) => at && at.minutes >= 9 * 60 + 15 && at.minutes < 16 * 60;
+const inCash = (at) => at && at.minutes >= 8 * 60 + 30 && at.minutes < 16 * 60;
 
 const bpFrom = (bid, ask) => {
   if (!(bid > 0) || !(ask > 0) || ask < bid) return null;
@@ -87,7 +88,52 @@ function listings() {
     jobs.push({ code, isin: ranked[0][0] });
   }
   jobs.sort((a, b) => a.code.localeCompare(b.code));
-  return { jobs, tied };
+  return { jobs, tied, otherIsins: otherIsins() };
+}
+
+function otherIsins() {
+  const ids = new Set();
+  for (const row of catalogueRows()) {
+    if (!BVC.has(norm(row.exchange))) continue;
+    const type = String(row.type || "").toUpperCase();
+    if (type && !KEEP.has(type)) continue;
+    if (String(row.currency || "").toUpperCase() === "COP") continue;
+    const isin = String(row.isin || "").toUpperCase();
+    if (/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin)) ids.add(isin);
+  }
+  return [...ids];
+}
+
+async function symbolsFor(isins) {
+  if (!isins.length) return [];
+  const response = await fetch("https://scanner.tradingview.com/colombia/scan", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Origin: "https://www.tradingview.com",
+      "User-Agent": "Mozilla/5.0",
+    },
+    body: JSON.stringify({
+      filter: [{ left: "isin", operation: "in_range", right: isins }],
+      columns: ["currency", "exchange", "isin"],
+      range: [0, Math.max(isins.length, 1)],
+    }),
+    signal: AbortSignal.timeout(30_000),
+  });
+  if (!response.ok) throw new Error(`le tableau BVC a répondu ${response.status}`);
+  const data = await response.json();
+  const jobs = [];
+  for (const row of data.data || []) {
+    const symbol = String(row.s || "");
+    const code = symbol.slice("BVC:".length);
+    const [currency, exchange, isin] = row.d || [];
+    const id = String(isin || "").toUpperCase();
+    if (!symbol.startsWith("BVC:") || exchange !== "BVC" || currency !== "COP" || !code) continue;
+    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(id)) continue;
+    jobs.push({ code, isin: id });
+  }
+  return jobs;
 }
 
 const pack = (obj) => {
@@ -118,15 +164,33 @@ function parse(raw) {
   return out;
 }
 
-function quote(jobs) {
+async function quote(jobs) {
+  const quotes = new Map();
+  const pull = async (list) => {
+    for (let i = 0; i < list.length; i += 4) {
+      const part = await quoteChunk(list.slice(i, i + 4));
+      for (const [name, row] of part) quotes.set(name, row);
+    }
+  };
+  await pull(jobs);
+  const missing = jobs.filter((job) => !quotes.has(`BVC:${job.code}`));
+  if (missing.length) await pull(missing);
+  return quotes;
+}
+
+function quoteChunk(jobs) {
   const quotes = new Map();
   const session = `qs_${Math.random().toString(36).slice(2, 14)}`;
   const ws = new WebSocket("wss://data.tradingview.com/socket.io/websocket", {
     headers: { Origin: "https://www.tradingview.com" },
   });
-  let completed = 0;
-  let errors = 0;
   let settle = null;
+  let openedAt = 0;
+  const arm = () => {
+    clearTimeout(settle);
+    const wait = quotes.size >= jobs.length ? 1500 : Math.max(1500, 12000 - (Date.now() - openedAt));
+    settle = setTimeout(() => ws.close(), wait);
+  };
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => ws.close(), 40000);
     const finish = () => {
@@ -135,9 +199,11 @@ function quote(jobs) {
       resolve(quotes);
     };
     ws.addEventListener("open", () => {
+      openedAt = Date.now();
       ws.send(pack({ m: "quote_create_session", p: [session] }));
       ws.send(pack({ m: "quote_set_fields", p: [session, ...FIELDS] }));
       ws.send(pack({ m: "quote_add_symbols", p: [session, ...jobs.map((job) => `BVC:${job.code}`)] }));
+      arm();
     });
     ws.addEventListener("message", (ev) => {
       for (const msg of parse(String(ev.data))) {
@@ -146,25 +212,17 @@ function quote(jobs) {
           ws.send(`~m~${msg.heartbeat.length}~m~${msg.heartbeat}`);
           continue;
         }
-        if (msg.m === "quote_completed") {
-          completed += 1;
-          continue;
-        }
         if (msg.m !== "qsd") continue;
         const payload = msg.p?.[1];
         const name = payload?.n;
         if (!name) continue;
         if (payload.s === "error") {
-          errors += 1;
           quotes.set(name, { error: payload.errmsg || "error" });
           continue;
         }
         quotes.set(name, { ...(quotes.get(name) || {}), ...(payload.v || {}) });
       }
-      if (completed + errors >= jobs.length) {
-        clearTimeout(settle);
-        settle = setTimeout(() => ws.close(), 8000);
-      }
+      arm();
     });
     ws.addEventListener("error", () => reject(new Error("le flux de Colombie n'a pas répondu")));
     ws.addEventListener("close", finish);
@@ -177,7 +235,15 @@ if (!canRead(now)) {
   process.exit(1);
 }
 
-const { jobs, tied } = listings();
+const listed = listings();
+const jobs = listed.jobs;
+const known = new Set(jobs.map((job) => job.isin));
+for (const job of await symbolsFor(listed.otherIsins.filter((id) => !known.has(id)))) {
+  if (known.has(job.isin)) continue;
+  known.add(job.isin);
+  jobs.push(job);
+}
+const tied = listed.tied;
 console.error(`Bogota ${now.clock}. ${jobs.length} codes, ${tied} codes à ISIN partagé laissés de côté.`);
 if (!jobs.length) {
   console.error("aucun code du catalogue. Rien n'est écrit.");

@@ -12,10 +12,8 @@
 //   https://www.hl.co.uk/shares/shares-search-results/a
 //   https://www.hl.co.uk/shares/share-dealing/overseas-share-dealing-service
 //
-// Funds are a second alphabet. A fund is not listed on an exchange, and
-// the factsheet prints a SEDOL and no ISIN.
-//
-//   https://www.hl.co.uk/funds/fund-discounts,-prices--and--factsheets/search-results/a
+// Open-ended funds are not listed. They stay out. An ETF, ETC or ETN on
+// the share pages stays.
 //
 //   node brokers/hargreaveslansdown/hargreaveslansdown_scraping.mjs
 //   node brokers/hargreaveslansdown/hargreaveslansdown_scraping.mjs --letters=a --limit=5
@@ -243,7 +241,6 @@ async function loadIndex() {
   const seen = new Set();
   const shelves = [];
   if (!fundsOnly) shelves.push(["share", SHARE_INDEX, shareRows]);
-  if (!sharesOnly) shelves.push(["fund", FUND_INDEX, fundRows]);
 
   for (const [kind, root, parse] of shelves) {
     const pages = await mapPool(letters, 3, async (letter) => {
@@ -351,7 +348,7 @@ const seen = new Set();
 const results = [];
 for (const job of sample) {
   const row = cache[`${job.kind}:${job.slug}`];
-  if (!row || row.skip) continue;
+  if (!row || row.skip || row.type === "FUND") continue;
   const { sedol, tradable, ...listing } = row;
   const id = `${listing.isin || listing.query}|${listing.exchange || ""}|${listing.ticker}|${listing.type}`;
   if (seen.has(id)) continue;

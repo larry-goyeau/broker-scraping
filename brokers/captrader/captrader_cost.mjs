@@ -30,6 +30,9 @@
 //             one share at 1 € prints « 2.00 ... 3.00 EUR ». The page's 4 €
 //             is not that ticket. The top of the range is the floor.
 //   EUR 2     Spain. The same account prints « 2 EUR » on one Banco Santander.
+//   EUR 2     Athens. The same account on 2026-10-14: Alpha Bank prints
+//             « 2 EUR » from 1 € through 1 706 €. The 0,10 % is still
+//             under that floor.
 //   EUR 2     Vienna (cap 120) and Belgium. The page's 4 € is not the
 //             ticket: voestalpine, OMV, Erste, RBI and Verbund, and
 //             Proximus, print « 2 EUR » at 1 € and at 2 €.
@@ -324,6 +327,10 @@ const RULE = {
   it: { rate: 0.001, min: 3, ccy: "EUR" },
   // Same day. SAN at 1 € and at 2 €: « 2 EUR ».
   es: { rate: 0.001, min: 2, ccy: "EUR" },
+  // Same account, 2026-10-14. Alpha Bank prints « 2 EUR » at 1 €, at the
+  // 4.27 € print, at 80 shares and at 400 shares (1 706 €). The 0.10 %
+  // of that last order is 1.71 €, so the slope was not reprinted.
+  ath: { rate: 0.001, min: 2, ccy: "EUR" },
   pt: { rate: 0.001, min: 6, ccy: "EUR" },
   baltics: { rate: 0.001, min: 10, ccy: "EUR" },
   ch: { rate: 0.001, min: 15, ccy: "CHF" },
@@ -358,7 +365,16 @@ const RULE = {
   sar: { rate: 0.00105, min: 0, ccy: "SAR" },
   // U27604034, 2026-10-13. 2330: the larger of 0.08 % and 80 TWD
   // plus 0.02 %. 200 TWD asked for 80.04, 4 000 for 80.80, 15 000 for 83.
+  // Taipei Exchange, 2026-10-14, 1569: 80.01 on 50 TWD, 80.10 on 500, 80.40 on 2 000.
   twd: { rate: 0.0008, min: 80, floorRate: 0.0002, ccy: "TWD" },
+  // Same account, 2026-10-14. Apex. 5 AED through 1 324 AED, 5.96 on 5 958,
+  // which is 0.10 %.
+  adx: { rate: 0.001, min: 5, ccy: "AED" },
+  // Drake & Scull. 15 AED through 572 AED, 15.72 on 2 288, 25.73 on 6 292:
+  // 15 plus 0.25 % of the amount above 2 000.
+  dfm: { min: 15, flatUntil: 2000, excessRate: 0.0025, ccy: "AED" },
+  // IRES. 7.52 EUR from 1 € through 516 €. No percentage printed under that.
+  ised: { flat: 7.52, ccy: "EUR" },
   pl: { rate: 0.001, min: 20, ccy: "PLN" },
   // U27604034, 2026-10-13. TEVA asked for 25 ILS through 30 000 ILS.
   // 0.14 % of 20 000 would have been 28. 0.08 % still sits under 25.
@@ -458,6 +474,7 @@ export function feeMarketOf(exchange, mic, currency) {
   if (code === "ENEXTBE" || m === "XBRU") return "be";
   if (code === "BVME" || code === "BVMEETF" || m === "XMIL") return "it";
   if (code === "BM" || m === "XMAD" || m === "XMCE") return "es";
+  if (code === "ATH" || m === "XATH") return "ath";
   if (code === "BVL" || m === "XLIS") return "pt";
   if (code === "OSE" || code === "OMXNO" || m === "XOSL") return "no";
   if (code === "SFB" || m === "XSTO") return "se";
@@ -468,7 +485,7 @@ export function feeMarketOf(exchange, mic, currency) {
   if (code === "B3" || code === "BVMF" || m === "BVMF" || m === "XBSP") return "brl";
   if ((code === "NSE" || m === "XNSE") && (ccy === "INR" || !ccy)) return "inr";
   if ((code === "TADAWUL" || m === "XSAU") && (ccy === "SAR" || !ccy)) return "sar";
-  if ((code === "TWSE" || m === "XTAI") && (ccy === "TWD" || !ccy)) return "twd";
+  if ((code === "TWSE" || code === "TPEX" || m === "XTAI") && (ccy === "TWD" || !ccy)) return "twd";
   if (code === "TASE" || m === "XTAE") return "il";
   if (code === "BUX" || m === "XBUD") return "hu";
   if ((code === "BVB" || m === "XBSE") && (ccy === "RON" || !ccy)) return "bvb";
@@ -478,6 +495,9 @@ export function feeMarketOf(exchange, mic, currency) {
   if (code === "SEHKNTL" || code === "SHSE" || m === "XSHG") return "cnh";
   if (code === "SEHKSZSE" && (ccy === "CNH" || !ccy)) return "szse";
   if (code === "ASX" || m === "XASX") return "au";
+  if (code === "ISED" || m === "XDUB") return "ised";
+  if (code === "ADX" || m === "XADS") return "adx";
+  if (code === "DFM" || m === "XDFM") return "dfm";
   if (code === "KRX" || m === "XKRX") return "kr";
   if (code === "BURSAMY" || code === "BURSA" || m === "XKLS") return "my";
   if (code === "MOEX" || m === "MISX") return "ru";
@@ -622,7 +642,15 @@ export function commissionSide({ shares, amount, market }) {
     return { raw, charged, floored: perShareAmount < rule.min, capped, currency: rule.ccy };
   }
 
+  if (rule.flat != null) {
+    return { raw: rule.flat, charged: rule.flat, floored: false, capped: false, currency: rule.ccy };
+  }
   if (amount == null || !Number.isFinite(Number(amount))) return null;
+  if (rule.flatUntil != null) {
+    const n = Number(amount);
+    const raw = n <= rule.flatUntil ? rule.min : rule.min + (n - rule.flatUntil) * rule.excessRate;
+    return { raw, charged: raw, floored: false, capped: false, currency: rule.ccy };
+  }
   if (rule.plus != null) {
     const raw = Number(amount) * rule.rate + rule.plus;
     return { raw, charged: raw, floored: false, capped: false, currency: rule.ccy };
@@ -752,11 +780,17 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
             ? `barème CapTrader ${market}, même palier Tiered I qu'Interactive Brokers : `
           : market === "hel"
             ? `barème CapTrader ${market}, aperçu du compte U27604034 le 2026-10-13 : `
+          : market === "ath" || market === "adx" || market === "dfm" || market === "ised"
+            ? `barème CapTrader ${market}, aperçu du portail le 2026-10-14 : `
           : market === "dk" || market === "pra"
             ? `barème CapTrader ${market}, aperçu du portail le 2026-10-08 : `
           : `barème CapTrader ${market}, lu le ${SCHEDULE.readOn} (page du ${SCHEDULE.pageUpdated}) : `) +
     (rule.statutory != null
       ? `0,01 % par sens, plancher 6 INR, plafond 20 INR jusqu'à 1 000 000 INR, puis 0,02 % du surplus, plus 0,11874 % mesuré dans la même ligne`
+      : rule.flat != null
+      ? `${rule.flat} ${rule.ccy} par sens`
+      : rule.flatUntil != null
+      ? `${rule.min} ${rule.ccy} jusqu'à ${rule.flatUntil} ${rule.ccy}, puis ${(100 * rule.excessRate).toFixed(2)} % du surplus`
       : (rule.rate != null
       ? `${(100 * rule.rate).toFixed(4).replace(/0+$/, "").replace(/\.$/, "")} % par sens`
       : `${rule.perShare} ${rule.ccy} par part`) +

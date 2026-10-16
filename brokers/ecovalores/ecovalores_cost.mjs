@@ -139,6 +139,7 @@ export function roundTrip({ etf, place, currency, ticker = null, shares, price, 
     mic: m.venue?.mic ?? null,
     currency: m.row.currency,
     unsourced: m.unsourced,
+    ticker: m.row.ticker,
   });
   const listing = {
     isin: code(m.row.isin) || null,

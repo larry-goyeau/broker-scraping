@@ -7,7 +7,9 @@
 
 import http from "node:http";
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
+import v8 from "node:v8";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { catalogueFiles } from "./catalogues.mjs";
 import { isObligation } from "./obligation.mjs";
@@ -190,8 +192,65 @@ function metaFor(folder, list) {
 }
 
 const list = loadBrokerMeta();
-const brokers = new Map();
-const instruments = new Map();
+let brokers = new Map();
+let instruments = new Map();
+let aliases = new Map();
+let listings = 0;
+
+const INDEX_CACHE = path.join(os.tmpdir(), "broker-front-index.bin");
+const INDEX_STAMP = path.join(os.tmpdir(), "broker-front-index.stamp");
+
+function indexStamp() {
+  const files = [
+    ...catalogueFiles(),
+    fileURLToPath(new URL("./spreads/venues.mjs", import.meta.url)),
+    fileURLToPath(new URL("./accepted.mjs", import.meta.url)),
+    fileURLToPath(new URL("./assets/stocks.csv", import.meta.url)),
+    fileURLToPath(new URL("./assets/etfs.csv", import.meta.url)),
+  ];
+  return files
+    .map((file) => {
+      try {
+        const st = fs.statSync(file);
+        return `${file}\t${st.mtimeMs}\t${st.size}`;
+      } catch {
+        return `${file}\tmissing`;
+      }
+    })
+    .join("\n");
+}
+
+function loadIndexCache(stamp) {
+  try {
+    if (!fs.existsSync(INDEX_CACHE) || !fs.existsSync(INDEX_STAMP)) return null;
+    if (fs.readFileSync(INDEX_STAMP, "utf8") !== stamp) return null;
+    const started = Date.now();
+    const saved = v8.deserialize(fs.readFileSync(INDEX_CACHE));
+    console.error(`index lu du cache en ${Date.now() - started} ms`);
+    return saved;
+  } catch (error) {
+    console.error(`cache d'index ignoré : ${error.message}`);
+    return null;
+  }
+}
+
+const indexStampText = indexStamp();
+const cachedIndex = loadIndexCache(indexStampText);
+function countListings(map) {
+  let n = 0;
+  for (const inst of map.values()) {
+    for (const rows of inst.byBroker.values()) n += rows.length;
+  }
+  return n;
+}
+
+if (cachedIndex) {
+  brokers = cachedIndex.brokers;
+  instruments = cachedIndex.instruments;
+  aliases = cachedIndex.aliases;
+  listings = cachedIndex.listings || countListings(instruments);
+  for (const [folder, broker] of brokers) Object.assign(broker, metaFor(folder, list));
+}
 
 function cryptoPair(ticker, currency) {
   const raw = String(ticker || "").trim().toUpperCase();
@@ -223,6 +282,15 @@ const UNSOURCED_EN = {
   "TSE (Toronto ou Tokyo)": "TSE (Toronto or Tokyo)",
 };
 
+const GROUP_EXCHANGE = new Set([
+  "Euronext",
+  "Nasdaq Nordic",
+  "TSE (Toronto or Tokyo)",
+  "TSE (Toronto ou Tokyo)",
+  "PSE (Prague ou Manille)",
+  "CSE (Canada ou Copenhague)",
+]);
+
 function displayExchange(raw, extra = {}) {
   const text = String(raw || "").trim();
   if (!text) return "";
@@ -230,6 +298,20 @@ function displayExchange(raw, extra = {}) {
   if (venue) return venue.name;
   if (unsourced?.name) return UNSOURCED_EN[unsourced.name] || unsourced.name;
   return text;
+}
+
+// ChiNext and the STAR Market are on Stock Connect only for institutional
+// professional investors. The sentence is added for every broker, after that
+// broker's own remark.
+function connectRemark(listing, remark) {
+  const code = String(listing.exchangeRaw || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+  const line = code === "CHINEXT"
+    ? "ChiNext on Stock Connect is limited to institutional professional investors."
+    : code === "SEHKSTAR"
+      ? "The STAR Market on Stock Connect is limited to institutional professional investors."
+      : "";
+  if (!line || String(remark || "").includes(line)) return remark || "";
+  return [remark, line].filter(Boolean).join("\n");
 }
 
 function addName(set, counts, value) {
@@ -252,9 +334,9 @@ const ANY_CURRENCY = new Set(["revolut"]);
 const imposesCurrency = (folder) =>
   !ANY_CURRENCY.has(folder) && (cryptoCcys.get(folder)?.size ?? 0) === 1;
 
+if (!cachedIndex) {
 console.error("indexation des catalogues…");
 const t0 = Date.now();
-let listings = 0;
 let obligations = 0;
 const matchedListings = [];
 for (const file of catalogueFiles()) {
@@ -306,11 +388,15 @@ for (const file of catalogueFiles()) {
       inst.typeCounts.set(type, (inst.typeCounts.get(type) || 0) + 1);
     }
     const exchangeRaw = String(row.exchange || "").trim();
+    // Traders Place prices the Frankfurt floor apart from Xetra. The word
+    // "Frankfurt" otherwise resolves to Xetra, and the index would keep
+    // only one of the two lines.
+    const exchangeHint = folder === "tradersplace" && exchangeRaw === "Frankfurt" ? { mic: "XFRA" } : {};
     const listing = {
       ticker: ticker || String(row.query || ""),
       query: pair?.raw || String(row.ticker || row.query || ""),
       name: String(row.name || row.label || "").trim(),
-      exchange: displayExchange(exchangeRaw, { currency: row.currency, isin: row.isin }),
+      exchange: displayExchange(exchangeRaw, { currency: row.currency, isin: row.isin, ...exchangeHint }),
       exchangeRaw,
       currency: pair ? pair.quote || String(row.currency || "").trim() : String(row.currency || "").trim(),
       type: String(row.type || "").trim(),
@@ -374,6 +460,7 @@ console.error(
   `${instruments.size} instruments, ${listings} cotations, ${brokers.size} brokers en ${Date.now() - t0} ms` +
     (obligations ? `; ${obligations} obligations laissées de côté` : "")
 );
+}
 
 const NA = "N/A";
 // Two contracts live side by side while the shelf is walked broker by broker.
@@ -387,34 +474,55 @@ const NA = "N/A";
 // column it had.
 const estimators = new Map();
 const ROOT_DIR = path.dirname(fileURLToPath(import.meta.url));
-for (const folder of brokers.keys()) {
-  const file = path.join(ROOT_DIR, "brokers", folder, `${folder}_cost.mjs`);
-  if (!fs.existsSync(file)) continue;
-  try {
-  const mod = await import(pathToFileURL(file));
-    const entry = {
-      total: typeof mod.roundTrip === "function" ? mod.roundTrip : null,
-      abc: typeof mod.roundTripCost === "function" ? mod.roundTripCost : null,
-    };
-    if (entry.total || entry.abc) estimators.set(folder, entry);
-  } catch (err) {
-    console.error(`estimateur ${folder} : ${err.message}`);
+// Each cost file rereads its catalogue. That stays off the path to listen:
+// the port opens once the index is in memory, and a quote waits for this.
+const estimatorsReady = (async () => {
+  const started = Date.now();
+  for (const folder of brokers.keys()) {
+    const file = path.join(ROOT_DIR, "brokers", folder, `${folder}_cost.mjs`);
+    if (!fs.existsSync(file)) continue;
+    try {
+      const mod = await import(pathToFileURL(file));
+      const entry = {
+        total: typeof mod.roundTrip === "function" ? mod.roundTrip : null,
+        abc: typeof mod.roundTripCost === "function" ? mod.roundTripCost : null,
+      };
+      if (entry.total || entry.abc) estimators.set(folder, entry);
+    } catch (err) {
+      console.error(`estimateur ${folder} : ${err.message}`);
+    }
   }
-}
-const migrated = [...estimators].filter(([, e]) => e.total).map(([folder]) => folder);
-console.error(
-  `estimateurs : ${[...estimators.keys()].join(", ") || "aucun"}`
-);
-console.error(
-  `coût total : ${migrated.length ? migrated.join(", ") : "aucun broker migré"}` +
-    ` (${estimators.size - migrated.length} encore en N/A)`
-);
+  const migrated = [...estimators].filter(([, e]) => e.total).map(([folder]) => folder);
+  console.error(
+    `estimateurs en ${Date.now() - started} ms : ${[...estimators.keys()].join(", ") || "aucun"}`
+  );
+  console.error(
+    `coût total : ${migrated.length ? migrated.join(", ") : "aucun broker migré"}` +
+      ` (${estimators.size - migrated.length} encore en N/A)`
+  );
+})();
 
 // How many of the thing the reader is buying. Shares for anything with a share
 // price, dollars for a coin — a coin has no unit worth naming, and ten bitcoin
-// is not a question anyone asks.
+// is not a question anyone asks. A share whose last is under $10 is counted
+// in hundreds: ten of a rupee share is not the round trip the column prices.
+// At $10 or more, and when no last is on file, the count stays at ten.
 const SHARES_DEFAULT = 10;
+const SHARES_CHEAP = 100;
+const CHEAP_USD = 10;
 const AMOUNT_DEFAULT = 1000;
+
+function defaultShares(inst) {
+  const currencies = [];
+  for (const lists of inst.byBroker.values()) {
+    for (const listing of lists) if (listing.currency) currencies.push(listing.currency);
+  }
+  const ccy = mostCommon(currencies);
+  const local = priceOf(inst.isin, ccy);
+  if (!(local > 0)) return SHARES_DEFAULT;
+  const usd = String(ccy || "").toUpperCase() === "USD" ? local : toUsd(local, ccy);
+  return usd > 0 && usd < CHEAP_USD ? SHARES_CHEAP : SHARES_DEFAULT;
+}
 
 // A price is not a fact about a broker, so it sits at the root with the other
 // facts about the market. Unlike the spread it barely moves from one venue to
@@ -509,6 +617,36 @@ function formatTotal(cost, usd) {
 // derivative over the same line.
 const EMPTY_ROW = { total: NA, fees: NA, spread: NA, remark: "", buyable: true, venueExchange: "", venueCurrency: "", cashCurrency: "", venueAuthoritative: false, spreadKnown: false };
 
+// Two lines of one company can sit on the same page: the local share and
+// its ADR, both sold OTC in dollars. The fee is a percent of a price.
+// When only one of those ISINs has a last, that last sizes the other
+// line too. The spread stays that line's own book.
+function priceFor(inst, listing) {
+  const ccy = String(listing.currency || "").toUpperCase();
+  const ids = [];
+  const add = (id) => {
+    const key = String(id || "").trim().toUpperCase();
+    if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(key) || ids.includes(key)) return;
+    ids.push(key);
+  };
+  add(listing.isin);
+  const samePlace = (other) => {
+    if (String(other.currency || "").toUpperCase() !== ccy) return false;
+    return other.exchange === listing.exchange || other.exchangeRaw === listing.exchangeRaw;
+  };
+  for (const source of [inst, ...(inst.wider || [])]) {
+    for (const lists of source.byBroker.values()) {
+      for (const other of lists) if (samePlace(other)) add(other.isin);
+    }
+  }
+  add(inst.isin);
+  for (const id of ids) {
+    const price = priceOf(id, ccy);
+    if (price > 0) return price;
+  }
+  return null;
+}
+
 function bookUsd(cost) {
   const shares = Number(cost?.trade?.shares);
   const notional = Number(cost?.trade?.notional);
@@ -523,7 +661,7 @@ function bookUsd(cost) {
   return null;
 }
 
-function estimateListing(folder, listing, inst, extra = {}, size = {}) {
+function estimateListing(folder, listing, inst, extra = {}, size = {}, page = inst) {
   const entry = estimators.get(folder);
   if (!entry) return { ...EMPTY_ROW };
   const crypto = inst.key.startsWith("CRYPTO:");
@@ -541,7 +679,7 @@ function estimateListing(folder, listing, inst, extra = {}, size = {}) {
     ? { amount: size.amount ?? AMOUNT_DEFAULT }
     : {
         shares: size.shares ?? SHARES_DEFAULT,
-        price: priceOf(listing.isin || inst.isin, listing.currency),
+        price: priceFor(page, listing),
       };
   try {
     if (entry.total) {
@@ -550,7 +688,7 @@ function estimateListing(folder, listing, inst, extra = {}, size = {}) {
       // tape, so a first call without a price is enough to learn it and look
       // the quote up under the right key — otherwise the row stays N/A.
       if (!crypto && !(trade.price > 0) && cost?.listing?.currency) {
-        const price = priceOf(listing.isin || inst.isin, cost.listing.currency);
+        const price = priceFor(page, { ...listing, currency: cost.listing.currency });
         if (price > 0) {
           cost = entry.total({ ...ask, shares: trade.shares, price });
         }
@@ -806,9 +944,8 @@ function absorbInstrument(into, from) {
   }
 }
 
+if (!cachedIndex) {
 loadReferenceNames();
-
-const aliases = new Map();
 
 {
   const parent = new Map();
@@ -906,6 +1043,11 @@ for (const inst of instruments.values()) {
   widerLinks += inst.wider.length;
 }
 console.error(`${widerLinks} listings share brokers with a depositary certificate`);
+  const started = Date.now();
+  fs.writeFileSync(INDEX_CACHE, v8.serialize({ brokers, instruments, aliases, listings }));
+  fs.writeFileSync(INDEX_STAMP, indexStampText);
+  console.error(`index écrit dans le cache en ${Date.now() - started} ms`);
+}
 
 function widerNames(inst) {
   return inst.wider || [];
@@ -2260,9 +2402,10 @@ function sameShown(crypto) {
 function detail(key, nat = "", size = {}, dep = "") {
   const inst = resolve(key);
   if (!inst) return null;
+  const isCrypto = inst.key.startsWith("CRYPTO:");
+  if (!isCrypto && !(Number(size.shares) > 0)) size = { ...size, shares: defaultShares(inst) };
   const rows = [];
   const easy = [];
-  const isCrypto = inst.key.startsWith("CRYPTO:");
   for (const [folder, pairs] of listingsByBroker(inst)) {
     if (!acceptsNat(folder, nat)) continue;
     if (dep && !splitByPlan(folder) && !depositHas(folder, "", dep)) continue;
@@ -2280,18 +2423,18 @@ function detail(key, nat = "", size = {}, dep = "") {
         .slice()
         .sort((a, b) => a.listing.exchange.localeCompare(b.listing.exchange, "en") || a.listing.currency.localeCompare(b.listing.currency))
         .map(({ listing, source }) => {
-          const cost = estimateListing(folder, listing, source, { nat, ...extra }, size);
+          const cost = estimateListing(folder, listing, source, { nat, ...extra }, size, inst);
           return {
             ...listing,
             ...cost,
-            remark: cost.remark || listing.remark || "",
-            // "Nasdaq Nordic" is the group. Once the book is the only Nordic
-            // one in this currency, the column names that city.
+            remark: connectRemark(listing, cost.remark || listing.remark || ""),
+            // The catalogue named a group. The book closest to the broker
+            // is a city, and the column names that city.
             exchange:
               (cost.venueAuthoritative && cost.venueExchange) ||
-              (listing.exchange === "Nasdaq Nordic" &&
+              (GROUP_EXCHANGE.has(listing.exchange) &&
               cost.venueExchange &&
-              cost.venueExchange !== "Nasdaq Nordic"
+              cost.venueExchange !== listing.exchange
                 ? cost.venueExchange
                 : listing.exchange) ||
               cost.venueExchange ||
@@ -2998,6 +3141,7 @@ const server = http.createServer(async (req, res) => {
     return json(res, 200, search(url.searchParams.get("q") || "", 20, url.searchParams.get("nat") || "", url.searchParams.get("dep") || ""));
   }
   if (url.pathname === "/api/instrument") {
+    await estimatorsReady;
     const size = {};
     const shares = Number(url.searchParams.get("shares"));
     const amount = Number(url.searchParams.get("amount"));

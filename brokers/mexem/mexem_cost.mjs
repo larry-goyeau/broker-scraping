@@ -291,7 +291,8 @@ const RULE = {
   pt: { rate: 0.0005, min: 1, ccy: "EUR" },
   // Same account. Tallinn: 7.80 EUR through 800 EUR, then 7.80 plus
   // 0.0325 % of the amount above 800. 1 200 asked for 7.92, 1 600 for
-  // 8.06, 1 800 for 8.13.
+  // 8.06, 1 800 for 8.13. Vilnius, 2026-10-14, AKO1L, and Riga the same
+  // day, BAL1R: 7.80 through 800 EUR, 7.92 at 1 200 and 8.13 at 1 800.
   baltic: { min: 7.8, flatUntil: 800, excessRate: 0.000325, ccy: "EUR" },
   // Same account. Not 0.35 %. Krka asked for 1 EUR through 1 500 EUR
   // and 1.05 EUR on 1 750, which is 0.06 %.
@@ -346,9 +347,26 @@ const RULE = {
   // then 0.10 %: 24 ILS on 24,000, 120 on 120,000, 600 on 600,000. No cap.
   ils: { rate: 0.001, min: 15, ccy: "ILS" },
   // Portal preview of 2330 on TWSE, 2026-10-10. The larger of 0.10 % and
-  // 80 TWD plus 0.02 %. No cap through 12,750,000 TWD.
+  // 80 TWD plus 0.02 %. No cap through 12,750,000 TWD. Taipei Exchange,
+  // 2026-10-14, 1240: 80.01 on 50 TWD, 80.10 on 500, 80.40 on 2 000.
   twd: { rate: 0.001, min: 80, floorRate: 0.0002, ccy: "TWD" },
   krw: { rate: 0.0006, min: 4000, ccy: "KRW" },
+  // Same account, 2026-10-14. 2PointZero. 5 AED through 2 000 AED,
+  // 6 AED on 6 000, which is 0.10 %.
+  adx: { rate: 0.001, min: 5, ccy: "AED" },
+  // Air Arabia. 15 AED through 2 000 AED, 20 on 4 000, 25 on 6 000:
+  // 15 plus 0.25 % of the amount above 2 000.
+  dfm: { min: 15, flatUntil: 2000, excessRate: 0.0025, ccy: "AED" },
+  // CUP.U on Toronto. 1 USD through 1 600 USD, 1.10 on 2 200, which is 0.05 %.
+  // Pure at 1 000 USD asked for the same 1 USD.
+  tseUsd: { rate: 0.0005, min: 1, ccy: "USD" },
+  // K6S. 1 USD at 1 000 and at 1 500. 2 000 asked for 1.07.
+  sgxUsd: { rate: 0.0005, min: 1, ccy: "USD" },
+  // Graphisoft. 1 EUR on 10 EUR, 1.30 on 1 000, 1.95 on 1 500, 2.60 on 2 000.
+  buxEur: { rate: 0.0013, min: 1, ccy: "EUR" },
+  // JPNA on SIX. 465 JPY through 50 000 JPY, 500 on 100 000 (0.50 %),
+  // 620 on 200 000, which is 0.50 % up to 100 000 then 0.12 % on the excess.
+  ebsJpy: { rate: 0.005, band: 100000, bandRate: 0.0012, min: 465, ccy: "JPY" },
 };
 
 const WEST_CODES = new Set([
@@ -583,11 +601,17 @@ export function feeMarketOf(exchange, mic, currency) {
   if (code === "PRA" || m === "XPRA") return "pra";
   if (code === "LJSE" || m === "XLJU") return "si";
   if (code === "BVL" || m === "XLIS") return "pt";
-  if (/^NTALLINN$/.test(code) || m === "XTAL") return "baltic";
-  if (code === "BUX" || m === "XBUD") return ccy === "HUF" || !ccy ? "huf" : null;
+  if (/^NTALLINN$/.test(code) || m === "XTAL" || /^NVILNIUS$/.test(code) || m === "XLIT" || /^NRIGA$/.test(code) || m === "XRIS") return "baltic";
+  if (code === "BUX" || m === "XBUD") {
+    if (ccy === "HUF" || !ccy) return "huf";
+    if (ccy === "EUR") return "buxEur";
+    return null;
+  }
+  if (code === "ADX" || m === "XADS") return "adx";
+  if (code === "DFM" || m === "XDFM") return "dfm";
   if ((code === "BVB" || m === "XBSE") && (ccy === "RON" || !ccy)) return "bvb";
   if ((code === "TASE" || m === "XTAE") && (ccy === "ILS" || !ccy)) return "ils";
-  if ((code === "TWSE" || m === "XTAI") && (ccy === "TWD" || !ccy)) return "twd";
+  if ((code === "TWSE" || code === "TPEX" || m === "XTAI") && (ccy === "TWD" || !ccy)) return "twd";
   if (code === "WSE" || m === "XWAR") return ccy === "PLN" || !ccy ? "pln" : null;
   if (code === "TSEJ" || m === "XJPX" || m === "XTKS") return ccy === "JPY" || !ccy ? "jpy" : null;
   if (code === "ASX" || m === "XASX") return ccy === "AUD" || !ccy ? "aud" : null;
@@ -597,7 +621,10 @@ export function feeMarketOf(exchange, mic, currency) {
     if (ccy === "HKD" || !ccy) return "hkd";
     return null;
   }
-  if (code === "SGX" || m === "XSES") return ccy === "SGD" || !ccy ? "sgd" : null;
+  if (code === "SGX" || m === "XSES") {
+    if (ccy === "USD") return "sgxUsd";
+    return ccy === "SGD" || !ccy ? "sgd" : null;
+  }
   if (code === "MEXI" || m === "XMEX") return ccy === "MXN" || !ccy ? "mxn" : null;
   if ((code === "B3" || code === "BVMF" || m === "BVMF" || m === "XBSP") && (ccy === "BRL" || !ccy)) return "brl";
   if ((code === "NSE" || m === "XNSE") && (ccy === "INR" || !ccy)) return "inr";
@@ -606,8 +633,10 @@ export function feeMarketOf(exchange, mic, currency) {
   if (code === "CPH" || m === "XCSE") return ccy === "DKK" || !ccy ? "dkk" : null;
   if (US_MICS.has(m) || US_EX.has(code)) return "usd";
   if (code === "TSE" || code === "TSX" || code === "VENTURE" || code === "PURE" || code === "AEQLIT" || m === "XTSE" || m === "XTSX") {
+    if (ccy === "USD") return "tseUsd";
     return ccy === "CAD" || !ccy ? "ca" : null;
   }
+  if ((code === "EBS" || m === "XSWX") && ccy === "JPY") return "ebsJpy";
   const west =
     WEST_CODES.has(code) ||
     WEST_MICS.has(m) ||
@@ -693,6 +722,12 @@ export function commissionSide({ shares, amount, market, side = "buy" }) {
       capped: n <= rule.excessAbove && pct > rule.max,
       currency: rule.ccy,
     };
+  }
+  if (rule.band != null && rule.bandRate != null) {
+    const n = Number(amount);
+    const raw = n <= rule.band ? n * rule.rate : rule.band * rule.rate + (n - rule.band) * rule.bandRate;
+    const charged = rule.min != null ? Math.max(rule.min, raw) : raw;
+    return { raw, charged, floored: rule.min != null && raw < rule.min, capped: false, currency: rule.ccy };
   }
   if (rule.altRate != null) {
     const n = Number(amount);
@@ -873,6 +908,8 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const basis =
     (market === "krw"
       ? `barème Mexem ${market}, lu le 2026-09-28 sur le contrôle de trésorerie du portail : `
+      : market === "adx" || market === "dfm" || market === "tseUsd" || market === "sgxUsd" || market === "buxEur" || market === "ebsJpy"
+        ? `barème Mexem ${market}, aperçu du portail le 2026-10-14 : `
       : market === "huf" || market === "bvb" || market === "connect" || market === "chf" || market === "dkk" || market === "nok" || market === "sek" || market === "pt" || market === "baltic" || market === "si" || market === "pln" || market === "jpy" || market === "sgd" || market === "mxn"
         ? `barème Mexem ${market}, aperçu du compte U28294463 le 2026-10-13 : `
       : `barème Mexem ${market}, aperçu du portail le 2026-10-10 : `) +
@@ -882,6 +919,8 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
         ? `0,10 % par sens, ou 80 TWD plus 0,02 % si c'est davantage, sans plafond`
       : rule.altRate != null
         ? `${(100 * rule.rate).toFixed(2)} % plus ${rule.plus} ${rule.ccy}, ou ${(100 * rule.altRate).toFixed(2)} % si c'est davantage, plancher ${rule.min} ${rule.ccy}`
+      : rule.band != null
+        ? `${(100 * rule.rate).toFixed(2)} % jusqu'à ${rule.band} ${rule.ccy}, puis ${(100 * rule.bandRate).toFixed(2)} % du surplus, plancher ${rule.min} ${rule.ccy}`
       : rule.flatUntil != null
         ? `${rule.min} ${rule.ccy} jusqu'à ${rule.flatUntil} ${rule.ccy}, puis ${(100 * rule.excessRate).toFixed(4).replace(/0+$/, "")} % du surplus`
       : (rule.buy != null

@@ -19,9 +19,9 @@
 // Stamp and FTT come from the tax map. PTM is £1.50 a side on a UK share
 // deal above £10,000, which the tax map does not price as a flat.
 //
-// London, Aquis and Chi-X keep their book. Any other line is a sterling
-// CDI: one side of the quote, for about fifteen seconds. That spread is
-// unknown. The foreign book and the American NBBO are not used.
+// London, Aquis and Chi-X keep their book. Any other line is a CDI.
+// Its spread is the bid and ask AJ Bell prints for that line, stored
+// apart from the foreign book and from the American NBBO.
 //
 //   https://www.ajbell.co.uk/dealing-account/charges
 //   https://www.ajbell.co.uk/investment/international
@@ -74,15 +74,6 @@ const sterling = (currency) => {
   return c === "GBP" || c === "GBX";
 };
 
-const HOME = new Set(["XLON", "LSE", "AQSE", "CHIX"]);
-function cdiOf(match) {
-  const exchange = String(match.row.exchange || "").toUpperCase();
-  if (exchange.startsWith("CDI")) return true;
-  const mic = match.venue?.mic || "";
-  if (HOME.has(mic) || HOME.has(exchange)) return false;
-  return true;
-}
-
 function fxOnDeal(pounds) {
   if (!(pounds > 0)) return null;
   let fee = 0;
@@ -126,7 +117,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     cashCurrency: CASH,
     url: PAGE,
     remark:
-      "Frequent dealing is -£1.50 a side after 10 online share deals in the previous month. A regular investment is free. The shares account charge is 0.25% a year, capped at £3.50 a month.",
+      "Frequent dealing is -£1.50 a side after 10 online share deals in the previous month. The shares account charge is 0.25% a year, capped at £3.50 a month.",
   };
 
   if (!catalogue) {
@@ -142,17 +133,14 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   }
 
   const m = matches[0];
-  const cdi = cdiOf(m);
-  const book = cdi
-    ? { leaf: null, mic: null }
-    : spreadLeaf(spreads, {
-        isin: m.row.isin,
-        mic: m.venue?.mic ?? null,
-        currency: m.row.currency,
-        unsourced: m.unsourced,
-        broker: "ajbell",
-        ticker: m.row.ticker,
-      });
+  const book = spreadLeaf(spreads, {
+    isin: m.row.isin,
+    mic: m.venue?.mic ?? null,
+    currency: m.row.currency,
+    unsourced: m.unsourced,
+    broker: "ajbell",
+    ticker: m.row.ticker,
+  });
   const listing = {
     isin: String(m.row.isin || "").toUpperCase() || null,
     ticker: m.row.ticker || null,
@@ -164,8 +152,8 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     brokerExchange: m.row.exchange || null,
   };
   const leaf = book.leaf;
-  const marketBp = cdi ? null : bp ?? leaf?.bp ?? null;
-  const marketPerShare = cdi ? null : perShare ?? leaf?.perShare ?? null;
+  const marketBp = bp ?? leaf?.bp ?? null;
+  const marketPerShare = perShare ?? leaf?.perShare ?? null;
   const partsBook = bookParts({
     bp: marketBp,
     perShare: marketPerShare,
@@ -223,9 +211,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     commission: { each: SHARE, currency: CASH, eachWay: true },
     ...(bookUsd == null
       ? {
-          why: cdi
-            ? "CDI : AJ Bell ne publie qu'un côté du prix en livres, le carnet de la place n'est pas ce prix"
-            : `aucun carnet pour ${m.unsourced?.name || listing.exchange || "cette ligne"} : ${m.unsourced?.why || "pas de feuille de carnet"}`,
+          why: `aucun carnet pour ${m.unsourced?.name || listing.exchange || "cette ligne"} : ${m.unsourced?.why || "pas de feuille de carnet"}`,
         }
       : {}),
     trade: {

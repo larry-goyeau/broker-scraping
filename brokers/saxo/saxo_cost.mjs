@@ -392,6 +392,7 @@ function coverage() {
       mic: venue?.mic ?? null,
       currency: r.currency,
       unsourced,
+      ticker: r.ticker,
     });
     const market = feeMarketOf(r, book.mic ?? venue?.mic) || "?";
     const slot = (out[type] ||= { n: 0, withBook: 0, byMarket: {} });
@@ -459,6 +460,8 @@ export function roundTrip({
     mic: venue?.mic ?? null,
     currency: m.row.currency,
     unsourced: m.unsourced,
+    broker: "saxo",
+    ticker: m.row.ticker,
   });
   const listing = {
     isin: code(m.row.isin) || null,

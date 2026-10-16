@@ -313,6 +313,45 @@ export const ACCEPTED = {
   // New investments stop if the client ceases to be UK resident.
   // https://www.fidelity.co.uk/media/PI%20UK/pdf/legal/fidelity-client-terms.pdf
   fidelity: { countries: ["GB"] },
+  // The equity form takes a resident, a non-resident Pakistani and a
+  // foreigner. Online opening of a resident asks for a Pakistani identity
+  // card. The countries where the others live are not listed. The picker
+  // is a country, so the country is PK.
+  // https://akdsl.com/Files/Equities/Account-Openning-Form-Equities-for-Individuals.pdf
+  // https://akdsl.com/Services/RDA
+  akd: { countries: ["PK"] },
+  // Nafa and the Chase form ask for a Pakistani identity card. A
+  // non-resident Pakistani can open too. The countries where that person
+  // lives are not listed. The picker is a country, so the country is PK.
+  // https://nafa.com.pk/
+  // https://chasesecurities.com/open-your-account/
+  // https://www.tickeranalysts.com/blog/how-to-open-nafa-account
+  chase: { countries: ["PK"] },
+  // The FAQ opens a BO account for someone over 18 with a national
+  // identity card. A non-resident Bangladeshi is named for an IPO, and
+  // a foreign account form exists. The countries where they live are
+  // not listed. The picker is a country, so the country is BD.
+  // https://www.lbsbd.com/Faq
+  // https://www.lbsbd.com/Platforms?platform=ibroker&tab=open-bo-account
+  lankabangla: { countries: ["BD"] },
+  // A digital booth asks for the national identity card of the applicant
+  // and of the nominee. The foreign desk buys Bangladeshi shares for
+  // institutions. The countries where they live are not listed. The
+  // picker is a country, so the country is BD.
+  // https://idlc.com/securities/knowledgebase/faq
+  // https://idlc.com/securities/whatweoffer/brokerage
+  idlc: { countries: ["BD"] },
+  // The equity signup asks for an NIC, a mobile number and an email.
+  // A foreign investor is named for treasury bills and bonds. The
+  // countries where they live are not listed. The picker is a country,
+  // so the country is LK.
+  // https://cal.lk/getting-started-eq/
+  // https://cal.lk/faq-items/as-a-foreign-investor-can-i-invest-in-treasury-bills-and-bonds/
+  capitalalliance: { countries: ["LK"] },
+  // Registration asks for an NIK and a photo of the KTP, the Indonesian
+  // identity card. No other residence is named.
+  // https://ajaib.co.id/pusat-bantuan/registrasi/bagaimana-cara-registrasi-akun-ajaib
+  ajaib: { countries: ["ID"] },
   // A Dealing account opens for a UK resident. A Crown employee, or their
   // spouse or dependant, may also open. No other country of residence is
   // named. The ISA asks the same of someone ordinarily resident in the UK.
@@ -482,6 +521,21 @@ export const ACCEPTED = {
   // https://new.bpitrade.com/faq/who-can-open-a-bpi-trade-account/
   // https://new.bpitrade.com/faq/what-are-the-requirements-to-open-a-bpi-trade-account/
   bpi: { countries: ["PH"] },
+  // The opening note times the account for a Filipino citizen. PERA,
+  // including an OFW, requires a Philippine address and fails with
+  // "residing outside the PH". The picker is residence, so the country
+  // is PH.
+  // https://help.dragonfi.ph/hc/en-us/articles/17029342098329-How-long-does-it-take-to-open-an-investment-account-and-start-investing
+  // https://help.dragonfi.ph/hc/en-us/articles/52921466054041-PERA-for-OFWs-Document-Submission-Guidelines
+  dragonfi: { countries: ["PH"] },
+  // The retail account is a CPF. A withdrawal goes only to a bank account
+  // in the same name. The contract also speaks to a non-resident, and that
+  // is the B3 non-resident module, a registered foreign investor, not a
+  // residence the picker names. The picker is residence, so the country
+  // is BR.
+  // https://cdn.toroinvestimentos.com.br/corretora/documents/regras-e-parametros-de-atuacao.pdf
+  // https://cdn.toroinvestimentos.com.br/corretora/documents/contrato-de-intermediacao-e-custodia-toro-investimentos.pdf
+  toro: { countries: ["BR"] },
   // GStocks opening takes a Filipino with a government ID, a foreigner
   // residing abroad with a passport, and a foreigner residing in the
   // Philippines with a passport and an AEP, an ACR or an SRRV. No
@@ -592,6 +646,12 @@ export const ACCEPTED = {
   // with a BVN. The picker is a country of residence, so the country is NG.
   // https://cowrywise.com/terms
   cowrywise: { countries: ["NG"] },
+  // The product is offered in Nigeria, Ghana and South Africa. A Nigerian
+  // BVN, a Ghana Card or a South African ID is what opens the account, and
+  // that person can then use the app from abroad. The picker is residence,
+  // so it keeps the three countries.
+  // https://faq.investbamboo.com/en/articles/6884650-what-countries-is-bamboo-available-in
+  bamboo: { countries: ["NG", "GH", "ZA"] },
   // Payment terms: Czech citizens and foreigners, 15 or older. A Czech
   // phone number is required. A non-EU foreigner shows a residence permit.
   // The picker is a country, so the country is CZ.
@@ -610,6 +670,17 @@ export const ACCEPTED = {
   // https://pearler.com/help/is-pearler-right-for-me/4794103-can-i-invest-with-pearler-if-i-m-not-an-australian-resident
   // https://pearler.com/help/is-pearler-right-for-me/5155265-am-i-eligible-to-sign-up-for-pearler
   pearler: { countries: ["AU"] },
+  // Support: an account needs an Australian residential address and
+  // Australian tax residence. An overseas address is refused. Nationality
+  // is not the test. The picker is a country, so the country is AU.
+  // https://hellostake.com/au/support/get-started/sign-up/57463401809945
+  stake: { countries: ["AU"] },
+  // Digital opening needs a Colombian resident with a cédula de ciudadanía.
+  // A foreigner's card, a minor's card and a company tax number are refused.
+  // The residence fields must be in Colombia. The picker is residence, so
+  // the country is CO.
+  // https://www.bancolombia.com/centro-de-ayuda/preguntas-frecuentes/vincularse-a-valores-bancolombia
+  valores: { countries: ["CO"] },
   // The guide is an offer in Australia only. The application requires an
   // Australian residential address, an Australian mobile number and an
   // Australian bank account, and it asks for tax residency. Nationality
@@ -970,6 +1041,11 @@ export const ACCEPTED = {
   // is not onboarded. The picker is residence, so the country is Germany.
   // https://www.justtrade.com/faq
   justtrade: { countries: ["DE"] },
+  // The depot is the customer who lives in Germany. Crypto, which sits in
+  // that same depot, is offered only to a customer with a German residence.
+  // The picker is residence, so the country is DE.
+  // https://www.tradersplace.de/angebot/uebersicht/kryptowerte
+  tradersplace: { countries: ["DE"] },
   // The service is only for a person living in Japan. A foreign national
   // opens with a residence card. A US citizen, a green-card holder or a US
   // resident cannot open. The picker is residence, so the country is JP.

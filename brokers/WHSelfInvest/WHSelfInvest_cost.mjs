@@ -286,7 +286,24 @@ const RULE = {
   ils: { rate: 0.001, min: 15, ccy: "ILS" },
   // Not on the card. Portal preview of 2330 on TWSE, 2026-10-10.
   // The larger of 0.10 % and 80 TWD plus 0.02 %. No cap through 12,750,000 TWD.
+  // Taipei Exchange, 2026-10-14, 3434: 80.01 on 50 TWD, 80.10 on 500, 80.40 on 2 000.
   twd: { rate: 0.001, min: 80, floorRate: 0.0002, ccy: "TWD" },
+  // Same account, 2026-10-14. Al Buhaira. 5 AED through 2 000 AED,
+  // 6 AED on 6 000, which is 0.10 %.
+  adx: { rate: 0.001, min: 5, ccy: "AED" },
+  // Air Arabia. 15 AED through 2 000 AED, 25 AED on 6 000:
+  // 15 plus 0.25 % of the amount above 2 000.
+  dfm: { min: 15, flatUntil: 2000, excessRate: 0.0025, ccy: "AED" },
+  // Jardine Matheson. 2.50 USD at 100 and at 1 000. 1 500 asked for 2.65,
+  // which is 2.50 plus 0.03 % of the amount above 1 000. 1 800 asked for
+  // 2.78 and 2 000 for 2.87, a few cents more than that line.
+  sgxUsd: { min: 2.5, flatUntil: 1000, excessRate: 0.0003, ccy: "USD" },
+  // Galp. 1.90 EUR from 1 € through 1 600 €. The 3 000 € ticket printed
+  // no commission. No percentage showed under that floor.
+  bvl: { flat: 1.9, ccy: "EUR" },
+  // Kingspan. 1.90 EUR from 10 € through 2 000 €. The Irish stamp is not
+  // in that figure. No percentage showed under that floor.
+  ised: { flat: 1.9, ccy: "EUR" },
   // Real account U27795602, 2026-10-13, nothing sent. Not the demo band.
   // OTP: 200 HUF plus 0.52 %. 100 HUF asked for 200.52, 40 000 for 408,
   // 80 000 for 616, 400 000 for 2 280. The 200 is added, not a floor.
@@ -301,6 +318,22 @@ const RULE = {
   // notional where 0.08 % would clear 20 CNH, so the slope stays the
   // demo's.
   connect: { rate: 0.0008, min: 20, ccy: "CNH" },
+  // Not on the card. Real account U27795602, 2026-10-14, nothing sent.
+  // PPC on ATH asked for 1.90 EUR from 1 EUR through 2 000 EUR. Above
+  // that the ticket prints no commission, so no percentage is stored.
+  ath: { flat: 1.9, ccy: "EUR" },
+  // Not on the card. Same account, 2026-10-14, nothing sent. TKM1T on
+  // N.TALLINN asked for 10 EUR from 1 EUR through 2 000 EUR. Above that
+  // the ticket prints no commission, so no percentage is stored.
+  tal: { flat: 10, ccy: "EUR" },
+  // Same account, 2026-10-14, nothing sent. BAL1R on N.RIGA asked for
+  // 10 EUR from 1 EUR through 2 000 EUR. Above that the ticket prints
+  // no commission, so no percentage is stored.
+  rig: { flat: 10, ccy: "EUR" },
+  // Same account, 2026-10-14, nothing sent. AKO1L on N.VILNIUS asked for
+  // 10 EUR from 1 EUR through 2 000 EUR. Above that the ticket prints
+  // no commission, so no percentage is stored.
+  vil: { flat: 10, ccy: "EUR" },
 };
 
 const TO_VENUES = {
@@ -392,13 +425,24 @@ export function feeMarketOf(exchange, mic, currency) {
   if (code === "LJSE" || m === "XLJU") return "si";
   if ((code === "GETTEX" || code === "GETTEX2" || m === "XMUN") && (ccy === "EUR" || !ccy)) return "gettex";
   if ((code === "B3" || code === "BVMF" || m === "BVMF" || m === "XBSP") && (ccy === "BRL" || !ccy)) return "brl";
-  if ((code === "SGX" || m === "XSES") && ccy === "SGD") return "sg";
+  if (code === "SGX" || m === "XSES") {
+    if (ccy === "USD") return "sgxUsd";
+    if (ccy === "SGD" || !ccy) return "sg";
+  }
+  if ((code === "BVL" || m === "XLIS") && (ccy === "EUR" || !ccy)) return "bvl";
+  if (code === "ISED" || m === "XDUB") return "ised";
+  if (code === "ADX" || m === "XADS") return "adx";
+  if (code === "DFM" || m === "XDFM") return "dfm";
   if ((code === "TADAWUL" || m === "XSAU") && (ccy === "SAR" || !ccy)) return "sar";
   if ((code === "TASE" || m === "XTAE") && (ccy === "ILS" || !ccy)) return "ils";
-  if ((code === "TWSE" || m === "XTAI") && (ccy === "TWD" || !ccy)) return "twd";
+  if ((code === "TWSE" || code === "TPEX" || m === "XTAI") && (ccy === "TWD" || !ccy)) return "twd";
   if ((code === "SEHKNTL" || code === "SEHKSZSE") && (ccy === "CNH" || !ccy)) return "connect";
   if (code === "BUX" && (ccy === "HUF" || !ccy)) return "bux";
   if (code === "BVB" && ccy === "RON") return "bvb";
+  if (code === "ATH" || m === "XATH") return "ath";
+  if (code === "NTALLINN" || m === "XTAL") return "tal";
+  if (code === "NRIGA" || m === "XRIS") return "rig";
+  if (code === "NVILNIUS" || m === "XLIT") return "vil";
   return null;
 }
 
@@ -555,6 +599,9 @@ export function commissionSide({ shares, amount, price, market }) {
     };
   }
 
+  if (rule.flat != null) {
+    return { raw: rule.flat, charged: rule.flat, floored: false, capped: false, currency: rule.ccy };
+  }
   if (amount == null || !Number.isFinite(Number(amount))) return null;
   if (rule.plus != null) {
     const raw = Number(amount) * rule.rate + rule.plus;
@@ -565,6 +612,11 @@ export function commissionSide({ shares, amount, price, market }) {
     const raw = n <= rule.band ? n * rule.rate : rule.band * rule.rate + (n - rule.band) * rule.bandRate;
     const floored = rule.min != null ? Math.max(rule.min, raw) : raw;
     return { raw, charged: floored, floored: rule.min != null && raw < rule.min, capped: false, currency: rule.ccy };
+  }
+  if (rule.flatUntil != null) {
+    const n = Number(amount);
+    const raw = n <= rule.flatUntil ? rule.min : rule.min + (n - rule.flatUntil) * rule.excessRate;
+    return { raw, charged: raw, floored: false, capped: false, currency: rule.ccy };
   }
   if (rule.floorRate != null) {
     const n = Number(amount);
@@ -693,15 +745,21 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
                 ? `barème WH SelfInvest ${market}, aperçu du portail le 2026-10-08 : `
                 : market === "hel" || market === "gettex" || market === "bux" || market === "bvb" || market === "connect"
                   ? `barème WH SelfInvest ${market}, aperçu du compte U27795602 le 2026-10-13 : `
+                : market === "ath" || market === "tal" || market === "rig" || market === "vil" || market === "adx" || market === "dfm" || market === "sgxUsd" || market === "bvl" || market === "ised"
+                  ? `barème WH SelfInvest ${market}, aperçu du compte U27795602 le 2026-10-14 : `
             : `barème WH SelfInvest ${market}, relu le ${SCHEDULE.readOn} : `) +
     (rule.plus != null
       ? `${(100 * rule.rate).toFixed(2)} % plus ${rule.plus} ${rule.ccy} par ordre`
       : rule.band != null
       ? `${(100 * rule.rate).toFixed(2)} % jusqu'à ${rule.band} ${rule.ccy}, puis ${(100 * rule.bandRate).toFixed(2)} %` +
         (rule.min != null ? `, plancher ${rule.min} ${rule.ccy}` : "")
+      : rule.flatUntil != null
+      ? `${rule.min} ${rule.ccy} jusqu'à ${rule.flatUntil} ${rule.ccy}, puis ${(100 * rule.excessRate).toFixed(2)} % du surplus`
       : rule.floorRate != null
       ? `0,10 % par sens, ou ${rule.min} ${rule.ccy} plus 0,02 % si c'est davantage`
-      : (rule.rate != null
+      : (rule.flat != null
+      ? `${rule.flat} ${rule.ccy} par sens`
+      : rule.rate != null
       ? `${(100 * rule.rate).toFixed(2)} % par sens`
       : market === "otc"
         ? `OTC ${rule.perShareLow}/${rule.perShareHigh} $ la part`

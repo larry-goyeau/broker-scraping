@@ -7,7 +7,8 @@
 // are on its fiche, and they differ: Adidas lists eight German places and
 // no American one, Apple adds Nasdaq, a Toronto name adds the TSX. One row
 // per place, so each line can carry that place's book. Direkthandel is
-// ING's own off-exchange quote, not Tradegate, and it has no book here.
+// ING's own quote, code TGT, not Tradegate and not gettex. `ing_touch.mjs`
+// reads that bid and ask.
 //
 // The codes below are the ones the fiche prints. An unmapped code keeps
 // the name ING printed, rather than being dropped. Frankfurt is stored as

@@ -19,7 +19,7 @@ import { norm } from "./venues.mjs";
 const STORE = fileURLToPath(new URL("./bursa-touch.json", import.meta.url));
 const BOARD = "https://www.klsescreener.com/v2/screener/quote_results";
 const PAGE = "https://www.klsescreener.com/v2/stocks/view/";
-const MY = new Set(["myx", "xkls", "malaysia", "bursa", "bursamy", "malay"]);
+const MY = new Set(["myx", "xkls", "malaysia", "bursa", "bursamy", "malay", "klse"]);
 const KEEP = new Set(["STOCK", "ETF", "ETN", "ETC", "REIT"]);
 const AT_ONCE = 8;
 

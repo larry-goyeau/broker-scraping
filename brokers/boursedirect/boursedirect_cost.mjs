@@ -25,7 +25,8 @@
 // the order when that is cheaper, only on EU / EEA tapes (note *). Up to
 // 198 € on Euronext the PEA column already prints 0.50 % instead of 0.99 €.
 // The cap does not apply on London, Switzerland or the US. A buy below
-// 10 € (CTO) or 80 € (PEA) is refused, not priced.
+// 10 € (CTO) or 80 € (PEA) is refused by the broker. The grid is still
+// printed.
 //
 // Cash is euro. Named foreign tapes add 0.08 % each way on a non-euro
 // quote (« taux Bourse Direct + 0.08 % »). Other markets print only their
@@ -252,6 +253,7 @@ function coverage() {
       mic: venue?.mic ?? null,
       currency: r.currency,
       unsourced,
+      ticker: r.ticker,
     });
     const market = feeMarketOf(r.exchange, book.mic ?? venue?.mic) || "?";
     const slot = (out[type] ||= { n: 0, withBook: 0, byMarket: {} });
@@ -313,6 +315,8 @@ export function roundTrip({
     mic: m.venue?.mic ?? null,
     currency: m.row.currency,
     unsourced: m.unsourced,
+    broker: "boursedirect",
+    ticker: m.row.ticker,
   });
   const listing = {
     isin: String(m.row.isin || "").toUpperCase(),
@@ -389,16 +393,6 @@ export function roundTrip({
   const notional = n * p;
   const notionalUsd = toUsd(notional, listing.currency);
   const notionalEur = toCcy(notional, listing.currency, "EUR");
-  const minBuy = pea ? MIN_BUY.pea : MIN_BUY.cto;
-  if (notionalEur != null && notionalEur < minBuy) {
-    return {
-      ...shared,
-      basis,
-      why: `achat refusé sous ${minBuy} € (${pea ? "PEA" : "CTO"})`,
-      trade: { shares: n, price: p, notional, notionalUsd: finite(notionalUsd, 6), notionalEur: finite(notionalEur, 6), currency: listing.currency },
-      confidence: `minimum d'achat ${minBuy} € ${pea ? "PEA" : "CTO"}, brochure du ${SCHEDULE.revised}`,
-    };
-  }
 
   const bookUsd =
     marketBp != null && notionalUsd != null

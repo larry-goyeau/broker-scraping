@@ -226,6 +226,7 @@ function coverage() {
           mic: venue?.mic ?? null,
           currency: r.currency,
           unsourced,
+          ticker: r.ticker,
         });
     const slot = (out[type] ||= { n: 0, withBook: 0 });
     slot.n += 1;
@@ -305,6 +306,7 @@ export function roundTrip({
         mic: m.venue?.mic ?? null,
         currency: m.row.currency,
         unsourced: m.unsourced,
+        ticker: m.row.ticker,
       });
   const listing = {
     isin: code(m.row.isin) || null,

@@ -207,8 +207,9 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   }
 
   const m = matches[0];
-  // A listed American line is the national best bid and offer. The 605
-  // figure is that tape, whichever of the five books happens to hold it.
+  // A listed American line does not name Nasdaq or the NYSE. Citigroup's
+  // Q multiplies the improved 605 of the ticker. With no Q the book
+  // would be the quoted NBBO, which is a different number.
   const listedUs = code(m.row.exchange) === "US" && code(m.row.currency) === "USD";
   const book = spreadLeaf(spreads, {
     isin: m.row.isin,
@@ -229,8 +230,10 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     brokerExchange: m.row.exchange || null,
   };
   const schedule = SCHEDULE[code(m.row.exchange)];
-  const marketBp = bp ?? book.leaf?.bp ?? null;
+  const marketBp = bp ?? (listedUs ? null : book.leaf?.bp ?? null);
   const marketPerShare = perShare ?? book.leaf?.perShare ?? null;
+  // Nasdaq, the NYSE and Arca are one row. Citigroup's Q multiplies the
+  // improved 605. The mic stays empty so the line is not called Nasdaq.
   const shared = {
     ...answer,
     listing,

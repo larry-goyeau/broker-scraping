@@ -68,6 +68,9 @@ export const ALIASES = {
   lightyear: "alpaca",
   sarwa: "alpaca",
   revolut: "drivewealth",
+  // Bamboo's US securities are provided by DriveWealth LLC.
+  // https://faq.investbamboo.com/en/articles/6884704-is-bamboo-registered-with-the-sec
+  bamboo: "drivewealth",
   captrader: "interactivebrokers",
   mexem: "interactivebrokers",
   whselfinvest: "interactivebrokers",
@@ -88,6 +91,9 @@ export const ALIASES = {
   // Pearler FSG of 1 July 2026: Alpaca Securities LLC is the US broker from
   // 29 July 2025. DriveWealth is marked legacy.
   pearler: "alpaca",
+  // Stake Wall St introduces the order to DriveWealth LLC (CRD 165429).
+  // https://hellostake.com/au/legal/financial-services-guide
+  stake: "drivewealth",
   // FINRA 606 bulk, 2026 Q2 disclosures: Kraken Securities (CRD 324343)
   // adopts Alpaca Securities LLC (CRD 288202) by reference, quarter 2025 Q4.
   kraken: "alpaca",

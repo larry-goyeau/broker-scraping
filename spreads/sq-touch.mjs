@@ -12,7 +12,7 @@ import fs from "node:fs";
 import puppeteer from "puppeteer-core";
 import { fileURLToPath } from "node:url";
 import { catalogueFiles } from "../catalogues.mjs";
-import { listingKey } from "./venues.mjs";
+import { listingKey, sessionState } from "./venues.mjs";
 
 const TOUCH = fileURLToPath(new URL("./sq-touch.json", import.meta.url));
 const STORE = fileURLToPath(new URL("./spread.json", import.meta.url));
@@ -82,7 +82,7 @@ function jobsOf(spreads, onlyMic = "") {
     const isin = String(row.isin || "").toUpperCase();
     if (!/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin)) continue;
     const { venue } = listingKey(row);
-    if (!venue?.mic) continue;
+    if (!venue?.mic || sessionState(venue).open !== true) continue;
     if (onlyMic && venue.mic !== onlyMic) continue;
     const currency = String(row.currency || "").toUpperCase();
     if (!/^[A-Z]{3}$/.test(currency)) continue;

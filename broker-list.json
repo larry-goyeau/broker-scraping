@@ -1667,15 +1667,6 @@
     ]
   },
   {
-    "name": "Fifth Third Securities (Self-Directed Online)",
-    "country": "US",
-    "type": "Bank",
-    "url": "https://www.53.com/",
-    "exchanges": [
-      "United States"
-    ]
-  },
-  {
     "name": "Parda Federal Credit Union",
     "country": "US",
     "type": "Bank",
@@ -2975,20 +2966,6 @@
       "Nasdaq",
       "NYSE American",
       "NYSE Arca"
-    ]
-  },
-  {
-    "name": "Fineco UK",
-    "country": "UK",
-    "type": "Bank",
-    "url": "https://uk.finecobank.com/",
-    "exchanges": [
-      "London Stock Exchange",
-      "New York Stock Exchange",
-      "Nasdaq",
-      "Euronext Milan",
-      "Börse Xetra",
-      "Euronext Paris"
     ]
   },
   {
@@ -4484,7 +4461,11 @@
     "url": "https://www.sparkasse-koelnbonn.de/de/home/privatkunden/wertpapiere-und-boerse/depot-finder.html",
     "exchanges": [
       "Tradegate",
-      "Germany"
+      "Germany",
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Stuttgart",
+      "Börse München"
     ]
   },
   {
@@ -4503,6 +4484,9 @@
     "type": "Bank",
     "url": "https://www.sparkasse-hannover.de/de/home/privatkunden/banking-und-bezahlen/banking-angebot/brokerage.html",
     "exchanges": [
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Tradegate",
       "Germany"
     ]
   },
@@ -4530,6 +4514,7 @@
     "type": "Bank",
     "url": "https://www.sskduesseldorf.de/de/home/privatkunden/wertpapier-und-boerse/s-neo.html",
     "exchanges": [
+      "Tradegate",
       "Germany"
     ]
   },
@@ -4539,6 +4524,7 @@
     "type": "Bank",
     "url": "https://www.sparkasse-bremen.de/de/home/privatkunden/wertpapiere-und-boerse.html",
     "exchanges": [
+      "Tradegate",
       "Germany"
     ]
   },
@@ -4557,6 +4543,8 @@
     "type": "Bank",
     "url": "https://www.hamburger-volksbank.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
+      "Tradegate",
+      "Quotrix",
       "Germany"
     ]
   },
@@ -4575,6 +4563,8 @@
     "type": "Bank",
     "url": "https://www.wvb.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
+      "Tradegate",
+      "Quotrix",
       "Germany"
     ]
   },
@@ -4636,6 +4626,7 @@
     "type": "Bank",
     "url": "https://www.sparkasse-muensterland-ost.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
+      "Tradegate",
       "Germany"
     ]
   },
@@ -4654,6 +4645,7 @@
     "type": "Bank",
     "url": "https://www.sparkasse-pforzheim-calw.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
+      "Tradegate",
       "Germany"
     ]
   },
@@ -4663,6 +4655,8 @@
     "type": "Bank",
     "url": "https://www.sparkasse-dortmund.de/de/home/privatkunden/wertpapiere-und-boerse.html",
     "exchanges": [
+      "Börse Xetra",
+      "Tradegate",
       "Germany"
     ]
   },
@@ -4672,6 +4666,7 @@
     "type": "Bank",
     "url": "https://www.sparkasse-essen.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
+      "Tradegate",
       "Germany"
     ]
   },
@@ -4699,6 +4694,7 @@
     "type": "Bank",
     "url": "https://www.sparkasse-bielefeld.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
+      "Tradegate",
       "Germany"
     ]
   },
@@ -4735,6 +4731,7 @@
     "type": "Bank",
     "url": "https://www.sparkasse-duisburg.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
+      "Tradegate",
       "Germany"
     ]
   },
@@ -4744,6 +4741,7 @@
     "type": "Bank",
     "url": "https://www.sparkasse-wuppertal.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
+      "Tradegate",
       "Germany"
     ]
   },
@@ -4780,6 +4778,7 @@
     "type": "Bank",
     "url": "https://www.kskmse.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
+      "Tradegate",
       "Germany"
     ]
   },
@@ -4825,6 +4824,7 @@
     "type": "Bank",
     "url": "https://www.kskwn.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
+      "Tradegate",
       "Germany"
     ]
   },
@@ -4879,6 +4879,7 @@
     "type": "Bank",
     "url": "https://www.ksk-reutlingen.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
+      "Tradegate",
       "Germany"
     ]
   },
@@ -4915,6 +4916,7 @@
     "type": "Bank",
     "url": "https://www.sparkasse-neuss.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
+      "Tradegate",
       "Germany"
     ]
   },
@@ -5005,6 +5007,8 @@
     "type": "Bank",
     "url": "https://www.volksbank-ulm-biberach.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
+      "Tradegate",
+      "Quotrix",
       "Germany"
     ]
   },
@@ -5104,6 +5108,8 @@
     "type": "Bank",
     "url": "https://www.volksbank-luebeck.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
+      "Tradegate",
+      "Quotrix",
       "Germany"
     ]
   },
@@ -5113,6 +5119,7 @@
     "type": "Bank",
     "url": "https://www.bib-fairbanking.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
+      "Börse Xetra",
       "Germany"
     ]
   },
@@ -5176,6 +5183,7 @@
     "type": "Bank",
     "url": "https://www.sparkasse-erlangen.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
+      "Tradegate",
       "Germany"
     ]
   },
@@ -5183,7 +5191,7 @@
     "name": "Sparkasse Aschaffenburg Miltenberg",
     "country": "DE",
     "type": "Bank",
-    "url": "https://www.spkam.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "url": "https://www.s-abmil.de/",
     "exchanges": [
       "Germany"
     ]
@@ -5203,6 +5211,7 @@
     "type": "Bank",
     "url": "https://www.ksk-steinfurt.de/de/home/privatkunden/sparen-und-investieren/wertpapiere/depots.html",
     "exchanges": [
+      "Börse Xetra",
       "Germany"
     ]
   },
@@ -5329,7 +5338,8 @@
     "type": "Bank",
     "url": "https://www.sparkasse-herford.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Germany",
+      "Tradegate"
     ]
   },
   {
@@ -5392,7 +5402,8 @@
     "type": "Bank",
     "url": "https://www.sparkasse-koblenz.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Germany",
+      "Tradegate"
     ]
   },
   {
@@ -5617,7 +5628,8 @@
     "type": "Bank",
     "url": "https://www.sparkasse-siegen.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Germany",
+      "Tradegate"
     ]
   },
   {
@@ -5896,7 +5908,9 @@
     "type": "Bank",
     "url": "https://www.volksbank-allgaeu-oberschwaben.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Germany"
+      "Germany",
+      "Tradegate",
+      "Quotrix"
     ]
   },
   {
@@ -5959,7 +5973,9 @@
     "type": "Bank",
     "url": "https://www.vbidr.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Germany"
+      "Germany",
+      "Tradegate",
+      "Quotrix"
     ]
   },
   {
@@ -5995,7 +6011,9 @@
     "type": "Bank",
     "url": "https://www.vrbank-sh-mitte.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Germany"
+      "Germany",
+      "Tradegate",
+      "Quotrix"
     ]
   },
   {
@@ -6085,7 +6103,9 @@
     "type": "Bank",
     "url": "https://www.vblh.de/",
     "exchanges": [
-      "Germany"
+      "Germany",
+      "Tradegate",
+      "Quotrix"
     ]
   },
   {
@@ -6391,7 +6411,9 @@
     "type": "Bank",
     "url": "https://www.vb-ruhrmitte.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Germany"
+      "Germany",
+      "Tradegate",
+      "Quotrix"
     ]
   },
   {
@@ -7782,7 +7804,7 @@
     "type": "Bank",
     "url": "https://llb.ch/de/private/anlegen/direktanlagen/aktien",
     "exchanges": [
-      "SIX Swiss Exchange"
+      "Switzerland"
     ]
   },
   {
@@ -7790,9 +7812,7 @@
     "country": "CH",
     "type": "Bank",
     "url": "https://www.bankeki.ch/privatkunden/anlegen/execution-only",
-    "exchanges": [
-      "SIX Swiss Exchange"
-    ]
+    "exchanges": []
   },
   {
     "name": "Spar- und Leihkasse Frutigen",
@@ -7800,7 +7820,7 @@
     "type": "Bank",
     "url": "https://www.slfrutigen.ch/anlegen/execution-only",
     "exchanges": [
-      "SIX Swiss Exchange"
+      "Switzerland"
     ]
   },
   {
@@ -7809,7 +7829,7 @@
     "type": "Bank",
     "url": "https://bankoberaargau.clientis.ch/de/privatkunden/anlegen/execution-only",
     "exchanges": [
-      "SIX Swiss Exchange"
+      "Switzerland"
     ]
   },
   {
@@ -7818,7 +7838,7 @@
     "type": "Bank",
     "url": "https://bankthur.clientis.ch/de/privatkunden/anlegen/execution-only",
     "exchanges": [
-      "SIX Swiss Exchange"
+      "Switzerland"
     ]
   },
   {
@@ -7827,7 +7847,7 @@
     "type": "Bank",
     "url": "https://eb.clientis.ch/de/privatkunden/anlegen/execution-only",
     "exchanges": [
-      "SIX Swiss Exchange"
+      "Switzerland"
     ]
   },
   {
@@ -7836,7 +7856,7 @@
     "type": "Bank",
     "url": "https://bankimthal.clientis.ch/de/privatkunden/anlegen/execution-only",
     "exchanges": [
-      "SIX Swiss Exchange"
+      "Switzerland"
     ]
   },
   {
@@ -7846,8 +7866,17 @@
     "url": "https://www.lynxbroker.ch/",
     "exchanges": [
       "SIX Swiss Exchange",
-      "United States",
-      "Germany"
+      "New York Stock Exchange",
+      "Nasdaq",
+      "NYSE Arca",
+      "NYSE American",
+      "Cboe BZX",
+      "OTC Markets",
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -7856,7 +7885,7 @@
     "type": "Bank",
     "url": "https://www.bankgantrisch.ch/Beginners/Zahlen/E-Banking",
     "exchanges": [
-      "SIX Swiss Exchange"
+      "Switzerland"
     ]
   },
   {
@@ -7864,9 +7893,7 @@
     "country": "CH",
     "type": "Bank",
     "url": "https://bankslm.ch/services/digital-banking/e-banking-mobile-banking-app/",
-    "exchanges": [
-      "SIX Swiss Exchange"
-    ]
+    "exchanges": []
   },
   {
     "name": "BBO Bank Brienz Oberhasli",
@@ -7883,7 +7910,7 @@
     "type": "Bank",
     "url": "https://www.slb.ch/produkte/slb-ebanking-neu/",
     "exchanges": [
-      "SIX Swiss Exchange"
+      "Switzerland"
     ]
   },
   {
@@ -7891,9 +7918,7 @@
     "country": "CH",
     "type": "Bank",
     "url": "https://www.eek.ch/e-banking",
-    "exchanges": [
-      "SIX Swiss Exchange"
-    ]
+    "exchanges": []
   },
   {
     "name": "Bitpanda",
@@ -8542,7 +8567,17 @@
     "type": "Broker",
     "url": "https://www.flatex.at/",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Tradegate",
+      "Börse Stuttgart",
+      "Quotrix",
+      "Börse München",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "gettex",
+      "Börse Düsseldorf",
+      "LS Exchange"
     ]
   },
   {
@@ -8552,8 +8587,17 @@
     "url": "https://www.lynxbroker.at/",
     "exchanges": [
       "Wiener Börse",
-      "United States",
-      "Germany"
+      "New York Stock Exchange",
+      "Nasdaq",
+      "NYSE Arca",
+      "NYSE American",
+      "Cboe BZX",
+      "OTC Markets",
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -9848,7 +9892,10 @@
     "exchanges": [
       "Euronext Brussels",
       "United States",
-      "Germany"
+      "Börse Frankfurt",
+      "Börse Stuttgart",
+      "gettex",
+      "Börse Xetra"
     ]
   },
   {
@@ -10573,7 +10620,10 @@
     "exchanges": [
       "Euronext Paris",
       "United States",
-      "Germany"
+      "Börse Frankfurt",
+      "Börse Stuttgart",
+      "gettex",
+      "Börse Xetra"
     ]
   },
   {
@@ -12535,7 +12585,7 @@
     "type": "Bank",
     "url": "https://www.cajaruraldeasturias.com/es/particulares/bolsa-mercados",
     "exchanges": [
-      "Bolsa de Madrid"
+      "Spain"
     ]
   },
   {
@@ -12544,7 +12594,7 @@
     "type": "Bank",
     "url": "https://www.cajaruraldelsur.es/es/particulares/ahorro-inversion/servicio-valores",
     "exchanges": [
-      "Bolsa de Madrid"
+      "Spain"
     ]
   },
   {
@@ -12553,7 +12603,7 @@
     "type": "Bank",
     "url": "https://www.cajaruraldesoria.com/es",
     "exchanges": [
-      "Bolsa de Madrid"
+      "Spain"
     ]
   },
   {
@@ -12562,7 +12612,7 @@
     "type": "Bank",
     "url": "https://www.crextremadura.com/",
     "exchanges": [
-      "Bolsa de Madrid"
+      "Spain"
     ]
   },
   {
@@ -12571,7 +12621,7 @@
     "type": "Bank",
     "url": "https://www.cajaruraldearagon.es/es",
     "exchanges": [
-      "Bolsa de Madrid"
+      "Spain"
     ]
   },
   {
@@ -12580,7 +12630,7 @@
     "type": "Bank",
     "url": "https://www.ruralcentral.es/particulares/bolsa-mercados",
     "exchanges": [
-      "Bolsa de Madrid"
+      "Spain"
     ]
   },
   {
@@ -12589,7 +12639,7 @@
     "type": "Bank",
     "url": "https://www.caixabenicarlo.es/va/borsa-i-mercats/",
     "exchanges": [
-      "Bolsa de Madrid"
+      "Spain"
     ]
   },
   {
@@ -12598,7 +12648,7 @@
     "type": "Bank",
     "url": "https://www.ruralnostra.com/es/particulares/bolsa-mercados",
     "exchanges": [
-      "Bolsa de Madrid"
+      "Spain"
     ]
   },
   {
@@ -12607,7 +12657,7 @@
     "type": "Bank",
     "url": "https://www.caixalgemesi.es/particulares/bolsa-mercados",
     "exchanges": [
-      "Bolsa de Madrid"
+      "Spain"
     ]
   },
   {
@@ -12616,7 +12666,7 @@
     "type": "Bank",
     "url": "https://www.caixacoves.es/particulares/bolsa-mercados",
     "exchanges": [
-      "Bolsa de Madrid"
+      "Spain"
     ]
   },
   {
@@ -12625,7 +12675,7 @@
     "type": "Bank",
     "url": "https://caixalcora.ruralvia.com/particulares/bolsa-mercados",
     "exchanges": [
-      "Bolsa de Madrid"
+      "Spain"
     ]
   },
   {
@@ -12634,7 +12684,7 @@
     "type": "Bank",
     "url": "https://casasibanez.ruralvia.com/particulares/bolsa-mercados",
     "exchanges": [
-      "Bolsa de Madrid"
+      "Spain"
     ]
   },
   {
@@ -12643,7 +12693,7 @@
     "type": "Bank",
     "url": "https://www.cajagijon.com/particulares/bolsa-mercados",
     "exchanges": [
-      "Bolsa de Madrid"
+      "Spain"
     ]
   },
   {
@@ -13653,8 +13703,9 @@
       "Nasdaq Helsinki",
       "New York Stock Exchange",
       "Nasdaq",
-      "Germany",
-      "Canada"
+      "Börse Xetra",
+      "Toronto Stock Exchange",
+      "TSX Venture"
     ]
   },
   {
@@ -14624,8 +14675,9 @@
       "Nasdaq Helsinki",
       "New York Stock Exchange",
       "Nasdaq",
-      "Germany",
-      "Canada"
+      "Börse Xetra",
+      "Toronto Stock Exchange",
+      "TSX Venture"
     ]
   },
   {
@@ -14833,8 +14885,9 @@
       "Oslo Børs",
       "New York Stock Exchange",
       "Nasdaq",
-      "Germany",
-      "Canada"
+      "Börse Xetra",
+      "Toronto Stock Exchange",
+      "TSX Venture"
     ]
   },
   {
@@ -14843,9 +14896,12 @@
     "type": "Broker",
     "url": "https://www.lynxbroker.fi/",
     "exchanges": [
-      "Nasdaq Helsinki",
       "United States",
-      "Germany"
+      "Börse Frankfurt",
+      "Börse Stuttgart",
+      "gettex",
+      "Tradegate",
+      "Börse Xetra"
     ]
   },
   {
@@ -15210,7 +15266,11 @@
     "url": "https://www.lynxbroker.pl/",
     "exchanges": [
       "United States",
-      "Germany"
+      "Börse Frankfurt",
+      "Börse Stuttgart",
+      "gettex",
+      "Tradegate",
+      "Börse Xetra"
     ]
   },
   {
@@ -15433,7 +15493,11 @@
     "url": "https://www.lynxbroker.cz/",
     "exchanges": [
       "United States",
-      "Germany"
+      "Börse Frankfurt",
+      "Börse Stuttgart",
+      "gettex",
+      "Tradegate",
+      "Börse Xetra"
     ]
   },
   {
@@ -15588,7 +15652,11 @@
     "url": "https://www.lynxbroker.sk/",
     "exchanges": [
       "United States",
-      "Germany"
+      "Börse Frankfurt",
+      "Börse Stuttgart",
+      "gettex",
+      "Tradegate",
+      "Börse Xetra"
     ]
   },
   {
@@ -16811,7 +16879,7 @@
     "type": "Broker",
     "url": "https://prudencecapital.rs/",
     "exchanges": [
-      "Belgrade Stock Exchange"
+      "Serbia"
     ]
   },
   {
@@ -16920,8 +16988,7 @@
     "type": "Broker",
     "url": "https://www.eurobroker.ba/",
     "exchanges": [
-      "Banja Luka Stock Exchange",
-      "United States"
+      "Banja Luka Stock Exchange"
     ]
   },
   {
@@ -18287,8 +18354,7 @@
     "url": "https://www.adss.com/",
     "exchanges": [
       "Abu Dhabi Securities Exchange",
-      "Dubai Financial Market",
-      "United States"
+      "Dubai Financial Market"
     ]
   },
   {
@@ -18745,8 +18811,7 @@
     "url": "https://investsky.com/",
     "exchanges": [
       "Tadawul",
-      "New York Stock Exchange",
-      "Nasdaq"
+      "United States"
     ]
   },
   {
@@ -19093,15 +19158,6 @@
     ]
   },
   {
-    "name": "KIB Invest (Kuwait International Bank)",
-    "country": "KW",
-    "type": "Broker",
-    "url": "https://www.kibinvest.com/",
-    "exchanges": [
-      "Boursa Kuwait"
-    ]
-  },
-  {
     "name": "Zad Fintech (The Securities House)",
     "country": "KW",
     "type": "Neobroker",
@@ -19435,7 +19491,7 @@
     "type": "Bank",
     "url": "https://www.pepper.co.il/",
     "exchanges": [
-      "Tel Aviv Stock Exchange",
+      "Israel",
       "United States"
     ]
   },
@@ -19612,8 +19668,7 @@
     "type": "Broker",
     "url": "https://atisazbroker.com/",
     "exchanges": [
-      "Tehran Stock Exchange",
-      "Iran Fara Bourse"
+      "Tehran Stock Exchange"
     ]
   },
   {
@@ -19622,8 +19677,7 @@
     "type": "Broker",
     "url": "https://babc.ir/",
     "exchanges": [
-      "Tehran Stock Exchange",
-      "Iran Fara Bourse"
+      "Tehran Stock Exchange"
     ]
   },
   {
@@ -21461,7 +21515,7 @@
     "type": "Broker",
     "url": "https://bestworth-ltd.com/",
     "exchanges": [
-      "Nigerian Exchange"
+      "Nigeria"
     ]
   },
   {
@@ -22282,7 +22336,7 @@
     "type": "Neobroker",
     "url": "https://telda.app/",
     "exchanges": [
-      "The Egyptian Exchange"
+      "Egypt"
     ]
   },
   {
@@ -22291,7 +22345,7 @@
     "type": "Broker",
     "url": "https://apexholding-eg.com/",
     "exchanges": [
-      "The Egyptian Exchange"
+      "Egypt"
     ]
   },
   {
@@ -22363,7 +22417,7 @@
     "type": "Broker",
     "url": "https://www.mahfazty-cibc.com/",
     "exchanges": [
-      "The Egyptian Exchange"
+      "Egypt"
     ]
   },
   {
@@ -22408,7 +22462,7 @@
     "type": "Broker",
     "url": "https://apps.apple.com/eg/app/bahr-brokerage/id6756045216",
     "exchanges": [
-      "The Egyptian Exchange"
+      "Egypt"
     ]
   },
   {
@@ -23789,7 +23843,9 @@
     "url": "https://sharesies.com.au/",
     "exchanges": [
       "ASX",
-      "United States",
+      "New York Stock Exchange",
+      "Nasdaq",
+      "Cboe BZX",
       "NZX"
     ]
   },
@@ -23798,15 +23854,6 @@
     "country": "AU",
     "type": "Neobroker",
     "url": "https://www.spaceship.com.au/",
-    "exchanges": [
-      "United States"
-    ]
-  },
-  {
-    "name": "tastytrade Australia",
-    "country": "AU",
-    "type": "Broker",
-    "url": "https://tastytrade.com/en-au/",
     "exchanges": [
       "United States"
     ]
@@ -23913,7 +23960,8 @@
     "url": "https://longbridge.com/nz",
     "exchanges": [
       "Hong Kong Stock Exchange",
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq"
     ]
   },
   {
@@ -24398,7 +24446,7 @@
     "url": "https://www.usmart.sg/",
     "exchanges": [
       "United States",
-      "Hong Kong Stock Exchange",
+      "Hong Kong",
       "Singapore Exchange"
     ]
   },
@@ -24412,8 +24460,7 @@
       "Nasdaq",
       "Hong Kong Stock Exchange",
       "Singapore Exchange",
-      "Shanghai-Hong Kong Stock Connect",
-      "Shenzhen-Hong Kong Stock Connect"
+      "China"
     ]
   },
   {
@@ -25372,7 +25419,7 @@
     "type": "Broker",
     "url": "https://www.htsc.com.hk/",
     "exchanges": [
-      "Hong Kong Stock Exchange"
+      "Hong Kong"
     ]
   },
   {
@@ -25468,15 +25515,6 @@
     ]
   },
   {
-    "name": "Fubon Bank (Hong Kong)",
-    "country": "HK",
-    "type": "Bank",
-    "url": "https://www.fubonbank.com.hk/",
-    "exchanges": [
-      "Hong Kong Stock Exchange"
-    ]
-  },
-  {
     "name": "Chiyu Banking Corporation",
     "country": "HK",
     "type": "Bank",
@@ -25490,16 +25528,6 @@
     "country": "HK",
     "type": "Broker",
     "url": "https://www.ifastgm.com.hk/",
-    "exchanges": [
-      "Hong Kong Stock Exchange",
-      "United States"
-    ]
-  },
-  {
-    "name": "Saxo Hong Kong",
-    "country": "HK",
-    "type": "Broker",
-    "url": "https://www.home.saxo/en-hk",
     "exchanges": [
       "Hong Kong Stock Exchange",
       "United States"
@@ -26493,7 +26521,8 @@
     "url": "https://www.okasan.co.jp/",
     "exchanges": [
       "Tokyo Stock Exchange",
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq"
     ]
   },
   {
@@ -28770,16 +28799,6 @@
     ]
   },
   {
-    "name": "Narnolia Financial Services",
-    "country": "IN",
-    "type": "Broker",
-    "url": "https://www.narnolia.com/",
-    "exchanges": [
-      "National Stock Exchange of India",
-      "BSE"
-    ]
-  },
-  {
     "name": "Sharewealth Securities",
     "country": "IN",
     "type": "Broker",
@@ -30439,7 +30458,7 @@
     "type": "Broker",
     "url": "https://sfast.id/",
     "exchanges": [
-      "Indonesia Stock Exchange"
+      "Indonesia"
     ]
   },
   {
@@ -31306,9 +31325,7 @@
     "type": "Broker",
     "url": "https://kafi.vn/",
     "exchanges": [
-      "HOSE",
-      "Hanoi Stock Exchange",
-      "UPCOM"
+      "Vietnam"
     ]
   },
   {
@@ -31328,20 +31345,7 @@
     "type": "Neobroker",
     "url": "https://anfin.vn/",
     "exchanges": [
-      "HOSE",
-      "Hanoi Stock Exchange",
-      "UPCOM"
-    ]
-  },
-  {
-    "name": "Infina",
-    "country": "VN",
-    "type": "Neobroker",
-    "url": "https://infina.vn/",
-    "exchanges": [
-      "HOSE",
-      "Hanoi Stock Exchange",
-      "UPCOM"
+      "Vietnam"
     ]
   },
   {
@@ -31350,9 +31354,7 @@
     "type": "Broker",
     "url": "https://xtsc.vn/",
     "exchanges": [
-      "HOSE",
-      "Hanoi Stock Exchange",
-      "UPCOM"
+      "Vietnam"
     ]
   },
   {
@@ -31361,9 +31363,7 @@
     "type": "Broker",
     "url": "https://apsi.vn/",
     "exchanges": [
-      "HOSE",
-      "Hanoi Stock Exchange",
-      "UPCOM"
+      "Vietnam"
     ]
   },
   {
@@ -31372,9 +31372,7 @@
     "type": "Broker",
     "url": "https://jbsv.com.vn/",
     "exchanges": [
-      "HOSE",
-      "Hanoi Stock Exchange",
-      "UPCOM"
+      "Vietnam"
     ]
   },
   {
@@ -31405,9 +31403,7 @@
     "type": "Broker",
     "url": "https://www.tvs.vn/",
     "exchanges": [
-      "HOSE",
-      "Hanoi Stock Exchange",
-      "UPCOM"
+      "Vietnam"
     ]
   },
   {
@@ -31415,17 +31411,6 @@
     "country": "VN",
     "type": "Broker",
     "url": "https://vts.com.vn/",
-    "exchanges": [
-      "HOSE",
-      "Hanoi Stock Exchange",
-      "UPCOM"
-    ]
-  },
-  {
-    "name": "Hoa Binh Securities (HBS)",
-    "country": "VN",
-    "type": "Broker",
-    "url": "https://www.hbse.com.vn/",
     "exchanges": [
       "HOSE",
       "Hanoi Stock Exchange",
@@ -32644,7 +32629,7 @@
     "type": "Broker",
     "url": "https://www.bindinversiones.com.ar",
     "exchanges": [
-      "BYMA"
+      "Argentina"
     ]
   },
   {
@@ -32681,7 +32666,7 @@
     "type": "Broker",
     "url": "https://mills.capital",
     "exchanges": [
-      "BYMA"
+      "Argentina"
     ]
   },
   {
@@ -32753,7 +32738,7 @@
     "type": "Broker",
     "url": "https://www.guor.com.ar/",
     "exchanges": [
-      "BYMA"
+      "Argentina"
     ]
   },
   {
@@ -32762,7 +32747,7 @@
     "type": "Broker",
     "url": "https://www.gmacap.com/",
     "exchanges": [
-      "BYMA"
+      "Argentina"
     ]
   },
   {
@@ -32798,7 +32783,7 @@
     "type": "Broker",
     "url": "https://www.one618fs.com/es",
     "exchanges": [
-      "BYMA"
+      "Argentina"
     ]
   },
   {
@@ -32933,7 +32918,7 @@
     "type": "Broker",
     "url": "https://www.bellinvestments.com.ar/",
     "exchanges": [
-      "BYMA"
+      "Argentina"
     ]
   },
   {
@@ -32978,7 +32963,7 @@
     "type": "Broker",
     "url": "https://www.gorostiagabursatil.com/",
     "exchanges": [
-      "BYMA"
+      "Argentina"
     ]
   },
   {
@@ -33024,7 +33009,7 @@
     "type": "Broker",
     "url": "https://www.metainversiones.com.ar/",
     "exchanges": [
-      "BYMA"
+      "Argentina"
     ]
   },
   {
@@ -33123,7 +33108,7 @@
     "type": "Broker",
     "url": "https://wise.com.ar/",
     "exchanges": [
-      "BYMA"
+      "Argentina"
     ]
   },
   {
@@ -33168,7 +33153,7 @@
     "type": "Broker",
     "url": "https://portfolioinvestment.com.ar/",
     "exchanges": [
-      "BYMA"
+      "Argentina"
     ]
   },
   {
@@ -34274,13 +34259,7 @@
     "type": "Broker",
     "url": "https://fbroker.kg/",
     "exchanges": [
-      "New York Stock Exchange",
-      "Nasdaq",
-      "London Stock Exchange",
-      "Hong Kong Stock Exchange",
-      "Börse Frankfurt",
-      "Kazakhstan Stock Exchange",
-      "Astana International Exchange"
+      "United States"
     ]
   },
   {
@@ -35015,7 +34994,7 @@
     "url": "https://iva.partners/",
     "exchanges": [
       "Moscow Exchange",
-      "Astana International Exchange"
+      "Kazakhstan Stock Exchange"
     ]
   },
   {
@@ -38077,8 +38056,7 @@
     "exchanges": [
       "Shanghai Stock Exchange",
       "Shenzhen Stock Exchange",
-      "Shanghai-Hong Kong Stock Connect",
-      "Shenzhen-Hong Kong Stock Connect"
+      "Shanghai-Hong Kong Stock Connect"
     ]
   },
   {
@@ -38561,9 +38539,7 @@
     "country": "BM",
     "type": "Broker",
     "url": "https://www.lom.com/services/trading-investment-brokerage/",
-    "exchanges": [
-      "United States"
-    ]
+    "exchanges": []
   },
   {
     "name": "Clarien Trade Direct",
@@ -38793,7 +38769,6 @@
     "type": "Bank",
     "url": "https://www.banken.gl/da/mit-liv/investering/handel-paa-netbank/",
     "exchanges": [
-      "Nasdaq Copenhagen",
       "Börse Frankfurt",
       "Euronext Paris",
       "London Stock Exchange",
@@ -38802,6 +38777,386 @@
       "Nasdaq",
       "New York Stock Exchange",
       "Toronto Stock Exchange"
+    ]
+  },
+  {
+    "name": "iWeb Share Dealing",
+    "country": "UK",
+    "type": "Broker",
+    "url": "https://www.iweb-sharedealing.co.uk/",
+    "exchanges": [
+      "AIM",
+      "Börse Xetra",
+      "Euronext Amsterdam",
+      "Euronext Brussels",
+      "Euronext Milan",
+      "Euronext Paris",
+      "London Stock Exchange",
+      "Nasdaq",
+      "New York Stock Exchange",
+      "NYSE American"
+    ]
+  },
+  {
+    "name": "X-O.co.uk",
+    "country": "UK",
+    "type": "Broker",
+    "url": "https://www.x-o.co.uk/",
+    "exchanges": [
+      "AIM",
+      "London Stock Exchange"
+    ]
+  },
+  {
+    "name": "Computershare UK Share Dealing",
+    "country": "UK",
+    "type": "Broker",
+    "url": "https://www.computershare.com/uk/individuals/share-dealing",
+    "exchanges": [
+      "AIM",
+      "London Stock Exchange"
+    ]
+  },
+  {
+    "name": "Tiger Brokers Australia",
+    "country": "AU",
+    "type": "Broker",
+    "url": "https://www.tigerbrokers.com.au/",
+    "exchanges": [
+      "ASX",
+      "Cboe Australia",
+      "Hong Kong Stock Exchange",
+      "Nasdaq",
+      "New York Stock Exchange",
+      "NYSE American",
+      "NYSE Arca",
+      "Singapore Exchange"
+    ]
+  },
+  {
+    "name": "Openmarkets",
+    "country": "AU",
+    "type": "Broker",
+    "url": "https://openmarkets.com.au/",
+    "exchanges": [
+      "ASX",
+      "Cboe Australia"
+    ]
+  },
+  {
+    "name": "State One Stockbroking (amscot)",
+    "country": "AU",
+    "type": "Broker",
+    "url": "https://www.amscot.com.au/",
+    "exchanges": [
+      "ASX",
+      "Cboe Australia"
+    ]
+  },
+  {
+    "name": "Craigs Investment Partners",
+    "country": "NZ",
+    "type": "Broker",
+    "url": "https://craigsip.com/",
+    "exchanges": [
+      "ASX",
+      "Nasdaq",
+      "New York Stock Exchange",
+      "NZX"
+    ]
+  },
+  {
+    "name": "Forsyth Barr",
+    "country": "NZ",
+    "type": "Broker",
+    "url": "https://www.forsythbarr.co.nz/",
+    "exchanges": [
+      "ASX",
+      "London Stock Exchange",
+      "Nasdaq",
+      "New York Stock Exchange",
+      "NZX"
+    ]
+  },
+  {
+    "name": "Laurentian Bank Discount Brokerage",
+    "country": "CA",
+    "type": "Bank",
+    "url": "https://www.blcdirect.ca/",
+    "exchanges": [
+      "Canadian Securities Exchange",
+      "Cboe Canada",
+      "Nasdaq",
+      "New York Stock Exchange",
+      "NYSE American",
+      "NYSE Arca",
+      "Toronto Stock Exchange",
+      "TSX Venture"
+    ]
+  },
+  {
+    "name": "BiG (Banco de Investimento Global)",
+    "country": "PT",
+    "type": "Bank",
+    "url": "https://www.big.pt/",
+    "exchanges": [
+      "Bolsa de Madrid",
+      "Börse Frankfurt",
+      "Börse Xetra",
+      "Euronext Amsterdam",
+      "Euronext Brussels",
+      "Euronext Lisbon",
+      "Euronext Paris",
+      "London Stock Exchange",
+      "Nasdaq",
+      "New York Stock Exchange",
+      "NYSE American"
+    ]
+  },
+  {
+    "name": "Novo Banco",
+    "country": "PT",
+    "type": "Bank",
+    "url": "https://www.novobanco.pt/investimentos/plataformas-negociacao",
+    "exchanges": [
+      "Bolsa de Madrid",
+      "Börse Frankfurt",
+      "Euronext Amsterdam",
+      "Euronext Brussels",
+      "Euronext Lisbon",
+      "Euronext Paris",
+      "London Stock Exchange",
+      "Nasdaq",
+      "New York Stock Exchange"
+    ]
+  },
+  {
+    "name": "Banque Raiffeisen Luxembourg",
+    "country": "LU",
+    "type": "Bank",
+    "url": "https://www.raiffeisen.lu/fr/particuliers/investir/titres-et-bourse",
+    "exchanges": [
+      "Börse Frankfurt",
+      "Börse Xetra",
+      "Euronext Amsterdam",
+      "Euronext Brussels",
+      "Euronext Paris",
+      "Luxembourg Stock Exchange",
+      "Nasdaq",
+      "New York Stock Exchange"
+    ]
+  },
+  {
+    "name": "Storebrand Bank",
+    "country": "NO",
+    "type": "Bank",
+    "url": "https://www.storebrand.no/privat/sparing-og-pensjon/aksjer-og-fond/aksjehandel",
+    "exchanges": [
+      "Börse Xetra",
+      "Euronext Expand Oslo",
+      "Euronext Growth Oslo",
+      "Nasdaq",
+      "Nasdaq Copenhagen",
+      "Nasdaq Helsinki",
+      "Nasdaq Stockholm",
+      "New York Stock Exchange",
+      "Oslo Børs"
+    ]
+  },
+  {
+    "name": "Sparebanken Vest",
+    "country": "NO",
+    "type": "Bank",
+    "url": "https://www.spv.no/sparing-og-investering/aksjehandel",
+    "exchanges": [
+      "Euronext Expand Oslo",
+      "Euronext Growth Oslo",
+      "Nasdaq",
+      "Nasdaq Copenhagen",
+      "Nasdaq Helsinki",
+      "Nasdaq Stockholm",
+      "New York Stock Exchange",
+      "Oslo Børs"
+    ]
+  },
+  {
+    "name": "Arbejdernes Landsbank",
+    "country": "DK",
+    "type": "Bank",
+    "url": "https://www.al-bank.dk/privat/opsparing-og-investering/investering/vaerdipapirhandel",
+    "exchanges": [
+      "Börse Xetra",
+      "Euronext Amsterdam",
+      "Nasdaq",
+      "Nasdaq Copenhagen",
+      "Nasdaq Helsinki",
+      "Nasdaq Stockholm",
+      "New York Stock Exchange",
+      "Oslo Børs"
+    ]
+  },
+  {
+    "name": "Santander Biuro Maklerskie",
+    "country": "PL",
+    "type": "Bank",
+    "url": "https://www.santander.pl/inwestor/gielda/rachunek-maklerski.html",
+    "exchanges": [
+      "Börse Xetra",
+      "London Stock Exchange",
+      "Nasdaq",
+      "New York Stock Exchange",
+      "NewConnect",
+      "Warsaw Stock Exchange"
+    ]
+  },
+  {
+    "name": "Kyokuto Securities",
+    "country": "JP",
+    "type": "Broker",
+    "url": "https://www.kyokuto-sec.co.jp/",
+    "exchanges": [
+      "Tokyo Stock Exchange"
+    ]
+  },
+  {
+    "name": "KAF Equities",
+    "country": "MY",
+    "type": "Broker",
+    "url": "https://www.kaf.com.my/equity-broking",
+    "exchanges": [
+      "Bursa Malaysia"
+    ]
+  },
+  {
+    "name": "Inter-Pacific Securities",
+    "country": "MY",
+    "type": "Broker",
+    "url": "https://www.paconline.com.my/",
+    "exchanges": [
+      "Bursa Malaysia",
+      "Nasdaq",
+      "New York Stock Exchange"
+    ]
+  },
+  {
+    "name": "FSMOne Hong Kong",
+    "country": "HK",
+    "type": "Broker",
+    "url": "https://www.fsmone.com.hk/",
+    "exchanges": [
+      "Hong Kong Stock Exchange",
+      "Nasdaq",
+      "New York Stock Exchange",
+      "NYSE American",
+      "Shanghai-Hong Kong Stock Connect",
+      "Shenzhen-Hong Kong Stock Connect",
+      "Singapore Exchange"
+    ]
+  },
+  {
+    "name": "Arrow",
+    "country": "IN",
+    "type": "Broker",
+    "url": "https://arrow.trade/",
+    "exchanges": [
+      "BSE",
+      "National Stock Exchange of India"
+    ]
+  },
+  {
+    "name": "SAS Online",
+    "country": "IN",
+    "type": "Broker",
+    "url": "https://sasonline.in/",
+    "exchanges": [
+      "BSE",
+      "National Stock Exchange of India"
+    ]
+  },
+  {
+    "name": "Espresso",
+    "country": "IN",
+    "type": "Broker",
+    "url": "https://www.myespresso.com/",
+    "exchanges": [
+      "BSE",
+      "National Stock Exchange of India"
+    ]
+  },
+  {
+    "name": "Vector Casa de Bolsa",
+    "country": "MX",
+    "type": "Broker",
+    "url": "https://www.vector.com.mx/",
+    "exchanges": [
+      "BIVA",
+      "Bolsa Mexicana"
+    ]
+  },
+  {
+    "name": "Casa de Bolsa (Grupo Aval)",
+    "country": "CO",
+    "type": "Broker",
+    "url": "https://www.casadebolsa.com.co/",
+    "exchanges": [
+      "Bolsa de Valores de Colombia"
+    ]
+  },
+  {
+    "name": "Renta 4 Colombia",
+    "country": "CO",
+    "type": "Broker",
+    "url": "https://www.renta4.com.co/",
+    "exchanges": [
+      "Bolsa de Valores de Colombia"
+    ]
+  },
+  {
+    "name": "Gotrade Global",
+    "country": "Global",
+    "type": "Neobroker",
+    "url": "https://www.heygotrade.com/en/",
+    "exchanges": [
+      "Nasdaq",
+      "New York Stock Exchange",
+      "NYSE Arca"
+    ]
+  },
+  {
+    "name": "Dukascopy Bank",
+    "country": "CH",
+    "type": "Bank",
+    "url": "https://www.dukascopy.com/",
+    "exchanges": [
+      "Börse Xetra",
+      "Euronext Paris",
+      "Nasdaq",
+      "New York Stock Exchange",
+      "SIX Swiss Exchange"
+    ]
+  },
+  {
+    "name": "Sparda-Bank Hessen",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparda-hessen.de/wertpapiere-und-depot/",
+    "exchanges": [
+      "Börse Frankfurt",
+      "Börse Xetra"
+    ]
+  },
+  {
+    "name": "Cantor Fitzgerald Ireland",
+    "country": "IE",
+    "type": "Broker",
+    "url": "https://cantorfitzgerald.ie/private-clients/online-share-dealing/",
+    "exchanges": [
+      "Börse Xetra",
+      "Euronext Dublin",
+      "Euronext Paris",
+      "London Stock Exchange",
+      "Nasdaq",
+      "New York Stock Exchange"
     ]
   }
 ]

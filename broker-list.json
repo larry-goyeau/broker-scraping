@@ -1868,23 +1868,6 @@
     ]
   },
   {
-    "name": "RBC Direct Investing",
-    "country": "CA",
-    "type": "Bank",
-    "url": "https://www.rbcplacementsendirect.com/",
-    "exchanges": [
-      "Toronto Stock Exchange",
-      "TSX Venture",
-      "Canadian Securities Exchange",
-      "Cboe Canada",
-      "New York Stock Exchange",
-      "Nasdaq",
-      "NYSE American",
-      "NYSE Arca",
-      "OTC Markets"
-    ]
-  },
-  {
     "name": "BMO InvestorLine",
     "country": "CA",
     "type": "Bank",
@@ -2057,33 +2040,6 @@
       "NYSE Arca",
       "Cboe BZX",
       "OTC Markets"
-    ]
-  },
-  {
-    "name": "TD Easy Trade",
-    "country": "CA",
-    "type": "Bank",
-    "url": "https://www.td.com/ca/en/investing/direct-investing/services/easytrade",
-    "exchanges": [
-      "Toronto Stock Exchange",
-      "TSX Venture",
-      "New York Stock Exchange",
-      "Nasdaq",
-      "NYSE Arca"
-    ]
-  },
-  {
-    "name": "BMO adviceDirect",
-    "country": "CA",
-    "type": "Bank",
-    "url": "https://www.bmo.com/en-ca/main/personal/investments/direct-investing/investorline/advicedirect/faqs/",
-    "exchanges": [
-      "Toronto Stock Exchange",
-      "New York Stock Exchange",
-      "Nasdaq",
-      "TSX Venture",
-      "Cboe Canada",
-      "NYSE Arca"
     ]
   },
   {
@@ -6559,58 +6515,6 @@
     ]
   },
   {
-    "name": "Swissquote",
-    "country": "CH",
-    "type": "Bank",
-    "url": "https://www.swissquote.com/en-ch/private",
-    "exchanges": [
-      "Bolsa Mexicana",
-      "Börse Xetra",
-      "BX Swiss",
-      "Hong Kong Stock Exchange",
-      "London Stock Exchange",
-      "Nasdaq",
-      "New York Stock Exchange",
-      "NZX",
-      "Oslo Børs",
-      "OTC Markets",
-      "Prague Stock Exchange",
-      "SIX Swiss Exchange",
-      "Stock Exchange of Thailand",
-      "Tokyo Stock Exchange",
-      "Toronto Stock Exchange",
-      "Warsaw Stock Exchange",
-      "Euronext Paris",
-      "Euronext Amsterdam",
-      "Euronext Brussels",
-      "Euronext Dublin",
-      "ASX",
-      "Aquis Stock Exchange",
-      "Bolsa de Madrid",
-      "Börse Düsseldorf",
-      "Börse Frankfurt",
-      "Börse Hamburg",
-      "Börse Hannover",
-      "Börse Stuttgart",
-      "Cboe BZX",
-      "Cboe Canada",
-      "Dubai Financial Market",
-      "EuroTLX",
-      "Euronext Milan",
-      "LS Exchange",
-      "Lang & Schwarz International",
-      "NYSE Arca",
-      "Nagoya Stock Exchange",
-      "Nasdaq Stockholm",
-      "Singapore Exchange",
-      "TSX Venture",
-      "Tel Aviv Stock Exchange",
-      "Tradegate",
-      "Wiener Börse",
-      "gettex"
-    ]
-  },
-  {
     "name": "IBKR Financial Services",
     "country": "CH",
     "type": "Broker",
@@ -6898,33 +6802,6 @@
     "country": "CH",
     "type": "Bank",
     "url": "https://www.bekb.ch/de/privatkunden/geld-anlegen/anlageprodukte/wertschriftendepot",
-    "exchanges": [
-      "SIX Swiss Exchange",
-      "BX Swiss",
-      "Euronext Brussels",
-      "Börse Xetra",
-      "Börse Frankfurt",
-      "London Stock Exchange",
-      "Euronext Paris",
-      "Euronext Amsterdam",
-      "Euronext Dublin",
-      "Euronext Milan",
-      "Wiener Börse",
-      "Euronext Lisbon",
-      "Bolsa de Madrid",
-      "United States",
-      "Toronto Stock Exchange",
-      "ASX",
-      "Tokyo Stock Exchange",
-      "Hong Kong Stock Exchange",
-      "Johannesburg Stock Exchange"
-    ]
-  },
-  {
-    "name": "Berner Kantonalbank",
-    "country": "CH",
-    "type": "Bank",
-    "url": "https://www.bcbe.ch/fr/clientele-privee/placements/produits-de-placement/depot-de-titres",
     "exchanges": [
       "SIX Swiss Exchange",
       "BX Swiss",
@@ -8679,25 +8556,6 @@
     "name": "BUX",
     "country": "NL",
     "type": "Neobroker",
-    "url": "https://getbux.com/",
-    "exchanges": [
-      "Bolsa de Madrid",
-      "Börse Xetra",
-      "Cboe BZX",
-      "Cboe Europe",
-      "Equiduct",
-      "Euronext",
-      "gettex",
-      "Nasdaq",
-      "New York Stock Exchange",
-      "NYSE Arca",
-      "Wiener Börse"
-    ]
-  },
-  {
-    "name": "BUX",
-    "country": "NL",
-    "type": "Neobroker",
     "url": "https://bux.com/",
     "exchanges": [
       "Bolsa de Madrid",
@@ -8960,36 +8818,6 @@
     "url": "https://todaysgroup.nl/todays-brokers/",
     "exchanges": [
       "Euronext Amsterdam",
-      "New York Stock Exchange",
-      "Nasdaq"
-    ]
-  },
-  {
-    "name": "Alex Beleggersbank",
-    "country": "NL",
-    "type": "Broker",
-    "url": "https://www.alex.nl/",
-    "exchanges": [
-      "Euronext Amsterdam",
-      "Euronext Brussels",
-      "Euronext Paris",
-      "Euronext Lisbon",
-      "Börse Xetra",
-      "New York Stock Exchange",
-      "Nasdaq"
-    ]
-  },
-  {
-    "name": "Alex Beleggersbank",
-    "country": "NL",
-    "type": "Broker",
-    "url": "https://www.home.saxo/nl-nl",
-    "exchanges": [
-      "Euronext Amsterdam",
-      "Euronext Brussels",
-      "Euronext Paris",
-      "Euronext Lisbon",
-      "Börse Xetra",
       "New York Stock Exchange",
       "Nasdaq"
     ]
@@ -9281,69 +9109,6 @@
     "country": "LU",
     "type": "Broker",
     "url": "https://www.whselfinvest.lu/en-lu/trading/information/clients/relationship",
-    "exchanges": [
-      "Abu Dhabi Securities Exchange",
-      "Alpha Exchange",
-      "Aquis Stock Exchange",
-      "ASX",
-      "Athens Stock Exchange",
-      "B3 São Paulo",
-      "Bolsa de Madrid",
-      "Bolsa Mexicana",
-      "Börse Frankfurt",
-      "Börse Stuttgart",
-      "Börse Xetra",
-      "Bucharest Stock Exchange",
-      "Budapest Stock Exchange",
-      "Bursa Malaysia",
-      "Cboe BZX",
-      "Dubai Financial Market",
-      "Euronext Amsterdam",
-      "Euronext Brussels",
-      "Euronext Dublin",
-      "Euronext Lisbon",
-      "Euronext Milan",
-      "Euronext Paris",
-      "gettex",
-      "Hong Kong Stock Exchange",
-      "Korea Exchange",
-      "Ljubljana Stock Exchange",
-      "London Stock Exchange",
-      "Moscow Exchange",
-      "Nasdaq",
-      "Nasdaq Copenhagen",
-      "Nasdaq Helsinki",
-      "Nasdaq Riga",
-      "Nasdaq Stockholm",
-      "Nasdaq Tallinn",
-      "Nasdaq Vilnius",
-      "National Stock Exchange of India",
-      "New York Stock Exchange",
-      "NYSE Arca",
-      "Oslo Børs",
-      "OTC Markets",
-      "Prague Stock Exchange",
-      "Pure Trading",
-      "Shanghai Stock Exchange",
-      "Shenzhen Stock Exchange",
-      "Singapore Exchange",
-      "SIX Swiss Exchange",
-      "Tadawul",
-      "Taipei Exchange",
-      "Taiwan Stock Exchange",
-      "Tel Aviv Stock Exchange",
-      "Tokyo Stock Exchange",
-      "Toronto Stock Exchange",
-      "TSX Venture",
-      "Warsaw Stock Exchange",
-      "Wiener Börse"
-    ]
-  },
-  {
-    "name": "WH SelfInvest",
-    "country": "LU",
-    "type": "Broker",
-    "url": "https://www.whselfinvest.com/en-lu/trading/information/clients/relationship",
     "exchanges": [
       "Abu Dhabi Securities Exchange",
       "Alpha Exchange",
@@ -10835,47 +10600,6 @@
     ]
   },
   {
-    "name": "BG Saxo SIM",
-    "country": "IT",
-    "type": "Broker",
-    "url": "https://www.home.saxo/it-it/accounts/individual",
-    "exchanges": [
-      "Euronext Milan",
-      "Euronext Paris",
-      "Euronext Amsterdam",
-      "Börse Xetra",
-      "New York Stock Exchange",
-      "Nasdaq",
-      "NYSE American",
-      "Cboe BZX",
-      "OTC Markets",
-      "Toronto Stock Exchange",
-      "Euronext Lisbon",
-      "Euronext Brussels",
-      "London Stock Exchange",
-      "Bolsa de Madrid",
-      "Wiener Börse",
-      "Börse Frankfurt",
-      "SIX Swiss Exchange",
-      "Prague Stock Exchange",
-      "Warsaw Stock Exchange",
-      "Nasdaq Copenhagen",
-      "Nasdaq Helsinki",
-      "Oslo Børs",
-      "Nasdaq Stockholm",
-      "Euronext Dublin",
-      "Luxembourg Stock Exchange",
-      "Johannesburg Stock Exchange",
-      "ASX",
-      "Hong Kong Stock Exchange",
-      "Shanghai-Hong Kong Stock Connect",
-      "Shenzhen-Hong Kong Stock Connect",
-      "Singapore Exchange",
-      "Tokyo Stock Exchange",
-      "Bursa Malaysia"
-    ]
-  },
-  {
     "name": "Banca Generali",
     "country": "IT",
     "type": "Bank",
@@ -10956,50 +10680,6 @@
     "url": "https://www.credem.it/content/credem/it/privati-e-famiglie/conti-servizi-e-carte/servizi_online/trading_online.html",
     "exchanges": [
       "Euronext Milan"
-    ]
-  },
-  {
-    "name": "IWBank",
-    "country": "IT",
-    "type": "Bank",
-    "url": "https://www.iwbank.it/",
-    "exchanges": [
-      "Euronext Milan",
-      "Euronext Growth Milan",
-      "EuroTLX",
-      "Euronext Paris",
-      "Euronext Amsterdam",
-      "Euronext Brussels",
-      "Euronext Lisbon",
-      "Börse Xetra",
-      "Börse Frankfurt",
-      "London Stock Exchange",
-      "SIX Swiss Exchange",
-      "Bolsa de Madrid",
-      "New York Stock Exchange",
-      "Nasdaq"
-    ]
-  },
-  {
-    "name": "IWBank",
-    "country": "IT",
-    "type": "Bank",
-    "url": "https://www.fideuramdirect.it/",
-    "exchanges": [
-      "Euronext Milan",
-      "Euronext Growth Milan",
-      "EuroTLX",
-      "Euronext Paris",
-      "Euronext Amsterdam",
-      "Euronext Brussels",
-      "Euronext Lisbon",
-      "Börse Xetra",
-      "Börse Frankfurt",
-      "London Stock Exchange",
-      "SIX Swiss Exchange",
-      "Bolsa de Madrid",
-      "New York Stock Exchange",
-      "Nasdaq"
     ]
   },
   {
@@ -11834,46 +11514,6 @@
     "country": "ES",
     "type": "Bank",
     "url": "https://www.caixabank.es/particular/bolsa-mercados/acciones.html",
-    "exchanges": [
-      "Bolsa de Madrid",
-      "Latibex",
-      "BME Growth",
-      "Euronext Amsterdam",
-      "Euronext Brussels",
-      "Euronext Lisbon",
-      "Euronext Paris",
-      "Wiener Börse",
-      "Börse Xetra",
-      "Börse Frankfurt",
-      "Euronext Milan",
-      "London Stock Exchange",
-      "Euronext Dublin",
-      "Nasdaq Copenhagen",
-      "Nasdaq Helsinki",
-      "Nasdaq Stockholm",
-      "Nasdaq First North",
-      "Oslo Børs",
-      "SIX Swiss Exchange",
-      "Athens Stock Exchange",
-      "ASX",
-      "Toronto Stock Exchange",
-      "Tokyo Stock Exchange",
-      "Singapore Exchange",
-      "New York Stock Exchange",
-      "Nasdaq",
-      "NYSE Arca",
-      "NYSE American",
-      "OTC Markets",
-      "Hong Kong Stock Exchange",
-      "Equiduct",
-      "Aquis Stock Exchange"
-    ]
-  },
-  {
-    "name": "CaixaBank Bolsa",
-    "country": "ES",
-    "type": "Bank",
-    "url": "https://www.caixabank.cat/particular/borsa-mercats/accions.html",
     "exchanges": [
       "Bolsa de Madrid",
       "Latibex",
@@ -15416,15 +15056,6 @@
     ]
   },
   {
-    "name": "Wood & Company",
-    "country": "CZ",
-    "type": "Broker",
-    "url": "https://wood.com/",
-    "exchanges": [
-      "Prague Stock Exchange"
-    ]
-  },
-  {
     "name": "Raiffeisenbank ČR",
     "country": "CZ",
     "type": "Bank",
@@ -18941,15 +18572,6 @@
     ]
   },
   {
-    "name": "National Investments Company / NICTRADE",
-    "country": "KW",
-    "type": "Broker",
-    "url": "https://www.ninv.com/",
-    "exchanges": [
-      "Boursa Kuwait"
-    ]
-  },
-  {
     "name": "Boubyan",
     "country": "KW",
     "type": "Broker",
@@ -21078,13 +20700,6 @@
       "New York Stock Exchange",
       "Nasdaq"
     ]
-  },
-  {
-    "name": "Stanbic IBTC Stockbrokers",
-    "country": "NG",
-    "type": "Bank",
-    "url": "https://www.sislbrokerage.com/IW/NewAccount/Account",
-    "exchanges": []
   },
   {
     "name": "Stanbic IBTC Stockbrokers",
@@ -24083,33 +23698,6 @@
     ]
   },
   {
-    "name": "Phillip POEMS",
-    "country": "SG",
-    "type": "Broker",
-    "url": "https://www.phillip.com.sg/",
-    "exchanges": [
-      "Singapore Exchange",
-      "New York Stock Exchange",
-      "NYSE American",
-      "Nasdaq",
-      "Hong Kong Stock Exchange",
-      "Stock Exchange of Thailand",
-      "Bursa Malaysia",
-      "London Stock Exchange",
-      "Tokyo Stock Exchange",
-      "Indonesia Stock Exchange",
-      "ASX",
-      "Börse Frankfurt",
-      "Shanghai Stock Exchange",
-      "Shenzhen Stock Exchange",
-      "Toronto Stock Exchange",
-      "Euronext Brussels",
-      "Euronext Paris",
-      "Euronext Amsterdam",
-      "Euronext Lisbon"
-    ]
-  },
-  {
     "name": "FSMOne SG",
     "country": "SG",
     "type": "Broker",
@@ -24501,25 +24089,8 @@
       "Shanghai Stock Exchange",
       "Shenzhen Stock Exchange",
       "Singapore Exchange",
-      "Tokyo Stock Exchange"
-    ]
-  },
-  {
-    "name": "Futu / moomoo HK",
-    "country": "HK",
-    "type": "Neobroker",
-    "url": "https://www.futunn.com/en",
-    "exchanges": [
-      "Hong Kong Stock Exchange",
-      "Korea Exchange",
-      "NYSE American",
-      "NYSE Arca",
-      "Nasdaq",
-      "New York Stock Exchange",
-      "Shanghai Stock Exchange",
-      "Shenzhen Stock Exchange",
-      "Singapore Exchange",
-      "Tokyo Stock Exchange"
+      "Tokyo Stock Exchange",
+      "Korea Exchange"
     ]
   },
   {
@@ -24612,17 +24183,6 @@
     "country": "HK",
     "type": "Neobroker",
     "url": "https://www.usmart.hk/en",
-    "exchanges": [
-      "Hong Kong Stock Exchange",
-      "United States",
-      "China"
-    ]
-  },
-  {
-    "name": "uSMART",
-    "country": "HK",
-    "type": "Neobroker",
-    "url": "https://hk.usmartglobal.com/en",
     "exchanges": [
       "Hong Kong Stock Exchange",
       "United States",
@@ -26640,20 +26200,6 @@
     "name": "Korea Investment & Securities",
     "country": "KR",
     "type": "Broker",
-    "url": "https://www.truefriend.com/",
-    "exchanges": [
-      "New York Stock Exchange",
-      "Nasdaq",
-      "NYSE American",
-      "Hong Kong Stock Exchange",
-      "Shanghai Stock Exchange",
-      "Korea Exchange"
-    ]
-  },
-  {
-    "name": "Korea Investment & Securities",
-    "country": "KR",
-    "type": "Broker",
     "url": "https://securities.koreainvestment.com/main/Main.jsp",
     "exchanges": [
       "New York Stock Exchange",
@@ -27965,16 +27511,6 @@
     "country": "IN",
     "type": "Broker",
     "url": "https://www.ventura1.com/",
-    "exchanges": [
-      "National Stock Exchange of India",
-      "BSE"
-    ]
-  },
-  {
-    "name": "Ventura Securities",
-    "country": "IN",
-    "type": "Broker",
-    "url": "https://www.venturasecurities.com/",
     "exchanges": [
       "National Stock Exchange of India",
       "BSE"
@@ -33238,16 +32774,6 @@
     ]
   },
   {
-    "name": "BICE Inversiones",
-    "country": "CL",
-    "type": "Bank",
-    "url": "https://banco.bice.cl/inversiones",
-    "exchanges": [
-      "Santiago Stock Exchange",
-      "New York Stock Exchange"
-    ]
-  },
-  {
     "name": "Banchile Inversiones",
     "country": "CL",
     "type": "Bank",
@@ -37228,13 +36754,6 @@
     ]
   },
   {
-    "name": "East Money Securities",
-    "country": "CN",
-    "type": "Neobroker",
-    "url": "https://www.18.cn/",
-    "exchanges": []
-  },
-  {
     "name": "Ping An Securities",
     "country": "CN",
     "type": "Broker",
@@ -38845,16 +38364,6 @@
     ]
   },
   {
-    "name": "State One Stockbroking (amscot)",
-    "country": "AU",
-    "type": "Broker",
-    "url": "https://www.amscot.com.au/",
-    "exchanges": [
-      "ASX",
-      "Cboe Australia"
-    ]
-  },
-  {
     "name": "Craigs Investment Partners",
     "country": "NZ",
     "type": "Broker",
@@ -38880,22 +38389,6 @@
     ]
   },
   {
-    "name": "Laurentian Bank Discount Brokerage",
-    "country": "CA",
-    "type": "Bank",
-    "url": "https://www.blcdirect.ca/",
-    "exchanges": [
-      "Canadian Securities Exchange",
-      "Cboe Canada",
-      "Nasdaq",
-      "New York Stock Exchange",
-      "NYSE American",
-      "NYSE Arca",
-      "Toronto Stock Exchange",
-      "TSX Venture"
-    ]
-  },
-  {
     "name": "Storebrand Bank",
     "country": "NO",
     "type": "Bank",
@@ -38910,52 +38403,6 @@
       "Nasdaq Stockholm",
       "New York Stock Exchange",
       "Oslo Børs"
-    ]
-  },
-  {
-    "name": "Sparebanken Vest",
-    "country": "NO",
-    "type": "Bank",
-    "url": "https://www.spv.no/sparing-og-investering/aksjehandel",
-    "exchanges": [
-      "Euronext Expand Oslo",
-      "Euronext Growth Oslo",
-      "Nasdaq",
-      "Nasdaq Copenhagen",
-      "Nasdaq Helsinki",
-      "Nasdaq Stockholm",
-      "New York Stock Exchange",
-      "Oslo Børs"
-    ]
-  },
-  {
-    "name": "Arbejdernes Landsbank",
-    "country": "DK",
-    "type": "Bank",
-    "url": "https://www.al-bank.dk/privat/opsparing-og-investering/investering/vaerdipapirhandel",
-    "exchanges": [
-      "Börse Xetra",
-      "Euronext Amsterdam",
-      "Nasdaq",
-      "Nasdaq Copenhagen",
-      "Nasdaq Helsinki",
-      "Nasdaq Stockholm",
-      "New York Stock Exchange",
-      "Oslo Børs"
-    ]
-  },
-  {
-    "name": "Santander Biuro Maklerskie",
-    "country": "PL",
-    "type": "Bank",
-    "url": "https://www.santander.pl/inwestor/gielda/rachunek-maklerski.html",
-    "exchanges": [
-      "Börse Xetra",
-      "London Stock Exchange",
-      "Nasdaq",
-      "New York Stock Exchange",
-      "NewConnect",
-      "Warsaw Stock Exchange"
     ]
   },
   {
@@ -39183,22 +38630,6 @@
     ]
   },
   {
-    "name": "Sparebanken Sør",
-    "country": "NO",
-    "type": "Bank",
-    "url": "https://www.sor.no/felles/investering/aksjer/",
-    "exchanges": [
-      "Euronext Expand Oslo",
-      "Euronext Growth Oslo",
-      "Nasdaq",
-      "Nasdaq Copenhagen",
-      "Nasdaq Helsinki",
-      "Nasdaq Stockholm",
-      "New York Stock Exchange",
-      "Oslo Børs"
-    ]
-  },
-  {
     "name": "Haugesund Sparebank",
     "country": "NO",
     "type": "Bank",
@@ -39231,20 +38662,6 @@
     ]
   },
   {
-    "name": "Aktieinvest",
-    "country": "SE",
-    "type": "Broker",
-    "url": "https://www.aktieinvest.se/",
-    "exchanges": [
-      "First North Stockholm",
-      "Nasdaq",
-      "Nasdaq Stockholm",
-      "New York Stock Exchange",
-      "Nordic Growth Market",
-      "Spotlight Stock Market"
-    ]
-  },
-  {
     "name": "Redmayne Bentley",
     "country": "UK",
     "type": "Broker",
@@ -39267,16 +38684,6 @@
       "London Stock Exchange",
       "Nasdaq",
       "New York Stock Exchange"
-    ]
-  },
-  {
-    "name": "Sharedeal Active",
-    "country": "UK",
-    "type": "Broker",
-    "url": "https://www.sharedealactive.co.uk/",
-    "exchanges": [
-      "AIM",
-      "London Stock Exchange"
     ]
   },
   {
@@ -39334,15 +38741,6 @@
       "Dubai Financial Market",
       "Muscat Stock Exchange",
       "Tadawul"
-    ]
-  },
-  {
-    "name": "Órama Investimentos",
-    "country": "BR",
-    "type": "Broker",
-    "url": "https://www.orama.com.br/investimentos/renda-variavel",
-    "exchanges": [
-      "B3 São Paulo"
     ]
   },
   {

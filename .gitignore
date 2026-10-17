@@ -1,4 +1,5 @@
-*.json
+*parsed.json
+*touch*.json
 .env
 *.jpg
 broker-scraping*

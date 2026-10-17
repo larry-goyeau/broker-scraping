@@ -1,0 +1,72 @@
+[
+  {
+    "name": "baukasten",
+    "value": "4jepji08lh7vvnd36t41a3lfj9",
+    "domain": "www.ls-x.de",
+    "path": "/",
+    "expires": -1,
+    "size": 35,
+    "httpOnly": true,
+    "secure": true,
+    "session": true,
+    "priority": "Medium",
+    "sourceScheme": "Secure",
+    "sameParty": false
+  },
+  {
+    "name": "PHPSESSID",
+    "value": "csqshqemr8hlkm5d64c6ar5iec",
+    "domain": "www.ls-x.de",
+    "path": "/",
+    "expires": -1,
+    "size": 35,
+    "httpOnly": false,
+    "secure": true,
+    "session": true,
+    "priority": "Medium",
+    "sourceScheme": "Secure",
+    "sameParty": false
+  },
+  {
+    "name": "M1R4X",
+    "value": "1791934697xDe3XuHCG2Ya5",
+    "domain": "www.ls-x.de",
+    "path": "/",
+    "expires": -1,
+    "size": 28,
+    "httpOnly": true,
+    "secure": true,
+    "session": true,
+    "priority": "Medium",
+    "sourceScheme": "Secure",
+    "sameParty": false
+  },
+  {
+    "name": "_ga",
+    "value": "GA1.1.454059971.1791931098",
+    "domain": ".ls-x.de",
+    "path": "/",
+    "expires": 1826491098.044303,
+    "size": 29,
+    "httpOnly": false,
+    "secure": false,
+    "session": false,
+    "priority": "Medium",
+    "sourceScheme": "Secure",
+    "sameParty": false
+  },
+  {
+    "name": "_ga_N2VQYR30VN",
+    "value": "GS2.1.s1791931098$o1$g0$t1791931098$j60$l0$h0",
+    "domain": ".ls-x.de",
+    "path": "/",
+    "expires": 1826491098.044139,
+    "size": 59,
+    "httpOnly": false,
+    "secure": false,
+    "session": false,
+    "priority": "Medium",
+    "sourceScheme": "Secure",
+    "sameParty": false
+  }
+]

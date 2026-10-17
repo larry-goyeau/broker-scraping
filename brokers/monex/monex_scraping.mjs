@@ -27,11 +27,22 @@
 // out, and so do PRO Market, the REIT section and a Tokyo foreign share.
 // REIT, venture funds and subscription rights are not in the search.
 //
+// Hong Kong is the cash rule: Main Board and GEM shares, and listed funds,
+// except a suspended line and an ETF or REIT whose manager has not filed
+// the foreign-investment-trust notice. The exchange list is the share book.
+// A suspension of three months or more is the named list in the monthly
+// status report. The filed funds are the Hong Kong ETFs on SBI's handled
+// list, which states that an unfiled overseas ETF is not sold, the four
+// iShares names on BlackRock's September 2026 filed list, and Link REIT,
+// whose manager filed its foreign-trust report on 25 September 2026.
+//
 //   https://mst.monex.co.jp/mst/servlet/ITS/fi/EtfStockList
 //   https://mst.monex.co.jp/mst/servlet/ITS/ucu/UsSymbolListGST
 //   https://mst.monex.co.jp/pc/pdfroot/public/50/99/Monex_US_LIST.csv
 //   https://scouter.monex.co.jp/find/basicInfo
 //   https://www.jpx.co.jp/markets/statistics-equities/misc/01.html
+//   https://www.hkex.com.hk/eng/services/trading/securities/securitieslists/ListOfSecurities.xlsx
+//   https://www2.hkexnews.hk/-/media/HKEXnews/Homepage/Exchange-Reports/Prolonged-Suspension-Status-Report/psuspenrep_mb.pdf
 //
 //   node brokers/monex/monex_scraping.mjs
 //   node brokers/monex/monex_scraping.mjs --us=./Monex_US_LIST.csv --etf=./etf.html --tokyo=./data_j.xlsx
@@ -40,6 +51,7 @@ import { stampRows } from "../../accepted.mjs";
 import { stampIsinMatches } from "../../isinMatches.mjs";
 import { withoutObligations } from "../../obligation.mjs";
 import { spawnSync } from "node:child_process";
+import { inflateSync } from "node:zlib";
 import fs from "node:fs";
 
 const ETF_PATH = "/mst/servlet/ITS/fi/EtfStockList";
@@ -47,6 +59,23 @@ const US_PATH = "/pc/pdfroot/public/50/99/Monex_US_LIST.csv";
 const SCOUT = "https://scouter.monex.co.jp";
 const FIND = `${SCOUT}/find/basicInfo`;
 const JPX_PAGE = "https://www.jpx.co.jp/markets/statistics-equities/misc/01.html";
+const HK_LIST = "https://www.hkex.com.hk/eng/services/trading/securities/securitieslists/ListOfSecurities.xlsx";
+const HK_SUSPEND = [
+  "https://www2.hkexnews.hk/-/media/HKEXnews/Homepage/Exchange-Reports/Prolonged-Suspension-Status-Report/psuspenrep_mb.pdf",
+  "https://www2.hkexnews.hk/-/media/HKEXnews/Homepage/Exchange-Reports/Prolonged-Suspension-Status-Report/psuspenrep_gem.pdf",
+];
+const HK_SHARE = new Set([
+  "Equity Securities (Main Board)",
+  "Equity Securities (GEM)",
+  "Depositary Receipts",
+]);
+// Still listed on 20 October 2026. 02833 and 03072 had left the board.
+const HK_FILED = new Set([
+  "02800", "02801", "02809", "02820", "02822", "02823", "02826", "02827", "02828",
+  "02836", "02837", "02838", "02845", "02846", "02848", "03007", "03015", "03020",
+  "03033", "03036", "03040", "03087", "03110", "07200", "07226", "07500", "07552",
+  "00823",
+]);
 const TOKYO_STOCK = new Set([
   "プライム（内国株式）",
   "スタンダード（内国株式）",
@@ -453,7 +482,7 @@ function attachJapan(rows, book) {
 
 async function scoutText(url) {
   let last = "";
-  for (let attempt = 0; attempt < 4; attempt += 1) {
+  for (let attempt = 0; attempt < 6; attempt += 1) {
     try {
       const response = await fetch(url, {
         headers: { "User-Agent": AGENTS[0], Accept: "text/html" },
@@ -461,6 +490,10 @@ async function scoutText(url) {
       });
       if (response.ok) return response.text();
       last = `${response.status} ${url}`;
+      if (response.status === 403) {
+        await sleep(8_000 * (attempt + 1));
+        continue;
+      }
     } catch (error) {
       last = `${error.message || error}`;
     }
@@ -505,7 +538,7 @@ async function scoutShares() {
     const pages = lastPage(first);
     const rows = sharesOn(first);
     for (let page = 2; page <= pages; page += 1) {
-      await sleep(120);
+      await sleep(200);
       const html = await scoutText(`${FIND}?searchTerm=${term}&page=${page}`);
       rows.push(...sharesOn(html));
     }
@@ -636,6 +669,98 @@ async function tokyoGap(held) {
   return rows;
 }
 
+function suspendCodes(bytes) {
+  const latin = Buffer.from(bytes).toString("latin1");
+  const parts = [];
+  for (const match of latin.matchAll(/stream\r?\n([\s\S]*?)\r?\nendstream/g)) {
+    let chunk = Buffer.from(match[1], "latin1");
+    try {
+      chunk = inflateSync(chunk);
+    } catch {
+      continue;
+    }
+    const body = chunk.toString("latin1");
+    for (const item of body.matchAll(/\[(.*?)\]\s*TJ/gs)) {
+      const bits = item[1].match(/\((?:\\\)|[^)])*\)/g) || [];
+      parts.push(bits.map((bit) => bit.slice(1, -1)).join(""));
+    }
+  }
+  const codes = new Set();
+  const text = parts.join("\n").replace(/\\([()])/g, "$1");
+  for (const hit of text.matchAll(/\((\d{1,5})\)/g)) {
+    const number = Number(hit[1]);
+    if ((number >= 2015 && number <= 2030) || number < 10) continue;
+    codes.add(hit[1].padStart(5, "0"));
+  }
+  return codes;
+}
+
+async function fetchBuffer(url) {
+  const response = await fetch(url, {
+    headers: { "User-Agent": AGENTS[0] },
+    signal: AbortSignal.timeout(40_000),
+  });
+  if (!response.ok) throw new Error(`${url} answered ${response.status}`);
+  return Buffer.from(await response.arrayBuffer());
+}
+
+function hkTicker(code) {
+  const text = String(code || "").trim();
+  if (!/^\d+$/.test(text)) return text.toUpperCase();
+  return String(Number(text));
+}
+
+async function hongKongRows() {
+  const suspended = new Set();
+  for (const url of HK_SUSPEND) {
+    for (const code of suspendCodes(await fetchBuffer(url))) suspended.add(code);
+  }
+  if (suspended.size < 70) throw new Error(`the suspension list was short: ${suspended.size}`);
+  const grid = workbookRows(await fetchBuffer(HK_LIST));
+  const header = grid[2]?.map((cell) => clean(cell));
+  if (header?.[0] !== "Stock Code" || header?.[5] !== "ISIN" || header?.[16] !== "Trading Currency") {
+    throw new Error(`HKEX header is ${(header || []).join(", ")}`);
+  }
+  const rows = [];
+  const currencies = new Set();
+  for (const line of grid.slice(3)) {
+    const rawCode = clean(line[0]).replace(/\.0$/, "");
+    if (!/^\d+$/.test(rawCode)) continue;
+    const padded = rawCode.padStart(5, "0");
+    if (suspended.has(padded)) continue;
+    const name = clean(line[1]);
+    const category = clean(line[2]);
+    const sub = clean(line[3]);
+    const isin = clean(line[5]).toUpperCase();
+    const currency = clean(line[16]).toUpperCase().replace("RMB", "CNY");
+    const filed = HK_FILED.has(padded);
+    let type = "";
+    if (category === "Equity" && HK_SHARE.has(sub)) type = "STOCK";
+    else if (filed && category === "Real Estate Investment Trusts") type = "REIT";
+    else if (filed && category === "Exchange Traded Products") type = "ETF";
+    if (!type || !name) continue;
+    if (!["HKD", "CNY", "USD"].includes(currency)) currencies.add(currency || "(blank)");
+    const ticker = hkTicker(padded);
+    rows.push({
+      query: ticker,
+      ticker,
+      name,
+      exchange: "Hong Kong",
+      currency: currency || "HKD",
+      type,
+      raw: [padded, name, sub || category, currency, type].filter(Boolean).join(" "),
+      ...( /^[A-Z]{2}[A-Z0-9]{9}\d$/.test(isin) ? { isin } : {} ),
+    });
+  }
+  if (currencies.size) throw new Error(`unread Hong Kong currency: ${[...currencies].join(", ")}`);
+  const stocks = rows.filter((row) => row.type === "STOCK").length;
+  const funds = rows.filter((row) => row.type !== "STOCK").length;
+  if (stocks < 2000) throw new Error(`the Hong Kong share list was short: ${stocks}`);
+  if (funds < 20) throw new Error(`the filed Hong Kong fund list was short: ${funds}`);
+  console.error(`Hong Kong: ${stocks} shares, ${funds} filed funds, ${suspended.size} long suspensions left out`);
+  return rows;
+}
+
 // A code the lists do not have yet still has a board on its company page.
 async function boardFromPage(share) {
   const html = await scoutText(`${SCOUT}/report/zaimu/${share.ticker}`);
@@ -683,10 +808,11 @@ const gap = await tokyoGap(new Set([...funds, ...shares.map((row) => row.ticker)
 console.error(`Tokyo names the search missed: ${gap.length}`);
 shares.push(...gap);
 attachJapan([...tokyo, ...shares], book);
+const hongKong = await hongKongRows();
 
 const seen = new Set();
 const unique = [];
-for (const row of [...tokyo, ...shares, ...america]) {
+for (const row of [...tokyo, ...shares, ...hongKong, ...america]) {
   const key = `${row.exchange}|${row.ticker}`;
   if (seen.has(key)) throw new Error(`${row.ticker} is listed twice on ${row.exchange}`);
   seen.add(key);
@@ -722,6 +848,16 @@ if (toyota.currency !== "JPY") throw new Error(`Toyota was ${toyota.currency}`);
 expect("1738", "Nagoya", "STOCK");
 expect("1771", "Fukuoka", "STOCK");
 expect("1449", "Sapporo", "STOCK");
+const tencent = expect("700", "Hong Kong", "STOCK");
+if (tencent.currency !== "HKD") throw new Error(`Tencent was ${tencent.currency}`);
+expect("2801", "Hong Kong", "ETF");
+expect("823", "Hong Kong", "REIT");
+if (unique.some((row) => row.exchange === "Hong Kong" && (row.ticker === "2804" || row.ticker === "1849"))) {
+  throw new Error("an unfiled Hong Kong fund or a long suspension was kept");
+}
+if (unique.filter((row) => row.exchange === "Hong Kong" && row.type === "STOCK").length < 2000) {
+  throw new Error("the Hong Kong share list was short");
+}
 const boj = expect("8301", "Tokyo", "STOCK");
 expect("8421", "Tokyo", "STOCK");
 expect("3787", "Tokyo", "STOCK");
@@ -751,6 +887,7 @@ if (brk.isin !== "US0846707026") throw new Error(`Berkshire was ${brk.isin || "b
 if (!airi.isin) throw new Error("Air Industries had no ISIN");
 if (toyota.isin !== "JP3633400001") throw new Error(`Toyota was ${toyota.isin || "blank"}`);
 if (boj.isin !== "JP3699200006") throw new Error(`the Bank of Japan was ${boj.isin || "blank"}`);
+if (tencent.isin !== "KYG875721634") throw new Error(`Tencent was ${tencent.isin || "blank"}`);
 
 fs.writeFileSync(new URL("monex-parsed.json", import.meta.url), JSON.stringify(kept, null, 2));
 

@@ -12882,7 +12882,17 @@
     "country": "PT",
     "type": "Bank",
     "url": "https://www.novobanco.pt/particulares/investimento/plataforma-de-trading",
-    "exchanges": []
+    "exchanges": [
+      "Bolsa de Madrid",
+      "Börse Frankfurt",
+      "Euronext Amsterdam",
+      "Euronext Brussels",
+      "Euronext Lisbon",
+      "Euronext Paris",
+      "London Stock Exchange",
+      "Nasdaq",
+      "New York Stock Exchange"
+    ]
   },
   {
     "name": "Caixa Geral de Depósitos",
@@ -14570,11 +14580,18 @@
     ]
   },
   {
-    "name": "SpareBank",
+    "name": "SpareBank 1",
     "country": "NO",
     "type": "Bank",
     "url": "https://www.sparebank1.no/nb/bank/privat/sparing/investering/aksjehandel.html",
     "exchanges": [
+      "Euronext Expand Oslo",
+      "Euronext Growth Oslo",
+      "Nasdaq",
+      "Nasdaq Copenhagen",
+      "Nasdaq Helsinki",
+      "Nasdaq Stockholm",
+      "New York Stock Exchange",
       "Oslo Børs"
     ]
   },
@@ -38818,22 +38835,6 @@
     ]
   },
   {
-    "name": "Tiger Brokers Australia",
-    "country": "AU",
-    "type": "Broker",
-    "url": "https://www.tigerbrokers.com.au/",
-    "exchanges": [
-      "ASX",
-      "Cboe Australia",
-      "Hong Kong Stock Exchange",
-      "Nasdaq",
-      "New York Stock Exchange",
-      "NYSE American",
-      "NYSE Arca",
-      "Singapore Exchange"
-    ]
-  },
-  {
     "name": "Openmarkets",
     "country": "AU",
     "type": "Broker",
@@ -38892,58 +38893,6 @@
       "NYSE Arca",
       "Toronto Stock Exchange",
       "TSX Venture"
-    ]
-  },
-  {
-    "name": "BiG (Banco de Investimento Global)",
-    "country": "PT",
-    "type": "Bank",
-    "url": "https://www.big.pt/",
-    "exchanges": [
-      "Bolsa de Madrid",
-      "Börse Frankfurt",
-      "Börse Xetra",
-      "Euronext Amsterdam",
-      "Euronext Brussels",
-      "Euronext Lisbon",
-      "Euronext Paris",
-      "London Stock Exchange",
-      "Nasdaq",
-      "New York Stock Exchange",
-      "NYSE American"
-    ]
-  },
-  {
-    "name": "Novo Banco",
-    "country": "PT",
-    "type": "Bank",
-    "url": "https://www.novobanco.pt/investimentos/plataformas-negociacao",
-    "exchanges": [
-      "Bolsa de Madrid",
-      "Börse Frankfurt",
-      "Euronext Amsterdam",
-      "Euronext Brussels",
-      "Euronext Lisbon",
-      "Euronext Paris",
-      "London Stock Exchange",
-      "Nasdaq",
-      "New York Stock Exchange"
-    ]
-  },
-  {
-    "name": "Banque Raiffeisen Luxembourg",
-    "country": "LU",
-    "type": "Bank",
-    "url": "https://www.raiffeisen.lu/fr/particuliers/investir/titres-et-bourse",
-    "exchanges": [
-      "Börse Frankfurt",
-      "Börse Xetra",
-      "Euronext Amsterdam",
-      "Euronext Brussels",
-      "Euronext Paris",
-      "Luxembourg Stock Exchange",
-      "Nasdaq",
-      "New York Stock Exchange"
     ]
   },
   {
@@ -39157,6 +39106,262 @@
       "London Stock Exchange",
       "Nasdaq",
       "New York Stock Exchange"
+    ]
+  },
+  {
+    "name": "SB Equities",
+    "country": "PH",
+    "type": "Broker",
+    "url": "https://www.securitybank.com/personal/investments/sb-equities/",
+    "exchanges": [
+      "Philippine Stock Exchange"
+    ]
+  },
+  {
+    "name": "Banca Popolare di Sondrio",
+    "country": "IT",
+    "type": "Bank",
+    "url": "https://www.popso.it/privati/risparmio-e-investimenti/trading-online",
+    "exchanges": [
+      "Börse Xetra",
+      "Euronext Milan",
+      "EuroTLX",
+      "Nasdaq",
+      "New York Stock Exchange"
+    ]
+  },
+  {
+    "name": "EuroBic",
+    "country": "PT",
+    "type": "Bank",
+    "url": "https://www.eurobic.pt/particulares/poupanca-e-investimento/investimento/bolsa-e-mercados",
+    "exchanges": [
+      "Bolsa de Madrid",
+      "Börse Frankfurt",
+      "Euronext Lisbon",
+      "Euronext Paris",
+      "Nasdaq",
+      "New York Stock Exchange"
+    ]
+  },
+  {
+    "name": "HSBC Bank Malta",
+    "country": "MT",
+    "type": "Bank",
+    "url": "https://www.hsbc.com.mt/investments/products/brokerage/",
+    "exchanges": [
+      "Euronext Amsterdam",
+      "Euronext Paris",
+      "London Stock Exchange",
+      "Malta Stock Exchange",
+      "Nasdaq",
+      "New York Stock Exchange"
+    ]
+  },
+  {
+    "name": "BankNordik",
+    "country": "FO",
+    "type": "Bank",
+    "url": "https://www.banknordik.fo/privat/sparing-og-investering/investering",
+    "exchanges": [
+      "Nasdaq",
+      "Nasdaq Copenhagen",
+      "Nasdaq Iceland",
+      "Nasdaq Stockholm",
+      "New York Stock Exchange"
+    ]
+  },
+  {
+    "name": "Føroya Banki",
+    "country": "FO",
+    "type": "Bank",
+    "url": "https://www.bankin.fo/fo/privat/sparing-og-i-loegur/i-loegur/",
+    "exchanges": [
+      "Nasdaq",
+      "Nasdaq Copenhagen",
+      "New York Stock Exchange"
+    ]
+  },
+  {
+    "name": "Sparebanken Sør",
+    "country": "NO",
+    "type": "Bank",
+    "url": "https://www.sor.no/felles/investering/aksjer/",
+    "exchanges": [
+      "Euronext Expand Oslo",
+      "Euronext Growth Oslo",
+      "Nasdaq",
+      "Nasdaq Copenhagen",
+      "Nasdaq Helsinki",
+      "Nasdaq Stockholm",
+      "New York Stock Exchange",
+      "Oslo Børs"
+    ]
+  },
+  {
+    "name": "Haugesund Sparebank",
+    "country": "NO",
+    "type": "Bank",
+    "url": "https://www.haugesund-sparebank.no/privat/spare-og-investere/aksjehandel/",
+    "exchanges": [
+      "Euronext Expand Oslo",
+      "Euronext Growth Oslo",
+      "Nasdaq",
+      "Nasdaq Copenhagen",
+      "Nasdaq Helsinki",
+      "Nasdaq Stockholm",
+      "New York Stock Exchange",
+      "Oslo Børs"
+    ]
+  },
+  {
+    "name": "Rogaland Sparebank",
+    "country": "NO",
+    "type": "Bank",
+    "url": "https://www.rogalandsparebank.no/privat/sparing-og-investering/aksjehandel",
+    "exchanges": [
+      "Euronext Expand Oslo",
+      "Euronext Growth Oslo",
+      "Nasdaq",
+      "Nasdaq Copenhagen",
+      "Nasdaq Helsinki",
+      "Nasdaq Stockholm",
+      "New York Stock Exchange",
+      "Oslo Børs"
+    ]
+  },
+  {
+    "name": "Aktieinvest",
+    "country": "SE",
+    "type": "Broker",
+    "url": "https://www.aktieinvest.se/",
+    "exchanges": [
+      "First North Stockholm",
+      "Nasdaq",
+      "Nasdaq Stockholm",
+      "New York Stock Exchange",
+      "Nordic Growth Market",
+      "Spotlight Stock Market"
+    ]
+  },
+  {
+    "name": "Redmayne Bentley",
+    "country": "UK",
+    "type": "Broker",
+    "url": "https://www.redmayne.co.uk/services/online-share-dealing",
+    "exchanges": [
+      "AIM",
+      "Euronext Paris",
+      "London Stock Exchange",
+      "Nasdaq",
+      "New York Stock Exchange"
+    ]
+  },
+  {
+    "name": "Killik & Co",
+    "country": "UK",
+    "type": "Broker",
+    "url": "https://www.killik.com/services/share-dealing/",
+    "exchanges": [
+      "AIM",
+      "London Stock Exchange",
+      "Nasdaq",
+      "New York Stock Exchange"
+    ]
+  },
+  {
+    "name": "Sharedeal Active",
+    "country": "UK",
+    "type": "Broker",
+    "url": "https://www.sharedealactive.co.uk/",
+    "exchanges": [
+      "AIM",
+      "London Stock Exchange"
+    ]
+  },
+  {
+    "name": "Sparda-Bank Baden-Württemberg",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparda-bw.de/geldanlage-wertpapiere-depot/",
+    "exchanges": [
+      "Börse Frankfurt",
+      "Börse Stuttgart",
+      "Börse Xetra"
+    ]
+  },
+  {
+    "name": "Sparda-Bank West",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparda-west.de/anlage-sparen/wertpapiere/depot/",
+    "exchanges": [
+      "Börse Frankfurt",
+      "Börse Xetra"
+    ]
+  },
+  {
+    "name": "Sparda-Bank München",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparda-m.de/depot/",
+    "exchanges": [
+      "Börse Frankfurt",
+      "Börse München",
+      "Börse Xetra"
+    ]
+  },
+  {
+    "name": "Hypo Tirol Bank",
+    "country": "AT",
+    "type": "Bank",
+    "url": "https://www.hypotirol.com/privatkunden/anlegen/wertpapierdepot/",
+    "exchanges": [
+      "Börse Frankfurt",
+      "Börse Xetra",
+      "Nasdaq",
+      "New York Stock Exchange",
+      "Wiener Börse"
+    ]
+  },
+  {
+    "name": "OAB Invest",
+    "country": "OM",
+    "type": "Bank",
+    "url": "https://www.oabinvest.com/",
+    "exchanges": [
+      "Abu Dhabi Securities Exchange",
+      "Dubai Financial Market",
+      "Muscat Stock Exchange",
+      "Tadawul"
+    ]
+  },
+  {
+    "name": "Órama Investimentos",
+    "country": "BR",
+    "type": "Broker",
+    "url": "https://www.orama.com.br/investimentos/renda-variavel",
+    "exchanges": [
+      "B3 São Paulo"
+    ]
+  },
+  {
+    "name": "PhillipCapital India",
+    "country": "IN",
+    "type": "Broker",
+    "url": "https://www.phillipcapital.in/equity",
+    "exchanges": [
+      "BSE",
+      "National Stock Exchange of India"
+    ]
+  },
+  {
+    "name": "Sogecapital Bourse",
+    "country": "MA",
+    "type": "Broker",
+    "url": "https://www.sogecapitalbourse.com/",
+    "exchanges": [
+      "Casablanca Stock Exchange"
     ]
   }
 ]

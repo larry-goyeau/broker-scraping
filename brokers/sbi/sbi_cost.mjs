@@ -24,10 +24,10 @@
 //   notional. Indonesia and Vietnam also take 0.1 % of the sale.
 //
 // The internet course converts yen to dollars at a 0 yen spread plus a
-// 0.02 % markup, each way. Other currencies use the published spread and
-// markup. That charge is the remark, not this ticket. Yen settlement is
-// the scheduled rate and stays out. The interbank bid-ask is not a
-// published number.
+// 0.02 % markup, each way. Other currencies publish a yen spread. The
+// remark is that amount over the currency mid. Yen settlement is the
+// scheduled rate and stays out. The interbank bid-ask is not a published
+// number.
 //
 // US orders go to Interactive Brokers LLC or Alpaca Securities LLC. SBI
 // chooses per name. The public list does not say which, so the book uses
@@ -50,7 +50,7 @@ import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
 import { spreads } from "../../spreads/book.mjs";
 import { bookParts, plus, finite } from "../../na.mjs";
 import { qOf, usBookPerShare } from "../../spreads/rule606.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, fxRemark, toUsd, usdPer } from "../../fx.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("sbi-parsed.json", import.meta.url);
@@ -158,12 +158,15 @@ function widerUsBroker() {
 function fxRemarkOf(currency) {
   const spec = FX[currency];
   if (!spec) return "";
-  if (spec.pct && !spec.yen) {
-    const pct = String(spec.pct * 100);
-    return `FX ${pct}% when cash ≠ ${currency}.`;
+  if (spec.yen) {
+    const unit = usdPer(currency);
+    const yen = usdPer("JPY");
+    if (!(unit > 0) || !(yen > 0) || !(spec.per > 0)) return "";
+    const pct = ((spec.yen / spec.per / (unit / yen)) * 100).toFixed(3);
+    return fxRemark(pct, currency);
   }
-  const per = spec.per === 1 ? currency : `${spec.per} ${currency}`;
-  return `FX ${spec.yen} JPY per ${per} each way when cash ≠ ${currency}.`;
+  if (spec.pct) return fxRemark(String(spec.pct * 100), currency);
+  return "";
 }
 
 /**
@@ -331,7 +334,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
           ...SCHEDULE,
           japan: "0, internet course, electronic delivery",
           us: "0.495 % tax included, 0 at 2.02 USD or below, cap 22 USD",
-          conversion: "remark only: USD 0.02% each way; other currencies the published yen spread",
+          conversion: "remark only: USD 0.02% each way; other currencies the published yen spread over the mid",
           rule606: "max Q of interactivebrokers and alpaca",
           venue: SCHEDULE.venue,
         },

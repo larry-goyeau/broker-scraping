@@ -37,10 +37,10 @@
 //         since 2025-06-30
 //       the investor-compensation levy has been suspended since 2005-12-19
 //
-// Dollars convert at 0 sen on the buy and 25 sen on the sale. Hong Kong
-// dollars convert at 15 sen each way. Both sit inside the rate. That
-// charge is the remark, not this ticket. Yen settlement of a US order is
-// the same 25 sen and stays out the same way.
+// Dollars convert at 0 sen on the buy and 25 sen on the sale. The remark
+// is that 25 sen over the dollar mid. Yen settlement of a US order is the
+// same 25 sen and stays out the same way. Hong Kong dollars convert at
+// 15 sen each way. The remark is that 15 sen over the Hong Kong dollar mid.
 //
 // US orders go to TradeStation Securities, Inc. That firm files a Rule
 // 606, so a US line uses that mix.
@@ -67,7 +67,7 @@ import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
 import { spreads } from "../../spreads/book.mjs";
 import { bookParts, plus, finite } from "../../na.mjs";
 import { usBookPerShare } from "../../spreads/rule606.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, fxRemark, toUsd, usdPer } from "../../fx.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("monex-parsed.json", import.meta.url);
@@ -195,9 +195,17 @@ function hkPlace(notionalHkd, type) {
 
 function fxRemarkOf(market) {
   if (US_MICS.has(market) || market === "TEXASSE") {
-    return "FX 0.25 JPY per USD on the sale when cash ≠ USD.";
+    const yen = usdPer("JPY");
+    if (!(yen > 0)) return fxRemark("", "USD");
+    return fxRemark(((0.25 / (1 / yen)) * 100).toFixed(3), "USD");
   }
-  if (market === "HONGKONG") return "FX 0.15 JPY per HKD each way when cash ≠ HKD.";
+  if (market === "HONGKONG") {
+    const yen = usdPer("JPY");
+    const hkd = usdPer("HKD");
+    if (!(yen > 0) || !(hkd > 0)) return fxRemark("", "HKD");
+    const pct = ((0.15 / (hkd / yen)) * 100).toFixed(3);
+    return fxRemark(pct, "HKD");
+  }
   return "";
 }
 
@@ -345,7 +353,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
       : marketPerShare != null
         ? `carnet 605 × Q TradeStation, ${marketPerShare} $ la part`
         : `pas de feuille de carnet : ${m.unsourced?.name || listing.exchange}`,
-  ].join(" ; ");
+  ].filter(Boolean).join(" ; ");
 
   return {
     ...shared,
@@ -390,7 +398,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
           us: "0.495 % tax included per order, minimum 0, cap 22 USD; SEC 0.0000206 on the sale from 2026-04-06",
           hongKong:
             "0.25 % rounded up to the cent plus 10 % tax truncated, floor 49.5 HKD, cap 495 HKD, per order; HKEX each side: stamp 0.1 % up to the dollar except an ETF, SFC 0.0027 %, AFRC 0.00015 %, trading fee 0.00565 %, CCASS 0.0042 %",
-          conversion: "USD 0 on the buy and 0.25 JPY on the sale; HKD 0.15 JPY each way; both stay out of the ticket",
+          conversion: "USD 0 on the buy and 0.25 JPY on the sale, HKD 0.15 JPY each way, both shown as a percent of the mid and kept out of the ticket",
           rule606: "tradestation",
         },
         null,

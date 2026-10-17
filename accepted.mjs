@@ -642,6 +642,14 @@ export const ACCEPTED = {
   // https://www.click-sec.com/corp/kouza/entry/kijun.html
   // https://faq.click-sec.com/faq/show/307?category_id=155&site_domain=default
   gmoclick: { countries: ["JP"] },
+  // FAQ: an account opens only for someone living in Japan. A foreign
+  // national uses a residence card. Nationality is not a criterion. A
+  // stay abroad of a year or more, or an open-ended posting, is
+  // non-resident and cannot open.
+  // https://faq.monex.co.jp/faq/show/1221?site_domain=default
+  // https://faq.monex.co.jp/faq/show/4690?site_domain=default
+  // https://info.monex.co.jp/support/non-resident-procedure.html
+  monex: { countries: ["JP"] },
   // Terms, 26 Aug 2025: a Nigerian citizen or a legal resident in Nigeria,
   // with a BVN. The picker is a country of residence, so the country is NG.
   // https://cowrywise.com/terms

@@ -262,6 +262,14 @@ const FOLDER = {
   // https://www.paypay-sec.co.jp/support/charge/
   // https://www.paypay-sec.co.jp/support/ca/
   paypay: ["JPY"],
+  // Yen is a bank transfer into the securities account and is left in yen.
+  // These nine can be paid in from an SBI Shinsei account and left as cash.
+  // A dollar wire of at least 10,000 is the same dollar balance. The lira
+  // is printed トリコリラ. Hong Kong dollars are a conversion of yen.
+  // https://info.monex.co.jp/service/deposit/bank.html
+  // https://faq.monex.co.jp/faq/show/1203?site_domain=default
+  // https://info.monex.co.jp/service/payment/shinsei/index.html
+  monex: ["JPY", "USD", "EUR", "AUD", "NZD", "CNY", "TRY", "ZAR", "CAD", "GBP"],
   // A pay-in by UPI, net banking, NEFT, IMPS or RTGS comes from the linked
   // Indian bank and is credited in rupees. An NRE, NRO or NRI account
   // cannot be added. No other currency is left unconverted.

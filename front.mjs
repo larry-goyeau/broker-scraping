@@ -145,8 +145,8 @@ const FOLDER_NAME = {
   icici: "ICICI",
   hdfcsky: "HDFC Sky",
   futu: "Futu",
-  // "monex" is also the start of Monex Boom and Monex Casa de Bolsa.
-  monex: "Monex Japan",
+  // The folder slug is also the start of Monex Boom and Monex Casa de Bolsa.
+  monex: "Monex",
 };
 
 // Display name above, broker-list row below, when the two differ.

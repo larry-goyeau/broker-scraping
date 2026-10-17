@@ -32,7 +32,8 @@
 // per yuan. Singapore stocks are 0.83 ¥ per dollar, Singapore ETFs 0.25 ¥.
 // Thailand is 0.08 ¥ per baht, Malaysia 0.43 ¥ per ringgit, Indonesia
 // 0.0003 ¥ per rupiah (the page writes 0.03 sen, in the same sentence as
-// the other currencies). That charge is the remark, not this ticket.
+// the other currencies). The remark is that amount over the currency mid,
+// not this ticket.
 //
 // The cash-rule page sends the US order to a local correspondent and does
 // not name the firm. A 9 December 2020 report of an outage said that
@@ -59,7 +60,7 @@ import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
 import { spreads } from "../../spreads/book.mjs";
 import { bookParts, plus, finite } from "../../na.mjs";
 import { usBookPerShare } from "../../spreads/rule606.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, fxRemark, toUsd, usdPer } from "../../fx.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("rakutenjp-parsed.json", import.meta.url);
@@ -177,7 +178,10 @@ function fxRemarkOf(market, type) {
     currency = "IDR";
   }
   if (yen == null) return "";
-  return `FX ${yen} JPY per ${currency} each way when cash ≠ ${currency}.`;
+  const unit = usdPer(currency);
+  const jpy = usdPer("JPY");
+  if (!(unit > 0) || !(jpy > 0)) return "";
+  return fxRemark(((yen / (unit / jpy)) * 100).toFixed(3), currency);
 }
 
 /**

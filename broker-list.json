@@ -9,7 +9,6 @@
       "Alpha Exchange",
       "Aquis Stock Exchange",
       "ASX",
-      "Athens Stock Exchange",
       "B3 São Paulo",
       "Börse Frankfurt",
       "Börse Stuttgart",
@@ -63,8 +62,7 @@
       "Bolsa Mexicana",
       "Bolsa de Madrid",
       "Euronext Dublin",
-      "Nasdaq Helsinki",
-      "Pure Trading"
+      "Nasdaq Helsinki"
     ]
   },
   {
@@ -77,7 +75,6 @@
       "Nasdaq",
       "New York Stock Exchange",
       "NYSE Arca",
-      "OTC Markets",
       "NYSE American"
     ]
   },
@@ -90,8 +87,6 @@
       "New York Stock Exchange",
       "Nasdaq",
       "NYSE American",
-      "NYSE Arca",
-      "Cboe BZX",
       "OTC Markets"
     ]
   },
@@ -104,8 +99,6 @@
       "New York Stock Exchange",
       "Nasdaq",
       "NYSE American",
-      "NYSE Arca",
-      "Cboe BZX",
       "OTC Markets"
     ]
   },
@@ -115,10 +108,7 @@
     "type": "Broker",
     "url": "https://www.tastytrade.com/",
     "exchanges": [
-      "New York Stock Exchange",
-      "Nasdaq",
-      "NYSE Arca",
-      "Cboe BZX"
+      "United States"
     ]
   },
   {
@@ -145,8 +135,7 @@
       "Nasdaq",
       "NYSE American",
       "NYSE Arca",
-      "Cboe BZX",
-      "OTC Markets"
+      "Cboe BZX"
     ]
   },
   {
@@ -186,8 +175,6 @@
       "New York Stock Exchange",
       "Nasdaq",
       "NYSE American",
-      "NYSE Arca",
-      "Cboe BZX",
       "OTC Markets"
     ]
   },
@@ -279,7 +266,9 @@
     "type": "Bank",
     "url": "https://www.merrilledge.com/global-oao",
     "exchanges": [
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq",
+      "OTC Markets"
     ]
   },
   {
@@ -343,8 +332,7 @@
       "NYSE American",
       "NYSE Arca",
       "Cboe BZX",
-      "OTC Markets",
-      "Hong Kong Stock Exchange"
+      "OTC Markets"
     ]
   },
   {
@@ -361,12 +349,7 @@
       "OTC Markets",
       "Hong Kong Stock Exchange",
       "Shanghai Stock Exchange",
-      "Shenzhen Stock Exchange",
-      "Singapore Exchange",
-      "ASX",
-      "Tokyo Stock Exchange",
-      "Toronto Stock Exchange",
-      "Bursa Malaysia"
+      "Shenzhen Stock Exchange"
     ]
   },
   {
@@ -423,9 +406,7 @@
     "url": "https://www.etoro.com/en-us/",
     "exchanges": [
       "New York Stock Exchange",
-      "Nasdaq",
-      "NYSE Arca",
-      "Cboe BZX"
+      "Nasdaq"
     ]
   },
   {
@@ -510,7 +491,8 @@
     "type": "Broker",
     "url": "https://www.eoption.com",
     "exchanges": [
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq"
     ]
   },
   {
@@ -520,8 +502,7 @@
     "url": "https://plynkinvest.com/",
     "exchanges": [
       "New York Stock Exchange",
-      "Nasdaq",
-      "NYSE Arca"
+      "Nasdaq"
     ]
   },
   {
@@ -531,9 +512,6 @@
     "url": "https://www.tradeup.com/",
     "exchanges": [
       "New York Stock Exchange",
-      "Nasdaq",
-      "NYSE American",
-      "NYSE Arca",
       "OTC Markets",
       "Hong Kong Stock Exchange"
     ]
@@ -544,7 +522,8 @@
     "type": "Neobroker",
     "url": "https://hapi.trade",
     "exchanges": [
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq"
     ]
   },
   {
@@ -599,7 +578,12 @@
     "type": "Broker",
     "url": "https://speedtrader.com/faq/",
     "exchanges": [
-      "United States"
+      "Nasdaq",
+      "NYSE American",
+      "New York Stock Exchange",
+      "OTC Markets",
+      "NYSE Arca",
+      "Cboe BZX"
     ]
   },
   {
@@ -648,7 +632,8 @@
     "type": "Neobroker",
     "url": "https://help.coinbase.com/en/stocks-funds",
     "exchanges": [
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq"
     ]
   },
   {
@@ -831,7 +816,11 @@
     "type": "Broker",
     "url": "https://lime.co/lime-trader-web/",
     "exchanges": [
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq",
+      "NYSE American",
+      "NYSE Arca",
+      "Cboe BZX"
     ]
   },
   {
@@ -1018,9 +1007,7 @@
     "type": "Broker",
     "url": "https://legacy.tradingblock.com/Docs/Agreements/tb/AOS_TradingBlock_Form_CRS.pdf",
     "exchanges": [
-      "New York Stock Exchange",
-      "NYSE American",
-      "Nasdaq"
+      "United States"
     ]
   },
   {
@@ -1043,7 +1030,10 @@
     "type": "Broker",
     "url": "https://placetrade.com/investment-types-1",
     "exchanges": [
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq",
+      "NYSE American",
+      "NYSE Arca"
     ]
   },
   {
@@ -1052,7 +1042,6 @@
     "type": "Broker",
     "url": "https://investrade.com/wp-content/uploads/Discount-Disclosure.pdf",
     "exchanges": [
-      "New York Stock Exchange",
       "Nasdaq"
     ]
   },
@@ -1087,7 +1076,7 @@
     "type": "Broker",
     "url": "https://content.commonwealth.com/RepSiteContent/wealthscape-investor-user-guide.pdf",
     "exchanges": [
-      "New York Stock Exchange"
+      "United States"
     ]
   },
   {
@@ -1205,7 +1194,8 @@
     "type": "Neobroker",
     "url": "https://ajuda.inter.co/investimentos/onde-encontro-etfs-acoes-fiis-e-bdrs-no-app-do-inter",
     "exchanges": [
-      "United States",
+      "New York Stock Exchange",
+      "Nasdaq",
       "B3 São Paulo"
     ]
   },
@@ -1240,7 +1230,8 @@
     "type": "Neobroker",
     "url": "https://help.revolut.com/en-US/help/wealth/stocks/trading-stocks/order-types/what-type-of-orders-can-i-submit/",
     "exchanges": [
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq"
     ]
   },
   {
@@ -1786,7 +1777,6 @@
       "SIX Swiss Exchange",
       "ASX",
       "Cboe Australia",
-      "National Stock Exchange of India",
       "Tokyo Stock Exchange",
       "Bursa Malaysia",
       "Singapore Exchange",
@@ -1887,8 +1877,14 @@
     "type": "Bank",
     "url": "https://www.scotiaitrade.com/en/home/open-trading-account.html",
     "exchanges": [
-      "Canada",
-      "United States"
+      "Toronto Stock Exchange",
+      "TSX Venture",
+      "Canadian Securities Exchange",
+      "Cboe Canada",
+      "New York Stock Exchange",
+      "Nasdaq",
+      "NYSE American",
+      "OTC Markets"
     ]
   },
   {
@@ -1897,8 +1893,13 @@
     "type": "Bank",
     "url": "https://www.investorsedge.cibc.com/en/home.html",
     "exchanges": [
-      "United States",
-      "Canada"
+      "New York Stock Exchange",
+      "Nasdaq",
+      "NYSE American",
+      "OTC Markets",
+      "Toronto Stock Exchange",
+      "Canadian Securities Exchange",
+      "Cboe Canada"
     ]
   },
   {
@@ -1971,9 +1972,7 @@
       "TSX Venture",
       "Canadian Securities Exchange",
       "Cboe Canada",
-      "New York Stock Exchange",
       "Nasdaq",
-      "NYSE American",
       "NYSE Arca"
     ]
   },
@@ -2014,13 +2013,9 @@
     "type": "Broker",
     "url": "https://tradezero.com/en-ca/support/questions/what-order-types-are-available-for-equity-trading-tradezero-canada",
     "exchanges": [
-      "Toronto Stock Exchange",
-      "TSX Venture",
       "New York Stock Exchange",
       "Nasdaq",
       "NYSE American",
-      "NYSE Arca",
-      "Cboe BZX",
       "OTC Markets"
     ]
   },
@@ -2038,8 +2033,7 @@
       "Nasdaq",
       "NYSE American",
       "NYSE Arca",
-      "Cboe BZX",
-      "OTC Markets"
+      "Cboe BZX"
     ]
   },
   {
@@ -2049,52 +2043,15 @@
     "url": "https://www.ig.com/",
     "exchanges": [
       "ASX",
-      "Aquis Stock Exchange",
-      "Athens Stock Exchange",
-      "BSE",
-      "Bolsa de Madrid",
-      "Bolsa de Valores de Colombia",
-      "Borsa Istanbul",
-      "Bursa Malaysia",
-      "Börse Berlin",
-      "Börse Frankfurt",
-      "Börse Hamburg",
-      "Börse Stuttgart",
-      "Börse Xetra",
-      "Canadian Securities Exchange",
-      "Cboe Australia",
-      "Cboe BZX",
-      "Cboe Canada",
-      "Euronext Amsterdam",
-      "Euronext Brussels",
-      "Euronext Dublin",
-      "Euronext Lisbon",
-      "Euronext Milan",
-      "Euronext Paris",
-      "HOSE",
-      "Hanoi Stock Exchange",
-      "Hong Kong Stock Exchange",
-      "Johannesburg Stock Exchange",
-      "Ljubljana Stock Exchange",
+      "Germany",
+      "Netherlands",
+      "Belgium",
+      "Ireland",
       "London Stock Exchange",
-      "NYSE Arca",
       "Nasdaq",
-      "Nasdaq Copenhagen",
-      "Nasdaq Helsinki",
-      "Nasdaq Stockholm",
       "New York Stock Exchange",
       "OTC Markets",
-      "Oslo Børs",
-      "Pakistan Stock Exchange",
-      "SIX Swiss Exchange",
-      "Shanghai Stock Exchange",
-      "Singapore Exchange",
-      "Stock Exchange of Thailand",
-      "TSX Venture",
-      "Tokyo Stock Exchange",
-      "Toronto Stock Exchange",
-      "Warsaw Stock Exchange",
-      "Wiener Börse"
+      "Austria"
     ]
   },
   {
@@ -2137,7 +2094,6 @@
       "Tel Aviv Stock Exchange",
       "ASX",
       "Hong Kong Stock Exchange",
-      "National Stock Exchange of India",
       "Tokyo Stock Exchange",
       "Singapore Exchange",
       "Korea Exchange",
@@ -2166,39 +2122,7 @@
     "country": "UK",
     "type": "Bank",
     "url": "https://www.swissquote.com/",
-    "exchanges": [
-      "New York Stock Exchange",
-      "Nasdaq",
-      "NYSE American",
-      "NYSE Arca",
-      "Toronto Stock Exchange",
-      "TSX Venture",
-      "London Stock Exchange",
-      "AIM",
-      "Börse Xetra",
-      "Börse Frankfurt",
-      "Börse Stuttgart",
-      "Börse München",
-      "Börse Berlin",
-      "Börse Düsseldorf",
-      "Börse Hamburg",
-      "Börse Hannover",
-      "Euronext Paris",
-      "Euronext Amsterdam",
-      "Euronext Brussels",
-      "SIX Swiss Exchange",
-      "Bolsa de Madrid",
-      "Euronext Milan",
-      "Wiener Börse",
-      "Nasdaq Stockholm",
-      "Nasdaq Copenhagen",
-      "Nasdaq Helsinki",
-      "Oslo Børs",
-      "Singapore Exchange",
-      "Hong Kong Stock Exchange",
-      "Tokyo Stock Exchange",
-      "ASX"
-    ]
+    "exchanges": []
   },
   {
     "name": "Plus500 UK",
@@ -2255,7 +2179,6 @@
       "Nasdaq Vilnius",
       "New York Stock Exchange",
       "NYSE American",
-      "NYSE Arca",
       "Oslo Børs",
       "OTC Markets",
       "SIX Swiss Exchange",
@@ -2328,7 +2251,6 @@
       "NYSE American",
       "NYSE Arca",
       "Oslo Børs",
-      "OTC Markets",
       "SIX Swiss Exchange",
       "Warsaw Stock Exchange"
     ]
@@ -2342,28 +2264,20 @@
       "AIM",
       "Aquis Stock Exchange",
       "Bolsa de Madrid",
-      "Börse Düsseldorf",
       "Börse Frankfurt",
-      "Börse Hamburg",
-      "Börse München",
-      "Börse Stuttgart",
       "Börse Xetra",
-      "Canadian Securities Exchange",
-      "Cboe BZX",
       "Euronext Amsterdam",
       "Euronext Brussels",
       "Euronext Dublin",
       "Euronext Lisbon",
       "Euronext Milan",
       "Euronext Paris",
-      "gettex",
       "London Stock Exchange",
       "Nasdaq",
       "Nasdaq Copenhagen",
       "Nasdaq Helsinki",
       "Nasdaq Stockholm",
       "New York Stock Exchange",
-      "NYSE American",
       "NYSE Arca",
       "Oslo Børs",
       "SIX Swiss Exchange",
@@ -2380,7 +2294,6 @@
     "exchanges": [
       "London Stock Exchange",
       "Aquis Stock Exchange",
-      "Cboe Europe",
       "Australia",
       "Austria",
       "Belgium",
@@ -2429,7 +2342,6 @@
       "London Stock Exchange",
       "Euronext Dublin",
       "Börse Xetra",
-      "Börse Frankfurt",
       "Euronext Paris",
       "Bolsa de Madrid",
       "Euronext Brussels",
@@ -2487,7 +2399,6 @@
     "url": "https://www.fidelity.co.uk/open-account/",
     "exchanges": [
       "London Stock Exchange",
-      "Aquis Stock Exchange",
       "Cboe Europe",
       "New York Stock Exchange",
       "Nasdaq",
@@ -2539,7 +2450,7 @@
     "type": "Broker",
     "url": "https://www.willisowen.co.uk/isa/apply-for-an-isa",
     "exchanges": [
-      "London Stock Exchange"
+      "United Kingdom"
     ]
   },
   {
@@ -2570,7 +2481,6 @@
       "New York Stock Exchange",
       "Nasdaq",
       "NYSE American",
-      "NYSE Arca",
       "Euronext Paris",
       "Euronext Amsterdam",
       "Euronext Brussels",
@@ -2589,7 +2499,6 @@
       "New York Stock Exchange",
       "Nasdaq",
       "NYSE American",
-      "NYSE Arca",
       "Euronext Paris",
       "Euronext Amsterdam",
       "Euronext Brussels",
@@ -2649,8 +2558,7 @@
     "url": "https://withplum.com/en-gb/investments",
     "exchanges": [
       "New York Stock Exchange",
-      "Nasdaq",
-      "NYSE Arca"
+      "Nasdaq"
     ]
   },
   {
@@ -2683,7 +2591,6 @@
       "New York Stock Exchange",
       "Nasdaq",
       "NYSE American",
-      "NYSE Arca",
       "Cboe BZX"
     ]
   },
@@ -2762,7 +2669,6 @@
       "London Stock Exchange",
       "New York Stock Exchange",
       "Euronext Paris",
-      "Börse Frankfurt",
       "Euronext Milan",
       "Euronext Amsterdam",
       "Euronext Brussels"
@@ -2825,7 +2731,7 @@
     "exchanges": [
       "London Stock Exchange",
       "United States",
-      "Toronto Stock Exchange"
+      "Canada"
     ]
   },
   {
@@ -2851,7 +2757,7 @@
     "url": "https://sharedeal.cm.mpms.mufg.com/services/our-share-dealing-service/",
     "exchanges": [
       "London Stock Exchange",
-      "Euronext Dublin"
+      "Ireland"
     ]
   },
   {
@@ -2897,10 +2803,7 @@
     "exchanges": [
       "London Stock Exchange",
       "AIM",
-      "New York Stock Exchange",
-      "Nasdaq",
-      "NYSE American",
-      "NYSE Arca"
+      "Nasdaq"
     ]
   },
   {
@@ -2919,9 +2822,7 @@
       "London Stock Exchange",
       "AIM",
       "New York Stock Exchange",
-      "Nasdaq",
-      "NYSE American",
-      "NYSE Arca"
+      "Nasdaq"
     ]
   },
   {
@@ -3083,7 +2984,6 @@
       "Alpha Exchange",
       "Aquis Stock Exchange",
       "Athens Stock Exchange",
-      "B3 São Paulo",
       "Bolsa Mexicana",
       "Bolsa de Madrid",
       "Bucharest Stock Exchange",
@@ -3102,7 +3002,6 @@
       "Euronext Milan",
       "Euronext Paris",
       "Hong Kong Stock Exchange",
-      "Korea Exchange",
       "Ljubljana Stock Exchange",
       "London Stock Exchange",
       "NYSE Arca",
@@ -3163,7 +3062,6 @@
     "exchanges": [
       "ASX",
       "Athens Stock Exchange",
-      "BME Growth",
       "Bolsa de Madrid",
       "Börse Düsseldorf",
       "Börse Frankfurt",
@@ -3172,19 +3070,14 @@
       "Börse München",
       "Börse Stuttgart",
       "Börse Xetra",
-      "Canadian Securities Exchange",
       "Euronext Access Lisbon",
-      "Euronext Access Paris",
       "Euronext Amsterdam",
       "Euronext Brussels",
       "Euronext Dublin",
       "Euronext Growth Brussels",
-      "Euronext Growth Oslo",
-      "Euronext Growth Paris",
       "Euronext Lisbon",
       "Euronext Milan",
       "Euronext Paris",
-      "EuroTLX",
       "First North Denmark",
       "First North Helsinki",
       "First North Stockholm",
@@ -3324,7 +3217,6 @@
       "Euronext Lisbon",
       "Euronext Paris",
       "Euronext Amsterdam",
-      "Euronext Milan",
       "Wiener Börse",
       "SIX Swiss Exchange"
     ]
@@ -3368,9 +3260,7 @@
     "country": "DE",
     "type": "Broker",
     "url": "https://www.ig.com/",
-    "exchanges": [
-      "Tradegate"
-    ]
+    "exchanges": []
   },
   {
     "name": "Commerzbank",
@@ -3418,11 +3308,9 @@
       "Nasdaq Stockholm",
       "Euronext Dublin",
       "Tokyo Stock Exchange",
-      "Borsa Istanbul",
       "Wiener Börse",
       "Johannesburg Stock Exchange",
       "Warsaw Stock Exchange",
-      "Börse Berlin",
       "Nasdaq",
       "EuroTLX"
     ]
@@ -3451,7 +3339,8 @@
       "Börse Hannover",
       "Börse München",
       "Börse Stuttgart",
-      "United States",
+      "New York Stock Exchange",
+      "Nasdaq",
       "Toronto Stock Exchange"
     ]
   },
@@ -3574,32 +3463,31 @@
       "Nasdaq",
       "New York Stock Exchange",
       "NYSE Arca",
-      "OTC Markets",
-      "SIX Swiss Exchange",
-      "Toronto Stock Exchange",
+      "Switzerland",
+      "Canada",
       "Tradegate",
-      "Wiener Börse",
+      "Austria",
       "London Stock Exchange",
       "Tokyo Stock Exchange",
       "Börse Berlin",
       "Börse Frankfurt",
-      "ASX",
-      "Euronext Brussels",
-      "Nasdaq Copenhagen",
-      "Nasdaq Helsinki",
-      "Euronext Paris",
-      "Athens Stock Exchange",
-      "Hong Kong Stock Exchange",
-      "Euronext Milan",
-      "Euronext Dublin",
-      "NZX",
-      "Euronext Amsterdam",
-      "Oslo Børs",
-      "Euronext Lisbon",
-      "Nasdaq Stockholm",
-      "Singapore Exchange",
-      "Bolsa de Madrid",
-      "Johannesburg Stock Exchange"
+      "Australia",
+      "Belgium",
+      "Denmark",
+      "Finland",
+      "France",
+      "Greece",
+      "Hong Kong",
+      "Italy",
+      "Ireland",
+      "New Zealand",
+      "Netherlands",
+      "Norway",
+      "Portugal",
+      "Sweden",
+      "Singapore",
+      "Spain",
+      "South Africa"
     ]
   },
   {
@@ -3610,7 +3498,6 @@
     "exchanges": [
       "gettex",
       "LS Exchange",
-      "Quotrix",
       "Tradegate",
       "Börse Xetra",
       "Börse Frankfurt",
@@ -3642,26 +3529,18 @@
     "url": "https://www.lynxbroker.de/wertpapierdepot/depot-eroeffnen/",
     "exchanges": [
       "ASX",
-      "Abu Dhabi Securities Exchange",
+      "United Arab Emirates",
       "Alpha Exchange",
       "Aquis Stock Exchange",
-      "Athens Stock Exchange",
-      "B3 São Paulo",
       "Bolsa Mexicana",
       "Bolsa de Madrid",
       "Budapest Stock Exchange",
-      "Börse Düsseldorf",
       "Börse Frankfurt",
-      "Börse Hamburg",
-      "Börse Hannover",
-      "Börse München",
       "Börse Stuttgart",
       "Börse Xetra",
       "Cboe BZX",
-      "Dubai Financial Market",
       "Euronext Amsterdam",
       "Euronext Brussels",
-      "Euronext Dublin",
       "Euronext Lisbon",
       "Euronext Milan",
       "Euronext Paris",
@@ -3675,14 +3554,12 @@
       "Nasdaq Stockholm",
       "Nasdaq Tallinn",
       "Nasdaq Vilnius",
-      "National Stock Exchange of India",
       "New York Stock Exchange",
       "OTC Markets",
       "Oslo Børs",
       "Prague Stock Exchange",
       "Pure Trading",
       "SIX Swiss Exchange",
-      "Shanghai Stock Exchange",
       "Shenzhen Stock Exchange",
       "Singapore Exchange",
       "TSX Venture",
@@ -3741,11 +3618,7 @@
     "type": "Neobroker",
     "url": "https://vivid.money/de-de/personal/",
     "exchanges": [
-      "Börse Xetra",
-      "Nasdaq",
       "New York Stock Exchange",
-      "NYSE Arca",
-      "OTC Markets",
       "Tradegate"
     ]
   },
@@ -3825,23 +3698,23 @@
     "exchanges": [
       "Tradegate",
       "Quotrix",
-      "ASX",
-      "Euronext Paris",
+      "Australia",
+      "France",
       "London Stock Exchange",
-      "Indonesia Stock Exchange",
-      "Euronext Dublin",
+      "Indonesia",
+      "Ireland",
       "Euronext Milan",
       "Tokyo Stock Exchange",
-      "Luxembourg Stock Exchange",
-      "Bursa Malaysia",
+      "Luxembourg",
+      "Malaysia",
       "Nasdaq",
       "New York Stock Exchange",
       "Euronext Amsterdam",
       "Wiener Börse",
-      "SIX Swiss Exchange",
-      "Singapore Exchange",
+      "Switzerland",
+      "Singapore",
       "Bolsa de Madrid",
-      "Johannesburg Stock Exchange",
+      "South Africa",
       "Börse Frankfurt",
       "Börse Stuttgart",
       "Börse München",
@@ -3861,12 +3734,10 @@
       "Börse Frankfurt",
       "Tradegate",
       "gettex",
-      "Quotrix",
       "LS Exchange",
       "Börse Stuttgart",
       "New York Stock Exchange",
-      "Nasdaq",
-      "NYSE Arca"
+      "Nasdaq"
     ]
   },
   {
@@ -3911,7 +3782,6 @@
       "New York Stock Exchange",
       "NYSE American",
       "NYSE Arca",
-      "OTC Markets",
       "TSX Venture",
       "Toronto Stock Exchange",
       "Börse Berlin",
@@ -3924,32 +3794,34 @@
       "Börse Stuttgart",
       "Tradegate",
       "Börse Xetra",
-      "Australia",
-      "Belgium",
-      "Denmark",
-      "Finland",
-      "France",
-      "Greece",
-      "United Kingdom",
-      "Indonesia",
-      "Ireland",
-      "Italy",
-      "Japan",
-      "Luxembourg",
-      "Malaysia",
-      "New Zealand",
-      "Netherlands",
-      "Norway",
-      "Austria",
-      "Portugal",
-      "Sweden",
-      "Switzerland",
-      "Singapore",
-      "Slovenia",
-      "Spain",
-      "South Africa",
-      "Thailand",
-      "Turkey"
+      "ASX",
+      "Euronext Brussels",
+      "Nasdaq Copenhagen",
+      "Nasdaq Helsinki",
+      "Euronext Paris",
+      "Athens Stock Exchange",
+      "London Stock Exchange",
+      "London IOB",
+      "Indonesia Stock Exchange",
+      "Euronext Dublin",
+      "Euronext Milan",
+      "Tokyo Stock Exchange",
+      "Luxembourg Stock Exchange",
+      "Bursa Malaysia",
+      "NZX",
+      "Euronext Amsterdam",
+      "Oslo Børs",
+      "Wiener Börse",
+      "Euronext Lisbon",
+      "Nasdaq Stockholm",
+      "SIX Swiss Exchange",
+      "BX Swiss",
+      "Singapore Exchange",
+      "Ljubljana Stock Exchange",
+      "Bolsa de Madrid",
+      "Johannesburg Stock Exchange",
+      "Stock Exchange of Thailand",
+      "Borsa Istanbul"
     ]
   },
   {
@@ -4381,7 +4253,7 @@
     "type": "Bank",
     "url": "https://www.ligabank.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/wertpapierdepot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra"
     ]
   },
   {
@@ -4407,7 +4279,7 @@
     "type": "Bank",
     "url": "https://www.ksk-koeln.de/de/home/privatkunden/wertpapiere-und-boerse.html",
     "exchanges": [
-      "Germany"
+      "Tradegate"
     ]
   },
   {
@@ -4417,9 +4289,8 @@
     "url": "https://www.sparkasse-koelnbonn.de/de/home/privatkunden/wertpapiere-und-boerse/depot-finder.html",
     "exchanges": [
       "Tradegate",
-      "Germany",
-      "Börse Xetra",
       "Börse Frankfurt",
+      "Börse Xetra",
       "Börse Stuttgart",
       "Börse München"
     ]
@@ -4430,8 +4301,7 @@
     "type": "Bank",
     "url": "https://www.sskm.de/de/home/online-banking/tipps-und-hilfe/fragen_und_antworten/faq-online-brokerage.html",
     "exchanges": [
-      "Tradegate",
-      "Germany"
+      "Tradegate"
     ]
   },
   {
@@ -4442,8 +4312,7 @@
     "exchanges": [
       "Börse Xetra",
       "Börse Frankfurt",
-      "Tradegate",
-      "Germany"
+      "Tradegate"
     ]
   },
   {
@@ -4500,8 +4369,7 @@
     "url": "https://www.hamburger-volksbank.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
       "Tradegate",
-      "Quotrix",
-      "Germany"
+      "Quotrix"
     ]
   },
   {
@@ -4520,8 +4388,7 @@
     "url": "https://www.wvb.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
       "Tradegate",
-      "Quotrix",
-      "Germany"
+      "Quotrix"
     ]
   },
   {
@@ -6489,29 +6356,19 @@
       "Euronext Brussels",
       "Euronext Dublin",
       "ASX",
-      "Aquis Stock Exchange",
       "Bolsa de Madrid",
       "Börse Düsseldorf",
       "Börse Frankfurt",
       "Börse Hamburg",
       "Börse Hannover",
       "Börse Stuttgart",
-      "Cboe BZX",
-      "Cboe Canada",
       "Dubai Financial Market",
-      "EuroTLX",
       "Euronext Milan",
-      "LS Exchange",
-      "Lang & Schwarz International",
-      "NYSE Arca",
       "Nagoya Stock Exchange",
       "Nasdaq Stockholm",
       "Singapore Exchange",
       "TSX Venture",
-      "Tel Aviv Stock Exchange",
-      "Tradegate",
-      "Wiener Börse",
-      "gettex"
+      "Wiener Börse"
     ]
   },
   {
@@ -6549,7 +6406,6 @@
       "Cboe Australia",
       "Hong Kong Stock Exchange",
       "Shanghai-Hong Kong Stock Connect",
-      "National Stock Exchange of India",
       "Tokyo Stock Exchange",
       "Singapore Exchange"
     ]
@@ -6642,7 +6498,7 @@
     "type": "Bank",
     "url": "https://www.migrosbank.ch/de/privatpersonen/anlegen/anlageloesungen/wertschriftendepot.html",
     "exchanges": [
-      "SIX Swiss Exchange"
+      "Switzerland"
     ]
   },
   {
@@ -6745,9 +6601,8 @@
       "Euronext Amsterdam",
       "Euronext Brussels",
       "Börse Xetra",
-      "New York Stock Exchange",
-      "Nasdaq",
-      "ASX",
+      "United States",
+      "Australia",
       "Tokyo Stock Exchange",
       "Singapore Exchange"
     ]
@@ -6805,23 +6660,23 @@
     "exchanges": [
       "SIX Swiss Exchange",
       "BX Swiss",
-      "Euronext Brussels",
+      "Belgium",
       "Börse Xetra",
       "Börse Frankfurt",
-      "London Stock Exchange",
-      "Euronext Paris",
-      "Euronext Amsterdam",
-      "Euronext Dublin",
-      "Euronext Milan",
-      "Wiener Börse",
-      "Euronext Lisbon",
-      "Bolsa de Madrid",
+      "United Kingdom",
+      "France",
+      "Netherlands",
+      "Ireland",
+      "Italy",
+      "Austria",
+      "Portugal",
+      "Spain",
       "United States",
-      "Toronto Stock Exchange",
-      "ASX",
-      "Tokyo Stock Exchange",
-      "Hong Kong Stock Exchange",
-      "Johannesburg Stock Exchange"
+      "Canada",
+      "Australia",
+      "Japan",
+      "Hong Kong",
+      "South Africa"
     ]
   },
   {
@@ -6831,29 +6686,28 @@
     "url": "https://www.cler.ch/de/anlegen",
     "exchanges": [
       "SIX Swiss Exchange",
-      "Euronext Brussels",
-      "Nasdaq Copenhagen",
-      "Nasdaq Helsinki",
-      "Euronext Paris",
-      "London Stock Exchange",
-      "Euronext Dublin",
-      "Euronext Milan",
-      "Luxembourg Stock Exchange",
-      "Euronext Amsterdam",
-      "Oslo Børs",
-      "Wiener Börse",
-      "Euronext Lisbon",
-      "Nasdaq Stockholm",
-      "Bolsa de Madrid",
-      "Toronto Stock Exchange",
-      "ASX",
-      "Hong Kong Stock Exchange",
-      "Tokyo Stock Exchange",
-      "Singapore Exchange",
-      "Johannesburg Stock Exchange",
-      "Nasdaq",
-      "New York Stock Exchange",
-      "Börse Xetra"
+      "Belgium",
+      "Denmark",
+      "Finland",
+      "France",
+      "United Kingdom",
+      "Ireland",
+      "Italy",
+      "Luxembourg",
+      "Netherlands",
+      "Norway",
+      "Austria",
+      "Portugal",
+      "Sweden",
+      "Spain",
+      "Canada",
+      "Australia",
+      "Hong Kong",
+      "Japan",
+      "Singapore",
+      "South Africa",
+      "United States",
+      "Germany"
     ]
   },
   {
@@ -7030,11 +6884,11 @@
       "United States",
       "SIX Swiss Exchange",
       "Germany",
-      "London Stock Exchange",
-      "Euronext Paris",
-      "Euronext Milan",
-      "Euronext Amsterdam",
-      "Bolsa de Madrid",
+      "United Kingdom",
+      "France",
+      "Italy",
+      "Netherlands",
+      "Spain",
       "BX Swiss"
     ]
   },
@@ -7343,7 +7197,7 @@
     "type": "Bank",
     "url": "https://www.aekbank.ch/privatkunden/Anlagen/Anlageloesungen/Depot-Anlagen-Online",
     "exchanges": [
-      "SIX Swiss Exchange"
+      "Switzerland"
     ]
   },
   {
@@ -7425,7 +7279,7 @@
     "type": "Bank",
     "url": "https://www.ersparniskasse.ch/de/e-banking",
     "exchanges": [
-      "SIX Swiss Exchange"
+      "Switzerland"
     ]
   },
   {
@@ -7645,7 +7499,7 @@
     "type": "Bank",
     "url": "https://www.bankzimmerberg.ch/digital-banking/e-banking/",
     "exchanges": [
-      "SIX Swiss Exchange"
+      "Switzerland"
     ]
   },
   {
@@ -7672,7 +7526,7 @@
     "type": "Bank",
     "url": "https://www.sparkasse.ch/pdf/publikationen/broschueren/anlegen/produkteblaetter/sparkasse-schwyz-ag-produkteblatt-aktien-aktienfonds.pdf",
     "exchanges": [
-      "SIX Swiss Exchange"
+      "Switzerland"
     ]
   },
   {
@@ -7819,7 +7673,6 @@
       "Nasdaq Helsinki",
       "Nasdaq Copenhagen",
       "London Stock Exchange",
-      "Aquis Stock Exchange",
       "Bolsa de Madrid",
       "Euronext Lisbon",
       "Euronext Milan",
@@ -7828,7 +7681,7 @@
       "SIX Swiss Exchange",
       "Nasdaq Stockholm",
       "United States",
-      "Toronto Stock Exchange",
+      "Canada",
       "Bratislava Stock Exchange",
       "Budapest Stock Exchange",
       "Bucharest Stock Exchange",
@@ -7880,7 +7733,6 @@
       "Hong Kong Stock Exchange",
       "Tokyo Stock Exchange",
       "ASX",
-      "NYSE Arca",
       "TSX Venture"
     ]
   },
@@ -7891,7 +7743,6 @@
     "url": "https://www.dad.at/boerse-depot/depot-trading/wertpapierdepot",
     "exchanges": [
       "gettex",
-      "LS Exchange",
       "Nasdaq",
       "SIX Swiss Exchange",
       "Wiener Börse",
@@ -7985,7 +7836,6 @@
       "Euronext Dublin",
       "Nasdaq Helsinki",
       "Euronext Lisbon",
-      "Luxembourg Stock Exchange",
       "Bolsa de Madrid",
       "Euronext Milan",
       "Nasdaq Stockholm",
@@ -8163,7 +8013,6 @@
       "NYSE American",
       "Toronto Stock Exchange",
       "TSX Venture",
-      "Indonesia Stock Exchange",
       "Budapest Stock Exchange",
       "Prague Stock Exchange",
       "Bulgarian Stock Exchange",
@@ -8180,8 +8029,6 @@
       "Hong Kong Stock Exchange",
       "Tokyo Stock Exchange",
       "NZX",
-      "Singapore Exchange",
-      "Johannesburg Stock Exchange",
       "Stock Exchange of Thailand"
     ]
   },
@@ -8226,7 +8073,6 @@
       "Börse Xetra",
       "Börse München",
       "Börse Stuttgart",
-      "Börse Berlin",
       "Börse Düsseldorf",
       "Börse Hamburg",
       "Börse Hannover",
@@ -8239,7 +8085,6 @@
       "Euronext Dublin",
       "Nasdaq Helsinki",
       "Euronext Lisbon",
-      "Luxembourg Stock Exchange",
       "Euronext Milan",
       "Nasdaq Stockholm",
       "Bratislava Stock Exchange",
@@ -8305,12 +8150,8 @@
       "Toronto Stock Exchange",
       "New York Stock Exchange",
       "Nasdaq",
-      "Banja Luka Stock Exchange",
-      "Sarajevo Stock Exchange",
       "Zagreb Stock Exchange",
       "Warsaw Stock Exchange",
-      "Moscow Exchange",
-      "Belgrade Stock Exchange",
       "Ljubljana Stock Exchange",
       "Prague Stock Exchange",
       "Budapest Stock Exchange"
@@ -8338,8 +8179,6 @@
       "Börse Berlin",
       "Börse Hamburg",
       "Börse Hannover",
-      "Tradegate",
-      "Quotrix",
       "New York Stock Exchange",
       "Nasdaq",
       "London Stock Exchange",
@@ -8488,7 +8327,6 @@
       "Bolsa de Madrid",
       "Börse Frankfurt",
       "Börse Xetra",
-      "Canadian Securities Exchange",
       "Euronext Amsterdam",
       "Euronext Brussels",
       "Euronext Dublin",
@@ -8513,8 +8351,7 @@
       "TSX Venture",
       "Warsaw Stock Exchange",
       "Wiener Börse",
-      "NYSE Arca",
-      "Euronext Access Paris"
+      "NYSE Arca"
     ]
   },
   {
@@ -8548,8 +8385,7 @@
     "url": "https://www.webull.eu/",
     "exchanges": [
       "New York Stock Exchange",
-      "Nasdaq",
-      "Euronext Amsterdam"
+      "Nasdaq"
     ]
   },
   {
@@ -8558,17 +8394,16 @@
     "type": "Neobroker",
     "url": "https://bux.com/",
     "exchanges": [
-      "Bolsa de Madrid",
+      "Spain",
       "Börse Xetra",
       "Cboe BZX",
       "Cboe Europe",
       "Equiduct",
       "Euronext",
-      "gettex",
       "Nasdaq",
       "New York Stock Exchange",
       "NYSE Arca",
-      "Wiener Börse"
+      "Austria"
     ]
   },
   {
@@ -8663,16 +8498,13 @@
       "Pure Trading",
       "Wiener Börse",
       "Euronext Brussels",
-      "B3 São Paulo",
       "Toronto Stock Exchange",
-      "China",
       "Prague Stock Exchange",
       "Nasdaq Copenhagen",
       "Nasdaq Tallinn",
       "Nasdaq Helsinki",
       "Euronext Paris",
       "Budapest Stock Exchange",
-      "India",
       "Tel Aviv Stock Exchange",
       "Euronext Milan",
       "Tokyo Stock Exchange",
@@ -8684,12 +8516,10 @@
       "Warsaw Stock Exchange",
       "Euronext Lisbon",
       "Singapore Exchange",
-      "Johannesburg Stock Exchange",
       "Korea Exchange",
       "Bolsa de Madrid",
       "Nasdaq Stockholm",
       "SIX Swiss Exchange",
-      "Taiwan Stock Exchange",
       "London Stock Exchange",
       "New York Stock Exchange",
       "Nasdaq",
@@ -8818,8 +8648,7 @@
     "url": "https://todaysgroup.nl/todays-brokers/",
     "exchanges": [
       "Euronext Amsterdam",
-      "New York Stock Exchange",
-      "Nasdaq"
+      "United States"
     ]
   },
   {
@@ -8833,23 +8662,22 @@
       "Euronext Paris",
       "Euronext Lisbon",
       "Börse Xetra",
-      "Börse Frankfurt",
       "London Stock Exchange",
       "SIX Swiss Exchange",
-      "Euronext Milan",
-      "Bolsa de Madrid",
-      "Wiener Börse",
-      "Nasdaq Stockholm",
-      "Nasdaq Copenhagen",
-      "Nasdaq Helsinki",
+      "Italy",
+      "Spain",
+      "Austria",
+      "Sweden",
+      "Denmark",
+      "Finland",
       "Oslo Børs",
       "New York Stock Exchange",
       "Nasdaq",
-      "Toronto Stock Exchange",
-      "Tokyo Stock Exchange",
-      "Hong Kong Stock Exchange",
-      "Singapore Exchange",
-      "ASX",
+      "Canada",
+      "Japan",
+      "Hong Kong",
+      "Singapore",
+      "Australia",
       "Cboe Europe",
       "Equiduct"
     ]
@@ -8916,7 +8744,6 @@
       "New York Stock Exchange",
       "Nasdaq",
       "NYSE American",
-      "NYSE Arca",
       "Toronto Stock Exchange",
       "TSX Venture",
       "London Stock Exchange",
@@ -8953,32 +8780,25 @@
     "type": "Bank",
     "url": "https://www.spuerkeess.lu/en/private-customers/saving-and-investing/invest-by-yourself/",
     "exchanges": [
-      "Wiener Börse",
-      "Euronext Brussels",
-      "Toronto Stock Exchange",
-      "Nasdaq Copenhagen",
-      "Bolsa de Madrid",
-      "Nasdaq Helsinki",
-      "Euronext Paris",
-      "Athens Stock Exchange",
-      "Euronext Dublin",
-      "Euronext Milan",
+      "Austria",
+      "Belgium",
+      "Canada",
+      "Denmark",
+      "Spain",
+      "Finland",
+      "France",
+      "Greece",
+      "Ireland",
+      "Italy",
       "Luxembourg Stock Exchange",
-      "Oslo Børs",
-      "Euronext Amsterdam",
-      "Euronext Lisbon",
-      "London Stock Exchange",
-      "Nasdaq Stockholm",
-      "SIX Swiss Exchange",
-      "Börse Berlin",
-      "Börse Düsseldorf",
-      "Börse Frankfurt",
-      "Börse Hamburg",
-      "Börse München",
-      "Börse Stuttgart",
-      "Börse Xetra",
-      "New York Stock Exchange",
-      "NYSE American"
+      "Norway",
+      "Netherlands",
+      "Portugal",
+      "United Kingdom",
+      "Sweden",
+      "Switzerland",
+      "Germany",
+      "United States"
     ]
   },
   {
@@ -9083,25 +8903,24 @@
       "London Stock Exchange",
       "Nasdaq Copenhagen",
       "Nasdaq Stockholm",
-      "Johannesburg Stock Exchange",
-      "ASX",
-      "Wiener Börse",
-      "Bolsa de Madrid",
-      "Nasdaq Helsinki",
-      "Athens Stock Exchange",
-      "Hong Kong Stock Exchange",
-      "Indonesia Stock Exchange",
-      "Euronext Milan",
-      "Tokyo Stock Exchange",
-      "Luxembourg Stock Exchange",
-      "Bursa Malaysia",
-      "Oslo Børs",
-      "NZX",
-      "Warsaw Stock Exchange",
-      "Euronext Lisbon",
-      "Singapore Exchange",
-      "Stock Exchange of Thailand",
-      "Euronext Dublin"
+      "South Africa",
+      "Australia",
+      "Austria",
+      "Spain",
+      "Finland",
+      "Greece",
+      "Hong Kong",
+      "Indonesia",
+      "Italy",
+      "Japan",
+      "Luxembourg",
+      "Malaysia",
+      "Norway",
+      "New Zealand",
+      "Poland",
+      "Portugal",
+      "Singapore",
+      "Thailand"
     ]
   },
   {
@@ -9110,60 +8929,29 @@
     "type": "Broker",
     "url": "https://www.whselfinvest.lu/en-lu/trading/information/clients/relationship",
     "exchanges": [
-      "Abu Dhabi Securities Exchange",
-      "Alpha Exchange",
-      "Aquis Stock Exchange",
-      "ASX",
-      "Athens Stock Exchange",
-      "B3 São Paulo",
-      "Bolsa de Madrid",
-      "Bolsa Mexicana",
+      "United Kingdom",
+      "Australia",
+      "Spain",
+      "Mexico",
       "Börse Frankfurt",
       "Börse Stuttgart",
       "Börse Xetra",
-      "Bucharest Stock Exchange",
-      "Budapest Stock Exchange",
-      "Bursa Malaysia",
-      "Cboe BZX",
-      "Dubai Financial Market",
       "Euronext Amsterdam",
       "Euronext Brussels",
-      "Euronext Dublin",
       "Euronext Lisbon",
-      "Euronext Milan",
+      "Italy",
       "Euronext Paris",
-      "gettex",
-      "Hong Kong Stock Exchange",
-      "Korea Exchange",
-      "Ljubljana Stock Exchange",
-      "London Stock Exchange",
-      "Moscow Exchange",
+      "Hong Kong",
       "Nasdaq",
-      "Nasdaq Copenhagen",
-      "Nasdaq Helsinki",
-      "Nasdaq Riga",
-      "Nasdaq Stockholm",
-      "Nasdaq Tallinn",
-      "Nasdaq Vilnius",
-      "National Stock Exchange of India",
+      "Sweden",
+      "India",
       "New York Stock Exchange",
-      "NYSE Arca",
-      "Oslo Børs",
+      "Norway",
       "OTC Markets",
-      "Prague Stock Exchange",
       "Pure Trading",
-      "Shanghai Stock Exchange",
-      "Shenzhen Stock Exchange",
-      "Singapore Exchange",
       "SIX Swiss Exchange",
-      "Tadawul",
-      "Taipei Exchange",
-      "Taiwan Stock Exchange",
-      "Tel Aviv Stock Exchange",
-      "Tokyo Stock Exchange",
-      "Toronto Stock Exchange",
+      "Japan",
       "TSX Venture",
-      "Warsaw Stock Exchange",
       "Wiener Börse"
     ]
   },
@@ -9248,8 +9036,8 @@
       "Oslo Børs",
       "Euronext Paris",
       "Börse Frankfurt",
-      "London Stock Exchange",
-      "Bolsa de Madrid",
+      "United Kingdom",
+      "Spain",
       "Nasdaq",
       "Nasdaq Copenhagen",
       "Nasdaq Helsinki",
@@ -9257,20 +9045,20 @@
       "New York Stock Exchange",
       "SIX Swiss Exchange",
       "Toronto Stock Exchange",
-      "Wiener Börse",
-      "Warsaw Stock Exchange",
-      "ASX",
-      "Athens Stock Exchange",
-      "Hong Kong Stock Exchange",
+      "Austria",
+      "Poland",
+      "Australia",
+      "Greece",
+      "Hong Kong",
       "Euronext Dublin",
-      "Tokyo Stock Exchange",
-      "Luxembourg Stock Exchange",
+      "Japan",
+      "Luxembourg",
       "Bratislava Stock Exchange",
       "Ljubljana Stock Exchange",
       "Johannesburg Stock Exchange",
-      "Singapore Exchange",
+      "Singapore",
       "Euronext Expert Market",
-      "Prague Stock Exchange"
+      "Czech Republic"
     ]
   },
   {
@@ -9321,7 +9109,6 @@
       "NYSE American",
       "NYSE Arca",
       "Oslo Børs",
-      "OTC Markets",
       "SIX Swiss Exchange"
     ]
   },
@@ -9379,24 +9166,7 @@
       "London Stock Exchange",
       "Luxembourg Stock Exchange",
       "Euronext Milan",
-      "Toronto Stock Exchange",
-      "SIX Swiss Exchange",
-      "Tokyo Stock Exchange",
-      "Nasdaq Stockholm",
-      "Nasdaq Helsinki",
-      "Nasdaq Copenhagen",
-      "Oslo Børs",
-      "Euronext Dublin",
-      "Johannesburg Stock Exchange",
-      "ASX",
-      "Hong Kong Stock Exchange",
-      "Athens Stock Exchange",
-      "Warsaw Stock Exchange",
-      "NZX",
-      "Bolsa de Madrid",
-      "Wiener Börse",
-      "Singapore Exchange",
-      "Euronext Expert Market"
+      "Canada"
     ]
   },
   {
@@ -9477,8 +9247,8 @@
     "url": "https://www.cbc.be/particuliers/fr/produits/placements/mes-investissements.html",
     "exchanges": [
       "Euronext",
-      "Tokyo Stock Exchange",
-      "Hong Kong Stock Exchange"
+      "Japan",
+      "Hong Kong"
     ]
   },
   {
@@ -9697,8 +9467,7 @@
       "SIX Swiss Exchange",
       "New York Stock Exchange",
       "Nasdaq",
-      "NYSE American",
-      "NYSE Arca"
+      "NYSE American"
     ]
   },
   {
@@ -9709,7 +9478,6 @@
     "exchanges": [
       "Bolsa de Madrid",
       "Börse Xetra",
-      "Cboe BZX",
       "Euronext Amsterdam",
       "Euronext Brussels",
       "Euronext Lisbon",
@@ -9774,8 +9542,7 @@
       "Nasdaq",
       "NYSE American",
       "OTC Markets",
-      "Toronto Stock Exchange",
-      "TSX Venture",
+      "Canada",
       "Euronext Dublin",
       "London Stock Exchange",
       "Singapore Exchange"
@@ -9802,9 +9569,9 @@
       "Euronext Paris",
       "Nasdaq",
       "New York Stock Exchange",
-      "Toronto Stock Exchange",
+      "Canada",
       "Germany",
-      "Euronext Milan",
+      "Italy",
       "SIX Swiss Exchange",
       "London Stock Exchange"
     ]
@@ -9818,7 +9585,8 @@
       "Euronext Paris",
       "Euronext Brussels",
       "Euronext Amsterdam",
-      "United States",
+      "Nasdaq",
+      "New York Stock Exchange",
       "Toronto Stock Exchange"
     ]
   },
@@ -9873,30 +9641,24 @@
       "Euronext Amsterdam",
       "Euronext Brussels",
       "Euronext Lisbon",
-      "Wiener Börse",
-      "Nasdaq Copenhagen",
-      "Nasdaq Stockholm",
-      "Nasdaq Helsinki",
-      "Oslo Børs",
-      "Budapest Stock Exchange",
-      "Warsaw Stock Exchange",
-      "Prague Stock Exchange",
-      "Euronext Dublin",
+      "Austria",
+      "Denmark",
+      "Sweden",
+      "Finland",
+      "Norway",
+      "Hungary",
+      "Poland",
+      "Czech Republic",
+      "Ireland",
       "Börse Xetra",
       "Börse Frankfurt",
       "Euronext Milan",
       "SIX Swiss Exchange",
       "NYSE American",
-      "NYSE Arca",
-      "Cboe BZX",
       "Nasdaq",
       "New York Stock Exchange",
       "OTC Markets",
-      "Cboe Canada",
-      "Alpha Exchange",
-      "Canadian Securities Exchange",
-      "Toronto Stock Exchange",
-      "TSX Venture",
+      "Canada",
       "Bolsa de Madrid"
     ]
   },
@@ -9909,7 +9671,6 @@
       "Euronext Paris",
       "Euronext Brussels",
       "Euronext Amsterdam",
-      "Equiduct",
       "Börse Xetra",
       "New York Stock Exchange",
       "Nasdaq"
@@ -10052,19 +9813,19 @@
     "exchanges": [
       "Germany",
       "United States",
-      "France",
-      "Netherlands",
-      "Belgium",
+      "Euronext Paris",
+      "Euronext Amsterdam",
+      "Euronext Brussels",
       "Switzerland",
-      "Italy",
+      "Euronext Milan",
       "United Kingdom",
-      "Ireland",
+      "Euronext Dublin",
       "Spain",
-      "Portugal",
+      "Euronext Lisbon",
       "Austria",
       "Greece",
       "Denmark",
-      "Norway",
+      "Oslo Børs",
       "South Africa",
       "Sweden",
       "Australia",
@@ -10115,7 +9876,6 @@
       "Canadian Securities Exchange",
       "Hong Kong Stock Exchange",
       "Nasdaq",
-      "National Stock Exchange of India",
       "New York Stock Exchange",
       "NZX",
       "NYSE Arca",
@@ -10161,14 +9921,8 @@
     "type": "Neobroker",
     "url": "https://support.shares.io/en/articles/91701-how-do-i-place-a-buy-or-sell-order-for-an-etf-on-shares",
     "exchanges": [
-      "Euronext Paris",
-      "Warsaw Stock Exchange",
-      "Euronext Brussels",
-      "Euronext Lisbon",
-      "Euronext Amsterdam",
-      "Germany",
-      "Euronext Milan",
-      "Luxembourg Stock Exchange",
+      "Tradegate",
+      "Quotrix",
       "New York Stock Exchange",
       "Nasdaq"
     ]
@@ -10505,7 +10259,6 @@
     "exchanges": [
       "Euronext Milan",
       "Euronext Growth Milan",
-      "EuroTLX",
       "Börse Xetra",
       "Börse Frankfurt",
       "Euronext Paris",
@@ -10545,7 +10298,6 @@
       "Bolsa de Madrid",
       "Athens Stock Exchange",
       "TAH",
-      "EuroTLX",
       "ETFplus",
       "Euronext MIV Milan",
       "Euronext Growth Milan"
@@ -10612,11 +10364,7 @@
     "type": "Bank",
     "url": "https://www.poste.it/investi-con-poste-italiane",
     "exchanges": [
-      "Euronext Milan",
-      "Deutsche Börse",
-      "New York Stock Exchange",
-      "Nasdaq",
-      "Cboe Europe"
+      "Euronext Milan"
     ]
   },
   {
@@ -10635,11 +10383,10 @@
     "type": "Bank",
     "url": "https://www.bper.it/privati/servizi-digitali/trading-online",
     "exchanges": [
-      "Euronext Milan",
+      "Italy",
       "London Stock Exchange",
       "Deutsche Börse",
-      "New York Stock Exchange",
-      "Nasdaq"
+      "United States"
     ]
   },
   {
@@ -10805,7 +10552,7 @@
     "type": "Bank",
     "url": "https://www.bancadelpiemonte.it/privati-e-famiglie/servizi-online/deposito-titoli-online/",
     "exchanges": [
-      "Euronext Milan"
+      "Italy"
     ]
   },
   {
@@ -11104,13 +10851,13 @@
       "Euronext Milan",
       "Euronext Growth Milan",
       "ETFplus",
-      "Börse Xetra",
+      "Germany",
       "Nasdaq",
       "New York Stock Exchange",
-      "Euronext Paris",
-      "Euronext Brussels",
-      "Euronext Amsterdam",
-      "Euronext Lisbon"
+      "France",
+      "Belgium",
+      "Netherlands",
+      "Portugal"
     ]
   },
   {
@@ -11259,7 +11006,7 @@
     "type": "Bank",
     "url": "https://www.crdolomiti.it/privati/inbank/",
     "exchanges": [
-      "Euronext Milan"
+      "Italy"
     ]
   },
   {
@@ -11556,8 +11303,7 @@
     "url": "https://www.openbank.es/inversiones/invertir-bolsa-valores",
     "exchanges": [
       "Bolsa de Madrid",
-      "New York Stock Exchange",
-      "Nasdaq",
+      "United States",
       "Börse Xetra",
       "Euronext Paris",
       "Euronext Amsterdam",
@@ -11574,27 +11320,16 @@
       "BME Growth",
       "Bolsa de Madrid",
       "Bolsa Mexicana",
-      "Börse Düsseldorf",
       "Börse Frankfurt",
-      "Börse Hamburg",
-      "Börse Hannover",
-      "Börse München",
-      "Börse Stuttgart",
       "Börse Xetra",
-      "Cboe Europe",
       "Euronext Amsterdam",
       "Euronext Brussels",
       "Euronext Dublin",
       "Euronext Lisbon",
       "Euronext Milan",
       "Euronext Paris",
-      "European Investor Exchange (EIX)",
-      "gettex",
-      "Lang & Schwarz International",
       "London IOB",
       "London Stock Exchange",
-      "LS Exchange",
-      "Luxembourg Stock Exchange",
       "Nasdaq",
       "Nasdaq Copenhagen",
       "Nasdaq Helsinki",
@@ -11603,10 +11338,8 @@
       "NYSE American",
       "Oslo Børs",
       "OTC Markets",
-      "Quotrix",
       "SIX Swiss Exchange",
       "Toronto Stock Exchange",
-      "Tradegate",
       "TSX Venture",
       "Wiener Börse"
     ]
@@ -11628,8 +11361,7 @@
       "London Stock Exchange",
       "New York Stock Exchange",
       "Nasdaq",
-      "NYSE American",
-      "NYSE Arca"
+      "NYSE American"
     ]
   },
   {
@@ -11669,24 +11401,21 @@
     "url": "https://www.bancosantander.es/particulares/ahorro-inversion/bolsa-inversion",
     "exchanges": [
       "Bolsa de Madrid",
-      "Börse Xetra",
-      "Börse Frankfurt",
-      "Euronext Brussels",
-      "Toronto Stock Exchange",
-      "Nasdaq Copenhagen",
-      "Euronext Paris",
-      "Athens Stock Exchange",
-      "Euronext Amsterdam",
-      "Euronext Dublin",
-      "Euronext Milan",
-      "Oslo Børs",
-      "Euronext Lisbon",
-      "London Stock Exchange",
-      "Nasdaq Stockholm",
-      "SIX Swiss Exchange",
-      "New York Stock Exchange",
-      "Nasdaq",
-      "Cboe BZX",
+      "Germany",
+      "Belgium",
+      "Canada",
+      "Denmark",
+      "France",
+      "Greece",
+      "Netherlands",
+      "Ireland",
+      "Italy",
+      "Norway",
+      "Portugal",
+      "United Kingdom",
+      "Sweden",
+      "Switzerland",
+      "United States",
       "Cboe Europe"
     ]
   },
@@ -11698,17 +11427,17 @@
     "exchanges": [
       "Bolsa de Madrid",
       "Euronext Paris",
-      "London Stock Exchange",
+      "United Kingdom",
       "Euronext Milan",
-      "Euronext Lisbon",
+      "Portugal",
       "Euronext Amsterdam",
       "New York Stock Exchange",
       "Nasdaq",
       "NYSE American",
       "BME Growth",
       "Börse Xetra",
-      "Nasdaq Helsinki",
-      "Nasdaq Stockholm"
+      "Finland",
+      "Sweden"
     ]
   },
   {
@@ -11771,49 +11500,26 @@
     "type": "Bank",
     "url": "https://www.unicajabanco.es/es/particulares/ahorro-e-inversion/unicaja-broker",
     "exchanges": [
-      "Latibex",
       "Bolsa de Madrid",
-      "New York Stock Exchange",
+      "United States",
       "Börse Frankfurt",
-      "Euronext Paris",
-      "Tokyo Stock Exchange",
+      "France",
+      "Japan",
       "SIX Swiss Exchange",
-      "Luxembourg Stock Exchange",
-      "Wiener Börse",
-      "Euronext Amsterdam",
-      "Euronext Milan",
-      "Euronext Brussels",
-      "Börse Düsseldorf",
-      "BYMA",
-      "Singapore Exchange",
-      "Borsa Istanbul",
-      "B3 São Paulo",
-      "ASX",
-      "Euronext Lisbon",
-      "Prague Stock Exchange",
-      "NZX",
-      "Hong Kong Stock Exchange",
-      "Euronext Dublin",
-      "London Stock Exchange",
-      "Toronto Stock Exchange",
-      "Johannesburg Stock Exchange",
-      "NYSE Arca",
-      "Nasdaq",
+      "Austria",
+      "Netherlands",
+      "Italy",
+      "Belgium",
+      "Australia",
+      "Portugal",
+      "Ireland",
+      "United Kingdom",
+      "Canada",
       "Börse Xetra",
-      "Nasdaq Stockholm",
-      "Nasdaq Helsinki",
-      "Athens Stock Exchange",
-      "Börse Berlin",
-      "Nasdaq Copenhagen",
-      "Bolsa Mexicana",
-      "Börse München",
-      "Warsaw Stock Exchange",
-      "Stock Exchange of Thailand",
-      "Oslo Børs",
-      "Budapest Stock Exchange",
-      "Korea Exchange",
-      "OTC Markets",
-      "NYSE American"
+      "Sweden",
+      "Finland",
+      "Denmark",
+      "Norway"
     ]
   },
   {
@@ -11858,7 +11564,7 @@
       "TSX Venture",
       "Börse Frankfurt",
       "OTC Markets",
-      "London Stock Exchange"
+      "United Kingdom"
     ]
   },
   {
@@ -11899,7 +11605,7 @@
     "type": "Bank",
     "url": "https://www.cajamar.es/storage/documents/337/contrato-tipo-custodia-administracion-valores.pdf",
     "exchanges": [
-      "Bolsa de Madrid",
+      "Spain",
       "Börse Frankfurt",
       "Börse Xetra",
       "Wiener Börse",
@@ -11917,12 +11623,12 @@
       "Nasdaq",
       "NYSE American",
       "ASX",
-      "Hong Kong Stock Exchange",
+      "Hong Kong",
       "Tokyo Stock Exchange",
-      "Singapore Exchange",
+      "Singapore",
       "Euronext Milan",
-      "Santiago Stock Exchange",
-      "Bolsa Mexicana"
+      "Chile",
+      "Mexico"
     ]
   },
   {
@@ -12080,11 +11786,10 @@
     "type": "Neobroker",
     "url": "https://heytrade.com/es/",
     "exchanges": [
-      "Bolsa de Madrid",
-      "New York Stock Exchange",
+      "Spain",
       "Nasdaq",
       "London Stock Exchange",
-      "Börse Xetra",
+      "Germany",
       "Euronext Paris",
       "Euronext Amsterdam",
       "Euronext Milan"
@@ -12096,7 +11801,7 @@
     "type": "Bank",
     "url": "https://www.deutsche-bank.es/es/guia-ayuda/operativa-banca-online.html",
     "exchanges": [
-      "Bolsa de Madrid"
+      "Spain"
     ]
   },
   {
@@ -12105,7 +11810,7 @@
     "type": "Bank",
     "url": "https://www.bancapueyo.es/ahorro-e-inversion/bolsa",
     "exchanges": [
-      "Bolsa de Madrid",
+      "Spain",
       "Euronext Amsterdam",
       "New York Stock Exchange"
     ]
@@ -12137,9 +11842,8 @@
     "type": "Bank",
     "url": "https://www.imagin.com/inversion",
     "exchanges": [
-      "Bolsa de Madrid",
-      "New York Stock Exchange",
-      "Nasdaq"
+      "Spain",
+      "United States"
     ]
   },
   {
@@ -12436,7 +12140,7 @@
       "NYSE Arca",
       "Euronext Milan",
       "Nasdaq Helsinki",
-      "Tokyo Stock Exchange",
+      "Japan",
       "Bolsa de Madrid",
       "London Stock Exchange",
       "Nasdaq Stockholm",
@@ -12593,7 +12297,9 @@
     "url": "https://www.eurobankequities.gr/en/individual-investors",
     "exchanges": [
       "Athens Stock Exchange",
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq",
+      "NYSE American"
     ]
   },
   {
@@ -12780,7 +12486,7 @@
     "url": "https://axontrader.eu/investing/markets/real-stocks",
     "exchanges": [
       "United States",
-      "Hong Kong Stock Exchange",
+      "Hong Kong",
       "Germany",
       "France",
       "Spain"
@@ -12939,7 +12645,7 @@
       "New York Stock Exchange",
       "Nasdaq Copenhagen",
       "Nasdaq Stockholm",
-      "Oslo Børs",
+      "Norway",
       "Nasdaq Helsinki"
     ]
   },
@@ -13115,10 +12821,9 @@
     "url": "https://www.sparkron.dk/investering",
     "exchanges": [
       "Nasdaq Copenhagen",
-      "Spotlight Stock Market",
-      "Nasdaq Stockholm",
-      "Nasdaq Helsinki",
-      "Oslo Børs",
+      "Sweden",
+      "Finland",
+      "Norway",
       "New York Stock Exchange",
       "Nasdaq",
       "Börse Xetra",
@@ -13243,10 +12948,10 @@
     "type": "Bank",
     "url": "https://www.majbank.dk/investering/forstaa-din-handelsnota",
     "exchanges": [
-      "Nasdaq Copenhagen",
-      "Nasdaq Stockholm",
-      "Nasdaq Helsinki",
-      "Oslo Børs",
+      "Denmark",
+      "Sweden",
+      "Finland",
+      "Norway",
       "Börse Xetra",
       "New York Stock Exchange",
       "Nasdaq",
@@ -13338,7 +13043,7 @@
     "type": "Bank",
     "url": "https://www.lpb.dk/Bank/Investering/Aktiesparekonto",
     "exchanges": [
-      "Denmark"
+      "Nasdaq Copenhagen"
     ]
   },
   {
@@ -13446,14 +13151,13 @@
       "Nasdaq Copenhagen",
       "Nasdaq Helsinki",
       "Oslo Børs",
-      "Toronto Stock Exchange",
+      "Canada",
       "United States",
       "Germany",
       "France",
       "Spain",
       "Italy",
-      "United Kingdom",
-      "Ireland",
+      "London Stock Exchange",
       "Belgium",
       "Netherlands",
       "Switzerland",
@@ -13532,17 +13236,20 @@
       "Nordic Growth Market",
       "Nordic SME",
       "Spotlight Stock Market",
-      "Germany",
-      "United States",
-      "France",
-      "Portugal",
-      "Netherlands",
-      "Belgium",
-      "Spain",
-      "Italy",
-      "United Kingdom",
-      "Switzerland",
-      "Canada"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "New York Stock Exchange",
+      "Nasdaq",
+      "Euronext Paris",
+      "Euronext Lisbon",
+      "Euronext Amsterdam",
+      "Euronext Brussels",
+      "Bolsa de Madrid",
+      "Euronext Milan",
+      "London Stock Exchange",
+      "SIX Swiss Exchange",
+      "Toronto Stock Exchange",
+      "TSX Venture"
     ]
   },
   {
@@ -13610,10 +13317,17 @@
     "type": "Bank",
     "url": "https://www.sparbankenskane.se/privat/spara-och-placera/vardepapper/sa-handlar-du-vardepapper/internetbanken.html",
     "exchanges": [
-      "Sweden",
-      "Norway",
-      "Finland",
-      "Denmark"
+      "Nasdaq Stockholm",
+      "First North Stockholm",
+      "Nordic Growth Market",
+      "Spotlight Stock Market",
+      "Nordic MTF",
+      "Oslo Børs",
+      "Euronext Expand Oslo",
+      "Nasdaq Helsinki",
+      "First North Helsinki",
+      "Nasdaq Copenhagen",
+      "First North Denmark"
     ]
   },
   {
@@ -13622,10 +13336,17 @@
     "type": "Bank",
     "url": "https://www.sparbankensjuharad.se/privat/spara-och-placera/vardepapper/sa-handlar-du-vardepapper/internetbanken.html",
     "exchanges": [
-      "Sweden",
-      "Norway",
-      "Finland",
-      "Denmark"
+      "Nasdaq Stockholm",
+      "First North Stockholm",
+      "Nordic Growth Market",
+      "Spotlight Stock Market",
+      "Nordic MTF",
+      "Oslo Børs",
+      "Euronext Expand Oslo",
+      "Nasdaq Helsinki",
+      "First North Helsinki",
+      "Nasdaq Copenhagen",
+      "First North Denmark"
     ]
   },
   {
@@ -13634,10 +13355,17 @@
     "type": "Bank",
     "url": "https://www.varbergssparbank.se/privat/spara-och-placera/vardepapper/sa-handlar-du-vardepapper/internetbanken.html",
     "exchanges": [
-      "Sweden",
-      "Norway",
-      "Finland",
-      "Denmark"
+      "Nasdaq Stockholm",
+      "First North Stockholm",
+      "Nordic Growth Market",
+      "Spotlight Stock Market",
+      "Nordic MTF",
+      "Oslo Børs",
+      "Euronext Expand Oslo",
+      "Nasdaq Helsinki",
+      "First North Helsinki",
+      "Nasdaq Copenhagen",
+      "First North Denmark"
     ]
   },
   {
@@ -13646,10 +13374,17 @@
     "type": "Bank",
     "url": "https://www.sparbankennord.se/privat/spara-och-placera/vardepapper/sa-handlar-du-vardepapper/internetbanken.html",
     "exchanges": [
-      "Sweden",
-      "Norway",
-      "Finland",
-      "Denmark"
+      "Nasdaq Stockholm",
+      "First North Stockholm",
+      "Nordic Growth Market",
+      "Spotlight Stock Market",
+      "Nordic MTF",
+      "Oslo Børs",
+      "Euronext Expand Oslo",
+      "Nasdaq Helsinki",
+      "First North Helsinki",
+      "Nasdaq Copenhagen",
+      "First North Denmark"
     ]
   },
   {
@@ -13658,10 +13393,17 @@
     "type": "Bank",
     "url": "https://www.sparbankenskaraborg.se/privat/spara-och-placera/vardepapper/sa-handlar-du-vardepapper/internetbanken.html",
     "exchanges": [
-      "Sweden",
-      "Norway",
-      "Finland",
-      "Denmark"
+      "Nasdaq Stockholm",
+      "First North Stockholm",
+      "Nordic Growth Market",
+      "Spotlight Stock Market",
+      "Nordic MTF",
+      "Oslo Børs",
+      "Euronext Expand Oslo",
+      "Nasdaq Helsinki",
+      "First North Helsinki",
+      "Nasdaq Copenhagen",
+      "First North Denmark"
     ]
   },
   {
@@ -13670,10 +13412,17 @@
     "type": "Bank",
     "url": "https://www.sparbankenblekinge.se/privat/spara-och-placera/vardepapper/sa-handlar-du-vardepapper/internetbanken.html",
     "exchanges": [
-      "Sweden",
-      "Norway",
-      "Finland",
-      "Denmark"
+      "Nasdaq Stockholm",
+      "First North Stockholm",
+      "Nordic Growth Market",
+      "Spotlight Stock Market",
+      "Nordic MTF",
+      "Oslo Børs",
+      "Euronext Expand Oslo",
+      "Nasdaq Helsinki",
+      "First North Helsinki",
+      "Nasdaq Copenhagen",
+      "First North Denmark"
     ]
   },
   {
@@ -13682,10 +13431,17 @@
     "type": "Bank",
     "url": "https://www.sparbankentranemo.se/privat/spara-och-placera/aktier-och-andra-placeringar/olika-satt-att-handla-vardepapper/internetbanken.html",
     "exchanges": [
-      "Sweden",
-      "Norway",
-      "Finland",
-      "Denmark"
+      "Nasdaq Stockholm",
+      "First North Stockholm",
+      "Nordic Growth Market",
+      "Spotlight Stock Market",
+      "Nordic MTF",
+      "Oslo Børs",
+      "Euronext Expand Oslo",
+      "Nasdaq Helsinki",
+      "First North Helsinki",
+      "Nasdaq Copenhagen",
+      "First North Denmark"
     ]
   },
   {
@@ -13731,7 +13487,6 @@
       "First North Lithuania",
       "Germany",
       "Nordic MTF",
-      "Externa Listan",
       "Australia",
       "Belgium",
       "France",
@@ -13776,7 +13531,6 @@
       "First North Lithuania",
       "Germany",
       "Nordic MTF",
-      "Externa Listan",
       "Australia",
       "Belgium",
       "France",
@@ -13821,7 +13575,6 @@
       "First North Lithuania",
       "Germany",
       "Nordic MTF",
-      "Externa Listan",
       "Australia",
       "Belgium",
       "France",
@@ -14216,7 +13969,7 @@
       "Euronext Brussels",
       "SIX Swiss Exchange",
       "Euronext Lisbon",
-      "Wiener Börse"
+      "Austria"
     ]
   },
   {
@@ -14291,26 +14044,7 @@
       "Oslo Børs",
       "Euronext Expand Oslo",
       "Euronext Growth Oslo",
-      "Nasdaq Stockholm",
-      "Nasdaq Copenhagen",
-      "Nasdaq Helsinki",
-      "First North Stockholm",
-      "Nordic Growth Market",
-      "Spotlight Stock Market",
-      "London Stock Exchange",
-      "Euronext Paris",
-      "Euronext Brussels",
-      "Euronext Amsterdam",
-      "Euronext Lisbon",
-      "Börse Xetra",
-      "SIX Swiss Exchange",
-      "Bolsa de Madrid",
-      "Euronext Milan",
-      "Wiener Börse",
-      "New York Stock Exchange",
-      "Nasdaq",
-      "NYSE American",
-      "Toronto Stock Exchange"
+      "Nasdaq Stockholm"
     ]
   },
   {
@@ -14482,13 +14216,11 @@
     "type": "Neobroker",
     "url": "https://www.kvarnx.com/fi",
     "exchanges": [
-      "Nasdaq Helsinki",
-      "Nasdaq Stockholm",
-      "Nasdaq Copenhagen",
-      "Oslo Børs",
-      "New York Stock Exchange",
-      "Nasdaq",
-      "Börse Xetra"
+      "Sweden",
+      "Denmark",
+      "Norway",
+      "United States",
+      "Germany"
     ]
   },
   {
@@ -14621,7 +14353,6 @@
       "NYSE American",
       "NYSE Arca",
       "Oslo Børs",
-      "OTC Markets",
       "SIX Swiss Exchange",
       "Warsaw Stock Exchange"
     ]
@@ -14639,7 +14370,6 @@
       "Euronext Paris",
       "Euronext Amsterdam",
       "Euronext Brussels",
-      "Euronext Lisbon",
       "London Stock Exchange",
       "New York Stock Exchange",
       "Nasdaq",
@@ -14803,21 +14533,19 @@
       "Warsaw Stock Exchange",
       "NewConnect",
       "GlobalConnect",
-      "New York Stock Exchange",
-      "Nasdaq",
+      "United States",
       "Euronext Paris",
       "Euronext Brussels",
       "Euronext Amsterdam",
       "Börse Xetra",
-      "London Stock Exchange",
-      "Euronext Dublin",
-      "Euronext Milan",
-      "Wiener Börse",
-      "Luxembourg Stock Exchange",
-      "Nasdaq Helsinki",
-      "Euronext Lisbon",
-      "Bolsa de Madrid",
-      "SIX Swiss Exchange"
+      "United Kingdom",
+      "Ireland",
+      "Italy",
+      "Austria",
+      "Luxembourg",
+      "Finland",
+      "Portugal",
+      "Spain"
     ]
   },
   {
@@ -14874,9 +14602,6 @@
     "exchanges": [
       "Warsaw Stock Exchange",
       "Börse Xetra",
-      "Börse Stuttgart",
-      "gettex",
-      "LS Exchange",
       "Bolsa de Madrid",
       "Euronext Paris",
       "Euronext Amsterdam",
@@ -14902,9 +14627,7 @@
     "country": "PL",
     "type": "Broker",
     "url": "https://www.xelion.pl/analizy/115-systemy/przewodnik-po-systemach/3303-zlecenia",
-    "exchanges": [
-      "Warsaw Stock Exchange"
-    ]
+    "exchanges": []
   },
   {
     "name": "UniCredit Polska",
@@ -14913,7 +14636,7 @@
     "url": "https://unicredit.pl/indywidualni/inwestycje/inwestowanie-samodzielne",
     "exchanges": [
       "Warsaw Stock Exchange",
-      "New York Stock Exchange"
+      "United States"
     ]
   },
   {
@@ -14951,8 +14674,7 @@
     "url": "https://www.airbank.cz/produkty/akcie/",
     "exchanges": [
       "Börse Xetra",
-      "Nasdaq",
-      "New York Stock Exchange"
+      "United States"
     ]
   },
   {
@@ -14966,9 +14688,8 @@
       "Nasdaq Copenhagen",
       "Nasdaq Helsinki",
       "Euronext Paris",
-      "Euronext Dublin",
+      "Ireland",
       "Euronext Milan",
-      "TSX Venture",
       "Toronto Stock Exchange",
       "Luxembourg Stock Exchange",
       "Budapest Stock Exchange",
@@ -14979,7 +14700,7 @@
       "Warsaw Stock Exchange",
       "Euronext Lisbon",
       "Wiener Börse",
-      "Athens Stock Exchange",
+      "Greece",
       "Bratislava Stock Exchange",
       "Nasdaq",
       "New York Stock Exchange",
@@ -15107,24 +14828,27 @@
       "gettex",
       "Bratislava Stock Exchange",
       "Warsaw Stock Exchange",
-      "Nasdaq Copenhagen",
-      "Nasdaq Helsinki",
+      "Denmark",
+      "Finland",
       "Euronext Paris",
       "Euronext Dublin",
       "Euronext Milan",
       "Euronext Amsterdam",
       "Oslo Børs",
       "Wiener Börse",
-      "Bolsa de Madrid",
-      "Nasdaq Stockholm",
-      "SIX Swiss Exchange",
+      "Spain",
+      "Sweden",
+      "Switzerland",
       "London Stock Exchange",
-      "United States",
-      "Toronto Stock Exchange",
-      "Zagreb Stock Exchange",
+      "New York Stock Exchange",
+      "NYSE American",
+      "Nasdaq",
+      "OTC Markets",
+      "Canada",
+      "Croatia",
       "Bucharest Stock Exchange",
-      "Ljubljana Stock Exchange",
-      "Borsa Istanbul"
+      "Slovenia",
+      "Turkey"
     ]
   },
   {
@@ -15234,23 +14958,16 @@
       "Nasdaq Stockholm",
       "Nasdaq Copenhagen",
       "Nasdaq Helsinki",
-      "Tokyo Stock Exchange",
-      "Nagoya Stock Exchange",
-      "Fukuoka Stock Exchange",
-      "Sapporo Securities Exchange",
+      "Japan",
       "Toronto Stock Exchange",
       "Budapest Stock Exchange",
       "Börse Xetra",
       "Oslo Børs",
       "Wiener Börse",
       "Bolsa de Madrid",
-      "Bolsa de Barcelona",
-      "Bolsa de Bilbao",
-      "Bolsa de Valencia",
       "SIX Swiss Exchange",
       "Euronext Milan",
       "New York Stock Exchange",
-      "NYSE American",
       "Nasdaq",
       "London Stock Exchange"
     ]
@@ -15271,7 +14988,12 @@
     "url": "https://rmsmarket.sk/produkty-a-sluzby/finport/",
     "exchanges": [
       "Bratislava Stock Exchange",
-      "United States",
+      "New York Stock Exchange",
+      "Nasdaq",
+      "NYSE American",
+      "NYSE Arca",
+      "Cboe BZX",
+      "OTC Markets",
       "Toronto Stock Exchange"
     ]
   },
@@ -15371,7 +15093,7 @@
       "Börse Hannover",
       "Börse Hamburg",
       "Börse München",
-      "Moscow Exchange",
+      "Russia",
       "ASX",
       "Tokyo Stock Exchange",
       "Hong Kong Stock Exchange"
@@ -15424,8 +15146,7 @@
       "Euronext Amsterdam",
       "Euronext Brussels",
       "Euronext Lisbon",
-      "Euronext Paris",
-      "Prague Stock Exchange"
+      "Euronext Paris"
     ]
   },
   {
@@ -15561,9 +15282,9 @@
       "Wiener Börse",
       "Börse Frankfurt",
       "United States",
-      "Toronto Stock Exchange",
-      "London Stock Exchange",
-      "SIX Swiss Exchange"
+      "Canada",
+      "United Kingdom",
+      "Switzerland"
     ]
   },
   {
@@ -15685,8 +15406,9 @@
     "url": "https://www.unicredit.ro/en/financial-investments/trading-on-the-stock-exchange.html",
     "exchanges": [
       "Bucharest Stock Exchange",
-      "United States",
-      "Germany",
+      "New York Stock Exchange",
+      "Nasdaq",
+      "Deutsche Börse",
       "Euronext Paris",
       "Euronext Amsterdam"
     ]
@@ -15700,7 +15422,6 @@
       "Bulgarian Stock Exchange",
       "Bolsa de Madrid",
       "Börse Xetra",
-      "Cboe BZX",
       "Euronext Amsterdam",
       "Euronext Brussels",
       "Euronext Lisbon",
@@ -15710,7 +15431,6 @@
       "London IOB",
       "London Stock Exchange",
       "NYSE American",
-      "NYSE Arca",
       "Nasdaq",
       "Nasdaq Copenhagen",
       "Nasdaq Helsinki",
@@ -15842,13 +15562,12 @@
     "url": "https://capman.bg/investment-intermediary/ctrader/",
     "exchanges": [
       "Bulgarian Stock Exchange",
-      "New York Stock Exchange",
-      "Nasdaq",
+      "United States",
       "Börse Xetra",
       "Euronext Paris",
       "Euronext Amsterdam",
-      "Wiener Börse",
-      "London Stock Exchange"
+      "Austria",
+      "United Kingdom"
     ]
   },
   {
@@ -15881,7 +15600,7 @@
       "Nasdaq Stockholm",
       "Nasdaq Helsinki",
       "Oslo Børs",
-      "Euronext Dublin",
+      "Ireland",
       "Euronext Milan",
       "Bolsa de Madrid",
       "SIX Swiss Exchange",
@@ -15897,11 +15616,7 @@
       "Athens Stock Exchange",
       "Toronto Stock Exchange",
       "Borsa Istanbul",
-      "Hong Kong Stock Exchange",
-      "Tokyo Stock Exchange",
-      "Singapore Exchange",
-      "ASX",
-      "Moscow Exchange"
+      "Russia"
     ]
   },
   {
@@ -15961,9 +15676,8 @@
       "Euronext Dublin",
       "Bolsa de Madrid",
       "Wiener Börse",
-      "Toronto Stock Exchange",
-      "New York Stock Exchange",
-      "Nasdaq"
+      "Canada",
+      "United States"
     ]
   },
   {
@@ -15990,9 +15704,7 @@
     "country": "BG",
     "type": "Broker",
     "url": "http://bulbrokers.com/en/online-trade/metatrader-4/bse-sofia/",
-    "exchanges": [
-      "Bulgarian Stock Exchange"
-    ]
+    "exchanges": []
   },
   {
     "name": "Zagora Finacorp",
@@ -16169,7 +15881,7 @@
       "London Stock Exchange",
       "United States",
       "Toronto Stock Exchange",
-      "Tokyo Stock Exchange"
+      "Japan"
     ]
   },
   {
@@ -16220,23 +15932,35 @@
     "url": "https://www.rba.hr/hr/gradani/digitalno-bankarstvo/ebroker.html",
     "exchanges": [
       "Zagreb Stock Exchange",
-      "Ukraine",
-      "Germany",
-      "United States",
-      "Belgium",
-      "Bulgaria",
-      "Czech Republic",
-      "Estonia",
-      "Greece",
+      "Kyiv International Stock Exchange",
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Stuttgart",
+      "Börse München",
+      "Börse Berlin",
+      "Börse Düsseldorf",
+      "Börse Hannover",
+      "Börse Hamburg",
+      "New York Stock Exchange",
+      "NYSE American",
+      "Nasdaq",
+      "NYSE Arca",
+      "OTC Markets",
+      "Euronext Brussels",
+      "Bulgarian Stock Exchange",
+      "Prague Stock Exchange",
+      "Nasdaq Tallinn",
+      "Athens Stock Exchange",
       "South Africa",
-      "Canada",
-      "Latvia",
-      "Lithuania",
-      "Hungary",
-      "Poland",
-      "Romania",
-      "Slovakia",
-      "Slovenia",
+      "Toronto Stock Exchange",
+      "TSX Venture",
+      "Nasdaq Riga",
+      "Nasdaq Vilnius",
+      "Budapest Stock Exchange",
+      "Warsaw Stock Exchange",
+      "Bucharest Stock Exchange",
+      "Bratislava Stock Exchange",
+      "Ljubljana Stock Exchange",
       "Albania",
       "Brazil",
       "Philippines",
@@ -16247,31 +15971,40 @@
       "Malaysia",
       "Mexico",
       "New Zealand",
-      "Russia",
-      "Singapore",
+      "Moscow Exchange",
+      "Singapore Exchange",
       "Thailand",
       "Taiwan",
-      "Turkey",
-      "Montenegro",
-      "North Macedonia",
-      "Serbia",
-      "Austria",
-      "Australia",
-      "Denmark",
-      "Finland",
-      "France",
-      "Italy",
-      "Ireland",
-      "Japan",
+      "Borsa Istanbul",
+      "Montenegro Stock Exchange",
+      "Macedonian Stock Exchange",
+      "Belgrade Stock Exchange",
+      "Wiener Börse",
+      "ASX",
+      "Nasdaq Copenhagen",
+      "First North Denmark",
+      "Nasdaq Helsinki",
+      "First North Helsinki",
+      "Euronext Paris",
+      "Euronext Growth Paris",
+      "Euronext Access Paris",
+      "Euronext Milan",
+      "Euronext Dublin",
+      "Tokyo Stock Exchange",
       "Luxembourg",
-      "Netherlands",
-      "Norway",
+      "Euronext Amsterdam",
+      "Oslo Børs",
+      "Euronext Expand Oslo",
       "Portugal",
-      "Spain",
-      "Sweden",
-      "Switzerland",
-      "United Kingdom",
-      "Hong Kong"
+      "Bolsa de Madrid",
+      "Latibex",
+      "Nasdaq Stockholm",
+      "Spotlight Stock Market",
+      "SIX Swiss Exchange",
+      "London Stock Exchange",
+      "Cboe Europe",
+      "Turquoise",
+      "Hong Kong Stock Exchange"
     ]
   },
   {
@@ -16367,7 +16100,6 @@
       "Oslo Børs",
       "OTC Markets",
       "Prague Stock Exchange",
-      "Quotrix",
       "SIX Swiss Exchange",
       "Tokyo Stock Exchange",
       "Toronto Stock Exchange",
@@ -16497,8 +16229,7 @@
       "Tokyo Stock Exchange",
       "Wiener Börse",
       "Warsaw Stock Exchange",
-      "Ljubljana Stock Exchange",
-      "OTC Markets"
+      "Ljubljana Stock Exchange"
     ]
   },
   {
@@ -16677,9 +16408,6 @@
       "Euronext Amsterdam",
       "Euronext Brussels",
       "Deutsche Börse",
-      "Tokyo Stock Exchange",
-      "Hong Kong Stock Exchange",
-      "Shanghai Stock Exchange",
       "Montenegro Stock Exchange"
     ]
   },
@@ -16777,7 +16505,6 @@
       "Nasdaq Vilnius",
       "New York Stock Exchange",
       "NYSE American",
-      "NYSE Arca",
       "Oslo Børs",
       "OTC Markets",
       "SIX Swiss Exchange",
@@ -16873,9 +16600,7 @@
     "country": "LV",
     "type": "Neobroker",
     "url": "https://www.mintos.com/en/investing-in-stocks/",
-    "exchanges": [
-      "United States"
-    ]
+    "exchanges": []
   },
   {
     "name": "Signet Bank",
@@ -16883,7 +16608,9 @@
     "type": "Bank",
     "url": "https://signetbank.com/en/services/brokerage-services/",
     "exchanges": [
-      "United States",
+      "New York Stock Exchange",
+      "Nasdaq",
+      "NYSE American",
       "Switzerland",
       "Norway",
       "Russia",
@@ -17020,7 +16747,11 @@
     "type": "Broker",
     "url": "https://myriadcapital.lt/investavimas/",
     "exchanges": [
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq",
+      "NYSE American",
+      "NYSE Arca",
+      "OTC Markets"
     ]
   },
   {
@@ -17092,7 +16823,7 @@
       "New York Stock Exchange",
       "NYSE American",
       "NYSE Arca",
-      "Oslo Børs",
+      "Norway",
       "SIX Swiss Exchange",
       "Wiener Börse"
     ]
@@ -17175,39 +16906,7 @@
     "country": "CY",
     "type": "Broker",
     "url": "https://www.swissquote.com/",
-    "exchanges": [
-      "New York Stock Exchange",
-      "Nasdaq",
-      "NYSE American",
-      "NYSE Arca",
-      "Toronto Stock Exchange",
-      "TSX Venture",
-      "London Stock Exchange",
-      "AIM",
-      "Börse Xetra",
-      "Börse Frankfurt",
-      "Börse Stuttgart",
-      "Börse München",
-      "Börse Berlin",
-      "Börse Düsseldorf",
-      "Börse Hamburg",
-      "Börse Hannover",
-      "Euronext Paris",
-      "Euronext Amsterdam",
-      "Euronext Brussels",
-      "SIX Swiss Exchange",
-      "Bolsa de Madrid",
-      "Euronext Milan",
-      "Wiener Börse",
-      "Nasdaq Stockholm",
-      "Nasdaq Copenhagen",
-      "Nasdaq Helsinki",
-      "Oslo Børs",
-      "Singapore Exchange",
-      "Hong Kong Stock Exchange",
-      "Tokyo Stock Exchange",
-      "ASX"
-    ]
+    "exchanges": []
   },
   {
     "name": "Plus500 Cyprus",
@@ -17327,7 +17026,12 @@
     "type": "Broker",
     "url": "https://www.colmexpro.com/faq/",
     "exchanges": [
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq",
+      "NYSE American",
+      "NYSE Arca",
+      "Cboe BZX",
+      "OTC Markets"
     ]
   },
   {
@@ -17335,13 +17039,7 @@
     "country": "CY",
     "type": "Broker",
     "url": "https://www.robomarkets.com.cy/blog/education/how-to-trade-on-r-stockstrader-platform-traders-guide/",
-    "exchanges": [
-      "New York Stock Exchange",
-      "Nasdaq",
-      "London Stock Exchange",
-      "Börse Xetra",
-      "Börse Frankfurt"
-    ]
+    "exchanges": []
   },
   {
     "name": "Just2Trade",
@@ -17394,10 +17092,10 @@
       "Euronext Dublin",
       "Euronext Milan",
       "London Stock Exchange",
-      "Prague Stock Exchange",
+      "Czech Republic",
       "Nasdaq Copenhagen",
       "Athens Stock Exchange",
-      "Luxembourg Stock Exchange",
+      "Luxembourg",
       "Malta Stock Exchange",
       "Oslo Børs",
       "Nasdaq Stockholm",
@@ -17416,7 +17114,7 @@
       "Shanghai-Hong Kong Stock Connect",
       "Shenzhen-Hong Kong Stock Connect",
       "Hong Kong Stock Exchange",
-      "Bursa Malaysia",
+      "Malaysia",
       "Singapore Exchange",
       "Tokyo Stock Exchange"
     ]
@@ -17433,7 +17131,6 @@
       "Euronext Brussels",
       "Euronext Lisbon",
       "Euronext Milan",
-      "Wiener Börse",
       "Nasdaq Stockholm",
       "Nasdaq Copenhagen",
       "Nasdaq Helsinki",
@@ -17489,7 +17186,6 @@
       "New York Stock Exchange",
       "Nasdaq",
       "NYSE American",
-      "NYSE Arca",
       "Toronto Stock Exchange",
       "TSX Venture",
       "London Stock Exchange",
@@ -17749,7 +17445,7 @@
     "url": "https://www.alramz.ae/our-platform",
     "exchanges": [
       "Abu Dhabi Securities Exchange",
-      "Bahrain Bourse",
+      "Bahrain",
       "Dubai Financial Market",
       "Muscat Stock Exchange",
       "Nasdaq",
@@ -17964,9 +17660,6 @@
       "NYSE Arca",
       "Cboe BZX",
       "New York Stock Exchange",
-      "London Stock Exchange",
-      "Euronext Paris",
-      "Börse Xetra",
       "SIX Swiss Exchange",
       "Singapore Exchange",
       "Hong Kong Stock Exchange",
@@ -18092,7 +17785,9 @@
     "url": "https://online.derayah.com/account/Register",
     "exchanges": [
       "Tadawul",
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq",
+      "NYSE American"
     ]
   },
   {
@@ -18159,34 +17854,32 @@
       "Qatar Stock Exchange",
       "Muscat Stock Exchange",
       "The Egyptian Exchange",
-      "New York Stock Exchange",
-      "Nasdaq",
+      "United States",
       "London Stock Exchange",
-      "Euronext Paris",
-      "Bolsa de Madrid",
-      "Wiener Börse",
-      "Euronext Brussels",
-      "Nasdaq Copenhagen",
-      "Nasdaq Helsinki",
-      "Euronext Milan",
-      "Euronext Amsterdam",
-      "Oslo Børs",
-      "Euronext Lisbon",
-      "Nasdaq Stockholm",
-      "SIX Swiss Exchange",
-      "Borsa Istanbul",
-      "Börse Xetra",
-      "ASX",
-      "NZX",
-      "Shanghai Stock Exchange",
-      "Shenzhen Stock Exchange",
-      "Indonesia Stock Exchange",
-      "Tokyo Stock Exchange",
-      "Bursa Malaysia",
-      "Philippine Stock Exchange",
-      "Singapore Exchange",
-      "Stock Exchange of Thailand",
-      "Hong Kong Stock Exchange"
+      "France",
+      "Spain",
+      "Austria",
+      "Belgium",
+      "Denmark",
+      "Finland",
+      "Italy",
+      "Netherlands",
+      "Norway",
+      "Portugal",
+      "Sweden",
+      "Switzerland",
+      "Turkey",
+      "Germany",
+      "Australia",
+      "New Zealand",
+      "China",
+      "Indonesia",
+      "Japan",
+      "Malaysia",
+      "Philippines",
+      "Singapore",
+      "Thailand",
+      "Hong Kong"
     ]
   },
   {
@@ -18195,28 +17888,25 @@
     "type": "Bank",
     "url": "https://www.sabinvest.com/en/sab-invest",
     "exchanges": [
-      "New York Stock Exchange",
-      "Nasdaq",
-      "Cboe BZX",
+      "United States",
       "Tadawul",
       "Dubai Financial Market",
       "Abu Dhabi Securities Exchange",
       "Nasdaq Dubai",
-      "Qatar Stock Exchange",
-      "Bahrain Bourse",
+      "Qatar",
+      "Bahrain",
       "Muscat Stock Exchange",
-      "Boursa Kuwait",
-      "The Egyptian Exchange",
-      "London Stock Exchange",
-      "Börse Xetra",
-      "Euronext Paris",
-      "Euronext Milan",
-      "SIX Swiss Exchange",
-      "Euronext Brussels",
-      "Luxembourg Stock Exchange",
-      "Nasdaq Stockholm",
-      "Euronext Dublin",
-      "Euronext Amsterdam"
+      "Kuwait",
+      "United Kingdom",
+      "Germany",
+      "France",
+      "Italy",
+      "Switzerland",
+      "Belgium",
+      "Luxembourg",
+      "Sweden",
+      "Ireland",
+      "Netherlands"
     ]
   },
   {
@@ -18227,7 +17917,9 @@
     "exchanges": [
       "Tadawul",
       "The Egyptian Exchange",
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq",
+      "NYSE American"
     ]
   },
   {
@@ -18257,7 +17949,8 @@
     "exchanges": [
       "Tadawul",
       "Nomu",
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq"
     ]
   },
   {
@@ -18270,12 +17963,12 @@
       "United States",
       "Dubai Financial Market",
       "Abu Dhabi Securities Exchange",
-      "Boursa Kuwait",
-      "Qatar Stock Exchange",
-      "Bahrain Bourse",
+      "Kuwait",
+      "Qatar",
+      "Bahrain",
       "Muscat Stock Exchange",
-      "The Egyptian Exchange",
-      "Amman Stock Exchange",
+      "Egypt",
+      "Jordan",
       "Nomu"
     ]
   },
@@ -18324,12 +18017,12 @@
       "Euronext Amsterdam",
       "Euronext Milan",
       "Bolsa de Madrid",
-      "Korea Exchange",
+      "South Korea",
       "Euronext Lisbon",
       "SIX Swiss Exchange",
       "Hong Kong Stock Exchange",
       "Bursa Malaysia",
-      "Shanghai Stock Exchange",
+      "China",
       "Singapore Exchange",
       "Tokyo Stock Exchange",
       "Philippine Stock Exchange",
@@ -18413,7 +18106,7 @@
     "url": "https://apps.apple.com/sa/app/awaed-invest-trade/id1610134585",
     "exchanges": [
       "United States",
-      "Tadawul"
+      "Saudi Arabia"
     ]
   },
   {
@@ -18708,7 +18401,7 @@
       "Dubai Financial Market",
       "Nasdaq Dubai",
       "Qatar Stock Exchange",
-      "The Egyptian Exchange",
+      "Egypt",
       "NYSE American",
       "New York Stock Exchange",
       "Nasdaq",
@@ -18825,20 +18518,20 @@
       "New York Stock Exchange",
       "Nasdaq",
       "London Stock Exchange",
-      "Euronext Paris",
-      "Euronext Milan",
-      "Nasdaq Stockholm",
-      "Euronext Amsterdam",
-      "Bolsa de Madrid",
-      "Oslo Børs",
-      "Euronext Brussels",
-      "Nasdaq Helsinki",
-      "Nasdaq Copenhagen",
-      "Wiener Börse",
-      "Euronext Dublin",
-      "Börse Xetra",
-      "Euronext Lisbon",
-      "SIX Swiss Exchange"
+      "France",
+      "Italy",
+      "Sweden",
+      "Netherlands",
+      "Spain",
+      "Norway",
+      "Belgium",
+      "Finland",
+      "Denmark",
+      "Austria",
+      "Ireland",
+      "Germany",
+      "Portugal",
+      "Switzerland"
     ]
   },
   {
@@ -18946,7 +18639,7 @@
       "United States",
       "Germany",
       "Canada",
-      "United Kingdom",
+      "London Stock Exchange",
       "France",
       "Switzerland",
       "Netherlands",
@@ -18989,7 +18682,6 @@
     "type": "Neobroker",
     "url": "https://heyblink.com",
     "exchanges": [
-      "Tel Aviv Stock Exchange",
       "United States"
     ]
   },
@@ -19217,8 +18909,7 @@
     "type": "Broker",
     "url": "https://danayan.com/",
     "exchanges": [
-      "Tehran Stock Exchange",
-      "Iran Fara Bourse"
+      "Iran"
     ]
   },
   {
@@ -19267,8 +18958,7 @@
     "type": "Broker",
     "url": "https://pishrobroker.ir/",
     "exchanges": [
-      "Tehran Stock Exchange",
-      "Iran Fara Bourse"
+      "Iran"
     ]
   },
   {
@@ -19729,7 +19419,7 @@
     "exchanges": [
       "Borsa Istanbul",
       "United States",
-      "Hong Kong"
+      "Hong Kong Stock Exchange"
     ]
   },
   {
@@ -20092,7 +19782,6 @@
       "Börse Xetra",
       "Euronext Dublin",
       "London Stock Exchange",
-      "Euronext Milan",
       "Nasdaq Copenhagen",
       "Nasdaq Helsinki",
       "Nasdaq Stockholm",
@@ -20112,11 +19801,8 @@
     "url": "https://www.meksa.com.tr/yurtdisi-piyasalar",
     "exchanges": [
       "Borsa Istanbul",
-      "London Stock Exchange",
-      "Nasdaq",
-      "New York Stock Exchange",
-      "NYSE American",
-      "NYSE Arca"
+      "United Kingdom",
+      "United States"
     ]
   },
   {
@@ -20205,7 +19891,11 @@
     "url": "https://www.aktifyatirim.com.tr/",
     "exchanges": [
       "Borsa Istanbul",
-      "United States"
+      "Nasdaq",
+      "New York Stock Exchange",
+      "NYSE American",
+      "NYSE Arca",
+      "Cboe BZX"
     ]
   },
   {
@@ -20298,7 +19988,8 @@
     "url": "https://slayz.app/spot/fakulte/borsa-emir-tipleri-nedir",
     "exchanges": [
       "Borsa Istanbul",
-      "United States"
+      "Nasdaq",
+      "New York Stock Exchange"
     ]
   },
   {
@@ -20308,7 +19999,8 @@
     "url": "https://www.piapiri.com/bize-sor/urunler/",
     "exchanges": [
       "Borsa Istanbul",
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq"
     ]
   },
   {
@@ -20457,14 +20149,11 @@
     "exchanges": [
       "ASX",
       "Börse Xetra",
-      "Cboe BZX",
-      "Euronext",
-      "gettex",
+      "Netherlands",
       "Johannesburg Stock Exchange",
       "London Stock Exchange",
       "Nasdaq",
-      "New York Stock Exchange",
-      "NYSE Arca"
+      "New York Stock Exchange"
     ]
   },
   {
@@ -20480,7 +20169,8 @@
     "type": "Bank",
     "url": "https://www.standardbank.co.za/southafrica/personal/products-and-services/grow-your-money/share-trading/shyft-app",
     "exchanges": [
-      "United States",
+      "Nasdaq",
+      "New York Stock Exchange",
       "London Stock Exchange"
     ]
   },
@@ -20730,7 +20420,8 @@
     "type": "Broker",
     "url": "https://cardinalstonesecurities.com/equities/",
     "exchanges": [
-      "Nigeria"
+      "Nigerian Exchange",
+      "NASD OTC Exchange"
     ]
   },
   {
@@ -20774,7 +20465,7 @@
     "type": "Broker",
     "url": "https://cordros.com/securities/cordros-cape",
     "exchanges": [
-      "Nigeria"
+      "Nigerian Exchange"
     ]
   },
   {
@@ -21704,8 +21395,6 @@
       "Abu Dhabi Securities Exchange",
       "New York Stock Exchange",
       "Nasdaq",
-      "NYSE Arca",
-      "Cboe BZX",
       "OTC Markets"
     ]
   },
@@ -22229,7 +21918,7 @@
     "type": "Broker",
     "url": "https://www.bmcecapital.com/actualites/la-nouvelle-application-mobile-qui-reinvente-lexperience-dinvestissement-en-bourse",
     "exchanges": [
-      "Morocco"
+      "Casablanca Stock Exchange"
     ]
   },
   {
@@ -22507,10 +22196,10 @@
     "exchanges": [
       "Amman Stock Exchange",
       "United Arab Emirates",
-      "Tadawul",
-      "Qatar Stock Exchange",
-      "Boursa Kuwait",
-      "The Egyptian Exchange",
+      "Saudi Arabia",
+      "Qatar",
+      "Kuwait",
+      "Egypt",
       "London Stock Exchange",
       "United States",
       "Turkey"
@@ -22620,7 +22309,7 @@
     "type": "Broker",
     "url": "https://www.first.com.jo/",
     "exchanges": [
-      "Amman Stock Exchange"
+      "Jordan"
     ]
   },
   {
@@ -22678,7 +22367,7 @@
     "exchanges": [
       "Beirut Stock Exchange",
       "United States",
-      "ASX"
+      "Australia"
     ]
   },
   {
@@ -23017,8 +22706,8 @@
     "url": "https://www.commsec.com.au/why-join-commsec/Sign-up-to-CommSec.html",
     "exchanges": [
       "ASX",
-      "London Stock Exchange",
-      "New York Stock Exchange"
+      "United Kingdom",
+      "United States"
     ]
   },
   {
@@ -23099,9 +22788,7 @@
     "url": "https://www.belldirect.com.au/",
     "exchanges": [
       "ASX",
-      "New York Stock Exchange",
-      "Nasdaq",
-      "NYSE American",
+      "United States",
       "Cboe Australia"
     ]
   },
@@ -23112,7 +22799,8 @@
     "url": "https://onboarding.secure.selfwealth.com.au/register",
     "exchanges": [
       "ASX",
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq"
     ]
   },
   {
@@ -23137,10 +22825,8 @@
     "url": "https://pearler.com/",
     "exchanges": [
       "ASX",
-      "Cboe BZX",
       "Nasdaq",
       "New York Stock Exchange",
-      "NYSE Arca",
       "OTC Markets"
     ]
   },
@@ -23178,7 +22864,8 @@
     "url": "https://www.moomoo.com/au",
     "exchanges": [
       "ASX",
-      "United States",
+      "New York Stock Exchange",
+      "Nasdaq",
       "Hong Kong Stock Exchange"
     ]
   },
@@ -23231,8 +22918,11 @@
       "Wiener Börse",
       "Euronext Brussels",
       "Euronext Paris",
-      "Germany",
-      "India",
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Stuttgart",
+      "gettex",
+      "Tradegate",
       "Euronext Milan",
       "Tokyo Stock Exchange",
       "Bolsa Mexicana",
@@ -23281,17 +22971,17 @@
     "url": "https://www.bendigobank.com.au/personal/investing/share-trading/",
     "exchanges": [
       "ASX",
-      "United States",
+      "New York Stock Exchange",
       "Germany",
       "United Kingdom",
-      "Hong Kong",
+      "Hong Kong Stock Exchange",
       "Canada",
-      "Singapore",
+      "Singapore Exchange",
       "France",
       "Netherlands",
       "Belgium",
       "Switzerland",
-      "Japan",
+      "Tokyo Stock Exchange",
       "New Zealand",
       "Denmark",
       "Spain",
@@ -23371,10 +23061,10 @@
     "exchanges": [
       "ASX",
       "London Stock Exchange",
-      "Euronext Dublin",
+      "Ireland",
       "New York Stock Exchange",
       "Nasdaq",
-      "Börse Xetra"
+      "Germany"
     ]
   },
   {
@@ -23437,13 +23127,13 @@
       "Cboe Australia",
       "Toronto Stock Exchange",
       "London Stock Exchange",
-      "Tokyo Stock Exchange",
+      "Japan",
       "Germany",
       "Hong Kong Stock Exchange",
-      "SIX Swiss Exchange",
-      "Euronext Paris",
-      "Singapore Exchange",
-      "Bolsa Mexicana",
+      "Switzerland",
+      "France",
+      "Singapore",
+      "Mexico",
       "New York Stock Exchange",
       "Nasdaq"
     ]
@@ -23487,7 +23177,8 @@
     "type": "Neobroker",
     "url": "https://www.spaceship.com.au/",
     "exchanges": [
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq"
     ]
   },
   {
@@ -23518,7 +23209,8 @@
     "type": "Neobroker",
     "url": "https://hatchinvest.nz",
     "exchanges": [
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq"
     ]
   },
   {
@@ -23723,7 +23415,7 @@
     "exchanges": [
       "Singapore Exchange",
       "Hong Kong Stock Exchange",
-      "ASX",
+      "Australia",
       "New York Stock Exchange",
       "Nasdaq",
       "OTC Markets",
@@ -23740,7 +23432,8 @@
       "Singapore Exchange",
       "United States",
       "Hong Kong Stock Exchange",
-      "China",
+      "Shanghai-Hong Kong Stock Connect",
+      "Shenzhen-Hong Kong Stock Connect",
       "Korea Exchange",
       "Japan"
     ]
@@ -23751,10 +23444,13 @@
     "type": "Neobroker",
     "url": "https://www.webull.com.sg",
     "exchanges": [
-      "United States",
+      "New York Stock Exchange",
+      "Nasdaq",
+      "NYSE American",
       "Singapore Exchange",
       "Hong Kong Stock Exchange",
-      "China"
+      "Shanghai-Hong Kong Stock Connect",
+      "Shenzhen-Hong Kong Stock Connect"
     ]
   },
   {
@@ -23771,8 +23467,7 @@
       "Nasdaq",
       "NYSE American",
       "New York Stock Exchange",
-      "Shanghai Stock Exchange",
-      "Vietnam"
+      "Shanghai Stock Exchange"
     ]
   },
   {
@@ -23844,15 +23539,23 @@
     "type": "Broker",
     "url": "https://www.interactivebrokers.com.sg/",
     "exchanges": [
-      "United States",
+      "New York Stock Exchange",
+      "Nasdaq",
+      "NYSE American",
+      "NYSE Arca",
+      "Cboe BZX",
+      "OTC Markets",
       "Wiener Börse",
       "ASX",
       "Euronext Brussels",
       "Toronto Stock Exchange",
       "Euronext Paris",
-      "Germany",
+      "Börse Frankfurt",
+      "Börse Xetra",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex",
       "Hong Kong Stock Exchange",
-      "India",
       "Euronext Milan",
       "Tokyo Stock Exchange",
       "Bolsa Mexicana",
@@ -23967,7 +23670,7 @@
     "exchanges": [
       "Hong Kong Stock Exchange",
       "United States",
-      "Singapore"
+      "Singapore Exchange"
     ]
   },
   {
@@ -23989,43 +23692,43 @@
     "type": "Bank",
     "url": "https://www.ubs.com/sg/en/wealthmanagement/digital-banking/faq/securities-trading.html",
     "exchanges": [
-      "Hong Kong Stock Exchange",
-      "Singapore Exchange",
+      "Hong Kong",
+      "Singapore",
       "United States",
-      "Toronto Stock Exchange",
+      "Canada",
       "Shanghai-Hong Kong Stock Connect",
       "Shenzhen-Hong Kong Stock Connect",
-      "ASX",
-      "Wiener Börse",
-      "Euronext Brussels",
-      "Cyprus Stock Exchange",
-      "Prague Stock Exchange",
-      "Nasdaq Copenhagen",
-      "Nasdaq Helsinki",
-      "Euronext Paris",
+      "Australia",
+      "Austria",
+      "Belgium",
+      "Cyprus",
+      "Czech Republic",
+      "Denmark",
+      "Finland",
+      "France",
       "Germany",
-      "Athens Stock Exchange",
-      "Budapest Stock Exchange",
-      "Indonesia Stock Exchange",
-      "Euronext Dublin",
-      "Euronext Milan",
-      "Tokyo Stock Exchange",
-      "Korea Exchange",
-      "Luxembourg Stock Exchange",
-      "Bursa Malaysia",
-      "Euronext Amsterdam",
-      "NZX",
-      "Oslo Børs",
-      "Philippine Stock Exchange",
-      "Warsaw Stock Exchange",
-      "Euronext Lisbon",
-      "Bolsa de Madrid",
-      "Nasdaq Stockholm",
-      "SIX Swiss Exchange",
-      "Taiwan Stock Exchange",
-      "Stock Exchange of Thailand",
-      "Borsa Istanbul",
-      "London Stock Exchange"
+      "Greece",
+      "Hungary",
+      "Indonesia",
+      "Ireland",
+      "Italy",
+      "Japan",
+      "South Korea",
+      "Luxembourg",
+      "Malaysia",
+      "Netherlands",
+      "New Zealand",
+      "Norway",
+      "Philippines",
+      "Poland",
+      "Portugal",
+      "Spain",
+      "Sweden",
+      "Switzerland",
+      "Taiwan",
+      "Thailand",
+      "Turkey",
+      "United Kingdom"
     ]
   },
   {
@@ -24040,8 +23743,9 @@
       "NYSE American",
       "Nasdaq",
       "Hong Kong Stock Exchange",
-      "Japan",
-      "China"
+      "Tokyo Stock Exchange",
+      "Shanghai-Hong Kong Stock Connect",
+      "Shenzhen-Hong Kong Stock Connect"
     ]
   },
   {
@@ -24089,7 +23793,7 @@
       "Shanghai Stock Exchange",
       "Shenzhen Stock Exchange",
       "Singapore Exchange",
-      "Tokyo Stock Exchange",
+      "Japan",
       "Korea Exchange"
     ]
   },
@@ -24134,7 +23838,6 @@
       "Hong Kong Stock Exchange",
       "ASX",
       "Korea Exchange",
-      "National Stock Exchange of India",
       "Singapore Exchange",
       "Shanghai Stock Exchange",
       "Shenzhen Stock Exchange",
@@ -24143,7 +23846,11 @@
       "Euronext Brussels",
       "Toronto Stock Exchange",
       "Euronext Paris",
-      "Germany",
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex",
       "Euronext Milan",
       "Bolsa Mexicana",
       "Euronext Amsterdam",
@@ -24186,7 +23893,8 @@
     "exchanges": [
       "Hong Kong Stock Exchange",
       "United States",
-      "China"
+      "Shanghai Stock Exchange",
+      "Shenzhen Stock Exchange"
     ]
   },
   {
@@ -24210,7 +23918,10 @@
     "url": "https://www.hsbc.com.hk/investments/account-opening/",
     "exchanges": [
       "Hong Kong Stock Exchange",
-      "United States",
+      "New York Stock Exchange",
+      "Nasdaq",
+      "NYSE American",
+      "Cboe BZX",
       "Shanghai Stock Exchange",
       "Shenzhen Stock Exchange"
     ]
@@ -24249,9 +23960,14 @@
     "type": "Bank",
     "url": "https://www.sc.com/hk/investment/online-investment-account/",
     "exchanges": [
-      "United States",
+      "Nasdaq",
+      "New York Stock Exchange",
+      "NYSE American",
+      "NYSE Arca",
+      "Cboe BZX",
       "Hong Kong Stock Exchange",
-      "China"
+      "Shanghai-Hong Kong Stock Connect",
+      "Shenzhen-Hong Kong Stock Connect"
     ]
   },
   {
@@ -24271,7 +23987,11 @@
     "url": "https://mox.com/features/mox-invest/",
     "exchanges": [
       "Hong Kong Stock Exchange",
-      "United States"
+      "Nasdaq",
+      "New York Stock Exchange",
+      "NYSE American",
+      "NYSE Arca",
+      "Cboe BZX"
     ]
   },
   {
@@ -24281,7 +24001,11 @@
     "url": "https://www.boom.com/en/open-account/",
     "exchanges": [
       "Hong Kong Stock Exchange",
-      "United States"
+      "New York Stock Exchange",
+      "NYSE Arca",
+      "NYSE American",
+      "Nasdaq",
+      "OTC Markets"
     ]
   },
   {
@@ -24306,16 +24030,16 @@
       "Nasdaq",
       "Singapore Exchange",
       "Tokyo Stock Exchange",
-      "ASX",
+      "Australia",
       "Shanghai Stock Exchange",
       "Shenzhen Stock Exchange",
-      "Korea Exchange",
+      "South Korea",
       "Taiwan Stock Exchange",
       "Stock Exchange of Thailand",
-      "Bursa Malaysia",
-      "Indonesia Stock Exchange",
-      "Philippine Stock Exchange",
-      "Toronto Stock Exchange",
+      "Malaysia",
+      "Indonesia",
+      "Philippines",
+      "Canada",
       "London Stock Exchange",
       "Euronext Paris",
       "Euronext Amsterdam",
@@ -24339,7 +24063,8 @@
     "exchanges": [
       "Hong Kong Stock Exchange",
       "United States",
-      "China"
+      "Shanghai-Hong Kong Stock Connect",
+      "Shenzhen-Hong Kong Stock Connect"
     ]
   },
   {
@@ -24363,7 +24088,8 @@
     "exchanges": [
       "Hong Kong Stock Exchange",
       "United States",
-      "China"
+      "Shanghai-Hong Kong Stock Connect",
+      "Shenzhen-Hong Kong Stock Connect"
     ]
   },
   {
@@ -24374,7 +24100,8 @@
     "exchanges": [
       "Hong Kong Stock Exchange",
       "United States",
-      "China"
+      "Shanghai-Hong Kong Stock Connect",
+      "Shenzhen-Hong Kong Stock Connect"
     ]
   },
   {
@@ -24386,9 +24113,7 @@
       "Tokyo Stock Exchange",
       "Singapore Exchange",
       "United States",
-      "Hong Kong Stock Exchange",
-      "Shanghai-Hong Kong Stock Connect",
-      "Shenzhen-Hong Kong Stock Connect"
+      "Hong Kong Stock Exchange"
     ]
   },
   {
@@ -24424,7 +24149,8 @@
     "url": "https://www.emperorcapital.com/en/business-overview/global-investment-product/hk-stocks/",
     "exchanges": [
       "Hong Kong Stock Exchange",
-      "United States",
+      "New York Stock Exchange",
+      "Nasdaq",
       "Shanghai Stock Exchange",
       "Shenzhen Stock Exchange",
       "Singapore Exchange",
@@ -24466,7 +24192,9 @@
     "url": "https://www.kgi.com.hk/en/products-overview/global-market/hong-kong-stocks",
     "exchanges": [
       "Hong Kong Stock Exchange",
-      "United States",
+      "New York Stock Exchange",
+      "NYSE American",
+      "Nasdaq",
       "ASX",
       "Shanghai Stock Exchange",
       "Shenzhen Stock Exchange",
@@ -24479,7 +24207,7 @@
       "Taiwan Stock Exchange",
       "Stock Exchange of Thailand",
       "Euronext Paris",
-      "Germany",
+      "Börse Xetra",
       "London Stock Exchange",
       "Toronto Stock Exchange"
     ]
@@ -24496,10 +24224,10 @@
       "Shanghai Stock Exchange",
       "Shenzhen Stock Exchange",
       "Tokyo Stock Exchange",
-      "Toronto Stock Exchange",
-      "London Stock Exchange",
-      "Singapore Exchange",
-      "ASX"
+      "Canada",
+      "United Kingdom",
+      "Singapore",
+      "Australia"
     ]
   },
   {
@@ -24510,7 +24238,8 @@
     "exchanges": [
       "Hong Kong Stock Exchange",
       "United States",
-      "China"
+      "Shanghai Stock Exchange",
+      "Shenzhen Stock Exchange"
     ]
   },
   {
@@ -24520,8 +24249,11 @@
     "url": "https://www.fosunwealth.com/zhTc/global",
     "exchanges": [
       "Hong Kong Stock Exchange",
-      "United States",
-      "China"
+      "New York Stock Exchange",
+      "NYSE American",
+      "Nasdaq",
+      "Shanghai Stock Exchange",
+      "Shenzhen Stock Exchange"
     ]
   },
   {
@@ -24569,12 +24301,14 @@
     "url": "https://www.mystockhk.com/category.aspx?NodeID=13",
     "exchanges": [
       "Hong Kong Stock Exchange",
-      "United States",
-      "Singapore Exchange",
-      "Tokyo Stock Exchange",
-      "Toronto Stock Exchange",
-      "London Stock Exchange",
-      "Korea Exchange",
+      "New York Stock Exchange",
+      "NYSE American",
+      "Nasdaq",
+      "Singapore",
+      "Japan",
+      "Canada",
+      "United Kingdom",
+      "South Korea",
       "Shanghai Stock Exchange",
       "Shenzhen Stock Exchange"
     ]
@@ -24585,9 +24319,7 @@
     "type": "Broker",
     "url": "https://www.cfsg.com.hk/eng/Security/TradingPlatform",
     "exchanges": [
-      "New York Stock Exchange",
-      "NYSE American",
-      "Nasdaq",
+      "United States",
       "Hong Kong Stock Exchange",
       "Singapore Exchange",
       "Shanghai-Hong Kong Stock Connect",
@@ -24606,7 +24338,9 @@
       "Shanghai-Hong Kong Stock Connect",
       "Shenzhen-Hong Kong Stock Connect",
       "Taiwan Stock Exchange",
-      "United States",
+      "New York Stock Exchange",
+      "NYSE American",
+      "Nasdaq",
       "Shanghai Stock Exchange",
       "Shenzhen Stock Exchange"
     ]
@@ -24662,12 +24396,12 @@
     "exchanges": [
       "United States",
       "China",
-      "London Stock Exchange",
-      "ASX",
+      "United Kingdom",
+      "Australia",
       "Tokyo Stock Exchange",
-      "Korea Exchange",
-      "Singapore Exchange",
-      "Taiwan Stock Exchange",
+      "South Korea",
+      "Singapore",
+      "Taiwan",
       "Hong Kong Stock Exchange"
     ]
   },
@@ -24711,14 +24445,15 @@
     "url": "https://www.cmbwinglungbank.com/wlb_corporate/en/about-us/service-guide/hot-questions/faq-net-securities.html",
     "exchanges": [
       "United States",
-      "London Stock Exchange",
-      "Tokyo Stock Exchange",
+      "United Kingdom",
+      "Japan",
       "Singapore Exchange",
-      "ASX",
+      "Australia",
       "Germany",
-      "SIX Swiss Exchange",
+      "Switzerland",
       "Hong Kong Stock Exchange",
-      "China"
+      "Shanghai-Hong Kong Stock Connect",
+      "Shenzhen-Hong Kong Stock Connect"
     ]
   },
   {
@@ -24790,9 +24525,7 @@
     "url": "https://www.cswsec.com.hk/wp-content/uploads/2026/06/APP-user-guide.pdf",
     "exchanges": [
       "Hong Kong Stock Exchange",
-      "United States",
-      "Shanghai-Hong Kong Stock Connect",
-      "Shenzhen-Hong Kong Stock Connect"
+      "United States"
     ]
   },
   {
@@ -24824,7 +24557,10 @@
       "Hong Kong Stock Exchange",
       "Shanghai Stock Exchange",
       "Shenzhen Stock Exchange",
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq",
+      "NYSE American",
+      "Cboe BZX"
     ]
   },
   {
@@ -24875,7 +24611,9 @@
       "Hong Kong Stock Exchange",
       "Shanghai-Hong Kong Stock Connect",
       "Shenzhen-Hong Kong Stock Connect",
-      "United States",
+      "New York Stock Exchange",
+      "Nasdaq",
+      "OTC Markets",
       "Shanghai Stock Exchange",
       "Shenzhen Stock Exchange"
     ]
@@ -24898,7 +24636,6 @@
       "Shenzhen Stock Exchange",
       "Nasdaq",
       "New York Stock Exchange",
-      "NYSE Arca",
       "NYSE American"
     ]
   },
@@ -24961,7 +24698,7 @@
       "Hong Kong Stock Exchange",
       "Shanghai-Hong Kong Stock Connect",
       "Shenzhen-Hong Kong Stock Connect",
-      "Taiwan Stock Exchange"
+      "Taiwan"
     ]
   },
   {
@@ -24987,7 +24724,10 @@
       "Hong Kong Stock Exchange",
       "Shanghai-Hong Kong Stock Connect",
       "Shenzhen-Hong Kong Stock Connect",
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq",
+      "NYSE American",
+      "Cboe BZX"
     ]
   },
   {
@@ -25024,7 +24764,9 @@
     "url": "https://www.citics.com.hk/",
     "exchanges": [
       "Hong Kong Stock Exchange",
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq",
+      "OTC Markets"
     ]
   },
   {
@@ -25061,7 +24803,9 @@
     "url": "https://www.xyzq.com.hk/",
     "exchanges": [
       "Hong Kong Stock Exchange",
-      "United States"
+      "NYSE American",
+      "New York Stock Exchange",
+      "Nasdaq"
     ]
   },
   {
@@ -25343,7 +25087,6 @@
       "New York Stock Exchange",
       "NYSE American",
       "NYSE Arca",
-      "OTC Markets",
       "Sapporo Securities Exchange",
       "Singapore Exchange",
       "Stock Exchange of Thailand",
@@ -25356,11 +25099,11 @@
     "type": "Broker",
     "url": "https://www.rakuten-sec.co.jp/web/account/rsec.html",
     "exchanges": [
-      "Bursa Malaysia",
+      "Malaysia",
       "Cboe BZX",
       "Fukuoka Stock Exchange",
       "Hong Kong Stock Exchange",
-      "Indonesia Stock Exchange",
+      "Indonesia",
       "Nagoya Stock Exchange",
       "Nasdaq",
       "New York Stock Exchange",
@@ -25368,7 +25111,7 @@
       "Sapporo Securities Exchange",
       "Shanghai Stock Exchange",
       "Singapore Exchange",
-      "Stock Exchange of Thailand",
+      "Thailand",
       "Tokyo Stock Exchange"
     ]
   },
@@ -25471,13 +25214,7 @@
       "Stock Exchange of Thailand",
       "Tokyo Stock Exchange",
       "Toronto Stock Exchange",
-      "Wiener Börse",
-      "India",
-      "Malaysia",
-      "Indonesia",
-      "South Africa",
-      "Brazil",
-      "Russia"
+      "Wiener Börse"
     ]
   },
   {
@@ -25490,7 +25227,8 @@
       "Nagoya Stock Exchange",
       "Fukuoka Stock Exchange",
       "Sapporo Securities Exchange",
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq"
     ]
   },
   {
@@ -25501,7 +25239,6 @@
     "exchanges": [
       "Nasdaq",
       "New York Stock Exchange",
-      "NYSE Arca",
       "Tokyo Stock Exchange"
     ]
   },
@@ -25626,8 +25363,11 @@
       "NYSE Arca",
       "NYSE American",
       "Nasdaq",
-      "China",
-      "Vietnam"
+      "Shanghai Stock Exchange",
+      "Shenzhen Stock Exchange",
+      "Shenzhen-Hong Kong Stock Connect",
+      "HOSE",
+      "Hanoi Stock Exchange"
     ]
   },
   {
@@ -25650,9 +25390,7 @@
       "United States",
       "Hong Kong Stock Exchange",
       "London Stock Exchange",
-      "Börse Frankfurt",
-      "Euronext Paris",
-      "Toronto Stock Exchange"
+      "Börse Frankfurt"
     ]
   },
   {
@@ -25665,7 +25403,10 @@
       "Nagoya Stock Exchange",
       "New York Stock Exchange",
       "Nasdaq",
-      "China"
+      "Shanghai Stock Exchange",
+      "Shenzhen Stock Exchange",
+      "Shanghai-Hong Kong Stock Connect",
+      "Shenzhen-Hong Kong Stock Connect"
     ]
   },
   {
@@ -25678,9 +25419,13 @@
       "Nagoya Stock Exchange",
       "Fukuoka Stock Exchange",
       "Sapporo Securities Exchange",
-      "United States",
-      "China",
-      "Thailand"
+      "New York Stock Exchange",
+      "Nasdaq",
+      "Shanghai Stock Exchange",
+      "Shenzhen Stock Exchange",
+      "Shanghai-Hong Kong Stock Connect",
+      "Shenzhen-Hong Kong Stock Connect",
+      "Stock Exchange of Thailand"
     ]
   },
   {
@@ -25729,9 +25474,9 @@
       "New York Stock Exchange",
       "NYSE Arca",
       "Nasdaq",
-      "China",
-      "Philippine Stock Exchange",
-      "India"
+      "Shanghai Stock Exchange",
+      "Shenzhen Stock Exchange",
+      "Philippine Stock Exchange"
     ]
   },
   {
@@ -25782,9 +25527,7 @@
       "Shenzhen Stock Exchange",
       "Korea Exchange",
       "KOSDAQ",
-      "Tokyo Stock Exchange",
-      "India",
-      "B3 São Paulo"
+      "Tokyo Stock Exchange"
     ]
   },
   {
@@ -25828,11 +25571,11 @@
       "Börse Frankfurt",
       "Euronext Paris",
       "Euronext Amsterdam",
-      "SIX Swiss Exchange",
+      "Switzerland",
       "Hong Kong Stock Exchange",
       "Shanghai Stock Exchange",
       "Shenzhen Stock Exchange",
-      "Bursa Malaysia",
+      "Malaysia",
       "Tokyo Stock Exchange"
     ]
   },
@@ -25852,7 +25595,8 @@
     "url": "https://www.105sec.co.jp/service/services/",
     "exchanges": [
       "Tokyo Stock Exchange",
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq"
     ]
   },
   {
@@ -25982,13 +25726,16 @@
     "url": "https://www.jtg-sec.co.jp/bluesky_net/rule/genbutu/order.htm",
     "exchanges": [
       "Tokyo Stock Exchange",
-      "Germany",
+      "Börse Frankfurt",
       "Euronext Paris",
-      "United States",
-      "Moscow Exchange",
-      "Indonesia Stock Exchange",
-      "Singapore Exchange",
-      "China"
+      "New York Stock Exchange",
+      "Nasdaq",
+      "NYSE Arca",
+      "Cboe BZX",
+      "Indonesia",
+      "Singapore",
+      "Hong Kong Stock Exchange",
+      "Shanghai Stock Exchange"
     ]
   },
   {
@@ -26027,7 +25774,8 @@
     "type": "Broker",
     "url": "https://www.okb-sec.co.jp/service/onlinetrade/contents/",
     "exchanges": [
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq"
     ]
   },
   {
@@ -26063,11 +25811,7 @@
     "country": "JP",
     "type": "Neobroker",
     "url": "https://smartplus-sec.com/stream/guide/buy/",
-    "exchanges": [
-      "New York Stock Exchange",
-      "Nasdaq",
-      "Tokyo Stock Exchange"
-    ]
+    "exchanges": []
   },
   {
     "name": "CHEER Securities",
@@ -26087,8 +25831,7 @@
       "New York Stock Exchange",
       "Nasdaq",
       "Hong Kong Stock Exchange",
-      "Tokyo Stock Exchange",
-      "China"
+      "Tokyo Stock Exchange"
     ]
   },
   {
@@ -26182,7 +25925,8 @@
       "KOSDAQ",
       "KONEX",
       "K-OTC",
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq"
     ]
   },
   {
@@ -26192,8 +25936,7 @@
     "url": "https://www.kbsec.com/go.able?linkcd=m06010000",
     "exchanges": [
       "New York Stock Exchange",
-      "Nasdaq",
-      "NYSE American"
+      "Nasdaq"
     ]
   },
   {
@@ -26306,10 +26049,14 @@
     "url": "https://www.ls-sec.co.kr/guide/eDirect/newid/GUJoinNewid0_01.jsp?front_menu_no=1402&left_menu_no=321&parent_menu_no=322",
     "exchanges": [
       "Korea Exchange",
-      "United States",
+      "New York Stock Exchange",
+      "Nasdaq",
+      "NYSE American",
+      "NYSE Arca",
       "Hong Kong Stock Exchange",
       "Tokyo Stock Exchange",
-      "China",
+      "Shanghai-Hong Kong Stock Connect",
+      "Shenzhen-Hong Kong Stock Connect",
       "Germany",
       "Toronto Stock Exchange",
       "London Stock Exchange",
@@ -26404,7 +26151,10 @@
       "KOSDAQ",
       "KONEX",
       "K-OTC",
-      "United States",
+      "New York Stock Exchange",
+      "Nasdaq",
+      "NYSE American",
+      "NYSE Arca",
       "Shanghai-Hong Kong Stock Connect",
       "Shenzhen-Hong Kong Stock Connect",
       "Hong Kong Stock Exchange"
@@ -26482,10 +26232,7 @@
       "KOSDAQ",
       "New York Stock Exchange",
       "Nasdaq",
-      "NYSE American",
-      "Hong Kong Stock Exchange",
-      "Shanghai Stock Exchange",
-      "Shenzhen Stock Exchange"
+      "NYSE American"
     ]
   },
   {
@@ -26498,7 +26245,9 @@
       "KOSDAQ",
       "KONEX",
       "K-OTC",
-      "United States",
+      "New York Stock Exchange",
+      "Nasdaq",
+      "NYSE American",
       "Hong Kong Stock Exchange",
       "Shanghai-Hong Kong Stock Connect",
       "Shenzhen-Hong Kong Stock Connect"
@@ -26544,7 +26293,9 @@
       "Korea Exchange",
       "KOSDAQ",
       "K-OTC",
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq",
+      "NYSE American"
     ]
   },
   {
@@ -26555,11 +26306,7 @@
     "exchanges": [
       "Korea Exchange",
       "KOSDAQ",
-      "K-OTC",
-      "New York Stock Exchange",
-      "Nasdaq",
-      "NYSE American",
-      "OTC Markets"
+      "K-OTC"
     ]
   },
   {
@@ -26635,7 +26382,6 @@
     "url": "https://www.yuanta.com.tw/",
     "exchanges": [
       "New York Stock Exchange",
-      "NYSE American",
       "Nasdaq",
       "Taiwan Stock Exchange",
       "Hong Kong Stock Exchange",
@@ -26654,8 +26400,8 @@
       "Emerging Stock Board",
       "United States",
       "Hong Kong Stock Exchange",
-      "Tokyo Stock Exchange",
-      "London Stock Exchange",
+      "Japan",
+      "United Kingdom",
       "Germany",
       "Singapore Exchange",
       "Shanghai Stock Exchange",
@@ -26674,7 +26420,7 @@
       "Hong Kong Stock Exchange",
       "Shanghai Stock Exchange",
       "Shenzhen Stock Exchange",
-      "Tokyo Stock Exchange",
+      "Japan",
       "Shanghai-Hong Kong Stock Connect",
       "Shenzhen-Hong Kong Stock Connect"
     ]
@@ -26698,7 +26444,8 @@
     "exchanges": [
       "Taiwan Stock Exchange",
       "Hong Kong Stock Exchange",
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq"
     ]
   },
   {
@@ -26712,8 +26459,7 @@
       "Hong Kong Stock Exchange",
       "Tokyo Stock Exchange",
       "Shanghai Stock Exchange",
-      "Taiwan Stock Exchange",
-      "London Stock Exchange"
+      "Taiwan Stock Exchange"
     ]
   },
   {
@@ -26722,9 +26468,9 @@
     "type": "Bank",
     "url": "https://www.dbs.com.tw/personal-zh/investments/equities-etf/foreign-stocks",
     "exchanges": [
-      "ASX",
+      "Australia",
       "Hong Kong Stock Exchange",
-      "Tokyo Stock Exchange",
+      "Japan",
       "United States"
     ]
   },
@@ -26737,7 +26483,7 @@
       "Hong Kong Stock Exchange",
       "Shanghai Stock Exchange",
       "Shenzhen Stock Exchange",
-      "Tokyo Stock Exchange",
+      "Japan",
       "United States"
     ]
   },
@@ -26748,7 +26494,7 @@
     "url": "https://fund.scsb.com.tw/invest-overseas-etfs-stocks.html",
     "exchanges": [
       "Hong Kong Stock Exchange",
-      "Tokyo Stock Exchange",
+      "Japan",
       "United States"
     ]
   },
@@ -26809,10 +26555,13 @@
     "exchanges": [
       "Taiwan Stock Exchange",
       "Emerging Stock Board",
-      "United States",
+      "New York Stock Exchange",
+      "NYSE American",
+      "Nasdaq",
       "Tokyo Stock Exchange",
       "Hong Kong Stock Exchange",
-      "China",
+      "Shanghai Stock Exchange",
+      "Shenzhen Stock Exchange",
       "Taipei Exchange"
     ]
   },
@@ -26826,7 +26575,9 @@
       "Shanghai Stock Exchange",
       "Shenzhen Stock Exchange",
       "Taiwan Stock Exchange",
-      "United States"
+      "New York Stock Exchange",
+      "NYSE Arca",
+      "Nasdaq"
     ]
   },
   {
@@ -26856,7 +26607,9 @@
     "exchanges": [
       "Emerging Stock Board",
       "Taiwan Stock Exchange",
-      "United States",
+      "New York Stock Exchange",
+      "NYSE American",
+      "Nasdaq",
       "Hong Kong Stock Exchange",
       "Tokyo Stock Exchange",
       "Singapore Exchange",
@@ -26943,7 +26696,9 @@
       "Taiwan Stock Exchange",
       "Taipei Exchange",
       "Emerging Stock Board",
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq",
+      "NYSE American"
     ]
   },
   {
@@ -26995,8 +26750,7 @@
     "url": "https://www.pocket.tw/school/articles/5349/",
     "exchanges": [
       "Taiwan Stock Exchange",
-      "New York Stock Exchange",
-      "Nasdaq"
+      "United States"
     ]
   },
   {
@@ -27016,14 +26770,11 @@
     "type": "Bank",
     "url": "https://www.sc.com/content/dam/sc/tw/zh_tw/digital-banking/docs/TWOE-ib-manual.pdf",
     "exchanges": [
-      "Börse Xetra",
-      "Euronext Paris",
       "Hong Kong Stock Exchange",
-      "London Stock Exchange",
-      "NYSE Arca",
+      "United Kingdom",
       "Nasdaq",
       "New York Stock Exchange",
-      "Tokyo Stock Exchange"
+      "Japan"
     ]
   },
   {
@@ -27254,11 +27005,9 @@
     "url": "https://www.motilaloswal.com/open-demat-account/",
     "exchanges": [
       "BSE",
-      "Cboe BZX",
       "Nasdaq",
       "National Stock Exchange of India",
       "New York Stock Exchange",
-      "NYSE Arca",
       "OTC Markets"
     ]
   },
@@ -27310,8 +27059,7 @@
     "exchanges": [
       "National Stock Exchange of India",
       "BSE",
-      "New York Stock Exchange",
-      "Nasdaq"
+      "United States"
     ]
   },
   {
@@ -27979,8 +27727,7 @@
     "url": "https://support.moneysukh.com/order-placing/",
     "exchanges": [
       "National Stock Exchange of India",
-      "BSE",
-      "India International Exchange"
+      "BSE"
     ]
   },
   {
@@ -28069,7 +27816,8 @@
     "type": "Neobroker",
     "url": "https://appreciatewealth.com/",
     "exchanges": [
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq"
     ]
   },
   {
@@ -28620,10 +28368,12 @@
     "type": "Neobroker",
     "url": "https://www.liberator.co.th/home",
     "exchanges": [
-      "United States",
-      "China",
+      "New York Stock Exchange",
+      "Nasdaq",
+      "Shanghai Stock Exchange",
+      "Shenzhen Stock Exchange",
       "Hong Kong Stock Exchange",
-      "Thailand"
+      "Stock Exchange of Thailand"
     ]
   },
   {
@@ -28636,11 +28386,9 @@
       "NYSE American",
       "Nasdaq",
       "New York Stock Exchange",
-      "NYSE Arca",
       "Hong Kong Stock Exchange",
       "HOSE",
       "Hanoi Stock Exchange",
-      "UPCOM",
       "Singapore Exchange",
       "Tokyo Stock Exchange"
     ]
@@ -28654,7 +28402,7 @@
       "Stock Exchange of Thailand",
       "Market for Alternative Investment",
       "United States",
-      "Hong Kong Stock Exchange"
+      "Hong Kong"
     ]
   },
   {
@@ -28705,31 +28453,30 @@
     "url": "https://openaccount.asiaplus.co.th/",
     "exchanges": [
       "Stock Exchange of Thailand",
-      "London Stock Exchange",
-      "Euronext Growth Paris",
-      "Deutsche Börse",
-      "Euronext Amsterdam",
-      "Bolsa de Madrid",
-      "Euronext Milan",
-      "Nasdaq Copenhagen",
-      "Nasdaq Stockholm",
-      "Oslo Børs",
-      "Euronext Dublin",
-      "Shanghai Stock Exchange",
-      "Shenzhen Stock Exchange",
-      "Hong Kong Stock Exchange",
+      "United Kingdom",
+      "France",
+      "Germany",
+      "Netherlands",
+      "Spain",
+      "Italy",
+      "Denmark",
+      "Sweden",
+      "Norway",
+      "Ireland",
+      "China",
+      "Hong Kong",
       "United States",
-      "Singapore Exchange",
+      "Singapore",
       "Vietnam",
-      "Bursa Malaysia",
-      "Indonesia Stock Exchange",
-      "Tokyo Stock Exchange",
-      "Philippine Stock Exchange",
-      "ASX",
-      "Korea Exchange",
-      "SIX Swiss Exchange",
-      "Athens Stock Exchange",
-      "Toronto Stock Exchange"
+      "Malaysia",
+      "Indonesia",
+      "Japan",
+      "Philippines",
+      "Australia",
+      "South Korea",
+      "Switzerland",
+      "Greece",
+      "Canada"
     ]
   },
   {
@@ -28739,7 +28486,12 @@
     "url": "https://www.maybank.co.th/",
     "exchanges": [
       "Stock Exchange of Thailand",
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq",
+      "NYSE Arca",
+      "OTC Markets",
+      "NYSE American",
+      "Cboe BZX"
     ]
   },
   {
@@ -28812,7 +28564,9 @@
     "url": "https://www.beyondsecurities.co.th/openaccount",
     "exchanges": [
       "Stock Exchange of Thailand",
-      "United States"
+      "New York Stock Exchange",
+      "NYSE American",
+      "Nasdaq"
     ]
   },
   {
@@ -28873,7 +28627,11 @@
     "type": "Broker",
     "url": "https://www.aira.co.th/trading_technology.aspx?lang=en",
     "exchanges": [
-      "United States",
+      "NYSE American",
+      "NYSE Arca",
+      "Cboe BZX",
+      "Nasdaq",
+      "New York Stock Exchange",
       "Hong Kong Stock Exchange",
       "Börse Frankfurt",
       "Stock Exchange of Thailand"
@@ -28927,7 +28685,8 @@
       "United States",
       "Stock Exchange of Thailand",
       "Hong Kong Stock Exchange",
-      "China"
+      "Shanghai Stock Exchange",
+      "Shenzhen Stock Exchange"
     ]
   },
   {
@@ -28946,31 +28705,31 @@
     "url": "https://www.utrade.co.th/Page/MaintainSubMenuPage/52",
     "exchanges": [
       "Stock Exchange of Thailand",
-      "Hong Kong Stock Exchange",
+      "Hong Kong",
       "China",
       "United States",
-      "Wiener Börse",
-      "Euronext Brussels",
-      "Nasdaq Copenhagen",
-      "Nasdaq Helsinki",
-      "Euronext Paris",
+      "Austria",
+      "Belgium",
+      "Denmark",
+      "Finland",
+      "France",
       "Germany",
-      "Euronext Milan",
-      "Euronext Amsterdam",
-      "Oslo Børs",
-      "Euronext Lisbon",
-      "Bolsa de Madrid",
-      "Nasdaq Stockholm",
-      "SIX Swiss Exchange",
-      "London Stock Exchange",
-      "Euronext Dublin",
-      "ASX",
-      "Toronto Stock Exchange",
-      "Tokyo Stock Exchange",
-      "Singapore Exchange",
-      "Indonesia Stock Exchange",
-      "NZX",
-      "Philippine Stock Exchange"
+      "Italy",
+      "Netherlands",
+      "Norway",
+      "Portugal",
+      "Spain",
+      "Sweden",
+      "Switzerland",
+      "United Kingdom",
+      "Ireland",
+      "Australia",
+      "Canada",
+      "Japan",
+      "Singapore",
+      "Indonesia",
+      "New Zealand",
+      "Philippines"
     ]
   },
   {
@@ -29002,7 +28761,8 @@
       "Bursa Malaysia",
       "Singapore Exchange",
       "Hong Kong Stock Exchange",
-      "China",
+      "Shanghai Stock Exchange",
+      "Shenzhen Stock Exchange",
       "New York Stock Exchange",
       "Nasdaq",
       "NYSE American",
@@ -29017,9 +28777,7 @@
     "country": "TH",
     "type": "Broker",
     "url": "https://www.caf.co.th/media/announcements/2023/08/30/Settrade-StreamingD-Manual.pdf",
-    "exchanges": [
-      "Stock Exchange of Thailand"
-    ]
+    "exchanges": []
   },
   {
     "name": "I V Global Securities",
@@ -29138,7 +28896,6 @@
       "Stock Exchange of Thailand",
       "London Stock Exchange",
       "ASX",
-      "NYSE American",
       "Japan"
     ]
   },
@@ -29154,8 +28911,7 @@
       "NYSE American",
       "Singapore Exchange",
       "Indonesia Stock Exchange",
-      "Hong Kong Stock Exchange",
-      "Stock Exchange of Thailand"
+      "Hong Kong Stock Exchange"
     ]
   },
   {
@@ -29225,7 +28981,6 @@
       "Nasdaq",
       "New York Stock Exchange",
       "NYSE Arca",
-      "OTC Markets",
       "Shanghai Stock Exchange",
       "Shenzhen Stock Exchange",
       "Singapore Exchange",
@@ -29359,8 +29114,6 @@
       "New York Stock Exchange",
       "NYSE American",
       "Hong Kong Stock Exchange",
-      "Shanghai Stock Exchange",
-      "Stock Exchange of Thailand",
       "ASX"
     ]
   },
@@ -29392,8 +29145,7 @@
       "New York Stock Exchange",
       "Nasdaq",
       "NYSE American",
-      "NYSE Arca",
-      "OTC Markets"
+      "NYSE Arca"
     ]
   },
   {
@@ -29488,7 +29240,8 @@
     "type": "Neobroker",
     "url": "https://www.heygotrade.com/id/",
     "exchanges": [
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq"
     ]
   },
   {
@@ -31099,9 +30852,7 @@
     "type": "Broker",
     "url": "https://cadastro.clear.com.br/",
     "exchanges": [
-      "B3 São Paulo",
-      "New York Stock Exchange",
-      "Nasdaq"
+      "B3 São Paulo"
     ]
   },
   {
@@ -31394,9 +31145,7 @@
     "country": "BR",
     "type": "Broker",
     "url": "https://coinvalores.com.br/seguranca/",
-    "exchanges": [
-      "B3 São Paulo"
-    ]
+    "exchanges": []
   },
   {
     "name": "RB Investimentos",
@@ -31614,8 +31363,7 @@
     "type": "Broker",
     "url": "https://www.finamex.com.mx/general/finamex-trading/",
     "exchanges": [
-      "Bolsa Mexicana",
-      "BIVA"
+      "Bolsa Mexicana"
     ]
   },
   {
@@ -31792,9 +31540,7 @@
     "exchanges": [
       "BYMA",
       "Nasdaq",
-      "New York Stock Exchange",
-      "NYSE American",
-      "OTC Markets"
+      "New York Stock Exchange"
     ]
   },
   {
@@ -31813,8 +31559,7 @@
     "type": "Bank",
     "url": "https://www.galicia.ar/personas/inversiones",
     "exchanges": [
-      "BYMA",
-      "Mercado Argentino de Valores"
+      "BYMA"
     ]
   },
   {
@@ -32084,10 +31829,7 @@
     "country": "AR",
     "type": "Neobroker",
     "url": "https://www.acuantoesta.com.ar/tutoriales#vender",
-    "exchanges": [
-      "New York Stock Exchange",
-      "Nasdaq"
-    ]
+    "exchanges": []
   },
   {
     "name": "Dracma Investments",
@@ -32095,7 +31837,7 @@
     "type": "Broker",
     "url": "https://play.google.com/store/apps/details?id=ar.com.dracmainv.app&hl=en_US",
     "exchanges": [
-      "Argentina"
+      "BYMA"
     ]
   },
   {
@@ -32867,11 +32609,7 @@
     "type": "Neobroker",
     "url": "https://fintual.cl/que-es-fintual/",
     "exchanges": [
-      "Cboe BZX",
-      "NYSE Arca",
-      "Nasdaq",
-      "New York Stock Exchange",
-      "OTC Markets"
+      "United States"
     ]
   },
   {
@@ -32954,7 +32692,7 @@
     "url": "https://www.xtb.com/cl",
     "exchanges": [
       "United States",
-      "Germany"
+      "Börse Xetra"
     ]
   },
   {
@@ -33120,8 +32858,7 @@
     "type": "Neobroker",
     "url": "https://trii.pe",
     "exchanges": [
-      "Bolsa de Valores de Lima",
-      "United States"
+      "Bolsa de Valores de Lima"
     ]
   },
   {
@@ -33449,13 +33186,14 @@
     "exchanges": [
       "Kazakhstan Stock Exchange",
       "Astana International Exchange",
-      "United States",
+      "New York Stock Exchange",
+      "Nasdaq",
       "Germany",
       "Canada",
       "Australia",
-      "Hong Kong",
-      "France",
-      "United Kingdom"
+      "Hong Kong Stock Exchange",
+      "Euronext Paris",
+      "London Stock Exchange"
     ]
   },
   {
@@ -33811,9 +33549,11 @@
     "type": "Broker",
     "url": "https://galtandtaggart.com/en/brokerage",
     "exchanges": [
-      "United States",
-      "Canada",
-      "Australia",
+      "New York Stock Exchange",
+      "NYSE American",
+      "Nasdaq",
+      "Toronto Stock Exchange",
+      "ASX",
       "Georgia"
     ]
   },
@@ -33891,7 +33631,12 @@
     "type": "Bank",
     "url": "https://www.evoca.am/en/",
     "exchanges": [
-      "United States"
+      "New York Stock Exchange",
+      "NYSE American",
+      "Nasdaq",
+      "Cboe BZX",
+      "OTC Markets",
+      "NYSE Arca"
     ]
   },
   {
@@ -33956,7 +33701,9 @@
     "type": "Broker",
     "url": "https://inviabroker.com/en",
     "exchanges": [
-      "United States",
+      "New York Stock Exchange",
+      "NYSE American",
+      "Nasdaq",
       "United Kingdom",
       "Japan",
       "Australia"
@@ -34026,7 +33773,7 @@
     "url": "https://www.yelo.az/az/individuals/investisiya/",
     "exchanges": [
       "United States",
-      "Baku Stock Exchange"
+      "Azerbaijan"
     ]
   },
   {
@@ -34051,7 +33798,8 @@
     "type": "Broker",
     "url": "https://www.univer.ua/",
     "exchanges": [
-      "Ukraine"
+      "PFTS Stock Exchange",
+      "Perspektyva Stock Exchange"
     ]
   },
   {
@@ -37765,17 +37513,15 @@
     "type": "Bank",
     "url": "https://www.morabanc.ad/en/individuals",
     "exchanges": [
-      "BYMA",
-      "B3 São Paulo",
-      "Germany",
+      "Börse Frankfurt",
       "Bolsa de Madrid",
       "United States",
-      "Belgium",
-      "France",
+      "Euronext Brussels",
+      "Euronext Paris",
       "Japan",
-      "Netherlands",
-      "Portugal",
-      "Switzerland"
+      "Euronext Amsterdam",
+      "Euronext Lisbon",
+      "SIX Swiss Exchange"
     ]
   },
   {
@@ -37899,9 +37645,7 @@
       "Nasdaq",
       "Nasdaq Stockholm",
       "New York Stock Exchange",
-      "NYSE Arca",
       "Oslo Børs",
-      "OTC Markets",
       "SIX Swiss Exchange",
       "Warsaw Stock Exchange"
     ]
@@ -37930,8 +37674,6 @@
       "ASX",
       "Bolsa de Madrid",
       "Budapest Stock Exchange",
-      "Bulgarian Stock Exchange",
-      "BX Swiss",
       "Börse Frankfurt",
       "Börse Xetra",
       "Cboe BZX",
@@ -37941,16 +37683,13 @@
       "Euronext Lisbon",
       "Euronext Milan",
       "Euronext Paris",
-      "gettex",
       "Hong Kong Stock Exchange",
-      "Lang & Schwarz International",
       "London Stock Exchange",
       "Nasdaq",
       "Nasdaq Copenhagen",
       "Nasdaq Helsinki",
       "Nasdaq Stockholm",
       "New York Stock Exchange",
-      "NYSE Arca",
       "Oslo Børs",
       "OTC Markets",
       "SIX Swiss Exchange",
@@ -37964,22 +37703,10 @@
     "url": "https://quantfury.com/",
     "exchanges": [
       "B3 São Paulo",
-      "BIVA",
-      "Bolsa de Madrid",
       "Bolsa Mexicana",
-      "BX Swiss",
-      "Börse Xetra",
-      "Cboe BZX",
       "Cboe Europe",
-      "Euronext Milan",
-      "gettex",
-      "London Stock Exchange",
       "Nasdaq",
-      "Nasdaq Helsinki",
-      "New York Stock Exchange",
-      "NYSE Arca",
-      "Tradegate",
-      "Wiener Börse"
+      "New York Stock Exchange"
     ]
   },
   {
@@ -38013,7 +37740,6 @@
       "Korea Exchange",
       "Ljubljana Stock Exchange",
       "London Stock Exchange",
-      "Moscow Exchange",
       "NYSE Arca",
       "Nasdaq",
       "Nasdaq Copenhagen",

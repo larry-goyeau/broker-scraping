@@ -1343,6 +1343,303 @@
     ]
   },
   {
+    "name": "Folionet",
+    "country": "US",
+    "type": "Broker",
+    "url": "https://www.folionet.com/",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Utilities Employees Credit Union",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://uecu.org/",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Tucson Federal Credit Union",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://www.tucsonfcu.com/",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Bridge Credit Union",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://www.bridgecu.org/",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Marine Federal Credit Union",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://www.marinefederal.org/investments",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "PenFed Credit Union",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://www.penfed.org/",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Heartland Credit Union",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://heartlandcu.org/",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Capitol Credit Union",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://www.ccutx.org/invest/wealth-management/online-investing",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "First Fidelity Bank",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://www.ffb.com/unifimoney",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Service Credit Union (E-Invest)",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://servicecu.org/investment/e-invest/",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Desert Financial Credit Union",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://www.desertfinancial.com/en/invest-and-insure/digital-investing",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Affinity Plus Federal Credit Union",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://www.affinityplus.org/personal/Invest-Plan/affinity-plus-investing-app",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Educators Credit Union",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://www.ecu.com/digital-services/online-stock-trading/",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Union Bank (Vermont) SimpleInvestment",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://www.ublocal.com/online-banking/simpleinvestment/",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Extraco Banks (EasyInvest)",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://www.extracobanks.com/digital-banking/online-banking/easyinvest-extraco",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Mercantile Bank",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://mercbank.com/investment-options/digital-investments",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Carter Credit Union (CarterINVEST)",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://www.cartercu.org/Services/CarterINVEST",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Brooklyn Cooperative Federal Credit Union",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://www.brooklyn.coop/eko_investment/",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Platinum Federal Credit Union",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://www.platinumfcu.org/",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Bell Bank",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://bell.bank/banking/digital-investing",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Casco Federal Credit Union (CascoINVEST)",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://www.cascofcu.com/additional-services/cascoinvest",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Crews Bank & Trust (Crews Invest)",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://www.crews.bank/digital-investing",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Cobalt Credit Union (Cobalt Blue Investments)",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://cobaltcu.com/cobalt-blue-investments",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Amboy Bank",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://www.amboybank.com/",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Maine Savings Federal Credit Union",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://mainesavings.com/",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Memphis City Employees Credit Union",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://www.mcecu.org/",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Coloramo Federal Credit Union",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://www.coloramo.org/",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Real One Credit Union (R1)",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://www.myreal1.com/",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Ellafi Federal Credit Union",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://www.ellafifcu.org/",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Securityplus Federal Credit Union",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://www.securityplusfcu.org/personal/plan/self-directed-investments",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Peoples Bank (Iowa)",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://www.peoples-ebank.com/digital-banking/digital-investing",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Superior Credit Union",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://www.superiorcu.com/services/member-services/online-investments",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Capital Credit Union (Wisconsin)",
+    "country": "US",
+    "type": "Bank",
+    "url": "https://www.capitalcu.com/mydigital-investments",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
     "name": "Questrade",
     "country": "CA",
     "type": "Broker",
@@ -2587,6 +2884,20 @@
       "Nasdaq",
       "NYSE American",
       "NYSE Arca"
+    ]
+  },
+  {
+    "name": "Fineco UK",
+    "country": "UK",
+    "type": "Bank",
+    "url": "https://uk.finecobank.com/",
+    "exchanges": [
+      "London Stock Exchange",
+      "New York Stock Exchange",
+      "Nasdaq",
+      "Euronext Milan",
+      "Börse Xetra",
+      "Euronext Paris"
     ]
   },
   {
@@ -4193,6 +4504,537 @@
     "exchanges": []
   },
   {
+    "name": "Sparkasse Nürnberg",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparkasse-nuernberg.de/de/home/privatkunden/wertpapiere-und-boerse/depotmodelle.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Kreissparkasse Ludwigsburg",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.ksklb.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Sparkasse Aachen",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparkasse-aachen.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Kreissparkasse Esslingen-Nürtingen",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.ksk-es.de/de/home/privatkunden/wertpapiere-und-boerse.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Sparkasse Münsterland Ost",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparkasse-muensterland-ost.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Ostsächsische Sparkasse Dresden",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.ostsaechsische-sparkasse-dresden.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Sparkasse Pforzheim Calw",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparkasse-pforzheim-calw.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Sparkasse Dortmund",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparkasse-dortmund.de/de/home/privatkunden/wertpapiere-und-boerse.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Sparkasse Essen",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparkasse-essen.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Sparkasse Leipzig",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparkasse-leipzig.de/de/home/privatkunden/wertpapiere-und-boerse.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Sparkasse Heidelberg",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparkasse-heidelberg.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Sparkasse Bielefeld",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparkasse-bielefeld.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Sparkasse Karlsruhe",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparkasse-karlsruhe.de/de/home/privatkunden/wertpapiere-und-boerse.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Kreissparkasse Böblingen",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.kskbb.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Sparkasse Krefeld",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparkasse-krefeld.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Sparkasse Duisburg",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparkasse-duisburg.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Stadtsparkasse Wuppertal",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparkasse-wuppertal.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Sparkasse Mainfranken Würzburg",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparkasse-mainfranken.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Sparkasse Ulm",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparkasse-ulm.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Sparkasse Rhein Neckar Nord",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparkasse-rhein-neckar-nord.de/de/home/privatkunden/wertpapiere-und-boerse.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Kreissparkasse München Starnberg Ebersberg",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.kskmse.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Sparkasse Darmstadt und Dieburg",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparkasse-dadi.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Förde Sparkasse",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.foerde-sparkasse.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Sparkasse Holstein",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparkasse-holstein.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Sparkasse Saarbrücken",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparkasse-saarbruecken.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Kreissparkasse Waiblingen",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.kskwn.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Stadtsparkasse Augsburg",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sska.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Sparkasse Regensburg",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparkasse-regensburg.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Sparkasse Chemnitz",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.spk-chemnitz.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Sparkasse Freiburg-Nördlicher Breisgau",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparkasse-freiburg.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Sparkasse Bochum",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparkasse-bochum.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Kreissparkasse Reutlingen",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.ksk-reutlingen.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Taunus Sparkasse",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.taunussparkasse.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Sparkasse Westmünsterland",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparkasse-westmuensterland.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Sparkasse Vorderpfalz",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparkasse-vorderpfalz.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Sparkasse Neuss",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparkasse-neuss.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Sparkasse Mittelthüringen",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparkasse-mittelthueringen.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Sparkasse Osnabrück",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparkasse-osnabrueck.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Kasseler Sparkasse",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.kasseler-sparkasse.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Sparkasse Hildesheim Goslar Peine",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparkasse-hgp.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Sparkasse Magdeburg",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparkasse-magdeburg.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Sparkasse Allgäu",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.sparkasse-allgaeu.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Volksbank Mittelhessen",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.vb-mittelhessen.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Volksbank Köln Bonn",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.volksbank-koeln-bonn.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "VR Bank Bayern Mitte",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.vr-bayernmitte.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Volksbank Ulm-Biberach",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.volksbank-ulm-biberach.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Volksbank Rhein-Ruhr",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.volksbank-rhein-ruhr.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Volksbank Münsterland Nord",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.vb-muensterland.de/privatkunden/sparen-und-anlegen/anlegen/depot-und-brokerage/brokerage.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Volksbank BraWo",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.volksbank-brawo.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Hannoversche Volksbank",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.hannoversche-volksbank.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Deutsche Skatbank",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.skatbank.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Volksbank pur",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.volksbank-pur.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Dortmunder Volksbank",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.dovoba.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Volksbank Kraichgau",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.vbkraichgau.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Volksbank Dresden-Bautzen",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.volksbank-dresden-bautzen.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Volksbank Chemnitz",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.volksbank-chemnitz.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "Volksbank Lübeck",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.volksbank-luebeck.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "BIB - Bank im Bistum Essen",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.bib-fairbanking.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "DKM Darlehnskasse Münster",
+    "country": "DE",
+    "type": "Bank",
+    "url": "https://www.dkm.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
     "name": "Swissquote",
     "country": "CH",
     "type": "Bank",
@@ -5548,6 +6390,17 @@
     ]
   },
   {
+    "name": "LYNX Schweiz",
+    "country": "CH",
+    "type": "Broker",
+    "url": "https://www.lynxbroker.ch/",
+    "exchanges": [
+      "SIX Swiss Exchange",
+      "United States",
+      "Germany"
+    ]
+  },
+  {
     "name": "Bitpanda",
     "country": "AT",
     "type": "Neobroker",
@@ -6187,6 +7040,26 @@
     "type": "Bank",
     "url": "https://www.dolomitenbank.at/anlageberater/wertpapiere-kaufen",
     "exchanges": []
+  },
+  {
+    "name": "flatex Österreich",
+    "country": "AT",
+    "type": "Broker",
+    "url": "https://www.flatex.at/",
+    "exchanges": [
+      "Germany"
+    ]
+  },
+  {
+    "name": "LYNX Österreich",
+    "country": "AT",
+    "type": "Broker",
+    "url": "https://www.lynxbroker.at/",
+    "exchanges": [
+      "Wiener Börse",
+      "United States",
+      "Germany"
+    ]
   },
   {
     "name": "DEGIRO",
@@ -7473,6 +8346,17 @@
     ]
   },
   {
+    "name": "LYNX Belgium",
+    "country": "BE",
+    "type": "Broker",
+    "url": "https://www.lynx.be/",
+    "exchanges": [
+      "Euronext Brussels",
+      "United States",
+      "Germany"
+    ]
+  },
+  {
     "name": "BoursoBank (Boursorama)",
     "country": "FR",
     "type": "Bank",
@@ -8182,6 +9066,26 @@
     "country": "FR",
     "type": "Bank",
     "url": "https://www.hsbc.fr/en/mentions-legales",
+    "exchanges": [
+      "Euronext Paris"
+    ]
+  },
+  {
+    "name": "LYNX France",
+    "country": "FR",
+    "type": "Broker",
+    "url": "https://www.lynxbroker.fr/",
+    "exchanges": [
+      "Euronext Paris",
+      "United States",
+      "Germany"
+    ]
+  },
+  {
+    "name": "Banque Chalus",
+    "country": "FR",
+    "type": "Bank",
+    "url": "https://www.banque-chalus.fr/particulier/epargne/bourse/service-de-bourse-en-ligne-invest-store.html",
     "exchanges": [
       "Euronext Paris"
     ]
@@ -9129,6 +10033,132 @@
     "country": "IT",
     "type": "Bank",
     "url": "https://www.crdolomiti.it/privati/inbank/",
+    "exchanges": [
+      "Euronext Milan"
+    ]
+  },
+  {
+    "name": "Cassa Rurale Alta Valsugana",
+    "country": "IT",
+    "type": "Bank",
+    "url": "https://www.cr-altavalsugana.net/privati/investimenti/trading-online/",
+    "exchanges": [
+      "Euronext Milan"
+    ]
+  },
+  {
+    "name": "Banca di Caraglio",
+    "country": "IT",
+    "type": "Bank",
+    "url": "https://www.bancadicaraglio.it/privati/investimenti/trading-online/",
+    "exchanges": [
+      "Euronext Milan"
+    ]
+  },
+  {
+    "name": "Cassa Rurale Val di Non",
+    "country": "IT",
+    "type": "Bank",
+    "url": "https://www.crvaldinon.it/privati/investimenti/trading-online/",
+    "exchanges": [
+      "Euronext Milan"
+    ]
+  },
+  {
+    "name": "Banca Prealpi SanBiagio",
+    "country": "IT",
+    "type": "Bank",
+    "url": "https://www.bancaprealpisanbiagio.it/privati/investimenti/trading-online/",
+    "exchanges": [
+      "Euronext Milan"
+    ]
+  },
+  {
+    "name": "Cassa Padana",
+    "country": "IT",
+    "type": "Bank",
+    "url": "https://www.cassapadana.it/privati/investimenti/inbank-trading/",
+    "exchanges": [
+      "Euronext Milan"
+    ]
+  },
+  {
+    "name": "Banca di Cherasco",
+    "country": "IT",
+    "type": "Bank",
+    "url": "https://www.bancadicherasco.it/persone/investimenti/trading-online/",
+    "exchanges": [
+      "Euronext Milan"
+    ]
+  },
+  {
+    "name": "Banca del Territorio Lombardo",
+    "country": "IT",
+    "type": "Bank",
+    "url": "https://www.bancadelterritoriolombardo.it/privati/investimenti/trading-online/",
+    "exchanges": [
+      "Euronext Milan"
+    ]
+  },
+  {
+    "name": "Cassa Rurale FVG",
+    "country": "IT",
+    "type": "Bank",
+    "url": "https://www.cassaruralefvg.it/privati/investimenti/trading-online/",
+    "exchanges": [
+      "Euronext Milan"
+    ]
+  },
+  {
+    "name": "Romagna Banca",
+    "country": "IT",
+    "type": "Bank",
+    "url": "https://www.romagnabanca.it/privati/investimenti/trading-online/",
+    "exchanges": [
+      "Euronext Milan"
+    ]
+  },
+  {
+    "name": "Banca Malatestiana",
+    "country": "IT",
+    "type": "Bank",
+    "url": "https://www.bancamalatestiana.it/famiglie/investimenti/trading-online/",
+    "exchanges": [
+      "Euronext Milan"
+    ]
+  },
+  {
+    "name": "Cassa Rurale Vallagarina",
+    "country": "IT",
+    "type": "Bank",
+    "url": "https://www.crvallagarina.it/privati/investimenti/trading-online/",
+    "exchanges": [
+      "Euronext Milan"
+    ]
+  },
+  {
+    "name": "BCC Locorotondo",
+    "country": "IT",
+    "type": "Bank",
+    "url": "https://www.bcclocorotondo.it/privati/investimenti/trading-online/",
+    "exchanges": [
+      "Euronext Milan"
+    ]
+  },
+  {
+    "name": "Banca Centro Emilia",
+    "country": "IT",
+    "type": "Bank",
+    "url": "https://www.bancacentroemilia.it/privati/investimenti/trading-online/",
+    "exchanges": [
+      "Euronext Milan"
+    ]
+  },
+  {
+    "name": "Cassa Rurale Val di Fiemme",
+    "country": "IT",
+    "type": "Bank",
+    "url": "https://www.crvaldifiemme.it/privati/investimenti/trading-online/",
     "exchanges": [
       "Euronext Milan"
     ]
@@ -11027,6 +12057,31 @@
     ]
   },
   {
+    "name": "Nordnet Danmark",
+    "country": "DK",
+    "type": "Broker",
+    "url": "https://www.nordnet.dk/",
+    "exchanges": [
+      "Nasdaq Copenhagen",
+      "Nasdaq Stockholm",
+      "Oslo Børs",
+      "Nasdaq Helsinki",
+      "New York Stock Exchange",
+      "Nasdaq",
+      "Germany",
+      "Canada"
+    ]
+  },
+  {
+    "name": "Fælleskassen",
+    "country": "DK",
+    "type": "Bank",
+    "url": "https://faelleskassen.dk/generelt-om-investering/",
+    "exchanges": [
+      "Nasdaq Copenhagen"
+    ]
+  },
+  {
     "name": "Nordnet",
     "country": "SE",
     "type": "Broker",
@@ -11802,6 +12857,31 @@
     "exchanges": []
   },
   {
+    "name": "Nordnet Norge",
+    "country": "NO",
+    "type": "Broker",
+    "url": "https://www.nordnet.no/",
+    "exchanges": [
+      "Oslo Børs",
+      "Nasdaq Stockholm",
+      "Nasdaq Copenhagen",
+      "Nasdaq Helsinki",
+      "New York Stock Exchange",
+      "Nasdaq",
+      "Germany",
+      "Canada"
+    ]
+  },
+  {
+    "name": "Sbanken",
+    "country": "NO",
+    "type": "Bank",
+    "url": "https://sbanken.no/",
+    "exchanges": [
+      "Oslo Børs"
+    ]
+  },
+  {
     "name": "OP Ryhmä",
     "country": "FI",
     "type": "Bank",
@@ -11974,6 +13054,33 @@
       "New York Stock Exchange",
       "NYSE Arca",
       "Nasdaq"
+    ]
+  },
+  {
+    "name": "Nordnet Suomi",
+    "country": "FI",
+    "type": "Broker",
+    "url": "https://www.nordnet.fi/",
+    "exchanges": [
+      "Nasdaq Helsinki",
+      "Nasdaq Stockholm",
+      "Nasdaq Copenhagen",
+      "Oslo Børs",
+      "New York Stock Exchange",
+      "Nasdaq",
+      "Germany",
+      "Canada"
+    ]
+  },
+  {
+    "name": "LYNX Suomi",
+    "country": "FI",
+    "type": "Broker",
+    "url": "https://www.lynxbroker.fi/",
+    "exchanges": [
+      "Nasdaq Helsinki",
+      "United States",
+      "Germany"
     ]
   },
   {
@@ -12332,6 +13439,16 @@
     ]
   },
   {
+    "name": "LYNX Polska",
+    "country": "PL",
+    "type": "Broker",
+    "url": "https://www.lynxbroker.pl/",
+    "exchanges": [
+      "United States",
+      "Germany"
+    ]
+  },
+  {
     "name": "Fio banka e-Broker",
     "country": "CZ",
     "type": "Bank",
@@ -12545,6 +13662,16 @@
     "exchanges": []
   },
   {
+    "name": "LYNX Česko",
+    "country": "CZ",
+    "type": "Broker",
+    "url": "https://www.lynxbroker.cz/",
+    "exchanges": [
+      "United States",
+      "Germany"
+    ]
+  },
+  {
     "name": "Slovenská sporiteľňa",
     "country": "SK",
     "type": "Bank",
@@ -12687,6 +13814,16 @@
       "Prague Stock Exchange",
       "Tokyo Stock Exchange",
       "London Stock Exchange"
+    ]
+  },
+  {
+    "name": "LYNX Slovensko",
+    "country": "SK",
+    "type": "Broker",
+    "url": "https://www.lynxbroker.sk/",
+    "exchanges": [
+      "United States",
+      "Germany"
     ]
   },
   {
@@ -15427,6 +16564,25 @@
     ]
   },
   {
+    "name": "Raseed",
+    "country": "AE",
+    "type": "Neobroker",
+    "url": "https://raseedcapital.com/",
+    "exchanges": [
+      "New York Stock Exchange",
+      "Nasdaq"
+    ]
+  },
+  {
+    "name": "Nemo Money (Exinity ME)",
+    "country": "AE",
+    "type": "Neobroker",
+    "url": "https://nemo.money/",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
     "name": "Derayah Financial",
     "country": "SA",
     "type": "Broker",
@@ -15794,6 +16950,17 @@
     ]
   },
   {
+    "name": "InvestSky",
+    "country": "SA",
+    "type": "Neobroker",
+    "url": "https://investsky.com/",
+    "exchanges": [
+      "Tadawul",
+      "New York Stock Exchange",
+      "Nasdaq"
+    ]
+  },
+  {
     "name": "QNB Financial Services",
     "country": "QA",
     "type": "Bank",
@@ -16128,6 +17295,24 @@
     ]
   },
   {
+    "name": "KIB Invest (Kuwait International Bank)",
+    "country": "KW",
+    "type": "Broker",
+    "url": "https://www.kibinvest.com/",
+    "exchanges": [
+      "Boursa Kuwait"
+    ]
+  },
+  {
+    "name": "Zad Fintech (The Securities House)",
+    "country": "KW",
+    "type": "Neobroker",
+    "url": "https://www.joinzad.com/",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
     "name": "SICO",
     "country": "BH",
     "type": "Bank",
@@ -16447,6 +17632,16 @@
     "exchanges": []
   },
   {
+    "name": "PEPPER Invest",
+    "country": "IL",
+    "type": "Bank",
+    "url": "https://www.pepper.co.il/",
+    "exchanges": [
+      "Tel Aviv Stock Exchange",
+      "United States"
+    ]
+  },
+  {
     "name": "Mofid Brokerage",
     "country": "IR",
     "type": "Broker",
@@ -16598,6 +17793,186 @@
     "country": "IR",
     "type": "Broker",
     "url": "https://pasargadbroker.ir/",
+    "exchanges": [
+      "Tehran Stock Exchange",
+      "Iran Fara Bourse"
+    ]
+  },
+  {
+    "name": "Aban Brokerage",
+    "country": "IR",
+    "type": "Broker",
+    "url": "https://aban.net/",
+    "exchanges": [
+      "Tehran Stock Exchange",
+      "Iran Fara Bourse"
+    ]
+  },
+  {
+    "name": "Ati Saz Bazar Brokerage",
+    "country": "IR",
+    "type": "Broker",
+    "url": "https://atisazbroker.com/",
+    "exchanges": [
+      "Tehran Stock Exchange",
+      "Iran Fara Bourse"
+    ]
+  },
+  {
+    "name": "Bank Ayandeh Brokerage",
+    "country": "IR",
+    "type": "Broker",
+    "url": "https://babc.ir/",
+    "exchanges": [
+      "Tehran Stock Exchange",
+      "Iran Fara Bourse"
+    ]
+  },
+  {
+    "name": "Bahman Brokerage",
+    "country": "IR",
+    "type": "Broker",
+    "url": "https://www.bahmanbroker.ir/",
+    "exchanges": [
+      "Tehran Stock Exchange",
+      "Iran Fara Bourse"
+    ]
+  },
+  {
+    "name": "Sahm Barez Brokerage",
+    "country": "IR",
+    "type": "Broker",
+    "url": "https://barez.ir/",
+    "exchanges": [
+      "Tehran Stock Exchange",
+      "Iran Fara Bourse"
+    ]
+  },
+  {
+    "name": "Bank Day Brokerage",
+    "country": "IR",
+    "type": "Broker",
+    "url": "https://daybroker.ir/",
+    "exchanges": [
+      "Tehran Stock Exchange",
+      "Iran Fara Bourse"
+    ]
+  },
+  {
+    "name": "Firouzeh Asia Brokerage",
+    "country": "IR",
+    "type": "Broker",
+    "url": "https://firouzehasia.ir/",
+    "exchanges": [
+      "Tehran Stock Exchange",
+      "Iran Fara Bourse"
+    ]
+  },
+  {
+    "name": "Ganjineh Sepehr Part Brokerage",
+    "country": "IR",
+    "type": "Broker",
+    "url": "https://iganjineh.ir/",
+    "exchanges": [
+      "Tehran Stock Exchange",
+      "Iran Fara Bourse"
+    ]
+  },
+  {
+    "name": "Kian Brokerage (Kian Trader)",
+    "country": "IR",
+    "type": "Broker",
+    "url": "https://kian.trade/",
+    "exchanges": [
+      "Tehran Stock Exchange",
+      "Iran Fara Bourse"
+    ]
+  },
+  {
+    "name": "Loghman Brokerage",
+    "country": "IR",
+    "type": "Broker",
+    "url": "https://loghmanbroker.ir/",
+    "exchanges": [
+      "Tehran Stock Exchange",
+      "Iran Fara Bourse"
+    ]
+  },
+  {
+    "name": "Mehr Eghtesad Iranian Brokerage",
+    "country": "IR",
+    "type": "Broker",
+    "url": "https://meibours.ir/",
+    "exchanges": [
+      "Tehran Stock Exchange",
+      "Iran Fara Bourse"
+    ]
+  },
+  {
+    "name": "Melal Pouya Brokerage",
+    "country": "IR",
+    "type": "Broker",
+    "url": "https://melalsecurities.ir/",
+    "exchanges": [
+      "Tehran Stock Exchange",
+      "Iran Fara Bourse"
+    ]
+  },
+  {
+    "name": "Tamin Sarmayeh Novin Brokerage",
+    "country": "IR",
+    "type": "Broker",
+    "url": "https://nibb.ir/",
+    "exchanges": [
+      "Tehran Stock Exchange",
+      "Iran Fara Bourse"
+    ]
+  },
+  {
+    "name": "Ordibehesht Iranian Brokerage",
+    "country": "IR",
+    "type": "Broker",
+    "url": "https://oibourse.ir/",
+    "exchanges": [
+      "Tehran Stock Exchange",
+      "Iran Fara Bourse"
+    ]
+  },
+  {
+    "name": "Rabin Hooshmand Brokerage",
+    "country": "IR",
+    "type": "Broker",
+    "url": "https://rabinbroker.ir/",
+    "exchanges": [
+      "Tehran Stock Exchange",
+      "Iran Fara Bourse"
+    ]
+  },
+  {
+    "name": "Bank Saderat Iran Brokerage",
+    "country": "IR",
+    "type": "Broker",
+    "url": "https://saderatbourse.ir/",
+    "exchanges": [
+      "Tehran Stock Exchange",
+      "Iran Fara Bourse"
+    ]
+  },
+  {
+    "name": "Yazdan Brokerage",
+    "country": "IR",
+    "type": "Broker",
+    "url": "https://yazdanbr.ir/",
+    "exchanges": [
+      "Tehran Stock Exchange",
+      "Iran Fara Bourse"
+    ]
+  },
+  {
+    "name": "Karamad Brokerage",
+    "country": "IR",
+    "type": "Broker",
+    "url": "https://www.karamadbrokerage.com/",
     "exchanges": [
       "Tehran Stock Exchange",
       "Iran Fara Bourse"
@@ -17381,6 +18756,34 @@
     "country": "TR",
     "type": "Bank",
     "url": "https://dunyakatilim.com.tr/kendim-icin/yatirim-urunleri/sermaye-piyasasi-urunleri/hisse-senedi",
+    "exchanges": [
+      "Borsa Istanbul"
+    ]
+  },
+  {
+    "name": "Metro Menkul Değerler",
+    "country": "TR",
+    "type": "Broker",
+    "url": "https://www.metromenkul.com.tr/",
+    "exchanges": [
+      "Borsa Istanbul"
+    ]
+  },
+  {
+    "name": "NeoMenkul",
+    "country": "TR",
+    "type": "Neobroker",
+    "url": "https://www.neomenkul.com.tr/",
+    "exchanges": [
+      "Borsa Istanbul",
+      "United States"
+    ]
+  },
+  {
+    "name": "Neta Menkul Değerler",
+    "country": "TR",
+    "type": "Broker",
+    "url": "https://www.netamenkul.com/",
     "exchanges": [
       "Borsa Istanbul"
     ]
@@ -18251,6 +19654,114 @@
     ]
   },
   {
+    "name": "Compass Investments & Securities",
+    "country": "NG",
+    "type": "Broker",
+    "url": "https://compasssecurities.net/",
+    "exchanges": [
+      "Nigerian Exchange"
+    ]
+  },
+  {
+    "name": "Edgefield Capital Management",
+    "country": "NG",
+    "type": "Broker",
+    "url": "https://edgefieldng.com/",
+    "exchanges": [
+      "Nigerian Exchange"
+    ]
+  },
+  {
+    "name": "Globalview Capital (GTrade)",
+    "country": "NG",
+    "type": "Broker",
+    "url": "https://www.globalviewng.com/",
+    "exchanges": [
+      "Nigerian Exchange"
+    ]
+  },
+  {
+    "name": "ISAM Securities",
+    "country": "NG",
+    "type": "Broker",
+    "url": "https://isamsecurities.ng/",
+    "exchanges": [
+      "Nigerian Exchange"
+    ]
+  },
+  {
+    "name": "Kapital Care Trust & Securities",
+    "country": "NG",
+    "type": "Broker",
+    "url": "https://www.kapitalcaretrust.com/",
+    "exchanges": [
+      "Nigerian Exchange"
+    ]
+  },
+  {
+    "name": "Mission Securities",
+    "country": "NG",
+    "type": "Broker",
+    "url": "https://www.missionsecuritiesltd.com/",
+    "exchanges": [
+      "Nigerian Exchange"
+    ]
+  },
+  {
+    "name": "Nigerian Stockbrokers Limited (NSL Trade Online)",
+    "country": "NG",
+    "type": "Broker",
+    "url": "https://nslng.com/",
+    "exchanges": [
+      "Nigerian Exchange"
+    ]
+  },
+  {
+    "name": "Royal Guaranty & Trust",
+    "country": "NG",
+    "type": "Broker",
+    "url": "https://etrade.royalguarantytrustltd.com/",
+    "exchanges": [
+      "Nigerian Exchange"
+    ]
+  },
+  {
+    "name": "WCM Capital (Woodland Capital)",
+    "country": "NG",
+    "type": "Broker",
+    "url": "https://www.woodlandcapitalplc.com/",
+    "exchanges": [
+      "Nigerian Exchange"
+    ]
+  },
+  {
+    "name": "Zion Stockbrokers & Securities",
+    "country": "NG",
+    "type": "Broker",
+    "url": "https://www.zionstockbrokers.com/",
+    "exchanges": [
+      "Nigerian Exchange"
+    ]
+  },
+  {
+    "name": "Atlass Portfolio (CITITRADER)",
+    "country": "NG",
+    "type": "Broker",
+    "url": "https://atlassportfolios.com/",
+    "exchanges": [
+      "Nigerian Exchange"
+    ]
+  },
+  {
+    "name": "PIPC Securities",
+    "country": "NG",
+    "type": "Broker",
+    "url": "https://www.pipcsec.com/IW/Home/Login",
+    "exchanges": [
+      "Nigerian Exchange"
+    ]
+  },
+  {
     "name": "Hisa",
     "country": "KE",
     "type": "Neobroker",
@@ -18765,6 +20276,195 @@
     ]
   },
   {
+    "name": "3Way Finance (3Way for Trading in Securities)",
+    "country": "EG",
+    "type": "Broker",
+    "url": "https://www.3way-finance.com/",
+    "exchanges": [
+      "The Egyptian Exchange"
+    ]
+  },
+  {
+    "name": "Al Rowad Securities Brokerage",
+    "country": "EG",
+    "type": "Broker",
+    "url": "https://alrowadonline.com/",
+    "exchanges": [
+      "The Egyptian Exchange"
+    ]
+  },
+  {
+    "name": "Al Amalka Securities Brokerage (Amalka+)",
+    "country": "EG",
+    "type": "Broker",
+    "url": "https://al-amalka.com/",
+    "exchanges": [
+      "The Egyptian Exchange"
+    ]
+  },
+  {
+    "name": "Brokers Securities Brokerage",
+    "country": "EG",
+    "type": "Broker",
+    "url": "https://www.brokerseg.com/",
+    "exchanges": [
+      "The Egyptian Exchange"
+    ]
+  },
+  {
+    "name": "Commercial International Brokerage (Mahfazty CIBC)",
+    "country": "EG",
+    "type": "Broker",
+    "url": "https://www.mahfazty-cibc.com/",
+    "exchanges": [
+      "The Egyptian Exchange"
+    ]
+  },
+  {
+    "name": "Global Invest Securities",
+    "country": "EG",
+    "type": "Broker",
+    "url": "https://online.globalinv.com.eg/global/ContactUs",
+    "exchanges": [
+      "The Egyptian Exchange"
+    ]
+  },
+  {
+    "name": "Golden Way Securities Brokerage",
+    "country": "EG",
+    "type": "Broker",
+    "url": "https://www.goldenwayonline.com/Etrade/Home.aspx",
+    "exchanges": [
+      "The Egyptian Exchange"
+    ]
+  },
+  {
+    "name": "Horizon Securities Brokerage",
+    "country": "EG",
+    "type": "Broker",
+    "url": "https://www.horizon-brokerage.com/",
+    "exchanges": [
+      "The Egyptian Exchange"
+    ]
+  },
+  {
+    "name": "Arzan Brokerage Egypt (IFA Securities Brokerage)",
+    "country": "EG",
+    "type": "Broker",
+    "url": "https://www.arzanegypt.com/",
+    "exchanges": [
+      "The Egyptian Exchange"
+    ]
+  },
+  {
+    "name": "Mediterranean Securities Brokerage (Bahr)",
+    "country": "EG",
+    "type": "Broker",
+    "url": "https://apps.apple.com/eg/app/bahr-brokerage/id6756045216",
+    "exchanges": [
+      "The Egyptian Exchange"
+    ]
+  },
+  {
+    "name": "Metro Brokerage for Securities Trading",
+    "country": "EG",
+    "type": "Broker",
+    "url": "https://www.metrotrade.net/",
+    "exchanges": [
+      "The Egyptian Exchange"
+    ]
+  },
+  {
+    "name": "Mina Securities Brokerage",
+    "country": "EG",
+    "type": "Broker",
+    "url": "https://www.minastock.com/",
+    "exchanges": [
+      "The Egyptian Exchange"
+    ]
+  },
+  {
+    "name": "New Brent Securities Brokerage",
+    "country": "EG",
+    "type": "Broker",
+    "url": "https://www.newbrentbrokerage.com/",
+    "exchanges": [
+      "The Egyptian Exchange"
+    ]
+  },
+  {
+    "name": "Premiere Securities Brokerage",
+    "country": "EG",
+    "type": "Broker",
+    "url": "https://apps.apple.com/eg/app/premiere-securities/id6445872873",
+    "exchanges": [
+      "The Egyptian Exchange"
+    ]
+  },
+  {
+    "name": "Pyramids Capital Securities Brokerage",
+    "country": "EG",
+    "type": "Broker",
+    "url": "https://www.pyramidscapital.com/",
+    "exchanges": [
+      "The Egyptian Exchange"
+    ]
+  },
+  {
+    "name": "Roots Securities Brokerage",
+    "country": "EG",
+    "type": "Broker",
+    "url": "https://therootsbh.com/",
+    "exchanges": [
+      "The Egyptian Exchange"
+    ]
+  },
+  {
+    "name": "Royal Brokerage Securities & Bonds",
+    "country": "EG",
+    "type": "Broker",
+    "url": "https://www.royalmg.net/",
+    "exchanges": [
+      "The Egyptian Exchange"
+    ]
+  },
+  {
+    "name": "Trend Securities Brokerage",
+    "country": "EG",
+    "type": "Broker",
+    "url": "https://apps.apple.com/eg/app/trend-brokerage/id6744294450",
+    "exchanges": [
+      "The Egyptian Exchange"
+    ]
+  },
+  {
+    "name": "Watheeqa Securities Brokerage",
+    "country": "EG",
+    "type": "Broker",
+    "url": "https://www.watheeqa.com.eg/",
+    "exchanges": [
+      "The Egyptian Exchange"
+    ]
+  },
+  {
+    "name": "Egypt Stocks Securities Brokerage",
+    "country": "EG",
+    "type": "Broker",
+    "url": "https://apps.apple.com/eg/app/egypt-stocks-online/id6737269180",
+    "exchanges": [
+      "The Egyptian Exchange"
+    ]
+  },
+  {
+    "name": "Egyptian Kuwaiti Brokerage (EKB Online)",
+    "country": "EG",
+    "type": "Broker",
+    "url": "https://egksco-online.com/",
+    "exchanges": [
+      "The Egyptian Exchange"
+    ]
+  },
+  {
     "name": "Wafa Bourse",
     "country": "MA",
     "type": "Broker",
@@ -18938,6 +20638,15 @@
     "country": "TN",
     "type": "Broker",
     "url": "https://www.btkconseil.com/nos-produits/compte-libres/",
+    "exchanges": [
+      "Tunis Stock Exchange"
+    ]
+  },
+  {
+    "name": "Attijari Intermédiation (Attijari Bourse Mobile)",
+    "country": "TN",
+    "type": "Broker",
+    "url": "https://apps.apple.com/tn/app/attijari-bourse-mobile/id1495955805",
     "exchanges": [
       "Tunis Stock Exchange"
     ]
@@ -19187,6 +20896,15 @@
     "country": "JO",
     "type": "Broker",
     "url": "https://cfi.trade/en/jo",
+    "exchanges": [
+      "Amman Stock Exchange"
+    ]
+  },
+  {
+    "name": "Jordan Ahli Bank (ahli Invest)",
+    "country": "JO",
+    "type": "Bank",
+    "url": "https://ahli.com/ahli-invest-app",
     "exchanges": [
       "Amman Stock Exchange"
     ]
@@ -20002,6 +21720,25 @@
     ]
   },
   {
+    "name": "tastytrade Australia",
+    "country": "AU",
+    "type": "Broker",
+    "url": "https://tastytrade.com/en-au/",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "ANZ Share Investing",
+    "country": "AU",
+    "type": "Bank",
+    "url": "https://www.anz.com.au/personal/superannuation/online-share-investing/",
+    "exchanges": [
+      "ASX",
+      "Cboe Australia"
+    ]
+  },
+  {
     "name": "Sharesies",
     "country": "NZ",
     "type": "Neobroker",
@@ -20075,6 +21812,15 @@
       "London Stock Exchange",
       "ASX",
       "NZX"
+    ]
+  },
+  {
+    "name": "Stake NZ",
+    "country": "NZ",
+    "type": "Neobroker",
+    "url": "https://hellostake.com/nz",
+    "exchanges": [
+      "United States"
     ]
   },
   {
@@ -22398,6 +24144,33 @@
     ]
   },
   {
+    "name": "Tochigin TT Securities",
+    "country": "JP",
+    "type": "Broker",
+    "url": "https://www.tochigintt.co.jp/",
+    "exchanges": [
+      "Tokyo Stock Exchange"
+    ]
+  },
+  {
+    "name": "Ikeda Senshu TT Securities",
+    "country": "JP",
+    "type": "Broker",
+    "url": "https://www.sittsec.co.jp/",
+    "exchanges": [
+      "Tokyo Stock Exchange"
+    ]
+  },
+  {
+    "name": "Bloomo Securities",
+    "country": "JP",
+    "type": "Neobroker",
+    "url": "https://bloomo.co.jp/",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
     "name": "Kiwoom Securities",
     "country": "KR",
     "type": "Broker",
@@ -23384,6 +25157,46 @@
     "country": "TW",
     "type": "Broker",
     "url": "https://www.peicheng.com.tw/",
+    "exchanges": [
+      "Taiwan Stock Exchange",
+      "Taipei Exchange"
+    ]
+  },
+  {
+    "name": "Land Bank of Taiwan Securities",
+    "country": "TW",
+    "type": "Bank",
+    "url": "https://stock.landbank.com.tw/",
+    "exchanges": [
+      "Taiwan Stock Exchange",
+      "Taipei Exchange"
+    ]
+  },
+  {
+    "name": "Taiwan Business Bank Securities",
+    "country": "TW",
+    "type": "Bank",
+    "url": "https://www.tbb.com.tw/zh-tw/personal/investments/securities/intro",
+    "exchanges": [
+      "Taiwan Stock Exchange",
+      "Taipei Exchange"
+    ]
+  },
+  {
+    "name": "Ta Chan Securities (大展證券)",
+    "country": "TW",
+    "type": "Broker",
+    "url": "https://www.tachan.com.tw/",
+    "exchanges": [
+      "Taiwan Stock Exchange",
+      "Taipei Exchange"
+    ]
+  },
+  {
+    "name": "Da Chang Securities (大昌證券)",
+    "country": "TW",
+    "type": "Broker",
+    "url": "https://www.dcn.com.tw/",
     "exchanges": [
       "Taiwan Stock Exchange",
       "Taipei Exchange"
@@ -24475,6 +26288,135 @@
     ]
   },
   {
+    "name": "Asian Markets Securities",
+    "country": "IN",
+    "type": "Broker",
+    "url": "https://www.asianmarkets.in/",
+    "exchanges": [
+      "National Stock Exchange of India",
+      "BSE"
+    ]
+  },
+  {
+    "name": "Rikhav Securities",
+    "country": "IN",
+    "type": "Broker",
+    "url": "https://www.rikhav.net/",
+    "exchanges": [
+      "National Stock Exchange of India",
+      "BSE"
+    ]
+  },
+  {
+    "name": "Systematix Shares & Stocks",
+    "country": "IN",
+    "type": "Broker",
+    "url": "https://www.systematixgroup.in/",
+    "exchanges": [
+      "National Stock Exchange of India",
+      "BSE"
+    ]
+  },
+  {
+    "name": "PACE Stock Broking",
+    "country": "IN",
+    "type": "Broker",
+    "url": "https://www.pacefin.in/",
+    "exchanges": [
+      "National Stock Exchange of India",
+      "BSE"
+    ]
+  },
+  {
+    "name": "BP Wealth (BP Equities)",
+    "country": "IN",
+    "type": "Broker",
+    "url": "https://www.bpwealth.com/",
+    "exchanges": [
+      "National Stock Exchange of India",
+      "BSE"
+    ]
+  },
+  {
+    "name": "Abhipra Capital",
+    "country": "IN",
+    "type": "Broker",
+    "url": "https://www.abhipra.com/",
+    "exchanges": [
+      "National Stock Exchange of India",
+      "BSE"
+    ]
+  },
+  {
+    "name": "InCred Markets (formerly Elite Wealth)",
+    "country": "IN",
+    "type": "Broker",
+    "url": "https://www.incredmarkets.com/",
+    "exchanges": [
+      "National Stock Exchange of India",
+      "BSE"
+    ]
+  },
+  {
+    "name": "LKP Securities",
+    "country": "IN",
+    "type": "Broker",
+    "url": "https://www.lkpsec.com/",
+    "exchanges": [
+      "National Stock Exchange of India",
+      "BSE"
+    ]
+  },
+  {
+    "name": "Mehta Equities",
+    "country": "IN",
+    "type": "Broker",
+    "url": "https://mehtagroup.in/",
+    "exchanges": [
+      "National Stock Exchange of India",
+      "BSE"
+    ]
+  },
+  {
+    "name": "Borderless (formerly Stockal)",
+    "country": "IN",
+    "type": "Neobroker",
+    "url": "https://www.borderless.world/",
+    "exchanges": [
+      "United States"
+    ]
+  },
+  {
+    "name": "Kunvarji Finstock",
+    "country": "IN",
+    "type": "Broker",
+    "url": "https://kunvarji.com/",
+    "exchanges": [
+      "National Stock Exchange of India",
+      "BSE"
+    ]
+  },
+  {
+    "name": "SMIFS",
+    "country": "IN",
+    "type": "Broker",
+    "url": "https://www.smifs.com/",
+    "exchanges": [
+      "National Stock Exchange of India",
+      "BSE"
+    ]
+  },
+  {
+    "name": "Muthoot Securities",
+    "country": "IN",
+    "type": "Broker",
+    "url": "https://www.muthootsecurities.com/",
+    "exchanges": [
+      "National Stock Exchange of India",
+      "BSE"
+    ]
+  },
+  {
     "name": "InnovestX",
     "country": "TH",
     "type": "Broker",
@@ -24984,6 +26926,24 @@
     ]
   },
   {
+    "name": "I V Global Securities",
+    "country": "TH",
+    "type": "Broker",
+    "url": "https://www.ivglobal.co.th/",
+    "exchanges": [
+      "Stock Exchange of Thailand"
+    ]
+  },
+  {
+    "name": "Merchant Partners Securities",
+    "country": "TH",
+    "type": "Broker",
+    "url": "https://www.merchant.co.th/",
+    "exchanges": [
+      "Stock Exchange of Thailand"
+    ]
+  },
+  {
     "name": "Rakuten MY",
     "country": "MY",
     "type": "Broker",
@@ -25356,6 +27316,25 @@
     "url": "https://www.mnaonline.com.my/",
     "exchanges": [
       "Bursa Malaysia"
+    ]
+  },
+  {
+    "name": "Alliance Stockbanking (Alliance Bank Malaysia)",
+    "country": "MY",
+    "type": "Bank",
+    "url": "https://www.alliancestockbanking.com.my/",
+    "exchanges": [
+      "Bursa Malaysia"
+    ]
+  },
+  {
+    "name": "MIDF Invest",
+    "country": "MY",
+    "type": "Broker",
+    "url": "https://www.midf.com.my/share-trading",
+    "exchanges": [
+      "New York Stock Exchange",
+      "Nasdaq"
     ]
   },
   {
@@ -25886,6 +27865,87 @@
     ]
   },
   {
+    "name": "Ekokapital Sekuritas",
+    "country": "ID",
+    "type": "Broker",
+    "url": "https://ekokapital.com/",
+    "exchanges": [
+      "Indonesia Stock Exchange"
+    ]
+  },
+  {
+    "name": "Indo Harvest Sekuritas",
+    "country": "ID",
+    "type": "Broker",
+    "url": "https://ihsekuritas.co.id/",
+    "exchanges": [
+      "Indonesia Stock Exchange"
+    ]
+  },
+  {
+    "name": "Bumiputera Sekuritas",
+    "country": "ID",
+    "type": "Broker",
+    "url": "https://www.bumiputerasekuritas.co.id/",
+    "exchanges": [
+      "Indonesia Stock Exchange"
+    ]
+  },
+  {
+    "name": "Anugerah Sekuritas Indonesia",
+    "country": "ID",
+    "type": "Broker",
+    "url": "https://www.anugerahsekuritas.co.id/",
+    "exchanges": [
+      "Indonesia Stock Exchange"
+    ]
+  },
+  {
+    "name": "OCBC Sekuritas Indonesia (ONE Trade)",
+    "country": "ID",
+    "type": "Broker",
+    "url": "https://www.ocbcsekuritas.com/",
+    "exchanges": [
+      "Indonesia Stock Exchange"
+    ]
+  },
+  {
+    "name": "Surya Fajar Sekuritas (SFAST)",
+    "country": "ID",
+    "type": "Broker",
+    "url": "https://sfast.id/",
+    "exchanges": [
+      "Indonesia Stock Exchange"
+    ]
+  },
+  {
+    "name": "Pilarmas Investindo Sekuritas (POT)",
+    "country": "ID",
+    "type": "Broker",
+    "url": "https://apps.apple.com/us/app/id1556221479",
+    "exchanges": [
+      "Indonesia Stock Exchange"
+    ]
+  },
+  {
+    "name": "BNC Sekuritas Indonesia",
+    "country": "ID",
+    "type": "Broker",
+    "url": "https://www.bncsekuritas.com/",
+    "exchanges": [
+      "Indonesia Stock Exchange"
+    ]
+  },
+  {
+    "name": "YB Sekuritas (Yakin Bertumbuh Sekuritas)",
+    "country": "ID",
+    "type": "Broker",
+    "url": "https://www.yb.co.id/",
+    "exchanges": [
+      "Indonesia Stock Exchange"
+    ]
+  },
+  {
     "name": "COL Financial",
     "country": "PH",
     "type": "Broker",
@@ -26147,6 +28207,24 @@
     "country": "PH",
     "type": "Broker",
     "url": "https://www.meridiansec.com.ph/",
+    "exchanges": [
+      "Philippine Stock Exchange"
+    ]
+  },
+  {
+    "name": "F. Yap Securities",
+    "country": "PH",
+    "type": "Broker",
+    "url": "https://www.fyapsecurities.com/",
+    "exchanges": [
+      "Philippine Stock Exchange"
+    ]
+  },
+  {
+    "name": "Mercantile Securities",
+    "country": "PH",
+    "type": "Broker",
+    "url": "https://www.mercantilesec.com/",
     "exchanges": [
       "Philippine Stock Exchange"
     ]
@@ -27247,6 +29325,61 @@
     "country": "BR",
     "type": "Broker",
     "url": "https://www.codepe.com.br",
+    "exchanges": [
+      "B3 São Paulo"
+    ]
+  },
+  {
+    "name": "Webull Brasil",
+    "country": "BR",
+    "type": "Neobroker",
+    "url": "https://www.webull.com.br/",
+    "exchanges": [
+      "New York Stock Exchange",
+      "Nasdaq"
+    ]
+  },
+  {
+    "name": "Amaril Franklin",
+    "country": "BR",
+    "type": "Broker",
+    "url": "https://www.amarilfranklin.com.br/",
+    "exchanges": [
+      "B3 São Paulo"
+    ]
+  },
+  {
+    "name": "Monte Bravo",
+    "country": "BR",
+    "type": "Broker",
+    "url": "https://www.montebravo.com.br/",
+    "exchanges": [
+      "B3 São Paulo"
+    ]
+  },
+  {
+    "name": "Guru",
+    "country": "BR",
+    "type": "Neobroker",
+    "url": "https://guru.com.vc/",
+    "exchanges": [
+      "B3 São Paulo"
+    ]
+  },
+  {
+    "name": "Geral Investimentos",
+    "country": "BR",
+    "type": "Broker",
+    "url": "https://www.geralinvestimentos.com.br/",
+    "exchanges": [
+      "B3 São Paulo"
+    ]
+  },
+  {
+    "name": "Traders Corretora",
+    "country": "BR",
+    "type": "Broker",
+    "url": "https://traders.com.br/",
     "exchanges": [
       "B3 São Paulo"
     ]
@@ -28358,6 +30491,15 @@
     ]
   },
   {
+    "name": "Nevasa",
+    "country": "CL",
+    "type": "Broker",
+    "url": "https://www.nevasa.cl/",
+    "exchanges": [
+      "Santiago Stock Exchange"
+    ]
+  },
+  {
     "name": "Trii",
     "country": "CO",
     "type": "Neobroker",
@@ -28799,6 +30941,20 @@
     "country": "UY",
     "type": "Broker",
     "url": "https://www.maiorano.com.uy",
+    "exchanges": []
+  },
+  {
+    "name": "Balanz Uruguay",
+    "country": "UY",
+    "type": "Broker",
+    "url": "https://www.balanz.com.uy/",
+    "exchanges": []
+  },
+  {
+    "name": "Puente Uruguay",
+    "country": "UY",
+    "type": "Broker",
+    "url": "https://www.puentenet.com/uy",
     "exchanges": []
   },
   {
@@ -29942,6 +32098,333 @@
     ]
   },
   {
+    "name": "AB & Co. Ltd.",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://www.abcdsebroker.com/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "Bangladesh Finance Securities (BOOM)",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://bfsl.bd.finance/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "Aries Securities",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://www.ariessecurities.com/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "ASENZ Securities",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://asenz.com.bd/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "Delta Capital Limited",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://www.deltacapitalbd.com/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "Commerce Bank Securities and Investment",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://www.cbsil.com.bd/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "Apex Investments Limited",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://www.ail-bd.com/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "Be Rich Limited",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://www.berichbd.com/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "3i Securities",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://3isecuritiesltd.com/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "E-Securities",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://www.esecuritiesbd.com/",
+    "exchanges": [
+      "Dhaka Stock Exchange",
+      "Chittagong Stock Exchange"
+    ]
+  },
+  {
+    "name": "GMF Securities",
+    "country": "BD",
+    "type": "Broker",
+    "url": "http://gmfsecuritiesltd.com/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "Globe Investment and Fintech Company",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://gifc.com.bd/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "Island Securities",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://www.islctg.com/",
+    "exchanges": [
+      "Dhaka Stock Exchange",
+      "Chittagong Stock Exchange"
+    ]
+  },
+  {
+    "name": "HAC Securities",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://www.hacsecurities.com/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "K-Securities and Consultants",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://www.ksclbd.com/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "Midway Securities",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://www.midwaybd.com/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "Innova Securities",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://innovasecurities.com.bd/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "Modern Securities",
+    "country": "BD",
+    "type": "Broker",
+    "url": "http://www.modernsecurities.com/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "Joytun Securities International",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://joytunsecurities.com/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "Mirror Financial Management",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://www.mirrorfml.com/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "Mona Financial Consultancy & Securities",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://monafcs.com/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "One Securities",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://www.onesecuritiesbd.com/",
+    "exchanges": [
+      "Dhaka Stock Exchange",
+      "Chittagong Stock Exchange"
+    ]
+  },
+  {
+    "name": "Mondol Securities",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://www.mondolsecurities.com/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "Padma Bank Securities",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://padmasecurities.com.bd/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "Oshadhi Securities",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://www.oshadhisecuritiesltd.com/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "SAHCO Securities",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://sahcosecurities.biz/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "Rose Securities",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://www.rsldhaka.com/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "Sadeque Finance Management",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://sfml-bd.com/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "SBAC Bank Investment",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://www.sbacbsl.com/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "SAR Securities",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://www.sarsecltd.com/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "Remons Investment and Securities",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://remons.org/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "Relief Exchange Limited",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://rel.com.bd/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "United Securities",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://www.unitedsecurities.com.bd/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "Uniroyal Securities (uTrade)",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://utrade.com.bd/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "Ali Securities",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://www.alisecurities.com/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
+    "name": "Rasti Securities Consultant",
+    "country": "BD",
+    "type": "Broker",
+    "url": "https://rastiscl.com/",
+    "exchanges": [
+      "Dhaka Stock Exchange"
+    ]
+  },
+  {
     "name": "Capital Alliance",
     "country": "LK",
     "type": "Broker",
@@ -30081,6 +32564,69 @@
     "country": "LK",
     "type": "Broker",
     "url": "https://www.lolcsecurities.lk/",
+    "exchanges": [
+      "Colombo Stock Exchange"
+    ]
+  },
+  {
+    "name": "Acuity Stockbrokers",
+    "country": "LK",
+    "type": "Broker",
+    "url": "https://www.acuitystockbrokers.com/",
+    "exchanges": [
+      "Colombo Stock Exchange"
+    ]
+  },
+  {
+    "name": "Almas Equities (formerly Assetline Securities)",
+    "country": "LK",
+    "type": "Broker",
+    "url": "https://www.almasequities.com/",
+    "exchanges": [
+      "Colombo Stock Exchange"
+    ]
+  },
+  {
+    "name": "CT Smith Stockbrokers (formerly CT CLSA Securities)",
+    "country": "LK",
+    "type": "Broker",
+    "url": "https://www.ctsmith.lk/",
+    "exchanges": [
+      "Colombo Stock Exchange"
+    ]
+  },
+  {
+    "name": "Richard Pieris Securities",
+    "country": "LK",
+    "type": "Broker",
+    "url": "https://www.rpsecurities.com/",
+    "exchanges": [
+      "Colombo Stock Exchange"
+    ]
+  },
+  {
+    "name": "Sampath Securities (formerly SC Securities)",
+    "country": "LK",
+    "type": "Broker",
+    "url": "https://itrade.sampathsecurities.lk/atsweb/login",
+    "exchanges": [
+      "Colombo Stock Exchange"
+    ]
+  },
+  {
+    "name": "Ambeon Securities (Taprobane)",
+    "country": "LK",
+    "type": "Broker",
+    "url": "https://www.ambeonsecurities.lk/",
+    "exchanges": [
+      "Colombo Stock Exchange"
+    ]
+  },
+  {
+    "name": "First Guardian Equities",
+    "country": "LK",
+    "type": "Broker",
+    "url": "https://fge.lk/",
     "exchanges": [
       "Colombo Stock Exchange"
     ]
@@ -30279,6 +32825,600 @@
     "country": "NP",
     "type": "Broker",
     "url": "https://kalikasecurities.com/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Opal Securities Investment",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://opalsecurities.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Market Securities Exchange Company",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://marketsecurities.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "J.F. Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://jfsecurities.com/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Ashutosh Brokerage & Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms08.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Malla & Malla Stock Broking Company",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://mallastock.com/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Primo Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://www.primosecurities.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "ABC Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms17.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Sagarmatha Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms18.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Nepal Investment & Securities Trading",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms19.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Sipla Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://siplasecurities.com/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Midas Stock Broking Company",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://midasstock.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Sweta Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://swetasecurities.com/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Asian Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms26.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Shree Krishna Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms28.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Trishul Securities and Investment",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms29.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Kohinoor Investment and Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms35.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Swarnalaxmi Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://swarnalaxmisecurities.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Dipshikha Dhitopatra Karobar Co.",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms38.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Creative Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms40.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Linch Stock Market",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms41.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Sani Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms42.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "South Asian Bulls",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://southasianbulls.com/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Imperial Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms45.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Neev Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://neevsecurities.com/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Crystal Kanchanjungha Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms50.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Oxford Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://oxfordsecurities.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Sundhara Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://sundharasecurities.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Sewa Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://sewasecurities.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Bhrikuti Stock Broking",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://bhrikutistock.com/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Sri Hari Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms56.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Arya Tara Investment and Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms57.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Deevyaa Securities & Stock House",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://deevyaasecurities.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Nagarik Stock Dealer",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms60.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Bhole Ganesh Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms61.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Capital Max Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms62.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Sun Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://sunsecurities.com/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Sharepro Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://shareprosecurities.com/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Miyo Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms66.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Elite Stock House",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms68.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Index Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms69.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Infinity Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms70.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Shubhakamana Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://shubhakamanasecurities.com/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Hatemalo Financial Services",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://hatemalo.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Money World Share Exchange",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms73.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Kalash Stock Market",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://kalashstock.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Machhapuchchhre Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms76.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Garima Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://garimasecurities.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Pahi Investment",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://pahiinvestment.com/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Indira Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://indirasecurities.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Aakashbhairab Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms81.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "NMB Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms82.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Milky Way Share Broker Company",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms84.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Capital Hub",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms85.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Stoxkarts Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://stoxkarts.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "S.P.S.A. Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://spsasecurities.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Blue Chip Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms88.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "JBNL Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms89.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Sajilo Broker",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://sajilobroker.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "CBIL Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms91.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Roadshow Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://roadshowsecurities.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Beni Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms93.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "KBL Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://tms94.nepsetms.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Magnet Securities and Investment Company",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://magnetsecurities.com.np/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Himalayan Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://himalayansecurities.com/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Trademow Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://www.trademow.com/",
+    "exchanges": [
+      "Nepal Stock Exchange"
+    ]
+  },
+  {
+    "name": "Apple Securities",
+    "country": "NP",
+    "type": "Broker",
+    "url": "https://applesecurities.com.np/",
     "exchanges": [
       "Nepal Stock Exchange"
     ]
@@ -30603,6 +33743,267 @@
     "country": "PK",
     "type": "Neobroker",
     "url": "https://finqalab.com/",
+    "exchanges": [
+      "Pakistan Stock Exchange"
+    ]
+  },
+  {
+    "name": "Amanah Investments",
+    "country": "PK",
+    "type": "Broker",
+    "url": "https://amanahinvestments.com/",
+    "exchanges": [
+      "Pakistan Stock Exchange"
+    ]
+  },
+  {
+    "name": "Sakarwala Capital Securities",
+    "country": "PK",
+    "type": "Broker",
+    "url": "https://sakarwalasecurities.com/",
+    "exchanges": [
+      "Pakistan Stock Exchange"
+    ]
+  },
+  {
+    "name": "ASDA Securities",
+    "country": "PK",
+    "type": "Broker",
+    "url": "https://asdalive.com/",
+    "exchanges": [
+      "Pakistan Stock Exchange"
+    ]
+  },
+  {
+    "name": "Vector Securities",
+    "country": "PK",
+    "type": "Broker",
+    "url": "https://vector.com.pk/",
+    "exchanges": [
+      "Pakistan Stock Exchange"
+    ]
+  },
+  {
+    "name": "Time Securities",
+    "country": "PK",
+    "type": "Broker",
+    "url": "https://www.timesec.pk/",
+    "exchanges": [
+      "Pakistan Stock Exchange"
+    ]
+  },
+  {
+    "name": "HH Misbah Securities",
+    "country": "PK",
+    "type": "Broker",
+    "url": "https://www.hhm.com.pk/",
+    "exchanges": [
+      "Pakistan Stock Exchange"
+    ]
+  },
+  {
+    "name": "AHM Securities",
+    "country": "PK",
+    "type": "Broker",
+    "url": "https://www.ahmsecurities.com/",
+    "exchanges": [
+      "Pakistan Stock Exchange"
+    ]
+  },
+  {
+    "name": "Multiline Securities (MSL Trade)",
+    "country": "PK",
+    "type": "Broker",
+    "url": "https://www.msltrade.com/",
+    "exchanges": [
+      "Pakistan Stock Exchange"
+    ]
+  },
+  {
+    "name": "Bawa Securities",
+    "country": "PK",
+    "type": "Broker",
+    "url": "https://www.bawasecurities.com/",
+    "exchanges": [
+      "Pakistan Stock Exchange"
+    ]
+  },
+  {
+    "name": "WE Financial Services",
+    "country": "PK",
+    "type": "Broker",
+    "url": "https://we.com.pk/",
+    "exchanges": [
+      "Pakistan Stock Exchange"
+    ]
+  },
+  {
+    "name": "Tariq Vohra Securities",
+    "country": "PK",
+    "type": "Broker",
+    "url": "https://tvspl.com/",
+    "exchanges": [
+      "Pakistan Stock Exchange"
+    ]
+  },
+  {
+    "name": "Iqbal Usman Kodvavi Securities",
+    "country": "PK",
+    "type": "Broker",
+    "url": "https://www.iuks.com.pk/",
+    "exchanges": [
+      "Pakistan Stock Exchange"
+    ]
+  },
+  {
+    "name": "Fawad Yusuf Securities",
+    "country": "PK",
+    "type": "Broker",
+    "url": "https://www.fysltrade.com/",
+    "exchanges": [
+      "Pakistan Stock Exchange"
+    ]
+  },
+  {
+    "name": "FDM Capital Securities",
+    "country": "PK",
+    "type": "Broker",
+    "url": "https://fdm.com.pk/",
+    "exchanges": [
+      "Pakistan Stock Exchange"
+    ]
+  },
+  {
+    "name": "MSMANIAR Financials",
+    "country": "PK",
+    "type": "Broker",
+    "url": "https://www.msmfinancials.com/",
+    "exchanges": [
+      "Pakistan Stock Exchange"
+    ]
+  },
+  {
+    "name": "Growth Securities",
+    "country": "PK",
+    "type": "Broker",
+    "url": "https://growthsecurities.com.pk/",
+    "exchanges": [
+      "Pakistan Stock Exchange"
+    ]
+  },
+  {
+    "name": "Seven Star Securities",
+    "country": "PK",
+    "type": "Broker",
+    "url": "https://sevenstarsec.com/",
+    "exchanges": [
+      "Pakistan Stock Exchange"
+    ]
+  },
+  {
+    "name": "Axis Global Limited",
+    "country": "PK",
+    "type": "Broker",
+    "url": "https://axisgloballimited.com/",
+    "exchanges": [
+      "Pakistan Stock Exchange"
+    ]
+  },
+  {
+    "name": "Trade Smart Securities",
+    "country": "PK",
+    "type": "Broker",
+    "url": "https://tradesmart.pk/",
+    "exchanges": [
+      "Pakistan Stock Exchange"
+    ]
+  },
+  {
+    "name": "Y.H. Securities",
+    "country": "PK",
+    "type": "Broker",
+    "url": "https://www.yhsecurities.com/",
+    "exchanges": [
+      "Pakistan Stock Exchange"
+    ]
+  },
+  {
+    "name": "Oriental Securities Pakistan",
+    "country": "PK",
+    "type": "Broker",
+    "url": "https://www.osl.com.pk/",
+    "exchanges": [
+      "Pakistan Stock Exchange"
+    ]
+  },
+  {
+    "name": "Rafi Securities",
+    "country": "PK",
+    "type": "Broker",
+    "url": "https://rafisecurities.com/",
+    "exchanges": [
+      "Pakistan Stock Exchange"
+    ]
+  },
+  {
+    "name": "Spectrum Securities",
+    "country": "PK",
+    "type": "Broker",
+    "url": "https://www.spectrumonline.com.pk/",
+    "exchanges": [
+      "Pakistan Stock Exchange"
+    ]
+  },
+  {
+    "name": "R.T. Securities",
+    "country": "PK",
+    "type": "Broker",
+    "url": "https://www.rtsecurities.com.pk/",
+    "exchanges": [
+      "Pakistan Stock Exchange"
+    ]
+  },
+  {
+    "name": "Value Stock and Commodities",
+    "country": "PK",
+    "type": "Broker",
+    "url": "https://www.valuestock.pk/",
+    "exchanges": [
+      "Pakistan Stock Exchange"
+    ]
+  },
+  {
+    "name": "BOP Capital Securities",
+    "country": "PK",
+    "type": "Broker",
+    "url": "https://bopcapital.com.pk/",
+    "exchanges": [
+      "Pakistan Stock Exchange"
+    ]
+  },
+  {
+    "name": "Integrated Equities",
+    "country": "PK",
+    "type": "Broker",
+    "url": "https://www.iel.net.pk/",
+    "exchanges": [
+      "Pakistan Stock Exchange"
+    ]
+  },
+  {
+    "name": "Pasha Securities",
+    "country": "PK",
+    "type": "Broker",
+    "url": "https://pashasec.com/",
+    "exchanges": [
+      "Pakistan Stock Exchange"
+    ]
+  },
+  {
+    "name": "Akik Capital",
+    "country": "PK",
+    "type": "Broker",
+    "url": "https://akikcapital.com/",
     "exchanges": [
       "Pakistan Stock Exchange"
     ]
@@ -32044,5 +35445,12 @@
     "exchanges": [
       "BRVM"
     ]
+  },
+  {
+    "name": "USE Easy Portal (Uganda Securities Exchange)",
+    "country": "UG",
+    "type": "Broker",
+    "url": "https://www.use.or.ug/scd/services/easy-portal",
+    "exchanges": []
   }
 ]

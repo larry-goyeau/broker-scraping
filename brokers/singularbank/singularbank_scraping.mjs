@@ -2,10 +2,11 @@
 // with no login. Two public searches are the book.
 //
 // Shares are the trading-center instrument search. Fewer than three
-// characters is refused, so the walk starts at three. A query that comes
-// back full is walked one character further. Warrants are in the same
-// search and are not kept. A tracker is an ETF and is taken from the ETF
-// search instead, which is the whole book.
+// characters is refused, so the walk starts at three. A query the service
+// refuses outright, or one that comes back with at least 400 names, is
+// walked one character further. A shorter answer is the whole match:
+// warrants are in it and are not kept. A tracker is an ETF and is taken
+// from the ETF search instead, which is the whole book.
 //
 // The ETF search is one list. Each line names the markets it trades on,
 // one ticker, and no currency. The quote for that ISIN on that market
@@ -47,8 +48,9 @@ const MIC = {
 };
 
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-// A three-character query that still fills the page is walked further.
-const SPLIT_AT = 150;
+// The fullest ordinary answer seen is a little over 200 names, warrants
+// included. Only a page at least this long is treated as cut off.
+const SPLIT_AT = 400;
 const QUOTE_BATCH = 12;
 const LANES = 4;
 
@@ -314,6 +316,7 @@ async function loadEtfs(rows, seen) {
 
 // Null means the query itself was refused. AAB does that: the service
 // answers "Unknown error" and the names are recovered one character further.
+// Undefined means the call timed out and the same query has to be asked again.
 async function searchPrefix(prefix) {
   let last = "";
   for (let attempt = 0; attempt < 4; attempt += 1) {
@@ -325,10 +328,15 @@ async function searchPrefix(prefix) {
     } catch (error) {
       last = error.message || String(error);
     }
-    if (/unknown error|timeout|aborted/i.test(last)) return null;
+    if (/unknown error/i.test(last)) return null;
     if (/no encontrado|not found|introuvable/i.test(last)) return [];
+    if (/timeout|aborted/i.test(last)) {
+      await sleep(400 * (attempt + 1));
+      continue;
+    }
     await sleep(400 * (attempt + 1));
   }
+  if (/timeout|aborted/i.test(last)) return undefined;
   console.error(`${prefix}: ${last}`);
   return null;
 }
@@ -347,6 +355,11 @@ async function loadStocks(rows, seen) {
       cursor += 1;
       inflight.add(prefix);
       const items = await searchPrefix(prefix);
+      if (items === undefined) {
+        inflight.delete(prefix);
+        pending.push(prefix);
+        continue;
+      }
       if (items) {
         for (const item of items) {
           const kind = String(item.instrumentType || "");
@@ -355,7 +368,7 @@ async function loadStocks(rows, seen) {
           if (row) addRow(rows, seen, row);
         }
       }
-      if ((!items || items.length >= SPLIT_AT) && prefix.length < 6) {
+      if ((items === null || items.length >= SPLIT_AT) && prefix.length < 6) {
         for (const ch of ALPHABET) {
           const next = prefix + ch;
           if (!donePrefixes.has(next)) pending.push(next);

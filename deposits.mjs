@@ -388,6 +388,12 @@ const FOLDER = {
   // account. It is credited in rupees. No other currency is left unconverted.
   // https://www.gopocket.in/funds-policy
   gopocket: ["INR"],
+  // A pay-in by UPI, net banking, NEFT, RTGS or IMPS is credited to the
+  // Groww balance in rupees and left there. An NRE account is not accepted.
+  // An NRO transfer is also rupees. No other currency is left unconverted.
+  // https://groww.in/help/payments-&-withdrawals/deposit/how-do-i-add-transfer-money-to-groww-balance--13
+  // https://groww.in/help/my-account/ma-bank-accounts/what-payment-methods-are-supported-on-groww-2
+  groww: ["INR"],
   // A pay-in by UPI or net banking is credited in rupees. The account must
   // be an Indian savings account. An NRI bank account is not accepted.
   // https://tradesmartonline.in/open-demat-account/

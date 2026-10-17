@@ -1724,11 +1724,10 @@ let brokerCountries = null;
 function brokerCountry(folder) {
   if (!brokerCountries) {
     brokerCountries = new Map();
-    const file = new URL("../broker-list.txt", import.meta.url);
-    const rows = fs.readFileSync(file, "utf8").split("\n").slice(1).map((line) => {
-      const [name, country] = line.split("\t");
-      return { name: name || "", country: country || "" };
-    }).filter((row) => row.name);
+    const file = new URL("../broker-list.json", import.meta.url);
+    const rows = JSON.parse(fs.readFileSync(file, "utf8"))
+      .filter((row) => row && row.name)
+      .map((row) => ({ name: row.name, country: row.country || "" }));
     const find = (wanted) =>
       rows.find((row) => row.name === wanted) || rows.find((row) => slug(row.name) === slug(wanted));
     const folders = new Set([...Object.keys(BROKER_NAME), ...Object.keys(BROKER_LIST)]);

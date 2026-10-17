@@ -4,7 +4,7 @@
 // the broker names it separately, e.g. bunq / Ginmon).
 //
 // Lists are taken from the broker's own help or onboarding pages. A broker
-// missing here falls back to the home country in broker-list.txt.
+// missing here falls back to the home country in broker-list.json.
 
 import { fillListIsins } from "./listIsins.mjs";
 
@@ -744,6 +744,14 @@ export const ACCEPTED = {
   // so the country is IN.
   // https://www.gopocket.in/
   gopocket: { countries: ["IN"] },
+  // Opening is PAN and an Aadhaar-linked mobile number. The help centre
+  // says an NRI cannot invest in stocks, even with an NRI KYC. A separate
+  // page offers an NRI demat through an NRO account and does not name the
+  // countries of residence. The picker is a country, so the country is IN.
+  // https://groww.in/open-demat-account
+  // https://groww.in/help/my-account/ma-account-details/i-am-an-nri--and-my-nri-kyc-is-verified--can-i-invest-through-groww--42
+  // https://groww.in/open-nri-demat-account
+  groww: { countries: ["IN"] },
   // The online form is for a resident individual. The mobile field is fixed
   // at +91 and asks for a 10-digit number, then an OTP. A company or an NRI
   // is told to email instead. The picker is a country, so the country is IN.

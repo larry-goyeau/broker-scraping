@@ -27,7 +27,7 @@ const PORT = (() => {
 
 const HTML = new URL("front.html", import.meta.url);
 const METHOD = new URL("method.html", import.meta.url);
-const LIST = new URL("broker-list.txt", import.meta.url);
+const LIST = new URL("broker-list.json", import.meta.url);
 
 function slug(value) {
   return String(value || "")
@@ -46,21 +46,15 @@ function prettyFolder(folder) {
 }
 
 function loadBrokerMeta() {
-  const rows = [];
-  if (fs.existsSync(LIST)) {
-    for (const line of fs.readFileSync(LIST, "utf8").split(/\r?\n/)) {
-      if (!line.trim()) continue;
-      const [name, country, type, , url] = line.split("\t");
-      if (!name || name === "name") continue;
-      rows.push({
-        name,
-        country: country || "",
-        type: type || "",
-        url: url || "",
-      });
-    }
-  }
-  return rows;
+  if (!fs.existsSync(LIST)) return [];
+  const rows = JSON.parse(fs.readFileSync(LIST, "utf8"));
+  return rows.filter((row) => row && row.name).map((row) => ({
+    name: row.name,
+    country: row.country || "",
+    type: row.type || "",
+    url: row.url || "",
+    exchanges: Array.isArray(row.exchanges) ? row.exchanges : [],
+  }));
 }
 
 const FOLDER_NAME = {
@@ -151,6 +145,8 @@ const FOLDER_NAME = {
   icici: "ICICI",
   hdfcsky: "HDFC Sky",
   futu: "Futu",
+  // "monex" is also the start of Monex Boom and Monex Casa de Bolsa.
+  monex: "Monex Japan",
 };
 
 // Display name above, broker-list row below, when the two differ.

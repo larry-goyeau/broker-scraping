@@ -70,9 +70,7 @@ const prefixLimit = arg("prefix").trim().toUpperCase();
 const sample = LIMIT > 0 || Boolean(prefixLimit);
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const jar = new Map();
-
-function store(response) {
+function store(jar, response) {
   const lines = typeof response.headers.getSetCookie === "function" ? response.headers.getSetCookie() : [];
   for (const line of lines) {
     const pair = line.split(";")[0];
@@ -81,7 +79,7 @@ function store(response) {
   }
 }
 
-function cookieHeader() {
+function cookieHeader(jar) {
   return [...jar].map(([key, value]) => `${key}=${value}`).join("; ");
 }
 
@@ -114,15 +112,15 @@ function encodeForm(value, prefix) {
   return parts.filter(Boolean).join("&");
 }
 
-async function getText(url) {
+async function getText(url, jar = new Map()) {
   let last = "";
   for (let attempt = 0; attempt < 5; attempt += 1) {
     try {
       const response = await fetch(url, {
-        headers: { "User-Agent": UA, Cookie: cookieHeader(), Accept: "*/*" },
+        headers: { "User-Agent": UA, Cookie: cookieHeader(jar), Accept: "*/*" },
         signal: AbortSignal.timeout(30_000),
       });
-      store(response);
+      store(jar, response);
       if (response.ok) return response.text();
       last = `${response.status} ${url}`;
     } catch (error) {
@@ -135,19 +133,14 @@ async function getText(url) {
 
 let apiKey = "";
 
-async function signature() {
-  const text = await getText(SIGN);
-  const parsed = JSON.parse(text);
-  if (!Array.isArray(parsed) || parsed.length < 3) throw new Error("bad signature");
-  return parsed;
-}
-
-// One signed POST can carry several services. The answer is s0, s1, ...
+// The signature is tied to the cookie just set, so each call keeps its own.
 async function call(actions) {
   let last = "";
   for (let attempt = 0; attempt < 5; attempt += 1) {
+    const jar = new Map();
     try {
-      const sig = await signature();
+      const sig = JSON.parse(await getText(SIGN, jar));
+      if (!Array.isArray(sig) || sig.length < 3) throw new Error("bad signature");
       const action = {};
       const query = [];
       actions.forEach(([service, params], index) => {
@@ -171,7 +164,7 @@ async function call(actions) {
         method: "POST",
         headers: {
           "User-Agent": UA,
-          Cookie: cookieHeader(),
+          Cookie: cookieHeader(jar),
           Accept: "application/json",
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
           Origin: "https://tradingcenter.selfbank.es",
@@ -179,7 +172,7 @@ async function call(actions) {
         body,
         signal: AbortSignal.timeout(40_000),
       });
-      store(response);
+      store(jar, response);
       if (!response.ok) {
         last = `${response.status} ${actions[0][0]}`;
       } else {
@@ -281,26 +274,6 @@ function seeds() {
   return layer;
 }
 
-async function searchPrefix(prefix) {
-  let last = "";
-  for (let attempt = 0; attempt < 4; attempt += 1) {
-    try {
-      const [slot] = await call([["Feed_Instrument.search", { query: prefix }]]);
-      if (slot && slot.error) {
-        last = slot.error.message || "search refused";
-      } else {
-        const items = slot && slot.result && Array.isArray(slot.result.instruments) ? slot.result.instruments : null;
-        if (items) return items;
-        last = "search had no instruments";
-      }
-    } catch (error) {
-      last = error.message || String(error);
-    }
-    await sleep(400 * (attempt + 1));
-  }
-  throw new Error(`${prefix}: ${last}`);
-}
-
 async function loadEtfs(rows, seen) {
   const page = JSON.parse(await getText(FUNDS));
   let funds = Array.isArray(page.funds) ? page.funds : [];
@@ -339,41 +312,71 @@ async function loadEtfs(rows, seen) {
   return missed;
 }
 
+// Null means the query itself was refused. AAB does that: the service
+// answers "Unknown error" and the names are recovered one character further.
+async function searchPrefix(prefix) {
+  let last = "";
+  for (let attempt = 0; attempt < 4; attempt += 1) {
+    try {
+      const [slot] = await call([["Feed_Instrument.search", { query: prefix }]]);
+      const items = slot && !slot.error && slot.result && Array.isArray(slot.result.instruments) ? slot.result.instruments : null;
+      if (items) return items;
+      last = (slot && slot.error && slot.error.message) || "search had no instruments";
+    } catch (error) {
+      last = error.message || String(error);
+    }
+    if (/unknown error|timeout|aborted/i.test(last)) return null;
+    if (/no encontrado|not found|introuvable/i.test(last)) return [];
+    await sleep(400 * (attempt + 1));
+  }
+  console.error(`${prefix}: ${last}`);
+  return null;
+}
+
 async function loadStocks(rows, seen) {
   const pending = seeds();
   const kinds = new Map();
+  const inflight = new Set();
   let cursor = 0;
   let searched = 0;
+
   async function run() {
     while (cursor < pending.length) {
       if (LIMIT > 0 && rows.filter((row) => row.type === "STOCK").length >= LIMIT) return;
-      const index = cursor;
+      const prefix = pending[cursor];
       cursor += 1;
-      const prefix = pending[index];
+      inflight.add(prefix);
       const items = await searchPrefix(prefix);
-      for (const item of items) {
-        const kind = String(item.instrumentType || "");
-        if (kind !== "Stock") kinds.set(kind, (kinds.get(kind) || 0) + 1);
-        const row = stockRow(item);
-        if (row) addRow(rows, seen, row);
+      if (items) {
+        for (const item of items) {
+          const kind = String(item.instrumentType || "");
+          if (kind !== "Stock") kinds.set(kind, (kinds.get(kind) || 0) + 1);
+          const row = stockRow(item);
+          if (row) addRow(rows, seen, row);
+        }
       }
-      if (items.length >= SPLIT_AT && prefix.length < 6) {
+      if ((!items || items.length >= SPLIT_AT) && prefix.length < 6) {
         for (const ch of ALPHABET) {
           const next = prefix + ch;
           if (!donePrefixes.has(next)) pending.push(next);
         }
       }
       donePrefixes.add(prefix);
+      inflight.delete(prefix);
       searched += 1;
       if (!sample && searched % 40 === 0) {
-        fs.writeFileSync(PROGRESS, JSON.stringify({ done: [...donePrefixes], pending: pending.slice(cursor) }));
+        fs.writeFileSync(PROGRESS, JSON.stringify({
+          done: [...donePrefixes],
+          pending: pending.slice(cursor).concat([...inflight]),
+        }));
         fs.writeFileSync(OUTPUT, JSON.stringify(stampRows(withoutObligations(rows)), null, 2));
         console.error(`${donePrefixes.size} prefixes, ${rows.filter((row) => row.type === "STOCK").length} shares`);
       }
     }
   }
-  await Promise.all(Array.from({ length: Math.min(LANES, pending.length) }, () => run()));
-  if (!sample && fs.existsSync(PROGRESS)) fs.unlinkSync(PROGRESS);
+
+  await Promise.all(Array.from({ length: Math.min(LANES, Math.max(pending.length, 1)) }, () => run()));
+  if (!sample && cursor >= pending.length && fs.existsSync(PROGRESS)) fs.unlinkSync(PROGRESS);
   return kinds;
 }
 

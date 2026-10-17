@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-16T14:00:58.518Z",
+  "generatedAt": "2026-10-16T23:07:20.974Z",
   "source": "EODHD, les bourses du Golfe, KASE pour un last en tenge, la clôture VNDirect pour une action ou un ETF du Vietnam, le bulletin de Lima pour une clôture en soles ou en dollars, la clôture NSENG pour un last en naira, et Yahoo pour un last quand le vendeur n'a rien",
   "unit": "prices[ISIN][devise] = { price, at, from } : la clôture du dernier jour de bourse, dans la devise de cotation, pour convertir un nombre de parts en montant. Une même ligne cotée sur plusieurs places dans la même devise garde sous `from` toutes ses cotations ; `price` retient la place principale. Londres cote en pence, donc GBX et GBP sont deux entrées, que `fx.mjs` sait distinguer. Ce n'est pas un prix temps réel : il sert à dimensionner un ordre, pas à l'exécuter. `fetched` date la dernière interrogation EODHD, y compris un miss, pour ne pas brûler le quota. `fallback` date le last Yahoo (ou le constat qu'il n'y en a pas), pour ne pas le redemander chaque vue.",
   "fetched": {
@@ -1016,7 +1016,7 @@
     "US00846U1016": "2026-10-04T12:44:38.826Z",
     "INF247L01CH6": "2026-10-04T12:44:39.628Z",
     "INE144J01027": "2026-10-04T13:09:02.407Z",
-    "INE562A01011": "2026-10-04T15:09:31.321Z",
+    "INE562A01011": "2026-10-16T23:07:09.840Z",
     "KYG6772F1028": "2026-10-04T15:29:40.701Z",
     "JP3165600002": "2026-10-04T17:02:02.982Z",
     "JP3027710007": "2026-10-15T11:18:37.575Z",
@@ -8789,7 +8789,8 @@
     "ARBCOM4603W8": "2026-10-16T11:38:43.429Z",
     "BRAALLBDR003": "2026-10-16T11:38:43.434Z",
     "US02376R1023": "2026-10-16T11:38:43.435Z",
-    "CA88162R1091": "2026-10-16T11:42:56.689Z"
+    "CA88162R1091": "2026-10-16T11:42:56.689Z",
+    "BRAAPLBDR004": "2026-10-16T23:07:08.011Z"
   },
   "fallback": {
     "CA34539A1066": "2026-09-18T17:21:39.427Z",
@@ -70310,12 +70311,12 @@
     },
     "INE562A01011": {
       "INR": {
-        "price": 793.15,
-        "at": "2026-10-01",
+        "price": 854.1,
+        "at": "2026-10-16",
         "from": {
           "NSE:INDIANB": {
-            "price": 793.15,
-            "at": "2026-10-01",
+            "price": 854.1,
+            "at": "2026-10-16",
             "primary": false
           }
         }
@@ -188614,6 +188615,11 @@
           "YAHOO:AAPL34.SA": {
             "price": 87.75,
             "at": "2026-10-15",
+            "primary": false
+          },
+          "SA:AAPL34": {
+            "price": 87.1,
+            "at": "2026-10-16",
             "primary": false
           }
         }

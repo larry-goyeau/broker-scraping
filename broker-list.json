@@ -4413,7 +4413,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-nuernberg.de/de/home/privatkunden/wertpapiere-und-boerse/depotmodelle.html",
     "exchanges": [
-      "Germany"
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Frankfurt",
+      "Börse Xetra",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -4422,7 +4431,16 @@
     "type": "Bank",
     "url": "https://www.ksklb.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Frankfurt",
+      "Börse Xetra",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -4431,7 +4449,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-aachen.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Frankfurt",
+      "Börse Xetra",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -4440,7 +4467,16 @@
     "type": "Bank",
     "url": "https://www.ksk-es.de/de/home/privatkunden/wertpapiere-und-boerse.html",
     "exchanges": [
-      "Germany"
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Frankfurt",
+      "Börse Xetra",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -4450,7 +4486,15 @@
     "url": "https://www.sparkasse-muensterland-ost.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
       "Tradegate",
-      "Germany"
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Frankfurt",
+      "Börse Xetra",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "gettex"
     ]
   },
   {
@@ -4459,7 +4503,16 @@
     "type": "Bank",
     "url": "https://www.ostsaechsische-sparkasse-dresden.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Frankfurt",
+      "Börse Xetra",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -4469,7 +4522,15 @@
     "url": "https://www.sparkasse-pforzheim-calw.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
       "Tradegate",
-      "Germany"
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Frankfurt",
+      "Börse Xetra",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "gettex"
     ]
   },
   {
@@ -4480,7 +4541,14 @@
     "exchanges": [
       "Börse Xetra",
       "Tradegate",
-      "Germany"
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Frankfurt",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "gettex"
     ]
   },
   {
@@ -4490,7 +4558,15 @@
     "url": "https://www.sparkasse-essen.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
       "Tradegate",
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "gettex"
     ]
   },
   {
@@ -4499,7 +4575,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-leipzig.de/de/home/privatkunden/wertpapiere-und-boerse.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -4508,7 +4593,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-heidelberg.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -4518,7 +4612,15 @@
     "url": "https://www.sparkasse-bielefeld.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
       "Tradegate",
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "gettex"
     ]
   },
   {
@@ -4527,7 +4629,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-karlsruhe.de/de/home/privatkunden/wertpapiere-und-boerse.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -4536,7 +4647,16 @@
     "type": "Bank",
     "url": "https://www.kskbb.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -4545,7 +4665,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-krefeld.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -4554,8 +4683,7 @@
     "type": "Bank",
     "url": "https://www.sparkasse-duisburg.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Tradegate",
-      "Germany"
+      "Tradegate"
     ]
   },
   {
@@ -4565,7 +4693,15 @@
     "url": "https://www.sparkasse-wuppertal.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
       "Tradegate",
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "gettex"
     ]
   },
   {
@@ -4574,7 +4710,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-mainfranken.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -4583,7 +4728,7 @@
     "type": "Bank",
     "url": "https://www.sparkasse-ulm.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Tradegate"
     ]
   },
   {
@@ -4601,8 +4746,7 @@
     "type": "Bank",
     "url": "https://www.kskmse.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Tradegate",
-      "Germany"
+      "Tradegate"
     ]
   },
   {
@@ -4611,7 +4755,7 @@
     "type": "Bank",
     "url": "https://www.sparkasse-dadi.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Tradegate"
     ]
   },
   {
@@ -4647,8 +4791,7 @@
     "type": "Bank",
     "url": "https://www.kskwn.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Tradegate",
-      "Germany"
+      "Tradegate"
     ]
   },
   {
@@ -4657,7 +4800,7 @@
     "type": "Bank",
     "url": "https://www.sska.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse München"
     ]
   },
   {
@@ -4675,7 +4818,16 @@
     "type": "Bank",
     "url": "https://www.spk-chemnitz.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -4684,7 +4836,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-freiburg.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -4693,7 +4854,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-bochum.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -4703,7 +4873,15 @@
     "url": "https://www.ksk-reutlingen.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
       "Tradegate",
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "gettex"
     ]
   },
   {
@@ -4712,7 +4890,16 @@
     "type": "Bank",
     "url": "https://www.taunussparkasse.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -4721,7 +4908,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-westmuensterland.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -4730,7 +4926,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-vorderpfalz.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -4740,7 +4945,15 @@
     "url": "https://www.sparkasse-neuss.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
       "Tradegate",
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "gettex"
     ]
   },
   {
@@ -4749,7 +4962,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-mittelthueringen.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -4758,7 +4980,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-osnabrueck.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -4803,7 +5034,8 @@
     "type": "Bank",
     "url": "https://www.vb-mittelhessen.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Germany"
+      "Tradegate",
+      "Quotrix"
     ]
   },
   {
@@ -4821,7 +5053,8 @@
     "type": "Bank",
     "url": "https://www.vr-bayernmitte.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Tradegate"
     ]
   },
   {
@@ -4832,7 +5065,7 @@
     "exchanges": [
       "Tradegate",
       "Quotrix",
-      "Germany"
+      "Börse Xetra"
     ]
   },
   {
@@ -4932,8 +5165,7 @@
     "url": "https://www.volksbank-luebeck.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
       "Tradegate",
-      "Quotrix",
-      "Germany"
+      "Quotrix"
     ]
   },
   {
@@ -4942,8 +5174,7 @@
     "type": "Bank",
     "url": "https://www.bib-fairbanking.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Börse Xetra",
-      "Germany"
+      "Börse Xetra"
     ]
   },
   {
@@ -4961,7 +5192,16 @@
     "type": "Bank",
     "url": "https://www.lzo.com/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -4970,7 +5210,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-heilbronn.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -4979,7 +5228,16 @@
     "type": "Bank",
     "url": "https://www.spk-schwaben-bodensee.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -4988,7 +5246,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-pdh.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -4997,7 +5264,16 @@
     "type": "Bank",
     "url": "https://www.nospa.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5007,7 +5283,15 @@
     "url": "https://www.sparkasse-erlangen.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
       "Tradegate",
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "gettex"
     ]
   },
   {
@@ -5016,7 +5300,16 @@
     "type": "Bank",
     "url": "https://www.s-abmil.de/",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5025,7 +5318,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-re.de/de/home/privatkunden/navi-wertpapiere/depots/sparkassen-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5035,7 +5337,15 @@
     "url": "https://www.ksk-steinfurt.de/de/home/privatkunden/sparen-und-investieren/wertpapiere/depots.html",
     "exchanges": [
       "Börse Xetra",
-      "Germany"
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5134,7 +5444,17 @@
     "type": "Bank",
     "url": "https://www.saalesparkasse.de/de/home/privatkunden/wertpapiere-und-boerse.html",
     "exchanges": [
-      "Germany"
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Frankfurt",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "gettex",
+      "LS Exchange",
+      "Tradegate",
+      "Börse Xetra"
     ]
   },
   {
@@ -5143,7 +5463,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-oberhessen.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Frankfurt",
+      "Börse Xetra",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5152,7 +5481,16 @@
     "type": "Bank",
     "url": "https://www.ospa.de/de/home/privatkunden/sparen-und-anlegen/wertpapier-und-boerse/depotuebersicht.html",
     "exchanges": [
-      "Germany"
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Frankfurt",
+      "Börse Xetra",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5161,7 +5499,15 @@
     "type": "Bank",
     "url": "https://www.sparkasse-herford.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Frankfurt",
+      "Börse Xetra",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "gettex",
       "Tradegate"
     ]
   },
@@ -5171,7 +5517,16 @@
     "type": "Bank",
     "url": "https://www.erzgebirgssparkasse.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Frankfurt",
+      "Börse Xetra",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5180,7 +5535,17 @@
     "type": "Bank",
     "url": "https://www.sparkasse-hanau.de/de/home/privatkunden/wertpapiere-und-boerse.html",
     "exchanges": [
-      "Germany"
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Frankfurt",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "gettex",
+      "LS Exchange",
+      "Tradegate",
+      "Börse Xetra"
     ]
   },
   {
@@ -5189,7 +5554,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-ansbach.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Frankfurt",
+      "Börse Xetra",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5198,7 +5572,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-mittelfranken-sued.de/de/home/privatkunden/wertpapiere-und-boerse.html",
     "exchanges": [
-      "Germany"
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Frankfurt",
+      "Börse Xetra",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5207,7 +5590,16 @@
     "type": "Bank",
     "url": "https://www.spkvr.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Frankfurt",
+      "Börse Xetra",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5216,7 +5608,16 @@
     "type": "Bank",
     "url": "https://www.kreissparkasse-ravensburg.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Frankfurt",
+      "Börse Xetra",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5225,7 +5626,15 @@
     "type": "Bank",
     "url": "https://www.sparkasse-koblenz.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany",
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "gettex",
       "Tradegate"
     ]
   },
@@ -5235,7 +5644,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-moenchengladbach.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5244,7 +5662,16 @@
     "type": "Bank",
     "url": "https://www.spk-vorpommern.de/de/home/privatkunden/wertpapiere-und-boerse.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5253,7 +5680,17 @@
     "type": "Bank",
     "url": "https://www.sparkasse-kl.de/de/home/privatkunden/wertpapiere-und-boerse.html",
     "exchanges": [
-      "Germany"
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Frankfurt",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "gettex",
+      "LS Exchange",
+      "Tradegate",
+      "Börse Xetra"
     ]
   },
   {
@@ -5262,7 +5699,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-suedpfalz.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5271,7 +5717,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-trier.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5280,7 +5735,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-niederbayern-mitte.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5289,7 +5753,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-offenburg.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5298,7 +5771,16 @@
     "type": "Bank",
     "url": "https://www.kskhwd.de/de/home/privatkunden/wertpapiere-und-boerse.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5307,7 +5789,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-bodensee.de/de/home/privatkunden/wertpapiere-und-boerse.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5325,7 +5816,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-oberland.de/de/home/privatkunden/wertpapiere-und-boerse.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5343,7 +5843,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-hellweg-lippe.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5352,7 +5861,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-rhein-nahe.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5361,7 +5879,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-bamberg.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5370,7 +5897,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-dueren.de/de/home/privatkunden/sparen--und-anlegen/unsere-depots.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5379,7 +5915,16 @@
     "type": "Bank",
     "url": "https://www.skmb.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5388,7 +5933,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-kraichgau.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depotuebersicht.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5397,7 +5951,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-sw-has.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5451,7 +6014,6 @@
     "type": "Bank",
     "url": "https://www.sparkasse-siegen.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany",
       "Tradegate"
     ]
   },
@@ -5497,7 +6059,16 @@
     "type": "Bank",
     "url": "https://www.spk-westholstein.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5515,7 +6086,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-sha.de/de/home/privatkunden/wertpapiere-und-boerse.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5524,7 +6104,16 @@
     "type": "Bank",
     "url": "https://www.wespa.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5533,7 +6122,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-fulda.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot-modelle.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5542,7 +6140,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-lev.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5551,7 +6158,16 @@
     "type": "Bank",
     "url": "https://www.spk-goettingen.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5560,7 +6176,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-am-niederrhein.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5569,7 +6194,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-fuerth.de/de/home/privatkunden/wertpapiere-und-boerse.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5578,7 +6212,16 @@
     "type": "Bank",
     "url": "https://www.sk-westerwald-sieg.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5587,7 +6230,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-passau.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Börse Frankfurt",
+      "Börse Düsseldorf",
+      "Quotrix",
+      "Börse Hamburg",
+      "Börse Hannover",
+      "Börse München",
+      "Börse Stuttgart",
+      "Tradegate",
+      "gettex"
     ]
   },
   {
@@ -5731,7 +6383,6 @@
     "type": "Bank",
     "url": "https://www.volksbank-allgaeu-oberschwaben.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Germany",
       "Tradegate",
       "Quotrix"
     ]
@@ -5796,7 +6447,6 @@
     "type": "Bank",
     "url": "https://www.vbidr.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Germany",
       "Tradegate",
       "Quotrix"
     ]
@@ -5834,7 +6484,6 @@
     "type": "Bank",
     "url": "https://www.vrbank-sh-mitte.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Germany",
       "Tradegate",
       "Quotrix"
     ]
@@ -5863,7 +6512,8 @@
     "type": "Bank",
     "url": "https://www.vbga.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Tradegate"
     ]
   },
   {
@@ -5881,7 +6531,8 @@
     "type": "Bank",
     "url": "https://www.vrbank-augsburg-ostallgaeu.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Tradegate"
     ]
   },
   {
@@ -5890,7 +6541,8 @@
     "type": "Bank",
     "url": "https://www.vrbk.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Tradegate"
     ]
   },
   {
@@ -5908,7 +6560,8 @@
     "type": "Bank",
     "url": "https://www.meine-vrbank.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Germany"
+      "Tradegate",
+      "Quotrix"
     ]
   },
   {
@@ -5926,7 +6579,6 @@
     "type": "Bank",
     "url": "https://www.vblh.de/",
     "exchanges": [
-      "Germany",
       "Tradegate",
       "Quotrix"
     ]
@@ -5937,7 +6589,8 @@
     "type": "Bank",
     "url": "https://www.volksbank-kurpfalz.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Tradegate"
     ]
   },
   {
@@ -5946,7 +6599,8 @@
     "type": "Bank",
     "url": "https://www.volksbank-im-westen.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Tradegate"
     ]
   },
   {
@@ -6045,7 +6699,8 @@
     "type": "Bank",
     "url": "https://www.vvr-bank.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Tradegate"
     ]
   },
   {
@@ -6063,7 +6718,8 @@
     "type": "Bank",
     "url": "https://www.meine-vvb.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Germany"
+      "Tradegate",
+      "Quotrix"
     ]
   },
   {
@@ -6090,7 +6746,8 @@
     "type": "Bank",
     "url": "https://www.vrbankmecklenburg.de/",
     "exchanges": [
-      "Germany"
+      "Tradegate",
+      "Quotrix"
     ]
   },
   {
@@ -6099,7 +6756,8 @@
     "type": "Bank",
     "url": "https://www.volksbank-mit-herz.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Tradegate"
     ]
   },
   {
@@ -6108,7 +6766,8 @@
     "type": "Bank",
     "url": "https://www.grafschafter-volksbank.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Tradegate"
     ]
   },
   {
@@ -6126,7 +6785,8 @@
     "type": "Bank",
     "url": "https://www.bergische-volksbank.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Germany"
+      "Tradegate",
+      "Quotrix"
     ]
   },
   {
@@ -6135,7 +6795,8 @@
     "type": "Bank",
     "url": "https://www.voba-rhein-erft-koeln.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Tradegate"
     ]
   },
   {
@@ -6144,7 +6805,8 @@
     "type": "Bank",
     "url": "https://www.vb-eg.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Tradegate"
     ]
   },
   {
@@ -6153,7 +6815,8 @@
     "type": "Bank",
     "url": "https://www.volksbank-goeppingen.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Tradegate"
     ]
   },
   {
@@ -6162,7 +6825,8 @@
     "type": "Bank",
     "url": "https://www.vrbank-hg.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Tradegate"
     ]
   },
   {
@@ -6180,7 +6844,8 @@
     "type": "Bank",
     "url": "https://www.vrbankgl.de/privatkunden/banking-brokerage.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Tradegate"
     ]
   },
   {
@@ -6207,7 +6872,8 @@
     "type": "Bank",
     "url": "https://www.vbsdn.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Tradegate"
     ]
   },
   {
@@ -6216,7 +6882,8 @@
     "type": "Bank",
     "url": "https://www.vrbank-bayreuth-hof.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Germany"
+      "Börse Xetra",
+      "Tradegate"
     ]
   },
   {
@@ -6225,7 +6892,8 @@
     "type": "Bank",
     "url": "https://www.vrbanking.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Germany"
+      "Tradegate",
+      "Quotrix"
     ]
   },
   {
@@ -6234,7 +6902,6 @@
     "type": "Bank",
     "url": "https://www.vb-ruhrmitte.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Germany",
       "Tradegate",
       "Quotrix"
     ]
@@ -6254,7 +6921,8 @@
     "type": "Bank",
     "url": "https://www.bremischevb.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Germany"
+      "Tradegate",
+      "Quotrix"
     ]
   },
   {
@@ -6290,7 +6958,8 @@
     "type": "Bank",
     "url": "https://www.volksbank-dkn.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": [
-      "Germany"
+      "Tradegate",
+      "Quotrix"
     ]
   },
   {
@@ -9426,7 +10095,9 @@
     "url": "https://www.lynx.be/",
     "exchanges": [
       "Euronext Brussels",
-      "United States",
+      "New York Stock Exchange",
+      "Nasdaq",
+      "OTC Markets",
       "Börse Frankfurt",
       "Börse Stuttgart",
       "gettex",
@@ -10138,7 +10809,9 @@
     "url": "https://www.lynxbroker.fr/",
     "exchanges": [
       "Euronext Paris",
-      "United States",
+      "New York Stock Exchange",
+      "Nasdaq",
+      "OTC Markets",
       "Börse Frankfurt",
       "Börse Stuttgart",
       "gettex",
@@ -11983,7 +12656,9 @@
     "type": "Bank",
     "url": "https://www.caixabenicarlo.es/va/borsa-i-mercats/",
     "exchanges": [
-      "Spain"
+      "Bolsa de Madrid",
+      "Latibex",
+      "BME Growth"
     ]
   },
   {
@@ -13978,13 +14653,6 @@
     "type": "Bank",
     "url": "https://www.sparebank1.no/nb/bank/privat/sparing/investering/aksjehandel.html",
     "exchanges": [
-      "Euronext Expand Oslo",
-      "Euronext Growth Oslo",
-      "Nasdaq",
-      "Nasdaq Copenhagen",
-      "Nasdaq Helsinki",
-      "Nasdaq Stockholm",
-      "New York Stock Exchange",
       "Oslo Børs"
     ]
   },
@@ -14285,7 +14953,9 @@
     "type": "Broker",
     "url": "https://www.lynxbroker.fi/",
     "exchanges": [
-      "United States",
+      "New York Stock Exchange",
+      "Nasdaq",
+      "OTC Markets",
       "Börse Frankfurt",
       "Börse Stuttgart",
       "gettex",
@@ -14645,7 +15315,9 @@
     "type": "Broker",
     "url": "https://www.lynxbroker.pl/",
     "exchanges": [
-      "United States",
+      "New York Stock Exchange",
+      "Nasdaq",
+      "OTC Markets",
       "Börse Frankfurt",
       "Börse Stuttgart",
       "gettex",
@@ -14864,7 +15536,9 @@
     "type": "Broker",
     "url": "https://www.lynxbroker.cz/",
     "exchanges": [
-      "United States",
+      "New York Stock Exchange",
+      "Nasdaq",
+      "OTC Markets",
       "Börse Frankfurt",
       "Börse Stuttgart",
       "gettex",
@@ -15021,7 +15695,9 @@
     "type": "Broker",
     "url": "https://www.lynxbroker.sk/",
     "exchanges": [
-      "United States",
+      "New York Stock Exchange",
+      "Nasdaq",
+      "OTC Markets",
       "Börse Frankfurt",
       "Börse Stuttgart",
       "gettex",
@@ -17289,29 +17965,18 @@
       "Euronext Brussels",
       "Euronext Dublin",
       "ASX",
-      "Aquis Stock Exchange",
       "Bolsa de Madrid",
       "Börse Düsseldorf",
-      "Börse Frankfurt",
       "Börse Hamburg",
       "Börse Hannover",
       "Börse Stuttgart",
-      "Cboe BZX",
-      "Cboe Canada",
       "Dubai Financial Market",
-      "EuroTLX",
       "Euronext Milan",
-      "LS Exchange",
-      "Lang & Schwarz International",
       "NYSE Arca",
-      "Nagoya Stock Exchange",
       "Nasdaq Stockholm",
       "Singapore Exchange",
       "TSX Venture",
-      "Tel Aviv Stock Exchange",
-      "Tradegate",
-      "Wiener Börse",
-      "gettex"
+      "Wiener Börse"
     ]
   },
   {
@@ -17350,7 +18015,6 @@
       "NYSE American",
       "NYSE Arca",
       "Oslo Børs",
-      "OTC Markets",
       "SIX Swiss Exchange",
       "Warsaw Stock Exchange"
     ]
@@ -17363,7 +18027,8 @@
     "exchanges": [
       "Abu Dhabi Securities Exchange",
       "Dubai Financial Market",
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq"
     ]
   },
   {
@@ -17411,11 +18076,9 @@
       "Abu Dhabi Securities Exchange",
       "Dubai Financial Market",
       "Tadawul",
-      "New York Stock Exchange",
-      "Nasdaq",
-      "NYSE Arca",
-      "London Stock Exchange",
-      "Hong Kong Stock Exchange"
+      "United States",
+      "United Kingdom",
+      "Hong Kong"
     ]
   },
   {
@@ -17424,7 +18087,8 @@
     "type": "Bank",
     "url": "https://wioinvest.io",
     "exchanges": [
-      "United States",
+      "New York Stock Exchange",
+      "Nasdaq",
       "Abu Dhabi Securities Exchange",
       "Dubai Financial Market"
     ]
@@ -18152,7 +18816,8 @@
     "url": "https://investsky.com/",
     "exchanges": [
       "Tadawul",
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq"
     ]
   },
   {
@@ -21382,7 +22047,8 @@
     "type": "Neobroker",
     "url": "https://pandapanda.app/",
     "exchanges": [
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq"
     ]
   },
   {
@@ -21738,7 +22404,7 @@
     "type": "Broker",
     "url": "https://www.mahfazty-cibc.com/",
     "exchanges": [
-      "Egypt"
+      "The Egyptian Exchange"
     ]
   },
   {
@@ -23186,10 +23852,7 @@
     "country": "AU",
     "type": "Bank",
     "url": "https://www.anz.com.au/personal/superannuation/online-share-investing/",
-    "exchanges": [
-      "ASX",
-      "Cboe Australia"
-    ]
+    "exchanges": []
   },
   {
     "name": "Sharesies",
@@ -23274,7 +23937,9 @@
     "type": "Neobroker",
     "url": "https://hellostake.com/nz",
     "exchanges": [
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq",
+      "OTC Markets"
     ]
   },
   {
@@ -24915,7 +25580,9 @@
     "url": "https://www.ztsc.com.hk/",
     "exchanges": [
       "Hong Kong Stock Exchange",
-      "United States"
+      "New York Stock Exchange",
+      "NYSE American",
+      "Nasdaq"
     ]
   },
   {
@@ -24934,7 +25601,9 @@
     "url": "https://www.dfzq.com.hk/",
     "exchanges": [
       "Hong Kong Stock Exchange",
-      "United States"
+      "New York Stock Exchange",
+      "NYSE American",
+      "Nasdaq"
     ]
   },
   {
@@ -24971,7 +25640,9 @@
     "url": "https://www.csci.hk/",
     "exchanges": [
       "Hong Kong Stock Exchange",
-      "United States"
+      "New York Stock Exchange",
+      "NYSE American",
+      "Nasdaq"
     ]
   },
   {
@@ -29764,7 +30435,7 @@
     "type": "Broker",
     "url": "https://sfast.id/",
     "exchanges": [
-      "Indonesia"
+      "Indonesia Stock Exchange"
     ]
   },
   {
@@ -30660,7 +31331,8 @@
     "type": "Broker",
     "url": "https://xtsc.vn/",
     "exchanges": [
-      "Vietnam"
+      "HOSE",
+      "Hanoi Stock Exchange"
     ]
   },
   {
@@ -30669,7 +31341,9 @@
     "type": "Broker",
     "url": "https://apsi.vn/",
     "exchanges": [
-      "Vietnam"
+      "HOSE",
+      "Hanoi Stock Exchange",
+      "UPCOM"
     ]
   },
   {
@@ -30678,7 +31352,8 @@
     "type": "Broker",
     "url": "https://jbsv.com.vn/",
     "exchanges": [
-      "Vietnam"
+      "HOSE",
+      "Hanoi Stock Exchange"
     ]
   },
   {
@@ -30709,7 +31384,9 @@
     "type": "Broker",
     "url": "https://www.tvs.vn/",
     "exchanges": [
-      "Vietnam"
+      "HOSE",
+      "Hanoi Stock Exchange",
+      "UPCOM"
     ]
   },
   {
@@ -37852,7 +38529,9 @@
     "url": "https://www.bcm.com.mo/",
     "exchanges": [
       "Hong Kong Stock Exchange",
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq",
+      "NYSE American"
     ]
   },
   {
@@ -37862,7 +38541,10 @@
     "url": "https://www.bankofchina.com/mo/",
     "exchanges": [
       "Hong Kong Stock Exchange",
-      "United States"
+      "New York Stock Exchange",
+      "Nasdaq",
+      "NYSE American",
+      "NYSE Arca"
     ]
   },
   {
@@ -38096,8 +38778,7 @@
     "url": "https://craigsip.com/",
     "exchanges": [
       "ASX",
-      "Nasdaq",
-      "New York Stock Exchange",
+      "United States",
       "NZX"
     ]
   },
@@ -38108,9 +38789,8 @@
     "url": "https://www.forsythbarr.co.nz/",
     "exchanges": [
       "ASX",
-      "London Stock Exchange",
-      "Nasdaq",
-      "New York Stock Exchange",
+      "United Kingdom",
+      "United States",
       "NZX"
     ]
   },
@@ -38119,17 +38799,7 @@
     "country": "NO",
     "type": "Bank",
     "url": "https://www.storebrand.no/privat/sparing-og-pensjon/aksjer-og-fond/aksjehandel",
-    "exchanges": [
-      "Börse Xetra",
-      "Euronext Expand Oslo",
-      "Euronext Growth Oslo",
-      "Nasdaq",
-      "Nasdaq Copenhagen",
-      "Nasdaq Helsinki",
-      "Nasdaq Stockholm",
-      "New York Stock Exchange",
-      "Oslo Børs"
-    ]
+    "exchanges": []
   },
   {
     "name": "Kyokuto Securities",
@@ -38240,8 +38910,7 @@
     "url": "https://www.heygotrade.com/en/",
     "exchanges": [
       "Nasdaq",
-      "New York Stock Exchange",
-      "NYSE Arca"
+      "New York Stock Exchange"
     ]
   },
   {
@@ -38249,23 +38918,14 @@
     "country": "CH",
     "type": "Bank",
     "url": "https://www.dukascopy.com/",
-    "exchanges": [
-      "Börse Xetra",
-      "Euronext Paris",
-      "Nasdaq",
-      "New York Stock Exchange",
-      "SIX Swiss Exchange"
-    ]
+    "exchanges": []
   },
   {
     "name": "Sparda-Bank Hessen",
     "country": "DE",
     "type": "Bank",
     "url": "https://www.sparda-hessen.de/wertpapiere-und-depot/",
-    "exchanges": [
-      "Börse Frankfurt",
-      "Börse Xetra"
-    ]
+    "exchanges": []
   },
   {
     "name": "Cantor Fitzgerald Ireland",
@@ -38277,8 +38937,7 @@
       "Euronext Dublin",
       "Euronext Paris",
       "London Stock Exchange",
-      "Nasdaq",
-      "New York Stock Exchange"
+      "United States"
     ]
   },
   {
@@ -38298,7 +38957,6 @@
     "exchanges": [
       "Börse Xetra",
       "Euronext Milan",
-      "EuroTLX",
       "Nasdaq",
       "New York Stock Exchange"
     ]
@@ -38322,14 +38980,7 @@
     "country": "MT",
     "type": "Bank",
     "url": "https://www.hsbc.com.mt/investments/products/brokerage/",
-    "exchanges": [
-      "Euronext Amsterdam",
-      "Euronext Paris",
-      "London Stock Exchange",
-      "Malta Stock Exchange",
-      "Nasdaq",
-      "New York Stock Exchange"
-    ]
+    "exchanges": []
   },
   {
     "name": "BankNordik",
@@ -38337,11 +38988,9 @@
     "type": "Bank",
     "url": "https://www.banknordik.fo/privat/sparing-og-investering/investering",
     "exchanges": [
-      "Nasdaq",
+      "United States",
       "Nasdaq Copenhagen",
-      "Nasdaq Iceland",
-      "Nasdaq Stockholm",
-      "New York Stock Exchange"
+      "Nasdaq Stockholm"
     ]
   },
   {
@@ -38350,9 +38999,8 @@
     "type": "Bank",
     "url": "https://www.bankin.fo/fo/privat/sparing-og-i-loegur/i-loegur/",
     "exchanges": [
-      "Nasdaq",
-      "Nasdaq Copenhagen",
-      "New York Stock Exchange"
+      "United States",
+      "Nasdaq Copenhagen"
     ]
   },
   {
@@ -38363,11 +39011,6 @@
     "exchanges": [
       "Euronext Expand Oslo",
       "Euronext Growth Oslo",
-      "Nasdaq",
-      "Nasdaq Copenhagen",
-      "Nasdaq Helsinki",
-      "Nasdaq Stockholm",
-      "New York Stock Exchange",
       "Oslo Børs"
     ]
   },
@@ -38394,10 +39037,9 @@
     "url": "https://www.redmayne.co.uk/services/online-share-dealing",
     "exchanges": [
       "AIM",
-      "Euronext Paris",
+      "France",
       "London Stock Exchange",
-      "Nasdaq",
-      "New York Stock Exchange"
+      "United States"
     ]
   },
   {
@@ -38408,8 +39050,7 @@
     "exchanges": [
       "AIM",
       "London Stock Exchange",
-      "Nasdaq",
-      "New York Stock Exchange"
+      "United States"
     ]
   },
   {
@@ -38452,8 +39093,7 @@
     "exchanges": [
       "Börse Frankfurt",
       "Börse Xetra",
-      "Nasdaq",
-      "New York Stock Exchange",
+      "United States",
       "Wiener Börse"
     ]
   },

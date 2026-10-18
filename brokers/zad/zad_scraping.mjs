@@ -7,14 +7,15 @@
 //   https://api.joinzad.com/api/v1/asset/asset-exports?page=0&size=2000
 //
 // Rows with tradable=false are skipped, and so are units, warrants and
-// rights. Zad prints no venue, type or ISIN, so these come from
-// assets/stocks.csv and assets/etfs.csv when the symbol is listed there on
-// NYSE, Nasdaq, AMEX or Cboe; a symbol found in etfs.csv is an ETF. The
-// catalogue writes AMEX for NYSE Arca as well as NYSE American: an ETF there
-// is stored as ARCX, a share as XASE. A symbol the catalogue only knows over
-// the counter (mostly ADRs) is stored as OTC. Any other tradable symbol (new
-// listings, and names the API still carries after a delisting) is stored as
-// "US" without a MIC, and is an ETF only when its name says so.
+// rights. Zad prints no venue, type or ISIN. The venue comes from the
+// Nasdaq Trader symbol directory, which lists every security on a US
+// exchange today; its ETF flag, or a line in assets/etfs.csv, makes a row an
+// ETF. The API still marks about 2,400 delisted names tradable: a symbol
+// that is in neither the directory nor, as an over-the-counter line (mostly
+// ADRs), in assets/stocks.csv is dropped. The ISIN comes from the asset lists.
+//
+//   https://www.nasdaqtrader.com/dynamic/SymDir/nasdaqlisted.txt
+//   https://www.nasdaqtrader.com/dynamic/SymDir/otherlisted.txt
 //
 //   node brokers/zad/zad_scraping.mjs
 
@@ -26,7 +27,20 @@ import fs from "node:fs";
 const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
 const API = "https://api.joinzad.com/api/v1/asset/asset-exports";
 const PAGE = 2000;
+const NASDAQ = "https://www.nasdaqtrader.com/dynamic/SymDir/nasdaqlisted.txt";
+const OTHER = "https://www.nasdaqtrader.com/dynamic/SymDir/otherlisted.txt";
+// Places in the asset lists that are a US exchange.
 const VENUES = { NYSE: "XNYS", NASDAQ: "XNAS", AMEX: "XASE", CBOE: "BATS" };
+// otherlisted.txt exchange codes; Q is the Nasdaq file itself.
+const DIRECTORY = {
+  Q: ["Nasdaq", "XNAS"],
+  N: ["NYSE", "XNYS"],
+  A: ["NYSE American", "XASE"],
+  P: ["NYSE Arca", "ARCX"],
+  Z: ["Cboe BZX", "BATS"],
+  V: ["IEX", "IEXG"],
+  F: ["NYSE Texas", "XCHI"],
+};
 const NOT_SHARE = /\b(units?|warrants?|rights?)\b/i;
 
 function normalize(value) {
@@ -37,15 +51,15 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function getJson(url) {
+async function fetchOk(url, accept) {
   let last = "";
   for (let attempt = 0; attempt < 5; attempt += 1) {
     try {
       const response = await fetch(url, {
-        headers: { "User-Agent": UA, Accept: "application/json", Origin: "https://www.joinzad.com" },
-        signal: AbortSignal.timeout(60_000),
+        headers: { "User-Agent": UA, Accept: accept, Origin: "https://www.joinzad.com" },
+        signal: AbortSignal.timeout(90_000),
       });
-      if (response.ok) return response.json();
+      if (response.ok) return response;
       last = `${response.status} ${url}`;
     } catch (error) {
       last = String(error.message || error);
@@ -55,6 +69,9 @@ async function getJson(url) {
   throw new Error(last);
 }
 
+const getJson = async (url) => (await fetchOk(url, "application/json")).json();
+const getText = async (url) => (await fetchOk(url, "text/plain")).text();
+
 // Catalogue spelling of a Zad symbol: ABR.PRD -> ABR/PD, BF.B stays BF.B.
 function spellings(symbol) {
   const out = [symbol];
@@ -62,6 +79,46 @@ function spellings(symbol) {
   if (preferred) out.push(`${preferred[1]}/P${preferred[2]}`);
   if (symbol.includes(".")) out.push(symbol.replace(".", "/"));
   return out;
+}
+
+// Directory spellings: a preferred ABR.PRD is ABR$D (ACT), ABRpD (CQS) or
+// ABR-D (Nasdaq); a class share BF.B is BF.B or BF/B.
+function directoryKeys(symbol) {
+  const out = [symbol, symbol.replace(/\./g, "/")];
+  const preferred = symbol.match(/^([A-Z]+)\.PR([A-Z]?)$/);
+  if (preferred) out.push(`${preferred[1]}$${preferred[2]}`, `${preferred[1]}p${preferred[2]}`, `${preferred[1]}-${preferred[2]}`);
+  return out;
+}
+
+// Every line of the two directory files, test issues left out, by each of
+// its symbol spellings.
+function directory(nasdaqText, otherText) {
+  const listings = new Map();
+  for (const [text, file] of [[nasdaqText, "nasdaq"], [otherText, "other"]]) {
+    const lines = text.split(/\r?\n/).filter(Boolean);
+    const header = lines.shift().split("|");
+    const column = (name) => {
+      const index = header.indexOf(name);
+      if (index < 0) throw new Error(`${file} directory has no ${name} column`);
+      return index;
+    };
+    const keys = file === "nasdaq" ? ["Symbol"] : ["ACT Symbol", "CQS Symbol", "NASDAQ Symbol"];
+    const [etf, test] = ["ETF", "Test Issue"].map(column);
+    const exchange = file === "nasdaq" ? -1 : column("Exchange");
+    let count = 0;
+    for (const line of lines) {
+      const cells = line.split("|");
+      if (cells.length < header.length || cells[test] === "Y") continue;
+      const venue = DIRECTORY[file === "nasdaq" ? "Q" : cells[exchange]];
+      if (!venue) continue;
+      count += 1;
+      for (const key of keys.map((name) => cells[column(name)]).filter(Boolean)) {
+        if (!listings.has(key)) listings.set(key, { exchange: venue[0], mic: venue[1], etf: cells[etf] === "Y" });
+      }
+    }
+    if (count < 3000) throw new Error(`${file} directory has only ${count} lines`);
+  }
+  return listings;
 }
 
 function catalogue() {
@@ -92,9 +149,10 @@ for (let page = 0; ; page += 1) {
 if (assets.length !== total) throw new Error(`export announced ${total}, returned ${assets.length}`);
 
 const book = catalogue();
+const listed = directory(await getText(NASDAQ), await getText(OTHER));
 const rows = [];
 const seen = new Set();
-const tally = { untradable: 0, notShare: 0, otcOnly: 0, noVenue: 0 };
+const tally = { untradable: 0, notShare: 0, otcOnly: 0, delisted: 0 };
 for (const asset of assets) {
   const symbol = normalize(asset.symbol).toUpperCase();
   const name = normalize(asset.companyName);
@@ -108,23 +166,30 @@ for (const asset of assets) {
   }
   const all = spellings(symbol).flatMap((spelling) => book.get(spelling) || []);
   const hits = all.filter((hit) => VENUES[hit.venue]);
-  let venue = hits[0]?.venue;
-  if (!venue) {
-    venue = all.some((hit) => hit.venue === "OTC") ? "OTC" : "US";
-    tally[venue === "OTC" ? "otcOnly" : "noVenue"] += 1;
+  const line = directoryKeys(symbol).map((key) => listed.get(key)).find(Boolean);
+  let exchange, mic, isins;
+  if (line) {
+    ({ exchange, mic } = line);
+    isins = hits.map((hit) => hit.isin);
+  } else if (all.some((hit) => hit.venue === "OTC")) {
+    exchange = "OTC";
+    tally.otcOnly += 1;
+    isins = all.filter((hit) => hit.venue === "OTC").map((hit) => hit.isin);
+  } else {
+    tally.delisted += 1;
+    continue;
   }
-  const etfName = /\b(ETF|ETN)\b|exchange traded/i.test(name);
-  const type = hits.some((hit) => hit.type === "ETF") || (!hits.length && etfName) ? "ETF" : "STOCK";
-  const isins = [...new Set(all.filter((hit) => hit.venue === venue).map((hit) => hit.isin).filter(Boolean))];
-  const key = `${venue}|${symbol}`;
+  const type = line?.etf || hits.some((hit) => hit.type === "ETF") ? "ETF" : "STOCK";
+  isins = [...new Set(isins.filter(Boolean))];
+  const key = `${exchange}|${symbol}`;
   if (seen.has(key)) continue;
   seen.add(key);
   rows.push({
     query: symbol,
     ticker: symbol,
     name,
-    exchange: venue,
-    ...(VENUES[venue] ? { mic: venue === "AMEX" && type === "ETF" ? "ARCX" : VENUES[venue] } : {}),
+    exchange,
+    ...(mic ? { mic } : {}),
     currency: "USD",
     type,
     isin: isins.length === 1 ? isins[0] : "",

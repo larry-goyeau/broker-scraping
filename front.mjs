@@ -18,7 +18,7 @@ import { accepts, COUNTRY_NAMES, countryOptions, listingAccepts, stampResidency,
 import { depositHas, splitByPlan, currencyOptions } from "./deposits.mjs";
 import { toUsd, usdPer } from "./fx.mjs";
 import { prices, ensureFresh } from "./assets/prices.mjs";
-import { ALIASES, US_BROKERS, qOf, routingOf } from "./spreads/rule606.mjs";
+import { ALIASES, US_BROKERS, aliasOf, qOf, routingOf } from "./spreads/rule606.mjs";
 
 const PORT = (() => {
   const m = process.argv.find((a) => a.startsWith("--port="));
@@ -53,7 +53,8 @@ function loadBrokerMeta() {
     country: row.country || "",
     type: row.type || "",
     url: row.url || "",
-    exchanges: Array.isArray(row.exchanges) ? row.exchanges : [],
+    // {place: {restriction?, count?}} in broker-list.json; the places are its keys
+    exchanges: Array.isArray(row.exchanges) ? row.exchanges : Object.keys(row.exchanges || {}),
   }));
 }
 
@@ -147,6 +148,8 @@ const FOLDER_NAME = {
   futu: "Futu",
   // The folder slug is also the start of Monex Boom and Monex Casa de Bolsa.
   monex: "Monex",
+  kotak: "Kotak",
+  daiwaconnect: "Daiwa",
 };
 
 // Display name above, broker-list row below, when the two differ.
@@ -162,9 +165,26 @@ const FOLDER_LIST = {
   triipe: "Trii Peru",
   icici: "ICICI Direct",
   futu: "Futu / moomoo HK",
+  kotak: "Kotak Securities",
+  daiwaconnect: "Daiwa Connect Securities",
 };
 
+// The page drops the word "Securities" from a broker's name: "Ando
+// Securities" reads "Ando". Inside parentheses it stays, so "3Way for
+// Trading in Securities" and "The Securities House" keep their sense.
+function shortName(name) {
+  return String(name || "")
+    .replace(/\s*\bSecurities\b(?![^()]*\))/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 function metaFor(folder, list) {
+  const meta = listedMeta(folder, list);
+  return { ...meta, name: shortName(meta.name) || meta.name };
+}
+
+function listedMeta(folder, list) {
   const aliased = FOLDER_NAME[folder];
   const listedAs = FOLDER_LIST[folder] || aliased;
   if (aliased || FOLDER_LIST[folder]) {
@@ -740,6 +760,36 @@ function votedName(inst) {
 const NAME_BY_ISIN = new Map();
 const NAME_BY_CODE = new Map();
 
+// A market, as a MIC, for the name-by-ticker fallback below. The lists'
+// EURONEXT is several books, and every American place counts as one: the
+// lists and the brokers spell those apart. In the lists TSE is Tokyo and
+// CSE the Canadian exchange (listIsins.mjs). null when the place is unknown.
+const PLACE_MARKET = new Map();
+const LIST_MARKET = { TSE: "XTKS", CSE: "XCNQ", EURONEXT: "EURONEXT" };
+function marketOfPlace(exchange, currency, fromLists = false) {
+  const key = `${exchange}|${currency || ""}|${fromLists}`;
+  if (PLACE_MARKET.has(key)) return PLACE_MARKET.get(key);
+  const upper = String(exchange || "").trim().toUpperCase();
+  const listed = fromLists ? LIST_MARKET[upper] : null;
+  const { venue } = listed ? {} : resolveVenue({ exchange, currency });
+  let market = listed || venue?.mic || null;
+  if (/^(XNAS|XNYS|XASE|ARCX|BATS|XCHI|TXSE|IEXG|OTCM)$/.test(market || "")) market = "US";
+  if (/^(XPAR|XAMS|XBRU|XLIS|XMSM|ALXP|ALXB|XESM|XAMC)$/.test(market || "")) market = "EURONEXT";
+  PLACE_MARKET.set(key, market);
+  return market;
+}
+
+function marketsOf(inst) {
+  const out = new Set();
+  for (const lists of inst.byBroker?.values() || []) {
+    for (const listing of lists) {
+      const market = marketOfPlace(listing.exchangeRaw || listing.exchange, listing.currency);
+      if (market) out.add(market);
+    }
+  }
+  return out;
+}
+
 function parseCsv(text) {
   const rows = [];
   let row = [];
@@ -805,7 +855,10 @@ function loadReferenceNames() {
       const code = ticker.split(":").pop();
       if (!code) continue;
       if (!byCode.has(code)) byCode.set(code, new Map());
-      byCode.get(code).set(isin, true);
+      const markets = byCode.get(code).get(isin) || new Set();
+      const place = ticker.includes(":") ? ticker.split(":")[0] : "";
+      markets.add(place ? marketOfPlace(place, "", true) : null);
+      byCode.get(code).set(isin, markets);
     }
   }
   for (const [isin, names] of byIsin) {
@@ -814,9 +867,9 @@ function loadReferenceNames() {
   }
   for (const [code, isins] of byCode) {
     if (isins.size !== 1) continue;
-    const isin = [...isins.keys()][0];
+    const [[isin, markets]] = [...isins];
     const name = NAME_BY_ISIN.get(isin);
-    if (name) NAME_BY_CODE.set(code, { isin, name });
+    if (name) NAME_BY_CODE.set(code, { isin, name, markets });
   }
 }
 
@@ -833,6 +886,12 @@ function referenceName(inst) {
     const hit = NAME_BY_CODE.get(code);
     if (!hit) continue;
     if (ids.length && !ids.includes(hit.isin)) continue;
+    // The same ticker on another market is another company: Apollo Textile
+    // is APOT in Karachi, Arab Potash is APOT in Amman.
+    if (!ids.length && !hit.markets.has(null)) {
+      const mine = marketsOf(inst);
+      if (mine.size && ![...mine].some((m) => hit.markets.has(m))) continue;
+    }
     return hit.name;
   }
   return "";
@@ -1244,6 +1303,29 @@ const FREETRADE_PLANS = [
   { id: "plus", name: "Freetrade Plus" },
 ];
 
+// Paid plans whose dealing charges differ get a row each, cheapest
+// subscription first; the remark carries what the plan costs. A dearer plan
+// that prices a line exactly like a cheaper one is dropped for that line.
+const INTERACTIVEINVESTOR_PLANS = [
+  { id: "core", name: "interactive investor Core" },
+  { id: "plus", name: "interactive investor Plus" },
+  { id: "premium", name: "interactive investor Premium" },
+];
+
+const NDOVU_PLANS = [
+  { id: "basic", name: "Ndovu Basic" },
+  { id: "standard", name: "Ndovu Standard" },
+  { id: "ultimate", name: "Ndovu Ultimate" },
+];
+
+function collapsePaidPlans(built) {
+  const kept = [];
+  for (const row of built) {
+    if (!kept.some((k) => sameTradeListings(k.listings, row.listings))) kept.push(row);
+  }
+  return kept;
+}
+
 const FORTUNEO_PLANS = [
   { id: "starter", name: "Fortuneo Starter" },
   { id: "progress", name: "Fortuneo Progress" },
@@ -1403,6 +1485,121 @@ const GOPOCKET_PLANS = [
   { id: "standard", name: "GoPocket Standard" },
   { id: "prime", name: "GoPocket Prime" },
 ];
+
+// Each plan whose fees price the trip apart is a row; the first plan is the
+// default ticket. On each place, plans that price the trip the same are one
+// row named after all of them ("Portu Gold / Platinum / <26"); a row every
+// plan shares keeps the bare brand.
+// Kotak: Trade Free (0.20 % on delivery), Trade Free Youth (under 30, ₹0 on
+// delivery) and Trade Free Pro (0.10 %, ₹249 a month). BlinkX: Pay-Per-Order
+// (₹20) and the Subscription (₹0 up to ₹25 crore of volume). Stocko: Per
+// Trade and Monthly (99 orders in the month's fee). Mastertrust: MT20 (₹20)
+// and MTClassic (0.3 %). Bright Smart: the US per-share and percentage
+// plans; the other markets match. Racional: Free (0.99 % dollar spread) and
+// Pro (0.49 %). Portu: the account level, set by the money in its managed
+// portfolios (Bronze 0.4 %, Silver 0.3 %, Gold and Platinum 0.2 %), each
+// halved on the Portu <26 account.
+const SPLIT_PLANS = {
+  kotak: { brand: "Kotak", plans: [
+    { id: "tradefree", label: "Trade Free" },
+    { id: "youth", label: "Trade Free Youth" },
+    { id: "pro", label: "Trade Free Pro" },
+  ] },
+  blinkx: { brand: "BlinkX", plans: [
+    { id: "payperorder", label: "Pay-Per-Order" },
+    { id: "subscription", label: "Subscription" },
+  ] },
+  stocko: { brand: "Stocko", plans: [
+    { id: "pertrade", label: "Per Trade" },
+    { id: "monthly", label: "Monthly" },
+  ] },
+  mastertrust: { brand: "Mastertrust", plans: [
+    { id: "mt20", label: "MT20" },
+    { id: "mtclassic", label: "MTClassic" },
+  ] },
+  brightsmart: { brand: "Bright Smart", plans: [
+    { id: "pershare", label: "per-share plan" },
+    { id: "percentage", label: "percentage plan" },
+  ] },
+  racional: { brand: "Racional", plans: [
+    { id: "free", label: "Free" },
+    { id: "pro", label: "Pro" },
+  ] },
+  // On a tie the <26 rows win: their custody is 0.025 % a year, not 0.05 %.
+  portu: { brand: "Portu", cheaperOnTie: ["u26", "u26silver", "u26gold"], plans: [
+    { id: "bronze", label: "Bronze" },
+    { id: "silver", label: "Silver" },
+    { id: "gold", label: "Gold / Platinum" },
+    { id: "u26", label: "<26" },
+    { id: "u26silver", label: "<26 Silver" },
+    { id: "u26gold", label: "<26 Gold / Platinum" },
+  ] },
+};
+
+// One row per set of plans that price a place the same, as collapseSaxo
+// does. Plans that tie on the trip but print different remarks are not
+// merged: only the cheaper one (`cheaperOnTie`, else the first) is kept,
+// with its own remark.
+function collapseSplitPlans(folder, built) {
+  const { brand, plans, cheaperOnTie = [] } = SPLIT_PLANS[folder];
+  const order = plans.map((plan) => plan.id);
+  const labelOf = (id) => plans.find((plan) => plan.id === id)?.label || id;
+  const places = new Map();
+  for (const row of built) {
+    for (const listing of row.listings) {
+      const place = `${listing.exchange}\0${listing.currency}`;
+      if (!places.has(place)) places.set(place, []);
+      places.get(place).push({ plan: row.plan, listing, row });
+    }
+  }
+  const buckets = new Map();
+  for (const items of places.values()) {
+    const clusters = [];
+    for (const item of items) {
+      const hit = clusters.find(
+        (c) => c.listing.total === item.listing.total && c.listing.fees === item.listing.fees && c.listing.remark === item.listing.remark
+      );
+      if (hit) hit.plans.push(item.plan);
+      else clusters.push({ listing: item.listing, plans: [item.plan], row: item.row });
+    }
+    const rank = (c) => {
+      const i = Math.min(...c.plans.map((id) => (cheaperOnTie.includes(id) ? cheaperOnTie.indexOf(id) : 99)));
+      return i === 99 ? 99 + Math.min(...c.plans.map((id) => order.indexOf(id))) : i;
+    };
+    const kept = clusters.filter(
+      (c) =>
+        !clusters.some(
+          (o) => o !== c && o.listing.total === c.listing.total && o.listing.fees === c.listing.fees && rank(o) < rank(c)
+        )
+    );
+    for (const c of kept) {
+      const ids = order.filter((id) => c.plans.includes(id));
+      const key = ids.join(",");
+      if (buckets.has(key)) buckets.get(key).listings.push(c.listing);
+      else buckets.set(key, { ids, listings: [c.listing], row: c.row });
+    }
+  }
+  return [...buckets.values()]
+    .map((b) => {
+      const all = b.ids.length === order.length;
+      // "<26", "<26 Silver" and "<26 Gold / Platinum" together read "<26".
+      const labels = b.ids.map(labelOf);
+      const family =
+        b.ids.every((id) => cheaperOnTie.includes(id)) &&
+        labels.every((label) => label === labels[0] || label.startsWith(`${labels[0]} `));
+      const name = all ? brand : `${brand} ${family ? labels[0] : labels.join(" / ")}`;
+      return {
+        ...b.row,
+        folder: `${folder}:${b.ids.join("-")}`,
+        family: name,
+        name,
+        plan: all ? "" : b.ids.join("-"),
+        planRank: all ? 0 : order.indexOf(b.ids[0]) + 1,
+        listings: b.listings,
+      };
+    })
+    .sort((a, b) => a.planRank - b.planRank);
+}
 
 const LIGHTYEAR_PLANS = [
   { id: "eu", name: "Lightyear Europe", url: "https://lightyear.com" },
@@ -2532,6 +2729,16 @@ function detail(key, nat = "", size = {}, dep = "") {
       for (const row of collapseFreetrade(built)) rows.push(row);
       continue;
     }
+    if (folder === "interactiveinvestor" || folder === "ndovu") {
+      const plans = folder === "ndovu" ? NDOVU_PLANS : INTERACTIVEINVESTOR_PLANS;
+      const built = [];
+      plans.forEach((plan, i) => {
+        const listed = listings({ plan: plan.id });
+        if (listed.length) built.push(asPlan(plan, i, listed));
+      });
+      for (const row of collapsePaidPlans(built)) rows.push(row);
+      continue;
+    }
     if (folder === "fortuneo") {
       const built = [];
       FORTUNEO_PLANS.forEach((plan, i) => {
@@ -2879,6 +3086,15 @@ function detail(key, nat = "", size = {}, dep = "") {
       }
       continue;
     }
+    if (SPLIT_PLANS[folder]) {
+      const built = [];
+      SPLIT_PLANS[folder].plans.forEach((plan, i) => {
+        const listed = listings({ plan: plan.id });
+        if (listed.length) built.push(asPlan({ id: plan.id, name: `${SPLIT_PLANS[folder].brand} ${plan.label}` }, i, listed));
+      });
+      for (const row of collapseSplitPlans(folder, built)) rows.push(row);
+      continue;
+    }
     if (folder === "kraken") {
       const listed = listings({});
       const shares = listed.filter((listing) => listing.exchange !== "xStock");
@@ -3018,7 +3234,9 @@ function methodPage() {
     if (row.q != null || !row.onFront) continue;
     noQ.push(`${shownName(row.folder)} has no 606 mix in ${quarter}.`);
   }
-  for (const [intro, dealer] of Object.entries(ALIASES)) {
+  // An array alias resolves to the BD it picks (highest Q).
+  for (const intro of Object.keys(ALIASES)) {
+    const dealer = aliasOf(intro);
     const names = groups.get(dealer) || [];
     if (qOf(dealer) != null) {
       names.push(shownName(intro));
@@ -3131,6 +3349,20 @@ for (const folder of fs.readdirSync(path.join(ROOT_DIR, "brokers"))) {
   if (slug && fs.existsSync(file)) logoBySlug.set(slug, file);
 }
 
+// A logo is cached for a day, so its URL carries the newest logo's change
+// time: a replaced picture gets a new URL and is fetched again.
+function logoVersion() {
+  let newest = 0;
+  for (const file of logoBySlug.values()) {
+    try {
+      newest = Math.max(newest, fs.statSync(file).mtimeMs);
+    } catch {
+      // A logo deleted since start is left to the 404 below.
+    }
+  }
+  return Math.floor(newest / 1000).toString(36);
+}
+
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
   if (url.pathname === "/api/search") {
@@ -3175,7 +3407,7 @@ const server = http.createServer(async (req, res) => {
   }
   if (url.pathname === "/" || url.pathname === "/front.html") {
     res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
-    return res.end(fs.readFileSync(HTML));
+    return res.end(fs.readFileSync(HTML, "utf8").replace(/\.png\?v=\w+/g, `.png?v=${logoVersion()}`));
   }
   if (url.pathname === "/method") {
     res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });

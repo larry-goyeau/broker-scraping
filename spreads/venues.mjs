@@ -1328,6 +1328,77 @@ export const VENUES = [
     exact: ["casablanca", "xcas", "csema", "boursedecasablanca"],
     loose: [],
   },
+  // The places below are named by catalogues but have no tape here yet, so
+  // `source` is empty: a listing on them resolves to its venue and is
+  // counted as a gap by spread.mjs rather than read from a book.
+  //
+  // Dhaka. Trading runs 10:00–14:10, Sunday to Thursday (dse.com.bd FAQ).
+  // "DSE" alone is not an alias: Dar es Salaam uses the same letters.
+  {
+    mic: "XDHA",
+    name: "Dhaka Stock Exchange",
+    source: "",
+    hours: { open: "10:00", close: "14:10", tz: "Asia/Dhaka", days: ["Sun", "Mon", "Tue", "Wed", "Thu"] },
+    exact: ["xdha", "dsebd", "dhaka", "dhakastockexchange"],
+    loose: [],
+  },
+  // BRVM, the West African regional exchange in Abidjan. Continuous trading
+  // is 09:45–14:00 UTC, then the pre-close and the 14:30 fixing (brvm.org).
+  {
+    mic: "XBRV",
+    name: "BRVM",
+    source: "",
+    hours: { open: "09:45", close: "14:00", tz: "Africa/Abidjan" },
+    exact: ["xbrv", "brvm", "bourseregionaledesvaleursmobilieres"],
+    loose: [],
+  },
+  // Amman. Continuous trading is 10:30–13:15, Sunday to Thursday (ase.com.jo).
+  // "ASE" alone stays NYSE American, which brokers abbreviate the same way.
+  {
+    mic: "XAMM",
+    name: "Amman Stock Exchange",
+    source: "",
+    hours: { open: "10:30", close: "13:15", tz: "Asia/Amman", days: ["Sun", "Mon", "Tue", "Wed", "Thu"] },
+    exact: ["xamm", "amman", "ammanstockexchange"],
+    loose: [],
+  },
+  // Nxchange, Amsterdam. Its rulebook gives no session times.
+  {
+    mic: "XNXC",
+    name: "Nxchange",
+    source: "",
+    hours: null,
+    exact: ["xnxc", "xnxd", "nxchange"],
+    loose: [],
+  },
+  // NPEX, The Hague. A continuous order book, 10:00–16:00 on business days.
+  {
+    mic: "NPEX",
+    name: "NPEX",
+    source: "",
+    hours: { open: "10:00", close: "16:00", tz: "Europe/Amsterdam" },
+    exact: ["npex"],
+    loose: [],
+  },
+  // NYSE Texas, formerly NYSE Chicago. Core session 09:30–16:00 New York.
+  {
+    mic: "XCHI",
+    name: "NYSE Texas",
+    source: "",
+    hours: { open: "09:30", close: "16:00", tz: "America/New_York" },
+    exact: ["xchi", "nysetexas", "nysechicago"],
+    loose: [],
+  },
+  // Texas Stock Exchange (TXSE), Dallas. Its auctions open and close the
+  // day at 09:30 and 16:00 New York.
+  {
+    mic: "TXSE",
+    name: "Texas Stock Exchange",
+    source: "",
+    hours: { open: "09:30", close: "16:00", tz: "America/New_York" },
+    exact: ["txse", "texasstockexchange"],
+    loose: [],
+  },
 ];
 
 // A coin has no ISIN, so `spread.json` keys it the way the front already does, by

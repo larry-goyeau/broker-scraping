@@ -3,13 +3,23 @@
 // same place stay in `matches`. An American line whose place is empty in
 // the lists keeps the code when the lists file it on exactly one other
 // American place. Arca is AMEX there, and FSMOne writes NYSE for it.
+//
+// Three codes in the lists are ambiguous to the venue table but not inside
+// the lists themselves: their TSE lines carry Japanese ISINs (Tokyo), CSE
+// lines Canadian ones (the Canadian Securities Exchange), and EURONEXT is
+// the Paris, Amsterdam, Brussels, Lisbon and Dublin books filed together.
 
 import { stampIsinMatches } from "./isinMatches.mjs";
 import { resolveVenue } from "./spreads/venues.mjs";
 import fs from "node:fs";
 
 const EQUITY = new Set(["STOCK", "ETF", "ETN", "ETC"]);
-const US_MICS = new Set(["XNAS", "ARCX", "XNYS", "XASE", "BATS"]);
+const US_MICS = new Set(["XNAS", "ARCX", "XNYS", "XASE", "BATS", "XCHI", "TXSE"]);
+const LIST_PLACES = {
+  TSE: ["XTKS"],
+  CSE: ["XCNQ"],
+  EURONEXT: ["XPAR", "XAMS", "XAMC", "XBRU", "XLIS", "XMSM", "ALXP", "ALXB", "XESM"],
+};
 
 let ready = null;
 
@@ -51,9 +61,10 @@ function load() {
   const byMic = new Map();
   for (const place of places) {
     const { venue } = resolveVenue({ exchange: place });
-    if (!venue) continue;
-    if (!byMic.has(venue.mic)) byMic.set(venue.mic, []);
-    byMic.get(venue.mic).push(place);
+    for (const mic of venue ? [venue.mic] : LIST_PLACES[place] || []) {
+      if (!byMic.has(mic)) byMic.set(mic, []);
+      byMic.get(mic).push(place);
+    }
   }
   const usPlaces = [...US_MICS].flatMap((mic) => byMic.get(mic) || []);
   ready = { book, byMic, usPlaces };
@@ -100,7 +111,7 @@ export function listIdentity(row) {
   if (String(row.isin || "").trim() || (row.matches || []).length) return null;
   const ticker = String(row.ticker || "").trim().toUpperCase();
   if (!ticker) return null;
-  const { venue, unsourced } = resolveVenue({ exchange: row.exchange, currency: row.currency });
+  const { venue, unsourced } = resolveVenue({ exchange: row.exchange, currency: row.currency, mic: row.mic });
   const { byMic, usPlaces } = load();
   if (venue && US_MICS.has(venue.mic)) return american(ticker, byMic.get(venue.mic) || []);
   if (unsourced?.match?.includes("us")) {

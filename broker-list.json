@@ -615,11 +615,7 @@
     "type": "Neobroker",
     "url": "https://www.sofi.com/invest/active/",
     "exchanges": {
-      "New York Stock Exchange": {},
-      "Nasdaq": {},
-      "NYSE American": {},
-      "OTC Markets": {},
-      "NYSE Arca": {}
+      "OTC Markets": {}
     }
   },
   {
@@ -829,8 +825,7 @@
     "url": "https://www.eoption.com",
     "exchanges": {
       "New York Stock Exchange": {},
-      "Nasdaq": {},
-      "OTC Markets": {}
+      "Nasdaq": {}
     }
   },
   {
@@ -839,8 +834,7 @@
     "type": "Neobroker",
     "url": "https://plynkinvest.com/",
     "exchanges": {
-      "New York Stock Exchange": {},
-      "Nasdaq": {}
+      "United States": {}
     }
   },
   {
@@ -896,9 +890,7 @@
     "type": "Broker",
     "url": "https://www.troweprice.com/personal-investing/accounts/brokerage/",
     "exchanges": {
-      "New York Stock Exchange": {},
       "Nasdaq": {},
-      "NYSE American": {},
       "OTC Markets": {}
     }
   },
@@ -1657,9 +1649,7 @@
     "type": "Broker",
     "url": "https://help.aries.com/hc/en-us/articles/29042945500444-Extended-Hours-Trading",
     "exchanges": {
-      "OTC Markets": {},
-      "New York Stock Exchange": {},
-      "Nasdaq": {}
+      "OTC Markets": {}
     }
   },
   {
@@ -1678,10 +1668,7 @@
     "url": "https://carry.com/equities",
     "exchanges": {
       "New York Stock Exchange": {},
-      "Nasdaq": {},
-      "Toronto Stock Exchange": {
-        "restriction": "No direct foreign trading (U.S.-listed shares/ADRs only); No non-US ETFs for US clients"
-      }
+      "Nasdaq": {}
     }
   },
   {
@@ -1762,9 +1749,7 @@
     "url": "https://www.lighthorse.io/instructions/trading/placing-an-order",
     "exchanges": {
       "New York Stock Exchange": {},
-      "Nasdaq": {},
-      "NYSE American": {},
-      "Cboe BZX": {}
+      "Nasdaq": {}
     }
   },
   {
@@ -2684,7 +2669,6 @@
       "New York Stock Exchange": {},
       "Nasdaq": {},
       "NYSE American": {},
-      "NYSE Arca": {},
       "Cboe BZX": {},
       "OTC Markets": {
         "restriction": "ADRs only; by phone only"
@@ -2815,14 +2799,10 @@
     "url": "https://centerpointsecurities.ca/routes/",
     "exchanges": {
       "Toronto Stock Exchange": {},
-      "TSX Venture": {},
-      "Canadian Securities Exchange": {},
-      "Cboe Canada": {},
       "New York Stock Exchange": {},
       "Nasdaq": {},
       "NYSE American": {},
-      "NYSE Arca": {},
-      "Cboe BZX": {}
+      "NYSE Arca": {}
     }
   },
   {
@@ -2841,21 +2821,20 @@
       "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs (UK PRIIPs/KID)"
       },
-      "OTC Markets": {},
       "NYSE American": {
         "restriction": "No US-domiciled ETFs (UK PRIIPs/KID)"
       },
-      "Börse Xetra": {
+      "Germany": {
         "restriction": "Mainly DAX/HDAX/MDAX index constituents"
       },
-      "Wiener Börse": {
+      "Austria": {
         "restriction": "Mainly ATX/WBI index constituents"
       },
-      "Euronext Dublin": {},
-      "Euronext Amsterdam": {
+      "Ireland": {},
+      "Netherlands": {
         "restriction": "Mainly AEX index constituents"
       },
-      "Euronext Brussels": {
+      "Belgium": {
         "restriction": "Mainly BEL 20 index constituents"
       }
     }
@@ -3031,9 +3010,6 @@
         "restriction": "No US-listed ETFs"
       },
       "Oslo Børs": {},
-      "OTC Markets": {
-        "restriction": "No US-listed ETFs"
-      },
       "SIX Swiss Exchange": {},
       "Tradegate": {},
       "Warsaw Stock Exchange": {},
@@ -3058,7 +3034,7 @@
         "restriction": "No US-listed ETFs (only UK/EEA-listed ETPs offered)"
       },
       "Tradegate": {},
-      "London Stock Exchange": {}
+      "United Kingdom": {}
     }
   },
   {
@@ -3416,7 +3392,6 @@
       "Wiener Börse": {},
       "AIM": {},
       "Turquoise": {},
-      "Warsaw Stock Exchange": {},
       "Aquis Stock Exchange": {}
     }
   },
@@ -3706,7 +3681,6 @@
       "Euronext Milan": {},
       "Euronext Paris": {},
       "First North Denmark": {},
-      "First North Helsinki": {},
       "First North Stockholm": {},
       "Hong Kong Stock Exchange": {},
       "Johannesburg Stock Exchange": {},
@@ -3945,11 +3919,7 @@
     "country": "UK",
     "type": "Broker",
     "url": "https://tillitinvest.com/why-tillit",
-    "exchanges": {
-      "London Stock Exchange": {
-        "restriction": "Curated range of ETFs and investment trusts only, no individual shares"
-      }
-    }
+    "exchanges": {}
   },
   {
     "name": "Investa",
@@ -4020,9 +3990,7 @@
     "type": "Broker",
     "url": "https://assets.cmcinvest.com/invest/CMCInvestOrderExecutionPolicy.pdf",
     "exchanges": {
-      "London Stock Exchange": {},
       "AIM": {},
-      "New York Stock Exchange": {},
       "Nasdaq": {},
       "Börse Frankfurt": {},
       "France": {},
@@ -4045,7 +4013,6 @@
       "Börse Berlin": {},
       "Börse Hamburg": {},
       "Börse Stuttgart": {},
-      "Börse Xetra": {},
       "Canadian Securities Exchange": {},
       "Euronext Amsterdam": {},
       "Euronext Brussels": {},
@@ -4057,9 +4024,6 @@
       "Johannesburg Stock Exchange": {},
       "London Stock Exchange": {},
       "Luxembourg Stock Exchange": {},
-      "NYSE Arca": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
-      },
       "NZX": {},
       "Nasdaq": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
@@ -4081,9 +4045,7 @@
       "Tokyo Stock Exchange": {},
       "Toronto Stock Exchange": {},
       "Warsaw Stock Exchange": {},
-      "Wiener Börse": {},
-      "gettex": {},
-      "China": {}
+      "Wiener Börse": {}
     }
   },
   {
@@ -4396,7 +4358,6 @@
         "restriction": "No ETFs lacking a PRIIPs KID (most locally domiciled ETFs)"
       },
       "Alpha Exchange": {},
-      "Aquis Stock Exchange": {},
       "Athens Stock Exchange": {},
       "Bolsa Mexicana": {
         "restriction": "No ETFs lacking a PRIIPs KID (most locally domiciled ETFs)"
@@ -4509,7 +4470,6 @@
       "STAR Market": {
         "restriction": "Professional investors only (via Stock Connect); Northbound-eligible stocks only"
       },
-      "B3 São Paulo": {},
       "London IOB": {},
       "ETFplus": {}
     }
@@ -4560,7 +4520,6 @@
       "Euronext Access Lisbon": {},
       "Euronext Amsterdam": {},
       "Euronext Brussels": {},
-      "Euronext Dublin": {},
       "Euronext Growth Brussels": {},
       "Euronext Lisbon": {},
       "Euronext Milan": {},
@@ -4583,9 +4542,7 @@
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
       "Nasdaq Copenhagen": {},
-      "Nasdaq First North Iceland": {},
       "Nasdaq Helsinki": {},
-      "Nasdaq Iceland": {},
       "Nasdaq Stockholm": {},
       "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
@@ -4655,8 +4612,7 @@
       "NYSE Arca": {
         "restriction": "Stocks only, no ETFs"
       },
-      "Tradegate": {},
-      "Börse Berlin": {}
+      "Tradegate": {}
     }
   },
   {
@@ -4719,8 +4675,7 @@
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
       "Toronto Stock Exchange": {},
-      "BX Swiss": {},
-      "Börse Berlin": {}
+      "BX Swiss": {}
     }
   },
   {
@@ -4951,8 +4906,7 @@
       "Warsaw Stock Exchange": {},
       "NZX": {},
       "Wiener Börse": {},
-      "SIX Swiss Exchange": {},
-      "Börse Berlin": {}
+      "SIX Swiss Exchange": {}
     }
   },
   {
@@ -5378,7 +5332,6 @@
         "restriction": "Northbound-eligible A-shares only; Professional investors only for ChiNext via Connect"
       },
       "Korea Exchange": {},
-      "Shanghai-Hong Kong Stock Connect": {},
       "Abu Dhabi Securities Exchange": {},
       "Dubai Financial Market": {}
     }
@@ -5436,7 +5389,6 @@
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
       "Turquoise": {},
-      "Cboe Canada": {},
       "London IOB": {}
     }
   },
@@ -5451,8 +5403,7 @@
       },
       "Tradegate": {},
       "Euronext": {},
-      "London Stock Exchange": {},
-      "Börse Xetra": {}
+      "London Stock Exchange": {}
     }
   },
   {
@@ -5498,7 +5449,7 @@
       "Borsa Istanbul": {},
       "Budapest Stock Exchange": {},
       "Tradegate": {},
-      "New York Stock Exchange": {
+      "United States": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
       "Canada": {}
@@ -5550,7 +5501,6 @@
       "Börse Stuttgart": {},
       "Börse München": {},
       "Börse Hannover": {},
-      "gettex": {},
       "Börse Hamburg": {},
       "Börse Düsseldorf": {},
       "Börse Xetra": {},
@@ -5990,9 +5940,7 @@
     "type": "Neobroker",
     "url": "https://bisonapp.com/aktien-etfs/",
     "exchanges": {
-      "Börse Stuttgart": {
-        "count": 2500
-      }
+      "TradeREBEL": {}
     }
   },
   {
@@ -6098,7 +6046,7 @@
     "type": "Bank",
     "url": "https://www.bank1saar.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/depot-aktiv.html",
     "exchanges": {
-      "Börse Xetra": {}
+      "Germany": {}
     }
   },
   {
@@ -6143,9 +6091,6 @@
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
       "NYSE Arca": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
-      },
-      "OTC Markets": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
       "Toronto Stock Exchange": {},
@@ -6212,27 +6157,50 @@
     "type": "Broker",
     "url": "https://www.hmpbrokers.com/trading-depot/",
     "exchanges": {
-      "United States": {
+      "New York Stock Exchange": {
+        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
+      },
+      "Nasdaq": {
+        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
+      },
+      "NYSE American": {
+        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
+      },
+      "NYSE Arca": {
+        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
+      },
+      "Cboe BZX": {
+        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
+      },
+      "OTC Markets": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
       "Börse Frankfurt": {},
       "Börse Stuttgart": {},
-      "Australia": {},
-      "Canada": {},
-      "Switzerland": {},
-      "China": {
+      "ASX": {},
+      "Cboe Australia": {},
+      "Toronto Stock Exchange": {},
+      "TSX Venture": {},
+      "Canadian Securities Exchange": {},
+      "Cboe Canada": {},
+      "SIX Swiss Exchange": {},
+      "Shanghai-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible A-shares only (Stock Connect); ChiNext/STAR via Connect for professional investors only"
       },
-      "Hong Kong": {},
-      "Hungary": {},
-      "Israel": {},
-      "Japan": {},
-      "Mexico": {},
-      "Norway": {},
-      "Poland": {},
-      "Sweden": {},
-      "Singapore": {},
-      "United Kingdom": {}
+      "Shenzhen-Hong Kong Stock Connect": {
+        "restriction": "Northbound-eligible A-shares only (Stock Connect); ChiNext/STAR via Connect for professional investors only"
+      },
+      "Hong Kong Stock Exchange": {},
+      "Budapest Stock Exchange": {},
+      "Tel Aviv Stock Exchange": {},
+      "Tokyo Stock Exchange": {},
+      "Bolsa Mexicana": {},
+      "Oslo Børs": {},
+      "Warsaw Stock Exchange": {},
+      "Nasdaq Stockholm": {},
+      "Singapore Exchange": {},
+      "London Stock Exchange": {},
+      "London IOB": {}
     }
   },
   {
@@ -6505,7 +6473,7 @@
     "type": "Bank",
     "url": "https://www.ligabank.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/wertpapierdepot.html",
     "exchanges": {
-      "Börse Xetra": {}
+      "Germany": {}
     }
   },
   {
@@ -6519,7 +6487,6 @@
       "Börse Frankfurt": {},
       "Börse München": {},
       "Börse Stuttgart": {},
-      "Börse Berlin": {},
       "Börse Düsseldorf": {},
       "Börse Hamburg": {},
       "Börse Hannover": {},
@@ -6664,8 +6631,7 @@
     "type": "Bank",
     "url": "https://www.sskduesseldorf.de/de/home/privatkunden/wertpapier-und-boerse/s-neo.html",
     "exchanges": {
-      "Tradegate": {},
-      "Germany": {}
+      "Tradegate": {}
     }
   },
   {
@@ -7300,7 +7266,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-regensburg.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": {
-      "Germany": {}
+      "Börse Xetra": {},
+      "Börse Frankfurt": {},
+      "Börse Düsseldorf": {},
+      "Quotrix": {},
+      "Börse Hamburg": {},
+      "Börse Hannover": {},
+      "Börse München": {},
+      "Börse Stuttgart": {},
+      "Tradegate": {},
+      "gettex": {}
     }
   },
   {
@@ -8625,7 +8600,16 @@
     "type": "Bank",
     "url": "https://www.ksk-gp.de/de/home/privatkunden/wertpapiere-und-boerse.html",
     "exchanges": {
-      "Germany": {}
+      "Börse Düsseldorf": {},
+      "Quotrix": {},
+      "Börse Frankfurt": {},
+      "Börse Xetra": {},
+      "Börse Hamburg": {},
+      "Börse Hannover": {},
+      "Börse München": {},
+      "Börse Stuttgart": {},
+      "Tradegate": {},
+      "gettex": {}
     }
   },
   {
@@ -8634,7 +8618,16 @@
     "type": "Bank",
     "url": "https://www.rheinhessen-sparkasse.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": {
-      "Germany": {}
+      "Börse Düsseldorf": {},
+      "Quotrix": {},
+      "Börse Frankfurt": {},
+      "Börse Xetra": {},
+      "Börse Hamburg": {},
+      "Börse Hannover": {},
+      "Börse München": {},
+      "Börse Stuttgart": {},
+      "Tradegate": {},
+      "gettex": {}
     }
   },
   {
@@ -9072,7 +9065,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-landshut.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": {
-      "Germany": {}
+      "Börse Xetra": {},
+      "Börse Frankfurt": {},
+      "Börse Düsseldorf": {},
+      "Quotrix": {},
+      "Börse Hamburg": {},
+      "Börse Hannover": {},
+      "Börse München": {},
+      "Börse Stuttgart": {},
+      "Tradegate": {},
+      "gettex": {}
     }
   },
   {
@@ -9396,7 +9398,16 @@
     "type": "Bank",
     "url": "https://www.sparkasse-oberlausitz-niederschlesien.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": {
-      "Germany": {}
+      "Börse Xetra": {},
+      "Börse Frankfurt": {},
+      "Börse Düsseldorf": {},
+      "Quotrix": {},
+      "Börse Hamburg": {},
+      "Börse Hannover": {},
+      "Börse München": {},
+      "Börse Stuttgart": {},
+      "Tradegate": {},
+      "gettex": {}
     }
   },
   {
@@ -9423,7 +9434,16 @@
     "type": "Bank",
     "url": "https://www.ksk-tut.de/de/home/privatkunden/wertpapiere-und-boerse/depotangebot.html",
     "exchanges": {
-      "Germany": {}
+      "Börse Xetra": {},
+      "Börse Frankfurt": {},
+      "Börse Düsseldorf": {},
+      "Quotrix": {},
+      "Börse Hamburg": {},
+      "Börse Hannover": {},
+      "Börse München": {},
+      "Börse Stuttgart": {},
+      "Tradegate": {},
+      "gettex": {}
     }
   },
   {
@@ -9721,8 +9741,7 @@
     "type": "Bank",
     "url": "https://www.vb-alzey-worms.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": {
-      "Tradegate": {},
-      "Quotrix": {}
+      "Germany": {}
     }
   },
   {
@@ -9860,8 +9879,7 @@
     "type": "Bank",
     "url": "https://www.vbga.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": {
-      "Börse Xetra": {},
-      "Tradegate": {}
+      "Germany": {}
     }
   },
   {
@@ -9879,8 +9897,7 @@
     "type": "Bank",
     "url": "https://www.vrbank-augsburg-ostallgaeu.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": {
-      "Börse Xetra": {},
-      "Tradegate": {}
+      "Germany": {}
     }
   },
   {
@@ -9889,8 +9906,7 @@
     "type": "Bank",
     "url": "https://www.vrbk.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": {
-      "Börse Xetra": {},
-      "Tradegate": {}
+      "Germany": {}
     }
   },
   {
@@ -9937,8 +9953,7 @@
     "type": "Bank",
     "url": "https://www.volksbank-kurpfalz.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": {
-      "Börse Xetra": {},
-      "Tradegate": {}
+      "Germany": {}
     }
   },
   {
@@ -9947,8 +9962,7 @@
     "type": "Bank",
     "url": "https://www.volksbank-im-westen.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": {
-      "Börse Xetra": {},
-      "Tradegate": {}
+      "Germany": {}
     }
   },
   {
@@ -10011,7 +10025,13 @@
     "type": "Bank",
     "url": "https://www.volksbank-kassel-goettingen.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": {
-      "Germany": {}
+      "Börse Frankfurt": {},
+      "Börse Xetra": {},
+      "Börse Stuttgart": {},
+      "Tradegate": {},
+      "Börse München": {},
+      "Quotrix": {},
+      "Börse Düsseldorf": {}
     }
   },
   {
@@ -10519,7 +10539,6 @@
       "Börse Stuttgart": {},
       "Dubai Financial Market": {},
       "Euronext Milan": {},
-      "Nagoya Stock Exchange": {},
       "Nasdaq Stockholm": {},
       "Singapore Exchange": {},
       "TSX Venture": {},
@@ -10860,7 +10879,7 @@
     "type": "Bank",
     "url": "https://www.migrosbank.ch/de/privatpersonen/anlegen/anlageloesungen/wertschriftendepot.html",
     "exchanges": {
-      "SIX Swiss Exchange": {}
+      "Switzerland": {}
     }
   },
   {
@@ -10884,7 +10903,7 @@
       "Euronext": {
         "restriction": "Curated selection only (shares hand-picked by Yuh, blue chips favoured)"
       },
-      "London Stock Exchange": {
+      "United Kingdom": {
         "restriction": "Curated selection only (shares hand-picked by Yuh, blue chips favoured)"
       },
       "Euronext Milan": {
@@ -11163,7 +11182,6 @@
       "Euronext Milan": {},
       "Euronext Paris": {},
       "First North Denmark": {},
-      "First North Helsinki": {},
       "First North Stockholm": {},
       "Hong Kong Stock Exchange": {},
       "Johannesburg Stock Exchange": {},
@@ -11573,7 +11591,8 @@
     "type": "Bank",
     "url": "https://www.bcf.ch/de/privatkunden/digitale-dienstleistungen/digital-banking/e-banking",
     "exchanges": {
-      "Switzerland": {}
+      "SIX Swiss Exchange": {},
+      "BX Swiss": {}
     }
   },
   {
@@ -12714,7 +12733,6 @@
       "Cboe Europe": {},
       "Turquoise": {},
       "Aquis Stock Exchange": {},
-      "Börse Berlin": {},
       "TradeREBEL": {}
     }
   },
@@ -12727,7 +12745,6 @@
       "Wiener Börse": {},
       "SIX Swiss Exchange": {},
       "Börse Xetra": {},
-      "Börse Berlin": {},
       "Börse Düsseldorf": {},
       "Börse Frankfurt": {},
       "Börse Hamburg": {},
@@ -13025,7 +13042,6 @@
       "London Stock Exchange": {},
       "Euronext Dublin": {},
       "Euronext Milan": {},
-      "Luxembourg Stock Exchange": {},
       "Euronext Amsterdam": {},
       "Oslo Børs": {},
       "Warsaw Stock Exchange": {},
@@ -13040,16 +13056,11 @@
       "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
-      "NYSE American": {},
       "OTC Markets": {},
       "Toronto Stock Exchange": {},
       "ASX": {},
       "Hong Kong Stock Exchange": {},
-      "Tokyo Stock Exchange": {},
-      "NZX": {},
-      "Johannesburg Stock Exchange": {},
-      "RM-SYSTEM": {},
-      "Moscow Exchange": {}
+      "Tokyo Stock Exchange": {}
     }
   },
   {
@@ -13190,8 +13201,7 @@
       "Cboe Europe": {},
       "Aquis Stock Exchange": {},
       "Turquoise": {},
-      "TradeREBEL": {},
-      "Moscow Exchange": {}
+      "TradeREBEL": {}
     }
   },
   {
@@ -13252,42 +13262,7 @@
     "country": "AT",
     "type": "Bank",
     "url": "https://anadibank.com/sites/default/files/media/315f6e8a/allgemeine_bedingungen_internetbanking.pdf",
-    "exchanges": {
-      "Wiener Börse": {},
-      "Börse Xetra": {},
-      "Börse Frankfurt": {},
-      "New York Stock Exchange": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
-      },
-      "Nasdaq": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
-      },
-      "Australia": {},
-      "Börse Stuttgart": {},
-      "Börse Hannover": {},
-      "Börse Hamburg": {},
-      "Börse München": {},
-      "Börse Berlin": {},
-      "Börse Düsseldorf": {},
-      "SIX Swiss Exchange": {},
-      "Euronext Milan": {},
-      "Euronext Amsterdam": {},
-      "Euronext Brussels": {},
-      "Nasdaq Copenhagen": {},
-      "London Stock Exchange": {},
-      "Euronext Paris": {},
-      "Bolsa de Madrid": {},
-      "Nasdaq Helsinki": {},
-      "Euronext Dublin": {},
-      "Oslo Børs": {},
-      "Nasdaq Stockholm": {},
-      "Euronext Lisbon": {},
-      "Ljubljana Stock Exchange": {},
-      "Zagreb Stock Exchange": {},
-      "NYSE American": {},
-      "Toronto Stock Exchange": {},
-      "TSX Venture": {}
-    }
+    "exchanges": {}
   },
   {
     "name": "BKS Bank",
@@ -13353,8 +13328,6 @@
       "Johannesburg Stock Exchange": {},
       "Stock Exchange of Thailand": {},
       "Indonesia Stock Exchange": {},
-      "Moscow Exchange": {},
-      "SPB Exchange": {},
       "Kyiv International Stock Exchange": {}
     }
   },
@@ -13602,11 +13575,7 @@
       },
       "Nasdaq": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
-      },
-      "Ireland": {},
-      "Portugal": {},
-      "Luxembourg": {},
-      "Indonesia": {}
+      }
     }
   },
   {
@@ -14255,7 +14224,6 @@
       "Euronext Milan": {},
       "Euronext Paris": {},
       "First North Denmark": {},
-      "First North Helsinki": {},
       "First North Stockholm": {},
       "Hong Kong Stock Exchange": {},
       "Johannesburg Stock Exchange": {},
@@ -14328,7 +14296,10 @@
       "Singapore": {},
       "Japan": {},
       "Hong Kong": {},
-      "China": {
+      "Shanghai-Hong Kong Stock Connect": {
+        "restriction": "Northbound-eligible A-shares only; ChiNext/STAR via Connect for professional investors only"
+      },
+      "Shenzhen-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible A-shares only; ChiNext/STAR via Connect for professional investors only"
       },
       "Malaysia": {},
@@ -14371,7 +14342,8 @@
       "Australia": {},
       "Cboe Europe": {},
       "Equiduct": {},
-      "China": {},
+      "Shanghai-Hong Kong Stock Connect": {},
+      "Shenzhen-Hong Kong Stock Connect": {},
       "Ireland": {}
     }
   },
@@ -14734,7 +14706,6 @@
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
       "Sweden": {},
-      "India": {},
       "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
@@ -14828,9 +14799,6 @@
       },
       "Nasdaq": {
         "restriction": "Stocks only, no ETFs; No US-domiciled ETFs (PRIIPs/KID)"
-      },
-      "OTC Markets": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       }
     }
   },
@@ -14872,8 +14840,6 @@
       "SIX Swiss Exchange": {},
       "Toronto Stock Exchange": {},
       "Euronext Dublin": {},
-      "Bratislava Stock Exchange": {},
-      "Ljubljana Stock Exchange": {},
       "Johannesburg Stock Exchange": {
         "restriction": "By phone (Orderdesk) only"
       },
@@ -14915,7 +14881,7 @@
       "ASX": {
         "restriction": "By phone (Orderdesk) only"
       },
-      "Prague Stock Exchange": {}
+      "Czech Republic": {}
     }
   },
   {
@@ -14954,8 +14920,7 @@
       },
       "NYSE Arca": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
-      },
-      "Luxembourg Stock Exchange": {}
+      }
     }
   },
   {
@@ -15120,8 +15085,7 @@
       "SIX Swiss Exchange": {},
       "Toronto Stock Exchange": {},
       "Wiener Börse": {},
-      "Börse Xetra": {},
-      "Tokyo Stock Exchange": {}
+      "Börse Xetra": {}
     }
   },
   {
@@ -15218,7 +15182,6 @@
       "Czech Republic": {},
       "South Africa": {},
       "Australia": {},
-      "Malaysia": {},
       "New Zealand": {},
       "Singapore": {},
       "Thailand": {}
@@ -15239,7 +15202,10 @@
       "Euronext Paris": {
         "restriction": "ETFs only if registered in Belgium; ETFs via mobile app only"
       },
-      "United States": {
+      "New York Stock Exchange": {
+        "restriction": "No US-domiciled ETFs (PRIIPs/KID); ETFs only if registered in Belgium; ETFs via mobile app only"
+      },
+      "Nasdaq": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID); ETFs only if registered in Belgium; ETFs via mobile app only"
       },
       "Börse Xetra": {
@@ -15565,12 +15531,12 @@
       "Euronext": {},
       "Euronext Amsterdam": {},
       "Euronext Paris": {},
-      "Euronext Lisbon": {},
+      "Portugal": {},
       "Toronto Stock Exchange": {
         "restriction": "No Canadian ETFs without a KID (retail)"
       },
-      "Nasdaq Copenhagen": {},
-      "Nasdaq Helsinki": {},
+      "Denmark": {},
+      "Finland": {},
       "Nasdaq Stockholm": {},
       "Oslo Børs": {},
       "Wiener Börse": {},
@@ -15782,7 +15748,10 @@
       "Euronext Amsterdam": {},
       "Euronext Brussels": {},
       "Euronext Paris": {},
-      "United States": {
+      "New York Stock Exchange": {
+        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
+      },
+      "Nasdaq": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
       "Canada": {
@@ -15991,7 +15960,6 @@
       "Euronext Brussels": {},
       "Euronext Amsterdam": {},
       "Euronext Lisbon": {},
-      "Athens Stock Exchange": {},
       "Bolsa de Madrid": {},
       "Börse Frankfurt": {},
       "Euronext Dublin": {},
@@ -16762,23 +16730,29 @@
       "Euronext Paris": {},
       "Euronext Brussels": {},
       "Euronext Amsterdam": {},
-      "Germany": {},
-      "United Kingdom": {},
-      "Austria": {},
-      "Canada": {
+      "Börse Xetra": {},
+      "London Stock Exchange": {},
+      "Wiener Börse": {},
+      "Toronto Stock Exchange": {
         "restriction": "No Canadian-domiciled ETFs (PRIIPs/KID)"
       },
-      "Denmark": {},
-      "Spain": {},
-      "Finland": {},
-      "Greece": {},
-      "Ireland": {},
-      "Italy": {},
-      "Norway": {},
-      "Portugal": {},
-      "Sweden": {},
-      "Switzerland": {},
-      "United States": {
+      "Nasdaq Copenhagen": {},
+      "Bolsa de Madrid": {},
+      "Nasdaq Helsinki": {},
+      "Athens Stock Exchange": {},
+      "Euronext Dublin": {},
+      "Euronext Milan": {},
+      "Oslo Børs": {},
+      "Euronext Lisbon": {},
+      "Nasdaq Stockholm": {},
+      "SIX Swiss Exchange": {},
+      "New York Stock Exchange": {
+        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
+      },
+      "Nasdaq": {
+        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
+      },
+      "Cboe BZX": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       }
     }
@@ -16792,23 +16766,29 @@
       "Euronext Paris": {},
       "Euronext Brussels": {},
       "Euronext Amsterdam": {},
-      "Germany": {},
-      "United Kingdom": {},
-      "Austria": {},
-      "Canada": {
+      "Börse Xetra": {},
+      "London Stock Exchange": {},
+      "Wiener Börse": {},
+      "Toronto Stock Exchange": {
         "restriction": "No Canadian-domiciled ETFs (PRIIPs/KID)"
       },
-      "Denmark": {},
-      "Spain": {},
-      "Finland": {},
-      "Greece": {},
-      "Ireland": {},
-      "Italy": {},
-      "Norway": {},
-      "Portugal": {},
-      "Sweden": {},
-      "Switzerland": {},
-      "United States": {
+      "Nasdaq Copenhagen": {},
+      "Bolsa de Madrid": {},
+      "Nasdaq Helsinki": {},
+      "Athens Stock Exchange": {},
+      "Euronext Dublin": {},
+      "Euronext Milan": {},
+      "Oslo Børs": {},
+      "Euronext Lisbon": {},
+      "Nasdaq Stockholm": {},
+      "SIX Swiss Exchange": {},
+      "New York Stock Exchange": {
+        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
+      },
+      "Nasdaq": {
+        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
+      },
+      "Cboe BZX": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       }
     }
@@ -16921,19 +16901,19 @@
       "Euronext Amsterdam": {},
       "Euronext Brussels": {},
       "Euronext Lisbon": {},
-      "Austria": {},
-      "Denmark": {},
-      "Spain": {},
-      "Estonia": {},
-      "Latvia": {},
-      "Lithuania": {},
-      "Mexico": {
+      "Wiener Börse": {},
+      "Nasdaq Copenhagen": {},
+      "Bolsa de Madrid": {},
+      "Nasdaq Tallinn": {},
+      "Nasdaq Riga": {},
+      "Nasdaq Vilnius": {},
+      "Bolsa Mexicana": {
         "restriction": "No Mexican-domiciled ETFs (PRIIPs/KID) for retail clients"
       },
-      "Norway": {},
+      "Oslo Børs": {},
       "Singapore Exchange": {},
-      "Sweden": {},
-      "Switzerland": {},
+      "Nasdaq Stockholm": {},
+      "SIX Swiss Exchange": {},
       "United Arab Emirates": {},
       "Shenzhen-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible A-shares only; Professional investors only for ChiNext via Connect"
@@ -16974,14 +16954,14 @@
       "SIX Swiss Exchange": {},
       "Toronto Stock Exchange": {},
       "Euronext Brussels": {},
-      "Bolsa de Madrid": {},
+      "Spain": {},
       "Nasdaq Helsinki": {},
       "Nasdaq Stockholm": {},
-      "Nasdaq Copenhagen": {},
-      "Oslo Børs": {},
-      "Wiener Börse": {},
+      "Denmark": {},
+      "Norway": {},
+      "Austria": {},
       "Athens Stock Exchange": {},
-      "Euronext Dublin": {},
+      "Ireland": {},
       "Tokyo Stock Exchange": {},
       "ASX": {},
       "Hong Kong Stock Exchange": {},
@@ -17218,7 +17198,7 @@
       "ASX": {
         "restriction": "By phone/advisor only"
       },
-      "Japan": {
+      "Tokyo Stock Exchange": {
         "restriction": "By phone/advisor only"
       },
       "Johannesburg Stock Exchange": {
@@ -17834,7 +17814,8 @@
     "type": "Bank",
     "url": "https://www.raiffeisen.it/en/obervinschgau/wir-sind-genossenschaft/unsere-dienstleistungen/produkte/trading-online.html",
     "exchanges": {
-      "Italy": {},
+      "Euronext Milan": {},
+      "ETFplus": {},
       "Börse Xetra": {},
       "Börse Frankfurt": {}
     }
@@ -18670,11 +18651,11 @@
     "type": "Bank",
     "url": "https://www.sanfelice1893.it/privati-e-famiglie/banca-online/app-mobile",
     "exchanges": {
-      "Euronext Milan": {},
+      "Italy": {},
       "United States": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
-      "Euronext Paris": {}
+      "France": {}
     }
   },
   {
@@ -19093,12 +19074,10 @@
       "Euronext Growth Milan": {},
       "Euronext MIV Milan": {},
       "Global Equity Market": {},
-      "Vorvel Equity Auction": {},
-      "EuroTLX": {},
-      "Euronext Paris": {},
-      "Euronext Amsterdam": {},
-      "Euronext Brussels": {},
-      "Börse Xetra": {},
+      "France": {},
+      "Netherlands": {},
+      "Belgium": {},
+      "Germany": {},
       "Cboe Europe": {},
       "Turquoise": {},
       "Aquis Stock Exchange": {},
@@ -19195,7 +19174,6 @@
       "Euronext Growth Milan": {},
       "ETFplus": {},
       "Euronext MIV Milan": {},
-      "EuroTLX": {},
       "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
@@ -19355,8 +19333,11 @@
       "Finland": {},
       "Denmark": {},
       "Austria": {},
-      "Switzerland": {},
-      "United States": {},
+      "SIX Swiss Exchange": {},
+      "New York Stock Exchange": {},
+      "Nasdaq": {},
+      "NYSE American": {},
+      "OTC Markets": {},
       "Canada": {},
       "Japan": {},
       "Australia": {},
@@ -19438,7 +19419,6 @@
       "Euronext Growth Milan": {},
       "ETFplus": {},
       "Euronext MIV Milan": {},
-      "EuroTLX": {},
       "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
@@ -19457,19 +19437,7 @@
       "Cboe Europe": {},
       "SIX Swiss Exchange": {},
       "Global Equity Market": {},
-      "TAH": {},
-      "Euronext Brussels": {},
-      "Vorvel Equity Auction": {},
-      "Turquoise": {},
-      "Aquis Stock Exchange": {},
-      "Austria": {},
-      "Denmark": {},
-      "Finland": {},
-      "Japan": {},
-      "Hong Kong": {},
-      "Norway": {},
-      "Spain": {},
-      "Sweden": {}
+      "TAH": {}
     }
   },
   {
@@ -19484,7 +19452,6 @@
       "Global Equity Market": {},
       "Euronext STAR Milan": {},
       "ETFplus": {},
-      "EuroTLX": {},
       "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
@@ -19517,7 +19484,6 @@
       "Global Equity Market": {},
       "Euronext STAR Milan": {},
       "ETFplus": {},
-      "EuroTLX": {},
       "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
@@ -19535,27 +19501,7 @@
       "Börse Xetra": {},
       "Cboe Europe": {},
       "SIX Swiss Exchange": {},
-      "TAH": {},
-      "Euronext Brussels": {},
-      "Vorvel Equity Auction": {},
-      "Turquoise": {},
-      "Aquis Stock Exchange": {},
-      "Spain": {},
-      "Finland": {},
-      "Austria": {},
-      "Denmark": {},
-      "Norway": {},
-      "Portugal": {},
-      "Sweden": {},
-      "Canada": {},
-      "Japan": {},
-      "Greece": {},
-      "Poland": {},
-      "Czech Republic": {},
-      "Hungary": {},
-      "Hong Kong": {},
-      "South Africa": {},
-      "Thailand": {}
+      "TAH": {}
     }
   },
   {
@@ -19724,10 +19670,7 @@
     "type": "Bank",
     "url": "https://www.bccbrescia.it/privati/banca-digitale/trading-online/",
     "exchanges": {
-      "Euronext Milan": {},
-      "Euronext Growth Milan": {},
-      "Euronext MIV Milan": {},
-      "Global Equity Market": {},
+      "Italy": {},
       "Cboe Europe": {}
     }
   },
@@ -19808,7 +19751,7 @@
       "Canada": {
         "restriction": "By phone/branch only; No local ETFs (ETFs must have Spanish KID and be Europe-listed)"
       },
-      "SIX Swiss Exchange": {},
+      "Switzerland": {},
       "Australia": {},
       "Greece": {}
     }
@@ -20159,11 +20102,11 @@
       "BME Growth": {},
       "Börse Xetra": {},
       "Latibex": {},
-      "Nasdaq Helsinki": {},
-      "Nasdaq Stockholm": {},
-      "London Stock Exchange": {},
-      "Euronext Brussels": {},
-      "Euronext Lisbon": {}
+      "Finland": {},
+      "Sweden": {},
+      "United Kingdom": {},
+      "Belgium": {},
+      "Portugal": {}
     }
   },
   {
@@ -20180,7 +20123,6 @@
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
       "London Stock Exchange": {},
-      "Börse Xetra": {},
       "Börse Frankfurt": {},
       "Euronext Paris": {},
       "BME Growth": {},
@@ -20269,7 +20211,7 @@
       "United States": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
-      "Börse Frankfurt": {},
+      "Germany": {},
       "France": {},
       "Japan": {},
       "SIX Swiss Exchange": {},
@@ -20282,7 +20224,6 @@
       "Ireland": {},
       "United Kingdom": {},
       "Canada": {},
-      "Börse Xetra": {},
       "Sweden": {},
       "Finland": {},
       "Denmark": {},
@@ -20354,7 +20295,7 @@
       "Athens Stock Exchange": {},
       "Oslo Børs": {},
       "Nasdaq Copenhagen": {},
-      "Nasdaq Helsinki": {},
+      "Finland": {},
       "Nasdaq Stockholm": {},
       "Singapore Exchange": {},
       "France": {},
@@ -20367,7 +20308,7 @@
     "type": "Bank",
     "url": "https://www.abanca.com/es/inversion/broker-online/",
     "exchanges": {
-      "Bolsa de Madrid": {},
+      "Spain": {},
       "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
@@ -20401,7 +20342,7 @@
     "type": "Bank",
     "url": "https://avantio.bancamarch.es/es/inversion/valores/",
     "exchanges": {
-      "Spain": {},
+      "Bolsa de Madrid": {},
       "United Kingdom": {},
       "France": {},
       "Italy": {},
@@ -20924,7 +20865,7 @@
     "type": "Bank",
     "url": "https://www.deutsche-bank.es/es/guia-ayuda/operativa-banca-online.html",
     "exchanges": {
-      "Spain": {}
+      "Bolsa de Madrid": {}
     }
   },
   {
@@ -21698,7 +21639,9 @@
     "type": "Bank",
     "url": "https://casasibanez.ruralvia.com/particulares/bolsa-mercados",
     "exchanges": {
-      "Spain": {}
+      "Bolsa de Madrid": {},
+      "Latibex": {},
+      "BME Growth": {}
     }
   },
   {
@@ -21707,7 +21650,9 @@
     "type": "Bank",
     "url": "https://www.cajagijon.com/particulares/bolsa-mercados",
     "exchanges": {
-      "Spain": {}
+      "Bolsa de Madrid": {},
+      "Latibex": {},
+      "BME Growth": {}
     }
   },
   {
@@ -21796,9 +21741,8 @@
       "Turquoise": {},
       "Börse Xetra": {},
       "Börse Stuttgart": {},
-      "Tradegate": {},
       "Euronext Milan": {},
-      "Oslo Børs": {},
+      "Norway": {},
       "Nasdaq Stockholm": {},
       "SIX Swiss Exchange": {},
       "London IOB": {},
@@ -21980,7 +21924,6 @@
       "ASX": {
         "count": 1094
       },
-      "BME Growth": {},
       "Cboe BZX": {
         "count": 22
       },
@@ -21996,11 +21939,7 @@
         "count": 1084
       },
       "First North Stockholm": {},
-      "London IOB": {},
-      "Budapest Stock Exchange": {
-        "restriction": "Single stock only",
-        "count": 1
-      }
+      "London IOB": {}
     }
   },
   {
@@ -22010,7 +21949,7 @@
     "url": "https://www.bancobpi.pt/particulares/servicos-24-7/apps/app-bpi-broker",
     "exchanges": {
       "Euronext Lisbon": {},
-      "Euronext Paris": {},
+      "France": {},
       "Euronext Amsterdam": {},
       "Euronext Brussels": {},
       "New York Stock Exchange": {
@@ -22020,32 +21959,19 @@
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
       "Börse Xetra": {},
-      "Bolsa de Madrid": {},
-      "Bolsa de Barcelona": {},
-      "Bolsa de Bilbao": {},
-      "Bolsa de Valencia": {},
-      "BME Growth": {},
+      "Spain": {},
       "Börse Frankfurt": {},
       "Wiener Börse": {},
-      "Euronext Milan": {},
+      "Italy": {},
       "London Stock Exchange": {},
       "Euronext Dublin": {},
       "Nasdaq Helsinki": {},
-      "Nasdaq Stockholm": {},
-      "Nasdaq Copenhagen": {},
-      "Oslo Børs": {},
-      "SIX Swiss Exchange": {},
+      "Sweden": {},
+      "Denmark": {},
+      "Norway": {},
+      "Switzerland": {},
       "Athens Stock Exchange": {},
-      "Toronto Stock Exchange": {},
-      "NYSE American": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
-      },
-      "NYSE Arca": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
-      },
-      "Cboe BZX": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
-      }
+      "Canada": {}
     }
   },
   {
@@ -22108,7 +22034,6 @@
       "Nasdaq Copenhagen": {},
       "Euronext Amsterdam": {},
       "Oslo Børs": {},
-      "Athens Stock Exchange": {},
       "Wiener Börse": {},
       "TSX Venture": {}
     }
@@ -22439,7 +22364,6 @@
       "SIX Swiss Exchange": {},
       "France": {},
       "Germany": {},
-      "XNET": {},
       "Canada": {},
       "Cyprus Stock Exchange Emerging Companies Market": {}
     }
@@ -22634,9 +22558,9 @@
       "Euronext Amsterdam": {},
       "Euronext Lisbon": {},
       "London Stock Exchange": {},
-      "Romania": {},
-      "Switzerland": {},
-      "Spain": {}
+      "Bucharest Stock Exchange": {},
+      "SIX Swiss Exchange": {},
+      "Bolsa de Madrid": {}
     }
   },
   {
@@ -22802,12 +22726,6 @@
       "Euronext Lisbon": {},
       "Bolsa de Madrid": {},
       "Börse Frankfurt": {},
-      "NYSE Arca": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
-      },
-      "Cboe BZX": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
-      },
       "OTC Markets": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
@@ -23054,7 +22972,6 @@
       "Euronext Milan": {},
       "Euronext Paris": {},
       "First North Denmark": {},
-      "First North Helsinki": {},
       "First North Stockholm": {},
       "Hong Kong Stock Exchange": {},
       "Johannesburg Stock Exchange": {},
@@ -23246,7 +23163,7 @@
     "type": "Bank",
     "url": "https://www.nykredit.dk/dit-liv/formue/investering/",
     "exchanges": {
-      "Denmark": {},
+      "Nasdaq Copenhagen": {},
       "Sweden": {},
       "Norway": {},
       "ASX": {
@@ -23560,16 +23477,13 @@
       "Sweden": {},
       "Finland": {},
       "Norway": {},
-      "New York Stock Exchange": {
+      "United States": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
-      "Nasdaq": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
-      },
-      "Börse Xetra": {},
-      "London Stock Exchange": {},
-      "Euronext Paris": {},
-      "Euronext Amsterdam": {},
+      "Germany": {},
+      "United Kingdom": {},
+      "France": {},
+      "Netherlands": {},
       "Australia": {},
       "Belgium": {},
       "Canada": {},
@@ -23612,9 +23526,6 @@
       "France": {},
       "Spain": {},
       "Italy": {},
-      "United States": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
-      },
       "Canada": {},
       "Sweden": {},
       "Norway": {}
@@ -24041,10 +23952,6 @@
       "NYSE American": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
-      "NYSE Arca": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
-      },
-      "Aquis Stock Exchange": {},
       "Nordic SME": {}
     }
   },
@@ -24166,13 +24073,9 @@
       "NYSE American": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
-      "NYSE Arca": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
-      },
       "Warsaw Stock Exchange": {
         "restriction": "Stocks only; by phone/advisor only"
       },
-      "Aquis Stock Exchange": {},
       "Cboe Europe": {},
       "Turquoise": {}
     }
@@ -24278,24 +24181,6 @@
       "Börse Frankfurt": {
         "restriction": "By phone/advisor only"
       },
-      "Börse Stuttgart": {
-        "restriction": "By phone/advisor only"
-      },
-      "Börse München": {
-        "restriction": "By phone/advisor only"
-      },
-      "Börse Berlin": {
-        "restriction": "By phone/advisor only"
-      },
-      "Börse Düsseldorf": {
-        "restriction": "By phone/advisor only"
-      },
-      "Börse Hamburg": {
-        "restriction": "By phone/advisor only"
-      },
-      "Börse Hannover": {
-        "restriction": "By phone/advisor only"
-      },
       "SIX Swiss Exchange": {
         "restriction": "Online via Cboe Europe only; direct SIX orders by phone/advisor"
       },
@@ -24303,28 +24188,13 @@
         "restriction": "Online orders executed on Equiduct only; other names by phone/advisor",
         "count": 4
       },
-      "Euronext Access Paris": {
-        "restriction": "By phone/advisor only"
-      },
-      "Euronext Access Lisbon": {
-        "restriction": "By phone/advisor only"
-      },
-      "Euronext Growth Lisbon": {
-        "restriction": "By phone/advisor only"
-      },
-      "Euronext Growth Brussels": {
-        "restriction": "By phone/advisor only"
-      },
-      "Euronext Access Brussels": {
-        "restriction": "By phone/advisor only"
-      },
       "London Stock Exchange": {
         "restriction": "Online via Cboe Europe only; direct LSE orders by phone/advisor"
       },
       "AIM": {
         "restriction": "By phone/advisor only"
       },
-      "Tokyo Stock Exchange": {
+      "Japan": {
         "restriction": "By phone/advisor only; no ETFs lacking a Swedish PRIIPs KID"
       },
       "OTC Markets": {
@@ -24333,16 +24203,16 @@
       "NOTC": {
         "restriction": "By phone/advisor only"
       },
-      "Estonia": {
+      "Nasdaq Tallinn": {
         "restriction": "By phone/advisor only"
       },
-      "Latvia": {
+      "Nasdaq Riga": {
         "restriction": "By phone/advisor only"
       },
-      "Lithuania": {
+      "Nasdaq Vilnius": {
         "restriction": "By phone/advisor only"
       },
-      "Poland": {
+      "Warsaw Stock Exchange": {
         "restriction": "By phone/advisor only"
       },
       "Czech Republic": {
@@ -24351,16 +24221,16 @@
       "Hungary": {
         "restriction": "By phone/advisor only"
       },
-      "Austria": {
+      "Wiener Börse": {
         "restriction": "By phone/advisor only"
       },
-      "Greece": {
+      "Athens Stock Exchange": {
         "restriction": "By phone/advisor only"
       },
       "Turkey": {
         "restriction": "By phone/advisor only; no ETFs lacking a Swedish PRIIPs KID"
       },
-      "Ireland": {
+      "Euronext Dublin": {
         "restriction": "By phone/advisor only"
       },
       "Hong Kong": {
@@ -24387,8 +24257,8 @@
       "South Africa": {
         "restriction": "By phone/advisor only; no ETFs lacking a Swedish PRIIPs KID"
       },
-      "Italy": {},
-      "Spain": {}
+      "Euronext Milan": {},
+      "Bolsa de Madrid": {}
     }
   },
   {
@@ -24545,8 +24415,7 @@
       "Nasdaq Stockholm": {},
       "Nasdaq Copenhagen": {},
       "Nasdaq Helsinki": {},
-      "Nasdaq Iceland": {},
-      "Nasdaq": {
+      "United States": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
       "Germany": {},
@@ -24669,7 +24538,6 @@
       "Nordic SME": {},
       "Spotlight Stock Market": {},
       "Börse Xetra": {},
-      "Börse Frankfurt": {},
       "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
@@ -24685,9 +24553,6 @@
       "London Stock Exchange": {},
       "SIX Swiss Exchange": {},
       "Toronto Stock Exchange": {
-        "restriction": "No Canadian-domiciled ETFs (PRIIPs/KID)"
-      },
-      "TSX Venture": {
         "restriction": "No Canadian-domiciled ETFs (PRIIPs/KID)"
       },
       "Euronext Expand Oslo": {},
@@ -25862,7 +25727,6 @@
       "Nordic Growth Market": {},
       "Spotlight Stock Market": {},
       "Nordic MTF": {},
-      "Externa Listan": {},
       "Oslo Børs": {},
       "Euronext Expand Oslo": {},
       "Nasdaq Copenhagen": {},
@@ -25945,7 +25809,6 @@
       "Nordic Growth Market": {},
       "Spotlight Stock Market": {},
       "Nordic MTF": {},
-      "Externa Listan": {},
       "Oslo Børs": {},
       "Euronext Expand Oslo": {},
       "Nasdaq Copenhagen": {},
@@ -26028,7 +25891,6 @@
       "Nordic Growth Market": {},
       "Spotlight Stock Market": {},
       "Nordic MTF": {},
-      "Externa Listan": {},
       "Oslo Børs": {},
       "Euronext Expand Oslo": {},
       "Nasdaq Copenhagen": {},
@@ -26111,7 +25973,6 @@
       "Nordic Growth Market": {},
       "Spotlight Stock Market": {},
       "Nordic MTF": {},
-      "Externa Listan": {},
       "Oslo Børs": {},
       "Euronext Expand Oslo": {},
       "Nasdaq Copenhagen": {},
@@ -26194,7 +26055,6 @@
       "Nordic Growth Market": {},
       "Spotlight Stock Market": {},
       "Nordic MTF": {},
-      "Externa Listan": {},
       "Oslo Børs": {},
       "Euronext Expand Oslo": {},
       "Nasdaq Copenhagen": {},
@@ -27291,7 +27151,6 @@
       "Nasdaq Vilnius": {},
       "First North Lithuania": {},
       "Nordic MTF": {},
-      "Externa Listan": {},
       "Australia": {
         "restriction": "By phone/advisor only"
       },
@@ -27374,7 +27233,6 @@
       "Nasdaq Vilnius": {},
       "First North Lithuania": {},
       "Nordic MTF": {},
-      "Externa Listan": {},
       "Australia": {
         "restriction": "By phone/advisor only"
       },
@@ -27457,7 +27315,6 @@
       "Nasdaq Vilnius": {},
       "First North Lithuania": {},
       "Nordic MTF": {},
-      "Externa Listan": {},
       "Australia": {
         "restriction": "By phone/advisor only"
       },
@@ -27540,7 +27397,6 @@
       "Nasdaq Vilnius": {},
       "First North Lithuania": {},
       "Nordic MTF": {},
-      "Externa Listan": {},
       "Australia": {
         "restriction": "By phone/advisor only"
       },
@@ -27623,7 +27479,6 @@
       "Nasdaq Vilnius": {},
       "First North Lithuania": {},
       "Nordic MTF": {},
-      "Externa Listan": {},
       "Australia": {
         "restriction": "By phone/advisor only"
       },
@@ -27756,8 +27611,7 @@
       "Austria": {
         "restriction": "By phone/advisor only"
       },
-      "Nordic MTF": {},
-      "Externa Listan": {}
+      "Nordic MTF": {}
     }
   },
   {
@@ -27839,8 +27693,7 @@
       "Austria": {
         "restriction": "By phone/advisor only"
       },
-      "Nordic MTF": {},
-      "Externa Listan": {}
+      "Nordic MTF": {}
     }
   },
   {
@@ -27922,8 +27775,7 @@
       "Austria": {
         "restriction": "By phone/advisor only"
       },
-      "Nordic MTF": {},
-      "Externa Listan": {}
+      "Nordic MTF": {}
     }
   },
   {
@@ -29053,19 +28905,20 @@
       "London IOB": {
         "restriction": "Depositary receipts only"
       },
-      "Denmark": {},
-      "Sweden": {},
-      "Norway": {},
-      "Belgium": {},
-      "Italy": {},
-      "Spain": {},
-      "Portugal": {},
-      "Poland": {},
-      "Israel": {},
-      "Mexico": {
+      "Nasdaq Copenhagen": {},
+      "Nasdaq Stockholm": {},
+      "Oslo Børs": {},
+      "Euronext Brussels": {},
+      "Euronext Milan": {},
+      "Bolsa de Madrid": {},
+      "Euronext Lisbon": {},
+      "Warsaw Stock Exchange": {},
+      "Tel Aviv Stock Exchange": {},
+      "Bolsa Mexicana": {
         "restriction": "No Mexican-domiciled ETFs (PRIIPs/KID)"
       },
-      "United Arab Emirates": {}
+      "Abu Dhabi Securities Exchange": {},
+      "Dubai Financial Market": {}
     }
   },
   {
@@ -29216,9 +29069,6 @@
       "NYSE American": {
         "restriction": "Limited selection of US-domiciled ETFs (65 across US places)"
       },
-      "NYSE Arca": {
-        "restriction": "Limited selection of US-domiciled ETFs (65 across US places)"
-      },
       "Oslo Børs": {
         "count": 70
       },
@@ -29274,9 +29124,6 @@
       "NYSE American": {
         "restriction": "Stocks only, no ETFs (no US-domiciled ETFs, PRIIPs/KID)",
         "count": 61
-      },
-      "NYSE Arca": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
       "SIX Swiss Exchange": {
         "count": 79
@@ -29626,7 +29473,6 @@
       "Euronext Brussels": {},
       "Euronext Amsterdam": {},
       "Börse Xetra": {},
-      "Luxembourg": {},
       "Portugal": {},
       "London Stock Exchange": {},
       "Euronext Milan": {},
@@ -29665,8 +29511,7 @@
     "url": "https://www.ipopema.pl/",
     "exchanges": {
       "NewConnect": {},
-      "Warsaw Stock Exchange": {},
-      "Bucharest Stock Exchange": {}
+      "Warsaw Stock Exchange": {}
     }
   },
   {
@@ -29882,9 +29727,8 @@
     "type": "Bank",
     "url": "https://www.airbank.cz/produkty/akcie/",
     "exchanges": {
-      "Börse Xetra": {
-        "restriction": "ETFs only (UCITS ETFs from Air Bank list)",
-        "count": 19
+      "Germany": {
+        "restriction": "ETFs only (UCITS ETFs from Air Bank list)"
       },
       "United States": {
         "restriction": "Stocks only, no ETFs; selected large caps only (S&P 500 list); fractional amount-based orders",
@@ -29927,15 +29771,12 @@
       "Nasdaq Stockholm": {},
       "SIX Swiss Exchange": {},
       "London Stock Exchange": {},
-      "Tokyo Stock Exchange": {},
-      "Hong Kong Stock Exchange": {
+      "Japan": {},
+      "Hong Kong": {
         "restriction": "No local ETFs without KID (PRIIPs/KID)"
       },
-      "ASX": {
+      "Australia": {
         "restriction": "No local ETFs without KID (PRIIPs/KID)"
-      },
-      "NYSE American": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
       "Börse München": {},
       "Börse Stuttgart": {},
@@ -30004,20 +29845,8 @@
       "Toronto Stock Exchange": {
         "restriction": "No ETFs lacking a PRIIPs KID (most locally domiciled ETFs); By phone/advisor only (Investiční makléř service)"
       },
-      "Bucharest Stock Exchange": {
-        "restriction": "By phone/advisor only (Investiční makléř service)"
-      },
       "Zagreb Stock Exchange": {
         "restriction": "By phone/advisor only (Investiční makléř service)"
-      },
-      "Ljubljana Stock Exchange": {
-        "restriction": "By phone/advisor only (Investiční makléř service)"
-      },
-      "Belgrade Stock Exchange": {
-        "restriction": "By phone/advisor only (Investiční makléř service)"
-      },
-      "Borsa Istanbul": {
-        "restriction": "No ETFs lacking a PRIIPs KID (most locally domiciled ETFs); By phone/advisor only (Investiční makléř service)"
       },
       "Börse Hannover": {
         "restriction": "By phone/advisor only (Investiční makléř service)"
@@ -30034,13 +29863,16 @@
       "Euronext Lisbon": {
         "restriction": "By phone/advisor only (Investiční makléř service)"
       },
-      "Hong Kong": {
+      "Hong Kong Stock Exchange": {
         "restriction": "No ETFs lacking a PRIIPs KID (most locally domiciled ETFs); By phone/advisor only (Investiční makléř service)"
       },
-      "China": {
+      "Shanghai-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible A-shares only; ChiNext/STAR for professional investors only; By phone/advisor only (Investiční makléř service)"
       },
-      "South Africa": {
+      "Shenzhen-Hong Kong Stock Connect": {
+        "restriction": "Northbound-eligible A-shares only; ChiNext/STAR for professional investors only; By phone/advisor only (Investiční makléř service)"
+      },
+      "Johannesburg Stock Exchange": {
         "restriction": "No ETFs lacking a PRIIPs KID (most locally domiciled ETFs); By phone/advisor only (Investiční makléř service)"
       }
     }
@@ -30267,13 +30099,6 @@
       "Nasdaq Tallinn": {},
       "Nasdaq Riga": {},
       "Nasdaq Vilnius": {},
-      "Börse Frankfurt": {},
-      "Börse Stuttgart": {},
-      "Börse München": {},
-      "Börse Berlin": {},
-      "Börse Düsseldorf": {},
-      "Börse Hannover": {},
-      "Börse Hamburg": {},
       "NYSE American": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
@@ -30356,10 +30181,10 @@
       "Denmark": {},
       "Finland": {},
       "Euronext Paris": {},
-      "Euronext Dublin": {},
-      "Euronext Milan": {},
+      "Ireland": {},
+      "Italy": {},
       "Euronext Amsterdam": {},
-      "Oslo Børs": {},
+      "Norway": {},
       "Wiener Börse": {},
       "Spain": {},
       "Sweden": {},
@@ -30407,9 +30232,6 @@
       "Bolsa de Madrid": {},
       "SIX Swiss Exchange": {},
       "New York Stock Exchange": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
-      },
-      "Nasdaq": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       }
     }
@@ -30515,14 +30337,8 @@
       "Cboe Australia": {
         "restriction": "No Australian-domiciled ETFs (PRIIPs/KID)"
       },
-      "Denmark": {},
-      "Finland": {},
-      "Brazil": {
-        "restriction": "Only ETFs with a PRIIPs KID (most local ETFs excluded)"
-      },
-      "South Africa": {
-        "restriction": "Only ETFs with a PRIIPs KID (most local ETFs excluded)"
-      }
+      "Nasdaq Copenhagen": {},
+      "Nasdaq Helsinki": {}
     }
   },
   {
@@ -30646,7 +30462,6 @@
       "Budapest Stock Exchange": {},
       "Hong Kong Stock Exchange": {},
       "Nasdaq Stockholm": {},
-      "Cboe Europe": {},
       "Deutsche Börse": {},
       "London IOB": {}
     }
@@ -30663,7 +30478,7 @@
       "Euronext Paris": {},
       "Euronext Amsterdam": {},
       "Euronext Lisbon": {},
-      "Euronext Dublin": {},
+      "Ireland": {},
       "Nasdaq Stockholm": {},
       "Nasdaq Copenhagen": {},
       "Nasdaq Helsinki": {},
@@ -30683,9 +30498,8 @@
       },
       "London Stock Exchange": {},
       "Warsaw Stock Exchange": {},
-      "Athens Stock Exchange": {},
+      "Greece": {},
       "Luxembourg Stock Exchange": {},
-      "TSX Venture": {},
       "OTC Markets": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
@@ -30866,8 +30680,7 @@
       "Estonia": {},
       "Latvia": {},
       "Lithuania": {},
-      "South Africa": {},
-      "Taiwan": {}
+      "South Africa": {}
     }
   },
   {
@@ -30966,11 +30779,7 @@
       "Hong Kong Stock Exchange": {
         "restriction": "By phone/advisor only"
       },
-      "London IOB": {},
-      "NYSE American": {},
-      "Moscow Exchange": {
-        "restriction": "Not tradable (EU sanctions; Moscow Exchange/NSD blocked)"
-      }
+      "London IOB": {}
     }
   },
   {
@@ -30981,7 +30790,7 @@
     "exchanges": {
       "Budapest Stock Exchange": {},
       "Bucharest Stock Exchange": {},
-      "Prague Stock Exchange": {},
+      "Czech Republic": {},
       "Warsaw Stock Exchange": {},
       "Börse Xetra": {},
       "Börse Frankfurt": {},
@@ -31001,8 +30810,8 @@
       "OTC Markets": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
-      "Ljubljana Stock Exchange": {},
-      "Zagreb Stock Exchange": {},
+      "Slovenia": {},
+      "Croatia": {},
       "London IOB": {},
       "Australia": {},
       "Austria": {},
@@ -31062,7 +30871,6 @@
       "NYSE American": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
-      "NYSE Arca": {},
       "Nasdaq Copenhagen": {},
       "Oslo Børs": {},
       "Euronext Amsterdam": {},
@@ -31176,9 +30984,9 @@
       "Warsaw Stock Exchange": {},
       "Ljubljana Stock Exchange": {},
       "Euronext Amsterdam": {},
-      "Zagreb Stock Exchange": {},
-      "Bucharest Stock Exchange": {},
-      "Bulgarian Stock Exchange": {}
+      "Croatia": {},
+      "Romania": {},
+      "Bulgaria": {}
     }
   },
   {
@@ -31270,20 +31078,17 @@
     "url": "https://www.goldring.ro/",
     "exchanges": {
       "Bucharest Stock Exchange": {},
-      "New York Stock Exchange": {
+      "United States": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
-      "Nasdaq": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
-      },
-      "London Stock Exchange": {},
-      "Wiener Börse": {},
-      "Börse Frankfurt": {},
-      "Euronext Paris": {},
-      "Euronext Amsterdam": {},
-      "Euronext Brussels": {},
-      "Tokyo Stock Exchange": {},
-      "Hong Kong Stock Exchange": {},
+      "United Kingdom": {},
+      "Austria": {},
+      "Germany": {},
+      "France": {},
+      "Netherlands": {},
+      "Belgium": {},
+      "Japan": {},
+      "Hong Kong": {},
       "Canada": {},
       "Switzerland": {},
       "Italy": {},
@@ -31653,9 +31458,6 @@
       "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
-      "OTC Markets": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
-      },
       "Oslo Børs": {},
       "SIX Swiss Exchange": {},
       "Wiener Börse": {},
@@ -31677,7 +31479,7 @@
       },
       "London Stock Exchange": {},
       "BSE International": {},
-      "France": {},
+      "Euronext Paris": {},
       "Australia": {},
       "Japan": {},
       "Börse Stuttgart": {},
@@ -32060,19 +31862,18 @@
       },
       "BEAM": {},
       "BSE International": {},
-      "Wiener Börse": {},
-      "Euronext Paris": {},
-      "Euronext Milan": {},
-      "Euronext Amsterdam": {},
-      "London Stock Exchange": {},
-      "SIX Swiss Exchange": {},
-      "Euronext Brussels": {},
-      "Bolsa de Madrid": {},
-      "Euronext Lisbon": {},
-      "Nasdaq Helsinki": {},
-      "Nasdaq Copenhagen": {},
-      "Nasdaq Stockholm": {},
-      "Oslo Børs": {}
+      "Austria": {},
+      "France": {},
+      "Italy": {},
+      "Netherlands": {},
+      "United Kingdom": {},
+      "Switzerland": {},
+      "Belgium": {},
+      "Portugal": {},
+      "Finland": {},
+      "Denmark": {},
+      "Sweden": {},
+      "Norway": {}
     }
   },
   {
@@ -32141,43 +31942,7 @@
     "country": "BG",
     "type": "Broker",
     "url": "http://bulbrokers.com/en/online-trade/metatrader-4/bse-sofia/",
-    "exchanges": {
-      "Bulgarian Stock Exchange": {},
-      "United States": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
-      },
-      "Canada": {
-        "restriction": "No Canadian-domiciled ETFs (PRIIPs/KID)"
-      },
-      "Mexico": {
-        "restriction": "No local ETFs without PRIIPs KID"
-      },
-      "Belgium": {},
-      "France": {},
-      "Börse Xetra": {},
-      "Börse Stuttgart": {},
-      "Cboe Europe": {},
-      "Börse Frankfurt": {},
-      "Italy": {},
-      "Austria": {},
-      "Spain": {},
-      "Sweden": {},
-      "SIX Swiss Exchange": {},
-      "London IOB": {},
-      "North Macedonia": {},
-      "Hong Kong": {
-        "restriction": "No local ETFs without PRIIPs KID"
-      },
-      "Australia": {
-        "restriction": "No local ETFs without PRIIPs KID"
-      },
-      "Japan": {
-        "restriction": "No local ETFs without PRIIPs KID"
-      },
-      "India": {
-        "restriction": "No local ETFs without PRIIPs KID"
-      }
-    }
+    "exchanges": {}
   },
   {
     "name": "Zagora Finacorp",
@@ -32568,10 +32333,11 @@
         "restriction": "Depositary receipts (GDRs) only"
       },
       "Slovenia": {},
-      "Serbia": {},
-      "Montenegro": {},
-      "North Macedonia": {},
-      "Bosnia and Herzegovina": {}
+      "Belgrade Stock Exchange": {},
+      "Montenegro Stock Exchange": {},
+      "Macedonian Stock Exchange": {},
+      "Sarajevo Stock Exchange": {},
+      "Banja Luka Stock Exchange": {}
     }
   },
   {
@@ -32919,9 +32685,6 @@
       "Athens Stock Exchange": {
         "restriction": "By phone/email with RBA broker only"
       },
-      "South Africa": {
-        "restriction": "By phone/email with RBA broker only"
-      },
       "Toronto Stock Exchange": {
         "restriction": "By phone/email with RBA broker only"
       },
@@ -32949,46 +32712,10 @@
       "Ljubljana Stock Exchange": {
         "restriction": "By phone/email with RBA broker only"
       },
-      "Albania": {
-        "restriction": "By phone/email with RBA broker only"
-      },
-      "Brazil": {
-        "restriction": "By phone/email with RBA broker only"
-      },
-      "Philippines": {
-        "restriction": "By phone/email with RBA broker only"
-      },
-      "India": {
-        "restriction": "By phone/email with RBA broker only"
-      },
-      "Indonesia": {
-        "restriction": "By phone/email with RBA broker only"
-      },
-      "South Korea": {
-        "restriction": "By phone/email with RBA broker only"
-      },
-      "Kazakhstan": {
-        "restriction": "By phone/email with RBA broker only"
-      },
-      "Malaysia": {
-        "restriction": "By phone/email with RBA broker only"
-      },
-      "Mexico": {
-        "restriction": "By phone/email with RBA broker only"
-      },
-      "New Zealand": {
-        "restriction": "By phone/email with RBA broker only"
-      },
       "Moscow Exchange": {
         "restriction": "By phone/email with RBA broker only"
       },
       "Singapore Exchange": {
-        "restriction": "By phone/email with RBA broker only"
-      },
-      "Thailand": {
-        "restriction": "By phone/email with RBA broker only"
-      },
-      "Taiwan": {
         "restriction": "By phone/email with RBA broker only"
       },
       "Borsa Istanbul": {
@@ -33037,9 +32764,6 @@
         "restriction": "By phone/email with RBA broker only"
       },
       "Tokyo Stock Exchange": {
-        "restriction": "By phone/email with RBA broker only"
-      },
-      "Luxembourg": {
         "restriction": "By phone/email with RBA broker only"
       },
       "Euronext Amsterdam": {
@@ -33284,8 +33008,7 @@
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
       "Canada": {},
-      "Mexico": {},
-      "Spain": {}
+      "Mexico": {}
     }
   },
   {
@@ -34017,13 +33740,11 @@
       "Canada": {},
       "United Kingdom": {},
       "Switzerland": {},
-      "Denmark": {},
       "Sweden": {},
       "Norway": {},
       "Poland": {},
       "Hungary": {},
       "Israel": {},
-      "Saudi Arabia": {},
       "Japan": {},
       "Hong Kong": {},
       "China": {
@@ -34227,9 +33948,6 @@
         "restriction": "No US-listed ETFs (stocks only)"
       },
       "Oslo Børs": {},
-      "OTC Markets": {
-        "restriction": "Sell only"
-      },
       "SIX Swiss Exchange": {},
       "Tradegate": {},
       "Warsaw Stock Exchange": {},
@@ -34318,9 +34036,6 @@
       "Nasdaq Riga": {},
       "Nasdaq Vilnius": {},
       "Nasdaq Tallinn": {},
-      "First North Latvia": {},
-      "First North Lithuania": {},
-      "First North Estonia": {},
       "United States": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
@@ -35005,22 +34720,27 @@
     "url": "https://www.xtb.com/cy",
     "exchanges": {
       "Börse Xetra": {},
-      "United States": {
+      "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
-      "United Kingdom": {},
-      "France": {},
-      "Netherlands": {},
-      "Sweden": {},
-      "Spain": {},
-      "Italy": {},
-      "Norway": {},
-      "Switzerland": {},
-      "Denmark": {},
-      "Belgium": {},
-      "Finland": {},
-      "Portugal": {},
-      "Poland": {}
+      "Nasdaq": {
+        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
+      },
+      "Cboe BZX": {
+        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
+      },
+      "London Stock Exchange": {},
+      "Euronext Paris": {},
+      "Euronext Amsterdam": {},
+      "Nasdaq Stockholm": {},
+      "Bolsa de Madrid": {},
+      "Euronext Milan": {},
+      "Oslo Børs": {},
+      "SIX Swiss Exchange": {},
+      "Nasdaq Copenhagen": {},
+      "Euronext Brussels": {},
+      "Nasdaq Helsinki": {},
+      "Euronext Lisbon": {}
     }
   },
   {
@@ -35138,11 +34858,7 @@
     "country": "CY",
     "type": "Broker",
     "url": "https://www.robomarkets.com.cy/blog/education/how-to-trade-on-r-stockstrader-platform-traders-guide/",
-    "exchanges": {
-      "United States": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
-      }
-    }
+    "exchanges": {}
   },
   {
     "name": "Just2Trade",
@@ -35196,8 +34912,7 @@
       "OTC Markets": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)"
       },
-      "China": {},
-      "NYSE American": {}
+      "China": {}
     }
   },
   {
@@ -35490,12 +35205,9 @@
       "Budapest Stock Exchange": {},
       "Bulgarian Stock Exchange": {},
       "Nasdaq Tallinn": {},
-      "Nasdaq Riga": {},
       "Nasdaq Vilnius": {},
       "Johannesburg Stock Exchange": {},
       "Nasdaq Dubai": {},
-      "Abu Dhabi Securities Exchange": {},
-      "NYSE Arca": {},
       "Warsaw Stock Exchange": {},
       "Cyprus Stock Exchange": {},
       "NZX": {},
@@ -35655,7 +35367,6 @@
       "NYSE Arca": {},
       "Oslo Børs": {},
       "SIX Swiss Exchange": {},
-      "Warsaw Stock Exchange": {},
       "Dubai Financial Market": {},
       "Prague Stock Exchange": {},
       "London IOB": {}
@@ -35920,8 +35631,7 @@
     "url": "https://xcube.ae/markets/dfm/",
     "exchanges": {
       "Dubai Financial Market": {},
-      "Abu Dhabi Securities Exchange": {},
-      "Nasdaq": {}
+      "Abu Dhabi Securities Exchange": {}
     }
   },
   {
@@ -35947,15 +35657,7 @@
     "url": "http://aldarshares.com/en/cms-pages/view?id=10",
     "exchanges": {
       "Abu Dhabi Securities Exchange": {},
-      "Amman Stock Exchange": {},
-      "Tadawul": {},
-      "Muscat Stock Exchange": {},
-      "Dubai Financial Market": {},
-      "Boursa Kuwait": {},
-      "Qatar Stock Exchange": {},
-      "Bahrain Bourse": {},
-      "Palestine Exchange": {},
-      "The Egyptian Exchange": {}
+      "Dubai Financial Market": {}
     }
   },
   {
@@ -36203,10 +35905,7 @@
     "type": "Neobroker",
     "url": "https://tabadulat.com/",
     "exchanges": {
-      "New York Stock Exchange": {
-        "restriction": "Shariah-compliant (AAOIFI-screened) stocks and ETFs only"
-      },
-      "Nasdaq": {
+      "United States": {
         "restriction": "Shariah-compliant (AAOIFI-screened) stocks and ETFs only"
       }
     }
@@ -37037,7 +36736,7 @@
       "Qatar Stock Exchange": {
         "restriction": "Shariah-compliant securities only"
       },
-      "Tadawul": {
+      "Saudi Arabia": {
         "restriction": "Shariah-compliant securities only"
       },
       "The Egyptian Exchange": {
@@ -37050,9 +36749,6 @@
         "restriction": "Shariah-compliant securities only"
       },
       "NYSE American": {
-        "restriction": "Shariah-compliant securities only"
-      },
-      "NYSE Arca": {
         "restriction": "Shariah-compliant securities only"
       },
       "London Stock Exchange": {
@@ -37070,10 +36766,10 @@
       "Shenzhen Stock Exchange": {
         "restriction": "Shariah-compliant securities only; Northbound-eligible A-shares only; ChiNext/STAR via Connect for professional investors only"
       },
-      "Tokyo Stock Exchange": {
+      "Japan": {
         "restriction": "Shariah-compliant securities only"
       },
-      "Korea Exchange": {
+      "South Korea": {
         "restriction": "Shariah-compliant securities only"
       },
       "OTC Markets": {
@@ -37122,7 +36818,6 @@
       "Bahrain Bourse": {},
       "The Egyptian Exchange": {},
       "Amman Stock Exchange": {},
-      "Nasdaq Dubai": {},
       "Cboe Europe": {
         "restriction": "On request only"
       },
@@ -37372,7 +37067,6 @@
       "Bahrain Bourse": {},
       "United States": {},
       "United Kingdom": {},
-      "Canada": {},
       "Abu Dhabi Securities Exchange": {},
       "Dubai Financial Market": {},
       "Nasdaq Dubai": {},
@@ -37621,7 +37315,7 @@
       "United States": {},
       "Germany": {},
       "Canada": {},
-      "London Stock Exchange": {},
+      "United Kingdom": {},
       "France": {},
       "Switzerland": {},
       "Netherlands": {},
@@ -38087,8 +37781,7 @@
     "type": "Broker",
     "url": "https://atisazbroker.com/",
     "exchanges": {
-      "Tehran Stock Exchange": {},
-      "Iran Fara Bourse": {}
+      "Tehran Stock Exchange": {}
     }
   },
   {
@@ -38578,7 +38271,7 @@
       "Hong Kong Stock Exchange": {
         "restriction": "ETFs by phone/advisor only (SPK: no online foreign ETF/ETN)"
       },
-      "Toronto Stock Exchange": {},
+      "Canada": {},
       "Australia": {},
       "SIX Swiss Exchange": {}
     }
@@ -38591,7 +38284,7 @@
     "exchanges": {
       "Borsa Istanbul": {},
       "United States": {},
-      "Hong Kong": {},
+      "Hong Kong Stock Exchange": {},
       "United Kingdom": {}
     }
   },
@@ -39742,7 +39435,7 @@
     "type": "Broker",
     "url": "https://www.randswiss.com/securities-broking/",
     "exchanges": {
-      "South Africa": {}
+      "Johannesburg Stock Exchange": {}
     }
   },
   {
@@ -39793,39 +39486,18 @@
     "url": "https://www.momentumsecurities.co.za/",
     "exchanges": {
       "Johannesburg Stock Exchange": {},
-      "London Stock Exchange": {},
-      "AIM": {},
-      "New York Stock Exchange": {},
-      "Nasdaq": {},
-      "NYSE American": {},
-      "Hong Kong Stock Exchange": {},
+      "United Kingdom": {},
+      "United States": {},
       "Euronext Dublin": {},
       "Euronext Amsterdam": {},
       "Euronext Brussels": {},
       "Euronext Lisbon": {},
       "Euronext Paris": {},
-      "Singapore Exchange": {},
       "SIX Swiss Exchange": {},
-      "Börse Xetra": {},
-      "Nigerian Exchange": {},
-      "Nairobi Securities Exchange": {},
-      "Malawi Stock Exchange": {},
-      "Zimbabwe Stock Exchange": {},
-      "BRVM": {},
-      "Rwanda Stock Exchange": {},
-      "The Egyptian Exchange": {},
-      "Namibian Stock Exchange": {},
-      "Stock Exchange of Mauritius": {},
-      "Botswana Stock Exchange": {},
-      "Casablanca Stock Exchange": {},
-      "Dar es Salaam Stock Exchange": {},
-      "Ghana Stock Exchange": {},
+      "Germany": {},
       "Canada": {},
       "Austria": {},
-      "Italy": {},
-      "ASX": {},
-      "Cboe Europe": {},
-      "B3 São Paulo": {}
+      "Italy": {}
     }
   },
   {
@@ -39883,14 +39555,11 @@
     "type": "Neobroker",
     "url": "https://investbamboo.com/",
     "exchanges": {
-      "Cboe BZX": {},
       "Nasdaq": {},
       "New York Stock Exchange": {},
       "Nigerian Exchange": {
         "count": 100
-      },
-      "NYSE American": {},
-      "NYSE Arca": {}
+      }
     }
   },
   {
@@ -39928,7 +39597,7 @@
     }
   },
   {
-    "name": "Stanbic IBTC Stockbrokers",
+    "name": "Stanbic IBTC",
     "country": "NG",
     "type": "Bank",
     "url": "https://www.stanbicibtcstockbrokers.com/nigeriastockbroking/stockbroking",
@@ -39971,7 +39640,7 @@
     "type": "Broker",
     "url": "https://www.arm.com.ng/securities/",
     "exchanges": {
-      "Nigeria": {}
+      "Nigerian Exchange": {}
     }
   },
   {
@@ -40121,8 +39790,7 @@
     "type": "Neobroker",
     "url": "https://investnaija.com/investin",
     "exchanges": {
-      "Nigerian Exchange": {},
-      "NASD OTC Exchange": {}
+      "Nigerian Exchange": {}
     }
   },
   {
@@ -41017,9 +40685,11 @@
       },
       "The Egyptian Exchange": {},
       "Nilex": {},
-      "Kuwait": {},
-      "United States": {},
-      "Oman": {},
+      "Boursa Kuwait": {},
+      "New York Stock Exchange": {},
+      "Nasdaq": {},
+      "NYSE Arca": {},
+      "Muscat Stock Exchange": {},
       "Tadawul": {}
     }
   },
@@ -41281,7 +40951,7 @@
     "type": "Broker",
     "url": "https://apps.apple.com/eg/app/pioneers-go/id6739808913",
     "exchanges": {
-      "Egypt": {}
+      "The Egyptian Exchange": {}
     }
   },
   {
@@ -41497,7 +41167,7 @@
     "type": "Broker",
     "url": "https://apps.apple.com/eg/app/trend-brokerage/id6744294450",
     "exchanges": {
-      "The Egyptian Exchange": {}
+      "Egypt": {}
     }
   },
   {
@@ -42477,7 +42147,7 @@
       "Switzerland": {},
       "Spain": {},
       "Cboe Australia": {},
-      "NZX": {}
+      "New Zealand": {}
     }
   },
   {
@@ -42585,8 +42255,7 @@
     "exchanges": {
       "ASX": {},
       "Nasdaq": {},
-      "New York Stock Exchange": {},
-      "OTC Markets": {}
+      "New York Stock Exchange": {}
     }
   },
   {
@@ -42639,14 +42308,7 @@
       "ASX": {},
       "New York Stock Exchange": {},
       "Nasdaq": {},
-      "Hong Kong Stock Exchange": {},
-      "OTC Markets": {},
-      "Shanghai-Hong Kong Stock Connect": {
-        "restriction": "Northbound-eligible securities only; STAR Market via Connect for professional investors only"
-      },
-      "Shenzhen-Hong Kong Stock Connect": {
-        "restriction": "Northbound-eligible securities only; ChiNext via Connect for professional investors only"
-      }
+      "Hong Kong Stock Exchange": {}
     }
   },
   {
@@ -42951,7 +42613,7 @@
     "exchanges": {
       "ASX": {},
       "Nasdaq": {},
-      "Tokyo Stock Exchange": {}
+      "Japan": {}
     }
   },
   {
@@ -43281,7 +42943,7 @@
     "exchanges": {
       "United States": {},
       "Australia": {},
-      "NZX": {}
+      "New Zealand": {}
     }
   },
   {
@@ -43341,7 +43003,6 @@
       "New York Stock Exchange": {},
       "Nasdaq": {},
       "NYSE American": {},
-      "NYSE Arca": {},
       "Singapore Exchange": {},
       "Shanghai Stock Exchange": {
         "restriction": "Northbound-eligible A-shares only (Stock Connect); ChiNext/STAR for professional investors only"
@@ -43363,7 +43024,10 @@
       "Hong Kong Stock Exchange": {},
       "Tokyo Stock Exchange": {},
       "London Stock Exchange": {},
-      "United States": {}
+      "New York Stock Exchange": {},
+      "Nasdaq": {},
+      "NYSE American": {},
+      "OTC Markets": {}
     }
   },
   {
@@ -43484,8 +43148,7 @@
       },
       "Vietnam": {
         "restriction": "Not on UTRADE online platform"
-      },
-      "OTC Markets": {}
+      }
     }
   },
   {
@@ -43586,7 +43249,6 @@
         "count": 4732
       },
       "New York Stock Exchange": {},
-      "NYSE Arca": {},
       "Shanghai Stock Exchange": {
         "restriction": "Northbound-eligible A-shares/ETFs only (Stock Connect); ChiNext/STAR for professional investors only",
         "count": 2105
@@ -43756,7 +43418,6 @@
       "Euronext Milan": {},
       "Euronext Paris": {},
       "First North Denmark": {},
-      "First North Helsinki": {},
       "First North Stockholm": {},
       "Hong Kong Stock Exchange": {},
       "Johannesburg Stock Exchange": {},
@@ -44373,7 +44034,7 @@
     "url": "https://www.usmart.sg/",
     "exchanges": {
       "United States": {},
-      "Hong Kong": {},
+      "Hong Kong Stock Exchange": {},
       "Singapore Exchange": {},
       "Japan": {},
       "United Kingdom": {}
@@ -44404,12 +44065,11 @@
     "url": "https://www.ig.com/sg",
     "exchanges": {
       "Singapore Exchange": {},
-      "New York Stock Exchange": {},
-      "Nasdaq": {},
-      "Hong Kong Stock Exchange": {},
+      "United States": {},
+      "Hong Kong": {},
       "London Stock Exchange": {},
-      "ASX": {},
-      "Tokyo Stock Exchange": {}
+      "Australia": {},
+      "Japan": {}
     }
   },
   {
@@ -44420,7 +44080,6 @@
     "exchanges": {
       "Hong Kong Stock Exchange": {},
       "NYSE American": {},
-      "NYSE Arca": {},
       "Nasdaq": {},
       "New York Stock Exchange": {},
       "Shanghai Stock Exchange": {
@@ -44430,7 +44089,7 @@
         "restriction": "Northbound-eligible A-shares only (via Stock Connect); Institutional professional investors only for ChiNext"
       },
       "Singapore Exchange": {},
-      "Japan": {},
+      "Tokyo Stock Exchange": {},
       "Korea Exchange": {},
       "Shanghai-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible A-shares only (via Stock Connect); Institutional professional investors only for STAR Market"
@@ -44463,8 +44122,7 @@
       "Shenzhen-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible A-shares only (via Stock Connect); Institutional professional investors only for ChiNext"
       },
-      "OTC Markets": {},
-      "NYSE Arca": {}
+      "OTC Markets": {}
     }
   },
   {
@@ -44617,9 +44275,7 @@
       "Shenzhen-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible A-shares only (Stock Connect); ChiNext/STAR for professional investors only"
       },
-      "NYSE American": {},
-      "Taipei Exchange": {},
-      "Cboe BZX": {}
+      "Taipei Exchange": {}
     }
   },
   {
@@ -44664,8 +44320,7 @@
       },
       "Shenzhen-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible A-shares only (Stock Connect); ChiNext/STAR for professional investors only"
-      },
-      "NYSE American": {}
+      }
     }
   },
   {
@@ -44770,9 +44425,10 @@
     "type": "Neobroker",
     "url": "https://bank.za.group/en/invest/stock",
     "exchanges": {
-      "United States": {
-        "count": 9000
-      },
+      "New York Stock Exchange": {},
+      "Nasdaq": {},
+      "NYSE American": {},
+      "NYSE Arca": {},
       "Hong Kong Stock Exchange": {}
     }
   },
@@ -45533,18 +45189,15 @@
       "Shenzhen Stock Exchange": {
         "restriction": "B shares only (A shares only via Stock Connect)"
       },
-      "Taiwan Stock Exchange": {},
+      "Taiwan": {},
       "Finland": {},
       "France": {},
       "Germany": {},
       "Indonesia": {},
       "Japan": {},
       "Malaysia": {},
-      "NYSE American": {},
-      "Nasdaq": {},
+      "United States": {},
       "Netherlands": {},
-      "New York Stock Exchange": {},
-      "OTC Markets": {},
       "Shanghai-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible A-shares and ETFs only; STAR Market shares for institutional professional investors only"
       },
@@ -45554,7 +45207,6 @@
       "Singapore": {},
       "South Korea": {},
       "Sweden": {},
-      "Taipei Exchange": {},
       "Thailand": {},
       "United Kingdom": {}
     }
@@ -45603,7 +45255,7 @@
     "exchanges": {
       "United Kingdom": {},
       "Japan": {},
-      "Singapore Exchange": {},
+      "Singapore": {},
       "Australia": {},
       "Germany": {},
       "Switzerland": {},
@@ -45614,7 +45266,7 @@
       "Shenzhen-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible A-shares and ETFs only; ChiNext shares for institutional professional investors only"
       },
-      "OTC Markets": {},
+      "United States": {},
       "Shanghai Stock Exchange": {},
       "Shenzhen Stock Exchange": {}
     }
@@ -45819,9 +45471,7 @@
       "Shenzhen-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible securities only; ChiNext for institutional professional investors only"
       },
-      "New York Stock Exchange": {},
-      "NYSE American": {},
-      "Nasdaq": {}
+      "United States": {}
     }
   },
   {
@@ -46061,8 +45711,9 @@
       "Shenzhen-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible securities only; ChiNext for institutional professional investors only"
       },
-      "Singapore": {},
-      "United States": {}
+      "New York Stock Exchange": {},
+      "Nasdaq": {},
+      "NYSE American": {}
     }
   },
   {
@@ -46139,13 +45790,13 @@
       "Shenzhen Stock Exchange": {
         "restriction": "B-shares only; by phone/advisor only"
       },
-      "Japan": {
+      "Tokyo Stock Exchange": {
         "restriction": "By phone/advisor only"
       },
-      "Thailand": {
+      "Stock Exchange of Thailand": {
         "restriction": "By phone/advisor only"
       },
-      "South Korea": {
+      "Korea Exchange": {
         "restriction": "By phone/advisor only"
       },
       "Philippines": {
@@ -46154,25 +45805,25 @@
       "Indonesia": {
         "restriction": "By phone/advisor only"
       },
-      "Malaysia": {
+      "Bursa Malaysia": {
         "restriction": "By phone/advisor only"
       },
-      "Australia": {
+      "ASX": {
         "restriction": "By phone/advisor only"
       },
       "Canada": {
         "restriction": "By phone/advisor only"
       },
-      "United Kingdom": {
+      "London Stock Exchange": {
         "restriction": "By phone/advisor only"
       },
-      "France": {
+      "Euronext Paris": {
         "restriction": "By phone/advisor only"
       },
       "Italy": {
         "restriction": "By phone/advisor only"
       },
-      "Germany": {},
+      "Börse Xetra": {},
       "OTC Markets": {}
     }
   },
@@ -46225,9 +45876,6 @@
       "Singapore Exchange": {
         "restriction": "By phone/advisor only"
       },
-      "Taiwan Stock Exchange": {
-        "restriction": "By phone/advisor only"
-      },
       "OTC Markets": {}
     }
   },
@@ -46237,7 +45885,7 @@
     "type": "Broker",
     "url": "https://www.htsc.com.hk/",
     "exchanges": {
-      "Hong Kong": {},
+      "Hong Kong Stock Exchange": {},
       "United States": {},
       "Shanghai-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible A-shares only; ChiNext/STAR via Connect for professional investors only"
@@ -46347,16 +45995,16 @@
       "Shenzhen-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible securities only; ChiNext via Connect for institutional professional investors only"
       },
-      "Australia": {},
-      "Germany": {},
-      "Japan": {},
+      "ASX": {},
+      "Deutsche Börse": {},
+      "Tokyo Stock Exchange": {},
       "Korea Exchange": {},
       "KOSDAQ": {},
-      "Malaysia": {},
-      "Philippines": {},
+      "Bursa Malaysia": {},
+      "Philippine Stock Exchange": {},
       "Taiwan": {},
-      "Thailand": {},
-      "United Kingdom": {},
+      "Stock Exchange of Thailand": {},
+      "London Stock Exchange": {},
       "Shanghai Stock Exchange": {
         "restriction": "A-shares via Stock Connect only (Northbound-eligible); STAR Market for institutional professional investors only"
       },
@@ -46561,7 +46209,10 @@
       "United States": {},
       "Singapore": {},
       "Malaysia": {},
-      "China": {
+      "Shanghai-Hong Kong Stock Connect": {
+        "restriction": "A-shares via Stock Connect only (Northbound-eligible); ChiNext/STAR for institutional professional investors only"
+      },
+      "Shenzhen-Hong Kong Stock Connect": {
         "restriction": "A-shares via Stock Connect only (Northbound-eligible); ChiNext/STAR for institutional professional investors only"
       },
       "United Kingdom": {}
@@ -48011,9 +47662,7 @@
     "url": "https://www.naito-sec.co.jp/rule/nisa/trade_japan.html",
     "exchanges": {
       "Tokyo Stock Exchange": {},
-      "New York Stock Exchange": {},
-      "NYSE Arca": {},
-      "Nasdaq": {},
+      "United States": {},
       "Shanghai Stock Exchange": {
         "restriction": "Stock Connect-eligible A-shares and B-shares only; some A-shares sell only; STAR Market via Connect for professional investors only"
       },
@@ -48360,7 +48009,10 @@
       "Nagoya Stock Exchange": {},
       "Sapporo Securities Exchange": {},
       "Fukuoka Stock Exchange": {},
-      "United States": {
+      "New York Stock Exchange": {
+        "restriction": "By phone/advisor only"
+      },
+      "Nasdaq": {
         "restriction": "By phone/advisor only"
       }
     }
@@ -48504,9 +48156,8 @@
         "restriction": "Selected stocks only",
         "count": 11
       },
-      "Hong Kong Stock Exchange": {
-        "restriction": "Selected stocks only",
-        "count": 24
+      "Hong Kong": {
+        "restriction": "Selected stocks only"
       },
       "Shanghai Stock Exchange": {
         "restriction": "Selected B-shares only",
@@ -48618,9 +48269,7 @@
     "type": "Neobroker",
     "url": "https://smartplus-sec.com/stream/guide/buy/",
     "exchanges": {
-      "Tokyo Stock Exchange": {},
-      "New York Stock Exchange": {},
-      "Nasdaq": {}
+      "Tokyo Stock Exchange": {}
     }
   },
   {
@@ -49087,28 +48736,28 @@
       "HOSE": {},
       "Hanoi Stock Exchange": {},
       "NYSE American": {},
-      "London Stock Exchange": {},
-      "Euronext Paris": {},
+      "United Kingdom": {},
+      "France": {},
       "Germany": {},
-      "SIX Swiss Exchange": {},
-      "Wiener Börse": {},
-      "Euronext Dublin": {},
-      "Euronext Amsterdam": {},
-      "Euronext Brussels": {},
-      "Nasdaq Helsinki": {},
-      "Nasdaq Copenhagen": {},
-      "Oslo Børs": {},
-      "Nasdaq Stockholm": {},
-      "Euronext Milan": {},
-      "Athens Stock Exchange": {},
-      "Euronext Lisbon": {},
-      "Bolsa de Madrid": {},
+      "Switzerland": {},
+      "Austria": {},
+      "Ireland": {},
+      "Netherlands": {},
+      "Belgium": {},
+      "Finland": {},
+      "Denmark": {},
+      "Norway": {},
+      "Sweden": {},
+      "Italy": {},
+      "Greece": {},
+      "Portugal": {},
+      "Spain": {},
       "Canada": {},
-      "Stock Exchange of Thailand": {},
-      "Indonesia Stock Exchange": {},
-      "ASX": {},
-      "Singapore Exchange": {},
-      "NZX": {}
+      "Thailand": {},
+      "Indonesia": {},
+      "Australia": {},
+      "Singapore": {},
+      "New Zealand": {}
     }
   },
   {
@@ -49240,7 +48889,6 @@
       "NYSE American": {},
       "NYSE Arca": {},
       "Nasdaq": {},
-      "OTC Markets": {},
       "Shanghai Stock Exchange": {
         "restriction": "A-shares: Northbound-eligible only (via Stock Connect); STAR Market for institutional professional investors only"
       },
@@ -49908,7 +49556,7 @@
       "Japan": {},
       "United Kingdom": {},
       "Germany": {},
-      "Singapore Exchange": {},
+      "Singapore": {},
       "Shanghai Stock Exchange": {
         "restriction": "Northbound-eligible A-shares only (via Stock Connect); ChiNext/STAR via Connect only for institutional professional investors"
       },
@@ -49959,7 +49607,7 @@
       "Emerging Stock Board": {},
       "Taiwan Stock Exchange": {},
       "United States": {},
-      "Hong Kong Stock Exchange": {},
+      "Hong Kong": {},
       "Japan": {},
       "Shanghai-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible A-shares only (via Stock Connect); ChiNext/STAR via Connect only for institutional professional investors"
@@ -49967,8 +49615,8 @@
       "Shenzhen-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible A-shares only (via Stock Connect); ChiNext/STAR via Connect only for institutional professional investors"
       },
-      "Singapore Exchange": {},
-      "Stock Exchange of Thailand": {},
+      "Singapore": {},
+      "Thailand": {},
       "Taipei Exchange": {}
     }
   },
@@ -49980,9 +49628,8 @@
     "exchanges": {
       "Taiwan Stock Exchange": {},
       "Hong Kong Stock Exchange": {},
-      "New York Stock Exchange": {},
-      "Nasdaq": {},
-      "Tokyo Stock Exchange": {},
+      "United States": {},
+      "Japan": {},
       "Shanghai-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible A-shares only (via Stock Connect); ChiNext/STAR via Connect only for institutional professional investors"
       },
@@ -50051,7 +49698,7 @@
     "type": "Bank",
     "url": "https://wealth.esunbank.com/zh-tw/etf/intro",
     "exchanges": {
-      "Hong Kong Stock Exchange": {},
+      "Hong Kong": {},
       "Shanghai Stock Exchange": {
         "restriction": "Northbound-eligible A-shares only (via Stock Connect); ChiNext/STAR via Connect only for institutional professional investors"
       },
@@ -50068,7 +49715,7 @@
     "type": "Bank",
     "url": "https://fund.scsb.com.tw/invest-overseas-etfs-stocks.html",
     "exchanges": {
-      "Hong Kong Stock Exchange": {},
+      "Hong Kong": {},
       "Japan": {},
       "United States": {}
     }
@@ -50266,9 +49913,6 @@
       },
       "Shenzhen-Hong Kong Stock Connect": {
         "restriction": "Professional investors only (Taiwan rule); Northbound-eligible A-shares only; ChiNext/STAR for professional institutional investors only"
-      },
-      "Nasdaq": {
-        "restriction": "Retail: leveraged/inverse ETFs only up to 2x/-1x, with risk disclosure and eligibility (Taiwan rule)"
       },
       "Taiwan Stock Exchange": {},
       "Taipei Exchange": {},
@@ -50811,7 +50455,6 @@
       "Nasdaq": {},
       "London Stock Exchange": {},
       "Hong Kong Stock Exchange": {},
-      "BSE": {},
       "ASX": {},
       "Cboe Australia": {},
       "Wiener Börse": {},
@@ -50879,7 +50522,8 @@
     "exchanges": {
       "BSE": {},
       "National Stock Exchange of India": {},
-      "United States": {}
+      "New York Stock Exchange": {},
+      "Nasdaq": {}
     }
   },
   {
@@ -50890,12 +50534,21 @@
     "exchanges": {
       "BSE": {},
       "National Stock Exchange of India": {},
-      "United States": {},
-      "United Kingdom": {},
-      "Germany": {},
-      "Japan": {},
-      "Singapore": {},
-      "Hong Kong": {}
+      "New York Stock Exchange": {},
+      "Nasdaq": {},
+      "NYSE American": {},
+      "NYSE Arca": {},
+      "Cboe BZX": {},
+      "London Stock Exchange": {},
+      "London IOB": {},
+      "Börse Xetra": {},
+      "Börse Frankfurt": {},
+      "Börse Stuttgart": {},
+      "Tradegate": {},
+      "gettex": {},
+      "Tokyo Stock Exchange": {},
+      "Singapore Exchange": {},
+      "Hong Kong Stock Exchange": {}
     }
   },
   {
@@ -50998,7 +50651,6 @@
       "Nasdaq": {},
       "National Stock Exchange of India": {},
       "New York Stock Exchange": {},
-      "NYSE Arca": {},
       "OTC Markets": {}
     }
   },
@@ -51409,7 +51061,6 @@
     "exchanges": {
       "National Stock Exchange of India": {},
       "BSE": {},
-      "India International Exchange": {},
       "Nasdaq": {},
       "New York Stock Exchange": {},
       "NYSE Arca": {},
@@ -51528,8 +51179,7 @@
     "url": "https://www.way2wealth.com/offerings/online-trading/",
     "exchanges": {
       "National Stock Exchange of India": {},
-      "BSE": {},
-      "Metropolitan Stock Exchange of India": {}
+      "BSE": {}
     }
   },
   {
@@ -51906,8 +51556,7 @@
     "url": "https://nubra.io/",
     "exchanges": {
       "National Stock Exchange of India": {},
-      "BSE": {},
-      "Metropolitan Stock Exchange of India": {}
+      "BSE": {}
     }
   },
   {
@@ -52190,8 +51839,7 @@
     "url": "https://www.centrum.co.in/",
     "exchanges": {
       "National Stock Exchange of India": {},
-      "BSE": {},
-      "Metropolitan Stock Exchange of India": {}
+      "BSE": {}
     }
   },
   {
@@ -52426,7 +52074,7 @@
         "restriction": "Only ETFs meeting Thai SEC criteria",
         "count": 10000
       },
-      "Thailand": {}
+      "Stock Exchange of Thailand": {}
     }
   },
   {
@@ -52542,21 +52190,15 @@
       "New York Stock Exchange": {},
       "Toronto Stock Exchange": {},
       "TSX Venture": {},
-      "Wiener Börse": {},
       "Bolsa de Madrid": {},
       "Börse Xetra": {},
       "Euronext Milan": {},
       "Euronext Amsterdam": {},
-      "Euronext Brussels": {},
-      "Euronext Dublin": {},
-      "Euronext Lisbon": {},
       "Euronext Paris": {},
-      "Nasdaq Helsinki": {},
       "Nasdaq Stockholm": {},
       "Nasdaq Copenhagen": {},
       "Oslo Børs": {},
       "SIX Swiss Exchange": {},
-      "London IOB": {},
       "London Stock Exchange": {},
       "Singapore Exchange": {},
       "Hong Kong Stock Exchange": {},
@@ -52730,7 +52372,6 @@
       "UPCOM": {},
       "Tokyo Stock Exchange": {},
       "Australia": {},
-      "Singapore": {},
       "Malaysia": {},
       "Indonesia": {},
       "United Kingdom": {}
@@ -52917,7 +52558,9 @@
       "Tokyo Stock Exchange": {},
       "Singapore Exchange": {},
       "ASX": {},
-      "Vietnam": {}
+      "HOSE": {},
+      "Hanoi Stock Exchange": {},
+      "UPCOM": {}
     }
   },
   {
@@ -52992,7 +52635,7 @@
     "type": "Broker",
     "url": "https://www.sbito.co.th/Online_Trading_Detail.aspx?id=3",
     "exchanges": {
-      "Tokyo Stock Exchange": {},
+      "Japan": {},
       "Vietnam": {},
       "Stock Exchange of Thailand": {},
       "United States": {}
@@ -53193,8 +52836,8 @@
     "url": "https://www.maybank2u.com.my/maybank2u/malaysia/en/personal/wealth/share_trading/online_stocks.page",
     "exchanges": {
       "Bursa Malaysia": {},
-      "Singapore Exchange": {},
-      "Hong Kong Stock Exchange": {},
+      "Singapore": {},
+      "Hong Kong": {},
       "Shanghai-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible A-shares only; STAR Market via Connect for professional investors only"
       },
@@ -53202,15 +52845,15 @@
         "restriction": "Northbound-eligible A-shares only; ChiNext via Connect for professional investors only"
       },
       "United States": {},
-      "ASX": {},
-      "London Stock Exchange": {},
-      "Stock Exchange of Thailand": {},
-      "Tokyo Stock Exchange": {},
-      "Indonesia Stock Exchange": {},
-      "Toronto Stock Exchange": {},
-      "Korea Exchange": {},
-      "Philippine Stock Exchange": {},
-      "Taiwan Stock Exchange": {},
+      "Australia": {},
+      "United Kingdom": {},
+      "Thailand": {},
+      "Japan": {},
+      "Indonesia": {},
+      "Canada": {},
+      "South Korea": {},
+      "Philippines": {},
+      "Taiwan": {},
       "Shanghai Stock Exchange": {
         "restriction": "Northbound-eligible A-shares only; STAR Market via Connect for professional investors only"
       },
@@ -53218,7 +52861,6 @@
         "restriction": "Northbound-eligible A-shares only; ChiNext via Connect for professional investors only"
       },
       "Vietnam": {},
-      "NZX": {},
       "Sri Lanka": {},
       "Germany": {},
       "Switzerland": {}
@@ -53307,7 +52949,6 @@
       "Shanghai-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible A-shares only; STAR Market via Connect for professional investors only"
       },
-      "NYSE Arca": {},
       "NYSE American": {}
     }
   },
@@ -53759,8 +53400,7 @@
     "exchanges": {
       "Nasdaq": {},
       "New York Stock Exchange": {},
-      "Cboe BZX": {},
-      "NYSE Arca": {}
+      "Cboe BZX": {}
     }
   },
   {
@@ -55181,7 +54821,9 @@
     "type": "Broker",
     "url": "https://www.smartmind.vn/huong-dan-giao-dich-co-phieu/",
     "exchanges": {
-      "Vietnam": {}
+      "HOSE": {},
+      "Hanoi Stock Exchange": {},
+      "UPCOM": {}
     }
   },
   {
@@ -55232,7 +54874,9 @@
     "type": "Neobroker",
     "url": "https://anfin.vn/",
     "exchanges": {
-      "Vietnam": {}
+      "HOSE": {},
+      "Hanoi Stock Exchange": {},
+      "UPCOM": {}
     }
   },
   {
@@ -55585,8 +55229,7 @@
     "url": "https://www.c6bank.com.br/c6-invest/",
     "exchanges": {
       "B3 São Paulo": {},
-      "New York Stock Exchange": {},
-      "Nasdaq": {}
+      "United States": {}
     }
   },
   {
@@ -55840,7 +55483,7 @@
     "type": "Broker",
     "url": "https://lerosa.com.br",
     "exchanges": {
-      "B3 São Paulo": {}
+      "Brazil": {}
     }
   },
   {
@@ -55860,8 +55503,7 @@
     "exchanges": {
       "New York Stock Exchange": {},
       "Nasdaq": {},
-      "OTC Markets": {},
-      "NYSE Arca": {}
+      "OTC Markets": {}
     }
   },
   {
@@ -55982,8 +55624,7 @@
     "type": "Broker",
     "url": "https://www.finamex.com.mx/general/finamex-trading/",
     "exchanges": {
-      "Bolsa Mexicana": {},
-      "BIVA": {}
+      "Bolsa Mexicana": {}
     }
   },
   {
@@ -56127,9 +55768,9 @@
     "url": "https://www.invertironline.com/servicios/cuenta-de-inversion",
     "exchanges": {
       "BYMA": {},
-      "United States": {
-        "count": 5000
-      }
+      "New York Stock Exchange": {},
+      "Nasdaq": {},
+      "NYSE American": {}
     }
   },
   {
@@ -56270,7 +55911,7 @@
     "url": "https://www.santander.com.ar/santander-valores",
     "exchanges": {
       "United States": {},
-      "BYMA": {}
+      "Argentina": {}
     }
   },
   {
@@ -56428,7 +56069,7 @@
     "type": "Broker",
     "url": "https://integrarinversiones.com.ar/preguntas-frecuentes/",
     "exchanges": {
-      "Argentina": {}
+      "BYMA": {}
     }
   },
   {
@@ -56475,7 +56116,7 @@
     "type": "Broker",
     "url": "https://www.linkedin.com/posts/lbo-sociedad-de-bolsa-s%2Ea%2E_d%C3%B3lar-d%C3%B3larmep-d%C3%B3larhoy-activity-7169384419542134784-GXUf",
     "exchanges": {
-      "Argentina": {},
+      "BYMA": {},
       "New York Stock Exchange": {},
       "Nasdaq": {}
     }
@@ -57162,7 +56803,8 @@
     "type": "Broker",
     "url": "https://portfolioinvestment.com.ar/",
     "exchanges": {
-      "Argentina": {}
+      "BYMA": {},
+      "Mercado Argentino de Valores": {}
     }
   },
   {
@@ -57255,11 +56897,9 @@
       "Euronext Amsterdam": {},
       "Bolsa de Madrid": {},
       "Euronext Paris": {},
-      "Nasdaq Stockholm": {},
       "Börse Frankfurt": {},
       "Euronext Milan": {},
       "Euronext Lisbon": {},
-      "Nasdaq Helsinki": {},
       "Euronext Brussels": {}
     }
   },
@@ -57429,7 +57069,7 @@
       "London Stock Exchange": {},
       "London IOB": {},
       "SIX Swiss Exchange": {},
-      "Prague Stock Exchange": {},
+      "Czech Republic": {},
       "Nasdaq Copenhagen": {},
       "Nasdaq Stockholm": {},
       "Nasdaq Helsinki": {},
@@ -57437,7 +57077,6 @@
       "New York Stock Exchange": {},
       "Nasdaq": {},
       "NYSE Arca": {},
-      "Dubai Financial Market": {},
       "Tradegate": {}
     }
   },
@@ -58002,7 +57641,9 @@
     "exchanges": {
       "Kazakhstan Stock Exchange": {},
       "Astana International Exchange": {},
-      "United States": {}
+      "New York Stock Exchange": {},
+      "Nasdaq": {},
+      "NYSE American": {}
     }
   },
   {
@@ -58273,12 +57914,19 @@
     "url": "https://play.google.com/store/apps/details?id=mn.ds.dbx.bdsec&hl=en",
     "exchanges": {
       "Mongolian Stock Exchange": {},
-      "United States": {},
-      "Canada": {},
-      "United Kingdom": {},
-      "Australia": {},
-      "Hong Kong": {},
-      "Japan": {}
+      "New York Stock Exchange": {},
+      "Nasdaq": {},
+      "NYSE Arca": {},
+      "NYSE American": {},
+      "Cboe BZX": {},
+      "OTC Markets": {},
+      "Toronto Stock Exchange": {},
+      "TSX Venture": {},
+      "London Stock Exchange": {},
+      "London IOB": {},
+      "ASX": {},
+      "Hong Kong Stock Exchange": {},
+      "Tokyo Stock Exchange": {}
     }
   },
   {
@@ -58504,7 +58152,8 @@
     "type": "Bank",
     "url": "https://bankofgeorgia.ge/en/retail/investments",
     "exchanges": {
-      "United States": {}
+      "New York Stock Exchange": {},
+      "Nasdaq": {}
     }
   },
   {
@@ -58526,33 +58175,37 @@
     "exchanges": {
       "New York Stock Exchange": {},
       "OTC Markets": {},
-      "Canada": {},
-      "Mexico": {},
-      "Austria": {},
-      "Belgium": {},
-      "France": {},
+      "Toronto Stock Exchange": {},
+      "TSX Venture": {},
+      "Cboe Canada": {},
+      "Bolsa Mexicana": {},
+      "Wiener Börse": {},
+      "Euronext Brussels": {},
+      "Euronext Paris": {},
       "Börse Stuttgart": {},
       "Börse Frankfurt": {},
       "Börse Xetra": {},
       "Tradegate": {},
       "Cboe Europe": {},
       "Turquoise": {},
-      "Italy": {},
-      "Norway": {},
-      "Portugal": {},
-      "Spain": {},
-      "Sweden": {},
-      "Switzerland": {},
+      "Euronext Milan": {},
+      "ETFplus": {},
+      "Oslo Børs": {},
+      "Euronext Lisbon": {},
+      "Bolsa de Madrid": {},
+      "Nasdaq Stockholm": {},
+      "SIX Swiss Exchange": {},
       "London Stock Exchange": {},
       "London IOB": {},
-      "Australia": {},
+      "ASX": {},
+      "Cboe Australia": {},
       "Hong Kong Stock Exchange": {},
       "Shanghai-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible SSE securities only; STAR Market for professional investors only"
       },
-      "Japan": {},
-      "Singapore": {},
-      "Georgia": {}
+      "Tokyo Stock Exchange": {},
+      "Singapore Exchange": {},
+      "Georgian Stock Exchange": {}
     }
   },
   {
@@ -59575,9 +59228,7 @@
       },
       "Singapore Exchange": {
         "restriction": "Qualified investors only (foreign securities not listed on Russian exchanges)"
-      },
-      "Brazil": {},
-      "Australia": {}
+      }
     }
   },
   {
@@ -59598,8 +59249,7 @@
     "type": "Broker",
     "url": "https://ivolgacap.ru/",
     "exchanges": {
-      "Moscow Exchange": {},
-      "SPB Exchange": {}
+      "Moscow Exchange": {}
     }
   },
   {
@@ -62803,9 +62453,6 @@
       },
       "Shenzhen-Hong Kong Stock Connect": {
         "restriction": "Southbound-eligible HK stocks/ETFs only; individual investors need CNY 500,000 in assets"
-      },
-      "Shanghai-London Stock Connect": {
-        "restriction": "Eastbound CDRs listed on SSE only; individual investors need CNY 3,000,000 in assets (20-day average) and 2 years' trading experience"
       }
     }
   },
@@ -64265,7 +63912,6 @@
       "Bolsa de Madrid": {},
       "Euronext Brussels": {},
       "Euronext Paris": {},
-      "Euronext Amsterdam": {},
       "Euronext Lisbon": {},
       "SIX Swiss Exchange": {},
       "London Stock Exchange": {},
@@ -64397,12 +64043,15 @@
     "type": "Broker",
     "url": "https://apps.apple.com/us/app/jabal-invest/id6737515373",
     "exchanges": {
-      "China": {},
-      "India": {},
+      "Shanghai Stock Exchange": {},
+      "Shenzhen Stock Exchange": {},
+      "Beijing Stock Exchange": {},
+      "BSE": {},
+      "National Stock Exchange of India": {},
       "Muscat Stock Exchange": {},
-      "Hong Kong": {},
-      "Saudi Arabia": {},
-      "United Arab Emirates": {},
+      "Hong Kong Stock Exchange": {},
+      "Tadawul": {},
+      "Abu Dhabi Securities Exchange": {},
       "Qatar": {},
       "Kuwait": {},
       "Bahrain": {}
@@ -64432,7 +64081,7 @@
     "type": "Broker",
     "url": "https://visioncapital.om/",
     "exchanges": {
-      "Muscat Stock Exchange": {}
+      "Oman": {}
     }
   },
   {
@@ -64479,9 +64128,7 @@
       "Euronext Lisbon": {
         "count": 20
       },
-      "Prague Stock Exchange": {
-        "count": 8
-      },
+      "Czech Republic": {},
       "Nasdaq Copenhagen": {
         "count": 38
       },
@@ -64518,7 +64165,6 @@
       "Abu Dhabi Securities Exchange": {},
       "ASX": {},
       "Bolsa de Madrid": {},
-      "Budapest Stock Exchange": {},
       "Börse Frankfurt": {},
       "Börse Xetra": {},
       "Cboe BZX": {},
@@ -64541,10 +64187,6 @@
       "Tokyo Stock Exchange": {},
       "Tadawul": {},
       "Toronto Stock Exchange": {},
-      "Warsaw Stock Exchange": {},
-      "Prague Stock Exchange": {},
-      "Wiener Börse": {},
-      "Euronext Dublin": {},
       "AIM": {}
     }
   },
@@ -64579,13 +64221,10 @@
     "exchanges": {
       "ASX": {},
       "Abu Dhabi Securities Exchange": {},
-      "Alpha Exchange": {},
       "Aquis Stock Exchange": {},
-      "Athens Stock Exchange": {},
       "B3 São Paulo": {},
       "Bolsa Mexicana": {},
       "Bolsa de Madrid": {},
-      "Bucharest Stock Exchange": {},
       "Budapest Stock Exchange": {},
       "Börse Frankfurt": {},
       "Börse Stuttgart": {},
@@ -64627,7 +64266,6 @@
       },
       "Oslo Børs": {},
       "Prague Stock Exchange": {},
-      "Pure Trading": {},
       "SIX Swiss Exchange": {},
       "Shanghai Stock Exchange": {
         "restriction": "Northbound-eligible A-shares only; STAR Market via Connect for professional investors only"
@@ -64651,8 +64289,7 @@
       },
       "Cboe Canada": {},
       "Turquoise": {},
-      "Tradegate": {},
-      "Canadian Securities Exchange": {}
+      "Tradegate": {}
     }
   },
   {
@@ -64797,9 +64434,7 @@
       "Hong Kong Stock Exchange": {},
       "New York Stock Exchange": {},
       "Nasdaq": {},
-      "NYSE American": {},
-      "NYSE Arca": {},
-      "Cboe BZX": {}
+      "NYSE American": {}
     }
   },
   {
@@ -64827,7 +64462,7 @@
       "Shenzhen-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible securities only; ChiNext via Connect for professional investors only"
       },
-      "Singapore Exchange": {}
+      "Singapore": {}
     }
   },
   {
@@ -64924,7 +64559,7 @@
       "Amman Stock Exchange": {},
       "Dubai Financial Market": {},
       "Abu Dhabi Securities Exchange": {},
-      "Tadawul": {},
+      "Saudi Arabia": {},
       "United States": {}
     }
   },

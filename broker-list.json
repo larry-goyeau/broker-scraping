@@ -3480,7 +3480,7 @@
         "reliability": "high"
       },
       "NYSE American": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "OTC Markets": {
         "restriction": "Generally not in registered accounts (RRSP/TFSA/FHSA) unless cross-listed on a designated exchange",
@@ -3488,43 +3488,43 @@
       },
       "London Stock Exchange": {
         "restriction": "Via separate TD Direct Investing Global Trading service only",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "ASX": {
         "restriction": "Via separate TD Direct Investing Global Trading service only",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Brussels": {
         "restriction": "Via separate TD Direct Investing Global Trading service only",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Paris": {
         "restriction": "Via separate TD Direct Investing Global Trading service only",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Börse Frankfurt": {
         "restriction": "Via separate TD Direct Investing Global Trading service only",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Hong Kong Stock Exchange": {
         "restriction": "Via separate TD Direct Investing Global Trading service only",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Milan": {
         "restriction": "Via separate TD Direct Investing Global Trading service only",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Amsterdam": {
         "restriction": "Via separate TD Direct Investing Global Trading service only",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Singapore Exchange": {
         "restriction": "Via separate TD Direct Investing Global Trading service only",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Bolsa de Madrid": {
         "restriction": "Via separate TD Direct Investing Global Trading service only",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Toronto Stock Exchange": {
         "reliability": "medium"
@@ -3559,7 +3559,7 @@
         "reliability": "high"
       },
       "NYSE Arca": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "OTC Markets": {
         "reliability": "high"
@@ -3690,13 +3690,13 @@
       },
       "OTC Markets": {
         "restriction": "Not eligible in registered accounts (TFSA/RRSP/RIF)",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Alpha Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Pure Trading": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -3750,14 +3750,11 @@
       "Nasdaq": {
         "reliability": "medium"
       },
-      "NYSE American": {
-        "reliability": "low"
-      },
       "Cboe Canada": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "OTC Markets": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Canadian Securities Exchange": {
         "reliability": "high"
@@ -3822,7 +3819,7 @@
         "reliability": "high"
       },
       "Cboe Canada": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "New York Stock Exchange": {
         "reliability": "high"
@@ -3874,7 +3871,7 @@
         "reliability": "medium"
       },
       "TSX Venture": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Canadian Securities Exchange": {
         "reliability": "low"
@@ -3890,9 +3887,6 @@
       },
       "New York Stock Exchange": {
         "reliability": "medium"
-      },
-      "NYSE American": {
-        "reliability": "low"
       }
     }
   },
@@ -3939,15 +3933,15 @@
       },
       "TSX Venture": {
         "restriction": "Selected stocks and ETFs only",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Canadian Securities Exchange": {
         "restriction": "Selected stocks and ETFs only",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Cboe Canada": {
         "restriction": "Selected stocks and ETFs only",
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -5087,10 +5081,10 @@
     "url": "https://www.charles-stanley-direct.co.uk/",
     "exchanges": {
       "London Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "AIM": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Aquis Stock Exchange": {
         "reliability": "low"
@@ -5143,37 +5137,37 @@
     "url": "https://www.scottishwidows.co.uk/share-dealing",
     "exchanges": {
       "London Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "New York Stock Exchange": {
         "restriction": "Stocks only, no ETFs",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq": {
         "restriction": "Stocks only, no ETFs",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "NYSE American": {
         "restriction": "Stocks only, no ETFs",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Börse Xetra": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Milan": {
         "restriction": "Stocks only, no ETFs",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Paris": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Amsterdam": {
         "restriction": "Stocks only, no ETFs",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Brussels": {
         "restriction": "Stocks only, no ETFs",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "AIM": {
         "reliability": "low"
@@ -5547,7 +5541,7 @@
       },
       "NYSE Arca": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID) for retail clients",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID) for retail clients",
@@ -5814,13 +5808,13 @@
     "url": "https://support.moneyboxapp.com/wp-content/uploads/2025/11/Order-Transmission-Policy-v2025.1.docx.pdf",
     "exchanges": {
       "New York Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq": {
-        "reliability": "low"
+        "reliability": "high"
       },
-      "London Stock Exchange": {
-        "reliability": "low"
+      "United Kingdom": {
+        "reliability": "high"
       }
     }
   },
@@ -5843,37 +5837,37 @@
     "url": "https://stocktrade.co.uk/wp-content/uploads/sites/12/stocktrade-TPIA-service-guide.pdf",
     "exchanges": {
       "London Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "New York Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Toronto Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "TSX Venture": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Hong Kong Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Singapore Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "ASX": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "SIX Swiss Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Börse Xetra": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Aquis Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -5928,7 +5922,7 @@
     "exchanges": {
       "London Stock Exchange": {
         "restriction": "Curated range only (17 funds/ETFs), no individual shares",
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -6041,7 +6035,7 @@
         "reliability": "high"
       },
       "Börse Frankfurt": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "France": {
         "reliability": "medium"
@@ -6540,22 +6534,22 @@
         "reliability": "high"
       },
       "Euronext Amsterdam": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Brussels": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Lisbon": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Milan": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Paris": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "LS Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
@@ -6566,38 +6560,38 @@
         "reliability": "high"
       },
       "Oslo Børs": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "SIX Swiss Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Toronto Stock Exchange": {
         "restriction": "No non-UCITS ETFs lacking a PRIIPs KID",
         "reliability": "high"
       },
       "Tradegate": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "TSX Venture": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Wiener Börse": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "London Stock Exchange": {
         "reliability": "low"
       },
       "Nasdaq Copenhagen": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Stockholm": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Helsinki": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Bolsa de Madrid": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "ASX": {
         "reliability": "low"
@@ -6735,7 +6729,7 @@
         "reliability": "high"
       },
       "Prague Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Pure Trading": {
         "reliability": "high"
@@ -9876,7 +9870,7 @@
         "reliability": "medium"
       },
       "Quotrix": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Börse Frankfurt": {
         "reliability": "medium"
@@ -9897,10 +9891,10 @@
         "reliability": "medium"
       },
       "Tradegate": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "gettex": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -18670,11 +18664,8 @@
     "type": "Bank",
     "url": "https://www.volksbank-mit-herz.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": {
-      "Börse Xetra": {
-        "reliability": "low"
-      },
-      "Tradegate": {
-        "reliability": "low"
+      "Germany": {
+        "reliability": "high"
       }
     }
   },
@@ -18686,9 +18677,6 @@
     "exchanges": {
       "Börse Xetra": {
         "reliability": "high"
-      },
-      "Tradegate": {
-        "reliability": "low"
       },
       "Börse Frankfurt": {
         "reliability": "high"
@@ -20036,11 +20024,11 @@
       },
       "Börse Xetra": {
         "restriction": "Curated selection only (shares hand-picked by Yuh, blue chips favoured)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext": {
         "restriction": "Curated selection only (shares hand-picked by Yuh, blue chips favoured)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "United Kingdom": {
         "restriction": "Curated selection only (shares hand-picked by Yuh, blue chips favoured)",
@@ -20048,7 +20036,7 @@
       },
       "Euronext Milan": {
         "restriction": "Curated selection only (shares hand-picked by Yuh, blue chips favoured)",
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -20373,82 +20361,82 @@
         "reliability": "high"
       },
       "Börse Xetra": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Börse Frankfurt": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Börse Stuttgart": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Paris": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Amsterdam": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Brussels": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Lisbon": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Milan": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Bolsa de Madrid": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Wiener Börse": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "London Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq Stockholm": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq Copenhagen": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq Helsinki": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Oslo Børs": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "New York Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "NYSE American": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Toronto Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "TSX Venture": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "OTC Markets": {
         "reliability": "low"
       },
       "Tokyo Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "ASX": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Hong Kong Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Singapore Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Johannesburg Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -20613,7 +20601,7 @@
         "reliability": "high"
       },
       "United States": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -20699,7 +20687,7 @@
       },
       "NYSE Arca": {
         "restriction": "No US-domiciled ETFs without KID",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq": {
         "restriction": "No US-domiciled ETFs without KID",
@@ -21881,11 +21869,8 @@
     "type": "Bank",
     "url": "https://www.hbl.ch/de/private/anlegen/solo/",
     "exchanges": {
-      "SIX Swiss Exchange": {
-        "reliability": "low"
-      },
-      "BX Swiss": {
-        "reliability": "low"
+      "Switzerland": {
+        "reliability": "high"
       }
     }
   },
@@ -21914,7 +21899,7 @@
     "url": "https://www.cic.ch/loesungen/service/elounge/hilfeseite/anlagen.html",
     "exchanges": {
       "SIX Swiss Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -22027,73 +22012,73 @@
     "url": "https://www.juliusbaer.com/en/e-services/switzerland/market-link/equities-etfs/",
     "exchanges": {
       "BX Swiss": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "SIX Swiss Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Wiener Börse": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Brussels": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Growth Brussels": {
         "reliability": "low"
       },
       "Bulgarian Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Zagreb Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Cyprus Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Prague Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Copenhagen": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Tallinn": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Helsinki": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Paris": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Growth Paris": {
         "reliability": "low"
       },
       "Börse Berlin": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Equiduct": {
         "reliability": "low"
       },
       "Börse Düsseldorf": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Börse Frankfurt": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Börse Hamburg": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Börse Hannover": {
         "reliability": "low"
       },
       "Börse München": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "gettex": {
         "reliability": "low"
       },
       "Börse Stuttgart": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Quotrix": {
         "reliability": "low"
@@ -22102,40 +22087,40 @@
         "reliability": "low"
       },
       "Börse Xetra": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Athens Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Budapest Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Dublin": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Growth Dublin": {
         "reliability": "low"
       },
       "Euronext Milan": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Riga": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Vilnius": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Luxembourg Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Malta Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Amsterdam": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Oslo Børs": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Expand Oslo": {
         "reliability": "low"
@@ -22144,38 +22129,32 @@
         "reliability": "low"
       },
       "Warsaw Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Lisbon": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Bucharest Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Moscow Exchange": {
         "restriction": "Not tradable for foreign clients (Russia sanctions/countermeasures)",
         "reliability": "low"
       },
       "Bolsa de Madrid": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Bratislava Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Ljubljana Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Stockholm": {
-        "reliability": "low"
-      },
-      "Nordic Growth Market": {
-        "reliability": "low"
-      },
-      "Spotlight Stock Market": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "London Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Aquis Stock Exchange": {
         "reliability": "low"
@@ -22184,55 +22163,49 @@
         "reliability": "low"
       },
       "Bahrain Bourse": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "The Egyptian Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Tel Aviv Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Amman Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Beirut Stock Exchange": {
-        "reliability": "low"
-      },
-      "Casablanca Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Muscat Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Pakistan Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Qatar Stock Exchange": {
-        "reliability": "low"
-      },
-      "Tadawul": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Johannesburg Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Borsa Istanbul": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Abu Dhabi Securities Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Dubai Financial Market": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Dubai": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "BYMA": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "B3 São Paulo": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Cboe Canada": {
         "reliability": "low"
@@ -22241,85 +22214,82 @@
         "reliability": "low"
       },
       "Canadian Securities Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Toronto Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "TSX Venture": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Santiago Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Bolsa Mexicana": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Bolsa de Valores de Lima": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Cboe BZX": {
         "reliability": "low"
       },
       "Nasdaq": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "New York Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "NYSE Arca": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "NYSE American": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "ASX": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Hong Kong Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Indonesia Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nagoya Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Sapporo Securities Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Tokyo Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Bursa Malaysia": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "NZX": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Philippine Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Singapore Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Korea Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "KOSDAQ": {
         "reliability": "low"
       },
       "Colombo Stock Exchange": {
-        "reliability": "low"
-      },
-      "Taipei Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Taiwan Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Stock Exchange of Thailand": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -22330,22 +22300,22 @@
     "url": "https://www.maerki-baumann.ch/en/about-mobile-banking-app",
     "exchanges": {
       "SIX Swiss Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "New York Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Börse Xetra": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Milan": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "London Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -22374,178 +22344,178 @@
     "url": "https://www.vontobel.com/siteassets/about-vontobel/contact-and-support/digital-application-manuals/vontobel_wealth_sicherheit-faq_de.pdf",
     "exchanges": {
       "ASX": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Wiener Börse": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Brussels": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "B3 São Paulo": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Bulgarian Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Toronto Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "TSX Venture": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Shanghai Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Shenzhen Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Zagreb Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Prague Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq Copenhagen": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq Tallinn": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq Helsinki": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Paris": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Growth Paris": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Access Paris": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Börse Berlin": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Börse Düsseldorf": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Börse Xetra": {
         "reliability": "high"
       },
       "Börse Hamburg": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Börse München": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Börse Stuttgart": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Athens Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Hong Kong Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Budapest Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Indonesia Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Dublin": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Tel Aviv Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Milan": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Tokyo Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq Riga": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq Vilnius": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Luxembourg Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Bursa Malaysia": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Bolsa Mexicana": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "NZX": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Oslo Børs": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Bolsa de Valores de Lima": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Philippine Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Warsaw Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Lisbon": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Belgrade Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Singapore Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Bratislava Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Ljubljana Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Johannesburg Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Korea Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Bolsa de Madrid": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq Stockholm": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "BX Swiss": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "SIX Swiss Exchange": {
         "reliability": "high"
       },
       "Stock Exchange of Thailand": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Amsterdam": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Borsa Istanbul": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "London Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "NYSE Arca": {
         "reliability": "high"
       },
       "Cboe BZX": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq": {
         "reliability": "high"
@@ -22554,81 +22524,81 @@
         "reliability": "high"
       },
       "Bucharest Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "BIVA": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Canadian Securities Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Alpha Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Cboe Canada": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Börse Frankfurt": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Shanghai-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible A-shares only; Professional investors only for STAR",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Shenzhen-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible A-shares only; Professional investors only for ChiNext",
-        "reliability": "low"
+        "reliability": "high"
       },
       "ETFplus": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "KOSDAQ": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "NYSE American": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "OTC Markets": {
         "reliability": "high"
       },
       "AIM": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "First North Stockholm": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "First North Helsinki": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nordic Growth Market": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Spotlight Stock Market": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Expert Market Brussels": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "OTC-X": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Equiduct": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Cboe Europe": {
         "reliability": "high"
       },
       "Turquoise": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Aquis Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "First North Denmark": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nordic SME": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -22650,34 +22620,34 @@
     "url": "https://www.axionbank.ch/en/e-banking.html",
     "exchanges": {
       "SIX Swiss Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "BX Swiss": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Börse Xetra": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "London Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "New York Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Amsterdam": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Milan": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Paris": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Toronto Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -26270,7 +26240,7 @@
         "reliability": "high"
       },
       "AIM": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -26415,7 +26385,7 @@
     "exchanges": {
       "Tradegate": {
         "restriction": "Selected popular stocks and ETFs only (curated list)",
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -26426,19 +26396,19 @@
     "url": "https://www.ing.nl/particulier/beleggen/beleggen-bij-ing/zelf-op-de-beurs",
     "exchanges": {
       "Euronext Amsterdam": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Brussels": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Paris": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Börse Xetra": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "London Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "SIX Swiss Exchange": {
         "reliability": "low"
@@ -26451,11 +26421,11 @@
       },
       "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -26466,50 +26436,54 @@
     "url": "https://www.rabobank.nl/particulieren/beleggen/rabo-zelf-beleggen",
     "exchanges": {
       "Euronext Amsterdam": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Brussels": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Paris": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Toronto Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
-      "United States": {
+      "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "high"
+      },
+      "Nasdaq": {
+        "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
+        "reliability": "high"
       },
       "London Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Börse Frankfurt": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Bolsa de Madrid": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Milan": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Helsinki": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Copenhagen": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Stockholm": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Oslo Børs": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "SIX Swiss Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Lisbon": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -27243,7 +27217,7 @@
         "reliability": "high"
       },
       "Oslo Børs": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
@@ -27270,7 +27244,7 @@
         "reliability": "high"
       },
       "Cboe Europe": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Equiduct": {
         "reliability": "low"
@@ -28602,53 +28576,53 @@
     "url": "https://www.bnpparibasfortis.be/nl/public/particulieren/sparen-en-beleggen/zelf-online-beleggen",
     "exchanges": {
       "Euronext Brussels": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Expert Market Brussels": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Paris": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Amsterdam": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Lisbon": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "London Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Börse Xetra": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Copenhagen": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Helsinki": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Stockholm": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Wiener Börse": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "NYSE Arca": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "NYSE American": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -32132,7 +32106,7 @@
         "reliability": "high"
       },
       "Euronext Growth": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -32159,7 +32133,7 @@
         "reliability": "high"
       },
       "Euronext Growth": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -33177,7 +33151,7 @@
         "reliability": "medium"
       },
       "Global Equity Market": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -33744,18 +33718,18 @@
         "reliability": "low"
       },
       "Euronext Milan": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext": {
         "reliability": "low"
       },
       "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -33864,20 +33838,8 @@
     "type": "Bank",
     "url": "https://www.credem.it/content/credem/it/privati-e-famiglie/conti-servizi-e-carte/servizi_online/trading_online.html",
     "exchanges": {
-      "Euronext Milan": {
-        "reliability": "low"
-      },
-      "Euronext MIV Milan": {
-        "reliability": "low"
-      },
-      "Euronext Growth Milan": {
-        "reliability": "low"
-      },
-      "Global Equity Market": {
-        "reliability": "low"
-      },
-      "ETFplus": {
-        "reliability": "low"
+      "Italy": {
+        "reliability": "high"
       },
       "Deutsche Börse": {
         "reliability": "low"
@@ -33900,16 +33862,9 @@
       "SIX Swiss Exchange": {
         "reliability": "low"
       },
-      "New York Stock Exchange": {
+      "United States": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
-      },
-      "Nasdaq": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
-      },
-      "TAH": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Börse Frankfurt": {
         "reliability": "low"
@@ -33942,14 +33897,6 @@
         "reliability": "low"
       },
       "Turquoise": {
-        "reliability": "low"
-      },
-      "NYSE Arca": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
-      },
-      "OTC Markets": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
         "reliability": "low"
       },
       "Toronto Stock Exchange": {
@@ -33988,61 +33935,58 @@
     "url": "https://www.mps.it/supporto/trading/index.html",
     "exchanges": {
       "Euronext Milan": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Growth Milan": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext MIV Milan": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Access Milan": {
-        "reliability": "low"
-      },
-      "EuroTLX": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Paris": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Amsterdam": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Brussels": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Lisbon": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "London Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Börse Xetra": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "high"
       },
       "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "high"
       },
       "NYSE American": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Bolsa de Madrid": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Global Equity Market": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "ETFplus": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Vorvel": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -35879,10 +35823,6 @@
     "type": "Neobroker",
     "url": "https://tinaba.bancaprofilo.it/aiuto/cosa-devo-fare-per-effettuare-unoperazione-di-acquisto-vendita",
     "exchanges": {
-      "Euronext Milan": {
-        "restriction": "Selected list of securities only (curated by Banca Profilo)",
-        "reliability": "low"
-      },
       "ETFplus": {
         "restriction": "Selected list of securities only (curated by Banca Profilo)",
         "reliability": "high"
@@ -35902,19 +35842,19 @@
         "reliability": "high"
       },
       "Cboe Europe": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Vorvel Equity Auction": {
         "reliability": "high"
       },
       "Japan": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Australia": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Hong Kong": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -36946,7 +36886,7 @@
         "reliability": "high"
       },
       "EuroTLX": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
@@ -37153,7 +37093,7 @@
         "reliability": "medium"
       },
       "Vorvel Equity Auction": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Paris": {
         "reliability": "medium"
@@ -37162,31 +37102,31 @@
         "reliability": "medium"
       },
       "Euronext Brussels": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Börse Xetra": {
         "reliability": "medium"
       },
       "Spain": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Portugal": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Norway": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Sweden": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Finland": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Denmark": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Austria": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "SIX Swiss Exchange": {
         "reliability": "medium"
@@ -37204,43 +37144,43 @@
         "reliability": "medium"
       },
       "Canada": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Japan": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Australia": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Hong Kong": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "South Africa": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Slovenia": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Singapore": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Thailand": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "New Zealand": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Greece": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Poland": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Czech Republic": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Hungary": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -37999,7 +37939,7 @@
       },
       "Tokyo Stock Exchange": {
         "restriction": "By phone/branch only; No local ETFs (ETFs must have Spanish KID and be Europe-listed)",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Canada": {
         "restriction": "By phone/branch only; No local ETFs (ETFs must have Spanish KID and be Europe-listed)",
@@ -38024,76 +37964,76 @@
     "exchanges": {
       "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "NYSE American": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "OTC Markets": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Toronto Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Bolsa de Madrid": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "BME Growth": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Börse Xetra": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Börse Frankfurt": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Milan": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Lisbon": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Wiener Börse": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Dublin": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Paris": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Amsterdam": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Brussels": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Helsinki": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "London Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Copenhagen": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "SIX Swiss Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Stockholm": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Oslo Børs": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Tokyo Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -38104,131 +38044,128 @@
     "url": "https://www.bbva.es/personas/productos/bolsa/cuenta-de-valores.html",
     "exchanges": {
       "Cboe Europe": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Equiduct": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Santiago Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Bolsa de Valores de Colombia": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Bolsa de Valores de Lima": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Bolsa Mexicana": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Borsa Istanbul": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Amsterdam": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Lisbon": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Paris": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "London Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Milan": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Bolsa de Madrid": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Börse Xetra": {
-        "reliability": "low"
-      },
-      "Aquis Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Athens Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "ASX": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "B3 São Paulo": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Brussels": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Hong Kong Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Indonesia Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Tokyo Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Johannesburg Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Luxembourg Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Bursa Malaysia": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Copenhagen": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Helsinki": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Stockholm": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Oslo Børs": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "NZX": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Singapore Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Korea Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Taiwan Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Stock Exchange of Thailand": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Toronto Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "OTC Markets": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "NYSE American": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Wiener Börse": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "SIX Swiss Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -38406,19 +38343,19 @@
         "reliability": "high"
       },
       "Börse Xetra": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Paris": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Amsterdam": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Milan": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "London Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -38573,74 +38510,74 @@
     "url": "https://activotrade.com/cuentas/",
     "exchanges": {
       "Bolsa de Madrid": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Amsterdam": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Brussels": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Lisbon": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Paris": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Börse Xetra": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Dublin": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Copenhagen": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Helsinki": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Oslo Børs": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Stockholm": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Milan": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Prague Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "SIX Swiss Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "London Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Growth Dublin": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Growth Paris": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Börse Frankfurt": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "NYSE American": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "NYSE Arca": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -39141,10 +39078,10 @@
         "reliability": "medium"
       },
       "Nasdaq Stockholm": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Singapore Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "France": {
         "reliability": "high"
@@ -39748,7 +39685,7 @@
         "reliability": "high"
       },
       "Börse Xetra": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Wiener Börse": {
         "reliability": "medium"
@@ -39848,7 +39785,7 @@
         "reliability": "high"
       },
       "Börse Xetra": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Wiener Börse": {
         "reliability": "medium"
@@ -40787,16 +40724,16 @@
         "reliability": "high"
       },
       "Wiener Börse": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Brussels": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq Copenhagen": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq Helsinki": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Paris": {
         "reliability": "medium"
@@ -40808,7 +40745,7 @@
         "reliability": "medium"
       },
       "Euronext Dublin": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Milan": {
         "reliability": "medium"
@@ -40817,19 +40754,19 @@
         "reliability": "medium"
       },
       "Euronext Amsterdam": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Oslo Børs": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Lisbon": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq Stockholm": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "SIX Swiss Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "London Stock Exchange": {
         "reliability": "medium"
@@ -40846,7 +40783,7 @@
         "reliability": "medium"
       },
       "BME Growth": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Latibex": {
         "reliability": "low"
@@ -42402,30 +42339,30 @@
     "url": "https://www.bancocarregosa.com/pt/plataformas-negociacao-gobulling/",
     "exchanges": {
       "Euronext Lisbon": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Paris": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Amsterdam": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Brussels": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Börse Xetra": {
         "reliability": "low"
       },
       "London Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -42640,60 +42577,35 @@
       "Börse Xetra": {
         "reliability": "low"
       },
-      "Euronext Brussels": {
-        "reliability": "low"
-      },
-      "Nasdaq Helsinki": {
-        "reliability": "low"
-      },
       "Euronext Paris": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Amsterdam": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Milan": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Lisbon": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Bolsa de Madrid": {
-        "reliability": "low"
-      },
-      "Nasdaq Copenhagen": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "London Stock Exchange": {
-        "reliability": "low"
-      },
-      "Nasdaq Stockholm": {
-        "reliability": "low"
-      },
-      "Oslo Børs": {
-        "reliability": "low"
-      },
-      "SIX Swiss Exchange": {
-        "reliability": "low"
-      },
-      "Toronto Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "NYSE Arca": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
-      },
-      "NYSE American": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -43205,13 +43117,13 @@
     "url": "https://www.alphafinance.gr/en/services",
     "exchanges": {
       "Athens Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Cyprus Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -43355,10 +43267,10 @@
     "url": "https://www.euroxx.gr/en/home",
     "exchanges": {
       "Athens Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Cyprus Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -43684,7 +43596,7 @@
         "reliability": "high"
       },
       "Cyprus Stock Exchange Emerging Companies Market": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Australia": {
         "reliability": "medium"
@@ -43770,7 +43682,7 @@
         "reliability": "high"
       },
       "Finland": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Norway": {
         "reliability": "high"
@@ -44221,7 +44133,7 @@
         "reliability": "high"
       },
       "Athens Exchange Alternative Market": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Amsterdam": {
         "reliability": "high"
@@ -44599,10 +44511,10 @@
     "url": "https://www.alpha.gr/en/personal/Investments/Equities-and-stock-exchanges/ALPHATRADE-trading-platform",
     "exchanges": {
       "Athens Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Cyprus Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -45007,47 +44919,47 @@
     "url": "https://www.sydbank.dk/privat/produkter/investering",
     "exchanges": {
       "Nasdaq Copenhagen": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Stockholm": {
-        "reliability": "low"
+        "reliability": "medium"
       },
-      "Oslo Børs": {
-        "reliability": "low"
+      "Norway": {
+        "reliability": "medium"
       },
       "Nasdaq Helsinki": {
-        "reliability": "low"
+        "reliability": "medium"
       },
-      "Euronext Brussels": {
-        "reliability": "low"
+      "Belgium": {
+        "reliability": "medium"
       },
-      "London Stock Exchange": {
-        "reliability": "low"
+      "United Kingdom": {
+        "reliability": "medium"
       },
-      "Euronext Paris": {
-        "reliability": "low"
+      "France": {
+        "reliability": "medium"
       },
-      "Euronext Amsterdam": {
-        "reliability": "low"
+      "Netherlands": {
+        "reliability": "medium"
       },
-      "Euronext Milan": {
-        "reliability": "low"
+      "Italy": {
+        "reliability": "medium"
       },
-      "Euronext Lisbon": {
-        "reliability": "low"
+      "Portugal": {
+        "reliability": "medium"
       },
-      "SIX Swiss Exchange": {
-        "reliability": "low"
+      "Switzerland": {
+        "reliability": "medium"
       },
-      "Bolsa de Madrid": {
-        "reliability": "low"
+      "Spain": {
+        "reliability": "medium"
       },
       "Germany": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "United States": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -45832,7 +45744,7 @@
         "reliability": "high"
       },
       "United States": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -46172,12 +46084,12 @@
     "type": "Bank",
     "url": "https://www.kreditbanken.dk/goer-det-selv/goer-det-selv/mobilbank-privat",
     "exchanges": {
-      "Nasdaq Nordic": {
-        "reliability": "low"
+      "Denmark": {
+        "reliability": "medium"
       },
       "United States": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -46863,7 +46775,7 @@
       },
       "AIM": {
         "restriction": "By phone/advisor only",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Japan": {
         "restriction": "By phone/advisor only; no ETFs lacking a Swedish PRIIPs KID",
@@ -46875,7 +46787,7 @@
       },
       "NOTC": {
         "restriction": "By phone/advisor only",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq Tallinn": {
         "restriction": "By phone/advisor only",
@@ -46895,11 +46807,11 @@
       },
       "Czech Republic": {
         "restriction": "By phone/advisor only",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Hungary": {
         "restriction": "By phone/advisor only",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Wiener Börse": {
         "restriction": "By phone/advisor only",
@@ -46911,7 +46823,7 @@
       },
       "Turkey": {
         "restriction": "By phone/advisor only; no ETFs lacking a Swedish PRIIPs KID",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Dublin": {
         "restriction": "By phone/advisor only",
@@ -46923,23 +46835,23 @@
       },
       "Singapore": {
         "restriction": "By phone/advisor only; no ETFs lacking a Swedish PRIIPs KID",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Thailand": {
         "restriction": "By phone/advisor only; no ETFs lacking a Swedish PRIIPs KID",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Indonesia": {
         "restriction": "By phone/advisor only; no ETFs lacking a Swedish PRIIPs KID",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Philippines": {
         "restriction": "By phone/advisor only; no ETFs lacking a Swedish PRIIPs KID",
-        "reliability": "low"
+        "reliability": "high"
       },
       "New Zealand": {
         "restriction": "By phone/advisor only; no ETFs lacking a Swedish PRIIPs KID",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Australia": {
         "restriction": "By phone/advisor only; no ETFs lacking a Swedish PRIIPs KID",
@@ -47017,7 +46929,7 @@
       },
       "Euronext Dublin": {
         "restriction": "By phone only",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
@@ -47055,22 +46967,22 @@
       },
       "Nasdaq Iceland": {
         "restriction": "By phone only",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq Riga": {
         "restriction": "By phone only",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq Tallinn": {
         "restriction": "By phone only",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq Vilnius": {
         "restriction": "By phone only",
-        "reliability": "low"
+        "reliability": "high"
       },
       "beQuoted": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -53720,7 +53632,7 @@
         "reliability": "high"
       },
       "Euronext Expand Oslo": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Growth Oslo": {
         "reliability": "low"
@@ -55103,7 +55015,7 @@
         "reliability": "medium"
       },
       "Nasdaq First North Iceland": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -57664,17 +57576,17 @@
     "exchanges": {
       "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Börse Xetra": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Wiener Börse": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -58915,7 +58827,7 @@
         "reliability": "high"
       },
       "Ljubljana Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Amsterdam": {
         "reliability": "high"
@@ -58983,11 +58895,11 @@
     "url": "https://www.bancatransilvania.ro/economii-si-investitii/investitii/investitii-la-bursa",
     "exchanges": {
       "Bucharest Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "United States": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -58998,62 +58910,62 @@
     "url": "https://tradeville.ro/",
     "exchanges": {
       "Bucharest Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Paris": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Amsterdam": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Lisbon": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Brussels": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Wiener Börse": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Deutsche Börse": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Milan": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Bolsa de Madrid": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Dublin": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Luxembourg Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "London Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Toronto Stock Exchange": {
         "restriction": "No Canadian-domiciled ETFs for retail clients (non-EU-issued ETFs professional only)",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq": {
         "restriction": "No US-domiciled ETFs for retail clients (non-EU-issued ETFs professional only)",
-        "reliability": "low"
+        "reliability": "high"
       },
       "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs for retail clients (non-EU-issued ETFs professional only)",
-        "reliability": "low"
+        "reliability": "high"
       },
       "NYSE Arca": {
         "restriction": "No US-domiciled ETFs for retail clients (non-EU-issued ETFs professional only)",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Warsaw Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq Stockholm": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -59425,7 +59337,7 @@
         "reliability": "high"
       },
       "AeRO": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -60575,10 +60487,10 @@
         "reliability": "high"
       },
       "BEAM": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "BSE International": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Austria": {
         "reliability": "medium"
@@ -64342,81 +64254,81 @@
     "exchanges": {
       "NYSE American": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "NYSE Arca": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Börse Xetra": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Helsinki": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Lisbon": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Milan": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Amsterdam": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Brussels": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Paris": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Bolsa de Madrid": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Wiener Börse": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Börse Frankfurt": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Copenhagen": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "First North Denmark": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "London IOB": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "London Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "OTC Markets": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Oslo Børs": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Stockholm": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "First North Stockholm": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "SIX Swiss Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Hong Kong Stock Exchange": {
         "restriction": "No HK-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -64555,20 +64467,20 @@
         "reliability": "high"
       },
       "First North Estonia": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "First North Lithuania": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "First North Latvia": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Milan": {
         "reliability": "medium"
       },
       "OTC Markets": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Wiener Börse": {
         "reliability": "medium"
@@ -64581,10 +64493,10 @@
         "reliability": "medium"
       },
       "Athens Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Börse Berlin": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Brussels": {
         "reliability": "medium"
@@ -64594,7 +64506,7 @@
       },
       "Canadian Securities Exchange": {
         "restriction": "No Canadian-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq Copenhagen": {
         "reliability": "medium"
@@ -64640,7 +64552,7 @@
       },
       "TSX Venture": {
         "restriction": "No Canadian-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Warsaw Stock Exchange": {
         "reliability": "medium"
@@ -64822,7 +64734,7 @@
         "reliability": "medium"
       },
       "London Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Milan": {
         "reliability": "medium"
@@ -64878,22 +64790,22 @@
         "reliability": "medium"
       },
       "TSX Venture": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "ASX": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Hong Kong Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "NZX": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Singapore Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Tokyo Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -65171,112 +65083,100 @@
     "type": "Bank",
     "url": "https://www.artea.lt/lt/privatiems/taupymas-investavimas/apie-investavima/investicine-saskaita",
     "exchanges": {
-      "Nasdaq Vilnius": {
-        "reliability": "low"
+      "Lithuania": {
+        "reliability": "medium"
       },
-      "Nasdaq Riga": {
-        "reliability": "low"
+      "Latvia": {
+        "reliability": "medium"
       },
-      "Nasdaq Tallinn": {
-        "reliability": "low"
+      "Estonia": {
+        "reliability": "medium"
       },
-      "Euronext Dublin": {
-        "reliability": "low"
+      "Ireland": {
+        "reliability": "medium"
       },
-      "Wiener Börse": {
-        "reliability": "low"
+      "Austria": {
+        "reliability": "medium"
       },
-      "Euronext Brussels": {
-        "reliability": "low"
+      "Belgium": {
+        "reliability": "medium"
       },
-      "Bulgarian Stock Exchange": {
-        "reliability": "low"
+      "Bulgaria": {
+        "reliability": "medium"
       },
-      "Prague Stock Exchange": {
-        "reliability": "low"
+      "Czech Republic": {
+        "reliability": "medium"
       },
-      "Nasdaq Copenhagen": {
-        "reliability": "low"
+      "Denmark": {
+        "reliability": "medium"
       },
-      "London Stock Exchange": {
-        "reliability": "low"
+      "United Kingdom": {
+        "reliability": "medium"
       },
-      "Athens Stock Exchange": {
-        "reliability": "low"
+      "Greece": {
+        "reliability": "medium"
       },
-      "Bolsa de Madrid": {
-        "reliability": "low"
+      "Spain": {
+        "reliability": "medium"
       },
-      "Euronext Milan": {
-        "reliability": "low"
+      "Italy": {
+        "reliability": "medium"
       },
-      "Zagreb Stock Exchange": {
-        "reliability": "low"
+      "Croatia": {
+        "reliability": "medium"
       },
-      "Warsaw Stock Exchange": {
-        "reliability": "low"
+      "Poland": {
+        "reliability": "medium"
       },
-      "Euronext Amsterdam": {
-        "reliability": "low"
+      "Netherlands": {
+        "reliability": "medium"
       },
-      "Oslo Børs": {
-        "reliability": "low"
+      "Norway": {
+        "reliability": "medium"
       },
-      "Euronext Lisbon": {
-        "reliability": "low"
+      "Portugal": {
+        "reliability": "medium"
       },
-      "Euronext Paris": {
-        "reliability": "low"
+      "France": {
+        "reliability": "medium"
       },
-      "Bucharest Stock Exchange": {
-        "reliability": "low"
+      "Romania": {
+        "reliability": "medium"
       },
-      "Belgrade Stock Exchange": {
-        "reliability": "low"
+      "Serbia": {
+        "reliability": "medium"
       },
-      "Bratislava Stock Exchange": {
-        "reliability": "low"
+      "Slovakia": {
+        "reliability": "medium"
       },
-      "Ljubljana Stock Exchange": {
-        "reliability": "low"
+      "Slovenia": {
+        "reliability": "medium"
       },
-      "Nasdaq Helsinki": {
-        "reliability": "low"
+      "Finland": {
+        "reliability": "medium"
       },
-      "Nasdaq Stockholm": {
-        "reliability": "low"
+      "Sweden": {
+        "reliability": "medium"
       },
-      "SIX Swiss Exchange": {
-        "reliability": "low"
+      "Switzerland": {
+        "reliability": "medium"
       },
-      "Borsa Istanbul": {
-        "reliability": "low"
+      "Turkey": {
+        "reliability": "medium"
       },
-      "Budapest Stock Exchange": {
-        "reliability": "low"
+      "Hungary": {
+        "reliability": "medium"
       },
       "Börse Xetra": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Börse Frankfurt": {
-        "reliability": "low"
+        "reliability": "medium"
       },
-      "Toronto Stock Exchange": {
-        "reliability": "low"
-      },
-      "First North Lithuania": {
-        "reliability": "low"
-      },
-      "First North Latvia": {
-        "reliability": "low"
-      },
-      "First North Estonia": {
-        "reliability": "low"
+      "Canada": {
+        "reliability": "medium"
       },
       "ASX": {
-        "reliability": "low"
-      },
-      "AIM": {
         "reliability": "low"
       },
       "Hong Kong Stock Exchange": {
@@ -65285,17 +65185,9 @@
       "Tokyo Stock Exchange": {
         "reliability": "low"
       },
-      "NYSE American": {
+      "United States": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
-      },
-      "Nasdaq": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
-      },
-      "New York Stock Exchange": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Luxembourg Stock Exchange": {
         "reliability": "low"
@@ -65891,10 +65783,10 @@
         "reliability": "high"
       },
       "Cyprus Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Athens Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -66470,7 +66362,7 @@
         "reliability": "high"
       },
       "Netherlands": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Bolsa de Madrid": {
         "reliability": "high"
@@ -66479,10 +66371,10 @@
         "reliability": "high"
       },
       "Belgium": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Greece": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
@@ -67055,87 +66947,87 @@
     "url": "https://www.bov.com/etrader",
     "exchanges": {
       "Athens Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "ASX": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Bolsa de Madrid": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Milan": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Deutsche Börse": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Amsterdam": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Brussels": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Dublin": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Lisbon": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Paris": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Hong Kong Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Johannesburg Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "London Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Malta Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Copenhagen": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Helsinki": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Stockholm": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Oslo Børs": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Prague Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Singapore Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "SIX Swiss Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Tokyo Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Toronto Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Warsaw Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Wiener Börse": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -67862,11 +67754,8 @@
     "type": "Bank",
     "url": "https://www.cbd.ae/cbdinvestr/self-investors.html",
     "exchanges": {
-      "Dubai Financial Market": {
-        "reliability": "low"
-      },
-      "Abu Dhabi Securities Exchange": {
-        "reliability": "low"
+      "United States": {
+        "reliability": "medium"
       }
     }
   },
@@ -67965,10 +67854,10 @@
     "url": "https://www.sifs.ae/en/services",
     "exchanges": {
       "Dubai Financial Market": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Abu Dhabi Securities Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -68171,7 +68060,7 @@
         "reliability": "high"
       },
       "Nasdaq Dubai": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "The Egyptian Exchange": {
         "reliability": "high"
@@ -68194,10 +68083,10 @@
     "url": "https://www.adss.com/",
     "exchanges": {
       "Abu Dhabi Securities Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Dubai Financial Market": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -69507,82 +69396,82 @@
         "reliability": "high"
       },
       "Jordan": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Lebanon": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Egypt": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Singapore": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Hong Kong": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Japan": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Spain": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Australia": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Germany": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Italy": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Belgium": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Denmark": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Sweden": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Switzerland": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "France": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Finland": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "United Kingdom": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Austria": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Netherlands": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "United States": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Canada": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "United Arab Emirates": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Bahrain": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Oman": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Qatar": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Kuwait": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -69816,7 +69705,7 @@
         "reliability": "high"
       },
       "United States": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -70071,15 +69960,15 @@
     "exchanges": {
       "Abu Dhabi Securities Exchange": {
         "restriction": "Shariah-compliant securities only",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Dubai Financial Market": {
         "restriction": "Shariah-compliant securities only",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Bahrain Bourse": {
         "restriction": "Shariah-compliant securities only",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Boursa Kuwait": {
         "restriction": "Shariah-compliant securities only",
@@ -70087,11 +69976,11 @@
       },
       "Muscat Stock Exchange": {
         "restriction": "Shariah-compliant securities only",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Qatar Stock Exchange": {
         "restriction": "Shariah-compliant securities only",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Saudi Arabia": {
         "restriction": "Shariah-compliant securities only",
@@ -70524,8 +70413,8 @@
     "type": "Broker",
     "url": "https://play.google.com/store/apps/details?id=com.gtn.kamco&hl=en",
     "exchanges": {
-      "Boursa Kuwait": {
-        "reliability": "low"
+      "Kuwait": {
+        "reliability": "medium"
       }
     }
   },
@@ -71125,10 +71014,10 @@
     "url": "https://xnes.co.il/trading",
     "exchanges": {
       "Tel Aviv Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
-      "New York Stock Exchange": {
-        "reliability": "low"
+      "United States": {
+        "reliability": "high"
       },
       "London Stock Exchange": {
         "reliability": "low"
@@ -71307,10 +71196,10 @@
     "url": "https://www.onezerobank.com/special/5636",
     "exchanges": {
       "Tel Aviv Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "United States": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -71495,10 +71384,10 @@
     "url": "https://www.bankmassad.co.il/private/capitalmarket/new/new/",
     "exchanges": {
       "Tel Aviv Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "United States": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Toronto Stock Exchange": {
         "reliability": "low"
@@ -71512,10 +71401,10 @@
     "url": "https://www.bankotsar.co.il/private/capitalmarket/independenttrade/mischar/",
     "exchanges": {
       "Tel Aviv Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "United States": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Toronto Stock Exchange": {
         "reliability": "low"
@@ -71803,7 +71692,7 @@
         "reliability": "high"
       },
       "Iran Fara Bourse": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -72159,7 +72048,7 @@
         "reliability": "low"
       },
       "Iran Fara Bourse": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -72205,7 +72094,7 @@
         "reliability": "high"
       },
       "Iran Fara Bourse": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -72247,7 +72136,7 @@
         "reliability": "high"
       },
       "Iran Fara Bourse": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -73216,7 +73105,7 @@
     "url": "https://www.investaz.com.tr/yatirim-platformlari",
     "exchanges": {
       "Borsa Istanbul": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -74466,7 +74355,7 @@
     "url": "https://www.investec.com/en_za/investment/self-managed-investing/online-stockbroking.html",
     "exchanges": {
       "Johannesburg Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -74533,7 +74422,7 @@
     "url": "https://etfsa.co.za/product/diy/",
     "exchanges": {
       "Johannesburg Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -74547,25 +74436,25 @@
         "reliability": "high"
       },
       "United States": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Canada": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "United Kingdom": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "China": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Hong Kong": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Japan": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Australia": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -74791,10 +74680,10 @@
     "url": "https://www.stanbicibtcstockbrokers.com/nigeriastockbroking/stockbroking",
     "exchanges": {
       "Nigerian Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "NASD OTC Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -74930,7 +74819,7 @@
     "url": "https://www.cslstockbrokers.com/blog-details.php?slug=how-to-use-csl-stockbrokers-web-portal---user-guide",
     "exchanges": {
       "Nigerian Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -75342,7 +75231,7 @@
         "reliability": "high"
       },
       "NASD OTC Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -75956,7 +75845,7 @@
         "reliability": "high"
       },
       "Rwanda Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -76327,7 +76216,7 @@
     "url": "https://pharoslive.com/",
     "exchanges": {
       "The Egyptian Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -76394,7 +76283,7 @@
     "url": "https://www.aaisecurities.com/ourservices.aspx",
     "exchanges": {
       "The Egyptian Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -76477,16 +76366,16 @@
     "url": "https://play.google.com/store/apps/details?id=tea.mobile.view.megaTradeApp&hl=en",
     "exchanges": {
       "The Egyptian Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nilex": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "New York Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "London Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -76563,7 +76452,7 @@
     "url": "https://apps.apple.com/eg/app/mirage-brokerage/id1476961502",
     "exchanges": {
       "The Egyptian Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -76585,7 +76474,7 @@
     "url": "https://apps.apple.com/app/aman-stocks/id6737268888",
     "exchanges": {
       "Egypt": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -76640,7 +76529,7 @@
     "url": "https://apps.apple.com/eg/app/helwan-ot/id1615267554",
     "exchanges": {
       "The Egyptian Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -76651,7 +76540,7 @@
     "url": "https://apps.apple.com/eg/app/team-trade/id6742747391",
     "exchanges": {
       "The Egyptian Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -77626,11 +77515,8 @@
     "type": "Neobroker",
     "url": "https://amana.app/lb/products/us-shares",
     "exchanges": {
-      "New York Stock Exchange": {
-        "reliability": "low"
-      },
-      "Nasdaq": {
-        "reliability": "low"
+      "United States": {
+        "reliability": "high"
       },
       "Dubai Financial Market": {
         "reliability": "high"
@@ -77884,7 +77770,7 @@
     "url": "https://sirius.ci/",
     "exchanges": {
       "BRVM": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -78399,7 +78285,7 @@
         "reliability": "high"
       },
       "Cboe BZX": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq": {
         "reliability": "high"
@@ -78408,10 +78294,10 @@
         "reliability": "high"
       },
       "NYSE American": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "NYSE Arca": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "OTC Markets": {
         "reliability": "high"
@@ -79182,7 +79068,7 @@
     "url": "https://www.thinkmarkets.com/au/cash-equities/",
     "exchanges": {
       "ASX": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -80438,7 +80324,7 @@
         "reliability": "high"
       },
       "NYSE Arca": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq": {
         "reliability": "high"
@@ -85207,7 +85093,7 @@
     "url": "https://www.schwab.com.hk/",
     "exchanges": {
       "United States": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -85297,14 +85183,14 @@
       },
       "Shanghai-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible SSE securities only; STAR Market for institutional professional investors only",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Shenzhen-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible SZSE securities only; ChiNext for institutional professional investors only",
-        "reliability": "low"
+        "reliability": "high"
       },
       "United States": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -85654,7 +85540,7 @@
       },
       "Shenzhen-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible SZSE securities only; ChiNext for institutional professional investors only",
-        "reliability": "low"
+        "reliability": "high"
       },
       "United States": {
         "reliability": "high"
@@ -85779,7 +85665,7 @@
         "reliability": "high"
       },
       "AIM": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "ASX": {
         "reliability": "high"
@@ -85788,7 +85674,7 @@
         "reliability": "high"
       },
       "KOSDAQ": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Bursa Malaysia": {
         "reliability": "high"
@@ -85881,7 +85767,7 @@
         "reliability": "high"
       },
       "KOSDAQ": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -86427,9 +86313,6 @@
     "type": "Broker",
     "url": "https://www.monex.co.jp/",
     "exchanges": {
-      "Cboe BZX": {
-        "reliability": "low"
-      },
       "Fukuoka Stock Exchange": {
         "reliability": "high"
       },
@@ -86467,7 +86350,7 @@
     "exchanges": {
       "Cboe BZX": {
         "count": 82,
-        "reliability": "low"
+        "reliability": "high"
       },
       "Fukuoka Stock Exchange": {
         "reliability": "high"
@@ -86485,7 +86368,7 @@
       },
       "NYSE American": {
         "count": 137,
-        "reliability": "low"
+        "reliability": "high"
       },
       "NYSE Arca": {
         "count": 339,
@@ -86710,7 +86593,7 @@
       },
       "Shanghai Stock Exchange": {
         "restriction": "By branch/phone only (Sogo course); Direct course: sell only",
-        "reliability": "low"
+        "reliability": "high"
       },
       "NYSE Arca": {
         "reliability": "medium"
@@ -87048,79 +86931,79 @@
       },
       "New York Stock Exchange": {
         "restriction": "Online (Net Club): broker-designated US stocks/ETFs only",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq": {
         "restriction": "Online (Net Club): broker-designated US stocks/ETFs only",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "London Stock Exchange": {
         "restriction": "By branch/advisor only (not via Net Club online)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Börse Frankfurt": {
         "restriction": "By branch/advisor only (not via Net Club online)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Paris": {
         "restriction": "By branch/advisor only (not via Net Club online)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Hong Kong Stock Exchange": {
         "restriction": "By branch/advisor only (not via Net Club online)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Shanghai Stock Exchange": {
         "restriction": "By branch/advisor only (not via Net Club online)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "ASX": {
         "restriction": "By branch/advisor only (not via Net Club online)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Toronto Stock Exchange": {
         "restriction": "By branch/advisor only (not via Net Club online)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Singapore Exchange": {
         "restriction": "By branch/advisor only (not via Net Club online)",
-        "reliability": "low"
+        "reliability": "medium"
       },
-      "Stock Exchange of Thailand": {
+      "Thailand": {
         "restriction": "By branch/advisor only (not via Net Club online)",
-        "reliability": "low"
+        "reliability": "medium"
       },
-      "Bursa Malaysia": {
+      "Malaysia": {
         "restriction": "By branch/advisor only (not via Net Club online)",
-        "reliability": "low"
+        "reliability": "medium"
       },
-      "Indonesia Stock Exchange": {
+      "Indonesia": {
         "restriction": "By branch/advisor only (not via Net Club online)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Milan": {
         "restriction": "By branch/advisor only (not via Net Club online)",
-        "reliability": "low"
+        "reliability": "medium"
       },
-      "SIX Swiss Exchange": {
+      "Switzerland": {
         "restriction": "By branch/advisor only (not via Net Club online)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Amsterdam": {
         "restriction": "By branch/advisor only (not via Net Club online)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Bolsa de Madrid": {
         "restriction": "By branch/advisor only (not via Net Club online)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Stockholm": {
         "restriction": "By branch/advisor only (not via Net Club online)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Helsinki": {
         "restriction": "By branch/advisor only (not via Net Club online)",
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -87894,15 +87777,6 @@
       "Tokyo Stock Exchange": {
         "reliability": "high"
       },
-      "Nagoya Stock Exchange": {
-        "reliability": "low"
-      },
-      "Fukuoka Stock Exchange": {
-        "reliability": "low"
-      },
-      "Sapporo Securities Exchange": {
-        "reliability": "low"
-      },
       "New York Stock Exchange": {
         "restriction": "By phone/advisor only (internet account: sell only, by phone)",
         "reliability": "high"
@@ -88110,13 +87984,13 @@
     "url": "https://www.kyushu-fg-sec.co.jp/service/onlinetrade/contents/",
     "exchanges": {
       "Tokyo Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Fukuoka Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "United States": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -88614,14 +88488,8 @@
     "type": "Broker",
     "url": "https://www.kiwoom.com/m/customer/acctopen/VAcctOpenInfoView",
     "exchanges": {
-      "New York Stock Exchange": {
-        "reliability": "low"
-      },
-      "Nasdaq": {
-        "reliability": "low"
-      },
-      "NYSE American": {
-        "reliability": "low"
+      "United States": {
+        "reliability": "high"
       },
       "K-OTC": {
         "reliability": "high"
@@ -88655,7 +88523,7 @@
     "exchanges": {
       "New York Stock Exchange": {
         "restriction": "Leveraged/inverse ETPs require KOFIA training and a basic deposit",
-        "reliability": "low"
+        "reliability": "high"
       },
       "NYSE Arca": {
         "restriction": "Leveraged/inverse ETPs require KOFIA training and a basic deposit",
@@ -88663,11 +88531,11 @@
       },
       "NYSE American": {
         "restriction": "Leveraged/inverse ETPs require KOFIA training and a basic deposit",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq": {
         "restriction": "Leveraged/inverse ETPs require KOFIA training and a basic deposit",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Korea Exchange": {
         "reliability": "high"
@@ -90415,16 +90283,16 @@
     "url": "https://www.bnkfn.co.kr/service/orderinfo.jsp",
     "exchanges": {
       "Korea Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "KOSDAQ": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "KONEX": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "K-OTC": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -91999,27 +91867,27 @@
         "reliability": "high"
       },
       "United States": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Hong Kong Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Japan": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Shanghai-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible A-shares only; STAR Market for professional investors only",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Shenzhen-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible A-shares only; ChiNext for professional investors only",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Singapore": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Malaysia": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -93256,10 +93124,10 @@
     "url": "https://www.reliancesmartmoney.com/Insights/classroom-detail/trading-products",
     "exchanges": {
       "BSE": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "National Stock Exchange of India": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -93538,10 +93406,10 @@
     "url": "https://rmoneyindia.com/support/xts-symphony-exe-window-application-overview-by-rmoney/",
     "exchanges": {
       "National Stock Exchange of India": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "BSE": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -94246,10 +94114,10 @@
     "url": "https://www.investmentz.com/",
     "exchanges": {
       "National Stock Exchange of India": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "BSE": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -95269,14 +95137,14 @@
     "exchanges": {
       "United States": {
         "restriction": "No spot crypto ETFs for retail investors",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Hong Kong Stock Exchange": {
         "restriction": "No spot crypto ETFs for retail investors",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Singapore Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Stock Exchange of Thailand": {
         "reliability": "high"
@@ -96813,15 +96681,15 @@
       },
       "United States": {
         "restriction": "Shariah-compliant securities only",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Hong Kong": {
         "restriction": "Shariah-compliant securities only",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Singapore": {
         "restriction": "Shariah-compliant securities only",
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -96879,11 +96747,11 @@
       },
       "Shanghai-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible A-shares only; STAR for professional investors only",
-        "reliability": "low"
+        "reliability": "high"
       },
       "Shenzhen-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible A-shares only; ChiNext for professional investors only",
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -96970,7 +96838,7 @@
     "url": "https://www.mnaonline.com.my/",
     "exchanges": {
       "Bursa Malaysia": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -97063,7 +96931,7 @@
     "url": "https://growin.id/",
     "exchanges": {
       "Indonesia Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -97179,7 +97047,7 @@
     "url": "https://www.mncsekuritas.id/pages/online-trading-overview/",
     "exchanges": {
       "Indonesia Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -97190,7 +97058,7 @@
     "url": "https://eform.trimegah.id/nmb/",
     "exchanges": {
       "Indonesia Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -97256,7 +97124,7 @@
     "url": "https://henanputihrai.com/hpx-syariah/",
     "exchanges": {
       "Indonesia Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -97278,7 +97146,7 @@
     "url": "https://doc.nhsec.co.id/screen_hts.html",
     "exchanges": {
       "Indonesia Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -97542,7 +97410,7 @@
     "url": "https://rhbtradesmart.co.id/uploads/files/Manual_Book_App_Desktop_Ver5.0_202510.pdf",
     "exchanges": {
       "Indonesia Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -97884,7 +97752,7 @@
     "url": "https://www.bdo.com.ph/bdo-securities/online-trading",
     "exchanges": {
       "Philippine Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -97906,7 +97774,7 @@
     "url": "https://www.maybank-atrke.com/",
     "exchanges": {
       "Philippine Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -97972,7 +97840,7 @@
     "url": "https://www.apsonline.com.ph/",
     "exchanges": {
       "Philippine Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -98210,13 +98078,13 @@
     "url": "https://www.tcbs.com.vn/mo-tai-khoan-tcbs",
     "exchanges": {
       "HOSE": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Hanoi Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "UPCOM": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -98879,7 +98747,7 @@
         "reliability": "high"
       },
       "UPCOM": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -99372,10 +99240,10 @@
         "reliability": "high"
       },
       "New York Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -99461,7 +99329,7 @@
     "url": "https://www.genialinvestimentos.com.br/",
     "exchanges": {
       "B3 São Paulo": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -99472,7 +99340,7 @@
     "url": "https://www.modalmais.com.br/",
     "exchanges": {
       "B3 São Paulo": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -99483,7 +99351,7 @@
     "url": "https://santandercorretora.com.br/",
     "exchanges": {
       "B3 São Paulo": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -99494,13 +99362,13 @@
     "url": "https://avenue.us/",
     "exchanges": {
       "New York Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "London Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -99714,8 +99582,8 @@
     "type": "Bank",
     "url": "https://www.sicoob.com.br/web/sicoob/noticias/-/asset_publisher/xAioIawpOI5S/content/id/187841825",
     "exchanges": {
-      "B3 São Paulo": {
-        "reliability": "low"
+      "Brazil": {
+        "reliability": "medium"
       }
     }
   },
@@ -100083,7 +99951,7 @@
     "url": "https://www.banorte.com/Casa-de-Bolsa/BeTrading/Que-es-BeTrading.html",
     "exchanges": {
       "Bolsa Mexicana": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -100167,7 +100035,7 @@
         "reliability": "high"
       },
       "Bolsa Mexicana": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -100181,7 +100049,7 @@
         "reliability": "high"
       },
       "BIVA": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -100226,7 +100094,7 @@
     "url": "https://www.revolut.com/es-MX/stock-trading/",
     "exchanges": {
       "United States": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -100299,7 +100167,7 @@
     "url": "https://cocos.capital",
     "exchanges": {
       "BYMA": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -100374,7 +100242,7 @@
     "url": "https://allaria.com.ar/",
     "exchanges": {
       "New York Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -100476,7 +100344,7 @@
     "url": "https://tsabursatil.com/Como-operar-online-en-el-Mercado-de-Capitales-3.note.aspx",
     "exchanges": {
       "BYMA": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -100487,7 +100355,7 @@
     "url": "https://ayuda.max.capital/es/articles/11044794-como-comprar-y-vender-acciones-bonos-cedears-letras-y-obligaciones-negociables-a-traves-del-home",
     "exchanges": {
       "BYMA": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -100579,8 +100447,8 @@
     "type": "Neobroker",
     "url": "https://www.reba.com.ar/cedears/",
     "exchanges": {
-      "BYMA": {
-        "reliability": "low"
+      "Argentina": {
+        "reliability": "medium"
       }
     }
   },
@@ -100767,8 +100635,8 @@
     "type": "Bank",
     "url": "https://apps.apple.com/ar/app/banca-credicoop/id6459479073",
     "exchanges": {
-      "BYMA": {
-        "reliability": "low"
+      "Argentina": {
+        "reliability": "high"
       }
     }
   },
@@ -100815,7 +100683,7 @@
     "url": "https://www.bbva.com.ar/personas/productos/inversiones/mercado-capitales/acciones.html",
     "exchanges": {
       "BYMA": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -100870,7 +100738,7 @@
     "url": "https://www.bindinversiones.com.ar",
     "exchanges": {
       "Argentina": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -101649,10 +101517,10 @@
     "url": "https://biceinversiones.cl/",
     "exchanges": {
       "Santiago Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
-      "New York Stock Exchange": {
-        "reliability": "low"
+      "United States": {
+        "reliability": "high"
       }
     }
   },
@@ -101715,10 +101583,10 @@
     "url": "https://www.bancoestado.cl/content/bancoestado-public/cl/es/home/home/productos-/ahorro-e-inversiones-/corredora-de-bolsa---bancoestado-personas.html",
     "exchanges": {
       "Santiago Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Bolsa Electrónica de Chile": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -101729,7 +101597,7 @@
     "url": "https://www.bci.cl/inversiones/activa-tus-inversiones/informacion",
     "exchanges": {
       "Santiago Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -101757,7 +101625,7 @@
     "url": "https://www.itau.cl/personas/inversiones/corredora-de-bolsa",
     "exchanges": {
       "Santiago Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Bolsa Electrónica de Chile": {
         "reliability": "low"
@@ -101788,10 +101656,10 @@
     "url": "https://banco.santander.cl/personas/corredores-de-bolsa",
     "exchanges": {
       "Santiago Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "New York Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -102243,10 +102111,10 @@
         "reliability": "high"
       },
       "United States": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Canada": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -102294,7 +102162,7 @@
     "url": "https://bolsa.bbva.pe/",
     "exchanges": {
       "Bolsa de Valores de Lima": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -102589,13 +102457,13 @@
         "reliability": "high"
       },
       "Trinidad and Tobago Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Jamaica Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "London Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -102811,13 +102679,13 @@
         "reliability": "high"
       },
       "New York Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Nasdaq": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "London Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -102999,7 +102867,7 @@
         "reliability": "high"
       },
       "Astana International Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -103424,10 +103292,10 @@
     "url": "https://minvest.kg/en",
     "exchanges": {
       "New York Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -104138,16 +104006,16 @@
         "reliability": "high"
       },
       "NYSE American": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "NYSE Arca": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "AIM": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "London IOB": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Euronext Amsterdam": {
         "reliability": "medium"
@@ -104361,7 +104229,7 @@
     "url": "https://www.acba.am/en",
     "exchanges": {
       "United States": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Armenian Securities Exchange": {
         "reliability": "high"
@@ -104790,12 +104658,7 @@
     "country": "RU",
     "type": "Bank",
     "url": "https://api.rosbank.ru/doc/reglament-brokerskogo-obsluzhivaniya-pao-rosbank-redakciya-8.pdf",
-    "exchanges": {
-      "Moscow Exchange": {
-        "restriction": "Foreign (non-EAEU) securities for qualified investors only",
-        "reliability": "low"
-      }
-    }
+    "exchanges": {}
   },
   {
     "name": "Sovcombank Investments",
@@ -105202,7 +105065,7 @@
     "url": "https://www.zenit.ru/personal/broker/",
     "exchanges": {
       "Moscow Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -105473,10 +105336,10 @@
     "url": "https://cityinfinity.citybrokerageltd.com/termsConditions/",
     "exchanges": {
       "Dhaka Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Chittagong Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -111553,15 +111416,15 @@
     "exchanges": {
       "Italy": {
         "restriction": "ETFs only, no single shares; Limited to willbe ETFselect list",
-        "reliability": "low"
+        "reliability": "high"
       },
       "France": {
         "restriction": "ETFs only, no single shares; Limited to willbe ETFselect list",
-        "reliability": "low"
+        "reliability": "high"
       },
       "United Kingdom": {
         "restriction": "ETFs only, no single shares; Limited to willbe ETFselect list",
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -111701,10 +111564,19 @@
     "url": "https://creand.ad/",
     "exchanges": {
       "Bolsa de Madrid": {
-        "reliability": "low"
+        "reliability": "medium"
       },
-      "United States": {
-        "reliability": "low"
+      "New York Stock Exchange": {
+        "reliability": "medium"
+      },
+      "NYSE Arca": {
+        "reliability": "medium"
+      },
+      "Cboe BZX": {
+        "reliability": "medium"
+      },
+      "OTC Markets": {
+        "reliability": "medium"
       }
     }
   },
@@ -111828,14 +111700,14 @@
     "exchanges": {
       "BSE": {
         "restriction": "NRI/OCI clients only",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "National Stock Exchange of India": {
         "restriction": "NRI/OCI clients only",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "United States": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -112310,61 +112182,58 @@
     "url": "https://www.plus500.com/",
     "exchanges": {
       "London Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
-      },
-      "Tokyo Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "NYSE American": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Stockholm": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Börse Frankfurt": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Milan": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Paris": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Bolsa de Madrid": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Helsinki": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Dublin": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Lisbon": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq Copenhagen": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Wiener Börse": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Oslo Børs": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "ASX": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Amsterdam": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -112517,7 +112386,7 @@
       },
       "Shanghai-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible A-shares only; STAR Market via Connect for professional investors only",
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -112919,31 +112788,31 @@
         "reliability": "low"
       },
       "Börse Xetra": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Amsterdam": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Brussels": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Milan": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Euronext Paris": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "London Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "New York Stock Exchange": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "NYSE American": {
-        "reliability": "low"
+        "reliability": "medium"
       }
     }
   },
@@ -112952,14 +112821,7 @@
     "country": "UK",
     "type": "Broker",
     "url": "https://www.x-o.co.uk/",
-    "exchanges": {
-      "AIM": {
-        "reliability": "low"
-      },
-      "London Stock Exchange": {
-        "reliability": "low"
-      }
-    }
+    "exchanges": {}
   },
   {
     "name": "Computershare UK Share Dealing",
@@ -113314,11 +113176,7 @@
     "country": "CO",
     "type": "Broker",
     "url": "https://www.renta4.com.co/",
-    "exchanges": {
-      "Bolsa de Valores de Colombia": {
-        "reliability": "low"
-      }
-    }
+    "exchanges": {}
   },
   {
     "name": "Gotrade Global",
@@ -113413,7 +113271,7 @@
     "url": "https://www.securitybank.com/personal/investments/sb-equities/",
     "exchanges": {
       "Philippine Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },
@@ -113423,22 +113281,22 @@
     "type": "Bank",
     "url": "https://www.popso.it/privati/risparmio-e-investimenti/trading-online",
     "exchanges": {
-      "Börse Xetra": {
-        "reliability": "low"
+      "Germany": {
+        "reliability": "medium"
       },
       "Euronext Milan": {
-        "reliability": "low"
+        "reliability": "medium"
       },
       "Nasdaq": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       },
       "New York Stock Exchange": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
+        "reliability": "medium"
       },
-      "London Stock Exchange": {
-        "reliability": "low"
+      "United Kingdom": {
+        "reliability": "medium"
       }
     }
   },
@@ -113647,34 +113505,7 @@
     "country": "NO",
     "type": "Bank",
     "url": "https://www.rogalandsparebank.no/privat/sparing-og-investering/aksjehandel",
-    "exchanges": {
-      "Euronext Expand Oslo": {
-        "reliability": "low"
-      },
-      "Euronext Growth Oslo": {
-        "reliability": "low"
-      },
-      "Nasdaq": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
-      },
-      "Nasdaq Copenhagen": {
-        "reliability": "low"
-      },
-      "Nasdaq Helsinki": {
-        "reliability": "low"
-      },
-      "Nasdaq Stockholm": {
-        "reliability": "low"
-      },
-      "New York Stock Exchange": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "low"
-      },
-      "Oslo Børs": {
-        "reliability": "low"
-      }
-    }
+    "exchanges": {}
   },
   {
     "name": "Redmayne Bentley",
@@ -114293,16 +114124,16 @@
     "url": "https://www.oabinvest.com/",
     "exchanges": {
       "Abu Dhabi Securities Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Dubai Financial Market": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Muscat Stock Exchange": {
-        "reliability": "low"
+        "reliability": "high"
       },
       "Tadawul": {
-        "reliability": "low"
+        "reliability": "high"
       }
     }
   },

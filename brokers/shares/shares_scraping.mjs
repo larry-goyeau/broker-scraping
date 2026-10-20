@@ -13,11 +13,14 @@
 //
 // The execution policy names the place. EUR-listed shares, fractions and
 // ETFs go to Upvest Securities, which executes on Tradegate or Quotrix
-// (Düsseldorf). Those rows are stored on Tradegate, in EUR. USD-listed shares
+// (Düsseldorf). Neither file says which of the two a line goes to, so each
+// EUR line is written on both, Tradegate and Quotrix, as broker-list.json
+// names them, in EUR. USD-listed shares
 // go to Alpaca; the row keeps the US listing from the KID file name
 // (NYSE, NASDAQ, AMEX = NYSE American, BATS = Cboe BZX), in USD. The other
 // codes in that name (PAR, LON, XEX, ETR, HKG, ...) are Shares' reference
-// listing, not where the order is executed.
+// listing, not where the order is executed. A US line stays one row: the
+// US book is one NBBO.
 //
 // kind "commodity" is a physical metal ETC. Crypto is not in these files.
 //
@@ -143,6 +146,11 @@ for (const country of COUNTRIES) {
     results.push(row);
     if (country !== COUNTRIES[0]) added.set(country, (added.get(country) || 0) + 1);
   }
+}
+
+// The second EUR place.
+for (const row of results.filter((line) => line.mic === "XGAT")) {
+  results.push({ ...row, exchange: "Quotrix", mic: "XQTX" });
 }
 
 const byCurrency = new Map();

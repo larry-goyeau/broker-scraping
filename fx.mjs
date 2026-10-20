@@ -59,6 +59,8 @@ const FOREIGN_PER_USD = {
   BHD: 0.376,
   OMR: 0.3845,
   QAR: 3.64,
+  // Central Bank of Jordan peg, 0.709 dinar per dollar since 1995. Not an ECB print.
+  JOD: 0.709,
   // CBE mid, not an ECB print. Same day as AS_OF.
   EGP: 50.9106,
   // NBK official rate, not an ECB print. Same day as AS_OF.
@@ -120,6 +122,28 @@ const FOREIGN_PER_USD = {
   // Not an ECB print. Same day. New Taiwan dollars per dollar.
   // https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@2026-09-07/v1/currencies/usd.min.json
   TWD: 31.618,
+  // BCT interbank "cours moyen" for 7 September 2026, dinars per dollar.
+  // Not an ECB print. The archive answers a POST of input=2026-09-07.
+  // https://www.bct.gov.tn/bct/siteprod/cours_archiv.jsp
+  TND: 2.9123,
+  // Bank of Zambia mid, kwacha per dollar, the 15:30 print of the same day
+  // (buy 19.1757 / sell 19.2257). Not an ECB print.
+  // https://www.boz.zm/api/v1/views/boz_zmw_usd_daily_exchange_rates?time%5Bmin%5D=2026-09-07%2000%3A00%3A00&time%5Bmax%5D=2026-09-07%2023%3A59%3A59
+  ZMW: 19.2007,
+  // Central Bank of Myanmar reference rate, kyat per dollar, same day.
+  // Not an ECB print.
+  // https://forex.cbm.gov.mm/api/history/07-09-2026
+  MMK: 2100,
+  // Not ECB prints. Same day. Mauritian rupees, Cambodian riels and
+  // Tanzanian shillings per dollar (the National Bank of Cambodia page
+  // refused the request, so the three come from the same daily file as TWD).
+  // https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@2026-09-07/v1/currencies/usd.min.json
+  MUR: 46.861,
+  KHR: 4047.18,
+  TZS: 2649.59,
+  // CFA franc (BCEAO), fixed at 655.957 per euro, so the ECB euro of the
+  // same day gives the dollar: 655.957 × 0.86044.
+  XOF: 564.4116,
 };
 
 function keyOf(currency) {
@@ -155,7 +179,11 @@ export function listingCash(currency) {
 /** One-way FX in a remark: the rate, and only when cash is not the instrument. */
 export function fxRemark(pctLabel, currency, extra = "") {
   const ccy = listingCash(currency);
-  const label = String(pctLabel ?? "").replace(/\s*%$/, "");
+  // A computed rate is shown to two decimals; one that would round to zero,
+  // or a range, is shown as given.
+  const raw = String(pctLabel ?? "").replace(/\s*%$/, "");
+  const two = /^\d+(\.\d+)?$/.test(raw) ? Number(Number(raw).toFixed(2)) : null;
+  const label = two ? String(two) : raw;
   const tail = extra ? ` ${extra}` : "";
   const vs = ccy || "listing";
   if (!label) return `FX when cash ≠ ${vs}.`;

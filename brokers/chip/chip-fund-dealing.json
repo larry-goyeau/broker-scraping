@@ -1,0 +1,1286 @@
+{
+  "readOn": "2026-10-18",
+  "about": "One-off dealing charges of open-ended funds dealt with their manager (Chip and Prosper FUND lines, via Seccl): entry/exit charge from each share class's KIID, dilution policy from the manager's prospectus. entry/exit are fractions (0 = 'None'/'0.00%'/'Not applicable'); null = only a maximum is stated (entryMax). dilution.kind: swing = single swinging price, the adjustment is in the dealt price, nothing added; mmf = money market fund, liquidity fee only under the money market fund regulation's stress triggers, nothing added; levy with rate = stated levy rate; levy with freeBelowGbp = no levy below that deal size, unknown above; duties = Duties and Charges added to the subscription / deducted from the redemption price at the manager's discretion, no published rate; unknown = mechanism not stated. excessiveTradingMax: the KIID allows a charge up to that rate when the manager suspects excessive trading (Janus: subscriptions held under 90 days); it is a penalty at the manager's discretion, not a dealing charge, so it is noted, not added.",
+  "managers": {
+    "vanguard": {
+      "name": "Vanguard (Vanguard Investments UK / Vanguard Group (Ireland))",
+      "dilution": {
+        "kind": "swing"
+      },
+      "source": "https://www.ch.vanguard/content/dam/intl/europe/documents/en/swing-pricing-guide.pdf",
+      "quote": "Since May 2019, Vanguard has employed partial swing pricing. This means that we adjust the price for all transactions in a fund on a given day [...] (full swing 2017-2019 'for its UK and Ireland-domiciled funds'). KIIDs: 'Entry charge None', 'Exit charge None'."
+    },
+    "blackrock-bcif": {
+      "name": "BlackRock Collective Investment Funds (iShares index funds (UK))",
+      "dilution": {
+        "kind": "swing"
+      },
+      "source": "https://www.blackrock.com/uk/literature/prospectus/blackrock-collective-investment-funds-en-gb-prospectus.pdf",
+      "docDate": "2026-10-12",
+      "quote": "Each Fund is a single priced fund [...] Each Fund operates a single swing pricing methodology where the price of each unit may be adjusted [...] (known as a 'dilution adjustment').",
+      "excessiveTrading": "KIID: 'Subject to a charge of up to 2% paid into the Fund where the Manager suspects excessive trading by an investor.'",
+      "excessiveTradingMax": 0.02
+    },
+    "blackrock-retail": {
+      "name": "BlackRock Retail Authorised Unit Trusts (BlackRock Emerging Markets Fund)",
+      "dilution": {
+        "kind": "swing"
+      },
+      "source": "https://www.blackrock.com/uk/literature/prospectus/uk-retail-funds-prospectus-en.pdf",
+      "docDate": "2026-10-12",
+      "quote": "Each Single-Priced Fund operates a single swing pricing methodology [...] The Single-Priced Funds began to use single pricing and the single swing pricing methodology with effect from 15 June 2026. Swing table: Blackrock Emerging Markets Fund 0.11 to 0.20 (offer) 0.19 to 0.28 (bid).",
+      "excessiveTrading": "KIID: 'Subject to a charge of up to 2% paid into the Fund where the Manager suspects excessive trading by an investor.'",
+      "excessiveTradingMax": 0.02
+    },
+    "blackrock-bif": {
+      "name": "BlackRock Investment Funds (MyMap)",
+      "dilution": {
+        "kind": "swing"
+      },
+      "source": "https://www.blackrock.com/uk/literature/prospectus/blackrock-investment-funds-prospectus.pdf",
+      "docDate": "2026-10-12",
+      "quote": "Each Single-Priced Fund operates a single swing pricing methodology [...] Swing table lists MyMap 3/4/5/6/8 (e.g. MyMap 6 Fund 0.01 / 0.01).",
+      "excessiveTrading": "KIID: 'Subject to a charge of up to 2% paid into the Fund where the Manager suspects excessive trading by an investor.'",
+      "excessiveTradingMax": 0.02
+    },
+    "blackrock-bgf": {
+      "name": "BlackRock Global Funds (Luxembourg)",
+      "dilution": {
+        "kind": "swing"
+      },
+      "source": "https://www.blackrock.com/uk/literature/prospectus/blackrock-global-funds-prospectus-en.pdf",
+      "docDate": "2026-09-17",
+      "quote": "17.3 The Directors may adjust the Net Asset Value per Share for a Fund [...] by an amount not exceeding 1.50%, or 3% in the case of fixed income Funds. Class D KIIDs: 'Entry Charge 5.00%' (maximum; 'In some cases you might pay less').",
+      "excessiveTrading": "KIID: 'Subject to a charge of up to 2% paid into the Fund where the Manager suspects excessive trading by an investor.'",
+      "excessiveTradingMax": 0.02
+    },
+    "blackrock-bisf": {
+      "name": "BlackRock Index Selection Fund (iShares index funds (IE))",
+      "dilution": {
+        "kind": "duties"
+      },
+      "source": "https://www.blackrock.com/uk/literature/prospectus/blackrock-index-selection-fund-prospectus-en.pdf",
+      "docDate": "2026-04-23",
+      "quote": "Subscription Price: the Net Asset Value [...] adding thereto such sum as the Manager may consider represents an appropriate figure for Duties and Charges [...] The Manager may levy Duties and Charges [...] The level of Duties and Charges is determined by the Manager. No rate is published."
+    },
+    "blackrock-bfidf": {
+      "name": "BlackRock Fixed Income Dublin Funds plc (iShares GiltTrak / UK Credit Bond Index Fund (IE))",
+      "dilution": {
+        "kind": "duties"
+      },
+      "source": "https://www.blackrock.com/uk/literature/prospectus/blackrock-fixed-income-dublin-funds-plc-prospectus-en.pdf",
+      "docDate": "2026-07-24",
+      "quote": "subscription price per Share [...] Net Asset Value [...] adding thereto such sum as the Directors may consider represents an appropriate figure for Duties and Charges. No rate is published."
+    },
+    "blackrock-ics": {
+      "name": "BlackRock Institutional Cash Series plc (Sterling Liquidity, LVNAV money market fund)",
+      "dilution": {
+        "kind": "mmf"
+      },
+      "source": "https://www.blackrock.com/uk/literature/prospectus/institutional-cash-series-prospectus-en.pdf",
+      "docDate": "2026-09-18",
+      "quote": "Save as described below, no preliminary charge is payable in respect of the Shares, nor are any redemption fees payable [...] It is not currently intended to charge any such fees. Liquidity fees only if weekly maturing assets fall below 30% (and net redemptions exceed 10%) or below 10%. 'Non-MMF Funds may [...] apply anti-dilution mechanisms.'"
+    },
+    "hsbc-itif": {
+      "name": "HSBC Index Tracker Investment Funds",
+      "dilution": {
+        "kind": "swing"
+      },
+      "source": "https://www.assetmanagement.hsbc.co.uk/api/v1/download/document/gb00b80qg615/gb/en/prospectus",
+      "docDate": "2025-10-17",
+      "quote": "The Company deals on the basis of 'single pricing' [...] the ACD may make an Initial Charge on Shares purchased (such charge is currently 0%) [...] For both purchases and sales, a dilution adjustment may be made to the price of a Share. Estimated rates: FTSE All-World Index Fund 0.12 - 0.14, American Index Fund 0.07."
+    },
+    "hsbc-openfunds": {
+      "name": "HSBC OpenFunds (Global Strategy portfolios)",
+      "dilution": {
+        "kind": "swing"
+      },
+      "source": "https://www.assetmanagement.hsbc.co.uk/api/v1/download/document/gb00byvxbh99/gb/en/prospectus",
+      "docDate": "2026-07-31",
+      "quote": "The Company deals on the basis of 'single pricing' [...] For both purchases and sales, a dilution adjustment may be made to the price of a Share."
+    },
+    "hsbc-islamic": {
+      "name": "HSBC Islamic Funds (Luxembourg)",
+      "dilution": {
+        "kind": "unknown"
+      },
+      "source": "https://www.assetmanagement.hsbc.co.uk/api/v1/download/document/lu2092165666/gb/en/prospectus",
+      "docDate": "2026-03-25",
+      "quote": "There are two anti-dilution mechanisms available to each sub-fund, a pricing adjustment and an anti-dilution levy [...] Details of which anti-dilution mechanism is in operation on a particular sub-fund can be obtained from the Management Company. KIID: 'Entry charge 3.00%' (maximum)."
+    },
+    "lg": {
+      "name": "Legal & General (Unit Trust Managers)",
+      "dilution": {
+        "kind": "swing"
+      },
+      "source": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=packet_fund_doc_prospectus&id=0879b8ab-5c23-46bd-8e0f-0c45a81d5734&user=fidelitydocumentreport",
+      "docDate": "2025-04-01",
+      "quote": "Single Swing: the pricing methodology [...] where the Net Asset Value per Unit may be adjusted on any Dealing Day by way of a Dilution Adjustment. KIID: 'Dilution adjustment: on any day, the prices for buying or selling units in this Fund are the same.'"
+    },
+    "fidelity-fif": {
+      "name": "Fidelity Investment Funds (Fidelity Index funds)",
+      "dilution": {
+        "kind": "swing"
+      },
+      "source": "https://www.fidelityinternational.com/legal/documents/FIF/en/pr.FIF.en.xx.pdf",
+      "docDate": "2026-08-28",
+      "quote": "Shares are priced on a single, mid-market basis [...] Price Adjustment Policy (Swing Pricing) [...] the ACD may require the payment of a dilution levy on the first day of dealing only in these Funds and thereafter the Price Adjustment Policy (Swing Pricing) as set out above will apply."
+    },
+    "fidelity-fifiv": {
+      "name": "Fidelity Investment Funds IV (Multi Asset Allocator)",
+      "dilution": {
+        "kind": "levy",
+        "freeBelowGbp": 500000
+      },
+      "source": "https://www.fidelityinternational.com/legal/documents/FIFIV/en/pr.fifiv.en.xx.pdf",
+      "docDate": "2025-04-02",
+      "quote": "the ACD has the power to charge a dilution levy when Shares are bought or sold [...] The ACD will not impose a dilution levy in respect of any deal (or series of deals placed on the same day) involving shares with a value below £500,000. Appendix 9: no swing or levy applied to the Multi Asset Allocator funds over three years (N/A)."
+    },
+    "fidelity-ff": {
+      "name": "Fidelity Funds (Luxembourg SICAV)",
+      "dilution": {
+        "kind": "swing"
+      },
+      "source": "https://www.fidelityinternational.com/legal/documents/FF/en/pr.ff.en.xx.pdf",
+      "docDate": "2026-09",
+      "quote": "Swing Pricing: The Board or Management Company may apply swing pricing by adjusting the NAV of the relevant fund using a swing factor [...] Swing Pricing may increase the subscription price or reduce the redemption proceeds."
+    },
+    "abrdn": {
+      "name": "abrdn OEIC I",
+      "dilution": {
+        "kind": "swing"
+      },
+      "source": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=packet_fund_doc_prospectus&id=212366e2-cf0a-4edf-9a04-50d1ebf13216&user=fidelitydocumentreport",
+      "docDate": "2025-12-05",
+      "quote": "The Company has a single swinging price. The single price can be swung up or down in response to inflows or outflows from the Company."
+    },
+    "artemis": {
+      "name": "Artemis Investment Funds ICVC",
+      "dilution": {
+        "kind": "swing"
+      },
+      "source": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=packet_fund_doc_prospectus&id=e3d5fc40-45ce-4139-b8b1-6b0a6747ba5a&user=fidelitydocumentreport",
+      "docDate": "2025-02-28",
+      "quote": "the Regulations allow the ACD to adjust the sale and purchase price of Shares [...] This is known as making a dilution adjustment or operating swinging single pricing. There is only a single price for each Class of Share."
+    },
+    "aviva-lux": {
+      "name": "Aviva Investors Luxembourg SICAV",
+      "dilution": {
+        "kind": "swing"
+      },
+      "source": "https://doc.morningstar.com/document/e94cd329d7937f69a6338f4b061f91b7.msdoc/?clientId=avivainvestors&key=0011b526a18a80ef",
+      "docDate": "2026-09-28",
+      "quote": "The Sub-Funds are single priced [...] the Management Company will apply 'swing pricing' as part of its daily valuation policy [...] (not exceeding 2% of that NAV)."
+    },
+    "aviva-liquidity": {
+      "name": "Aviva Investors Liquidity Funds plc (Sterling Liquidity Fund, LVNAV money market fund)",
+      "dilution": {
+        "kind": "mmf"
+      },
+      "source": "https://doc.morningstar.com/document/be3459790f1e10f66ff06ca1e111a8db.msdoc/?clientId=avivainvestors&key=0011b526a18a80ef",
+      "docDate": "2026-09-23",
+      "quote": "Preliminary Charge: No preliminary charge will be payable on the issue of Shares in the Sub-Fund. Exchange Charge None. Redemption Charge None. Liquidity fees (anti-dilution levy) only if weekly maturing assets fall below 30% with net daily redemptions above 10%, or below 10%."
+    },
+    "axa": {
+      "name": "AXA Framlington authorised unit trusts",
+      "dilution": {
+        "kind": "swing"
+      },
+      "source": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=packet_fund_doc_prospectus&id=c9aead2c-d55c-4ae0-811a-febbfb53104c&user=fidelitydocumentreport",
+      "docDate": "2025-03-19",
+      "quote": "Each Fund is a single priced scheme [...] the Manager applies a dilution adjustment in the calculation of the Price, a policy known as 'swing pricing'."
+    },
+    "franklin-uk": {
+      "name": "Franklin Templeton Funds (UK OEIC)",
+      "dilution": {
+        "kind": "swing"
+      },
+      "source": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=packet_fund_doc_prospectus&id=1dea179e-8d83-49b4-92af-9f2a0a2b37ea&user=fidelitydocumentreport",
+      "docDate": "2025-03-14",
+      "quote": "Shares will be 'single priced' with the same price for buying or selling on any particular day [...] recovered from investors [...] by means of a dilution adjustment to the dealing price [...] The ACD shall comply with COLL 6.3.8R."
+    },
+    "franklin-lux": {
+      "name": "Franklin Templeton Shariah Funds (Luxembourg)",
+      "dilution": {
+        "kind": "swing"
+      },
+      "source": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=packet_fund_doc_prospectus&id=0c897def-c0b7-41b1-af09-c5cd255da406&user=fidelitydocumentreport",
+      "docDate": "2026-02-24",
+      "quote": "The Fund operates a swing pricing mechanism which may be applied when the total capital activity [...] exceeds a pre-determined threshold. KIID: 'Entry charge Not applicable*' (*share class only available through certain financial advisers which may apply their own charges)."
+    },
+    "fundsmith": {
+      "name": "Fundsmith Equity Fund (UK OEIC)",
+      "dilution": {
+        "kind": "swing"
+      },
+      "source": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=packet_fund_doc_prospectus&id=8b960f3e-46f4-4482-b09d-176f9ee30bd8&user=fidelitydocumentreport",
+      "quote": "The ACD has decided that its policy on dilution is that it will make a dilution adjustment to the price of Shares [...] will not normally be applied unless the net creations or redemptions exceed 5% of the value of the Company [...] ordinarily of the magnitude of +/- 0.15%."
+    },
+    "janus": {
+      "name": "Janus Henderson (UK OEIC)",
+      "dilution": {
+        "kind": "swing"
+      },
+      "source": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=packet_fund_doc_prospectus&id=e56bcfbf-3a4a-4d8f-9acc-58494ba4faba&user=fidelitydocumentreport",
+      "docDate": "2026-04-14",
+      "quote": "the ACD has discretion to make a dilution adjustment in the calculation of the dealing price and thereby swing the dealing price of shares.",
+      "excessiveTrading": "KIID: '** Subject to a charge of up to 3.00% where the Manager suspects excessive trading by an investor (and specifically on subscriptions held for less than 90 days).'",
+      "excessiveTradingMax": 0.03
+    },
+    "jpm": {
+      "name": "JPMorgan Fund ICVC",
+      "dilution": {
+        "kind": "swing"
+      },
+      "source": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=packet_fund_doc_prospectus&id=a0435be5-097a-4f73-9865-48e17fb35c12&user=fidelitydocumentreport",
+      "docDate": "2025-09-19",
+      "quote": "(assets - liabilities) +/- any dilution adjustment = NAV [...] a Fund's NAV may be adjusted [...] normally applied on any Dealing Day when net purchases or net redemptions of Shares in a Fund exceed 1.00% of Fund assets. JPM Global Research Enhanced Index Equity Fund 0.08 / 0.11; JPM US Research Enhanced Index Equity Fund 0.02 / 0.02."
+    },
+    "liontrust": {
+      "name": "Liontrust (UK OEIC)",
+      "dilution": {
+        "kind": "swing"
+      },
+      "source": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=packet_fund_doc_prospectus&id=95533ab0-8814-43b6-b665-ae733a3e7286&user=fidelitydocumentreport",
+      "docDate": "2025-02-19",
+      "quote": "The price per Share at which Shares are bought, redeemed or switched is the Net Asset Value per Share (as adjusted [...] by any dilution adjustment) [...] any dilution adjustment will in percentage terms affect the price of Shares of each Class identically. Liontrust Global Technology Fund: 11 offer adjustments averaging 0.10% in 2024."
+    },
+    "mg": {
+      "name": "M&G Securities (M&G OEICs)",
+      "dilution": {
+        "kind": "swing"
+      },
+      "source": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=packet_fund_doc_prospectus&id=cdb1de99-8a24-4e08-a96a-7151f033bb3e&user=fidelitydocumentreport",
+      "docDate": "2025-04-02",
+      "quote": "it is the ACD's policy to apply a dilution adjustment to the net asset value in certain circumstances [...] by means of a dilution adjustment to the net asset value to arrive at the Share price (M&G Investment Funds (1); M&G Global Dividend Fund sits in another M&G OEIC under the same ACD policy)."
+    },
+    "royal-london": {
+      "name": "Royal London Bond Funds ICVC (Short-Term Money Market Fund)",
+      "dilution": {
+        "kind": "levy",
+        "rate": 0
+      },
+      "source": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=packet_fund_doc_prospectus&id=c81b1326-15e7-4f2f-88e6-a7398a7cb22b&user=fidelitydocumentreport",
+      "docDate": "2025-08-26",
+      "quote": "Dilution Levy (applicable to Royal London Short-Term Money Market Fund) [...] the ACD does not generally expect to impose a dilution levy [...] Royal London Short-Term Money Market Fund 0 N/A 0.00% (current dilution levy rate expected to be applied)."
+    },
+    "schroders": {
+      "name": "Schroder Unit Trusts Limited",
+      "dilution": {
+        "kind": "swing"
+      },
+      "source": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=packet_fund_doc_prospectus&id=35d3606b-5c24-41af-ad13-292d28bc23cb&user=fidelitydocumentreport",
+      "docDate": "2025-04-01",
+      "quote": "All Funds listed in this prospectus are single priced [...] may be subject to the imposition of a dilution adjustment after which the price to be applied is known as the 'dealing price'."
+    }
+  },
+  "funds": {
+    "GB0007716078": {
+      "name": "Janus Henderson Global Technology Leaders Fund I Acc",
+      "manager": "janus",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=7d740230-4eb0-433a-bbc5-a9ae93534454&user=fidelitydocumentreport",
+      "kiidDate": "2026-08-21"
+    },
+    "GB0030926843": {
+      "name": "M&G North American Dividend Fund Sterling A Acc",
+      "manager": "mg",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=bb0ef5d8-c598-471d-8034-03b194762418&user=fidelitydocumentreport",
+      "kiidDate": "2026-02-16"
+    },
+    "GB0031978918": {
+      "name": "Legal & General Global 100 Index Trust R Class Accumulation",
+      "manager": "lg",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=fecd014e-0bf6-4486-b49c-a33ec40a75f4&user=fidelitydocumentreport",
+      "kiidDate": "2026-04-06"
+    },
+    "GB00B0CNGS66": {
+      "name": "Legal & General US Index Trust I Class Distribution",
+      "manager": "lg",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=505bb0bd-e4b6-4dd6-8216-d1715de3da7b&user=fidelitydocumentreport",
+      "kiidDate": "2026-04-06"
+    },
+    "GB00B0CNGT73": {
+      "name": "Legal & General US Index Trust I Class Accumulation",
+      "manager": "lg",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=45461550-fb56-4127-bd51-cdfeea5484bc&user=fidelitydocumentreport",
+      "kiidDate": "2026-04-06"
+    },
+    "GB00B0CNH163": {
+      "name": "Legal & General Global Technology Index Trust I Class Accumulation",
+      "manager": "lg",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=15ad814d-6cff-4e0a-b511-ef4ea9b9403a&user=fidelitydocumentreport",
+      "kiidDate": "2026-04-06"
+    },
+    "GB00B0CNH387": {
+      "name": "Legal & General Global Health & Pharmaceuticals Index Trust I Class Accumulation",
+      "manager": "lg",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=e1aa33fc-f7f9-47bf-ba48-ad300596eecd&user=fidelitydocumentreport",
+      "kiidDate": "2026-04-06"
+    },
+    "GB00B0XWN580": {
+      "name": "abrdn European Smaller Companies Fund I Acc",
+      "manager": "abrdn",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=4dab73fd-6a98-48c1-b8be-b0d9804d84c7&user=fidelitydocumentreport",
+      "kiidDate": "2026-04-21"
+    },
+    "GB00B2Q6HW61": {
+      "name": "Legal & General International Index Trust I Class Accumulation",
+      "manager": "lg",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=c1fe7c8b-d20c-4469-9ddb-0e79ccb3a3f8&user=fidelitydocumentreport",
+      "kiidDate": "2026-04-06"
+    },
+    "GB00B39R2Q25": {
+      "name": "M&G Global Dividend Fund Sterling I Acc",
+      "manager": "mg",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=bafd4004-7f36-4ae7-a496-a9c664118fdf&user=fidelitydocumentreport",
+      "kiidDate": "2026-02-16"
+    },
+    "GB00B39R2R32": {
+      "name": "M&G Global Dividend Fund Sterling I Inc",
+      "manager": "mg",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=d5670129-7106-4b9d-aa37-0947b2960f64&user=fidelitydocumentreport",
+      "kiidDate": "2026-02-16"
+    },
+    "GB00B3P2RZ52": {
+      "name": "Royal London Short Term Money Market Fund Y Inc",
+      "manager": "royal-london",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=00f9f3fe-2160-41e5-a998-0fe27156588e&user=fidelitydocumentreport",
+      "kiidDate": "2026-02-17"
+    },
+    "GB00B3TYHH97": {
+      "name": "Vanguard LifeStrategy 60% Equity Fund A Acc",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/gb00b3tyhh97-en.pdf",
+      "kiidDate": "2026-06-26"
+    },
+    "GB00B3X7QG63": {
+      "name": "Vanguard FTSE U.K. All Share Index Unit Trust GBP Acc",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/gb00b3x7qg63-en.pdf",
+      "kiidDate": "2026-02-17"
+    },
+    "GB00B3ZHN960": {
+      "name": "Vanguard LifeStrategy 40% Equity Fund A Acc",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/gb00b3zhn960-en.pdf",
+      "kiidDate": "2026-06-26"
+    },
+    "GB00B41XG308": {
+      "name": "Vanguard LifeStrategy 100% Equity Fund A Acc",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/gb00b41xg308-en.pdf",
+      "kiidDate": "2026-06-26"
+    },
+    "GB00B41YBW71": {
+      "name": "Fundsmith Equity I Acc",
+      "manager": "fundsmith",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=339076cc-6f44-4ddb-bc62-927d21fe72ac&user=fidelitydocumentreport",
+      "kiidDate": "2026-01-30"
+    },
+    "GB00B4NXY349": {
+      "name": "Vanguard LifeStrategy 20% Equity Fund A Gross Acc",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/gb00b4nxy349-en.pdf",
+      "kiidDate": "2026-06-26"
+    },
+    "GB00B4PQW151": {
+      "name": "Vanguard LifeStrategy 80% Equity Fund A Acc",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/gb00b4pqw151-en.pdf",
+      "kiidDate": "2026-06-26"
+    },
+    "GB00B4R9F681": {
+      "name": "BlackRock Emerging Markets D GBP Acc",
+      "manager": "blackrock-retail",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-blackrock-emerging-markets-fund-class-d-acc-gb-gb00b4r9f681-en.pdf",
+      "kiidDate": "2026-02-09"
+    },
+    "GB00B4W52V57": {
+      "name": "AXA Framlington Global Technology Fund - Z Accumulation",
+      "manager": "axa",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=19bd0e26-41e2-44b5-9238-c1874981ca76&user=fidelitydocumentreport",
+      "kiidDate": "2026-02-19"
+    },
+    "GB00B59G4Q73": {
+      "name": "Vanguard FTSE Developed World ex-U.K. Equity Index Fund GBP Acc",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/gb00b59g4q73-en.pdf",
+      "kiidDate": "2026-02-17"
+    },
+    "GB00B5B71H80": {
+      "name": "Vanguard FTSE Developed Europe ex-U.K. Equity Index Fund GBP Acc",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/gb00b5b71h80-en.pdf",
+      "kiidDate": "2026-02-17"
+    },
+    "GB00B5B71Q71": {
+      "name": "Vanguard U.S. Equity Index Fund GBP Acc",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/gb00b5b71q71-en.pdf",
+      "kiidDate": "2026-04-22"
+    },
+    "GB00B5B74F71": {
+      "name": "Vanguard FTSE Developed World ex-U.K. Equity Index Fund GBP Inc",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/gb00b5b74f71-en.pdf",
+      "kiidDate": "2026-02-17"
+    },
+    "GB00B5B74S01": {
+      "name": "Vanguard U.S. Equity Index Fund GBP Inc",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/gb00b5b74s01-en.pdf",
+      "kiidDate": "2026-04-22"
+    },
+    "GB00B5MJ5601": {
+      "name": "FTF ClearBridge UK Rising Dividends Fund W (Acc)",
+      "manager": "franklin-uk",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=5bdd8660-e41c-4876-80e2-cb52618067b7&user=fidelitydocumentreport",
+      "kiidDate": "2026-02-13"
+    },
+    "GB00B5MQXC30": {
+      "name": "AXA Framlington Global Technology Fund - Z Income",
+      "manager": "axa",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=4c3ac1bf-6d96-497b-b4a1-432cac022e98&user=fidelitydocumentreport",
+      "kiidDate": "2026-02-19"
+    },
+    "GB00B5VRGY09": {
+      "name": "iShares US Equity Index Fund (UK) D Acc",
+      "manager": "blackrock-bcif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-ishares-us-equity-index-fund-uk-class-d-acc-gb-gb00b5vrgy09-en.pdf",
+      "kiidDate": "2026-02-09"
+    },
+    "GB00B5ZX1M70": {
+      "name": "Artemis Global Income Fund I Acc",
+      "manager": "artemis",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=71fb1ef3-9a4a-440e-bf99-4876a683b9e5&user=fidelitydocumentreport",
+      "kiidDate": "2026-02-18"
+    },
+    "GB00B6QQ9X96": {
+      "name": "iShares Japan Equity Index Fund (UK) D GBP Acc",
+      "manager": "blackrock-bcif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-ishares-japan-equity-index-fund-uk-class-d-acc-gb-gb00b6qq9x96-en.pdf",
+      "kiidDate": "2026-02-09"
+    },
+    "GB00B76WP695": {
+      "name": "HSBC Global Strategy Balanced Portfolio Accumulation C",
+      "manager": "hsbc-openfunds",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.assetmanagement.hsbc.co.uk/api/v1/download/document/gb00b76wp695/gb/en/kiid",
+      "kiidDate": "2026-02-17"
+    },
+    "GB00B7C44X99": {
+      "name": "iShares UK Equity Index Fund (UK) D Acc",
+      "manager": "blackrock-bcif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-ishares-uk-equity-index-fund-uk-class-d-acc-gb-gb00b7c44x99-en.pdf",
+      "kiidDate": "2026-02-09"
+    },
+    "GB00B7F5Y731": {
+      "name": "M&G North American Dividend Fund Sterling I Inc",
+      "manager": "mg",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=7ecb7f8a-fb77-4220-aa4e-08a593cebf28&user=fidelitydocumentreport",
+      "kiidDate": "2026-02-16"
+    },
+    "GB00B7J60R40": {
+      "name": "iShares Corporate Bond Index Fund (UK) D Inc",
+      "manager": "blackrock-bcif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-ishares-corporate-bond-index-fund-uk-class-d-inc-gb-gb00b7j60r40-en.pdf",
+      "kiidDate": "2026-02-09"
+    },
+    "GB00B80QFW04": {
+      "name": "HSBC FTSE All Share Index Fund C Income",
+      "manager": "hsbc-itif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.assetmanagement.hsbc.co.uk/api/v1/download/document/gb00b80qfw04/gb/en/kiid",
+      "kiidDate": "2026-02-17"
+    },
+    "GB00B80QFX11": {
+      "name": "HSBC FTSE All Share Index Fund C Accumulation",
+      "manager": "hsbc-itif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.assetmanagement.hsbc.co.uk/api/v1/download/document/gb00b80qfx11/gb/en/kiid",
+      "kiidDate": "2026-02-17"
+    },
+    "GB00B80QG615": {
+      "name": "HSBC American Index Fund Accumulation C",
+      "manager": "hsbc-itif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.assetmanagement.hsbc.co.uk/api/v1/download/document/gb00b80qg615/gb/en/kiid",
+      "kiidDate": "2026-02-17"
+    },
+    "GB00B80QGD89": {
+      "name": "HSBC European Index Fund Income C",
+      "manager": "hsbc-itif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.assetmanagement.hsbc.co.uk/api/v1/download/document/gb00b80qgd89/gb/en/kiid",
+      "kiidDate": "2026-02-17"
+    },
+    "GB00B80QGH28": {
+      "name": "HSBC European Index Fund Accumulation C",
+      "manager": "hsbc-itif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.assetmanagement.hsbc.co.uk/api/v1/download/document/gb00b80qgh28/gb/en/kiid",
+      "kiidDate": "2026-02-17"
+    },
+    "GB00B83LW328": {
+      "name": "Legal & General Global Equity Index Fund I Class Accumulation",
+      "manager": "lg",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=1f940e02-6c51-4442-bcf8-e1573722451d&user=fidelitydocumentreport",
+      "kiidDate": "2026-04-06"
+    },
+    "GB00B83MH186": {
+      "name": "iShares Continental European Equity Index Fund (UK) D GBP Acc",
+      "manager": "blackrock-bcif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-ishares-continental-european-equity-index-fd-class-d-acc-gb-gb00b83mh186-en.pdf",
+      "kiidDate": "2026-02-09"
+    },
+    "GB00B849DT80": {
+      "name": "HSBC Global Strategy Dynamic Portfolio Accumulation C",
+      "manager": "hsbc-openfunds",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.assetmanagement.hsbc.co.uk/api/v1/download/document/gb00b849dt80/gb/en/kiid",
+      "kiidDate": "2026-02-17"
+    },
+    "GB00B849FB47": {
+      "name": "iShares Pacific ex Japan Equity Index Fund (UK) D GBP Acc",
+      "manager": "blackrock-bcif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-ishares-pacific-ex-japan-equity-index-fund-uk-class-d-acc-gb-gb00b849fb47-en.pdf",
+      "kiidDate": "2026-08-25"
+    },
+    "GB00B84DSW83": {
+      "name": "iShares Corporate Bond Index Fund (UK) D Acc",
+      "manager": "blackrock-bcif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-ishares-corporate-bond-index-fund-uk-class-d-acc-gb-gb00b84dsw83-en.pdf",
+      "kiidDate": "2026-02-09"
+    },
+    "GB00B84DV184": {
+      "name": "HSBC Global Strategy Cautious Portfolio Accumulation C",
+      "manager": "hsbc-openfunds",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.assetmanagement.hsbc.co.uk/api/v1/download/document/gb00b84dv184/gb/en/kiid",
+      "kiidDate": "2026-02-17"
+    },
+    "GB00B893BN59": {
+      "name": "Fidelity Investment Funds IV - Fidelity Multi Asset Allocator Adventurous Fund W Accumulation",
+      "manager": "fidelity-fifiv",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fidelityinternational.com/FDS/KIID/FIFIV/en-gb/FIFIV-Fidelity%20Multi%20Asset%20Allocator%20Adventurous%20Fund%20W%20Accumulation%20Shares_STRD_en-gb_GB00B893BN59.pdf",
+      "kiidDate": "2026-01-30"
+    },
+    "GB00B8XYYQ86": {
+      "name": "Royal London Short Term Money Market Fund Y Acc",
+      "manager": "royal-london",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=d49f591a-4659-426a-a75d-8f234dd9c5b8&user=fidelitydocumentreport",
+      "kiidDate": "2026-02-17"
+    },
+    "GB00B8YQD220": {
+      "name": "Fidelity Investment Funds IV - Fidelity Multi Asset Allocator Defensive Fund W Accumulation",
+      "manager": "fidelity-fifiv",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fidelityinternational.com/FDS/KIID/FIFIV/en-gb/FIFIV-Fidelity%20Multi%20Asset%20Allocator%20Defensive%20Fund%20W%20Accumulation%20Shares_STRD_en-gb_GB00B8YQD220.pdf",
+      "kiidDate": "2026-01-30"
+    },
+    "GB00B99P9349": {
+      "name": "Fidelity Investment Funds IV - Fidelity Multi Asset Allocator Strategic Fund W Accumulation",
+      "manager": "fidelity-fifiv",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fidelityinternational.com/FDS/KIID/FIFIV/en-gb/FIFIV-Fidelity%20Multi%20Asset%20Allocator%20Strategic%20Fund%20W%20Accumulation%20Shares_STRD_en-gb_GB00B99P9349.pdf",
+      "kiidDate": "2026-01-30"
+    },
+    "GB00B9C3GS90": {
+      "name": "Fidelity Investment Funds IV - Fidelity Multi Asset Allocator Growth Fund W Accumulation",
+      "manager": "fidelity-fifiv",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fidelityinternational.com/FDS/KIID/FIFIV/en-gb/FIFIV-Fidelity%20Multi%20Asset%20Allocator%20Growth%20Fund%20W%20Accumulation%20Shares_STRD_en-gb_GB00B9C3GS90.pdf",
+      "kiidDate": "2026-01-30"
+    },
+    "GB00BD3RZ251": {
+      "name": "Vanguard FTSE 100 Index Unit Trust GBP Inc",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/gb00bd3rz251-en.pdf",
+      "kiidDate": "2026-02-17"
+    },
+    "GB00BD3RZ368": {
+      "name": "Vanguard FTSE 100 Index Unit Trust GBP Acc",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/gb00bd3rz368-en.pdf",
+      "kiidDate": "2026-02-17"
+    },
+    "GB00BD3RZ582": {
+      "name": "Vanguard FTSE Global All Cap Index Fund GBP Acc",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/gb00bd3rz582-en.pdf",
+      "kiidDate": "2026-02-17"
+    },
+    "GB00BF0TZG22": {
+      "name": "Legal & General Global Infrastructure Index Fund Class I Accumulation",
+      "manager": "lg",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=ca1ced62-1f3f-45f9-86d2-d6eaa08eaad9&user=fidelitydocumentreport",
+      "kiidDate": "2026-04-06"
+    },
+    "GB00BF41Q726": {
+      "name": "Legal & General Future World Global Multi-Factor ESG Tilted and Optimised Index Fund I Accumulation",
+      "manager": "lg",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=b7c84457-362b-462b-95e5-d3fc0fa35a46&user=fidelitydocumentreport",
+      "kiidDate": "2026-06-10"
+    },
+    "GB00BF780Y53": {
+      "name": "Schroder Islamic Global Equity Fund Z GBP Acc",
+      "manager": "schroders",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=eb71e98f-353f-4f39-bc32-8320c9bcd370&user=fidelitydocumentreport",
+      "kiidDate": "2026-02-12"
+    },
+    "GB00BFBFVX86": {
+      "name": "iShares UK Equity Index Fund (UK) D Inc",
+      "manager": "blackrock-bcif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-ishares-uk-equity-index-fund-uk-class-d-inc-gb-gb00bfbfvx86-en.pdf",
+      "kiidDate": "2026-02-09"
+    },
+    "GB00BFBFYB71": {
+      "name": "Blackrock MyMap 3 Fund D GBP Acc",
+      "manager": "blackrock-bif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-mymap-3-fund-d-acc-gb-gb00bfbfyb71-en.pdf",
+      "kiidDate": "2026-02-09"
+    },
+    "GB00BFBFYC88": {
+      "name": "Blackrock MyMap 3 Fund D GBP Inc",
+      "manager": "blackrock-bif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-mymap-3-fund-d-inc-gb-gb00bfbfyc88-en.pdf",
+      "kiidDate": "2026-02-09"
+    },
+    "GB00BFBFYJ57": {
+      "name": "MyMap 4 Fund D GBP Acc",
+      "manager": "blackrock-bif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-mymap-4-fund-d-acc-gb-gb00bfbfyj57-en.pdf",
+      "kiidDate": "2026-02-09"
+    },
+    "GB00BFBFYK62": {
+      "name": "Blackrock MyMap 4 Fund D GBP Inc",
+      "manager": "blackrock-bif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-mymap-4-fund-d-inc-gb-gb00bfbfyk62-en.pdf",
+      "kiidDate": "2026-02-09"
+    },
+    "GB00BFBFYQ25": {
+      "name": "MyMap 5 Fund D GBP Acc",
+      "manager": "blackrock-bif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-mymap-5-fund-d-acc-gb-gb00bfbfyq25-en.pdf",
+      "kiidDate": "2026-02-09"
+    },
+    "GB00BFBFYR32": {
+      "name": "Blackrock MyMap 5 Fund D GBP Inc",
+      "manager": "blackrock-bif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-mymap-5-fund-d-inc-gb-gb00bfbfyr32-en.pdf",
+      "kiidDate": "2026-02-09"
+    },
+    "GB00BFBFYX91": {
+      "name": "MyMap 5 Select ESG Fund D GBP Acc",
+      "manager": "blackrock-bif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-mymap-5-select-esg-d-acc-gbp-gb-gb00bfbfyx91-en.pdf",
+      "kiidDate": "2026-02-09"
+    },
+    "GB00BFBFZ140": {
+      "name": "MyMap 6 Fund D GBP Acc",
+      "manager": "blackrock-bif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-mymap-6-fund-d-acc-gb-gb00bfbfz140-en.pdf",
+      "kiidDate": "2026-02-09"
+    },
+    "GB00BFBFZ256": {
+      "name": "Blackrock MyMap 6 Fund D GBP Inc",
+      "manager": "blackrock-bif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-mymap-6-fund-d-inc-gb-gb00bfbfz256-en.pdf",
+      "kiidDate": "2026-02-09"
+    },
+    "GB00BFK3MT61": {
+      "name": "BlackRock CIF - iShares Developed World Fossil Fuel Screened Equity Index Fund (UK) D GBP Acc",
+      "manager": "blackrock-bcif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-ishares-developed-world-fossil-fuel-screened-fund-d-acc-gbp-gb-gb00bfk3mt61-en.pdf",
+      "kiidDate": "2026-02-09"
+    },
+    "GB00BHZK8872": {
+      "name": "Fidelity Index Japan P Accumulation",
+      "manager": "fidelity-fif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fidelityinternational.com/FDS/KIID/FIF/en-gb/FIF-Fidelity%20Index%20Japan%20Fund%20P%20Accumulation%20Shares_STRD_en-gb_GB00BHZK8872.pdf",
+      "kiidDate": "2026-01-30"
+    },
+    "GB00BHZK8B07": {
+      "name": "Fidelity Index Europe ex UK P Accumulation",
+      "manager": "fidelity-fif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fidelityinternational.com/FDS/KIID/FIF/en-gb/FIF-Fidelity%20Index%20Europe%20ex%20UK%20Fund%20P%20Accumulation%20Shares_STRD_en-gb_GB00BHZK8B07.pdf",
+      "kiidDate": "2026-01-30"
+    },
+    "GB00BJH4XV95": {
+      "name": "Legal & General Future World ESG Tilted & Optimised UK Index Fund I GBP Acc",
+      "manager": "lg",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=5431ed7a-38cc-4eb2-944f-0a42eb008762&user=fidelitydocumentreport",
+      "kiidDate": "2026-05-20"
+    },
+    "GB00BJRCPT57": {
+      "name": "JPM US Research Enhanced Index Equity Fund E Accumulation",
+      "manager": "jpm",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=a954bc79-59ce-4fa4-a138-fd2db701a1aa&user=fidelitydocumentreport",
+      "kiidDate": "2026-07-02"
+    },
+    "GB00BJS8SF95": {
+      "name": "Fidelity Index UK Fund P Accumulation",
+      "manager": "fidelity-fif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fidelityinternational.com/FDS/KIID/FIF/en-gb/FIF-Fidelity%20Index%20UK%20Fund%20P%20Accumulation%20Shares_STRD_en-gb_GB00BJS8SF95.pdf",
+      "kiidDate": "2026-01-30"
+    },
+    "GB00BJS8SH10": {
+      "name": "Fidelity Index US Fund P Accumulation",
+      "manager": "fidelity-fif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fidelityinternational.com/FDS/KIID/FIF/en-gb/FIF-Fidelity%20Index%20US%20Fund%20P%20Accumulation%20Shares_STRD_en-gb_GB00BJS8SH10.pdf",
+      "kiidDate": "2026-01-30"
+    },
+    "GB00BJS8SJ34": {
+      "name": "Fidelity Index World Fund P Accumulation",
+      "manager": "fidelity-fif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fidelityinternational.com/FDS/KIID/FIF/en-gb/FIF-Fidelity%20Index%20World%20Fund%20P%20Accumulation%20Shares_STRD_en-gb_GB00BJS8SJ34.pdf",
+      "kiidDate": "2026-01-30"
+    },
+    "GB00BKTDV955": {
+      "name": "JPM Global Research Enhanced Index Equity Fund E Accumulation",
+      "manager": "jpm",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=4b995cf0-f1e9-4fc5-8d76-ab577b01a8c1&user=fidelitydocumentreport",
+      "kiidDate": "2026-07-02"
+    },
+    "GB00BMJJJF91": {
+      "name": "HSBC FTSE All-World Index Fund Accumulation C",
+      "manager": "hsbc-itif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.assetmanagement.hsbc.co.uk/api/v1/download/document/gb00bmjjjf91/gb/en/kiid",
+      "kiidDate": "2026-02-17"
+    },
+    "GB00BN090M98": {
+      "name": "Blackrock MyMap 8 Select ESG Fund D GBP Acc",
+      "manager": "blackrock-bif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-mymap-8-select-esg-fund-d-acc-gb-gb00bn090m98-en.pdf",
+      "kiidDate": "2026-02-09"
+    },
+    "GB00BN090N06": {
+      "name": "MyMap 8 Select ESG Fund S Acc",
+      "manager": "blackrock-bif",
+      "entry": null,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-mymap-8-select-esg-fund-s-acc-gb-gb00bn090n06-en.pdf",
+      "kiidDate": "2026-02-09",
+      "entryMax": 0.05,
+      "note": "Chip prints this ISIN as \"D GBP Acc\"; BlackRock lists GB00BN090N06 as Class S Acc (initial charge 5.00%), the D Acc being GB00BN090M98."
+    },
+    "GB00BN090Q37": {
+      "name": "Blackrock MyMap 3 Select ESG Fund D GBP Acc",
+      "manager": "blackrock-bif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-mymap-3-select-esg-fund-d-acc-gb-gb00bn090q37-en.pdf",
+      "kiidDate": "2026-02-09"
+    },
+    "GB00BNB74C03": {
+      "name": "iShares Mid Cap UK Equity Index Fund (UK) D Inc",
+      "manager": "blackrock-bcif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-ishares-mid-cap-uk-equity-index-fund-uk-d-inc-gb-gb00bnb74c03-en.pdf",
+      "kiidDate": "2026-02-09"
+    },
+    "GB00BP8RY838": {
+      "name": "Fidelity Index US Fund P GBP Income",
+      "manager": "fidelity-fif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fidelityinternational.com/FDS/KIID/FIF/en-gb/FIF-Fidelity%20Index%20US%20Fund%20P%20Income%20Shares_STRD_en-gb_GB00BP8RY838.pdf",
+      "kiidDate": "2026-01-30"
+    },
+    "GB00BP8RYB62": {
+      "name": "Fidelity Index World Fund P GBP Income",
+      "manager": "fidelity-fif",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fidelityinternational.com/FDS/KIID/FIF/en-gb/FIF-Fidelity%20Index%20World%20Fund%20P%20Income%20Shares_STRD_en-gb_GB00BP8RYB62.pdf",
+      "kiidDate": "2026-01-30"
+    },
+    "GB00BPN5P782": {
+      "name": "Vanguard FTSE U.K. All Share Index Unit Trust GBP Inc",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/gb00bpn5p782-en.pdf",
+      "kiidDate": "2026-02-17"
+    },
+    "GB00BQ1JYX87": {
+      "name": "Legal & General UK MID Cap Index Fund I Class Accumulation",
+      "manager": "lg",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=8f065c9b-6597-465b-afb8-3f6ce5590488&user=fidelitydocumentreport",
+      "kiidDate": "2026-04-06"
+    },
+    "GB00BT6STC53": {
+      "name": "FTF ClearBridge UK Rising Dividends Fund W (Inc)",
+      "manager": "franklin-uk",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=271414c3-57e7-4666-a529-86dd3966ea21&user=fidelitydocumentreport",
+      "kiidDate": "2026-02-13"
+    },
+    "GB00BVPLDL62": {
+      "name": "Vanguard LifeStrategy Global 100% Equity Fund A GBP Accumulation",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/gb00bvpldl62-en.pdf",
+      "kiidDate": "2026-02-17"
+    },
+    "GB00BVPLDN86": {
+      "name": "Vanguard LifeStrategy Global 80% Equity Fund A GBP Accumulation",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/gb00bvpldn86-en.pdf",
+      "kiidDate": "2026-02-17"
+    },
+    "GB00BVPLDQ18": {
+      "name": "Vanguard LifeStrategy Global 60% Equity Fund A GBP Accumulation",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/gb00bvpldq18-en.pdf",
+      "kiidDate": "2026-02-17"
+    },
+    "GB00BVPLDS32": {
+      "name": "Vanguard LifeStrategy Global 40% Equity Fund A GBP Accumulation",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/gb00bvplds32-en.pdf",
+      "kiidDate": "2026-02-17"
+    },
+    "GB00BVPLDV60": {
+      "name": "Vanguard LifeStrategy Global 20% Equity Fund A GBP Accumulation",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/gb00bvpldv60-en.pdf",
+      "kiidDate": "2026-02-17"
+    },
+    "GB00BYTHMZ80": {
+      "name": "iShares Continental European Equity Index Fund (UK) H Inc",
+      "manager": "blackrock-bcif",
+      "entry": null,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-ishares-continental-european-equity-index-fund-uk-h-inc-gb-gb00bythmz80-en.pdf",
+      "kiidDate": "2026-02-09",
+      "entryMax": 0.05
+    },
+    "GB00BYTHN335": {
+      "name": "iShares US Equity Index Fund (UK) H Inc",
+      "manager": "blackrock-bcif",
+      "entry": null,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-ishares-us-equity-index-fund-uk-class-h-inc-gb-gb00bythn335-en.pdf",
+      "kiidDate": "2026-02-09",
+      "entryMax": 0.05
+    },
+    "GB00BYVXBH99": {
+      "name": "HSBC Global Strategy Adventurous Portolio AC",
+      "manager": "hsbc-openfunds",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.assetmanagement.hsbc.co.uk/api/v1/download/document/gb00byvxbh99/gb/en/kiid",
+      "kiidDate": "2026-02-17"
+    },
+    "GB00BYVXBK29": {
+      "name": "HSBC Global Strategy Conservative Portfolio AC",
+      "manager": "hsbc-openfunds",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.assetmanagement.hsbc.co.uk/api/v1/download/document/gb00byvxbk29/gb/en/kiid",
+      "kiidDate": "2026-02-17"
+    },
+    "GB00BYXZ5N79": {
+      "name": "Liontrust Global Technology Fund C GBP",
+      "manager": "liontrust",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=5b718b3c-ba39-4471-8ea0-534c4fa73eb8&user=fidelitydocumentreport",
+      "kiidDate": "2026-02-11"
+    },
+    "IE0006UNDXI5": {
+      "name": "Aviva Investors Sterling Liquidity Fund W GBP Inc",
+      "manager": "aviva-liquidity",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=ebb2d656-9596-4d59-8f34-ff245558b961&user=fidelitydocumentreport",
+      "kiidDate": "2026-02-06"
+    },
+    "IE000YIMFK06": {
+      "name": "Aviva Investors Sterling Liquidity Fund W GBP Acc",
+      "manager": "aviva-liquidity",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=19562409-e1ab-4f69-b65a-3034733344b0&user=fidelitydocumentreport",
+      "kiidDate": "2026-02-06"
+    },
+    "IE00B1S74Q32": {
+      "name": "Vanguard U.K. Investment Grade Bond Index Fund GBP Acc",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/ie00b1s74q32-en.pdf",
+      "kiidDate": "2026-02-17"
+    },
+    "IE00B1S74W91": {
+      "name": "Vanguard U.K. Investment Grade Bond Index Fund GBP Dist",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/ie00b1s74w91-en.pdf",
+      "kiidDate": "2026-02-17"
+    },
+    "IE00B2RHVP93": {
+      "name": "Vanguard Global Bond Index Fund GBP Hedged Dist",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/ie00b2rhvp93-en.pdf",
+      "kiidDate": "2026-02-17"
+    },
+    "IE00B3X1LS57": {
+      "name": "Vanguard Global Small-Cap Index Fund GBP Dist",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/ie00b3x1ls57-en.pdf",
+      "kiidDate": "2026-05-13"
+    },
+    "IE00B3X1NT05": {
+      "name": "Vanguard Global Small Cap Index Fund GBP",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/ie00b3x1nt05-en.pdf",
+      "kiidDate": "2026-05-13"
+    },
+    "IE00B43FT809": {
+      "name": "BlackRock Institutional Cash Series Sterling Liquidity Fund Premier Acc",
+      "manager": "blackrock-ics",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-blackrock-ics-sterling-liquidity-fund-premier-acc-shares-gbp-gb-ie00b43ft809-en.pdf",
+      "kiidDate": "2026-06-17"
+    },
+    "IE00B50W2R13": {
+      "name": "Vanguard Global Bond Index Fund GBP Hedged Acc",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/ie00b50w2r13-en.pdf",
+      "kiidDate": "2026-02-17"
+    },
+    "IE00B74W3891": {
+      "name": "BlackRock ICS Sterling Liq S GBP Acc",
+      "manager": "blackrock-ics",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-blackrock-ics-sterling-liquidity-fund---s-acc-shares-gbp-gb-ie00b74w3891-en.pdf",
+      "kiidDate": "2026-02-09"
+    },
+    "IE00B76VTN11": {
+      "name": "Vanguard ESG Developed World All Cap Equity Index Fund GBP Acc",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/ie00b76vtn11-en.pdf",
+      "kiidDate": "2026-02-17"
+    },
+    "IE00B95W7137": {
+      "name": "Vanguard U.K. Short-Term Investment Grade Bond Index Fund GBP Dist",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/ie00b95w7137-en.pdf",
+      "kiidDate": "2026-02-17"
+    },
+    "IE00B9M1BB17": {
+      "name": "Vanguard U.K. Short-Term Investment Grade Bond Index Fund GBP Acc",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/ie00b9m1bb17-en.pdf",
+      "kiidDate": "2026-02-17"
+    },
+    "IE00BD0NC250": {
+      "name": "iShares GiltTrak Index Fund (IE) D Acc GBP",
+      "manager": "blackrock-bfidf",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-ishares-gilttrak-index-fund-ie-class-d-acc-gbp-gb-ie00bd0nc250-en.pdf",
+      "kiidDate": "2026-02-09"
+    },
+    "IE00BD0NC474": {
+      "name": "iShares UK Credit Bond Index Fund (IE) D Acc GBP",
+      "manager": "blackrock-bfidf",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-ishares-uk-credit-bond-index-fund-ie-class-d-acc-gbp-gb-ie00bd0nc474-en.pdf",
+      "kiidDate": "2026-02-09"
+    },
+    "IE00BD6D4566": {
+      "name": "Vanguard U.S. Government Bond Index Fund GBP Dist",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/ie00bd6d4566-en.pdf",
+      "kiidDate": "2026-02-17"
+    },
+    "IE00BDFB5K33": {
+      "name": "Vanguard Global Corporate Bond Index Fund GBP Hedged Distribution",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/ie00bdfb5k33-en.pdf",
+      "kiidDate": "2026-02-17"
+    },
+    "IE00BDFB5M56": {
+      "name": "Vanguard Global Corporate Bond Index Fund GBP Hedged Acc",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/ie00bdfb5m56-en.pdf",
+      "kiidDate": "2026-02-17"
+    },
+    "IE00BFRTD722": {
+      "name": "Vanguard Euro Government Bond Index Fund GBP Hedged Acc",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/ie00bfrtd722-en.pdf",
+      "kiidDate": "2026-02-17"
+    },
+    "IE00BH65QG55": {
+      "name": "Vanguard Global Short-Term Bond Index Fund GBP Hedged Acc",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/ie00bh65qg55-en.pdf",
+      "kiidDate": "2026-02-17"
+    },
+    "IE00BH65QH62": {
+      "name": "Vanguard Global Short-Term Bond Index Fund GBP Hedged Dist",
+      "manager": "vanguard",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://fund-docs.vanguard.com/ie00bh65qh62-en.pdf",
+      "kiidDate": "2026-02-17"
+    },
+    "IE00BYWYCF69": {
+      "name": "iShares Emerging Markets Index Fund (IE) D Acc GBP",
+      "manager": "blackrock-bisf",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-ishares-emerging-markets-index-fund-ie-class-d-acc-gbp-gb-ie00bywycf69-en.pdf",
+      "kiidDate": "2026-02-09"
+    },
+    "LU0630472362": {
+      "name": "BlackRock Global Funds - World Energy Fund D4",
+      "manager": "blackrock-bgf",
+      "entry": null,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-bgf-world-energy-fund-class-d4-gbp-gb-lu0630472362-en.pdf",
+      "kiidDate": "2026-03-06",
+      "entryMax": 0.05
+    },
+    "LU0827890491": {
+      "name": "BlackRock Global Funds - World Technology Fund D2",
+      "manager": "blackrock-bgf",
+      "entry": null,
+      "exit": 0,
+      "kiid": "https://www.blackrock.com/uk/literature/kiid/ucits_kiid-bgf-world-technology-fund-class-d2-gbp-gb-lu0827890491-en.pdf",
+      "kiidDate": "2026-02-09",
+      "entryMax": 0.05
+    },
+    "LU0880134928": {
+      "name": "Aviva Investors - Global High Yield Bond Fund Rah GBP Inc",
+      "manager": "aviva-lux",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://doc.morningstar.com/document/b7e851176a95d64f1590881992bb59da.msdoc/?clientId=avivainvestors&key=0011b526a18a80ef",
+      "kiidDate": "2026-04-01"
+    },
+    "LU1033663649": {
+      "name": "Fidelity Funds - Global Technology Fund W-Acc-GBP",
+      "manager": "fidelity-ff",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fidelityinternational.com/FDS/KIID/FF/en-gb/FF-Fidelity%20Funds%20-%20Global%20Technology%20Fund%20W-ACC-GBP_STRD_en-gb_LU1033663649.pdf",
+      "kiidDate": "2026-01-30"
+    },
+    "LU2092165666": {
+      "name": "HSBC Islamic Funds - HSBC Islamic Global Equity Index Fund BC GBP",
+      "manager": "hsbc-islamic",
+      "entry": null,
+      "exit": 0,
+      "kiid": "https://www.assetmanagement.hsbc.co.uk/api/v1/download/document/lu2092165666/gb/en/kiid",
+      "kiidDate": "2026-03-25",
+      "entryMax": 0.03
+    },
+    "LU2407588818": {
+      "name": "Franklin Global Sukuk Fund W(Qdis)GBP-H1",
+      "manager": "franklin-lux",
+      "entry": 0,
+      "exit": 0,
+      "kiid": "https://www.fundslibrary.co.uk/FundsLibrary.DataRetrieval//Documents.aspx?type=point_of_sale&id=ff7d330f-cbb4-4039-bb9a-9befc6da3449&user=fidelitydocumentreport",
+      "kiidDate": "2026-02-13"
+    }
+  },
+  "aliases": {
+    "AW01": "GB00BMJJJF91",
+    "HSBC FTSE ALL-WORLD INDEX FUND ACCUMULATION C GBP": "GB00BMJJJF91",
+    "VANGUARD LIFESTRATEGY 100%": "GB00B41XG308",
+    "VANGUARD LIFESTRATEGY 80%": "GB00B4PQW151",
+    "VANGUARD LIFESTRATEGY 60%": "GB00B3TYHH97",
+    "VANGUARD LIFESTRATEGY 40%": "GB00B3ZHN960"
+  }
+}

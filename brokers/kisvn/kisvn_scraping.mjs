@@ -10,7 +10,7 @@
 //   https://trading.kisvn.vn/files/resources/symbol_static_data.json
 //   https://api.dnse.com.vn/price-api/query
 //
-//   node brokers/kis/kis_scraping.mjs
+//   node brokers/kisvn/kisvn_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
 import { withoutObligations } from "../../obligation.mjs";
@@ -157,7 +157,7 @@ const listings = rows.map((row) => {
   };
 });
 listings.sort((left, right) => left.exchange.localeCompare(right.exchange) || left.ticker.localeCompare(right.ticker));
-fs.writeFileSync(new URL("kis-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(listings)), null, 2));
+fs.writeFileSync(new URL("kisvn-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(listings)), null, 2));
 
 const byType = new Map();
 for (const row of listings) byType.set(row.type, (byType.get(row.type) || 0) + 1);

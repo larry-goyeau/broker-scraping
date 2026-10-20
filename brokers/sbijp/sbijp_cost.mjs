@@ -38,9 +38,9 @@
 //   https://www.sbisec.co.jp/ETGate/WPLETmgR001Control?OutSide=on&getFlg=on&burl=search_home&cat1=home&cat2=service&dir=service&file=home_kawase.html
 //   https://www.sbisec.co.jp/ETGate/WPLETmgR001Control?OutSide=on&getFlg=on&burl=search_home&cat1=home&cat2=info&dir=info&file=home_info250212_yakkan.html
 //
-//   node brokers/sbi/sbi_cost.mjs 1301 Tokyo JPY --shares=10 --price=3000
-//   node brokers/sbi/sbi_cost.mjs AAPL XNAS USD --shares=10 --price=230
-//   node brokers/sbi/sbi_cost.mjs --schedule
+//   node brokers/sbijp/sbijp_cost.mjs 1301 Tokyo JPY --shares=10 --price=3000
+//   node brokers/sbijp/sbijp_cost.mjs AAPL XNAS USD --shares=10 --price=230
+//   node brokers/sbijp/sbijp_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
@@ -53,7 +53,7 @@ import { qOf, usBookPerShare } from "../../spreads/rule606.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, fxRemark, toUsd, usdPer } from "../../fx.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
 
-const CATALOGUE = new URL("sbi-parsed.json", import.meta.url);
+const CATALOGUE = new URL("sbijp-parsed.json", import.meta.url);
 
 const SCHEDULE = {
   url: "https://www.sbisec.co.jp/ETGate/WPLETmgR001Control?OutSide=on&getFlg=on&burl=search_home&cat1=home&cat2=none&dir=info&file=home_info_zerocom.html",
@@ -185,7 +185,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     cashCurrency: "JPY",
   };
   if (!catalogue) {
-    return { ...answer, why: "le catalogue SBI n'existe pas encore : lancer `node brokers/sbi/sbi_scraping.mjs`" };
+    return { ...answer, why: "le catalogue SBI n'existe pas encore : lancer `node brokers/sbijp/sbijp_scraping.mjs`" };
   }
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue SBI` };
@@ -203,7 +203,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     mic: m.venue?.mic ?? null,
     currency: m.row.currency,
     unsourced: m.unsourced,
-    broker: "sbi",
+    broker: "sbijp",
     ticker: m.row.ticker,
   });
   const listing = {
@@ -252,7 +252,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const usBroker = american ? widerUsBroker() : null;
   if (american) {
     const quoted = usBookPerShare({
-      broker: usBroker || "sbi",
+      broker: usBroker || "sbijp",
       ticker: listing.ticker,
       fallback: marketPerShare,
     });
@@ -348,7 +348,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const positional = process.argv.slice(2).filter((a) => !a.startsWith("--"));
   const [etf, place, currency] = positional;
   if (!etf) {
-    console.error("usage : node brokers/sbi/sbi_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]");
+    console.error("usage : node brokers/sbijp/sbijp_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]");
     process.exit(2);
   }
 

@@ -31,10 +31,10 @@
 // on the ticket: a peso line settles in pesos, a MEP line and a cable
 // line settle in dollars.
 //
-//   node brokers/balanz/balanz_cost.mjs GGAL BCBA ARS --shares=10 --price=8000
-//   node brokers/balanz/balanz_cost.mjs AAPL BCBA ARS --shares=10 --price=27000
-//   node brokers/balanz/balanz_cost.mjs AAPLD BCBA USD --shares=10 --price=18
-//   node brokers/balanz/balanz_cost.mjs --schedule
+//   node brokers/balanzar/balanzar_cost.mjs GGAL BCBA ARS --shares=10 --price=8000
+//   node brokers/balanzar/balanzar_cost.mjs AAPL BCBA ARS --shares=10 --price=27000
+//   node brokers/balanzar/balanzar_cost.mjs AAPLD BCBA USD --shares=10 --price=18
+//   node brokers/balanzar/balanzar_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
@@ -47,7 +47,7 @@ import { bookParts, plus, finite } from "../../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
 
-const CATALOGUE = new URL("balanz-parsed.json", import.meta.url);
+const CATALOGUE = new URL("balanzar-parsed.json", import.meta.url);
 
 const SCHEDULE = {
   url: "https://balanz.com/comisiones/",
@@ -102,7 +102,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     remark: REMARK,
   };
   if (!catalogue) {
-    return { ...answer, why: "le catalogue Balanz n'existe pas encore : lancer `node brokers/balanz/balanz_scraping.mjs`" };
+    return { ...answer, why: "le catalogue Balanz n'existe pas encore : lancer `node brokers/balanzar/balanzar_scraping.mjs`" };
   }
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Balanz` };
@@ -227,7 +227,7 @@ function printCli() {
   const positional = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
   const [etf, place, currency] = positional;
   if (!etf) {
-    console.error("usage : node brokers/balanz/balanz_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]");
+    console.error("usage : node brokers/balanzar/balanzar_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]");
     process.exit(2);
   }
   const out = roundTrip({

@@ -56,12 +56,33 @@ export const US_BROKERS = {
   citigroup: { crd: ["7059"], name: "Citigroup Global Markets Inc.", xml: /CNTXT-CGWM/ },
   // Banca IMI's US broker-dealer. The filing's <bd> tag is the code "bimi".
   bimi: { crd: ["19418"], name: "Intesa Sanpaolo IMI Securities Corp." },
+  vision: { crd: ["142271"], name: "Vision Financial Markets LLC" },
+  // US broker-dealers that a European broker names among several
+  // intermediaries (ALIASES arrays below). Filename CRD and <bd> tag checked
+  // in the 2026 Q2 zip; each files one report. Instinet's tag is "INCA",
+  // J.P. Morgan's "JPMS.606", BofA Securities' "MLCO.606_NEW".
+  goldmansachs: { crd: ["361"], name: "Goldman Sachs & Co. LLC" },
+  instinet: { crd: ["7897"], name: "Instinet, LLC" },
+  jpmsecurities: { crd: ["79"], name: "J.P. Morgan Securities LLC" },
+  morganstanleyco: { crd: ["8209"], name: "Morgan Stanley & Co. LLC" },
+  bofasecurities: { crd: ["283942"], name: "BofA Securities, Inc." },
+  bnpparibassecurities: { crd: ["15794"], name: "BNP Paribas Securities Corp." },
+  nomurasecuritiesinternational: { crd: ["4297"], name: "Nomura Securities International, Inc." },
+  gtnamericas: { crd: ["315499"], name: "GTN Americas Financial Services, Inc." },
+  hsbcsecuritiesusa: { crd: ["19585"], name: "HSBC Securities (USA) Inc." },
+  canaccordgenuity: { crd: ["1020"], name: "Canaccord Genuity LLC" },
+  wolverine: { crd: ["120719"], name: "Wolverine Execution Services, LLC" },
+  // SoFi Securities files its own report (Apex routes it on).
+  sofi: { crd: ["151717"], name: "SoFi Securities LLC" },
+  // Lime Trading Corp, formerly Just2Trade Inc. Its <bd> tag is "SPCX".
+  lime: { crd: ["11826"], name: "Lime Trading Corp" },
 };
 
 // Introducing brokers that do not file their own 606: same mix as the US BD
 // that actually routes the order. An EU name is listed only when that broker
 // names the correspondent. apply606 then uses the BD's Q on a US tape and
-// leaves a European book (bp, no perShare) untouched.
+// leaves a European book (bp, no perShare) untouched. A value may be an
+// array when the broker names several US BDs: aliasOf takes the highest Q.
 export const ALIASES = {
   thndr: "alpaca",
   plum: "alpaca",
@@ -74,10 +95,44 @@ export const ALIASES = {
   captrader: "interactivebrokers",
   mexem: "interactivebrokers",
   whselfinvest: "interactivebrokers",
+  // Consorsbank's best-execution policy (02/2023, section 9) sends US equity
+  // orders to "eine Konzerngesellschaft der BNP Paribas Gruppe"; its RTS 28
+  // third-broker reports (2019-2023) name BNP Paribas Securities Corp. as
+  // that firm. Its 2026 Q2 report holds no held NMS stock orders (options
+  // only), so Q is null and the book falls back to the quoted NBBO until a
+  // quarter carries a stock mix.
+  // https://www.consorsbank.de/content/dam/de-cb/editorial/PDF/Transversal/AGB/grundsaetze-ausfuehrung-finanzinstrumente-02-2023.pdf
+  // https://www.consorsbank.de/content/dam/de-cb/editorial/CSV/4-berichte-der-gruppe-kleinanleger-%c3%bcber-drittbroker-routingprovider-2024/107_Drittbroker_Kleinanleger_EK2_2023.csv
+  consorsbank: "bnpparibassecurities",
+  // Nomura (Japan) executes online US orders "現地証券会社経由" and names no
+  // local broker in its documents. User decision (2026-10-20): use the 606
+  // of the group's US broker-dealer, Nomura Securities International, Inc.
+  // (CRD 4297), which files one. Its 2026 Q2 report holds no held NMS stock
+  // orders (options only) and says NSI routes "the majority of customer
+  // orders in equity securities" to its affiliate Instinet, whose report has
+  // no stock mix either: Q is null and the book is the quoted NBBO until a
+  // quarter carries one.
+  // https://www.nomura.co.jp/solution/financial-assets/fstock/
+  // https://cdn.finra.org/606/2026/4297_606_NMS_2026_Q2_V2.pdf
+  nomurajp: "nomurasecuritiesinternational",
   // LYNX transmits to IBIE. IBIE routes US equities to Interactive Brokers LLC.
-  lynx: "interactivebrokers",
+  lynxnl: "interactivebrokers",
   trading212: "interactivebrokers",
   vivid: "interactivebrokers",
+  // UniCredit Polska: orders are executed by Interactive Brokers Ireland
+  // (MiFID brochure 2.2). IBIE routes US equities to Interactive Brokers LLC.
+  unicreditpl: "interactivebrokers",
+  // Capital.com sends every share order to GTN Europe, whose US
+  // affiliate GTN Americas files the 606 (owner's choice, 2026-10-20).
+  capitalcomcy: "gtnamericas",
+  // Saxo Bank A/S and the firms that execute through it: US shares go to
+  // Citadel Securities LLC (Saxo RTS 28).
+  saxofr: "citadelsecurities",
+  elana: "citadelsecurities",
+  alior: "citadelsecurities",
+  bnpparibasbiuro: "citadelsecurities",
+  investona: "citadelsecurities",
+  nagacy: "citadelsecurities",
   // Matsui transmits US cash orders to Interactive Brokers LLC.
   matsui: "interactivebrokers",
   // LHV Pank is a member of the Baltic exchanges. On other markets it
@@ -93,7 +148,7 @@ export const ALIASES = {
   pearler: "alpaca",
   // Stake Wall St introduces the order to DriveWealth LLC (CRD 165429).
   // https://hellostake.com/au/legal/financial-services-guide
-  stake: "drivewealth",
+  stakeau: "drivewealth",
   // FINRA 606 bulk, 2026 Q2 disclosures: Kraken Securities (CRD 324343)
   // adopts Alpaca Securities LLC (CRD 288202) by reference, quarter 2025 Q4.
   kraken: "alpaca",
@@ -110,18 +165,18 @@ export const ALIASES = {
   fsmonemy: "ifastsecuritiesus",
   // ING Deutschland forwards a foreign order to UBS Switzerland AG. The US
   // book is the 606 of UBS Securities LLC (CRD 7654).
-  ing: "ubssecurities",
+  ingde: "ubssecurities",
   // Rakuten Trade's foreign-equity FAQ names Interactive Brokers as the
   // partner that can suspend the service. US cash follows that firm's NMS
   // flow, so the book is Interactive Brokers LLC's 606.
-  rakutenma: "interactivebrokers",
+  rakutenmy: "interactivebrokers",
   // moomoo証券's December 2025 trading booklet, chapter 1 article 13:
   // a US stock order is transmitted to Futu Clearing Inc.
-  moomoo: "futuclearing",
+  moomoojp: "futuclearing",
   // Futu Hong Kong names Futu Clearing Inc. as the DTC firm for a US
   // stock transfer, code 4272. Futu Clearing's 606 is the routing report.
   // https://www.futuhk.com/support/topic2_277
-  futu: "futuclearing",
+  futuhk: "futuclearing",
   // Pluang sends a US share or ETF through PT PG Berjangka and KBI to
   // Alpaca Securities LLC, the only overseas broker that executes it.
   // Options go to Atomic Vaults and are not this book.
@@ -167,7 +222,15 @@ export const ALIASES = {
   iol: "apex",
   // Nordnet names Citigroup Global Markets for global equities. US stocks
   // take that firm's equity 606 (Wealth, CGWM).
-  nordnet: "citigroup",
+  nordnetse: "citigroup",
+  // The Danish, Finnish and Norwegian branches of the same Nordnet Bank AB.
+  nordnetdk: "citigroup",
+  nordnetfi: "citigroup",
+  nordnetno: "citigroup",
+  // Interactive Brokers Canada and IBUK (Swiss residents) route US orders
+  // through Interactive Brokers LLC.
+  ibkrca: "interactivebrokers",
+  ibkrch: "interactivebrokers",
   // Inversis Banco's 2024 retransmission report names several intermediaries
   // and no single US broker-dealer. Of the American names, only Citigroup
   // Global Markets Inc. files a 606. Its 2026 Q2 Q is 1.024. Morgan Stanley
@@ -184,12 +247,155 @@ export const ALIASES = {
   // slice is the place.
   lloyds: "bimi",
   halifax: "bimi",
+  // Light Horse's Form CRS: Apex Clearing executes, clears and custodies.
+  // FINRA 606 bulk, 2026 Q2 disclosures: Light Horse (CRD 120242) adopts
+  // Apex Clearing (CRD 13071) by reference.
+  // https://www.lighthorse.io/terms/form-crs
+  lighthorse: "apex",
+  // Coinbase Capital Markets: "Execution, clearing and custody of all
+  // securities are provided by Apex Clearing Corporation." FINRA 606 bulk,
+  // 2026 Q2 disclosures: CCM (CRD 10722) adopts Apex (CRD 13071).
+  // https://www.coinbase.com/stocks
+  coinbaseus: "apex",
+  // Zad's CEO, in Alpaca's launch post of 9 March 2023: the app is built on
+  // Alpaca's Broker API (brokerage, custody and post-trade).
+  // https://alpaca.markets/blog/securities-house-launches-zad-app-kuwaits-first-shariah-compliant-investment-platform-with-alpaca/
+  zad: "alpaca",
+  // Upstox: "Upstox works with Alpaca Securities LLC", its US clearing broker.
+  // https://upstox.com/us-stocks/
+  upstox: "alpaca",
+  // Freestoxx (WH SelfInvest): "All client orders for stocks and options
+  // quoted in the United States are transmitted to Vision Financial Markets".
+  // https://www.freestoxx.com/en/commission-free-trading/mifid-legal-communication/best-execution-policy
+  freestoxx: "vision",
+  // Renta 4's best-execution policy (2018) transmits international equity
+  // orders to "principales intermediarios financieros", none tied to a
+  // market: Goldman Sachs, BNP Paribas, Merrill Lynch, Instinet, CitiGroup,
+  // JP Morgan, HSBC, Morgan Stanley (and Kepler Cheuvreux, Allfunds,
+  // X-Trade, Commerzbank and its Latin American subsidiaries, no US BD).
+  // Merrill Lynch is read as BofA Securities, the institutional successor.
+  // User decision: the highest Q among those US BDs.
+  // https://wealth.r4.com/content/dam/rentabanco/r4/documentos/mifid_ejecucion.pdf
+  renta4es: [
+    "goldmansachs",
+    "bnpparibassecurities",
+    "bofasecurities",
+    "instinet",
+    "citigroup",
+    "jpmsecurities",
+    "hsbcsecuritiesusa",
+    "morganstanleyco",
+  ],
+  // ii's best-execution disclosure (MAY26), US equities: Citadel Execution
+  // Services, Canaccord Genuity, Citigroup, KCG, UBS Securities, G1X, Two
+  // Sigma Securities, Morgan Stanley, Wolverine, plus the exchanges. KCG is
+  // Virtu Americas. Citadel Securities LLC (CRD 116797), G1 and Two Sigma
+  // have no report in the zip. User decision: the highest Q of the rest.
+  // https://media-prod.ii.co.uk/s3fs-public/pdfs/best_execution_disclosure.pdf
+  interactiveinvestor: [
+    "canaccordgenuity",
+    "citigroup",
+    "virtuamericas",
+    "ubssecurities",
+    "morganstanleyco",
+    "wolverine",
+  ],
+  // HSBC Hong Kong sends a US order to "affiliated HSBC entities and third
+  // party brokers" and names none. User decision: HSBC Securities (USA) Inc.
+  hsbchk: "hsbcsecuritiesusa",
+  // Longbridge names no US broker-dealer. US shares are received at DTC 0534
+  // (Interactive Brokers LLC's number) into a U-prefixed account, IBKR's
+  // format. User decision on that basis.
+  longbridgehk: "interactivebrokers",
+  longbridgesg: "interactivebrokers",
+  // The folders of the US firms' own non-US or US entities: same BD.
+  interactivebrokersie: "interactivebrokers",
+  tradestationus: "tradestation",
+  tastytradeus: "tastytrade",
+  // kabu.com's US stock rules: 当社では現地証券会社（Interactive Brokers LLC）へ取次を行います。
+  // https://kabu.com/item/foreign_stock/us_stock/stock/rule.html
+  mitsubishiufjesmart: "interactivebrokers",
+  // Kvarn X "receives orders and transmits them to Interactive Brokers",
+  // which executes and holds custody. US orders end at Interactive Brokers
+  // LLC, as for LYNX and Air Bank.
+  // https://help.kvarnx.com/en/articles/13578356
+  kvarnx: "interactivebrokers",
+  // Freedom Finance Europe's best execution policy, Annex 1, equities:
+  // Vision Financial Markets LLC.
+  // https://freedom24.com/download/documents/255/Best_Execution_Policy
+  freedom24: "vision",
+  // Admirals Europe's execution venues: Admiral Markets AS, Admiral Markets
+  // UK, Vision Financial Markets LLC and XNT. Vision is the only US firm.
+  // https://admiralmarkets.com/start-trading/documents/order-execution-policy
+  admiralcy: "vision",
+  // INDmoney "works with DriveWealth LLC and Alpaca Securities LLC" and does
+  // not say which one takes an order. DriveWealth's stock mix is empty, so
+  // the highest Q is Alpaca's.
+  // https://www.indmoney.com/us-stocks
+  indmoney: ["drivewealth", "alpaca"],
+  // XTB's execution policy of 29.06.2026 sends US shares and ETFs to "KBC
+  // Bank N.V. lub DriveWealth LLC". DriveWealth is the only US firm; its
+  // 2026 Q2 stock sections are empty, so the book stays the quoted NBBO.
+  // https://xas-new-cdn.xtb.com/file/0104/67/a77a2a66-7485-4948-96c2-bc3b89097f91/polityka-realizacji-zlecen-omi-29-06-2026-access.pdf
+  xtb: "drivewealth",
+  // Racional Stocks "están operadas y custodiadas por DriveWealth". Same
+  // empty stock mix.
+  // https://ayuda.racional.cl/es/articles/5551738-quien-opera-y-custodia-mis-inversiones-en-stocks
+  racional: "drivewealth",
+  // Alpaca's case study: "As a long-time partner of Alpaca, Ajaib has
+  // offered access to US stocks and ETFs".
+  // https://alpaca.markets/blog/how-ajaib-is-empowering-indonesian-investors-with-us-options-trading/
+  ajaib: "alpaca",
+  // Shares' best execution policy (May 2026 copy): USD shares are executed
+  // by ALPACA Securities LLC, EUR shares by Upvest.
+  // http://web.archive.org/web/20260514193828/https://www.shares.io/fr/terms/best-execution-policy
+  shares: "alpaca",
+  // EasyBourse's broker-selection policy: NYSE and Nasdaq orders go to
+  // Virtu ITG Europe, venue Virtu Client Market Making (VCMM), which is
+  // Virtu Americas LLC in the ISO MIC registry.
+  // https://documents.easybourse.com/formulaires_clients/politique-meilleure-selection-negociateurs-bourse.pdf
+  easybourse: "virtuamericas",
+  // Bourse Direct's execution policy, US markets: "1. Virtu 2. Exane 3.
+  // Morgan Stanley". Exane is not a US firm. The highest Q of the other two.
+  // https://www.boursedirect.fr/pdf/politiqueExeMif.pdf
+  boursedirect: ["virtuamericas", "morganstanleyco"],
+  // UP Fintech's 20-F: most US trades are self-cleared through TradeUP
+  // Securities, the rest through Interactive Brokers LLC. The highest Q.
+  // https://www.sec.gov/Archives/edgar/data/1756699/000156459022016241/tigr-20f_20211231.htm
+  tiger: ["tradeup", "interactivebrokers"],
+  // "Access to the US stock market is provided by Lime Financial USA -
+  // FINRA member". The Lime broker-dealer on BrokerCheck is Lime Trading
+  // Corp (CRD 11826), formerly Just2Trade Inc.
+  // https://j2t.com/en/solutions/mma/
+  just2trade: "lime",
 };
+
+// The BD key a broker routes through: the alias, or for an array the key
+// with the highest Q (keys with no Q are skipped; the first if none has one).
+export function aliasOf(name) {
+  const alias = ALIASES[name];
+  if (!Array.isArray(alias)) return alias || name;
+  let best = null;
+  let bestQ = -Infinity;
+  for (const key of alias) {
+    const q = qOf(key);
+    if (q != null && q > bestQ) {
+      best = key;
+      bestQ = q;
+    }
+  }
+  return best ?? alias[0];
+}
 
 // Not in the FINRA zip. Virtu Americas' own routing is itself, so the Q
 // is the NITE mean and the mix is that one venue.
 const ASSIGNED = {
   virtuamericas: { name: "Virtu Americas LLC", mix: { NITE: 1 } },
+  // Citadel Securities LLC files no 606 of its own; Saxo Bank's RTS 28 (2023)
+  // gives it about 95% of the US-traded share flow, so its own 605 is the mix
+  // (owner's choice, 2026-10-20).
+  // https://www.home.saxo/-/media/documents/business-terms-and-policies/rts-28-reports/rts28_saxoas_2023_brokers.csv
+  citadelsecurities: { name: "Citadel Securities LLC", mix: { CDRG: 1 } },
 };
 
 const RIC = new Set(["CDRG", "NITE", "JNST", "UBSS", "HRTF", "SOHO", "ETMM", "GTSM", "IATS", "IBCO", "MSCO", "STXG", "CODX", "ICBX"]);
@@ -386,7 +592,7 @@ export function routingOf(broker) {
     .trim()
     .toLowerCase()
     .split(":")[0];
-  const key = ALIASES[raw] || raw;
+  const key = aliasOf(raw);
   return load606()?.brokers?.[key] || ASSIGNED[key] || null;
 }
 
@@ -469,7 +675,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const asked = process.argv[2]?.toLowerCase();
   const table = await monthlyRouting({ refresh: !asked && !process.argv.includes("--cached") });
   if (asked) {
-    const key = ALIASES[asked] || asked;
+    const key = aliasOf(asked);
     const row = routingOf(asked);
     if (!row) {
       console.log(`${asked} n'a pas de 606 dans ${table.quarter}`);

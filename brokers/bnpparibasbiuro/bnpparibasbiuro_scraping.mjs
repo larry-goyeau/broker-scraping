@@ -30,7 +30,7 @@
 // each symbol's profile for the ISIN, kept only where the quote is in
 // zlotys. The same account page sells GlobalConnect shares in zlotys (the
 // GOwebmakler FAQ gives its hours); those rows are the GlobalConnect
-// company list, which prints the ISIN, as in brokers/erste. GlobalConnect
+// company list, which prints the ISIN, as in brokers/erstepl. GlobalConnect
 // ETFs are not named by the broker and stay out.
 //
 //   https://www.bnpparibas.pl/biuro-maklerskie/rynki-zagraniczne
@@ -479,7 +479,7 @@ async function warsawListings() {
   return rows;
 }
 
-// ---------- GlobalConnect (company list, as brokers/erste) ----------
+// ---------- GlobalConnect (company list, as brokers/erstepl) ----------
 
 // The exchange's server resets an HTTP/2 or undici connection; a plain
 // HTTP/1.1 request is answered.

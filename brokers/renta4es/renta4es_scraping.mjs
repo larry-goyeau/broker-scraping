@@ -15,7 +15,7 @@
 //   https://www.r4.com/internal-api/v1/apificacion/buscador/valores
 //   https://www.r4.com/productos-inversion/acciones/fichas/US0378331005/MMO
 //
-//   node brokers/renta4/renta4_scraping.mjs
+//   node brokers/renta4es/renta4es_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
 import { withoutObligations } from "../../obligation.mjs";
@@ -183,7 +183,7 @@ const etfs = rows.filter((row) => row.type === "ETF").length;
 if (etfs < 3000) throw new Error(`only ${etfs} ETFs`);
 
 const kept = stampRows(withoutObligations(rows));
-fs.writeFileSync(new URL("renta4-parsed.json", import.meta.url), JSON.stringify(kept, null, 2));
+fs.writeFileSync(new URL("renta4es-parsed.json", import.meta.url), JSON.stringify(kept, null, 2));
 
 const counts = new Map();
 for (const row of kept) {

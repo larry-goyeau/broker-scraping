@@ -29,13 +29,26 @@
 // British levy come from the tax table. The card names an American
 // SEC fee on the sale and does not print the rate, so it is not added.
 // No US broker-dealer is named, so a listed American line is the
-// national quote. Cash on the securities account is euro. A purchase
-// in another currency is converted at the bank's commercial rate. That
-// rate is not printed, so it stays out of the figure.
+// national quote. Cash on the securities account is euro, the only
+// deposit currency (deposits.mjs). A line in another currency is a forced
+// conversion: the buy converts EUR once and the sell converts back once.
+// The general terms (March 2026) put that conversion on "tečajni listi
+// banke za odkup deviz", the bank's own non-cash (devize) rate list. Read
+// 2026-10-19 (valid since 2026-10-19). The Slovenian branch prints that
+// devize board on its "pravne osebe" page; its "potrošniki" page is the
+// banknote board (the same figures BKS Bank AG labels "Notenkurse" on
+// markets.bks.at, USD 1.107 / 1.133, 1.16 %), not a securities rate. RON
+// and NZD are missing from the Slovenian page but are on BKS Bank AG's own
+// "Devisenkurse" page, same entity, same figures. One-way cost vs mid is
+// (buy - sell) / (buy + sell). KRW is on no published board: N/A.
 //
-//   node brokers/bks/bks_cost.mjs SXR8 XETR EUR --shares=10 --price=600
-//   node brokers/bks/bks_cost.mjs AAPL XNYS USD --shares=10 --price=230
-//   node brokers/bks/bks_cost.mjs CSPX XLON GBP --shares=10 --price=500
+//   https://markets.bksbank.si/tecajna-lista-za-pravne-osebe
+//   https://markets.bks.at/devisenkurse
+//   https://www.bksbank.si/mbxs8qn54zwj/6Tfee0Dh8W1oOK69bJj9oo/52dab9f27dccc41a506f4417cc5b64eb/Splo%C3%85_ni_pogoji_poslovanja_s_finan%C3%84_nimi_instrumenti_Marec2026_final.pdf
+//
+//   node brokers/bkssi/bkssi_cost.mjs SXR8 XETR EUR --shares=10 --price=600
+//   node brokers/bkssi/bkssi_cost.mjs AAPL XNYS USD --shares=10 --price=230
+//   node brokers/bkssi/bkssi_cost.mjs CSPX XLON GBP --shares=10 --price=500
 //
 // `roundTrip(...)` reads files, not the network.
 
@@ -46,10 +59,11 @@ import { listingKey, spreadLeaf } from "../../spreads/venues.mjs";
 import { usBookPerShare } from "../../spreads/rule606.mjs";
 import { spreads } from "../../spreads/book.mjs";
 import { bookParts, plus, finite } from "../../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, listingCash, toUsd, usdPer } from "../../fx.mjs";
+import { depositHas } from "../../deposits.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
 
-const CATALOGUE = new URL("bks-parsed.json", import.meta.url);
+const CATALOGUE = new URL("bkssi-parsed.json", import.meta.url);
 
 const SCHEDULE = {
   url: "https://www.bksbank.si/fizicne-osebe/financni-instrumenti/inr-racun",
@@ -58,6 +72,42 @@ const SCHEDULE = {
   asOf: "2026-03-13",
   entity: "BKS Bank AG, Bančna podružnica",
 };
+
+// Devize board, units per 1 EUR: `sell` = "Prodajni (tečaj) za 1 EUR
+// dobite", `buy` = "Nakupni (tečaj) za 1 EUR plačate". Snapshot read
+// 2026-10-19 at https://markets.bksbank.si/tecajna-lista-za-pravne-osebe;
+// RON and NZD from https://markets.bks.at/devisenkurse (same board).
+const FX_BOARD = {
+  readOn: "2026-10-19",
+  url: "https://markets.bksbank.si/tecajna-lista-za-pravne-osebe",
+  pairs: {
+    USD: { sell: 1.115, mid: 1.12, buy: 1.125 },
+    CAD: { sell: 1.573, mid: 1.582, buy: 1.591 },
+    AUD: { sell: 1.594, mid: 1.607, buy: 1.62 },
+    GBP: { sell: 0.837, mid: 0.84, buy: 0.843 },
+    CHF: { sell: 0.92, mid: 0.927, buy: 0.934 },
+    DKK: { sell: 7.436, mid: 7.476, buy: 7.516 },
+    NOK: { sell: 10.5, mid: 10.55, buy: 10.6 },
+    SEK: { sell: 11.05, mid: 11.1, buy: 11.15 },
+    JPY: { sell: 176.5, mid: 177.2, buy: 177.9 },
+    CZK: { sell: 23.94, mid: 24.34, buy: 24.74 },
+    ZAR: { sell: 18.19, mid: 18.43, buy: 18.67 },
+    PLN: { sell: 4.305, mid: 4.37, buy: 4.435 },
+    HUF: { sell: 358, mid: 363, buy: 368 },
+    TRY: { sell: 55.25, mid: 55.55, buy: 55.85 },
+    RON: { sell: 5.225, mid: 5.325, buy: 5.425 },
+    HKD: { sell: 8.595, mid: 8.795, buy: 8.995 },
+    SGD: { sell: 1.392, mid: 1.434, buy: 1.476 },
+    NZD: { sell: 1.924, mid: 1.978, buy: 2.032 },
+  },
+};
+
+// One-way cost of a conversion against the mid, or null when not printed.
+function fxOneWay(currency) {
+  const pair = FX_BOARD.pairs[currency];
+  if (!pair) return null;
+  return (pair.buy - pair.sell) / (pair.buy + pair.sell);
+}
 
 const RATE = 0.0015;
 const MIN = 2;
@@ -173,7 +223,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     remark: "",
   };
   if (!catalogue) {
-    return { ...answer, why: "le catalogue BKS n'existe pas encore : lancer `node brokers/bks/bks_scraping.mjs`" };
+    return { ...answer, why: "le catalogue BKS n'existe pas encore : lancer `node brokers/bkssi/bkssi_scraping.mjs`" };
   }
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue BKS` };
@@ -192,7 +242,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     mic: m.venue?.mic ?? null,
     currency: m.row.currency,
     unsourced: m.unsourced,
-    broker: "bks",
+    broker: "bkssi",
     ticker: m.row.ticker,
   });
   const listing = {
@@ -207,7 +257,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   };
   const american = US.has(exchange);
   const quoted = american
-    ? usBookPerShare({ broker: "bks", ticker: listing.ticker, fallback: book.leaf?.perShare ?? null })
+    ? usBookPerShare({ broker: "bkssi", ticker: listing.ticker, fallback: book.leaf?.perShare ?? null })
     : null;
   const marketPerShare = perShare ?? quoted ?? (american ? null : book.leaf?.perShare ?? null);
   const marketBp = bp ?? (marketPerShare != null ? null : book.leaf?.bp ?? null);
@@ -249,7 +299,14 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const sellMarket = home ? ljubljana(notionalEur) : abroad(exchange, notionalEur, true);
   const brokerEur = (commission + ticket) * 2;
   const marketEur = buyMarket + sellMarket;
-  const brokerFees = dollars(brokerEur, "EUR");
+  const courtageUsd = dollars(brokerEur, "EUR");
+  // A deposit currency is never converted. Anything else converts on the buy
+  // and back on the sell, each at the board's one-way cost; no board, no figure.
+  const cashCcy = listingCash(listing.currency);
+  const held = depositHas("bkssi", null, cashCcy);
+  const fxRate = held ? 0 : fxOneWay(cashCcy);
+  const fxUsd = fxRate == null || notionalUsd == null ? null : notionalUsd * fxRate * 2;
+  const brokerFees = plus(courtageUsd, fxUsd);
   const bourse = dollars(marketEur, "EUR");
   const bookUsd =
     parts.a == null || notionalUsd == null || parts.b == null ? null : parts.a * notionalUsd + parts.b * n;
@@ -266,14 +323,26 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
         : `pas de feuille de carnet : ${m.unsourced?.name || listing.exchange}`,
   ].join(" ; ");
 
+  const why = [
+    fxUsd == null ? `change forcé vers ${cashCcy} : taux de change non publié (absent de la tečajnica devize BKS)` : null,
+    bookUsd == null
+      ? `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ${m.unsourced?.why || "pas de carnet pour ce ticker"}`
+      : null,
+  ].filter(Boolean);
+  const basis = held
+    ? shared.basis
+    : `${shared.basis} ; change forcé EUR→${cashCcy} ` +
+      (fxRate == null
+        ? "sans taux publié"
+        : `${(100 * fxRate).toFixed(2).replace(".", ",")} % par conversion (achat/vente vs moyen, tečajnica devize BKS du ${FX_BOARD.readOn}), deux conversions`);
+
   return {
     ...shared,
+    basis,
     usd: finite(usd, 6),
     brokerFees: finite(brokerFees, 6),
     commission: { rate: RATE, min: MIN, foreign: ticket, currency: "EUR", eachWay: true },
-    ...(bookUsd == null
-      ? { why: `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ${m.unsourced?.why || "pas de carnet pour ce ticker"}` }
-      : {}),
+    ...(why.length ? { why: why.join(" ; ") } : {}),
     trade: {
       shares: n,
       price: p,
@@ -283,7 +352,8 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     },
     parts: {
       marché: finite(bookUsd, 6),
-      courtage: finite(brokerFees, 6),
+      courtage: finite(courtageUsd, 6),
+      change: finite(fxUsd, 6),
       bourse: finite(bourse, 6),
       taxes: finite(taxUsd, 6),
     },
@@ -310,7 +380,7 @@ function printCli() {
   const positional = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
   const [etf, place, currency] = positional;
   if (!etf) {
-    console.error("usage : node brokers/bks/bks_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]");
+    console.error("usage : node brokers/bkssi/bkssi_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]");
     process.exit(2);
   }
   const out = roundTrip({
@@ -335,6 +405,7 @@ function printCli() {
     const parts = out.parts || {};
     if (parts.marché != null) console.log(`  carnet         : ${parts.marché} $`);
     if (parts.courtage != null) console.log(`  courtage       : ${parts.courtage} $`);
+    if (parts.change) console.log(`  change         : ${parts.change} $`);
     if (parts.bourse != null) console.log(`  bourse         : ${parts.bourse} $`);
     if (parts.taxes) console.log(`  taxes          : ${parts.taxes} $`);
   }

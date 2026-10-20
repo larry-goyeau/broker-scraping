@@ -61,9 +61,52 @@ const byIsin = taxFile?.byIsin && Object.keys(taxFile.byIsin).length
   ? taxFile.byIsin
   : rebuildByIsin(taxFile);
 
+// Lines Trading212 does not carry, so its disclosure is silent on them, taken
+// from the rule itself. HMRC charges 0.5 % SDRT on a purchase of existing
+// shares in a UK-incorporated company; the only market exemption is a
+// recognised growth market such as AIM (gov.uk/tax-buy-shares,
+// gov.uk/guidance/stamp-duty-reserve-tax-reliefs-and-exemptions). Each line
+// below is a UK plc on the LSE Main Market, as the LSE's own instrument data
+// says (market MAINMARKET, country GB), read 2026-10-18. The sweep's entry
+// wins whenever it has one.
+const UK_STAMP = { achat: { STAMP_DUTY: { ofValue: 0.005 } }, vente: {} };
+const SUPPLEMENT = {
+  GB00BLDYK618: UK_STAMP, // SMT  Scottish Mortgage Investment Trust plc, SET1
+  GB00BS88V647: UK_STAMP, // FCIT F&C Investment Trust plc, SET1
+  GB00BNG2M159: UK_STAMP, // ATT  Allianz Technology Trust plc, STMM
+  GB00BJ0LT190: UK_STAMP, // HGT  HgCapital Trust plc, STMM
+  GB00BNKDVV71: UK_STAMP, // LTI  Lindsell Train Investment Trust plc, SSMM
+};
+
 export function taxEntry(isin) {
   const id = String(isin || "").toUpperCase();
-  return id && byIsin ? byIsin[id] ?? null : null;
+  if (!id) return null;
+  return byIsin?.[id] ?? SUPPLEMENT[id] ?? null;
+}
+
+// A share whose issuer country has a transaction tax (UK and Irish stamp,
+// French, Italian and Spanish FTT) and that neither the sweep nor the
+// supplement covers: whether it pays, and how much, is unknown, and an
+// unknown leg makes the trip unknown (na.mjs). ETFs are outside all five.
+// French, Italian and Spanish FTT follow the issuer wherever the share
+// trades. UK and Irish stamp reach a trade on the home book only: a UK or
+// Irish share bought on a foreign exchange settles in that market's
+// clearing system, which pays the entry charge once, so that trade pays
+// none. With no MIC the place is unknown and so is the stamp.
+// Returns why, or null when the tax is known (including known to be nil).
+const TAXING_COUNTRIES = new Set(["GB", "IE", "FR", "IT", "ES"]);
+const STAMP_BOOKS = {
+  GB: new Set(["XLON", "AQXE", "XMSM"]),
+  IE: new Set(["XMSM", "XLON", "AQXE"]),
+};
+export function taxGap(isin, type, mic = null) {
+  const id = String(isin || "").toUpperCase();
+  if (String(type || "").toUpperCase() !== "STOCK") return null;
+  const country = id.slice(0, 2);
+  if (!TAXING_COUNTRIES.has(country)) return null;
+  if (STAMP_BOOKS[country] && mic && !STAMP_BOOKS[country].has(String(mic).toUpperCase())) return null;
+  if (taxEntry(id)) return null;
+  return `taxe de transaction inconnue pour ${id} (${id.slice(0, 2)}) : pas de ligne fiscale`;
 }
 
 export function taxesOf(isin) {

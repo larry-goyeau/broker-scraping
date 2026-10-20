@@ -10,7 +10,7 @@
 // / 0.10 % sell. `roundTrip` is given the size and charges what is charged.
 //
 // Interactive Brokers Ireland Limited (IBIE). Catalogue from
-// `interactivebrokers_scraping.mjs` on interactivebrokers.ie — 80 321 lines
+// `interactivebrokersie_scraping.mjs` on interactivebrokers.ie — 80 321 lines
 // (23 332 ETF, 56 695 stocks, 167 ETC, 78 ETN, 49 crypto; 12 495 US-domiciled
 // ETFs flagged `nonEuResident`). Default card is IBKR Pro Fixed + IB
 // SmartRouting — the all-in column (no venue pass-through). `--plan=tiered`
@@ -46,11 +46,11 @@
 //   https://www.interactivebrokers.ie/en/pricing/commissions-crypto-assets.php
 //   https://www.interactivebrokers.ie/en/trading/products-etfs.php
 //
-//   node brokers/interactivebrokers/interactivebrokers_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node brokers/interactivebrokers/interactivebrokers_cost.mjs IWDA AEB EUR --shares=10 --price=100
-//   node brokers/interactivebrokers/interactivebrokers_cost.mjs VWCE IBIS EUR --shares=1 --price=140
-//   node brokers/interactivebrokers/interactivebrokers_cost.mjs BTC ZEROHASH USD --amount=1000
-//   node brokers/interactivebrokers/interactivebrokers_cost.mjs --schedule
+//   node brokers/interactivebrokersie/interactivebrokersie_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/interactivebrokersie/interactivebrokersie_cost.mjs IWDA AEB EUR --shares=10 --price=100
+//   node brokers/interactivebrokersie/interactivebrokersie_cost.mjs VWCE IBIS EUR --shares=1 --price=140
+//   node brokers/interactivebrokersie/interactivebrokersie_cost.mjs BTC ZEROHASH USD --amount=1000
+//   node brokers/interactivebrokersie/interactivebrokersie_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
@@ -62,7 +62,7 @@ import { plus, finite } from "../../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../../fx.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
 
-const CATALOGUE = new URL("interactivebrokers-parsed.json", import.meta.url);
+const CATALOGUE = new URL("interactivebrokersie-parsed.json", import.meta.url);
 
 const SCHEDULE = {
   stocks: "https://www.interactivebrokers.ie/en/pricing/commissions-stocks.php",
@@ -439,7 +439,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Interactive Brokers n'existe pas encore : lancer `node brokers/interactivebrokers/interactivebrokers_scraping.mjs`",
+      why: "le catalogue Interactive Brokers n'existe pas encore : lancer `node brokers/interactivebrokersie/interactivebrokersie_scraping.mjs`",
     };
   }
 
@@ -463,7 +463,7 @@ export function roundTrip({
     mic: hit.venue?.mic ?? null,
     currency: hit.row.currency,
     unsourced: hit.unsourced,
-    broker: "interactivebrokers",
+    broker: "interactivebrokersie",
     ticker: hit.row.ticker,
   });
   const listing = {
@@ -786,12 +786,12 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node interactivebrokers_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--amount=usd] [--plan=fixed|tiered] [--json]\n" +
-        "        node interactivebrokers_cost.mjs --schedule\n" +
-        "  ex.   node interactivebrokers_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
-        "        node interactivebrokers_cost.mjs IWDA AEB EUR --shares=10 --price=100\n" +
-        "        node interactivebrokers_cost.mjs VWCE IBIS EUR --shares=1 --price=140\n" +
-        "        node interactivebrokers_cost.mjs BTC ZEROHASH USD --amount=1000"
+      "usage : node interactivebrokersie_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--amount=usd] [--plan=fixed|tiered] [--json]\n" +
+        "        node interactivebrokersie_cost.mjs --schedule\n" +
+        "  ex.   node interactivebrokersie_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
+        "        node interactivebrokersie_cost.mjs IWDA AEB EUR --shares=10 --price=100\n" +
+        "        node interactivebrokersie_cost.mjs VWCE IBIS EUR --shares=1 --price=140\n" +
+        "        node interactivebrokersie_cost.mjs BTC ZEROHASH USD --amount=1000"
     );
     process.exit(2);
   }

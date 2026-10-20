@@ -39,9 +39,7 @@
 //
 // What is in the number: the commission each way at its floor; the market
 // spread, once. What is not: stamp duty and FTT (these are CFDs — the client
-// does not acquire the share); SEC and TAF (measured zero); a conversion
-// markup (schedule §2.10 allows one when account and product currencies
-// differ; the EUR trip converted the stock and showed no extra line); overnight
+// does not acquire the share); SEC and TAF (measured zero); overnight
 // (0 % on the card, and this trip does not hold); inactivity (10 $ / month
 // after 12 months idle); market-data subscriptions. Bank transfers in and out
 // are free in as many words.
@@ -50,8 +48,18 @@
 // book is the reconstructed NBBO quoted (605 field 19 + 2 × PI), found by
 // trying the NMS MICs: Century names no US BD, so there is no 606 to scale
 // E by. Hong Kong and Tadawul have no sourced book in this deposit, so those
-// lines answer N/A on the total whenever the book is the missing piece — the
-// commission itself is still returned under `brokerFees` where the card printed one.
+// lines answer N/A on the total whenever the book is the missing piece.
+//
+// FX. Euro is the only deposit currency (deposits.mjs), and every line is
+// USD, HKD or SAR, so every trip is a forced conversion: EUR to the product
+// currency on the buy and back on the sell. Schedule of Charges §2.10,
+// re-read 2026-10-19: "a currency conversion fee may apply", and rates are
+// "based on our currency conversion rates, which may be subject to change
+// at any time". No percentage, no spread and no board is published, so the
+// conversion has no figure and the total (and `brokerFees`, which holds the
+// conversion) is N/A. The commission stays under `parts.commission`. The
+// 2026-09-09 NIO trip debited 3.24 € for 3.765 $, within rounding of the
+// mid, but one measured fill is not a published rate.
 //
 //   https://liveapp.century.ae/
 //   https://www.century.ae/en/shares-trading/
@@ -70,7 +78,8 @@ import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
 import { spreads } from "../../spreads/book.mjs";
 import { plus, finite } from "../../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, fxRemark, listingCash, toUsd, usdPer } from "../../fx.mjs";
+import { depositHas } from "../../deposits.mjs";
 
 const CATALOGUE = new URL("century-parsed.json", import.meta.url);
 
@@ -254,7 +263,8 @@ export function commissionSide({ shares, amount, market, currency }) {
 
 /**
  * The whole bill for buying `shares` at `price` and selling them straight back.
- * `usd` is the number the page prints; `brokerFees` is the commission alone.
+ * `usd` is the number the page prints; `brokerFees` is the commission plus
+ * any forced conversion (N/A when that conversion has no published rate).
  */
 export function roundTrip({ etf, place, currency, shares, price, bp = null, perShare = null }) {
   const answer = { usd: null, brokerFees: null, etf, place, currency, onlineBuy: true, cashCurrency: "" };
@@ -295,6 +305,14 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const marketBp = bp ?? leaf?.bp ?? null;
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
   const american = market === "us";
+  // A deposit currency is never converted; anything else is converted at a
+  // rate Century does not publish (§2.10), so that leg has no figure.
+  const cashCcy = listingCash(listing.currency);
+  const held = depositHas("century", null, cashCcy);
+  const fxWhy = held ? null : `change forcé vers ${cashCcy} : taux de change non publié`;
+  const fxBasis = held
+    ? ""
+    : ` ; change forcé vers ${cashCcy} sans taux publié (barème des frais §2.10, relu le 2026-10-19)`;
 
   const shared = {
     ...answer,
@@ -305,7 +323,10 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     url: leaf?.url ?? SCHEDULE.source,
     fx: fxNote(listing.currency),
     fxIfConverted: 0,
-    remark: "",
+    // The account is USD, EUR or GBP, one chosen at opening; a line in another
+    // of those is converted at Century's unprinted rate (§16.3: "may include a
+    // mark-up").
+    remark: held ? fxRemark("", cashCcy) : "",
     withdraw: WITHDRAW,
     check: american ? CHECK : null,
   };
@@ -313,8 +334,8 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   if (!market || !rule || (rule.rate == null && rule.perShare == null)) {
     return {
       ...shared,
-      basis: `fiche Century Trader ${market || listing.currency}, lue le ${SCHEDULE.readOn} : commission « - »`,
-      why: "Tadawul : la fiche Century imprime « - » pour la commission, pas un chiffre",
+      basis: `fiche Century Trader ${market || listing.currency}, lue le ${SCHEDULE.readOn} : commission « - »${fxBasis}`,
+      why: ["Tadawul : la fiche Century imprime « - » pour la commission, pas un chiffre", fxWhy].filter(Boolean).join(" ; "),
       confidence: confidenceOf({ market, rule, listing, leaf, marketBp, marketPerShare, unsourced: m.unsourced }),
     };
   }
@@ -323,7 +344,8 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     `barème Century Trader ${market}, fiche lue le ${SCHEDULE.readOn}` +
     (rule.perShare != null
       ? ` : ${rule.perShare} ${rule.perShareCcy} / part, plancher ${rule.min} ${rule.minCcy} (débit mesuré en ${rule.minCcy})`
-      : ` : ${(rule.rate * 100).toFixed(2)} % du montant, plancher ${rule.min} ${rule.minCcy}`);
+      : ` : ${(rule.rate * 100).toFixed(2)} % du montant, plancher ${rule.min} ${rule.minCcy}`) +
+    fxBasis;
 
   const n = Number(shares);
   const p = Number(price);
@@ -362,20 +384,22 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const sell = commissionSide({ shares: n, amount: notional, market, currency: listing.currency });
   const buyUsd = buy ? dollars(buy.charged, buy.currency) : null;
   const sellUsd = sell ? dollars(sell.charged, sell.currency) : null;
-  const brokerFees = plus(buyUsd, sellUsd);
+  const commissionUsd = plus(buyUsd, sellUsd);
+  const fxUsd = held ? 0 : null;
+  const brokerFees = plus(commissionUsd, fxUsd);
   const usd = plus(bookUsd, brokerFees);
+  const why = [
+    fxWhy,
+    bookUsd == null
+      ? `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ${m.unsourced?.why || "pas de source de spread"}`
+      : null,
+  ].filter(Boolean);
 
   return {
     ...shared,
     usd: finite(usd, 6),
     brokerFees: finite(brokerFees, 6),
-    ...(bookUsd == null
-      ? {
-          why:
-            `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ` +
-            `${m.unsourced?.why || "pas de source de spread"}`,
-        }
-      : {}),
+    ...(why.length ? { why: why.join(" ; ") } : {}),
     trade: {
       shares: n,
       price: hasP ? p : null,
@@ -397,7 +421,8 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     },
     parts: {
       marché: finite(bookUsd, 6),
-      commission: finite(brokerFees, 6),
+      commission: finite(commissionUsd, 6),
+      change: finite(fxUsd, 6),
     },
     commission: {
       rate: rule.rate ?? null,
@@ -491,9 +516,9 @@ function confidenceOf({ market, rule, listing, leaf, marketBp, marketPerShare, u
   }
 
   said.push(
-      `hors total : la conversion (§2.10 du tableau) peut s'appliquer quand la caisse n'est pas dans la devise du titre. ` +
-      `Le voyage EUR du ${CHECK.on} a converti le notionnel et n'a montré aucune ligne à part. ` +
-      `Virement bancaire gratuit. Inactivité ${WITHDRAW.inactivity.monthly} ${WITHDRAW.inactivity.ccy} / mois ` +
+      `devise du compte au choix USD, EUR ou GBP ; une autre devise est un change forcé, et le §2.10 du tableau renvoie à « our currency conversion rates » sans taux publié, ` +
+      `d'où un total N/A sur ces lignes. Le voyage EUR du ${CHECK.on} a converti le notionnel près du mid, sans ligne à part. ` +
+      `Hors total : virement bancaire gratuit. Inactivité ${WITHDRAW.inactivity.monthly} ${WITHDRAW.inactivity.ccy} / mois ` +
       `après ${WITHDRAW.inactivity.afterMonths} mois. Holding 0 % sur la fiche, donc 0 sur un aller-retour le jour même. ` +
       `DMA DFM / ADX et les actions UK / DE / CN de la page marketing ne sont pas dans ce catalogue`
   );

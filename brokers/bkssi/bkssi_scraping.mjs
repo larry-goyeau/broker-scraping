@@ -10,7 +10,7 @@
 //
 //   https://www.bksbank.si/fizicne-osebe/financni-instrumenti/inr-racun
 //
-//   node brokers/bks/bks_scraping.mjs
+//   node brokers/bkssi/bkssi_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
 import { withoutObligations } from "../../obligation.mjs";
@@ -301,7 +301,7 @@ if (results.some((row) => row.type !== "STOCK" && row.type !== "ETF" && row.type
 }
 
 const kept = stampRows(withoutObligations(results));
-fs.writeFileSync(new URL("bks-parsed.json", import.meta.url), JSON.stringify(kept, null, 2));
+fs.writeFileSync(new URL("bkssi-parsed.json", import.meta.url), JSON.stringify(kept, null, 2));
 
 const byType = new Map();
 const byPlace = new Map();

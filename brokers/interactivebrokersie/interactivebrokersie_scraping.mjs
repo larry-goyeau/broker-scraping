@@ -231,7 +231,7 @@ if (!isPortalUrl(page.url()) || looksLoggedOut(page.url())) {
   await sleep(5000);
 }
 
-const outputPath = new URL("interactivebrokers-parsed.json", import.meta.url);
+const outputPath = new URL("interactivebrokersie-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 

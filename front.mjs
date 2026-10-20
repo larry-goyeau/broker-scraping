@@ -59,7 +59,11 @@ function loadBrokerMeta() {
 }
 
 const FOLDER_NAME = {
-  saxo: "Saxo Bank",
+  interactivebrokersie: "Interactive Brokers",
+  saxofr: "Saxo Bank",
+  ibkrch: "IBKR Suisse",
+  alfainvest: "Alfa",
+  invictus: "Invictus",
   avanza: "Avanza",
   virtuamericas: "Virtu Americas LLC",
   lloyds: "Lloyds",
@@ -71,11 +75,11 @@ const FOLDER_NAME = {
   boursobank: "BoursoBank",
   alramz: "Al Ramz Capital",
   boubyan: "Boubyan",
-  tastytrade: "Tastytrade",
+  tastytradeus: "Tastytrade",
   bri: "BRI Danareksa Sekuritas",
   bux: "BUX",
   davy: "Davy Select",
-  oanda: "OANDA TMS",
+  oandapl: "OANDA TMS",
   plum: "Plum",
   easyequities: "EasyEquities",
   efocs: "EuroFinance",
@@ -86,7 +90,7 @@ const FOLDER_NAME = {
   thndr: "Thndr",
   tiger: "Tiger Brokers",
   traderepublic: "Trade Republic",
-  tradestation: "TradeStation",
+  tradestationus: "TradeStation",
   tradeup: "TradeUP",
   tradezero: "TradeZero",
   tradier: "Tradier",
@@ -97,7 +101,7 @@ const FOLDER_NAME = {
   xtb: "XTB",
   fortuneo: "Fortuneo",
   fidelity: "Fidelity",
-  lynx: "LYNX+",
+  lynxnl: "LYNX+",
   vanguarduk: "Vanguard UK",
   choice: "Choice",
   "m.stock": "m.Stock",
@@ -108,21 +112,21 @@ const FOLDER_NAME = {
   vietcap: "Vietcap",
   rakutenjp: "Rakuten Japan",
   spare: "SpareBank",
-  rakutenma: "Rakuten MY",
+  rakutenmy: "Rakuten MY",
   profitmart: "Profitmart",
-  dbs: "DBS Taiwan",
+  dbstw: "DBS Taiwan",
   "e.sun": "E.SUN",
   scsb: "SCSB",
-  standardchartered: "Standard Chartered Taiwan",
+  standardcharteredtw: "Standard Chartered Taiwan",
   unionbank: "Union Bank of Taiwan",
-  sinopac: "SinoPac",
+  sinopactw: "SinoPac",
   taishin: "Taishin",
   ctbc: "CTBC",
-  moomoo: "moomoo Japan",
+  moomoojp: "moomoo Japan",
   disnat: "Desjardins",
-  ing: "ING Deutschland",
+  ingde: "ING Deutschland",
   prime: "Prime Transaction",
-  mirae: "Mirae",
+  miraevn: "Mirae",
   bsc: "BSC",
   bdm: "BDM",
   rabee: "Rabee Securities",
@@ -138,35 +142,78 @@ const FOLDER_NAME = {
   gotradeid: "Gotrade Indonesia",
   iol: "InvertirOnline",
   triipe: "Trii Perou",
-  bks: "BKS Bank",
+  bkssi: "BKS Bank",
   public: "Public.com",
-  erste: "Erste",
+  erstepl: "Erste",
   iguk: "IG UK",
   igue: "IG UE",
   icici: "ICICI",
   hdfcsky: "HDFC Sky",
-  futu: "Futu",
+  futuhk: "Futu",
   // The folder slug is also the start of Monex Boom and Monex Casa de Bolsa.
-  monex: "Monex",
+  monexjp: "Monex",
   kotak: "Kotak",
   daiwaconnect: "Daiwa",
 };
 
 // Display name above, broker-list row below, when the two differ.
 const FOLDER_LIST = {
-  mirae: "Mirae Asset Securities Vietnam",
+  // Folders named with their entity's country code.
+  oandapl: "OANDA TMS",
+  admiralcy: "Admirals",
+  degironl: "DEGIRO",
+  tastytradeus: "tastytrade",
+  nordnetse: "Nordnet",
+  interactivebrokersie: "Interactive Brokers Ireland",
+  longbridgehk: "Longbridge",
+  stakeau: "Stake",
+  renta4es: "Renta 4 Banco",
+  sbijp: "SBI",
+  handelsbankense: "Handelsbanken",
+  balanzar: "Balanz",
+  coinbaseus: "Coinbase",
+  wealthyhoodgr: "Wealthyhood",
+  kisvn: "KIS Vietnam",
+  gtjavn: "Guotai Junan Vietnam",
+  nordnetdk: "Nordnet Danmark",
+  nordnetfi: "Nordnet Suomi",
+  nordnetno: "Nordnet Norge",
+  ibkrca: "Interactive Brokers Canada",
+  ibkrch: "IBKR Financial Services",
+  invictus: "Invictus Capital & Finance",
+  dsehisa: "DSE Hisa Kiganjani",
+  aya: "AYA Trust Securities",
+  sbiroyal: "SBI Royal Securities",
+  alor: "ALOR Broker",
+  alfainvest: "Alfa-Investments",
+  eastmoney: "East Money Securities",
+  sofi: "SoFi Invest",
+  nomurajp: "Nomura Securities",
+  charlesstanley: "Charles Stanley",
+  dmm: "DMM.com Securities",
+  miraevn: "Mirae Asset Securities Vietnam",
   bsc: "BIDV Securities (BSC)",
   boursobank: "BoursoBank (Boursorama)",
   iol: "InvertirOnline (IOL)",
-  bks: "BKS Bank Slovenia",
-  erste: "Erste Biuro Maklerskie",
+  bkssi: "BKS Bank Slovenia",
+  erstepl: "Erste Biuro Maklerskie",
   iguk: "IG",
   igue: "IG Europe",
   triipe: "Trii Peru",
   icici: "ICICI Direct",
-  futu: "Futu / moomoo HK",
+  futuhk: "Futu / moomoo HK",
   kotak: "Kotak Securities",
   daiwaconnect: "Daiwa Connect Securities",
+  nagacy: "NAGA",
+  capitalcomcy: "Capital.com",
+  unicreditpl: "UniCredit Polska",
+  slsp: "Slovenská sporiteľňa",
+  investona: "Investona",
+  benchmark: "BenchMark",
+  ibsl: "Islami Bank Securities",
+  tvs: "Thien Viet Securities (TVS)",
+  tinvest: "T-Investments",
+  vpbanks: "VPBank Securities",
 };
 
 // The page drops the word "Securities" from a broker's name: "Ando
@@ -518,26 +565,17 @@ const estimatorsReady = (async () => {
   );
 })();
 
-// How many of the thing the reader is buying. Shares for anything with a share
-// price, dollars for a coin — a coin has no unit worth naming, and ten bitcoin
-// is not a question anyone asks. A share whose last is under $10 is counted
-// in hundreds: ten of a rupee share is not the round trip the column prices.
-// At $10 or more, and when no last is on file, the count stays at ten.
-const SHARES_DEFAULT = 10;
-const SHARES_CHEAP = 100;
-const CHEAP_USD = 10;
+// How much the reader is buying: an amount in dollars, for a coin and for a
+// share alike. A share line buys that amount in its own currency at its own
+// price, so the count is amount / price and need not be whole: a $1,000 trip
+// in a $343 share is 2.91 shares. A count given in the query (`shares`) still
+// wins, for a link that asks for one.
 const AMOUNT_DEFAULT = 1000;
 
-function defaultShares(inst) {
-  const currencies = [];
-  for (const lists of inst.byBroker.values()) {
-    for (const listing of lists) if (listing.currency) currencies.push(listing.currency);
-  }
-  const ccy = mostCommon(currencies);
-  const local = priceOf(inst.isin, ccy);
-  if (!(local > 0)) return SHARES_DEFAULT;
-  const usd = String(ccy || "").toUpperCase() === "USD" ? local : toUsd(local, ccy);
-  return usd > 0 && usd < CHEAP_USD ? SHARES_CHEAP : SHARES_DEFAULT;
+/** Shares that `amountUsd` buys of a line at `price` in `currency`; null without a price. */
+function sharesFor(amountUsd, price, currency) {
+  const usd = toUsd(price, currency);
+  return price > 0 && usd > 0 ? amountUsd / usd : null;
 }
 
 // A price is not a fact about a broker, so it sits at the root with the other
@@ -691,12 +729,11 @@ function estimateListing(folder, listing, inst, extra = {}, size = {}, page = in
   // A coin is bought by the dollar, a share by the unit at a price. The
   // estimator is handed whichever pair describes the trade, and nothing else:
   // how the two turn into a bill is the whole point of moving it in there.
+  const amount = size.amount ?? AMOUNT_DEFAULT;
+  const price = crypto ? null : priceFor(page, listing);
   const trade = crypto
-    ? { amount: size.amount ?? AMOUNT_DEFAULT }
-    : {
-        shares: size.shares ?? SHARES_DEFAULT,
-        price: priceFor(page, listing),
-      };
+    ? { amount }
+    : { shares: size.shares ?? sharesFor(amount, price, listing.currency), price };
   try {
     if (entry.total) {
       let cost = entry.total({ ...ask, ...trade });
@@ -706,7 +743,7 @@ function estimateListing(folder, listing, inst, extra = {}, size = {}, page = in
       if (!crypto && !(trade.price > 0) && cost?.listing?.currency) {
         const price = priceFor(page, { ...listing, currency: cost.listing.currency });
         if (price > 0) {
-          cost = entry.total({ ...ask, shares: trade.shares, price });
+          cost = entry.total({ ...ask, shares: size.shares ?? sharesFor(amount, price, cost.listing.currency), price });
         }
       }
       return formatTotal(cost, cost?.usd);
@@ -1500,6 +1537,42 @@ const GOPOCKET_PLANS = [
 // portfolios (Bronze 0.4 %, Silver 0.3 %, Gold and Platinum 0.2 %), each
 // halved on the Portu <26 account.
 const SPLIT_PLANS = {
+  nomurajp: { brand: "Nomura", plans: [
+    { id: "netcall", label: "Net & Call" },
+    { id: "branch", label: "Branch account" },
+  ] },
+  hapi: { brand: "Hapi", plans: [
+    { id: "regular", label: "Regular" },
+    { id: "prime", label: "Prime" },
+  ] },
+  slsp: { brand: "Slovenská sporiteľňa", plans: [
+    { id: "standard", label: "STANDARD" },
+    { id: "explore", label: "EXPLORE" },
+    { id: "trade", label: "TRADE" },
+  ] },
+  tinvest: { brand: "T-Investments", plans: [
+    { id: "investor", label: "Investor" },
+    { id: "trader", label: "Trader" },
+    { id: "premium", label: "Premium" },
+  ] },
+  alor: { brand: "ALOR", plans: [
+    { id: "professional", label: "Professional" },
+    { id: "active", label: "Active" },
+    { id: "unified", label: "Unified" },
+  ] },
+  alfainvest: { brand: "Alfa", plans: [
+    { id: "investor", label: "Investor" },
+    { id: "trading", label: "Trading" },
+  ] },
+  wealthyhoodgr: { brand: "Wealthyhood", plans: [
+    { id: "basic", label: "Basic" },
+    { id: "plus", label: "Plus" },
+    { id: "gold", label: "Gold" },
+  ] },
+  idealing: { brand: "iDealing", plans: [
+    { id: "smartwealth", label: "Smart Wealth" },
+    { id: "adminfree", label: "Admin Free" },
+  ] },
   kotak: { brand: "Kotak", plans: [
     { id: "tradefree", label: "Trade Free" },
     { id: "youth", label: "Trade Free Youth" },
@@ -2596,7 +2669,6 @@ function detail(key, nat = "", size = {}, dep = "") {
   const inst = resolve(key);
   if (!inst) return null;
   const isCrypto = inst.key.startsWith("CRYPTO:");
-  if (!isCrypto && !(Number(size.shares) > 0)) size = { ...size, shares: defaultShares(inst) };
   const rows = [];
   const easy = [];
   for (const [folder, pairs] of listingsByBroker(inst)) {
@@ -2874,7 +2946,7 @@ function detail(key, nat = "", size = {}, dep = "") {
       for (const row of collapseFsmone(built)) rows.push(row);
       continue;
     }
-    if (folder === "saxo") {
+    if (folder === "saxofr") {
       const built = [];
       SAXO_PLANS.forEach((plan, i) => {
         const listed = listings({ plan: plan.id });
@@ -2969,7 +3041,7 @@ function detail(key, nat = "", size = {}, dep = "") {
       for (const row of collapseTradeup(built)) rows.push(row);
       continue;
     }
-    if (folder === "tradestation") {
+    if (folder === "tradestationus") {
       const built = [];
       TRADESTATION_PLANS.forEach((plan, i) => {
         const listed = listings({ plan: plan.id });
@@ -3133,12 +3205,12 @@ function detail(key, nat = "", size = {}, dep = "") {
   rows.splice(at === -1 ? rows.length : at, 0, ...easy);
   // The page prints the size back, so a reader who changed it sees what the
   // column answers for, and learns when the price behind it is missing.
+  const amount = size.amount ?? AMOUNT_DEFAULT;
+  const ccy = mostCommon([...inst.byBroker.values()].flat().map((l) => l.currency));
+  const price = isCrypto ? null : priceOf(inst.isin, ccy);
   const trade = isCrypto
-    ? { amount: size.amount ?? AMOUNT_DEFAULT }
-    : {
-        shares: size.shares ?? SHARES_DEFAULT,
-        price: priceOf(inst.isin, mostCommon([...inst.byBroker.values()].flat().map((l) => l.currency))),
-      };
+    ? { amount }
+    : { amount, price, currency: ccy, shares: size.shares ?? sharesFor(amount, price, ccy) };
   return {
     ...summarize(inst, "", nat),
     // Plans and extra venues are extra rows, not extra brokers.

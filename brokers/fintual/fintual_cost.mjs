@@ -11,8 +11,18 @@
 //   From the 11th     0.1% of the order. That is the remark. The figure
 //                     is the case the page gives away.
 //   Dollars           4 Chilean pesos per dollar, on buying or selling
-//                     the dollars. The share settles in dollars, so the
-//                     pesos are not this order.
+//                     the dollars.
+//
+// FX, re-read 2026-10-19 on the "comisión de dólares" article above: "El
+// spread es de 4 pesos chilenos", charged in the price shown on buying and on
+// selling dollars. It does not say whether 4 pesos is each side or the
+// buy/sell gap; each side is taken (the higher reading), 4 CLP on the
+// observed dollar of fx.mjs, about 0.43 % one way. Deposits and withdrawals
+// are pesos only ("tus depósitos y retiros continuarán siendo a través de
+// pesos chilenos",
+// https://ayuda.fintual.cl/es/articles/6458430-puedo-depositar-o-retirar-en-dolares-desde-mis-acciones),
+// and `deposits.mjs` holds CLP only, so a dollar line is converted by force:
+// pesos to dollars on the buy, back on the sale, in the total under `change`.
 //
 // The account is at Alpaca, so a US line uses that firm's Q. Alpaca
 // passes SEC, TAF and CAT through and rounds each type up to the cent,
@@ -37,6 +47,8 @@ import { usBookPerShare } from "../../spreads/rule606.mjs";
 import { bookParts, plus, finite } from "../../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
+import { depositHas } from "../../deposits.mjs";
+import { listingCash } from "../../fx.mjs";
 
 const CATALOGUE = new URL("fintual-parsed.json", import.meta.url);
 
@@ -61,13 +73,15 @@ const CAT_OTC_EQUIV = 0.01;
 const CENT = 0.01;
 const up = (value) => (value > 0 ? Math.ceil(value / CENT - 1e-9) * CENT : 0);
 const isOverTheCounter = (row) => /^(OTC|PINK)/i.test(String(row?.exchange || ""));
-// 4 pesos on the observed dollar is one way. The share is already in dollars.
-const FX_PCT = (PESOS_PER_DOLLAR * usdPer("CLP") * 100).toFixed(3);
+// 4 pesos on the observed dollar is one way.
+const FX_ONE_WAY = PESOS_PER_DOLLAR * usdPer("CLP");
+const FX_PCT = Number((FX_ONE_WAY * 100).toFixed(2));
+const BASE = "CLP";
 const REMARK = [
   "The first 10 orders each month have no commission.",
   "From the 11th, 0.1% of the order.",
-  `FX ${FX_PCT}% when cash ≠ USD.`,
 ].join("\n");
+const remarkOf = (held, currency) => (held ? `${REMARK}\nFX ${FX_PCT}% when cash ≠ ${listingCash(currency)}.` : REMARK);
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
@@ -102,7 +116,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     place,
     currency,
     onlineBuy: true,
-    cashCurrency: "USD",
+    cashCurrency: BASE,
     url: SCHEDULE.url,
     remark: REMARK,
   };
@@ -149,12 +163,18 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   });
   const tax = taxesOf(listing.isin);
   const taxTotal = Object.values(taxRates(tax)).reduce((sum, rate) => sum + rate, 0);
+  const held = depositHas("fintual", null, listingCash(listing.currency));
   const shared = {
     ...answer,
+    cashCurrency: held ? listingCash(listing.currency) : BASE,
+    remark: remarkOf(held, listing.currency),
+    fxIfConverted: held ? FX_ONE_WAY : 0,
     listing,
     bp: marketBp,
     perShare: marketPerShare,
-    basis: `barème Fintual Acciones, relu le ${SCHEDULE.readOn} : 0 $ sur les ${FREE_ORDERS} premiers ordres du mois ; Alpaca arrondit SEC, TAF et CAT au centime par jour, vente un autre jour`,
+    basis:
+      `barème Fintual Acciones, relu le ${SCHEDULE.readOn} : 0 $ sur les ${FREE_ORDERS} premiers ordres du mois ; Alpaca arrondit SEC, TAF et CAT au centime par jour, vente un autre jour` +
+      (held ? "" : ` ; change forcé CLP ↔ ${listingCash(listing.currency)} : ${PESOS_PER_DOLLAR} pesos par dollar par sens (${FX_PCT} %), relu le 2026-10-19`),
     tax,
     ccy: QUOTE,
     fx: { quote: QUOTE, asOf: FX_AS_OF, listing: usdPer(listing.currency) },
@@ -178,14 +198,18 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   // The buy and the sale fall on different days, so each day's types are
   // rounded on their own. The buy day is CAT. The sell day is SEC, TAF and CAT.
   const regulatory = up(catLeg) + up(secRaw) + up(tafRaw) + up(catLeg);
-  const usd = plus(bookUsd, regulatory, taxUsd);
+  // Forced conversion: pesos to dollars on the buy, dollars to pesos on the sale.
+  const fxUsd = held ? 0 : notionalUsd == null ? null : notionalUsd * FX_ONE_WAY * 2;
+  const usd = plus(bookUsd, regulatory, fxUsd, taxUsd);
   const confidence = [
     shared.basis,
     listing.type === "ETF" ? "barème ETF" : "barème action",
     "mélange 606 d'Alpaca Securities",
     `réglementaire ${regulatory.toFixed(2)} $ : CAT le jour de l'achat, SEC, TAF et CAT le jour de la vente`,
     `au-delà : ${(100 * PAID_RATE).toFixed(1)} % par ordre, moitié au-dessus de ${VOLUME_USD} $ d'ordres payants`,
-    `change ${FX_PCT} % quand la caisse n'est pas en dollars, hors de ce ticket`,
+    held
+      ? `change ${FX_PCT} % quand la caisse n'est pas en dollars, hors de ce ticket`
+      : `change forcé ${FX_PCT} % par sens (${PESOS_PER_DOLLAR} pesos par dollar), dans le total : dépôts et retraits en pesos seulement`,
     marketPerShare != null
       ? `carnet ${marketPerShare} $ la part`
       : `pas de feuille de carnet : ${m.unsourced?.name || listing.exchange}`,
@@ -194,7 +218,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   return {
     ...shared,
     usd: finite(usd, 6),
-    brokerFees: finite(0, 6),
+    brokerFees: finite(plus(0, fxUsd), 6),
     commission: { each: 0, currency: "USD", eachWay: true, freeOrders: FREE_ORDERS },
     ...(bookUsd == null
       ? { why: `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ${m.unsourced?.why || "pas de 605 pour ce ticker"}` }
@@ -209,6 +233,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     parts: {
       marché: finite(bookUsd, 6),
       courtage: finite(0, 6),
+      change: finite(fxUsd, 6),
       réglementaire: finite(regulatory, 6),
       taxes: finite(taxUsd, 6),
     },
@@ -267,6 +292,7 @@ function printCli() {
     const parts = out.parts || {};
     if (parts.marché != null) console.log(`  carnet         : ${parts.marché} $`);
     if (parts.courtage != null) console.log(`  courtage       : ${parts.courtage} $`);
+    if (parts.change) console.log(`  change         : ${parts.change} $`);
     if (parts.réglementaire) console.log(`  réglementaire  : ${parts.réglementaire} $`);
     if (parts.taxes) console.log(`  taxes          : ${parts.taxes} $`);
   }

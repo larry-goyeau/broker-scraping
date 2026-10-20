@@ -19,7 +19,7 @@
 //   https://balanz.com/inversiones/cedears/cedear-de-etf/
 //   https://open.bymadata.com.ar/
 //
-//   node brokers/balanz/balanz_scraping.mjs
+//   node brokers/balanzar/balanzar_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
 import { withoutObligations } from "../../obligation.mjs";
@@ -314,7 +314,7 @@ if (cedears.length < 1200) throw new Error("the CEDEAR board was short");
 if (cedears.filter((row) => row.type === "ETF").length < 40) throw new Error("CEDEAR ETFs were short");
 
 const kept = stampRows(withoutObligations(unique));
-fs.writeFileSync(new URL("balanz-parsed.json", import.meta.url), JSON.stringify(kept, null, 2));
+fs.writeFileSync(new URL("balanzar-parsed.json", import.meta.url), JSON.stringify(kept, null, 2));
 
 const byType = new Map();
 for (const row of kept) byType.set(row.type, (byType.get(row.type) || 0) + 1);

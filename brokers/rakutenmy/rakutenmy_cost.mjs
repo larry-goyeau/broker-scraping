@@ -31,10 +31,18 @@
 //   Hong Kong, Bursa         no book is published here
 //   ADR fee                  a range, so it stays out
 //   Assisted RM30, margin and same-day amalgamation stay out.
-//   Cash in MYR, USD or HKD is held with no printed conversion charge.
+//   Cash in MYR, USD or HKD is held at no charge, but a deposit is ringgit
+//   only (deposits.mjs), so a US or HK line is a forced MYR->USD/HKD
+//   conversion on the buy and back on the sell. No rate or spread is
+//   printed: the fees page says only "The exchange rate is updated at 6pm
+//   Malaysia time", and the FAQ "For settlement, the quoted rates will be
+//   applied." The change leg is unknown, so the total is N/A.
+//   https://www.rakutentrade.my/fees
+//   https://www.rakutentrade.my/faqs/foreign-equity-cash-portfolio-management/can-i-deposit-or-withdraw-funds-in-usd-or-hkd
+//   read on 2026-10-19.
 //
-//   node brokers/rakutenma/rakutenma_cost.mjs MAYBANK Bursa MYR --shares=10 --price=10
-//   node brokers/rakutenma/rakutenma_cost.mjs AAPL US USD --shares=10 --price=230
+//   node brokers/rakutenmy/rakutenmy_cost.mjs MAYBANK Bursa MYR --shares=10 --price=10
+//   node brokers/rakutenmy/rakutenmy_cost.mjs AAPL US USD --shares=10 --price=230
 //
 // `roundTrip(...)` reads files, not the network.
 
@@ -48,7 +56,7 @@ import { bookParts, plus, finite } from "../../na.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
 
-const CATALOGUE = new URL("rakutenma-parsed.json", import.meta.url);
+const CATALOGUE = new URL("rakutenmy-parsed.json", import.meta.url);
 const PAGE = "https://www.rakutentrade.my/fees";
 const READ_ON = "2026-10-02";
 const SST = 0.08;
@@ -168,7 +176,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     remark: "",
   };
   if (!catalogue) {
-    return { ...answer, why: "le catalogue Rakuten Trade n'existe pas encore : lancer `node brokers/rakutenma/rakutenma_scraping.mjs`" };
+    return { ...answer, why: "le catalogue Rakuten Trade n'existe pas encore : lancer `node brokers/rakutenmy/rakutenmy_scraping.mjs`" };
   }
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Rakuten Trade` };
@@ -186,7 +194,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     mic: m.venue?.mic ?? null,
     currency: m.row.currency,
     unsourced: m.unsourced,
-    broker: "rakutenma",
+    broker: "rakutenmy",
     ticker: m.row.ticker,
   });
   const listing = {
@@ -204,7 +212,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   let marketBp = bp ?? book.leaf?.bp ?? null;
   let marketPerShare = perShare ?? book.leaf?.perShare ?? null;
   if (american && bp == null && perShare == null) {
-    const quoted = usBookPerShare({ broker: "rakutenma", ticker: listing.ticker, fallback: marketPerShare });
+    const quoted = usBookPerShare({ broker: "rakutenmy", ticker: listing.ticker, fallback: marketPerShare });
     if (quoted != null) marketPerShare = quoted;
   }
   const tax = taxesOf(listing.isin);
@@ -238,7 +246,12 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
 
   const notional = n * p;
   const notionalUsd = dollars(notional, listing.currency);
-  const brokerFees = ticketUsd({ market, type: listing.type, notional, shares: n, price: p });
+  const ticket = ticketUsd({ market, type: listing.type, notional, shares: n, price: p });
+  // A US or HK line is a forced conversion from ringgit, buy and sell. No
+  // published rate: unknown.
+  const forced = listing.currency !== "MYR";
+  const fxUsd = forced ? null : 0;
+  const brokerFees = plus(ticket, fxUsd);
   const parts = bookParts({
     bp: marketBp,
     perShare: marketPerShare,
@@ -250,16 +263,31 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     parts.a == null || notionalUsd == null ? null : parts.b == null ? null : parts.a * notionalUsd + parts.b * n;
   const taxUsd = notionalUsd == null ? null : notionalUsd * taxTotal;
   const usd = plus(bookUsd, brokerFees, taxUsd);
+  const unknown = [
+    forced ? `change forcé vers ${listing.currency} : taux de change non publié` : null,
+    bookUsd == null ? `aucun carnet pour ${listing.exchange} : ${m.unsourced?.why || "pas de feuille de carnet"}` : null,
+  ].filter(Boolean);
 
   return {
     ...shared,
+    ...(forced
+      ? { basis: `${shared.basis} Change forcé MYR→${listing.currency} et retour : taux non publié (relu le 2026-10-19).` }
+      : {}),
     usd: finite(usd, 6),
     brokerFees: finite(brokerFees, 6),
-    ...(bookUsd == null
-      ? { why: `aucun carnet pour ${listing.exchange} : ${m.unsourced?.why || "pas de feuille de carnet"}` }
-      : {}),
+    ...(unknown.length ? { why: unknown.join(" ; ") } : {}),
     trade: { shares: n, price: p, notional, notionalUsd: finite(notionalUsd, 6), currency: listing.currency },
     commission: { market, currency: listing.currency },
+    ...(forced
+      ? {
+          parts: {
+            marché: finite(bookUsd, 6),
+            courtage: finite(ticket, 6),
+            change: finite(fxUsd, 6),
+            taxes: finite(taxUsd, 6),
+          },
+        }
+      : {}),
   };
 }
 

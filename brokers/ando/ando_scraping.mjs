@@ -17,8 +17,11 @@
 // ETF・ETN section (a name that says ETN is an ETN). Tokyo-listed foreign
 // shares stay out: the page says domestic shares. The REIT/fund section is
 // left out as in the other Japanese catalogues, and so is a code JASDEC
-// does not handle (8301). Nagoya is the exchange's Premier, Main and Next
-// search; its ETFs are Tokyo funds and are not a second line.
+// does not handle (8301). A name listed on Tokyo and Nagoya is written
+// once per exchange: the page sells both. Nagoya is the exchange's
+// Premier, Main and Next search and its ETF board (1319, the Nikkei 300
+// fund the page names, also a Tokyo fund, and 1553, a Nagoya sole
+// listing).
 //
 // Not in the file: the other foreign shares the face-to-face page says
 // are handled on request (外国株式等, no list); Fukuoka and Sapporo, which
@@ -43,6 +46,7 @@ import {
   fold,
   jasdecRefused,
   jpRow,
+  nagoyaEtfs,
   nagoyaListing,
   textOf,
   tokyoListing,
@@ -82,10 +86,11 @@ async function checkNetPage() {
   }
 }
 
-const [us, tokyo, nagoya, refused] = await Promise.all([
+const [us, tokyo, nagoya, nagoyaFunds, refused] = await Promise.all([
   usBook(),
   tokyoListing(),
   nagoyaListing(),
+  nagoyaEtfs(),
   jasdecRefused(),
   checkNetPage(),
 ]);
@@ -104,6 +109,7 @@ for (const line of nagoya) {
   if (refused.has(line.code)) drop("JASDEC");
   else rows.push(jpRow({ ...line, exchange: "Nagoya", type: "STOCK" }));
 }
+for (const line of nagoyaFunds) rows.push(jpRow({ ...line, exchange: "Nagoya", type: "ETF" }));
 
 attachJapanIsins(rows);
 writeCatalogue(import.meta.url, "ando-parsed.json", rows, {

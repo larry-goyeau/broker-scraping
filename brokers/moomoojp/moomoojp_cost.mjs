@@ -27,8 +27,8 @@
 //   Clearing Inc. The book is that firm's Rule 606.
 //   https://risk-disclosure.jp.moomoo.com/j/JPINTR210?l=ja
 //
-//   node brokers/moomoo/moomoo_cost.mjs 1305 Tokyo JPY --shares=10 --price=400
-//   node brokers/moomoo/moomoo_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/moomoojp/moomoojp_cost.mjs 1305 Tokyo JPY --shares=10 --price=400
+//   node brokers/moomoojp/moomoojp_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
 //
 // `roundTrip(...)` reads files, not the network.
 
@@ -41,7 +41,7 @@ import { bookParts, plus, finite } from "../../na.mjs";
 import { usBookPerShare } from "../../spreads/rule606.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, fxRemark, toUsd, usdPer } from "../../fx.mjs";
 
-const CATALOGUE = new URL("moomoo-parsed.json", import.meta.url);
+const CATALOGUE = new URL("moomoojp-parsed.json", import.meta.url);
 const PAGE = "https://www.moomoo.com/jp/pricing";
 const JAPAN_PAGE = "https://www.moomoo.com/jp/support/topic7_189";
 const US_PAGE = "https://www.moomoo.com/jp/support/topic7_183";
@@ -107,7 +107,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     remark: "",
   };
   if (!catalogue) {
-    return { ...answer, why: "le catalogue moomoo n'existe pas encore : lancer `node brokers/moomoo/moomoo_scraping.mjs`" };
+    return { ...answer, why: "le catalogue moomoo n'existe pas encore : lancer `node brokers/moomoojp/moomoojp_scraping.mjs`" };
   }
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue moomoo` };
@@ -125,7 +125,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     mic: m.venue?.mic ?? null,
     currency: m.row.currency,
     unsourced: m.unsourced,
-    broker: "moomoo",
+    broker: "moomoojp",
     ticker: m.row.ticker,
   });
   const listing = {
@@ -178,7 +178,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   let marketBp = bp ?? book.leaf?.bp ?? null;
   let marketPerShare = perShare ?? book.leaf?.perShare ?? null;
   if (american) {
-    const quoted = usBookPerShare({ broker: "moomoo", ticker: listing.ticker, fallback: marketPerShare });
+    const quoted = usBookPerShare({ broker: "moomoojp", ticker: listing.ticker, fallback: marketPerShare });
     if (quoted != null) marketPerShare = quoted;
   }
   const parts = bookParts({

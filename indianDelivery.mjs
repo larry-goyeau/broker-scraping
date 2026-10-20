@@ -38,19 +38,52 @@ export function amountGap(applied, other) {
   if (rounded === 0) return "";
   return points > 0 ? `-${rounded}` : `${rounded}`;
 }
+// The same for two rates, as words: "0.15% lower" when the other table is
+// cheaper, "0.05% higher" when it costs more, "" when they round equal.
 export function rateGap(applied, other) {
   const points = (Number(applied) - Number(other)) * 100;
-  const rounded = Math.round(Math.abs(points) * 10000) / 10000;
+  const rounded = Math.round(Math.abs(points) * 100) / 100;
   if (rounded === 0) return "";
-  return points > 0 ? `-${rounded}` : `${rounded}`;
+  return `${rounded}% ${points > 0 ? "lower" : "higher"}`;
 }
 
 // The round trip charges `delivery`. Intraday is another table. The remark
 // is the gap between those two rates. The rupee cap stays in its own table.
 export function intradayGap(deliveryRate, intradayRate) {
   const gap = rateGap(deliveryRate, intradayRate);
-  return gap ? `Intraday commission is ${gap}%.` : "";
+  return gap ? `Intraday commission is ${gap}.` : "";
 }
+
+// Same idea when the two tables are rupees an order rather than one rate:
+// the gap is read at this trade's notional, so it rides on the priced answer.
+export function sameDaySell(cost, deliveryEach, intradayEach) {
+  const notional = Number(cost?.trade?.notional);
+  if (!(notional > 0)) return cost;
+  const gap = rateGap(deliveryEach(notional) / notional, intradayEach(notional) / notional);
+  const line = gap ? `Same day sell is ${gap}.` : "";
+  return { ...cost, remark: [line, cost.remark].filter(Boolean).join(" ") };
+}
+
+// The whole intraday round trip against the delivery one, at this trade's
+// notional: brokerage plus GST, STT, stamp and the DP debit. The law's
+// intraday STT is 0.025% on the sell only and stamp 0.003% on the buy;
+// intraday has no DP debit. Exchange, SEBI and IPFT lines are the same on
+// both, so they cancel. Two decimals.
+export function intradayBuySell(cost, schedule, intradayEach) {
+  const notional = Number(cost?.trade?.notional);
+  if (!(notional > 0)) return cost;
+  const gst = 1 + schedule.gstRate;
+  const delivery =
+    2 * schedule.brokerageEach(notional) * gst +
+    notional * (2 * schedule.sttRate + schedule.stampRate) +
+    schedule.dpInr * (schedule.gstOnDp ? gst : 1);
+  const intraday = 2 * intradayEach(notional) * gst + notional * (INTRADAY_STT + INTRADAY_STAMP);
+  const gap = Math.round(((delivery - intraday) / notional) * 100 * 100) / 100;
+  const line = gap ? `Intraday buy and sell is ${Math.abs(gap)}% ${gap > 0 ? "lower" : "higher"}.` : "";
+  return { ...cost, remark: [line, cost.remark].filter(Boolean).join(" ") };
+}
+const INTRADAY_STT = 0.00025;
+const INTRADAY_STAMP = 0.00003;
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 const code = (s) => String(s || "").trim().toUpperCase();

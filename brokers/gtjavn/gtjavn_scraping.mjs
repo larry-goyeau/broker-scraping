@@ -13,7 +13,7 @@
 //   https://priceboard.gtjai.com.vn/assets/config.json
 //   https://krxmobile.gtjai.com.vn/market/socket.io (topic KRXMDDS|STKLST|STO|VI, STX, UPX)
 //
-//   node brokers/gtja/gtja_scraping.mjs
+//   node brokers/gtjavn/gtjavn_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
 import { withoutObligations } from "../../obligation.mjs";
@@ -24,4 +24,4 @@ const STREAM = "https://krxmobile.gtjai.com.vn";
 
 const { lines, leftOut } = await altisssBoard(STREAM);
 const rows = finish(lines, leftOut);
-fs.writeFileSync(new URL("gtja-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(rows)), null, 2));
+fs.writeFileSync(new URL("gtjavn-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(rows)), null, 2));

@@ -30,9 +30,8 @@
 //
 // Foreign orders go to Saxo Bank A/S. The communiqué of 31 December 2025
 // names no other broker, and the regulation lets Saxo use another firm
-// without naming it. Saxo Bank A/S is not a US broker-dealer in the 606
-// file, so no Rule 606 mix is applied. A Nasdaq or NYSE line keeps that
-// exchange's quoted NBBO.
+// without naming it. Saxo's RTS 28 gives US-traded shares to Citadel Securities LLC, so the
+// US book is the blended 605 × Citadel's Q (alias in spreads/rule606.mjs).
 //
 //   https://www.aliorbank.pl/dam/jcr:ca1b9ef9-7529-4aed-9ac1-3fd5ff8a63ff/Taryfa-oplat-i-prowizji-Biura-Maklerskiego-Alior-Banku-S.A-z-dnia-12.11.2025.pdf
 //   https://www.aliorbank.pl/dam/jcr:a58c5245-33e8-43e6-a15c-201255915ae2/RNZ-exante.pdf
@@ -266,7 +265,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     remark: [
       fxNote(listing.currency),
       rule.dayTrade
-        ? `If the sale is the same day, that sale is -${((POLISH_RATE - DAY_RATE) * 100).toFixed(2)}% fees.`
+        ? `If the sale is the same day, that sale's fees are ${Number(((POLISH_RATE - DAY_RATE) * 100).toFixed(2))}% lower.`
         : "",
     ]
       .filter(Boolean)
@@ -362,7 +361,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
           gpwEtp: "0 through 2026-12-31",
           rates: "0.29 % min 5 EUR, 5 USD, 5 GBP, 60 SEK, 60 NOK or 60 DKK; US exchanges also 0.02 USD a share",
           conversion: "custodian bank's rate, in the remark",
-          rule606: null,
+          rule606: "Citadel Securities LLC (Saxo RTS 28), 605 × Q",
         },
         null,
         2

@@ -14,6 +14,7 @@
 
 import { stampRows } from "../../accepted.mjs";
 import { withoutObligations } from "../../obligation.mjs";
+import { withoutDelisted } from "../../psxStatus.mjs";
 import fs from "node:fs";
 
 const PAGE = "https://dps.psx.com.pk/eligible-scrips";
@@ -84,7 +85,8 @@ if (!unique.some((row) => row.ticker === "MIIETF" && row.type === "ETF")) {
 }
 if (unique.some((row) => row.ticker === "786R")) throw new Error("a right stayed in the file");
 
-const stamped = stampRows(withoutObligations(unique));
+// Delisted and suspended companies stay in the list but cannot be bought.
+const stamped = stampRows(withoutDelisted(withoutObligations(unique)));
 for (const row of stamped) if (row.isin) row.query = row.isin;
 fs.writeFileSync(OUTPUT, JSON.stringify(stamped, null, 2));
 

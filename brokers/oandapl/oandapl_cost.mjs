@@ -2,7 +2,7 @@
 // back at once, in dollars.
 //
 // OANDA TMS Brokers S.A. (Warsaw, KNF). The catalogue is the TMS Stocks list
-// (`oanda_scraping.mjs`): 2 380 cash shares and UCITS ETFs across New York,
+// (`oandapl_scraping.mjs`): 2 380 cash shares and UCITS ETFs across New York,
 // Nasdaq, Xetra, Euronext, the LSE, Madrid and the GPW. The CFD books, BTCUSD
 // among them, are another product and are not here.
 //
@@ -160,11 +160,11 @@
 //   https://www.oanda.com/eu-en/invest/brokerage-account
 //   https://help.oanda.com/eu/en/faqs/trade-etfs-eu.htm
 //
-//   node brokers/oanda/oanda_cost.mjs AAPL --shares=10 --price=230
-//   node brokers/oanda/oanda_cost.mjs AAPL --shares=10 --price=230 --plan=usd
-//   node brokers/oanda/oanda_cost.mjs VWCE XETR EUR --shares=10 --price=120
-//   node brokers/oanda/oanda_cost.mjs HSBA LSE GBP --shares=100 --price=9
-//   node brokers/oanda/oanda_cost.mjs --schedule
+//   node brokers/oandapl/oandapl_cost.mjs AAPL --shares=10 --price=230
+//   node brokers/oandapl/oandapl_cost.mjs AAPL --shares=10 --price=230 --plan=usd
+//   node brokers/oandapl/oandapl_cost.mjs VWCE XETR EUR --shares=10 --price=120
+//   node brokers/oandapl/oandapl_cost.mjs HSBA LSE GBP --shares=100 --price=9
+//   node brokers/oandapl/oandapl_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
@@ -176,7 +176,7 @@ import { plus, finite } from "../../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
 
-const CATALOGUE = new URL("oanda-parsed.json", import.meta.url);
+const CATALOGUE = new URL("oandapl-parsed.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://www.oanda.com/eu-en/document/81",
@@ -408,13 +408,13 @@ function stampOf({ listing, tax }) {
   const isin = String(listing.isin || "").toUpperCase();
   const mic = String(listing.mic || "").toUpperCase();
   if (isin.startsWith("IE") || mic === "XDUB" || mic === "XMSM") {
-    return { pct: IE_STAMP, rates: { IRISH_STAMP: IE_STAMP }, source: "oanda" };
+    return { pct: IE_STAMP, rates: { IRISH_STAMP: IE_STAMP }, source: "oandapl" };
   }
   if (mic === "XLON" || isin.startsWith("GB")) {
-    return { pct: UK_STAMP, rates: { STAMP_DUTY: UK_STAMP }, source: "oanda" };
+    return { pct: UK_STAMP, rates: { STAMP_DUTY: UK_STAMP }, source: "oandapl" };
   }
   if (isin.startsWith("ES") || mic === "XMAD") {
-    return { pct: ES_FTT, rates: { SPANISH_FTT: ES_FTT }, source: "oanda", capped: ES_FTT_ABOVE };
+    return { pct: ES_FTT, rates: { SPANISH_FTT: ES_FTT }, source: "oandapl", capped: ES_FTT_ABOVE };
   }
   return { pct: 0, rates: {}, source: null };
 }
@@ -483,7 +483,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const answer = { usd: null, brokerFees: null, etf, place, currency, onlineBuy: true, plan: picked?.id ?? plan };
 
   if (!picked) return { ...answer, why: `formule inconnue : ${plan} (eur|usd|pln|ron|czk)` };
-  if (!catalogue) return { ...answer, why: "le catalogue OANDA n'existe pas encore : lancer `node brokers/oanda/oanda_scraping.mjs`" };
+  if (!catalogue) return { ...answer, why: "le catalogue OANDA n'existe pas encore : lancer `node brokers/oandapl/oandapl_scraping.mjs`" };
 
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue OANDA` };
@@ -492,12 +492,12 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   }
 
   const m = matches[0];
-  let book = spreadLeaf(spreads, { isin: m.row.isin, mic: m.venue?.mic ?? null, currency: m.row.currency, unsourced: m.unsourced, broker: "oanda", ticker: m.row.ticker });
+  let book = spreadLeaf(spreads, { isin: m.row.isin, mic: m.venue?.mic ?? null, currency: m.row.currency, unsourced: m.unsourced, broker: "oandapl", ticker: m.row.ticker });
   const marketGuess = feeMarketOf(m.row, book.mic ?? m.venue?.mic);
   // Rule 605 is a tape figure. A leftover csv venue (BCS, GETTEX, LSX) on a US
   // share still reads the same American report as NYSE or Nasdaq.
   if (marketGuess === "us" && book.leaf?.perShare == null) {
-    const tape = spreadLeaf(spreads, { isin: m.row.isin, mic: "XNYS", currency: "USD", broker: "oanda", ticker: m.row.ticker });
+    const tape = spreadLeaf(spreads, { isin: m.row.isin, mic: "XNYS", currency: "USD", broker: "oandapl", ticker: m.row.ticker });
     if (tape.leaf?.perShare != null) book = tape;
   }
 
@@ -780,10 +780,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node oanda_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--plan=eur|usd|pln|ron|czk] [--json]\n" +
-        "        node oanda_cost.mjs --schedule\n" +
-        "  ex.   node oanda_cost.mjs AAPL --shares=10 --price=230\n" +
-        "        node oanda_cost.mjs HSBA LSE GBP --shares=100 --price=9"
+      "usage : node oandapl_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--plan=eur|usd|pln|ron|czk] [--json]\n" +
+        "        node oandapl_cost.mjs --schedule\n" +
+        "  ex.   node oandapl_cost.mjs AAPL --shares=10 --price=230\n" +
+        "        node oandapl_cost.mjs HSBA LSE GBP --shares=100 --price=9"
     );
     process.exit(2);
   }

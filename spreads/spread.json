@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-16T14:00:58.127Z",
+  "generatedAt": "2026-10-18T23:36:04.430Z",
   "unit": "spreads[ISIN][place][devise] = { bp, url } ou { perShare, url } : le coût d'un achat suivi d'une revente immédiate, pour un ordre de particulier. bp -> montant * bp / 10000 (places européennes, mesure en pourcentage). perShare -> parts * perShare (places américaines, spread effectif des rapports 605, en dollars par part, amélioration de prix comprise). url mène à la source. Le double pour le cas pessimiste (ordre internalisé, ou fonds peu liquide).",
   "convention": "coût d'un aller-retour, taille d'un particulier, à la touche, ramené à la moyenne de séance",
   "session": {
@@ -94816,23 +94816,23 @@
         0.937
       ],
       "IE00BMX0DF60|USD": [
-        1.274,
-        1.24,
-        1.031,
-        1.031,
-        0.914,
-        0.96,
-        0.941,
-        0.94,
-        1.008,
-        1.124,
-        1.13,
-        1.152,
-        1.337,
-        1.112,
-        0.654,
-        0.591,
-        0.561
+        1.533,
+        1.469,
+        1.082,
+        1.092,
+        1.022,
+        1.026,
+        1.002,
+        1.073,
+        1.064,
+        1.033,
+        1.009,
+        1.059,
+        1.263,
+        1.079,
+        0.438,
+        0.378,
+        0.378
       ],
       "DE000A4ARTH9|EUR": [
         1.155,
@@ -94854,23 +94854,23 @@
         0.986
       ],
       "DE000A3GPSP7|USD": [
-        1.095,
-        0.949,
-        0.961,
-        0.958,
-        0.96,
-        0.969,
-        0.946,
-        0.933,
-        0.93,
-        0.918,
-        1.062,
-        1.124,
+        1.097,
+        0.971,
+        0.979,
+        0.967,
         0.984,
-        1.175,
-        1.072,
+        0.924,
         0.957,
-        1.008
+        0.948,
+        0.982,
+        0.986,
+        1.073,
+        1.002,
+        0.94,
+        1.102,
+        1.111,
+        0.946,
+        1.03
       ],
       "DE000A4AKW34|USD": [
         1.544,
@@ -94892,23 +94892,23 @@
         0.968
       ],
       "IE00097WZHZ9|USD": [
-        1.307,
-        1.119,
+        1.309,
+        1.081,
+        1.074,
+        1.035,
+        1.042,
+        0.995,
+        0.985,
+        1.029,
+        1.043,
+        1.058,
+        1.095,
+        1.054,
         1.093,
-        1.067,
-        1.062,
-        1.009,
-        0.961,
-        0.926,
-        0.927,
-        0.915,
-        0.895,
-        1.011,
-        0.967,
-        0.991,
-        0.909,
-        0.931,
-        0.91
+        0.879,
+        0.754,
+        0.776,
+        0.697
       ],
       "IE000A9G9R73|USD": [
         1.177,
@@ -94930,23 +94930,23 @@
         0.596
       ],
       "IE00BMXC7W70|USD": [
-        1.341,
-        1.188,
-        0.967,
-        0.965,
-        0.971,
-        0.903,
-        0.868,
-        0.853,
-        0.969,
-        0.942,
-        0.953,
-        1.056,
-        1.23,
-        1.16,
-        0.923,
-        0.866,
-        0.846
+        1.115,
+        1.021,
+        1.049,
+        0.994,
+        1.021,
+        1.01,
+        0.979,
+        0.981,
+        0.994,
+        0.988,
+        1.025,
+        1.061,
+        1.103,
+        1.133,
+        0.874,
+        0.826,
+        0.826
       ],
       "IE000SNWS0L0|USD": [
         1.172,
@@ -94968,23 +94968,23 @@
         1.008
       ],
       "IE00BMXC7V63|USD": [
-        1.177,
-        1.074,
-        1.064,
-        1.076,
-        0.94,
-        0.903,
-        0.902,
-        0.889,
-        0.96,
-        0.985,
-        0.998,
-        1.109,
-        1.317,
-        1.249,
-        0.815,
-        0.785,
-        0.757
+        1.096,
+        0.907,
+        0.979,
+        0.904,
+        0.93,
+        0.859,
+        0.873,
+        0.942,
+        0.99,
+        0.927,
+        1.01,
+        1.019,
+        1.316,
+        1.286,
+        1.065,
+        0.946,
+        0.953
       ],
       "IE00BJ5JP212|USD": [
         1.042,
@@ -95139,42 +95139,42 @@
         1.018
       ],
       "IE00BKVL7778|USD": [
-        1.204,
-        1.106,
-        1.06,
-        1.047,
-        1.034,
-        1.049,
-        1.018,
+        1.032,
         0.992,
-        1.073,
-        1.081,
-        1.117,
-        1.129,
+        1.052,
+        1.032,
+        1.019,
+        0.982,
+        0.945,
+        0.977,
+        1.09,
+        1.057,
+        1.097,
         1.12,
-        0.849,
-        0.738,
-        0.717,
-        0.663
+        1.15,
+        0.973,
+        0.822,
+        0.831,
+        0.828
       ],
       "IE000U58J0M1|USD": [
-        1.114,
-        0.96,
-        0.947,
-        0.919,
-        0.961,
-        0.926,
-        0.906,
-        0.859,
-        0.993,
-        1.023,
-        1.051,
-        1.101,
-        1.032,
-        1.227,
-        0.991,
-        1.004,
-        0.985
+        1.089,
+        1.013,
+        0.996,
+        0.952,
+        0.969,
+        0.949,
+        0.914,
+        0.93,
+        1.05,
+        1.036,
+        1.062,
+        1.134,
+        1.054,
+        1.134,
+        0.936,
+        0.914,
+        0.867
       ],
       "IE00BJ5JPG56|USD": [
         1.187,
@@ -95196,23 +95196,23 @@
         1.002
       ],
       "IE00BGDQ0V72|USD": [
-        1.127,
-        1.049,
-        0.991,
-        0.882,
-        0.91,
-        0.897,
-        0.916,
-        0.951,
-        0.962,
-        1.001,
-        1.051,
-        1.108,
-        1.099,
-        1.133,
+        1.266,
+        1.209,
+        0.997,
+        0.864,
+        0.892,
+        0.858,
+        0.891,
+        0.888,
+        0.89,
+        0.918,
         0.98,
-        1.025,
-        0.918
+        0.993,
+        1.084,
+        1.175,
+        1.046,
+        1.023,
+        1.027
       ],
       "IE00BJ5JP105|USD": [
         1.116,
@@ -95234,42 +95234,42 @@
         0.772
       ],
       "IE00BGDQ0T50|USD": [
-        1.165,
-        0.938,
-        0.916,
-        0.94,
+        1.086,
         0.964,
-        0.887,
-        0.925,
-        0.832,
-        0.921,
-        0.885,
-        0.992,
-        0.994,
-        0.888,
-        1.261,
-        1.184,
-        1.135,
-        1.172
+        1.071,
+        0.989,
+        0.902,
+        0.874,
+        0.958,
+        0.945,
+        0.983,
+        0.94,
+        0.954,
+        0.943,
+        0.914,
+        1.251,
+        1.125,
+        1.06,
+        1.039
       ],
       "IE000D8FCSD8|USD": [
-        1.202,
-        1.051,
+        1.082,
+        1.053,
+        1.041,
+        1.009,
+        1.057,
+        1.007,
+        1.006,
         1.004,
-        1.026,
-        0.964,
-        0.906,
-        0.89,
-        0.952,
-        0.944,
-        1.01,
-        1.017,
-        1.026,
-        1.062,
         1.097,
-        0.937,
-        0.951,
-        0.962
+        1.087,
+        1.106,
+        1.128,
+        1.129,
+        0.926,
+        0.754,
+        0.758,
+        0.756
       ],
       "IE00BYPC1H27|USD": [
         1.46,
@@ -95424,80 +95424,80 @@
         1.011
       ],
       "DE000A28M8D0|USD": [
-        1.104,
-        0.963,
+        1.098,
+        0.986,
+        0.969,
         0.958,
+        0.989,
+        0.914,
+        0.918,
+        0.905,
+        0.913,
+        0.922,
+        1.044,
         0.976,
-        0.977,
-        0.968,
-        0.945,
-        0.945,
-        0.948,
-        0.945,
-        1.048,
-        1.066,
-        0.956,
-        1.117,
-        1.082,
-        0.981,
-        1.021
+        0.931,
+        1.196,
+        1.127,
+        1.023,
+        1.13
       ],
       "CH1135202096|USD": [
-        1.249,
-        0.93,
-        0.92,
-        0.917,
-        0.912,
-        0.974,
-        0.901,
-        0.878,
-        0.884,
-        0.908,
-        0.981,
-        1.112,
-        1.11,
-        1.167,
-        1.138,
-        1.093,
-        0.927
+        1.236,
+        1.085,
+        1.072,
+        1.04,
+        0.994,
+        0.936,
+        0.938,
+        0.964,
+        0.992,
+        0.972,
+        0.989,
+        0.96,
+        0.937,
+        0.978,
+        0.989,
+        0.948,
+        0.97
       ],
       "IE000U6ABUJ7|USD": [
-        1.209,
-        1.058,
-        1.025,
-        0.968,
-        1,
-        0.982,
-        0.911,
-        0.93,
-        1.049,
-        1.165,
-        1.231,
-        1.286,
-        1.258,
-        1,
-        0.692,
-        0.61,
-        0.626
+        1.238,
+        1.122,
+        1.065,
+        1.054,
+        0.988,
+        0.984,
+        0.917,
+        0.934,
+        1.056,
+        1.089,
+        1.113,
+        1.168,
+        1.242,
+        1.192,
+        0.666,
+        0.6,
+        0.57
       ],
       "IE00BKPX3K41|USD": [
-        1.201,
-        1.001,
-        1.186,
-        1.113,
-        0.939,
-        0.902,
-        0.849,
-        0.784,
-        0.87,
-        0.95,
-        1,
-        0.978,
-        1.008,
-        1.331,
-        1.014,
-        0.979,
-        0.895
+        1.129,
+        0.985,
+        1.171,
+        1.153,
+        1.052,
+        0.934,
+        0.907,
+        0.892,
+        0.94,
+        0.89,
+        0.909,
+        0.905,
+        0.963,
+        1.276,
+        0.956,
+        0.94,
+        0.997
       ],
       "IE00B4LJS984|EUR": [
         0.982,
@@ -178870,6 +178870,25 @@
         1.111,
         0.978,
         0.869
+      ],
+      "IE000PTMIE90|USD": [
+        1.933,
+        1.035,
+        0.949,
+        0.901,
+        0.889,
+        0.888,
+        0.879,
+        0.902,
+        0.945,
+        0.898,
+        0.886,
+        0.948,
+        0.903,
+        1.126,
+        1.003,
+        0.962,
+        0.953
       ]
     }
   },
@@ -1005836,7 +1005855,7 @@
           "url": "https://www.ls-tc.de/de/download"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 20.02,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=20245924"
@@ -1147950,7 +1147969,7 @@
           "url": "https://www.comdirect.de/inf/aktien/NO0010917719?ID_NOTATION=323596778"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 819.67,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=28435162"
@@ -1155554,7 +1155573,7 @@
           "url": "https://www.ls-tc.de/de/download"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 69.44,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=20230436"
@@ -1165984,7 +1166003,7 @@
           "url": "https://www.ajbell.co.uk/market-research/screener/shares"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 17.88,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=54933086"
@@ -1168760,7 +1168779,7 @@
           "url": "https://component-api.wertpapiere.ing.de/api/v1/instrument-header?isinOrSearchTerm=NO0013325506&isKnownIsin=true&includeAvailableExchanges=true&exchangeCode=TGT"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 21.21,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=46602327"
@@ -1169216,7 +1169235,7 @@
           "url": "https://cld42.boersenag.de/m13data/indexpt.html"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 133.63,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=23359875"
@@ -1176536,7 +1176555,7 @@
           "url": "https://www.boerse-muenchen.de/handel-support/kursdaten-delayed-data/"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 1450.55,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=21061266"
@@ -1180048,7 +1180067,7 @@
           "url": "https://component-api.wertpapiere.ing.de/api/v1/instrument-header?isinOrSearchTerm=NO0010955917&isKnownIsin=true&includeAvailableExchanges=true&exchangeCode=TGT"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 101.11,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=25156357"
@@ -1199196,7 +1199215,7 @@
           "url": "https://www.boerse-muenchen.de/handel-support/kursdaten-delayed-data/"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 545.45,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=20242156"
@@ -1214268,7 +1214287,7 @@
           "url": "https://www.ls-tc.de/de/download"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 356.56,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=20242190"
@@ -1215802,7 +1215821,7 @@
           "url": "https://www.comdirect.de/inf/aktien/NO0003058109?ID_NOTATION=328309212"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 139.86,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=55180235"
@@ -1215986,7 +1216005,7 @@
           "url": "https://component-api.wertpapiere.ing.de/api/v1/instrument-header?isinOrSearchTerm=NO0010360019&isKnownIsin=true&includeAvailableExchanges=true&exchangeCode=TGT"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 41.71,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=32191608"
@@ -1216244,7 +1216263,7 @@
           "url": "https://www.ls-tc.de/de/download"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 226.42,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=23300730"
@@ -1225772,7 +1225791,7 @@
           "url": "https://www.ajbell.co.uk/market-research/screener/shares"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 176.99,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=25173636"
@@ -1292168,7 +1292187,7 @@
           "url": "https://www.comdirect.de/inf/aktien/NO0013470534?ID_NOTATION=323465245"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 586.91,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=22266100"
@@ -1294348,7 +1294367,7 @@
           "url": "https://cld42.boersenag.de/m13data/indexpt.html"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 81.37,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=42976225"
@@ -1294674,7 +1294693,7 @@
           "url": "https://component-api.wertpapiere.ing.de/api/v1/instrument-header?isinOrSearchTerm=NO0010950249&isKnownIsin=true&includeAvailableExchanges=true&exchangeCode=TGT"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 401.85,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=22963004"
@@ -1294798,7 +1294817,7 @@
           "url": "https://www.comdirect.de/inf/aktien/NO0010895782?ID_NOTATION=314628783"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 22.35,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=20245859"
@@ -1297738,7 +1297757,7 @@
           "url": "https://www.comdirect.de/inf/aktien/NO0013228585?ID_NOTATION=382182048"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 849.42,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=20242081"
@@ -1299304,7 +1299323,7 @@
           "url": "https://www.comdirect.de/inf/aktien/MHY1096C1093?ID_NOTATION=557928039"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 24.9,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=56429084"
@@ -1301912,7 +1301931,7 @@
           "url": "https://www.ajbell.co.uk/market-research/screener/shares"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 245.18,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=20448227"
@@ -1318188,7 +1318207,7 @@
           "url": "https://www.comdirect.de/inf/aktien/NO0010969108?ID_NOTATION=335757371"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 92.17,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=23759083"
@@ -1319746,7 +1319765,7 @@
           "url": "https://www.comdirect.de/inf/aktien/NO0010762792?ID_NOTATION=332678630"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 81.97,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=20242152"
@@ -1364272,7 +1364291,7 @@
           "url": "https://www.comdirect.de/inf/aktien/NO0013711739?ID_NOTATION=397384247"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 235.29,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=34241927"
@@ -1365974,7 +1365993,7 @@
           "url": "https://www.ls-tc.de/de/download"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 92.17,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=26168032"
@@ -1366388,7 +1366407,7 @@
           "url": "https://www.comdirect.de/inf/aktien/NO0010894512?ID_NOTATION=308957436"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 192.51,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=38126506"
@@ -1367118,7 +1367137,7 @@
           "url": "https://www.ls-tc.de/de/download"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 199.6,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=27220321"
@@ -1369652,7 +1369671,7 @@
           "url": "https://www.ajbell.co.uk/market-research/screener/shares"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 112.99,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=21498235"
@@ -1370076,7 +1370095,7 @@
           "url": "https://www.boerse-muenchen.de/handel-support/kursdaten-delayed-data/"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 128.21,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=22650218"
@@ -1371844,7 +1371863,7 @@
           "url": "https://cld42.boersenag.de/m13data/indexpt.html"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 943.82,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=54367232"
@@ -1372146,7 +1372165,7 @@
           "url": "https://www.comdirect.de/inf/aktien/NO0012885252?ID_NOTATION=419069120"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 152.96,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=22415016"
@@ -1372618,7 +1372637,7 @@
           "url": "https://www.comdirect.de/inf/aktien/NO0010984966?ID_NOTATION=337844866"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 173.61,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=58001750"
@@ -1372692,7 +1372711,7 @@
           "url": "https://www.boerse-muenchen.de/handel-support/kursdaten-delayed-data/"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 79.26,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=32637541"
@@ -1392102,7 +1392121,7 @@
           "url": "https://component-api.wertpapiere.ing.de/api/v1/instrument-header?isinOrSearchTerm=BMG6904D1083&isKnownIsin=true&includeAvailableExchanges=true&exchangeCode=TGT"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 51.95,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=43067410"
@@ -1396980,7 +1396999,7 @@
           "url": "https://www.comdirect.de/inf/aktien/NO0012928805?ID_NOTATION=316464525"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 90.09,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=37254472"
@@ -1401374,7 +1401393,7 @@
           "url": "https://www.ls-tc.de/de/download"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 325.2,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=21061274"
@@ -1401400,7 +1401419,7 @@
           "url": "https://www.comdirect.de/inf/aktien/SGXZ33675836?ID_NOTATION=348158240"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 1592.92,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=24633194"
@@ -1407142,7 +1407161,7 @@
           "url": "https://www.comdirect.de/inf/aktien/NO0013355859?ID_NOTATION=480911434"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 110.5,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=20242166"
@@ -1408808,7 +1408827,7 @@
           "url": "https://www.comdirect.de/inf/aktien/CY0201461213?ID_NOTATION=570884536"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 218.18,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=60924515"
@@ -1409264,7 +1409283,7 @@
           "url": "https://www.comdirect.de/inf/aktien/NO0013483503?ID_NOTATION=310592747"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 346.82,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=40851836"
@@ -1411466,7 +1411485,7 @@
           "url": "https://www.comdirect.de/inf/aktien/NO0010923121?ID_NOTATION=466188085"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 165.29,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=34172766"
@@ -1416934,7 +1416953,7 @@
           "url": "https://www.comdirect.de/inf/aktien/NL0015268814?ID_NOTATION=319970769"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 206.19,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=21060813"
@@ -1417264,7 +1417283,7 @@
           "url": "https://www.comdirect.de/inf/aktien/NO0010405780?ID_NOTATION=342121713"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 124.22,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=32395842"
@@ -1417840,7 +1417859,7 @@
           "url": "https://www.ls-tc.de/de/download"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 129.45,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=35143977"
@@ -1419392,7 +1419411,7 @@
           "url": "https://www.comdirect.de/inf/aktien/NO0011013765?ID_NOTATION=344432856"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 219.78,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=45383118"
@@ -1423194,7 +1423213,7 @@
           "url": "https://www.comdirect.de/inf/aktien/NO0013756361?ID_NOTATION=577448019"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 769.23,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=60810725"
@@ -1434870,7 +1434889,7 @@
           "url": "https://www.comdirect.de/inf/aktien/NO0010907744?ID_NOTATION=327212844"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 767.49,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=22101220"
@@ -1438778,7 +1438797,7 @@
           "url": "https://www.comdirect.de/inf/aktien/NO0010887565?ID_NOTATION=310698796"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 183.91,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=20242193"
@@ -1459322,7 +1459341,7 @@
           "url": "https://www.ls-tc.de/de/download"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 23.45,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=44582958"
@@ -1479458,7 +1479477,7 @@
           "url": "https://www.comdirect.de/inf/aktien/NO0010884794?ID_NOTATION=297199916"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 881.67,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=20242088"
@@ -1485510,7 +1485529,7 @@
           "url": "https://www.boerse-muenchen.de/handel-support/kursdaten-delayed-data/"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 1210.37,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=35164176"
@@ -1488354,7 +1488373,7 @@
           "url": "https://www.ls-tc.de/de/download"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 355.87,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=49612143"
@@ -1489056,7 +1489075,7 @@
           "url": "https://www.comdirect.de/inf/aktien/NO0010893902?ID_NOTATION=321285968"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 138.57,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=22874580"
@@ -1493908,7 +1493927,7 @@
           "url": "https://www.comdirect.de/inf/aktien/NO0010859648?ID_NOTATION=315431569"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 182.05,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=21544593"
@@ -1494800,7 +1494819,7 @@
           "url": "https://www.comdirect.de/inf/aktien/NO0010859580?ID_NOTATION=324734983"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 873.18,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=22043321"
@@ -1506406,7 +1506425,7 @@
           "url": "https://www.comdirect.de/inf/aktien/NO0013698431?ID_NOTATION=535802315"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 729.17,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=32828797"
@@ -1614332,7 +1614351,7 @@
           "url": "https://www.comdirect.de/inf/aktien/NO0010811961?ID_NOTATION=311457252"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 67.68,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=20244378"
@@ -1634046,7 +1634065,7 @@
           "url": "https://myportal.questrade.com/investing/summary/quote/SHPLF"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 180.2,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=59583048"
@@ -1953016,7 +1953035,7 @@
           "url": "https://live.euronext.com/en/product/etfs/CY0108052115-XOSL/market-information"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 480,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=20230169"
@@ -1955952,7 +1955971,7 @@
           "url": "https://live.euronext.com/en/product/etfs/NO0013685750-XOSL/market-information"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 3585.66,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=20230440"
@@ -1956692,7 +1956711,7 @@
           "url": "https://live.euronext.com/en/product/etfs/NO0013036814-XOSL/market-information"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 35.27,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=55884859"
@@ -1963262,7 +1963281,7 @@
           "url": "https://www.comdirect.de/inf/aktien/MT0003060101?ID_NOTATION=569763405"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 27.74,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=59380356"
@@ -1965490,7 +1965509,7 @@
           "url": "https://live.euronext.com/en/product/etfs/NO0010536048-XOSL/market-information"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 290.91,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=20242091"
@@ -1972986,7 +1973005,7 @@
           "url": "https://www.comdirect.de/inf/aktien/NO0013759159?ID_NOTATION=583148237"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 50.63,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=60671929"
@@ -1975022,7 +1975041,7 @@
           "url": "https://live.euronext.com/en/product/etfs/CA74836K4072-XOSL/market-information"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 444.44,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=59116052"
@@ -1982208,7 +1982227,7 @@
           "url": "https://component-api.wertpapiere.ing.de/api/v1/instrument-header?isinOrSearchTerm=BMG730931091&isKnownIsin=true&includeAvailableExchanges=true&exchangeCode=TGT"
         }
       },
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 118.69,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=50277755"
@@ -2116282,7 +2116301,7 @@
       }
     },
     "SGXZ33616145": {
-      "XOAS": {
+      "MERK": {
         "NOK": {
           "bp": 66.57,
           "url": "https://www.saxotrader.fr/d/trading/open-positions?uic=61389756"
@@ -2119734,6 +2119753,550 @@
         "ARS": {
           "bp": 34.93,
           "url": "https://bonos.ecovalores.com.ar/activo/XOM"
+        }
+      }
+    },
+    "JO4100611014": {
+      "XAMM": {
+        "JOD": {
+          "bp": 350.88,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3125611017": {
+      "XAMM": {
+        "JOD": {
+          "bp": 160,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3108211017": {
+      "XAMM": {
+        "JOD": {
+          "bp": 84.39,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3128511016": {
+      "XAMM": {
+        "JOD": {
+          "bp": 190.48,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3128111015": {
+      "XAMM": {
+        "JOD": {
+          "bp": 425.53,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO4100311011": {
+      "XAMM": {
+        "JOD": {
+          "bp": 487.8,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO4104311017": {
+      "XAMM": {
+        "JOD": {
+          "bp": 68.25,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3110111015": {
+      "XAMM": {
+        "JOD": {
+          "bp": 88.89,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO4120811016": {
+      "XAMM": {
+        "JOD": {
+          "bp": 172.41,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO4121411014": {
+      "XAMM": {
+        "JOD": {
+          "bp": 81.63,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO4109811011": {
+      "XAMM": {
+        "JOD": {
+          "bp": 131.29,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3123211018": {
+      "XAMM": {
+        "JOD": {
+          "bp": 322.58,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3109711015": {
+      "XAMM": {
+        "JOD": {
+          "bp": 219.78,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO4103611011": {
+      "XAMM": {
+        "JOD": {
+          "bp": 143.88,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO4101211012": {
+      "XAMM": {
+        "JOD": {
+          "bp": 80.97,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3128211013": {
+      "XAMM": {
+        "JOD": {
+          "bp": 190.48,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3125511019": {
+      "XAMM": {
+        "JOD": {
+          "bp": 129.03,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3128711012": {
+      "XAMM": {
+        "JOD": {
+          "bp": 298.51,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3125111018": {
+      "XAMM": {
+        "JOD": {
+          "bp": 298.51,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO2103411010": {
+      "XAMM": {
+        "JOD": {
+          "bp": 138.89,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3126911010": {
+      "XAMM": {
+        "JOD": {
+          "bp": 253.16,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3125811013": {
+      "XAMM": {
+        "JOD": {
+          "bp": 263.16,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3124611018": {
+      "XAMM": {
+        "JOD": {
+          "bp": 224.72,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO4121011012": {
+      "XAMM": {
+        "JOD": {
+          "bp": 125.39,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO4100911018": {
+      "XAMM": {
+        "JOD": {
+          "bp": 118.34,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO4110611012": {
+      "XAMM": {
+        "JOD": {
+          "bp": 79.68,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3123611019": {
+      "XAMM": {
+        "JOD": {
+          "bp": 168.07,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3101011018": {
+      "XAMM": {
+        "JOD": {
+          "bp": 34.54,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3101711013": {
+      "XAMM": {
+        "JOD": {
+          "bp": 229.89,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3107611019": {
+      "XAMM": {
+        "JOD": {
+          "bp": 320.86,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3100411011": {
+      "XAMM": {
+        "JOD": {
+          "bp": 25.87,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO1100111011": {
+      "XAMM": {
+        "JOD": {
+          "bp": 59.11,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO4105511011": {
+      "XAMM": {
+        "JOD": {
+          "bp": 377.36,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO4101811019": {
+      "XAMM": {
+        "JOD": {
+          "bp": 13.61,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO4204111010": {
+      "XAMM": {
+        "JOD": {
+          "bp": 43.53,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO4100211013": {
+      "XAMM": {
+        "JOD": {
+          "bp": 392.16,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3122911014": {
+      "XAMM": {
+        "JOD": {
+          "bp": 136.05,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3120611012": {
+      "XAMM": {
+        "JOD": {
+          "bp": 24.72,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3128611014": {
+      "XAMM": {
+        "JOD": {
+          "bp": 28.45,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3125911011": {
+      "XAMM": {
+        "JOD": {
+          "bp": 240.96,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO4120911014": {
+      "XAMM": {
+        "JOD": {
+          "bp": 154.24,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO2101311014": {
+      "XAMM": {
+        "JOD": {
+          "bp": 298.51,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3124311015": {
+      "XAMM": {
+        "JOD": {
+          "bp": 89.69,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3128411019": {
+      "XAMM": {
+        "JOD": {
+          "bp": 1068.7,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3120811018": {
+      "XAMM": {
+        "JOD": {
+          "bp": 219.78,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3123811015": {
+      "XAMM": {
+        "JOD": {
+          "bp": 297.24,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3122811016": {
+      "XAMM": {
+        "JOD": {
+          "bp": 86.58,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3122111011": {
+      "XAMM": {
+        "JOD": {
+          "bp": 173.16,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3123911013": {
+      "XAMM": {
+        "JOD": {
+          "bp": 96.62,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3127011018": {
+      "XAMM": {
+        "JOD": {
+          "bp": 240.96,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3108711016": {
+      "XAMM": {
+        "JOD": {
+          "bp": 289.86,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3126111017": {
+      "XAMM": {
+        "JOD": {
+          "bp": 344.83,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO4106511010": {
+      "XAMM": {
+        "JOD": {
+          "bp": 163.49,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3124911012": {
+      "XAMM": {
+        "JOD": {
+          "bp": 186.92,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3101211014": {
+      "XAMM": {
+        "JOD": {
+          "bp": 193.24,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3127811011": {
+      "XAMM": {
+        "JOD": {
+          "bp": 891.72,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO1100612018": {
+      "XAMM": {
+        "JOD": {
+          "bp": 53.48,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3103411018": {
+      "XAMM": {
+        "JOD": {
+          "bp": 640.57,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3107711017": {
+      "XAMM": {
+        "JOD": {
+          "bp": 55.4,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3108111019": {
+      "XAMM": {
+        "JOD": {
+          "bp": 1749.05,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3101911019": {
+      "XAMM": {
+        "JOD": {
+          "bp": 118.34,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3126811012": {
+      "XAMM": {
+        "JOD": {
+          "bp": 246.91,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO2102511018": {
+      "XAMM": {
+        "JOD": {
+          "bp": 110.09,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO4121511011": {
+      "XAMM": {
+        "JOD": {
+          "bp": 127.93,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO4105211018": {
+      "XAMM": {
+        "JOD": {
+          "bp": 104.17,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3124711016": {
+      "XAMM": {
+        "JOD": {
+          "bp": 176.99,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "JO3101111016": {
+      "XAMM": {
+        "JOD": {
+          "bp": 237.15,
+          "url": "https://www.exchange.jo/en/bulletins/daily/new"
+        }
+      }
+    },
+    "NL0015000YV5": {
+      "XNXC": {
+        "EUR": {
+          "bp": 4516.13,
+          "url": "https://account.nxchange.com/order-board/NXCH.json"
         }
       }
     }

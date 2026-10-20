@@ -14,8 +14,16 @@
 //
 // United States, https://dhan.co/us-stocks/ read on 2026-09-25.
 //   Brokerage                   0.25% of trade value, minimum $0.01, each order
-//   A transfer into the US account below $100 costs $1. The FX markup is
-//   quoted on that transfer. Neither is part of this trip.
+//   A transfer into the US account below $100 costs $1. It is not part of
+//   this trip.
+//   Cash is rupees only (deposits.mjs), so a US line is a forced INR->USD
+//   conversion on the buy and USD->INR on the sell. Dhan prints no rate:
+//   "The FX rate applied includes a markup over the interbank rate. The
+//   exact rate and markup are shown transparently in the app before you
+//   confirm the transfer."
+//   https://dhan.co/support/platforms/us-stocks/what-is-the-fx-rate-i-get-is-it-the-interbank-rate/
+//   https://dhan.co/support/platforms/us-stocks/what-are-the-charges-for-adding-funds-in-us-stocks/
+//   read on 2026-10-19. The change leg is unknown, so the total is N/A.
 //   ViewTrade Securities (CRD 46987) executes and clears. The US book is
 //   that firm's 606, not a place fill.
 //   https://dhan.co/support/platforms/us-stocks/who-are-dhan-s-partners-for-us-stocks/
@@ -44,15 +52,18 @@ function sttSides(row) {
 function usRoundTrip({ listing, leafBook, shared, query }) {
   const n = Number(query.shares);
   const p = Number(query.price);
-  const basis = "actions américaines, page relue le 2026-09-25 : 0,25 % par ordre, minimum 0,01 $";
-  const remark =
-    "A pay-in below $100 costs $1. The FX markup is quoted on the INR transfer.";
+  const basis =
+    "actions américaines, page relue le 2026-09-25 : 0,25 % par ordre, minimum 0,01 $. Change forcé INR→USD et retour : marge de change non publiée (FAQ relue le 2026-10-19).";
+  const remark = "A pay-in below $100 costs $1.";
   if (!(n > 0) || !(p > 0)) {
     return { ...shared, cashCurrency: "USD", basis, remark, why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs" };
   }
   const notional = n * p;
   const each = Math.max(US_MIN, notional * US_RATE);
-  const brokerFees = dollars(each * 2, listing.currency);
+  const commissionUsd = dollars(each * 2, listing.currency);
+  // Forced INR->USD and back. No published markup: unknown.
+  const fxUsd = null;
+  const brokerFees = plus(commissionUsd, fxUsd);
   const notionalUsd = dollars(notional, listing.currency);
   const leaf = leafBook.leaf;
   const marketBp = query.bp ?? leaf?.bp ?? null;
@@ -74,9 +85,19 @@ function usRoundTrip({ listing, leafBook, shared, query }) {
     brokerFees: finite(brokerFees, 6),
     bp: marketBp,
     perShare: marketPerShare,
-    ...(bookUsd == null ? { why: `aucun carnet pour ${listing.exchange}` } : {}),
+    why: [
+      "change forcé vers USD : taux de change non publié",
+      bookUsd == null ? `aucun carnet pour ${listing.exchange}` : null,
+    ]
+      .filter(Boolean)
+      .join(" ; "),
     trade: { shares: n, price: p, notional, notionalUsd: finite(notionalUsd, 6), currency: listing.currency },
     commission: { rate: US_RATE, min: US_MIN, currency: "USD", eachWay: true },
+    parts: {
+      marché: finite(bookUsd, 6),
+      courtage: finite(commissionUsd, 6),
+      change: null,
+    },
   };
 }
 

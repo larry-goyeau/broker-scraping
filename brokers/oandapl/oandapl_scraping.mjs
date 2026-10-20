@@ -191,7 +191,7 @@ async function discoverListUrl(page) {
 // `--cryptos-csv=PATH` the coin list. `--etfs-only` / `--stocks-only` /
 // `--crypto-only` answer for one shelf. `--all` keeps lines the catalogues
 // do not carry. `--fresh` starts the file over. `--start=` is accepted so
-// a resumed run can reload oanda-parsed.json; the book arrives in one PDF.
+// a resumed run can reload oandapl-parsed.json; the book arrives in one PDF.
 const etfsCsvPath = pathArg("csv", "../../assets/etfs.csv");
 const stocksCsvPath = pathArg("stocks-csv", "../../assets/stocks.csv");
 const cryptosCsvPath = pathArg("cryptos-csv", "../../assets/cryptos.csv");
@@ -225,7 +225,7 @@ const onlyTickers = new Set(
     .map((ticker) => ticker.replace(/\.(US|DE|UK|PL|ES|FR|DK|ETF)$/i, ""))
 );
 
-const outputPath = new URL("oanda-parsed.json", import.meta.url);
+const outputPath = new URL("oandapl-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 

@@ -18,8 +18,10 @@
 //   for both transactions and says it already includes the broker fee
 //   and VAT. It prints no SEC, TAF or CAT line. A dollar balance avoids
 //   a conversion.
-//   Ajaib names no US broker-dealer and files no Rule 606, so the book
-//   is the quoted NBBO of the name, not a wholesaler's fill.
+//   Ajaib files no Rule 606. Alpaca names it as a long-time partner for
+//   US stocks and ETFs, so the book is the 605 times Alpaca's Q (the
+//   "ajaib" alias in spreads/rule606.mjs).
+//   https://alpaca.markets/blog/how-ajaib-is-empowering-indonesian-investors-with-us-options-trading/
 //
 //   node brokers/ajaib/ajaib_cost.mjs BBCA IDX IDR --shares=10 --price=6000
 //   node brokers/ajaib/ajaib_cost.mjs AAPL US USD --shares=10 --price=230

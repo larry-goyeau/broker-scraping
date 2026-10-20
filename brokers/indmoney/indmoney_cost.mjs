@@ -43,8 +43,14 @@
 //     Direct Access              brokerage $0, so brokerFees is 0.
 //                                Exchange transaction $0. IFSCA 0.0001%
 //                                of the order, each side, then GST 18%.
-//     The bank's conversion is 0.5% to 1.2%. That range is the remark,
-//     not a single rate. US orders are named at DriveWealth and at
+//     The bank's conversion is 0.5% to 1.2%. Cash is rupees only
+//     (deposits.mjs), so every US or London line is a forced INR->USD
+//     conversion on the buy and USD->INR on the sell. The total takes
+//     the top of the range, 1.2% each way (pessimistic), twice.
+//     https://www.indmoney.com/us-stocks and https://www.indmoney.com/ucits,
+//     re-read 2026-10-19: "Forex Conversion Charges (Charged By Bank)"
+//     "0.5% to 1.2%".
+//     US orders are named at DriveWealth and at
 //     Alpaca. The book uses whichever of those two Rule 606 Qs is
 //     higher. DriveWealth's 2026-Q2 file has no market-order mix, so
 //     the book is Alpaca's Q.
@@ -87,15 +93,13 @@ const IFSCA_MIN = 0.01;
 const DIRECT_IFSCA = 0.000001;
 const GST = 0.18;
 const US_DEALERS = ["alpaca", "drivewealth"];
-const FX_REMARK = "FX 0.5% to 1.2% when cash ≠ USD.";
+// Top of the bank's printed 0.5% to 1.2%, one way. Read 2026-10-19.
+const FX_RATE = 0.012;
+const FX_BASIS = "Change forcé INR→USD à l'achat et USD→INR à la vente : 1,2 % par sens, haut de la fourchette 0,5 % à 1,2 % prélevée par la banque (relue le 2026-10-19).";
 const TCS_REMARK =
   "When more than ₹10 lakh is sent to the US wallet in a year, the bank collects 20% TCS. The tax can be claimed back when filing.";
-const GLOBAL_REMARK = [FX_REMARK, TCS_REMARK].join(" ");
-const DIRECT_REMARK = [
-  FX_REMARK,
-  "GST 18% on the IFSCA line.",
-  TCS_REMARK,
-].join(" ");
+const GLOBAL_REMARK = TCS_REMARK;
+const DIRECT_REMARK = ["GST 18% on the IFSCA line.", TCS_REMARK].join(" ");
 
 const SCHEDULE = {
   broker: "INDmoney",
@@ -250,7 +254,8 @@ function usRoundTrip(query, plan) {
     const notional = n * p;
     const notionalUsd = dollars(notional, "USD");
     const commissionEach = notional * GLOBAL_RATE;
-    const brokerFees = commissionEach * 2;
+    const fxUsd = notionalUsd == null ? null : notionalUsd * FX_RATE * 2;
+    const brokerFees = plus(commissionEach * 2, fxUsd);
     const marketBp = bp ?? leafBook.leaf?.bp ?? null;
     const marketPerShare = perShare ?? leafBook.leaf?.perShare ?? null;
     const parts = bookParts({
@@ -267,7 +272,7 @@ function usRoundTrip(query, plan) {
       ...shared,
       url: UCITS_PAGE,
       remark: GLOBAL_REMARK,
-      basis: `UCITS, page relue le ${UCITS_READ_ON}. Courtage 0,25 % par ordre. Le carnet est celui de Londres.`,
+      basis: `UCITS, page relue le ${UCITS_READ_ON}. Courtage 0,25 % par ordre. Le carnet est celui de Londres. ${FX_BASIS}`,
       usd: finite(usd, 6),
       brokerFees: finite(brokerFees, 6),
       bp: marketBp,
@@ -277,6 +282,11 @@ function usRoundTrip(query, plan) {
         : {}),
       trade: { shares: n, price: p, notional, notionalUsd: finite(notionalUsd, 6), currency: "USD" },
       commission: { each: commissionEach, currency: "USD" },
+      parts: {
+        marché: finite(bookUsd, 6),
+        courtage: finite(commissionEach * 2, 6),
+        change: finite(fxUsd, 6),
+      },
     };
   }
 
@@ -288,7 +298,9 @@ function usRoundTrip(query, plan) {
   const taf = Math.min(TAF_MAX, atLeast(n * TAF, TAF_MIN));
   // Global Access brokerage is before GST. Direct Access prints $0, and
   // GST on the IFSCA line sits with that levy, not in the broker's bill.
-  const brokerFees = direct ? 0 : commissionEach * 2 * (1 + GST);
+  const commissionUsd = direct ? 0 : commissionEach * 2 * (1 + GST);
+  const fxUsd = notionalUsd == null ? null : notionalUsd * FX_RATE * 2;
+  const brokerFees = plus(commissionUsd, fxUsd);
   const ifscaCharged = ifscaEach * (direct ? 1 + GST : 1);
   const levy = (direct ? 0 : sec) + (direct ? 0 : taf) + ifscaCharged * 2;
   const routed = widerUsBook(listing.ticker);
@@ -308,7 +320,7 @@ function usRoundTrip(query, plan) {
   const who = routed.dealer === "alpaca" ? "Alpaca" : routed.dealer === "drivewealth" ? "DriveWealth" : "";
   return {
     ...shared,
-    ...(who ? { basis: `${shared.basis} Carnet 605 × Q ${who} ${Number(routed.q.toFixed(3))}.` } : {}),
+    basis: `${shared.basis}${who ? ` Carnet 605 × Q ${who} ${Number(routed.q.toFixed(3))}.` : ""} ${FX_BASIS}`,
     usd: finite(usd, 6),
     brokerFees: finite(brokerFees, 6),
     bp: marketBp,
@@ -323,6 +335,12 @@ function usRoundTrip(query, plan) {
       sec: direct ? null : sec,
       taf: direct ? null : taf,
       currency: "USD",
+    },
+    parts: {
+      marché: finite(bookUsd, 6),
+      courtage: finite(commissionUsd, 6),
+      frais: finite(levy, 6),
+      change: finite(fxUsd, 6),
     },
   };
 }

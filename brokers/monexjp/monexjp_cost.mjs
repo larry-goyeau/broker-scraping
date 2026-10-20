@@ -54,10 +54,10 @@
 //   https://www.hkex.com.hk/-/media/HKEX-Market/Services/Circulars-and-Notices/Participant-and-Members-Circulars/HKSCC/2025/ce_HKSCC_SET_022_2025.pdf
 //   https://www.ird.gov.hk/eng/faq/ETFs.htm
 //
-//   node brokers/monex/monex_cost.mjs 7203 Tokyo JPY --shares=100 --price=3000
-//   node brokers/monex/monex_cost.mjs AAPL XNAS USD --shares=10 --price=230
-//   node brokers/monex/monex_cost.mjs 700 "Hong Kong" HKD --shares=100 --price=400
-//   node brokers/monex/monex_cost.mjs --schedule
+//   node brokers/monexjp/monexjp_cost.mjs 7203 Tokyo JPY --shares=100 --price=3000
+//   node brokers/monexjp/monexjp_cost.mjs AAPL XNAS USD --shares=10 --price=230
+//   node brokers/monexjp/monexjp_cost.mjs 700 "Hong Kong" HKD --shares=100 --price=400
+//   node brokers/monexjp/monexjp_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
@@ -70,7 +70,7 @@ import { usBookPerShare } from "../../spreads/rule606.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, fxRemark, toUsd, usdPer } from "../../fx.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
 
-const CATALOGUE = new URL("monex-parsed.json", import.meta.url);
+const CATALOGUE = new URL("monexjp-parsed.json", import.meta.url);
 
 const SCHEDULE = {
   url: "https://info.monex.co.jp/stock/fee.html",
@@ -225,7 +225,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     cashCurrency: "JPY",
   };
   if (!catalogue) {
-    return { ...answer, why: "le catalogue Monex n'existe pas encore : lancer `node brokers/monex/monex_scraping.mjs`" };
+    return { ...answer, why: "le catalogue Monex n'existe pas encore : lancer `node brokers/monexjp/monexjp_scraping.mjs`" };
   }
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Monex` };
@@ -243,7 +243,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     mic: m.venue?.mic ?? null,
     currency: m.row.currency,
     unsourced: m.unsourced,
-    broker: "monex",
+    broker: "monexjp",
     ticker: m.row.ticker,
   });
   const listing = {
@@ -411,7 +411,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const positional = process.argv.slice(2).filter((a) => !a.startsWith("--"));
   const [etf, place, currency] = positional;
   if (!etf) {
-    console.error("usage : node brokers/monex/monex_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]");
+    console.error("usage : node brokers/monexjp/monexjp_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]");
     process.exit(2);
   }
 

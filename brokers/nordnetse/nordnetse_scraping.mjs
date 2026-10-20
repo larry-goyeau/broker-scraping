@@ -14,7 +14,7 @@
 //   https://www.nordnet.se/aktier/kurser?limit=2000
 //   https://www.nordnet.se/etf/lista?limit=2000
 //
-//   node brokers/nordnet/nordnet_scraping.mjs
+//   node brokers/nordnetse/nordnetse_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
 import { withoutObligations } from "../../obligation.mjs";
@@ -281,7 +281,7 @@ const nestle = rows.find((row) => row.isin === "CH0038863350" && row.exchange ==
 if (!nestle) throw new Error("Nestlé is not on SIX");
 
 const kept = stampRows(withoutObligations(rows));
-fs.writeFileSync(new URL("nordnet-parsed.json", import.meta.url), `${JSON.stringify(kept, null, 2)}\n`);
+fs.writeFileSync(new URL("nordnetse-parsed.json", import.meta.url), `${JSON.stringify(kept, null, 2)}\n`);
 
 const byBook = new Map();
 for (const row of kept) {

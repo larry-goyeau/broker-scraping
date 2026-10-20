@@ -48,8 +48,8 @@ const READ_ON = "2026-10-05";
 const INTRADAY = 0.0025;
 const FIRST_BAND = 0.008;
 const ORDER = { RON: 1, EUR: 1 };
-const SAME_DAY = `-${((FIRST_BAND - INTRADAY) * 100).toFixed(2)}%`;
-const gap = (rate) => `-${((FIRST_BAND - rate) * 100).toFixed(2)}%`;
+const SAME_DAY = `${Number(((FIRST_BAND - INTRADAY) * 100).toFixed(2))}% lower`;
+const gap = (rate) => `${Number(((FIRST_BAND - rate) * 100).toFixed(2))}% lower`;
 const VOLUME_ABOVE =
   `Above 50,000 lei of average monthly turnover in the last finished quarter: ${gap(0.006)} up to 100,000, ${gap(0.005)} up to 700,000, ${gap(0.0039)} above 700,000`;
 

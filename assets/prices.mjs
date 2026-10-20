@@ -14,7 +14,9 @@
 // again. The four Gulf boards still publish their own last through `gulf.mjs`. The
 // Zimbabwe sheet publishes its own last, in cents of a ZiG. VNDirect publishes
 // the session close for HOSE, HNX and UPCoM, in thousands of dong. Lima's daily
-// bulletin publishes the session close in soles or in dollars. TradingView's
+// bulletin publishes the session close in soles or in dollars. Amman's
+// daily bulletin publishes the session close in dinars. The Pakistan Stock
+// Exchange's closing file publishes the session close in rupees. TradingView's
 // Nigeria scanner publishes the NSENG session close in naira, at any hour.
 // Everywhere else, a miss falls through to Yahoo's chart last, built from the
 // catalogues' ticker and MIC (`F.TO`, `1111.SR`, `3565.T`). Enough to size an
@@ -39,11 +41,15 @@
 //   node assets/prices.mjs --budget=50       ne dépense pas plus de cinquante appels
 //   node assets/prices.mjs --use-reserve     autorise à entamer la réserve non renouvelable
 //   node assets/prices.mjs --gulf            lit les carnets du Golfe, sans clé et sans quota
+//   node assets/prices.mjs --amman           clôtures du bulletin quotidien d'Amman, sans clé
+//   node assets/prices.mjs --psx             clôtures du fichier quotidien de la PSX, sans clé
+//   node assets/prices.mjs --brvm            cours de clôture publiés par la BRVM, sans clé
 //   node assets/prices.mjs --yahoo           clôtures Yahoo pour tout ISIN encore sans prix, sans clé
 //
 // The key lives in `.env` as EODHD_API_KEY, which `.gitignore` already keeps out of the
 // repository.
 import fs from "node:fs";
+import zlib from "node:zlib";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { resolveVenue } from "../spreads/venues.mjs";
@@ -106,6 +112,42 @@ const fallback = (store.fallback ||= {});
 // lands on a timer and once more on the way out.
 let dirty = false;
 let timer = null;
+
+// Johannesburg and Tel Aviv quote in the minor unit: cents of a rand (ZAC),
+// agorot of a shekel (ILA). The listings are in rand and shekels, and only
+// London's pence have their own key (GBX) that fx.mjs knows.
+const MINOR = { ZAC: "ZAR", ILA: "ILS" };
+
+/** One leaf's `price` from its sources: the primary one, else the first. */
+function settle(leaf) {
+  const best = Object.values(leaf.from || {}).find((x) => x.primary) || Object.values(leaf.from || {})[0];
+  leaf.price = best ? best.price : null;
+  leaf.at = best ? best.at : null;
+}
+
+// Stored before the minor units were known: Johannesburg lasts in cents
+// filed as rand (Cashbuild 9750 for R97.50), and vendor quotes left under
+// ZAC or ILA, which no listing asks for. Run once; the store remembers it.
+store.migrations ||= [];
+if (!store.migrations.includes("minor-units")) {
+  for (const byCcy of Object.values(prices)) {
+    const zar = byCcy.ZAR;
+    if (zar?.from) {
+      for (const [key, x] of Object.entries(zar.from)) if (key.startsWith("XJSE:")) x.price = Number((x.price / 100).toPrecision(8));
+      settle(zar);
+    }
+    for (const [minor, major] of Object.entries(MINOR)) {
+      const leaf = byCcy[minor];
+      if (!leaf?.from) continue;
+      const into = (byCcy[major] ||= { price: null, at: null, from: {} });
+      for (const [key, x] of Object.entries(leaf.from)) into.from[key] = { ...x, price: Number((x.price / 100).toPrecision(8)) };
+      delete byCcy[minor];
+      settle(into);
+    }
+  }
+  store.migrations.push("minor-units");
+  scheduleSave();
+}
 function save() {
   if (!dirty) return;
   dirty = false;
@@ -115,8 +157,9 @@ function save() {
     JSON.stringify(
       {
         generatedAt: new Date().toISOString(),
-        source: "EODHD, les bourses du Golfe, KASE pour un last en tenge, la clôture VNDirect pour une action ou un ETF du Vietnam, le bulletin de Lima pour une clôture en soles ou en dollars, la clôture NSENG pour un last en naira, et Yahoo pour un last quand le vendeur n'a rien",
+        source: "EODHD, les bourses du Golfe, KASE pour un last en tenge, la clôture VNDirect pour une action ou un ETF du Vietnam, le bulletin de Lima pour une clôture en soles ou en dollars, le bulletin d'Amman pour une clôture en dinars, le fichier de clôture de la PSX pour une clôture en roupies, la clôture NSENG pour un last en naira, et Yahoo pour un last quand le vendeur n'a rien",
         unit: UNIT,
+        migrations: store.migrations,
         fetched,
         fallback,
         prices,
@@ -159,6 +202,7 @@ export function isFresh(isin, maxAge = DAY) {
   // A miss from before the ISIN search never asked Yahoo for the identifier.
   if (!(fb >= YAHOO_BOARDS_AT) || !(fb >= YAHOO_OTC_AT) || !(fb >= YAHOO_ISIN_AT)) return false;
   if (key.startsWith("CN") && !(fb >= YAHOO_CONNECT_AT)) return false;
+  if ((key.startsWith("ZA") || key.startsWith("IL")) && !(fb >= YAHOO_MINOR_AT)) return false;
   return Date.now() - fb < maxAge;
 }
 
@@ -167,6 +211,8 @@ export function isFresh(isin, maxAge = DAY) {
 const API = "https://eodhd.com/api";
 let spent = 0;
 let budget = Infinity;
+// Set when the vendor answers 402/403: no call until then.
+let quotaOutUntil = 0;
 
 async function get(url, { tries = 3 } = {}) {
   for (let i = 0; i < tries; i++) {
@@ -178,7 +224,10 @@ async function get(url, { tries = 3 } = {}) {
       }
       // Out of quota or outside the plan: worth saying once and out loud, since every
       // later call will fail the same way and the page would otherwise look merely slow.
+      // EODHD takes about 28 s to say so, and a page view waited that long
+      // for every instrument: stop asking until the next day.
       if (r.status === 402 || r.status === 403) {
+        quotaOutUntil = Date.now() + DAY;
         throw new Error(`HTTP ${r.status} — quota épuisé ou hors formule`);
       }
       if (!r.ok) return null;
@@ -200,8 +249,9 @@ async function get(url, { tries = 3 } = {}) {
 // `from` so that a suspect price can be argued with rather than merely replaced.
 function noteSearch(isin, rows) {
   for (const r of rows) {
-    const ccy = String(r.Currency || "").trim().toUpperCase();
-    const px = Number(r.previousClose);
+    const quoted = String(r.Currency || "").trim().toUpperCase();
+    const ccy = MINOR[quoted] || quoted;
+    const px = Number(r.previousClose) / (MINOR[quoted] ? 100 : 1);
     if (!ccy || !(px > 0)) continue;
     const leaf = ((prices[isin] ||= {})[ccy] ||= { price: null, at: null, from: {} });
     leaf.from[`${r.Exchange}:${r.Code}`] = {
@@ -364,6 +414,9 @@ const YAHOO_SUFFIX = {
   // Pakistan Stock Exchange. Yahoo's last is the ticker plus .KA, in rupees.
   // This is the same listing's last, not a book.
   XKAR: ".KA",
+  // Johannesburg. Yahoo charts it in cents of a rand (ZAc); yahooChart
+  // turns that into rand.
+  XJSE: ".JO",
   // Shanghai and Shenzhen A-shares. Yahoo's last is the six-digit code.
   XSHG: ".SS",
   XSHE: ".SZ",
@@ -433,6 +486,10 @@ const YAHOO_ISIN_AT = Date.parse("2026-10-02T23:28:00Z");
 // Stock Connect had no Yahoo suffix, so a Chinese miss never asked 600519.SS.
 // A miss from before that is not a try.
 const YAHOO_CONNECT_AT = Date.parse("2026-10-13T15:05:00Z");
+// Johannesburg had no Yahoo suffix by MIC, and a last in cents (ZAc) or
+// agorot (ILA) was thrown away as another currency. A miss from before
+// that is not a try.
+const YAHOO_MINOR_AT = Date.parse("2026-10-18T22:40:00Z");
 const YAHOO_US = new Set(["XNYS", "XNAS", "ARCX", "XASE", "BATS"]);
 const YAHOO_ALREADY = /\.[A-Z]{1,3}$/;
 
@@ -456,6 +513,12 @@ function yahooSymbol(ticker, mic, isin, exchange) {
   if (!stem) return null;
   stem = stem.replace(/\.+$/, "");
   if (!stem) return null;
+  // Colombo writes the voting class after a dot (JKH.N0000); Yahoo charts it
+  // as JKH-N0000.CM. The catalogues say CSE, which Toronto's Canadian
+  // Securities Exchange also uses, so the ISIN tells them apart.
+  if (/^(CSE|XCOL)$/.test(String(exchange || mic || "").toUpperCase()) && String(isin || "").toUpperCase().startsWith("LK")) {
+    return `${stem.replace(/\./g, "-")}.CM`;
+  }
   if (YAHOO_ALREADY.test(stem)) return stem;
   if (/^\d{4}$/.test(stem) && String(isin || "").startsWith("SA")) return `${stem}.SR`;
   if (mic && mic in YAHOO_SUFFIX) return `${yahooBody(stem, YAHOO_SUFFIX[mic])}${YAHOO_SUFFIX[mic]}`;
@@ -554,6 +617,9 @@ async function yahooChart(symbol, tries = 0) {
   let currency = yahooCurrency(meta?.currency);
   if (!currency && String(symbol).endsWith(".SR")) currency = "SAR";
   if (!(last > 0) || !currency) return null;
+  // Johannesburg and Tel Aviv chart in the minor unit: cents of a rand,
+  // agorot of a shekel. The listings are in rand and shekels.
+  if (MINOR[currency]) return { last: last / 100, currency: MINOR[currency] };
   return { last, currency };
 }
 
@@ -1180,6 +1246,36 @@ function setFresh(isin) {
   return true;
 }
 
+// Nxchange and NPEX: the last each venue prints beside its standing order
+// book (spreads/nxchange-touch.mjs, spreads/npex-touch.mjs). The book rests
+// between sessions, so a reading up to a week old still names the last.
+const MTF_TOUCH = { XNXC: "../spreads/nxchange-touch.json", NPEX: "../spreads/npex-touch.json" };
+const mtfRows = new Map();
+function mtfTouch(mic) {
+  if (mtfRows.has(mic)) return mtfRows.get(mic);
+  const rows = new Map();
+  mtfRows.set(mic, rows);
+  const path = new URL(MTF_TOUCH[mic], import.meta.url);
+  if (!fs.existsSync(path)) return rows;
+  const data = JSON.parse(fs.readFileSync(path, "utf8"));
+  const age = (Date.now() - Date.parse(`${data.date}T00:00:00Z`)) / DAY;
+  if (!(age >= -1 && age <= 7)) return rows;
+  for (const row of data.rows || []) if (Number(row.last) > 0) rows.set(String(row.isin || "").toUpperCase(), row);
+  return rows;
+}
+
+function mtfFresh(isin) {
+  for (const mic of Object.keys(MTF_TOUCH)) {
+    const row = mtfTouch(mic).get(isin);
+    if (!row) continue;
+    noteBoard(isin, { currency: "EUR", last: Number(row.last), symbol: row.code || isin }, mic);
+    fetched[isin] = new Date().toISOString();
+    scheduleSave();
+    return true;
+  }
+  return false;
+}
+
 let psxRows = null;
 function psxTouch() {
   if (psxRows) return psxRows;
@@ -1396,6 +1492,14 @@ export async function ensureFresh(isin, maxAge = DAY, listings = null) {
   if (!hasPrice(key)) csecyFresh(key);
   if (!(Number(prices[key]?.THB?.price) > 0)) setFresh(key);
   if (!(Number(prices[key]?.PKR?.price) > 0)) psxFresh(key);
+  if (key.startsWith("NL") && !(Number(prices[key]?.EUR?.price) > 0)) mtfFresh(key);
+  // The Pakistan Stock Exchange's closing file prints every symbol's session
+  // close, in rupees. It is asked whenever no Karachi figure is held, fresh
+  // stamp or not: Yahoo's .KA last can be months old (OGDC at 131.87 rupees
+  // against a 299.10 close).
+  if (key.startsWith("PK") && !Object.keys(prices[key]?.PKR?.from || {}).some((k) => k.startsWith("XKAR:"))) {
+    await psxCloseFresh(key);
+  }
   if (!(Number(prices[key]?.RUB?.price) > 0)) moexFresh(key);
   if (!(Number(prices[key]?.ILS?.price) > 0)) taseFresh(key);
   if (!(Number(prices[key]?.MAD?.price) > 0)) xcasFresh(key);
@@ -1409,7 +1513,7 @@ export async function ensureFresh(isin, maxAge = DAY, listings = null) {
       // it: the boards below cost nothing and answer exactly where the vendor cannot.
       const eodhdAt = Date.parse(fetched[key] || 0);
       const eodhdFresh = Number.isFinite(eodhdAt) && Date.now() - eodhdAt < maxAge;
-      if (KEY && spent + 1 <= budget && !eodhdFresh) {
+      if (KEY && spent + 1 <= budget && !eodhdFresh && Date.now() >= quotaOutUntil) {
         try {
           spent++;
           const rows = await get(`${API}/search/${encodeURIComponent(key)}?api_token=${KEY}&fmt=json&limit=30`);
@@ -1453,10 +1557,20 @@ export async function ensureFresh(isin, maxAge = DAY, listings = null) {
       if (key.startsWith("PE") && !(Number(prices[key]?.PEN?.price) > 0) && !(Number(prices[key]?.USD?.price) > 0)) {
         await limaFresh(key);
       }
+      // EODHD does not carry the Amman Stock Exchange. The daily bulletin
+      // prints the last session's close, in dinars.
+      if (key.startsWith("JO") && !(Number(prices[key]?.JOD?.price) > 0)) {
+        await ammanFresh(key);
+      }
       // EODHD does not carry the Dhaka Stock Exchange. The company page
       // prints the last trade in taka. The same ISIN prices Chittagong.
       if (key.startsWith("BD") && !(Number(prices[key]?.BDT?.price) > 0)) {
         await dseFresh(key, listings);
+      }
+      // EODHD does not carry the BRVM. Its own page prints every share's
+      // close, in francs CFA.
+      if (BRVM_COUNTRIES.has(key.slice(0, 2)) && !(Number(prices[key]?.XOF?.price) > 0)) {
+        await brvmFresh(key);
       }
       if (!hasPrice(key)) {
         // `listings` is the page's own rows. Without them the sweep still
@@ -1882,6 +1996,263 @@ async function sweepLima() {
   console.error(`${priced} clôtures de Lima, bulletin de ${sheet.size ? [...sheet.values()][0].at : "?"}. Écrit dans ${STORE_PATH}.`);
 }
 
+// ---------------------------------------------------------------- Amman
+
+// One bulletin for the board (spreads/ase.mjs). The close is the session's
+// own print; a share that traded without a close keeps the last close. A
+// symbol is kept only when the shared list names exactly one Amman ISIN.
+let ammanSheetPromise = null;
+
+function ammanIsins() {
+  const book = new Map();
+  for (const name of ["./stocks.csv", "./etfs.csv"]) {
+    let text = "";
+    try {
+      text = fs.readFileSync(fileURLToPath(new URL(name, import.meta.url)), "utf8");
+    } catch {
+      continue;
+    }
+    for (const line of text.split(/\r?\n/)) {
+      if (!line.trim() || /^ticker\s*,/i.test(line)) continue;
+      const columns = line.split(",");
+      if (String(columns[1] || "").trim().toUpperCase() !== "XAMM") continue;
+      const ticker = String(columns[0] || "").split(":").pop().trim().toUpperCase();
+      const isin = String(columns[2] || "").trim().toUpperCase();
+      if (!ticker || !ISIN.test(isin)) continue;
+      const held = book.get(ticker) || new Set();
+      held.add(isin);
+      book.set(ticker, held);
+    }
+  }
+  return book;
+}
+
+function ammanSheet() {
+  if (ammanSheetPromise && Date.now() - ammanSheetPromise.at < BOARD_TTL) return ammanSheetPromise.rows;
+  const rows = (async () => {
+    const { readAseBulletin } = await import("../spreads/ase.mjs");
+    const { date, rows: lines } = await readAseBulletin();
+    const isins = ammanIsins();
+    const map = new Map();
+    for (const line of lines) {
+      const close = line.close ?? line.lastClose;
+      const ids = isins.get(line.symbol);
+      if (!(close > 0) || !ids || ids.size !== 1) continue;
+      map.set([...ids][0], { ticker: line.symbol, price: close, at: date });
+    }
+    return map;
+  })().catch((error) => {
+    ammanSheetPromise = null;
+    console.error(`bulletin d'Amman : ${error.message}`);
+    return new Map();
+  });
+  ammanSheetPromise = { at: Date.now(), rows };
+  return rows;
+}
+
+async function ammanFresh(isin) {
+  const row = (await ammanSheet()).get(isin);
+  if (!row) return false;
+  const price = Number(row.price.toPrecision(8));
+  const leaf = ((prices[isin] ||= {}).JOD ||= { price: null, at: null, from: {} });
+  const taken = Object.values(leaf.from).some((x) => x.primary);
+  leaf.from[`XAMM:${row.ticker}`] = { price, at: row.at, primary: !taken };
+  if (!taken || !(Number(leaf.price) > 0)) {
+    leaf.price = price;
+    leaf.at = row.at;
+  }
+  fallback[isin] = new Date().toISOString();
+  scheduleSave();
+  return Number(leaf.price) > 0;
+}
+
+async function sweepAmman() {
+  const sheet = await ammanSheet();
+  let priced = 0;
+  for (const isin of sheet.keys()) if (await ammanFresh(isin)) priced++;
+  save();
+  console.error(`${priced} clôtures d'Amman, séance du ${sheet.size ? [...sheet.values()][0].at : "?"}. Écrit dans ${STORE_PATH}.`);
+}
+
+// ---------------------------------------------------------------- Karachi
+
+// The PSX's closing file for a session: a zip holding one pipe-separated
+// list, date|symbol|sector|name|open|high|low|close|volume|previous close.
+// The newest one of the last week is taken. A futures line (DEC, NOV, a
+// hyphen in the symbol) is not the share. A symbol that did not trade
+// prints 0 for its close, and its previous close is the last figure. A
+// symbol is kept only when the shared list names exactly one PSX ISIN.
+const PSX_CLOSING = "https://dps.psx.com.pk/download/mkt_summary/";
+let psxSheetPromise = null;
+
+function psxIsins() {
+  const book = new Map();
+  for (const name of ["./stocks.csv", "./etfs.csv"]) {
+    let text = "";
+    try {
+      text = fs.readFileSync(fileURLToPath(new URL(name, import.meta.url)), "utf8");
+    } catch {
+      continue;
+    }
+    for (const line of text.split(/\r?\n/)) {
+      if (!line.trim() || /^ticker\s*,/i.test(line)) continue;
+      const columns = line.split(",");
+      if (String(columns[1] || "").trim().toUpperCase() !== "PSX") continue;
+      const ticker = String(columns[0] || "").split(":").pop().trim().toUpperCase();
+      const isin = String(columns[2] || "").trim().toUpperCase();
+      if (!ticker || !ISIN.test(isin)) continue;
+      const held = book.get(ticker) || new Set();
+      held.add(isin);
+      book.set(ticker, held);
+    }
+  }
+  return book;
+}
+
+async function psxClosingFile() {
+  for (let back = 0; back < 8; back++) {
+    const day = new Date(Date.now() - back * 86_400_000).toISOString().slice(0, 10);
+    const response = await fetch(`${PSX_CLOSING}${day}.Z`, {
+      headers: { "User-Agent": "Mozilla/5.0" },
+      signal: AbortSignal.timeout(40_000),
+    });
+    if (!response.ok) continue;
+    const zip = Buffer.from(await response.arrayBuffer());
+    if (zip.readUInt32LE(0) !== 0x04034b50) continue;
+    const start = 30 + zip.readUInt16LE(26) + zip.readUInt16LE(28);
+    return { day, text: zlib.inflateRawSync(zip.subarray(start)).toString("latin1") };
+  }
+  throw new Error("aucun fichier de clôture sur les huit derniers jours");
+}
+
+function psxSheet() {
+  if (psxSheetPromise && Date.now() - psxSheetPromise.at < BOARD_TTL) return psxSheetPromise.rows;
+  const rows = (async () => {
+    const { day, text } = await psxClosingFile();
+    const isins = psxIsins();
+    const map = new Map();
+    for (const line of text.split(/\r?\n/)) {
+      const cells = line.split("|");
+      if (cells.length < 10) continue;
+      const ticker = cells[1].trim().toUpperCase();
+      if (!ticker || ticker.includes("-")) continue;
+      const close = Number(cells[7]) > 0 ? Number(cells[7]) : Number(cells[9]);
+      const ids = isins.get(ticker);
+      if (!(close > 0) || !ids || ids.size !== 1) continue;
+      map.set([...ids][0], { ticker, price: close, at: day });
+    }
+    return map;
+  })().catch((error) => {
+    psxSheetPromise = null;
+    console.error(`clôtures de la PSX : ${error.message}`);
+    return new Map();
+  });
+  psxSheetPromise = { at: Date.now(), rows };
+  return rows;
+}
+
+async function psxCloseFresh(isin) {
+  const row = (await psxSheet()).get(isin);
+  if (!row) return false;
+  const price = Number(row.price.toPrecision(8));
+  const leaf = ((prices[isin] ||= {}).PKR ||= { price: null, at: null, from: {} });
+  const taken = Object.values(leaf.from).some((x) => x.primary);
+  leaf.from[`XKAR:${row.ticker}`] = { price, at: row.at, primary: !taken };
+  if (!taken || !(Number(leaf.price) > 0)) {
+    leaf.price = price;
+    leaf.at = row.at;
+  }
+  fallback[isin] = new Date().toISOString();
+  scheduleSave();
+  return Number(leaf.price) > 0;
+}
+
+async function sweepPsx() {
+  const sheet = await psxSheet();
+  let priced = 0;
+  for (const isin of sheet.keys()) if (await psxCloseFresh(isin)) priced++;
+  save();
+  console.error(`${priced} clôtures de la PSX, séance du ${sheet.size ? [...sheet.values()][0].at : "?"}. Écrit dans ${STORE_PATH}.`);
+}
+
+// ---------------------------------------------------------------- Abidjan
+
+// The BRVM prints every share's session on one page: symbol, name, volume,
+// previous close, open, close, change. A share that did not trade prints its
+// previous close. The symbol is joined to its ISIN through the BRVM lines of
+// the shared stock list. Prices are in francs CFA (XOF).
+const BRVM_COURS = "https://www.brvm.org/fr/cours-actions/0";
+const BRVM_COUNTRIES = new Set(["CI", "SN", "BF", "ML", "NE", "TG", "BJ", "GW"]);
+let brvmSheetPromise = null;
+
+function brvmIsins() {
+  const book = new Map();
+  let text = "";
+  try {
+    text = fs.readFileSync(fileURLToPath(new URL("./stocks.csv", import.meta.url)), "utf8");
+  } catch {
+    return book;
+  }
+  for (const line of text.split(/\r?\n/)) {
+    const columns = line.split(",");
+    const place = String(columns[1] || "").trim().toUpperCase();
+    if (place !== "BRVM" && place !== "XBRV") continue;
+    const ticker = String(columns[0] || "").split(":").pop().trim().toUpperCase();
+    const isin = String(columns[2] || "").trim().toUpperCase();
+    if (ticker && ISIN.test(isin)) book.set(ticker, isin);
+  }
+  return book;
+}
+
+function brvmSheet() {
+  if (brvmSheetPromise && Date.now() - brvmSheetPromise.at < BOARD_TTL) return brvmSheetPromise.rows;
+  const rows = (async () => {
+    const response = await fetch(BRVM_COURS, { headers: { "User-Agent": "Mozilla/5.0" }, signal: AbortSignal.timeout(40_000) });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const html = await response.text();
+    const isins = brvmIsins();
+    const day = new Date().toISOString().slice(0, 10);
+    const number = (cell) => Number(String(cell || "").replace(/<[^>]*>/g, "").replace(/[\s  ]/g, "").replace(",", "."));
+    const map = new Map();
+    for (const tr of html.split(/<tr[\s>]/i).slice(1)) {
+      const cells = [...tr.matchAll(/<td[^>]*>([\s\S]*?)<\/td>/gi)].map((m) => m[1]);
+      if (cells.length < 6) continue;
+      const ticker = cells[0].replace(/<[^>]*>/g, "").trim().toUpperCase();
+      const isin = isins.get(ticker);
+      const close = number(cells[5]) > 0 ? number(cells[5]) : number(cells[3]);
+      if (!isin || !(close > 0)) continue;
+      map.set(isin, { ticker, price: close, at: day });
+    }
+    return map;
+  })().catch((error) => {
+    brvmSheetPromise = null;
+    console.error(`cours de la BRVM : ${error.message}`);
+    return new Map();
+  });
+  brvmSheetPromise = { at: Date.now(), rows };
+  return rows;
+}
+
+async function brvmFresh(isin) {
+  const row = (await brvmSheet()).get(isin);
+  if (!row) return false;
+  const leaf = ((prices[isin] ||= {}).XOF ||= { price: null, at: null, from: {} });
+  leaf.from[`XBRV:${row.ticker}`] = { price: row.price, at: row.at, primary: true };
+  leaf.price = row.price;
+  leaf.at = row.at;
+  fallback[isin] = new Date().toISOString();
+  scheduleSave();
+  return true;
+}
+
+async function sweepBrvm() {
+  const sheet = await brvmSheet();
+  let priced = 0;
+  for (const isin of sheet.keys()) if (await brvmFresh(isin)) priced++;
+  save();
+  console.error(`${priced} cours de la BRVM. Écrit dans ${STORE_PATH}.`);
+}
+
 // ---------------------------------------------------------------- the sweep
 
 // Every Gulf line at once, which is four requests rather than one per instrument. Manama
@@ -1964,6 +2335,9 @@ async function sweepYahoo() {
 async function main() {
   if (has("gulf")) return sweepGulf();
   if (has("lima")) return sweepLima();
+  if (has("amman")) return sweepAmman();
+  if (has("psx")) return sweepPsx();
+  if (has("brvm")) return sweepBrvm();
   if (has("ngx")) return sweepNgx();
   if (has("yahoo")) return sweepYahoo();
   if (has("sgx")) return sweepSgx();

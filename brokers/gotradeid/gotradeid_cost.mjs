@@ -62,7 +62,7 @@ const SEC = 0.0000206;
 const TAF = 0.000195;
 const TAF_CAP = 9.79;
 const CAT = 0.000003;
-const REMARK = "Prestige is -0.1%, from $7,000 or $32,000 traded in 30 days.\nFX 0.25% to 0.35% when cash ≠ USD.";
+const REMARK = "Prestige is 0.1% lower, from $7,000 or $32,000 traded in 30 days.\nFX 0.25% to 0.35% when cash ≠ USD.";
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];

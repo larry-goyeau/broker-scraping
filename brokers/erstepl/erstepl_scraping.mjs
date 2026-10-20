@@ -21,7 +21,7 @@
 //   https://centruminformacji.erste.pl/_fileserver/item/1508657
 //   https://www.erste.pl/inwestor/skaneretf
 //
-//   node brokers/erste/erste_scraping.mjs
+//   node brokers/erstepl/erstepl_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
 import { withoutObligations } from "../../obligation.mjs";
@@ -583,7 +583,7 @@ results.sort((left, right) => {
   return String(left.ticker).localeCompare(right.ticker);
 });
 
-const outputPath = new URL("erste-parsed.json", import.meta.url);
+const outputPath = new URL("erstepl-parsed.json", import.meta.url);
 fs.writeFileSync(outputPath, JSON.stringify(stampRows(withoutObligations(results)), null, 2));
 
 const byIsin = new Set(results.map((row) => row.isin));

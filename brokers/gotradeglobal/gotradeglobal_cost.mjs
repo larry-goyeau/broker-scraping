@@ -48,7 +48,7 @@ const FEE_MIN = 0.1;
 const SEC = 0.0000206;
 const TAF = 0.000195;
 const CAT = 0.000003;
-const REMARK = "Some clients' nationalities can have a -0.15% reduction.\nFX 0.3% to 1% when cash ≠ USD.";
+const REMARK = "Some clients' nationalities have a 0.15% lower fee.\nFX 0.3% to 1% when cash ≠ USD.";
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];

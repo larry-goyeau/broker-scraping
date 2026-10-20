@@ -1,8 +1,8 @@
 // One AAPL Nasdaq share, market both ways, on the signed-in DEGIRO NL trader.
 // Chrome :9222. Does not touch other tabs. `--probe` stops after checkOrder.
 //
-//   node brokers/degiro/degiro-live-experiment.mjs --probe
-//   node brokers/degiro/degiro-live-experiment.mjs --live
+//   node brokers/degironl/degironl-live-experiment.mjs --probe
+//   node brokers/degironl/degironl-live-experiment.mjs --live
 //
 // A bought leg that fails to sell aborts and leaves the position; the JSON
 // still writes what it has.
@@ -12,7 +12,7 @@ import fs from "node:fs";
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const LIVE = process.argv.includes("--live");
-const OUT = new URL(LIVE ? "degiro-live-experiment.json" : "degiro-live-probe.json", import.meta.url);
+const OUT = new URL(LIVE ? "degironl-live-experiment.json" : "degironl-live-probe.json", import.meta.url);
 
 const ISIN = "US0378331005";
 const TICKER = "AAPL";

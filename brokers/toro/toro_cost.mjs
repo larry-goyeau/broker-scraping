@@ -53,7 +53,7 @@ const CCP = 0.000224;
 const TRANSFER = 0.000026;
 const SIDE = NEGOTIATION + CCP + TRANSFER;
 const DAY_TRADE = 0.00023;
-const SAME_DAY = ((SIDE - DAY_TRADE) * 100).toFixed(3);
+const SAME_DAY = Number(((SIDE - DAY_TRADE) * 100).toFixed(2));
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
@@ -104,7 +104,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     onlineBuy: true,
     cashCurrency: "BRL",
     url: PAGE,
-    remark: `A same-day buy and sell is -${SAME_DAY}%.`,
+    remark: SAME_DAY ? `A same-day buy and sell is ${SAME_DAY}% lower.` : "",
   };
   if (!catalogue) {
     return { ...answer, why: "le catalogue Toro n'existe pas encore : lancer `node brokers/toro/toro_scraping.mjs`" };

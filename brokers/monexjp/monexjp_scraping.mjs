@@ -44,8 +44,8 @@
 //   https://www.hkex.com.hk/eng/services/trading/securities/securitieslists/ListOfSecurities.xlsx
 //   https://www2.hkexnews.hk/-/media/HKEXnews/Homepage/Exchange-Reports/Prolonged-Suspension-Status-Report/psuspenrep_mb.pdf
 //
-//   node brokers/monex/monex_scraping.mjs
-//   node brokers/monex/monex_scraping.mjs --us=./Monex_US_LIST.csv --etf=./etf.html --tokyo=./data_j.xlsx
+//   node brokers/monexjp/monexjp_scraping.mjs
+//   node brokers/monexjp/monexjp_scraping.mjs --us=./Monex_US_LIST.csv --etf=./etf.html --tokyo=./data_j.xlsx
 
 import { stampRows } from "../../accepted.mjs";
 import { stampIsinMatches } from "../../isinMatches.mjs";
@@ -889,7 +889,7 @@ if (toyota.isin !== "JP3633400001") throw new Error(`Toyota was ${toyota.isin ||
 if (boj.isin !== "JP3699200006") throw new Error(`the Bank of Japan was ${boj.isin || "blank"}`);
 if (tencent.isin !== "KYG875721634") throw new Error(`Tencent was ${tencent.isin || "blank"}`);
 
-fs.writeFileSync(new URL("monex-parsed.json", import.meta.url), JSON.stringify(kept, null, 2));
+fs.writeFileSync(new URL("monexjp-parsed.json", import.meta.url), JSON.stringify(kept, null, 2));
 
 const byType = new Map();
 for (const row of kept) byType.set(row.type, (byType.get(row.type) || 0) + 1);

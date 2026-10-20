@@ -5,16 +5,16 @@
 // on interactivebrokers.ie or interactivebrokers.co.uk, is used as it stands:
 // nothing here changes the screen.
 //
-//   node brokers/interactivebrokers/interactivebrokers_touch.mjs
-//   node brokers/interactivebrokers/interactivebrokers_touch.mjs --limit=20
+//   node brokers/interactivebrokersie/interactivebrokersie_touch.mjs
+//   node brokers/interactivebrokersie/interactivebrokersie_touch.mjs --limit=20
 
 import fs from "node:fs";
 import puppeteer from "puppeteer-core";
 import { resolveVenue, sessionState } from "../../spreads/venues.mjs";
 
-const CATALOGUE = new URL("interactivebrokers-parsed.json", import.meta.url);
-const PROGRESS = new URL("interactivebrokers-touch-progress.json", import.meta.url);
-const TOUCHES = new URL("interactivebrokers-touches.jsonl", import.meta.url);
+const CATALOGUE = new URL("interactivebrokersie-parsed.json", import.meta.url);
+const PROGRESS = new URL("interactivebrokersie-touch-progress.json", import.meta.url);
+const TOUCHES = new URL("interactivebrokersie-touches.jsonl", import.meta.url);
 const SPREAD = new URL("../../spreads/spread.json", import.meta.url);
 let pageUrl = "https://www.interactivebrokers.ie/portal/";
 const EQ = new Set(["STOCK", "ETF", "ETN", "ETC", "ETP"]);

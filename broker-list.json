@@ -59388,7 +59388,7 @@
     }
   },
   {
-    "name": "BenchMark Finance",
+    "name": "BenchMark",
     "country": "BG",
     "type": "Broker",
     "url": "https://www.benchmark.bg/real_account.php",
@@ -86355,14 +86355,6 @@
         "count": 2795,
         "reliability": "high"
       },
-      "Shanghai-Hong Kong Stock Connect": {
-        "restriction": "Northbound-eligible securities only; STAR Market shares for institutional professional investors only",
-        "reliability": "high"
-      },
-      "Shenzhen-Hong Kong Stock Connect": {
-        "restriction": "Northbound-eligible securities only; ChiNext shares for institutional professional investors only",
-        "reliability": "high"
-      },
       "Singapore Exchange": {
         "restriction": "Overseas ETFs limited to the IBSJ-approved list",
         "count": 558,
@@ -101324,12 +101316,10 @@
       "NYSE Arca": {
         "reliability": "high"
       },
-      "Tradegate": {
-        "reliability": "high"
-      },
       "NYSE American": {},
       "Cboe BZX": {},
-      "Texas Stock Exchange": {}
+      "Texas Stock Exchange": {},
+      "Börse Frankfurt": {}
     }
   },
   {
@@ -104854,7 +104844,7 @@
     }
   },
   {
-    "name": "Islami Bank Securities Limited",
+    "name": "Islami Bank Securities",
     "country": "BD",
     "type": "Broker",
     "url": "https://www.islamibanksecurities.com/Content/PDF/TradeiBS%20User%20Manual.pdf",

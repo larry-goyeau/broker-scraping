@@ -237,13 +237,25 @@
         outline: none;
       }
       #nat.is-empty, #dep.is-empty { color: var(--mute); font-weight: 450; }
-      .param-size { display: block; }
+      .param-size { position: relative; display: block; }
+      /* The unit sits on the value's line, at the right edge. */
+      .size-unit {
+        position: absolute;
+        top: 24px;
+        bottom: 8px;
+        right: 16px;
+        display: flex;
+        align-items: center;
+        color: var(--mute);
+        font: 450 15px var(--sans);
+        pointer-events: none;
+      }
       #size {
         display: block;
         width: 100%;
         height: 58px;
         margin: 0;
-        padding: 24px 38px 8px 16px;
+        padding: 24px 54px 8px 16px;
         border: 0;
         border-radius: inherit;
         background: transparent;
@@ -256,38 +268,6 @@
         -moz-appearance: textfield;
         appearance: textfield;
       }
-      .size-spin {
-        position: absolute;
-        top: 50%;
-        right: 16px;
-        display: flex;
-        flex-direction: column;
-        gap: 1px;
-        transform: translateY(-50%);
-      }
-      .size-spin button {
-        display: grid;
-        place-items: center;
-        width: 14px;
-        height: 9px;
-        margin: 0;
-        padding: 0;
-        border: 0;
-        background: transparent;
-        cursor: pointer;
-      }
-      .size-spin button::before {
-        content: "";
-        display: block;
-        width: 0;
-        height: 0;
-        border-right: 4px solid transparent;
-        border-left: 4px solid transparent;
-      }
-      .size-spin button[data-step="1"]::before { border-bottom: 5px solid var(--mute); }
-      .size-spin button[data-step="-1"]::before { border-top: 5px solid var(--mute); }
-      .size-spin button[data-step="1"]:hover::before { border-bottom-color: var(--ink); }
-      .size-spin button[data-step="-1"]:hover::before { border-top-color: var(--ink); }
       #size::-webkit-outer-spin-button,
       #size::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
@@ -698,13 +678,10 @@
               <option value="">Select currency</option>
             </select>
           </label>
-          <label class="param param-for"><span class="param-label" id="sizeLabel">number of shares</span>
+          <label class="param param-for"><span class="param-label" id="sizeLabel">amount</span>
             <span class="param-size">
-              <input id="size" type="number" min="0" step="any" value="10" aria-label="Quantity" />
-            </span>
-            <span class="size-spin">
-              <button type="button" data-step="1" aria-label="More"></button>
-              <button type="button" data-step="-1" aria-label="Less"></button>
+              <input id="size" type="number" min="0" step="any" value="1000" aria-label="Amount in USD" />
+              <span class="size-unit" aria-hidden="true">USD</span>
             </span>
           </label>
         </div>
@@ -741,17 +718,14 @@
       const q = document.getElementById("q");
       const nat = document.getElementById("nat");
       const dep = document.getElementById("dep");
-      // A share is bought by the unit, a coin by the dollar. The control is one
-      // box either way; only what it counts changes, and it changes when the
-      // instrument on screen does.
-      const SHARES_DEFAULT = 10;
+      // Everything is bought by the dollar: a coin, and a share too. The server
+      // turns the amount into a (possibly fractional) count per line, at that
+      // line's own price and currency.
       const AMOUNT_DEFAULT = 1000;
-      let sizeKind = "shares";
-      let sizeVal = SHARES_DEFAULT;
-      let sizeTouched = false;
+      const sizeKind = "amount";
+      let sizeVal = AMOUNT_DEFAULT;
       let sizeTimer;
       const sizeBox = document.getElementById("size");
-      const sizeLabel = document.getElementById("sizeLabel");
       const goBtn = document.getElementById("go");
       const suggest = document.getElementById("suggest");
       const meta = document.getElementById("meta");
@@ -779,7 +753,7 @@
 
       const sizeValue = () => {
         const v = Number(sizeVal);
-        return Number.isFinite(v) && v > 0 ? v : sizeKind === "amount" ? AMOUNT_DEFAULT : SHARES_DEFAULT;
+        return Number.isFinite(v) && v > 0 ? v : AMOUNT_DEFAULT;
       };
       const withSize = (path) =>
         `${path}${path.includes("?") ? "&" : "?"}${sizeKind}=${encodeURIComponent(sizeValue())}`;
@@ -881,7 +855,7 @@
         return [
           `<li>Sold by <strong>${d.brokers}</strong>${of} broker${d.brokers === 1 ? "" : "s"}</li>`,
           crypto || !venues ? "" : `<li>On <strong>${venues}</strong> exchange${venues === 1 ? "" : "s"}</li>`,
-          `<li>For <strong>${esc(sizeValue().toLocaleString("en-US"))}</strong> ${crypto ? "USD" : "shares"}</li>`,
+          `<li>For <strong>$${esc(sizeValue().toLocaleString("en-US"))}</strong>${!crypto && Number(d.trade?.shares) > 0 ? ` (${esc(Number(d.trade.shares).toLocaleString("en-US", { maximumFractionDigits: 4 }))} shares)` : ""}</li>`,
         ].join("");
       };
       const syncExamples = (key) => {
@@ -985,7 +959,6 @@
       // what keeps the cursor in it.
       let shownReq = 0;
       async function show(key, sizeOnly = false) {
-        if (!sizeOnly && key !== shown) sizeTouched = false;
         const mine = ++shownReq;
         shown = key;
         empty.hidden = true;
@@ -993,8 +966,8 @@
           result.hidden = true;
           loading.hidden = false;
         }
-        let path = withDep(withNat(`/api/instrument?key=${encodeURIComponent(key)}`));
-        if (sizeTouched) path = withSize(path);
+        // A dollar amount means the same on every page, so it follows the reader.
+        const path = withSize(withDep(withNat(`/api/instrument?key=${encodeURIComponent(key)}`)));
         const r = await fetch(path);
         if (mine !== shownReq) return;
         if (!r.ok) {
@@ -1006,22 +979,6 @@
         }
         const d = await r.json();
         const crypto = String(d.type || "").toUpperCase() === "CRYPTO";
-        // The kind of size follows the instrument. Switching to or from a coin
-        // resets the box, since ten of one is not a thousand of the other, and
-        // asks the server again for the size it now means.
-        const kind = crypto ? "amount" : "shares";
-        if (kind !== sizeKind) {
-          sizeKind = kind;
-          sizeTouched = false;
-          sizeVal = crypto ? AMOUNT_DEFAULT : SHARES_DEFAULT;
-          sizeBox.value = String(sizeVal);
-          sizeLabel.textContent = crypto ? "amount in USD" : "number of shares";
-          return show(key);
-        }
-        if (!crypto && !sizeTouched && Number(d.trade?.shares) > 0) {
-          sizeVal = d.trade.shares;
-          sizeBox.value = String(sizeVal);
-        }
         const rows = d.soldBy
           .flatMap((b) => {
             const listed = b.listings.length ? b.listings : [{ exchange: "", currency: "" }];
@@ -1090,7 +1047,7 @@
         }
         const body = rowsHtml(merged, crypto);
         const notes = `
-          <p class="note"><a class="star" href="/method">*</a> Cost if you buy ${crypto ? `${esc(String(sizeValue()))} USD of` : `${esc(String(sizeValue()))} shares of`} ${esc(d.ticker || d.isin || d.key)} and sell them back at once. Spreads may vary. <a class="method-link" href="/method">How costs are calculated</a></p>
+          <p class="note"><a class="star" href="/method">*</a> Cost if you buy $${esc(sizeValue().toLocaleString("en-US"))} of ${esc(d.ticker || d.isin || d.key)} and sell them back at once. Spreads may vary. <a class="method-link" href="/method">How costs are calculated</a></p>
           ${!crypto && d.trade && d.trade.price == null
             ? `<p class="note">No price on file for this instrument, so nothing proportional to the amount can be added up. Write assets/prices.json to fill this column.</p>`
             : ""}`;
@@ -1180,7 +1137,6 @@
       });
 
       sizeBox.addEventListener("input", () => {
-        sizeTouched = true;
         sizeVal = sizeBox.value;
         clearTimeout(sizeTimer);
         // The bill is computed in Node, broker by broker, so a new size is a
@@ -1188,18 +1144,6 @@
         sizeTimer = setTimeout(() => {
           if (shown && !result.hidden) show(shown, true);
         }, 250);
-      });
-
-      // Shares move by one, a coin's dollar amount by a hundred. A fractional
-      // size lands on the next whole step rather than keeping its fraction.
-      document.querySelector(".size-spin").addEventListener("click", (e) => {
-        const btn = e.target.closest("button[data-step]");
-        if (!btn) return;
-        const unit = sizeKind === "amount" ? 100 : 1;
-        const now = sizeValue();
-        const next = Number(btn.dataset.step) > 0 ? Math.floor(now / unit) * unit + unit : Math.ceil(now / unit) * unit - unit;
-        sizeBox.value = String(Math.max(unit, next));
-        sizeBox.dispatchEvent(new Event("input", { bubbles: true }));
       });
 
       nat.addEventListener("mousedown", () => {

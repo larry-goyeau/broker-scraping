@@ -1,6 +1,7 @@
-// Longbridge New Zealand sells Hong Kong and US shares and ETFs only. The
+// Longbridge New Zealand sells Hong Kong, US and Singapore shares and ETFs
+// (its help centre prints a Singapore fee table). The
 // markets come from the shared Longbridge reader in
-// ../longbridge/longbridge_markets.mjs, which pages the public market lists
+// ../longbridgehk/longbridgehk_markets.mjs, which pages the public market lists
 // and reads each counter's quote detail.
 //
 //   https://longbridge.com/nz
@@ -15,8 +16,8 @@
 import { stampRows } from "../../accepted.mjs";
 import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
-import { longbridgeRows, logCounts } from "../longbridge/longbridge_markets.mjs";
+import { longbridgeRows, logCounts } from "../longbridgehk/longbridgehk_markets.mjs";
 
-const rows = await longbridgeRows(["HK", "US"]);
+const rows = await longbridgeRows(["HK", "US", "SG"]);
 fs.writeFileSync(new URL("longbridgenz-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(rows)), null, 2));
 logCounts(rows);

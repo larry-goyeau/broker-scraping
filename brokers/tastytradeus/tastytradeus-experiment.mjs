@@ -1,13 +1,13 @@
 // Measures what a buy followed immediately by a sell actually costs on tastytrade, to check
-// the coefficients `tastytrade_cost.mjs` publishes against money that really moved.
+// the coefficients `tastytradeus_cost.mjs` publishes against money that really moved.
 //
 // Two things are being tested, and they are of different kinds. The fee side is arithmetic
 // on published rates, and the broker will quote it before anything is traded: `--probe` asks
 // for that quote and compares it with the model, at no cost. The market side is the effective
 // spread, and only a real order can say what it was, so `--live` trades.
 //
-//   node brokers/tastytrade/tastytrade-experiment.mjs --probe                      # nothing traded
-//   node brokers/tastytrade/tastytrade-experiment.mjs --live --plan=IAU:1,AQLT:1
+//   node brokers/tastytradeus/tastytradeus-experiment.mjs --probe                      # nothing traded
+//   node brokers/tastytradeus/tastytradeus-experiment.mjs --live --plan=IAU:1,AQLT:1
 //
 // The measurement is the Rule 605 one, so that it can be held against the reports the cost
 // script reads: the mid is noted just before each leg, and the effective spread per share is
@@ -33,7 +33,7 @@ const LIVE = process.argv.includes("--live");
 const OUT = arg(
   "out",
   new URL(
-    LIVE ? "tastytrade-experiment.json" : "tastytrade-probe.json",
+    LIVE ? "tastytradeus-experiment.json" : "tastytradeus-probe.json",
     import.meta.url
   )
 );
@@ -311,7 +311,7 @@ if (LIVE) {
 // Runs accumulate rather than replace each other. A round trip costs money and cannot be taken
 // again under the same market, so the one thing this file must never do is lose one — which it
 // did once, on 2026-08-27: a later probe, writing the same path, overwrote the six live trips of
-// that afternoon. Their distilled figures survive in `tastytrade_cost.mjs`, the raw legs do not.
+// that afternoon. Their distilled figures survive in `tastytradeus_cost.mjs`, the raw legs do not.
 // Hence two defences: a probe writes to its own file, and a live run appends.
 const run = {
   at: new Date().toISOString(),

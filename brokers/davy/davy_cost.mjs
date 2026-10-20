@@ -43,8 +43,13 @@
 // SEC and TAF on an American sale, TAF capped at 9.79 $; the market
 // spread, once.
 //
-// FX is "typically will not exceed 1 %" of the converted amount. That is a
-// cap, not a rate, so it stays out of the total. The 0.90 % annual dealing
+// FX, re-read 2026-10-19 in the schedule PDF below (Other Charges): "Typically
+// the percentage adjustment will not exceed 1% of the total of the sale or
+// purchase amount." A typical ceiling and no lower figure, so 1 % one way is
+// taken (the highest stated, pessimistic). `deposits.mjs` holds EUR only for
+// Davy, so a line in any other currency is converted by force: 1 % on the buy
+// and 1 % on the sale, in the total and under `change`. A euro line keeps the
+// FX remark and pays nothing. The 0.90 % annual dealing
 // charge on IO / Trading Plus, the 50 € quarterly execution-service fee on
 // PIA, ROI EFT (free) and other transfers (25–50 €) are holding or funding
 // and stay in the remark. Fees are exclusive of VAT; Irish brokerage is
@@ -69,6 +74,8 @@ import { spreads } from "../../spreads/book.mjs";
 import { plus, finite } from "../../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../../fx.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
+import { depositHas } from "../../deposits.mjs";
+import { listingCash } from "../../fx.mjs";
 
 const CATALOGUE = new URL("davy-parsed.json", import.meta.url);
 
@@ -94,6 +101,8 @@ const HOME_MICS = new Set(["XMSM", "XDUB", "XLON"]);
 const PTM = { each: 1, currency: "GBP", above: 10000 };
 const ITP = { each: 1.25, currency: "EUR", above: 12500 };
 const SETTLEMENT_EUR = 25;
+// One way, of the converted amount: "typically ... will not exceed 1%".
+const FX_ONE_WAY = 0.01;
 const UK_ISSUERS = /^(GB|JE|GG|IM)$/;
 
 const isStock = (listing) => String(listing?.type || "").toUpperCase() === "STOCK";
@@ -216,7 +225,7 @@ export function commissionSide({ amountEur, plan, market }) {
   };
 }
 
-function remarkOf(plan, currency) {
+function remarkOf(plan, currency, held = true) {
   const lines = [];
   if (plan.quarterly != null) {
     lines.push(`€${plan.quarterly}/quarter if commissions below €${plan.quarterly}.`);
@@ -224,7 +233,7 @@ function remarkOf(plan, currency) {
   if (plan.annual != null) {
     lines.push(`Dealing ${(plan.annual * 100).toFixed(2)}%/year, min €${plan.annualMin}.`);
   }
-  lines.push(fxRemark("typically ≤1", currency));
+  if (held) lines.push(fxRemark("typically ≤1", currency));
   lines.push(`Withdraw €${TRANSFER.otherLow}–${TRANSFER.otherHigh} outside of Ireland.`);
   return lines.join("\n");
 }
@@ -375,6 +384,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
 
   const market = feeMarketOf(m.row.exchange, listing.mic);
   const overseas = market === "overseas";
+  const held = depositHas("davy", picked.id, listingCash(listing.currency));
   const leaf = book.leaf;
   const marketBp = bp ?? leaf?.bp ?? null;
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
@@ -391,8 +401,9 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     url: leaf?.url ?? SCHEDULE.source,
     tax,
     fx: fxNote(listing.currency),
-    fxIfConverted: 0,
-    remark: remarkOf(picked, listing.currency),
+    cashCurrency: held ? listingCash(listing.currency) : "EUR",
+    fxIfConverted: held ? FX_ONE_WAY : 0,
+    remark: remarkOf(picked, listing.currency, held),
     transfer: TRANSFER,
   };
 
@@ -401,7 +412,8 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     (picked.rate
       ? ` : ${(picked.rate * 100).toFixed(2)} %, plancher ${picked.min} €`
       : ` : pas de courtage par ordre sur IE/UK`) +
-    (overseas ? `, overseas ${(picked.overseas * 100).toFixed(2)} % + ${SETTLEMENT_EUR} €` : "");
+    (overseas ? `, overseas ${(picked.overseas * 100).toFixed(2)} % + ${SETTLEMENT_EUR} €` : "") +
+    (held ? "" : ` ; change forcé EUR ↔ ${listingCash(listing.currency)} : 1 % par sens (« typically ≤ 1 % », plafond pris), relu le 2026-10-19`);
 
   const n = Number(shares);
   const p = Number(price);
@@ -428,7 +440,9 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const sell = commissionSide({ amountEur: notionalEur, plan: picked, market });
   const buyUsd = buy ? dollars(buy.charged, "EUR") : null;
   const sellUsd = sell ? dollars(sell.charged, "EUR") : null;
-  const brokerFees = plus(buyUsd, sellUsd);
+  // Forced conversion: the buy converts euros out, the sale converts back.
+  const fxUsd = held ? 0 : notionalUsd == null ? null : notionalUsd * FX_ONE_WAY * 2;
+  const brokerFees = plus(buyUsd, sellUsd, fxUsd);
 
   const taxUsd = notionalUsd == null ? null : notionalUsd * taxPct;
   const secUsd = american ? (notionalUsd == null ? null : notionalUsd * SEC_RATE) : 0;
@@ -465,7 +479,8 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     },
     parts: {
       marché: finite(bookUsd, 6),
-      commission: finite(brokerFees, 6),
+      commission: finite(plus(buyUsd, sellUsd), 6),
+      change: finite(fxUsd, 6),
       taxes: finite(taxUsd, 6),
       réglementaire: finite(plus(secUsd, tafUsd, itpUsd, ptmUsd), 6),
     },
@@ -494,6 +509,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
       n,
       american,
       levy,
+      held,
     }),
   };
 }
@@ -512,6 +528,7 @@ function confidenceOf({
   n,
   american,
   levy,
+  held = true,
 }) {
   const said = [];
   said.push(
@@ -566,7 +583,9 @@ function confidenceOf({
     );
   }
   said.push(
-    `hors total : change « typically ≤ 1 % », ` +
+    (held
+      ? `hors total : change « typically ≤ 1 % », `
+      : `dans le total : change forcé 1 % par sens (« typically ≤ 1 % », plafond pris) ; hors total : `) +
       (picked.quarterly != null ? `service d'exécution ${picked.quarterly} € / trimestre sous ${picked.quarterly} € de commissions, ` : "") +
       (picked.annual != null ? `dealing ${(picked.annual * 100).toFixed(2)} % / an, ` : "") +
       `virement ROI lendemain gratuit, autres ${TRANSFER.otherLow}–${TRANSFER.otherHigh} €. ` +

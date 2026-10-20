@@ -1,6 +1,6 @@
 {
   "quarter": "2026-Q2",
-  "fetchedAt": "2026-10-10T20:16:06.356Z",
+  "fetchedAt": "2026-10-20T17:51:21.609Z",
   "source": "https://cdn.finra.org/606reportBulk/2026/606_NMS_2026_Q2.zip",
   "brokers": {
     "alpaca": {
@@ -331,6 +331,184 @@
         "NITE": 0.4613,
         "CDRG": 0.4602,
         "OTHER": 0.07847
+      }
+    },
+    "vision": {
+      "crd": [
+        "142271"
+      ],
+      "name": "Vision Financial Markets LLC",
+      "files": [
+        "142271_606_NMS_2026_Q2_V1_20260727.xml"
+      ],
+      "mix": {
+        "CDRG": 0.4357,
+        "SOHO": 0.4904,
+        "HRTF": 0.07389
+      }
+    },
+    "goldmansachs": {
+      "crd": [
+        "361"
+      ],
+      "name": "Goldman Sachs & Co. LLC",
+      "files": [
+        "361_606_NMS_2026_Q2_V1_20260731.xml"
+      ],
+      "mix": {
+        "OTHER": 1
+      }
+    },
+    "instinet": {
+      "crd": [
+        "7897"
+      ],
+      "name": "INCA",
+      "files": [
+        "7897_606_NMS_2026_Q2_V1_20260731.xml"
+      ],
+      "mix": {}
+    },
+    "jpmsecurities": {
+      "crd": [
+        "79"
+      ],
+      "name": "JPMS.606",
+      "files": [
+        "79_606_NMS_2026_Q2_V1_20260731.xml"
+      ],
+      "mix": {
+        "ETMM": 0.3579,
+        "OTHER": 0.1603,
+        "NITE": 0.21,
+        "CDRG": 0.09507,
+        "JNST": 0.05027,
+        "GTSM": 0.1265
+      }
+    },
+    "morganstanleyco": {
+      "crd": [
+        "8209"
+      ],
+      "name": "Morgan Stanley & Co.",
+      "files": [
+        "8209_606_NMS_2026_Q2_V1_20260731.xml"
+      ],
+      "mix": {}
+    },
+    "bofasecurities": {
+      "crd": [
+        "283942"
+      ],
+      "name": "MLCO.606_NEW",
+      "files": [
+        "283942_606_NMS_2026_Q2_V1_20260728.xml"
+      ],
+      "mix": {}
+    },
+    "bnpparibassecurities": {
+      "crd": [
+        "15794"
+      ],
+      "name": "BNP Paribas Securities Corp.",
+      "files": [
+        "15794_606_NMS_2026_Q2_V1_20260730.xml"
+      ],
+      "mix": {}
+    },
+    "nomurasecuritiesinternational": {
+      "crd": [
+        "4297"
+      ],
+      "name": "Nomura",
+      "files": [
+        "4297_606_NMS_2026_Q2_V2_20260730.xml"
+      ],
+      "mix": {}
+    },
+    "gtnamericas": {
+      "crd": [
+        "315499"
+      ],
+      "name": "GTN Americas",
+      "files": [
+        "315499_606_NMS_2026_Q2_V1_20260730.xml"
+      ],
+      "mix": {
+        "CDRG": 0.3981,
+        "JNST": 0.3685,
+        "SOHO": 0.2334
+      }
+    },
+    "hsbcsecuritiesusa": {
+      "crd": [
+        "19585"
+      ],
+      "name": "HSBC Securities",
+      "files": [
+        "19585_606_NMS_2026_Q2_HSBC_V1_20260729.xml"
+      ],
+      "mix": {
+        "OTHER": 0.6824,
+        "UBSS": 0.3176
+      }
+    },
+    "canaccordgenuity": {
+      "crd": [
+        "1020"
+      ],
+      "name": "Cannacord Genuity Inc.",
+      "files": [
+        "1020_606_NMS_2026_Q2_ADAM_V1_20260731.xml"
+      ],
+      "mix": {
+        "OTHER": 0.4242,
+        "CDRG": 0.5758
+      }
+    },
+    "wolverine": {
+      "crd": [
+        "120719"
+      ],
+      "name": "Wolverine Execution Services",
+      "files": [
+        "120719_606_NMS_2026_Q2_V1_20260731.xml"
+      ],
+      "mix": {}
+    },
+    "sofi": {
+      "crd": [
+        "151717"
+      ],
+      "name": "SOFI",
+      "files": [
+        "151717_606_NMS_2026_Q2_SOFI_V1_20260728.xml"
+      ],
+      "mix": {
+        "NITE": 0.1861,
+        "CDRG": 0.2036,
+        "HRTF": 0.1551,
+        "GTSM": 0.1795,
+        "JNST": 0.165,
+        "ETMM": 0.06289,
+        "OTHER": 0.04782
+      }
+    },
+    "lime": {
+      "crd": [
+        "11826"
+      ],
+      "name": "Lime Trading Corp",
+      "files": [
+        "11826_606_NMS_2026_Q2_SPCX_V1_20260731.xml"
+      ],
+      "mix": {
+        "NITE": 0.3136,
+        "OTHER": 0.3059,
+        "CDRG": 0.2098,
+        "STXG": 0.08859,
+        "JNST": 0.06117,
+        "HRTF": 0.02102
       }
     }
   }

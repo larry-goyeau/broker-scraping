@@ -22,7 +22,7 @@
 //   https://www.nasdaqtrader.com/dynamic/SymDir/nasdaqlisted.txt
 //   https://www.nasdaqtrader.com/dynamic/SymDir/otherlisted.txt
 //
-//   node brokers/coinbase/coinbase_scraping.mjs
+//   node brokers/coinbaseus/coinbaseus_scraping.mjs
 
 import puppeteer from "puppeteer-core";
 import { stampRows } from "../../accepted.mjs";
@@ -250,7 +250,7 @@ try {
 
   rows.sort((left, right) => left.exchange.localeCompare(right.exchange) || left.ticker.localeCompare(right.ticker));
   kept = stampRows(withoutObligations(rows));
-  fs.writeFileSync(new URL("coinbase-parsed.json", import.meta.url), JSON.stringify(kept, null, 2));
+  fs.writeFileSync(new URL("coinbaseus-parsed.json", import.meta.url), JSON.stringify(kept, null, 2));
 
   const counts = new Map();
   for (const row of kept) counts.set(`${row.exchange} ${row.type}`, (counts.get(`${row.exchange} ${row.type}`) || 0) + 1);

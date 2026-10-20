@@ -8,6 +8,10 @@
 // is kept too. Neither file prints a venue or an ISIN, so both come from
 // ../../assets/stocks.csv and etfs.csv (see japan.mjs). A code those lists
 // only know over the counter is stored as OTC, one they do not know as US.
+// No file prints a currency. A US line is quoted in dollars only and a
+// Japanese line in yen only, so no name is written a second time in
+// another currency the account holds (../../deposits.mjs); the Hong Kong
+// counters that need it are only at mitsubishiufjmorgan.
 //
 // At home the product page says every exchange: Tokyo (foreign shares
 // included), Nagoya with Next, Fukuoka with Q-Board, Sapporo with
@@ -17,9 +21,17 @@
 // month-end file: Prime, Standard and Growth, domestic and foreign, and the
 // ETF・ETN section (a name that says ETN is an ETN). The REIT/fund section
 // is left out as in the other Japanese catalogues, and so is 出資証券, which
-// the page does not name. Nagoya is the exchange's Premier, Main and Next
-// search; Nagoya's ETFs are Tokyo funds and are not a second line here.
-// Fukuoka and Sapporo are their sole listings, as in matsui.
+// the page does not name. A name listed on several of the four exchanges
+// is written once per exchange, since the product page sells each of
+// them (Japan has no consolidated book). Nagoya is the exchange's Premier,
+// Main and Next search and its ETF board (1319, also a Tokyo fund, and
+// 1553, a Nagoya sole listing): the page sells ETFs on Tokyo and Nagoya.
+// Fukuoka is the monthly listed-securities PDF, sole and dual listings,
+// with today's sole-listing page on top; Sapporo is its own page, sole
+// and dual sections. US lines stay one row: the US book is one NBBO.
+//
+//   https://www.fse.or.jp/investors/companies-and-brokers/
+//   https://www.sse.or.jp/listing/list
 //
 //   https://kabu.com/item/foreign_stock/us_stock/meigara.html
 //   https://kabu.com/process/beikabu.js
@@ -35,13 +47,14 @@ import {
   decodeEntities,
   fetchText,
   fold,
-  fukuokaSole,
+  fukuokaListing,
   jasdecRefused,
   jpRow,
+  nagoyaEtfs,
   nagoyaListing,
   normalize,
   parseCsv,
-  sapporoSole,
+  sapporoListing,
   tokyoListing,
   usRow,
   writeCatalogue,
@@ -109,12 +122,13 @@ async function checkRule() {
   }
 }
 
-const [us, tokyo, nagoya, fukuoka, sapporo, refused] = await Promise.all([
+const [us, tokyo, nagoya, nagoyaFunds, fukuoka, sapporo, refused] = await Promise.all([
   usBook(),
   tokyoListing(),
   nagoyaListing(),
-  fukuokaSole(),
-  sapporoSole(),
+  nagoyaEtfs(),
+  fukuokaListing(),
+  sapporoListing(),
   jasdecRefused(),
   checkRule(),
 ]);
@@ -142,6 +156,7 @@ for (const [exchange, lines] of [["Nagoya", nagoya], ["Fukuoka", fukuoka], ["Sap
     else rows.push(jpRow({ ...line, exchange, type: "STOCK" }));
   }
 }
+for (const line of nagoyaFunds) rows.push(jpRow({ ...line, exchange: "Nagoya", type: "ETF" }));
 
 attachJapanIsins(rows);
 writeCatalogue(import.meta.url, "mitsubishiufjesmart-parsed.json", rows, {

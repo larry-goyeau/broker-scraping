@@ -37,10 +37,10 @@
 //   https://www.tradestation.com/stocks-etfs-pricing-disclosures/
 //   https://www.tradestation.com/trading-products/stocks/
 //
-//   node brokers/tradestation/tradestation_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node brokers/tradestation/tradestation_cost.mjs AQLT CBOE USD --shares=10 --price=31.5
-//   node brokers/tradestation/tradestation_cost.mjs --plan=tier4 AAPL NASDAQ USD --shares=10 --price=230
-//   node brokers/tradestation/tradestation_cost.mjs --schedule
+//   node brokers/tradestationus/tradestationus_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/tradestationus/tradestationus_cost.mjs AQLT CBOE USD --shares=10 --price=31.5
+//   node brokers/tradestationus/tradestationus_cost.mjs --plan=tier4 AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/tradestationus/tradestationus_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
@@ -52,7 +52,7 @@ import { plus, finite } from "../../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
 
-const CATALOGUE = new URL("tradestation-parsed.json", import.meta.url);
+const CATALOGUE = new URL("tradestationus-parsed.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://www.tradestation.com/pricing/",
@@ -246,7 +246,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue TradeStation n'existe pas encore : lancer `node brokers/tradestation/tradestation_scraping.mjs`",
+      why: "le catalogue TradeStation n'existe pas encore : lancer `node brokers/tradestationus/tradestationus_scraping.mjs`",
     };
   }
 
@@ -266,7 +266,7 @@ export function roundTrip({
     mic: m.venue?.mic ?? null,
     currency: m.row.currency,
     unsourced: m.unsourced,
-    broker: "tradestation",
+    broker: "tradestationus",
     ticker: m.row.ticker,
   });
   const listing = {
@@ -494,10 +494,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node brokers/tradestation/tradestation_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--plan=tier1|tier4|intl]\n" +
-        "        node brokers/tradestation/tradestation_cost.mjs --schedule\n" +
-        "  ex.   node brokers/tradestation/tradestation_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
-        "        node brokers/tradestation/tradestation_cost.mjs AQLT CBOE USD --shares=10 --price=31.5 --plan=tier4"
+      "usage : node brokers/tradestationus/tradestationus_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--plan=tier1|tier4|intl]\n" +
+        "        node brokers/tradestationus/tradestationus_cost.mjs --schedule\n" +
+        "  ex.   node brokers/tradestationus/tradestationus_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
+        "        node brokers/tradestationus/tradestationus_cost.mjs AQLT CBOE USD --shares=10 --price=31.5 --plan=tier4"
     );
     process.exit(2);
   }

@@ -20,7 +20,7 @@
 //
 //   https://service.standardchartered.com.tw/investment/stock/index.aspx
 //
-//   node brokers/standardchartered/standardchartered_scraping.mjs
+//   node brokers/standardcharteredtw/standardcharteredtw_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
 import { stampIsinMatches } from "../../isinMatches.mjs";
@@ -405,7 +405,7 @@ rows.sort((left, right) => {
 });
 
 const kept = stampRows(withoutObligations(rows));
-fs.writeFileSync(new URL("standardchartered-parsed.json", import.meta.url), JSON.stringify(kept, null, 2));
+fs.writeFileSync(new URL("standardcharteredtw-parsed.json", import.meta.url), JSON.stringify(kept, null, 2));
 const byBook = new Map();
 for (const row of kept) byBook.set(`${row.exchange} ${row.type}`, (byBook.get(`${row.exchange} ${row.type}`) || 0) + 1);
 console.error(

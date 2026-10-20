@@ -13,16 +13,18 @@
 // been run, this one answers that the book is missing. Options and
 // Treasuries are not this book.
 //
-// Hong Kong is the Commission (HK) tab on the same pricing page, read
-// 2026-10-02. The 0.08 % line is a promotion that ended on 30 July 2020.
-//   SEHK commission     0.12 % of the trade, minimum 18 HKD an order
-//   Trading fee         0.00565 %
-//   Clearing            0.002 %, minimum 2 HKD, maximum 100 HKD
-//   SFC levy            0.0027 %
+// Hong Kong is the "HK Stocks & ETFs" table on the same pricing page,
+// https://www.tradeup.com/pricing, read 2026-10-19 in a browser:
+//   Commission          0.03 % of the trade, minimum 7 HKD an order
+//   Platform fee        0.03 % of the trade, minimum 8 HKD an order
+//   Trading fee         0.00565 %, minimum 0.01 HKD (HKEX)
+//   Settlement fee      0.0042 % (HKSCC)
+//   Transaction levy    0.0027 %, minimum 0.01 HKD (SFC)
 //   FRC levy            0.00015 %
-//   Stamp               0.13 % of a stock, rounded up to the next HKD,
-//                       each execution. The note names stocks, so an ETF
-//                       pays none.
+//   Stamp               0.1 % of a stock, rounded up to the next HKD. The
+//                       table prints « 0.01% », the service-fee note under
+//                       it « 0.1% », the statutory rate; 0.1 % is used. An
+//                       ETF pays none.
 //
 //   US tax resident, listed NMS                         $0
 //   US tax resident, OTC                                $0.0002 / share
@@ -34,8 +36,20 @@
 //
 // SEC 0.00206 % of the sale, minimum $0.01 — their print. TAF $0.000195 /
 // $9.79. CAT is not named and stays out. They do not name a stamp or FTT,
-// so taxMap stays out. Cash is USD and every priced listing is USD, so FX
-// stays out.
+// so taxMap stays out.
+//
+// FX. Dollars are the only deposit currency (deposits.mjs). A US line and
+// the USD counter on HKEX are held as they are. A HKD or CNY counter on
+// HKEX is a forced conversion: USD to the listing currency on the buy and
+// back on the sell. TradeUP publishes no rate for it. Re-read 2026-10-19:
+// the pricing page, the non-US detail card and the Account Agreement have
+// no currency-exchange line, rate, spread or fee (the page only prints an
+// HKD margin rate). The « 2 $ par exécution » this file used to carry in
+// `confidence` had no source and is gone. So those totals (and
+// `brokerFees`, which holds the conversion) are N/A.
+//   https://www.tradeup.com/pricing
+//   https://www.tradeup.com/pricing/detail
+//   https://tradeup.com/agreement/240
 //
 // Tickets already in the number stay out of the remark. Wires ($50), ACAT
 // ($75 / $50), ACH reversal ($30) and mailing stay out. No inactivity
@@ -57,7 +71,8 @@ import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
 import { spreads } from "../../spreads/book.mjs";
 import { plus, finite } from "../../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, listingCash, toUsd, usdPer } from "../../fx.mjs";
+import { depositHas } from "../../deposits.mjs";
 
 const CATALOGUE = new URL("tradeup-parsed.json", import.meta.url);
 
@@ -66,7 +81,7 @@ const SCHEDULE = {
   detail: "https://www.tradeup.com/pricing/detail",
   commissions: "https://www.tradeup.com/pricing/commissions-us",
   readOn: "2026-09-17",
-  hkReadOn: "2026-10-02",
+  hkReadOn: "2026-10-19",
   entity: "TradeUP Securities, Inc. (US)",
   crd: "18483",
 };
@@ -125,7 +140,7 @@ export function commissionSide({ market, plan, shares, notional }) {
   const n = Number(shares);
   const amt = Number(notional);
   if (!(n > 0) || !(amt > 0)) return null;
-  if (market === "hk") return Math.max(18, amt * 0.0012);
+  if (market === "hk") return Math.max(7, amt * 0.0003) + Math.max(8, amt * 0.0003);
   const resolved = resolvePlan(plan);
   if (market === "otc") {
     const raw = resolved.otcPerShare * n;
@@ -152,9 +167,10 @@ function hkdOf(amount, currency) {
 function hkStatutory(notional, type) {
   const amt = Number(notional);
   const stock = !/^(ETF|ETN|ETC)$/.test(String(type || "").toUpperCase());
-  const stamp = stock ? Math.ceil(amt * 0.0013 - 1e-9) : 0;
-  const clearing = Math.min(100, Math.max(2, amt * 0.00002));
-  return amt * (0.0000565 + 0.000027 + 0.0000015) + clearing + stamp;
+  const stamp = stock ? Math.ceil(amt * 0.001 - 1e-9) : 0;
+  const trading = Math.max(0.01, amt * 0.0000565);
+  const levy = Math.max(0.01, amt * 0.000027);
+  return trading + levy + amt * (0.000042 + 0.0000015) + stamp;
 }
 
 function findListing({ etf, place, currency }) {
@@ -225,7 +241,8 @@ function remarkOf({ market, plan }) {
 /**
  * The whole bill for buying `shares` at `price` and selling them straight
  * back. `usd` is the number the page prints; `brokerFees` is TradeUP's
- * commission, twice.
+ * commission, twice, plus any forced conversion (N/A when that conversion
+ * has no published rate).
  */
 export function roundTrip({
   etf,
@@ -302,6 +319,12 @@ export function roundTrip({
   const leaf = book.leaf;
   const marketBp = bp ?? leaf?.bp ?? null;
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
+  // A deposit currency is never converted; anything else is converted at a
+  // rate TradeUP does not publish, so that leg has no figure.
+  const cashCcy = listingCash(listing.currency);
+  const held = depositHas("tradeup", resolved.id, cashCcy);
+  const fxWhy = held ? null : `change forcé USD→${cashCcy} : taux de change non publié`;
+  const fxBasis = held ? "" : ` ; change forcé USD→${cashCcy} sans taux publié (page tarifs relue le 2026-10-19)`;
 
   const n = Number(shares);
   const p = Number(price);
@@ -325,8 +348,8 @@ export function roundTrip({
     url: leaf?.url ?? (resolved.id === "us" ? SCHEDULE.source : SCHEDULE.detail),
     basis:
       market === "hk"
-        ? `barème Hong Kong TradeUP, relu le ${SCHEDULE.hkReadOn} : 0,12 % par ordre, plancher 18 HKD, plus les frais de place et le timbre 0,13 % arrondi au dollar`
-        : `barème ${resolved.name}, palier ${market}, relu le ${SCHEDULE.readOn}`,
+        ? `barème Hong Kong TradeUP, relu le ${SCHEDULE.hkReadOn} : commission 0,03 % (plancher 7 HKD) et frais de plateforme 0,03 % (plancher 8 HKD) par ordre, plus les frais de place et le timbre 0,1 % arrondi au dollar${fxBasis}`
+        : `barème ${resolved.name}, palier ${market}, relu le ${SCHEDULE.readOn}${fxBasis}`,
     commission: {
       each: ticket,
       currency: market === "hk" ? "HKD" : "USD",
@@ -344,7 +367,9 @@ export function roundTrip({
   if (notional == null || ticket == null) {
     return {
       ...shared,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
+      why: [!(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs", fxWhy]
+        .filter(Boolean)
+        .join(" ; "),
       confidence: confidenceOf({
         market,
         listing,
@@ -369,19 +394,22 @@ export function roundTrip({
         : null;
   const secUsd = market === "hk" || notionalUsd == null ? (market === "hk" ? 0 : null) : Math.max(SEC_MIN, notionalUsd * SEC_RATE);
   const tafUsd = market === "hk" ? 0 : Math.min(n * TAF_PER_SHARE, TAF_CAP);
-  const usd = plus(bookUsd, commissionUsd, secUsd, tafUsd);
+  // Forced conversion with no published rate: unknown, and so is the total.
+  const fxUsd = held ? 0 : null;
+  const brokerFees = plus(commissionUsd, fxUsd);
+  const usd = plus(bookUsd, brokerFees, secUsd, tafUsd);
+  const why = [
+    fxWhy,
+    bookUsd == null
+      ? `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ${m.unsourced?.why || "pas de feuille de carnet"}`
+      : null,
+  ].filter(Boolean);
 
   return {
     ...shared,
     usd: finite(usd, 6),
-    brokerFees: finite(commissionUsd, 6),
-    ...(bookUsd == null
-      ? {
-          why: `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ${
-            m.unsourced?.why || "pas de feuille de carnet"
-          }`,
-        }
-      : {}),
+    brokerFees: finite(brokerFees, 6),
+    ...(why.length ? { why: why.join(" ; ") } : {}),
     trade: {
       shares: n,
       price: p,
@@ -393,6 +421,7 @@ export function roundTrip({
       marché: finite(bookUsd, 6),
       courtage: finite(commissionUsd, 6),
       réglementaire: finite(plus(secUsd, tafUsd), 6),
+      change: finite(fxUsd, 6),
     },
     sell: {
       sec: finite(secUsd, 6),
@@ -431,8 +460,8 @@ function confidenceOf({
   const said = [];
   if (market === "hk") {
     said.push(
-      `commission Hong Kong, page lue le ${SCHEDULE.hkReadOn} : 0,12 % du montant, plancher 18 HKD, ` +
-        `plus frais de place et timbre 0,13 % arrondi au dollar`
+      `commission Hong Kong, page lue le ${SCHEDULE.hkReadOn} : 0,03 % (plancher 7 HKD) + plateforme 0,03 % (plancher 8 HKD), ` +
+        `plus frais de place et timbre 0,1 % arrondi au dollar`
     );
   } else if (plan.id === "us") {
     said.push(
@@ -466,7 +495,7 @@ function confidenceOf({
   said.push(
     `hors trajet : algo +${ALGO} $/part, virement ${WIRE.domestic} $, ` +
       `ACAT sortant ${ACAT.full} $ / ${ACAT.partial} $, ACH reversal ${ACH_REVERSAL} $. ` +
-      `Compte en dollars. Le change USD/HKD est à 2 $ par exécution quand il a lieu, et reste hors du nombre. ` +
+      `Compte en dollars : une ligne HKD ou CNY est un change forcé sans taux publié, donc N/A. ` +
       `Aucun aller-retour réel dans ce dépôt`
   );
   return said.join(" ; ");

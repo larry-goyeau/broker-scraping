@@ -7,11 +7,11 @@
 // Do not navigate the tab. A `goto` on lynxplus.com has been seen to
 // fire `/ibapi/v1/api/logout` and drop the bridge.
 //
-//   node brokers/lynx/lynx_scraping.mjs
-//   node brokers/lynx/lynx_scraping.mjs IE00B4L5Y983 US0378331005
-//   node brokers/lynx/lynx_scraping.mjs --fresh --start=400
+//   node brokers/lynxnl/lynxnl_scraping.mjs
+//   node brokers/lynxnl/lynxnl_scraping.mjs IE00B4L5Y983 US0378331005
+//   node brokers/lynxnl/lynxnl_scraping.mjs --fresh --start=400
 //
-// Writes `lynx-parsed.json` next to this file.
+// Writes `lynxnl-parsed.json` next to this file.
 
 import puppeteer from "puppeteer-core";
 import { stampRows } from "../../accepted.mjs";
@@ -108,7 +108,7 @@ const etfsOnly = hasFlag("etfs-only") || hasFlag("funds-only");
 const stocksOnly = hasFlag("stocks-only");
 const cryptoOnly = hasFlag("crypto-only") || hasFlag("cryptos-only");
 const fresh = hasFlag("fresh");
-// Re-read the retail KID block onto rows already in lynx-parsed.json.
+// Re-read the retail KID block onto rows already in lynxnl-parsed.json.
 // A what-if preview, not an order: the portal answers before any transmit.
 const restrictionsOnly = hasFlag("restrictions");
 const startIndex = Math.max(1, numberArg("start", 1));
@@ -237,7 +237,7 @@ if (!(await attachPortalPage())) {
   await page.goto(HOME, { waitUntil: "domcontentloaded" });
 }
 
-const outputPath = new URL("lynx-parsed.json", import.meta.url);
+const outputPath = new URL("lynxnl-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 const existingByKey = new Map();

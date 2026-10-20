@@ -17,7 +17,7 @@
 //
 //   https://www.rakutentrade.my/from-wall-street-to-victoria-harbour-trade-it-all
 //
-//   node brokers/rakutenma/rakutenma_scraping.mjs
+//   node brokers/rakutenmy/rakutenmy_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
 import { stampIsinMatches } from "../../isinMatches.mjs";
@@ -318,7 +318,7 @@ console.error(`Bursa : ${bursa.length} lignes, ${bursaAdded} nouvelles`);
 
 const tally = attachIsins(rows, loadIsinIndex());
 rows.sort((left, right) => left.exchange.localeCompare(right.exchange) || left.ticker.localeCompare(right.ticker, undefined, { numeric: true }));
-fs.writeFileSync(new URL("rakutenma-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(rows)), null, 2));
+fs.writeFileSync(new URL("rakutenmy-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(rows)), null, 2));
 const byType = new Map();
 for (const row of rows) byType.set(`${row.exchange} ${row.type}`, (byType.get(`${row.exchange} ${row.type}`) || 0) + 1);
 console.error(

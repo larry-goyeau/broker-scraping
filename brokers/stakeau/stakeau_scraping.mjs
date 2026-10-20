@@ -12,18 +12,37 @@
 //   https://hellostake.com/sitemap/stocks/wall-st.xml
 //   https://hellostake.com/au/invest/wall-st/stocks/spy
 //
-//   node brokers/stake/stake_scraping.mjs
-//   node brokers/stake/stake_scraping.mjs --limit=20
+//   node brokers/stakeau/stakeau_scraping.mjs
+//   node brokers/stakeau/stakeau_scraping.mjs --limit=20
+//
+// A Wall St fiche on a listed exchange (not OTC) is kept only when the US
+// symbol directories of the day, Nasdaq Trader's official lists of every
+// security listed on a US exchange, name its ticker (a test issue is left
+// out); a line they call a warrant or a right is not a stock and stays out
+// (a SPAC unit, which holds a share, and a depositary share whose name
+// speaks of rights, stay).
+// Stake spells the directories' BAC$B as BAC.PRB and GLED.R as GLED.RT.
+//
+//   ftp://ftp.nasdaqtrader.com/symboldirectory/nasdaqlisted.txt
+//   ftp://ftp.nasdaqtrader.com/symboldirectory/otherlisted.txt
+//   (same files as https://www.nasdaqtrader.com/dynamic/SymDir/, whose web
+//   copy can answer with a bot check)
+//
+// The shared lists can stamp a recycled ticker with its former holder's
+// ISIN (SATS, EchoStar's until it became ECHO, is now a Strive preferred).
+// An ISIN stamped on two American tickers stays only on the one whose name
+// shares a word with the lists' name for that ISIN.
 
 import { stampRows } from "../../accepted.mjs";
 import { isObligation, withoutObligations } from "../../obligation.mjs";
+import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 
 const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36";
 const ORIGIN = "https://hellostake.com";
 const SITEMAPS = ["stocks/aus.xml", "stocks/wall-st.xml"];
 const CACHE = new URL("stake-cache.jsonl", import.meta.url);
-const OUTPUT = new URL("stake-parsed.json", import.meta.url);
+const OUTPUT = new URL("stakeau-parsed.json", import.meta.url);
 const JOBS = 4;
 
 // Codes read off the fiches. PCQ is Arca, which this repo files as AMEX.
@@ -78,28 +97,31 @@ function decodeXml(value) {
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 let limitedUntil = 0;
 
-async function textOf(url) {
+// `timeout` is per attempt; `backoff` is the first pause, doubled after
+// each failed attempt.
+async function textOf(url, { attempts = 8, timeout = 30_000, backoff = 400 } = {}) {
   let last = "";
-  for (let attempt = 0; attempt < 8; attempt += 1) {
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
     const pause = limitedUntil - Date.now();
     if (pause > 0) await sleep(pause);
     try {
       const response = await fetch(url, {
         headers: { "User-Agent": UA, Accept: "application/json, application/xml, text/html" },
-        signal: AbortSignal.timeout(30_000),
+        signal: AbortSignal.timeout(timeout),
       });
-      if (response.ok) return response.text();
+      if (response.ok) return await response.text();
       if (response.status === 404) return "";
       last = `${response.status} ${url}`;
       if (response.status === 429) {
         limitedUntil = Date.now() + 4000 * (attempt + 1);
         continue;
       }
-      if (response.status < 500) break;
+      // The explore table answers 400 now and then under load: retry it.
+      if (response.status < 500 && response.status !== 400) break;
     } catch (error) {
       last = String(error.message || error);
     }
-    await sleep(400 * (attempt + 1));
+    await sleep(Math.min(backoff * 2 ** attempt, 60_000));
   }
   throw new Error(last || url);
 }
@@ -129,7 +151,8 @@ function leaveOut(name) {
 async function fichePaths() {
   const paths = [];
   for (const file of SITEMAPS) {
-    const xml = await textOf(`${ORIGIN}/sitemap/${file}`);
+    // The Wall St sitemap takes about a minute and resets now and then.
+    const xml = await textOf(`${ORIGIN}/sitemap/${file}`, { attempts: 5, timeout: 180_000, backoff: 5000 });
     if (!xml) throw new Error(`Stake sitemap missing ${file}`);
     for (const match of xml.matchAll(/<loc>([^<]+)<\/loc>/g)) {
       const url = new URL(decodeXml(match[1]));
@@ -332,7 +355,75 @@ unique.sort((left, right) => {
   return left.ticker.localeCompare(right.ticker);
 });
 
+// --- US symbol directories ---
+const directory = new Map();
+const dropped = { unlisted: [], warrant: [] };
+const recycled = [];
+if (!LIMIT) {
+  for (const [file, header] of [
+    ["nasdaqlisted.txt", "Symbol|Security Name|Market Category|Test Issue"],
+    ["otherlisted.txt", "ACT Symbol|Security Name|Exchange|CQS Symbol|ETF"],
+  ]) {
+    let body = "";
+    try {
+      body = execFileSync("curl", ["-s", "--max-time", "120", `ftp://ftp.nasdaqtrader.com/symboldirectory/${file}`], { maxBuffer: 64 << 20 }).toString("utf8");
+    } catch {
+      body = "";
+    }
+    if (!body.startsWith(header)) body = await textOf(`https://www.nasdaqtrader.com/dynamic/SymDir/${file}`, { attempts: 4, timeout: 60_000 });
+    if (!body.startsWith(header)) throw new Error(`${file}: unexpected header ${body.slice(0, 60)}`);
+    for (const line of body.split(/\r?\n/).slice(1)) {
+      const cells = line.split("|");
+      if (cells.length < 7 || line.startsWith("File Creation Time")) continue;
+      const nasdaq = file === "nasdaqlisted.txt";
+      if ((nasdaq ? cells[3] : cells[6]) === "Y") continue;
+      directory.set(cells[0], { name: cells[1].trim(), etf: (nasdaq ? cells[6] : cells[4]) === "Y" });
+      // The CQS spelling too: ACT writes SKYD.W, CQS (and Stake) SKYD.WS.
+      if (!nasdaq && cells[3] && !directory.has(cells[3])) directory.set(cells[3], directory.get(cells[0]));
+    }
+  }
+  if (directory.size < 10000) throw new Error(`the US directories hold only ${directory.size} lines`);
+  const listedAs = (ticker) => {
+    const act = ticker.replace(/\.PR([A-Z]?)$/, "$$$1").replace(/\.RT$/, ".R").replace(/\.WSA$/, ".WS.A");
+    const nasdaq = ticker.replace(/\.WS$/, "W").replace(/\.RT$/, "R").replace(/\.U$/, "U").replace(/\./g, "");
+    return [ticker, act, nasdaq].map((candidate) => directory.get(candidate)).find(Boolean) || null;
+  };
+  const listedBooks = new Set(["NASDAQ", "NYSE", "AMEX", "NYSE American", "CBOE"]);
+  for (let index = unique.length - 1; index >= 0; index -= 1) {
+    const row = unique[index];
+    if (!listedBooks.has(row.exchange)) continue;
+    const entry = listedAs(row.ticker);
+    if (!entry) dropped.unlisted.push(`${row.ticker} (${row.name}, ${row.type})`);
+    else if (!entry.etf && /\b(warrants?|rights?)\b/i.test(entry.name) && !/\bunits?\b|depositary/i.test(entry.name)) dropped.warrant.push(`${row.ticker} (${entry.name.slice(0, 50)})`);
+    else continue;
+    unique.splice(index, 1);
+  }
+  if (dropped.unlisted.length > 300) throw new Error(`${dropped.unlisted.length} listed fiches in no directory: spelling changed?`);
+}
+
 const stamped = stampRows(withoutObligations(unique));
+if (!LIMIT) {
+  const listNames = new Map();
+  for (const line of fs.readFileSync(new URL("../../assets/stocks.csv", import.meta.url), "utf8").split(/\r?\n/)) {
+    const cells = line.match(/("([^"]|"")*"|[^,]*)(,|$)/g)?.map((cell) => cell.replace(/,$/, "").replace(/^"|"$/g, "")) || [];
+    if (!["NYSE", "NASDAQ", "AMEX", "CBOE"].includes(cells[1]) || !cells[2]) continue;
+    if (!listNames.has(cells[2])) listNames.set(cells[2], []);
+    listNames.get(cells[2]).push(cells[3] || "");
+  }
+  const NOISE = new Set("inc corp corporation co company ltd limited plc the and of class common stock shares share ordinary holdings holding group trust series".split(" "));
+  const words = (name) => String(name || "").toLowerCase().replace(/[^a-z0-9 ]/g, " ").split(/\s+/).filter((word) => word.length > 1 && !NOISE.has(word));
+  const byIsin = new Map();
+  for (const row of stamped) if (row.isin && !["ASX", "OTC"].includes(row.exchange)) byIsin.set(row.isin, [...(byIsin.get(row.isin) || []), row]);
+  for (const [isin, same] of byIsin) {
+    if (new Set(same.map((row) => row.ticker)).size < 2) continue;
+    const known = new Set((listNames.get(isin) || []).flatMap(words));
+    for (const row of same) {
+      if (words(row.name).some((word) => known.has(word))) continue;
+      recycled.push(`${row.ticker} (${row.name}) lost ${isin}`);
+      row.isin = "";
+    }
+  }
+}
 for (const row of stamped) {
   if (row.isin) row.query = row.isin;
 }
@@ -347,3 +438,6 @@ console.error(
     `(${[...byBook].map(([label, count]) => `${count} ${label}`).join(", ")})` +
     (skipped.size ? `; laissées de côté ${[...skipped].map(([reason, count]) => `${count} ${reason}`).join(", ")}` : ""),
 );
+console.error(`not in the US directories, left out (${dropped.unlisted.length}): ${dropped.unlisted.join("; ")}`);
+console.error(`warrants and rights, left out (${dropped.warrant.length}): ${dropped.warrant.join("; ")}`);
+console.error(`ISIN of a recycled ticker removed (${recycled.length}): ${recycled.join("; ")}`);

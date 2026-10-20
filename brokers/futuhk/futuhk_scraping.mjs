@@ -22,7 +22,7 @@
 // six-digit expiry. Those stay out. A Hong Kong name ending in -WR
 // is the renminbi counter, not a warrant.
 //
-//   node brokers/futu/futu_scraping.mjs
+//   node brokers/futuhk/futuhk_scraping.mjs
 
 import { createHash, createHmac } from "node:crypto";
 import { spawnSync } from "node:child_process";
@@ -46,7 +46,7 @@ const CONNECT = [
 
 const STOCKS = new URL("../../assets/stocks.csv", import.meta.url);
 const ETFS = new URL("../../assets/etfs.csv", import.meta.url);
-const OUTPUT = new URL("futu-parsed.json", import.meta.url);
+const OUTPUT = new URL("futuhk-parsed.json", import.meta.url);
 
 const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
 const PAGE_SIZE = 50;

@@ -17,7 +17,7 @@
 // A fund marked PI, TPC or DBU is still sold, to that client. The mark
 // stays on the row.
 //
-//   node brokers/dbs/dbs_scraping.mjs
+//   node brokers/dbstw/dbstw_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
 import { stampIsinMatches } from "../../isinMatches.mjs";
@@ -317,7 +317,7 @@ rows.sort((left, right) => {
   return left.ticker.localeCompare(right.ticker);
 });
 
-fs.writeFileSync(new URL("dbs-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(rows)), null, 2));
+fs.writeFileSync(new URL("dbstw-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(rows)), null, 2));
 const byBook = new Map();
 for (const row of rows) byBook.set(`${row.exchange} ${row.type}`, (byBook.get(`${row.exchange} ${row.type}`) || 0) + 1);
 console.error(

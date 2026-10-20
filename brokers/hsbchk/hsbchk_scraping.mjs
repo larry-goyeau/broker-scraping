@@ -22,11 +22,21 @@
 // US OTC names, which get no exchange quote. ETFs and closed-end funds are
 // the screener's "Exchange Traded Funds" and "Closed End Funds" lists.
 //
+// Board lot: HSBC's deposit transaction charge on a Hong Kong purchase is
+// 5 HKD a board lot, and the quote search names no lot. HKEX's List of
+// Securities does, in its "Board Lot" column, one line per stock code
+// (an RMB or USD counter has its own code). Each HKEX row gets `lot` from
+// it; a code the list lacks stays without one.
+//
+//   https://www.hkex.com.hk/eng/services/trading/securities/securitieslists/ListOfSecurities.xlsx
+//
 //   node brokers/hsbchk/hsbchk_scraping.mjs
+//   node brokers/hsbchk/hsbchk_scraping.mjs --lots    (only stamps the lots on hsbchk-parsed.json)
 
 import { stampRows } from "../../accepted.mjs";
 import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
+import { inflateRawSync } from "node:zlib";
 
 const API = "https://investments4.personal-banking.hsbc.com.hk/api/wealth-mds-amh-pws-shp-api-hk-hbap-prod-proxy/v0/mds/hk";
 const HEADERS = {
@@ -42,6 +52,8 @@ const HEADERS = {
   "X-HSBC-Customer-Id": "STBPWS",
   "X-HSBC-Locale": "en_US",
 };
+const HKEX_LIST = "https://www.hkex.com.hk/eng/services/trading/securities/securitieslists/ListOfSecurities.xlsx";
+const PARSED = new URL("hsbchk-parsed.json", import.meta.url);
 const CAP = 300;
 const WORKERS = 4;
 const SCREEN_PAGE = 20;
@@ -194,6 +206,119 @@ function makeRow(item, exchange, mic, type) {
   return row;
 }
 
+// ---- HKEX board lots ---------------------------------------------------
+
+function columnIndex(ref) {
+  let n = 0;
+  for (const char of ref) {
+    if (!/[A-Z]/i.test(char)) break;
+    n = n * 26 + char.toUpperCase().charCodeAt(0) - 64;
+  }
+  return n - 1;
+}
+
+function unescapeXml(text) {
+  return text
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&amp;/g, "&");
+}
+
+// The first sheet of an .xlsx, as rows of strings. Node's zlib reads the
+// zip; the workbook's entries carry their sizes in the local header.
+function xlsxRows(bytes) {
+  const files = new Map();
+  let offset = 0;
+  while (offset + 30 < bytes.length && bytes.readUInt32LE(offset) === 0x04034b50) {
+    const flags = bytes.readUInt16LE(offset + 6);
+    const method = bytes.readUInt16LE(offset + 8);
+    const compressed = bytes.readUInt32LE(offset + 18);
+    const nameLength = bytes.readUInt16LE(offset + 26);
+    const extraLength = bytes.readUInt16LE(offset + 28);
+    const name = bytes.subarray(offset + 30, offset + 30 + nameLength).toString("utf8");
+    const start = offset + 30 + nameLength + extraLength;
+    if (flags & 0x8) throw new Error(`${name}: zip entry without sizes in its header`);
+    const stored = bytes.subarray(start, start + compressed);
+    files.set(name, method === 0 ? stored : inflateRawSync(stored));
+    offset = start + compressed;
+  }
+  const tag = "(?:[a-z0-9]+:)?";
+  const texts = (xml) => [...xml.matchAll(new RegExp(`<${tag}t\\b[^>]*>([\\s\\S]*?)</${tag}t>`, "g"))].map((m) => m[1]).join("");
+  const shared = [];
+  const sharedXml = files.get("xl/sharedStrings.xml");
+  if (sharedXml) {
+    for (const item of sharedXml.toString("utf8").matchAll(new RegExp(`<${tag}si\\b[^>]*>([\\s\\S]*?)</${tag}si>`, "g"))) shared.push(texts(item[1]));
+  }
+  const sheet = files.get("xl/worksheets/sheet1.xml");
+  if (!sheet) throw new Error("the HKEX workbook has no sheet1");
+  const rows = [];
+  for (const row of sheet.toString("utf8").matchAll(new RegExp(`<${tag}row\\b[^>]*>([\\s\\S]*?)</${tag}row>`, "g"))) {
+    const values = {};
+    for (const cell of row[1].matchAll(new RegExp(`<${tag}c\\b([^>]*?)(?:/>|>([\\s\\S]*?)</${tag}c>)`, "g"))) {
+      const ref = cell[1].match(/\br="([A-Z]+)\d+"/i)?.[1] || "A";
+      const type = cell[1].match(/\bt="([^"]+)"/)?.[1] || "";
+      const body = cell[2] || "";
+      const raw = body.match(new RegExp(`<${tag}v>([\\s\\S]*?)</${tag}v>`))?.[1] ?? "";
+      const value = type === "s" ? shared[Number(raw)] ?? "" : type === "inlineStr" ? texts(body) : raw;
+      values[columnIndex(ref)] = unescapeXml(value).replace(/\s+/g, " ").trim();
+    }
+    const keys = Object.keys(values).map(Number);
+    if (keys.length) rows.push(Array.from({ length: Math.max(...keys) + 1 }, (_, i) => values[i] ?? ""));
+  }
+  return rows;
+}
+
+// Stock code -> board lot, from HKEX's List of Securities.
+async function hkexLots() {
+  let bytes = null;
+  let last = "";
+  for (let attempt = 0; attempt < 5 && !bytes; attempt += 1) {
+    try {
+      const response = await fetch(HKEX_LIST, { headers: { "User-Agent": HEADERS["User-Agent"] }, signal: AbortSignal.timeout(180_000) });
+      if (response.ok) bytes = Buffer.from(await response.arrayBuffer());
+      else last = `${response.status} ${HKEX_LIST}`;
+    } catch (error) {
+      last = `${error.message || error} ${HKEX_LIST}`;
+    }
+    if (!bytes) await sleep(1500 * 2 ** attempt);
+  }
+  if (!bytes) throw new Error(last);
+  const table = xlsxRows(bytes);
+  const header = table.find((row) => row[0] === "Stock Code");
+  const lotAt = header ? header.indexOf("Board Lot") : -1;
+  if (lotAt < 0) throw new Error("the HKEX list has no Stock Code / Board Lot header");
+  const lots = new Map();
+  for (const row of table) {
+    const stock = String(row[0] || "").trim();
+    const lot = Number(String(row[lotAt] || "").replace(/,/g, ""));
+    if (/^\d{5}$/.test(stock) && Number.isInteger(lot) && lot > 0) lots.set(stock, lot);
+  }
+  if (lots.size < 10000) throw new Error(`the HKEX list gave ${lots.size} board lots`);
+  return lots;
+}
+
+async function stampLots(listings) {
+  const lots = await hkexLots();
+  let stamped = 0;
+  const missing = [];
+  for (const row of listings) {
+    if (row.exchange !== "HKEX") continue;
+    delete row.lot;
+    const lot = lots.get(row.ticker);
+    if (lot) { row.lot = lot; stamped += 1; } else missing.push(row.ticker);
+  }
+  console.error(`HKEX board lots: ${stamped} rows stamped, ${missing.length} not on the HKEX list${missing.length ? ` (${missing.slice(0, 20).join(" ")})` : ""}`);
+  return listings;
+}
+
+if (process.argv.includes("--lots")) {
+  const listings = JSON.parse(fs.readFileSync(PARSED, "utf8"));
+  fs.writeFileSync(PARSED, JSON.stringify(await stampLots(listings), null, 2));
+  process.exit(0);
+}
+
 const rows = [];
 const skipped = {};
 const skip = (why) => { skipped[why] = (skipped[why] || 0) + 1; };
@@ -242,7 +367,8 @@ for (const row of rows) unique.set(`${row.exchange}|${row.ticker}|${row.currency
 const listings = [...unique.values()].sort((a, b) =>
   a.exchange.localeCompare(b.exchange) || a.ticker.localeCompare(b.ticker) || a.currency.localeCompare(b.currency));
 
-fs.writeFileSync(new URL("hsbchk-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(listings)), null, 2));
+await stampLots(listings);
+fs.writeFileSync(PARSED, JSON.stringify(stampRows(withoutObligations(listings)), null, 2));
 console.error("skipped", skipped);
 const counts = {};
 for (const row of listings) counts[`${row.exchange} ${row.type}`] = (counts[`${row.exchange} ${row.type}`] || 0) + 1;

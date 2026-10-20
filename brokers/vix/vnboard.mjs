@@ -27,7 +27,9 @@ dns.setDefaultResultOrder("ipv4first");
 export const UA =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36";
 export const BOARDS = ["HOSE", "HNX", "UPCOM"];
-const MIC = { HOSE: "XSTC", HNX: "HSTC" };
+// HOSE and HNX have ISO 10383 codes. UPCOM, the Hanoi unlisted board, has
+// none; UPCM is this project's code for it (spreads/venues.mjs).
+const MIC = { HOSE: "XSTC", HNX: "HSTC", UPCOM: "UPCM" };
 // A full board carries about 400 HOSE, 300 HNX and 800 UPCOM shares and
 // about 20 ETFs. Fewer than this means the read stopped early.
 const FLOOR = { HOSE: 350, HNX: 250, UPCOM: 650, ETF: 15 };
@@ -158,7 +160,7 @@ export function finish(lines, leftOut = new Map()) {
       ticker: line.ticker,
       name: line.name,
       exchange: line.exchange,
-      ...(MIC[line.exchange] ? { mic: MIC[line.exchange] } : {}),
+      mic: MIC[line.exchange],
       currency: "VND",
       type: line.type,
       isin: line.isin,

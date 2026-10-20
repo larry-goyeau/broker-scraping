@@ -320,7 +320,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     remark: [
       fxRemark("max 0.3", listing.currency, "(min 30 PLN) to buy foreign currency, max 1% (min 100 PLN) to buy PLN"),
       rule.dayTrade
-        ? `If the sale is the same day, -${((POLISH_RATE - DAY_RATE) * 100).toFixed(3)}% fees.`
+        ? `If the sale is the same day, fees are ${Number(((POLISH_RATE - DAY_RATE) * 100).toFixed(2))}% lower.`
         : "",
     ].filter(Boolean).join("\n"),
     url: SCHEDULE.url,

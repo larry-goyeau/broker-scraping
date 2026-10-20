@@ -87,7 +87,7 @@ function fxRemark(currency) {
   if (!pair) return "";
   const [bid, offer] = pair;
   const half = ((offer - bid) / (offer + bid)) * 100;
-  return `FX ${half.toFixed(3)}% if cash ≠ ${ccy}.`;
+  return `FX ${Number(half.toFixed(2))}% if cash ≠ ${ccy}.`;
 }
 
 function remarkOf(currency) {

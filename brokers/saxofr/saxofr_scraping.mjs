@@ -390,7 +390,7 @@ results.sort((left, right) => {
   return String(left.ticker).localeCompare(String(right.ticker));
 });
 
-const outputPath = new URL("saxo-parsed.json", import.meta.url);
+const outputPath = new URL("saxofr-parsed.json", import.meta.url);
 fs.writeFileSync(outputPath, JSON.stringify(stampRows(withoutObligations(results), import.meta.url), null, 2));
 
 const byType = new Map();

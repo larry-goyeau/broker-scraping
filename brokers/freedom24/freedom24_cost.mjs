@@ -392,6 +392,7 @@ export function roundTrip({
     currency: m.row.currency,
     unsourced: m.unsourced,
     ticker: m.row.ticker,
+    broker: "freedom24",
   });
   const listing = {
     isin: String(m.row.isin || "").toUpperCase() || null,

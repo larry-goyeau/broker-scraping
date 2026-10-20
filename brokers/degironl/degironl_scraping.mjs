@@ -325,7 +325,7 @@ console.error(`${exchanges.size} exchanges named, ${catalogue.byIsin.size} ISINs
 
 const shelf = await loadShelf(exchanges, stockCountries);
 
-const outputPath = new URL("degiro-parsed.json", import.meta.url);
+const outputPath = new URL("degironl-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 

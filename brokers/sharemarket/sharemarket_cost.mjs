@@ -58,7 +58,7 @@ const SCHEDULE = {
   dpInr,
   basis:
     "Courtage livraison : le plus bas de 20 ₹ et 0,1 %, au moins 2 ₹, plafond SEBI. DP 18,50 ₹ + GST à la vente au-dessus de 300 ₹, sinon 3,50 ₹.",
-  remark: `Intraday STT is ${rateGap(STT, pct("0.025"))}% on the sell and stamp is ${rateGap(STAMP, pct("0.003"))}% on the buy.`,
+  remark: `Intraday STT is ${rateGap(STT, pct("0.025"))} on the sell and stamp is ${rateGap(STAMP, pct("0.003"))} on the buy.`,
 };
 
 export function roundTrip(query) {

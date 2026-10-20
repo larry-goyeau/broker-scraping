@@ -254,7 +254,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const remark = [
     held ? `FX ${FX_FLAT.PLN} PLN / ${FX_FLAT.EUR} EUR / ${FX_FLAT.USD} USD / ${FX_FLAT.GBP} GBP if cash ≠ ${cash}.` : "",
     market === "gpw" && listing.type === "STOCK"
-      ? "If the sale is the same day, -0.23% fees."
+      ? "If the sale is the same day, fees are 0.23% lower."
       : "",
     isFund(listing.type) ? "IKE and IKZE: 0 % on ETF, ETP, ETN and ETC through February 2027." : "",
   ]

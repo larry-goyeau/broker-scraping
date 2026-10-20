@@ -17,9 +17,14 @@
 //     0 under a notional of 2.22 USD
 //     capped at 22 USD including tax
 //
-// Converting yen and dollars is published at 0. Settling the US order in
-// yen is another choice and costs 0.25 ¥ per dollar inside the rate. That
-// stays out of this ticket. Odd-lot sales, the best-match improvement fee
+// Converting yen and dollars is published at 0. Cash is yen only
+// (deposits.mjs), so a US line is a forced JPY->USD exchange on the buy and
+// USD->JPY on the sell. Both are free, so the change leg is 0 in the total.
+// https://www.matsui.co.jp/us-stock/domestic/rule/ re-read 2026-10-19:
+// 為替取引, 為替手数料 "無料". https://www.matsui.co.jp/us-stock/domestic/fee/
+// says no spread either way. Settling the US order in yen is another choice
+// and costs 0.25 ¥ per dollar inside the rate. That stays out of this
+// ticket, being dearer than the free exchange. Odd-lot sales, the best-match improvement fee
 // and the tax-loss service are other orders. Custody is not a ticket.
 // These rows have no ISIN, so the tax map adds nothing. The tariff names
 // no SEC fee.
@@ -66,6 +71,8 @@ const BOX_CAP = 110_000;
 const US_RATE = 0.00495;
 const US_FREE = 2.22;
 const US_CAP = 22;
+// One-way JPY<->USD exchange, published free. Read 2026-10-19.
+const FX_RATE = 0;
 const US_MICS = new Set(["XNAS", "XNYS", "ARCX", "XASE", "BATS"]);
 const JAPAN = new Set(["TOKYO", "NAGOYA", "FUKUOKA", "SAPPORO"]);
 
@@ -176,7 +183,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     url: japan ? SCHEDULE.url : SCHEDULE.us,
     basis: japan
       ? `barème boîte Matsui, relu le ${SCHEDULE.readOn} : 0 ¥ jusqu'à 500 000 ¥ dans la journée, un seul total pour l'aller-retour`
-      : `barème US Matsui, relu le ${SCHEDULE.readOn} : 0,495 % TTC par ordre, plafond 22 USD`,
+      : `barème US Matsui, relu le ${SCHEDULE.readOn} : 0,495 % TTC par ordre, plafond 22 USD. Change forcé JPY→USD et retour : 0 % par sens, gratuit (relu le 2026-10-19)`,
     tax,
     ccy: QUOTE,
     fx: { quote: QUOTE, asOf: FX_AS_OF, listing: usdPer(listing.currency) },
@@ -211,7 +218,9 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
         : parts.a * notionalUsd + parts.b * n;
   const commissionLocal = japan ? boxYen(notional * 2) : plus(usLeg(notional), usLeg(notional));
   const commissionUsd = commissionLocal == null ? null : japan ? dollars(commissionLocal, "JPY") : commissionLocal;
-  const brokerFees = commissionUsd;
+  // Forced JPY->USD and back on a US line: two exchanges at the published 0.
+  const fxUsd = japan ? 0 : notionalUsd == null ? null : notionalUsd * FX_RATE * 2;
+  const brokerFees = plus(commissionUsd, fxUsd);
   const taxUsd = notionalUsd == null ? null : notionalUsd * taxTotal;
   const usd = plus(bookUsd, brokerFees, taxUsd);
   const confidence = [
@@ -248,6 +257,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     parts: {
       marché: finite(bookUsd, 6),
       courtage: finite(commissionUsd, 6),
+      ...(japan ? {} : { change: finite(fxUsd, 6) }),
       taxes: finite(taxUsd, 6),
     },
     confidence,

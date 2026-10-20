@@ -1,0 +1,511 @@
+{
+ "readOn": "2026-10-19",
+ "source": "https://dps.psx.com.pk/company/<SYMBOL>",
+ "note": "Status of the PSX catalogue symbols absent from the 16 Oct 2026 closing file.",
+ "symbols": {
+  "AAL": {
+   "status": "SUSPENDED",
+   "lastTrade": "2018-08-11",
+   "ldcp": 16.0,
+   "flags": "SUSPENDED WINDING-UP"
+  },
+  "AASM": {
+   "status": "SUSPENDED",
+   "lastTrade": "2018-02-16",
+   "ldcp": 3.49,
+   "flags": "SUSPENDED WINDING-UP"
+  },
+  "ABSON": {
+   "status": "SUSPENDED",
+   "lastTrade": "2017-02-15",
+   "ldcp": 2.5,
+   "flags": "SUSPENDED WINDING-UP"
+  },
+  "ADOS": {
+   "status": "DELISTED",
+   "lastTrade": "2023-01-02",
+   "ldcp": null,
+   "flags": "DELISTED"
+  },
+  "ADTM": {
+   "status": "DELISTED",
+   "lastTrade": "2017-02-15",
+   "ldcp": 8.9,
+   "flags": "DELISTED"
+  },
+  "AEL": {
+   "status": "DELISTED",
+   "lastTrade": "2024-01-05",
+   "ldcp": 33.68,
+   "flags": "DELISTED"
+  },
+  "AGLNCPS": {
+   "status": "LISTED",
+   "lastTrade": "2026-09-16",
+   "ldcp": 43.94,
+   "flags": null
+  },
+  "AKZO": {
+   "status": "DELISTED",
+   "lastTrade": "2020-08-07",
+   "ldcp": 270.0,
+   "flags": "DELISTED"
+  },
+  "ALQT": {
+   "status": "DELISTED",
+   "lastTrade": "2017-11-02",
+   "ldcp": 85.0,
+   "flags": "DELISTED"
+  },
+  "AMSL": {
+   "status": "SUSPENDED",
+   "lastTrade": "2017-02-15",
+   "ldcp": 0.62,
+   "flags": "SUSPENDED WINDING-UP"
+  },
+  "ANLNVR": {
+   "status": "LISTED",
+   "lastTrade": "2020-03-12",
+   "ldcp": 0.01,
+   "flags": null
+  },
+  "ANLPS": {
+   "status": "LISTED",
+   "lastTrade": "2017-02-15",
+   "ldcp": 9.8,
+   "flags": null
+  },
+  "ANNT": {
+   "status": "SUSPENDED",
+   "lastTrade": "2017-02-15",
+   "ldcp": 11.38,
+   "flags": "SUSPENDED WINDING-UP"
+  },
+  "APOT": {
+   "status": "SUSPENDED",
+   "lastTrade": "2017-02-15",
+   "ldcp": 29.52,
+   "flags": "SUSPENDED WINDING-UP"
+  },
+  "ARM": {
+   "status": "LISTED",
+   "lastTrade": "2024-02-20",
+   "ldcp": 27.9,
+   "flags": null
+  },
+  "AWTX": {
+   "status": "LISTED",
+   "lastTrade": "2026-10-13",
+   "ldcp": 1601.11,
+   "flags": null
+  },
+  "AWWAL": {
+   "status": "DELISTED",
+   "lastTrade": "2023-04-05",
+   "ldcp": 10.0,
+   "flags": "DELISTED"
+  },
+  "AYTM": {
+   "status": "DELISTED",
+   "lastTrade": "2019-11-07",
+   "ldcp": 200.0,
+   "flags": "DELISTED"
+  },
+  "AZMT": {
+   "status": "SUSPENDED",
+   "lastTrade": "2017-02-15",
+   "ldcp": 9.95,
+   "flags": "SUSPENDED WINDING-UP"
+  },
+  "BCML": {
+   "status": "DELISTED",
+   "lastTrade": "2022-02-15",
+   "ldcp": null,
+   "flags": "DELISTED"
+  },
+  "BIIC": {
+   "status": "SUSPENDED",
+   "lastTrade": "2017-02-15",
+   "ldcp": 3.6,
+   "flags": "SUSPENDED WINDING-UP"
+  },
+  "BILF": {
+   "status": "LISTED",
+   "lastTrade": "2025-10-23",
+   "ldcp": 38.39,
+   "flags": null
+  },
+  "BPBL": {
+   "status": "DELISTED",
+   "lastTrade": "2020-08-26",
+   "ldcp": 17.31,
+   "flags": "DELISTED"
+  },
+  "BROT": {
+   "status": "DELISTED",
+   "lastTrade": "2017-03-13",
+   "ldcp": 4.2,
+   "flags": "DELISTED"
+  },
+  "BRR": {
+   "status": "DELISTED",
+   "lastTrade": "2023-06-22",
+   "ldcp": 11.5,
+   "flags": "DELISTED"
+  },
+  "CASH": {
+   "status": "LISTED",
+   "lastTrade": "2026-03-27",
+   "ldcp": 50.3,
+   "flags": null
+  },
+  "CECL": {
+   "status": "DELISTED",
+   "lastTrade": "2019-02-12",
+   "ldcp": 100.0,
+   "flags": "DELISTED"
+  },
+  "CJPL": {
+   "status": "LISTED",
+   "lastTrade": "2026-10-16",
+   "ldcp": 14.73,
+   "flags": "WINDING-UP"
+  },
+  "CML": {
+   "status": "NOT FOUND",
+   "lastTrade": null,
+   "ldcp": null,
+   "flags": null
+  },
+  "COST": {
+   "status": "DELISTED",
+   "lastTrade": "2017-02-15",
+   "ldcp": 0.5,
+   "flags": "DELISTED"
+  },
+  "COTT": {
+   "status": "DELISTED",
+   "lastTrade": "2017-02-15",
+   "ldcp": 5.05,
+   "flags": "DELISTED"
+  },
+  "CSM": {
+   "status": "DELISTED",
+   "lastTrade": "2018-10-04",
+   "ldcp": 3.5,
+   "flags": "DELISTED"
+  },
+  "CSUML": {
+   "status": "NOT FOUND",
+   "lastTrade": null,
+   "ldcp": null,
+   "flags": null
+  },
+  "CWSM": {
+   "status": "LISTED",
+   "lastTrade": "2025-12-29",
+   "ldcp": 51.18,
+   "flags": null
+  },
+  "CYAN": {
+   "status": "DELISTED",
+   "lastTrade": "2026-03-11",
+   "ldcp": 41.91,
+   "flags": "DELISTED"
+  },
+  "DATM": {
+   "status": "DELISTED",
+   "lastTrade": "2023-05-12",
+   "ldcp": 2.35,
+   "flags": "DELISTED"
+  },
+  "DAWH": {
+   "status": "LISTED",
+   "lastTrade": "2025-01-03",
+   "ldcp": 275.28,
+   "flags": null
+  },
+  "DBSL": {
+   "status": "SUSPENDED",
+   "lastTrade": "2017-02-15",
+   "ldcp": 7.0,
+   "flags": "SUSPENDED NON-COMPLIANT"
+  },
+  "DCM": {
+   "status": "LISTED",
+   "lastTrade": "2017-02-15",
+   "ldcp": 2.15,
+   "flags": null
+  },
+  "DCTL": {
+   "status": "SUSPENDED",
+   "lastTrade": "2017-02-15",
+   "ldcp": 0.08,
+   "flags": "SUSPENDED WINDING-UP"
+  },
+  "DKTM": {
+   "status": "SUSPENDED",
+   "lastTrade": "2019-05-28",
+   "ldcp": 0.94,
+   "flags": "SUSPENDED WINDING-UP"
+  },
+  "DMTM": {
+   "status": "SUSPENDED",
+   "lastTrade": "2025-11-14",
+   "ldcp": 8.56,
+   "flags": "SUSPENDED NON-COMPLIANT"
+  },
+  "DMTX": {
+   "status": "LISTED",
+   "lastTrade": "2025-05-29",
+   "ldcp": 34.96,
+   "flags": null
+  },
+  "DOLCPS": {
+   "status": "LISTED",
+   "lastTrade": "2018-07-12",
+   "ldcp": 13.8,
+   "flags": null
+  },
+  "DOMF": {
+   "status": "DELISTED",
+   "lastTrade": "2017-02-15",
+   "ldcp": 0.34,
+   "flags": "DELISTED"
+  },
+  "DREL": {
+   "status": "NOT FOUND",
+   "lastTrade": null,
+   "ldcp": null,
+   "flags": null
+  },
+  "DSFL": {
+   "status": "SUSPENDED",
+   "lastTrade": "2018-02-19",
+   "ldcp": 0.88,
+   "flags": "SUSPENDED WINDING-UP"
+  },
+  "DSML": {
+   "status": "LISTED",
+   "lastTrade": "2024-12-27",
+   "ldcp": 51.25,
+   "flags": null
+  },
+  "EFGH": {
+   "status": "LISTED",
+   "lastTrade": "2024-11-22",
+   "ldcp": 73.18,
+   "flags": null
+  },
+  "ENGL": {
+   "status": "SUSPENDED",
+   "lastTrade": "2017-02-15",
+   "ldcp": 0.65,
+   "flags": "SUSPENDED WINDING-UP"
+  },
+  "ENGRO": {
+   "status": "DELISTED",
+   "lastTrade": "2025-01-03",
+   "ldcp": 485.38,
+   "flags": "DELISTED"
+  },
+  "ESBLR": {
+   "status": "LISTED",
+   "lastTrade": "2019-07-16",
+   "ldcp": 0.01,
+   "flags": null
+  },
+  "EWLA": {
+   "status": "LISTED",
+   "lastTrade": "2018-07-13",
+   "ldcp": 20.55,
+   "flags": null
+  },
+  "EXTR": {
+   "status": "DELISTED",
+   "lastTrade": "2017-02-15",
+   "ldcp": 15.1,
+   "flags": "DELISTED"
+  },
+  "FAEL": {
+   "status": "SUSPENDED",
+   "lastTrade": "2017-02-15",
+   "ldcp": 14.3,
+   "flags": "SUSPENDED NON-COMPLIANT"
+  },
+  "FCONM": {
+   "status": "SUSPENDED",
+   "lastTrade": "2017-02-15",
+   "ldcp": 1.19,
+   "flags": "SUSPENDED"
+  },
+  "FDIBL": {
+   "status": "LISTED",
+   "lastTrade": "2024-03-22",
+   "ldcp": 2.92,
+   "flags": null
+  },
+  "FFBL": {
+   "status": "DELISTED",
+   "lastTrade": "2024-12-20",
+   "ldcp": 88.94,
+   "flags": "DELISTED"
+  },
+  "FFLNV": {
+   "status": "DELISTED",
+   "lastTrade": "2018-03-15",
+   "ldcp": 28.49,
+   "flags": "DELISTED"
+  },
+  "FHBM": {
+   "status": "NOT FOUND",
+   "lastTrade": null,
+   "ldcp": null,
+   "flags": null
+  },
+  "FIM": {
+   "status": "SUSPENDED",
+   "lastTrade": "2017-02-15",
+   "ldcp": 0.2,
+   "flags": "SUSPENDED WINDING-UP"
+  },
+  "FNBM": {
+   "status": "SUSPENDED",
+   "lastTrade": "2020-12-03",
+   "ldcp": 0.64,
+   "flags": "SUSPENDED WINDING-UP"
+  },
+  "FRCL": {
+   "status": "LISTED",
+   "lastTrade": "2026-10-15",
+   "ldcp": 86.31,
+   "flags": null
+  },
+  "FRSM": {
+   "status": "LISTED",
+   "lastTrade": "2026-10-15",
+   "ldcp": 40.57,
+   "flags": null
+  },
+  "FTHM": {
+   "status": "SUSPENDED",
+   "lastTrade": "2017-02-15",
+   "ldcp": 74.0,
+   "flags": "SUSPENDED WINDING-UP"
+  },
+  "FUDLM": {
+   "status": "LISTED",
+   "lastTrade": "2024-06-07",
+   "ldcp": 8.0,
+   "flags": null
+  },
+  "FZTM": {
+   "status": "NOT FOUND",
+   "lastTrade": null,
+   "ldcp": null,
+   "flags": null
+  },
+  "GAIL": {
+   "status": "DELISTED",
+   "lastTrade": "2021-09-20",
+   "ldcp": 7.4,
+   "flags": "DELISTED"
+  },
+  "GASF": {
+   "status": "DELISTED",
+   "lastTrade": "2019-11-13",
+   "ldcp": 6.69,
+   "flags": "DELISTED"
+  },
+  "GCILB": {
+   "status": "DELISTED",
+   "lastTrade": "2023-05-08",
+   "ldcp": 9.3,
+   "flags": "DELISTED"
+  },
+  "GEMBLUEX": {
+   "status": "LISTED",
+   "lastTrade": "2025-12-26",
+   "ldcp": 73.5,
+   "flags": null
+  },
+  "GEMPACRA": {
+   "status": "LISTED",
+   "lastTrade": "2026-10-14",
+   "ldcp": 43.33,
+   "flags": null
+  },
+  "GEMPAPL": {
+   "status": "LISTED",
+   "lastTrade": "2026-10-15",
+   "ldcp": 9.99,
+   "flags": null
+  },
+  "GEMSPNL": {
+   "status": "DELISTED",
+   "lastTrade": "2026-03-19",
+   "ldcp": 85.95,
+   "flags": "DELISTED"
+  },
+  "GIL": {
+   "status": "LISTED",
+   "lastTrade": "2023-02-23",
+   "ldcp": 2646.3,
+   "flags": null
+  },
+  "GLAT": {
+   "status": "DELISTED",
+   "lastTrade": "2018-03-21",
+   "ldcp": 65.0,
+   "flags": "DELISTED"
+  },
+  "GLOT": {
+   "status": "SUSPENDED",
+   "lastTrade": "2017-02-15",
+   "ldcp": 8.7,
+   "flags": "SUSPENDED WINDING-UP"
+  },
+  "GLPL": {
+   "status": "DELISTED",
+   "lastTrade": "2026-05-18",
+   "ldcp": 700.0,
+   "flags": "DELISTED"
+  },
+  "GOEM": {
+   "status": "DELISTED",
+   "lastTrade": "2017-02-15",
+   "ldcp": 40.0,
+   "flags": "DELISTED"
+  },
+  "GRAYS": {
+   "status": "NOT FOUND",
+   "lastTrade": null,
+   "ldcp": null,
+   "flags": null
+  },
+  "GTECH": {
+   "status": "LISTED",
+   "lastTrade": "2022-11-02",
+   "ldcp": 8.58,
+   "flags": null
+  },
+  "GUTM": {
+   "status": "SUSPENDED",
+   "lastTrade": "2017-02-15",
+   "ldcp": 15.0,
+   "flags": "SUSPENDED WINDING-UP"
+  },
+  "HADC": {
+   "status": "SUSPENDED",
+   "lastTrade": "2017-10-13",
+   "ldcp": 16.51,
+   "flags": "SUSPENDED WINDING-UP"
+  },
+  "HAJT": {
+   "status": "SUSPENDED",
+   "lastTrade": "2017-02-15",
+   "ldcp": 0.72,
+   "flags": "SUSPENDED WINDING-UP"
+  }
+ }
+}

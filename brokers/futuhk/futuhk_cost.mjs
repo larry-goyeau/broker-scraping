@@ -43,11 +43,11 @@
 //                                        https://www.futuhk.com/en/support/topic2_1781
 //   The page prints no platform fee for another Singapore currency.
 //
-//   node brokers/futu/futu_cost.mjs 00700 "Hong Kong" HKD --shares=10 --price=400
-//   node brokers/futu/futu_cost.mjs AAPL Nasdaq USD --shares=10 --price=230
-//   node brokers/futu/futu_cost.mjs 601398 "Shanghai Stock Exchange" CNH --shares=100 --price=7
-//   node brokers/futu/futu_cost.mjs 7203 Tokyo JPY --shares=10 --price=3000
-//   node brokers/futu/futu_cost.mjs D05 "Singapore Exchange" SGD --shares=10 --price=40
+//   node brokers/futuhk/futuhk_cost.mjs 00700 "Hong Kong" HKD --shares=10 --price=400
+//   node brokers/futuhk/futuhk_cost.mjs AAPL Nasdaq USD --shares=10 --price=230
+//   node brokers/futuhk/futuhk_cost.mjs 601398 "Shanghai Stock Exchange" CNH --shares=100 --price=7
+//   node brokers/futuhk/futuhk_cost.mjs 7203 Tokyo JPY --shares=10 --price=3000
+//   node brokers/futuhk/futuhk_cost.mjs D05 "Singapore Exchange" SGD --shares=10 --price=40
 //
 // `roundTrip(...)` reads files, not the network.
 
@@ -60,7 +60,7 @@ import { bookParts, plus, finite } from "../../na.mjs";
 import { usBookPerShare } from "../../spreads/rule606.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
 
-const CATALOGUE = new URL("futu-parsed.json", import.meta.url);
+const CATALOGUE = new URL("futuhk-parsed.json", import.meta.url);
 const PAGE = "https://www.futuhk.com/en/commissionnew";
 const PAGES = {
   HK: "https://www.futuhk.com/en/support/topic2_335",
@@ -172,7 +172,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     remark: "",
   };
   if (!catalogue) {
-    return { ...answer, why: "le catalogue futu n'existe pas encore : lancer `node brokers/futu/futu_scraping.mjs`" };
+    return { ...answer, why: "le catalogue futu n'existe pas encore : lancer `node brokers/futuhk/futuhk_scraping.mjs`" };
   }
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue futu` };
@@ -190,7 +190,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     mic: m.venue?.mic ?? null,
     currency: m.row.currency,
     unsourced: m.unsourced,
-    broker: "futu",
+    broker: "futuhk",
     ticker: m.row.ticker,
   });
   const listing = {
@@ -265,7 +265,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   let marketBp = bp ?? book.leaf?.bp ?? null;
   let marketPerShare = perShare ?? book.leaf?.perShare ?? null;
   if (market === "US") {
-    const quoted = usBookPerShare({ broker: "futu", ticker: listing.ticker, fallback: marketPerShare });
+    const quoted = usBookPerShare({ broker: "futuhk", ticker: listing.ticker, fallback: marketPerShare });
     if (quoted != null) marketPerShare = quoted;
   }
   const parts = bookParts({

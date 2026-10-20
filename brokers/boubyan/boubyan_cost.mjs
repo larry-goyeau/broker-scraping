@@ -41,8 +41,21 @@
 // said in the result. CAT is not named. ADR conversion is 25 USD plus
 // sponsor fees, and pre-market, post-market and overnight add a per-share
 // charge: none of those is this regular-session trip. A transfer minimum
-// and the 1 000 KWD opening minimum are not a ticket. The account is in
-// dinars. No conversion fee is printed, so none is added.
+// and the 1 000 KWD opening minimum are not a ticket.
+//
+// FX. Dinars are the only deposit currency (deposits.mjs), so every line
+// outside Boursa Kuwait is a forced conversion: KWD to the listing currency
+// on the buy and back on the sell. Boubyan Capital prints no rate of its
+// own (brokerage page and 2019 release re-read 2026-10-19; the agreement
+// and Appendix B links are dead). User decision: the conversion is priced
+// on Boubyan Bank's transfer buy/sell board, the parent's, KWD for one
+// unit, read 2026-10-19. One way against the mid is (sell - buy) /
+// (sell + buy), paid on the buy and again on the sell, in `brokerFees`.
+// The board shows seven rows without accepting cookies; any other
+// currency (SAR, QAR, JPY, HKD, CNY, KRW…) has no rate here and stays N/A.
+//   https://boubyancapital.com/brokerage/
+//   https://boubyancapital.com/who-we-are/news/global-stock-markets-pr/
+//   https://www.bankboubyan.com/en/exchange-rates
 //
 // London and Cboe Europe print no currency. The UK card is in pounds and
 // the Europe card is in euros, and the exchange column is the only split
@@ -64,7 +77,8 @@ import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
 import { spreads } from "../../spreads/book.mjs";
 import { usBookPerShare } from "../../spreads/rule606.mjs";
 import { plus, finite } from "../../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, listingCash, toUsd, usdPer } from "../../fx.mjs";
+import { depositHas } from "../../deposits.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("boubyan-parsed.json", import.meta.url);
@@ -162,6 +176,21 @@ const dollars = (amount, currency) => {
   return v == null ? null : Number(v.toPrecision(6));
 };
 
+// Boubyan Bank transfer board, KWD per unit: [bank buys, bank sells].
+const FX_BOARD = {
+  USD: [0.3072, 0.31005],
+  EUR: [0.342265, 0.349449],
+  GBP: [0.407362, 0.415044],
+  BHD: [0.811289, 0.823614],
+  OMR: [0.795976, 0.807397],
+  EGP: [0.005498, 0.005982],
+  AED: [0.083292, 0.084539],
+};
+const FX_BOARD_URL = "https://www.bankboubyan.com/en/exchange-rates";
+const oneWay = (ccy) => {
+  const pair = FX_BOARD[ccy];
+  return pair ? (pair[1] - pair[0]) / (pair[1] + pair[0]) : null;
+};
 const fxNote = (currency) => ({ quote: QUOTE, asOf: FX_AS_OF, listing: usdPer(currency) });
 
 export function feeMarketOf(row) {
@@ -246,7 +275,8 @@ function bookGap(listing, unsourced, market) {
 /**
  * The whole bill for buying `shares` at `price` and selling them straight
  * back. `usd` is the number the page prints; `brokerFees` is Boubyan's
- * commission, twice, including the London and Europe custody ticket.
+ * commission, twice, including the London and Europe custody ticket, plus
+ * any forced conversion (N/A when that conversion has no published rate).
  */
 export function roundTrip({ etf, place, currency, shares, price, bp = null, perShare = null }) {
   const answer = {
@@ -311,6 +341,17 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   delete rates.PTM_LEVY;
   delete rates.PTM;
   const taxPct = Object.values(rates).reduce((sum, rate) => sum + rate, 0);
+  // A deposit currency is never converted; anything else is converted at a
+  // rate Boubyan Capital does not publish, so that leg has no figure.
+  const cashCcy = listingCash(ccy);
+  const held = depositHas("boubyan", null, cashCcy);
+  const fxRate = held ? 0 : oneWay(cashCcy);
+  const fxWhy = fxRate == null ? `change forcé KWD→${cashCcy} : pas de cours ${cashCcy} au tableau de Boubyan Bank` : null;
+  const fxBasis = held
+    ? ""
+    : fxRate == null
+      ? ` ; change forcé KWD→${cashCcy} sans cours publié`
+      : ` ; change forcé KWD→${cashCcy} au tableau virement de Boubyan Bank du 2026-10-19 : ${(100 * fxRate).toFixed(2).replace(".", ",")} % par sens`;
 
   const shared = {
     ...answer,
@@ -323,17 +364,18 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     url: market === "us" || market === "uk" || market === "europe" || market === "china" || market === "hk" || market === "japan" || market === "korea"
       ? SCHEDULE.appendixB
       : SCHEDULE.appendixA,
-    basis: `Boubyan schedule ${market || m.row.exchange}, read on ${SCHEDULE.readOn}`,
+    basis: `Boubyan schedule ${market || m.row.exchange}, read on ${SCHEDULE.readOn}${fxBasis}`,
     tax,
     fx: fxNote(ccy),
     fxIfConverted: 0,
   };
 
+  const withFx = (why) => [why, fxWhy].filter(Boolean).join(" ; ");
   if (!market) {
-    return { ...shared, why: `no Boubyan schedule for ${m.row.exchange}` };
+    return { ...shared, why: withFx(`no Boubyan schedule for ${m.row.exchange}`) };
   }
   if (UNPRICED[market] && !RULE[market]) {
-    return { ...shared, why: UNPRICED[market] };
+    return { ...shared, why: withFx(UNPRICED[market]) };
   }
   if (notional == null) {
     return {
@@ -343,7 +385,11 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   }
 
   const each = commissionSide({ market, notional, shares: n, price: p, currency: ccy });
-  const brokerFees = dollars(each * 2, ccy);
+  const commissionUsd = dollars(each * 2, ccy);
+  // Forced conversion: twice the one-way board cost, unknown without a row.
+  const notionalUsdFx = dollars(notional, ccy);
+  const fxUsd = held ? 0 : fxRate == null || notionalUsdFx == null ? null : notionalUsdFx * fxRate * 2;
+  const brokerFees = plus(commissionUsd, fxUsd);
   const notionalUsd = dollars(notional, ccy);
   const bookUsd =
     marketPerShare != null
@@ -365,8 +411,14 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     ...shared,
     usd: finite(usd, 6),
     brokerFees: finite(brokerFees, 6),
-    ...(bookUsd == null ? { why: bookGap(listing, m.unsourced, market) } : {}),
-    ...(brokerFees == null ? { why: `no ${ccy} rate to convert the commission` } : {}),
+    ...(() => {
+      const why = [
+        fxWhy,
+        bookUsd == null ? bookGap(listing, m.unsourced, market) : null,
+        commissionUsd == null ? `no ${ccy} rate to convert the commission` : null,
+      ].filter(Boolean);
+      return why.length ? { why: why.join(" ; ") } : {};
+    })(),
     trade: {
       shares: n,
       price: p,
@@ -377,7 +429,8 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     commission: { each, currency: ccy, eachWay: true },
     parts: {
       marché: finite(bookUsd, 6),
-      courtage: finite(brokerFees, 6),
+      courtage: finite(commissionUsd, 6),
+      change: finite(fxUsd, 6),
       réglementaire: finite(plus(thirdUsd, secUsd, tafUsd), 6),
       taxes: finite(plus(stampUsd, mapTaxUsd), 6),
     },

@@ -44,9 +44,14 @@
 // 9.79 $ (their printed 27.8 $ / million is stale); the market spread,
 // once.
 //
-// Custody 0.1 % / year is a holding cost. Cash can sit in several
-// currencies; conversion is spot ± 0.5 % only if the sub-account is the
-// wrong currency, so FX stays out of the total.
+// Custody 0.1 % / year is a holding cost.
+//
+// FX, re-read 2026-10-19 on the stocks card below: "When trading stocks, the
+// currency rate will be calculated when the trade is executed. The rate will
+// be the current spot rate +/- 0.5%." `deposits.mjs` holds EUR only for this
+// folder (the open Global Trader account is one euro account), so a line in
+// any other currency is converted by force: 0.5 % on the buy and 0.5 % on the
+// sale, in the total and under `change`. A euro line keeps the FX remark.
 //
 //   https://globaltrader.elana.net/en/en-tc/trading-conditions-stocks/
 //   https://globaltrader.elana.net/en/en-tc/trading-conditions-etf/
@@ -68,6 +73,8 @@ import { spreads } from "../../spreads/book.mjs";
 import { plus, finite } from "../../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../../fx.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
+import { depositHas } from "../../deposits.mjs";
+import { listingCash } from "../../fx.mjs";
 
 const CATALOGUE = new URL("elana-parsed.json", import.meta.url);
 
@@ -103,6 +110,8 @@ const HK_STAMP = 0.001;
 const PTM = { each: 1, currency: "GBP", above: 10000 };
 const ITP = { each: 1.25, currency: "EUR", above: 12500 };
 const UK_ISSUERS = /^(GB|JE|GG|IM)$/;
+// One way, "spot rate +/- 0.5%".
+const FX_ONE_WAY = 0.005;
 
 const RULE = {
   us: { kind: "perShare", standard: 0.01, vip: 0.009, amexVip: 0.01, min: 2, minCcy: "USD" },
@@ -205,8 +214,8 @@ export function feeMarketOf(row, mic) {
   return null;
 }
 
-function remarkOf(currency) {
-  return `Custody 0.1%/year.\n${fxRemark("0.5", currency)}`;
+function remarkOf(currency, held = true) {
+  return held ? `Custody 0.1%/year.\n${fxRemark("0.5", currency)}` : "Custody 0.1%/year.";
 }
 
 /**
@@ -429,9 +438,10 @@ export function roundTrip({
   const rate = rateOf(rule, picked, listing);
   const min = minOf(rule, picked);
 
+  const held = depositHas("elana", picked.id, listingCash(listing.currency));
   const shared = {
     ...answer,
-    cashCurrency: listing.currency,
+    cashCurrency: held ? listingCash(listing.currency) : "EUR",
     listing,
     feeMarket: market,
     bp: marketBp,
@@ -439,8 +449,8 @@ export function roundTrip({
     url: leaf?.url ?? SCHEDULE.source,
     tax,
     fx: fxNote(listing.currency),
-    fxIfConverted: 0,
-    remark: remarkOf(listing.currency),
+    fxIfConverted: held ? FX_ONE_WAY : 0,
+    remark: remarkOf(listing.currency, held),
   };
 
   const basis =
@@ -449,7 +459,8 @@ export function roundTrip({
       ? ` : ${rate} $/share, plancher ${min} $`
       : rule.kind === "flat"
         ? ` : ${rate} $ sous ${rule.above} $`
-        : ` : ${(rate * 100).toFixed(2)} %, plancher ${min} ${rule.minCcy}`);
+        : ` : ${(rate * 100).toFixed(2)} %, plancher ${min} ${rule.minCcy}`) +
+    (held ? "" : ` ; change forcé EUR ↔ ${listingCash(listing.currency)} : spot ± 0,5 % par sens, relu le 2026-10-19`);
 
   const n = Number(shares);
   const p = Number(price);
@@ -500,7 +511,9 @@ export function roundTrip({
   });
   const buyUsd = buy ? dollars(buy.charged, buy.currency) : null;
   const sellUsd = sell ? dollars(sell.charged, sell.currency) : null;
-  const brokerFees = plus(buyUsd, sellUsd);
+  // Forced conversion: euros out on the buy, back on the sale.
+  const fxUsd = held ? 0 : notionalUsd == null ? null : notionalUsd * FX_ONE_WAY * 2;
+  const brokerFees = plus(buyUsd, sellUsd, fxUsd);
 
   const taxUsd = notionalUsd == null ? null : notionalUsd * taxPct;
   const secUsd = american ? (notionalUsd == null ? null : notionalUsd * SEC_RATE) : 0;
@@ -543,7 +556,8 @@ export function roundTrip({
     },
     parts: {
       marché: finite(bookUsd, 6),
-      commission: finite(brokerFees, 6),
+      commission: finite(plus(buyUsd, sellUsd), 6),
+      change: finite(fxUsd, 6),
       taxes: finite(taxUsd, 6),
       réglementaire: finite(plus(secUsd, tafUsd, itpUsd, ptmUsd), 6),
     },
@@ -575,6 +589,7 @@ export function roundTrip({
       n,
       american,
       levy,
+      held,
     }),
   };
 }
@@ -596,6 +611,7 @@ function confidenceOf({
   n,
   american,
   levy,
+  held = true,
 }) {
   const said = [];
   said.push(
@@ -650,7 +666,9 @@ function confidenceOf({
     );
   }
   said.push(
-    `hors total : change spot ± 0,5 % si le sous-compte n'est pas dans la devise, garde 0,1 % / an, ` +
+    (held
+      ? `hors total : change spot ± 0,5 % si la caisse n'est pas dans la devise, garde 0,1 % / an, `
+      : `dans le total : change forcé spot ± 0,5 % par sens ; hors total : garde 0,1 % / an, `) +
       `BG Trader / téléphone / algo pre-market. Aucun aller-retour réel dans ce dépôt`
   );
   return said.join(" ; ");

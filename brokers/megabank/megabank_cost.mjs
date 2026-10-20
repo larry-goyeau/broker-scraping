@@ -78,7 +78,7 @@ function remarkOf(currency) {
   if (!pair) return CUSTODY;
   const [bid, ask] = pair;
   const gap = ((ask - bid) / (ask + bid)) * 100;
-  return `${CUSTODY}\nFX ${gap.toFixed(3)}% when cash ≠ ${code(currency)}.`;
+  return `${CUSTODY}\nFX ${Number(gap.toFixed(2))}% when cash ≠ ${code(currency)}.`;
 }
 
 function findListing({ etf, place, currency }) {

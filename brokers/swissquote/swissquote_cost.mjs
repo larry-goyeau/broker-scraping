@@ -40,6 +40,9 @@
 //   Prague SE                                   same sheet: 1.00 % of the
 //                                                amount, minimum 200 CHF,
 //                                                each side.
+//   Johannesburg                                same sheet: 0.30 % of the
+//                                                amount, minimum 100 CHF,
+//                                                each side.
 //   New Zealand SE                              same sheet: 0.50 % of the
 //                                                amount, minimum 75 NZD,
 //                                                each side. An AUD line on
@@ -219,6 +222,7 @@ const CH_BY_CODE = {
   SET: "th",
   GPW: "pl",
   PSECZ: "cz",
+  JSE: "za",
 };
 
 const LU_ONLY = { DFM: "dubai" };
@@ -290,6 +294,7 @@ export function feeMarketOf(exchange, mic) {
   if (raw === "NZX" || raw === "XNZE" || m === "XNZE") return "nz";
   if (raw === "GPW" || m === "XWAR") return "pl";
   if (raw === "PSECZ" || m === "XPRA") return "cz";
+  if (raw === "JSE" || m === "XJSE") return "za";
   return null;
 }
 
@@ -377,6 +382,14 @@ export function commissionEach(bank, { market, notional, currency, exchange }) {
     const floor = amountIn(200, "CHF", "CZK");
     if (floor == null) return null;
     return { charged: Math.max(notional * 0.01, floor), currency: "CZK", rate: 0.01 };
+  }
+  if (market === "za") {
+    // Same sheet (SQ-D-SQWEB-01-26-EN v2.2). South Africa – Johannesburg.
+    // 0.30 % of the amount, minimum ticket 100 CHF, each side.
+    if (settleCcy(currency) !== "ZAR" || !(notional > 0)) return null;
+    const floor = amountIn(100, "CHF", "ZAR");
+    if (floor == null) return null;
+    return { charged: Math.max(notional * 0.003, floor), currency: "ZAR", rate: 0.003 };
   }
   if (market === "nz") {
     // Same sheet, New Zealand SE. 0.50 % of the amount, minimum ticket
@@ -594,6 +607,8 @@ export function roundTrip({
               ? "barème Swissquote Suisse, autres marchés du 2025-08-20 : Varsovie 1 %, minimum 250 CHF"
               : market === "cz" && bank === "ch"
                 ? "barème Swissquote Suisse, autres marchés du 2025-08-20 : Prague 1 %, minimum 200 CHF"
+                : market === "za" && bank === "ch"
+                  ? "barème Swissquote Suisse, autres marchés (SQ-D-SQWEB-01-26 v2.2) : Johannesburg 0,30 %, minimum 100 CHF"
                 : `barème Swissquote ${bank === "lu" ? "Europe" : "Suisse"}, palier ${market || "?"}, relu le ${SCHEDULE[bank].readOn}`,
     tax,
     ccy: QUOTE,

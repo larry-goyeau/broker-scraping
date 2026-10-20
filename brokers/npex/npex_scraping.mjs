@@ -139,6 +139,8 @@ for (const item of picked) {
     currency: "EUR",
     type: item.type,
     isin: item.isin,
+    // The order-book page: spreads/npex-touch.mjs reads its best bid and ask.
+    book: item.book,
     raw: [item.name, item.kind, "NPEX", "EUR", item.isin].filter(Boolean).join(" "),
   });
 }

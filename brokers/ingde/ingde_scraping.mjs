@@ -7,7 +7,7 @@
 // are on its fiche, and they differ: Adidas lists eight German places and
 // no American one, Apple adds Nasdaq, a Toronto name adds the TSX. One row
 // per place, so each line can carry that place's book. Direkthandel is
-// ING's own quote, code TGT, not Tradegate and not gettex. `ing_touch.mjs`
+// ING's own quote, code TGT, not Tradegate and not gettex. `ingde_touch.mjs`
 // reads that bid and ask.
 //
 // The codes below are the ones the fiche prints. An unmapped code keeps
@@ -20,16 +20,16 @@
 //   https://component-api.wertpapiere.ing.de/api/v1/instrument-search/share/search
 //   https://component-api.wertpapiere.ing.de/api/v1/instrument-header?isinOrSearchTerm=DE000A1EWWW0&isKnownIsin=true&includeAvailableExchanges=true
 //
-//   node brokers/ing/ing_scraping.mjs
-//   node brokers/ing/ing_scraping.mjs --limit=20
-//   node brokers/ing/ing_scraping.mjs --fresh
+//   node brokers/ingde/ingde_scraping.mjs
+//   node brokers/ingde/ingde_scraping.mjs --limit=20
+//   node brokers/ingde/ingde_scraping.mjs --fresh
 
 import { stampRows } from "../../accepted.mjs";
 import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 
 const API = "https://component-api.wertpapiere.ing.de/api/v1";
-const OUTPUT = new URL("ing-parsed.json", import.meta.url);
+const OUTPUT = new URL("ingde-parsed.json", import.meta.url);
 const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36";
 const CONCURRENCY = 8;
 

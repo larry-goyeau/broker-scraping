@@ -407,6 +407,9 @@ const CROSSED = {
   moex: 1,
   tase: 1,
   xcas: 1,
+  ase: 1,
+  nxchange: 1,
+  npex: 1,
   direkthandel: 1,
   xhel: 1,
   xpra: 1,
@@ -1535,6 +1538,34 @@ function loadTaseTouch() {
 
 function loadXcasTouch() {
   return loadCurrencyTouch("./xcas-touch.json", "Africa/Casablanca", "XCAS");
+}
+
+function loadNxchangeTouch() {
+  return loadCurrencyTouch("./nxchange-touch.json", "Europe/Amsterdam", "XNXC");
+}
+
+function loadNpexTouch() {
+  return loadCurrencyTouch("./npex-touch.json", "Europe/Amsterdam", "NPEX");
+}
+
+// Amman's touch is the book the last session left, read from the next
+// morning's bulletin, so it is dated with that session rather than today.
+// A week covers the Friday–Saturday weekend and a holiday.
+function loadAseTouch() {
+  const path = new URL("./ase-touch.json", import.meta.url);
+  if (!fs.existsSync(path)) return { books: 0 };
+  const data = JSON.parse(fs.readFileSync(path, "utf8"));
+  const age = (Date.now() - Date.parse(`${data.date}T00:00:00Z`)) / 86_400_000;
+  if (!(age >= -1 && age <= 7)) return { books: 0, at: data.at, stale: true };
+  let books = 0;
+  for (const row of data.rows || []) {
+    const bp = Number(row.bp) > 0 ? Number(row.bp) : bpFrom(Number(row.bid), Number(row.ask));
+    const isin = String(row.isin || "").toUpperCase();
+    if (!(bp > 0) || !/^[A-Z]{2}[A-Z0-9]{10}$/.test(isin)) continue;
+    ((spreads[isin] ||= {}).XAMM ||= {}).JOD = { bp: Number(bp.toFixed(2)), url: row.url };
+    books += 1;
+  }
+  return { at: data.at, books };
 }
 
 function loadSofiaTouch() {
@@ -5566,6 +5597,24 @@ if (!ONLY.length || ONLY.includes("xcas") || xcasTouchOnly) {
   xcasTouchStats = loadXcasTouch();
   console.error(`Casablanca : ${xcasTouchStats.books} touches du carnet (${xcasTouchStats.at || "sans date"})`);
 }
+const nxchangeTouchOnly = ONLY.length === 1 && ONLY[0] === "nxchange-touch";
+let nxchangeTouchStats = { books: 0 };
+if (!ONLY.length || ONLY.includes("nxchange") || nxchangeTouchOnly) {
+  nxchangeTouchStats = loadNxchangeTouch();
+  console.error(`Nxchange : ${nxchangeTouchStats.books} touches du carnet (${nxchangeTouchStats.at || "sans date"})`);
+}
+const npexTouchOnly = ONLY.length === 1 && ONLY[0] === "npex-touch";
+let npexTouchStats = { books: 0 };
+if (!ONLY.length || ONLY.includes("npex") || npexTouchOnly) {
+  npexTouchStats = loadNpexTouch();
+  console.error(`NPEX : ${npexTouchStats.books} touches du carnet (${npexTouchStats.at || "sans date"})`);
+}
+const aseTouchOnly = ONLY.length === 1 && ONLY[0] === "ase-touch";
+let aseTouchStats = { books: 0 };
+if (!ONLY.length || ONLY.includes("ase") || aseTouchOnly) {
+  aseTouchStats = loadAseTouch();
+  console.error(`Amman : ${aseTouchStats.books} touches du carnet (${aseTouchStats.at || "sans date"})`);
+}
 const taseTouchOnly = ONLY.length === 1 && ONLY[0] === "tase-touch";
 let taseTouchStats = { books: 0 };
 if (!ONLY.length || ONLY.includes("tase") || taseTouchOnly) {
@@ -5650,7 +5699,7 @@ if (!ONLY.length || ONLY.includes("ljubljana") || ONLY.includes("xlju") || ONLY.
 }
 
 const todo =
-  auTouchOnly || sgxTouchOnly || hkTouchOnly || bursaTouchOnly || pseTouchOnly || vnTouchOnly || idxTouchOnly || kwTouchOnly || ljTouchOnly || gcTouchOnly || nagoyaTouchOnly || bvbTouchOnly || jseTouchOnly || nairobiTouchOnly || bivaTouchOnly || bymaTouchOnly || ngxTouchOnly || bistTouchOnly || bvcTouchOnly || sofiaTouchOnly || csecyTouchOnly || setTouchOnly || psxTouchOnly || moexTouchOnly || taseTouchOnly || xcasTouchOnly || ncTouchOnly || bequotedTouchOnly || aqseTouchOnly
+  auTouchOnly || sgxTouchOnly || hkTouchOnly || bursaTouchOnly || pseTouchOnly || vnTouchOnly || idxTouchOnly || kwTouchOnly || ljTouchOnly || gcTouchOnly || nagoyaTouchOnly || bvbTouchOnly || jseTouchOnly || nairobiTouchOnly || bivaTouchOnly || bymaTouchOnly || ngxTouchOnly || bistTouchOnly || bvcTouchOnly || sofiaTouchOnly || csecyTouchOnly || setTouchOnly || psxTouchOnly || moexTouchOnly || taseTouchOnly || xcasTouchOnly || aseTouchOnly || nxchangeTouchOnly || npexTouchOnly || ncTouchOnly || bequotedTouchOnly || aqseTouchOnly
     ? []
     : [...listings.values()].filter(worthVisiting);
 console.error(`${todo.length} à visiter, ${listings.size - todo.length} à jour\n`);
@@ -5797,6 +5846,21 @@ if (taseTouchOnly) {
 if (xcasTouchOnly) {
   flush();
   console.error(`${STORE_PATH} : ${xcasTouchStats.books} touches de Casablanca écrites.`);
+  process.exit(0);
+}
+if (nxchangeTouchOnly) {
+  flush();
+  console.error(`${STORE_PATH} : ${nxchangeTouchStats.books} touches de Nxchange écrites.`);
+  process.exit(0);
+}
+if (npexTouchOnly) {
+  flush();
+  console.error(`${STORE_PATH} : ${npexTouchStats.books} touches de NPEX écrites.`);
+  process.exit(0);
+}
+if (aseTouchOnly) {
+  flush();
+  console.error(`${STORE_PATH} : ${aseTouchStats.books} touches d'Amman écrites.`);
   process.exit(0);
 }
 if (vnTouchOnly) {

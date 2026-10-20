@@ -182,11 +182,21 @@ export const VENUES = [
     loose: [],
   },
   {
+    // XOAS is Euronext Expand Oslo (formerly Oslo Axess). Euronext Growth
+    // Oslo (formerly Merkur Market) is MERK, below.
     mic: "XOAS",
+    name: "Euronext Expand Oslo",
+    source: "euronext",
+    hours: { open: "09:00", close: "16:20", tz: "Europe/Oslo" },
+    exact: ["xoas", "euronextexpandoslo", "osloaxess", "axess"],
+    loose: [],
+  },
+  {
+    mic: "MERK",
     name: "Euronext Growth Oslo",
     source: "euronext",
     hours: { open: "09:00", close: "16:20", tz: "Europe/Oslo" },
-    exact: ["xoas", "ego", "euronextgrowthoslo"],
+    exact: ["merk", "ego", "euronextgrowthoslo", "merkurmarket"],
     loose: [],
   },
   {
@@ -521,7 +531,7 @@ export const VENUES = [
     name: "Börse Frankfurt",
     source: "frankfurt",
     hours: { open: "08:00", close: "22:00", tz: "Europe/Berlin" },
-    exact: ["xfra", "fwb", "fwb2", "boersefrankfurt", "fra", "fft"],
+    exact: ["xfra", "fwb", "fwb2", "boersefrankfurt", "borsefrankfurt", "fra", "fft"],
     loose: [],
   },
   // Hamburg and Hannover share BÖAG's delayed CSVs with Quotrix. HAMQ is the busy
@@ -565,7 +575,7 @@ export const VENUES = [
   },
   // ING's own Direkthandel quote, code TGT. Not Tradegate and not gettex:
   // the order may be sent on to one of them, but the fiche prints this
-  // book. Open 08:00–22:00. `ing_touch.mjs` reads it.
+  // book. Open 08:00–22:00. `ingde_touch.mjs` reads it.
   {
     mic: "TGT",
     name: "Direkthandel",
@@ -1226,7 +1236,7 @@ export const VENUES = [
     name: "Nasdaq Tallinn",
     source: "xtal",
     hours: { open: "10:00", close: "15:55", tz: "Europe/Tallinn" },
-    exact: ["xtal", "tallinn", "ntallinn", "omxtse", "tallinnstockexchange"],
+    exact: ["xtal", "tallinn", "ntallinn", "nasdaqtallinn", "omxtse", "tallinnstockexchange"],
     loose: [],
   },
   {
@@ -1234,7 +1244,7 @@ export const VENUES = [
     name: "Nasdaq Riga",
     source: "xris",
     hours: { open: "10:00", close: "15:55", tz: "Europe/Riga" },
-    exact: ["xris", "riga", "nriga", "omxrse", "rigastockexchange"],
+    exact: ["xris", "riga", "nriga", "nasdaqriga", "omxrse", "rigastockexchange"],
     loose: [],
   },
   {
@@ -1242,7 +1252,7 @@ export const VENUES = [
     name: "Nasdaq Vilnius",
     source: "xlit",
     hours: { open: "10:00", close: "15:55", tz: "Europe/Vilnius" },
-    exact: ["xlit", "vilnius", "nvilnius", "omxvse", "vilniusstockexchange"],
+    exact: ["xlit", "vilnius", "nvilnius", "nasdaqvilnius", "omxvse", "vilniusstockexchange"],
     loose: [],
   },
   // Cyprus Stock Exchange. Continuous trading is 10:30–17:00. The touch is
@@ -1354,19 +1364,141 @@ export const VENUES = [
   },
   // Amman. Continuous trading is 10:30–13:15, Sunday to Thursday (ase.com.jo).
   // "ASE" alone stays NYSE American, which brokers abbreviate the same way.
+  // The touch is the daily bulletin's best bid and ask (ase-touch.mjs).
   {
     mic: "XAMM",
     name: "Amman Stock Exchange",
-    source: "",
+    source: "ase",
     hours: { open: "10:30", close: "13:15", tz: "Asia/Amman", days: ["Sun", "Mon", "Tue", "Wed", "Thu"] },
     exact: ["xamm", "amman", "ammanstockexchange"],
+    loose: [],
+  },
+  // Toronto's NEX board, for issuers that fell below TSX Venture's listing
+  // requirements. It trades on the TSX Venture platform and session.
+  {
+    mic: "XTNX",
+    name: "NEX",
+    source: "",
+    hours: { open: "09:30", close: "16:00", tz: "America/Toronto" },
+    exact: ["xtnx", "nex", "nexboard", "tsxnex"],
+    loose: [],
+  },
+  // Nordic Growth Market (NGM Equity), Stockholm. Session times not checked.
+  {
+    mic: "XNGM",
+    name: "Nordic Growth Market",
+    source: "",
+    hours: null,
+    exact: ["xngm", "ngm", "nordicgrowthmarket", "ngmequity"],
+    loose: [],
+  },
+  // Nordic SME, NGM's SME growth market. Session times not checked.
+  {
+    mic: "NSME",
+    name: "Nordic SME",
+    source: "",
+    hours: null,
+    exact: ["nsme", "nordicsme", "ngmnordicsme"],
+    loose: [],
+  },
+  // Spotlight Stock Market, Stockholm (also lists Danish and Norwegian
+  // issuers). Session times not checked.
+  {
+    mic: "XSAT",
+    name: "Spotlight Stock Market",
+    source: "",
+    hours: null,
+    exact: ["xsat", "spotlight", "spotlightstockmarket", "aktietorget"],
+    loose: [],
+  },
+  // Turquoise, LSEG's pan-European MTF. Continuous trading follows London,
+  // 08:00–16:30.
+  {
+    mic: "TRQX",
+    name: "Turquoise",
+    source: "",
+    hours: { open: "08:00", close: "16:30", tz: "Europe/London" },
+    exact: ["trqx", "turquoise", "trqxen"],
+    loose: [],
+  },
+  // Aquis Exchange, the pan-European MTF (IBKR's AQEUxx books). Not the Aquis
+  // Stock Exchange growth market, which is AQSE and owns the bare "aquis".
+  {
+    mic: "AQXE",
+    name: "Aquis Exchange",
+    source: "",
+    hours: { open: "08:00", close: "16:30", tz: "Europe/London" },
+    exact: ["aqxe", "aquisexchange", "aquisexchangemtf"],
+    loose: [],
+  },
+  // Dar es Salaam Stock Exchange. "DSE" alone stays Dhaka's. Session times
+  // not checked.
+  {
+    mic: "XDAR",
+    name: "Dar es Salaam Stock Exchange",
+    source: "",
+    hours: null,
+    exact: ["xdar", "daressalaamstockexchange", "dsetz", "daressalaam"],
+    loose: [],
+  },
+  // Stock Exchange of Mauritius: Official Market and the Development &
+  // Enterprise Market (DEM). Session times not checked.
+  {
+    mic: "XMAU",
+    name: "Stock Exchange of Mauritius",
+    source: "",
+    hours: null,
+    exact: ["xmau", "sem", "stockexchangeofmauritius", "mauritius"],
+    loose: [],
+  },
+  // SPB Exchange, St Petersburg. The MIC is the one MIC directories give
+  // (tradinghours.com), not checked against the ISO registry. Session times
+  // not checked.
+  {
+    mic: "XPET",
+    name: "SPB Exchange",
+    source: "",
+    hours: null,
+    exact: ["xpet", "spbexchange", "spbx", "spbe", "spb", "saintpetersburgexchange"],
+    loose: [],
+  },
+  // TSX Alpha Exchange (TMX), a Canadian marketplace that trades TSX and
+  // TSX Venture listed securities. No book of its own is read here.
+  {
+    mic: "XATS",
+    name: "Alpha Exchange",
+    source: "",
+    hours: null,
+    exact: ["xats", "alphaexchange", "tsxalpha", "tsxalphaexchange", "alpha"],
+    loose: [],
+  },
+  // Chittagong Stock Exchange. The bare "cse" stays ambiguous (Canada,
+  // Copenhagen, Colombo); the full name resolves here. Session times not
+  // checked.
+  {
+    mic: "XCHG",
+    name: "Chittagong Stock Exchange",
+    source: "",
+    hours: null,
+    exact: ["xchg", "chittagongstockexchange", "chittagong", "csebd"],
+    loose: [],
+  },
+  // Beijing Stock Exchange. Same session as Shanghai and Shenzhen.
+  {
+    mic: "BJSE",
+    name: "Beijing Stock Exchange",
+    source: "",
+    hours: { open: "09:30", close: "15:00", tz: "Asia/Shanghai" },
+    exact: ["bjse", "beijingstockexchange", "beijing", "bsecn"],
     loose: [],
   },
   // Nxchange, Amsterdam. Its rulebook gives no session times.
   {
     mic: "XNXC",
     name: "Nxchange",
-    source: "",
+    // The touch is the venue's own order board (nxchange-touch.mjs). Trading
+    // is permitted around the clock, seven days a week (Rulebook v3.0, art. 16).
+    source: "nxchange",
     hours: null,
     exact: ["xnxc", "xnxd", "nxchange"],
     loose: [],
@@ -1375,7 +1507,8 @@ export const VENUES = [
   {
     mic: "NPEX",
     name: "NPEX",
-    source: "",
+    // The touch is each instrument's public order-book page (npex-touch.mjs).
+    source: "npex",
     hours: { open: "10:00", close: "16:00", tz: "Europe/Amsterdam" },
     exact: ["npex"],
     loose: [],
@@ -1397,6 +1530,58 @@ export const VENUES = [
     source: "",
     hours: { open: "09:30", close: "16:00", tz: "America/New_York" },
     exact: ["txse", "texasstockexchange"],
+    loose: [],
+  },
+  // Bourse de Tunis. Winter hours: continuous 09:00–14:00, then the 14:05
+  // closing fixing. July and August run 09:00–12:00 (tunis-stockexchange.com/horaires).
+  {
+    mic: "XTUN",
+    name: "Bourse de Tunis",
+    source: "",
+    hours: { open: "09:00", close: "14:00", tz: "Africa/Tunis" },
+    exact: ["xtun", "bvmt", "boursedetunis", "tunis", "tunisstockexchange", "boursedesvaleursmobilieresdetunis"],
+    loose: [],
+  },
+  // Lusaka. Opening auction at 11:00, continuous to 14:00 (LuSE Trading
+  // Procedures, §3 and §4.1).
+  {
+    mic: "XLUS",
+    name: "Lusaka Securities Exchange",
+    source: "",
+    hours: { open: "11:00", close: "14:00", tz: "Africa/Lusaka" },
+    exact: ["xlus", "luse", "lusaka", "lusakastockexchange", "lusakasecuritiesexchange"],
+    loose: [],
+  },
+  // Cambodia Securities Exchange, Phnom Penh. Opening auction at 09:00,
+  // continuous to 14:50, closing auction at 15:00 (csx.com.kh trading session).
+  {
+    mic: "XCSX",
+    name: "Cambodia Securities Exchange",
+    source: "",
+    hours: { open: "09:00", close: "15:00", tz: "Asia/Phnom_Penh" },
+    exact: ["xcsx", "csx", "cambodiasecuritiesexchange"],
+    loose: [],
+  },
+  // Yangon. No continuous book: seven call auctions from 10:00 to 13:00,
+  // orders from 09:30 (YSX Trading Business Regulations, §6–7). ISO 10383
+  // gives YSX no MIC, so the key here is its acronym.
+  {
+    mic: "YSX",
+    name: "Yangon Stock Exchange",
+    source: "",
+    hours: { open: "09:30", close: "13:00", tz: "Asia/Yangon" },
+    exact: ["ysx", "yangon", "yangonstockexchange"],
+    loose: [],
+  },
+  // Lao Securities Exchange, Vientiane. Opening call 08:30–09:00, continuous
+  // to 14:50, closing call to 15:00 (lsx.com.la trading hour). "LSX" alone
+  // stays Lang & Schwarz.
+  {
+    mic: "XLAO",
+    name: "Lao Securities Exchange",
+    source: "",
+    hours: { open: "09:00", close: "15:00", tz: "Asia/Vientiane" },
+    exact: ["xlao", "laosecuritiesexchange", "laostockexchange"],
     loose: [],
   },
 ];
@@ -1481,6 +1666,16 @@ export const KNOWN_UNSOURCED = [
   { match: ["crypto", "trd", "tradias", "tradiasotc", "zerohash", "zerohashe"], name: "Crypto", why: "gré à gré, pas un carnet unique" },
   // BET in the catalogues is Budapest (BÉT), which has its own book.
   { match: ["pse"], name: "PSE (Prague ou Manille)", why: "le sigle nomme les deux places" },
+  // Japan's two regional exchanges. Nomura and DMM sell the names listed
+  // only there; neither exchange publishes a bid and an offer, and no
+  // vendor here reads them. FSE and SSE are left out of the match: they
+  // also name Frankfurt and Shanghai.
+  { match: ["xfka", "fukuoka", "fukuokastockexchange"], name: "Fukuoka", why: "pas de carnet public" },
+  { match: ["xsap", "sapporo", "sapporosecuritiesexchange"], name: "Sapporo", why: "pas de carnet public" },
+  // BME Growth, the Madrid growth market (formerly MAB). Consorsbank
+  // writes it "BME Alternativ Market". Madrid's own touch comes from
+  // Interactive Brokers (es-touch.json), which is not read for this segment.
+  { match: ["mabx", "bmegrowth", "bmealternativmarket", "bmealternativemarket", "mercadoalternativobursatil"], name: "BME Growth", why: "adaptateur non écrit" },
   // Xontro, the Berlin floor, stopped on 1 January 2026 and Börse Berlin
   // did not replace it. The file that still updates is Equiduct, a different
   // book, and it is not written here.
@@ -1761,34 +1956,51 @@ const slug = (value) => String(value || "").toLowerCase().replace(/[^a-z0-9]+/g,
 
 // Same names the page uses, so the country is the one shown for that folder.
 const BROKER_NAME = {
-  saxo: "Saxo Bank", avanza: "Avanza", virtuamericas: "Virtu Americas LLC", lloyds: "Lloyds",
+  saxofr: "Saxo Bank", avanza: "Avanza", virtuamericas: "Virtu Americas LLC", lloyds: "Lloyds",
   halifax: "Halifax", bimi: "Intesa Sanpaolo IMI Securities Corp.", bhmuae: "BHM Capital",
   bunq: "Bunq", century: "Century Financial", boursobank: "BoursoBank", alramz: "Al Ramz Capital",
-  boubyan: "Boubyan", tastytrade: "Tastytrade", bri: "BRI Danareksa Sekuritas", bux: "BUX",
-  davy: "Davy Select", oanda: "OANDA TMS", plum: "Plum", easyequities: "EasyEquities",
+  boubyan: "Boubyan", tastytradeus: "Tastytrade", bri: "BRI Danareksa Sekuritas", bux: "BUX",
+  davy: "Davy Select", oandapl: "OANDA TMS", plum: "Plum", easyequities: "EasyEquities",
   efocs: "EuroFinance", elana: "Elana Trading", siebert: "Siebert Financial", sogotrade: "SogoTrade",
   swissquote: "Swissquote", thndr: "Thndr", tiger: "Tiger Brokers", traderepublic: "Trade Republic",
-  tradestation: "TradeStation", tradeup: "TradeUP", tradezero: "TradeZero", tradier: "Tradier",
+  tradestationus: "TradeStation", tradeup: "TradeUP", tradezero: "TradeZero", tradier: "Tradier",
   vested: "Vested Finance", vivid: "Vivid Money",
   webull: "Webull", WHSelfInvest: "WH SelfInvest", xtb: "XTB", fortuneo: "Fortuneo",
-  fidelity: "Fidelity", lynx: "LYNX+", vanguarduk: "Vanguard UK", choice: "Choice",
+  fidelity: "Fidelity", lynxnl: "LYNX+", vanguarduk: "Vanguard UK", choice: "Choice",
   "m.stock": "m.Stock", megabank: "Mega Bank", zsedirect: "ZSE Direct", vps: "VPS",
   vndirect: "VNDirect", vietcap: "Vietcap", rakutenjp: "Rakuten Japan", spare: "SpareBank",
-  rakutenma: "Rakuten MY", profitmart: "Profitmart", dbs: "DBS Taiwan", "e.sun": "E.SUN",
-  scsb: "SCSB", standardchartered: "Standard Chartered Taiwan", unionbank: "Union Bank of Taiwan",
-  sinopac: "SinoPac", taishin: "Taishin", ctbc: "CTBC", moomoo: "moomoo Japan", disnat: "Desjardins",
-  ing: "ING Deutschland", prime: "Prime Transaction", mirae: "Mirae", bsc: "BSC", bdm: "BDM",
+  rakutenmy: "Rakuten MY", profitmart: "Profitmart", dbstw: "DBS Taiwan", "e.sun": "E.SUN",
+  scsb: "SCSB", standardcharteredtw: "Standard Chartered Taiwan", unionbank: "Union Bank of Taiwan",
+  sinopactw: "SinoPac", taishin: "Taishin", ctbc: "CTBC", moomoojp: "moomoo Japan", disnat: "Desjardins",
+  ingde: "ING Deutschland", prime: "Prime Transaction", miraevn: "Mirae", bsc: "BSC", bdm: "BDM",
   rabee: "Rabee Securities", pinetree: "Pinetree", cfgbank: "CFG Bank", wafabourse: "Wafa Bourse",
   cih: "CIH", marketech: "Marketech Focus", fsmonesg: "FSMOne SG", fsmonehk: "FSMOne HK",
   fsmonemy: "FSMOne MY", gotradeglobal: "Gotrade Global", gotradeid: "Gotrade Indonesia",
-  iol: "InvertirOnline", triipe: "Trii Perou", bks: "BKS Bank", public: "Public.com",
-  erste: "Erste", iguk: "IG UK", igue: "IG UE", icici: "ICICI", hdfcsky: "HDFC Sky", futu: "Futu",
+  iol: "InvertirOnline", triipe: "Trii Perou", bkssi: "BKS Bank", public: "Public.com",
+  erstepl: "Erste", iguk: "IG UK", igue: "IG UE", icici: "ICICI", hdfcsky: "HDFC Sky", futuhk: "Futu",
 };
 const BROKER_LIST = {
-  mirae: "Mirae Asset Securities Vietnam", bsc: "BIDV Securities (BSC)",
-  boursobank: "BoursoBank (Boursorama)", iol: "InvertirOnline (IOL)", bks: "BKS Bank Slovenia",
-  erste: "Erste Biuro Maklerskie", iguk: "IG", igue: "IG Europe", triipe: "Trii Peru",
-  icici: "ICICI Direct", futu: "Futu / moomoo HK",
+  // Folders named with their entity's country code.
+  oandapl: "OANDA TMS",
+  admiralcy: "Admirals",
+  degironl: "DEGIRO",
+  tastytradeus: "tastytrade",
+  nordnetse: "Nordnet",
+  interactivebrokersie: "Interactive Brokers Ireland",
+  longbridgehk: "Longbridge",
+  stakeau: "Stake",
+  renta4es: "Renta 4 Banco",
+  sbijp: "SBI",
+  handelsbankense: "Handelsbanken",
+  balanzar: "Balanz",
+  coinbaseus: "Coinbase",
+  wealthyhoodgr: "Wealthyhood",
+  kisvn: "KIS Vietnam",
+  gtjavn: "Guotai Junan Vietnam",
+  miraevn: "Mirae Asset Securities Vietnam", bsc: "BIDV Securities (BSC)",
+  boursobank: "BoursoBank (Boursorama)", iol: "InvertirOnline (IOL)", bkssi: "BKS Bank Slovenia",
+  erstepl: "Erste Biuro Maklerskie", iguk: "IG", igue: "IG Europe", triipe: "Trii Peru",
+  icici: "ICICI Direct", futuhk: "Futu / moomoo HK",
 };
 
 let brokerCountries = null;
@@ -1942,7 +2154,7 @@ export function spreadLeaf(spreads, { isin, mic, currency, unsourced, broker, ti
   // Amsterdam, Brussels, Milan and Oslo are too close for that to mean
   // anything for Swissquote, Elana, Saxo and DEGIRO: several books, and
   // the tightest one is kept.
-  const EUROPE_AMONG = new Set(["swissquote", "elana", "saxo", "degiro"]);
+  const EUROPE_AMONG = new Set(["swissquote", "elana", "saxofr", "degironl"]);
   const confused = confusedOf(unsourced);
   const among = EUROPE_AMONG.has(String(broker || "").split(":")[0]) && (confused === "euronext" || confused === "nasdaqnordic");
   const picked = confused && !among ? closestMic(broker, confused) : "";
@@ -2060,6 +2272,9 @@ const PAGE = {
       : "https://www.set.or.th/en/market/product/stock/overview";
   },
   xcas: () => "https://www.casablanca-bourse.com/live-market/actions",
+  ase: () => "https://www.exchange.jo/en/bulletins/daily/new",
+  nxchange: (l) => `https://account.nxchange.com/order-board/${encodeURIComponent(String(l.ticker || "").toUpperCase())}.json`,
+  npex: () => "https://www.npex.nl/effectenbeurs/",
   tase: (l) => {
     const code = String(l.ticker || "").trim().toUpperCase();
     return code

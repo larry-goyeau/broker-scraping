@@ -29,9 +29,9 @@
 //
 //   https://www.erste.pl/regulation_file_server/time20260417083103/download?id=169231&lang=pl_PL
 //
-//   node brokers/erste/erste_cost.mjs PLPKN0000018 GPW PLN --shares=10 --price=100
-//   node brokers/erste/erste_cost.mjs US0378331005 NASDAQ USD --shares=10 --price=200
-//   node brokers/erste/erste_cost.mjs --schedule
+//   node brokers/erstepl/erstepl_cost.mjs PLPKN0000018 GPW PLN --shares=10 --price=100
+//   node brokers/erstepl/erstepl_cost.mjs US0378331005 NASDAQ USD --shares=10 --price=200
+//   node brokers/erstepl/erstepl_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
@@ -44,7 +44,7 @@ import { bookParts, plus, finite } from "../../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, listingCash } from "../../fx.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
 
-const CATALOGUE = new URL("erste-parsed.json", import.meta.url);
+const CATALOGUE = new URL("erstepl-parsed.json", import.meta.url);
 
 const SCHEDULE = {
   url: "https://www.erste.pl/regulation_file_server/time20260417083103/download?id=169231&lang=pl_PL",
@@ -147,7 +147,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     cashCurrency: "",
   };
   if (!catalogue) {
-    return { ...answer, why: "le catalogue Erste n'existe pas encore : lancer `node brokers/erste/erste_scraping.mjs`" };
+    return { ...answer, why: "le catalogue Erste n'existe pas encore : lancer `node brokers/erstepl/erstepl_scraping.mjs`" };
   }
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Erste` };
@@ -165,7 +165,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     mic: m.venue?.mic ?? null,
     currency: m.row.currency,
     unsourced: m.unsourced,
-    broker: "erste",
+    broker: "erstepl",
     ticker: m.row.ticker,
   });
   const listing = {
@@ -196,7 +196,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     ...answer,
     listing,
     cashCurrency: rule.currency,
-    remark: `If the sale is the same day, the commission is -${((rule.rate - DAY_RATE) * 100).toFixed(2)}%.`,
+    remark: `If the sale is the same day, the commission is ${Number(((rule.rate - DAY_RATE) * 100).toFixed(2))}% lower.`,
     url: SCHEDULE.url,
     basis: `taryfa Erste du ${SCHEDULE.tariffOn}, relue le ${SCHEDULE.readOn} : ${rule.label} par ordre`,
     tax,
@@ -215,7 +215,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   let marketBp = bp ?? leaf?.bp ?? null;
   let marketPerShare = perShare ?? leaf?.perShare ?? null;
   if (american && marketBp == null && marketPerShare == null) {
-    const quoted = usBookPerShare({ broker: "erste", ticker: listing.ticker });
+    const quoted = usBookPerShare({ broker: "erstepl", ticker: listing.ticker });
     if (quoted != null) marketPerShare = quoted;
   }
   const parts = bookParts({
@@ -306,7 +306,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const positional = process.argv.slice(2).filter((a) => !a.startsWith("--"));
   const [etf, place, currency] = positional;
   if (!etf) {
-    console.error("usage : node brokers/erste/erste_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]");
+    console.error("usage : node brokers/erstepl/erstepl_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]");
     process.exit(2);
   }
 

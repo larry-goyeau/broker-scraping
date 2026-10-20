@@ -14028,3 +14028,56 @@
 {"path":"/au/invest/wall-st/stocks/suma","ticker":"SUMA","name":"SUMA ACQUISITION CORP-A","type":"STOCK","status":"ACTIVE","code":"NMQ","isin":""}
 {"path":"/au/invest/wall-st/stocks/amac","ticker":"AMAC","name":"AMR RESOURCES ACQUISITION -A","type":"STOCK","status":"ACTIVE","code":"NMQ","isin":""}
 {"path":"/au/invest/wall-st/stocks/kth","ticker":"KTH","name":"Structured Products Corp Corts Tr for Peco Energy Cap Tr III","type":"STOCK","status":"ACTIVE","code":"NYQ","isin":""}
+{"path":"/au/invest/aus/stocks/euz","ticker":"EUZ","name":"Europa Metals","type":"STOCK","status":"TRADING","code":"ASX","isin":""}
+{"path":"/au/invest/aus/stocks/owl","ticker":"OWL","name":"Overwatch Technologies Limited","type":"STOCK","status":"TRADING","code":"ASX","isin":""}
+{"path":"/au/invest/aus/stocks/auzdc","ticker":"AUZDC","name":"Australian Mines Call 0.16 AUD Australian Mines 06May27 Opt Def","type":"STOCK","status":"TRADING","code":"ASX","isin":""}
+{"path":"/au/invest/aus/stocks/auzdd","ticker":"AUZDD","name":"Australian Mines Call 0.11 AUD Australian Mines 02Feb27 Opt Def","type":"STOCK","status":"TRADING","code":"ASX","isin":""}
+{"path":"/au/invest/aus/stocks/auen","ticker":"AUEN","name":"Aurum Resources Ord Shs Def","type":"STOCK","status":"TRADING","code":"ASX","isin":""}
+{"path":"/au/invest/wall-st/stocks/frgt","ticker":"FRGT","name":"Freight Technologies Inc","type":"STOCK","status":"ACTIVE","code":"NAQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/bcda","ticker":"BCDA","name":"BioCardia Inc","type":"STOCK","status":"ACTIVE","code":"NAQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/xlab","ticker":"XLAB","name":"Exascale Labs Holdings Inc. Class A","type":"STOCK","status":"ACTIVE","code":"NMQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/revb","ticker":"REVB","name":"Revelation Biosciences Inc","type":"STOCK","status":"ACTIVE","code":"NAQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/atnm","ticker":"ATNM","name":"Actinium Pharmaceuticals Inc","type":"STOCK","status":"ACTIVE","code":"ASQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/obai","ticker":"OBAI","name":"Our Bond Inc","type":"STOCK","status":"ACTIVE","code":"NMQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/caps","ticker":"CAPS","name":"CAPSTONE HLDG CORP COM NEW","type":"STOCK","status":"ACTIVE","code":"NAQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/mrkr","ticker":"MRKR","name":"Marker Therapeutics Inc","type":"STOCK","status":"ACTIVE","code":"NAQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/dcm","ticker":"DCM","name":"DeFi Capital Markets Inc","type":"STOCK","status":"ACTIVE","code":"ASQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/genvr","ticker":"GENVR","name":"GEN DIGITAL INC - CVR","type":"STOCK","status":"ACTIVE","code":"NMQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/fufu","ticker":"FUFU","name":"Arisz Acquisition Corp","type":"STOCK","status":"ACTIVE","code":"NAQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/wneb","ticker":"WNEB","name":"Western New England Bancorp Inc","type":"STOCK","status":"ACTIVE","code":"NSQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/dlpn","ticker":"DLPN","name":"Dolphin Entertainment Inc","type":"STOCK","status":"ACTIVE","code":"NAQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/iam","ticker":"IAM","name":"Iambic Therapeutics","type":"STOCK","status":"ACTIVE","code":"NSQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/tulp","ticker":"TULP","name":"Bloomia Holdings Inc","type":"STOCK","status":"ACTIVE","code":"NAQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/plun.u","ticker":"PLUN.U","name":"PLUTONIAN ACQUISITION CORP I","type":"STOCK","status":"ACTIVE","code":"NYQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/aaci","ticker":"AACI","name":"ARMADA ACQ CORP III-A","type":"STOCK","status":"ACTIVE","code":"NMQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/ofssh","ticker":"OFSSH","name":"OFS Capital Corp","type":"STOCK","status":"ACTIVE","code":"NSQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/fgbip","ticker":"FGBIP","name":"First Guaranty Bancshares Inc","type":"STOCK","status":"ACTIVE","code":"NMQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/lcu","ticker":"LCU","name":"LION COPPER CORP","type":"STOCK","status":"ACTIVE","code":"NAQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/amro","ticker":"AMRO","name":"Amaero","type":"STOCK","status":"ACTIVE","code":"NAQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/cfr.prb","ticker":"CFR.PRB","name":"Cullen/Frost Bankers, Inc. Depositary Shares, each representing a 1/40th ownership interest in a share of 4.450% non-cumulative perpetual preferred stock, Series B","type":"STOCK","status":"ACTIVE","code":"NYQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/hygd","ticker":"HYGD","name":"MICROSECT 3X SH YC BH ETNS","type":"ETN","status":"ACTIVE","code":"BTQ","isin":""}
+{"path":"/au/invest/aus/stocks/auzdb","ticker":"AUZDB","name":"Australian Mines","type":"STOCK","status":"TRADING","code":"ASX","isin":""}
+{"path":"/au/invest/wall-st/stocks/iacou","ticker":"IACOU","name":"IDEA ACQUISITION CORP","type":"STOCK","status":"ACTIVE","code":"NMQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/ozkap","ticker":"OZKAP","name":"Bank Ozk","type":"STOCK","status":"ACTIVE","code":"NSQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/mjexq","ticker":"MJEXQ","name":"JORDANEXQUISITEBGS8","type":"ALTERNATIVE_ASSET","status":"ACTIVE","code":"","isin":""}
+{"path":"/au/invest/wall-st/stocks/ssea","ticker":"SSEA","name":"STARRY SEA ACQUISITION CORP","type":"STOCK","status":"ACTIVE","code":"NAQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/ntwo","ticker":"NTWO","name":"Newbury Street II Acquisition Corp","type":"STOCK","status":"ACTIVE","code":"NMQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/jatt","ticker":"JATT","name":"JATT II ACQUISITION CORP","type":"STOCK","status":"ACTIVE","code":"NMQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/bhfao","ticker":"BHFAO","name":"Brighthouse Financial Inc","type":"STOCK","status":"ACTIVE","code":"NSQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/saaq","ticker":"SAAQ","name":"SPACE ASSET ACQUISITION-CL A","type":"STOCK","status":"ACTIVE","code":"NMQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/wafdp","ticker":"WAFDP","name":"WaFd Inc","type":"STOCK","status":"ACTIVE","code":"NSQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/bval","ticker":"BVAL","name":"BLUEMONTE LARGE CAP VALU ETF","type":"ETF","status":"ACTIVE","code":"PCQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/vtrix","ticker":"VTRIX","name":"Vanguard International Value Fund","type":"MUTUAL_FUND","status":"ACTIVE","code":"MUTF","isin":""}
+{"path":"/au/invest/wall-st/stocks/fera","ticker":"FERA","name":"FIFTH ERA ACQUISITION CORP-A","type":"STOCK","status":"ACTIVE","code":"NMQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/vblax","ticker":"VBLAX","name":"Long-Term Bond Index Inst","type":"MUTUAL_FUND","status":"ACTIVE","code":"MUTF","isin":""}
+{"path":"/au/invest/wall-st/stocks/lego.u","ticker":"LEGO.U","name":"LEGATO MERGER CORP IV","type":"STOCK","status":"ACTIVE","code":"ASQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/pyt","ticker":"PYT","name":"PPLUS Trust Series GSC-2","type":"STOCK","status":"ACTIVE","code":"NYQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/mlp","ticker":"MLP","name":"Maui Land & Pineapple Company Inc","type":"STOCK","status":"ACTIVE","code":"NYQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/meshu","ticker":"MESHU","name":"MESHFLOW ACQUISITION CORP","type":"STOCK","status":"ACTIVE","code":"NMQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/cty","ticker":"CTY","name":"City Therapeutics","type":"STOCK","status":"ACTIVE","code":"NMQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/mdrr","ticker":"MDRR","name":"Medalist Diversified Inc","type":"STOCK","status":"ACTIVE","code":"NAQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/fbydp","ticker":"FBYDP","name":"FALCON'S BEYOND GLOBAL INC","type":"STOCK","status":"ACTIVE","code":"NMQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/adaml","ticker":"ADAML","name":"Adamas Trust Inc 6.875 Preferred","type":"STOCK","status":"ACTIVE","code":"NSQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/tbcv","ticker":"TBCV","name":"THUNDER BRIDGE CAPITAL PAR-A","type":"STOCK","status":"ACTIVE","code":"NMQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/onez","ticker":"ONEZ","name":"TRUESHR SEASONALITY LA B ETF","type":"ETN","status":"ACTIVE","code":"BTQ","isin":""}
+{"path":"/au/invest/wall-st/stocks/gaing","ticker":"GAING","name":"GLADSTONE INVESTMENT COR","type":"STOCK","status":"ACTIVE","code":"NSQ","isin":""}

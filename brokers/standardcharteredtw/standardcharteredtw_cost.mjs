@@ -35,7 +35,7 @@
 //   The public page does not print a spot bid and ask, so the remark
 //   has no FX rate.
 //
-//   node brokers/standardchartered/standardchartered_cost.mjs AAPL US USD --shares=10 --price=200
+//   node brokers/standardcharteredtw/standardcharteredtw_cost.mjs AAPL US USD --shares=10 --price=200
 //
 // `roundTrip(...)` reads files, not the network.
 
@@ -48,7 +48,7 @@ import { bookParts, plus, finite } from "../../na.mjs";
 import { usBookPerShare } from "../../spreads/rule606.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
 
-const CATALOGUE = new URL("standardchartered-parsed.json", import.meta.url);
+const CATALOGUE = new URL("standardcharteredtw-parsed.json", import.meta.url);
 const PAGE = "https://www.sc.com/content/dam/sc/tw/zh_tw/investment/docs/general-agreement-deposits.pdf";
 const READ_ON = "2026-10-04";
 const ONLINE_RATE = 0.0075;
@@ -134,7 +134,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     remark: CUSTODY,
   };
   if (!catalogue) {
-    return { ...answer, why: "le catalogue Standard Chartered n'existe pas encore : lancer `node brokers/standardchartered/standardchartered_scraping.mjs`" };
+    return { ...answer, why: "le catalogue Standard Chartered n'existe pas encore : lancer `node brokers/standardcharteredtw/standardcharteredtw_scraping.mjs`" };
   }
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Standard Chartered` };
@@ -152,7 +152,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     mic: m.venue?.mic ?? null,
     currency: m.row.currency,
     unsourced: m.unsourced,
-    broker: "standardchartered",
+    broker: "standardcharteredtw",
     ticker: m.row.ticker,
   });
   const listing = {
@@ -173,7 +173,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const rate = online ? ONLINE_RATE : BOARD_RATE;
   const floor = FLOOR[listing.currency] ?? null;
   const american = US_BOOK.has(market) && listing.currency === "USD";
-  const quoted = american ? usBookPerShare({ broker: "standardchartered", ticker: listing.ticker }) : null;
+  const quoted = american ? usBookPerShare({ broker: "standardcharteredtw", ticker: listing.ticker }) : null;
   const marketBp = bp ?? (american ? null : book.leaf?.bp ?? null);
   const marketPerShare = perShare ?? quoted ?? (american ? null : book.leaf?.perShare ?? null);
   const shared = {

@@ -240,7 +240,7 @@ const page =
 await page.bringToFront();
 
 // `--start=N` (1-indexed) lets a run resume from a specific instrument without
-// throwing away progress already saved to admiral-parsed.json.
+// throwing away progress already saved to admiralcy-parsed.json.
 const startIndex = (() => {
   for (const arg of process.argv.slice(2)) {
     const match = arg.match(/^--start=(\d+)$/i);
@@ -289,7 +289,7 @@ const onlyPairs = new Set(
   positionalArgs.map((arg) => String(arg || "").trim().toUpperCase()).filter(Boolean)
 );
 
-const outputPath = new URL("admiral-parsed.json", import.meta.url);
+const outputPath = new URL("admiralcy-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 

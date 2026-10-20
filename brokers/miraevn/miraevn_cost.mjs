@@ -34,7 +34,7 @@
 //   HOSE, UPCOM                    the BSC board, read by spreads/vn-touch.mjs
 //   HNX                            no book is published here
 //
-//   node brokers/mirae/mirae_cost.mjs VNM HOSE VND --shares=10 --price=57300
+//   node brokers/miraevn/miraevn_cost.mjs VNM HOSE VND --shares=10 --price=57300
 //
 // `roundTrip(...)` reads files, not the network.
 
@@ -46,7 +46,7 @@ import { spreads } from "../../spreads/book.mjs";
 import { bookParts, plus, finite } from "../../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
 
-const CATALOGUE = new URL("mirae-parsed.json", import.meta.url);
+const CATALOGUE = new URL("miraevn-parsed.json", import.meta.url);
 const PAGE = "https://masvn.com/cate/bieu-phi-53";
 const READ_ON = "2026-10-06";
 const RATE = 0.001;
@@ -97,7 +97,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     remark: CUSTODY,
   };
   if (!catalogue) {
-    return { ...answer, why: "le catalogue Mirae n'existe pas encore : lancer `node brokers/mirae/mirae_scraping.mjs`" };
+    return { ...answer, why: "le catalogue Mirae n'existe pas encore : lancer `node brokers/miraevn/miraevn_scraping.mjs`" };
   }
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Mirae` };
@@ -115,7 +115,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     mic: m.venue?.mic ?? null,
     currency: m.row.currency,
     unsourced: m.unsourced,
-    broker: "mirae",
+    broker: "miraevn",
     ticker: m.row.ticker,
   });
   const listing = {

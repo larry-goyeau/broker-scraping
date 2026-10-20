@@ -13,6 +13,7 @@
 
 import { stampRows } from "../../accepted.mjs";
 import { withoutObligations } from "../../obligation.mjs";
+import { withoutDelisted } from "../../psxStatus.mjs";
 import fs from "node:fs";
 
 const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
@@ -87,8 +88,9 @@ for (const [, symbolCell, nameCell, marketCell] of cells) {
 }
 
 listings.sort((left, right) => left.ticker.localeCompare(right.ticker));
-fs.writeFileSync(new URL("ktrade-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(listings)), null, 2));
-const written = withoutObligations(listings);
+// Delisted and suspended companies stay in the list but cannot be bought.
+const written = withoutDelisted(withoutObligations(listings));
+fs.writeFileSync(new URL("ktrade-parsed.json", import.meta.url), JSON.stringify(stampRows(written), null, 2));
 const counts = {};
 for (const row of written) counts[`${row.exchange} ${row.type}`] = (counts[`${row.exchange} ${row.type}`] || 0) + 1;
 console.error(`${written.length} listings of ${cells.length} directory rows`, counts);

@@ -8,16 +8,26 @@
 //
 // A full name that says ETC is an ETC, ETN an ETN, ETF an ETF. Any other
 // line with a ticker is a listed investment trust, so a stock. The rest
-// have no ticker and are open-ended funds. Prosper names no exchange and
-// no dealing currency, so neither is stored. A fund line has no ticker;
-// its ISIN is the ticker.
+// have no ticker and are open-ended funds, dealt with the fund manager; a
+// fund line has no ticker, its ISIN is the ticker.
+//
+// Prosper names no exchange or dealing currency per line. Its custodian,
+// Seccl, sends every exchange-traded order to Winterflood, whose only
+// execution venue is the London Stock Exchange (broker-list.json gives
+// Prosper that place). So a listed line becomes one row per LSE main-market
+// line of its ISIN, each with its own TIDM and currency, read from the LSE.
+// Only lines the sterling-only Prosper Wallet can hold are kept (GBP, and
+// GBX pence). A listed line with none of those keeps the card as printed.
 //
 //   https://www.prosper.co.uk/products/funds
+//   https://seccl.tech/order-execution/
 //
 //   node brokers/prosper/prosper_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
 import { withoutObligations } from "../../obligation.mjs";
+import { depositHas } from "../../deposits.mjs";
+import { lseLine, lseLines, heldAs } from "../../lseListings.mjs";
 import fs from "node:fs";
 
 const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
@@ -103,22 +113,35 @@ for (const card of cards) {
   const id = `${isin}|${ticker}`;
   if (seen.has(id)) continue;
   seen.add(id);
-  rows.push({
-    query: ticker || isin,
-    ticker: ticker || isin,
-    name,
-    currency: "",
-    type: kindOf(name, ticker),
-    isin,
-    raw: [ticker, short, name, manager, asset[0], isin].filter(Boolean).join(" "),
-  });
+  const type = kindOf(name, ticker);
+  const raw = [ticker, short, name, manager, asset[0], isin].filter(Boolean).join(" ");
+  if (ticker) {
+    const own = isin ? null : await lseLine(ticker);
+    const lines = (isin ? await lseLines(isin) : own ? [own] : []).filter((line) => depositHas("prosper", "", heldAs(line.currency)));
+    for (const line of lines) {
+      rows.push({
+        query: line.ticker,
+        ticker: line.ticker,
+        name,
+        exchange: "London Stock Exchange",
+        mic: "XLON",
+        currency: line.currency,
+        type,
+        isin: line.isin,
+        raw: `${raw} | XLON ${line.ticker} ${line.currency}`,
+      });
+    }
+    await sleep(150);
+    if (lines.length) continue;
+  }
+  rows.push({ query: ticker || isin, ticker: ticker || isin, name, currency: "", type, isin, raw });
 }
 if (rows.length < 150) throw new Error(`only ${rows.length} funds`);
 
-rows.sort((left, right) => left.name.localeCompare(right.name) || left.isin.localeCompare(right.isin));
+rows.sort((left, right) => left.name.localeCompare(right.name) || left.isin.localeCompare(right.isin) || left.ticker.localeCompare(right.ticker));
 fs.writeFileSync(new URL("prosper-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(rows)), null, 2));
 
 const counts = {};
-for (const row of rows) counts[row.type] = (counts[row.type] || 0) + 1;
+for (const row of rows) counts[`${row.exchange || "no exchange"} ${row.type} ${row.currency || "-"}`] = (counts[`${row.exchange || "no exchange"} ${row.type} ${row.currency || "-"}`] || 0) + 1;
 for (const [kind, count] of Object.entries(counts).sort()) console.error(`${kind}: ${count}`);
 console.error(`${rows.length} rows from ${cards.length} cards`);

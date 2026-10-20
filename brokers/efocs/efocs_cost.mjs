@@ -25,9 +25,19 @@
 // map, never invented. Custody on the BSE / Deutsche Börse pages is none.
 // Art. 33 UniCredit safekeeping is their schedule, not a figure here.
 //
-// Cash is euro (BG joined on 1 January 2026). They take EUR / USD / GBP
-// deposits and convert "at the current exchange rate of Euro-Finance" on
-// payments — no published fill markup, so FX stays out of the total.
+// Cash is euro (BG joined on 1 January 2026). FX follows deposits.mjs. A
+// line in a deposit currency has no FX in the total, only a remark when the
+// account can hold another currency. A line in any other currency is a
+// forced conversion (buy converts once, sell converts back once), and
+// Euro-Finance publishes no rate for it: the fee schedule (in force
+// 2026-09-15) has no conversion article, and the FAQ, re-read 2026-10-19,
+// only says a purchase works "as long as you have an equivalent amount in
+// another currency in your account", with no rate, spread or fee. So that
+// total is N/A.
+//   https://eurofinance.bg/en/faqs-categories/deposits-withdrawals-and-currency-conversion/
+// The same FAQ says balances can be held in "BGN, EUR, USD, GBP, and CHF",
+// while deposits.mjs lists EUR only; the code reads deposits.mjs, so a USD,
+// GBP or CHF line turns into a held line as soon as that list changes.
 //
 //   https://www.eurofinance.bg/wp-content/uploads/documents/legal-documents/Schedule%20of%20fees.pdf
 //   https://eurofinance.bg/en/services/trading/deutscheboerse/
@@ -46,7 +56,8 @@ import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
 import { spreads } from "../../spreads/book.mjs";
 import { plus, finite } from "../../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, fxRemark, listingCash, toUsd, usdPer } from "../../fx.mjs";
+import { depositHas } from "../../deposits.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("efocs-parsed.json", import.meta.url);
@@ -63,6 +74,10 @@ const SCHEDULE = {
 };
 
 const DEFAULT_PLAN = "retail";
+
+// Currencies the FAQ says an account can hold; used only to tell whether a
+// held line can meet cash in another currency (then the FX remark applies).
+const FAQ_BALANCES = ["EUR", "USD", "GBP", "CHF"];
 
 const PLANS = {
   retail: { id: "retail", label: "Retail" },
@@ -287,9 +302,19 @@ export function roundTrip({
   const rates = taxRates(tax);
   const taxPct = Object.values(rates).reduce((s, r) => s + r, 0);
   const rate = rateOf(rule, picked);
+  // A deposit currency is never converted; anything else is converted at a
+  // rate Euro-Finance does not publish, so that leg has no figure.
+  const cashCcy = listingCash(listing.currency);
+  const held = depositHas("efocs", null, cashCcy);
+  const otherCash = FAQ_BALANCES.some((c) => c !== cashCcy && depositHas("efocs", null, c));
+  const fxWhy = held ? null : `change forcé vers ${cashCcy} : taux de change non publié`;
+  const fxBasis = held
+    ? ""
+    : ` ; change forcé EUR→${cashCcy} sans taux publié (barème et FAQ Euro-Finance relus le 2026-10-19)`;
 
   const shared = {
     ...answer,
+    cashCurrency: held ? cashCcy : "EUR",
     listing,
     feeMarket: market,
     bp: marketBp,
@@ -298,12 +323,13 @@ export function roundTrip({
     tax,
     fx: fxNote(listing.currency),
     fxIfConverted: 0,
-    remark: "",
+    remark: held && otherCash ? fxRemark("", cashCcy) : "",
   };
 
   const basis =
     `barème EFOCS ${picked.label}, palier ${market}, brochure du ${SCHEDULE.revised} relue le ${SCHEDULE.readOn}` +
-    ` : ${(rate * 100).toFixed(2)} %, plancher ${rule.min} €`;
+    ` : ${(rate * 100).toFixed(2)} %, plancher ${rule.min} €` +
+    fxBasis;
 
   const n = Number(shares);
   const p = Number(price);
@@ -341,21 +367,23 @@ export function roundTrip({
   const sell = commissionSide({ amountEur: notionalEur, market, plan: picked });
   const buyUsd = buy ? dollars(buy.charged, "EUR") : null;
   const sellUsd = sell ? dollars(sell.charged, "EUR") : null;
-  const brokerFees = plus(buyUsd, sellUsd);
+  const commissionUsd = plus(buyUsd, sellUsd);
+  const fxUsd = held ? 0 : null;
+  const brokerFees = plus(commissionUsd, fxUsd);
   const taxUsd = notionalUsd == null ? null : notionalUsd * taxPct;
   const usd = plus(bookUsd, brokerFees, taxUsd);
+  const why = [
+    fxWhy,
+    bookUsd == null
+      ? `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ${m.unsourced?.why || "pas de source de spread"}`
+      : null,
+  ].filter(Boolean);
 
   return {
     ...shared,
     usd: finite(usd, 6),
     brokerFees: finite(brokerFees, 6),
-    ...(bookUsd == null
-      ? {
-          why:
-            `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ` +
-            `${m.unsourced?.why || "pas de source de spread"}`,
-        }
-      : {}),
+    ...(why.length ? { why: why.join(" ; ") } : {}),
     trade: {
       shares: n,
       price: p,
@@ -376,7 +404,8 @@ export function roundTrip({
     },
     parts: {
       marché: finite(bookUsd, 6),
-      commission: finite(brokerFees, 6),
+      commission: finite(commissionUsd, 6),
+      change: finite(fxUsd, 6),
       taxes: finite(taxUsd, 6),
     },
     commission: {
@@ -439,8 +468,8 @@ function confidenceOf({
     );
   }
   said.push(
-    `hors total : change « at the current exchange rate of Euro-Finance » sans % publié, ` +
-      `garde UniCredit art. 33, virement sortant 1 € / retrait caisse 0,90 %, téléphone chapitre II. ` +
+    `change : aucun taux publié par Euro-Finance, donc total N/A hors devise de dépôt ; ` +
+      `hors total : garde UniCredit art. 33, virement sortant 1 € / retrait caisse 0,90 %, téléphone chapitre II. ` +
       `Aucun aller-retour réel dans ce dépôt`
   );
   return said.join(" ; ");

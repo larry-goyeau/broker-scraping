@@ -11,7 +11,7 @@
 //   https://masboard.masvn.com/media/symbol_static_data.json
 //   https://api.dnse.com.vn/price-api/query
 //
-//   node brokers/mirae/mirae_scraping.mjs
+//   node brokers/miraevn/miraevn_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
 import { withoutObligations } from "../../obligation.mjs";
@@ -154,7 +154,7 @@ const listings = rows.map((row) => {
   };
 });
 listings.sort((left, right) => left.exchange.localeCompare(right.exchange) || left.ticker.localeCompare(right.ticker));
-fs.writeFileSync(new URL("mirae-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(listings)), null, 2));
+fs.writeFileSync(new URL("miraevn-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(listings)), null, 2));
 
 const byType = new Map();
 for (const row of listings) byType.set(row.type, (byType.get(row.type) || 0) + 1);

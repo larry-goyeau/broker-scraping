@@ -12,21 +12,28 @@
 //   brokerage      3 per order up to 30 000, then 0.01% of the order.
 //                  AUD on the ASX, USD on Wall St. Both legs.
 //   FX             0.55% (minimum 2 USD) when cash moves between AUD and
-//                  USD. It is funding, not this trip: a USD balance can
-//                  sit at DriveWealth.
+//                  USD. The account is funded in AUD only (`deposits.mjs`),
+//                  so a Wall St line converts on the way in and back on the
+//                  way out: two conversions, in the total.
 //   SEC            0 on a sell, in the April 2026 guide.
 //   TAF            0.000166 USD a share sold, minimum 0.01, cap 8.30.
 //                  One sell in the round trip.
 //   ADR            0.01–0.03 USD a share a quarter. Custody, not this trip.
+//
+// FX, re-read 2026-10-19 in the Financial Services Guide (U.S. Pricing, fees
+// in USD): "From 12 Feb 2025: 55 basis points (minimum of $2)", and "This fee
+// applies to fund transfers in and out of your Stake account between AUD and
+// USD." The pricing page gives the same 55 bps. Each conversion is
+// max(2 USD, 0.55 % of the amount), once on the buy and once on the sale.
 //
 // ASX orders go to FinClear Execution Ltd. There is no free ASX book.
 // US orders go to DriveWealth LLC. The equity 606 has no stock mix, so
 // there is no Q and the book stays the quoted NBBO. An OTC line has no
 // single tape.
 //
-//   node brokers/stake/stake_cost.mjs BHP ASX AUD --shares=10 --price=40
-//   node brokers/stake/stake_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node brokers/stake/stake_cost.mjs --schedule
+//   node brokers/stakeau/stakeau_cost.mjs BHP ASX AUD --shares=10 --price=40
+//   node brokers/stakeau/stakeau_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/stakeau/stakeau_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
@@ -38,8 +45,10 @@ import { qOf, usBookPerShare } from "../../spreads/rule606.mjs";
 import { bookParts, plus, finite } from "../../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../../fx.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
+import { depositHas } from "../../deposits.mjs";
+import { listingCash } from "../../fx.mjs";
 
-const CATALOGUE = new URL("stake-parsed.json", import.meta.url);
+const CATALOGUE = new URL("stakeau-parsed.json", import.meta.url);
 
 const SCHEDULE = {
   url: "https://hellostake.com/au/pricing",
@@ -58,6 +67,10 @@ const TAF_PER_SHARE = 0.000166;
 const TAF_MIN = 0.01;
 const TAF_CAP = 8.3;
 const FX_BPS = "0.55";
+// One conversion: 0.55 % of the amount, minimum 2 USD.
+const FX_ONE_WAY = 0.0055;
+const FX_MIN_USD = 2;
+const BASE = "AUD";
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
@@ -117,7 +130,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     cashCurrency: null,
   };
   if (!catalogue) {
-    return { ...answer, why: "le catalogue Stake n'existe pas encore : lancer `node brokers/stake/stake_scraping.mjs`" };
+    return { ...answer, why: "le catalogue Stake n'existe pas encore : lancer `node brokers/stakeau/stakeau_scraping.mjs`" };
   }
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Stake` };
@@ -135,7 +148,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     mic: m.venue?.mic ?? null,
     currency: m.row.currency,
     unsourced: m.unsourced,
-    broker: "stake",
+    broker: "stakeau",
     ticker: m.row.ticker,
   });
   const listing = {
@@ -149,12 +162,12 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     brokerExchange: m.row.exchange || null,
   };
   const american = nmsLine(m.row);
-  const q = american ? qOf("stake") : null;
+  const q = american ? qOf("stakeau") : null;
   const leaf = book.leaf;
   let marketBp = bp ?? (american ? null : leaf?.bp ?? null);
   let marketPerShare = perShare ?? null;
   if (american && bp == null && perShare == null) {
-    const quoted = usBookPerShare({ broker: "stake", ticker: listing.ticker, fallback: leaf?.perShare ?? null });
+    const quoted = usBookPerShare({ broker: "stakeau", ticker: listing.ticker, fallback: leaf?.perShare ?? null });
     if (quoted != null) marketPerShare = quoted;
   } else if (!american && perShare == null) {
     marketPerShare = leaf?.perShare ?? null;
@@ -168,13 +181,17 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const tax = taxesOf(listing.isin);
   const taxTotal = Object.values(taxRates(tax)).reduce((sum, rate) => sum + rate, 0);
   const feeCurrency = american ? "USD" : "AUD";
+  const held = depositHas("stakeau", null, listingCash(listing.currency));
   const shared = {
     ...answer,
-    cashCurrency: feeCurrency,
+    cashCurrency: held ? listingCash(listing.currency) : BASE,
     listing,
-    remark: american ? fxRemark(FX_BPS, "USD", "min 2 USD") : "",
+    remark: held && listingCash(listing.currency) !== BASE ? fxRemark(FX_BPS, listing.currency, "min 2 USD") : "",
+    fxIfConverted: held ? FX_ONE_WAY : 0,
     url: SCHEDULE.url,
-    basis: `barème Stake, relu le ${SCHEDULE.readOn} : 3 ${feeCurrency} l'ordre jusqu'à 30 000, puis 0,01 %`,
+    basis:
+      `barème Stake, relu le ${SCHEDULE.readOn} : 3 ${feeCurrency} l'ordre jusqu'à 30 000, puis 0,01 %` +
+      (held ? "" : ` ; change forcé AUD ↔ ${listingCash(listing.currency)} : 0,55 % par sens, min 2 USD, relu le 2026-10-19`),
     tax,
     ccy: QUOTE,
     fx: { quote: QUOTE, asOf: FX_AS_OF, listing: usdPer(listing.currency) },
@@ -194,7 +211,11 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const bookUsd =
     parts.a == null || notionalUsd == null || parts.b == null ? null : parts.a * notionalUsd + parts.b * n;
   const taxUsd = notionalUsd == null ? null : notionalUsd * taxTotal;
-  const usd = plus(bookUsd, commissionUsd, tafUsd, taxUsd);
+  // Forced conversion: AUD in on the buy, back to AUD on the sale.
+  const oneFx = notionalUsd == null ? null : Math.max(FX_MIN_USD, notionalUsd * FX_ONE_WAY);
+  const fxUsd = held ? 0 : oneFx == null ? null : oneFx * 2;
+  const brokerFees = plus(commissionUsd, fxUsd);
+  const usd = plus(bookUsd, commissionUsd, fxUsd, tafUsd, taxUsd);
   const bookLine =
     marketBp != null
       ? `carnet ${Number(marketBp.toPrecision(4))} bp`
@@ -208,7 +229,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     "hors Stake Black et hors Accumulate",
     american ? "SEC 0 sur la vente" : "ligne en AUD : pas de change",
     american ? `TAF ${TAF_PER_SHARE} USD la part vendue, minimum ${TAF_MIN}, plafond ${TAF_CAP}` : "pas de TAF",
-    american ? "change 0,55 % (minimum 2 USD) à chaque virement, hors du nombre" : null,
+    held ? null : "change forcé 0,55 % (minimum 2 USD) à l'aller et au retour, dans le total : dépôt en AUD seulement",
     bookLine,
   ]
     .filter(Boolean)
@@ -217,7 +238,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   return {
     ...shared,
     usd: finite(usd, 6),
-    brokerFees: finite(commissionUsd, 6),
+    brokerFees: finite(brokerFees, 6),
     commission: { each: one, currency: feeCurrency, eachWay: true },
     bp: marketBp,
     perShare: marketPerShare,
@@ -238,6 +259,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     parts: {
       marché: finite(bookUsd, 6),
       courtage: finite(commissionUsd, 6),
+      change: finite(fxUsd, 6),
       réglementaire: american ? finite(tafUsd, 6) : 0,
       taxes: finite(taxUsd, 6),
     },
@@ -261,7 +283,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
           wallSt: "USD",
           sec: "0",
           taf: `${TAF_PER_SHARE} USD a share sold, min ${TAF_MIN}, cap ${TAF_CAP}`,
-          fx: "0.55% min 2 USD on an AUD/USD transfer",
+          fx: "0.55% min 2 USD on an AUD/USD transfer, twice in a Wall St round trip",
         },
         null,
         2,
@@ -274,7 +296,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node brokers/stake/stake_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]",
+      "usage : node brokers/stakeau/stakeau_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]",
     );
     process.exit(2);
   }
@@ -311,6 +333,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     const bill = out.parts || {};
     if (bill.marché != null) console.log(`  carnet         : ${bill.marché} $`);
     if (bill.courtage != null) console.log(`  courtage       : ${bill.courtage} $`);
+    if (bill.change) console.log(`  change         : ${bill.change} $`);
     if (bill.réglementaire) console.log(`  réglementaire  : ${bill.réglementaire} $`);
     if (bill.taxes) console.log(`  taxes          : ${bill.taxes} $`);
   } else if (out.why) {

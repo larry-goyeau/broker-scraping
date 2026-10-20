@@ -44,7 +44,7 @@ export const MIC = { Tokyo: "XTKS", Nagoya: "XNGO", Fukuoka: "XFKA", Sapporo: "X
 const JP_FILE = ["TSE", "NAG", "FSE", "SAPSE", "TYO"];
 const JAPAN = new Set(["Tokyo", "Nagoya", "Fukuoka", "Sapporo"]);
 const US_FILE = { NYSE: "XNYS", NASDAQ: "XNAS", AMEX: "XASE", CBOE: "BATS" };
-const NAGOYA_SECTION = { 1: "Premier", 2: "Main", 3: "Next" };
+const NAGOYA_SECTION = { 1: "Premier", 2: "Main", 3: "Next", 4: "ETF" };
 
 // Section names of the JPX file. A section the file adds later stops the run.
 export const TOKYO_SECTIONS = new Set([
@@ -184,9 +184,76 @@ export async function fetchText(url, encoding = "utf-8", headers = {}) {
 }
 
 function workbookRows(bytes) {
-  const run = spawnSync("python3", ["-c", XLSX_TO_JSON], { input: bytes, maxBuffer: 32_000_000 });
-  if (run.status !== 0) throw new Error(run.stderr.toString() || "the JPX workbook could not be read");
+  const run = spawnSync("python3", ["-c", XLSX_TO_JSON], { input: bytes, maxBuffer: 128_000_000 });
+  if (run.status !== 0) throw new Error(run.stderr.toString() || "the workbook could not be read");
   return JSON.parse(run.stdout.toString());
+}
+
+// HKEX's List of Securities: one line per counter, with its ISIN and
+// trading currency. A share or fund quoted in several currencies has one
+// counter per currency under the same ISIN (00700 in HKD, 80700 in RMB).
+// RMB on HKEX is the offshore yuan, stored as CNH; the other codes are
+// ISO already (debt lines also trade in EUR, AUD and others). Returns code
+// (no leading zeros) → { code, isin, currency }.
+const HKEX_LIST = "https://www.hkex.com.hk/eng/services/trading/securities/securitieslists/ListOfSecurities.xlsx";
+
+export async function hkexCounters() {
+  const grid = workbookRows(await fetchBytes(HKEX_LIST));
+  const at = grid.findIndex((row) => row[0] === "Stock Code");
+  const header = grid[at] || [];
+  const isinAt = header.indexOf("ISIN");
+  const currencyAt = header.indexOf("Trading Currency");
+  if (at < 0 || isinAt < 0 || currencyAt < 0) throw new Error("HKEX list header moved");
+  const counters = new Map();
+  for (const row of grid.slice(at + 1)) {
+    const code = String(Number(normalize(row[0])));
+    const isin = normalize(row[isinAt]);
+    const traded = normalize(row[currencyAt]);
+    if (code === "NaN" || !isin) continue;
+    const currency = traded === "RMB" ? "CNH" : traded;
+    if (!/^[A-Z]{3}$/.test(currency)) throw new Error(`HKEX ${row[0]} trades in ${traded || "no currency"}`);
+    counters.set(code, { code, isin, currency });
+  }
+  if (counters.size < 10000) throw new Error(`HKEX list has ${counters.size} counters`);
+  return counters;
+}
+
+// Each Hong Kong row takes HKEX's ISIN and currency for its counter, and is
+// copied once for every other counter of the same ISIN whose currency the
+// broker's account can hold (`holds(currency)`). A code HKEX no longer
+// lists keeps the row as the broker prints it and is reported in `unlisted`.
+// Returns { added, unlisted }.
+export function hkOtherCounters(rows, counters, holds) {
+  const byIsin = new Map();
+  for (const counter of counters.values()) {
+    if (!byIsin.has(counter.isin)) byIsin.set(counter.isin, []);
+    byIsin.get(counter.isin).push(counter);
+  }
+  const added = [];
+  const unlisted = [];
+  for (const row of rows) {
+    if (row.exchange !== "HKEX") continue;
+    const own = counters.get(row.ticker);
+    if (!own) {
+      unlisted.push(row.ticker);
+      continue;
+    }
+    delete row.matches;
+    row.isin = own.isin;
+    row.query = own.isin;
+    row.currency = own.currency;
+    for (const other of byIsin.get(own.isin)) {
+      if (other.code === own.code || other.currency === own.currency || !holds(other.currency)) continue;
+      added.push({
+        ...row,
+        ticker: other.code,
+        currency: other.currency,
+        raw: `${other.code} ${other.currency} counter of ${row.raw}`,
+      });
+    }
+  }
+  rows.push(...added);
+  return { added, unlisted };
 }
 
 export function jpCode(value) {
@@ -263,14 +330,15 @@ function nagoyaCode(value) {
   return ordinary ? ordinary[1] : jpCode(text);
 }
 
-// Nagoya Premier, Main and Next: { code, name, section }.
-export async function nagoyaListing() {
+// One pass of the Nagoya exchange search over the given listedDivision
+// values (1 Premier, 2 Main, 3 Next, 4 ETF): { code, name, section, sole }.
+async function nagoyaSearch(divisions) {
   const lines = [];
   let page = 1;
   let total = Infinity;
   while (lines.length < total && page < 30) {
     const url = new URL(NAGOYA);
-    for (const division of ["1", "2", "3"]) url.searchParams.append("listedDivision[]", division);
+    for (const division of divisions) url.searchParams.append("listedDivision[]", division);
     url.searchParams.set("dispType", "stockCode");
     url.searchParams.set("dispOrder", "ASC");
     url.searchParams.set("dispCount", "100");
@@ -283,12 +351,26 @@ export async function nagoyaListing() {
       const code = nagoyaCode(item.stockCode);
       const section = NAGOYA_SECTION[item.listedDivision];
       if (!code || !section) throw new Error(`Nagoya line not read: ${item.stockCode} ${item.listedDivision}`);
-      lines.push({ code, name: normalize(item.stockName_j), section });
+      lines.push({ code, name: normalize(item.stockName_j), section, sole: Number(item.simpleListing) === 1 });
     }
     page += 1;
   }
   if (lines.length !== total) throw new Error(`Nagoya search announced ${total} and returned ${lines.length}`);
+  return lines;
+}
+
+// Nagoya Premier, Main and Next, sole and dual listings.
+export async function nagoyaListing() {
+  const lines = await nagoyaSearch(["1", "2", "3"]);
   if (lines.length < 150) throw new Error(`Nagoya search returned only ${lines.length}`);
+  return lines;
+}
+
+// Nagoya's ETF board. 1319 is also a Tokyo fund; 1553 (MAXIS S&P Tokai)
+// is listed in Nagoya only.
+export async function nagoyaEtfs() {
+  const lines = await nagoyaSearch(["4"]);
+  if (!lines.length) throw new Error("Nagoya search returned no ETF");
   return lines;
 }
 
@@ -330,6 +412,83 @@ export async function sapporoSole() {
     }
   }
   if (lines.length < 5) throw new Error(`Sapporo sole-listing sections returned ${lines.length} codes`);
+  return lines;
+}
+
+// Every Fukuoka share listing, sole and dual (重複), main board and
+// Q-Board: the monthly 上場有価証券の状況 PDF linked on the listed-companies
+// page, one line per code with its market and 単独/重複 flag. PRO stays
+// out.
+const FUKUOKA_LISTED = "https://www.fse.or.jp/investors/companies-and-brokers/";
+const PDF_TEXT = `
+import json, sys
+try:
+    import fitz
+except ImportError:
+    sys.stderr.write("PyMuPDF is missing: pip install pymupdf")
+    sys.exit(2)
+doc = fitz.open(stream=sys.stdin.buffer.read(), filetype="pdf")
+json.dump([page.get_text() for page in doc], sys.stdout, ensure_ascii=False)
+`;
+
+export async function fukuokaListing() {
+  const html = await fetchText(FUKUOKA_LISTED);
+  const href = html.match(/href="([^"]*\/files\/lir_cmn\/\d{6}kaisya\.pdf)"/i)?.[1];
+  if (!href) throw new Error("Fukuoka listed-companies page links no monthly PDF");
+  const run = spawnSync("python3", ["-c", PDF_TEXT], { input: await fetchBytes(new URL(href, FUKUOKA_LISTED).href), maxBuffer: 32_000_000 });
+  if (run.status !== 0) throw new Error(run.stderr.toString() || "the Fukuoka PDF could not be read");
+  const pages = JSON.parse(run.stdout.toString("utf8"));
+  // Page 1 is the summary; each list page repeats the column header.
+  const text = pages
+    .slice(1)
+    .map((page) => page.normalize("NFKC").replace(/証券種類[\s\S]*?決算期/, ""))
+    .join("\n");
+  const lines = [];
+  let pro = 0;
+  for (const record of text.split(/\n(?=(?:内国株式|外国株式|株価指数連動型|不動産投資)[^\n]*\n)/)) {
+    const flat = record.replace(/\s*\n\s*/g, " ").trim();
+    const hit = flat.match(/(?:^| )((?:[0-9]{4}|[0-9]{3}[A-Z])0) (\S+)/);
+    if (!hit) continue;
+    if (!/^(内国株式|外国株式)/.test(flat)) throw new Error(`Fukuoka PDF has a non-share line: ${flat.slice(0, 80)}`);
+    const section = /Fukuoka PRO Market/.test(flat) ? "PRO" : /Q-Board/.test(flat) ? "Q-Board" : /本則/.test(flat) ? "本則" : "";
+    const sole = /単独/.test(flat) ? true : /重複/.test(flat) ? false : null;
+    if (!section || sole === null) throw new Error(`Fukuoka PDF line not read: ${flat.slice(0, 80)}`);
+    if (section === "PRO") {
+      pro += 1;
+      continue;
+    }
+    lines.push({ code: nagoyaCode(hit[1]), name: hit[2], section, sole });
+  }
+  if (lines.length < 80 || !pro) throw new Error(`Fukuoka PDF returned ${lines.length} codes and ${pro} PRO`);
+  // The PDF is the last month-end; the sole-listing page is today's. A code
+  // on that page is sole today, and one the PDF lacks (listed since
+  // month-end) is added from the page.
+  const byCode = new Map(lines.map((line) => [line.code, line]));
+  for (const line of await fukuokaSole()) {
+    if (byCode.has(line.code)) byCode.get(line.code).sole = true;
+    else lines.push({ ...line, sole: true });
+  }
+  return lines;
+}
+
+// Every Sapporo share listing, sole and dual (重複上場会社), main board and
+// Ambitious. PRO stays out.
+export async function sapporoListing() {
+  const html = await fetchText(SAPPORO);
+  const lines = [];
+  for (const part of html.split(/<h5>/i).slice(1)) {
+    const title = textOf(part.split(/<\/h5>/i)[0]);
+    const kind = title.match(/^(単独|重複)上場会社\s*[-－]\s*(.+)$/);
+    if (!kind || /PRO/i.test(title)) continue;
+    for (const block of part.matchAll(/<dt>\s*([0-9A-Za-z]+)\s*<\/dt>([\s\S]*?)<\/dl>/gi)) {
+      const code = jpCode(block[1]);
+      if (!code) continue;
+      const alt = block[2].match(/alt="([^"]*)"/i);
+      lines.push({ code, name: textOf(alt?.[1] || ""), section: kind[2], sole: kind[1] === "単独" });
+    }
+  }
+  if (lines.filter((line) => !line.sole).length < 20) throw new Error(`Sapporo dual-listing sections returned too few codes`);
+  if (lines.filter((line) => line.sole).length < 5) throw new Error(`Sapporo sole-listing sections returned too few codes`);
   return lines;
 }
 

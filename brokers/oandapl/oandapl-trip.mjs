@@ -1,6 +1,6 @@
 // One real round trip at OANDA TMS, to price the conversion margin.
 //
-// `oanda_cost.mjs` charges about half a percent per conversion on any line not
+// `oandapl_cost.mjs` charges about half a percent per conversion on any line not
 // quoted in the account's own currency, and that figure is deduced and not seen.
 // The fee table publishes the margin in units of the quoted currency — 0,006 on
 // EURUSD — and says it is applied about « the MID price, the prevailing market
@@ -26,16 +26,16 @@
 // closes what it opens. What it leaves behind, if anything goes wrong between
 // the two, is one share of a twelve-dollar company.
 //
-//   node brokers/oanda/oanda-trip.mjs                    (lecture seule : cotations, solde)
-//   node brokers/oanda/oanda-trip.mjs --go               (l'aller-retour, pour de bon)
-//   node brokers/oanda/oanda-trip.mjs --symbol=F.US --volume=1 --go
+//   node brokers/oandapl/oandapl-trip.mjs                    (lecture seule : cotations, solde)
+//   node brokers/oandapl/oandapl-trip.mjs --go               (l'aller-retour, pour de bon)
+//   node brokers/oandapl/oandapl-trip.mjs --symbol=F.US --volume=1 --go
 //
 // Chrome must already be listening on 9222, with the terminal signed in.
 
 import fs from "node:fs";
 import puppeteer from "puppeteer-core";
 
-const OUT = new URL("oanda-trip.json", import.meta.url);
+const OUT = new URL("oandapl-trip.json", import.meta.url);
 
 const arg = (name, fallback = null) => {
   const hit = process.argv.find((a) => a.startsWith(`--${name}=`));

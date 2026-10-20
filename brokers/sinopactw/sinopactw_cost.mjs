@@ -44,7 +44,7 @@
 //   from CNY.
 //   https://bank.sinopac.com/sinopacBT/personal/forex/exchange-rate/exchange-rate.html
 //
-//   node brokers/sinopac/sinopac_cost.mjs AAPL US USD --shares=10 --price=200
+//   node brokers/sinopactw/sinopactw_cost.mjs AAPL US USD --shares=10 --price=200
 //
 // `roundTrip(...)` reads files, not the network.
 
@@ -57,7 +57,7 @@ import { bookParts, plus, finite } from "../../na.mjs";
 import { usBookPerShare } from "../../spreads/rule606.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
 
-const CATALOGUE = new URL("sinopac-parsed.json", import.meta.url);
+const CATALOGUE = new URL("sinopactw-parsed.json", import.meta.url);
 const PAGE = "https://mma.sinopac.com/StockandETF/index";
 const READ_ON = "2026-10-05";
 const RATE = 0.01;
@@ -109,7 +109,7 @@ function remarkOf(currency, row) {
   if (pair) {
     const [bid, ask] = pair;
     const gap = ((ask - bid) / (ask + bid)) * 100;
-    lines.push(`FX ${gap.toFixed(3)}% when cash ≠ ${code(currency)}.`);
+    lines.push(`FX ${Number(gap.toFixed(2))}% when cash ≠ ${code(currency)}.`);
   }
   if (String(row?.raw || "").trim().endsWith("professional")) lines.push("For professional investors only.");
   return lines.join("\n");
@@ -146,7 +146,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     remark: CUSTODY,
   };
   if (!catalogue) {
-    return { ...answer, why: "le catalogue Bank SinoPac n'existe pas encore : lancer `node brokers/sinopac/sinopac_scraping.mjs`" };
+    return { ...answer, why: "le catalogue Bank SinoPac n'existe pas encore : lancer `node brokers/sinopactw/sinopactw_scraping.mjs`" };
   }
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Bank SinoPac` };
@@ -164,7 +164,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     mic: m.venue?.mic ?? null,
     currency: m.row.currency,
     unsourced: m.unsourced,
-    broker: "sinopac",
+    broker: "sinopactw",
     ticker: m.row.ticker,
   });
   const listing = {
@@ -179,7 +179,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   };
   const american = loose(listing.brokerExchange) === "US" && listing.currency === "USD";
   const floor = american ? FLOOR_USD : null;
-  const quoted = american ? usBookPerShare({ broker: "sinopac", ticker: listing.ticker }) : null;
+  const quoted = american ? usBookPerShare({ broker: "sinopactw", ticker: listing.ticker }) : null;
   const marketBp = bp ?? (american ? null : book.leaf?.bp ?? null);
   const marketPerShare = perShare ?? quoted ?? (american ? null : book.leaf?.perShare ?? null);
   const shared = {

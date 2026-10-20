@@ -38,8 +38,7 @@
 // by ISIN: a stamp duty is a fact about the instrument, not about Admirals, and
 // the two agree on every rate the broker publishes.
 //
-//    40// Two things stay out of the number on purpose, and both were put to the test on
-// 2026-09-14 before being left there.
+//    40// Two things were put to the test on 2026-09-14 before being settled.
 //
 // The 0.30 % conversion fee bites only where the account's base currency differs
 // from the instrument's, and the account currency is the client's choice, so the
@@ -50,7 +49,8 @@
 // 10 224,62 $ of stock, so the cash moved by the notional and the commission and
 // by nothing else. A markup on the principal would have added some 30 $ a side.
 // It lands on the P&L and the fees, which is where the remark says it lands, and
-// at any ordinary size that is cents. Left out, now for a measured reason.
+// at any ordinary size that is cents. Since 2026-10-19 those cents are in the
+// total for a non-USD line (see FX below); the principal stays out.
 //
 // The standing offer that makes the first one-sided deal of each trading day
 // free excludes ETFs, is one side and not the round trip, and can be withdrawn:
@@ -58,6 +58,19 @@
 // not fired — Boeing on the 8th and Allianz on the 14th both paid full
 // commission on the day's first order — which is the better reason to keep it
 // out. Inactivity (10 € / month after 24 months) is a holding cost, not a trip.
+//
+// FX, re-read 2026-10-19 on https://admiralmarkets.com/products/fees-and-charges:
+// "Trades in Stocks and ETFs that are quoted in currencies other than the
+// account base currency are subject to a conversion fee", 0.3 %, "with a
+// minimum of 0.01 units of the account base currency", and the page scopes it
+// to the settlement of profits and losses and to fees. `deposits.mjs` holds
+// USD only for this folder, so a line in any other currency is converted by
+// force and the fee goes in the total. What gets converted is what the page
+// says and what the 2026-09-14 Allianz trip showed: each side's commission
+// (two conversions) and the closing P&L, which for an instant round trip is
+// the book (one more). Each pays 0.3 %, floored at 0.01 $. The principal is
+// not converted (a markup on it would have shown as ~30 $ a side on that trip).
+// A USD line pays none of it and keeps the remark.
 //
 // Market spread comes from `spreads/spread.json` and is already a round trip:
 //    50// basis points in Europe, the Rule 605 effective spread per share in America. It
@@ -81,10 +94,10 @@
 // the market happened to give back. This file answers 20,59 $ of broker fees for
 // that trip against 20,45 $ paid, the gap being the EURUSD it caches.
 //    60//
-//   node brokers/admiral/admiral_cost.mjs AAPL NASDAQ USD
-//   node brokers/admiral/admiral_cost.mjs AAPL NASDAQ USD --shares=1000 --price=230
-//   node brokers/admiral/admiral_cost.mjs EUNL XETR EUR --shares=10 --price=126
-//   node brokers/admiral/admiral_cost.mjs --schedule
+//   node brokers/admiralcy/admiralcy_cost.mjs AAPL NASDAQ USD
+//   node brokers/admiralcy/admiralcy_cost.mjs AAPL NASDAQ USD --shares=1000 --price=230
+//   node brokers/admiralcy/admiralcy_cost.mjs EUNL XETR EUR --shares=10 --price=126
+//   node brokers/admiralcy/admiralcy_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
@@ -95,8 +108,10 @@ import { spreads } from "../../spreads/book.mjs";
 import { plus, finite } from "../../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../../fx.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
+import { depositHas } from "../../deposits.mjs";
+import { listingCash } from "../../fx.mjs";
 
-const CATALOGUE = new URL("admiral-parsed.json", import.meta.url);
+const CATALOGUE = new URL("admiralcy-parsed.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://admiralmarkets.com/start-trading/admiral-invest-stocks-and-etfs",
@@ -120,6 +135,9 @@ const PTM = { each: 1.5, currency: "GBP", above: 10000 };
 // is, a few lines below.
 const FLAT_NOT_RATE = new Set(["PTM_LEVY"]);
 const FX_ON_SETTLEMENT = 0.003;
+// Per conversion, in the account base currency (USD here).
+const FX_MIN_USD = 0.01;
+const BASE = "USD";
 const US_MICS = new Set(["XNAS", "XNYS", "ARCX", "XASE", "BATS"]);
 
 const CHECK = {
@@ -279,7 +297,7 @@ function coverage() {
       mic: venue?.mic ?? null,
       currency: r.currency,
       unsourced,
-      broker: "admiral",
+      broker: "admiralcy",
       ticker: r.ticker,
     });
     const market = feeMarketOf(r.exchange, book.mic ?? venue?.mic);
@@ -313,8 +331,8 @@ export function commissionSide({ shares, notional, currency, market }) {
 // The remark carries what the number does not. Everything the round trip
 // actually charges — the floors, the stamp duties, the PTM levy — is in `usd`
 // and broken out under `buy` and `sell`, so naming it here would only invite
-// the reader to add it twice. The conversion fee is the one charge left out,
-// because it turns on the account's base currency rather than on the listing.
+// the reader to add it twice. The conversion fee is left out only on a USD line,
+// where it would turn on a base currency the account does not hold.
 const remarkOf = (currency) => fxRemark((100 * FX_ON_SETTLEMENT).toFixed(2), currency);
 
 /**
@@ -327,7 +345,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   if (!catalogue) {
     return {
       ...base,
-      why: "le catalogue Admirals n'existe pas encore : lancer `node brokers/admiral/admiral_scraping.mjs` avec admiralmarkets.com ouvert",
+      why: "le catalogue Admirals n'existe pas encore : lancer `node brokers/admiralcy/admiralcy_scraping.mjs` avec admiralmarkets.com ouvert",
     };
   }
   const { named, matches } = findListing({ etf, place, currency });
@@ -346,7 +364,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     mic: m.venue?.mic ?? null,
     currency: m.row.currency,
     unsourced: m.unsourced,
-    broker: "admiral",
+    broker: "admiralcy",
     ticker: m.row.ticker,
   });
   const listing = {
@@ -384,7 +402,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     return {
       ...answer,
       why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
-      remark: remarkOf(listing.currency),
+      remark: depositHas("admiralcy", null, listingCash(listing.currency)) ? remarkOf(listing.currency) : "",
     };
   }
 
@@ -432,20 +450,27 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const ptmEach = ptmApplies == null ? null : ptmApplies ? dollars(PTM.each, PTM.currency) : 0;
   const ptmUsd = ptmApplies == null ? null : ptmApplies ? dollars(PTM.each * 2, PTM.currency) : 0;
 
-  const usd = plus(bookUsd, buyCommUsd, sellCommUsd, taxUsd, secUsd, tafUsd, ptmUsd);
+  // Forced conversion when the line is not in a deposit currency: 0.3 % on each
+  // commission and on the closing P&L (the book), each floored at 0.01 $.
+  const held = depositHas("admiralcy", null, listingCash(listing.currency));
+  const oneFx = (amountUsd) => (amountUsd == null ? null : Math.max(FX_MIN_USD, Math.abs(amountUsd) * FX_ON_SETTLEMENT));
+  const fxUsd = held ? 0 : plus(oneFx(buyCommUsd), oneFx(sellCommUsd), oneFx(bookUsd));
+
+  const usd = plus(bookUsd, buyCommUsd, sellCommUsd, fxUsd, taxUsd, secUsd, tafUsd, ptmUsd);
   // What the broker keeps, told apart from the total because the page prints the
   // two side by side. A free trade, a discount, a plan waives a commission and
   // nothing else: the book belongs to whoever quoted it, the transaction taxes
   // to a treasury, the regulatory levies to a regulator, and no broker can
   // forgive any of them. A remark about free trades next to a single number
   // would read as if it did.
-  const brokerFees = plus(buyCommUsd, sellCommUsd);
+  const brokerFees = plus(buyCommUsd, sellCommUsd, fxUsd);
 
   return {
     ...answer,
     usd: finite(usd, 6),
     brokerFees: finite(brokerFees, 6),
-    remark: remarkOf(listing.currency),
+    remark: held ? remarkOf(listing.currency) : "",
+    cashCurrency: held ? listingCash(listing.currency) : BASE,
     trade: { shares: n, price: p, notional, notionalUsd: finite(notionalUsd, 6), currency: listing.currency },
     buy: {
       commission: finite(buyCommUsd, 6),
@@ -467,16 +492,20 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
       taxes: finite(taxUsd, 6),
       réglementaire: american ? finite(plus(secUsd, tafUsd), 6) : 0,
       ptm: ptmUsd,
+      change: finite(fxUsd, 6),
     },
     tax,
-    fxIfConverted: FX_ON_SETTLEMENT,
-    fxNote: `${(100 * FX_ON_SETTLEMENT).toFixed(2)} % si la devise du compte diffère de ${listing.currency} (P&L et frais), hors du total`,
+    fxIfConverted: held ? FX_ON_SETTLEMENT : 0,
+    fxNote: held
+      ? `${(100 * FX_ON_SETTLEMENT).toFixed(2)} % si la devise du compte diffère de ${listing.currency} (P&L et frais), hors du total`
+      : `${(100 * FX_ON_SETTLEMENT).toFixed(2)} % sur les frais et le P&L convertis vers ${BASE}, min ${FX_MIN_USD} $ par conversion, dans le total`,
     check: american ? CHECK : null,
     basis:
       `barème Invest.MT5 relu le ${SCHEDULE.readOn}, palier ${market} : ` +
       (rule.perShare != null
         ? `${rule.perShare} ${rule.ccy} par part et par sens, plancher ${rule.min} ${rule.ccy}`
-        : `${(100 * rule.rate).toFixed(2)} % par sens, plancher ${rule.min} ${rule.ccy}`),
+        : `${(100 * rule.rate).toFixed(2)} % par sens, plancher ${rule.min} ${rule.ccy}`) +
+      (held ? "" : ` ; change forcé vers ${BASE} : 0,30 % sur chaque commission et sur le P&L, min 0,01 $ (relu le 2026-10-19)`),
     confidence: confidenceOf({
       market,
       marketBp,
@@ -487,11 +516,12 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
       unsourced: m.unsourced,
       buyComm,
       n,
+      held,
     }),
   };
 }
 
-function confidenceOf({ market, marketBp, marketPerShare, taxRate, american, type, unsourced, buyComm, n }) {
+function confidenceOf({ market, marketBp, marketPerShare, taxRate, american, type, unsourced, buyComm, n, held = true }) {
   const said = [];
   said.push(
     `commission Invest.MT5, palier ${market}, lue le ${SCHEDULE.readOn} (${SCHEDULE.fees}), ` +
@@ -545,7 +575,9 @@ function confidenceOf({ market, marketBp, marketPerShare, taxRate, american, typ
     said.push(`le catalogue US Admirals n'a pas d'ETF : une action paie les mêmes frais, le carnet est le 605 de son symbole`);
   }
   said.push(
-    `hors total : ${(100 * FX_ON_SETTLEMENT).toFixed(2)} % de conversion si la devise du compte diffère — et il ` +
+    (held
+      ? `hors total : ${(100 * FX_ON_SETTLEMENT).toFixed(2)} % de conversion si la devise du compte diffère — et il `
+      : `dans le total : le compte est en ${BASE}, ${(100 * FX_ON_SETTLEMENT).toFixed(2)} % sur chaque commission et sur le P&L (min 0,01 $) — et il `) +
       `ne mord pas sur le principal, ce qui a été vérifié le ${CHECK_EU.on} : une ligne en euros achetée avec des ` +
       `dollars a débité le notionnel et le courtage, rien d'autre, quand 0,30 % du montant aurait fait 30 $ de plus`
   );
@@ -571,10 +603,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node admiral_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--json]\n" +
-        "        node admiral_cost.mjs --schedule\n" +
-        "  ex.   node admiral_cost.mjs AAPL NASDAQ USD --shares=1000 --price=230\n" +
-        "        node admiral_cost.mjs EUNL XETR EUR --shares=10 --price=126"
+      "usage : node admiralcy_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--json]\n" +
+        "        node admiralcy_cost.mjs --schedule\n" +
+        "  ex.   node admiralcy_cost.mjs AAPL NASDAQ USD --shares=1000 --price=230\n" +
+        "        node admiralcy_cost.mjs EUNL XETR EUR --shares=10 --price=126"
     );
     process.exit(2);
   }

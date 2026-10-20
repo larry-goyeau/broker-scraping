@@ -80,7 +80,7 @@ const CAT = 0.0000265;
 const CAT_MIN = 0.01;
 const CFX = 0.0000555;
 const FX_FEE = 0.0025;
-const FX_REMARK = `FX ${(FX_FEE * (1 + VAT) * 100).toFixed(3)}% when cash ≠ USD. The conversion spread is not priced.`;
+const FX_REMARK = `FX ${Number((FX_FEE * (1 + VAT) * 100).toFixed(2))}% when cash ≠ USD. The conversion spread is not priced.`;
 const CRYPTO_REMARK = "Advanced orders: maker 0.10%, taker 0.15%.";
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;

@@ -63,7 +63,7 @@ const RATE = 0.0033;
 const MARKET = 0.0005;
 const REMARK = [
   "If the sale is the same day, the commission is half.",
-  "-0.08% trading fees above 30,000,000 pesos traded on at least 3 days that week.",
+  "Trading fees are 0.08% lower above 30,000,000 pesos traded on at least 3 days that week.",
 ].join("\n");
 // Compra, venta. Pesos per 1 dollar. Last point of 2026-10-09 16:59 ART.
 // Half the width, over the mid, is the remark.

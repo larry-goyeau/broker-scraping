@@ -30,11 +30,11 @@
 //   https://tastytrade.com/pricing/
 //   https://tastytrade.com/crypto/
 //
-//   node brokers/tastytrade/tastytrade_cost.mjs ACWI NASDAQ USD --shares=10 --price=160
-//   node brokers/tastytrade/tastytrade_cost.mjs AAPL NASDAQ USD --shares=1 --price=230
-//   node brokers/tastytrade/tastytrade_cost.mjs BTC/USD --amount=1000
-//   node brokers/tastytrade/tastytrade_cost.mjs --verify
-//   node brokers/tastytrade/tastytrade_cost.mjs --schedule
+//   node brokers/tastytradeus/tastytradeus_cost.mjs ACWI NASDAQ USD --shares=10 --price=160
+//   node brokers/tastytradeus/tastytradeus_cost.mjs AAPL NASDAQ USD --shares=1 --price=230
+//   node brokers/tastytradeus/tastytradeus_cost.mjs BTC/USD --amount=1000
+//   node brokers/tastytradeus/tastytradeus_cost.mjs --verify
+//   node brokers/tastytradeus/tastytradeus_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
@@ -46,7 +46,7 @@ import { plus, finite } from "../../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
 
-const CATALOGUE = new URL("tastytrade-parsed.json", import.meta.url);
+const CATALOGUE = new URL("tastytradeus-parsed.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://tastytrade.com/commissions-and-fees/",
@@ -225,7 +225,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue tastytrade n'existe pas encore : lancer `node brokers/tastytrade/tastytrade_scraping.mjs`",
+      why: "le catalogue tastytrade n'existe pas encore : lancer `node brokers/tastytradeus/tastytradeus_scraping.mjs`",
     };
   }
 
@@ -248,7 +248,7 @@ export function roundTrip({
         mic: m.venue?.mic ?? null,
         currency: m.row.currency,
         unsourced: m.unsourced,
-        broker: "tastytrade",
+        broker: "tastytradeus",
         ticker: m.row.ticker,
       });
   const listing = {
@@ -518,11 +518,11 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node brokers/tastytrade/tastytrade_cost.mjs <ticker|ISIN|paire> [place] [devise] [--shares=n] [--price=p]\n" +
-        "        node brokers/tastytrade/tastytrade_cost.mjs --verify\n" +
-        "        node brokers/tastytrade/tastytrade_cost.mjs --schedule\n" +
-        "  ex.   node brokers/tastytrade/tastytrade_cost.mjs ACWI NASDAQ USD --shares=10 --price=160\n" +
-        "        node brokers/tastytrade/tastytrade_cost.mjs BTC/USD --amount=1000"
+      "usage : node brokers/tastytradeus/tastytradeus_cost.mjs <ticker|ISIN|paire> [place] [devise] [--shares=n] [--price=p]\n" +
+        "        node brokers/tastytradeus/tastytradeus_cost.mjs --verify\n" +
+        "        node brokers/tastytradeus/tastytradeus_cost.mjs --schedule\n" +
+        "  ex.   node brokers/tastytradeus/tastytradeus_cost.mjs ACWI NASDAQ USD --shares=10 --price=160\n" +
+        "        node brokers/tastytradeus/tastytradeus_cost.mjs BTC/USD --amount=1000"
     );
     process.exit(2);
   }

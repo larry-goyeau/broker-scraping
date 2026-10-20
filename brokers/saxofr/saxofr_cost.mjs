@@ -72,10 +72,10 @@
 //   https://www.home.saxo/en-au/rates-and-conditions/stocks/commissions
 //   https://www.home.saxo/fr-fr/rates-and-conditions/stocks/commissions
 //
-//   node brokers/saxo/saxo_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node brokers/saxo/saxo_cost.mjs AAPL NASDAQ USD --shares=1 --price=230 --plan=vip
-//   node brokers/saxo/saxo_cost.mjs IWDA EURONEXT EUR --shares=1 --price=100
-//   node brokers/saxo/saxo_cost.mjs --schedule
+//   node brokers/saxofr/saxofr_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/saxofr/saxofr_cost.mjs AAPL NASDAQ USD --shares=1 --price=230 --plan=vip
+//   node brokers/saxofr/saxofr_cost.mjs IWDA EURONEXT EUR --shares=1 --price=100
+//   node brokers/saxofr/saxofr_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
@@ -87,7 +87,7 @@ import { plus, finite } from "../../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../../fx.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
 
-const CATALOGUE = new URL("saxo-parsed.json", import.meta.url);
+const CATALOGUE = new URL("saxofr-parsed.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://www.home.saxo/rates-and-conditions/stocks/commissions",
@@ -326,10 +326,10 @@ function stampOf({ market, listing, tax }) {
   const stock = code(listing.type) === "STOCK";
   if (!stock) return { pct: 0, rates: {}, source: null };
   if (market === "lse" && listing.currency === "GBP") {
-    return { pct: UK_STAMP, rates: { stamp: UK_STAMP }, source: "saxo" };
+    return { pct: UK_STAMP, rates: { stamp: UK_STAMP }, source: "saxofr" };
   }
-  if (market === "dublin") return { pct: IE_STAMP, rates: { stamp: IE_STAMP }, source: "saxo" };
-  if (market === "hkex") return { pct: HK_STAMP, rates: { stamp: HK_STAMP }, source: "saxo" };
+  if (market === "dublin") return { pct: IE_STAMP, rates: { stamp: IE_STAMP }, source: "saxofr" };
+  if (market === "hkex") return { pct: HK_STAMP, rates: { stamp: HK_STAMP }, source: "saxofr" };
   return { pct: 0, rates: {}, source: null };
 }
 
@@ -441,7 +441,7 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Saxo n'existe pas encore : lancer `node brokers/saxo/saxo_scraping.mjs`",
+      why: "le catalogue Saxo n'existe pas encore : lancer `node brokers/saxofr/saxofr_scraping.mjs`",
     };
   }
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Saxo` };
@@ -460,7 +460,7 @@ export function roundTrip({
     mic: venue?.mic ?? null,
     currency: m.row.currency,
     unsourced: m.unsourced,
-    broker: "saxo",
+    broker: "saxofr",
     ticker: m.row.ticker,
   });
   const listing = {
@@ -687,7 +687,7 @@ function confidenceOf({
   }
   if (stamp.pct) {
     said.push(
-      stamp.source === "saxo"
+      stamp.source === "saxofr"
         ? `taxe ${(100 * stamp.pct).toFixed(2)} % — timbre ${market} que Saxo imprime (cet ISIN n'est pas dans la carte)`
         : `taxe de transfert ${(100 * stamp.pct).toFixed(2)} % prise dans la carte des taxes`
     );
@@ -747,12 +747,12 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node brokers/saxo/saxo_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]\n" +
+      "usage : node brokers/saxofr/saxofr_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]\n" +
         "                          [--plan=classic|platinum|vip] [--nat=FR] [--json]\n" +
-        "        node brokers/saxo/saxo_cost.mjs --schedule\n" +
-        "  ex.   node brokers/saxo/saxo_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
-        "        node brokers/saxo/saxo_cost.mjs IWDA EURONEXT EUR --shares=1 --price=100\n" +
-        "        node brokers/saxo/saxo_cost.mjs AAPL NASDAQ USD --shares=1 --price=230 --plan=vip"
+        "        node brokers/saxofr/saxofr_cost.mjs --schedule\n" +
+        "  ex.   node brokers/saxofr/saxofr_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
+        "        node brokers/saxofr/saxofr_cost.mjs IWDA EURONEXT EUR --shares=1 --price=100\n" +
+        "        node brokers/saxofr/saxofr_cost.mjs AAPL NASDAQ USD --shares=1 --price=230 --plan=vip"
     );
     process.exit(2);
   }

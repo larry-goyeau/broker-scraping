@@ -35,8 +35,8 @@
 //   https://www.nordnet.se/kundservice/prislista
 //   https://www.nordnet.se/faq/handel-vardepapper/valutakonto/hur-fungerar-valutavaexling-och-vad-kostar-det
 //
-//   node brokers/nordnet/nordnet_cost.mjs INVEB XSTO SEK --shares=10 --price=400
-//   node brokers/nordnet/nordnet_cost.mjs AAPL XNAS USD --shares=1 --price=230
+//   node brokers/nordnetse/nordnetse_cost.mjs INVEB XSTO SEK --shares=10 --price=400
+//   node brokers/nordnetse/nordnetse_cost.mjs AAPL XNAS USD --shares=1 --price=230
 //
 // `roundTrip(...)` reads files, not the network.
 
@@ -49,7 +49,7 @@ import { bookParts, plus, finite } from "../../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer, fxRemark } from "../../fx.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
 
-const CATALOGUE = new URL("nordnet-parsed.json", import.meta.url);
+const CATALOGUE = new URL("nordnetse-parsed.json", import.meta.url);
 const PAGE = "https://www.nordnet.se/kundservice/prislista";
 const READ_ON = "2026-10-08";
 const CASH = "SEK";
@@ -194,7 +194,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     remark: "",
   };
   if (!catalogue) {
-    return { ...answer, why: "le catalogue Nordnet n'existe pas encore : lancer `node brokers/nordnet/nordnet_scraping.mjs`" };
+    return { ...answer, why: "le catalogue Nordnet n'existe pas encore : lancer `node brokers/nordnetse/nordnetse_scraping.mjs`" };
   }
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Nordnet` };
@@ -216,7 +216,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     mic: m.venue?.mic ?? (listedUs ? "XNAS" : null),
     currency: m.row.currency,
     unsourced: m.unsourced,
-    broker: "nordnet",
+    broker: "nordnetse",
     ticker: m.row.ticker,
   });
   const listing = {

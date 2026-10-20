@@ -86,8 +86,23 @@
 //
 // Cash on this account is dirhams (250 AED). US buying power came back
 // 67,7506775 $, which is 250 / 3,69 exactly. The app lists the peg at 3,669.
-// There is no FX line on the ticket, so the 3,69 is a buying-power rate and
-// not a published conversion fee — it stays in `confidence`, not in `usd`.
+// There is no FX line on the ticket. User decision: that measured 3,69 is
+// the dollar conversion, against the 3,6725 dirham peg, so 0,48 % one way.
+//
+// FX. Dirhams are the only deposit currency (deposits.mjs), so a USD, SAR,
+// BHD or OMR line is a forced conversion: AED to the listing currency on the
+// buy and back on the sell. Al Ramz publishes no rate for it. Re-read
+// 2026-10-19: the commission card (2025-03) and the services schedule
+// (2026-05) carry no currency or conversion line, and the FAQ page says
+// nothing on currency. A USD line is priced on the measured 3,69 (above),
+// paid on the buy and again on the sell, in `brokerFees` and
+// `parts.change`. SAR, BHD and OMR were never measured, so those totals
+// stay N/A. ADX and DFM lines are in
+// dirhams and unchanged; the account holds no other currency, so there is
+// no FX remark on them.
+//   https://www.alramz.ae/sites/default/files/2025-03/commission.pdf
+//   https://www.alramz.ae/sites/default/files/2026-05/AL_RAMZ_SERVICE_FEES_V4%20(2).pdf
+//   https://alramz.ae/index.php/faqs
 // The FAQ also sets a minimum order value of 200 AED: below it there is no
 // trade to price.
 //
@@ -125,7 +140,8 @@ import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
 import { spreads } from "../../spreads/book.mjs";
 import { plus, finite } from "../../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, listingCash, toUsd, usdPer } from "../../fx.mjs";
+import { depositHas } from "../../deposits.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("alramz-parsed.json", import.meta.url);
@@ -186,6 +202,10 @@ const MEASURED = {
   aedPerUsd: 3.69,
   listedPeg: 3.669,
 };
+// The dirham's official peg, the mid the measured rate is read against.
+const AED_PEG = 3.6725;
+// One-way conversion cost from dirhams, by listing currency; measured only.
+const FX_ONE_WAY = { USD: (MEASURED.aedPerUsd - AED_PEG) / AED_PEG };
 
 const TO_VENUES = {
   ADSM: "ADX",
@@ -387,6 +407,18 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const marketBp = bp ?? leaf?.bp ?? null;
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
   const american = market === "us";
+  // A deposit currency is never converted; anything else is converted at a
+  // rate Al Ramz does not publish, so that leg has no figure.
+  const cashCcy = listingCash(listing.currency);
+  const held = depositHas("alramz", null, cashCcy);
+  const fxRate = held ? 0 : FX_ONE_WAY[cashCcy] ?? null;
+  const fxWhy = fxRate == null ? `change forcé AED→${cashCcy} : taux de change non publié` : null;
+  const fxBasis = held
+    ? ""
+    : fxRate == null
+      ? ` ; change forcé AED→${cashCcy} sans taux publié (carte, barème de services et FAQ relus le 2026-10-19)`
+      : ` ; change forcé AED→${cashCcy} au taux mesuré ${String(MEASURED.aedPerUsd).replace(".", ",")} contre le peg ${String(AED_PEG).replace(".", ",")}, ` +
+        `${(100 * fxRate).toFixed(2).replace(".", ",")} % par sens`;
 
   const answer = {
     ...base,
@@ -402,8 +434,10 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   if (!market || !rule) {
     return {
       ...answer,
-      basis: `aucun barème publié pour ${listing.exchange || m.row.exchange}`,
-      why: `${listing.exchange || m.row.exchange} n'est pas sur la carte Al Ramz : commission inconnue`,
+      basis: `aucun barème publié pour ${listing.exchange || m.row.exchange}${fxBasis}`,
+      why: [`${listing.exchange || m.row.exchange} n'est pas sur la carte Al Ramz : commission inconnue`, fxWhy]
+        .filter(Boolean)
+        .join(" ; "),
       tax: taxesOf(listing.isin),
     };
   }
@@ -417,7 +451,8 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
       ? ""
       : plain > 0
         ? `, TVA 5 % sur ${(100 * vatable).toFixed(3)} % des ${(100 * total).toFixed(3)} % (la SCA n'est pas taxée)`
-        : `, TVA 5 % dessus`);
+        : `, TVA 5 % dessus`) +
+    fxBasis;
 
   const n = Number(shares);
   const p = Number(price);
@@ -458,7 +493,9 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   // The live NYSE/NSDQ sell add, already inside `sellComm.charged`.
   const sellAddUsd = sellComm?.sellAdd ? dollars(sellComm.sellAdd, sellComm.currency) : 0;
 
-  const usd = plus(bookUsd, buyCommUsd, sellCommUsd, taxUsd);
+  // Forced conversion: the measured one-way rate twice, unknown without one.
+  const fxUsd = held ? 0 : fxRate == null || notionalUsd == null ? null : notionalUsd * fxRate * 2;
+  const usd = plus(bookUsd, buyCommUsd, sellCommUsd, taxUsd, fxUsd);
   // What the broker keeps, told apart from the total because the page prints the
   // two side by side. A free trade, a discount, a plan waives a commission and
   // nothing else: the book belongs to whoever quoted it, the transaction taxes
@@ -476,8 +513,15 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   // donc elle est comptée ici : `broker` la porte déjà.
   const brokerFees = plus(
     buyComm ? dollars(buyComm.broker, buyComm.currency) : null,
-    sellComm ? dollars(sellComm.broker, sellComm.currency) : null
+    sellComm ? dollars(sellComm.broker, sellComm.currency) : null,
+    fxUsd
   );
+  const why = [
+    fxWhy,
+    bookUsd == null
+      ? `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ${m.unsourced?.why || "pas de source de spread"}`
+      : null,
+  ].filter(Boolean);
   const belowMinOrder = (() => {
     const inAed = convert(notional, listing.currency, MIN_ORDER.ccy);
     return inAed == null ? null : inAed < MIN_ORDER.amount;
@@ -487,13 +531,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     ...answer,
     usd: finite(usd, 6),
     brokerFees: finite(brokerFees, 6),
-    ...(bookUsd == null
-      ? {
-          why:
-            `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ` +
-            `${m.unsourced?.why || "pas de source de spread"}`,
-        }
-      : {}),
+    ...(why.length ? { why: why.join(" ; ") } : {}),
     trade: { shares: n, price: p, notional, notionalUsd: finite(notionalUsd, 6), currency: listing.currency },
     buy: {
       commission: finite(buyCommUsd, 6),
@@ -528,6 +566,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
       tva: rule.vat ? finite(plus(dollars(buyComm?.vat, rule.ccy), dollars(sellComm?.vat, rule.ccy)), 6) : 0,
       taxes: finite(taxUsd, 6),
       réglementaire: american ? finite(sellAddUsd, 6) : 0,
+      change: finite(fxUsd, 6),
     },
     tax,
     commission: {
@@ -559,6 +598,8 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
       buyComm,
       belowMinOrder,
       n,
+      held,
+      cashCcy,
     }),
   };
 }
@@ -577,6 +618,8 @@ function confidenceOf({
   buyComm,
   belowMinOrder,
   n,
+  held = true,
+  cashCcy = "AED",
 }) {
   const said = [];
   said.push(
@@ -643,8 +686,14 @@ function confidenceOf({
   said.push(
     `trésorerie en dirhams : ${MEASURED.cashAed} AED donnaient ${MEASURED.usBuyingPower} $ de pouvoir d'achat US ` +
       `le ${MEASURED.on}, soit ${MEASURED.aedPerUsd} AED/$ contre un peg affiché à ${MEASURED.listedPeg} — ` +
-      `pas de ligne FX sur le ticket, donc ce taux reste hors du total`
+      `pas de ligne FX sur le ticket ; ce taux mesuré chiffre le change d'une ligne en dollars`
   );
+  if (!held && FX_ONE_WAY[cashCcy] == null) {
+    said.push(
+      `change forcé AED→${cashCcy} (seule devise de dépôt : AED) : aucun taux publié, d'où un total N/A, ` +
+        `le ratio de pouvoir d'achat mesuré n'est pas un taux publié`
+    );
+  }
   said.push(
     `hors total, barème de services du ${SCHEDULE.servicesUpdated} : le retrait coûte ` +
       `${WITHDRAW.transfer} ${WITHDRAW.ccy} par virement et ${WITHDRAW.crossBorder} ${WITHDRAW.ccy} ` +

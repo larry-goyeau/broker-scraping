@@ -138,7 +138,7 @@ function remarkOf(currency, row, domestic) {
   if (pair) {
     const [bid, ask] = pair;
     const gap = ((ask - bid) / (ask + bid)) * 100;
-    lines.push(`FX ${gap.toFixed(3)}% when cash ≠ ${code(currency)}.`);
+    lines.push(`FX ${Number(gap.toFixed(2))}% when cash ≠ ${code(currency)}.`);
   }
   if (String(row?.raw || "").trim().endsWith("professional")) lines.push("For professional investors only.");
   return lines.join("\n");

@@ -248,7 +248,7 @@ const catalogueQueries = [...tickerCandidates.entries()]
 
 const queries = uniqueQueries(onlyTickers.size > 0 ? [...onlyTickers] : catalogueQueries);
 
-const outputPath = new URL("tradestation-parsed.json", import.meta.url);
+const outputPath = new URL("tradestationus-parsed.json", import.meta.url);
 const results = [];
 const seen = new Set();
 

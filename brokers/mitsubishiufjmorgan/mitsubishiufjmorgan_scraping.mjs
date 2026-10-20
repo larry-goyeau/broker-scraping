@@ -7,9 +7,15 @@
 // ETF), the firm's own code, ticker and Japanese name. Neither PDF prints a
 // venue or ISIN. A US ticker is joined to ../../assets/stocks.csv and
 // etfs.csv for the venue and ISIN (see ../mitsubishiufjesmart/japan.mjs);
-// a Hong Kong code to the HKEX lines. The one Hong Kong line filed as ETF
+// a Hong Kong code takes its ISIN and trading currency from HKEX's List of
+// Securities. The one Hong Kong line filed as ETF
 // is HK Electric Investments' share-stapled units (2638), a share, and is
-// stored as STOCK. The branches sell further markets (Canada, Europe,
+// stored as STOCK. Neither PDF prints a currency. A name HKEX quotes in
+// several currencies (a HKD counter and its RMB or USD counter, under one
+// ISIN) is written once per counter whose currency the account holds as
+// cash (../../deposits.mjs) and an online order can settle in: the online
+// buy guide settles foreign orders in USD or HKD only, so an RMB counter
+// (80700 beside 700) is not written. A US line is quoted in dollars only. The branches sell further markets (Canada, Europe,
 // Australia, China B, Taiwan, ASEAN) face to face; those are not online.
 //
 // At home the online page lists Tokyo Prime, Standard and Growth with ETF,
@@ -20,14 +26,20 @@
 // month-end file: Prime, Standard and Growth, domestic and foreign, and the
 // ETF・ETN section (a name that says ETN is an ETN). The REIT/fund section
 // is left out as in the other Japanese catalogues, and so is 出資証券, which
-// the page does not name. Nagoya is the exchange search; its ETFs are
-// Tokyo funds and are not a second line. Fukuoka and Sapporo are their own
-// sole-listing pages. A code JASDEC does not handle stays out.
+// the page does not name. A name listed on Tokyo and Nagoya is written
+// once per exchange: the page sells both, and Japan has no consolidated
+// book. Nagoya is the exchange search with its ETF board (1319, also a
+// Tokyo fund, and 1553, a Nagoya sole listing). Fukuoka and Sapporo are
+// their own sole-listing pages: the page sells only sole listings there,
+// so a dual listing stays on its other exchange. A code JASDEC does not
+// handle stays out. US lines stay one row: the US book is one NBBO.
 //
 //   https://www.sc.mufg.jp/trade/deal/f_stock/index.html
 //   https://www.sc.mufg.jp/its/pdf/US_stock.pdf
 //   https://www.sc.mufg.jp/its/pdf/HK_stock.pdf
 //   https://www.sc.mufg.jp/trade/deal/st_etf_reit/index.html
+//   https://www.hkex.com.hk/eng/services/trading/securities/securitieslists/ListOfSecurities.xlsx
+//   https://www.sc.mufg.jp/its/pdf/fstock_buy.pdf
 //
 //   node brokers/mitsubishiufjmorgan/mitsubishiufjmorgan_scraping.mjs
 
@@ -37,9 +49,12 @@ import {
   fetchText,
   fold,
   fukuokaSole,
+  hkexCounters,
+  hkOtherCounters,
   hkRow,
   jasdecRefused,
   jpRow,
+  nagoyaEtfs,
   nagoyaListing,
   sapporoSole,
   textOf,
@@ -47,9 +62,12 @@ import {
   usRow,
   writeCatalogue,
 } from "../mitsubishiufjesmart/japan.mjs";
+import { depositHas } from "../../deposits.mjs";
 import { spawnSync } from "node:child_process";
 
 const SITE = "https://www.sc.mufg.jp";
+// Settlement currencies of an online foreign order (fstock_buy.pdf).
+const ONLINE_SETTLEMENT = new Set(["USD", "HKD"]);
 const FOREIGN_PAGE = `${SITE}/trade/deal/f_stock/index.html`;
 const DOMESTIC_PAGE = `${SITE}/trade/deal/st_etf_reit/index.html`;
 
@@ -149,17 +167,20 @@ async function checkDomestic() {
   }
 }
 
-const [foreign, tokyo, nagoya, fukuoka, sapporo, refused] = await Promise.all([
+const [foreign, tokyo, nagoya, nagoyaFunds, fukuoka, sapporo, refused, counters] = await Promise.all([
   foreignBook(),
   tokyoListing(),
   nagoyaListing(),
+  nagoyaEtfs(),
   fukuokaSole(),
   sapporoSole(),
   jasdecRefused(),
+  hkexCounters(),
   checkDomestic(),
 ]);
 
 const rows = [...foreign.rows];
+const { added, unlisted } = hkOtherCounters(rows, counters, (currency) => ONLINE_SETTLEMENT.has(currency) && depositHas("mitsubishiufjmorgan", "", currency));
 const dropped = {};
 const drop = (why) => (dropped[why] = (dropped[why] || 0) + 1);
 for (const line of tokyo) {
@@ -177,6 +198,7 @@ for (const [exchange, lines] of [["Nagoya", nagoya], ["Fukuoka", fukuoka], ["Sap
     else rows.push(jpRow({ ...line, exchange, type: "STOCK" }));
   }
 }
+for (const line of nagoyaFunds) rows.push(jpRow({ ...line, exchange: "Nagoya", type: "ETF" }));
 
 attachJapanIsins(rows);
 writeCatalogue(import.meta.url, "mitsubishiufjmorgan-parsed.json", rows, {
@@ -188,4 +210,6 @@ writeCatalogue(import.meta.url, "mitsubishiufjmorgan-parsed.json", rows, {
   HKEX: 400,
 });
 console.error(`US PDF ${foreign.us.rows.length} rows (${foreign.us.asOf}), HK PDF ${foreign.hk.rows.length} rows (${foreign.hk.asOf})`);
+console.error(`HKEX counters in another held currency: ${added.length} (${added.map((row) => `${row.ticker} ${row.currency}`).join(", ") || "none"})`);
+if (unlisted.length) console.error(`HK PDF codes not on the HKEX list, kept as printed: ${unlisted.join(", ")}`);
 console.error(`Left out: ${Object.entries(dropped).map(([why, count]) => `${count} ${why}`).join(", ")}`);

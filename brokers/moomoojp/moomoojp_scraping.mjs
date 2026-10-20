@@ -25,7 +25,7 @@
 // ../../assets/etfs.csv when that place has exactly one ISIN. A REIT page
 // that prints an ISIN keeps that ISIN.
 //
-//   node brokers/moomoo/moomoo_scraping.mjs
+//   node brokers/moomoojp/moomoojp_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
 import { stampIsinMatches } from "../../isinMatches.mjs";
@@ -53,7 +53,7 @@ const US_MARKET = 2;
 const BROKER = 1012;
 const STOCKS = new URL("../../assets/stocks.csv", import.meta.url);
 const ETFS = new URL("../../assets/etfs.csv", import.meta.url);
-const OUTPUT = new URL("moomoo-parsed.json", import.meta.url);
+const OUTPUT = new URL("moomoojp-parsed.json", import.meta.url);
 
 const MARKET = { 10: "NYSE", 11: "NASDAQ", 12: "AMEX" };
 const FILE_EXCHANGE = {

@@ -23,6 +23,10 @@
 // Kraken says they do not count toward the volume, and does not print
 // them a different rate. Higher tiers are volume the page does not have.
 //
+// A stock or ETF is bought with dollars. Cash in another currency is
+// changed on the Pro EUR/USD book first, 0.20 % a leg: a remark, since USD
+// is a deposit currency.
+//
 // An xStock (AAPLX) is neither of those. Outside the EEA a round trip
 // that sells straight back is taker both ways on the Pro book: 0.10 % a
 // leg from the first tier (fee schedule, 29 September 2026). That book is
@@ -50,7 +54,7 @@ import fs from "node:fs";
 import { cryptoId, listingKey, spreadLeaf } from "../../spreads/venues.mjs";
 import { spreads } from "../../spreads/book.mjs";
 import { plus, finite, bookParts } from "../../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, fxRemark, toUsd, usdPer } from "../../fx.mjs";
 
 const CATALOGUE = new URL("kraken-parsed.json", import.meta.url);
 
@@ -75,6 +79,9 @@ const TAF_CAP = 8.3;
 const TAKER = 0.008;
 // Pro xStocks, first tier ($0+). Maker −0.02 % is a resting order.
 const XSTOCK_TAKER = 0.001;
+// EUR/USD on the Pro book, maker and taker alike (pair header, 19 October
+// 2026). Stocks are bought in dollars, so euros are changed there first.
+const FX_TAKER = 0.002;
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
@@ -268,7 +275,7 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
     fxIfConverted: 0,
     ...(crypto
       ? { remark: "Instant Buy and the volume tiers are a different price." }
-      : {}),
+      : { remark: fxRemark((100 * FX_TAKER).toFixed(2), "USD") }),
   };
 
   const n = Number(shares);

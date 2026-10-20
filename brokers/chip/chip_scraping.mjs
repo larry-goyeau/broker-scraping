@@ -8,18 +8,27 @@
 // LifeStrategy cards have no page; they stay with the card name, the
 // provider and no ticker.
 //
-// Chip names no exchange, so none is stored. The ticker is the code Chip
-// prints: the London code for an ETF, a fund code for a fund. The currency
-// is the fund's currency as Chip prints it, not a dealing line. A line
-// whose name says ETF is an ETF, ETC an ETC; anything else is a fund.
+// Chip names no exchange per fund. Its custodian, Seccl, sends every
+// exchange-traded order to Winterflood, whose only execution venue is the
+// London Stock Exchange (broker-list.json gives Chip that place). So an ETF
+// or ETC becomes one row per LSE main-market line, each with its own TIDM
+// and currency, read from the LSE; the line's ISIN is the LSE's, which also
+// corrects a KIID link that points at a sister share class. Only lines the
+// account can hold are kept: payments are in sterling (GBP, and GBX pence).
+// A line with none of those keeps the card as Chip prints it. Open-ended
+// funds are dealt with the fund manager and have no exchange. A line whose
+// name says ETF is an ETF, ETC an ETC; anything else is a fund.
 //
 //   https://getchip.uk/investing/investment-funds
 //   https://getchip.uk/investing/invest-in-funds/sp-500-tech
+//   https://seccl.tech/order-execution/
 //
 //   node brokers/chip/chip_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
 import { withoutObligations } from "../../obligation.mjs";
+import { depositHas } from "../../deposits.mjs";
+import { lseLine, lseLines, heldAs } from "../../lseListings.mjs";
 import fs from "node:fs";
 
 const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
@@ -112,21 +121,34 @@ for (const card of list) {
   const isins = [...new Set((kiid.toUpperCase().match(/(?<![A-Z0-9])[A-Z]{2}[A-Z0-9]{9}\d(?![A-Z0-9])/g) || []))];
   const isin = isins.length === 1 ? isins[0] : "";
   const currency = (fields.Currency || "").toUpperCase();
-  rows.push({
-    query: ticker || name,
-    ticker,
-    name,
-    currency,
-    type: kindOf(name),
-    isin,
-    raw: [ticker, name, card.name, card.provider, currency, isin].filter(Boolean).join(" "),
-  });
+  const type = kindOf(name);
+  const raw = [ticker, name, card.name, card.provider, currency, isin].filter(Boolean).join(" ");
+  if (type !== "FUND") {
+    const own = ticker ? await lseLine(ticker) : null;
+    const id = own?.isin || isin;
+    const lines = (id ? await lseLines(id) : own ? [own] : []).filter((line) => depositHas("chip", "", heldAs(line.currency)));
+    for (const line of lines) {
+      rows.push({
+        query: line.ticker,
+        ticker: line.ticker,
+        name,
+        exchange: "London Stock Exchange",
+        mic: "XLON",
+        currency: line.currency,
+        type,
+        isin: line.isin,
+        raw: `${raw} | XLON ${line.ticker} ${line.currency}`,
+      });
+    }
+    if (lines.length) continue;
+  }
+  rows.push({ query: ticker || name, ticker, name, currency, type, isin, raw });
 }
 
-rows.sort((left, right) => left.name.localeCompare(right.name));
+rows.sort((left, right) => left.name.localeCompare(right.name) || left.ticker.localeCompare(right.ticker));
 fs.writeFileSync(new URL("chip-parsed.json", import.meta.url), JSON.stringify(stampRows(withoutObligations(rows)), null, 2));
 
 const counts = {};
-for (const row of rows) counts[row.type] = (counts[row.type] || 0) + 1;
+for (const row of rows) counts[`${row.exchange || "no exchange"} ${row.type} ${row.currency || "-"}`] = (counts[`${row.exchange || "no exchange"} ${row.type} ${row.currency || "-"}`] || 0) + 1;
 for (const [key, count] of Object.entries(counts).sort()) console.error(`${key}: ${count}`);
 console.error(`${rows.length} rows (${rows.filter((row) => row.isin).length} with an ISIN)`);

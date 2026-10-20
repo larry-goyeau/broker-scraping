@@ -20,12 +20,18 @@
 //
 // Settlement is in euro. The published FX markup is 0.25 % of the euro
 // value, each way, when the listing is not euro. It is part of the bill.
+// Euro is the only deposit currency (deposits.mjs), so a non-euro line is
+// a forced conversion: the buy converts once and the sell converts back
+// once, each at 0.25 % on the mid, under `parts.change`. Re-read
+// 2026-10-19 in the PLV excerpt (Stand 10.02.2026), "Umrechnung von
+// Fremdwährungsumsätzen (Auf- bzw. Abschlag): 0,25 % auf Devisenmittelkurs":
+//   https://www.ing.de/dokumente/direkt-depot-auszug-plv/
 // Direkt-Depot Young (1.90 € flat) and the ETF purchase promotion are
 // not this schedule.
 //
-//   node brokers/ing/ing_cost.mjs DE000A1EWWW0 Xetra EUR --shares=10 --price=150
-//   node brokers/ing/ing_cost.mjs DE000A1EWWW0 Direkthandel EUR --shares=1 --price=500
-//   node brokers/ing/ing_cost.mjs US0378331005 Nasdaq USD --shares=10 --price=230
+//   node brokers/ingde/ingde_cost.mjs DE000A1EWWW0 Xetra EUR --shares=10 --price=150
+//   node brokers/ingde/ingde_cost.mjs DE000A1EWWW0 Direkthandel EUR --shares=1 --price=500
+//   node brokers/ingde/ingde_cost.mjs US0378331005 Nasdaq USD --shares=10 --price=230
 
 import { rowsNamed, warmListingIndex } from "../../listingIndex.mjs";
 import fs from "node:fs";
@@ -34,10 +40,11 @@ import { listingKey, spreadLeaf } from "../../spreads/venues.mjs";
 import { usBookPerShare } from "../../spreads/rule606.mjs";
 import { spreads } from "../../spreads/book.mjs";
 import { bookParts, plus, finite } from "../../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, listingCash, toUsd, usdPer } from "../../fx.mjs";
+import { depositHas } from "../../deposits.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
 
-const CATALOGUE = new URL("ing-parsed.json", import.meta.url);
+const CATALOGUE = new URL("ingde-parsed.json", import.meta.url);
 
 const SCHEDULE = {
   url: "https://www.ing.de/sparen-anlegen/direkt-depot/konditionen/",
@@ -158,7 +165,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     remark: "",
   };
   if (!catalogue) {
-    return { ...answer, why: "le catalogue ING n'existe pas encore : lancer `node brokers/ing/ing_scraping.mjs`" };
+    return { ...answer, why: "le catalogue ING n'existe pas encore : lancer `node brokers/ingde/ingde_scraping.mjs`" };
   }
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue ING` };
@@ -176,7 +183,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     mic: m.venue?.mic ?? null,
     currency: m.row.currency,
     unsourced: m.unsourced,
-    broker: "ing",
+    broker: "ingde",
     ticker: m.row.ticker,
   });
   const listing = {
@@ -193,7 +200,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   let marketBp = bp ?? (marketPerShare != null ? null : book.leaf?.bp ?? null);
   const american = ["XNAS", "XNYS", "ARCX", "XASE", "BATS"].includes(listing.mic) && listing.currency === "USD";
   if (american && bp == null && perShare == null && marketBp == null && marketPerShare == null) {
-    const quoted = usBookPerShare({ broker: "ing", ticker: listing.ticker });
+    const quoted = usBookPerShare({ broker: "ingde", ticker: listing.ticker });
     if (quoted != null) marketPerShare = quoted;
   }
   const parts = bookParts({
@@ -236,10 +243,15 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     };
   }
 
-  const fxEach = listing.currency === "EUR" ? 0 : notionalEur * FX_MARKUP;
+  // A deposit currency is never converted; anything else is converted on the
+  // buy and back on the sell, 0.25 % on the mid each time.
+  const held = depositHas("ingde", null, listingCash(listing.currency));
+  const fxEach = held ? 0 : notionalEur * FX_MARKUP;
   const each = side.charged + fxEach;
   const notionalUsd = dollars(notional, listing.currency);
-  const brokerFees = dollars(each * 2, "EUR");
+  const courtageUsd = dollars(side.charged * 2, "EUR");
+  const fxUsd = dollars(fxEach * 2, "EUR");
+  const brokerFees = plus(courtageUsd, fxUsd);
   const bookUsd =
     parts.a == null || notionalUsd == null || parts.b == null ? null : parts.a * notionalUsd + parts.b * n;
   const taxUsd = notionalUsd == null ? null : notionalUsd * taxTotal;
@@ -249,7 +261,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     `commission ${side.commission.toFixed(2)} €, place ${side.venue.toFixed(2)} €` +
       (fxEach > 0 ? `, change ${fxEach.toFixed(2)} €` : "") +
       `, par sens`,
-    listing.currency === "EUR" ? "montant déjà en euro" : "0,25 % de change sur le mid, à l'achat et à la vente",
+    held ? "montant déjà en euro" : "0,25 % de change sur le mid, à l'achat et à la vente",
     marketPerShare != null
       ? american
         ? `carnet ${marketPerShare} $ la part, mélange 606 d'UBS Securities LLC`
@@ -261,6 +273,13 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
 
   return {
     ...shared,
+    ...(held
+      ? {}
+      : {
+          basis:
+            `${shared.basis} ; change forcé EUR→${listingCash(listing.currency)} : 0,25 % sur le cours moyen ` +
+            `par conversion, à l'achat et à la vente (PLV ING du 10.02.2026, relu le 2026-10-19)`,
+        }),
     usd: finite(usd, 6),
     brokerFees: finite(brokerFees, 6),
     commission: {
@@ -286,7 +305,8 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     },
     parts: {
       marché: finite(bookUsd, 6),
-      courtage: finite(brokerFees, 6),
+      courtage: finite(courtageUsd, 6),
+      change: finite(fxUsd, 6),
       taxes: finite(taxUsd, 6),
     },
     confidence,
@@ -308,7 +328,7 @@ function printCli() {
   const positional = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
   const [etf, place, currency] = positional;
   if (!etf) {
-    console.error("usage : node brokers/ing/ing_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]");
+    console.error("usage : node brokers/ingde/ingde_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p]");
     process.exit(2);
   }
   const out = roundTrip({

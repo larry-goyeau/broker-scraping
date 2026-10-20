@@ -15,8 +15,8 @@
 //   https://site0.sbisec.co.jp/marble/domestic/etfetn/etfetnsearch.do
 //   https://www.jpx.co.jp/markets/statistics-equities/misc/01.html
 //
-//   node brokers/sbi/sbi_scraping.mjs
-//   node brokers/sbi/sbi_scraping.mjs --tokyo=./data_j.xlsx
+//   node brokers/sbijp/sbijp_scraping.mjs
+//   node brokers/sbijp/sbijp_scraping.mjs --tokyo=./data_j.xlsx
 
 import { stampRows } from "../../accepted.mjs";
 import { stampIsinMatches } from "../../isinMatches.mjs";
@@ -587,7 +587,7 @@ results.sort((left, right) => {
   return String(left.ticker).localeCompare(right.ticker);
 });
 
-const outputPath = new URL("sbi-parsed.json", import.meta.url);
+const outputPath = new URL("sbijp-parsed.json", import.meta.url);
 fs.writeFileSync(outputPath, JSON.stringify(stampRows(withoutObligations(results)), null, 2));
 
 const byBook = new Map();

@@ -692,7 +692,8 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
       ...shared,
       why:
         rowCcy === "GBP"
-          ? `Upvest exécute le sterling chez ${VENUES.gbp.name}, hors bourse et sans carnet publié : aucun écart chiffrable`
+          ? `Upvest exécute le sterling chez ${VENUES.gbp.name}, hors bourse et sans carnet publié : aucun écart chiffrable ; ` +
+            `change forcé EUR→GBP, le compte ne tient que des euros et N26 ne publie aucun taux de change`
           : `${listing.ticker || isin} n'a de carnet ni à Tradegate ni à Quotrix, les deux places euro d'Upvest`,
       confidence: confidenceOf({ picked, at, marketBp: null, taxPct, rates, dropped, listing, rowCcy }),
     };

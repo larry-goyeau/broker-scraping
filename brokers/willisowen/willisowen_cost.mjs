@@ -7,9 +7,19 @@
 //   shares, ETF, ETC, ETN     £7.50 a side
 //   FX                        none published
 //
-// The account holds pounds. A GBX line is pence, not a conversion. A line
-// the list prices in dollars keeps that price. No FX rate is published,
-// so none is added.
+// The account holds pounds. A GBX line is pence, not a conversion.
+//
+// FX. Pounds are the only deposit currency (deposits.mjs), so a London line
+// the list prices in dollars or euros (« 395.27 USD » on the explore page)
+// is a forced conversion: GBP to the listing currency on the buy and back
+// on the sell. Willis Owen publishes no rate for it. Re-read 2026-10-19:
+// the fees-and-charges page lists the £7.50 ticket, stamp and PTM and no
+// FX line, and the Platform Terms (February 2025) have no clause on
+// currency or exchange rates. So those totals (and `brokerFees`, which
+// holds the conversion) are N/A. GBP and GBX lines are unchanged; the
+// account holds no other currency, so there is no FX remark on them.
+//   https://www.willisowen.co.uk/help/fees-and-charges
+//   https://www.willisowen.co.uk/documents/Willis_Owen_Platform_Terms_and_Conditions_February_2025.pdf
 // The service fee is not a trade. On an ISA, a JISA or a GIA it is 0.40%
 // to £50,000, 0.30% to £100,000, 0.20% to £250,000, then 0.15%. A SIPP
 // is 0.40% to £100,000, 0.25% to £250,000, then 0.15%. Cash is in the
@@ -36,7 +46,8 @@ import fs from "node:fs";
 import { listingKey, spreadLeaf } from "../../spreads/venues.mjs";
 import { spreads } from "../../spreads/book.mjs";
 import { bookParts, plus, finite } from "../../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, listingCash, toUsd, usdPer } from "../../fx.mjs";
+import { depositHas } from "../../deposits.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
 
 const CATALOGUE = new URL("willisowen-parsed.json", import.meta.url);
@@ -92,7 +103,8 @@ function findListing({ etf, place, currency }) {
 /**
  * The whole bill for buying `shares` at `price` and selling straight back.
  * `usd` is the number the page prints. `brokerFees` is the £7.50 ticket,
- * twice. The service fee is the remark.
+ * twice, plus any forced conversion (N/A when that conversion has no
+ * published rate). The service fee is the remark.
  */
 export function roundTrip({ etf, place, currency, shares, price, bp = null, perShare = null }) {
   const { named, matches } = findListing({ etf, place, currency });
@@ -153,6 +165,12 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   });
   const tax = listing.isin ? taxesOf(listing.isin) : null;
   const taxTotal = Object.values(taxRates(tax)).reduce((s, r) => s + r, 0);
+  // A deposit currency is never converted (GBX is pence of the pound);
+  // anything else is converted at a rate Willis Owen does not publish.
+  const cashCcy = listingCash(listing.currency);
+  const held = depositHas("willisowen", null, cashCcy);
+  const fxWhy = held ? null : `change forcé GBP→${cashCcy} : taux de change non publié`;
+  const fxBasis = held ? "" : ` ; change forcé GBP→${cashCcy} sans taux publié (frais et conditions relus le 2026-10-19)`;
   const shared = {
     ...answer,
     listing,
@@ -162,7 +180,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     perShare: marketPerShare,
     via606: false,
     url: SCHEDULE.charges,
-    basis: `barème Willis Owen, relu le ${SCHEDULE.readOn}`,
+    basis: `barème Willis Owen, relu le ${SCHEDULE.readOn}${fxBasis}`,
     tax,
     ccy: QUOTE,
     fx: { quote: QUOTE, asOf: FX_AS_OF, listing: usdPer(listing.currency) },
@@ -175,7 +193,9 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   if (notional == null) {
     return {
       ...shared,
-      why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
+      why: [!(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs", fxWhy]
+        .filter(Boolean)
+        .join(" ; "),
     };
   }
 
@@ -193,19 +213,23 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const taxUsd = notionalUsd == null ? null : notionalUsd * taxTotal;
   const commissionUsd = dollars(EACH * 2, CASH);
   const ptmUsd = ptmGbp == null ? null : dollars(ptmGbp, CASH);
-  const brokerFees = commissionUsd;
+  // Forced conversion with no published rate: unknown, and so is the total.
+  const fxUsd = held ? 0 : null;
+  const brokerFees = plus(commissionUsd, fxUsd);
   const usd = plus(bookUsd, brokerFees, taxUsd, ptmUsd);
+  const why = [
+    fxWhy,
+    bookUsd == null
+      ? `aucun carnet pour ${m.unsourced?.name || listing.exchange || "cette ligne"} : ${m.unsourced?.why || "pas de feuille de carnet"}`
+      : null,
+  ].filter(Boolean);
 
   return {
     ...shared,
     usd: finite(usd, 6),
     brokerFees: finite(brokerFees, 6),
     commission: { each: EACH, currency: CASH, eachWay: true },
-    ...(bookUsd == null
-      ? {
-          why: `aucun carnet pour ${m.unsourced?.name || listing.exchange || "cette ligne"} : ${m.unsourced?.why || "pas de feuille de carnet"}`,
-        }
-      : {}),
+    ...(why.length ? { why: why.join(" ; ") } : {}),
     trade: {
       shares: n,
       price: p,
@@ -216,12 +240,13 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     parts: {
       marché: finite(bookUsd, 6),
       courtage: finite(commissionUsd, 6),
+      change: finite(fxUsd, 6),
       taxes: finite(plus(taxUsd, ptmUsd), 6),
     },
     confidence: [
       `barème relu le ${SCHEDULE.readOn}`,
       `courtage ${EACH} £ par sens`,
-      "pas de change publié",
+      held ? "pas de change : ligne en livres" : `change forcé GBP→${cashCcy} sans taux publié : total N/A`,
       "pas de Rule 606 : pas de broker-dealer américain",
       ptmDue ? `PTM ${PTM.each} £ par sens, le montant dépassant ${PTM.above} £` : null,
       marketBp != null

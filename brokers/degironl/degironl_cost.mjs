@@ -54,12 +54,12 @@
 //   https://www.degiro.nl/data/pdf/Tarievenoverzicht.pdf
 //   https://www.degiro.nl/tarieven/etf-kernselectie
 //
-//   node brokers/degiro/degiro_cost.mjs AAPL NDQ USD --shares=1 --price=230
-//   node brokers/degiro/degiro_cost.mjs EUNL TDG EUR --shares=1 --price=108
-//   node brokers/degiro/degiro_cost.mjs EUNL XET EUR --shares=1 --price=108
-//   node brokers/degiro/degiro_cost.mjs IWDA EAM EUR --shares=1 --price=108
-//   node brokers/degiro/degiro_cost.mjs BTC --amount=1000
-//   node brokers/degiro/degiro_cost.mjs --schedule
+//   node brokers/degironl/degironl_cost.mjs AAPL NDQ USD --shares=1 --price=230
+//   node brokers/degironl/degironl_cost.mjs EUNL TDG EUR --shares=1 --price=108
+//   node brokers/degironl/degironl_cost.mjs EUNL XET EUR --shares=1 --price=108
+//   node brokers/degironl/degironl_cost.mjs IWDA EAM EUR --shares=1 --price=108
+//   node brokers/degironl/degironl_cost.mjs BTC --amount=1000
+//   node brokers/degironl/degironl_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
@@ -71,7 +71,7 @@ import { plus, finite } from "../../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
 
-const CATALOGUE = new URL("degiro-parsed.json", import.meta.url);
+const CATALOGUE = new URL("degironl-parsed.json", import.meta.url);
 
 const SCHEDULE = {
   source: "https://www.degiro.nl/data/pdf/Tarievenoverzicht.pdf",
@@ -257,8 +257,8 @@ export function taxesFor(isin, listing) {
   if (Object.keys(mapped).length) return { tax, rates: mapped, source: "taxMap" };
   if (!isRetail(listing)) return { tax, rates: {}, source: null };
   const cc = issuerCc(isin);
-  if (cc === "IE") return { tax, rates: { stamp: IE_STAMP }, source: "degiro" };
-  if (cc === "GB") return { tax, rates: { stamp: UK_STAMP }, source: "degiro" };
+  if (cc === "IE") return { tax, rates: { stamp: IE_STAMP }, source: "degironl" };
+  if (cc === "GB") return { tax, rates: { stamp: UK_STAMP }, source: "degironl" };
   return { tax, rates: {}, source: null };
 }
 
@@ -343,7 +343,7 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
   };
 
   if (!catalogue) {
-    return { ...answer, why: "le catalogue DEGIRO n'existe pas encore : lancer `node brokers/degiro/degiro_scraping.mjs`" };
+    return { ...answer, why: "le catalogue DEGIRO n'existe pas encore : lancer `node brokers/degironl/degironl_scraping.mjs`" };
   }
 
   let { named, matches } = findListing({ etf, place, currency });
@@ -366,7 +366,7 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
     mic: m.venue?.mic ?? null,
     currency: m.row.currency,
     unsourced: m.unsourced,
-    broker: "degiro",
+    broker: "degironl",
     ticker: m.row.ticker,
   });
   const listing = {
@@ -576,7 +576,7 @@ function confidenceOf({
   }
   if (taxPct) {
     said.push(
-      taxSource === "degiro"
+      taxSource === "degironl"
         ? `taxe à l'achat ${(100 * taxPct).toFixed(2)} % du montant — timbre ${issuerCc(listing.isin)} que DEGIRO dit répercuter (cet ISIN n'est pas dans taxMap.mjs)`
         : `taxe à l'achat ${(100 * taxPct).toFixed(2)} % du montant, depuis taxMap.mjs`
     );
@@ -627,11 +627,11 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node degiro_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--amount=€] [--json]\n" +
-        "        node degiro_cost.mjs --schedule\n" +
-        "  ex.   node degiro_cost.mjs AAPL NDQ USD --shares=1 --price=230\n" +
-        "        node degiro_cost.mjs EUNL TDG EUR --shares=1 --price=108\n" +
-        "        node degiro_cost.mjs BTC --amount=1000"
+      "usage : node degironl_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--amount=€] [--json]\n" +
+        "        node degironl_cost.mjs --schedule\n" +
+        "  ex.   node degironl_cost.mjs AAPL NDQ USD --shares=1 --price=230\n" +
+        "        node degironl_cost.mjs EUNL TDG EUR --shares=1 --price=108\n" +
+        "        node degironl_cost.mjs BTC --amount=1000"
     );
     process.exit(2);
   }

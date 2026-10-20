@@ -17,7 +17,12 @@ const FOLDER = {
   // https://ajaib.co.id/rekening-usd
   // https://ajaib.co.id/usd-otc
   ajaib: ["IDR", "USD"],
-  admiral: ["USD"],
+  // Invest.MT5 "Account Balance Currencies … EUR, USD, RON", chosen at
+  // opening; several accounts in different base currencies may be held. A
+  // deposit in another currency "will be converted to the base currency".
+  // https://admiralmarkets.com/start-trading/account-types
+  // https://admiralmarkets.com/start-trading/deposits-and-withdrawals
+  admiralcy: ["EUR", "USD", "RON"],
   // A cheque or an interbank transfer from the client's own account lands
   // in a rupee client account. The Roshan equity account is a rupee
   // account, funded by a remittance that is converted on the way in.
@@ -161,7 +166,7 @@ const FOLDER = {
   // quoted CNH, the same unit. New Taiwan dollars are the domestic account.
   // A trade is debited in the listing currency. The client converts.
   // https://www.dbs.com.tw/treasures-zh/deposits/your-accounts/multi-currency-account
-  dbs: ["TWD", "USD", "EUR", "GBP", "CAD", "AUD", "CHF", "NZD", "SGD", "CNY", "CNH", "HKD", "JPY", "THB", "SEK", "ZAR"],
+  dbstw: ["TWD", "USD", "EUR", "GBP", "CAD", "AUD", "CHF", "NZD", "SGD", "CNY", "CNH", "HKD", "JPY", "THB", "SEK", "ZAR"],
   // One passbook holds these fifteen and leaves each one there. The
   // renminbi account is printed CNY. The shelf quotes it as CNH, the
   // same unit. New Taiwan dollars are the domestic account. A trade in
@@ -183,7 +188,7 @@ const FOLDER = {
   // currency. The client converts.
   // https://www.sc.com/tw/save/foreign-currency-current-account/
   // https://www.sc.com/tw/frequently-asked-questions/deposit/
-  standardchartered: ["TWD", "USD", "HKD", "GBP", "AUD", "CAD", "CHF", "JPY", "EUR", "NZD", "SGD", "ZAR", "SEK", "CNY"],
+  standardcharteredtw: ["TWD", "USD", "HKD", "GBP", "AUD", "CAD", "CHF", "JPY", "EUR", "NZD", "SGD", "ZAR", "SEK", "CNY"],
   // One passbook holds these twelve and leaves each one there. The page
   // prints renminbi. The shelf quotes CNH, the same unit. New Taiwan
   // dollars are the domestic account. A trade is debited in the listing
@@ -196,7 +201,7 @@ const FOLDER = {
   // Taiwan dollars are the domestic account. A trade is debited in
   // the listing currency. The client converts.
   // https://bank.sinopac.com/sinopacBT/personal/desposit-forex/forex/demand-deposit.html
-  sinopac: ["TWD", "USD", "JPY", "GBP", "AUD", "HKD", "CAD", "CNY", "CNH", "SGD", "ZAR", "CHF", "NZD", "EUR", "SEK"],
+  sinopactw: ["TWD", "USD", "JPY", "GBP", "AUD", "HKD", "CAD", "CNY", "CNH", "SGD", "ZAR", "CHF", "NZD", "EUR", "SEK"],
   // One passbook holds these fourteen and leaves each one there. The
   // page prints renminbi. The shelf quotes CNH, the same unit. New
   // Taiwan dollars are the domestic account. A trade is debited in
@@ -212,7 +217,7 @@ const FOLDER = {
   // Yen lands in the comprehensive account. These seven foreign currencies
   // can be paid in from a foreign-currency bank account and left as cash.
   // https://www.sbisec.co.jp/ETGate/WPLETmgR001Control?OutSide=on&getFlg=on&burl=search_home&cat1=home&cat2=service&dir=service&file=home_in_gaika.html
-  sbi: ["JPY", "USD", "EUR", "AUD", "NZD", "CAD", "ZAR", "HKD"],
+  sbijp: ["JPY", "USD", "EUR", "AUD", "NZD", "CAD", "ZAR", "HKD"],
   // The online book settles on a SpareBank 1 bank account. A purchase is
   // debited there and a sale is credited there. The account is in kroner.
   // No other currency is named.
@@ -255,7 +260,7 @@ const FOLDER = {
   // ringgit, and a withdrawal is ringgit again.
   // https://www.rakutentrade.my/faqs/foreign-equity-cash-portfolio-management/can-i-deposit-or-withdraw-funds-in-usd-or-hkd
   // https://www.rakutentrade.my/faqs/cash-deposits-and-withdrawals
-  rakutenma: ["MYR"],
+  rakutenmy: ["MYR"],
   // A bank transfer, PayPay Bank and PayPay Money are credited in yen and
   // left there. A US dividend arrives in dollars and is converted to yen
   // before it is credited. There is no dollar cash.
@@ -269,7 +274,7 @@ const FOLDER = {
   // https://info.monex.co.jp/service/deposit/bank.html
   // https://faq.monex.co.jp/faq/show/1203?site_domain=default
   // https://info.monex.co.jp/service/payment/shinsei/index.html
-  monex: ["JPY", "USD", "EUR", "AUD", "NZD", "CNY", "TRY", "ZAR", "CAD", "GBP"],
+  monexjp: ["JPY", "USD", "EUR", "AUD", "NZD", "CNY", "TRY", "ZAR", "CAD", "GBP"],
   // A pay-in by UPI, net banking, NEFT, IMPS or RTGS comes from the linked
   // Indian bank and is credited in rupees. An NRE, NRO or NRI account
   // cannot be added. No other currency is left unconverted.
@@ -305,7 +310,7 @@ const FOLDER = {
   // dollars and won can be exchanged into, and are not a deposit.
   // https://www.futuhk.com/en/support/topic2_30
   // https://www.futuhk.com/en/support/topic2_83
-  futu: ["HKD", "USD", "CNH", "JPY"],
+  futuhk: ["HKD", "USD", "CNH", "JPY"],
   // A deposit and a withdrawal are naira, through a Nigerian bank account.
   // A dollar fund is bought with naira. There is no dollar cash.
   // https://help.cowrywise.com/en/articles/9148093-what-bank-can-i-use-to-receive-my-funds-on-cowrywise
@@ -342,7 +347,7 @@ const FOLDER = {
   // wallet converts those dollars, and that conversion is not a deposit.
   // https://hellostake.com/au/support/funding-and-withdrawal/funding/52905017357209
   // https://hellostake.com/au/support/funding-and-withdrawal/funding/52906816466201
-  stake: ["AUD"],
+  stakeau: ["AUD"],
   // A transfer into the multiproducto account is a PSE payment or the
   // Bancolombia button, in pesos. Local shares and the MGC settle in pesos.
   // No other currency is left unconverted.
@@ -446,10 +451,15 @@ const FOLDER = {
   toss: ["KRW", "USD"],
   bunq: ["EUR"],
   bux: ["EUR"],
-  century: ["EUR"],
+  // Terms of Business §14.4: the Account Currency is "one of the currencies
+  // offered by us and selected by you when opening the Account"; the live
+  // account form offers USD, EURO and GBP. AED is accepted but converted.
+  // https://www.century.ae/custom_scripts/pdfs/web/cfc-terms-of-business.pdf
+  // https://www.century.ae/en/open-live-account/
+  century: ["USD", "EUR", "GBP"],
   choicetrade: ["USD"],
   davy: ["EUR"],
-  degiro: ["EUR"],
+  degironl: ["EUR"],
   // US stocks are funded by an INR transfer under LRS. The dollars are the
   // conversion, not a currency the client can deposit and leave as cash.
   dhan: ["INR"],
@@ -459,9 +469,19 @@ const FOLDER = {
   definedge: ["INR"],
   easybourse: ["EUR"],
   easyequities: ["ZAR", "USD", "AUD", "GBP", "EUR"],
-  efocs: ["EUR"],
-  // The open Global Trader account is one euro account. BG Trader shows the same.
-  elana: ["EUR"],
+  // "You can maintain balances in different currencies in your EuroFinance
+  // account", and no automatic conversion unless a trade lacks the cash. The
+  // deposit page (accounts opened in the EFOCS app) gives EUR, USD and GBP
+  // accounts; BGN ended with the euro, CHF has no deposit account.
+  // https://eurofinance.bg/en/faqs/can-i-have-different-currencies-in-my-eurofinance-account/
+  // https://payments.eurofinance.bg/en
+  efocs: ["EUR", "USD", "GBP"],
+  // Client contract Art. 2(1): accounts "in U.S. dollars, Euro, British Pounds
+  // or Swiss Francs, at Client's choice"; Art. 8(c): a deposit in another
+  // currency is converted into the account's.
+  // https://webupload.elana.net/docs/elana-trading-dogovor-global-meta-trader-en.pdf
+  // https://globaltrader.elana.net/en/live-account-deposit-and-withdrawal/
+  elana: ["EUR", "USD", "GBP", "CHF"],
   firstrade: ["USD"],
   // The account is dollars. An ACH or a domestic wire stays dollars. A
   // deposit in another currency is converted, plus 0.30%.
@@ -549,7 +569,7 @@ const FOLDER = {
   // https://levler.se/om-oss/prislista/
   levler: ["SEK"],
   N26: ["EUR"],
-  oanda: ["EUR", "PLN", "CZK", "RON", "USD"],
+  oandapl: ["EUR", "PLN", "CZK", "RON", "USD"],
   // Communiqué 15/1 of 2 March 2026, point 2: a foreign trade settles in PLN
   // or in the listing currency. Those are the cash the account can hold.
   // https://www.bm.pkobp.pl/api/public/994a8c6c-d442-47a1-bded-4eb0d5a361a4.pdf
@@ -562,7 +582,7 @@ const FOLDER = {
   // Settling a foreign order in zlotys is a conversion at KBC's rate, not a
   // deposit.
   // https://www.erste.pl/klient-indywidualny/oszczednosci-i-inwestycje/rachunki-dla-gield-zagranicznych
-  erste: ["PLN", "EUR", "USD", "GBP", "CHF", "SEK"],
+  erstepl: ["PLN", "EUR", "USD", "GBP", "CHF", "SEK"],
   // Foreign-markets page: the brokerage account holds PLN and six foreign
   // currencies. A payment in one of them lands on that currency's sub-account.
   // https://www.aliorbank.pl/biuro-maklerskie/gielda/rynki-zagraniczne.html
@@ -616,7 +636,7 @@ const FOLDER = {
   // https://www.indmoney.com/blog/us-stocks/how-to-transfer-money-to-your-us-stocks-account
   indmoney: ["INR"],
   sarwa: ["USD"],
-  saxo: ["USD", "CAD", "EUR", "GBP", "NOK", "PLN", "CZK", "MYR", "CHF", "DKK", "SEK", "ZAR", "JPY", "HKD", "CNH", "SGD", "AUD"],
+  saxofr: ["USD", "CAD", "EUR", "GBP", "NOK", "PLN", "CZK", "MYR", "CHF", "DKK", "SEK", "ZAR", "JPY", "HKD", "CNH", "SGD", "AUD"],
   scalablecapital: ["EUR"],
   // One euro clearing account at Sutor Bank. A transfer in or out is a
   // SEPA payment in euros. There is no foreign-currency balance.
@@ -631,7 +651,7 @@ const FOLDER = {
   shoonya: ["INR"],
   siebert: ["USD"],
   sogotrade: ["USD"],
-  tastytrade: ["USD"],
+  tastytradeus: ["USD"],
   thndr: ["EGP", "USD", "AED"],
   bhmuae: ["AED", "USD"],
   // A dollar transfer stays in the USD wallet. Dirhams deposited into the
@@ -662,7 +682,7 @@ const FOLDER = {
   // costs 10 dollars plus IVA.
   // https://cms.balanz.com/PFS/055928_cuentas_balanz_2021nuevo.pdf
   // https://balanz.com/comisiones/
-  balanz: ["ARS", "USD"],
+  balanzar: ["ARS", "USD"],
   // A peso transfer into the local peso account stays pesos. A dollar
   // transfer into the local dollar account stays dollars. A cable wire
   // is dollars too, and it stays dollars. Buying MEP or cable with bonds
@@ -682,7 +702,7 @@ const FOLDER = {
   // in another currency is converted at the bank's commercial rate. Dollars
   // and pounds can sit on a payment account. That account is not this cash.
   // https://www.bksbank.si/mbxs8qn54zwj/6Tfee0Dh8W1oOK69bJj9oo/52dab9f27dccc41a506f4417cc5b64eb/Splo%C3%85_ni_pogoji_poslovanja_s_finan%C3%84_nimi_instrumenti_Marec2026_final.pdf
-  bks: ["EUR"],
+  bkssi: ["EUR"],
   // A payment that stays as cash is francs. The account is at
   // Hypothekarbank Lenzburg, and every neon invest line is already a
   // BX Swiss price in CHF, so nothing is converted on the way in.
@@ -702,7 +722,7 @@ const FOLDER = {
   // https://www.avanza.se/avanzabank/hem/konton/blanketter/aktie-och-fondkonto/allmanna_villkor_for_kontotjanster.pdf
   // https://www.avanza.se/kundservice.html/3747/hur-fungerar-manuell-valutavaxling/
   avanza: ["SEK", "USD", "EUR", "GBP", "CHF", "NOK", "DKK", "CAD"],
-  nordnet: ["SEK", "USD", "EUR", "NOK", "DKK", "CAD"],
+  nordnetse: ["SEK", "USD", "EUR", "NOK", "DKK", "CAD"],
   // A pay-in is K-net, or a transfer from the client's account at the
   // bank, and the opening minimum is KD 1,000. Dollars, pounds and euros
   // on the fee sheet are a transfer into that market, done with customer
@@ -713,7 +733,11 @@ const FOLDER = {
   boubyan: ["KWD"],
   tiger: ["USD", "HKD", "SGD", "AUD", "CNH"],
   traderepublic: ["EUR"],
-  tradestation: ["USD"],
+  tradestationus: ["USD"],
+  // "You may fund your TradeUP account via ACH or Wire … only supports the
+  // linkage of U.S. domestic bank accounts." No HKD or CNY deposit is named;
+  // an HKD balance only arises from Hong Kong trading or margin.
+  // https://www.tradeup.com/help/detail?parentId=23&contentId=53
   tradeup: ["USD"],
   tradezero: ["USD"],
   tradier: ["USD"],
@@ -722,8 +746,8 @@ const FOLDER = {
   vivid: ["EUR"],
   // Settlement currencies on the card. Conversion is a separate order, so a
   // balance in one of these is not converted when it arrives.
-  interactivebrokers: ["AED", "AUD", "BRL", "CAD", "CHF", "CZK", "DKK", "EUR", "GBP", "HKD", "HUF", "ILS", "INR", "JPY", "KRW", "MXN", "MYR", "NOK", "PLN", "RON", "SAR", "SEK", "SGD", "TWD", "USD"],
-  lynx: ["AED", "AUD", "CAD", "CHF", "CNH", "CZK", "DKK", "EUR", "GBP", "HKD", "HUF", "ILS", "JPY", "MXN", "NOK", "PLN", "RUB", "SEK", "SGD", "USD"],
+  interactivebrokersie: ["AED", "AUD", "BRL", "CAD", "CHF", "CZK", "DKK", "EUR", "GBP", "HKD", "HUF", "ILS", "INR", "JPY", "KRW", "MXN", "MYR", "NOK", "PLN", "RON", "SAR", "SEK", "SGD", "TWD", "USD"],
+  lynxnl: ["AED", "AUD", "CAD", "CHF", "CNH", "CZK", "DKK", "EUR", "GBP", "HKD", "HUF", "ILS", "JPY", "MXN", "NOK", "PLN", "RUB", "SEK", "SGD", "USD"],
   // A payment in a currency the bank quotes is credited in that currency
   // and left. A currency it does not quote is converted into the main
   // currency of the account. Foreign payments quote AUD, CAD, CHF, CZK,
@@ -755,12 +779,12 @@ const FOLDER = {
   // wire in another currency is converted before it is cash.
   // https://kisvn.vn/danh-sach-tai-khoan-tong
   // https://kisvn.vn/ho-tro/nop-tien
-  kis: ["VND"],
+  kisvn: ["VND"],
   // A QR payment into Mirae Asset's account at BIDV is credited to the
   // securities cash account, the ordinary sub-account or the margin one,
   // and left there. The sheet names no other currency.
   // https://masvn.com/cate/nop-tienchuyen-tien-890
-  mirae: ["VND"],
+  miraevn: ["VND"],
   // A linked BIDV securities account is credited in dong and left there.
   // A foreign investor's indirect-investment account is opened at a bank
   // that converts the wire before the cash is dong. The sheets name no
@@ -822,7 +846,7 @@ const FOLDER = {
   // balance is left in another currency.
   // https://www.ing.de/sparen-anlegen/direkt-depot/
   // https://www.ing.de/sparen-anlegen/direkt-depot/kundenservice/abrechnung-steuer/
-  ing: ["EUR"],
+  ingde: ["EUR"],
   // A transfer into the euro settlement account is credited in euro and
   // stays there. A transfer in dollars into the currency account is
   // credited in dollars. The other twelve currencies are bought and sold
@@ -834,7 +858,7 @@ const FOLDER = {
   // and left as dollars. No other currency can be paid in.
   // https://www.moomoo.com/jp/manual/topic-deposit-withdrawal-12-78
   // https://www.moomoo.com/jp/support/topic7_81
-  moomoo: ["JPY", "USD"],
+  moomoojp: ["JPY", "USD"],
   // Rupiah lands by a BCA transfer, a virtual account, an e-wallet or
   // QRIS and is left in rupiah. Dollars land by a USD transfer into the
   // USD balance and are left in dollars. The minimum is $10,000. Pluang
@@ -877,6 +901,963 @@ const FOLDER = {
   // https://marketech.com.au/financial-services-guide/
   // https://marketech.com.au/focus/pricing/
   marketech: ["AUD"],
+  // The folders below have no *_cost.mjs yet. Their lists come from each
+  // broker's own funding pages, quoted under each entry.
+  // Add funds is UPI or net banking from the client's own registered Indian
+  // bank, credited in rupees. NRE and NRO accounts fund only by net banking;
+  // those are rupee accounts. The US wallet is funded in rupees from the same
+  // bank: the app shows the INR-to-USD rate and the money goes to GIFT City
+  // under LRS. That is a conversion, not a dollar deposit; no direct dollar
+  // transfer is offered.
+  // https://upstox.com/help-center/how-to-add-funds-to-your-us-wallet-264394/
+  // https://upstox.com/us-stocks/
+  // https://upstox.com/help-center/250454/
+  upstox: ["INR"],
+  // Add Funds in the app or the Star back office is UPI, net banking, IMPS,
+  // NEFT or RTGS from the client's registered bank account. Those rails are
+  // rupees. Samco sells no foreign shares and names no other currency.
+  // https://www.samco.in/help-support/article/how-do-i-add-funds-to-my-samco-trading-account/
+  samco: ["INR"],
+  // UPI from the trading app, or IMPS, NEFT or RTGS to Flattrade's HDFC
+  // virtual accounts, credits the ledger. Those are rupee rails into an Indian
+  // current account. No foreign-currency balance is named.
+  // https://flattrade.in/fund-transfer
+  // https://flattrade.in/support/knowledge-base/category/funds/add-funds-payin/
+  flattrade: ["INR"],
+  // A cheque, IBFT, draft or pay order goes to a KASB or KTrade rupee account
+  // (Askari, Faysal, HabibMetro, UBL, Meezan IBANs). Raast to the client's own
+  // Raast IBAN lands in the KTrade wallet; the minimum is Rs. 5,000. HBL and
+  // Alfalah pay in from their apps. A non-resident invests through a Roshan
+  // Digital Account at a partner bank; the page names no dollar balance at
+  // KTrade.
+  // https://www.kasb.com/bank-transfer-details/
+  // https://www.kasb.com/raast/
+  // https://www.kasb.com/roshan-digital-account/
+  ktrade: ["PKR"],
+  // Misk trades only Amman Stock Exchange shares, and the ASE trades in
+  // dinars. The product page gives the commission only as a rate (0.002 plus
+  // levies) and says the online service shows the client's cash balance. No
+  // page says how a deposit is made or names any currency for it. The evidence
+  // is thin.
+  // https://www.safwabank.com/en/product/misc/
+  // https://www.safwabank.com/ar/product/misc/
+  misk: ["JOD"],
+  // The account is funded only from a Nigerian bank account, in naira. A GBP,
+  // USD, EUR or AED account abroad cannot be used. Someone abroad sends money
+  // to a naira account first. The fee table lists an FX spread for converting
+  // another currency into naira, so nothing else is left unconverted.
+  // https://sharessaver.com/invest-from-abroad
+  // https://sharessaver.com/fees-and-charges
+  sharessaver: ["NGN"],
+  // Money comes in by EFT, debit order or a credit or debit card. The card
+  // charge is R1.60 plus 2.2% of the rand value. Interest is paid on free
+  // cash, and every fee is set in rand. No other currency is named.
+  // http://resources.satrixnow.co.za/satrixnow_Cost_Profile.pdf
+  // https://satrix.co.za/platform
+  satrixnow: ["ZAR"],
+  // A deposit is entered in KES or USD and paid by M-Pesa or bank transfer.
+  // Shillings paid into a USD fund, share or ETF are converted by the banking
+  // partner at its rate plus a spread. To avoid that, USD can be sent straight
+  // to Ndovu's USD bank account. Bank transfer is the default for a USD
+  // investment. A USD bank withdrawal costs USD 9.
+  // https://ndovu.zohodesk.com/portal/en/kb/articles/how-does-currency-conversion-work-when-i-invest-in-usd-funds
+  // https://ndovu.zohodesk.com/portal/en/kb/articles/how-do-i-fund-my-investment
+  // https://ndovu.co/ke/fee-structure
+  ndovu: ["KES", "USD"],
+  // The trading account holds dollars: commission is $3 or 0.15%, $3 of cash
+  // must stay in the account, and both withdrawal routes have a $100 minimum.
+  // Deposits are a local transfer, an international transfer, K-Net, a card,
+  // Apple Pay or a standing order, with a 35 KWD minimum. K-Net and a local
+  // transfer are dinars, so they are converted. No page names a dinar balance,
+  // or says outright that a dollar wire is left unconverted.
+  // https://www.joinzad.com/en/faq/
+  zad: ["USD"],
+  // A bank transfer from abroad lands in one of nine NatWest IBANs, one per
+  // currency: sterling, euros, US, Canadian, Australian, Hong Kong and
+  // Singapore dollars, Swedish krona and Swiss francs. The cash page shows a
+  // balance for each currency held, and a trade can settle in any of them. An
+  // ISA, a Junior ISA and a SIPP take sterling only, and an ISA holds no
+  // foreign currency.
+  // https://www.ii.co.uk/help/adding-and-withdrawing-cash/adding-cash/adding-cash-from-an-overseas-bank
+  // https://www.ii.co.uk/help/trading/international-trading/foreign-currency-exchange
+  // https://www.ii.co.uk/help/adding-and-withdrawing-cash/adding-cash/cash-balance-page
+  interactiveinvestor: ["GBP", "EUR", "USD", "CAD", "AUD", "HKD", "SGD", "SEK", "CHF"],
+  // The reference currency is CHF or EUR, picked at registration and fixed.
+  // ETFselect buys from a cash account in CHF, EUR, USD or GBP, and a
+  // distribution lands in the cash account of the fund's currency without
+  // conversion. Cash accounts also open in NOK, SEK, PLN, CZK and HUF, but
+  // nothing in ETFselect is bought from them. Deposits come only from an IBAN
+  // in the client's name in the EU, EEA or Switzerland.
+  // https://mobilep.willbe-invest.com/en/about-willbe/faq
+  willbe: ["CHF", "EUR", "USD", "GBP"],
+  // A deposit is a charge to the payment card linked to the Chip app, pooled
+  // and sent to the Seccl custody account. The platform terms say payments
+  // must be made in sterling. A fund priced in dollars is bought from that
+  // sterling, with any FX cost passed through.
+  // https://cdn.prod.website-files.com/5d65390243727621f8413d93/6978ce4cc764ff5c3d2f1de5_investments_platform_terms_chip_29_jan.pdf
+  chip: ["GBP"],
+  // Money comes in by Faster Payments or Open Banking from a UK account in the
+  // client's name and lands in the Prosper Wallet at Griffin Bank. The terms
+  // say the Wallet holds only pounds sterling, and foreign-currency payments
+  // are not accepted. The ISA, GIA and SIPP are funded from that Wallet. A
+  // fund in another currency is bought from sterling.
+  // https://www.prosper.co.uk/documents/terms-and-conditions
+  // https://www.prosper.co.uk/help/en/articles/11667907-what-is-the-prosper-wallet
+  prosper: ["GBP"],
+  // Money comes in by Nemoverførsel or Straksoverførsel from a Danish bank,
+  // and both are kroner. The price list charges 399 DKK to handle and return a
+  // foreign payment, so a wire in another currency is sent back, not credited.
+  // A trade in another currency is converted from kroner automatically at
+  // 0.07%.
+  // https://endavu.com/priser
+  // https://endavu.com/support
+  // https://cdn.endavu.com/documents/market-and-exchange-specific-terms.pdf
+  endavu: ["DKK"],
+  // A multi-currency account (cuenta multidivisa) has one IBAN with a balance
+  // in each of EUR, USD, GBP, SEK, JPY and CHF. The fee sheet prices a
+  // received SWIFT transfer in each of these, charged in that currency. NYSE,
+  // Nasdaq, AMEX, London, Stockholm, Switzerland and Japan settle against the
+  // balance in their own currency. In the plain euro account, and for any
+  // other market such as Canada, a foreign trade is converted to euros with a
+  // 0.30% spread.
+  // https://www.r4.com/centro-de-ayuda/articulo/servicio-de-liquidacion-multidivisa
+  // https://www.r4.com/resources/pdf/tablonanuncios/hoja_tarifas.pdf
+  renta4es: ["EUR", "USD", "GBP", "SEK", "JPY", "CHF"],
+  // BisonTrade has one account, funded in euros. A USD sub-account is opened
+  // on request and holds dollars, so a US asset is bought from it without
+  // converting on each trade. The fee sheet takes incoming USD transfers free
+  // and charges 0.375% on outgoing USD transfers. Any other conversion is the
+  // real-time rate plus or minus 0.35%.
+  // https://www.bisontrade.com/blog/accede-a-los-mercados-globales-con-la-subcuenta-en-usd-de-bisontrade/
+  // https://www.miraltabank.com/wp-content/uploads/2025/02/Tarifas-BisonTrade-2025.pdf
+  // https://www.bisontrade.com/blog/que-tipos-de-cuentas-ofrecen-en-bisontrade/
+  bisontrade: ["EUR", "USD"],
+  // Freestoxx is WH SelfInvest's US-share account. An incoming transfer must
+  // come from the client's reference account, is free, and is converted to
+  // dollars if it is in any other currency. The cost disclosure charges the
+  // depositary bank's conversion fee plus 0.3% on that conversion. Even the
+  // 9.99 EUR Full Services fee is converted to USD.
+  // https://www.freestoxx.com/en-lu/commission-free-trading/broker-platform-service/useful-information-for-clients
+  // https://www.freestoxx.com/docs/freestoxx-freefutures-ex-ante-fees-disclosure-en.pdf
+  freestoxx: ["USD"],
+  // Money comes in by bank transfer or iDEAL from the client's contra account
+  // to a collective account at ABN AMRO, and is credited to the cash account.
+  // The rulebook holds that cash in euros: euros in the CTA, and euros or
+  // money-market units in the UTA, always shown in euros. Opening needs a 0.01
+  // euro validation deposit. No other currency is named.
+  // https://cdn.prod.website-files.com/6603ca52d62c204544f53366/67fe42945dca68275f516796_rulebook-nxchange-ENG.pdf
+  // https://www.nxchange.com/how-it-works
+  nxchange: ["EUR"],
+  // Money goes from the client's contra account to the single ING account of
+  // Stichting NPEX Bewaarbedrijf, and is booked to the NPEX cash account. Only
+  // an EU bank account in the client's name is accepted, and a payment from
+  // outside the EU is sent back. The account is verified with a 1 euro
+  // deposit. The venue trades in euros. No other currency is named, so the
+  // evidence for euros only is thin.
+  // https://www.npex.nl/faq_category/mijn-npex-rekening/
+  // https://www.npex.nl/wp-content/uploads/2024/11/NPEX-Reglement-per-11-november-2024.pdf
+  npex: ["EUR"],
+  // An ACH transfer or a wire funds the Invest account in US dollars. Account
+  // holders need a US residential address and phone number. The cash products
+  // take wires from US banks only. No foreign-currency balance or
+  // international wire is named for the Invest account, so the evidence beyond
+  // USD is thin.
+  // https://help.m1.com/en/articles/9331996
+  // https://help.m1.com/en/articles/11331081-how-to-create-a-wire-transfer-for-my-m1-earn-account
+  // https://help.m1.com/en/articles/9332043-open-my-account
+  m1: ["USD"],
+  // ACH comes from a linked US bank. A domestic or SWIFT wire goes to Apex
+  // Clearing at BMO Harris. The wire page says funds must be sent in US
+  // dollars, and a wire in another currency is returned.
+  // https://www.lighthorse.io/instructions/funding/wires.md
+  // https://www.lighthorse.io/instructions/funding/deposit.md
+  lighthorse: ["USD"],
+  // US stocks sit in a Coinbase Capital Markets brokerage account for US
+  // residents, cleared by Apex. Stocks may only be bought with settled USD.
+  // USDC belongs to the Coinbase Inc. crypto account, and a stablecoin is not
+  // a currency. UK users pay in GBP, which is converted to USD at each buy.
+  // Their sale proceeds come back as USDC.
+  // https://www.coinbase.com/stocks
+  // https://help.coinbase.com/en/coinbase/getting-started/getting-started-with-coinbase/available-balance
+  // https://www.coinbase.com/en-gb/stocks
+  coinbaseus: ["USD"],
+  // Long Bridge HK Limited takes deposits in HKD and USD only. FPS, eDDA and
+  // bank-securities transfers are HKD; online, ATM, cheque and wire transfers
+  // can be HKD or USD. A wire lands in the HKD or USD account at ICBC (Asia).
+  // In-app exchange is between USD and HKD only. Mainland China bank cards are
+  // refused.
+  // https://longbridge.com/hk/en/support/topics/depositfunds/41fajdm.md
+  // https://longbridge.com/hk/en/support/topics/depositfunds/hk-telegraphictransfer.md
+  // https://longbridge.com/hk/en/support/topics/conversion/hk-exchange.md
+  longbridgehk: ["HKD", "USD"],
+  // Long Bridge Securities Pte. Ltd. takes SGD, USD and HKD deposits into its
+  // DBS account. DDA and PayNow are SGD only. A telegraphic or bank transfer
+  // in SGD, HKD or USD is credited as received. In-app conversion is between
+  // SGD, USD and HKD.
+  // https://longbridge.com/sg/en/support/topics/depositfunds/Deposit.md
+  // https://longbridge.com/sg/en/support/topics/depositfunds/internetbankingtransfer.md
+  // https://longbridge.com/sg/en/support/topics/currencyexchange/FAQs.md
+  longbridgesg: ["SGD", "USD", "HKD"],
+  // Deposits go to the custodian, Phillip Securities Pte Ltd. It has a USD and
+  // an HKD account at HSBC Hong Kong and at Standard Chartered Singapore. No
+  // NZD account is named. In-app exchange lists USD, HKD, SGD, CNH, AUD, JPY,
+  // GBP and EUR. The deposit pages only take USD and HKD.
+  // https://longbridge.com/nz/en/support/topics/fundsoverview/qtrjzy.md
+  // https://longbridge.com/nz/en/support/topics/fundsoverview/4481v6r.md
+  // https://longbridge.com/nz/en/support/topics/conversion/1boirpz.md
+  longbridgenz: ["USD", "HKD"],
+  // Stock Trading debits a savings account under the integrated investment
+  // account. Hong Kong shares settle in HKD; RMB-traded counters are charged
+  // in RMB. US shares settle in USD from the USD savings account. China
+  // A-shares settle in RMB from the RMB savings account, which is required to
+  // trade them. Other currencies the savings account holds settle no stock
+  // trade. The renminbi is the Hong Kong offshore unit, written CNH as for
+  // futu.
+  // https://www.hsbc.com.hk/content/dam/hsbc/hk/docs/investments/stocks/top-trader-club/us-stocks-product-fact-sheet.pdf
+  // https://www.hsbc.com.hk/content/dam/hsbc/hk/docs/investments/stocks/china-a-shares/product-fact-sheet.pdf
+  // https://www.hsbc.com.hk/content/dam/hsbc/hk/docs/investments/stocks/hk-trading/local-securities-product-fact-sheet.pdf
+  // https://www.hsbc.com.hk/investments/products/stocks/
+  hsbchk: ["HKD", "USD", "CNH"],
+  // A transfer to the client's identification account at Techcombank or BIDV
+  // is credited to the securities cash account and left there. An ordinary
+  // transfer to AAS's collection account is the other route. The pages name no
+  // other currency.
+  // https://aas.com.vn/ho-tro-aas/huong-dan-chuyen-nop-tien-chung-khoan-aas-qua-tai-khoan-dinh-danh-techcombank-bidv/
+  // https://aas.com.vn/aas-ho-tro/huong-dan-giao-dich/
+  aas: ["VND"],
+  // A transfer to the identification account at BIDV, VPBank or ABBank, from a
+  // banking app or at a branch, is credited to the securities cash account and
+  // left there. The sheet names no other currency.
+  // https://www.abs.vn/huong-dan-chuyen-tien-truc-tuyen-vao-tai-khoan-chung-khoan-abs/
+  abs: ["VND"],
+  // A transfer to the client's identification account at ACB, VPBank,
+  // Techcombank or BIDV, or into one of ACBS's collection accounts at ACB,
+  // Vietcombank, BIDV or Techcombank, is credited to the securities cash sub-
+  // account and left there. The daily online limit is in dong. The sheet names
+  // no other currency.
+  // https://acbs.com.vn/san-pham/ttgd/nop--chuyen-tien-vao-tai-khoan-giao-dich-chung-khoan-co-so-1163-P6E7D2DA6
+  acbs: ["VND"],
+  // A VietQR, a transfer to the identification account at BIDV or VPBank, a
+  // linked bank app, or cash at a BIDV or VPBank counter is credited to the
+  // ordinary, margin or derivatives sub-account and left there. The sheet
+  // names no other currency.
+  // https://www.aisec.com.vn/transactions-money/
+  ais: ["VND"],
+  // A transfer to the identification account, through the BIDV or VPBank app,
+  // or into one of APG's collection accounts at BIDV, Vietcombank or VPBank,
+  // is credited to the securities account and left there. The sheet names no
+  // other currency.
+  // https://apsi.vn/deposit-guidelines
+  apg: ["VND"],
+  // Cash or a transfer from any bank in Vietnam into one of Artex's accounts
+  // at VietinBank, MB and other Vietnamese banks is credited to the securities
+  // account and left there. The sheet names no other currency.
+  // https://artex.vn/CustomerSupport/MoneyTransactionGuide
+  artex: ["VND"],
+  // Cash or a transfer from a bank in Vietnam into DVSC's account at BIDV, OCB
+  // or Techcombank is credited to the securities account and left there. The
+  // one-page sheet names no other currency.
+  // https://dvsc.com.vn/files/dvsc/54b53072540eeeb8f8e9343e71f28176/HD-KH-NT.pdf
+  dvsc: ["VND"],
+  // A QR, a transfer to the identification account at BIDV, or cash or a
+  // transfer into a collection account at BIDV, Techcombank, Vietcombank, NCB
+  // or MBV is credited to the securities cash sub-account and left there.
+  // Foreign investors pay into a separate BIDV line from their indirect-
+  // investment account, which is dong, so a wire in another currency is
+  // converted first.
+  // https://eves.com.vn/media/ywpnmvqb/190826-huong-dan-nop-tien-vao-tai-khoan.pdf
+  // https://eves.com.vn/wikibook/cau-hoi-thuong-gap/
+  eves: ["VND"],
+  // A transfer to the GTJA identification account at BIDV, or cash or a
+  // transfer into one of the collection accounts at BIDV, VietinBank,
+  // Techcombank, Eximbank, Vietcombank or Woori, is credited to the securities
+  // cash sub-account and left there. The sheets name no other currency.
+  // https://gtht.com.vn/support/huong-dan-nop-tien-qua-tai-khoan-dinh-danh-new/
+  // https://gtht.com.vn/support/huong-dan-nop-tien-vao-tai-khoan-giao-dich-chung-khoan/
+  gtjavn: ["VND"],
+  // A transfer to the HVS identification account at BIDV, or cash or a
+  // transfer into one of HVS's collection accounts, is credited to the
+  // ordinary or margin sub-account and left there. The sheet names no other
+  // currency.
+  // https://hvsvn.com/huong-dan/tien
+  hvs: ["VND"],
+  // A transfer from a Vietnamese banking app or bank counter to the
+  // identification code or QR shown in Kafi X is credited to the securities
+  // cash account. The page names no bank list and no other currency; evidence
+  // is thin.
+  // https://kafi.vn/support/detail?tab=ntdd_app
+  kafi: ["VND"],
+  // A transfer with the CSI identification code to Kirin's BIDV account, or
+  // cash or a transfer into one of its accounts at BIDV, Techcombank,
+  // Vietcombank, ACB or VietABank, is credited to the securities account and
+  // left there. The sheet names no other currency.
+  // https://kirins.vn/nop-rut-tien/
+  kirin: ["VND"],
+  // A QR, a transfer to the identification account at LPBank, BIDV, VPBank,
+  // Vietcombank, VIB or Sacombank, or a transfer into a collection account is
+  // credited to the cash or margin sub-account and left there. Foreign
+  // investors (103F accounts) pay into a separate BIDV line, which is the same
+  // dong account, so a wire in another currency is converted first.
+  // https://lpbs.com.vn/nop-tien-chung-khoan-tu-cac-ngan-hang-vao-tai-khoan-chuyen-dung-support17
+  // https://lpbs.com.vn/mo-tai-khoan-cho-nha-dau-tu-nuoc-ngoai-support9
+  lpbs: ["VND"],
+  // A transfer to the MBS identification account at MB or BIDV, a linked BIDV
+  // transfer, or a transfer into one of MBS's collection accounts is credited
+  // to the ordinary, margin or MBSLink sub-account and left there. The sheet
+  // names no other currency.
+  // https://mbs.com.vn/huong-dan-giao-dich-tien/
+  mbs: ["VND"],
+  // A transfer to the identification account, a QR, a linked bank, an e-wallet
+  // (MoMo, ZaloPay, Viettel Money) or a transfer into a collection account is
+  // credited to the securities cash account and left there. The sheet names no
+  // other currency.
+  // https://www.phs.vn/san-pham-dich-vu/huong-dan-nop-tien-vao-tai-khoan-giao-dich-chung-khoan/50
+  phs: ["VND"],
+  // A transfer through BIDV's collection service, or into one of PSI's
+  // accounts at Vietcombank, PVcomBank, BIDV, SHB and others, is credited to
+  // the securities cash account and left there. The sheet names no other
+  // currency.
+  // https://www.psi.vn/vi/cau-hoi-thuong-gap/huong-dan-giao-dich/huong-dan-nop-tien-vao-tai-khoan
+  // https://www.psi.vn/uploads/huong-dan-su-dung/tai-lieu/HDSD%20Nop%20tien%20qua%20tai%20khoan%20chung%20khoan-26.11.pdf
+  psi: ["VND"],
+  // A transfer from Sacombank Pay, or cash or a transfer into one of SBS's
+  // accounts at Sacombank, BIDV, Vietcombank or Eximbank, is credited to the
+  // securities cash account and left there. The sheet names no other currency.
+  // https://sbsc.com.vn/ho-tro/huong-dan-nop-tien-vao-tai-khoan-chung-khoan/
+  sbs: ["VND"],
+  // A transfer to the SSV identification account at BIDV, through Shinhan
+  // Bank's SOL app, or into one of SSV's collection accounts is credited to
+  // the securities cash account and left there. The sheet names no other
+  // currency. The QR route is closed to a foreign investor's IICA, which is a
+  // dong account at a Vietnamese bank.
+  // https://shinhansec.com.vn/vi/ho-tro-khach-hang/huong-dan-su-dung-dich-vu/nop-rut-tien.html
+  // https://shinhansec.com.vn/vi/ho-tro-khach-hang/huong-dan-giao-dich.html
+  shinhanvn: ["VND"],
+  // A transfer from SHB SAHA, a Napas 247 transfer to the SHS identification
+  // account at SHB, or cash at an SHB or other bank counter is credited to the
+  // securities cash sub-account and left there. The Napas limit is in dong.
+  // The sheet names no other currency.
+  // https://shs.com.vn/MoneyTradingGuide.aspx
+  shs: ["VND"],
+  // A QR or a transfer to the TCSC identification account at Techcombank is
+  // credited to the securities cash account and left there. The sheets name no
+  // other currency.
+  // https://tcsc.vn/vi/support
+  // https://tcsc.vn/uploads/documents-website/policy/HDSD_082026/HDSD_Huong%20dan%20nop%20tien_CKCS_082026.pdf
+  tcsc: ["VND"],
+  // A QR, a transfer to the 072C identification account at Techcombank or
+  // VietinBank, or cash into one of VIX's collection accounts is credited to
+  // the securities cash sub-account and left there. The sheet names no other
+  // currency.
+  // https://vixs.vn/ho-tro/nop-tien
+  vix: ["VND"],
+  // A transfer into VTS's account at BIDV, Eximbank or Vietcombank, with the
+  // 089C account number in the note, is credited to the securities account and
+  // left there. The sheet names no other currency.
+  // https://vts.com.vn/upload/files/Huong%20dan%20giao%20dich%20tien.pdf
+  // https://vts.com.vn/huong-dan-giao-dich.html
+  vts: ["VND"],
+  // A transfer to the YSVN identification account at BIDV, Vietcombank,
+  // Sacombank, ACB or Eximbank, or into a collection account at those banks,
+  // VietinBank or Techcombank, is credited to the ordinary, margin or
+  // derivatives sub-account and left there. The sheet names no other currency.
+  // https://support.yuanta.com.vn/en/support/cau-hoi-thuong-gap/huong-dan-nop-tien-vao-tai-khoan-giao-dich-tai-yuanta-viet-nam/
+  // https://support.yuanta.com.vn/en/support/huong-dan-giao-dich-tien/huong-dan-nop-tien-dinh-danh/
+  yuantavn: ["VND"],
+  // Net banking, UPI, NEFT, RTGS, IMPS or a cheque pays rupees in from the
+  // client's own linked bank account. An NRI moves rupees from an NRE or
+  // NRO savings account into the matching PINS account at Kotak Mahindra
+  // Bank. Global Investing is a separate Interactive Brokers account funded
+  // by an LRS remittance, not a balance in this account.
+  // https://www.kotakneo.com/support/how-can-i-transfer-funds-to-kotak-securities-trading-account
+  // https://www.kotakneo.com/support/types-of-nri-account-faqs/
+  // https://www.kotakneo.com/global-investment/
+  kotak: ["INR"],
+  // A pay-in by UPI or net banking comes from the client's bank in rupees.
+  // BlinkX is open to resident Indians only, so an NRE or NRO account or a
+  // bank outside India cannot be linked. No foreign-currency balance is
+  // named.
+  // https://blinkx.in/assets/pdf/Final-terms-for-DIY-account-opening.pdf
+  // https://blinkx.in/help-center/articles/which-banks-can-nris-link-to-their-blinkx-account
+  blinkx: ["INR"],
+  // NEFT, RTGS or IMPS goes to a collection account at Axis Bank, numbered
+  // NBSP plus the client code. UPI goes to a SEBI-validated UPI ID. Payment
+  // is taken only from the client's own linked bank account. An NRI links
+  // an NRE or NRO account, both rupee accounts. No foreign-currency balance
+  // is named.
+  // https://payment.nirmalbang.com/NEFT_RTGS.html
+  // https://payment.nirmalbang.com/
+  // https://www.nirmalbang.com/files/supportpdf/CDSL_Individual_Acct_Open.pdf
+  nirmalbang: ["INR"],
+  // UPI, the payment gateway, NEFT, RTGS or a cheque pays in from a bank
+  // account mapped in the back office. NRI accounts are not offered, and an
+  // NRE or NRO account is not accepted. No foreign-currency balance is
+  // named. (stocko.in was down on 18 October 2026; read from the archived
+  // copies of these pages.)
+  // https://stocko.in/support/stocko-trading-guide/
+  // https://stocko.in/support/can-i-open-nri-nro-account-with-stocko/
+  stocko: ["INR"],
+  // UPI or net banking in the Agnik app pays in from the registered bank
+  // account. An NRI account sits on an NRE or NRO bank account, both rupee
+  // accounts. No foreign-currency balance is named.
+  // https://mastertrust.co.in/blog/agnik-app-walkthrough-explore-how-to-place-your-first-trade
+  // https://www.mastertrust.co.in/blog/what-happens-to-your-demat-accounts-when-you-become-an-nri
+  mastertrust: ["INR"],
+  // UPI, net banking, IMPS or NEFT pays rupees in from the one registered
+  // primary bank account. A transfer from any other account is refunded.
+  // NRI accounts are not offered. No foreign-currency balance is named.
+  // https://nubra.io/faq
+  nubra: ["INR"],
+  // A yen transfer lands in the securities account. A foreign-currency
+  // transfer from a bank in Japan is credited as 外貨預り金 in the same
+  // currency, in these six. A transfer from abroad, or yen sent as foreign
+  // currency, is not accepted. US shares need the dollars moved into
+  // 外国株預り金（米ドル）, which is still dollars.
+  // https://kabu.com/item/payment_cashout/default.html
+  // https://kabu.com/item/payment_cashout/forex/default.html
+  mitsubishiufjesmart: ["JPY", "USD", "EUR", "AUD", "NZD", "ZAR", "MXN"],
+  // Yen is a transfer into the client's own transfer-only account at MUFG
+  // Bank. Foreign currency is paid in by a 外貨送金 to the firm's receiving
+  // account at MUFG Bank head office and held as 外貨お預かり金. The FAQ
+  // gives the receiving currencies only on request from the branch; the
+  // list is the currencies the account holds, the rouble left out. The
+  // renminbi account is printed CNY. The Hong Kong RMB counters are
+  // quoted CNH, the same unit.
+  // https://www.sc.mufg.jp/service/nyushukkin/gonyukin/index.html
+  // https://faq.sc.mufg.jp/faq/show/1872
+  // https://faq.sc.mufg.jp/faq/show/451
+  // https://www.sc.mufg.jp/trade/deal/gaika/index.html
+  mitsubishiufjmorgan: ["JPY", "USD", "EUR", "GBP", "CHF", "AUD", "NZD", "CAD", "HKD", "SGD", "SEK", "MXN", "TRY", "CNY", "CNH", "ZAR"],
+  // A transfer into the client's deposit-only account at Daiwa Next Bank,
+  // Quick Deposit or a direct debit lands in yen. US shares (ひなカブUSA)
+  // are bought and sold in yen at the firm's exchange rate. There is no
+  // dollar cash.
+  // https://www.connect-sec.co.jp/service/deposit/choice.html
+  // https://www.connect-sec.co.jp/service/hinakabu_usa/
+  daiwaconnect: ["JPY"],
+  // A transfer into the client's deposit-only account takes 日本円のみ, and
+  // only from a bank in Japan. US shares are an over-the-counter trade
+  // settled entirely in yen. There is no dollar cash.
+  // https://www.cheer-sec.co.jp/start/pay.html
+  // https://www.cheer-sec.co.jp/service/us-stock.html
+  cheer: ["JPY"],
+  // Online and call-centre deposits are a transfer from a bank in Japan,
+  // and only yen is accepted. A branch client also pays by bank transfer.
+  // US shares can be settled in yen or dollars, but no page describes a
+  // dollar deposit.
+  // https://www.ando-sec.co.jp/services/internet/rule/09-nyusyukkin.html
+  // https://www.ando-sec.co.jp/services/callcenter/furikomi.html
+  // https://www.ando-sec.co.jp/spot-stock/trading-guide/us_stocks.html
+  ando: ["JPY"],
+  // A transfer from the client's own account lands in euros. The help
+  // centre says deposits can only be made in euros. A transfer from an
+  // account in another currency is converted by the client's bank before
+  // it arrives.
+  // https://support.shares.io/en/articles/18958-in-what-currency-can-i-deposit-funds
+  // https://support.shares.io/en/articles/21601-how-do-i-make-a-regular-bank-transfer
+  // https://support.shares.io/en/articles/18960-are-there-any-deposit-fees
+  shares: ["EUR"],
+  // The brokerage account is funded by a zloty transfer to the number in
+  // the agreement. Foreign markets settle in USD, EUR and GBP, held in the
+  // client's currency account in that currency. The brokerage does not
+  // exchange currency, so the cash for an order must already be in the
+  // instrument's currency.
+  // https://www.bnpparibas.pl/biuro-maklerskie/rynki-zagraniczne
+  // https://www.bnpparibas.pl/_fileserver/item/1537059
+  // https://www.bnpparibas.pl/biuro-maklerskie/rachunek-maklerski
+  bnpparibasbiuro: ["PLN", "USD", "EUR", "GBP"],
+  // A SEPA transfer or an instant deposit lands in euros in the
+  // securities account. The account is held at Interactive Brokers, and
+  // dollar or krona shares need a currency order placed first. No other
+  // currency is named for a deposit.
+  // https://help.kvarnx.com/en/articles/12665206-kvarn-x-investment-services-general-information
+  // https://help.kvarnx.com/en/articles/13578356-getting-started-with-stock-and-etf-trading-on-kvarn-x
+  // https://www.kvarnx.com/fi/hinnasto
+  kvarnx: ["EUR"],
+  // Crowns or euros sent by transfer stay in that currency in the
+  // Brokerage wallet. Dollars cannot be deposited or withdrawn. They come
+  // only from a 0.4% exchange, a sale or a dividend.
+  // https://magazin.portu.cz/pruvodce-obchodovanim-na-portu-v-brokerage-rezimu/
+  // https://app.portu.cz/documents/download/generaldocument/cs/PriceList
+  portu: ["CZK", "EUR"],
+  // Trades settle through the krona account linked to the depå. A
+  // foreign purchase is exchanged automatically at 0.25% unless the
+  // client has a separate valutakonto. No page offers such an account to
+  // private clients. An ISK cannot hold foreign currency.
+  // https://www.handelsbanken.se/sv/ekonomi-i-livet/privatekonomi/spara-klokt/aktiehjalpen/kom-igang-med-aktier
+  // https://www.handelsbanken.se/sv/privat/spara/investeringssparkonto
+  // https://www.handelsbanken.se/sv/om-oss/juridiska-dokument/prislistor-privat/prislista-spara/prislista-vardepappershandel
+  handelsbankense: ["SEK"],
+  // The securities account has its own receiving bank account for Hong
+  // Kong dollars, renminbi, dollars and yen. The account holds several
+  // currencies, and the client exchanges them before settlement. US
+  // shares need dollars by the settlement date. A 2021 form put AUD, GBP
+  // and SGD on the yen account; the current page names yen only.
+  // https://www.bsgroup.com.hk/fund/deposit/
+  // https://www.bsgroup.com.hk/sec/majormarket/us/
+  // https://enweb.bsgroup.com.hk/media/12209/cak1c-23acknowledgementbyclient.pdf
+  brightsmart: ["HKD", "USD", "CNH", "JPY"],
+  // Only pesos can be deposited or withdrawn, from a bank tied to a
+  // Chilean RUT. Pesos sent to the stocks wallet are converted to dollars
+  // and sent to the US account. A dollar deposit is not accepted, and
+  // a foreign bank or wallet cannot fund the account.
+  // https://ayuda.racional.cl/es/articles/6433441-puedo-depositar-dolares-a-mi-billetera
+  // https://ayuda.racional.cl/es/articles/6173553-como-puedo-comprar-dolares-para-mi-billetera
+  // https://ayuda.racional.cl/es/articles/8365396-puedo-depositar-desde-una-billetera-digital-o-banco-extranjero
+  racional: ["CLP"],
+  // A transfer to one of Agriseco's accounts at Agribank, BIDV or
+  // Vietcombank, or cash at the Agribank counter inside each Agriseco office,
+  // is credited to the securities account and left there. A client may
+  // instead trade from a dedicated Agribank account. The sheet names no other
+  // currency.
+  // https://agriseco.com.vn/Supports/MoneyTransactions/vi-VN
+  // https://agriseco.com.vn/ProductsServices/SecuritiesBroker/InvestorMoneyManagement/vi-VN
+  agriseco: ["VND"],
+  // Cash at a VBSE counter, a transfer to the identification account at
+  // VietinBank, BIDV, Techcombank or Vietcombank, or a transfer into VBSE's
+  // accounts at VietinBank or PGBank is credited to the ordinary, margin or
+  // derivatives sub-account and left there. The sheet names no other currency.
+  // https://www.vbse.vn/huong-dan-giao-dich/
+  vbse: ["VND"],
+  // Cash at a BIDV counter or a 24/7 transfer to the 963388 identification
+  // account, or a payment into one of BVSC's bank accounts, is credited to
+  // the N1, M1 or CB1 sub-account and left there. Foreign clients fund from
+  // their indirect-investment capital account under Circular 05/2014, which
+  // is dong, so a wire in another currency is converted first.
+  // https://www.bvsc.com.vn/danhmuc/dich-vu/khach-hang-ca-nhan/ho-tro/huong-dan-su-dung-dich-vu/nopchuyen-tien-vao-tk-gdck/
+  bvsc: ["VND"],
+  // A transfer to TPS's accounts at BIDV or TPBank, to the identification
+  // account at BIDV or TPBank, or through TPBank Mobile is credited to the X1
+  // or M1 sub-account and left there. Foreign investors pay into a separate
+  // BIDV line for 048F accounts. The guide names no other currency.
+  // https://web-api.tpbs.com.vn/static/uploads/HUONG_DAN_GIAO_DICH_TIEN_NAP_TIEN.pdf
+  // https://tpbs.com.vn/vi/san-pham-dich-vu/dich-vu-chung-khoan/truc-tuyen/huong-dan-giao-dich-truc-tuyen?postId=2205
+  tpbs: ["VND"],
+  // A transfer from any bank app to one of TVSI's bank accounts, to the
+  // identification account at BIDV or VPBank, or by the account's QR code is
+  // credited to the ordinary (1) or margin (6) sub-account and left there.
+  // The FAQ names no other currency.
+  // https://support.tvsi.com.vn/QuestionPage?id=71
+  tvsi: ["VND"],
+  // A 24/7 transfer to the 963369 or DSC identification account at BIDV, or
+  // cash or a transfer into one of DSC's accounts at BIDV, Vietcombank, VIB,
+  // Techcombank or VietinBank, is credited to the ordinary (1) or margin (6)
+  // sub-account and left there. The sheet names no other currency.
+  // https://www.dsc.com.vn/huong-dan/nop-tien
+  dsc: ["VND"],
+  // A transfer to the VFS identification account at BIDV, or into one of
+  // VFS's accounts at Vietcombank, Techcombank, BIDV or ACB, is credited to
+  // the ordinary (01) or margin (10) sub-account and left there. The sheet
+  // names no other currency.
+  // https://www.vfs.com.vn/ho-tro/giao-dich-chuyen-tien-vao-tai-khoan-chung-khoan
+  // https://www.vfs.com.vn/ho-tro/thu-chi-ho-dien-tu-qua-ngan-hang-bidv
+  vfs: ["VND"],
+  // A NAPAS 24/7 or BIDV Smart Banking transfer to the SSA identification
+  // account at BIDV, a payment into one of ASEAN's accounts at SeABank, BIDV
+  // or Vietcombank, or a top-up from Viettel Money is credited to the
+  // ordinary (1) or margin (6) sub-account and left there. The pages name no
+  // other currency.
+  // https://www.aseansc.com.vn/huong-dan-va-ho-tro/huong-dan-giao-dich-tien/huong-dan-nop-tien/
+  // https://www.aseansc.com.vn/huong-dan-va-ho-tro/cau-hoi-thuong-gap/giao-dich-tien/
+  // https://www.aseansc.com.vn/huong-dan-va-ho-tro/aseansc-viettelmoney-faq/nap-rut-tien-dau-tu/
+  aseansc: ["VND"],
+  // A transfer to the BETA identification account at BIDV, or cash or a
+  // transfer into one of BETA's accounts at BIDV, ACB, Vietcombank, Ban Viet,
+  // Eximbank, Sacombank, VietinBank or MB, is credited to the securities
+  // account and left there. The sheet names no other currency.
+  // https://www.bsi.com.vn/vn/ho-tro/huong-dan-bieu-mau
+  // https://www.bsi.com.vn/public/upload/files/HUONG%20DAN%20NOP%20TIEN%20TK%20DINH%20DANH.pdf
+  bsi: ["VND"],
+  // A transfer or cash at any bank into one of FNS's accounts at Sacombank,
+  // ACB, BIDV or Vietcombank, a QR code, or the Sacombankpay securities gateway
+  // is credited to the ordinary or margin sub-account and left there. A foreign
+  // client funds an indirect-investment account at the custodian bank, which is
+  // dong, so a wire from abroad is converted first.
+  // https://funan.com.vn/vi/page/huong-dan-giao-dich.16841
+  funan: ["VND"],
+  // A transfer to the identification account 963636036C at BIDV, from the BIDV
+  // app, another bank's app or a counter, or into one of APSC's accounts at
+  // BIDV, SHB, VietinBank or Eximbank, is credited to the ordinary or margin
+  // sub-account and left there. The linked BIDV account is a dong account. The
+  // sheet names no other currency.
+  // https://apsc.vn/huong-dan-giao-dich/huong-dan-nop-tien-vao-tai-khoan
+  apsc: ["VND"],
+  // A transfer from any banking app to the client's identification account at
+  // VPBank, Techcombank or VietinBank, or into FHSC's accounts at Vietcombank,
+  // Viet A Bank, Eximbank or ABBank, is credited to the ordinary or margin
+  // sub-account. Old Finhay cash-account balances move across in dong. The
+  // guide names no other currency.
+  // https://fhsc.com.vn/huong-dan-nap-rut-tien-va-chuyen-tien-tu-finhay-sang-fhsc
+  finhay: ["VND"],
+  // A QR or transfer to the identification account at KienlongBank or VPBank,
+  // a transfer into SMDS's accounts at KienlongBank or BIDV, or BIDV Smart
+  // Banking is credited to the securities account and left there. Transfers are
+  // capped at 500 million dong a time. Foreign clients get separate KienlongBank
+  // and BIDV lines. The sheet names no other currency.
+  // https://www.smartmind.vn/huong-dan-nop-tien-vao-tkck/
+  smartmind: ["VND"],
+  // A transfer to the BMSC identification account at BIDV, or into one of its
+  // accounts at BIDV, Nam A Bank, Vietcombank or VietinBank, is credited to the
+  // X1 ordinary or M1 margin sub-account and left there. The sheet names no
+  // other currency.
+  // https://www.bmsc.com.vn/ho-tro/Huong-dan-chuyen-tien-vao-tai-khoan.html
+  bmsc: ["VND"],
+  // A QR from NHSV Pro, a transfer to the identification account at Woori or
+  // BIDV, or a transfer into one of NHSV's accounts at BIDV, Vietcombank, Woori,
+  // BaoViet, VPBank, Techcombank, ACB or LPBank is credited to the 00 or 01
+  // sub-account and left there. Foreign investors use separate BIDV, Shinhan,
+  // Woori and ACB lines. The sheet names no other currency.
+  // https://nhsv.vn/page/huong-dan-nop-tien.html
+  nhsv: ["VND"],
+  // A transfer or cash at any bank to the 079C identification account at
+  // Techcombank, Eximbank or BIDV, or into one of MSVN's accounts at ACB,
+  // Sacombank, Vietcombank, MB or Indovina, is credited to the general, margin or
+  // derivatives account and left there. The foreign-client sheet lists the same
+  // Vietnamese banks. Neither sheet names another currency.
+  // https://www.maybank-kimeng.com.vn/securities/customer-support/faqs/8-0/vi
+  // https://www.maybank-kimeng.com.vn/securities/customer-support/faqs/8-0/en
+  maybankvn: ["VND"],
+  // JBSV publishes no deposit guide. Finavi's funding steps sit inside the app,
+  // and BIDV is the bank that receives client data until the contract ends. The
+  // fee schedule and trading guide are written in dong only. Evidence is thin.
+  // https://wts.finavi.com.vn/s3/files/static/Bieu_phi_JBSV.pdf
+  // https://jbsv.com.vn/huong-dan-giao-dich-chung-khoan-1001?id=1001
+  jbsv: ["VND"],
+  // A transfer to the HPS identification account at BIDV, a QR from HAC Mobile
+  // or Webtrading, or a transfer into Haseco's account at BIDV or Sacombank is
+  // credited to the 01 ordinary or 06 margin sub-account and left there. The
+  // sheet names no other currency.
+  // https://haseco.vn/huong-dan-nop-rut-chuyen-khoan-tien/
+  // https://haseco.vn/wp-content/uploads/2025/11/Huong-dan-nop-tien-tong-1.jpg
+  haseco: ["VND"],
+  // The site has a login, a price board and an account-opening form, but no
+  // page on how money arrives. The capital is stated in pounds. The evidence
+  // is thin, so the list is the local trading currency.
+  // https://alrowadonline.com/About.aspx
+  // https://alrowadonline.com/BeAClient.aspx
+  rowad: ["EGP"],
+  // A Stanbic IBTC bank client pays from the Super App. Another bank's
+  // client adds funds on eTrade, or sends a cheque or a transfer to the
+  // firm's account. A foreign inflow gets a Certificate of Capital
+  // Importation, so it is converted to naira. No dollar product is offered.
+  // https://www.stanbicibtcstockbrokers.com/nigeriastockbroking/stockbroking/about-us/regulatory/Stockbroking-FAQs
+  // https://www.stanbicibtcstockbrokers.com/nigeriastockbroking/stockbroking/getting-started/how-to-register/individuals
+  // https://www.stanbicibtcstockbrokers.com/nigeriastockbroking/stockbroking
+  stanbicibtc: ["NGN"],
+  // The account takes cash at a BDU CI or BSIC CI counter into a dedicated
+  // bank account, a cheque, or a transfer to that account. The minimums are
+  // in FCFA. The FAQ names no other currency.
+  // https://macafricansgi.com/nos-formules/la-gestion-sous-mandat/faq/
+  macafrican: ["XOF"],
+  // The stocks account is opened in euros or dollars, one account per
+  // currency under its own agreement. A wire in the account's currency to
+  // Fibank, UniCredit Bulbank or another listed bank stays that currency.
+  // Dollar shares need a dollar balance, and a move between the two is a
+  // conversion. Any other currency, and every card payment, is converted.
+  // https://www.deltastock.com/english/investments/stocks.asp
+  // https://www.deltastock.com/english/my-account/deposit-withdraw.asp
+  // https://www.deltastock.com/english/accounts/open-account.asp
+  deltastock: ["EUR", "USD"],
+  // A havale or EFT goes to GCM's TL account at Garanti, İş Bankası, Akbank
+  // and six other banks. The USD and EUR accounts on the same pages are the
+  // margin ("teminat") accounts of the leveraged desk. The Borsa İstanbul
+  // trading conditions are all in lira, so a dollar or euro paid in is
+  // converted before it buys a BIST share.
+  // https://www.gcmyatirim.com.tr/hesap-islemleri/para-guvenligi-ve-transferi/para-yatirma-islemleri
+  // https://www.gcmyatirim.com.tr/hesap-islemleri/para-guvenligi-ve-transferi/banka-hesap-bilgileri
+  // https://www.gcmyatirim.com.tr/sirket-profili/sikca-sorulan-sorular
+  gcm: ["TRY"],
+  // PayID, BPAY, a bank transfer or a card funds the account in Australian
+  // dollars. Manual conversion can keep balances in other currencies for
+  // the US, UK, German and Irish markets, but those are converted from
+  // the deposit. No AU page names a deposit in another currency that stays.
+  // https://www.ig.com/au/share-trading/charges
+  // https://www.ig.com/usermanagement/customeragreements?igCompany=igau&agreementType=share_trading_product_details&locale=en_GB
+  // https://www.ig.com/au/shares/how-to-buy-trade-shares/buy-us-shares-in-australia
+  igau: ["AUD"],
+  // The standing transfer form has a peso CBU and a dollar CBU, and the
+  // comitente account holds pesos and dollars. MEP dollars are local
+  // dollars. A US-dollar wire is received and sent at up to 195 dollars
+  // in bank costs, and it stays dollars. Another currency is not a
+  // deposit that stays.
+  // https://navarromediamanager.prod.ingecloud.com/MediaFiles/Files/2023/6_22/0/0/29/7620.pdf
+  // https://www.navarroviola.com.ar/Informe/Nuestros-Aranceles
+  navarroviola: ["ARS", "USD"],
+  // A deposit or transfer goes into one of LDT's bank current accounts.
+  // The fee sheet has a peso transfer line and no dollar line. No dollar
+  // account is named, so the evidence is thin.
+  // https://www.ldtbrokers.com/faqs
+  // https://www.ldtbrokers.com/Informe/Legales/Aranceles
+  ldt: ["ARS"],
+  // UPI or net banking from the registered bank account is credited at
+  // once. An IMPS, NEFT or RTGS payment to Torus as payee is credited
+  // after it is checked. Cards are not accepted. All of these are rupee
+  // payments, and no foreign-currency balance is named.
+  // https://www.torusdigital.com/faqs/funds/add-funds/how-can-i-transfer-funds-to-my-torus-digital-account-oOK8bt
+  // https://www.torusdigital.com/faqs/funds/add-funds/how-to-transfer-funds-to-my-torus-account-using-imps-neft-or-rtgs-aDmhtx
+  torus: ["INR"],
+  // The client agreement asks for cleared funds by 9:00 on settlement
+  // day, and sale proceeds can be held for later purchases. No bank
+  // details or currency are named, so the evidence is thin.
+  // https://www.lolcsecurities.lk/images/site-specific/downloads/client-agreement.pdf
+  // https://www.lolcsecurities.lk/images/site-specific/downloads/sales-proceeds-authorization-form.pdf
+  lolc: ["LKR"],
+  // A transfer through Commercial Bank's digital channels, a telex
+  // transfer from any bank, or a cheque or cash at a Commercial Bank ATM
+  // goes to the trading account (4998-…-039) at Commercial Bank. The page
+  // names no other currency.
+  // https://www.cbfs.com.qa/en-us/AOF
+  cbfs: ["QAR"],
+  // The buying order form debits the client's account, and payment is by
+  // certified cheque. No bank details or currency are named, so the
+  // evidence is thin.
+  // https://qatar-securities.com/wp-content/uploads/2026/07/buying_order_form.pdf
+  qsc: ["QAR"],
+  // The client adds Al Sharq as a beneficiary in their bank app and pays
+  // into its NBK, KFH or ABK account for the official market. A dividend
+  // in a currency other than the dinar is collected at the Kuwait Clearing
+  // Company, not through this account. The page names no other currency.
+  // https://www.sharqetrade.com/%D8%A3%D8%B3%D8%A6%D9%84%D8%A9-%D8%B4%D8%A7%D8%A6%D8%B9%D8%A9
+  sharq: ["KWD"],
+  // A transfer from a Danish bank lands in kroner. SEK, NOK, USD, EUR and
+  // CAD can be paid in to a matching currency account and are left there.
+  // Each has its own SEB IBAN. Only a share depot has currency accounts; a
+  // pension depot and an aktiesparekonto always convert. Nordnet takes no
+  // transfer from a bank abroad.
+  // https://www.nordnet.dk/faq/overforsel-af-kontanter/indbetaling/hvordan-indbetaler-jeg-penge-til-mit-nordnet-depot-i-udenlandsk-valuta
+  // https://www.nordnet.dk/faq/valuta/valutakonti/hvilke-valutaer-kan-jeg-have-valutakonto-i
+  // https://www.nordnet.dk/faq/overforsel-af-kontanter/indbetaling/hvordan-indbetaler-jeg-penge-til-mit-nordnet-depot-fra-udlandet
+  nordnetdk: ["DKK", "SEK", "NOK", "USD", "EUR", "CAD"],
+  // Euros are the account. SEK, NOK, DKK, USD and CAD each have a currency
+  // account that is opened on request, and a deposit in that currency goes
+  // to its own SEB IBAN and is left there. A currency deposit must come
+  // from a Finnish IBAN account. No other currency has an account.
+  // https://www.nordnet.fi/faq/rahan-ja-arvopapereiden-siirto/rahan-siirtaminen/miten-teen-talletuksen-valuuttatililleni
+  // https://www.nordnet.fi/faq/korot-ja-valuuttatilit/valuuttatilit/mita-valuuttatilit-ovat
+  nordnetfi: ["EUR", "SEK", "NOK", "DKK", "USD", "CAD"],
+  // Kroner are every account. On an Aksje- og fondskonto, SEK, DKK, EUR,
+  // CAD and USD currency accounts can be activated, and a transfer in that
+  // currency to its SEB IBAN is left there. It must come from a Norwegian
+  // bank; a payment from a bank abroad is sent back.
+  // https://www.nordnet.no/faq/innskudd-og-uttak/sett-inn-penger/hvordan-foretar-jeg-innskudd-og-uttak-i-annen-valuta-til-fra-min-valutakonto
+  // https://www.nordnet.no/faq/belaning-og-kreditt/valutakonto/hvilke-valutaer-kan-jeg-aktivere-valutakonto-i
+  // https://www.nordnet.no/faq/innskudd-og-uttak/sett-inn-penger/hvordan-setter-jeg-inn-penger-fra-utlandet
+  nordnetno: ["NOK", "SEK", "DKK", "EUR", "CAD", "USD"],
+  // The funding tool on the .ca site, for a Canadian resident, lists these
+  // 20 deposit currencies under the Canadian entity. Wire routing is set per
+  // currency, and a correctly routed deposit is credited in that currency;
+  // conversion is a separate FX order. CAD also takes EFT and bill payment.
+  // https://www.interactivebrokers.ca/en/support/fund-my-account.php
+  // https://www.interactivebrokers.ca/aces/Funding/Methods/Currencies?type=DEPOSIT&colr=CAN
+  ibkrca: ["AUD", "CAD", "CHF", "CNH", "CZK", "DKK", "EUR", "GBP", "HKD", "HUF", "ILS", "JPY", "MXN", "NOK", "NZD", "PLN", "SEK", "SGD", "USD", "ZAR"],
+  // The funding tool, for a Swiss resident, lists these 25 deposit
+  // currencies, with CHF as the domestic one. It files that resident under
+  // the UK entity and shows no separate Swiss company. Wire routing is set
+  // per currency and the deposit is credited in it; conversion is a
+  // separate FX order.
+  // https://www.interactivebrokers.com/en/support/fund-my-account.php
+  // https://www.interactivebrokers.ch/aces/Funding/Methods/Currencies?type=DEPOSIT&colr=CHE
+  ibkrch: ["AED", "AUD", "CAD", "CHF", "CNH", "CZK", "DKK", "EUR", "GBP", "HKD", "HUF", "IDR", "ILS", "JPY", "MXN", "MYR", "NOK", "NZD", "PLN", "RON", "SEK", "SGD", "TRY", "USD", "ZAR"],
+  // Money comes in by SEPA transfer to an IBAN Wealthyhood gives, by debit
+  // card, or by Apple Pay and Google Pay. Plans are priced in euros. An order
+  // in another currency is converted from the account's currency at an FX
+  // spread. No second cash currency is named.
+  // https://wealthyhood.com/eu/help-centre/deposits-withdrawals
+  // https://wealthyhood.com/eu/help-centre/plans-pricing-faq
+  wealthyhoodgr: ["EUR"],
+  // The minimum first deposit is printed for sterling and for euros. Cash
+  // is held in cash accounts in the relevant currency, and euros are paid
+  // out by SEPA. No other deposit currency is named.
+  // https://www.idealing.com/en/help/account_operations
+  // https://www.idealing.com/en/help/terms/view?terms=TERMS_AND_CONDITIONS_06APR2026
+  // https://www.idealing.com/en/help/services_and_prices
+  idealing: ["GBP", "EUR"],
+  // The bank details of 1 September 2026 are rubles only, at NSD. The rules
+  // let foreign currency in under a list posted on alorbroker.ru; that site
+  // did not answer and the list was not read. Cash at the desk is rubles
+  // only. USD, EUR, CNY and CHF on the 2022 sheet are no longer printed.
+  // https://storage.alorbroker.ru/openinfo/%D0%A0%D0%B5%D0%BA%D0%B2%D0%B8%D0%B7%D0%B8%D1%82%D1%8B.pdf
+  // https://storage.alorbroker.ru/openinfo-reglaments/%D0%A0%D0%B5%D0%B3%D0%BB%D0%B0%D0%BC%D0%B5%D0%BD%D1%82%20%D0%B1%D1%80%D0%BE%D0%BA%D0%B5%D1%80%D1%81%D0%BA%D0%BE%D0%B3%D0%BE%20%D0%BE%D0%B1%D1%81%D0%BB%D1%83%D0%B6%D0%B8%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F_02.09.2026.pdf
+  alor: ["RUB"],
+  // A brokerage account opens in rubles, dollars and euros. Yuan, Hong Kong
+  // dollars, pounds, francs, Turkish lira and Belarusian rubles can also be
+  // paid in. The account must be open in the currency of the deposit, so it
+  // is left there. The help article is dated 21 October 2022.
+  // https://alfabank.ru/help/articles/investments/kak-popolnit-brokerskij-schet/
+  alfainvest: ["RUB", "USD", "EUR", "CNY", "HKD", "GBP", "CHF", "TRY", "BYN"],
+  // The account is funded in the My Coris Bourse app by mobile money (Orange
+  // Money, Moov Money, Wave) or by a bank transfer from any UEMOA bank to
+  // Coris Bourse's account. The minimum is 50,000 FCFA. No other currency
+  // is named.
+  // https://www.coris-bourse.com/nos-services-produits/particuliers
+  // https://www.coris-bourse.com/nos-services-produits/digital
+  corisbourse: ["XOF"],
+  // The cash-deposit page funds the securities account by wallet (Orange
+  // Money, Wave) or bank card, paid from Senegal or Cote d'Ivoire. The
+  // page's payment script sets the currency to XOF. No other currency is
+  // named.
+  // https://invictuscapfin.com/depot-cash
+  invictus: ["XOF"],
+  // The DSE FAQ says an order on the mobile trading platform is paid with a
+  // control number that is valid for 24 hours. The investor web front prints
+  // amounts in TZS. No page names a deposit currency or a foreign-currency
+  // balance. The only evidence is the local exchange and its local payment
+  // system, so the list is shillings. The evidence is thin.
+  // https://dse.co.tz/faqs
+  // https://investor.dse.co.tz/
+  dsehisa: ["TZS"],
+  // MCB Securities settles every trade through the client's MCB Ltd account
+  // ("only MCB Ltd accepted for trade settlements"); the online form takes
+  // an MCB account in MUR, USD, EUR, GBP and ZAR. The CDS settles in the
+  // security's currency and never converts it (MCBSL "shall not be held
+  // responsible for any currency conversions").
+  // https://ipo.mcbcapitalmarkets.mu/documents/Documents%20to%20bring%20along.pdf
+  // https://stockexchangeofmauritius.com/cds/clearing-settlement-services
+  mcbsecurities: ["MUR", "USD", "EUR", "GBP", "ZAR"],
+  // A local client opens the account with an AYA Bank account. A
+  // non-resident gives a bank account abroad and N-KAS and N-FAS numbers,
+  // the bank's non-resident kyat and foreign-currency accounts. Every amount
+  // on the broker's pages is in kyat (a block trade is MMK 30 million). No
+  // foreign-currency balance at the broker is named.
+  // https://www.ayatrustsc.com/equity
+  // https://www.ayatrustsc.com/ac-opening
+  // https://www.ayatrustsc.com/foreign-participation
+  aya: ["MMK"],
+  // A cash deposit or a transfer goes to the SBI Royal cash collection
+  // account at Canadia Bank. The FAQ still says trading and settlement are
+  // in riel. SBI Royal's notice of 16 January 2024 says the CSX now lets a
+  // trade priced in riel settle in dollars, so a dollar balance pays for a
+  // trade without first being turned into riel. No other currency is named.
+  // https://www.sbiroyal.com.kh/faq/
+  // https://www.sbiroyal.com.kh/new-trading-mechanism-with-usd-settlement/
+  sbiroyal: ["KHR", "USD"],
+  // Money comes in by bank transfer "in multiple currencies". The terms
+  // convert any funding that is not in the account's base currency and keep
+  // the rest in that base currency. The terms do not name it, but the
+  // account-closure floor (USD 5), dividend rounding (USD 0.01) and every fee
+  // are in dollars, and only US shares and ETFs are sold. Other currencies
+  // are converted on arrival.
+  // https://tabadulat.com/terms-conditions?tab=terms
+  // https://tabadulat.com/
+  // https://tabadulat.com/pricing
+  tabadulat: ["USD"],
+  // An account is opened with a mainland ID card and a bank card, and cash
+  // moves through a third-party custody bank. Idle cash can sit in
+  // Tiantianbao, a money fund. B-shares are not traded, and no page names a
+  // foreign-currency balance. The only evidence is the mainland bank link,
+  // so the list is renminbi.
+  // https://kh.eastmoney.com/Account/Step1
+  eastmoney: ["CNY"],
+  // Money arrives by BEFTN, EFTN or RTGS, or by bKash, all taka rails. A
+  // non-resident Bangladeshi funds the BO account from a Non-Resident
+  // Investor's Taka Account (NITA) at BRAC Bank, so foreign money becomes
+  // taka before it reaches the broker. No foreign-currency balance is named.
+  // https://www.bracepl.com/brokerage/products/item/eft-bftn-rtgs
+  // https://www.bracepl.com/brokerage/products/item/besl-probashi-biniyog
+  // https://www.bracepl.com/brokerage/products/item/nrb-brokerage-service
+  bracepl: ["BDT"],
+  // Euros are paid in by transfer and held on the Verrechnungskonto. A free
+  // Fremdwährungskonto can be opened in USD, GBP, CAD, AUD, NOK, SGD, TRY,
+  // ZAR, JPY or SEK and picked as the settlement account for an order on a
+  // foreign exchange quoted in that currency; the price list charges for
+  // foreign-currency credits, so a payment in that currency lands as is.
+  // CHF is not on the product page and is left out.
+  // https://www.consorsbank.de/web/Sparen-Anlegen/Anlegen/Fremdwaehrungskonto
+  // https://www.consorsbank.de/t5/H%c3%a4ufige-Fragen/Wie-er%c3%b6ffne-ich-ein-Fremdw%c3%a4hrungskonto-und-welche-W%c3%a4hrungen-sind/ta-p/143
+  consorsbank: ["EUR", "USD", "GBP", "CAD", "AUD", "NOK", "SGD", "TRY", "ZAR", "JPY", "SEK"],
+  // The MT5 Global account is opened in USD or EUR, and a bank transfer,
+  // card or Skrill payment in that currency is credited as is. The pages
+  // also name RUB, but no Russian share is sold (see just2trade_scraping),
+  // so it is left out.
+  // https://j2t.com/en/solutions/mt5globaldescription/
+  // https://j2t.com/solutions/mt5global/deposit/
+  just2trade: ["USD", "EUR"],
+  // ACH or a wire from the client's own US account, in dollars; an
+  // international wire is not accepted. The account holds dollars only.
+  // https://support.sofi.com/hc/en-us/articles/4408300652813-How-do-I-send-a-wire-to-my-SoFi-Invest-account
+  sofi: ["USD"],
+  // Yen is paid in by transfer and held as yen. Dollars, euros and
+  // Australian dollars can be wired in from another bank and kept as
+  // foreign currency, and online foreign shares settle in their own
+  // currency from that balance. Hong Kong dollars can be held but no page
+  // says they can be wired in, so HKD is left out.
+  // https://www.nomura.co.jp/onlineservice/help/rule/deal_inquiry/fstock_rule.html
+  // https://www.nomura.co.jp/service/f_exchange
+  // https://www.nomura.co.jp/support/procedure/service/f_refund/
+  nomurajp: ["JPY", "USD", "EUR", "AUD"],
+  // Yen is paid in by quick deposit or transfer. DMM does not accept a
+  // foreign-currency deposit ("外貨による入金は承っておりません"): dollars are
+  // held only from a sale or a yen-to-dollar exchange in the account.
+  // https://kabu.dmm.com/support/faqs/article/00084/
+  // https://kabu.dmm.com/us/settlement/
+  dmm: ["JPY"],
+  // The Direct service quotes a sterling cash rate only; money in another
+  // currency is converted, and an overseas trade carries an FX charge. No
+  // official page says "sterling only" in so many words.
+  // https://www.charles-stanley.co.uk/services/invest/terms-conditions
+  charlesstanley: ["GBP"],
+  // A SWIFT transfer must be in dollars ("Transfers must be in dollars
+  // (USD)"), as are ACH and the local USD routes; a local-currency transfer
+  // is converted to dollars. The account is held in dollars.
+  // https://help.hapi.trade/en/articles/8945476-how-can-i-fund-my-account
+  // https://hapi.trade/en/blog/how-to-make-deposits-and-withdrawals-on-hapi
+  hapi: ["USD"],
+  // BG Trader: one EUR and one USD IBAN at UBB; the account currency is the
+  // client's choice (BGN gone with the euro on 1 Jan 2026). A deposit in
+  // another currency than the account's is converted at BenchMark's rate.
+  // https://www.benchmark.bg/Внос-на-средства_545.html
+  // https://www.benchmark.bg/real_account.php
+  // https://www.benchmark.bg/online_form/General_terms_2026_BG.pdf
+  benchmark: ["EUR", "USD"],
+  // Every deposit account (shares/ETF, wallet) is a CZK account at CSOB.
+  // Base currency is CZK (terms, "Zakladni mena"); Investona converts for
+  // a foreign title itself ("O prevod men se postarame my").
+  // https://www.investona.cz/static/bankovni_spojeni.pdf
+  // https://www.investona.cz/static/obchodni_podminky.pdf
+  // https://www.investona.cz/cenik
+  investona: ["CZK"],
+  // SPACE ucet MINI, free when used only for securities, is held in EUR or
+  // in USD, CZK, GBP, HUF or PLN. An order settles on the account it names;
+  // a security in another currency is converted at the bank's rate.
+  // https://www.slsp.sk/sk/ludia/ucty/space-ucet-mini
+  // https://www.slsp.sk/content/dam/sk/slsp/www_slsp_sk/documents/zverejnenia/zverejnenie-spotrebitel-ucty.pdf
+  // https://www.slsp.sk/content/dam/sk/slsp/www_slsp_sk/documents/zverejnenia/podmienky-investovania-do-cennych-papierov.pdf
+  slsp: ["EUR", "USD", "CZK", "GBP", "HUF", "PLN"],
+  // Regulations §7d: cash accounts in PLN, EUR, USD, GBP and CHF ("inwestycje
+  // w 5 walutach").
+  // https://unicredit.pl/indywidualni/inwestycje/inwestowanie-samodzielne
+  // https://unicredit.pl/dam/jcr:c4bf5152-a0f7-4fb7-a0b1-ec58853eb789/Regulamin%20%C5%9Bwiadczenia%20us%C5%82ug%20maklerskich%20(przyjmowanie,%20przekazywanie%20i%20wykonywanie%20zlece%C5%84,%20prowadzenie%20rachunku).pdf
+  unicreditpl: ["PLN", "EUR", "USD", "GBP", "CHF"],
+  // Up to two live MT5 accounts, each with its own base currency: EUR, USD,
+  // GBP, PLN, RON. Real stocks are bought on the MT5 account. A deposit in
+  // another currency than the base is converted.
+  // https://nagamarkets.zendesk.com/hc/en-gb/articles/13801518527516-How-can-I-add-a-trading-account
+  // https://nagamarkets.zendesk.com/hc/en-gb/articles/13994925749916-I-deposited-funds-and-the-amount-that-I-received-differs-from-what-I-sent
+  nagacy: ["EUR", "USD", "GBP", "PLN", "RON"],
+  // Share-dealing terms: base currency USD, EUR or GBP; the stocks fee page
+  // gives a minimum deposit of "20 USD/EUR/GBP or 100 PLN".
+  // https://capital.com/en-eu/ways-to-trade/fees-and-charges/stocks
+  // https://capital.com/terms-and-conditions-share-dealing-cceu
+  capitalcomcy: ["EUR", "USD", "GBP", "PLN"],
+  // A linked bank account in NEO Invest or a transfer to the 0116C… account
+  // at VPBank or MB116C… at MB. The guide names no other currency.
+  // https://hdsd.vpbanks.com.vn/giao-dich-tien/nap-tien
+  vpbanks: ["VND"],
+  // Cash at the counter, a fast transfer to the 042C… account at VPBank, or
+  // a transfer to TVS's accounts at Vietnamese banks. No other currency.
+  // https://www.tvs.vn/api/files/Update-huong-dan-nop-tien-vao-tai-khoan.pdf
+  tvs: ["VND"],
+  // No page names a currency; fees are in taka, the form asks for a local
+  // bank account with a routing number, and an NRB's foreign currency is
+  // converted to taka through a NITA before it reaches the broker.
+  // https://www.islamibanksecurities.com/Services/NRBBrokerageService.php
+  // https://www.islamibanksecurities.com/Services/documents/NRB%20Guidelines.pdf
+  ibsl: ["BDT"],
+  // From a T-Bank debit card or savings account: roubles, US dollars, yuan,
+  // Turkish lira, tenge and Belarusian roubles. Another bank's card or SBP
+  // pays in roubles. Euros and drams are not on the deposit list.
+  // https://www.tbank.ru/invest/help/brokerage/account/trade-on-bs/insert-money/
+  tinvest: ["RUB", "USD", "CNY", "TRY", "KZT", "BYN"],
 };
 
 const BY_PLAN = {

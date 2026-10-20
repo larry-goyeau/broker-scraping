@@ -4,23 +4,23 @@
 // is left for a later session: the quote on the fiche would be the previous
 // board.
 //
-//   node brokers/ing/ing_touch.mjs
-//   node brokers/ing/ing_touch.mjs --limit=20
+//   node brokers/ingde/ingde_touch.mjs
+//   node brokers/ingde/ingde_touch.mjs --limit=20
 
 import fs from "node:fs";
 import { resolveVenue, sessionState } from "../../spreads/venues.mjs";
 
 const API = "https://component-api.wertpapiere.ing.de/api/v1";
-const CATALOGUE = new URL("ing-parsed.json", import.meta.url);
-const PROGRESS = new URL("ing-touch-progress.json", import.meta.url);
-const TOUCHES = new URL("ing-touches.jsonl", import.meta.url);
+const CATALOGUE = new URL("ingde-parsed.json", import.meta.url);
+const PROGRESS = new URL("ingde-touch-progress.json", import.meta.url);
+const TOUCHES = new URL("ingde-touches.jsonl", import.meta.url);
 const SPREAD = new URL("../../spreads/spread.json", import.meta.url);
 const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36";
 const EQ = new Set(["STOCK", "ETF", "ETN", "ETC", "ETP"]);
 const CONCURRENCY = 6;
 const FLUSH_EVERY = 40;
 
-// Same labels as ing_scraping.mjs. The code is what the fiche asks for.
+// Same labels as ingde_scraping.mjs. The code is what the fiche asks for.
 const PLACE = {
   TGT: "Direkthandel",
   FRA: "FRA",

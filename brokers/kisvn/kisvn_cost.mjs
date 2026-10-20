@@ -26,7 +26,7 @@
 //   HOSE, UPCOM            the BSC board, read by spreads/vn-touch.mjs
 //   HNX                    no book is published here
 //
-//   node brokers/kis/kis_cost.mjs VNM HOSE VND --shares=10 --price=57300
+//   node brokers/kisvn/kisvn_cost.mjs VNM HOSE VND --shares=10 --price=57300
 //
 // `roundTrip(...)` reads files, not the network.
 
@@ -38,7 +38,7 @@ import { spreads } from "../../spreads/book.mjs";
 import { bookParts, plus, finite } from "../../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
 
-const CATALOGUE = new URL("kis-parsed.json", import.meta.url);
+const CATALOGUE = new URL("kisvn-parsed.json", import.meta.url);
 const PAGE = "https://kisvn.vn/san-pham-dich-vu/dich-vu-chung-khoan/bieu-phi-4206";
 const READ_ON = "2026-10-06";
 const RATE = 0.003;
@@ -88,7 +88,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     remark: CUSTODY,
   };
   if (!catalogue) {
-    return { ...answer, why: "le catalogue KIS n'existe pas encore : lancer `node brokers/kis/kis_scraping.mjs`" };
+    return { ...answer, why: "le catalogue KIS n'existe pas encore : lancer `node brokers/kisvn/kisvn_scraping.mjs`" };
   }
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue KIS` };
@@ -106,7 +106,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     mic: m.venue?.mic ?? null,
     currency: m.row.currency,
     unsourced: m.unsourced,
-    broker: "kis",
+    broker: "kisvn",
     ticker: m.row.ticker,
   });
   const listing = {

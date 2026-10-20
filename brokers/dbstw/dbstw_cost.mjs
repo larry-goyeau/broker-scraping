@@ -32,7 +32,7 @@
 //   above their middle, as "FX 0.333% when cash ≠ USD". Read 2026-10-02 17:40.
 //   https://www.dbs.com.tw/personal-zh/rates/foreign-exchange-rates.page
 //
-//   node brokers/dbs/dbs_cost.mjs AAPL US USD --shares=10 --price=200
+//   node brokers/dbstw/dbstw_cost.mjs AAPL US USD --shares=10 --price=200
 //
 // `roundTrip(...)` reads files, not the network.
 
@@ -45,7 +45,7 @@ import { bookParts, plus, finite } from "../../na.mjs";
 import { usBookPerShare } from "../../spreads/rule606.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
 
-const CATALOGUE = new URL("dbs-parsed.json", import.meta.url);
+const CATALOGUE = new URL("dbstw-parsed.json", import.meta.url);
 const PAGE =
   "https://www.dbs.com.tw/iwov-resources/pdf/legal%20disclaimers%20and%20announcements/01_personal%20finance/05_investments/foreign-stocks-risk-disclosure.pdf";
 const READ_ON = "2026-10-02";
@@ -81,7 +81,7 @@ function remarkOf(currency) {
   const [bid, ask] = pair;
   const mid = (bid + ask) / 2;
   const gap = ((ask - mid) / mid) * 100;
-  return `${CUSTODY}\nFX ${gap.toFixed(3)}% when cash ≠ ${code(currency)}.`;
+  return `${CUSTODY}\nFX ${Number(gap.toFixed(2))}% when cash ≠ ${code(currency)}.`;
 }
 
 function findListing({ etf, place, currency }) {
@@ -122,7 +122,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     remark: CUSTODY,
   };
   if (!catalogue) {
-    return { ...answer, why: "le catalogue DBS n'existe pas encore : lancer `node brokers/dbs/dbs_scraping.mjs`" };
+    return { ...answer, why: "le catalogue DBS n'existe pas encore : lancer `node brokers/dbstw/dbstw_scraping.mjs`" };
   }
   const { named, matches } = findListing({ etf, place, currency });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue DBS` };
@@ -140,7 +140,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     mic: m.venue?.mic ?? null,
     currency: m.row.currency,
     unsourced: m.unsourced,
-    broker: "dbs",
+    broker: "dbstw",
     ticker: m.row.ticker,
   });
   const listing = {
@@ -155,7 +155,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   };
   const floor = FLOOR[listing.currency];
   const american = loose(listing.brokerExchange) === "US" && listing.currency === "USD";
-  const quoted = american ? usBookPerShare({ broker: "dbs", ticker: listing.ticker }) : null;
+  const quoted = american ? usBookPerShare({ broker: "dbstw", ticker: listing.ticker }) : null;
   const marketBp = bp ?? (american ? null : book.leaf?.bp ?? null);
   const marketPerShare = perShare ?? quoted ?? (american ? null : book.leaf?.perShare ?? null);
   const shared = {

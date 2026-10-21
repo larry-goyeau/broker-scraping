@@ -29,8 +29,11 @@
 // printed.
 //
 // Cash is euro. Named foreign tapes add 0.08 % each way on a non-euro
-// quote (« taux Bourse Direct + 0.08 % »). Other markets print only their
-// unpublished rate — that conversion is N/A rather than 0.08 % invented.
+// quote; other markets add nothing: « Commission de change : taux appliqué
+// à Bourse Direct + 0,08% par opération, sauf autres marchés : taux
+// appliqué à Bourse Direct » (tarifs_bd.pdf, re-read 2026-10-21). As on the
+// named tapes, the rate Bourse Direct is given is taken as the market rate,
+// so other markets convert at 0 %.
 // Custody is 0 € on Euronext Paris / Amsterdam / Brussels and 0.036 % / year
 // (VAT in) on foreign holdings: a holding cost, in the remark. Transfer
 // out (15 € / 25 € a line) is leaving. French / Italian / Spanish FTT and
@@ -340,8 +343,7 @@ export function roundTrip({
   const { tax, rates, source: taxSource } = taxesFor(listing.isin);
   const taxPct = Object.values(rates).reduce((s, r) => s + r, 0);
   const converts = listing.currency !== "EUR";
-  const fxKnown = !converts || namedFx(market);
-  const fxPct = !converts ? 0 : namedFx(market) ? FX_NAMED : null;
+  const fxPct = !converts ? 0 : namedFx(market) ? FX_NAMED : 0;
 
   const shared = {
     ...answer,
@@ -428,9 +430,7 @@ export function roundTrip({
             `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ` +
             `${m.unsourced?.why || "pas de source de spread"}`,
         }
-      : !fxKnown
-        ? { why: "change des autres marchés : taux Bourse Direct non publié" }
-        : {}),
+      : {}),
     trade: {
       shares: n,
       price: p,
@@ -522,8 +522,8 @@ function confidenceOf({
     }
   }
   if (fxPct) said.push(`change + ${(fxPct * 100).toFixed(2)} % par sens`);
-  else if (fxPct === 0) said.push(`cotation EUR : pas de change`);
-  else if (listing.currency !== "EUR") said.push(`change des autres marchés non publié`);
+  else if (listing.currency !== "EUR") said.push(`autres marchés : change au taux appliqué à Bourse Direct, sans majoration`);
+  else said.push(`cotation EUR : pas de change`);
   if (taxPct) {
     said.push(
       `taxe à l'achat ${(100 * taxPct).toFixed(2)} % du montant` +

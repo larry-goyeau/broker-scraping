@@ -348,6 +348,14 @@ const FOLDER = {
   // https://hellostake.com/au/support/funding-and-withdrawal/funding/52905017357209
   // https://hellostake.com/au/support/funding-and-withdrawal/funding/52906816466201
   stakeau: ["AUD"],
+  // Stake refuses direct USD funding: a deposit is New Zealand dollars from
+  // a local bank. The NZ account is Wall St only and the pricing page takes
+  // the 1% FX fee at the time of funding, so the money lands as US dollars.
+  // No NZD balance is kept, so no currency stays as sent.
+  // https://hellostake.com/nz/support/funding-and-withdrawal/funding/26011875001881
+  // https://hellostake.com/nz/support/funding-and-withdrawal/funding/26013092023961
+  // https://hellostake.com/nz/pricing/wall-st
+  stakenz: [],
   // A transfer into the multiproducto account is a PSE payment or the
   // Bancolombia button, in pesos. Local shares and the MGC settle in pesos.
   // No other currency is left unconverted.
@@ -470,12 +478,15 @@ const FOLDER = {
   easybourse: ["EUR"],
   easyequities: ["ZAR", "USD", "AUD", "GBP", "EUR"],
   // "You can maintain balances in different currencies in your EuroFinance
-  // account", and no automatic conversion unless a trade lacks the cash. The
-  // deposit page (accounts opened in the EFOCS app) gives EUR, USD and GBP
-  // accounts; BGN ended with the euro, CHF has no deposit account.
+  // account, including BGN, EUR, USD, GBP, and CHF", with no automatic
+  // conversion unless a trade lacks the cash, and "You can deposit and
+  // withdraw in one of the following currencies – BGN, EUR, USD, CHF, or
+  // GBP". The deposit page prints IBANs for EUR, USD and GBP only, so a CHF
+  // transfer rests on the FAQ. BGN ended with the euro.
   // https://eurofinance.bg/en/faqs/can-i-have-different-currencies-in-my-eurofinance-account/
+  // https://eurofinance.bg/en/faqs-categories/deposits-withdrawals-and-currency-conversion/
   // https://payments.eurofinance.bg/en
-  efocs: ["EUR", "USD", "GBP"],
+  efocs: ["EUR", "USD", "GBP", "CHF"],
   // Client contract Art. 2(1): accounts "in U.S. dollars, Euro, British Pounds
   // or Swiss Francs, at Client's choice"; Art. 8(c): a deposit in another
   // currency is converted into the account's.
@@ -1658,6 +1669,80 @@ const FOLDER = {
   // https://www.interactivebrokers.com/en/support/fund-my-account.php
   // https://www.interactivebrokers.ch/aces/Funding/Methods/Currencies?type=DEPOSIT&colr=CHE
   ibkrch: ["AED", "AUD", "CAD", "CHF", "CNH", "CZK", "DKK", "EUR", "GBP", "HKD", "HUF", "IDR", "ILS", "JPY", "MXN", "MYR", "NOK", "NZD", "PLN", "RON", "SEK", "SGD", "TRY", "USD", "ZAR"],
+  // The funding tool, for a US resident, files the client under Interactive
+  // Brokers LLC and lists 29 currencies. Wire routing is set per currency and
+  // the deposit is credited in it; conversion is a separate FX order. ARS, CLP
+  // and COP come only through SafetyPay, which converts to dollars, and IDR,
+  // MYR, PHP and RON only through Wise, which converts, so they are left out.
+  // https://www.interactivebrokers.com/en/support/fund-my-account.php
+  // https://www.interactivebrokers.com/aces/Funding/Methods/Currencies?type=DEPOSIT&colr=USA
+  // https://www.interactivebrokers.com/am.webapp/i18n/Acct_Mgmt_en.json
+  ibkrus: ["AED", "AUD", "CAD", "CHF", "CNH", "CZK", "DKK", "EUR", "GBP", "HKD", "HUF", "ILS", "JPY", "MXN", "NOK", "NZD", "PLN", "SEK", "SGD", "TRY", "USD", "ZAR"],
+  // IB LLC for a non-US resident: the funding tool answers ibEntity "LLC"
+  // with the same wire currencies as for a US resident (colr=BRA, MEX, ZAF,
+  // ARE, CHN, MYS, NZL, read 2026-10-21; Brazil adds BRL). The same ones are
+  // left out as for ibkrus: ARS, CLP and COP come only through SafetyPay,
+  // which converts to dollars, IDR, MYR, PHP and RON only through Wise, which
+  // converts, and BRL only through a local method that converts.
+  // https://www.interactivebrokers.com/aces/Funding/Methods/Currencies?type=DEPOSIT&colr=BRA
+  // https://www.interactivebrokers.com/am.webapp/i18n/Acct_Mgmt_en.json
+  ibkrint: ["AED", "AUD", "CAD", "CHF", "CNH", "CZK", "DKK", "EUR", "GBP", "HKD", "HUF", "ILS", "JPY", "MXN", "NOK", "NZD", "PLN", "SEK", "SGD", "TRY", "USD", "ZAR"],
+  // The funding tool on the .co.uk site, for a UK resident, files the client
+  // under the UK entity, with GBP as the domestic currency, and lists 25
+  // currencies. Wire routing is set per currency and the deposit is credited
+  // in it; conversion is a separate FX order. IDR, MYR and RON come only
+  // through Wise, which converts them, so they are left out.
+  // https://www.interactivebrokers.co.uk/en/support/fund-my-account.php
+  // https://www.interactivebrokers.co.uk/aces/Funding/Methods/Currencies?type=DEPOSIT&colr=GBR
+  // https://www.interactivebrokers.com/am.webapp/i18n/Acct_Mgmt_en.json
+  ibkruk: ["AED", "AUD", "CAD", "CHF", "CNH", "CZK", "DKK", "EUR", "GBP", "HKD", "HUF", "ILS", "JPY", "MXN", "NOK", "NZD", "PLN", "SEK", "SGD", "TRY", "USD", "ZAR"],
+  // The funding tool on the .com.au site, for an Australian resident, files
+  // the client under the Australian entity, with AUD as the domestic currency,
+  // and lists only these five deposit currencies. Each is taken by wire (AUD
+  // also by PayID) and credited in that currency; conversion is a separate
+  // FX order.
+  // https://www.interactivebrokers.com.au/en/support/fund-my-account.php
+  // https://www.interactivebrokers.com.au/aces/Funding/Methods/Currencies?type=DEPOSIT&colr=AUS
+  ibkrau: ["AUD", "EUR", "GBP", "HKD", "USD"],
+  // The funding tool on the .com.sg site, for a Singapore resident, files the
+  // client under the Singapore entity, with SGD as the domestic currency, and
+  // lists ten currencies. These eight are taken by wire (SGD also by PayNow
+  // and eGIRO) and credited in that currency. IDR and MYR come only through
+  // Wise, which converts them, so they are left out.
+  // https://www.interactivebrokers.com.sg/en/support/fund-my-account.php
+  // https://www.interactivebrokers.com.sg/aces/Funding/Methods/Currencies?type=DEPOSIT&colr=SGP
+  // https://www.interactivebrokers.com/am.webapp/i18n/Acct_Mgmt_en.json
+  ibkrsg: ["AUD", "CNH", "EUR", "GBP", "HKD", "JPY", "SGD", "USD"],
+  // The funding tool on the .com.hk site, for a Hong Kong resident, files the
+  // client under the Hong Kong entity and lists 23 currencies. These 20 are
+  // taken by wire (HKD and CNH also by FPS and eDDA) and credited in that
+  // currency; conversion is a separate FX order. IDR, MYR and RON come only
+  // through Wise, which converts them, so they are left out.
+  // https://www.interactivebrokers.com.hk/en/support/fund-my-account.php
+  // https://www.interactivebrokers.com.hk/aces/Funding/Methods/Currencies?type=DEPOSIT&colr=HKG
+  // https://www.interactivebrokers.com/am.webapp/i18n/Acct_Mgmt_en.json
+  ibkrhk: ["AUD", "CAD", "CHF", "CNH", "CZK", "DKK", "EUR", "GBP", "HKD", "HUF", "ILS", "JPY", "MXN", "NOK", "NZD", "PLN", "SEK", "SGD", "USD", "ZAR"],
+  // IBSJ takes deposits in four currencies only: JPY, USD, EUR and GBP.
+  // The base currency is JPY. A multi-currency account holds each of them
+  // as it is paid in, and the funding tool for a Japanese resident lists the
+  // same four. Other currencies can be held only after a trade or conversion,
+  // so they are not a deposit.
+  // https://www.interactivebrokers.co.jp/aces/Funding/Methods/Currencies?type=DEPOSIT&colr=JPN
+  // https://ibkb.interactivebrokers.com/node/4858
+  // https://www.interactivebrokers.com/am.webapp/i18n/Acct_Mgmt_en.json
+  ibkrjp: ["EUR", "GBP", "JPY", "USD"],
+  // Two accounts. The NSE account is with IB India: INR only (the funding
+  // tool for an Indian resident answers ibEntity "IN", INR alone; "Accounts
+  // opened via IBKR (India) Pvt. Ltd can only use INR as the base currency").
+  // Overseas trading is a separate Interactive Brokers LLC account paid in by
+  // an LRS remittance, which the bank converts from rupees "to US$ or another
+  // currency such as EUR or JPY". It is credited in that currency and held
+  // there, as in any IB LLC account (same wire currencies as ibkrus).
+  // https://www.interactivebrokers.co.in/aces/Funding/Methods/Currencies?type=DEPOSIT&colr=IND
+  // https://www.interactivebrokers.com/en/accounts/configuring-your-account.php
+  // https://www.interactivebrokers.com/webinars/2020-WB-3329-InvestinginGlobalMarketsthroughInteractiveBrokersforIndianResidents.pdf
+  // https://www.interactivebrokers.com/webinars/2017-WB-2760DemystifyInvestinginGlobalMarketsforIndianResidents.pdf
+  ibkrin: ["AED", "AUD", "CAD", "CHF", "CNH", "CZK", "DKK", "EUR", "GBP", "HKD", "HUF", "ILS", "INR", "JPY", "MXN", "NOK", "NZD", "PLN", "SEK", "SGD", "TRY", "USD", "ZAR"],
   // Money comes in by SEPA transfer to an IBAN Wealthyhood gives, by debit
   // card, or by Apple Pay and Google Pay. Plans are priced in euros. An order
   // in another currency is converted from the account's currency at an FX
@@ -1858,6 +1943,91 @@ const FOLDER = {
   // pays in roubles. Euros and drams are not on the deposit list.
   // https://www.tbank.ru/invest/help/brokerage/account/trade-on-bs/insert-money/
   tinvest: ["RUB", "USD", "CNY", "TRY", "KZT", "BYN"],
+  // A trading account is opened in dollars or euros, and up to four can
+  // be held side by side. The currency cannot be changed later. A peso
+  // transfer is free but lands converted, since no peso account exists.
+  // A transfer between accounts in two currencies is an FX order at 0.5%.
+  // https://www.xtb.com/cl/centro-de-ayuda/cuenta-de-inversion/puedo-cambiar-la-divisa-de-mi-cuenta-de-inversiones
+  // https://www.xtb.com/cl/cuenta-y-tarifas
+  // https://www.xtb.com/cl/centro-de-ayuda/tarifas-y-comisiones/puedo-transferir-fondos-entre-mis-cuentas-de-trading
+  xtbcl: ["USD", "EUR"],
+  // A deposit is Australian dollars from an Australian bank, by PayID or
+  // BSB transfer, and stays in dollars. International transfers are
+  // refused. US dollars are a Currency Exchange inside the app; the help
+  // page sends a client who wants to pay in dollars to customer service.
+  // https://www.moomoo.com/au/support/topic6_344
+  // https://www.moomoo.com/au/support/topic6_418
+  // https://www.moomoo.com/au/support/topic6_333
+  moomooau: ["AUD"],
+  // FPX, GXBank Express Deposit and bank transfer are each listed with
+  // ringgit as the only currency, and a withdrawal is ringgit only.
+  // Dollars and Hong Kong dollars come from a Currency Exchange inside
+  // the account, not from a deposit.
+  // https://www.moomoo.com/my/support/topic9_585
+  // https://www.moomoo.com/my/support/topic9_113
+  // https://www.moomoo.com/my/support/topic9_332
+  moomoomy: ["MYR"],
+  // Terms 3.1 and 4.1: a payment in is pounds sterling and all cash is
+  // held in pounds. Dealing term 1.16: a deal or a dividend in another
+  // currency is converted to or from sterling.
+  // https://dodl.co.uk/terms-and-conditions
+  // https://help.dodl.co.uk/en/articles/6655200-what-are-foreign-exchange-fx-charges
+  dodl: ["GBP"],
+  // Terms 4.2 and section 8 (effective 24 August 2026): every payment to
+  // or from the nominated bank is pounds, and the account settles in
+  // pounds. A receipt in another currency is converted. The nominated
+  // bank is in the UK, Jersey, Guernsey or the Isle of Man.
+  // https://www.bankofscotland.co.uk/assets/pdf/sharedealing/filestore/bankofscotlandsharedealing_termsandconds.pdf
+  bankofscotland: ["GBP"],
+  // Terms 4.2 and section 8 (effective 24 August 2026): every payment to
+  // or from the nominated bank is pounds, and the account settles in
+  // pounds. A receipt in another currency is converted. The nominated
+  // bank is in the UK, Jersey, Guernsey or the Isle of Man.
+  // https://www.scottishwidows.co.uk/assets/literature/docs/terms-and-conditions.pdf
+  scottishwidows: ["GBP"],
+  // The ISA and Investment Account terms (06/2025): all payments must be
+  // made in sterling, and all orders and valuations are in sterling only.
+  // A non-sterling holding from a corporate action is sold and paid into
+  // the cash account in sterling.
+  // https://static.aviva.io/content/dam/document-library/adviser/customerplatform/rd02002c.pdf
+  // https://static.aviva.io/content/dam/document-library/adviser/customerplatform/rd03003c.pdf
+  aviva: ["GBP"],
+  // Bloomo takes no deposit in dollars or any other foreign currency;
+  // money is paid in as yen (FAQ of 6 November 2025). Dollars for a US
+  // trade are bought with that yen, which is a conversion.
+  // https://bloomo.co.jp/support/deposit/ドルなどの外貨で入金することはできますか
+  // https://bloomo.co.jp/support/deposit/sub-category/入金
+  bloomo: ["JPY"],
+  // A transfer to the client's VPBank identification account, by Napas
+  // 247 from any Vietnamese bank, or to APS's VPBank collection account
+  // is credited to the ordinary or margin sub-account and left there.
+  // The page names no other currency.
+  // https://apec.com.vn/ho-tro/nop-rut-tien-co-phieu/
+  apec: ["VND"],
+  // A transfer through the securities tab of a VCB, BIDV, VietinBank,
+  // VPBank, MSB or Techcombank app, or to the KBSV identification account
+  // at BIDV, is credited to the SA or MA sub-account and left there. The
+  // page names no other currency.
+  // https://www.kbsec.com.vn/vi/giao-dich-tien.htm
+  // https://www.kbsec.com.vn/vi/huong-dan-giao-dich-tien.htm
+  kbsvn: ["VND"],
+  // Pesos paid to the peso CBU stay pesos. Dollars paid to the dollar CBU
+  // at Banco Comafi stay dollars (local MEP dollars). Nothing published
+  // takes a wire from abroad, so there is no cable balance. An account
+  // needs an address in Argentina.
+  // https://www.comafi.com.ar/bursatil/json/apps/GetFaq.aspx?note=2694
+  // https://www.comafi.com.ar/bursatil/dolar-mep.aspx
+  comafi: ["ARS", "USD"],
+  // Terms clause 2: cash is booked in sub-accounts kept apart by currency.
+  // Pesos and local dollars come by transfer from the client's own bank in
+  // Argentina. The fee sheet charges u$s 100 for a money transfer received
+  // from abroad, and clause 7 lets cash go to the client's bank abroad, so
+  // cable dollars can be paid in and held as dollars. The FAQ names only
+  // local banks, so the cable route is the less certain part.
+  // https://giobursatil.com.ar/wp-content/uploads/2024/03/Términos-y-condiciones-de-cuenta-Vigente-2023.pdf
+  // https://giobursatil.com.ar/wp-content/uploads/2021/09/Comisiones-y-Aranceles-092021.pdf
+  // https://giobursatil.com.ar/preguntas-frecuentes/
+  gio: ["ARS", "USD"],
 };
 
 const BY_PLAN = {

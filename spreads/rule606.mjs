@@ -85,6 +85,10 @@ export const US_BROKERS = {
 // array when the broker names several US BDs: aliasOf takes the highest Q.
 export const ALIASES = {
   thndr: "alpaca",
+  // Bloomo's pre-contract document (上場有価証券等書面) names Alpaca
+  // Securities LLC as the local broker that takes its US orders.
+  // https://storage.googleapis.com/prod-brooklyn-public/documents/上場有価証券等書面・契約締結前交付書面.pdf
+  bloomo: "alpaca",
   plum: "alpaca",
   lightyear: "alpaca",
   sarwa: "alpaca",
@@ -149,6 +153,9 @@ export const ALIASES = {
   // Stake Wall St introduces the order to DriveWealth LLC (CRD 165429).
   // https://hellostake.com/au/legal/financial-services-guide
   stakeau: "drivewealth",
+  // Stake NZ pricing PDF: "Stake's U.S. broker-dealer, DriveWealth".
+  // https://media.hellostake.com/NZ_Pricing.pdf
+  stakenz: "drivewealth",
   // FINRA 606 bulk, 2026 Q2 disclosures: Kraken Securities (CRD 324343)
   // adopts Alpaca Securities LLC (CRD 288202) by reference, quarter 2025 Q4.
   kraken: "alpaca",
@@ -173,6 +180,12 @@ export const ALIASES = {
   // moomoo証券's December 2025 trading booklet, chapter 1 article 13:
   // a US stock order is transmitted to Futu Clearing Inc.
   moomoojp: "futuclearing",
+  // moomoo MY names Futu Clearing Inc. (DTC 4272) as custodian of US stocks.
+  // https://www.moomoo.com/my/support/topic9_202
+  moomoomy: "futuclearing",
+  // moomoo AU's US transfer-in page gives DTC 4272, Futu Clearing Inc.'s
+  // number. https://www.moomoo.com/au/support/topic6_393
+  moomooau: "futuclearing",
   // Futu Hong Kong names Futu Clearing Inc. as the DTC firm for a US
   // stock transfer, code 4272. Futu Clearing's 606 is the routing report.
   // https://www.futuhk.com/support/topic2_277
@@ -247,6 +260,10 @@ export const ALIASES = {
   // slice is the place.
   lloyds: "bimi",
   halifax: "bimi",
+  // Bank of Scotland and Scottish Widows Share Dealing are Halifax Share
+  // Dealing Limited too (their terms of 24 August 2026).
+  bankofscotland: "bimi",
+  scottishwidows: "bimi",
   // Light Horse's Form CRS: Apex Clearing executes, clears and custodies.
   // FINRA 606 bulk, 2026 Q2 disclosures: Light Horse (CRD 120242) adopts
   // Apex Clearing (CRD 13071) by reference.
@@ -310,6 +327,16 @@ export const ALIASES = {
   longbridgesg: "interactivebrokers",
   // The folders of the US firms' own non-US or US entities: same BD.
   interactivebrokersie: "interactivebrokers",
+  // The IBKR entities of the new catalogues: each IBKR company passes a
+  // client's US order to Interactive Brokers LLC, which routes it.
+  ibkrus: "interactivebrokers",
+  ibkruk: "interactivebrokers",
+  ibkrau: "interactivebrokers",
+  ibkrsg: "interactivebrokers",
+  ibkrhk: "interactivebrokers",
+  ibkrjp: "interactivebrokers",
+  ibkrin: "interactivebrokers",
+  ibkrint: "interactivebrokers",
   tradestationus: "tradestation",
   tastytradeus: "tastytrade",
   // kabu.com's US stock rules: 当社では現地証券会社（Interactive Brokers LLC）へ取次を行います。
@@ -335,9 +362,13 @@ export const ALIASES = {
   indmoney: ["drivewealth", "alpaca"],
   // XTB's execution policy of 29.06.2026 sends US shares and ETFs to "KBC
   // Bank N.V. lub DriveWealth LLC". DriveWealth is the only US firm; its
-  // 2026 Q2 stock sections are empty, so the book stays the quoted NBBO.
+  // 606 stock sections are empty, so its own 605 (DWWT) is the mix.
   // https://xas-new-cdn.xtb.com/file/0104/67/a77a2a66-7485-4948-96c2-bc3b89097f91/polityka-realizacji-zlecen-omi-29-06-2026-access.pdf
   xtb: "drivewealth",
+  // XTB Chile's custody contract (29.06.2026): XTB S.A. may hold the
+  // securities at KBC Securities NV and/or DriveWealth LLC.
+  // https://www.xtb.com/cl/archivos/contrato-de-custodia-de-valores_clcl.pdf
+  xtbcl: "drivewealth",
   // Racional Stocks "están operadas y custodiadas por DriveWealth". Same
   // empty stock mix.
   // https://ayuda.racional.cl/es/articles/5551738-quien-opera-y-custodia-mis-inversiones-en-stocks
@@ -396,9 +427,15 @@ const ASSIGNED = {
   // (owner's choice, 2026-10-20).
   // https://www.home.saxo/-/media/documents/business-terms-and-policies/rts-28-reports/rts28_saxoas_2023_brokers.csv
   citadelsecurities: { name: "Citadel Securities LLC", mix: { CDRG: 1 } },
+  // DriveWealth LLC's 606 stock sections are empty in every quarter since
+  // 2025 Q3: it takes stock orders not held, which Rule 606(a) leaves out.
+  // Its own 605 as a broker-dealer (DWWT) covers those orders, filled by it
+  // or sent on, so that file is its mix.
+  // https://legal.drivewealth.com
+  drivewealth: { name: "DriveWealth, LLC", mix: { DWWT: 1 } },
 };
 
-const RIC = new Set(["CDRG", "NITE", "JNST", "UBSS", "HRTF", "SOHO", "ETMM", "GTSM", "IATS", "IBCO", "MSCO", "STXG", "CODX", "ICBX"]);
+const RIC = new Set(["CDRG", "NITE", "JNST", "UBSS", "HRTF", "SOHO", "ETMM", "GTSM", "IATS", "IBCO", "MSCO", "STXG", "CODX", "ICBX", "DWWT"]);
 
 const ricOf = (name) => {
   const raw = String(name || "").trim().toUpperCase();
@@ -593,7 +630,10 @@ export function routingOf(broker) {
     .toLowerCase()
     .split(":")[0];
   const key = aliasOf(raw);
-  return load606()?.brokers?.[key] || ASSIGNED[key] || null;
+  const filed = load606()?.brokers?.[key];
+  // A filed report with no stock venue says nothing about stock fills.
+  if (filed && Object.keys(filed.mix || {}).length) return filed;
+  return ASSIGNED[key] || filed || null;
 }
 
 // Equal-weight mean over names of (that teneur's 605 / the blended 605).

@@ -170,6 +170,7 @@ const BY_MIC = {
   TXSE: "us",
   OTCM: "us",
   XTSE: "tsx",
+  XATS: "tsx",
   XTSX: "ca",
   NEOE: "ca",
   XCNQ: "ca",
@@ -353,12 +354,51 @@ function findListing(rows, { etf, place, currency }) {
 }
 
 /**
+ * MARKETS with an entity's partial override merged over it. Each key of
+ * `over` is a market: `null` drops it (N/A), an object is merged over the
+ * default (a new key adds a market) and its `byCcy` is merged currency by
+ * currency (`null` drops a currency). No override returns MARKETS itself.
+ */
+export function mergeMarkets(over) {
+  if (!over) return MARKETS;
+  const out = { ...MARKETS };
+  for (const [key, value] of Object.entries(over)) {
+    if (value == null) {
+      delete out[key];
+      continue;
+    }
+    const prior = out[key] || {};
+    const byCcy = { ...(prior.byCcy || {}), ...(value.byCcy || {}) };
+    for (const [ccy, rule] of Object.entries(byCcy)) if (rule == null) delete byCcy[ccy];
+    out[key] = { ...prior, ...value, byCcy };
+  }
+  return out;
+}
+
+/**
  * One IBKR entity: its folder, its catalogue, the cash it is based in, its
  * price-list URL and its name. Every IBKR price list prints the same stock
  * tables; what changes is the account currency and the deposit list.
+ * Where an entity's own page differs, `markets` is a partial MARKETS
+ * override (see mergeMarkets) and `byMic` maps extra MICs to a market key
+ * (a falsy value makes that MIC N/A). A market entry may also carry
+ * `column` (French name of the price column, default "Fixed + IB
+ * SmartRouting"), `plan` (the answer's plan) and `levies` (the market key
+ * whose third-party fees apply, default its own); a rule may carry `note`
+ * (French text replacing the generated rule text). `commissionTax` is
+ * `{ rate, label, markets }`: a consumption tax (GST) on the commission,
+ * on every market or only the listed market keys. `catalogue` passes an
+ * already parsed catalogue (two plans of one entity share it).
  */
-export function makeIbkr({ folder, entity, base, page, catalogueUrl }) {
-  const catalogue = fs.existsSync(catalogueUrl) ? JSON.parse(fs.readFileSync(catalogueUrl, "utf8")) : null;
+export function makeIbkr({ folder, entity, base, page, catalogueUrl, markets = null, byMic = null, commissionTax = null, catalogue: given = null }) {
+  const MARKET = mergeMarkets(markets);
+  const micMap = byMic ? { ...BY_MIC, ...byMic } : BY_MIC;
+  const marketHere = (row, mic) => {
+    const m = code(mic || row?.mic);
+    if (!MTF.has(m) && Object.prototype.hasOwnProperty.call(micMap, m)) return micMap[m] || null;
+    return marketOf(row, mic);
+  };
+  const catalogue = given ?? (fs.existsSync(catalogueUrl) ? JSON.parse(fs.readFileSync(catalogueUrl, "utf8")) : null);
   const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
   if (rows.length) warmListingIndex(rows);
   const deposit = (ccy) => depositHas(folder, null, cashOf(ccy));
@@ -414,8 +454,8 @@ export function makeIbkr({ folder, entity, base, page, catalogueUrl }) {
     const held = deposit(listing.currency);
     const marketBp = bp ?? book.leaf?.bp ?? null;
     const marketPerShare = perShare ?? book.leaf?.perShare ?? null;
-    const market = marketOf(m.row, m.venue?.mic ?? m.row.mic);
-    const table = market ? MARKETS[market] : null;
+    const market = marketHere(m.row, m.venue?.mic ?? m.row.mic);
+    const table = market ? MARKET[market] ?? null : null;
     const rule = table?.byCcy?.[listing.currency] ?? null;
     const ruleCcy = rule ? (listing.currency === "GBX" ? "GBP" : listing.currency) : null;
 
@@ -427,7 +467,7 @@ export function makeIbkr({ folder, entity, base, page, catalogueUrl }) {
       listing,
       cashCurrency: held ? cash : base,
       feeMarket: market,
-      plan: table?.tieredOnly ? "tiered" : "fixed",
+      plan: table?.plan ?? (table?.tieredOnly ? "tiered" : "fixed"),
       fx: { quote: QUOTE, asOf: FX_AS_OF, listing: usdPer(listing.currency) },
       fxIfConverted: held ? FX_AUTO : 0,
       bp: marketBp,
@@ -456,11 +496,13 @@ export function makeIbkr({ folder, entity, base, page, catalogueUrl }) {
     const buy = commissionSide(rule, { shares: n, amount, side: "buy" });
     const sell = commissionSide(rule, { shares: n, amount, side: "sell" });
     const commissionCcy = ruleCcy === "GBX" ? "GBP" : ruleCcy;
-    const commissionUsd = buy && sell ? dollars(buy.charged + sell.charged, commissionCcy) : null;
+    const vat =
+      commissionTax && (!commissionTax.markets || commissionTax.markets.includes(market)) ? commissionTax.rate : 0;
+    const commissionUsd = buy && sell ? dollars((buy.charged + sell.charged) * (1 + vat), commissionCcy) : null;
     const fxUsd = held ? 0 : notionalUsd == null ? null : notionalUsd * FX_AUTO * 2;
     const brokerFees = plus(commissionUsd, fxUsd);
 
-    const levies = leviesOf({ market, listing, n, notional, notionalGbp: convert(notional, settle, "GBP") });
+    const levies = leviesOf({ market: table.levies ?? market, listing, n, notional, notionalGbp: convert(notional, settle, "GBP") });
     const leviesUsd = levies.native == null ? null : dollars(levies.native, settle);
 
     const tax = taxesOf(listing.isin);
@@ -489,14 +531,16 @@ export function makeIbkr({ folder, entity, base, page, catalogueUrl }) {
     ].filter(Boolean);
 
     const ruleText =
-      rule.perShare != null
+      rule.note ??
+      (rule.perShare != null
         ? `${rule.perShare} ${commissionCcy} la part, plancher ${rule.min}, plafond ${(100 * rule.maxPct).toFixed(1)} %`
         : rule.buy != null
           ? `${(100 * rule.buy).toFixed(2)} % à l'achat (jusqu'à ${rule.buyBand} ${commissionCcy}, puis ${(100 * rule.sell).toFixed(2)} %), ${(100 * rule.sell).toFixed(2)} % à la vente, plancher ${rule.min}`
-          : `${(100 * rule.rate).toFixed(3)} % par sens` + (rule.min != null ? `, plancher ${rule.min} ${commissionCcy}` : ", sans plancher");
+          : `${(100 * rule.rate).toFixed(3)} % par sens` + (rule.min != null ? `, plancher ${rule.min} ${commissionCcy}` : ", sans plancher"));
     const said = [
-      `${entity}, ${table.tieredOnly ? "Tiered seul imprimé, premier palier" : "Fixed + IB SmartRouting"}, ${table.label} : ${ruleText}`,
+      `${entity}, ${table.column ?? (table.tieredOnly ? "Tiered seul imprimé, premier palier" : "Fixed + IB SmartRouting")}, ${table.label} : ${ruleText}`,
       buy?.capped ? "commission au plafond" : buy?.floored ? "commission au plancher" : "commission au taux",
+      vat ? `${commissionTax.label} sur la commission` : null,
       ...levies.said,
       taxPct ? `taxe à l'achat ${(100 * taxPct).toFixed(2)} % (taxMap.mjs)` : null,
       held
@@ -522,6 +566,7 @@ export function makeIbkr({ folder, entity, base, page, catalogueUrl }) {
         perShare: rule.perShare ?? null,
         min: rule.min ?? null,
         maxPct: rule.maxPct ?? null,
+        ...(vat ? { tax: vat } : {}),
       },
       parts: {
         marché: finite(bookUsd, 6),
@@ -534,6 +579,40 @@ export function makeIbkr({ folder, entity, base, page, catalogueUrl }) {
   }
 
   return { roundTrip, rows };
+}
+
+// Entities whose page prints an IBKR Lite column (US, Singapore).
+export const PLANS = ["pro", "lite"];
+
+/**
+ * An IBKR entity that prints both IBKR Pro (Fixed) and IBKR Lite: US
+ * exchange-listed lines at USD 0, OTC Markets and other markets at Fixed.
+ * `opts` are makeIbkr's; `liteLabel` names the Lite column.
+ */
+export function makeIbkrProLite(opts, liteLabel = "IBKR Lite") {
+  const pro = makeIbkr(opts);
+  const lite = makeIbkr({
+    ...opts,
+    catalogue: pro.rows.length ? pro.rows : null,
+    markets: {
+      ...(opts.markets || {}),
+      us: {
+        column: liteLabel,
+        byCcy: { USD: { rate: 0, min: null, note: "0 USD, sans plancher (IBKR Lite, actions et ETF cotés sur une bourse américaine)" } },
+      },
+      // OTC Markets is "non-exchange-listed": Fixed pricing under Lite.
+      otc: { ...MARKETS.us, label: "États-Unis (OTC)", column: `${liteLabel}, OTC au tarif Fixed`, levies: "us" },
+    },
+    byMic: { ...(opts.byMic || {}), OTCM: "otc" },
+  });
+  function roundTrip({ plan = "pro", ...query }) {
+    const id = String(plan || "pro").toLowerCase();
+    if (id === "pro" || id === "fixed") return { ...pro.roundTrip(query), plan: "pro" };
+    if (id === "lite") return { ...lite.roundTrip(query), plan: "lite" };
+    const { parts, commission, trade, basis, confidence, ...head } = pro.roundTrip(query);
+    return { ...head, usd: null, brokerFees: null, plan: id, why: `formule inconnue : ${plan} (pro|lite)` };
+  }
+  return { roundTrip, rows: pro.rows };
 }
 
 const ibkrca = makeIbkr({
@@ -560,7 +639,18 @@ export function runCli(metaUrl, fn) {
   };
   const [etf, place, currency] = process.argv.slice(2).filter((item) => !item.startsWith("--"));
   console.log(
-    JSON.stringify(fn({ etf, place, currency, shares: Number(arg("shares", "10")), price: Number(arg("price", "0")) }), null, 2)
+    JSON.stringify(
+      fn({
+        etf,
+        place,
+        currency,
+        shares: Number(arg("shares", "10")),
+        price: Number(arg("price", "0")),
+        ...(arg("plan") ? { plan: arg("plan") } : {}),
+      }),
+      null,
+      2
+    )
   );
 }
 

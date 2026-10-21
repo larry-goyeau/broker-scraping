@@ -78,10 +78,32 @@ const SUPPLEMENT = {
   GB00BNKDVV71: UK_STAMP, // LTI  Lindsell Train Investment Trust plc, SSMM
 };
 
+// The tax authorities' own lists, for 2026 trades (taxOfficial.json, built
+// from the sources it names). French, Spanish and Italian FTT follow the
+// issuer and a published list: BOFiP's companies above EUR 1bn, the AEAT's
+// above EUR 1bn, the MEF's exempt companies below EUR 500m (Italy's rate on
+// a market buy is 0.2 % from 1 Jan 2026, L. 199/2025). Trading212 prints no
+// Spanish or Italian line at all, so for those three taxes the list wins over
+// its disclosure. UK and Irish stamp lines (LSE market and incorporation,
+// HMRC and Revenue rules) only fill an ISIN the disclosure is silent on. A
+// title the list exempts carries the tax at 0, so a cost file that adds a
+// tax of its own when the map has none sees that it is known.
+const OFFICIAL_FILE = new URL("taxOfficial.json", import.meta.url);
+const OFFICIAL = fs.existsSync(OFFICIAL_FILE) ? JSON.parse(fs.readFileSync(OFFICIAL_FILE, "utf8")).byIsin ?? {} : {};
+const LIST_TAXES = /FRENCH_TRANSACTION|SPANISH|ITALIAN/i;
+
 export function taxEntry(isin) {
   const id = String(isin || "").toUpperCase();
   if (!id) return null;
-  return byIsin?.[id] ?? SUPPLEMENT[id] ?? null;
+  const swept = byIsin?.[id] ?? SUPPLEMENT[id] ?? null;
+  const listed = OFFICIAL[id];
+  if (!listed || listed.rate == null) return swept;
+  const line = { [listed.key]: { ofValue: listed.rate } };
+  if (LIST_TAXES.test(listed.key)) {
+    const achat = Object.fromEntries(Object.entries(swept?.achat ?? {}).filter(([name]) => !LIST_TAXES.test(name)));
+    return { achat: { ...achat, ...line }, vente: swept?.vente ?? {} };
+  }
+  return swept ?? { achat: line, vente: {} };
 }
 
 // A share whose issuer country has a transaction tax (UK and Irish stamp,

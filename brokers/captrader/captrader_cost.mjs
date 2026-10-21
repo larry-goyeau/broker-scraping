@@ -237,8 +237,9 @@ const ADR_NAMED = /\b(ADR|GDR|ADS)\b/i;
 
 // The page withholds French and Italian FTT by name (note dated 12/2015, still
 // on the 2026 page). The root map has France and reads Trading212's zero on
-// Italy. Spain is not named, so it is left to the map.
-const OWN_FTT = { IT: { name: "ITALIAN_FTT", rate: 0.001 } };
+// Italy. Spain is not named, so it is left to the map. Italy's rate on a
+// market buy is 0.2 % from 1 Jan 2026 (L. 199/2025).
+const OWN_FTT = { IT: { name: "ITALIAN_FTT", rate: 0.002 } };
 
 const CHECK = {
   on: "2026-09-10",

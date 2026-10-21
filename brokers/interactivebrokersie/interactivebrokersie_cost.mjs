@@ -22,9 +22,9 @@
 // Tables re-read 2026-09-16 from the IE stocks and crypto pages — unchanged
 // since the 11th. NTF reimbursement after 30 days, directed routing (0.10 %
 // / higher mins), fractionals' $0.01 / 1 % special, the PEA 0.50 % cap and
-// IBKR Lite are not this trip. A `nonEuResident` (no KID) line stays priced;
-// `listingAccepts` hides it from an EEA or GB nationality, not from an empty country
-// box. Crypto is zerohash europe: 0.18 %, min $1.75, cap 1 % of trade
+// IBKR Lite are not this trip. A no-KID line stays priced, with the
+// catalogue's remark that it is for professional clients only (IBIE takes
+// EEA residents only, and PRIIPs closes it to retail). Crypto is zerohash europe: 0.18 %, min $1.75, cap 1 % of trade
 // value, no tape. Conversion (0.0008–0.002 % on the FX page) stays out: whether
 // cash has to cross is a fact about the client's balances. Custody is free.
 // VAT "may apply" with no rate — left out. NSCC $0.00020 and the NYSE /
@@ -501,7 +501,8 @@ export function roundTrip({
     tax,
     fx: fxNote(listing.currency),
     fxIfConverted: 0,
-    remark: remarkOf({ market, rule: resolved?.rule, usedPlan: resolved?.usedPlan, currency: listing.currency }),
+    // The catalogue's own line first (a no-KID fund: professional clients only).
+    remark: [hit.row.remark || "", remarkOf({ market, rule: resolved?.rule, usedPlan: resolved?.usedPlan, currency: listing.currency })].filter(Boolean).join("\n"),
   };
 
   if (!resolved) {

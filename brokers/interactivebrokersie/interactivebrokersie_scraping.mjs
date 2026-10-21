@@ -533,12 +533,15 @@ function corpactListing(exchange) {
 }
 
 // IBKR's own over-the-counter desk. Not a stock exchange, and not Xetra (IBIS).
+const PROFESSIONAL_ONLY = "Professional clients only.";
+let indianDropped = 0;
+
 function valueListing(exchange) {
   return String(exchange || "").toUpperCase() === "VALUE";
 }
 
 // A US-domiciled fund publishes no KID, and PRIIPs leaves European retail
-// clients unable to buy one. A non-EU resident still can. IBKR quotes those
+// clients unable to buy one. An EEA professional client still can. IBKR quotes those
 // listings all the same and admits it in one place only: field 7183, the
 // order-ticket notice. 7184 alone says nothing, since tradable UCITS listings
 // come back with 7184=1 too.
@@ -716,13 +719,19 @@ async function runJob(queryIndex, job) {
       raw: row.raw,
       isin: job.shelf === "isin" ? job.query : "",
     };
-    if (row.restricted) entry.nonEuResident = true;
+    // IBIE takes EEA residents only (accepted.mjs), so a line kept for
+    // clients outside the EEA is not its offer. NSE cash is for Indian
+    // residents with an IB India account: dropped. A no-KID line is closed to
+    // EEA retail but open to an EEA professional client (PRIIPs covers retail
+    // only): kept, with that said.
     if (
       String(row.exchange || "").toUpperCase() === "NSE" &&
       (!row.currency || String(row.currency).toUpperCase() === "INR")
     ) {
-      entry.indianOnly = true;
+      indianDropped += 1;
+      continue;
     }
+    if (row.restricted) entry.remark = PROFESSIONAL_ONLY;
 
     const key = entryKey(entry);
     if (seen.has(key)) continue;
@@ -730,10 +739,7 @@ async function runJob(queryIndex, job) {
     results.push(entry);
 
     if (row.restricted) {
-      console.error(`  ${row.ticker}@${row.exchange}: non-EU resident (no KID)`);
-    }
-    if (entry.indianOnly) {
-      console.error(`  ${row.ticker}@${row.exchange}: Indian-resident only`);
+      console.error(`  ${row.ticker}@${row.exchange}: professional clients only (no KID)`);
     }
   }
 
@@ -755,21 +761,19 @@ await Promise.all(
 );
 
 const byType = new Map();
-let nonEu = 0;
-let indianOnly = 0;
+let professional = 0;
 for (const row of results) {
   byType.set(row.type, (byType.get(row.type) || 0) + 1);
-  if (row.nonEuResident) nonEu += 1;
-  if (row.indianOnly) indianOnly += 1;
+  if (row.remark === PROFESSIONAL_ONLY) professional += 1;
 }
 console.error(
   `${results.length} listed (${[...byType].map(([type, count]) => `${count} ${type}`).join(", ")})`
 );
-if (nonEu > 0) {
-  console.error(`${nonEu} of them are non-EU-resident (no KID for European retail)`);
+if (professional > 0) {
+  console.error(`${professional} of them are for professional clients only (no KID for European retail)`);
 }
-if (indianOnly > 0) {
-  console.error(`${indianOnly} of them are Indian-resident only (NSE cash)`);
+if (indianDropped > 0) {
+  console.error(`${indianDropped} NSE lines dropped (Indian residents only)`);
 }
 
 await browser.disconnect();

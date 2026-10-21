@@ -124,6 +124,20 @@ const REPORTERS = [
     amended: true,
     url: () => "https://public.s3.com/rule605/coda/CODX202608.zip",
   },
+  // DriveWealth LLC files its customer orders as a broker-dealer (DWWT): what
+  // it filled itself and what it sent on, in the amended layout. Its 606
+  // stock sections are empty because it takes stock orders not held, so
+  // this file is the only public measure of its fills. Its site keeps the
+  // current month only (2026-07 is gone). Prices that slice of Q, not the blend.
+  // https://legal.drivewealth.com
+  {
+    ric: "DWWT",
+    name: "DriveWealth",
+    participant: "DWWT",
+    qOnly: true,
+    amended: true,
+    url: () => "https://public.s3.com/rule605/drvw/DWWT202608.zip",
+  },
   // Instinet LLC files its 605 as the CBX ATS (ICBX). July 2026 is still the
   // legacy layout, and it has marketable limits only. Not in the blend.
   {

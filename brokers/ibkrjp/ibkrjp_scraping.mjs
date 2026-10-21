@@ -51,8 +51,8 @@
 // the Nasdaq Trader symbol directory, and Hong Kong codes missing from
 // HKEX's List of Securities. Rules, sources and quotes are in
 // ../ibkrus/ibkr_exchange_lists.mjs (shared by the nine IBKR scrapers).
-// Expert Market names stay: IBKR only says its clients cannot see their
-// quotes, not that they cannot buy them.
+// Expert Market names are dropped too: IBKR clients cannot see their
+// quotes (owner's decision, 2026-10-20).
 //
 // Left out: warrants, rights, interim shares (BTA), dead contracts IBKR
 // keeps renamed .OLD/.NEW/.BAD or without a currency, Russian ISINs

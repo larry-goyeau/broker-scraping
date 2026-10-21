@@ -888,10 +888,14 @@ export const ACCEPTED = {
   // differ, so the lists stay apart. UK, Singapore, Hong Kong and MEA are
   // other companies and are not either card.
   swissquote: { groups: ["EEA"], countries: ["CH"] },
-  // open-account-country-list.php has Montenegro, the Philippines and the Holy See.
-  // It does not list Afghanistan, Nigeria, Venezuela or Zimbabwe. Russia is
-  // on that page.
-  interactivebrokersie: { all: true, except: ["AF", "NG", "VE", "ZW"] },
+  // IBKR books an account with the entity of the holder's residence. Its
+  // Europe page: Interactive Brokers Ireland serves "all EU and EEA
+  // residents"; the UK and Switzerland are IBUK, the rest of the world other
+  // IBKR companies. The country picker sends exactly the 30 EEA countries to
+  // the Irish site.
+  // https://www.interactivebrokers.eu/en/home.php
+  // https://www.interactivebrokers.com/en/choose-country-region.php
+  interactivebrokersie: { groups: ["EEA"] },
   xtb: { countries: XTB },
   igue: WORLD_NO_US,
   // UK site, IG Trading and Investments: a GBP share-dealing account, an ISA
@@ -1937,6 +1941,76 @@ export const ACCEPTED = {
   // https://www.interactivebrokers.eu/en/home.php
   // https://ibkb.interactivebrokers.com/es/node/1000
   ibkrch: { countries: ["CH"] },
+  // This row is a US resident's account at Interactive Brokers LLC. The
+  // catalogue drops non-US ETFs ("U.S. residents are not allowed to trade
+  // non-U.S. ETFs", IBKR FAQ 467097743) and the Lite plan is for US
+  // residents only, so the other countries IB LLC carries (Latin America,
+  // Africa, most of Asia: "If you are a resident of Asia, except India, Hong
+  // Kong, Japan, Australia and Singapore ... your account will be opened with
+  // Interactive Brokers LLC") are not this row.
+  // https://www.interactivebrokers.com/lib/cstools/faq/#/content/467097743
+  // https://www.interactivebrokers.com.hk/en/accounts/individual.php
+  ibkrus: { countries: ["US"] },
+  // Interactive Brokers LLC for everyone else: IBKR books an account with the
+  // entity of the holder's residence, and IB LLC carries every country that
+  // has no IBKR company of its own. "If you are a resident of Asia, except
+  // India, Hong Kong, Japan, Australia and Singapore ... your account will be
+  // opened with Interactive Brokers LLC"; the application opens a resident of
+  // China with IB LLC, also from the Hong Kong site. The country picker sends
+  // the EEA, the UK, Switzerland, Canada and the small European states to
+  // their own companies. The application has no Afghanistan, Belarus, Iraq,
+  // Myanmar, Nigeria, Venezuela or Zimbabwe. The US is the ibkrus row. The UAE
+  // is uncertain: the picker sends it here, but IBUK has a DIFC branch.
+  // https://www.interactivebrokers.com.hk/en/accounts/individual.php
+  // https://www.interactivebrokers.com/en/choose-country-region.php
+  // https://www.interactivebrokers.com/Universal/Application
+  ibkrint: {
+    all: true,
+    except: [
+      "US", ...EEA, "GB", "CH", "CA", "AU", "SG", "HK", "JP", "IN",
+      "GG", "JE", "IM", "GI", "AD", "MC", "SM", "VA",
+      "AF", "BY", "IQ", "MM", "NG", "VE", "ZW",
+    ],
+  },
+  // IBKR's Europe page: IBUK serves "residents of non-EU/EEA European
+  // countries (UK, Switzerland)". The country picker sends the UK, Switzerland,
+  // Jersey, Guernsey, the Isle of Man, Gibraltar, Andorra, Monaco, San Marino
+  // and the Holy See to IBUK. Other non-EU states such as Serbia and Ukraine go
+  // to IB LLC. Switzerland is the ibkrch row, so it stays out of this one.
+  // https://www.interactivebrokers.eu/en/home.php
+  // https://www.interactivebrokers.com/en/choose-country-region.php
+  ibkruk: { countries: ["GB", "GG", "JE", "IM", "GI", "AD", "MC", "SM", "VA"] },
+  // Individual account page: "Accounts are accepted from residents of
+  // Australia." A New Zealand resident goes to IB LLC.
+  // https://www.interactivebrokers.com.au/en/accounts/individual.php
+  // https://www.interactivebrokers.com/en/choose-country-region.php
+  ibkrau: { countries: ["AU"] },
+  // IBKR leaves Singapore out of the Asian residents that IB LLC carries.
+  // Malaysia, Indonesia, Thailand, the Philippines and Vietnam go to IB LLC.
+  // The country picker sends only Singapore to the Singapore site.
+  // https://www.interactivebrokers.com.hk/en/accounts/individual.php
+  // https://www.interactivebrokers.com/en/choose-country-region.php
+  ibkrsg: { countries: ["SG"] },
+  // IBKR leaves Hong Kong out of the Asian residents that IB LLC carries. The
+  // application, on the Hong Kong site too, opens a resident of China with
+  // Interactive Brokers LLC. Macau and Taiwan go to the US site, so IB LLC.
+  // https://www.interactivebrokers.com.hk/en/home.php
+  // https://www.interactivebrokers.com.hk/Universal/Application
+  // https://www.interactivebrokers.com/en/choose-country-region.php
+  ibkrhk: { countries: ["HK"] },
+  // IBKR leaves Japan out of the Asian residents that IB LLC carries. The site
+  // has "Important Account Information for Japan Residents" for the IBSJ
+  // account. Only Japan is sent to the Japanese site.
+  // https://www.interactivebrokers.co.jp/en/accounts/individual.php
+  // https://www.interactivebrokers.com/en/choose-country-region.php
+  ibkrjp: { countries: ["JP"] },
+  // IBKR leaves India out of the Asian residents that IB LLC carries. The site
+  // says Indian residents may trade all products on Indian markets and only
+  // stocks, bonds and ETFs abroad. IB India offers only services allowed under
+  // the NSE, NSDL and SEBI rules.
+  // https://www.interactivebrokers.co.in/en/home.php
+  // https://www.interactivebrokers.com/en/choose-country-region.php
+  ibkrin: { countries: ["IN"] },
   // The online form asks whether the applicant is a Russian citizen. Yes needs
   // a verified Gosuslugi account and a Russian email address. No is sent to
   // the nearest ALOR office, and the offices are in Russia. No other country
@@ -2142,6 +2216,85 @@ export const ACCEPTED = {
   // https://www.tbank.ru/invest/help/brokerage/account/get-bs/requirements/
   // https://www.tbank.ru/cards/debit-cards/tinkoff-black/foreign/
   tinvest: { countries: ["RU"] },
+  // The Chile site is XTB Agente de Valores SpA (CMF register no. 216). Its
+  // terms cover accounts opened with that company from 2 July 2025, and
+  // "Clientes residentes en Chile" who opened earlier stay with XTB
+  // International. The country picker is residence ("El país de residencia
+  // especificado no está disponible"), so the country is CL.
+  // https://www.xtb.com/cl/centro-de-ayuda/cuenta-de-inversion/paises-con-restricciones-de-registro
+  // https://www.xtb.com/cl/centro-de-ayuda/cuenta-de-inversion/que-tipo-de-cuentas-ofrecemos
+  xtbcl: { countries: ["CL"] },
+  // An individual account needs "an Australian Resident" with "a valid
+  // Australian residential address". The picker is residence, so the
+  // country is AU.
+  // https://www.moomoo.com/au/support/topic6_323
+  moomooau: { countries: ["AU"] },
+  // A Malaysian citizen or PR opens with a MyKad. Any other nationality
+  // opens with a passport, but must also prove a Malaysian address. The
+  // picker is residence, so the country is MY.
+  // https://www.moomoo.com/my/support/topic9_107
+  // https://www.moomoo.com/my/support/topic9_108
+  moomoomy: { countries: ["MY"] },
+  // Sign-up needs a New Zealand resident (a citizen or a visa holder) with
+  // a New Zealand bank account in their own name. Someone overseas must
+  // meet the same criteria.
+  // https://hellostake.com/nz/support/get-started/sign-up/26009032047897
+  stakenz: { countries: ["NZ"] },
+  // "Dodl is only available to UK residents". Every account needs a
+  // permanent UK address and UK tax residence. A Crown employee abroad may
+  // open only an ISA. US and Canadian citizens or tax residents are refused.
+  // https://help.dodl.co.uk/en/articles/5830346-is-dodl-available-to-non-uk-residents
+  // https://help.dodl.co.uk/en/articles/9273312-who-can-open-a-dodl-general-investment-account
+  dodl: { countries: ["GB"] },
+  // Terms 4.1 (Halifax Share Dealing, same text as Halifax): an individual
+  // over 18, resident in the UK or, unless the account is an ISA, in Jersey,
+  // Guernsey or the Isle of Man. A crown employee overseas may also open. A
+  // US person and a resident of Canada cannot. The live PDF refuses
+  // non-browser requests; it was read in the 20 Jan 2025 edition.
+  // https://www.bankofscotland.co.uk/assets/pdf/sharedealing/filestore/bankofscotlandsharedealing_termsandconds.pdf
+  bankofscotland: { countries: ["GB", "GG", "JE", "IM"] },
+  // Terms 4.1 (24 Aug 2026, Halifax Share Dealing): an individual over 18,
+  // resident in the UK or, unless the account is an ISA, in Jersey, Guernsey
+  // or the Isle of Man. A crown employee overseas may also open. A US person
+  // and a resident of Canada cannot.
+  // https://www.scottishwidows.co.uk/assets/literature/docs/terms-and-conditions.pdf
+  scottishwidows: { countries: ["GB", "GG", "JE", "IM"] },
+  // Investment Account terms 1: at least 18 and "resident in the UK", or a
+  // Crown Servant overseas. "The UK does not include the Channel Islands,
+  // the Isle of Man or Gibraltar." The key features (09/2026) say the same.
+  // https://static.aviva.io/content/dam/document-library/adviser/customerplatform/rd03003c.pdf
+  // https://static.aviva.io/content/dam/document-library/adviser/customerplatform/rd03002c.pdf
+  aviva: { countries: ["GB"] },
+  // Someone living overseas cannot open ("海外にお住まいのお客様は口座開設を
+  // 行うことができません"). Opening needs a My Number document, and a foreigner
+  // shows a residence card.
+  // https://bloomo.co.jp/support/account/海外に住んでいますが-口座開設はできますか
+  // https://bloomo.co.jp/support/account/どのような本人確認書類が必要ですか
+  bloomo: { countries: ["JP"] },
+  // An account opens only by eKYC in the APEC Invest app, where the client
+  // photographs a CMT/CCCD (Vietnamese identity card). No foreign-investor
+  // path is published.
+  // https://apec.com.vn/khach-hang-ca-nhan/dich-vu-chung-khoan/mo-tai-khoan-truc-tuyen/mo-tai-khoan-truc-tuyen-2/
+  // https://apps.apple.com/vn/app/apec-invest/id1588347128?l=vi
+  apec: { countries: ["VN"] },
+  // The online form asks the client to prepare a chip citizen card ("CC/CCCD
+  // gắn chip"). A foreign individual is a choice on the form, but it does not
+  // replace the CCCD step. KBSV's guide routes foreigners through a trading
+  // code and a BIDV capital account. Same as kisvn and pinetree, so VN.
+  // https://kbopen.kbsec.com.vn/
+  // https://www.kbsec.com.vn/pic/general/files/GUIDE%20TO%20SECURITIES%20TRADING-032019.pdf
+  kbsvn: { countries: ["VN"] },
+  // FAQ: "Ser mayor de 14 años" and "Tener domicilio en la Argentina", with
+  // a DNI and a CUIT or CUIL.
+  // https://www.comafi.com.ar/bursatil/json/apps/GetFaq.aspx?note=2694
+  comafi: { countries: ["AR"] },
+  // FAQ: a DNI, a CUIL/CUIT and a utility bill for the declared address.
+  // Transfers in must come from the client's account at a bank in the
+  // country authorised by the BCRA. The signature line takes "CUIT / L /
+  // CDI", so a CDI foreigner can open, but the picker stays Argentina.
+  // https://giobursatil.com.ar/preguntas-frecuentes/
+  // https://giobursatil.com.ar/wp-content/uploads/2025/04/personafisica2025.pdf
+  gio: { countries: ["AR"] },
 };
 
 const GROUPS = { EEA, EU, GCC };

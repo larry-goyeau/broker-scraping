@@ -40,7 +40,8 @@
 // Stamp / FTT from taxMap by ISIN. The OMI table also names France
 // 0.40 %, Spain 0.20 %, Italy 0.10 %, UK 0.50 % / Irish 1 %, and PTM
 // £1.50 above £10 000 — used only when the map is silent, and only
-// on a stock of that market. SEC is printed 0 %. TAF, CAT, Belgian
+// on a stock of that market. Italy is 0.20 % here: the law doubled it
+// on market buys from 1 Jan 2026 (L. 199/2025). SEC is printed 0 %. TAF, CAT, Belgian
 // TOB and HK stamp are not named and are not invented.
 //
 // Custody 0.02 % p.a. on the excess of average daily NAV above
@@ -155,7 +156,7 @@ const IE_STAMP = 0.01;
 const OWN_FTT = {
   FR: { name: "FRENCH_TRANSACTION_TAX", rate: 0.004, mics: new Set(["XPAR"]), exchanges: /EURONEXT|PARIS|XPAR/ },
   ES: { name: "SPANISH_FTT", rate: 0.002, mics: new Set(["XMAD"]), exchanges: /BME|MADRID|XMAD/ },
-  IT: { name: "ITALIAN_FTT", rate: 0.001, mics: new Set(["XMIL"]), exchanges: /MIL|BORSA|XMIL/ },
+  IT: { name: "ITALIAN_FTT", rate: 0.002, mics: new Set(["XMIL"]), exchanges: /MIL|BORSA|XMIL/ },
 };
 const EURONEXT_MICS = new Set(["XPAR", "XAMS", "XBRU", "XLIS"]);
 const US_MICS = new Set(["XNAS", "XNYS", "ARCX", "XASE", "BATS", "IEXG"]);

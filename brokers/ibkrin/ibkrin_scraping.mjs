@@ -38,8 +38,8 @@
 // the Nasdaq Trader symbol directory, and Hong Kong codes missing from
 // HKEX's List of Securities. Rules, sources and quotes are in
 // ../ibkrus/ibkr_exchange_lists.mjs (shared by the nine IBKR scrapers).
-// Expert Market names stay: IBKR only says its clients cannot see their
-// quotes, not that they cannot buy them.
+// Expert Market names are dropped too: IBKR clients cannot see their
+// quotes (owner's decision, 2026-10-20).
 //
 // Left out: warrants, rights, interim shares (BTA), dead contracts IBKR
 // keeps renamed .OLD/.NEW/.BAD or without a currency, Russian ISINs
@@ -365,7 +365,7 @@ byPlace.clear();
 for (const row of rows) byPlace.set(row.exchange, (byPlace.get(row.exchange) || 0) + 1);
 
 if (rows.length < 100_000) throw new Error(`only ${rows.length} rows`);
-const floors = { "Toronto Stock Exchange": 2000, "TSX Venture": 1200, "Cboe Canada": 4000, "London Stock Exchange": 4500, "Börse Frankfurt": 8000, "Hong Kong Stock Exchange": 2500, "Tokyo Stock Exchange": 3500, "OTC Markets": 5000, "National Stock Exchange of India": 3000 };
+const floors = { "Toronto Stock Exchange": 2000, "TSX Venture": 1200, "Cboe Canada": 4000, "London Stock Exchange": 4500, "Börse Frankfurt": 8000, "Hong Kong Stock Exchange": 2500, "Tokyo Stock Exchange": 3500, "OTC Markets": 4000, "National Stock Exchange of India": 3000 };
 for (const [place, floor] of Object.entries(floors)) {
   if (places.includes(place) && (byPlace.get(place) || 0) < floor) throw new Error(`only ${byPlace.get(place) || 0} rows on ${place}`);
 }

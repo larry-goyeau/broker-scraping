@@ -195,7 +195,8 @@ const UK_STAMP = 0.005;
 const IE_STAMP = 0.01;
 const US_MICS = new Set(["XNAS", "XNYS", "ARCX", "XASE", "BATS", "IEXG"]);
 const US_EX = new Set(["NASDAQ", "NYSE", "AMEX", "ARCA", "BATS", "IEX"]);
-const OWN_FTT = { IT: { name: "ITALIAN_FTT", rate: 0.001 } };
+// Italian FTT on a market buy, 0.2 % from 1 Jan 2026 (L. 199/2025).
+const OWN_FTT = { IT: { name: "ITALIAN_FTT", rate: 0.002 } };
 
 const SPECIALIST_ON_PAGE = {
   frankfurt: { rate: 0.000504, min: 2.52 },

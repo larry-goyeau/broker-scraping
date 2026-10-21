@@ -35,9 +35,9 @@
 // another currency in your account", with no rate, spread or fee. So that
 // total is N/A.
 //   https://eurofinance.bg/en/faqs-categories/deposits-withdrawals-and-currency-conversion/
-// The same FAQ says balances can be held in "BGN, EUR, USD, GBP, and CHF",
-// while deposits.mjs lists EUR only; the code reads deposits.mjs, so a USD,
-// GBP or CHF line turns into a held line as soon as that list changes.
+// The same FAQ says balances can be held, deposited and withdrawn in "BGN,
+// EUR, USD, CHF, or GBP"; deposits.mjs lists EUR, USD, GBP and CHF, and the
+// code reads it, so a line in one of those is held, not converted.
 //
 //   https://www.eurofinance.bg/wp-content/uploads/documents/legal-documents/Schedule%20of%20fees.pdf
 //   https://eurofinance.bg/en/services/trading/deutscheboerse/

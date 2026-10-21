@@ -59,9 +59,20 @@ function loadBrokerMeta() {
 }
 
 const FOLDER_NAME = {
-  interactivebrokersie: "Interactive Brokers",
+  interactivebrokersie: "IBKR EEA",
+  ibkrus: "IBKR US",
+  ibkruk: "IBKR UK",
+  ibkrau: "IBKR Australia",
+  ibkrsg: "IBKR Singapore",
+  ibkrhk: "IBKR Hong Kong",
+  ibkrjp: "IBKR Japan",
+  ibkrin: "IBKR India",
+  ibkrca: "IBKR Canada",
   saxofr: "Saxo Bank",
   ibkrch: "IBKR Suisse",
+  scottishwidows: "Scottish Widows",
+  // IB LLC for a resident of a country with no IBKR company of its own.
+  ibkrint: "IBKR International",
   alfainvest: "Alfa",
   invictus: "Invictus",
   avanza: "Avanza",
@@ -214,6 +225,19 @@ const FOLDER_LIST = {
   tvs: "Thien Viet Securities (TVS)",
   tinvest: "T-Investments",
   vpbanks: "VPBank Securities",
+  // The 2026-10 catalogues whose folder name does not find their row.
+  ibkrus: "Interactive Brokers",
+  ibkrint: "Interactive Brokers",
+  ibkruk: "Interactive Brokers UK",
+  ibkrau: "Interactive Brokers Australia",
+  ibkrsg: "Interactive Brokers Singapore",
+  ibkrhk: "Interactive Brokers Hong Kong",
+  ibkrjp: "Interactive Brokers Japan",
+  ibkrin: "Interactive Brokers India",
+  xtbcl: "XTB Chile",
+  dodl: "AJ Bell Dodl",
+  bloomo: "Bloomo Securities",
+  kbsvn: "KB Securities Vietnam",
 };
 
 // The page drops the word "Securities" from a broker's name: "Ando
@@ -1537,6 +1561,14 @@ const GOPOCKET_PLANS = [
 // portfolios (Bronze 0.4 %, Silver 0.3 %, Gold and Platinum 0.2 %), each
 // halved on the Portu <26 account.
 const SPLIT_PLANS = {
+  ibkrus: { brand: "IBKR US", plans: [
+    { id: "pro", label: "Pro" },
+    { id: "lite", label: "Lite" },
+  ] },
+  ibkrsg: { brand: "IBKR Singapore", plans: [
+    { id: "pro", label: "Pro" },
+    { id: "lite", label: "Lite" },
+  ] },
   nomurajp: { brand: "Nomura", plans: [
     { id: "netcall", label: "Net & Call" },
     { id: "branch", label: "Branch account" },
@@ -3257,7 +3289,24 @@ async function warmPrices(key) {
     }
     return hints;
   };
-  await Promise.all([...isins].slice(0, 12).map((isin) => ensureFresh(isin, undefined, hintsFor(isin))));
+  // A price already held, even a day old, is good enough to draw the page:
+  // its refresh runs behind and the next view gets it. Only an ISIN with no
+  // price at all is waited for, and then for a few seconds at most, so one
+  // slow board cannot hold the whole page (a first BHP view took 30 s).
+  const waits = [];
+  for (const isin of [...isins].slice(0, 12)) {
+    const job = ensureFresh(isin, undefined, hintsFor(isin)).catch(() => undefined);
+    if (!heldPrice(isin)) waits.push(job);
+  }
+  if (waits.length) {
+    await Promise.race([Promise.all(waits), new Promise((done) => setTimeout(done, PRICE_WAIT_MS))]);
+  }
+}
+
+const PRICE_WAIT_MS = 5000;
+
+function heldPrice(isin) {
+  return Object.values(prices[String(isin || "").toUpperCase()] || {}).some((leaf) => Number(leaf?.price) > 0);
 }
 
 const VENUE_606 = {

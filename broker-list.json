@@ -723,6 +723,10 @@
     "type": "Bank",
     "url": "https://www.axos.com/invest/self-directed-trading",
     "exchanges": {
+      "OTC Markets": {
+        "restriction": "$0 commission only for US exchange-listed stocks; OTC trades may carry extra charges",
+        "reliability": "medium"
+      },
       "United States": {
         "reliability": "high"
       }
@@ -836,6 +840,10 @@
     "exchanges": {
       "OTC Markets": {
         "reliability": "high"
+      },
+      "United States": {
+        "count": 10996,
+        "reliability": "high"
       }
     }
   },
@@ -848,6 +856,10 @@
       "OTC Markets": {
         "restriction": "Selected OTC stocks only (mainly large-cap international companies)",
         "count": 300,
+        "reliability": "high"
+      },
+      "United States": {
+        "count": 13182,
         "reliability": "high"
       }
     }
@@ -1781,17 +1793,6 @@
     }
   },
   {
-    "name": "Popular Securities",
-    "country": "US",
-    "type": "Broker",
-    "url": "https://documents.popular.com/pdfs/PO/Understanding-How-We-Are.pdf",
-    "exchanges": {
-      "United States": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "HSBC Securities (USA)",
     "country": "US",
     "type": "Bank",
@@ -1886,6 +1887,9 @@
     "exchanges": {
       "OTC Markets": {
         "reliability": "high"
+      },
+      "United States": {
+        "reliability": "high"
       }
     }
   },
@@ -1935,6 +1939,9 @@
     "url": "https://www.galaxy.app/product/brokerage",
     "exchanges": {
       "OTC Markets": {
+        "reliability": "high"
+      },
+      "United States": {
         "reliability": "high"
       }
     }
@@ -2234,6 +2241,9 @@
     "exchanges": {
       "OTC Markets": {
         "reliability": "high"
+      },
+      "United States": {
+        "reliability": "high"
       }
     }
   },
@@ -2339,6 +2349,9 @@
       "OTC Markets": {
         "restriction": "Selected OTC stocks only",
         "reliability": "high"
+      },
+      "United States": {
+        "reliability": "high"
       }
     }
   },
@@ -2375,6 +2388,9 @@
     "url": "https://files.brokercheck.finra.org/crs_328167.pdf",
     "exchanges": {
       "OTC Markets": {
+        "reliability": "high"
+      },
+      "United States": {
         "reliability": "high"
       }
     }
@@ -2587,6 +2603,9 @@
     "exchanges": {
       "OTC Markets": {
         "reliability": "high"
+      },
+      "United States": {
+        "reliability": "medium"
       }
     }
   },
@@ -3770,6 +3789,9 @@
         "reliability": "high"
       },
       "OTC Markets": {
+        "reliability": "high"
+      },
+      "United States": {
         "reliability": "high"
       }
     }
@@ -5273,7 +5295,7 @@
     }
   },
   {
-    "name": "Quilter Invest",
+    "name": "Quilter",
     "country": "UK",
     "type": "Neobroker",
     "url": "https://www.quilterinvest.com",
@@ -10587,7 +10609,7 @@
     }
   },
   {
-    "name": "AGORA direct",
+    "name": "AGORA",
     "country": "DE",
     "type": "Broker",
     "url": "https://www.agora-direct.com/de/aktien-etf-fonds/",
@@ -10782,6 +10804,9 @@
     "exchanges": {
       "Germany": {
         "reliability": "high"
+      },
+      "London Stock Exchange": {
+        "reliability": "medium"
       }
     }
   },
@@ -11353,6 +11378,9 @@
     "exchanges": {
       "Germany": {
         "reliability": "high"
+      },
+      "London Stock Exchange": {
+        "reliability": "medium"
       }
     }
   },
@@ -11378,6 +11406,12 @@
     "exchanges": {
       "Germany": {
         "reliability": "high"
+      },
+      "London Stock Exchange": {
+        "reliability": "medium"
+      },
+      "United States": {
+        "reliability": "medium"
       }
     }
   },
@@ -15011,6 +15045,12 @@
     "exchanges": {
       "Germany": {
         "reliability": "high"
+      },
+      "London Stock Exchange": {
+        "reliability": "medium"
+      },
+      "United States": {
+        "reliability": "medium"
       }
     }
   },
@@ -15648,6 +15688,9 @@
     "type": "Bank",
     "url": "https://www.spk-ro-aib.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html",
     "exchanges": {
+      "Germany": {
+        "reliability": "medium"
+      },
       "Tradegate": {
         "reliability": "high"
       }
@@ -19143,6 +19186,27 @@
     "type": "Bank",
     "url": "https://www.psd-nuernberg.de/produkte/geldanlage/depot-brokerage/meindepot.html",
     "exchanges": {
+      "Börse Berlin": {
+        "reliability": "medium"
+      },
+      "Börse Düsseldorf": {
+        "reliability": "medium"
+      },
+      "Börse Frankfurt": {
+        "reliability": "medium"
+      },
+      "Börse Hamburg": {
+        "reliability": "medium"
+      },
+      "Börse Hannover": {
+        "reliability": "medium"
+      },
+      "Börse München": {
+        "reliability": "medium"
+      },
+      "Börse Stuttgart": {
+        "reliability": "medium"
+      },
       "Börse Xetra": {
         "reliability": "high"
       }
@@ -26073,18 +26137,18 @@
     "type": "Neobroker",
     "url": "https://www.webull.eu/",
     "exchanges": {
-      "New York Stock Exchange": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "high"
-      },
       "Nasdaq": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
+        "restriction": "Shares only: no US ETFs, funds or ETNs (KID); no OTC",
         "reliability": "high"
       },
-      "Tradegate": {
+      "New York Stock Exchange": {
+        "restriction": "Shares only: no US ETFs, funds or ETNs (KID); no OTC",
         "reliability": "high"
       },
       "Quotrix": {
+        "reliability": "high"
+      },
+      "Tradegate": {
         "reliability": "high"
       }
     }
@@ -45161,6 +45225,12 @@
     "exchanges": {
       "Nasdaq Copenhagen": {
         "reliability": "high"
+      },
+      "Nasdaq Stockholm": {
+        "reliability": "medium"
+      },
+      "Oslo Børs": {
+        "reliability": "medium"
       }
     }
   },
@@ -45629,6 +45699,18 @@
     "exchanges": {
       "Denmark": {
         "reliability": "high"
+      },
+      "Finland": {
+        "restriction": "Fee list says only 'Nordiske aktier' and names no exchange or country",
+        "reliability": "medium"
+      },
+      "Norway": {
+        "restriction": "Fee list says only 'Nordiske aktier' and names no exchange or country",
+        "reliability": "medium"
+      },
+      "Sweden": {
+        "restriction": "Fee list says only 'Nordiske aktier' and names no exchange or country",
+        "reliability": "medium"
       }
     }
   },
@@ -45640,6 +45722,22 @@
     "exchanges": {
       "Denmark": {
         "reliability": "high"
+      },
+      "Finland": {
+        "restriction": "Price book says only 'nordiske aktier' and names no exchange or country",
+        "reliability": "medium"
+      },
+      "Norway": {
+        "restriction": "Price book says only 'nordiske aktier' and names no exchange or country",
+        "reliability": "medium"
+      },
+      "Sweden": {
+        "restriction": "Price book says only 'nordiske aktier' and names no exchange or country",
+        "reliability": "medium"
+      },
+      "United States": {
+        "restriction": "Inferred from a USD-denominated online commission (favørpris table); no US exchange is named",
+        "reliability": "medium"
       }
     }
   },
@@ -45859,6 +45957,18 @@
     "exchanges": {
       "Denmark": {
         "reliability": "high"
+      },
+      "Finland": {
+        "restriction": "Fee sheet says only 'Nordiske aktier' and names no exchange or country",
+        "reliability": "medium"
+      },
+      "Norway": {
+        "restriction": "Fee sheet says only 'Nordiske aktier' and names no exchange or country",
+        "reliability": "medium"
+      },
+      "Sweden": {
+        "restriction": "Fee sheet says only 'Nordiske aktier' and names no exchange or country",
+        "reliability": "medium"
       }
     }
   },
@@ -58908,6 +59018,10 @@
     "type": "Broker",
     "url": "https://www.ifbfinwest.ro/ghid/ghid.php?l=tranzactionare_online",
     "exchanges": {
+      "AeRO": {
+        "restriction": "Venue list is general; the Spartacus online platform covers 'instrumentele financiare tranzactionate la Bursa de Valori Bucuresti'",
+        "reliability": "medium"
+      },
       "Bucharest Stock Exchange": {
         "reliability": "high"
       }
@@ -69315,7 +69429,7 @@
     }
   },
   {
-    "name": "Dlala Brokerage",
+    "name": "Dlala",
     "country": "QA",
     "type": "Broker",
     "url": "https://www.dlalabroker.com/en/",
@@ -69541,8 +69655,32 @@
     "type": "Broker",
     "url": "https://www.nic.com.kw/our-services/online-trading/",
     "exchanges": {
+      "Abu Dhabi Securities Exchange": {
+        "reliability": "medium"
+      },
+      "Bahrain Bourse": {
+        "reliability": "medium"
+      },
       "Boursa Kuwait": {
         "reliability": "high"
+      },
+      "Dubai Financial Market": {
+        "reliability": "medium"
+      },
+      "London Stock Exchange": {
+        "reliability": "medium"
+      },
+      "Muscat Stock Exchange": {
+        "reliability": "medium"
+      },
+      "Qatar Stock Exchange": {
+        "reliability": "medium"
+      },
+      "Tadawul": {
+        "reliability": "medium"
+      },
+      "United States": {
+        "reliability": "medium"
       }
     }
   },
@@ -70070,6 +70208,10 @@
     "type": "Neobroker",
     "url": "https://www.joinzad.com/",
     "exchanges": {
+      "OTC Markets": {
+        "count": 257,
+        "reliability": "high"
+      },
       "United States": {
         "restriction": "Shariah-compliant securities only",
         "count": 4000,
@@ -72261,6 +72403,10 @@
     "exchanges": {
       "Borsa Istanbul": {
         "reliability": "high"
+      },
+      "United States": {
+        "restriction": "Exchanges not named individually (29 countries); online via the D-Trade platform; minimum 10,000 USD account. US is inferred from the US-insured (SIPC) account, so it needs cross-checking.",
+        "reliability": "medium"
       }
     }
   },
@@ -73143,8 +73289,96 @@
     "type": "Broker",
     "url": "https://www.ing.com.tr/tr/sizin-icin/yatirim/hisse-senedi-ve-viop",
     "exchanges": {
+      "ASX": {
+        "restriction": "via ING Mobil app",
+        "reliability": "medium"
+      },
+      "Bolsa de Madrid": {
+        "restriction": "via ING Mobil app",
+        "reliability": "medium"
+      },
       "Borsa Istanbul": {
         "reliability": "high"
+      },
+      "Börse Xetra": {
+        "restriction": "via ING Mobil app",
+        "reliability": "medium"
+      },
+      "Euronext Amsterdam": {
+        "restriction": "via ING Mobil app",
+        "reliability": "medium"
+      },
+      "Euronext Brussels": {
+        "restriction": "via ING Mobil app",
+        "reliability": "medium"
+      },
+      "Euronext Dublin": {
+        "restriction": "via ING Mobil app",
+        "reliability": "medium"
+      },
+      "Euronext Lisbon": {
+        "restriction": "via ING Mobil app",
+        "reliability": "medium"
+      },
+      "Euronext Paris": {
+        "restriction": "via ING Mobil app",
+        "reliability": "medium"
+      },
+      "Hong Kong Stock Exchange": {
+        "restriction": "via ING Mobil app",
+        "reliability": "medium"
+      },
+      "Johannesburg Stock Exchange": {
+        "restriction": "via ING Mobil app",
+        "reliability": "medium"
+      },
+      "London IOB": {
+        "restriction": "via ING Mobil app",
+        "reliability": "medium"
+      },
+      "London Stock Exchange": {
+        "restriction": "via ING Mobil app",
+        "reliability": "medium"
+      },
+      "Nasdaq Copenhagen": {
+        "restriction": "via ING Mobil app",
+        "reliability": "medium"
+      },
+      "Nasdaq Helsinki": {
+        "restriction": "via ING Mobil app",
+        "reliability": "medium"
+      },
+      "Nasdaq Stockholm": {
+        "restriction": "via ING Mobil app",
+        "reliability": "medium"
+      },
+      "Oslo Børs": {
+        "restriction": "via ING Mobil app",
+        "reliability": "medium"
+      },
+      "Singapore Exchange": {
+        "restriction": "via ING Mobil app",
+        "reliability": "medium"
+      },
+      "SIX Swiss Exchange": {
+        "restriction": "via ING Mobil app",
+        "reliability": "medium"
+      },
+      "Tokyo Stock Exchange": {
+        "restriction": "via ING Mobil app",
+        "reliability": "medium"
+      },
+      "United States": {
+        "restriction": "via ING Mobil app",
+        "reliability": "high"
+      },
+      "Warsaw Stock Exchange": {
+        "restriction": "via ING Mobil app",
+        "reliability": "medium"
+      },
+      "Wiener Börse": {
+        "restriction": "via ING Mobil app",
+        "reliability": "medium"
       }
     }
   },
@@ -73791,8 +74025,60 @@
     "type": "Bank",
     "url": "https://www.fnb.co.za/share-investing/Self-help/share-investor.html",
     "exchanges": {
+      "ASX": {
+        "restriction": "Global Trader offshore account only.",
+        "reliability": "medium"
+      },
+      "Hong Kong Stock Exchange": {
+        "restriction": "Global Trader offshore account only.",
+        "reliability": "medium"
+      },
       "Johannesburg Stock Exchange": {
         "reliability": "high"
+      },
+      "London Stock Exchange": {
+        "restriction": "Global Trader offshore account only (see United States).",
+        "reliability": "medium"
+      },
+      "Nasdaq Copenhagen": {
+        "restriction": "Global Trader offshore account only.",
+        "reliability": "medium"
+      },
+      "Nasdaq Stockholm": {
+        "restriction": "Global Trader offshore account only.",
+        "reliability": "medium"
+      },
+      "Oslo Børs": {
+        "restriction": "Global Trader offshore account only.",
+        "reliability": "medium"
+      },
+      "Singapore Exchange": {
+        "restriction": "Global Trader offshore account only.",
+        "reliability": "medium"
+      },
+      "SIX Swiss Exchange": {
+        "restriction": "Global Trader offshore account only.",
+        "reliability": "medium"
+      },
+      "Tokyo Stock Exchange": {
+        "restriction": "Global Trader offshore account only.",
+        "reliability": "medium"
+      },
+      "Toronto Stock Exchange": {
+        "restriction": "Global Trader offshore account only.",
+        "reliability": "medium"
+      },
+      "TSX Venture": {
+        "restriction": "Global Trader offshore account only; shares priced above CAD 1.",
+        "reliability": "medium"
+      },
+      "United States": {
+        "restriction": "Only through a separate FNB Global Trader offshore account (FNB Stockbroking and Portfolio Management), funded in USD/EUR/GBP from the client's foreign investment allowance; FNB suggests $10 000 to start. The Share Investor account itself is JSE only.",
+        "reliability": "medium"
+      },
+      "Warsaw Stock Exchange": {
+        "restriction": "Global Trader offshore account only.",
+        "reliability": "medium"
       }
     }
   },
@@ -73908,17 +74194,6 @@
     }
   },
   {
-    "name": "Otto1890 Securities",
-    "country": "ZA",
-    "type": "Broker",
-    "url": "https://www.otto1890.com/",
-    "exchanges": {
-      "Johannesburg Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Investec Online",
     "country": "ZA",
     "type": "Bank",
@@ -73958,8 +74233,84 @@
     "type": "Broker",
     "url": "https://www.sanlamitrade.co.za/w/content/ourproducts.htm",
     "exchanges": {
+      "Bolsa de Madrid": {
+        "restriction": "iTradeGlobal account",
+        "reliability": "medium"
+      },
+      "Börse Xetra": {
+        "restriction": "iTradeGlobal account",
+        "reliability": "medium"
+      },
+      "Euronext Amsterdam": {
+        "restriction": "iTradeGlobal account",
+        "reliability": "medium"
+      },
+      "Euronext Brussels": {
+        "restriction": "iTradeGlobal account",
+        "reliability": "medium"
+      },
+      "Euronext Dublin": {
+        "restriction": "iTradeGlobal account",
+        "reliability": "medium"
+      },
+      "Euronext Lisbon": {
+        "restriction": "iTradeGlobal account",
+        "reliability": "medium"
+      },
+      "Euronext Paris": {
+        "restriction": "iTradeGlobal account",
+        "reliability": "medium"
+      },
+      "First North Stockholm": {
+        "restriction": "iTradeGlobal account",
+        "reliability": "medium"
+      },
+      "Hong Kong Stock Exchange": {
+        "restriction": "iTradeGlobal account",
+        "reliability": "medium"
+      },
       "Johannesburg Stock Exchange": {
         "reliability": "high"
+      },
+      "London IOB": {
+        "restriction": "iTradeGlobal account",
+        "reliability": "medium"
+      },
+      "London Stock Exchange": {
+        "restriction": "iTradeGlobal account",
+        "reliability": "medium"
+      },
+      "Nasdaq Copenhagen": {
+        "restriction": "iTradeGlobal account",
+        "reliability": "medium"
+      },
+      "Nasdaq Helsinki": {
+        "restriction": "iTradeGlobal account",
+        "reliability": "medium"
+      },
+      "Nasdaq Stockholm": {
+        "restriction": "iTradeGlobal account",
+        "reliability": "medium"
+      },
+      "Oslo Børs": {
+        "restriction": "iTradeGlobal account",
+        "reliability": "medium"
+      },
+      "SIX Swiss Exchange": {
+        "restriction": "iTradeGlobal account",
+        "reliability": "medium"
+      },
+      "Toronto Stock Exchange": {
+        "restriction": "iTradeGlobal account",
+        "reliability": "medium"
+      },
+      "United States": {
+        "restriction": "iTradeGlobal account (minimum R100 000); also lists NASDAQ, NYSE MKT, NYSE ARCA, Bats BZX",
+        "reliability": "medium"
+      },
+      "Wiener Börse": {
+        "restriction": "iTradeGlobal account",
+        "reliability": "medium"
       }
     }
   },
@@ -73980,8 +74331,32 @@
     "type": "Broker",
     "url": "https://www.randswiss.com/securities-broking/",
     "exchanges": {
+      "Euronext Dublin": {
+        "restriction": "Private Broking account (minimum R2 million); the evidence is indirect",
+        "reliability": "medium"
+      },
+      "Euronext Milan": {
+        "restriction": "Private Broking account (minimum R2 million); the evidence is indirect",
+        "reliability": "medium"
+      },
+      "Euronext Paris": {
+        "restriction": "Private Broking account (minimum R2 million); the evidence is indirect",
+        "reliability": "medium"
+      },
+      "Hong Kong Stock Exchange": {
+        "restriction": "Private Broking account (minimum R2 million); the evidence is indirect",
+        "reliability": "medium"
+      },
       "Johannesburg Stock Exchange": {
         "reliability": "high"
+      },
+      "London Stock Exchange": {
+        "restriction": "Private Broking account (minimum R2 million); the evidence is indirect",
+        "reliability": "medium"
+      },
+      "United States": {
+        "restriction": "Private Broking account (minimum R2 million), DMA platform; the evidence is indirect",
+        "reliability": "medium"
       }
     }
   },
@@ -75355,17 +75730,6 @@
     }
   },
   {
-    "name": "Standard Investment Bank",
-    "country": "KE",
-    "type": "Broker",
-    "url": "https://sib.co.ke/",
-    "exchanges": {
-      "Nairobi Securities Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "AIB-AXYS Africa",
     "country": "KE",
     "type": "Broker",
@@ -75415,7 +75779,7 @@
     }
   },
   {
-    "name": "Faida Investment Bank",
+    "name": "Faida",
     "country": "KE",
     "type": "Broker",
     "url": "https://fib.co.ke/online-trading/",
@@ -76452,7 +76816,7 @@
     }
   },
   {
-    "name": "CDG Capital Bourse",
+    "name": "CDG Capital",
     "country": "MA",
     "type": "Broker",
     "url": "https://etrading.cdgcapitalbourse.ma/",
@@ -76595,7 +76959,7 @@
     }
   },
   {
-    "name": "Attijari Intermédiation (Attijari Bourse Mobile)",
+    "name": "Attijari",
     "country": "TN",
     "type": "Broker",
     "url": "https://apps.apple.com/tn/app/attijari-bourse-mobile/id1495955805",
@@ -76821,6 +77185,10 @@
     "exchanges": {
       "Amman Stock Exchange": {
         "reliability": "high"
+      },
+      "United States": {
+        "restriction": "Online-trading fee annex lists only US stocks/ETPs; other foreign markets (London, Europe, Canada, Asia) and regional Arab markets appear only in the non-online fee schedules (dealer-assisted)",
+        "reliability": "medium"
       }
     }
   },
@@ -76986,6 +77354,10 @@
     "exchanges": {
       "Amman Stock Exchange": {
         "reliability": "high"
+      },
+      "United States": {
+        "restriction": "Real stocks and ETFs through the CFI Multi-Asset platform (separate from the CFD offering)",
+        "reliability": "medium"
       }
     }
   },
@@ -78000,6 +78372,10 @@
     "exchanges": {
       "ASX": {
         "reliability": "high"
+      },
+      "Cboe Australia": {
+        "count": 36,
+        "reliability": "high"
       }
     }
   },
@@ -78012,22 +78388,22 @@
       "ASX": {
         "reliability": "high"
       },
-      "United States": {
-        "count": 10000,
+      "Cboe Australia": {
         "reliability": "high"
       },
       "Hong Kong Stock Exchange": {
         "reliability": "high"
       },
       "Shanghai-Hong Kong Stock Connect": {
-        "restriction": "Northbound-eligible securities only; STAR Market shares for institutional professional investors only",
+        "restriction": "Northbound-eligible securities only; no STAR Market",
         "reliability": "high"
       },
       "Shenzhen-Hong Kong Stock Connect": {
-        "restriction": "Northbound-eligible securities only; ChiNext shares for institutional professional investors only",
+        "restriction": "Northbound-eligible securities only; no ChiNext",
         "reliability": "high"
       },
-      "Cboe Australia": {
+      "United States": {
+        "count": 10000,
         "reliability": "high"
       }
     }
@@ -79681,27 +80057,37 @@
     "type": "Neobroker",
     "url": "https://www.webull.com.sg",
     "exchanges": {
-      "New York Stock Exchange": {
-        "reliability": "high"
-      },
-      "Nasdaq": {
-        "reliability": "high"
-      },
-      "NYSE American": {
-        "reliability": "high"
-      },
-      "Singapore Exchange": {
+      "Cboe BZX": {
         "reliability": "high"
       },
       "Hong Kong Stock Exchange": {
         "reliability": "high"
       },
+      "Nasdaq": {
+        "reliability": "high"
+      },
+      "New York Stock Exchange": {
+        "reliability": "high"
+      },
+      "NYSE American": {
+        "reliability": "high"
+      },
+      "NYSE Arca": {
+        "reliability": "high"
+      },
+      "OTC Markets": {
+        "restriction": "Webull OTC list only, after signing the OTC Trading Disclosure; limit day orders only",
+        "reliability": "high"
+      },
       "Shanghai-Hong Kong Stock Connect": {
-        "restriction": "Northbound-eligible securities only; STAR Market shares for institutional professional investors only",
+        "restriction": "Northbound-eligible securities only; no STAR Market",
         "reliability": "high"
       },
       "Shenzhen-Hong Kong Stock Connect": {
-        "restriction": "Northbound-eligible securities only; ChiNext shares for institutional professional investors only",
+        "restriction": "Northbound-eligible securities only; no ChiNext",
+        "reliability": "high"
+      },
+      "Singapore Exchange": {
         "reliability": "high"
       }
     }
@@ -84643,6 +85029,14 @@
     "type": "Broker",
     "url": "https://www.schwab.com.hk/",
     "exchanges": {
+      "Canada": {
+        "restriction": "Placed in USD under the US 5-letter 'F' symbol, US$6.95 online plus a dealer fee to the Canadian trader; other foreign exchanges are phone-only",
+        "reliability": "medium"
+      },
+      "OTC Markets": {
+        "restriction": "US$6.95 online per trade (not the US$0 listed rate); foreign ordinaries on OTC add a US$50 foreign transaction fee",
+        "reliability": "high"
+      },
       "United States": {
         "reliability": "medium"
       }
@@ -87804,17 +88198,6 @@
       },
       "Shenzhen-Hong Kong Stock Connect": {
         "restriction": "Northbound-eligible SZSE securities only; ChiNext for professional investors only",
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Smartplus",
-    "country": "JP",
-    "type": "Neobroker",
-    "url": "https://smartplus-sec.com/stream/guide/buy/",
-    "exchanges": {
-      "Tokyo Stock Exchange": {
         "reliability": "high"
       }
     }
@@ -97244,17 +97627,6 @@
     }
   },
   {
-    "name": "Maybank Securities Philippines",
-    "country": "PH",
-    "type": "Broker",
-    "url": "https://www.maybank-atrke.com/",
-    "exchanges": {
-      "Philippine Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "China Bank Securities",
     "country": "PH",
     "type": "Broker",
@@ -97413,17 +97785,6 @@
     "country": "PH",
     "type": "Broker",
     "url": "https://www.sbx.ph/faq/",
-    "exchanges": {
-      "Philippine Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "DA Market Securities",
-    "country": "PH",
-    "type": "Broker",
-    "url": "https://www.damarketsec.com/faq",
     "exchanges": {
       "Philippine Stock Exchange": {
         "reliability": "high"
@@ -98426,7 +98787,7 @@
     }
   },
   {
-    "name": "Xuan Thien Securities (XTSC)",
+    "name": "Xuan Thien",
     "country": "VN",
     "type": "Broker",
     "url": "https://xtsc.vn/",
@@ -98703,6 +99064,10 @@
     "exchanges": {
       "B3 São Paulo": {
         "reliability": "high"
+      },
+      "United States": {
+        "restriction": "Through the Conta Investimento Global held at XP's US broker (XP Investments/XP International), open only to individuals resident in Brazil who are Brazilian nationals, with active XP digital and investment accounts. The same help category covers stocks, ETFs and ADRs. No OTC Markets mentioned.",
+        "reliability": "high"
       }
     }
   },
@@ -98730,6 +99095,10 @@
     "url": "https://cadastro.clear.com.br/",
     "exchanges": {
       "B3 São Paulo": {
+        "reliability": "high"
+      },
+      "United States": {
+        "restriction": "Investimento Global Clear is provided by XP International (US) through XP Investimentos, Clear brand. It is open only to individuals resident in Brazil with active Clear digital and investment accounts. The help centre names the NYSE and NASDAQ.",
         "reliability": "high"
       }
     }
@@ -98805,6 +99174,10 @@
     "url": "https://www.genialinvestimentos.com.br/",
     "exchanges": {
       "B3 São Paulo": {
+        "reliability": "high"
+      },
+      "BEE4": {
+        "restriction": "Tokenized shares of Brazilian SMEs only, on BEE4, a CVM-authorized organized OTC market. Genial's fee table (genialinvestimentos.com.br/custos-tarifas/) lists 'Mercado BEE4 – Ações tokenizadas de PMEs'.",
         "reliability": "high"
       }
     }
@@ -99255,17 +99628,6 @@
     }
   },
   {
-    "name": "Amaril Franklin",
-    "country": "BR",
-    "type": "Broker",
-    "url": "https://www.amarilfranklin.com.br/",
-    "exchanges": {
-      "B3 São Paulo": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Monte Bravo",
     "country": "BR",
     "type": "Broker",
@@ -99404,6 +99766,10 @@
     "type": "Broker",
     "url": "https://www.finamex.com.mx/general/finamex-trading/",
     "exchanges": {
+      "BIVA": {
+        "count": 3744,
+        "reliability": "high"
+      },
       "Bolsa Mexicana": {
         "reliability": "high"
       }
@@ -99429,6 +99795,9 @@
     "type": "Bank",
     "url": "https://www.banorte.com/Casa-de-Bolsa/BeTrading/Que-es-BeTrading.html",
     "exchanges": {
+      "BIVA": {
+        "reliability": "medium"
+      },
       "Bolsa Mexicana": {
         "reliability": "medium"
       }
@@ -99541,17 +99910,6 @@
       "United States": {
         "count": 5000,
         "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Casa de Bolsa Inbursa",
-    "country": "MX",
-    "type": "Broker",
-    "url": "https://www.inbursa.com/",
-    "exchanges": {
-      "Bolsa Mexicana": {
-        "reliability": "low"
       }
     }
   },
@@ -99708,17 +100066,6 @@
     "exchanges": {
       "BYMA": {
         "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Allaria",
-    "country": "AR",
-    "type": "Broker",
-    "url": "https://allaria.com.ar/",
-    "exchanges": {
-      "New York Stock Exchange": {
-        "reliability": "medium"
       }
     }
   },
@@ -100073,7 +100420,7 @@
     }
   },
   {
-    "name": "Banco Hipotecario",
+    "name": "Hipotecario",
     "country": "AR",
     "type": "Bank",
     "url": "https://www.hipotecario.com.ar/buhobank/buho-inversor/",
@@ -101133,6 +101480,10 @@
     "type": "Neobroker",
     "url": "https://fintual.cl/que-es-fintual/",
     "exchanges": {
+      "OTC Markets": {
+        "count": 293,
+        "reliability": "high"
+      },
       "United States": {
         "count": 11000,
         "reliability": "high"
@@ -101399,17 +101750,6 @@
     }
   },
   {
-    "name": "BTG Pactual Colombia",
-    "country": "CO",
-    "type": "Broker",
-    "url": "https://www.btgpactual.com.co/",
-    "exchanges": {
-      "Bolsa de Valores de Colombia": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Credicorp Capital Colombia",
     "country": "CO",
     "type": "Broker",
@@ -101549,6 +101889,10 @@
       "Bolsa de Valores de Lima": {
         "count": 90,
         "reliability": "high"
+      },
+      "United States": {
+        "count": 66,
+        "reliability": "high"
       }
     }
   },
@@ -101632,17 +101976,6 @@
     }
   },
   {
-    "name": "Diviso Bolsa",
-    "country": "PE",
-    "type": "Broker",
-    "url": "https://andina.pe/agencia/noticia-lanzan-plataforma-para-invertir-la-bolsa-desde-cualquier-parte-del-peru-983427.aspx",
-    "exchanges": {
-      "Bolsa de Valores de Lima": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "SURA Investments Sociedad Agente de Bolsa S.A.",
     "country": "PE",
     "type": "Broker",
@@ -101722,7 +102055,7 @@
     }
   },
   {
-    "name": "NCB Capital Markets",
+    "name": "NCB Capital",
     "country": "JM",
     "type": "Broker",
     "url": "https://www.jamstockex.com/services/jtraderpro/",
@@ -101733,7 +102066,7 @@
     }
   },
   {
-    "name": "GK Capital Management",
+    "name": "GK Capital",
     "country": "JM",
     "type": "Broker",
     "url": "https://www.jamstockex.com/services/jtraderpro/",
@@ -101744,7 +102077,7 @@
     }
   },
   {
-    "name": "JN Fund Managers",
+    "name": "JN Fund",
     "country": "JM",
     "type": "Broker",
     "url": "https://www.jamstockex.com/services/jtraderpro/",
@@ -101945,17 +102278,6 @@
         "reliability": "high"
       },
       "London Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Paullier",
-    "country": "UY",
-    "type": "Broker",
-    "url": "https://paullier.com/",
-    "exchanges": {
-      "Bolsa de Valores de Montevideo": {
         "reliability": "high"
       }
     }
@@ -102651,6 +102973,10 @@
     "exchanges": {
       "Mongolian Stock Exchange": {
         "reliability": "high"
+      },
+      "United States": {
+        "restriction": "Through the Interactive Brokers platform (trader.tengercapital.mn); the page names no individual exchange, so US access is inferred from IB's coverage",
+        "reliability": "medium"
       }
     }
   },
@@ -103907,6 +104233,10 @@
       "Moscow Exchange": {
         "restriction": "Foreign (non-EAEU) securities for qualified investors only",
         "reliability": "high"
+      },
+      "SPB Exchange": {
+        "restriction": "In the BCS 'Инвестор' plan, SPB trades are those 'с расчетами в иностранной валюте' (foreign securities in USD/EUR/HKD).",
+        "reliability": "medium"
       }
     }
   },
@@ -111792,17 +112122,6 @@
     }
   },
   {
-    "name": "Macao Development Bank (MDB)",
-    "country": "MO",
-    "type": "Bank",
-    "url": "https://www.mdb.com.mo/",
-    "exchanges": {
-      "Hong Kong Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Banco Well Link (立橋銀行)",
     "country": "MO",
     "type": "Bank",
@@ -112358,17 +112677,6 @@
       },
       "South Africa": {
         "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "KAF Equities",
-    "country": "MY",
-    "type": "Broker",
-    "url": "https://www.kaf.com.my/equity-broking",
-    "exchanges": {
-      "Bursa Malaysia": {
-        "reliability": "low"
       }
     }
   },

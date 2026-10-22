@@ -144,6 +144,37 @@ const FOREIGN_PER_USD = {
   // CFA franc (BCEAO), fixed at 655.957 per euro, so the ECB euro of the
   // same day gives the dollar: 655.957 × 0.86044.
   XOF: 564.4116,
+  // CBK daily KES rate, shillings per dollar, same day. Not an ECB print.
+  // CBK prints one weighted average of the interbank trades; its buy and
+  // sell columns stop in January 2024.
+  // https://www.centralbank.go.ke/forex/ (wpDataTables table 193, 07/09/2026)
+  KES: 129.43,
+  // Bank of the Lao PDR board, kip per dollar, same day. Not an ECB print.
+  // Buy 22,308 / sell 22,520; the figure is the mid. The BOL reference
+  // rate of that day (notice 1220) is 22,311.
+  // https://www.bol.gov.la/en/ExchangRate (POST date=07-09-2026)
+  LAK: 22414,
+  // Bank of Jamaica weighted averages in force on 7 September 2026 (trade
+  // date 4 September, the counter-rate row dated 7 September), Jamaican
+  // dollars per dollar. Not an ECB print. Buy 157.2941 / sell 159.0304; the
+  // figure is the mid.
+  // https://boj.org.jm/market/foreign-exchange/counter-rates/
+  JMD: 158.16225,
+  // Nepal Rastra Bank, rupees per dollar, same day. Not an ECB print.
+  // Buy 150.88 / sell 151.48; the figure is the mid.
+  // https://www.nrb.org.np/api/forex/v1/rates?page=1&per_page=5&from=2026-09-07&to=2026-09-07
+  NPR: 151.18,
+  // National Bank of Ethiopia indicative rate, birr per dollar, same day.
+  // Not an ECB print. Buy 160.9448 / sell 162.5542; the figure is the mid
+  // (NBE's "weighted average" field repeats the buying rate).
+  // https://api.nbe.gov.et/api/filter-exchange-rates?date=2026-09-07
+  ETB: 161.7495,
+  // Free-market dollar, rials per dollar, same day. Not an ECB print.
+  // Bonbast prints tomans: sell 224,200 / buy 224,100, so 2,242,000 /
+  // 2,241,000 rials; the figure is the mid. The official ICE transfer rate
+  // of that day (buy 1,600,136 / sell 1,614,668) is what rials do not buy.
+  // https://www.bonbast.com/archive (POST date=2026-09-07)
+  IRR: 2241500,
 };
 
 function keyOf(currency) {

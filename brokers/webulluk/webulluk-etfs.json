@@ -1,0 +1,7142 @@
+{
+ "source": "https://www.webull-uk.com/help/faq/1522-What-UK-shares-and-ETFs-can-I-trade",
+ "read": "2026-10-21",
+ "how": "Each table row was sliced out of the FAQ images, OCR'd with macOS Vision, matched to assets/etfs.csv by ISIN (check digit and fuzzy match on look-alike characters) and checked by eye against the image. 01.jpg is the Go list ('The list of 20 UK ETFs available to Go clients'); 02-07.jpg are the full Meridian list.",
+ "rows": [
+  {
+   "image": "01.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/b44e1adfb78c4c1c82f31b3eb741a890.jpg",
+   "row": 1,
+   "list": "go",
+   "name": "VANGUARD S&P 500 UCITS ETF",
+   "isin": "IE00B3XXRP09",
+   "resolvedIsin": "IE00B3XXRP09",
+   "lse": [
+    "VUSA",
+    "VUSD"
+   ]
+  },
+  {
+   "image": "01.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/b44e1adfb78c4c1c82f31b3eb741a890.jpg",
+   "row": 2,
+   "list": "go",
+   "name": "ISHARES CORE FTSE100 UCITS ETF GBP(DIST)",
+   "isin": "IE0005042456",
+   "resolvedIsin": "IE0005042456",
+   "lse": [
+    "ISF",
+    "ISFU"
+   ]
+  },
+  {
+   "image": "01.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/b44e1adfb78c4c1c82f31b3eb741a890.jpg",
+   "row": 3,
+   "list": "go",
+   "name": "ISHARES FTSE 250 UCITS ETF GBP (DIST)",
+   "isin": "IE00B00FV128",
+   "resolvedIsin": "IE00B00FV128",
+   "lse": [
+    "MIDD"
+   ]
+  },
+  {
+   "image": "01.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/b44e1adfb78c4c1c82f31b3eb741a890.jpg",
+   "row": 4,
+   "list": "go",
+   "name": "INVESCO STOXX EUR 600 UCITS ETF",
+   "isin": "IE00B60SWW18",
+   "resolvedIsin": "IE00B60SWW18",
+   "lse": [
+    "S600"
+   ]
+  },
+  {
+   "image": "01.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/b44e1adfb78c4c1c82f31b3eb741a890.jpg",
+   "row": 5,
+   "list": "go",
+   "name": "VANGUARD FTSE EMERGING MARKETS UCITS ETF",
+   "isin": "IE00BK5BR733",
+   "resolvedIsin": "IE00BK5BR733",
+   "lse": [
+    "VFEA",
+    "VFEG"
+   ]
+  },
+  {
+   "image": "01.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/b44e1adfb78c4c1c82f31b3eb741a890.jpg",
+   "row": 6,
+   "list": "go",
+   "name": "XMLA X MSCI EM LATAM ESG SWAP",
+   "isin": "LU0292108619",
+   "resolvedIsin": "LU0292108619",
+   "lse": [
+    "XMLA",
+    "XMLD"
+   ]
+  },
+  {
+   "image": "01.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/b44e1adfb78c4c1c82f31b3eb741a890.jpg",
+   "row": 7,
+   "list": "go",
+   "name": "HSBC MSCI PAC EX JP UCITS ETF USD (ACC)",
+   "isin": "IE000SGVQIZ9",
+   "resolvedIsin": "IE000SGVQIZ9",
+   "lse": [
+    "HMXA",
+    "HMXS"
+   ]
+  },
+  {
+   "image": "01.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/b44e1adfb78c4c1c82f31b3eb741a890.jpg",
+   "row": 8,
+   "list": "go",
+   "name": "ISHARES CORE UK GILTS UCITS ETF GBP (DIST)",
+   "isin": "IE00B1FZSB30",
+   "resolvedIsin": "IE00B1FZSB30",
+   "lse": [
+    "IGLT"
+   ]
+  },
+  {
+   "image": "01.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/b44e1adfb78c4c1c82f31b3eb741a890.jpg",
+   "row": 9,
+   "list": "go",
+   "name": "ISHS £ ULTRASHORT BD UCITS ETFGBP DIST",
+   "isin": "IE00BCRY6441",
+   "resolvedIsin": "IE00BCRY6441",
+   "lse": [
+    "ERNS"
+   ]
+  },
+  {
+   "image": "01.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/b44e1adfb78c4c1c82f31b3eb741a890.jpg",
+   "row": 10,
+   "list": "go",
+   "name": "ISHARES PHYSICAL GOLD GBP HEDGED ETC",
+   "isin": "IE000Q2P3ZQ3",
+   "resolvedIsin": "IE000Q2P3ZQ3",
+   "lse": [
+    "IGLG"
+   ]
+  },
+  {
+   "image": "01.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/b44e1adfb78c4c1c82f31b3eb741a890.jpg",
+   "row": 11,
+   "list": "go",
+   "name": "VANECK S&P GLOBAL MINING UCITS ETF",
+   "isin": "IE00BDFBTQ78",
+   "resolvedIsin": "IE00BDFBTQ78",
+   "lse": [
+    "GDIG",
+    "GIGB"
+   ]
+  },
+  {
+   "image": "01.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/b44e1adfb78c4c1c82f31b3eb741a890.jpg",
+   "row": 12,
+   "list": "go",
+   "name": "GLOBAL X URANIUM UCITS ETF",
+   "isin": "IE00BLCHJN13",
+   "resolvedIsin": "IE000MS9DTS9",
+   "note": "printed ISIN IE00BLCHJN13 is Global X Lithium & Battery Tech; the name (Uranium) is followed, as in meridian row 05.jpg #8",
+   "lse": [
+    "URND"
+   ]
+  },
+  {
+   "image": "01.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/b44e1adfb78c4c1c82f31b3eb741a890.jpg",
+   "row": 13,
+   "list": "go",
+   "name": "GLOBAL X AI UCITS ETF",
+   "isin": "IE0000XTDDA8",
+   "resolvedIsin": "IE0000XTDDA8",
+   "lse": [
+    "AIQG",
+    "AIQU"
+   ]
+  },
+  {
+   "image": "01.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/b44e1adfb78c4c1c82f31b3eb741a890.jpg",
+   "row": 14,
+   "list": "go",
+   "name": "SPDR MSCI EUROPE FINANCIALS UCITS ETF",
+   "isin": "IE00BKWQ0G16",
+   "resolvedIsin": "IE00BKWQ0G16",
+   "lse": [
+    "FNCE",
+    "FNCL"
+   ]
+  },
+  {
+   "image": "01.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/b44e1adfb78c4c1c82f31b3eb741a890.jpg",
+   "row": 15,
+   "list": "go",
+   "name": "ISHRS MSCI WLD ENRGY SEC UCT ETF USD DIS",
+   "isin": "IE00BJ5JP105",
+   "resolvedIsin": "IE00BJ5JP105",
+   "lse": [
+    "WENS"
+   ]
+  },
+  {
+   "image": "01.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/b44e1adfb78c4c1c82f31b3eb741a890.jpg",
+   "row": 16,
+   "list": "go",
+   "name": "ISH GLB AERO & DEFENCE UCTS US ACC",
+   "isin": "IE000U9ODG19",
+   "resolvedIsin": "IE000U9ODG19",
+   "lse": [
+    "DFND"
+   ]
+  },
+  {
+   "image": "01.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/b44e1adfb78c4c1c82f31b3eb741a890.jpg",
+   "row": 17,
+   "list": "go",
+   "name": "X MSCI WORLD INDUSTRIALS",
+   "isin": "IE00BM67HV82",
+   "resolvedIsin": "IE00BM67HV82",
+   "lse": [
+    "XDWI",
+    "XWIS"
+   ]
+  },
+  {
+   "image": "01.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/b44e1adfb78c4c1c82f31b3eb741a890.jpg",
+   "row": 18,
+   "list": "go",
+   "name": "HSBC USA SUSTAINABLE EQUITY ETF",
+   "isin": "IE00BKY40J65",
+   "resolvedIsin": "IE00BKY40J65",
+   "lse": [
+    "HSUD",
+    "HSUS"
+   ]
+  },
+  {
+   "image": "01.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/b44e1adfb78c4c1c82f31b3eb741a890.jpg",
+   "row": 19,
+   "list": "go",
+   "name": "HSBC EM SUSTAINABLE EQUITY ETF",
+   "isin": "IE00BKY59G90",
+   "resolvedIsin": "IE00BKY59G90",
+   "lse": [
+    "HSEF",
+    "HSEM"
+   ]
+  },
+  {
+   "image": "01.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/b44e1adfb78c4c1c82f31b3eb741a890.jpg",
+   "row": 20,
+   "list": "go",
+   "name": "HSBC MSCI JP ISL ESG USD ACC",
+   "isin": "IE0001XCFC82",
+   "resolvedIsin": "IE0001XCFC82",
+   "lse": [
+    "HIJP",
+    "HIJS"
+   ]
+  },
+  {
+   "image": "01.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/b44e1adfb78c4c1c82f31b3eb741a890.jpg",
+   "row": 21,
+   "list": "go",
+   "name": "ISHARES MSCI WORLD ETF GBP HDGD (DIST)",
+   "isin": "IE00BD45YS76",
+   "resolvedIsin": "IE00BD45YS76",
+   "lse": [
+    "IWDG"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 1,
+   "list": "meridian",
+   "name": "VANGUARD FTSE ALL-WORLD UCITS ETF",
+   "isin": "IE00BK5BQT80",
+   "resolvedIsin": "IE00BK5BQT80",
+   "lse": [
+    "VWRA",
+    "VWRP"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 2,
+   "list": "meridian",
+   "name": "VANGUARD FTSE ALL-WORLD UCITS ETF",
+   "isin": "IE00B3RBWM25",
+   "resolvedIsin": "IE00B3RBWM25",
+   "lse": [
+    "VWRD",
+    "VWRL"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 3,
+   "list": "meridian",
+   "name": "ISHARES CORE MSCI WORLD UCITS ETF USD (ACC)",
+   "isin": "IE00B4L5Y983",
+   "resolvedIsin": "IE00B4L5Y983",
+   "lse": [
+    "IWDA",
+    "SWDA"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 4,
+   "list": "meridian",
+   "name": "SPDR MSCI ALL COUNTRY WORLD UCITS ETF",
+   "isin": "IE00B44Z5B48",
+   "resolvedIsin": "IE00B44Z5B48",
+   "lse": [
+    "ACWD",
+    "ACWI"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 5,
+   "list": "meridian",
+   "name": "AMUNDI PRIME ALL COUNTRY WLD ETF DIST",
+   "isin": "IE0009HF1MK9",
+   "resolvedIsin": "IE0009HF1MK9",
+   "lse": [
+    "PACW"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 6,
+   "list": "meridian",
+   "name": "UBSETF IRL MSCI WORLD ACC",
+   "isin": "IE00BD4TXV59",
+   "resolvedIsin": "IE00BD4TXV59",
+   "lse": [
+    "WRDA",
+    "WRDB",
+    "WRDK"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 7,
+   "list": "meridian",
+   "name": "AMUNDI MSCI WORLD UCITS ETF ACC",
+   "isin": "IE000BI8OT95",
+   "resolvedIsin": "IE000BI8OT95",
+   "lse": [
+    "MWRL",
+    "MWRU"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 8,
+   "list": "meridian",
+   "name": "SPDR MSCI WORLD UCITS ETF",
+   "isin": "IE00BFY0GT14",
+   "resolvedIsin": "IE00BFY0GT14",
+   "lse": [
+    "SWLD",
+    "SWRD"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 9,
+   "list": "meridian",
+   "name": "XTRACKERS MSCI WORLD UCITS ETF",
+   "isin": "IE00BK1PV551",
+   "resolvedIsin": "IE00BK1PV551",
+   "lse": [
+    "XDWK",
+    "XDWL",
+    "XDWP"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 10,
+   "list": "meridian",
+   "name": "INVESCO MSCI WORLD UCITS ETF",
+   "isin": "IE00B60SX394",
+   "resolvedIsin": "IE00B60SX394",
+   "lse": [
+    "MXWO",
+    "MXWS"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 11,
+   "list": "meridian",
+   "name": "LYXOR MSCI WORLD - DIST",
+   "isin": "FR0010315770",
+   "resolvedIsin": "FR0010315770",
+   "lse": [
+    "WLDD",
+    "WLDL"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 12,
+   "list": "meridian",
+   "name": "UBS ETF MSCI WORLD (USD) A-DIS",
+   "isin": "LU0340285161",
+   "resolvedIsin": "LU0340285161",
+   "lse": [
+    "UC55",
+    "UC68"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 13,
+   "list": "meridian",
+   "name": "AMUNDI MSCI WORLD",
+   "isin": "LU1681043672",
+   "resolvedIsin": "LU1681043672",
+   "lse": [
+    "CW8G",
+    "CW8U"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 14,
+   "list": "meridian",
+   "name": "AMUNDI MSCI WORLD IE UCITS ETF DIST",
+   "isin": "LU2572257124",
+   "resolvedIsin": "LU2572257124",
+   "lse": [
+    "MSCW"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 15,
+   "list": "meridian",
+   "name": "SC MSCI ACWORLD XTRACKERS 1C",
+   "isin": "LU2903252349",
+   "resolvedIsin": "LU2903252349",
+   "lse": [
+    "SCWX",
+    "SCXW"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 16,
+   "list": "meridian",
+   "name": "ISHARES CORE MSCI WRD UCITS ETF USD DIS",
+   "isin": "IE000OHHIBC6",
+   "resolvedIsin": "IE000OHHIBC6",
+   "lse": [
+    "IWDD"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 17,
+   "list": "meridian",
+   "name": "VANGUARD S&P 500 UCITS ETF",
+   "isin": "IE00BFMXXD54",
+   "resolvedIsin": "IE00BFMXXD54",
+   "lse": [
+    "VUAA",
+    "VUAG"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 18,
+   "list": "meridian",
+   "name": "INVESCO EQQQ NASDAQ 100 UCITS ETF",
+   "isin": "IE0032077012",
+   "resolvedIsin": "IE0032077012",
+   "lse": [
+    "EQQQ",
+    "EQQU"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 19,
+   "list": "meridian",
+   "name": "ISHARES S&P 500 UCITS ETF USD (DIST)",
+   "isin": "IE0031442068",
+   "resolvedIsin": "IE0031442068",
+   "lse": [
+    "IDUS",
+    "IUSA"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 20,
+   "list": "meridian",
+   "name": "SPDR S&P 500 UCITS ETF (ACC)",
+   "isin": "IE000XZSV718",
+   "resolvedIsin": "IE000XZSV718",
+   "lse": [
+    "SPXL",
+    "SPYL"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 21,
+   "list": "meridian",
+   "name": "SPDR S&P 500 UCITS ETF",
+   "isin": "IE00B6YX5C33",
+   "resolvedIsin": "IE00B6YX5C33",
+   "lse": [
+    "SPX5",
+    "SPY5"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 22,
+   "list": "meridian",
+   "name": "INVESCO S&P 500 UCITS ETF",
+   "isin": "IE00B3YCGJ38",
+   "resolvedIsin": "IE00B3YCGJ38",
+   "lse": [
+    "SPXP",
+    "SPXS"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 23,
+   "list": "meridian",
+   "name": "ISHRS CORE S&P 500 UCITS ETF USD (ACC)",
+   "isin": "IE00B5BMR087",
+   "resolvedIsin": "IE00B5BMR087",
+   "lse": [
+    "CSP1",
+    "CSPX"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 24,
+   "list": "meridian",
+   "name": "HSBC S&P 500 UCITS ETF",
+   "isin": "IE00B5KQNG97",
+   "resolvedIsin": "IE00B5KQNG97",
+   "lse": [
+    "HSPD",
+    "HSPX"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 25,
+   "list": "meridian",
+   "name": "AMUNDI S&P 500 II UCITS ETF USD DIST",
+   "isin": "LU0496786657",
+   "resolvedIsin": "LU0496786657",
+   "lse": [
+    "LSPU",
+    "LSPX"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 26,
+   "list": "meridian",
+   "name": "AMUNDI S&P 500",
+   "isin": "LU1681049018",
+   "resolvedIsin": "LU1681049018",
+   "lse": [
+    "500G",
+    "500U"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 27,
+   "list": "meridian",
+   "name": "AMUNDI S&P 500 II UCITS ETF ACC",
+   "isin": "LU1135865084",
+   "resolvedIsin": "LU1135865084",
+   "lse": [
+    "SP5C",
+    "SP5L"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 28,
+   "list": "meridian",
+   "name": "X SS:P500 SWAP",
+   "isin": "LU0490618542",
+   "resolvedIsin": "LU0490618542",
+   "lse": [
+    "XSPU",
+    "XSPX"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 29,
+   "list": "meridian",
+   "name": "X S&P500 4C",
+   "isin": "IE000Z9SJA06",
+   "resolvedIsin": "IE000Z9SJA06",
+   "lse": [
+    "XDPP",
+    "XDPU"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 30,
+   "list": "meridian",
+   "name": "ISHARES S&P 500 SWAP UCITS ETF USD DIST",
+   "isin": "IE000D3BWBR2",
+   "resolvedIsin": "IE000D3BWBR2",
+   "lse": [
+    "I50D"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 31,
+   "list": "meridian",
+   "name": "XTRACKERS S&P 500 SWAP UCITS ETF",
+   "isin": "LU2009147757",
+   "resolvedIsin": "LU2009147757",
+   "lse": [
+    "XSXD",
+    "XSXG"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 32,
+   "list": "meridian",
+   "name": "UBSETF-S&P 500(U5DJA-DIS",
+   "isin": "IE00B7K93397",
+   "resolvedIsin": "IE00B7K93397",
+   "lse": [
+    "UC13"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 33,
+   "list": "meridian",
+   "name": "UBS ETF S&P 500 SCORED & SCREENED",
+   "isin": "IE00BHXMHK04",
+   "resolvedIsin": "IE00BHXMHK04",
+   "lse": [
+    "S5SD"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 34,
+   "list": "meridian",
+   "name": "UBSETF S&P 500 GBP HD A-DIS",
+   "isin": "IE00BD34DL14",
+   "resolvedIsin": "IE00BD34DL14",
+   "lse": [
+    "USPG"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 35,
+   "list": "meridian",
+   "name": "FRK US. EQUITY UCITS ETF",
+   "isin": "IE00BF2B0P08",
+   "resolvedIsin": "IE00BF2B0P08",
+   "lse": [
+    "FLXU",
+    "FRUE"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 36,
+   "list": "meridian",
+   "name": "ISH S&XP500 SWAP SA",
+   "isin": "IE00BMTX1Y45",
+   "resolvedIsin": "IE00BMTX1Y45",
+   "lse": [
+    "I500"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 37,
+   "list": "meridian",
+   "name": "ISH S&P500 UCITS ETF GBP-H DIST",
+   "isin": "IE00BD8KRH84",
+   "resolvedIsin": "IE00BD8KRH84",
+   "lse": [
+    "GSPX"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 38,
+   "list": "meridian",
+   "name": "HSBC S&P 500 UCITS ETF USD (ACC)",
+   "isin": "IE000JZ473P7",
+   "resolvedIsin": "IE000JZ473P7",
+   "lse": [
+    "HSPA",
+    "HSPS"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 39,
+   "list": "meridian",
+   "name": "AMUNDI SP 500 II GBP HEDGED DIST",
+   "isin": "LU1950341179",
+   "resolvedIsin": "LU1950341179",
+   "lse": [
+    "SP5G"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 40,
+   "list": "meridian",
+   "name": "X S&P 500 GBP",
+   "isin": "IE00BM67HX07",
+   "resolvedIsin": "IE00BM67HX07",
+   "lse": [
+    "XDPG"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 41,
+   "list": "meridian",
+   "name": "X S&P 500 EQUAL WEIGH 1D GBP",
+   "isin": "IE000N5GJDD7",
+   "resolvedIsin": "IE000N5GJDD7",
+   "lse": [
+    "XEWG"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 42,
+   "list": "meridian",
+   "name": "X S&P 500 EQUAL WEIGHT 2D",
+   "isin": "IE000CXLGK86",
+   "resolvedIsin": "IE000CXLGK86",
+   "lse": [
+    "XDED",
+    "XDEU"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 43,
+   "list": "meridian",
+   "name": "ISHARES S&P 500 EQL WGHT ETF GBP HD ACC",
+   "isin": "IE0003WV2ME7",
+   "resolvedIsin": "IE0003WV2ME7",
+   "lse": [
+    "ISPE"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 44,
+   "list": "meridian",
+   "name": "ISHARES S&P 500 EQL WGHT ETF USD ACC",
+   "isin": "IE000MLMNYS0",
+   "resolvedIsin": "IE000MLMNYS0",
+   "lse": [
+    "EWSP",
+    "EWSX"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 45,
+   "list": "meridian",
+   "name": "ISHRS S&P 500 GBP HEDGED ETF (ACC)",
+   "isin": "IE00B3Y8X563",
+   "resolvedIsin": "IE00B3Y8X563",
+   "lse": [
+    "IGUS"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 46,
+   "list": "meridian",
+   "name": "INVESCO S&P 500 UCITS ETF GBP HDG ACC",
+   "isin": "IE00BKX8G916",
+   "resolvedIsin": "IE00BKX8G916",
+   "lse": [
+    "G500"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 47,
+   "list": "meridian",
+   "name": "SPDR S&P500 LEADERS UCITS ETF",
+   "isin": "IE00BH4GPZ28",
+   "resolvedIsin": "IE00BH4GPZ28",
+   "lse": [
+    "500X",
+    "SPPY"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 48,
+   "list": "meridian",
+   "name": "ISHARES S&P 500 T 20 UCITS ETF USD (ACC)",
+   "isin": "IE000VA628D5",
+   "resolvedIsin": "IE000VA628D5",
+   "lse": [
+    "SP20"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 49,
+   "list": "meridian",
+   "name": "ISH S&P 500 SWAP UCTS GBP HDG DST",
+   "isin": "IE0001OGLP52",
+   "resolvedIsin": "IE0001OGLP52",
+   "lse": [
+    "I50G"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 50,
+   "list": "meridian",
+   "name": "X S&P 500 EQUALWEIGHT ESG UCITS ETF",
+   "isin": "IE0004MFRED4",
+   "resolvedIsin": "IE0004MFRED4",
+   "lse": [
+    "XZES",
+    "XZEW"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 51,
+   "list": "meridian",
+   "name": "X S&P 500 EQUAL WEIGHT ESG 4C GBP",
+   "isin": "IE000SZ25OI0",
+   "resolvedIsin": "IE000SZ25OI0",
+   "lse": [
+    "XEWP"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 52,
+   "list": "meridian",
+   "name": "GLOBAL X S&P 500 COVERED CALL UCITS ETF",
+   "isin": "IE0002L5QB31",
+   "resolvedIsin": "IE0002L5QB31",
+   "lse": [
+    "XYLP",
+    "XYLU"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 53,
+   "list": "meridian",
+   "name": "GX S&P 500 QUARTERLY BUFFER UCITS ETF",
+   "isin": "IE000LSRKCB4",
+   "resolvedIsin": "IE000LSRKCB4",
+   "lse": [
+    "SPQB",
+    "SQBP"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 54,
+   "list": "meridian",
+   "name": "GX S&P 500 QUARTERLY TAIL HEDGE UCITS",
+   "isin": "IE000EPX8KB7",
+   "resolvedIsin": "IE000EPX8KB7",
+   "lse": [
+    "SPQH",
+    "SQHP"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 55,
+   "list": "meridian",
+   "name": "GX S&P 500€ ANNUAL BUFFER UCITS ETF",
+   "isin": "IE0009BM62P2",
+   "resolvedIsin": "IE0009BM62P2",
+   "lse": [
+    "SABP",
+    "SPAB"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 56,
+   "list": "meridian",
+   "name": "GX S&P 500€ ANNUAL TAIL HEDGE UCTS",
+   "isin": "IE000HGH8PV2",
+   "resolvedIsin": "IE000HGH8PV2",
+   "lse": [
+    "SAHP",
+    "SPAH"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 57,
+   "list": "meridian",
+   "name": "VANGUARD FTSE 100 UCITS ETF",
+   "isin": "IE00B810Q511",
+   "resolvedIsin": "IE00B810Q511",
+   "lse": [
+    "VUKE"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 58,
+   "list": "meridian",
+   "name": "VANGUARD FTSE 100 UCITS ETF",
+   "isin": "IE00BFMXYP42",
+   "resolvedIsin": "IE00BFMXYP42",
+   "lse": [
+    "VUKG"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 59,
+   "list": "meridian",
+   "name": "VANGUARD FTSE 250 UCITS ETF",
+   "isin": "IE00BKX55Q28",
+   "resolvedIsin": "IE00BKX55Q28",
+   "lse": [
+    "VMID"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 60,
+   "list": "meridian",
+   "name": "VANGUARD FTSE 250 UCITS ETF",
+   "isin": "IE00BFMXVQ44",
+   "resolvedIsin": "IE00BFMXVQ44",
+   "lse": [
+    "VMIG"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 61,
+   "list": "meridian",
+   "name": "HSBC FTSE 100 UCITS ETF",
+   "isin": "IE00B42TW061",
+   "resolvedIsin": "IE00B42TW061",
+   "lse": [
+    "HUKX"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 62,
+   "list": "meridian",
+   "name": "HSBC FTSE 250 UCITS ETF",
+   "isin": "IE00B64PTF05",
+   "resolvedIsin": "IE00B64PTF05",
+   "lse": [
+    "HMCX"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 63,
+   "list": "meridian",
+   "name": "INVESCO FTSE 100 UCITS ETF",
+   "isin": "IE00B60SWT88",
+   "resolvedIsin": "IE00B60SWT88",
+   "lse": [
+    "S100"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 64,
+   "list": "meridian",
+   "name": "INVESCO FTSE 250 UCITS ETF",
+   "isin": "IE00B60SWV01",
+   "resolvedIsin": "IE00B60SWV01",
+   "lse": [
+    "S250"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 65,
+   "list": "meridian",
+   "name": "AMUNDI FTSE 100 UCITS ETF ACC",
+   "isin": "LU1650492173",
+   "resolvedIsin": "LU1650492173",
+   "lse": [
+    "L100"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 66,
+   "list": "meridian",
+   "name": "AMUNDI FTSE 100 UCITS ETF DIST",
+   "isin": "LU1650492256",
+   "resolvedIsin": "LU1650492256",
+   "lse": [
+    "100D"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 67,
+   "list": "meridian",
+   "name": "ISHRS FTSE 100 UCITS ETF GBP (ACC)",
+   "isin": "IE00B53HP851",
+   "resolvedIsin": "IE00B53HP851",
+   "lse": [
+    "CUKX"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 68,
+   "list": "meridian",
+   "name": "SPDR FTSE UK ALL-SHARE UCITS ETF",
+   "isin": "IE00B7452L46",
+   "resolvedIsin": "IE00B7452L46",
+   "lse": [
+    "FTAL"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 69,
+   "list": "meridian",
+   "name": "SPDR FTSE UK ALL SHARES UCITS ETF (DIST",
+   "isin": "IE00BD5FCF91",
+   "resolvedIsin": "IE00BD5FCF91",
+   "lse": [
+    "FTAD"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 70,
+   "list": "meridian",
+   "name": "X FTSE 100 INCOME",
+   "isin": "LU0292097234",
+   "resolvedIsin": "LU0292097234",
+   "lse": [
+    "XUKX"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 71,
+   "list": "meridian",
+   "name": "X FTSE 100",
+   "isin": "LU0838780707",
+   "resolvedIsin": "LU0838780707",
+   "lse": [
+    "XDUK"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 72,
+   "list": "meridian",
+   "name": "X FTSE 250",
+   "isin": "LU0292097317",
+   "resolvedIsin": "LU0292097317",
+   "lse": [
+    "XMCX"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 73,
+   "list": "meridian",
+   "name": "UBS ETF FTSE 100 (GBP) A-DIS",
+   "isin": "LU0136242590",
+   "resolvedIsin": "LU0136242590",
+   "lse": [
+    "UB03"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 74,
+   "list": "meridian",
+   "name": "VANGUARD FTSE DEV EUROPE EXUK UCITS ETF",
+   "isin": "IE00BKX55S42",
+   "resolvedIsin": "IE00BKX55S42",
+   "lse": [
+    "VERX"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 75,
+   "list": "meridian",
+   "name": "VANGUARD FTSE DEV EUROPE EX UK UCITS ETF",
+   "isin": "IE00BK5BQY34",
+   "resolvedIsin": "IE00BK5BQY34",
+   "lse": [
+    "VERE",
+    "VERG"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 76,
+   "list": "meridian",
+   "name": "AMUNDI STOXX EUROPE 600 - UCITS ETF ACC",
+   "isin": "LU0908500753",
+   "resolvedIsin": "LU0908500753",
+   "lse": [
+    "MEUD",
+    "MEUS"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 77,
+   "list": "meridian",
+   "name": "LYXOR CAC 40 - DIST",
+   "isin": "FR0007052782",
+   "resolvedIsin": "FR0007052782",
+   "lse": [
+    "CACX"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 78,
+   "list": "meridian",
+   "name": "ISHRS EURO STOXX 50 UCITS ETF EUR (DIST)",
+   "isin": "IE0008471009",
+   "resolvedIsin": "IE0008471009",
+   "lse": [
+    "EUE"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 79,
+   "list": "meridian",
+   "name": "AMUNDI ELROSTOXX50 UCTS ETF - EUR",
+   "isin": "LU1681047236",
+   "resolvedIsin": "LU1681047236",
+   "lse": [
+    "MSED"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 80,
+   "list": "meridian",
+   "name": "X EURO STOXX 50 1C",
+   "isin": "LU0380865021",
+   "resolvedIsin": "LU0380865021",
+   "lse": [
+    "XESC"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 81,
+   "list": "meridian",
+   "name": "X EURO STOXX 50 1D",
+   "isin": "LU0274211217",
+   "resolvedIsin": "LU0274211217",
+   "lse": [
+    "XESX"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 82,
+   "list": "meridian",
+   "name": "AMUNDI EURO STOXX 50 # UCITS ETF",
+   "isin": "FR0012399772",
+   "resolvedIsin": "FR0012399772",
+   "lse": [
+    "MSEX"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 83,
+   "list": "meridian",
+   "name": "HSBC EURO STOXX 50 UCITS ETF",
+   "isin": "IE00B4K6B022",
+   "resolvedIsin": "IE00B4K6B022",
+   "lse": [
+    "H50E"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 84,
+   "list": "meridian",
+   "name": "HSBC EURO STOXX50UCTS ETF EUR(ACC",
+   "isin": "IE000MWUQBJ0",
+   "resolvedIsin": "IE000MWUQBJ0",
+   "lse": [
+    "H50A"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 85,
+   "list": "meridian",
+   "name": "INVESCO EURO STOXX 50 UCITS ETF",
+   "isin": "IE00B60SWX25",
+   "resolvedIsin": "IE00B60SWX25",
+   "lse": [
+    "SX5S"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 86,
+   "list": "meridian",
+   "name": "UBS ETF EURO STOXX 50 (EUR) A-DIS",
+   "isin": "LU0136234068",
+   "resolvedIsin": "LU0136234068",
+   "lse": [
+    "UB00",
+    "UB01"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 87,
+   "list": "meridian",
+   "name": "ISHRS CORE EURO STOXX 50 ETF EUR (ACC)",
+   "isin": "IE00B53L3W79",
+   "resolvedIsin": "IE00B53L3W79",
+   "lse": [
+    "CS51",
+    "CSX5",
+    "ISX5"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 88,
+   "list": "meridian",
+   "name": "AMUNDI DAX III UCITS ETF ACC",
+   "isin": "LU0252633754",
+   "resolvedIsin": "LU0252633754",
+   "lse": [
+    "DAXX"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 89,
+   "list": "meridian",
+   "name": "AMUNDI ETF DAX UCTS ETFDR",
+   "isin": "FR0010655712",
+   "resolvedIsin": "FR0010655712",
+   "lse": [
+    "CG1"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 90,
+   "list": "meridian",
+   "name": "X DAX",
+   "isin": "LU0274211480",
+   "resolvedIsin": "LU0274211480",
+   "lse": [
+    "XDAX"
+   ]
+  },
+  {
+   "image": "02.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/c3a86bfcee8047c7bbfdfe0af2666a9f.jpg",
+   "row": 91,
+   "list": "meridian",
+   "name": "ISHARES FTSE MIB UCITS ETF EUR (ACC)",
+   "isin": "IE00B53L4X51",
+   "resolvedIsin": "IE00B53L4X51",
+   "lse": [
+    "CMB1"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 1,
+   "list": "meridian",
+   "name": "ISHARES FTSE MIB UCITS ETF EUR DIST",
+   "isin": "IE00B1XNH568",
+   "resolvedIsin": "IE00B1XNH568",
+   "lse": [
+    "IMIB"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 2,
+   "list": "meridian",
+   "name": "LYXOR FTSE MIB UCTS ETF - DIST",
+   "isin": "FR0010010827",
+   "resolvedIsin": "FR0010010827",
+   "lse": [
+    "MIBX"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 3,
+   "list": "meridian",
+   "name": "SPDR MSCI EUROPE UCITS ETF",
+   "isin": "IE00BKWQ0Q14",
+   "resolvedIsin": "IE00BKWQ0Q14",
+   "lse": [
+    "ERO"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 4,
+   "list": "meridian",
+   "name": "X STOXX EUROPE 600",
+   "isin": "LU0328475792",
+   "resolvedIsin": "LU0328475792",
+   "lse": [
+    "XSX6"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 5,
+   "list": "meridian",
+   "name": "VANGUARD FTSE EMERGING MARKETS UCITS ETF",
+   "isin": "IE00B3VVMM84",
+   "resolvedIsin": "IE00B3VVMM84",
+   "lse": [
+    "VDEM",
+    "VFEM"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 6,
+   "list": "meridian",
+   "name": "ISHARES CORE EM IMI UCITS ETF USD (ACC)",
+   "isin": "IE00BKM4GZ66",
+   "resolvedIsin": "IE00BKM4GZ66",
+   "lse": [
+    "EIMI",
+    "EMIM"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 7,
+   "list": "meridian",
+   "name": "ISHARES MSCI EM UCITS ETF USD (DIST",
+   "isin": "IE00B0M63177",
+   "resolvedIsin": "IE00B0M63177",
+   "lse": [
+    "IDEM",
+    "IEEM"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 8,
+   "list": "meridian",
+   "name": "ISHARES MSCI EM UCITS ETF USD (ACC",
+   "isin": "IE00B4L5YC18",
+   "resolvedIsin": "IE00B4L5YC18",
+   "lse": [
+    "IEMA",
+    "SEMA"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 9,
+   "list": "meridian",
+   "name": "HSBC MSCI EMERGING MARKETS UCITS ETF",
+   "isin": "IE00B5SSQT16",
+   "resolvedIsin": "IE00B5SSQT16",
+   "lse": [
+    "HMEF",
+    "HMEM"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 10,
+   "list": "meridian",
+   "name": "HSBC MSCI EM UCITS ETF USD (ACC)",
+   "isin": "IE000KCS7J59",
+   "resolvedIsin": "IE000KCS7J59",
+   "lse": [
+    "HEMA",
+    "HEMC"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 11,
+   "list": "meridian",
+   "name": "AMUNDI MSCI EMERGING MARKETS",
+   "isin": "LU1681045453",
+   "resolvedIsin": "LU1681045453",
+   "lse": [
+    "AUEG",
+    "AUEM"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 12,
+   "list": "meridian",
+   "name": "AMUNDI INDEX MSCI EMERGING MARKETS DR.",
+   "isin": "LU1737652583",
+   "resolvedIsin": "LU1737652583",
+   "lse": [
+    "AEMD"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 13,
+   "list": "meridian",
+   "name": "UBS ETF MSCI EMERGING MARKETS (USD/A-DIS",
+   "isin": "LU0480132876",
+   "resolvedIsin": "LU0480132876",
+   "lse": [
+    "UB30",
+    "UB32"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 14,
+   "list": "meridian",
+   "name": "LYXOR ETF MSCI EMERGING MARKETS",
+   "isin": "FR0010435297",
+   "resolvedIsin": "FR0010435297",
+   "lse": [
+    "LEMD",
+    "LEML"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 15,
+   "list": "meridian",
+   "name": "FRK EMERGING MARKETS UCITS ETF",
+   "isin": "IE00BF2B0K52",
+   "resolvedIsin": "IE00BF2B0K52",
+   "lse": [
+    "FLXE",
+    "FREM"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 16,
+   "list": "meridian",
+   "name": "X MSCI EMERGING MARKETS",
+   "isin": "IE00BTJRMP35",
+   "resolvedIsin": "IE00BTJRMP35",
+   "lse": [
+    "XMME",
+    "XMMS"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 17,
+   "list": "meridian",
+   "name": "X MSCI EMERGING MARKETS SWAP",
+   "isin": "LU0292107645",
+   "resolvedIsin": "LU0292107645",
+   "lse": [
+    "XMEM",
+    "XMMD"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 18,
+   "list": "meridian",
+   "name": "INVESCO MSCI EMERGING MARKETS UCITS ETF",
+   "isin": "IE00B3DWVS88",
+   "resolvedIsin": "IE00B3DWVS88",
+   "lse": [
+    "MXFP",
+    "MXFS"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 19,
+   "list": "meridian",
+   "name": "AMUNDI MSCI EMERGING MARKETS II D - GBP",
+   "isin": "LU2573966905",
+   "resolvedIsin": "LU2573966905",
+   "lse": [
+    "E127",
+    "U127"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 20,
+   "list": "meridian",
+   "name": "IS MSCI EM EX-CHINA USD (ACC",
+   "isin": "IE00BMG6Z448",
+   "resolvedIsin": "IE00BMG6Z448",
+   "lse": [
+    "EXCS"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 21,
+   "list": "meridian",
+   "name": "AMUNDI MSCI EM EX CHINA UCITS ETF ACC",
+   "isin": "LU2009202107",
+   "resolvedIsin": "LU2009202107",
+   "lse": [
+    "EMXC",
+    "EMXN"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 22,
+   "list": "meridian",
+   "name": "X MSCI EMERGING MARKETS ESG ETF",
+   "isin": "IE00BG370F43",
+   "resolvedIsin": "IE00BG370F43",
+   "lse": [
+    "XESE",
+    "XZEM"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 23,
+   "list": "meridian",
+   "name": "SPDR MSCI EM ASIA UCITS ETF",
+   "isin": "IE00B466KX20",
+   "resolvedIsin": "IE00B466KX20",
+   "lse": [
+    "EMAD"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 24,
+   "list": "meridian",
+   "name": "SPDR MSCI EMERGING MARKETS SMALL CAP ETF",
+   "isin": "IE00B48X4842",
+   "resolvedIsin": "IE00B48X4842",
+   "lse": [
+    "EMSD",
+    "EMSM"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 25,
+   "list": "meridian",
+   "name": "VANGUARD FTSE JAPAN UCITS ETF",
+   "isin": "IE00B95PGT31",
+   "resolvedIsin": "IE00B95PGT31",
+   "lse": [
+    "VDJP",
+    "VJPN"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 26,
+   "list": "meridian",
+   "name": "VANGUARD FTSE JAPAN UCITS ETF",
+   "isin": "IE00BFMXYX26",
+   "resolvedIsin": "IE00BFMXYX26",
+   "lse": [
+    "VJPA",
+    "VJPB"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 27,
+   "list": "meridian",
+   "name": "AMUNDI MSCI JAPAN UCITS ETF ACC",
+   "isin": "LU1781541252",
+   "resolvedIsin": "LU1781541252",
+   "lse": [
+    "LCJD",
+    "LCJP"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 28,
+   "list": "meridian",
+   "name": "AMUNDI MSCI JAPAN UCITS ETF GBP HDG ACC",
+   "isin": "LU1781541682",
+   "resolvedIsin": "LU1781541682",
+   "lse": [
+    "LCJG"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 29,
+   "list": "meridian",
+   "name": "SPDR MSCI JAPAN UCITS ETF",
+   "isin": "IE00BZ0G8B96",
+   "resolvedIsin": "IE00BZ0G8B96",
+   "lse": [
+    "JPJP"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 30,
+   "list": "meridian",
+   "name": "JPMORGAN JAPANESE INVESTMENT TRUST PLC",
+   "isin": "GB0001740025",
+   "resolvedIsin": "GB0001740025",
+   "lse": [
+    "JFJ"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 31,
+   "list": "meridian",
+   "name": "ISHRS MSCI JAPAN GBP HEDGED ETF (ACC)",
+   "isin": "IE00B7XYN974",
+   "resolvedIsin": "IE00B7XYN974",
+   "lse": [
+    "IJPH"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 32,
+   "list": "meridian",
+   "name": "X MSCI JAPAN 1D",
+   "isin": "LU2581375230",
+   "resolvedIsin": "LU2581375230",
+   "lse": [
+    "XM1D",
+    "XMJU"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 33,
+   "list": "meridian",
+   "name": "VANGUARD FTSE DEV ASIAPAC XIPN UCITS ETF",
+   "isin": "IE00B9F5YL18",
+   "resolvedIsin": "IE00B9F5YL18",
+   "lse": [
+    "VAPX",
+    "VDPX"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 34,
+   "list": "meridian",
+   "name": "VANGUARD FTSE DEVAPAC EXJAPAN UCITS ETF",
+   "isin": "IE00BK5BQZ41",
+   "resolvedIsin": "IE00BK5BQZ41",
+   "lse": [
+    "VAPU",
+    "VDPG"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 35,
+   "list": "meridian",
+   "name": "HSBC MSCI AC FAR EAST EXUAPAN UCIISETF E",
+   "isin": "IE00BBQ2W338",
+   "resolvedIsin": "IE00BBQ2W338",
+   "lse": [
+    "HMAD",
+    "HMAF"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 36,
+   "list": "meridian",
+   "name": "HSBC MSCI AC FAEXIP UCITS ETF USD (DIST)",
+   "isin": "IE00022VXYM7",
+   "resolvedIsin": "IE00022VXYM7",
+   "lse": [
+    "HFEJ",
+    "HFEX"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 37,
+   "list": "meridian",
+   "name": "FRK FTSE CHINA UCITS ETF",
+   "isin": "IE00BHZRR147",
+   "resolvedIsin": "IE00BHZRR147",
+   "lse": [
+    "FLXC",
+    "FRCH"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 38,
+   "list": "meridian",
+   "name": "HSBC MSCI CHINA UCITSETFUSD (ACC)",
+   "isin": "IE0007P4PBU1",
+   "resolvedIsin": "IE0007P4PBU1",
+   "lse": [
+    "HCHA",
+    "HCHS"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 39,
+   "list": "meridian",
+   "name": "HSBC MSCI CHINA A UCITS ETF",
+   "isin": "IE00BF4NQ904",
+   "resolvedIsin": "IE00BF4NQ904",
+   "lse": [
+    "HMCA",
+    "HMCT"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 40,
+   "list": "meridian",
+   "name": "AMUNDI MSCI CHINA A II - UCITS ETF DIST",
+   "isin": "LU2572256746",
+   "resolvedIsin": "LU2572256746",
+   "lse": [
+    "C024"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 41,
+   "list": "meridian",
+   "name": "AMUNDI MSCI CHINA UCITS ETF ACC",
+   "isin": "LU1841731745",
+   "resolvedIsin": "LU1841731745",
+   "lse": [
+    "LCCG",
+    "LCCN"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 42,
+   "list": "meridian",
+   "name": "ICBCCS S&P CHINA 500 UCITS ETF CLASS USD",
+   "isin": "IE0001QF56M0",
+   "resolvedIsin": "IE0001QF56M0",
+   "lse": [
+    "CHIN",
+    "CHIP"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 43,
+   "list": "meridian",
+   "name": "CSI CHINA INTERNET UCITS ETF GBP",
+   "isin": "IE00BMW13836",
+   "resolvedIsin": "IE00BMW13836",
+   "lse": [
+    "KWBP"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 44,
+   "list": "meridian",
+   "name": "KRANE MSCI CHINA CLEAN TECH IDX ETF USD",
+   "isin": "IE00Y61WD48",
+   "resolvedIsin": "",
+   "note": "ISIN as printed is not in assets/etfs.csv; no LSE line found",
+   "lse": []
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 45,
+   "list": "meridian",
+   "name": "KRANESHARES ICBCCS SSE STAR MKT 50 USD",
+   "isin": "IE00BKPJY434",
+   "resolvedIsin": "IE00BKPJY434",
+   "lse": [
+    "KSTP",
+    "KSTR"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 46,
+   "list": "meridian",
+   "name": "FRK FTSE INDIA UCITS ETF",
+   "isin": "IE00BHZRQZ17",
+   "resolvedIsin": "IE00BHZRQZ17",
+   "lse": [
+    "FLXI",
+    "FRIN"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 47,
+   "list": "meridian",
+   "name": "FRK FTSE KOREA UCITS ETF",
+   "isin": "IE00BHZRR030",
+   "resolvedIsin": "IE00BHZRR030",
+   "lse": [
+    "FLRK",
+    "FLXK"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 48,
+   "list": "meridian",
+   "name": "FRK FTSE BRAZIL UCITS ETF",
+   "isin": "IE00BHZRQY00",
+   "resolvedIsin": "IE00BHZRQY00",
+   "lse": [
+    "FLXB",
+    "FVUB"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 49,
+   "list": "meridian",
+   "name": "FRK, FTSE TAIWAN UCITS ETF",
+   "isin": "IE000CM02H85",
+   "resolvedIsin": "IE000CM02H85",
+   "lse": [
+    "FLXT",
+    "FRXT"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 50,
+   "list": "meridian",
+   "name": "FRK ASIA EX CHINA EX JAPAN UCITS ETF",
+   "isin": "IE00BFWXDV39",
+   "resolvedIsin": "IE00BFWXDV39",
+   "lse": [
+    "FLQA",
+    "FRQX"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 51,
+   "list": "meridian",
+   "name": "X MSCI CHINA 1D",
+   "isin": "LU2456436083",
+   "resolvedIsin": "LU2456436083",
+   "lse": [
+    "XCS7",
+    "XCX7"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 52,
+   "list": "meridian",
+   "name": "XTRACKERS MSCI PACIFICEXIP ESGSCR ETF 1D",
+   "isin": "LU2755521270",
+   "resolvedIsin": "LU2755521270",
+   "lse": [
+    "DXPJ",
+    "XPEJ"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 53,
+   "list": "meridian",
+   "name": "VANGUARD FTSE NORTH AMERICA UCITS ETF",
+   "isin": "IE00BK5BQW10",
+   "resolvedIsin": "IE00BK5BQW10",
+   "lse": [
+    "VNRA",
+    "VNRG"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 54,
+   "list": "meridian",
+   "name": "VANGUARD FTSE NORTH AMERICA UCITS ETF",
+   "isin": "IE00BKX55R35",
+   "resolvedIsin": "IE00BKX55R35",
+   "lse": [
+    "VDNR",
+    "VNRT"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 55,
+   "list": "meridian",
+   "name": "AMUNDI MSCI WORLD EX USA UCITS ETF ACC",
+   "isin": "IE00085PWS28",
+   "resolvedIsin": "IE00085PWS28",
+   "lse": [
+    "WEXU"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 56,
+   "list": "meridian",
+   "name": "ISHRS UK GILTS 0-5YR ETF GBP (DIST)",
+   "isin": "IE00B4WXJK79",
+   "resolvedIsin": "IE00B4WXJK79",
+   "lse": [
+    "IGLS"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 57,
+   "list": "meridian",
+   "name": "UK GILT UCTS ETF GBP",
+   "isin": "IE00B42WWV65",
+   "resolvedIsin": "IE00B42WWV65",
+   "lse": [
+    "VGOV"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 58,
+   "list": "meridian",
+   "name": "VANGUARD U.K GILT UCITS ETF",
+   "isin": "IE00BH04GW44",
+   "resolvedIsin": "IE00BH04GW44",
+   "lse": [
+    "VGVA"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 59,
+   "list": "meridian",
+   "name": "GS UK GILTS ETF GBP DIST",
+   "isin": "IE0003MKK4H3",
+   "resolvedIsin": "IE0003MKK4H3",
+   "lse": [
+    "GBPG"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 60,
+   "list": "meridian",
+   "name": "SPDR BLOOM UK GILT UCITS ET",
+   "isin": "IE00B3W74078",
+   "resolvedIsin": "IE00B3W74078",
+   "lse": [
+    "GLTY"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 61,
+   "list": "meridian",
+   "name": "SPDR BLOCM15+ YEAR GILT UCTS ETF",
+   "isin": "IE00B6YX5L24",
+   "resolvedIsin": "IE00B6YX5L24",
+   "lse": [
+    "GLTL"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 62,
+   "list": "meridian",
+   "name": "SPDR BLOOM 1-5 YEAR GILT UCITS ETF",
+   "isin": "IE00B6YX5K17",
+   "resolvedIsin": "IE00B6YX5K17",
+   "lse": [
+    "GLTS"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 63,
+   "list": "meridian",
+   "name": "BETABUILDERS UK GILT 1-5YR UCITS ETF",
+   "isin": "IE00BD9MMC32",
+   "resolvedIsin": "IE00BD9MMC32",
+   "lse": [
+    "JG15"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 64,
+   "list": "meridian",
+   "name": "ISHRS $ TREAS BOND 7-10YR ETF USD (DIST)",
+   "isin": "IE00B1FZS798",
+   "resolvedIsin": "IE00B1FZS798",
+   "lse": [
+    "IBTM",
+    "IDTM"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 65,
+   "list": "meridian",
+   "name": "VANGUARD USD TREASURY BOND UCITS ETF",
+   "isin": "IE00BZ163M45",
+   "resolvedIsin": "IE00BZ163M45",
+   "lse": [
+    "VDTY",
+    "VUTY"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 66,
+   "list": "meridian",
+   "name": "VANGUARD USD TREASURY BD UCITS ETF",
+   "isin": "IE00BGYWFS63",
+   "resolvedIsin": "IE00BGYWFS63",
+   "lse": [
+    "VDTA",
+    "VUTA"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 67,
+   "list": "meridian",
+   "name": "SPDR BLOOM US TREAS BOND ETF",
+   "isin": "IE00B44CND37",
+   "resolvedIsin": "IE00B44CND37",
+   "lse": [
+    "TRSY",
+    "USTY"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 68,
+   "list": "meridian",
+   "name": "SPDR ICE BOFA 0-5 YR US GOV BOND UCITS",
+   "isin": "IE00BP46NG52",
+   "resolvedIsin": "IE00BP46NG52",
+   "lse": [
+    "EMH5",
+    "SEMH"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 69,
+   "list": "meridian",
+   "name": "JPM BETABUILDERS US TREASURY BOND ETF",
+   "isin": "IE00BJK9HH50",
+   "resolvedIsin": "IE00BJK9HH50",
+   "lse": [
+    "BBRT",
+    "BBTR"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 70,
+   "list": "meridian",
+   "name": "BETABUILDERS US TSRY BD 1-3YR UCITS ETF",
+   "isin": "IE00BD9MMD49",
+   "resolvedIsin": "IE00BD9MMD49",
+   "lse": [
+    "J13U",
+    "JU13"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 71,
+   "list": "meridian",
+   "name": "X US TREASURIES ULTRASHORT BOND ETF 1C",
+   "isin": "IE00BM97MR69",
+   "resolvedIsin": "IE00BM97MR69",
+   "lse": [
+    "XT01",
+    "XT0D"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 72,
+   "list": "meridian",
+   "name": "XTRACKERS E US TREASURIES UCITS ETF",
+   "isin": "LU2610432036",
+   "resolvedIsin": "LU2610432036",
+   "lse": [
+    "XUTG"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 73,
+   "list": "meridian",
+   "name": "ISHRS EUR GOVT BOND 1-3 UCITS ETF EUR DIST",
+   "isin": "IE00B14X4Q57",
+   "resolvedIsin": "IE00B14X4Q57",
+   "lse": [
+    "IBGS"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 74,
+   "list": "meridian",
+   "name": "ISHRS EUR GOVT BOND 3-5YR ETF EUR (DIST",
+   "isin": "IE00B1FZS681",
+   "resolvedIsin": "IE00B1FZS681",
+   "lse": [
+    "IBGX"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 75,
+   "list": "meridian",
+   "name": "ISHRS EUR GOVT BOND 5-7YR ETF EUR (DIST)",
+   "isin": "IE00B4WXJG34",
+   "resolvedIsin": "IE00B4WXJG34",
+   "lse": [
+    "IBGY"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 76,
+   "list": "meridian",
+   "name": "ISHRS EUR GOVT BOND 7-10YR ETF EUR (DIST",
+   "isin": "IE00B1FZS806",
+   "resolvedIsin": "IE00B1FZS806",
+   "lse": [
+    "IBGM"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 77,
+   "list": "meridian",
+   "name": "ISHRS EUR GOVT BOND 10-15YR ETF EUR DIST",
+   "isin": "IE00B4WXJH41",
+   "resolvedIsin": "IE00B4WXJH41",
+   "lse": [],
+   "note": "no LSE line in assets/etfs.csv"
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 78,
+   "list": "meridian",
+   "name": "ISHRS EUR GOVT BOND 15-30YR ETF EUR DIST",
+   "isin": "IE00B1FZS913",
+   "resolvedIsin": "IE00B1FZS913",
+   "lse": [
+    "IBGL"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 79,
+   "list": "meridian",
+   "name": "ISHRS EUR GOVT BOND 0-1YR ETF EUR (DIST)",
+   "isin": "IE00B3FH7618",
+   "resolvedIsin": "IE00B3FH7618",
+   "lse": [],
+   "note": "no LSE line in assets/etfs.csv"
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 80,
+   "list": "meridian",
+   "name": "ISHRS CORE EUR GOVT BOND ETF EUR (DIST)",
+   "isin": "IE00B4WXJJ64",
+   "resolvedIsin": "IE00B4WXJJ64",
+   "lse": [
+    "SEGA"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 81,
+   "list": "meridian",
+   "name": "VANGUARD EUR EUROZONE GOVT BD UCITS ETF",
+   "isin": "IE00BH04GL39",
+   "resolvedIsin": "IE00BH04GL39",
+   "lse": [
+    "VETA"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 82,
+   "list": "meridian",
+   "name": "VANGUARD EUR EUROZONE GOV BOND UCITS ETF",
+   "isin": "IE00BZ163H91",
+   "resolvedIsin": "IE00BZ163H91",
+   "lse": [
+    "VETY"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 83,
+   "list": "meridian",
+   "name": "JPM BETABUILDERS EUR GOVT BOND ETF",
+   "isin": "IE00BJK9HD13",
+   "resolvedIsin": "IE00BJK9HD13",
+   "lse": [
+    "BBGE"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 84,
+   "list": "meridian",
+   "name": "JPM EUR GOVT BOND 1-3 YR UCITS ETF (ACC)",
+   "isin": "IE00BYVZV757",
+   "resolvedIsin": "IE00BYVZV757",
+   "lse": [
+    "J13E"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 85,
+   "list": "meridian",
+   "name": "X EUROZONE GOVBOND UCITS ETF 2D GBP",
+   "isin": "LU2523866023",
+   "resolvedIsin": "LU2523866023",
+   "lse": [
+    "XGLB"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 86,
+   "list": "meridian",
+   "name": "X EUROZONE GOVBOND 7-10 UCITS ETF 1D GBP",
+   "isin": "LU2523865728",
+   "resolvedIsin": "LU2523865728",
+   "lse": [
+    "X7GB"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 87,
+   "list": "meridian",
+   "name": "XTRACKERS E EUROZONE GOVT BOND 3-SUCITS",
+   "isin": "LU2606231418",
+   "resolvedIsin": "LU2606231418",
+   "lse": [
+    "XGEP"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 88,
+   "list": "meridian",
+   "name": "XTRACKERS EURZ GOVT BD 1-3 ETF 2D - GBP",
+   "isin": "LU3003217638",
+   "resolvedIsin": "LU3003217638",
+   "lse": [
+    "XE2D"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 89,
+   "list": "meridian",
+   "name": "XTRACKERS EURZ GOVT BD 5-7 ETF 1D - GBP",
+   "isin": "LU3003217984",
+   "resolvedIsin": "LU3003217984",
+   "lse": [
+    "XE5G"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 90,
+   "list": "meridian",
+   "name": "ISHRS GERMANY GVT BND ETF EUR (DIST)",
+   "isin": "IE00B5V94313",
+   "resolvedIsin": "IE00B5V94313",
+   "lse": [
+    "SDEU"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 91,
+   "list": "meridian",
+   "name": "X GERMANY GOW BOND UCITS ETF 2D GBP",
+   "isin": "LU2523866296",
+   "resolvedIsin": "LU2523866296",
+   "lse": [
+    "XBGB"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 92,
+   "list": "meridian",
+   "name": "ISHARES ITALY GOV BD UCT ETF GBP HDG DIS",
+   "isin": "IE0003V00UC4",
+   "resolvedIsin": "IE0003V00UC4",
+   "lse": [
+    "ITEB"
+   ]
+  },
+  {
+   "image": "03.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/ed5f3fdb59c94d308310ccdb68d4d0b0.jpg",
+   "row": 93,
+   "list": "meridian",
+   "name": "ISHARES FRANCE GOW BD UCT ETF GBP HD DIS",
+   "isin": "IE00014E9P24",
+   "resolvedIsin": "IE00014E9P24",
+   "lse": [
+    "FRGP"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 1,
+   "list": "meridian",
+   "name": "ISHARES SPAIN GOV BDUCT ETF GBP HDG DIS",
+   "isin": "IE000Q4EBLW2",
+   "resolvedIsin": "IE000Q4EBLW2",
+   "lse": [
+    "SPPB"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 2,
+   "list": "meridian",
+   "name": "VANGUARD USD EM GOVT BOND UCITS ETF",
+   "isin": "IE00BZ163L38",
+   "resolvedIsin": "IE00BZ163L38",
+   "lse": [
+    "VDET",
+    "VEMT"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 3,
+   "list": "meridian",
+   "name": "VANGUARD USD EMG MKTS GOV BD UCITS ETF",
+   "isin": "IE00BGYWCB81",
+   "resolvedIsin": "IE00BGYWCB81",
+   "lse": [
+    "VDEA",
+    "VEMA"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 4,
+   "list": "meridian",
+   "name": "ISHRS EM LOCAL GOVT BOND ETF USD (DIST)",
+   "isin": "IE00B5M4WH52",
+   "resolvedIsin": "IE00B5M4WH52",
+   "lse": [
+    "IEML",
+    "SEML"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 5,
+   "list": "meridian",
+   "name": "SPDR BLOOM EM LOCAL BOND UCITS $",
+   "isin": "IE00B4613386",
+   "resolvedIsin": "IE00B4613386",
+   "lse": [
+    "EMDD",
+    "EMDL"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 6,
+   "list": "meridian",
+   "name": "ISHRS GLOBAL GOVT BOND ETF USD (DIST)",
+   "isin": "IE00B3F81K65",
+   "resolvedIsin": "IE00B3F81K65",
+   "lse": [
+    "IGLO",
+    "SGLO"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 7,
+   "list": "meridian",
+   "name": "ISHRS BRD GLBL GVT BND UCITS ETF USD D",
+   "isin": "IE000J8Z5N74",
+   "resolvedIsin": "IE000J8Z5N74",
+   "lse": [
+    "IGBG"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 8,
+   "list": "meridian",
+   "name": "ISHRS BRD GLBL GVT BND UCITS ETFGBP H D",
+   "isin": "IE000S6ZDHA0",
+   "resolvedIsin": "IE000S6ZDHA0",
+   "lse": [
+    "IGBS"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 9,
+   "list": "meridian",
+   "name": "ISHRS GLOBAL AAA-AA GVT BND ETF USD DIST",
+   "isin": "IE00B87G8S03",
+   "resolvedIsin": "IE00B87G8S03",
+   "lse": [
+    "IAAA",
+    "SAAA"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 10,
+   "list": "meridian",
+   "name": "VANGUARD GLOBAL GOV BD ETF GBP H ACC",
+   "isin": "IE000AI6QNJ5",
+   "resolvedIsin": "IE000AI6QNJ5",
+   "lse": [
+    "VGGS"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 11,
+   "list": "meridian",
+   "name": "VANGUARD GLOBAL GOV BD ETF GBP DIST",
+   "isin": "IE000A2E14U6",
+   "resolvedIsin": "IE000A2E14U6",
+   "lse": [
+    "VGGP"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 12,
+   "list": "meridian",
+   "name": "AMUNDI GLOBAL GOV BOND II UCITS DIST",
+   "isin": "LU2099288503",
+   "resolvedIsin": "LU2099288503",
+   "lse": [
+    "GOUD",
+    "GOVD"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 13,
+   "list": "meridian",
+   "name": "ISHARES £ CORP ED 0-5 UCITS ETF GBP DIST",
+   "isin": "IE00B5L65R35",
+   "resolvedIsin": "IE00B5L65R35",
+   "lse": [
+    "ES15",
+    "IS15"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 14,
+   "list": "meridian",
+   "name": "ISHARES GLBL CORP BND UCITS ETF USD DIST",
+   "isin": "IE00B7J7TB45",
+   "resolvedIsin": "IE00B7J7TB45",
+   "lse": [
+    "CORP",
+    "CRPS"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 15,
+   "list": "meridian",
+   "name": "ISH GLOBAL CORP BOND ETF GBP-H D",
+   "isin": "IE00BDFK3G24",
+   "resolvedIsin": "IE00BDFK3G24",
+   "lse": [
+    "CRHG"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 16,
+   "list": "meridian",
+   "name": "VANGUARD USD CORPORATE BOND UCTS ETF",
+   "isin": "IE00BZ163K21",
+   "resolvedIsin": "IE00BZ163K21",
+   "lse": [
+    "VDCP",
+    "VUCP"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 17,
+   "list": "meridian",
+   "name": "VANGUARD USD CORP BD UCITS ETF",
+   "isin": "IE00BGYWFK87",
+   "resolvedIsin": "IE00BGYWFK87",
+   "lse": [
+    "VCPA",
+    "VDPA"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 18,
+   "list": "meridian",
+   "name": "VANGUARD USD CORP1-3 YEAR BD UCITS ETF",
+   "isin": "IE00BGYWSV06",
+   "resolvedIsin": "IE00BGYWSV06",
+   "lse": [
+    "VDCA",
+    "VSCA"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 19,
+   "list": "meridian",
+   "name": "VANGUARD USDCORP 1-3 YR BOND UCITS ETF",
+   "isin": "IE00BDD48R20",
+   "resolvedIsin": "IE00BDD48R20",
+   "lse": [
+    "VDUC",
+    "VUSC"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 20,
+   "list": "meridian",
+   "name": "SPDR BLOOM 0-5 YEAR GBP CORP BOND ETF",
+   "isin": "IE00BCBJF711",
+   "resolvedIsin": "IE00BCBJF711",
+   "lse": [
+    "SUKC"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 21,
+   "list": "meridian",
+   "name": "SPDR BLOOM STERLING CORP BOND UCITS ETF",
+   "isin": "IE00B4694Z11",
+   "resolvedIsin": "IE00B4694Z11",
+   "lse": [
+    "UKCO"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 22,
+   "list": "meridian",
+   "name": "ISHARES CRE £ CORP BD UCITS ETF GBP DIST",
+   "isin": "IE00B00FV011",
+   "resolvedIsin": "IE00B00FV011",
+   "lse": [
+    "SLXX"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 23,
+   "list": "meridian",
+   "name": "ISHARES £ CORP BOND EX-FIN ETF GBP (DIST)",
+   "isin": "IE00B4L60H17",
+   "resolvedIsin": "IE00B4L60H17",
+   "lse": [
+    "ISXF",
+    "SSXF"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 24,
+   "list": "meridian",
+   "name": "ISHRS CORE EUR CORP BOND ETF EUR (DIST)",
+   "isin": "IE00B3F81R35",
+   "resolvedIsin": "IE00B3F81R35",
+   "lse": [
+    "IEAC",
+    "IEBC"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 25,
+   "list": "meridian",
+   "name": "ISHRS EUR CRP BND EX-FIN ETF EUR (DIST)",
+   "isin": "IE00B4L5ZG21",
+   "resolvedIsin": "IE00B4L5ZG21",
+   "lse": [
+    "EEXF"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 26,
+   "list": "meridian",
+   "name": "ISHARES EUR CORP BOND 1-5YR ETF EUR DIST",
+   "isin": "IE00B4L60045",
+   "resolvedIsin": "IE00B4L60045",
+   "lse": [
+    "IE15",
+    "SE15"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 27,
+   "list": "meridian",
+   "name": "VANGUARD EUR CORPORATE BOND UCITS ETF",
+   "isin": "IE00BZ163G84",
+   "resolvedIsin": "IE00BZ163G84",
+   "lse": [
+    "VECP"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 28,
+   "list": "meridian",
+   "name": "VANGUARD EUR CORPORATE BD UCITS ETF",
+   "isin": "IE00BGYWT403",
+   "resolvedIsin": "IE00BGYWT403",
+   "lse": [
+    "VECA"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 29,
+   "list": "meridian",
+   "name": "XTRACKERS USD CORPORATE BOND UCITS ETF",
+   "isin": "IE00BG04LY46",
+   "resolvedIsin": "IE00BG04LY46",
+   "lse": [
+    "XDGB"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 30,
+   "list": "meridian",
+   "name": "ISHARES $ TIPS UCITS ETF USD (ACC)",
+   "isin": "IE00B1FZSC47",
+   "resolvedIsin": "IE00B1FZSC47",
+   "lse": [
+    "IDTP",
+    "ITPS"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 31,
+   "list": "meridian",
+   "name": "ISH $ TIPS 0-5 ETF GBP HDG DIST",
+   "isin": "IE00BDZVHB89",
+   "resolvedIsin": "IE00BDZVHB89",
+   "lse": [
+    "TI5G"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 32,
+   "list": "meridian",
+   "name": "ISH $ TIPS ETF GBP HDG ACC",
+   "isin": "IE00BDZVH859",
+   "resolvedIsin": "IE00BDZVH859",
+   "lse": [
+    "ITPG"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 33,
+   "list": "meridian",
+   "name": "ISH $ TIPS 0-5 UCTS ETF US ACC",
+   "isin": "IE000JXFRNI0",
+   "resolvedIsin": "IE000JXFRNI0",
+   "lse": [
+    "TI5A"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 34,
+   "list": "meridian",
+   "name": "ISHARES $ TIPS UCITS ETF GBP HACC",
+   "isin": "IE000B3NURO6",
+   "resolvedIsin": "IE000B3NURO6",
+   "lse": [
+    "ITPA"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 35,
+   "list": "meridian",
+   "name": "SPDR BLOOM US TIPSUCITS ETF",
+   "isin": "IE00BZ0G8977",
+   "resolvedIsin": "IE00BZ0G8977",
+   "lse": [
+    "TIPS",
+    "UTIP"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 36,
+   "list": "meridian",
+   "name": "AMUNDI US TIPS GOVERNMENT INFL GBP HDG",
+   "isin": "LU1452600601",
+   "resolvedIsin": "LU1452600601",
+   "lse": [
+    "TIPH"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 37,
+   "list": "meridian",
+   "name": "ISHRS GLBL INFL LNKD GVT BND ETF USD ACC",
+   "isin": "IE00B3B8PX14",
+   "resolvedIsin": "IE00B3B8PX14",
+   "lse": [
+    "IGIL",
+    "SGIL"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 38,
+   "list": "meridian",
+   "name": "ISHRS $ HIGH YIELD CRP BND ETF USD DIST",
+   "isin": "IE00B4PY7Y77",
+   "resolvedIsin": "IE00B4PY7Y77",
+   "lse": [
+    "IHYU",
+    "SHYU"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 39,
+   "list": "meridian",
+   "name": "ISH $ HY CORP BOND ETF GBP-H D",
+   "isin": "IE00BDFJYL11",
+   "resolvedIsin": "IE00BDFJYL11",
+   "lse": [
+    "IHHG"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 40,
+   "list": "meridian",
+   "name": "ISH GHY CORP BND GBP H D",
+   "isin": "IE00BJSFQX44",
+   "resolvedIsin": "IE00BJSFQX44",
+   "lse": [
+    "GHYG"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 41,
+   "list": "meridian",
+   "name": "ISHRS GLBL HGH YLD CRP BND GBP HDGD DIST",
+   "isin": "IE00B8KQFS66",
+   "resolvedIsin": "IE00B8KQFS66",
+   "lse": [
+    "GHYS"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 42,
+   "list": "meridian",
+   "name": "ISHARES EUR H.YLD C.B UCITS ETFEUR DIST",
+   "isin": "IE00B66F4759",
+   "resolvedIsin": "IE00B66F4759",
+   "lse": [
+    "IHYG",
+    "SHYG"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 43,
+   "list": "meridian",
+   "name": "ISH € HIGH YIELD CORP BOND GBP HEDGED",
+   "isin": "IE000KJVA5F6",
+   "resolvedIsin": "IE000KJVA5F6",
+   "lse": [
+    "HIGG"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 44,
+   "list": "meridian",
+   "name": "SPDR BBARC 0-5 YR US HIGH YIELD BOND",
+   "isin": "IE00B99FL386",
+   "resolvedIsin": "IE00B99FL386",
+   "lse": [
+    "JNKS",
+    "SJNK"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 45,
+   "list": "meridian",
+   "name": "SPDR BLOOM 10+ US CORP BD UCITS ETF",
+   "isin": "IE00BZ0G8860",
+   "resolvedIsin": "IE00BZ0G8860",
+   "lse": [
+    "LUSC"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 46,
+   "list": "meridian",
+   "name": "JPM GLOBAL HY CORP BOND MF UCITS ETF ACC",
+   "isin": "IE00BKKCKJ46",
+   "resolvedIsin": "IE00BKKCKJ46",
+   "lse": [
+    "JGHY",
+    "JGYH"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 47,
+   "list": "meridian",
+   "name": "JPM USD HY ACTIVE UCITS ETF USD ACC",
+   "isin": "IE000LZI2UH4",
+   "resolvedIsin": "IE000LZI2UH4",
+   "lse": [
+    "JPHY",
+    "JPYH"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 48,
+   "list": "meridian",
+   "name": "JPM USD HY ACTIVE UCITS ETF USD DIST",
+   "isin": "IE000R88UVN6",
+   "resolvedIsin": "IE000R88UVN6",
+   "lse": [
+    "JPUY",
+    "JPYU"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 49,
+   "list": "meridian",
+   "name": "JPM USD HY ACT UCITS ETF USD ACC GBP HDG",
+   "isin": "IE000CF2JI38",
+   "resolvedIsin": "IE000CF2JI38",
+   "lse": [
+    "JPYG"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 50,
+   "list": "meridian",
+   "name": "AMUNDI USD HY CORP BOND ESG UCITS ETF D",
+   "isin": "LU1435356149",
+   "resolvedIsin": "LU1435356149",
+   "lse": [
+    "UHYG",
+    "USHY"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 51,
+   "list": "meridian",
+   "name": "X HY CB ETF 4D GBP HEDGED",
+   "isin": "IE00BG04LV15",
+   "resolvedIsin": "IE00BG04LV15",
+   "lse": [
+    "XUHG"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 52,
+   "list": "meridian",
+   "name": "X ESG USD HIGH YIELD CORP BOND 1C",
+   "isin": "IE0006YM7D84",
+   "resolvedIsin": "IE0006YM7D84",
+   "lse": [
+    "XZHS",
+    "XZHY"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 53,
+   "list": "meridian",
+   "name": "XESG USD HIGH YIELD CORP BOND 2C GBP",
+   "isin": "IE000WHO5BF2",
+   "resolvedIsin": "IE000WHO5BF2",
+   "lse": [
+    "XZ2G"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 54,
+   "list": "meridian",
+   "name": "VANECK EMERGING MARKET HY BOND UCITS ETF",
+   "isin": "IE00BF541080",
+   "resolvedIsin": "IE00BF541080",
+   "lse": [
+    "HYEM",
+    "HYGB"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 55,
+   "list": "meridian",
+   "name": "VANECK GLOBAL FALLEN ANGEL HY BOND ETF",
+   "isin": "IE00BF540Z61",
+   "resolvedIsin": "IE00BF540Z61",
+   "lse": [
+    "GFA",
+    "GFGB"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 56,
+   "list": "meridian",
+   "name": "VANGUARD GLOBAL AGGREGATE BD UCITS ETF",
+   "isin": "IE00BG47K971",
+   "resolvedIsin": "IE00BG47K971",
+   "lse": [
+    "VAGS"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 57,
+   "list": "meridian",
+   "name": "VANGUARD GLOBAL AGGREGATE BD UCITS ETF",
+   "isin": "IE00BG47KG48",
+   "resolvedIsin": "IE00BG47KG48",
+   "lse": [
+    "VAGP"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 58,
+   "list": "meridian",
+   "name": "ISH GLOBAL AGG BOND ETF GBP HEDGED DIST",
+   "isin": "IE00BF540Y54",
+   "resolvedIsin": "IE00BF540Y54",
+   "lse": [
+    "AGBP"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 59,
+   "list": "meridian",
+   "name": "ISH GLOBAL AGG BOND ETF USD DIST (GBP)",
+   "isin": "IE00B3F81409",
+   "resolvedIsin": "IE00B3F81409",
+   "lse": [
+    "AGGG",
+    "SAGG"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 60,
+   "list": "meridian",
+   "name": "HSBC ICAV GLOBAL AGG BND ETF",
+   "isin": "IE0009RYSBF2",
+   "resolvedIsin": "IE0009RYSBF2",
+   "lse": [
+    "HGAS"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 61,
+   "list": "meridian",
+   "name": "SPDR BLOOM GBL AGG EHDG UCITS ETF",
+   "isin": "IE00BF1QPJ56",
+   "resolvedIsin": "IE00BF1QPJ56",
+   "lse": [
+    "GLAB"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 62,
+   "list": "meridian",
+   "name": "SPDR BLOOM GLOBAL AGG UCITS ETF",
+   "isin": "IE00B43QJJ40",
+   "resolvedIsin": "IE00B43QJJ40",
+   "lse": [
+    "GLAG",
+    "GLBL"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 63,
+   "list": "meridian",
+   "name": "JPM GLOB AGG BOND ACTIVE UCITS ETF GBP H",
+   "isin": "IE0000F1IQZ8",
+   "resolvedIsin": "IE0000F1IQZ8",
+   "lse": [
+    "JAGP"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 64,
+   "list": "meridian",
+   "name": "JPMGLOBAL AGG BONDACTIVE UCITS ETF ACC",
+   "isin": "IE0006MM8VN6",
+   "resolvedIsin": "IE0006MM8VN6",
+   "lse": [
+    "JAAG",
+    "JAGA"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 65,
+   "list": "meridian",
+   "name": "JPM GLOBAL AGG BOND ACTIVE UCITS ETF DIS",
+   "isin": "IE000LHP8TA1",
+   "resolvedIsin": "IE000LHP8TA1",
+   "lse": [
+    "JAGD",
+    "JAGG"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 66,
+   "list": "meridian",
+   "name": "ISHARES EUR AGG BOND UCITS ETF EUR (DIST)",
+   "isin": "IE00B3DKXQ41",
+   "resolvedIsin": "IE00B3DKXQ41",
+   "lse": [
+    "SEAG"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 67,
+   "list": "meridian",
+   "name": "JPMEUR AGG BONDACTIVE UCITS ETF DIST",
+   "isin": "IE0008QIFH42",
+   "resolvedIsin": "IE0008QIFH42",
+   "lse": [
+    "JEGG",
+    "JGGE"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 68,
+   "list": "meridian",
+   "name": "JPM EUR AGG BOND ACTIVE UCITS ETF ACC",
+   "isin": "IE00049TNTV6",
+   "resolvedIsin": "IE00049TNTV6",
+   "lse": [
+    "JAEP",
+    "JEAA"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 69,
+   "list": "meridian",
+   "name": "ISHS EUR ULTRASHORT BD UCITS ETF (DIST)",
+   "isin": "IE00BCRY6557",
+   "resolvedIsin": "IE00BCRY6557",
+   "lse": [
+    "ERN1",
+    "ERNE"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 70,
+   "list": "meridian",
+   "name": "ISHS $ ULTRASHORT BD UCITS ETF USD DIST",
+   "isin": "IE00BCRY6227",
+   "resolvedIsin": "IE00BCRY6227",
+   "lse": [
+    "ERND",
+    "ERNU"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 71,
+   "list": "meridian",
+   "name": "ISHRS GBP ULTRASHORT B ESG SRI ETF DIST",
+   "isin": "IE00BJP26F04",
+   "resolvedIsin": "IE00BJP26F04",
+   "lse": [
+    "UESD"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 72,
+   "list": "meridian",
+   "name": "JPM US TREASURY BOND 0-3MTH UCITS ETF",
+   "isin": "IE00BMD8KM66",
+   "resolvedIsin": "IE00BMD8KM66",
+   "lse": [
+    "BB3M",
+    "BBM3"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 73,
+   "list": "meridian",
+   "name": "JPM US TREASURY BOND O-1YR UCITS ETF",
+   "isin": "IE00BJK3WF00",
+   "resolvedIsin": "IE00BJK3WF00",
+   "lse": [
+    "BBIL",
+    "BBLL"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 74,
+   "list": "meridian",
+   "name": "JPM GBP ULTRA-SHORT INCOME UCITS ETF",
+   "isin": "IE00BG47J908",
+   "resolvedIsin": "IE00BG47J908",
+   "lse": [
+    "JGSA"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 75,
+   "list": "meridian",
+   "name": "JPM GBP ULT SHORT INC UCITS ETF GBP ACC",
+   "isin": "IE00BG47J908",
+   "resolvedIsin": "IE00BG47J908",
+   "lse": [
+    "JGSA"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 76,
+   "list": "meridian",
+   "name": "JPM GBP ULT SHORT INC UCITS ETF GBP DIS",
+   "isin": "IE00BD9MMG79",
+   "resolvedIsin": "IE00BD9MMG79",
+   "lse": [
+    "JGST"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 77,
+   "list": "meridian",
+   "name": "JPM EUR ULTRA-SHORT INCOME UCITS ETF ACC",
+   "isin": "IE00BD9MMF62",
+   "resolvedIsin": "IE00BD9MMF62",
+   "lse": [
+    "JSET"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 78,
+   "list": "meridian",
+   "name": "JPM EUR ULT SHORT INC UCITS ETF EUR ACC",
+   "isin": "IE00BD9MMF62",
+   "resolvedIsin": "IE00BD9MMF62",
+   "lse": [
+    "JSET"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 79,
+   "list": "meridian",
+   "name": "JPM USD ULTRA-SHORT INCOME UCITS ETF",
+   "isin": "IE00BG8BCY43",
+   "resolvedIsin": "IE00BG8BCY43",
+   "lse": [
+    "JPAS",
+    "JPSA"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 80,
+   "list": "meridian",
+   "name": "JPM USD ULT SHORT INC UCITS ETF USD ACC",
+   "isin": "IE00BG8BCY43",
+   "resolvedIsin": "IE00BG8BCY43",
+   "lse": [
+    "JPAS",
+    "JPSA"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 81,
+   "list": "meridian",
+   "name": "JPM USD ULT SHORT INC UCITS ETF USD DIS",
+   "isin": "IE00BDFC6Q91",
+   "resolvedIsin": "IE00BDFC6Q91",
+   "lse": [
+    "JPST",
+    "JPTS"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 82,
+   "list": "meridian",
+   "name": "GBP ULTRA-SHORT INCOME UCITS ETF",
+   "isin": "IE00BD9MMG79",
+   "resolvedIsin": "IE00BD9MMG79",
+   "lse": [
+    "JGST"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 83,
+   "list": "meridian",
+   "name": "GLOBAL X 1-3 MONTH T-BILL UCITS ETF",
+   "isin": "IE000GSIFIB0",
+   "resolvedIsin": "IE000GSIFIB0",
+   "lse": [
+    "CLIP",
+    "CLPP"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 84,
+   "list": "meridian",
+   "name": "SPDR BLOOM 0-3 US CORPORATE BOND",
+   "isin": "IE00BC7GZX26",
+   "resolvedIsin": "IE00BC7GZX26",
+   "lse": [
+    "SUSC",
+    "SUSD"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 85,
+   "list": "meridian",
+   "name": "SPDR BLOOM 1-3 US TREASURY BOND",
+   "isin": "IE00BC7GZJ81",
+   "resolvedIsin": "IE00BC7GZJ81",
+   "lse": [
+    "TRS3",
+    "TSY3"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 86,
+   "list": "meridian",
+   "name": "ISHARES STRES.BD1-3YR UCITS ETF USD DIST",
+   "isin": "IE00B14X4S71",
+   "resolvedIsin": "IE00B14X4S71",
+   "lse": [
+    "IBTS",
+    "IDBT"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 87,
+   "list": "meridian",
+   "name": "ISHS $ SHORT DUR CORP BOND ETF USDYDIST)",
+   "isin": "IE00BCRY5Y77",
+   "resolvedIsin": "IE00BCRY5Y77",
+   "lse": [
+    "IGSD",
+    "SDIG"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 88,
+   "list": "meridian",
+   "name": "ISH $ SHORT DUR CORP BOND GBP HED DIST",
+   "isin": "IE000PECRUX8",
+   "resolvedIsin": "IE000PECRUX8",
+   "lse": [
+    "SDGH"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 89,
+   "list": "meridian",
+   "name": "ISHS $ SHRT DUR HY CRP BD ETF USD (DIST)",
+   "isin": "IE00BCRY6003",
+   "resolvedIsin": "IE00BCRY6003",
+   "lse": [
+    "SDHG",
+    "SDHY"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 90,
+   "list": "meridian",
+   "name": "ISHARES GLBL HY CPBD UCITS ETF USD DIST",
+   "isin": "IE00B74DQ490",
+   "resolvedIsin": "IE00B74DQ490",
+   "lse": [
+    "HYLD",
+    "IGHY"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 91,
+   "list": "meridian",
+   "name": "PIMCO STERL SHORT MATURITY UCITS GBP IN",
+   "isin": "IE00B622SG73",
+   "resolvedIsin": "IE00B622SG73",
+   "lse": [
+    "QUID"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 92,
+   "list": "meridian",
+   "name": "PIMCO US SHORT MATURITY UCITS GBP AC",
+   "isin": "IE00BK9YKZ79",
+   "resolvedIsin": "IE00BK9YKZ79",
+   "lse": [
+    "MIST"
+   ]
+  },
+  {
+   "image": "04.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/0baaf8d3378b4189a7b0886512f24030.jpg",
+   "row": 93,
+   "list": "meridian",
+   "name": "FRK EURO SHORT MATURITY UCITS ETF",
+   "isin": "IE00BFWXDY69",
+   "resolvedIsin": "IE00BFWXDY69",
+   "lse": [
+    "FLES",
+    "FRXE"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 1,
+   "list": "meridian",
+   "name": "VANECK GOLD MINERS UCITS ETF",
+   "isin": "IE00BQQP9F84",
+   "resolvedIsin": "IE00BQQP9F84",
+   "lse": [
+    "GDGB",
+    "GDX"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 2,
+   "list": "meridian",
+   "name": "VANECK JUNIOR GOLD MINERS UCITS ETF",
+   "isin": "IE00BQQP9G91",
+   "resolvedIsin": "IE00BQQP9G91",
+   "lse": [
+    "GDXJ",
+    "GJGB"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 3,
+   "list": "meridian",
+   "name": "GLOBAL X SILVER MINERS UCITS ETF",
+   "isin": "IE000UL6CLP7",
+   "resolvedIsin": "IE000UL6CLP7",
+   "lse": [
+    "SILG",
+    "SILV"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 4,
+   "list": "meridian",
+   "name": "ISHARES COPPER MINERS UCITS ETF USD (ACC",
+   "isin": "IE00063FT9K6",
+   "resolvedIsin": "IE00063FT9K6",
+   "lse": [
+    "MINE"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 5,
+   "list": "meridian",
+   "name": "GLOBAL X COPPER MINERS UCITS ETF",
+   "isin": "IE0003Z9E2Y3",
+   "resolvedIsin": "IE0003Z9E2Y3",
+   "lse": [
+    "COPG",
+    "COPX"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 6,
+   "list": "meridian",
+   "name": "VANECK OIL SERVICES UCITS ETF",
+   "isin": "IE000NXF88S1",
+   "resolvedIsin": "IE000NXF88S1",
+   "lse": [
+    "OIGB",
+    "OIHV"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 7,
+   "list": "meridian",
+   "name": "VANECK RARE EARTH STR METALS UCITS ETF",
+   "isin": "IE0002PG6CA6",
+   "resolvedIsin": "IE0002PG6CA6",
+   "lse": [
+    "REGB",
+    "REMX"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 8,
+   "list": "meridian",
+   "name": "GLOBAL X URANIUM UCITS ETF",
+   "isin": "IE000MS9DTS9",
+   "resolvedIsin": "IE000MS9DTS9",
+   "lse": [
+    "URND"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 9,
+   "list": "meridian",
+   "name": "VANECK URANIUM AND NUCLEAR UCITS ETF",
+   "isin": "IE000M7V94E1",
+   "resolvedIsin": "IE000M7V94E1",
+   "lse": [
+    "NUCG",
+    "NUCL"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 10,
+   "list": "meridian",
+   "name": "INVESCO EQQQ NASDAQ 100 UCITS ETF (Heavy Tech)",
+   "isin": "IE0032077012",
+   "resolvedIsin": "IE0032077012",
+   "lse": [
+    "EQQQ",
+    "EQQU"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 11,
+   "list": "meridian",
+   "name": "VANECK SEMICONDUCTOR UCITS ETF",
+   "isin": "IE00BMC38736",
+   "resolvedIsin": "IE00BMC38736",
+   "lse": [
+    "SMGB",
+    "SMH"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 12,
+   "list": "meridian",
+   "name": "ISHRS NASDAQ 100 UCITS ETF USD (ACC)",
+   "isin": "IE00B53SZB19",
+   "resolvedIsin": "IE00B53SZB19",
+   "lse": [
+    "CNDX",
+    "CNX1"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 13,
+   "list": "meridian",
+   "name": "X NASDAQ 100 ETF 1C",
+   "isin": "IE00BMFKG444",
+   "resolvedIsin": "IE00BMFKG444",
+   "lse": [
+    "XNAQ",
+    "XNAS"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 14,
+   "list": "meridian",
+   "name": "AMUNDI NASDAQ-100",
+   "isin": "LU1681038326",
+   "resolvedIsin": "LU1681038326",
+   "lse": [
+    "ANXG",
+    "ANXU"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 15,
+   "list": "meridian",
+   "name": "AMUNDI NASDAQ-100 II UCITS ETF ACC",
+   "isin": "LU1829221024",
+   "resolvedIsin": "LU1829221024",
+   "lse": [
+    "NASD",
+    "NASL"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 16,
+   "list": "meridian",
+   "name": "IVZ NASDAQ-100 SWAPUCITS ETF",
+   "isin": "IE00BNRQM384",
+   "resolvedIsin": "IE00BNRQM384",
+   "lse": [
+    "EQQS",
+    "EQSG"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 17,
+   "list": "meridian",
+   "name": "IVZ NASDAQ-100 ESG UCITS ETF ACC",
+   "isin": "IE000COQKPO9",
+   "resolvedIsin": "IE000COQKPO9",
+   "lse": [
+    "NESG",
+    "NESP"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 18,
+   "list": "meridian",
+   "name": "INVESCO NASDQ NEXT GEN 100 UCITS ETF ACC",
+   "isin": "IE00BMD8KP97",
+   "resolvedIsin": "IE00BMD8KP97",
+   "lse": [
+    "EQJS",
+    "EQQJ"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 19,
+   "list": "meridian",
+   "name": "L&G CYBER SECURITY INNOVATION UCITS ETF",
+   "isin": "IE000ST40PX8",
+   "resolvedIsin": "IE000ST40PX8",
+   "lse": [
+    "ASPY",
+    "ESPY"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 20,
+   "list": "meridian",
+   "name": "XTRACKERS AI & BIG DATA ETF 1C",
+   "isin": "IE00BGV5VN51",
+   "resolvedIsin": "IE00BGV5VN51",
+   "lse": [
+    "XAID",
+    "XAIX"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 21,
+   "list": "meridian",
+   "name": "SPDR MSCI WORLD TECHNOLOGY UCITS ETF",
+   "isin": "IE00BYTRRD19",
+   "resolvedIsin": "IE00BYTRRD19",
+   "lse": [
+    "TECW",
+    "WTEC"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 22,
+   "list": "meridian",
+   "name": "SPDR S&P US TECHNOLOGY UCITS ETF",
+   "isin": "IE00BWBXM948",
+   "resolvedIsin": "IE00BWBXM948",
+   "lse": [
+    "GXLK",
+    "SXLK"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 23,
+   "list": "meridian",
+   "name": "X MSOWORLD INF TECH",
+   "isin": "IE00BM67HT60",
+   "resolvedIsin": "IE00BM67HT60",
+   "lse": [
+    "XDWT",
+    "XXTW"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 24,
+   "list": "meridian",
+   "name": "ROBOTICS & ARTIFICIAL INTELLIGENCE",
+   "isin": "IE00BLCHJC08",
+   "resolvedIsin": "IE00BLCHJC08",
+   "lse": [
+    "BOTG"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 25,
+   "list": "meridian",
+   "name": "GLOBAL X CYBERSECURITY UCITS ETF",
+   "isin": "IE00BMH5Y871",
+   "resolvedIsin": "IE00BMH5Y871",
+   "lse": [
+    "BUG",
+    "BUGG"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 26,
+   "list": "meridian",
+   "name": "GLOBAL X INTERNET OF THINGS UCITS ETF",
+   "isin": "IE00BLCHJT74",
+   "resolvedIsin": "IE00BLCHJT74",
+   "lse": [
+    "SNSG",
+    "SNSR"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 27,
+   "list": "meridian",
+   "name": "ISHARES METAVERSE UCITS ETF USD (ACC)",
+   "isin": "IE000RN58M26",
+   "resolvedIsin": "IE000RN58M26",
+   "lse": [
+    "MTAV"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 28,
+   "list": "meridian",
+   "name": "ISHARES AI INFRA UCITS ETF USD A",
+   "isin": "IE000X59ZHE2",
+   "resolvedIsin": "IE000X59ZHE2",
+   "lse": [
+    "AINF"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 29,
+   "list": "meridian",
+   "name": "ISHRS AI ADP & APP UCITS ETF USD A",
+   "isin": "IE000Q9W2IR3",
+   "resolvedIsin": "IE000Q9W2IR3",
+   "lse": [
+    "AIAA"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 30,
+   "list": "meridian",
+   "name": "ISHRS AI INN ACTIVE UCITS ETF UCITS US A",
+   "isin": "IE000G0E83X3",
+   "resolvedIsin": "IE000G0E83X3",
+   "lse": [
+    "IART"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 31,
+   "list": "meridian",
+   "name": "AMUNDI MSCI DIGITAL ECONOMY UCITS ETF A",
+   "isin": "LU2023678878",
+   "resolvedIsin": "LU2023678878",
+   "lse": [
+    "DIGE",
+    "EBUY"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 32,
+   "list": "meridian",
+   "name": "FRK AI METAVERSE & BLOCKCHAIN UCITS ETF",
+   "isin": "IE000IM4K4K2",
+   "resolvedIsin": "IE000IM4K4K2",
+   "lse": [
+    "METE",
+    "METU"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 33,
+   "list": "meridian",
+   "name": "GLOBAL X BLOCKCHAIN UCITS ETF",
+   "isin": "IE000XAGSCY5",
+   "resolvedIsin": "IE000XAGSCY5",
+   "lse": [
+    "BKCG",
+    "BKCH"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 34,
+   "list": "meridian",
+   "name": "ISHARES BLOCKCHAIN TECH UCITS ETF USD A",
+   "isin": "IE000RDRMSD1",
+   "resolvedIsin": "IE000RDRMSD1",
+   "lse": [
+    "BLKC"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 35,
+   "list": "meridian",
+   "name": "VANECK CRYPTO AND BLOCKCHAIN UCITS ETF",
+   "isin": "IE00BMDKNW35",
+   "resolvedIsin": "IE00BMDKNW35",
+   "lse": [
+    "DAGB",
+    "DAPP"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 36,
+   "list": "meridian",
+   "name": "ISHARES NASDAQ US BIOTEC UCITS USD (ACC)",
+   "isin": "IE00BYXG2H39",
+   "resolvedIsin": "IE00BYXG2H39",
+   "lse": [
+    "BTEC",
+    "BTEK"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 37,
+   "list": "meridian",
+   "name": "SPDR MSCI WORLD HEALTH CARE UCITS ETF",
+   "isin": "IE00BYTRRB94",
+   "resolvedIsin": "IE00BYTRRB94",
+   "lse": [
+    "HEAW",
+    "WHEA"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 38,
+   "list": "meridian",
+   "name": "SPDR MSCI EUROPE HEALTH CARE UCITS ETF",
+   "isin": "IE00BKWQ0H23",
+   "resolvedIsin": "IE00BKWQ0H23",
+   "lse": [
+    "HEAE",
+    "HLTH"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 39,
+   "list": "meridian",
+   "name": "SPDR S&P US HEALTH CARE UCITS ETF",
+   "isin": "IE00BWBXM617",
+   "resolvedIsin": "IE00BWBXM617",
+   "lse": [
+    "GXLV",
+    "SXLV"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 40,
+   "list": "meridian",
+   "name": "VANECK GENOMICS & HEALTHCARE UCITS ETF",
+   "isin": "IE000B9PQW54",
+   "resolvedIsin": "IE000B9PQW54",
+   "lse": [
+    "CURE",
+    "CURG"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 41,
+   "list": "meridian",
+   "name": "X MSCI WORLD HEALTH",
+   "isin": "IE00BM67HK77",
+   "resolvedIsin": "IE00BM67HK77",
+   "lse": [
+    "XDWH",
+    "XWHS"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 42,
+   "list": "meridian",
+   "name": "GLOBAL X GENOMICS & BIOTECHNOLOGY",
+   "isin": "IE00BM8R0N95",
+   "resolvedIsin": "IE00BM8R0N95",
+   "lse": [
+    "GNOG",
+    "GNOM"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 43,
+   "list": "meridian",
+   "name": "GLOBAL X TELEMED & DIGTL HLTH UCITS ETF",
+   "isin": "IE00BLR6QC17",
+   "resolvedIsin": "IE00BLR6QC17",
+   "lse": [
+    "EDOG"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 44,
+   "list": "meridian",
+   "name": "X MSCI GENOMIC HC INNOV UCITS ETF 1C",
+   "isin": "IE000KD0BZ68",
+   "resolvedIsin": "IE000KD0BZ68",
+   "lse": [
+    "XGEN",
+    "XGES"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 45,
+   "list": "meridian",
+   "name": "FRK FUTURE HEALTH WELLNESS UCITS ETF",
+   "isin": "IE0003WEWAX4",
+   "resolvedIsin": "IE0003WEWAX4",
+   "lse": [
+    "FOHW",
+    "FRHW"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 46,
+   "list": "meridian",
+   "name": "WORLDWIDE HEALTHCARE TRUST PLC",
+   "isin": "GB00BN455J50",
+   "resolvedIsin": "GB00BN455J50",
+   "lse": [
+    "WWH"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 47,
+   "list": "meridian",
+   "name": "SPDR MSCI WORLD FINANCIALS UCITS ETF",
+   "isin": "IE00BYTRR970",
+   "resolvedIsin": "IE00BYTRR970",
+   "lse": [
+    "FNCW",
+    "WFIN"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 48,
+   "list": "meridian",
+   "name": "SPDR S&P US FINANCIALS UCITS ETF",
+   "isin": "IE00BWBXM500",
+   "resolvedIsin": "IE00BWBXM500",
+   "lse": [
+    "GXLF",
+    "SXLF"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 49,
+   "list": "meridian",
+   "name": "AMUNDI EUIRO STOXX BANKS UCITS ETF ACC",
+   "isin": "LU1829219390",
+   "resolvedIsin": "LU1829219390",
+   "lse": [
+    "BNKE"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 50,
+   "list": "meridian",
+   "name": "X MSCI WORLD FINANCIALS",
+   "isin": "IE00BM67HL84",
+   "resolvedIsin": "IE00BM67HL84",
+   "lse": [
+    "XDWF",
+    "XWFS"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 51,
+   "list": "meridian",
+   "name": "POLAR CAPITAL GLOBAL FINANCIALS TRUST PLC",
+   "isin": "GB00B9XQT119",
+   "resolvedIsin": "GB00B9XQT119",
+   "lse": [
+    "PCFT"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 52,
+   "list": "meridian",
+   "name": "SPDR MSCI WORLD ENERGY UCITS ETF",
+   "isin": "IE00BYTRR863",
+   "resolvedIsin": "IE00BYTRR863",
+   "lse": [
+    "ENGW",
+    "WNRG"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 53,
+   "list": "meridian",
+   "name": "SPDR MSCI EUROPE ENERGY UCITS ETF",
+   "isin": "IE00BKWQ0F09",
+   "resolvedIsin": "IE00BKWQ0F09",
+   "lse": [
+    "ENGE",
+    "ENGY"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 54,
+   "list": "meridian",
+   "name": "SPDR S&P US ENERGY UCITS ETF",
+   "isin": "IE00BWBXM492",
+   "resolvedIsin": "IE00BWBXM492",
+   "lse": [
+    "GXLE",
+    "SXLE"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 55,
+   "list": "meridian",
+   "name": "X MSCI WORLD ENERGY",
+   "isin": "IE00BM67HM91",
+   "resolvedIsin": "IE00BM67HM91",
+   "lse": [
+    "XDW0",
+    "XWES"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 56,
+   "list": "meridian",
+   "name": "VANECK, DEFENSE UCITS ETF",
+   "isin": "IE000YYE6WK5",
+   "resolvedIsin": "IE000YYE6WK5",
+   "lse": [
+    "DFNG",
+    "DFNS"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 57,
+   "list": "meridian",
+   "name": "GLOBAL X DEFENCE TECH UCITS ETF",
+   "isin": "IE000JCW3DZ3",
+   "resolvedIsin": "IE000JCW3DZ3",
+   "lse": [
+    "ARMG",
+    "ARMR"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 58,
+   "list": "meridian",
+   "name": "VANECK GLOBAL FEAL ESTATE UCITS ETF",
+   "isin": "NL0009690239",
+   "resolvedIsin": "NL0009690239",
+   "lse": [
+    "TREG",
+    "TRET"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 59,
+   "list": "meridian",
+   "name": "SPDR DOW JONES GLOBAL REAL EST UCITS ETF",
+   "isin": "IE00B8GF1M35",
+   "resolvedIsin": "IE00B8GF1M35",
+   "lse": [
+    "GBRE",
+    "GLRE"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 60,
+   "list": "meridian",
+   "name": "HSBC FTSE EPRA NAREIT DEV ETF USD (ACC)",
+   "isin": "IE000G6GSP88",
+   "resolvedIsin": "IE000G6GSP88",
+   "lse": [
+    "HPRA",
+    "HPRS"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 61,
+   "list": "meridian",
+   "name": "HSBC FTSE EPRA NAR DEV CPA ETF USD (ACC)",
+   "isin": "IE00096S6AV7",
+   "resolvedIsin": "IE00096S6AV7",
+   "lse": [
+    "HPNA",
+    "HPNS"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 62,
+   "list": "meridian",
+   "name": "JPM EUR CORPORATE REI UCITS ETF EUR ACC",
+   "isin": "IE00BF59RX87",
+   "resolvedIsin": "IE00BF59RX87",
+   "lse": [
+    "JEBU",
+    "JRBE"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 63,
+   "list": "meridian",
+   "name": "JPM USD CORPORATE REI UCITS ETF USD ACC",
+   "isin": "IE00BF59RV63",
+   "resolvedIsin": "IE00BF59RV63",
+   "lse": [
+    "JRBU",
+    "JRUB"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 64,
+   "list": "meridian",
+   "name": "JPM EUR CREI UCITS ESG ETF",
+   "isin": "IE00BF59RX87",
+   "resolvedIsin": "IE00BF59RX87",
+   "lse": [
+    "JEBU",
+    "JRBE"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 65,
+   "list": "meridian",
+   "name": "JPM USD CREI UCITS ESG ETF DIST",
+   "isin": "IE00BN4RDY28",
+   "resolvedIsin": "IE00BN4RDY28",
+   "lse": [
+    "JIBG"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 66,
+   "list": "meridian",
+   "name": "JPM USD CREI UCITS ESG ETF - GBP HDG",
+   "isin": "IE00BN7JCJ33",
+   "resolvedIsin": "IE00BN7JCJ33",
+   "lse": [
+    "JRUP"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 67,
+   "list": "meridian",
+   "name": "JPM EUR CREI 1-5 UCITS ESG ETF",
+   "isin": "IE00BF59RW70",
+   "resolvedIsin": "IE00BF59RW70",
+   "lse": [
+    "J15R",
+    "JR15"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 68,
+   "list": "meridian",
+   "name": "JPM EUR CORP 1-5Y RB UCTS ETF EUR ACC",
+   "isin": "IE00BF59RW70",
+   "resolvedIsin": "IE00BF59RW70",
+   "lse": [
+    "J15R",
+    "JR15"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 69,
+   "list": "meridian",
+   "name": "SPDR MSCI EUROPE CONSUMER STAPLES ETF",
+   "isin": "IE00BKWQ0D84",
+   "resolvedIsin": "IE00BKWQ0D84",
+   "lse": [
+    "CSPE",
+    "CSTP"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 70,
+   "list": "meridian",
+   "name": "SPDR MSCI ELIROPE CONSUMER CI5 UCITS ETF",
+   "isin": "IE00BKWQ0C77",
+   "resolvedIsin": "IE00BKWQ0C77",
+   "lse": [
+    "CDCE",
+    "CDIS"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 71,
+   "list": "meridian",
+   "name": "SPDR S&P USCOMM SERV UCITS ETF",
+   "isin": "IE00BFWFPX50",
+   "resolvedIsin": "IE00BFWFPX50",
+   "lse": [
+    "GXLC",
+    "SXLC"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 72,
+   "list": "meridian",
+   "name": "X MSCI WORLD CON DIS",
+   "isin": "IE00BM67HP23",
+   "resolvedIsin": "IE00BM67HP23",
+   "lse": [
+    "XDWC",
+    "XWDS"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 73,
+   "list": "meridian",
+   "name": "X MSCI WORLDCON STAP",
+   "isin": "IE00BM67HN09",
+   "resolvedIsin": "IE00BM67HN09",
+   "lse": [
+    "XDWS",
+    "XWCS"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 74,
+   "list": "meridian",
+   "name": "X MSCI WORLD COMM SERV",
+   "isin": "IE00BM67HR47",
+   "resolvedIsin": "IE00BM67HR47",
+   "lse": [
+    "XSSW",
+    "XWTS"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 75,
+   "list": "meridian",
+   "name": "X MSCI WORLD MATERIALS",
+   "isin": "IE00BM67HS53",
+   "resolvedIsin": "IE00BM67HS53",
+   "lse": [
+    "XDWM",
+    "XSMW"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 76,
+   "list": "meridian",
+   "name": "X MSCI WORLD UTILITIES",
+   "isin": "IE00BM67HQ30",
+   "resolvedIsin": "IE00BM67HQ30",
+   "lse": [
+    "XDWU",
+    "XWUS"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 77,
+   "list": "meridian",
+   "name": "ISHARES ESS METALS PRODS UCITS ETF USD A",
+   "isin": "IE000ROSD5J6",
+   "resolvedIsin": "IE000ROSD5J6",
+   "lse": [
+    "METG"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 78,
+   "list": "meridian",
+   "name": "VANGUARD ESG GLOBL ALL CAP UCITS ETF ACC",
+   "isin": "IE00BNG8L278",
+   "resolvedIsin": "IE00BNG8L278",
+   "lse": [
+    "V3AA",
+    "V3AB"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 79,
+   "list": "meridian",
+   "name": "VANGUARD ESG GLOBL ALL CAP UCITS ETF DIS",
+   "isin": "IE00BNG8L385",
+   "resolvedIsin": "IE00BNG8L385",
+   "lse": [
+    "V3AL",
+    "V3AM"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 80,
+   "list": "meridian",
+   "name": "ISH MSCI WORLD ESG ACC",
+   "isin": "IE00BHZPJ569",
+   "resolvedIsin": "IE00BHZPJ569",
+   "lse": [
+    "EGMW"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 81,
+   "list": "meridian",
+   "name": "ISH MSCI WORLD ESG ENH CTB DIST",
+   "isin": "IE00BG11HV38",
+   "resolvedIsin": "IE00BG11HV38",
+   "lse": [
+    "EEWD",
+    "EEWG"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 82,
+   "list": "meridian",
+   "name": "X MSCI ESG WORLD",
+   "isin": "IE00BZ02LR44",
+   "resolvedIsin": "IE00BZ02LR44",
+   "lse": [
+    "XESW",
+    "XZW0"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 83,
+   "list": "meridian",
+   "name": "X MSCI ESG USA",
+   "isin": "IE00BFMNPS42",
+   "resolvedIsin": "IE00BFMNPS42",
+   "lse": [
+    "XESU",
+    "XZMU"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 84,
+   "list": "meridian",
+   "name": "X MSCI ESG JAPAN",
+   "isin": "IE00BG36TC12",
+   "resolvedIsin": "IE00BG36TC12",
+   "lse": [
+    "XESJ",
+    "XZMJ"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 85,
+   "list": "meridian",
+   "name": "X MSCI EMU ESG ETF 1C",
+   "isin": "IE00BNC1G699",
+   "resolvedIsin": "IE00BNC1G699",
+   "lse": [],
+   "note": "no LSE line in assets/etfs.csv"
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 86,
+   "list": "meridian",
+   "name": "ISHRS MSCI USA ESG ENH CTB USD ETF DIST",
+   "isin": "IE00BHZPJ890",
+   "resolvedIsin": "IE00BHZPJ890",
+   "lse": [
+    "EEDG",
+    "EEDS"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 87,
+   "list": "meridian",
+   "name": "AMUNDI S&P 500 CLIMATE PARIS ALIGNED",
+   "isin": "IE000O5FBC47",
+   "resolvedIsin": "IE000O5FBC47",
+   "lse": [
+    "CLMT"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 88,
+   "list": "meridian",
+   "name": "AMUNDI MSCI EUROPE ESG LEADERS ACC",
+   "isin": "LU1940199711",
+   "resolvedIsin": "LU1940199711",
+   "lse": [
+    "ESGL"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 89,
+   "list": "meridian",
+   "name": "AMUNDI MSCI EUROPE CLIMATE PAB ACC",
+   "isin": "LU2130768844",
+   "resolvedIsin": "LU2130768844",
+   "lse": [
+    "EABE"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 90,
+   "list": "meridian",
+   "name": "AMUNDI S&P EUROZONE CLIMATE PAB A",
+   "isin": "LU2195226068",
+   "resolvedIsin": "LU2195226068",
+   "lse": [
+    "EPAB",
+    "PABG"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 91,
+   "list": "meridian",
+   "name": "HSBC MSCI WORLD CLIMATE PARIS UCITS ETF",
+   "isin": "IE00BP2C1V62",
+   "resolvedIsin": "IE00BP2C1V62",
+   "lse": [
+    "HPAO",
+    "HPAW"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 92,
+   "list": "meridian",
+   "name": "HSBC MSCI USA CLIMATE PARIS UCITS ETF",
+   "isin": "IE00BP2C1S34",
+   "resolvedIsin": "IE00BP2C1S34",
+   "lse": [
+    "HPAS",
+    "HPAU"
+   ]
+  },
+  {
+   "image": "05.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/175fcc8352b64bcfa984b8221f8235b2.jpg",
+   "row": 93,
+   "list": "meridian",
+   "name": "HSBC MSCI JAPAN CLIMATE PARIS UCITS ETF",
+   "isin": "IE000UU299V4",
+   "resolvedIsin": "IE000UU299V4",
+   "lse": [
+    "HPJP",
+    "HPJS"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 1,
+   "list": "meridian",
+   "name": "HSBC MSCI EUROPE CLIMATE PARS UCITS ETF",
+   "isin": "IE00BP2C0316",
+   "resolvedIsin": "IE00BP2C0316",
+   "lse": [
+    "HPAE"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 2,
+   "list": "meridian",
+   "name": "FRK SP 500 PA CLIMATE UCITS ETF",
+   "isin": "IE00BMDPBZ72",
+   "resolvedIsin": "IE00BMDPBZ72",
+   "lse": [
+    "500P",
+    "USPA"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 3,
+   "list": "meridian",
+   "name": "FRK STX ELIR600 PA CLIMATE UCITS ETF",
+   "isin": "IE00BMDPBY65",
+   "resolvedIsin": "IE00BMDPBY65",
+   "lse": [
+    "EUPA",
+    "PARI"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 4,
+   "list": "meridian",
+   "name": "FRK M5OI CH PARIS UCITS ETF",
+   "isin": "IE000EBPC0Z7",
+   "resolvedIsin": "IE000EBPC0Z7",
+   "lse": [
+    "CHPA",
+    "PABC"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 5,
+   "list": "meridian",
+   "name": "SPDR MSCI ACW CLIMATE PARIS ALIGN UCIT A",
+   "isin": "IE00BYTH5370",
+   "resolvedIsin": "",
+   "note": "ISIN as printed is not in assets/etfs.csv; no LSE line found",
+   "lse": []
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 6,
+   "list": "meridian",
+   "name": "SPDR MSCI WOR CLIMATE PARIS ALIGN UCIT A",
+   "isin": "IE00BYTH5594",
+   "resolvedIsin": "",
+   "note": "ISIN as printed is not in assets/etfs.csv; no LSE line found",
+   "lse": []
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 7,
+   "list": "meridian",
+   "name": "SPDR MSCI EUR CLIMATE PARIS ALIGN UCIT A",
+   "isin": "IE00BYTH5487",
+   "resolvedIsin": "",
+   "note": "ISIN as printed is not in assets/etfs.csv; no LSE line found",
+   "lse": []
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 8,
+   "list": "meridian",
+   "name": "SPDR MSCI EM CLIMATE PARIS ALIGN UCIT AC",
+   "isin": "IE00BYTH5263",
+   "resolvedIsin": "",
+   "note": "ISIN as printed is not in assets/etfs.csv; no LSE line found",
+   "lse": []
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 9,
+   "list": "meridian",
+   "name": "X WORLD CLIMATE TRANSITION UCTS ETF",
+   "isin": "IE000P4AYI47",
+   "resolvedIsin": "IE000P4AYI47",
+   "lse": [
+    "XCTU"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 10,
+   "list": "meridian",
+   "name": "X USA CLIMATE TRANSITION UCITS ETF",
+   "isin": "IE000GYDNJS5",
+   "resolvedIsin": "IE000GYDNJS5",
+   "lse": [
+    "XCUD",
+    "XCUU"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 11,
+   "list": "meridian",
+   "name": "X EUROPE CLIMATE TRANSITION UCITS ETF",
+   "isin": "IE000N9MLVT1",
+   "resolvedIsin": "IE000N9MLVT1",
+   "lse": [
+    "XECT"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 12,
+   "list": "meridian",
+   "name": "X EMU CLIMATE TRANSITION UCITS ETF",
+   "isin": "IE000W6L2AI3",
+   "resolvedIsin": "IE000W6L2AI3",
+   "lse": [
+    "XCEU"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 13,
+   "list": "meridian",
+   "name": "X JAPAN CLIMATE TRANSITION UCITS ETF",
+   "isin": "IE0006FDYJF8",
+   "resolvedIsin": "IE0006FDYJF8",
+   "lse": [
+    "XCJD",
+    "XCJU"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 14,
+   "list": "meridian",
+   "name": "X WORLD NET ZERO PA 1C",
+   "isin": "IE000UZCJS58",
+   "resolvedIsin": "IE000UZCJS58",
+   "lse": [
+    "XNZS",
+    "XNZW"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 15,
+   "list": "meridian",
+   "name": "X USA NET ZERO PARIS 1C",
+   "isin": "IE0002ZM3JI1",
+   "resolvedIsin": "IE0002ZM3JI1",
+   "lse": [
+    "XNZU"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 16,
+   "list": "meridian",
+   "name": "X EUROPE NET ZERO PARIS 1C",
+   "isin": "IE0001JH5CB4",
+   "resolvedIsin": "IE0001JH5CB4",
+   "lse": [
+    "XEPA"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 17,
+   "list": "meridian",
+   "name": "XJAPAN NET ZERO PARIS 1C",
+   "isin": "IE00074JLU02",
+   "resolvedIsin": "IE00074JLU02",
+   "lse": [
+    "XNJG"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 18,
+   "list": "meridian",
+   "name": "X EM NET ZERO PARIS ALIGNED UCITS ETF",
+   "isin": "IE000TZT8TI0",
+   "resolvedIsin": "IE000TZT8TI0",
+   "lse": [
+    "XEMN"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 19,
+   "list": "meridian",
+   "name": "X NORDC NET ZERO PARIS ALIGNED UCITS ETF",
+   "isin": "IE000HT7E0B1",
+   "resolvedIsin": "IE000HT7E0B1",
+   "lse": [],
+   "note": "no LSE line in assets/etfs.csv"
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 20,
+   "list": "meridian",
+   "name": "ISH MSC WRLD SCRND UCTS ETF G8 H DIS",
+   "isin": "IE00BKBF6K52",
+   "resolvedIsin": "IE00BKBF6K52",
+   "lse": [
+    "SAWG"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 21,
+   "list": "meridian",
+   "name": "ISH MSCI US SRI GBH D",
+   "isin": "IE00BMWPV470",
+   "resolvedIsin": "IE00BMWPV470",
+   "lse": [
+    "SUAP"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 22,
+   "list": "meridian",
+   "name": "ISHARES MSCI IPN SRI UCT ETF GBP HDG ACC",
+   "isin": "IE0007VCNJW3",
+   "resolvedIsin": "IE0007VCNJW3",
+   "lse": [
+    "JPSG"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 23,
+   "list": "meridian",
+   "name": "ISH £SRI E GBH D",
+   "isin": "IE00BMZ17T93",
+   "resolvedIsin": "IE00BMZ17T93",
+   "lse": [
+    "SGWS"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 24,
+   "list": "meridian",
+   "name": "HSBC USA SUS EQ UCITS ETF USD (DIST)",
+   "isin": "IE000YFGN231",
+   "resolvedIsin": "IE000YFGN231",
+   "lse": [
+    "HSDU",
+    "HSSU"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 25,
+   "list": "meridian",
+   "name": "HSBC UK SUSTAINABLE EQUITY ETF",
+   "isin": "IE00BKY53D40",
+   "resolvedIsin": "IE00BKY53D40",
+   "lse": [
+    "HSUK"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 26,
+   "list": "meridian",
+   "name": "HSBC EUROPE EX UK SUS EQUITY UCITS ETF",
+   "isin": "IE00BKY58625",
+   "resolvedIsin": "IE00BKY58625",
+   "lse": [
+    "HSXE",
+    "HSXU"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 27,
+   "list": "meridian",
+   "name": "HSBC EUROPE SUSTAINABLE EQUITY ETF",
+   "isin": "IE00BKY55W78",
+   "resolvedIsin": "IE00BKY55W78",
+   "lse": [
+    "HSEP",
+    "HSEU"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 28,
+   "list": "meridian",
+   "name": "HSBC EUROPE SUS EQ UCITS ETF EUR (DIST)",
+   "isin": "IE000WARATZ3",
+   "resolvedIsin": "",
+   "note": "ISIN as printed is not in assets/etfs.csv; no LSE line found",
+   "lse": []
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 29,
+   "list": "meridian",
+   "name": "HSBC JAPAN SUS EQ UCITS ETF USD (DIST)",
+   "isin": "IE000J3F4J90",
+   "resolvedIsin": "IE000J3F4J90",
+   "lse": [
+    "HSJA",
+    "HSJS"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 30,
+   "list": "meridian",
+   "name": "HSBC JAPAN SUSTAINABLE EQUITY ETF",
+   "isin": "IE00BKY55S33",
+   "resolvedIsin": "IE00BKY55S33",
+   "lse": [
+    "HSJD",
+    "HSJP"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 31,
+   "list": "meridian",
+   "name": "HSBC APAC EX JAP SUSTAINABLE EQUITY ETF",
+   "isin": "IE00BKY58G26",
+   "resolvedIsin": "IE00BKY58G26",
+   "lse": [
+    "HSXD",
+    "HSXJ"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 32,
+   "list": "meridian",
+   "name": "HSBC APAC EX JP SUS EQ UC ETF USD (DIST)",
+   "isin": "IE000P1WR081",
+   "resolvedIsin": "IE000P1WR081",
+   "lse": [
+    "HSAS",
+    "HSAX"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 33,
+   "list": "meridian",
+   "name": "HSBC EM SUS EQUITY UCITS ETF USD (DIST)",
+   "isin": "IE000XYBMEH0",
+   "resolvedIsin": "IE000XYBMEH0",
+   "lse": [
+    "HSMD",
+    "HSMS"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 34,
+   "list": "meridian",
+   "name": "HSBC DEV WLD SUSTAINABLE EQ ETF USD DIST",
+   "isin": "IE000ZGT8JM8",
+   "resolvedIsin": "IE000ZGT8JM8",
+   "lse": [
+    "HSDD",
+    "HSDS"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 35,
+   "list": "meridian",
+   "name": "HSBC DEV WORLD SUSTAINABLE EQUITY ETF",
+   "isin": "IE00BKY59K37",
+   "resolvedIsin": "IE00BKY59K37",
+   "lse": [
+    "HSWD",
+    "HSWO"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 36,
+   "list": "meridian",
+   "name": "HSBC MSCI WORLD ISLAMIC ESG ETF USD ACC",
+   "isin": "IE000X9FTI22",
+   "resolvedIsin": "IE000X9FTI22",
+   "lse": [
+    "HIWO",
+    "HIWS"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 37,
+   "list": "meridian",
+   "name": "HSBC MSCI EUROPE ISLAMIC ESG ETF EUR ACC",
+   "isin": "IE000AGFZM58",
+   "resolvedIsin": "IE000AGFZM58",
+   "lse": [
+    "HIEU",
+    "HIPS"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 38,
+   "list": "meridian",
+   "name": "HSBC MSCI USA ISLAMIC ESG USD ACC",
+   "isin": "IE000I5NV504",
+   "resolvedIsin": "IE000I5NV504",
+   "lse": [
+    "HIUA",
+    "HIUS"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 39,
+   "list": "meridian",
+   "name": "HSBC MSCI EM ISLAMIC ESG ETF USD ACC",
+   "isin": "IE0009BC6K22",
+   "resolvedIsin": "IE0009BC6K22",
+   "lse": [
+    "HIEM",
+    "HIES"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 40,
+   "list": "meridian",
+   "name": "HSBC ICAV GLOBAL SUKUK UCITS ETF ETFC",
+   "isin": "IE000E8WZD37",
+   "resolvedIsin": "IE000E8WZD37",
+   "lse": [
+    "HBKS",
+    "HBKU"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 41,
+   "list": "meridian",
+   "name": "AMUNDI GLOBAL AGGREGATE GREEN BOND ACC",
+   "isin": "LU1563454310",
+   "resolvedIsin": "LU1563454310",
+   "lse": [
+    "CLIM",
+    "CLMU"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 42,
+   "list": "meridian",
+   "name": "AMUNDI GLBL AGG GREEN BOND GBP HDG",
+   "isin": "LU1563455630",
+   "resolvedIsin": "LU1563455630",
+   "lse": [
+    "KLMG"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 43,
+   "list": "meridian",
+   "name": "AMUNDI EURO GOVERNMENT GREEN BOND ACC",
+   "isin": "LU2356220926",
+   "resolvedIsin": "LU2356220926",
+   "lse": [
+    "EART"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 44,
+   "list": "meridian",
+   "name": "GS GREEN BOND ETF - GBP H",
+   "isin": "IE0004IR5U82",
+   "resolvedIsin": "IE0004IR5U82",
+   "lse": [
+    "GREN"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 45,
+   "list": "meridian",
+   "name": "JPM GREEN SOCIAL SUST BOND UCITS ETF ACC",
+   "isin": "IE0005FKEK99",
+   "resolvedIsin": "IE0005FKEK99",
+   "lse": [],
+   "note": "no LSE line in assets/etfs.csv"
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 46,
+   "list": "meridian",
+   "name": "JPM GREEN SOCIAL SUST UCITS ETF USD ACC",
+   "isin": "IE0005FKEK99",
+   "resolvedIsin": "IE0005FKEK99",
+   "lse": [],
+   "note": "no LSE line in assets/etfs.csv"
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 47,
+   "list": "meridian",
+   "name": "X USD CORP GREEN BOND 1D GBP",
+   "isin": "IE000X63FXN4",
+   "resolvedIsin": "IE000X63FXN4",
+   "lse": [
+    "XGBB"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 48,
+   "list": "meridian",
+   "name": "FRK SUSTAINABLE EUR GREEN BOND UCITS ETF",
+   "isin": "IE00BHZRR253",
+   "resolvedIsin": "IE00BHZRR253",
+   "lse": [
+    "FLRG",
+    "FVUG"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 49,
+   "list": "meridian",
+   "name": "ISHARES GBL AGG BD ESG ETF GBP HDG(ACC)",
+   "isin": "IE000ZXYID24",
+   "resolvedIsin": "IE000ZXYID24",
+   "lse": [
+    "AEGG"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 50,
+   "list": "meridian",
+   "name": "ISHS GBL AGG BD ESG SRI ETF GBP HDG/ACC)",
+   "isin": "IE000ZXYID24",
+   "resolvedIsin": "IE000ZXYID24",
+   "lse": [
+    "AEGG"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 51,
+   "list": "meridian",
+   "name": "VANGUARD ESG GLBL CORP UCITS ETF GBH ACC",
+   "isin": "IE00BNDS1T77",
+   "resolvedIsin": "IE00BNDS1T77",
+   "lse": [
+    "V3GS"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 52,
+   "list": "meridian",
+   "name": "VANGUARD ESG GLBL CORP UCITS ETF GBH DIS",
+   "isin": "IE00BNDS1V99",
+   "resolvedIsin": "IE00BNDS1V99",
+   "lse": [
+    "V3GP"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 53,
+   "list": "meridian",
+   "name": "X ESG GLOBAL GOV BOND 2D GBP",
+   "isin": "LU2385068247",
+   "resolvedIsin": "LU2385068247",
+   "lse": [
+    "XZWS"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 54,
+   "list": "meridian",
+   "name": "X USD CORP BOND SRI PAB UCITS ETF",
+   "isin": "IE00BL58LJ19",
+   "resolvedIsin": "IE00BL58LJ19",
+   "lse": [
+    "XZBD"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 55,
+   "list": "meridian",
+   "name": "ISHARES USD CORP ESG SRI 0-3YR GBP H",
+   "isin": "IE00BK7Y2S64",
+   "resolvedIsin": "IE00BK7Y2S64",
+   "lse": [
+    "SGSU"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 56,
+   "list": "meridian",
+   "name": "ISHARES USD CORP ESG SRI-GBPHD DIST",
+   "isin": "IE00BMWPV702",
+   "resolvedIsin": "IE00BMWPV702",
+   "lse": [
+    "SUOP"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 57,
+   "list": "meridian",
+   "name": "ISH CB ESG SRI GBP H D",
+   "isin": "IE00BK74KV56",
+   "resolvedIsin": "IE00BK74KV56",
+   "lse": [
+    "SUOG"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 58,
+   "list": "meridian",
+   "name": "ISH $ HYCB ESG UCITS ETF GBH D",
+   "isin": "IE0003NVF3Y3",
+   "resolvedIsin": "IE0003NVF3Y3",
+   "lse": [
+    "DHYG"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 59,
+   "list": "meridian",
+   "name": "ISH $ HYCB ESG SRI UCIT ETF GBH D",
+   "isin": "IE0003NVF3Y3",
+   "resolvedIsin": "IE0003NVF3Y3",
+   "lse": [
+    "DHYG"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 60,
+   "list": "meridian",
+   "name": "ISH € HY CRP BD ESG UCT ETF GBP HD ACC",
+   "isin": "IE000YZVB4R7",
+   "resolvedIsin": "IE000YZVB4R7",
+   "lse": [
+    "EHYG"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 61,
+   "list": "meridian",
+   "name": "ISHS € H CP B ESG SRI UCT ETF GBP HD ACC",
+   "isin": "IE000YZVB4R7",
+   "resolvedIsin": "IE000YZVB4R7",
+   "lse": [
+    "EHYG"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 62,
+   "list": "meridian",
+   "name": "AMUNDI GLOBAL GENDER EQUALITY ACC",
+   "isin": "LU1691909508",
+   "resolvedIsin": "LU1691909508",
+   "lse": [
+    "ELLE",
+    "GEND"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 63,
+   "list": "meridian",
+   "name": "X GLOBAL SDG 3 GOOD HEALTH UCITS ETF",
+   "isin": "IE00036F4K40",
+   "resolvedIsin": "IE00036F4K40",
+   "lse": [
+    "SDG3",
+    "XDG3"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 64,
+   "list": "meridian",
+   "name": "X GLOBAL SDG 6 WATER UCITS ETF",
+   "isin": "IE0007WJ6B10",
+   "resolvedIsin": "IE0007WJ6B10",
+   "lse": [
+    "SDG6",
+    "XDG6"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 65,
+   "list": "meridian",
+   "name": "X GLOBAL SDG 7 CLEAN ENERGY UCITS ETF",
+   "isin": "IE000JZYIUN0",
+   "resolvedIsin": "IE000JZYIUN0",
+   "lse": [
+    "XDG7"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 66,
+   "list": "meridian",
+   "name": "XSDG11 SUSTAINABLE CIETIES COMMUNICATION",
+   "isin": "IE000V0GDVU7",
+   "resolvedIsin": "IE000V0GDVU7",
+   "lse": [
+    "XG11"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 67,
+   "list": "meridian",
+   "name": "XGLOBAL SDGS UCITS ETF",
+   "isin": "IE000PSF3A70",
+   "resolvedIsin": "IE000PSF3A70",
+   "lse": [
+    "SDGX",
+    "XDGI"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 68,
+   "list": "meridian",
+   "name": "X SDG 12 CIRCULAR ECONOMY",
+   "isin": "IE000Y6ZXZ48",
+   "resolvedIsin": "IE000Y6ZXZ48",
+   "lse": [
+    "XG12"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 69,
+   "list": "meridian",
+   "name": "X MSCI GLOBAL SDG9 INDUST INNOVAT INFRA",
+   "isin": "IE0005E47AH7",
+   "resolvedIsin": "IE0005E47AH7",
+   "lse": [
+    "SDG9"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 70,
+   "list": "meridian",
+   "name": "ISHS GLOBAL CLEAN ENERGY UCITS ETF USD A",
+   "isin": "IE000U58J0M1",
+   "resolvedIsin": "IE000U58J0M1",
+   "lse": [
+    "INRA"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 71,
+   "list": "meridian",
+   "name": "GLOBAL X CLEAN WATER UCITS",
+   "isin": "IE000BWKUES1",
+   "resolvedIsin": "IE000BWKUES1",
+   "lse": [
+    "AQWA",
+    "AQWG"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 72,
+   "list": "meridian",
+   "name": "GLOBAL X SOLAR UCITS ETF",
+   "isin": "IE000XD7KCJ7",
+   "resolvedIsin": "IE000XD7KCJ7",
+   "lse": [
+    "RAYG",
+    "RAYZ"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 73,
+   "list": "meridian",
+   "name": "GLOBAL X WIND ENERGY UCITS ETF",
+   "isin": "IE000JNHCBM6",
+   "resolvedIsin": "IE000JNHCBM6",
+   "lse": [
+    "WNDG",
+    "WNDY"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 74,
+   "list": "meridian",
+   "name": "GLOBAL X CLEANTECH UCITS ETF",
+   "isin": "IE00BMH5YL08",
+   "resolvedIsin": "IE00BMH5YL08",
+   "lse": [
+    "CTEG",
+    "CTEK"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 75,
+   "list": "meridian",
+   "name": "GLOBAL X RENEWABLE ENERG PRODUCER UCITS",
+   "isin": "IE00BLCHJH52",
+   "resolvedIsin": "IE00BLCHJH52",
+   "lse": [
+    "RNRG",
+    "RNRU"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 76,
+   "list": "meridian",
+   "name": "GLOBAL X HYDROGEN UCITS ETF",
+   "isin": "IE0002RPS3K2",
+   "resolvedIsin": "IE0002RPS3K2",
+   "lse": [
+    "HYGG",
+    "HYGN"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 77,
+   "list": "meridian",
+   "name": "VANECK HYDROGEN ECONOMY UCITS ETF",
+   "isin": "IE00BMDH1538",
+   "resolvedIsin": "IE00BMDH1538",
+   "lse": [
+    "HDGB",
+    "HDRO"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 78,
+   "list": "meridian",
+   "name": "AMUNDI MSCI NEW ENERGY UCITS ETF DIST",
+   "isin": "FR0010524777",
+   "resolvedIsin": "FR0010524777",
+   "lse": [
+    "NRJL",
+    "NRJU"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 79,
+   "list": "meridian",
+   "name": "HSBC NASDAQ GLOBAL CLIMATE TECH ETF USD ACC",
+   "isin": "IE000XC6EVL9",
+   "resolvedIsin": "IE000XC6EVL9",
+   "lse": [
+    "HNCS",
+    "HNCT"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 80,
+   "list": "meridian",
+   "name": "KRANESHS ELEC VEH FUT MOB ESG SCREEN USD",
+   "isin": "IE000YUAPTQ0",
+   "resolvedIsin": "",
+   "note": "ISIN as printed is not in assets/etfs.csv; no LSE line found",
+   "lse": []
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 81,
+   "list": "meridian",
+   "name": "ISHS ELEC VEHICLES DRIVING TECH ETF US A",
+   "isin": "IE00BGL86Z12",
+   "resolvedIsin": "IE00BGL86Z12",
+   "lse": [
+    "ECAR",
+    "GCAR"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 82,
+   "list": "meridian",
+   "name": "GLOBAL X AUTONOMOUS & ELECTRIC VEHICLES",
+   "isin": "IE00BMH5YS76",
+   "resolvedIsin": "IE00BMH5YS76",
+   "lse": [
+    "DRVG"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 83,
+   "list": "meridian",
+   "name": "XTRACKERS FUTURE MOBILITY ETF 1C",
+   "isin": "IE00BGV5VR99",
+   "resolvedIsin": "IE00BGV5VR99",
+   "lse": [
+    "XMOV"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 84,
+   "list": "meridian",
+   "name": "AMUNDI MSCI FUTURE MOBILITY ESG SCREENED",
+   "isin": "LU2023679090",
+   "resolvedIsin": "LU2023679090",
+   "lse": [
+    "ELCR",
+    "MOBI"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 85,
+   "list": "meridian",
+   "name": "SPDR MORNINGSTAR GLOB INFRASTRUCTURE ETF",
+   "isin": "IE00BQWJFQ70",
+   "resolvedIsin": "IE00BQWJFQ70",
+   "lse": [
+    "GIN",
+    "MAGI"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 86,
+   "list": "meridian",
+   "name": "GLOBAL X US. INFRASTRUCTURE DEVELOPMENT",
+   "isin": "IE00BLCHJ641",
+   "resolvedIsin": "IE00BLCHJ641",
+   "lse": [
+    "PAVG",
+    "PAVU"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 87,
+   "list": "meridian",
+   "name": "GLOBAL X EUROPEAN INFRA DEV UCITS ETF",
+   "isin": "IE000PS0J481",
+   "resolvedIsin": "IE000PS0J481",
+   "lse": [
+    "BRIJ",
+    "BRIP"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 88,
+   "list": "meridian",
+   "name": "X GLOBAL INFRASTRUCTURE ESG 1C",
+   "isin": "IE00BYZNF849",
+   "resolvedIsin": "IE00BYZNF849",
+   "lse": [
+    "XIFE",
+    "XINF"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 89,
+   "list": "meridian",
+   "name": "ISH GLB INFRASTRUCTURE UCTS ETF GBP H AC",
+   "isin": "IE000TCZMZM8",
+   "resolvedIsin": "IE000TCZMZM8",
+   "lse": [
+    "INGH"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 90,
+   "list": "meridian",
+   "name": "GLOBAL X DATA CENTER REITS & DIGI INFRA",
+   "isin": "IE00BMH5Y327",
+   "resolvedIsin": "IE00BMH5Y327",
+   "lse": [
+    "VPN",
+    "VPNG"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 91,
+   "list": "meridian",
+   "name": "VANECK SPACE INNOVATORS UCITS ETF",
+   "isin": "IE000YU9K6K2",
+   "resolvedIsin": "IE000YU9K6K2",
+   "lse": [
+    "JEDG",
+    "JEDI"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 92,
+   "list": "meridian",
+   "name": "VANECK CIRCULAR ECONOMY UCITS ETF",
+   "isin": "IE0001J5A2T9",
+   "resolvedIsin": "IE0001J5A2T9",
+   "lse": [
+    "REUG",
+    "REUS"
+   ]
+  },
+  {
+   "image": "06.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/3c2cfcbb42a144458d2d563ab7341fa7.jpg",
+   "row": 93,
+   "list": "meridian",
+   "name": "VANECK SUSTAIN FUTURE OF FOOD UCITS ETF",
+   "isin": "IE0005B8WVT6",
+   "resolvedIsin": "IE0005B8WVT6",
+   "lse": [
+    "VEGB",
+    "VEGI"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 1,
+   "list": "meridian",
+   "name": "AMUNDI MSCI SMART CITIES UCITS ETF ACC",
+   "isin": "LU2037748345",
+   "resolvedIsin": "LU2037748345",
+   "lse": [
+    "IQCT",
+    "IQCY"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 2,
+   "list": "meridian",
+   "name": "AMUNDI MSCI MILLENNIALS UCITS ETF ACC",
+   "isin": "LU2023678449",
+   "resolvedIsin": "LU2023678449",
+   "lse": [
+    "GENY",
+    "MILL"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 3,
+   "list": "meridian",
+   "name": "GLOBAL X DISRUPTIVE MATERIALS UCITS ETF",
+   "isin": "IE000FP52WM7",
+   "resolvedIsin": "IE000FP52WM7",
+   "lse": [
+    "DMAG",
+    "DMAT"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 4,
+   "list": "meridian",
+   "name": "GLOBAL X DISRUPTIVE MATERIALS UCITS ETF",
+   "isin": "IE000544AJM3",
+   "resolvedIsin": "IE000544AJM3",
+   "lse": [
+    "DMAD"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 5,
+   "list": "meridian",
+   "name": "GLOBAL X AGTECH & FOOD INNOVATION UCITS",
+   "isin": "IE000EBFYWX3",
+   "resolvedIsin": "IE000EBFYWX3",
+   "lse": [
+    "KROG",
+    "KROP"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 6,
+   "list": "meridian",
+   "name": "FRK FUTURE FOOD UCITS ETF",
+   "isin": "IE000ZOKLHY7",
+   "resolvedIsin": "IE000ZOKLHY7",
+   "lse": [
+    "FOFD",
+    "FRFD"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 7,
+   "list": "meridian",
+   "name": "X DEVELOPED GREEN RE ESG UCITS ETF 1C",
+   "isin": "IE00BN2BCY94",
+   "resolvedIsin": "IE00BN2BCY94",
+   "lse": [
+    "XDRE",
+    "XZRE"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 8,
+   "list": "meridian",
+   "name": "X MSCI FINTECH INNOVATION UCITS ETF 1C",
+   "isin": "IE000YDOORK7",
+   "resolvedIsin": "IE000YDOORK7",
+   "lse": [
+    "XFNT",
+    "XFSN"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 9,
+   "list": "meridian",
+   "name": "X MSCI NG INTERNET INNOV UCITS ETF 1C",
+   "isin": "IE000XOQ9TK4",
+   "resolvedIsin": "IE000XOQ9TK4",
+   "lse": [
+    "XNGI",
+    "XNGS"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 10,
+   "list": "meridian",
+   "name": "VANGUARD FTSE WRLD HI DI YLD UCITS ETF",
+   "isin": "IE00B8GKDB10",
+   "resolvedIsin": "IE00B8GKDB10",
+   "lse": [
+    "VHYD",
+    "VHYL"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 11,
+   "list": "meridian",
+   "name": "VANGUARD FTSE ALLWELD HIDNYLD UCITS ETF",
+   "isin": "IE00BK5BR626",
+   "resolvedIsin": "IE00BK5BR626",
+   "lse": [
+    "VHYA",
+    "VHYG"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 12,
+   "list": "meridian",
+   "name": "SPDR S&P GLOBAL DIVIDEND UCITS ETF",
+   "isin": "IE00B9CQXS71",
+   "resolvedIsin": "IE00B9CQXS71",
+   "lse": [
+    "GBDV",
+    "GLDV"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 13,
+   "list": "meridian",
+   "name": "SPDR S&P US DIVIDEND ARISTOCRATS UCTETF",
+   "isin": "IE00B6YX5D40",
+   "resolvedIsin": "IE00B6YX5D40",
+   "lse": [
+    "UDVD",
+    "USDV"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 14,
+   "list": "meridian",
+   "name": "SPDR S&P US DIV ARIST SCREENED DIST",
+   "isin": "IE00BYTH5R14",
+   "resolvedIsin": "IE00BYTH5R14",
+   "lse": [
+    "UEDV"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 15,
+   "list": "meridian",
+   "name": "SPDR S&P EURO DIVIDEND ARISTOCRATS ETFE",
+   "isin": "IE00B5M1WJ87",
+   "resolvedIsin": "IE00B5M1WJ87",
+   "lse": [
+    "EUDI",
+    "EUDV"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 16,
+   "list": "meridian",
+   "name": "SPDR S&P PAN ASIA DIVIDEND UCITS ETF",
+   "isin": "IE00B9KNR336",
+   "resolvedIsin": "IE00B9KNR336",
+   "lse": [
+    "ASDV",
+    "PADV"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 17,
+   "list": "meridian",
+   "name": "SPDR S&P UK DIVIDEND ARISTOCRAT LCIT ETF",
+   "isin": "IE00B6S2Z822",
+   "resolvedIsin": "IE00B6S2Z822",
+   "lse": [
+    "UKDV"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 18,
+   "list": "meridian",
+   "name": "SPDR S&P EMERGING MARKETS DVOND UCIT ETF",
+   "isin": "IE00B6YX5B26",
+   "resolvedIsin": "IE00B6YX5B26",
+   "lse": [
+    "EDVD",
+    "EMDV"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 19,
+   "list": "meridian",
+   "name": "AMUNDI S&P EUROZONE DIVIDEND ARISTOCRAT",
+   "isin": "LU0959210781",
+   "resolvedIsin": "LU0959210781",
+   "lse": [
+    "EDIV"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 20,
+   "list": "meridian",
+   "name": "FRK BUROPEAN QUALITY DIVIDEND UCITS ETF",
+   "isin": "IE00BF2B0L69",
+   "resolvedIsin": "IE00BF2B0L69",
+   "lse": [
+    "FLXD",
+    "FRXD"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 21,
+   "list": "meridian",
+   "name": "FRK GLOBAL QUALITY DIVIDEND UCITS ETF",
+   "isin": "IE00BF2B0M76",
+   "resolvedIsin": "IE00BF2B0M76",
+   "lse": [
+    "FLXX",
+    "FRGD"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 22,
+   "list": "meridian",
+   "name": "GLOBAL X SUPERDIMIDEND UCITS ETF",
+   "isin": "IE00077FRP95",
+   "resolvedIsin": "IE00077FRP95",
+   "lse": [
+    "SDIP",
+    "SDIV"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 23,
+   "list": "meridian",
+   "name": "X FTSE 100 INCOME",
+   "isin": "LU0292097234",
+   "resolvedIsin": "LU0292097234",
+   "lse": [
+    "XUKX"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 24,
+   "list": "meridian",
+   "name": "SPDR MSCI USA VALUE ETF",
+   "isin": "IE00BSPLC520",
+   "resolvedIsin": "IE00BSPLC520",
+   "lse": [
+    "USVL",
+    "UVAL"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 25,
+   "list": "meridian",
+   "name": "SPDR MSCI ELIROPE VALUE ETF",
+   "isin": "IE00BSPLC306",
+   "resolvedIsin": "IE00BSPLC306",
+   "lse": [
+    "EVAL"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 26,
+   "list": "meridian",
+   "name": "SPDR MSCI WLD VAL",
+   "isin": "IE00BJXRT813",
+   "resolvedIsin": "IE00BJXRT813",
+   "lse": [
+    "VALW",
+    "WVAL"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 27,
+   "list": "meridian",
+   "name": "ISH RUSSEL 1000 GROWTH UCTS ETF US ACC",
+   "isin": "IE000NITTFF2",
+   "resolvedIsin": "IE000NITTFF2",
+   "lse": [
+    "R1GB",
+    "R1GR"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 28,
+   "list": "meridian",
+   "name": "AMUNDI RUSSELL 1000 GROWTH UCITS ETF ACC",
+   "isin": "IE0005E8B9S4",
+   "resolvedIsin": "IE0005E8B9S4",
+   "lse": [
+    "MWOT"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 29,
+   "list": "meridian",
+   "name": "ISH WORLD VALUE ETF GBP DIST",
+   "isin": "IE00BFYTYS33",
+   "resolvedIsin": "IE00BFYTYS33",
+   "lse": [
+    "IWVG",
+    "IWVU"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 30,
+   "list": "meridian",
+   "name": "FIDELITY US QUALITY VALUE UCITS ETF - A",
+   "isin": "IE000MKIH0W7",
+   "resolvedIsin": "IE000MKIH0W7",
+   "lse": [
+    "FUS1",
+    "FUSV"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 31,
+   "list": "meridian",
+   "name": "FIDELITY GL QUALITY VALUE UCITS ETF - A",
+   "isin": "IE0002XFS025",
+   "resolvedIsin": "IE0002XFS025",
+   "lse": [
+    "FGL1",
+    "FGLV"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 32,
+   "list": "meridian",
+   "name": "VANECK MORNINGSTAR US WIDE MOAT UCITS",
+   "isin": "IE0007I99HX7",
+   "resolvedIsin": "IE0007I99HX7",
+   "lse": [
+    "MOTU",
+    "MOTV"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 33,
+   "list": "meridian",
+   "name": "VANECK MORNINGSTAR GLOBAL WIDE MOAT UCITS ETF",
+   "isin": "IE00BL0BMZ89",
+   "resolvedIsin": "IE00BL0BMZ89",
+   "lse": [
+    "GOAT",
+    "GOGB"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 34,
+   "list": "meridian",
+   "name": "VANECK MORNINGSTAR US SMID MOAT UCTS",
+   "isin": "IE000SBU19F7",
+   "resolvedIsin": "IE000SBU19F7",
+   "lse": [
+    "SMOT",
+    "SMTV"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 35,
+   "list": "meridian",
+   "name": "X MSCI WORLD QUALITY ESG UCITS ETF 1C",
+   "isin": "IE0003NQ0IY5",
+   "resolvedIsin": "IE0003NQ0IY5",
+   "lse": [
+    "XWEQ",
+    "XWQS"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 36,
+   "list": "meridian",
+   "name": "X MSCI WORLD MOMENTUM ESG UCITS ETF 1C",
+   "isin": "IE000TL3PL69",
+   "resolvedIsin": "IE000TL3PL69",
+   "lse": [
+    "XWEM",
+    "XWMS"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 37,
+   "list": "meridian",
+   "name": "X MSCI WORLD VALUE ESG UCITS ETF 1C",
+   "isin": "IE000LAUZQT6",
+   "resolvedIsin": "IE000LAUZQT6",
+   "lse": [
+    "XWEV",
+    "XWVS"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 38,
+   "list": "meridian",
+   "name": "X MSCI WORLD MIN VOL ESG UCITS ETF 1C",
+   "isin": "IE0008YN0OY8",
+   "resolvedIsin": "IE0008YN0OY8",
+   "lse": [
+    "XWBS",
+    "XWEB"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 39,
+   "list": "meridian",
+   "name": "SPDR RUSSELL 2000 US SMALL CAP ETF",
+   "isin": "IE00BJ38QD84",
+   "resolvedIsin": "IE00BJ38QD84",
+   "lse": [
+    "R2SC",
+    "R2US"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 40,
+   "list": "meridian",
+   "name": "SPDR MSCI WORLD SMALL CAP UCITS ETF",
+   "isin": "IE00BCBJG560",
+   "resolvedIsin": "IE00BCBJG560",
+   "lse": [
+    "WDSC",
+    "WOSC"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 41,
+   "list": "meridian",
+   "name": "SPDR S&P 400 US MID CAP UCITS ETF",
+   "isin": "IE00B4YBJ215",
+   "resolvedIsin": "IE00B4YBJ215",
+   "lse": [
+    "SPX4",
+    "SPY4"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 42,
+   "list": "meridian",
+   "name": "ISH MSCI WLD SMALL CAP UCITS ETF ACC GBP",
+   "isin": "IE00BF4RFH31",
+   "resolvedIsin": "IE00BF4RFH31",
+   "lse": [
+    "WLDS",
+    "WSML"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 43,
+   "list": "meridian",
+   "name": "HSBC MSCIWLD SMALL CAP ESG ETF USD ACC",
+   "isin": "IE000C692SN6",
+   "resolvedIsin": "IE000C692SN6",
+   "lse": [
+    "HWSC",
+    "HWSS"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 44,
+   "list": "meridian",
+   "name": "HSBC MSCI EM SC ESG USD ACC",
+   "isin": "IE000W080FK3",
+   "resolvedIsin": "IE000W080FK3",
+   "lse": [
+    "HESC",
+    "HESS"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 45,
+   "list": "meridian",
+   "name": "AVANTIS GLOBAL SMALL CAP VALUE UCITS ETF",
+   "isin": "IE0003R87OG3",
+   "resolvedIsin": "IE0003R87OG3",
+   "lse": [
+    "AVGS",
+    "AVSG"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 46,
+   "list": "meridian",
+   "name": "SPDR S&P 500 LOW VOLATILITY UCITS ETF",
+   "isin": "IE00B802KR88",
+   "resolvedIsin": "IE00B802KR88",
+   "lse": [
+    "LOWV",
+    "USLV"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 47,
+   "list": "meridian",
+   "name": "IS EDG MSCI WRD MIN V GBP",
+   "isin": "IE00BGPP8L80",
+   "resolvedIsin": "IE00BGPP8L80",
+   "lse": [
+    "WMVG"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 48,
+   "list": "meridian",
+   "name": "HSBC MULTI FACTOR WORLDWIDE EQ UCITS E",
+   "isin": "IE00BKZGB098",
+   "resolvedIsin": "IE00BKZGB098",
+   "lse": [
+    "HWWA",
+    "HWWD"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 49,
+   "list": "meridian",
+   "name": "HSBC MULTI FACTOR WLDWIDE EQ ETFUSD ACC",
+   "isin": "IE0000378O66",
+   "resolvedIsin": "IE0000378O66",
+   "lse": [
+    "HWDA",
+    "HWWS"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 50,
+   "list": "meridian",
+   "name": "FIDELITY US EQ RESEARCH ENHANCED ETF ACC",
+   "isin": "IE00BKSBGS44",
+   "resolvedIsin": "IE00BKSBGS44",
+   "lse": [
+    "FUSR",
+    "FUSS"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 51,
+   "list": "meridian",
+   "name": "FIDELITY EU EQ RESEARCH ENHANCED ETF ACC",
+   "isin": "IE00BKSBGT50",
+   "resolvedIsin": "IE00BKSBGT50",
+   "lse": [
+    "FEUR"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 52,
+   "list": "meridian",
+   "name": "FIDELITY GL EQ RESEARCH ENHANCED ETF ACC",
+   "isin": "IE00BKSBGV72",
+   "resolvedIsin": "IE00BKSBGV72",
+   "lse": [
+    "FGLR",
+    "FGLS"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 53,
+   "list": "meridian",
+   "name": "FIDELITY JP EQ RESEARCH ENHANCED ETF ACC",
+   "isin": "IE00BNGFMX61",
+   "resolvedIsin": "IE00BNGFMX61",
+   "lse": [
+    "FJPR",
+    "FJPS"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 54,
+   "list": "meridian",
+   "name": "FIDELITY EM EQ RESEARCH ENHANCED ETF ACC",
+   "isin": "IE00BLRPN388",
+   "resolvedIsin": "IE00BLRPN388",
+   "lse": [
+    "FEMR",
+    "FEMS"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 55,
+   "list": "meridian",
+   "name": "FIDELITY PJ EQ RESEARCH ENHANCED ETF ACC",
+   "isin": "IE00BNGFMY78",
+   "resolvedIsin": "IE00BNGFMY78",
+   "lse": [
+    "FPXR",
+    "FPXS"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 56,
+   "list": "meridian",
+   "name": "ISHRS US EQ ENH ACTIVE UCT ETF USD ACC",
+   "isin": "IE0009VWHAE6",
+   "resolvedIsin": "IE0009VWHAE6",
+   "lse": [
+    "USEE"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 57,
+   "list": "meridian",
+   "name": "ISHRS WLD EQ ENH ACTIVE UCT ETF USD ACC",
+   "isin": "IE000D8XC064",
+   "resolvedIsin": "IE000D8XC064",
+   "lse": [
+    "WOEE"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 58,
+   "list": "meridian",
+   "name": "ISHRS WRLD EQTY ENH ACTV UCITS ETF GBP A",
+   "isin": "IE000ZYE17Z0",
+   "resolvedIsin": "IE000ZYE17Z0",
+   "lse": [
+    "WOGH"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 59,
+   "list": "meridian",
+   "name": "ISHRS EU EQ ENH ACTIVE UCT ETF USD ACC",
+   "isin": "IE00000EF730",
+   "resolvedIsin": "IE00000EF730",
+   "lse": [
+    "EUEE"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 60,
+   "list": "meridian",
+   "name": "ISHRS ASIA EQ ENH ACTIVE UCT ETF USD ACC",
+   "isin": "IE000D5R9C23",
+   "resolvedIsin": "IE000D5R9C23",
+   "lse": [
+    "AXEE"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 61,
+   "list": "meridian",
+   "name": "ISHRS EM EQ ENH ACTIVE UCT ETF USD ACC",
+   "isin": "IE000OVF8Q66",
+   "resolvedIsin": "IE000OVF8Q66",
+   "lse": [
+    "EMEE"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 62,
+   "list": "meridian",
+   "name": "ISHRS US EQTY ENHNCD ACTV UCITS GBP H A",
+   "isin": "IE000IX54FW5",
+   "resolvedIsin": "IE000IX54FW5",
+   "lse": [
+    "USGH"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 63,
+   "list": "meridian",
+   "name": "JPM GLOBAL HY FACTOR UCITS ETF USD ACC",
+   "isin": "IE00BKKCKJ46",
+   "resolvedIsin": "IE00BKKCKJ46",
+   "lse": [
+    "JGHY",
+    "JGYH"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 64,
+   "list": "meridian",
+   "name": "ROBECO 3D US EQUITY ACC",
+   "isin": "IE000XERHYF0",
+   "resolvedIsin": "IE000XERHYF0",
+   "lse": [
+    "3DUG",
+    "3DUS"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 65,
+   "list": "meridian",
+   "name": "ROBECO 3D GLOBAL EQUITY ACC",
+   "isin": "IE000Q8N7WY1",
+   "resolvedIsin": "IE000Q8N7WY1",
+   "lse": [
+    "3DGG",
+    "3DGL"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 66,
+   "list": "meridian",
+   "name": "ROBECO 3D EU EQUITY ACC",
+   "isin": "IE0007WLHX89",
+   "resolvedIsin": "IE0007WLHX89",
+   "lse": [
+    "3DEG"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 67,
+   "list": "meridian",
+   "name": "ROBECO DYN THEME MACH ACC",
+   "isin": "IE000VG2WCW5",
+   "resolvedIsin": "IE000VG2WCW5",
+   "lse": [
+    "RDTG",
+    "RDYN"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 68,
+   "list": "meridian",
+   "name": "IVZ GBL ACTIVE DEF ESG EQUITY UCITS ETF",
+   "isin": "IE000N42HDP2",
+   "resolvedIsin": "IE000N42HDP2",
+   "lse": [
+    "LVLC",
+    "LVLG"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 69,
+   "list": "meridian",
+   "name": "IDS GLOBAL EQ LVLC UCITS ETF ACC",
+   "isin": "IE000N42HDP2",
+   "resolvedIsin": "IE000N42HDP2",
+   "lse": [
+    "LVLC",
+    "LVLG"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 70,
+   "list": "meridian",
+   "name": "GLOBAL X S&P 500 COVERED CALL UCITS ETF",
+   "isin": "IE0002L5QB31",
+   "resolvedIsin": "IE0002L5QB31",
+   "lse": [
+    "XYLP",
+    "XYLU"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 71,
+   "list": "meridian",
+   "name": "GLOBAL X NASDAQ 100 COV CALL UCITS ETF",
+   "isin": "IE00BM8R0J59",
+   "resolvedIsin": "IE00BM8R0J59",
+   "lse": [
+    "QYLD",
+    "QYLP"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 72,
+   "list": "meridian",
+   "name": "INVESCO EQQQ NASDAQ 100 UCITS ETF E HDG",
+   "isin": "IE00BYVTMW98",
+   "resolvedIsin": "IE00BYVTMW98",
+   "lse": [
+    "EQGB"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 73,
+   "list": "meridian",
+   "name": "ISHRS MSCI WORLD GBP HEDGED ETF (ACC)",
+   "isin": "IE00B42YS929",
+   "resolvedIsin": "IE00B42YS929",
+   "lse": [
+    "IGWD"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 74,
+   "list": "meridian",
+   "name": "X MSCI WORLD GBP",
+   "isin": "IE00BZ1BS790",
+   "resolvedIsin": "IE00BZ1BS790",
+   "lse": [
+    "XDWG"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 75,
+   "list": "meridian",
+   "name": "X MSCI NORDIC 2C GBP HEDG",
+   "isin": "IE000MF9SZ46",
+   "resolvedIsin": "IE000MF9SZ46",
+   "lse": [
+    "XMN2"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 76,
+   "list": "meridian",
+   "name": "GLOBAL QUALITY INCOME UCITS GBPACC HED",
+   "isin": "IE00BYV1YF22",
+   "resolvedIsin": "IE00BYV1YF22",
+   "lse": [
+    "FGQP"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 77,
+   "list": "meridian",
+   "name": "US QUALITY INCOME UCITS GBPACC HED",
+   "isin": "IE00BYV03C98",
+   "resolvedIsin": "IE00BYV03C98",
+   "lse": [
+    "FUSP"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 78,
+   "list": "meridian",
+   "name": "EUROPE QUALITY INCOME UCITS GBP ACC HED",
+   "isin": "IE00BYSX4408",
+   "resolvedIsin": "IE00BYSX4408",
+   "lse": [
+    "FEQP"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 79,
+   "list": "meridian",
+   "name": "GX S&P 500 QUARTERLY TAIL HEDGE UCITS",
+   "isin": "IE000EPX8KB7",
+   "resolvedIsin": "IE000EPX8KB7",
+   "lse": [
+    "SPQH",
+    "SQHP"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 80,
+   "list": "meridian",
+   "name": "GX S&P 500€ ANNUAL TAIL HEDGE UCITS",
+   "isin": "IE000HGH8PV2",
+   "resolvedIsin": "IE000HGH8PV2",
+   "lse": [
+    "SAHP",
+    "SPAH"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 81,
+   "list": "meridian",
+   "name": "ISHARES GROWTH PORTFOLIO UCITS ETF",
+   "isin": "IE00BLLZQ912",
+   "resolvedIsin": "IE00BLLZQ912",
+   "lse": [
+    "MAGG"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 82,
+   "list": "meridian",
+   "name": "ISHARES MODERATE PORTFOLIO UCITS ETF",
+   "isin": "IE00BLLZQ797",
+   "resolvedIsin": "IE00BLLZQ797",
+   "lse": [
+    "MAMG"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 83,
+   "list": "meridian",
+   "name": "ISHARES CONSERVATIVE PORTFOLIO UCITS ETF",
+   "isin": "IE00BLP53N06",
+   "resolvedIsin": "IE00BLP53N06",
+   "lse": [
+    "MACG"
+   ]
+  },
+  {
+   "image": "07.jpg",
+   "imageUrl": "https://u1kweb.wbuksecurities.com/suggestion/623936ce17ab4fa6af8b25a1148d9f67.jpg",
+   "row": 84,
+   "list": "meridian",
+   "name": "VANILLA GLOBAL BALANCED ETP",
+   "isin": "XS2944878912",
+   "resolvedIsin": "XS2944878912",
+   "lse": [
+    "VPBG",
+    "VPBU"
+   ]
+  }
+ ]
+}

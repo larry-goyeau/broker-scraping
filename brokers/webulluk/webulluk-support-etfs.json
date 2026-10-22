@@ -1,0 +1,6032 @@
+{
+ "source": "Webull UK support, e-mail reply with the attachment \"UK ETF Lists 18112025.xlsx\" (sheets \"Go ETFs\" and \"All ETFs\")",
+ "dated": "2025-11-18",
+ "received": "2026-10-22",
+ "how": "Both sheets copied as printed (Symbol, Name, ISIN). The reply says: \"we do not offer trading of HK/US listed ETFs. However, we do offer trading of UK listed ETFs\", \"this list may change and may not be entirely accurate\". The scraper adds every ISIN here that FAQ 1522 lacks (owner decision, 2026-10-22: union of both lists); the Go list stays the FAQ's, the newer of the two.",
+ "rows": [
+  {
+   "sheet": "Go ETFs",
+   "row": 2,
+   "list": "go",
+   "symbol": "AIQG",
+   "name": "Global X Artificial Intelligence UCITS ETF USD Acc",
+   "isin": "IE0000XTDDA8"
+  },
+  {
+   "sheet": "Go ETFs",
+   "row": 3,
+   "list": "go",
+   "symbol": "FNCE",
+   "name": "SPDR MSCI Europe Financials UCITS ETF",
+   "isin": "IE00BKWQ0G16"
+  },
+  {
+   "sheet": "Go ETFs",
+   "row": 4,
+   "list": "go",
+   "symbol": "DFND",
+   "name": "iShares Global Aerospace & Defence UCITS ETF USD A",
+   "isin": "IE000U9ODG19"
+  },
+  {
+   "sheet": "Go ETFs",
+   "row": 5,
+   "list": "go",
+   "symbol": "GIGB",
+   "name": "VanEck S&P Global Mining UCITS ETF",
+   "isin": "IE00BDFBTQ78"
+  },
+  {
+   "sheet": "Go ETFs",
+   "row": 6,
+   "list": "go",
+   "symbol": "HIUS",
+   "name": "HSBC MSCI USA Islamic Screened UCITS ETF USD Acc",
+   "isin": "IE000I5NV504"
+  },
+  {
+   "sheet": "Go ETFs",
+   "row": 7,
+   "list": "go",
+   "symbol": "HMXS",
+   "name": "HSBC MSCI Pacific ex Japan UCITS ETF USD Acc",
+   "isin": "IE000SGVQIZ9"
+  },
+  {
+   "sheet": "Go ETFs",
+   "row": 8,
+   "list": "go",
+   "symbol": "HSEF",
+   "name": "Hsbc Em Screened Equity Etf",
+   "isin": "IE00BKY59G90"
+  },
+  {
+   "sheet": "Go ETFs",
+   "row": 9,
+   "list": "go",
+   "symbol": "HSUS",
+   "name": "Hsbc Usa Screened Equity Etf",
+   "isin": "IE00BKY40J65"
+  },
+  {
+   "sheet": "Go ETFs",
+   "row": 10,
+   "list": "go",
+   "symbol": "IGLG",
+   "name": "iShares Physical Gold GBP Hedged ETC",
+   "isin": "IE000Q2P3ZQ3"
+  },
+  {
+   "sheet": "Go ETFs",
+   "row": 11,
+   "list": "go",
+   "symbol": "IGLT",
+   "name": "iShares Core UK Gilts UCITS ETF GBP (Dist)",
+   "isin": "IE00B1FZSB30"
+  },
+  {
+   "sheet": "Go ETFs",
+   "row": 12,
+   "list": "go",
+   "symbol": "ISF",
+   "name": "iShares Core FTSE 100 UCITS ETF GBP Dist",
+   "isin": "IE0005042456"
+  },
+  {
+   "sheet": "Go ETFs",
+   "row": 13,
+   "list": "go",
+   "symbol": "MIDD",
+   "name": "iShares FTSE 250 UCITS ETF GBP (Dist)",
+   "isin": "IE00B00FV128"
+  },
+  {
+   "sheet": "Go ETFs",
+   "row": 14,
+   "list": "go",
+   "symbol": "WENS",
+   "name": "iShares MSCI World Energy Sector UCITS ETF USD D",
+   "isin": "IE00BJ5JP105"
+  },
+  {
+   "sheet": "Go ETFs",
+   "row": 15,
+   "list": "go",
+   "symbol": "IWDG",
+   "name": "iShares Core MSCI World UCITS ETF GBP Hgd (Dist)",
+   "isin": "IE00BD45YS76"
+  },
+  {
+   "sheet": "Go ETFs",
+   "row": 16,
+   "list": "go",
+   "symbol": "LITG",
+   "name": "Global X Lithium and Battery Tech UCITS ETF USDAcc",
+   "isin": "IE00BLCHJN13"
+  },
+  {
+   "sheet": "Go ETFs",
+   "row": 17,
+   "list": "go",
+   "symbol": "S600",
+   "name": "Invesco STOXX Europe 600 UCITS Acc ETF",
+   "isin": "IE00B60SWW18"
+  },
+  {
+   "sheet": "Go ETFs",
+   "row": 18,
+   "list": "go",
+   "symbol": "VFEG",
+   "name": "Vanguard FTSE Emerging Mkts UCITS ETF USD Acc",
+   "isin": "IE00BK5BR733"
+  },
+  {
+   "sheet": "Go ETFs",
+   "row": 19,
+   "list": "go",
+   "symbol": "VUSA",
+   "name": "Vanguard S&P 500 UCITS ETF USD Dis",
+   "isin": "IE00B3XXRP09"
+  },
+  {
+   "sheet": "Go ETFs",
+   "row": 20,
+   "list": "go",
+   "symbol": "XMLA",
+   "name": "Xtrackers MSCI EM Latin America ESG UCITS 1C ETF",
+   "isin": "LU0292108619"
+  },
+  {
+   "sheet": "Go ETFs",
+   "row": 21,
+   "list": "go",
+   "symbol": "XWIS",
+   "name": "Xtrackers MSCI World Industrials UCITS 1C ETF",
+   "isin": "IE00BM67HV82"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 2,
+   "list": "meridian",
+   "symbol": "ACWI",
+   "name": "SPDR MSCI All Country World UCITS (Acc) ETF",
+   "isin": "IE00B44Z5B48"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 3,
+   "list": "meridian",
+   "symbol": "AEGG",
+   "name": "iShares Global Aggt Bd ESG SRI UCITS ETF GBP H A",
+   "isin": "IE000ZXYID24"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 4,
+   "list": "meridian",
+   "symbol": "AEMD",
+   "name": "Amundi Core MSCI Emerging Markets UCITS EUR Dist ETF",
+   "isin": "LU1737652583"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 5,
+   "list": "meridian",
+   "symbol": "AGBP",
+   "name": "iShares Core Gl Aggregate Bd UCITS ETF GBP Hgd Dis",
+   "isin": "IE00BF540Y54"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 6,
+   "list": "meridian",
+   "symbol": "AIAA",
+   "name": "iShares AI Adopters & Applications UCITS ETF USD (Acc)",
+   "isin": "IE000Q9W2IR3"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 7,
+   "list": "meridian",
+   "symbol": "AINF",
+   "name": "iShares AI Infrastructure UCITS ETF USD (Acc)",
+   "isin": "IE000X59ZHE2"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 8,
+   "list": "meridian",
+   "symbol": "AIQG",
+   "name": "Global X Artificial Intelligence UCITS ETF USD Acc",
+   "isin": "IE0000XTDDA8"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 9,
+   "list": "meridian",
+   "symbol": "C024",
+   "name": "Amundi Core MSCI China A Swap UCITS Dist ETF",
+   "isin": "LU2572256746"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 10,
+   "list": "meridian",
+   "symbol": "MEGA",
+   "name": "Amundi MSCI USA Mega Cap UCITS Acc ETF",
+   "isin": "IE000YBGJ9I4"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 11,
+   "list": "meridian",
+   "symbol": "ANXG",
+   "name": "Amundi Nasdaq-100 Swap UCITS ETF USD Acc",
+   "isin": "LU1681038326"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 12,
+   "list": "meridian",
+   "symbol": "AQWG",
+   "name": "Global X Clean Water UCITS ETF USD Acc",
+   "isin": "IE000BWKUES1"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 13,
+   "list": "meridian",
+   "symbol": "ARMG",
+   "name": "Global X Defence Tech UCITS ETF USD Acc",
+   "isin": "IE000JCW3DZ3"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 14,
+   "list": "meridian",
+   "symbol": "ASPY",
+   "name": "L&G Cyber Security Innovation UCITS ETF USD Acc",
+   "isin": "IE000ST40PX8"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 15,
+   "list": "meridian",
+   "symbol": "AUEG",
+   "name": "Amundi MSCI Em Mkts Swap UCITS ETF USD Acc",
+   "isin": "LU1681045453"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 16,
+   "list": "meridian",
+   "symbol": "AXEE",
+   "name": "iShares Asia ex Japn Eqty Enh Actv UCITS ETF USD A",
+   "isin": "IE000D5R9C23"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 17,
+   "list": "meridian",
+   "symbol": "BBGE",
+   "name": "JPM BetaBuilders EUR Gvt Bnd UCITS ETF - EUR (acc)",
+   "isin": "IE00BJK9HD13"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 18,
+   "list": "meridian",
+   "symbol": "BBLL",
+   "name": "JPM BetaBuilders US Treasury Bond 0-1yr UCITS - USD (acc) ETF",
+   "isin": "IE00BJK3WF00"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 19,
+   "list": "meridian",
+   "symbol": "BBM3",
+   "name": "JPM BetaBuilders US Tr Bd 0-3M UCITS ETF USD Acc",
+   "isin": "IE00BMD8KM66"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 20,
+   "list": "meridian",
+   "symbol": "BBRT",
+   "name": "JPM BetaBuilders US Trs Bond UCITS ETF USD Acc",
+   "isin": "IE00BJK9HH50"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 21,
+   "list": "meridian",
+   "symbol": "BBTP",
+   "name": "JPM BetaBuilders US Trs Bond UCITS ETF GBP H Acc",
+   "isin": "IE00BK6Q9938"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 22,
+   "list": "meridian",
+   "symbol": "BKCG",
+   "name": "Global X Blockchain UCITS - USD Accumulating ETF",
+   "isin": "IE000XAGSCY5"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 23,
+   "list": "meridian",
+   "symbol": "BLKC",
+   "name": "iShares Blockchain Technology UCITS ETF (Acc)",
+   "isin": "IE000RDRMSD1"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 24,
+   "list": "meridian",
+   "symbol": "BNKE",
+   "name": "Amundi Euro Stoxx Banks UCITS ETF Acc",
+   "isin": "LU1829219390"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 25,
+   "list": "meridian",
+   "symbol": "BOTG",
+   "name": "Global X Robotics & AI UCITS ETF USD Dist",
+   "isin": "IE00BLCHJC08"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 26,
+   "list": "meridian",
+   "symbol": "BRIP",
+   "name": "Global X European Infra Dev UCITS ETF EUR Acc",
+   "isin": "IE000PS0J481"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 27,
+   "list": "meridian",
+   "symbol": "BTEK",
+   "name": "iShares NASDAQ US Biotechnology UCITS ETF USD Acc",
+   "isin": "IE00BYXG2H39"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 28,
+   "list": "meridian",
+   "symbol": "EMCP",
+   "name": "iShares J.P. Morgan $ EM Corp Bd UCITS ETF USD D",
+   "isin": "IE00B6TLBW47"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 29,
+   "list": "meridian",
+   "symbol": "EMDL",
+   "name": "SPDR Bloomberg Em Mkts Local Bond UCITS ETF Dist",
+   "isin": "IE00B4613386"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 30,
+   "list": "meridian",
+   "symbol": "EMDV",
+   "name": "SPDR S&P Em Mkts Div Aristocrats UCITS ETF Dist",
+   "isin": "IE00B6YX5B26"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 31,
+   "list": "meridian",
+   "symbol": "EMEE",
+   "name": "iShares Emerg Mkts Equity Enh Actv UCITS ETF USD A",
+   "isin": "IE000OVF8Q66"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 32,
+   "list": "meridian",
+   "symbol": "EMER",
+   "name": "Franklin FTSE Emerging Markets UCITS ETF",
+   "isin": "IE0004I037N4"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 33,
+   "list": "meridian",
+   "symbol": "EMGB",
+   "name": "VanEck J.P. Morgan EM LC Bond UCITS ETF USD A",
+   "isin": "IE00BDS67326"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 34,
+   "list": "meridian",
+   "symbol": "EMGU",
+   "name": "iShares Core MSCI EM IMI UCITS USD (Dist) ETF",
+   "isin": "IE00BD45KH83"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 35,
+   "list": "meridian",
+   "symbol": "EMHG",
+   "name": "iShares JP Morgan $ EM Bond UCITS ETF GBP H Dis",
+   "isin": "IE00BDFGJ734"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 36,
+   "list": "meridian",
+   "symbol": "EMIM",
+   "name": "iShares Core MSCI EM IMI UCITS ETF USD Acc",
+   "isin": "IE00BKM4GZ66"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 37,
+   "list": "meridian",
+   "symbol": "EMLP",
+   "name": "PIMCO EM Advantage Local Bond UCITS ETF USD Acc",
+   "isin": "IE00B4P11460"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 38,
+   "list": "meridian",
+   "symbol": "EMSM",
+   "name": "SPDR MSCI Emerging Markets Small Cap UCITS ETF",
+   "isin": "IE00B48X4842"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 39,
+   "list": "meridian",
+   "symbol": "EMUD",
+   "name": "Ish Msci Emu Esg Enh Ctb Eur D",
+   "isin": "IE00BHZPHZ28"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 40,
+   "list": "meridian",
+   "symbol": "EMXG",
+   "name": "Amundi MSCI Em Ex China ESG Sel UCITS ETF DR C",
+   "isin": "LU2345046655"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 41,
+   "list": "meridian",
+   "symbol": "EMXN",
+   "name": "Amundi MSCI Emerging Ex China UCITS ETF Acc",
+   "isin": "LU2009202107"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 42,
+   "list": "meridian",
+   "symbol": "ENGE",
+   "name": "SPDR MSCI Europe Energy UCITS ETF",
+   "isin": "IE00BKWQ0F09"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 43,
+   "list": "meridian",
+   "symbol": "ENGW",
+   "name": "SPDR MSCI World Energy UCITS ETF",
+   "isin": "IE00BYTRR863"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 44,
+   "list": "meridian",
+   "symbol": "EQGB",
+   "name": "Invesco EQQQ NASDAQ-100 UCITS ETF GBP Hdg Acc",
+   "isin": "IE00BYVTMW98"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 45,
+   "list": "meridian",
+   "symbol": "EQJS",
+   "name": "Invesco NASDAQ Next Generation 100 UCITS ETF Acc",
+   "isin": "IE00BMD8KP97"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 46,
+   "list": "meridian",
+   "symbol": "EQQQ",
+   "name": "Invesco EQQQ NASDAQ-100 UCITS ETF Dist",
+   "isin": "IE0032077012"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 47,
+   "list": "meridian",
+   "symbol": "EQSG",
+   "name": "Invesco NASDAQ-100 Swap UCITS ETF Acc",
+   "isin": "IE00BNRQM384"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 48,
+   "list": "meridian",
+   "symbol": "ERN1",
+   "name": "iShares   Ultrashort Bond UCITS ETF EUR (Dist)",
+   "isin": "IE00BCRY6557"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 49,
+   "list": "meridian",
+   "symbol": "ERNS",
+   "name": "iShares   Ultrashort Bond UCITS ETF GBP (Dist)",
+   "isin": "IE00BCRY6441"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 50,
+   "list": "meridian",
+   "symbol": "ERNU",
+   "name": "iShares $ Ultrashort Bond UCITS ETF USD Dist",
+   "isin": "IE00BCRY6227"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 51,
+   "list": "meridian",
+   "symbol": "ESES",
+   "name": "Invesco MSCI Em Mkts Universal Scrnd UCITS ETF Acc",
+   "isin": "IE00BMDBMY19"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 52,
+   "list": "meridian",
+   "symbol": "ESGB",
+   "name": "VanEck Video Gaming and eSports UCITS ETF USD A",
+   "isin": "IE00BYWQWR46"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 53,
+   "list": "meridian",
+   "symbol": "ESGL",
+   "name": "Amundi MSCI Europe ESG Selection UCITS ETF A",
+   "isin": "LU1940199711"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 54,
+   "list": "meridian",
+   "symbol": "ESIC",
+   "name": "iShares MSCI Europe Consumer Discretionary Sector UCITS EUR (Acc) ETF",
+   "isin": "IE00BMW42298"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 55,
+   "list": "meridian",
+   "symbol": "ESIE",
+   "name": "iShares MSCI Europe Energy Sector UCITS EUR (Acc) ETF",
+   "isin": "IE00BMW42637"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 56,
+   "list": "meridian",
+   "symbol": "ESIF",
+   "name": "iShares MSCI Europe Financials Sector UCITS EUR (Acc) ETF",
+   "isin": "IE00BMW42306"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 57,
+   "list": "meridian",
+   "symbol": "ESIH",
+   "name": "iShares MSCI Europe Health Care Sector UCITS EUR (Acc) ETF",
+   "isin": "IE00BMW42181"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 58,
+   "list": "meridian",
+   "symbol": "ESIN",
+   "name": "iShares MSCI Europe Industr Sector UCITS ETF EUR A",
+   "isin": "IE00BMW42520"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 59,
+   "list": "meridian",
+   "symbol": "ESIS",
+   "name": "iShares MSCI Europe Consumer Staples Sector UCITS EUR (Acc) ETF",
+   "isin": "IE00BMW42074"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 60,
+   "list": "meridian",
+   "symbol": "ESIT",
+   "name": "iShares MSCI Europe Information Technology Sector UCITS EUR (Acc) ETF",
+   "isin": "IE00BMW42413"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 61,
+   "list": "meridian",
+   "symbol": "EUDV",
+   "name": "SPDR S&P Euro Dividend Aristocrats UCITS ETF",
+   "isin": "IE00B5M1WJ87"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 62,
+   "list": "meridian",
+   "symbol": "EUE",
+   "name": "iShares Core EURO STOXX 50 UCITS ETF EUR Dist",
+   "isin": "IE0008471009"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 63,
+   "list": "meridian",
+   "symbol": "EUEE",
+   "name": "iShares Europe Equity Enh Active UCITS ETF EUR Acc",
+   "isin": "IE00000EF730"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 64,
+   "list": "meridian",
+   "symbol": "EUPA",
+   "name": "Franklin STOXX Europe 600 Paris Aligned Climate UCITS ETF",
+   "isin": "IE00BMDPBY65"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 65,
+   "list": "meridian",
+   "symbol": "EVAL",
+   "name": "SPDR MSCI Europe Value UCITS ETF",
+   "isin": "IE00BSPLC306"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 66,
+   "list": "meridian",
+   "symbol": "EWSP",
+   "name": "iShares S&P 500 Equal Weight UCITS ETF USD A",
+   "isin": "IE000MLMNYS0"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 67,
+   "list": "meridian",
+   "symbol": "EXCS",
+   "name": "iShares MSCI EM ex-China UCITS ETF USD Acc",
+   "isin": "IE00BMG6Z448"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 68,
+   "list": "meridian",
+   "symbol": "EYED",
+   "name": "iShares MSCI Europe Energy Sector UCITS ETF EUR D",
+   "isin": "IE000UDV9YG1"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 69,
+   "list": "meridian",
+   "symbol": "CPRI",
+   "name": "Franklin Catholic Principles Emerging Markets Sovereign Debt UCITS ETF",
+   "isin": "IE000YZIVX22"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 70,
+   "list": "meridian",
+   "symbol": "FEIP",
+   "name": "Fidelity EUR Corp Bd Rs Enh PAB UCITS ETF Acc GBPH",
+   "isin": "IE00048UULY2"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 71,
+   "list": "meridian",
+   "symbol": "FEIS",
+   "name": "Fidelity EUR Corp Bd Rs Enh PAB UCITS ETF Inc EUR",
+   "isin": "IE000VQZQ963"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 72,
+   "list": "meridian",
+   "symbol": "FEMD",
+   "name": "Fidelity Emerging Markets Quality Income UCITS - Inc USD ETF",
+   "isin": "IE00BYSX4739"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 73,
+   "list": "meridian",
+   "symbol": "FEMP",
+   "name": "Fidelity ESG USD EM Bond UCITS ETF Acc GBPH",
+   "isin": "IE00BM9GRQ71"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 74,
+   "list": "meridian",
+   "symbol": "FEMQ",
+   "name": "Fidelity Emerging Markets Quality Income UCITS - Acc USD ETF",
+   "isin": "IE00BYSX4846"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 75,
+   "list": "meridian",
+   "symbol": "FEMS",
+   "name": "Fidelity EM Equity Research Enh UCITS ETF Acc USD",
+   "isin": "IE00BLRPN388"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 76,
+   "list": "meridian",
+   "symbol": "FEQD",
+   "name": "Fidelity Europe Quality Income UCITS - Acc EUR ETF",
+   "isin": "IE00BYSX4283"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 77,
+   "list": "meridian",
+   "symbol": "FEQP",
+   "name": "Fidelity Europe Quality Income UCITS ETF Acc GBPH",
+   "isin": "IE00BYSX4408"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 78,
+   "list": "meridian",
+   "symbol": "FEUI",
+   "name": "Fidelity Europe Quality Income UCITS - Inc EUR ETF",
+   "isin": "IE00BYSX4176"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 79,
+   "list": "meridian",
+   "symbol": "FEUR",
+   "name": "Fidelity Europe Eq Research Enh UCITS ETF Acc EUR",
+   "isin": "IE00BKSBGT50"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 80,
+   "list": "meridian",
+   "symbol": "FGGG",
+   "name": "Fidelity Global Gvt Bd Cl Aware UCITS ETF Acc GBPH",
+   "isin": "IE000QVCP9S5"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 81,
+   "list": "meridian",
+   "symbol": "FGGP",
+   "name": "Fidelity Global Government Bond Climate Aware UCITS - Inc ETF",
+   "isin": "IE000IF0HTJ9"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 82,
+   "list": "meridian",
+   "symbol": "FGL1",
+   "name": "Fidelity Global Quality Value UCITS - Acc ETF",
+   "isin": "IE0002XFS025"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 83,
+   "list": "meridian",
+   "symbol": "FGLS",
+   "name": "Fidelity Gl Research Enhance Etf Acc",
+   "isin": "IE00BKSBGV72"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 84,
+   "list": "meridian",
+   "symbol": "FGQP",
+   "name": "Fidelity Global Quality Income UCITS ETF Inc GBPH",
+   "isin": "IE00BYV1YF22"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 85,
+   "list": "meridian",
+   "symbol": "FHYG",
+   "name": "Fidelity Gl HY Crp Bd Rs Enh PAB UCITS ETF AccGBPH",
+   "isin": "IE000C17QP01"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 86,
+   "list": "meridian",
+   "symbol": "FHYP",
+   "name": "Fidelity Gl HY Crp Bd Rs Enh PAB UCITS ETF Inc USD",
+   "isin": "IE0006OIQXE9"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 87,
+   "list": "meridian",
+   "symbol": "FING",
+   "name": "Global X FinTech UCITS ETF USD Dist",
+   "isin": "IE00BLCHK052"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 88,
+   "list": "meridian",
+   "symbol": "FJPS",
+   "name": "Fidelity Jp Research Enhance Etf Acc",
+   "isin": "IE00BNGFMX61"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 89,
+   "list": "meridian",
+   "symbol": "FLPE",
+   "name": "FlexShares Listed Private Equity UCITS ETF USD Acc",
+   "isin": "IE0008ZGI5C1"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 90,
+   "list": "meridian",
+   "symbol": "FLRK",
+   "name": "Franklin FTSE Korea UCITS  ETF",
+   "isin": "IE00BHZRR030"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 91,
+   "list": "meridian",
+   "symbol": "FLXD",
+   "name": "Franklin European Quality Dividend UCITS ETF",
+   "isin": "IE00BF2B0L69"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 92,
+   "list": "meridian",
+   "symbol": "FLXE",
+   "name": "Franklin EM Multi-Factor Equity UCITS ETF",
+   "isin": "IE00BF2B0K52"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 93,
+   "list": "meridian",
+   "symbol": "FLXU",
+   "name": "Franklin U.S. Equity UCITS ETF",
+   "isin": "IE00BF2B0P08"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 94,
+   "list": "meridian",
+   "symbol": "FLXX",
+   "name": "Franklin Global Quality Dividend UCITS ETF",
+   "isin": "IE00BF2B0M76"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 95,
+   "list": "meridian",
+   "symbol": "CHPA",
+   "name": "Franklin MSCI China Paris Aligned Climate UCITS ETF",
+   "isin": "IE000EBPC0Z7"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 96,
+   "list": "meridian",
+   "symbol": "FNCE",
+   "name": "SPDR MSCI Europe Financials UCITS ETF",
+   "isin": "IE00BKWQ0G16"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 97,
+   "list": "meridian",
+   "symbol": "FNCW",
+   "name": "SPDR MSCI World Financials UCITS ETF",
+   "isin": "IE00BYTRR970"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 98,
+   "list": "meridian",
+   "symbol": "FPXS",
+   "name": "Fidelity Pj Research Enhance Etf Acc",
+   "isin": "IE00BNGFMY78"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 99,
+   "list": "meridian",
+   "symbol": "FRCH",
+   "name": "Franklin FTSE China UCITS ETF",
+   "isin": "IE00BHZRR147"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 100,
+   "list": "meridian",
+   "symbol": "FRFD",
+   "name": "Franklin Future of Food UCITS ETF",
+   "isin": "IE000ZOKLHY7"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 101,
+   "list": "meridian",
+   "symbol": "FRGP",
+   "name": "iShares France Govt Bond UCITS ETF GBP Hdg D",
+   "isin": "IE00014E9P24"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 102,
+   "list": "meridian",
+   "symbol": "FRHW",
+   "name": "Franklin Future of Health and Wellness UCITS ETF",
+   "isin": "IE0003WEWAX4"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 103,
+   "list": "meridian",
+   "symbol": "FRIN",
+   "name": "Franklin FTSE India UCITS  ETF",
+   "isin": "IE00BHZRQZ17"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 104,
+   "list": "meridian",
+   "symbol": "FRQX",
+   "name": "Franklin FTSE Asia ex China ex Japan UCITS ETF",
+   "isin": "IE00BFWXDV39"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 105,
+   "list": "meridian",
+   "symbol": "FRUC",
+   "name": "Franklin USD Inv Grade Corpo Bd UCITS ETF",
+   "isin": "IE00BFWXDX52"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 106,
+   "list": "meridian",
+   "symbol": "FRXE",
+   "name": "Franklin Euro Short Maturity UCITS ETF (Dis)",
+   "isin": "IE00BFWXDY69"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 107,
+   "list": "meridian",
+   "symbol": "FRXT",
+   "name": "Franklin FTSE Taiwan UCITS ETF",
+   "isin": "IE000CM02H85"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 108,
+   "list": "meridian",
+   "symbol": "FSED",
+   "name": "Fidelity ESG USD EM Bond UCITS ETF",
+   "isin": "IE00BM9GRP64"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 109,
+   "list": "meridian",
+   "symbol": "FSMG",
+   "name": "Fidelity Global Corp Bond Research Enhanced PAB UCITS ETF",
+   "isin": "IE00BM9GRM34"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 110,
+   "list": "meridian",
+   "symbol": "FSMP",
+   "name": "Fidelity Gl Corp Bd Rs Enh PAB UCITS ETF Acc GBPH",
+   "isin": "IE00BM9GRN41"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 111,
+   "list": "meridian",
+   "symbol": "FTAD",
+   "name": "SPDR FTSE UK All Share UCITS (Dist) ETF",
+   "isin": "IE00BD5FCF91"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 112,
+   "list": "meridian",
+   "symbol": "FTAL",
+   "name": "SPDR FTSE UK All Share UCITS ETF",
+   "isin": "IE00B7452L46"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 113,
+   "list": "meridian",
+   "symbol": "FUIP",
+   "name": "Fidelity USD Corp Bd Rs Enh PAB UCITS ETF Acc GBPH",
+   "isin": "IE000X3MDCC5"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 114,
+   "list": "meridian",
+   "symbol": "FUIS",
+   "name": "Fidelity USD Corp Bd Rs Enh PAB UCITS ETF Inc USD",
+   "isin": "IE000JJQ6248"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 115,
+   "list": "meridian",
+   "symbol": "FUS1",
+   "name": "Fidelity US Quality Value UCITS - Acc ETF",
+   "isin": "IE000MKIH0W7"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 116,
+   "list": "meridian",
+   "symbol": "FUSP",
+   "name": "Fidelity US Quality Income UCITS ETF Acc GBPH",
+   "isin": "IE00BYV03C98"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 117,
+   "list": "meridian",
+   "symbol": "FUSS",
+   "name": "Fidelity Us Research Enhance Etf Acc",
+   "isin": "IE00BKSBGS44"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 118,
+   "list": "meridian",
+   "symbol": "FVUB",
+   "name": "Franklin FTSE Brazil UCITS  ETF",
+   "isin": "IE00BHZRQY00"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 119,
+   "list": "meridian",
+   "symbol": "FVUG",
+   "name": "Franklin Sustainable Euro Green Bond UCITS ETF",
+   "isin": "IE00BHZRR253"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 120,
+   "list": "meridian",
+   "symbol": "FYEP",
+   "name": "Fidelity EUR HY Crp Bd Rs Enh PAB UCITS ETFAccGBPH",
+   "isin": "IE000I6Q83Z7"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 121,
+   "list": "meridian",
+   "symbol": "FYUP",
+   "name": "Fidelity USD HY Crp Bd Rs Enh PAB UCITS ETFAccGBPH",
+   "isin": "IE000IKCYI88"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 122,
+   "list": "meridian",
+   "symbol": "G500",
+   "name": "Invesco S&P 500 UCITS ETF GBP Hdg Acc",
+   "isin": "IE00BKX8G916"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 123,
+   "list": "meridian",
+   "symbol": "OIGB",
+   "name": "VanEck Oil Services UCITS ETF",
+   "isin": "IE000NXF88S1"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 124,
+   "list": "meridian",
+   "symbol": "PABG",
+   "name": "Amundi S&P Eurozone Cl Paris Aligned UCITS ETF A",
+   "isin": "LU2195226068"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 125,
+   "list": "meridian",
+   "symbol": "PACW",
+   "name": "Amundi Prime All Country World UCITS Dist ETF",
+   "isin": "IE0009HF1MK9"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 126,
+   "list": "meridian",
+   "symbol": "PADV",
+   "name": "SPDR S&P Pan Asia Dividend Aristocrats UCITS ETF",
+   "isin": "IE00B9KNR336"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 127,
+   "list": "meridian",
+   "symbol": "PAEX",
+   "name": "Invesco MSCI Em Markets ESG Cl PA UCITS ETF Acc",
+   "isin": "IE000PJL7R74"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 128,
+   "list": "meridian",
+   "symbol": "PAVG",
+   "name": "Global X U.S. Infra Developments UCITS ETF USD Dis",
+   "isin": "IE00BLCHJ641"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 129,
+   "list": "meridian",
+   "symbol": "PRAJ",
+   "name": "Amundi Prime Japan UCITS DR (C) ETF",
+   "isin": "LU2089238385"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 130,
+   "list": "meridian",
+   "symbol": "PRAN",
+   "name": "Amundi Prime Emerging Markets UCITS DR (C) ETF",
+   "isin": "LU2300295123"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 131,
+   "list": "meridian",
+   "symbol": "PRUB",
+   "name": "Amundi Core USD Corp Bond UCITS ETF GBP Hgd Dist",
+   "isin": "LU2621112452"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 132,
+   "list": "meridian",
+   "symbol": "QUID",
+   "name": "PIMCO Sterling Short Maturity UCITS ETF GBP Inc",
+   "isin": "IE00B622SG73"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 133,
+   "list": "meridian",
+   "symbol": "QYLP",
+   "name": "Global X Nasdaq 100 Covered Call UCITS ETF",
+   "isin": "IE00BM8R0J59"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 134,
+   "list": "meridian",
+   "symbol": "R1GB",
+   "name": "iShares Russell 1000 Growth UCITS ETF USD (Acc)",
+   "isin": "IE000NITTFF2"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 135,
+   "list": "meridian",
+   "symbol": "R2SC",
+   "name": "SPDR Russell 2000 U.S. Small Cap UCITS ETF",
+   "isin": "IE00BJ38QD84"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 136,
+   "list": "meridian",
+   "symbol": "RAYG",
+   "name": "Global X Solar UCITS ETF USD Acc",
+   "isin": "IE000XD7KCJ7"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 137,
+   "list": "meridian",
+   "symbol": "RDTG",
+   "name": "Robeco Dynamic Theme Machine UCITS ETF USD Acc",
+   "isin": "IE000VG2WCW5"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 138,
+   "list": "meridian",
+   "symbol": "REGB",
+   "name": "VanEck Rare Earth and Strategic Metals UCITS ETF",
+   "isin": "IE0002PG6CA6"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 139,
+   "list": "meridian",
+   "symbol": "REUG",
+   "name": "VanEck Circular Economy UCITS ETF USD A",
+   "isin": "IE0001J5A2T9"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 140,
+   "list": "meridian",
+   "symbol": "100D",
+   "name": "Amundi Core Ftse 100 Swap Ucits Etf",
+   "isin": "LU1650492256"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 141,
+   "list": "meridian",
+   "symbol": "30GB",
+   "name": "iShares iBond Dec 2030 Term $ Corp UCITS ETF GBPHD",
+   "isin": "IE000WZJ38F1"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 142,
+   "list": "meridian",
+   "symbol": "32GH",
+   "name": "iShares iBond Dec 2032 Term $ Corp UCITS ETF GBPHD",
+   "isin": "IE000C2BA1B7"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 143,
+   "list": "meridian",
+   "symbol": "3DEG",
+   "name": "Robeco 3D European Equity UCITS ETF EUR Acc",
+   "isin": "IE0007WLHX89"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 144,
+   "list": "meridian",
+   "symbol": "3DGG",
+   "name": "Robeco 3D Global Equity UCITS ETF USD Acc",
+   "isin": "IE000Q8N7WY1"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 145,
+   "list": "meridian",
+   "symbol": "3DUG",
+   "name": "Robeco 3D US Equity UCITS ETF USD Acc",
+   "isin": "IE000XERHYF0"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 146,
+   "list": "meridian",
+   "symbol": "500G",
+   "name": "Amundi S&P 500 Swap UCITS ETF USD Acc",
+   "isin": "LU1681049018"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 147,
+   "list": "meridian",
+   "symbol": "500P",
+   "name": "Franklin S&P 500 Paris Aligned Climate UCITS ETF",
+   "isin": "IE00BMDPBZ72"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 148,
+   "list": "meridian",
+   "symbol": "BUGG",
+   "name": "Global X Cybersecurity UCITS ETF USD Acc",
+   "isin": "IE00BMH5Y871"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 149,
+   "list": "meridian",
+   "symbol": "CACX",
+   "name": "Amundi CAC 40 UCITS ETF Dist",
+   "isin": "FR0007052782"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 150,
+   "list": "meridian",
+   "symbol": "CBDG",
+   "name": "Amundi Core Eur Corporate Bond Etf Gbp",
+   "isin": "LU2977997209"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 151,
+   "list": "meridian",
+   "symbol": "CBGA",
+   "name": "iShares $ Treasury Bond 3-7yr UCITS ETF GBP Hgd A",
+   "isin": "IE0000U2ASV9"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 152,
+   "list": "meridian",
+   "symbol": "CBUG",
+   "name": "iShares $ Treasury Bond 3-7yr UCITS ETF GBP Hgd D",
+   "isin": "IE00BJJPVP04"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 153,
+   "list": "meridian",
+   "symbol": "CDCE",
+   "name": "SPDR MSCI Europe Consumer Discr UCITS ETF",
+   "isin": "IE00BKWQ0C77"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 154,
+   "list": "meridian",
+   "symbol": "CEMX",
+   "name": "iShares MSCI EM Consumer Growth UCITS ETF USD Acc",
+   "isin": "IE00BKM4H197"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 155,
+   "list": "meridian",
+   "symbol": "CG1",
+   "name": "Amundi ETF DAX UCITS ETF DR C/D",
+   "isin": "FR0010655712"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 156,
+   "list": "meridian",
+   "symbol": "CJ1P",
+   "name": "Amundi MSCI Jpn ESG Brd Transition UCITS ETF GBPD",
+   "isin": "LU2668197069"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 157,
+   "list": "meridian",
+   "symbol": "CLMT",
+   "name": "Amundi S&P 500 Climate Paris Aligned UCITS ETF Acc ETF",
+   "isin": "IE000O5FBC47"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 158,
+   "list": "meridian",
+   "symbol": "CLO6",
+   "name": "Global X Cloud Computing UCITS ETF USD Acc",
+   "isin": "IE00BMH5YF48"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 159,
+   "list": "meridian",
+   "symbol": "CLPP",
+   "name": "Global X 1-3 Month T-Bill UCITS ETF",
+   "isin": "IE000GSIFIB0"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 160,
+   "list": "meridian",
+   "symbol": "CMB1",
+   "name": "iShares FTSE MIB UCITS ETF EUR (Acc)",
+   "isin": "IE00B53L4X51"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 161,
+   "list": "meridian",
+   "symbol": "CNX1",
+   "name": "iShares NASDAQ 100 UCITS ETF USD (Acc)",
+   "isin": "IE00B53SZB19"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 162,
+   "list": "meridian",
+   "symbol": "CNYB",
+   "name": "iShares China CNY Bond UCITS ETF USD (Dist)",
+   "isin": "IE00BYPC1H27"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 163,
+   "list": "meridian",
+   "symbol": "COPG",
+   "name": "Global X Copper Miners UCITS ETF USD Acc",
+   "isin": "IE0003Z9E2Y3"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 164,
+   "list": "meridian",
+   "symbol": "CRHG",
+   "name": "iShares Global Corp Bond UCITS ETF GBP Hgd Dist",
+   "isin": "IE00BDFK3G24"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 165,
+   "list": "meridian",
+   "symbol": "CRPS",
+   "name": "iShares Global Corp Bond UCITS ETF USD Dist",
+   "isin": "IE00B7J7TB45"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 166,
+   "list": "meridian",
+   "symbol": "CS51",
+   "name": "iShares Core EURO STOXX 50 UCITS ETF EUR (Acc)",
+   "isin": "IE00B53L3W79"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 167,
+   "list": "meridian",
+   "symbol": "CSP1",
+   "name": "iShares Core S&P 500 UCITS ETF USD (Acc)",
+   "isin": "IE00B5BMR087"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 168,
+   "list": "meridian",
+   "symbol": "CSPE",
+   "name": "SPDR MSCI Europe Consumer Staples UCITS ETF",
+   "isin": "IE00BKWQ0D84"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 169,
+   "list": "meridian",
+   "symbol": "CT2B",
+   "name": "iShares Smart City Infrastructure UCITS ETF USDDis",
+   "isin": "IE00BKTLJB70"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 170,
+   "list": "meridian",
+   "symbol": "CTEG",
+   "name": "Global X Cleantech UCITS ETF USD Acc",
+   "isin": "IE00BMH5YL08"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 171,
+   "list": "meridian",
+   "symbol": "CUKX",
+   "name": "iShares Core FTSE 100 UCITS ETF GBP (Acc)",
+   "isin": "IE00B53HP851"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 172,
+   "list": "meridian",
+   "symbol": "CURG",
+   "name": "VanEck Genomics & Hlth Cr Innvtrs UCITS ETF USD A",
+   "isin": "IE000B9PQW54"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 173,
+   "list": "meridian",
+   "symbol": "CW8G",
+   "name": "Amundi MSCI World Swap UCITS ETF USD Acc",
+   "isin": "LU1681043672"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 174,
+   "list": "meridian",
+   "symbol": "CYGB",
+   "name": "iShares China CNY Bond UCITS ETF GBP Hedged (Dist)",
+   "isin": "IE00BMZ17Y47"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 175,
+   "list": "meridian",
+   "symbol": "D26G",
+   "name": "iShares iBond Dec 2026 Term $ Corp UCITS ETF GBPHD",
+   "isin": "IE000KM34187"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 176,
+   "list": "meridian",
+   "symbol": "D28G",
+   "name": "iShares iBond Dec 2028 Term $ Corp UCITS ETF GBPHD",
+   "isin": "IE000VVQWC23"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 177,
+   "list": "meridian",
+   "symbol": "DAGB",
+   "name": "VanEck Crypto and Blckchn Innvtrs UCITS ETF USD A",
+   "isin": "IE00BMDKNW35"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 178,
+   "list": "meridian",
+   "symbol": "DAXX",
+   "name": "Amundi DAX II UCITS Acc ETF",
+   "isin": "LU0252633754"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 179,
+   "list": "meridian",
+   "symbol": "DFND",
+   "name": "iShares Global Aerospace & Defence UCITS ETF USD A",
+   "isin": "IE000U9ODG19"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 180,
+   "list": "meridian",
+   "symbol": "DFNG",
+   "name": "VanEck Defense UCITS ETF",
+   "isin": "IE000YYE6WK5"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 181,
+   "list": "meridian",
+   "symbol": "DHYG",
+   "name": "iShares $ High Yield Cp Bd ESG SRI UCITS ETF GBPHD",
+   "isin": "IE0003NVF3Y3"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 182,
+   "list": "meridian",
+   "symbol": "DMAD",
+   "name": "Global X Disruptive Materials UCITS ETF USD Dist",
+   "isin": "IE000544AJM3"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 183,
+   "list": "meridian",
+   "symbol": "DMAG",
+   "name": "Global X Disruptive Materials UCITS ETF USD Acc",
+   "isin": "IE000FP52WM7"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 184,
+   "list": "meridian",
+   "symbol": "DPYG",
+   "name": "iShares Dvlp Mrkts Prop Yld UCITS ETF GBP Hgd Dist",
+   "isin": "IE00BDZVHC96"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 185,
+   "list": "meridian",
+   "symbol": "DRVG",
+   "name": "Global X Autonomous and Elc Veh UCITS ETF USD Dist",
+   "isin": "IE00BMH5YS76"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 186,
+   "list": "meridian",
+   "symbol": "DTEC",
+   "name": "Amundi MSCI Disruptive Technology UCITS ETF Acc",
+   "isin": "LU2023678282"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 187,
+   "list": "meridian",
+   "symbol": "E127",
+   "name": "Amundi Core MSCI Emerging Markets Swap UCITS Dist ETF",
+   "isin": "LU2573966905"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 188,
+   "list": "meridian",
+   "symbol": "EART",
+   "name": "Amundi Euro Government Green Bond UCITS ETF Acc",
+   "isin": "LU2356220926"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 189,
+   "list": "meridian",
+   "symbol": "EMAS",
+   "name": "SPDR MSCI EM Asia UCITS ETF",
+   "isin": "IE00B466KX20"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 190,
+   "list": "meridian",
+   "symbol": "EBIG",
+   "name": "Global X E Commerce UCITS ETF USD Acc",
+   "isin": "IE00BMH5XY61"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 191,
+   "list": "meridian",
+   "symbol": "EBUY",
+   "name": "Amundi MSCI Digital Economy UCITS ETF Acc",
+   "isin": "LU2023678878"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 192,
+   "list": "meridian",
+   "symbol": "EDG2",
+   "name": "iShares MSCI EM ESG Enhanced CTB UCITS USD (Acc) ETF",
+   "isin": "IE00BHZPJ239"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 193,
+   "list": "meridian",
+   "symbol": "EDIV",
+   "name": "Amundi S&P Eurozone Div Arist Scrnd UCITS ETF A",
+   "isin": "LU0959210781"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 194,
+   "list": "meridian",
+   "symbol": "EDMG",
+   "name": "iShares MSCI USA ESG Enh CTB UCITS ETF GBP Hgd D",
+   "isin": "IE000LZ4F7J0"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 195,
+   "list": "meridian",
+   "symbol": "EDOG",
+   "name": "Global X Telemedicine & Dig Hlth UCITS ETF USD Dis",
+   "isin": "IE00BLR6QC17"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 196,
+   "list": "meridian",
+   "symbol": "EEDG",
+   "name": "Ishrs Msci Usa Esg Enh Ctb Usd Etf Dist",
+   "isin": "IE00BHZPJ890"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 197,
+   "list": "meridian",
+   "symbol": "EEJG",
+   "name": "Ish Msci Jpn Esg Enh Ctb Usd D",
+   "isin": "IE00BHZPJ346"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 198,
+   "list": "meridian",
+   "symbol": "EEUD",
+   "name": "Ish Msci Europe Esg Enh Ctb Eur D",
+   "isin": "IE00BHZPJ676"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 199,
+   "list": "meridian",
+   "symbol": "EEWG",
+   "name": "Ish Msci Wrld Esg Enh Ctb Usd D",
+   "isin": "IE00BG11HV38"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 200,
+   "list": "meridian",
+   "symbol": "EEXC",
+   "name": "Franklin FTSE Emerging ex China UCITS ETF",
+   "isin": "IE0006D3PGW3"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 201,
+   "list": "meridian",
+   "symbol": "EEXF",
+   "name": "iShares   Corp Bond ex-Financials UCITS ETF EUR D",
+   "isin": "IE00B4L5ZG21"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 202,
+   "list": "meridian",
+   "symbol": "EGDM",
+   "name": "Ish Msci Em Usg E Ctb Usd D",
+   "isin": "IE00BHZPJ122"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 203,
+   "list": "meridian",
+   "symbol": "EGMW",
+   "name": "iShares MSCI World ESG Enhanced CTB UCITS USD (Acc) ETF",
+   "isin": "IE00BHZPJ569"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 204,
+   "list": "meridian",
+   "symbol": "EHYG",
+   "name": "iShares   High Yield CpBd ESG SRI UCITS ETF GBPHA",
+   "isin": "IE000YZVB4R7"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 205,
+   "list": "meridian",
+   "symbol": "ELCR",
+   "name": "Amundi MSCI Smart Mobility UCITS ETF A",
+   "isin": "LU2023679090"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 206,
+   "list": "meridian",
+   "symbol": "GBDV",
+   "name": "SPDR S&P Global Dividend Aristocrats UCITS ETF",
+   "isin": "IE00B9CQXS71"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 207,
+   "list": "meridian",
+   "symbol": "GBPG",
+   "name": "Goldman Sachs Access UK Glt 1-10Y UCITS ETF GBPDis",
+   "isin": "IE0003MKK4H3"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 208,
+   "list": "meridian",
+   "symbol": "GBRE",
+   "name": "SPDR Dow Jones Global Real Estate UCITS ETF",
+   "isin": "IE00B8GF1M35"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 209,
+   "list": "meridian",
+   "symbol": "GCAR",
+   "name": "iShares Elctrc Vhcls and Drvng Tech UCITS ETF USDA",
+   "isin": "IE00BGL86Z12"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 210,
+   "list": "meridian",
+   "symbol": "GCVG",
+   "name": "SPDR FTSE Gl Conv Bond GBP Hdg UCITS ETF Dist",
+   "isin": "IE00BDT6FT30"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 211,
+   "list": "meridian",
+   "symbol": "GDGB",
+   "name": "VanEck Gold Miners UCITS ETF USD A",
+   "isin": "IE00BQQP9F84"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 212,
+   "list": "meridian",
+   "symbol": "GEDM",
+   "name": "Ish Msci Em Imi Dist",
+   "isin": "IE00BFNM3N12"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 213,
+   "list": "meridian",
+   "symbol": "GEND",
+   "name": "Amundi Global Gender Equality",
+   "isin": "LU1691909508"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 214,
+   "list": "meridian",
+   "symbol": "GFGB",
+   "name": "VanEck Global Fallen Angel High Yield Bond UCITS ETF",
+   "isin": "IE00BF540Z61"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 215,
+   "list": "meridian",
+   "symbol": "GHYG",
+   "name": "iShares Global HY Corp Bond UCITS ETF GBP Hgd Dist",
+   "isin": "IE00BJSFQX44"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 216,
+   "list": "meridian",
+   "symbol": "GHYS",
+   "name": "iShares Gbl High Yield Corp Bd GBP Hgd UCITS ETF D",
+   "isin": "IE00B8KQFS66"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 217,
+   "list": "meridian",
+   "symbol": "GIGB",
+   "name": "VanEck S&P Global Mining UCITS ETF",
+   "isin": "IE00BDFBTQ78"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 218,
+   "list": "meridian",
+   "symbol": "GIL5",
+   "name": "Amundi UK Government Bond 0-5Y UCITS ETF Dist",
+   "isin": "LU1439943090"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 219,
+   "list": "meridian",
+   "symbol": "GIN",
+   "name": "SPDR Morningstar Multi-Asset Global Infrastructure UCITS ETF",
+   "isin": "IE00BQWJFQ70"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 220,
+   "list": "meridian",
+   "symbol": "GISG",
+   "name": "Amundi Gbl Gov Infl-Lnkd Bd 1-10Y UCITS ETF GBPH D",
+   "isin": "LU1910940425"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 221,
+   "list": "meridian",
+   "symbol": "GJGB",
+   "name": "VanEck Junior Gold Miners UCITS ETF USD A",
+   "isin": "IE00BQQP9G91"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 222,
+   "list": "meridian",
+   "symbol": "GLAB",
+   "name": "SPDR Bloomberg Global Aggregate Bond GBP Hdg UCITS ETF",
+   "isin": "IE00BF1QPJ56"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 223,
+   "list": "meridian",
+   "symbol": "GLBL",
+   "name": "SPDR Bloomberg Global Aggregate Bond UCITS ETF",
+   "isin": "IE00B43QJJ40"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 224,
+   "list": "meridian",
+   "symbol": "GLCB",
+   "name": "SPDR FTSE Global Convertible Bond UCITS ETF",
+   "isin": "IE00BNH72088"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 225,
+   "list": "meridian",
+   "symbol": "GLTL",
+   "name": "SPDR Bloomberg 15+ Year Gilt UCITS ETF",
+   "isin": "IE00B6YX5L24"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 226,
+   "list": "meridian",
+   "symbol": "GLTS",
+   "name": "SPDR Bloomberg 1-5 Year Gilt UCITS ETF",
+   "isin": "IE00B6YX5K17"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 227,
+   "list": "meridian",
+   "symbol": "GLTY",
+   "name": "SPDR Bloomberg UK Gilt UCITS ETF",
+   "isin": "IE00B3W74078"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 228,
+   "list": "meridian",
+   "symbol": "GNOG",
+   "name": "Global X Genomics & Biotechnology UCITS ETF USDAcc",
+   "isin": "IE00BM8R0N95"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 229,
+   "list": "meridian",
+   "symbol": "GOGB",
+   "name": "VanEck Morningstar Gl Wide Moat UCITS ETF USD A",
+   "isin": "IE00BL0BMZ89"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 230,
+   "list": "meridian",
+   "symbol": "GOVD",
+   "name": "Amundi Glbl Government Bond UCITS ETF Dist",
+   "isin": "LU2099288503"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 231,
+   "list": "meridian",
+   "symbol": "GPSA",
+   "name": "Ish Msci Usa Acc",
+   "isin": "IE00BFNM3G45"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 232,
+   "list": "meridian",
+   "symbol": "GREN",
+   "name": "Goldman Sachs Global Green Bond UCITS ETF GBPH Dis",
+   "isin": "IE0004IR5U82"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 233,
+   "list": "meridian",
+   "symbol": "GTBG",
+   "name": "Amundi Index Solutions Amundi Global Treasury Bond UCITS ETF GBP Hedged Dist Distribution",
+   "isin": "LU2977964027"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 234,
+   "list": "meridian",
+   "symbol": "GXLC",
+   "name": "SPDR S&P U.S. Communication Services Select Sector UCITS ETF",
+   "isin": "IE00BFWFPX50"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 235,
+   "list": "meridian",
+   "symbol": "GXLE",
+   "name": "SPDR S&P U.S. Energy Select Sector UCITS ETF",
+   "isin": "IE00BWBXM492"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 236,
+   "list": "meridian",
+   "symbol": "GXLF",
+   "name": "SPDR S&P U.S. Financials Select Sector UCITS ETF",
+   "isin": "IE00BWBXM500"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 237,
+   "list": "meridian",
+   "symbol": "GXLK",
+   "name": "SPDR S&P U.S. Technology Select Sector UCITS ETF",
+   "isin": "IE00BWBXM948"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 238,
+   "list": "meridian",
+   "symbol": "GXLV",
+   "name": "SPDR S&P U.S. Health Care Select Sector UCITS ETF",
+   "isin": "IE00BWBXM617"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 239,
+   "list": "meridian",
+   "symbol": "H50A",
+   "name": "HSBC Euro Stoxx 50 UCITS ETF EUR Acc",
+   "isin": "IE000MWUQBJ0"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 240,
+   "list": "meridian",
+   "symbol": "H50E",
+   "name": "HSBC Euro Stoxx 50 UCITS ETF EUR",
+   "isin": "IE00B4K6B022"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 241,
+   "list": "meridian",
+   "symbol": "HAGS",
+   "name": "HSBC Bloomberg Gl ESG Aggrt 1-3Y Bd UCITS ETF USD",
+   "isin": "IE000XGNMWE1"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 242,
+   "list": "meridian",
+   "symbol": "HCGG",
+   "name": "HSBC China Government Local Bd UCITS ETF ETFSHGBP",
+   "isin": "IE0009PACXU3"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 243,
+   "list": "meridian",
+   "symbol": "HCHS",
+   "name": "HSBC MSCI China UCITS ETF USD Acc",
+   "isin": "IE0007P4PBU1"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 244,
+   "list": "meridian",
+   "symbol": "HDGB",
+   "name": "VanEck Hydrogen Economy UCITS ETF USD A",
+   "isin": "IE00BMDH1538"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 245,
+   "list": "meridian",
+   "symbol": "HEAE",
+   "name": "SPDR MSCI Europe Health Care UCITS ETF",
+   "isin": "IE00BKWQ0H23"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 246,
+   "list": "meridian",
+   "symbol": "HEAW",
+   "name": "SPDR MSCI World Health Care UCITS ETF",
+   "isin": "IE00BYTRRB94"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 247,
+   "list": "meridian",
+   "symbol": "HESS",
+   "name": "HSBC MSCI EM Small Cap Screened UCITS ETF USD Acc",
+   "isin": "IE000W080FK3"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 248,
+   "list": "meridian",
+   "symbol": "HEVS",
+   "name": "HSBC MSCI Emerging Markets Value Screened UCITS USD Acc ETF",
+   "isin": "IE000NVVIF88"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 249,
+   "list": "meridian",
+   "symbol": "HFEJ",
+   "name": "HSBC MSCI AC Far East ex Japan UCITS ETF USD Dist",
+   "isin": "IE00022VXYM7"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 250,
+   "list": "meridian",
+   "symbol": "HGAS",
+   "name": "HSBC Global Aggregate Bond UCITS ETF ETFSHGBP",
+   "isin": "IE0009RYSBF2"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 251,
+   "list": "meridian",
+   "symbol": "HIGG",
+   "name": "iShares   High Yield Corp Bond UCITS ETF GBP H Dis",
+   "isin": "IE000KJVA5F6"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 252,
+   "list": "meridian",
+   "symbol": "HITC",
+   "name": "HSBC S&P India Tech UCITS ETF EUR Acc",
+   "isin": "IE0008119MO8"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 253,
+   "list": "meridian",
+   "symbol": "HMAF",
+   "name": "HSBC MSCI AC Far East ex Japan UCITS ETF USD",
+   "isin": "IE00BBQ2W338"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 254,
+   "list": "meridian",
+   "symbol": "HMCA",
+   "name": "HSBC MSCI China A UCITS ETF USD",
+   "isin": "IE00BF4NQ904"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 255,
+   "list": "meridian",
+   "symbol": "HMCX",
+   "name": "HSBC FTSE 250 UCITS ETF GBP",
+   "isin": "IE00B64PTF05"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 256,
+   "list": "meridian",
+   "symbol": "HMEF",
+   "name": "HSBC MSCI Emerging Markets UCITS ETF USD",
+   "isin": "IE00B5SSQT16"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 257,
+   "list": "meridian",
+   "symbol": "HMES",
+   "name": "HSBC MSCI Europe UCITS ETF EUR Acc",
+   "isin": "IE000ZQOIPB1"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 258,
+   "list": "meridian",
+   "symbol": "HMWO",
+   "name": "HSBC MSCI World UCITS ETF USD",
+   "isin": "IE00B4X9L533"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 259,
+   "list": "meridian",
+   "symbol": "HMWS",
+   "name": "HSBC MSCI World UCITS ETF USD Acc",
+   "isin": "IE000UQND7H4"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 260,
+   "list": "meridian",
+   "symbol": "HMXS",
+   "name": "HSBC MSCI Pacific ex Japan UCITS ETF USD Acc",
+   "isin": "IE000SGVQIZ9"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 261,
+   "list": "meridian",
+   "symbol": "HNSS",
+   "name": "HSBC Nasdaq Global Semiconductor UCITS ETF USD",
+   "isin": "IE000YDZG487"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 262,
+   "list": "meridian",
+   "symbol": "HPAE",
+   "name": "HSBC MSCI Europe Cl Paris Aligned UCITS ETF EUR",
+   "isin": "IE00BP2C0316"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 263,
+   "list": "meridian",
+   "symbol": "HPAO",
+   "name": "HSBC MSCI World Cl Paris Aligned UCITS ETF USD",
+   "isin": "IE00BP2C1V62"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 264,
+   "list": "meridian",
+   "symbol": "HPAS",
+   "name": "HSBC MSCI USA Climate Paris Aligned UCITS ETF USD",
+   "isin": "IE00BP2C1S34"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 265,
+   "list": "meridian",
+   "symbol": "HPAX",
+   "name": "HSBC MSCI AC APac exJapan Climate PA UCITS ETF USD",
+   "isin": "IE000XFORJ80"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 266,
+   "list": "meridian",
+   "symbol": "HPEF",
+   "name": "HSBC MSCI EM Climate Paris Aligned UCITS ETF USD",
+   "isin": "IE000FNVOB27"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 267,
+   "list": "meridian",
+   "symbol": "HPJS",
+   "name": "HSBC MSCI Japan Cl Paris Aligned UCITS ETF USD",
+   "isin": "IE000UU299V4"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 268,
+   "list": "meridian",
+   "symbol": "HPRS",
+   "name": "HSBC FTSE EPRA Nareit Developed UCITS ETF USD Acc",
+   "isin": "IE000G6GSP88"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 269,
+   "list": "meridian",
+   "symbol": "HSAS",
+   "name": "Hsbc Apac Ex Jp Scr Eq Uc Etf Usd (Dist)",
+   "isin": "IE000P1WR081"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 270,
+   "list": "meridian",
+   "symbol": "HSDS",
+   "name": "Hsbc Dev Wld Screened Eq Etf Usd Dist",
+   "isin": "IE000ZGT8JM8"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 271,
+   "list": "meridian",
+   "symbol": "HSEF",
+   "name": "Hsbc Em Screened Equity Etf",
+   "isin": "IE00BKY59G90"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 272,
+   "list": "meridian",
+   "symbol": "HSEP",
+   "name": "Hsbc Europe Screened Equity Etf",
+   "isin": "IE00BKY55W78"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 273,
+   "list": "meridian",
+   "symbol": "HSES",
+   "name": "Hsbc Europe Scr Eq Ucits Etf Eur (Dist)",
+   "isin": "IE000WARATZ3"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 274,
+   "list": "meridian",
+   "symbol": "HEMC",
+   "name": "HSBC MSCI Emerging Markets UCITS ETF USD Acc",
+   "isin": "IE000KCS7J59"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 275,
+   "list": "meridian",
+   "symbol": "HSJP",
+   "name": "Hsbc Japan Screened Equity Etf",
+   "isin": "IE00BKY55S33"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 276,
+   "list": "meridian",
+   "symbol": "HSJS",
+   "name": "Hsbc Japan Scr Eq Ucits Etf Usd (Dist)",
+   "isin": "IE000J3F4J90"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 277,
+   "list": "meridian",
+   "symbol": "HSMS",
+   "name": "Hsbc Em Scr Equity Ucits Etf Usd (Dist)",
+   "isin": "IE000XYBMEH0"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 278,
+   "list": "meridian",
+   "symbol": "HSPS",
+   "name": "HSBC S&P 500 UCITS ETF USD Acc",
+   "isin": "IE000JZ473P7"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 279,
+   "list": "meridian",
+   "symbol": "HSPX",
+   "name": "HSBC S&P 500 UCITS ETF USD",
+   "isin": "IE00B5KQNG97"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 280,
+   "list": "meridian",
+   "symbol": "HSSU",
+   "name": "Hsbc Usa Scr Eq Ucits Etf Usd (Dist)",
+   "isin": "IE000YFGN231"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 281,
+   "list": "meridian",
+   "symbol": "HSTC",
+   "name": "HSBC Hang Seng Tech UCITS ETF HKD",
+   "isin": "IE00BMWXKN31"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 282,
+   "list": "meridian",
+   "symbol": "HSUK",
+   "name": "Hsbc Uk Screened Equity Etf",
+   "isin": "IE00BKY53D40"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 283,
+   "list": "meridian",
+   "symbol": "HSUS",
+   "name": "Hsbc Usa Screened Equity Etf",
+   "isin": "IE00BKY40J65"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 284,
+   "list": "meridian",
+   "symbol": "HSWO",
+   "name": "Hsbc Dev World Screened Equity Etf",
+   "isin": "IE00BKY59K37"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 285,
+   "list": "meridian",
+   "symbol": "HSXE",
+   "name": "Hsbc Europe Ex Uk Scr Equity Ucits Etf",
+   "isin": "IE00BKY58625"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 286,
+   "list": "meridian",
+   "symbol": "HSXJ",
+   "name": "Hsbc Apac Ex Jap Screened Equity Etf",
+   "isin": "IE00BKY58G26"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 287,
+   "list": "meridian",
+   "symbol": "HUKS",
+   "name": "Hsbc Uk Screened Eq Etf Gbp (Dist)",
+   "isin": "IE00046S3PW1"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 288,
+   "list": "meridian",
+   "symbol": "HUKX",
+   "name": "HSBC FTSE 100 UCITS ETF GBP",
+   "isin": "IE00B42TW061"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 289,
+   "list": "meridian",
+   "symbol": "HWSS",
+   "name": "HSBC MSCI World Small Cap Scrnd UCITS ETF USD Acc",
+   "isin": "IE000C692SN6"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 290,
+   "list": "meridian",
+   "symbol": "HWVS",
+   "name": "HSBC MSCI World Value Screened UCITS ETF USD Acc",
+   "isin": "IE000LYBU7X5"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 291,
+   "list": "meridian",
+   "symbol": "HWWA",
+   "name": "HSBC Multi Factor Worldwide Equity UCITS ETF USD",
+   "isin": "IE00BKZGB098"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 292,
+   "list": "meridian",
+   "symbol": "HWWS",
+   "name": "HSBC Multi Factor Worldwide Eq UCITS ETF USD Acc",
+   "isin": "IE0000378O66"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 293,
+   "list": "meridian",
+   "symbol": "HYGB",
+   "name": "VanEck Emerging Markets HY Bond UCITS ETF USD A",
+   "isin": "IE00BF541080"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 294,
+   "list": "meridian",
+   "symbol": "HYGG",
+   "name": "Global X Hydrogen UCITS ETF",
+   "isin": "IE0002RPS3K2"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 295,
+   "list": "meridian",
+   "symbol": "HYSD",
+   "name": "iShares Broad $ High Yld Corp Bd UCITS ETF GBP H D",
+   "isin": "IE000IIOOR48"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 296,
+   "list": "meridian",
+   "symbol": "I500",
+   "name": "iShares S&P 500 Swap UCITS ETF USD (Acc)",
+   "isin": "IE00BMTX1Y45"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 297,
+   "list": "meridian",
+   "symbol": "I50G",
+   "name": "iShares S&P 500 Swap UCITS ETF GBP Hedged (Dist)",
+   "isin": "IE0001OGLP52"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 298,
+   "list": "meridian",
+   "symbol": "IBCI",
+   "name": "iShares   Inflation Linked Govt Bd UCITS ETF EUR A",
+   "isin": "IE00B0M62X26"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 299,
+   "list": "meridian",
+   "symbol": "IBGL",
+   "name": "iShares Govt Bond 15-30yr UCITS ETF EUR (Dist)",
+   "isin": "IE00B1FZS913"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 300,
+   "list": "meridian",
+   "symbol": "IBGM",
+   "name": "iShares   Govt Bond 7-10yr UCITS ETF EUR (Dist)",
+   "isin": "IE00B1FZS806"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 301,
+   "list": "meridian",
+   "symbol": "IBGS",
+   "name": "iShares   Govt Bond 1-3yr UCITS ETF EUR Dist",
+   "isin": "IE00B14X4Q57"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 302,
+   "list": "meridian",
+   "symbol": "IBGT",
+   "name": "iShares $ Treasury Bond 1-3yr UCITS ETF GBP Hdg Ac",
+   "isin": "IE000KN6U873"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 303,
+   "list": "meridian",
+   "symbol": "IBGX",
+   "name": "iShares   Govt Bond 3-5yr UCITS ETF EUR (Dist)",
+   "isin": "IE00B1FZS681"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 304,
+   "list": "meridian",
+   "symbol": "IBGY",
+   "name": "iShares   Govt Bond 5-7yr UCITS ETF EUR (Dist)",
+   "isin": "IE00B4WXJG34"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 305,
+   "list": "meridian",
+   "symbol": "IBTG",
+   "name": "iShares $ Treasury Bd 1-3yr UCITS ETF GBP Hgd Dist",
+   "isin": "IE00BDFK1N50"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 306,
+   "list": "meridian",
+   "symbol": "IBTS",
+   "name": "iShares $ Treasury Bd 1-3yr UCITS ETF USD Dist",
+   "isin": "IE00B14X4S71"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 307,
+   "list": "meridian",
+   "symbol": "IDTG",
+   "name": "iShares $ Treasury Bond 20+yr UCITS ETF GBP H D",
+   "isin": "IE00BK5MT033"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 308,
+   "list": "meridian",
+   "symbol": "IE1G",
+   "name": "iShares   Corp Bond 1-5 yr UCITS ETF GBP Hdg Dist",
+   "isin": "IE000WY37YU4"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 309,
+   "list": "meridian",
+   "symbol": "IEAH",
+   "name": "iShares Core   Corp Bond UCITS ETF GBP Hedged D",
+   "isin": "IE00BDFJYN35"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 310,
+   "list": "meridian",
+   "symbol": "IEBC",
+   "name": "iShares Core   Corp Bond UCITS ETF EUR D",
+   "isin": "IE00B3F81R35"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 311,
+   "list": "meridian",
+   "symbol": "IEEM",
+   "name": "iShares MSCI EM UCITS ETF USD (Dist)",
+   "isin": "IE00B0M63177"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 312,
+   "list": "meridian",
+   "symbol": "IGBS",
+   "name": "iShares Broad Global Govt Bond UCITS ETF GBPH Dist",
+   "isin": "IE000S6ZDHA0"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 313,
+   "list": "meridian",
+   "symbol": "IGHY",
+   "name": "iShares Global HY Corp Bond UCITS ETF USD Dist",
+   "isin": "IE00B74DQ490"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 314,
+   "list": "meridian",
+   "symbol": "IGL5",
+   "name": "iShares UK Gilts 0-5yr UCITS ETF GBP (Acc)",
+   "isin": "IE000RCMNFR9"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 315,
+   "list": "meridian",
+   "symbol": "IGLG",
+   "name": "iShares Physical Gold GBP Hedged ETC",
+   "isin": "IE000Q2P3ZQ3"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 316,
+   "list": "meridian",
+   "symbol": "IGLH",
+   "name": "iShares Global Govt Bond UCITS ETF GBP Hedged Dist",
+   "isin": "IE00BDFK3H31"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 317,
+   "list": "meridian",
+   "symbol": "IGLS",
+   "name": "iShares UK Gilts 0-5yr UCITS ETF GBP (Dist)",
+   "isin": "IE00B4WXJK79"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 318,
+   "list": "meridian",
+   "symbol": "IGLT",
+   "name": "iShares Core UK Gilts UCITS ETF GBP (Dist)",
+   "isin": "IE00B1FZSB30"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 319,
+   "list": "meridian",
+   "symbol": "IGSD",
+   "name": "iShares $ Short Dur Corp Bd UCITS ETF USD Dist",
+   "isin": "IE00BCRY5Y77"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 320,
+   "list": "meridian",
+   "symbol": "IGTA",
+   "name": "iShares $ Treasury Bd 7-10y UCITS ETF GBP Hedg Acc",
+   "isin": "IE000R4RN8C3"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 321,
+   "list": "meridian",
+   "symbol": "IGTM",
+   "name": "iShares $ Treasury Bd 7-10y UCITS ETF GBP Hdg Dist",
+   "isin": "IE00BGPP6580"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 322,
+   "list": "meridian",
+   "symbol": "IGUS",
+   "name": "iShares S&P 500 GBP Hedged UCITS ETF (Acc)",
+   "isin": "IE00B3Y8X563"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 323,
+   "list": "meridian",
+   "symbol": "IGWD",
+   "name": "iShares MSCI World GBP Hedged UCITS ETF (Acc)",
+   "isin": "IE00B42YS929"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 324,
+   "list": "meridian",
+   "symbol": "IHHG",
+   "name": "iShares $ High Yield Corp Bond UCITS ETF GBP Hgd D",
+   "isin": "IE00BDFJYL11"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 325,
+   "list": "meridian",
+   "symbol": "IJPH",
+   "name": "iShares MSCI Japan GBP Hedged UCITS ETF (Acc)",
+   "isin": "IE00B7XYN974"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 326,
+   "list": "meridian",
+   "symbol": "IMIB",
+   "name": "iShares FTSE MIB UCITS ETF EUR (Dist)",
+   "isin": "IE00B1XNH568"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 327,
+   "list": "meridian",
+   "symbol": "INCU",
+   "name": "iShares US Equity High Income Actv UCITS ETF USD D",
+   "isin": "IE000WHL2ZK1"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 328,
+   "list": "meridian",
+   "symbol": "INGH",
+   "name": "ISH Glb Infrastructure UCTS ETF GBP H AC",
+   "isin": "IE000TCZMZM8"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 329,
+   "list": "meridian",
+   "symbol": "INRA",
+   "name": "iShares Global Clean Energy Trnstn UCITS ETF USD A",
+   "isin": "IE000U58J0M1"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 330,
+   "list": "meridian",
+   "symbol": "INXG",
+   "name": "iShares   Index-Linked Gilts UCITS ETF GBP Dist",
+   "isin": "IE00B1FZSD53"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 331,
+   "list": "meridian",
+   "symbol": "IPRH",
+   "name": "Ish Listed Private Eqty Ucts Etf Gb H Ac",
+   "isin": "IE000GXN71U1"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 332,
+   "list": "meridian",
+   "symbol": "IQCY",
+   "name": "Amundi MSCI Smart Cities UCITS ETF ACC",
+   "isin": "LU2037748345"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 333,
+   "list": "meridian",
+   "symbol": "IS15",
+   "name": "iShares   Corp Bond 0-5yr UCITS ETF GBP (Dist)",
+   "isin": "IE00B5L65R35"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 334,
+   "list": "meridian",
+   "symbol": "CEUG",
+   "name": "iShares Core MSCI EMU UCITS ETF GBP Hedged (Dist)",
+   "isin": "IE00BG0J9Y53"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 335,
+   "list": "meridian",
+   "symbol": "ISF",
+   "name": "iShares Core FTSE 100 UCITS ETF GBP Dist",
+   "isin": "IE0005042456"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 336,
+   "list": "meridian",
+   "symbol": "GILG",
+   "name": "iShares Gl Infl Lnk Govt Bd UCITS ETF GBP Hgd Dist",
+   "isin": "IE00BMDBML89"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 337,
+   "list": "meridian",
+   "symbol": "GOVP",
+   "name": "iShares $ Treasury Bond UCITS ETF GBP Hgd Dist",
+   "isin": "IE00BKTN1T54"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 338,
+   "list": "meridian",
+   "symbol": "GSPX",
+   "name": "iShares Core S&P 500 UCITS ETF GBP Hedged (Dist)",
+   "isin": "IE00BD8KRH84"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 339,
+   "list": "meridian",
+   "symbol": "I50D",
+   "name": "iShares S&P 500 Swap UCITS ETF USD (Dist)",
+   "isin": "IE000D3BWBR2"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 340,
+   "list": "meridian",
+   "symbol": "IART",
+   "name": "iShares AI Innovation Active UCITS ETF USD (Acc)",
+   "isin": "IE000G0E83X3"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 341,
+   "list": "meridian",
+   "symbol": "IGBG",
+   "name": "iShares Broad Global Govt Bond UCITS ETF USD Dist",
+   "isin": "IE000J8Z5N74"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 342,
+   "list": "meridian",
+   "symbol": "IIND",
+   "name": "iShares MSCI India UCITS USD (Acc) ETF",
+   "isin": "IE00BZCQB185"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 343,
+   "list": "meridian",
+   "symbol": "IMGP",
+   "name": "iShares US Mortgage Backed Sec UCITS ETF GBP Hdg D",
+   "isin": "IE000MFEI2J0"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 344,
+   "list": "meridian",
+   "symbol": "ITPG",
+   "name": "iShares $ TIPS UCITS ETF GBP Hedged (Dist)",
+   "isin": "IE00BDZVH859"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 345,
+   "list": "meridian",
+   "symbol": "METG",
+   "name": "iShares Essential Metals Producers UCITS ETF USD (Acc)",
+   "isin": "IE000ROSD5J6"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 346,
+   "list": "meridian",
+   "symbol": "MIDD",
+   "name": "iShares FTSE 250 UCITS ETF GBP (Dist)",
+   "isin": "IE00B00FV128"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 347,
+   "list": "meridian",
+   "symbol": "MVEA",
+   "name": "iShares Edge MSCI USA Min Vol Adv UCITS ETF USD A",
+   "isin": "IE00BKVL7331"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 348,
+   "list": "meridian",
+   "symbol": "MVEW",
+   "name": "iShares Edge MSCI Wld Min Vol Adv UCITS ETF USD A",
+   "isin": "IE00BKVL7778"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 349,
+   "list": "meridian",
+   "symbol": "ISPE",
+   "name": "iShares S&P 500 Equal Weight UCITS ETF GBP Hgd A",
+   "isin": "IE0003WV2ME7"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 350,
+   "list": "meridian",
+   "symbol": "PLAY",
+   "name": "iShs Digital Entertnmnt and Eductn UCITS ETF USD A",
+   "isin": "IE00023EZQ82"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 351,
+   "list": "meridian",
+   "symbol": "ROLG",
+   "name": "iShs Blmbrg Enhcd Roll Yd Comdt Swp UCITS ETF USDA",
+   "isin": "IE00BZ1NCS44"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 352,
+   "list": "meridian",
+   "symbol": "SHLG",
+   "name": "iShares Digital Security UCITS ETF USD (Dist)",
+   "isin": "IE00BG0J4841"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 353,
+   "list": "meridian",
+   "symbol": "IBTM",
+   "name": "iShares $ Treasury Bd 7-10y UCITS ETF USD Dist",
+   "isin": "IE00B1FZS798"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 354,
+   "list": "meridian",
+   "symbol": "WENS",
+   "name": "iShares MSCI World Energy Sector UCITS ETF USD D",
+   "isin": "IE00BJ5JP105"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 355,
+   "list": "meridian",
+   "symbol": "WIGG",
+   "name": "iShares Fallen Angels HY Corp Bd UCITS ETF GBP H D",
+   "isin": "IE00BDFK1680"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 356,
+   "list": "meridian",
+   "symbol": "ISXF",
+   "name": "iShares   Corp Bd ex-Fincls UCITS ETF GBP Dist",
+   "isin": "IE00B4L60H17"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 357,
+   "list": "meridian",
+   "symbol": "ITEB",
+   "name": "iShares Italy Govt Bond UCITS ETF GBP Hedged Dist",
+   "isin": "IE0003V00UC4"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 358,
+   "list": "meridian",
+   "symbol": "ITPA",
+   "name": "iShares $ TIPS UCITS ETF GBP Hedged (Acc)",
+   "isin": "IE000B3NURO6"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 359,
+   "list": "meridian",
+   "symbol": "ITPS",
+   "name": "iShares $ TIPS UCITS ETF USD (Acc)",
+   "isin": "IE00B1FZSC47"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 360,
+   "list": "meridian",
+   "symbol": "IUGA",
+   "name": "iShares US Aggregate Bond UCITS ETF GBP Hgd (Dist)",
+   "isin": "IE00BDFGJ841"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 361,
+   "list": "meridian",
+   "symbol": "IUSA",
+   "name": "iShares Core S&P 500 UCITS ETF USD (Dist)",
+   "isin": "IE0031442068"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 362,
+   "list": "meridian",
+   "symbol": "IWDD",
+   "name": "iShares Core MSCI World UCITS ETF USD (Dist)",
+   "isin": "IE000OHHIBC6"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 363,
+   "list": "meridian",
+   "symbol": "IWDG",
+   "name": "iShares Core MSCI World UCITS ETF GBP Hgd (Dist)",
+   "isin": "IE00BD45YS76"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 364,
+   "list": "meridian",
+   "symbol": "IWRD",
+   "name": "iShares MSCI World UCITS ETF USD (Dist)",
+   "isin": "IE00B0M62Q58"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 365,
+   "list": "meridian",
+   "symbol": "IWVG",
+   "name": "iShares Edge MSCI Wld Val Fctr UCITS ETF USD D",
+   "isin": "IE00BFYTYS33"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 366,
+   "list": "meridian",
+   "symbol": "J13E",
+   "name": "JPM BetaBuilders EUR Govt Bond 1-3 yr UCITS - EUR (acc) ETF",
+   "isin": "IE00BYVZV757"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 367,
+   "list": "meridian",
+   "symbol": "J13U",
+   "name": "JPM BetaBuilders US Treasury Bond 1-3 yr UCITS - USD (acc) ETF",
+   "isin": "IE00BD9MMD49"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 368,
+   "list": "meridian",
+   "symbol": "J15R",
+   "name": "JPM EUR 1-5 yr IG Corp Bond Active UCITS ETF EUR A",
+   "isin": "IE00BF59RW70"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 369,
+   "list": "meridian",
+   "symbol": "JAAG",
+   "name": "JPM Glbl Aggrgte Bd Active UCITS ETF - USD (acc)",
+   "isin": "IE0006MM8VN6"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 370,
+   "list": "meridian",
+   "symbol": "JAEP",
+   "name": "JPM EUR Aggregate Bond Active UCITS ETF EUR acc",
+   "isin": "IE00049TNTV6"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 371,
+   "list": "meridian",
+   "symbol": "JAGD",
+   "name": "JPM Glbl Aggrgte Bd Active UCITS ETF - USD (dist)",
+   "isin": "IE000LHP8TA1"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 372,
+   "list": "meridian",
+   "symbol": "JAGP",
+   "name": "JPM Glbl Aggrgte Bd Active UCITS ETF - GBP Hd(acc)",
+   "isin": "IE0000F1IQZ8"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 373,
+   "list": "meridian",
+   "symbol": "JAPN",
+   "name": "Franklin FTSE Japan UCITS ETF",
+   "isin": "IE000D0T0BO1"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 374,
+   "list": "meridian",
+   "symbol": "JCAP",
+   "name": "JPM BetaBuilders China Aggrgte Bd UCITS ETF USD A",
+   "isin": "IE000TB7IEF3"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 375,
+   "list": "meridian",
+   "symbol": "JCGA",
+   "name": "JPM BetaBuilders China Aggrgte Bd UCITS ETF USD D",
+   "isin": "IE000RJNOUX7"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 376,
+   "list": "meridian",
+   "symbol": "JEBP",
+   "name": "JPM EUR IG Corporate Bond Active UCITS ETF GBPH A",
+   "isin": "IE000IZS2303"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 377,
+   "list": "meridian",
+   "symbol": "JEDG",
+   "name": "VanEck Space Innovators UCITS ETF",
+   "isin": "IE000YU9K6K2"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 378,
+   "list": "meridian",
+   "symbol": "JEYG",
+   "name": "JPM EUR High Yield Bond Active UCITS ETF GBP H A",
+   "isin": "IE000ZT56NY2"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 379,
+   "list": "meridian",
+   "symbol": "JG15",
+   "name": "JPM BetaBuilders UK Gilt 1-5 yr UCITS ETF GBP dis",
+   "isin": "IE00BD9MMC32"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 380,
+   "list": "meridian",
+   "symbol": "JGGE",
+   "name": "JPM EUR Aggregate Bond Active UCITS ETF EUR dist",
+   "isin": "IE0008QIFH42"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 381,
+   "list": "meridian",
+   "symbol": "JGNR",
+   "name": "JPM Green Social Sustain Bond Activ UCITS ETF USDA",
+   "isin": "IE0005FKEK99"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 382,
+   "list": "meridian",
+   "symbol": "JGSA",
+   "name": "JPM GBP Ultra-Short Income Active UCITS ETF GBP A",
+   "isin": "IE00BG47J908"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 383,
+   "list": "meridian",
+   "symbol": "JGST",
+   "name": "JPM GBP Ultra-Short Income Active UCITS ETF GBP D",
+   "isin": "IE00BD9MMG79"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 384,
+   "list": "meridian",
+   "symbol": "JGYH",
+   "name": "JPM Global High Yield Corporate Bond Multi-Factor Active UCITS USD (acc) ETF",
+   "isin": "IE00BKKCKJ46"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 385,
+   "list": "meridian",
+   "symbol": "JHYP",
+   "name": "JPM Global HY Cp Bd Multi-Fctr Atv UCITS ETF GBPHD",
+   "isin": "IE00BKV0QF55"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 386,
+   "list": "meridian",
+   "symbol": "JIBG",
+   "name": "JPM USD IG Corporate Bond Active UCITS ETF USD D",
+   "isin": "IE00BN4RDY28"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 387,
+   "list": "meridian",
+   "symbol": "JMAB",
+   "name": "JPM USD Em Mkts Sovereign Bond UCITS ETF USD A",
+   "isin": "IE00BJ06C937"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 388,
+   "list": "meridian",
+   "symbol": "JMBP",
+   "name": "JPM USD Em Mkts Sovereign Bond UCITS ETF GBP Hgd D",
+   "isin": "IE00BJLTWS02"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 389,
+   "list": "meridian",
+   "symbol": "JMRE",
+   "name": "JPM Glob EM Resrch Enh Idx Eqt Actv UCITS ETF USDA",
+   "isin": "IE00BF4G6Z54"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 390,
+   "list": "meridian",
+   "symbol": "JNKS",
+   "name": "SPDR BBG U.S. High Yield Crp Scored UCITS ETF Dist",
+   "isin": "IE00B99FL386"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 391,
+   "list": "meridian",
+   "symbol": "JPAS",
+   "name": "JPM USD Ultra-Short Income Active UCITS ETF USD A",
+   "isin": "IE00BG8BCY43"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 392,
+   "list": "meridian",
+   "symbol": "JPBM",
+   "name": "JPM USD Em Mkts Sovereign Bond UCITS ETF USD D",
+   "isin": "IE00BDFC6G93"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 393,
+   "list": "meridian",
+   "symbol": "JPJP",
+   "name": "SPDR MSCI Japan UCITS ETF",
+   "isin": "IE00BZ0G8B96"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 394,
+   "list": "meridian",
+   "symbol": "JPSG",
+   "name": "iShares MSCI Japan SRI UCITS ETF GBP Hedged (Acc)",
+   "isin": "IE0007VCNJW3"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 395,
+   "list": "meridian",
+   "symbol": "JPTS",
+   "name": "JPM USD Ultra-Short Income Active UCITS ETF USD D",
+   "isin": "IE00BDFC6Q91"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 396,
+   "list": "meridian",
+   "symbol": "JPUY",
+   "name": "USD High Yield Bond Active UCITS ETF - JPM USD High Yield Bond Active UCITS ETF - USD (dist)",
+   "isin": "IE000R88UVN6"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 397,
+   "list": "meridian",
+   "symbol": "JPYG",
+   "name": "USD High Yield Bond Active UCITS ETF - JPM USD High Yield Bond Active UCITS ETF - GBP Hedged (acc)",
+   "isin": "IE000CF2JI38"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 398,
+   "list": "meridian",
+   "symbol": "JPYH",
+   "name": "USD High Yield Bond Active UCITS ETF - JPM USD High Yield Bond Active UCITS ETF - USD (acc)",
+   "isin": "IE000LZI2UH4"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 399,
+   "list": "meridian",
+   "symbol": "JRBE",
+   "name": "JPM EUR IG Corporate Bond Active UCITS ETF EUR A",
+   "isin": "IE00BF59RX87"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 400,
+   "list": "meridian",
+   "symbol": "JRBU",
+   "name": "JPM USD IG Corporate Bond Active UCITS ETF USD A",
+   "isin": "IE00BF59RV63"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 401,
+   "list": "meridian",
+   "symbol": "JRUP",
+   "name": "JPM USD IG Corporate Bond Active UCITS ETF GBPH A",
+   "isin": "IE00BN7JCJ33"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 402,
+   "list": "meridian",
+   "symbol": "JSET",
+   "name": "JPM EUR Ultra-Short Income Active UCITS EUR (acc) ETF",
+   "isin": "IE00BD9MMF62"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 403,
+   "list": "meridian",
+   "symbol": "KARP",
+   "name": "Kraneshs Elec Veh Fut Mob Screen Usd",
+   "isin": "IE000YUAPTQ0"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 404,
+   "list": "meridian",
+   "symbol": "KLMG",
+   "name": "Amundi Gbl Agt Green Bd UCITS ETF GBP Hedged D",
+   "isin": "LU1563455630"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 405,
+   "list": "meridian",
+   "symbol": "KROG",
+   "name": "Global X Agtech and Food Innvtn UCITS ETF USD Acc",
+   "isin": "IE000EBFYWX3"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 406,
+   "list": "meridian",
+   "symbol": "KSTP",
+   "name": "KraneShares ICBCUBS SSE StrMkt 50Idx UCITS ETF USD",
+   "isin": "IE00BKPJY434"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 407,
+   "list": "meridian",
+   "symbol": "KWBP",
+   "name": "KraneShares CSI China Internet UCITS ETF GBP",
+   "isin": "IE00BMW13836"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 408,
+   "list": "meridian",
+   "symbol": "LCAL",
+   "name": "Amundi MSCI EM Asia ESG Broad Transition UCITS Acc ETF",
+   "isin": "LU1781541849"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 409,
+   "list": "meridian",
+   "symbol": "LCCG",
+   "name": "Amundi MSCI China UCITS ETF Acc",
+   "isin": "LU1841731745"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 410,
+   "list": "meridian",
+   "symbol": "LCJG",
+   "name": "Amundi Core Msci Japan Etf",
+   "isin": "LU1781541682"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 411,
+   "list": "meridian",
+   "symbol": "LCJP",
+   "name": "Amundi Core MSCI Japan UCITS Acc ETF",
+   "isin": "LU1781541252"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 412,
+   "list": "meridian",
+   "symbol": "LCRP",
+   "name": "SPDR Bloomberg 10+ Year U.S. Corporate Bond UCITS  ETF",
+   "isin": "IE00BZ0G8860"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 413,
+   "list": "meridian",
+   "symbol": "LDME",
+   "name": "L&G Em Mrkts Qlty Div Eql Wght UCITS ETF USD Dis",
+   "isin": "IE00BMYDMC42"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 414,
+   "list": "meridian",
+   "symbol": "LITG",
+   "name": "Global X Lithium and Battery Tech UCITS ETF USDAcc",
+   "isin": "IE00BLCHJN13"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 415,
+   "list": "meridian",
+   "symbol": "LITM",
+   "name": "iShares Lithium&Battery Producers UCITS ETF USD Ac",
+   "isin": "IE000WDG5795"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 416,
+   "list": "meridian",
+   "symbol": "LQGH",
+   "name": "iShares $ Corp Bond UCITS ETF GBP Hedged Dist",
+   "isin": "IE00BDFK3736"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 417,
+   "list": "meridian",
+   "symbol": "LSPX",
+   "name": "Amundi Core S&P 500 Swap Etf",
+   "isin": "LU0496786657"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 418,
+   "list": "meridian",
+   "symbol": "CHIP",
+   "name": "KraneShares ICBCUBS S&P China 500 UCITS ETF USD",
+   "isin": "IE0001QF56M0"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 419,
+   "list": "meridian",
+   "symbol": "IDGA",
+   "name": "iShares $ Treasury Bond 20+yr UCITS ETF GBP Hdg Ac",
+   "isin": "IE0006NB6WZ4"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 420,
+   "list": "meridian",
+   "symbol": "RU2K",
+   "name": "iShares Russell 2000 Swap UCITS ETF USD Acc",
+   "isin": "IE0007O06KL9"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 421,
+   "list": "meridian",
+   "symbol": "LVLG",
+   "name": "Invesco Gl Active Defensive ESG Eq UCITS ETF Acc",
+   "isin": "IE000N42HDP2"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 422,
+   "list": "meridian",
+   "symbol": "CLIM",
+   "name": "Amundi Global Aggregate Green Bond UCITS ETF Acc",
+   "isin": "LU1563454310"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 423,
+   "list": "meridian",
+   "symbol": "LCUK",
+   "name": "Amundi UK Equity All Cap UCITS ETF - Dist",
+   "isin": "LU1781541096"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 424,
+   "list": "meridian",
+   "symbol": "LEML",
+   "name": "Amundi MSCI Em Mkts Swap II UCITS ETF USD Acc",
+   "isin": "FR0010435297"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 425,
+   "list": "meridian",
+   "symbol": "MILL",
+   "name": "Amundi MSCI Millennials UCITS ETF Acc",
+   "isin": "LU2023678449"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 426,
+   "list": "meridian",
+   "symbol": "MACG",
+   "name": "Ishares Conservative Portfolio UCITS ETF",
+   "isin": "IE00BLP53N06"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 427,
+   "list": "meridian",
+   "symbol": "MAGG",
+   "name": "Ishares Growth Portfolio UCITS ETF",
+   "isin": "IE00BLLZQ912"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 428,
+   "list": "meridian",
+   "symbol": "MAMG",
+   "name": "Ishares Moderate Portfolio UCITS ETF",
+   "isin": "IE00BLLZQ797"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 429,
+   "list": "meridian",
+   "symbol": "METU",
+   "name": "Franklin AI, Metaverse and Blockchain UCITS ETF",
+   "isin": "IE000IM4K4K2"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 430,
+   "list": "meridian",
+   "symbol": "MEUD",
+   "name": "Amundi Core Stoxx Europe 600 UCITS ETF A",
+   "isin": "LU0908500753"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 431,
+   "list": "meridian",
+   "symbol": "MFDD",
+   "name": "Amundi MSCI EMU ESG Broad Transition UCITS ETF D",
+   "isin": "LU0908501132"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 432,
+   "list": "meridian",
+   "symbol": "MFEX",
+   "name": "Amundi Core MSCI EMU UCITS ETF Dist",
+   "isin": "LU1646360971"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 433,
+   "list": "meridian",
+   "symbol": "MIBX",
+   "name": "Amundi FTSE MIB UCITS ETF Dist",
+   "isin": "FR0010010827"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 434,
+   "list": "meridian",
+   "symbol": "HERG",
+   "name": "Global X Video Games & Esports UCITS ETF USD Dist",
+   "isin": "IE00BLR6Q650"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 435,
+   "list": "meridian",
+   "symbol": "MINE",
+   "name": "iShares Copper Miners UCITS ETF USD (Acc)",
+   "isin": "IE00063FT9K6"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 436,
+   "list": "meridian",
+   "symbol": "MIST",
+   "name": "PIMCO US Dollar Short Maturity UCITS ETF GBPH Acc",
+   "isin": "IE00BK9YKZ79"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 437,
+   "list": "meridian",
+   "symbol": "MOGB",
+   "name": "VanEck Morningstar US ESG Wide Moat UCITS ETF",
+   "isin": "IE00BQQP9H09"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 438,
+   "list": "meridian",
+   "symbol": "MOTV",
+   "name": "VanEck Morningstar US Wide Moat UCITS ETF USD A",
+   "isin": "IE0007I99HX7"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 439,
+   "list": "meridian",
+   "symbol": "MSCU",
+   "name": "Amundi Core MSCI USA UCITS Dist ETF",
+   "isin": "IE000IEGVMH6"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 440,
+   "list": "meridian",
+   "symbol": "MSCW",
+   "name": "Amundi Core MSCI World Swap UCITS Dist ETF",
+   "isin": "LU2572257124"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 441,
+   "list": "meridian",
+   "symbol": "MSED",
+   "name": "Amundi Core EURO STOXX 50 UCITS ETF EUR Acc",
+   "isin": "LU1681047236"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 442,
+   "list": "meridian",
+   "symbol": "MSEX",
+   "name": "Amundi EURO STOXX 50 II UCITS ETF GBP Hedged Acc",
+   "isin": "FR0012399772"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 443,
+   "list": "meridian",
+   "symbol": "MTAV",
+   "name": "iShares Metaverse UCITS ETF USD (Acc)",
+   "isin": "IE000RN58M26"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 444,
+   "list": "meridian",
+   "symbol": "MTHG",
+   "name": "Amundi Euro Government Bond 25+Y UCITS ETF GBPH D",
+   "isin": "LU2891728078"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 445,
+   "list": "meridian",
+   "symbol": "MUSG",
+   "name": "iShares MSCI USA Swap UCITS ETF GBP Hgd Dist",
+   "isin": "IE000DLDNVK1"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 446,
+   "list": "meridian",
+   "symbol": "MWOT",
+   "name": "Amundi Russell 1000 Growth UCITS Acc ETF",
+   "isin": "IE0005E8B9S4"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 447,
+   "list": "meridian",
+   "symbol": "MWOZ",
+   "name": "Amundi Prime Global UCITS Dist ETF",
+   "isin": "IE000QIF5N15"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 448,
+   "list": "meridian",
+   "symbol": "MWRL",
+   "name": "Amundi Core MSCI World UCITS ETF Acc",
+   "isin": "IE000BI8OT95"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 449,
+   "list": "meridian",
+   "symbol": "MXFP",
+   "name": "Invesco MSCI Emerging Markets UCITS ETF Acc",
+   "isin": "IE00B3DWVS88"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 450,
+   "list": "meridian",
+   "symbol": "MXWS",
+   "name": "Invesco MSCI World UCITS Acc ETF",
+   "isin": "IE00B60SX394"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 451,
+   "list": "meridian",
+   "symbol": "N100",
+   "name": "iShares Nasdaq 100 Swap UCITS ETF USD Acc",
+   "isin": "IE0001ZFMLN7"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 452,
+   "list": "meridian",
+   "symbol": "NASL",
+   "name": "Amundi Core Nasdaq-100 Swap UCITS ETF Acc",
+   "isin": "LU1829221024"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 453,
+   "list": "meridian",
+   "symbol": "NESP",
+   "name": "Invesco NASDAQ 100 ESG UCITS ETF Acc",
+   "isin": "IE000COQKPO9"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 454,
+   "list": "meridian",
+   "symbol": "NRJL",
+   "name": "Amundi MSCI New Energy UCITS ETF Dist",
+   "isin": "FR0010524777"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 455,
+   "list": "meridian",
+   "symbol": "RNRU",
+   "name": "Global X Renw Energy Producers UCITS ETF USD Acc",
+   "isin": "IE00BLCHJH52"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 456,
+   "list": "meridian",
+   "symbol": "S100",
+   "name": "Invesco FTSE 100 UCITS ETF Acc",
+   "isin": "IE00B60SWT88"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 457,
+   "list": "meridian",
+   "symbol": "S250",
+   "name": "Invesco FTSE 250 UCITS ETF Acc",
+   "isin": "IE00B60SWV01"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 458,
+   "list": "meridian",
+   "symbol": "S5SD",
+   "name": "UBS S&P 500 Scored & Screened UCITS USD dis ETF",
+   "isin": "IE00BHXMHK04"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 459,
+   "list": "meridian",
+   "symbol": "S600",
+   "name": "Invesco STOXX Europe 600 UCITS Acc ETF",
+   "isin": "IE00B60SWW18"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 460,
+   "list": "meridian",
+   "symbol": "SAAA",
+   "name": "iShares Global AAA-AA Govt Bd UCITS ETF USD D",
+   "isin": "IE00B87G8S03"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 461,
+   "list": "meridian",
+   "symbol": "SABP",
+   "name": "Global X S&P 500 Annual Buffer UCITS ETF USD Acc",
+   "isin": "IE0009BM62P2"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 462,
+   "list": "meridian",
+   "symbol": "SAEU",
+   "name": "Ish Msci Eu Gbp-A",
+   "isin": "IE00BFNM3D14"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 463,
+   "list": "meridian",
+   "symbol": "SAGG",
+   "name": "iShares Core Gl Aggregate Bd UCITS ETF USD Dis",
+   "isin": "IE00B3F81409"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 464,
+   "list": "meridian",
+   "symbol": "SAHP",
+   "name": "Global X S&P 500 Annual Tail Hdg UCITS ETF USD Acc",
+   "isin": "IE000HGH8PV2"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 465,
+   "list": "meridian",
+   "symbol": "SAPA",
+   "name": "SPDR MSCI All Country World Climate Paris Aligned UCITS ETF",
+   "isin": "IE00BYTH5370"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 466,
+   "list": "meridian",
+   "symbol": "SAUM",
+   "name": "Ish Msci Emu Gbp-A",
+   "isin": "IE00BFNM3B99"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 467,
+   "list": "meridian",
+   "symbol": "SAWG",
+   "name": "Ish Msc Wrld Scrnd Ucts Etf Gb H Dis",
+   "isin": "IE00BKBF6K52"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 468,
+   "list": "meridian",
+   "symbol": "SCXW",
+   "name": "Scalable MSCI AC World Xtrackers UCITS ETF",
+   "isin": "LU2903252349"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 469,
+   "list": "meridian",
+   "symbol": "SDEU",
+   "name": "iShares Germany Govt Bond UCITS EUR (Dist) ETF",
+   "isin": "IE00B5V94313"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 470,
+   "list": "meridian",
+   "symbol": "SDG3",
+   "name": "Xtrackers MSCI Global SDG 3 Good Health UCITS ETF",
+   "isin": "IE00036F4K40"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 471,
+   "list": "meridian",
+   "symbol": "SDG6",
+   "name": "Xtrackers MSCI Global Clean Water & Sanitation UCITS ETF",
+   "isin": "IE0007WJ6B10"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 472,
+   "list": "meridian",
+   "symbol": "SDG7",
+   "name": "Xtrackers MSCI Global SDG 7 Affordable and Clean Energy UCITS ETF",
+   "isin": "IE000JZYIUN0"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 473,
+   "list": "meridian",
+   "symbol": "SDGH",
+   "name": "iShares $ Short Dur Corp Bd UCITS ETF GBP Hedged D",
+   "isin": "IE000PECRUX8"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 474,
+   "list": "meridian",
+   "symbol": "SDGX",
+   "name": "Xtrackers MSCI Global SDGs UCITS ETF",
+   "isin": "IE000PSF3A70"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 475,
+   "list": "meridian",
+   "symbol": "SDHG",
+   "name": "iShares $ Sht Duration HY Crp Bd UCITS ETF USD D",
+   "isin": "IE00BCRY6003"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 476,
+   "list": "meridian",
+   "symbol": "SDIP",
+   "name": "Global X Superdividend UCITS ETF USD Dist",
+   "isin": "IE00077FRP95"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 477,
+   "list": "meridian",
+   "symbol": "SDUE",
+   "name": "Ish Msci Eu Gbp-D",
+   "isin": "IE00BFNM3F38"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 478,
+   "list": "meridian",
+   "symbol": "SE15",
+   "name": "iShares   Corp Bond 1-5 yr UCITS ETF EUR (Dist)",
+   "isin": "IE00B4L60045"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 479,
+   "list": "meridian",
+   "symbol": "SEAG",
+   "name": "iShares   Aggregate Bond ESG SRI UCITS ETF EUR D",
+   "isin": "IE00B3DKXQ41"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 480,
+   "list": "meridian",
+   "symbol": "SEGA",
+   "name": "iShares Core   Govt Bond UCITS ETF EUR D",
+   "isin": "IE00B4WXJJ64"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 481,
+   "list": "meridian",
+   "symbol": "SEGM",
+   "name": "Ish Msci Em Imi Acc",
+   "isin": "IE00BFNM3P36"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 482,
+   "list": "meridian",
+   "symbol": "SEGP",
+   "name": "ISH Govt Bnd CLMT UCTS GBP Hdg Ac",
+   "isin": "IE000M9FJ295"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 483,
+   "list": "meridian",
+   "symbol": "SEMA",
+   "name": "iShares MSCI EM UCITS ETF USD (Acc)",
+   "isin": "IE00B4L5YC18"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 484,
+   "list": "meridian",
+   "symbol": "SEMH",
+   "name": "SPDR ICE BofA 0-5 Year EM USD Government Bond UCITS ETF",
+   "isin": "IE00BP46NG52"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 485,
+   "list": "meridian",
+   "symbol": "SEMI",
+   "name": "iShares MSCI Global Semiconductors UCITS ETF USD A",
+   "isin": "IE000I8KRLL9"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 486,
+   "list": "meridian",
+   "symbol": "SEML",
+   "name": "iShares JPM EM Local Govt Bond UCITS ETF USD D",
+   "isin": "IE00B5M4WH52"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 487,
+   "list": "meridian",
+   "symbol": "SEPA",
+   "name": "SPDR MSCI Europe Climate Paris Aligned UCITS ETF",
+   "isin": "IE00BYTH5487"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 488,
+   "list": "meridian",
+   "symbol": "SGEA",
+   "name": "iShares Emerging Asia Local Gvt Bd UCITS ETF USD D",
+   "isin": "IE00B6QGFW01"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 489,
+   "list": "meridian",
+   "symbol": "SGIL",
+   "name": "iShares Gl Infl Lnk Govt Bd UCITS ETF USD Acc",
+   "isin": "IE00B3B8PX14"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 490,
+   "list": "meridian",
+   "symbol": "SGJP",
+   "name": "Ish Msci Jap Usd-A",
+   "isin": "IE00BFNM3L97"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 491,
+   "list": "meridian",
+   "symbol": "SGLO",
+   "name": "iShares Global Govt Bond UCITS ETF USD Dist",
+   "isin": "IE00B3F81K65"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 492,
+   "list": "meridian",
+   "symbol": "SGSU",
+   "name": "iShares $ Corp Bd 0-3Yr ESG SRI UCITS ETF GBPHD",
+   "isin": "IE00BK7Y2S64"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 493,
+   "list": "meridian",
+   "symbol": "SGWS",
+   "name": "iShares MSCI World SRI UCITS ETF GBP Hedged (Dist)",
+   "isin": "IE00BMZ17T93"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 494,
+   "list": "meridian",
+   "symbol": "SHYG",
+   "name": "iShares   High Yield Corp Bond UCITS ETF EUR D",
+   "isin": "IE00B66F4759"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 495,
+   "list": "meridian",
+   "symbol": "SHYU",
+   "name": "iShares $ High Yield Corp Bond UCITS ETF USD D",
+   "isin": "IE00B4PY7Y77"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 496,
+   "list": "meridian",
+   "symbol": "SLXX",
+   "name": "iShares Core   Corp Bond UCITS ETF GBP (Dist)",
+   "isin": "IE00B00FV011"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 497,
+   "list": "meridian",
+   "symbol": "SMGB",
+   "name": "VanEck Semiconductor UCITS ETF USD A",
+   "isin": "IE00BMC38736"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 498,
+   "list": "meridian",
+   "symbol": "SMPA",
+   "name": "SPDR MSCI EM Climate Paris Aligned UCITS ETF Acc",
+   "isin": "IE00BYTH5263"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 499,
+   "list": "meridian",
+   "symbol": "SMTV",
+   "name": "VanEck Morningstar US SMID Moat UCITS ETF USD A",
+   "isin": "IE000SBU19F7"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 500,
+   "list": "meridian",
+   "symbol": "SMUD",
+   "name": "Ish Msci Emu Gbp-D",
+   "isin": "IE00BFNM3C07"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 501,
+   "list": "meridian",
+   "symbol": "SNGB",
+   "name": "iShares J.P. Morgan $ EM Corp Bd UCITS ETF GBP H D",
+   "isin": "IE000D352U62"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 502,
+   "list": "meridian",
+   "symbol": "SNSG",
+   "name": "Global X Internet of Things UCITS ETF USD Acc",
+   "isin": "IE00BLCHJT74"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 503,
+   "list": "meridian",
+   "symbol": "SP20",
+   "name": "iShares S&P 500 Top 20 UCITS ETF USD (Acc)",
+   "isin": "IE000VA628D5"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 504,
+   "list": "meridian",
+   "symbol": "SP5G",
+   "name": "Amundi Core S&P 500 Swap Etf",
+   "isin": "LU1950341179"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 505,
+   "list": "meridian",
+   "symbol": "SP5L",
+   "name": "Amundi Core S&P 500 Swap UCITS ETF Acc",
+   "isin": "LU1135865084"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 506,
+   "list": "meridian",
+   "symbol": "ERO",
+   "name": "SPDR MSCI Europe UCITS ETF",
+   "isin": "IE00BKWQ0Q14"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 507,
+   "list": "meridian",
+   "symbol": "SPPB",
+   "name": "iShares Spain GovtBond UCITS ETF GBP Hedged (Dist)",
+   "isin": "IE000Q4EBLW2"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 508,
+   "list": "meridian",
+   "symbol": "SPPY",
+   "name": "SPDR S&P 500 ESG Leaders UCITS ETF",
+   "isin": "IE00BH4GPZ28"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 509,
+   "list": "meridian",
+   "symbol": "SPX4",
+   "name": "SPDR S&P 400 U.S. Mid Cap UCITS ETF Acc",
+   "isin": "IE00B4YBJ215"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 510,
+   "list": "meridian",
+   "symbol": "SPX5",
+   "name": "SPDR S&P 500 UCITS ETF",
+   "isin": "IE00B6YX5C33"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 511,
+   "list": "meridian",
+   "symbol": "SPXL",
+   "name": "SPDR S&P 500 UCITS ETF Acc",
+   "isin": "IE000XZSV718"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 512,
+   "list": "meridian",
+   "symbol": "SPXP",
+   "name": "Invesco S&P 500 UCITS ETF Acc",
+   "isin": "IE00B3YCGJ38"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 513,
+   "list": "meridian",
+   "symbol": "SSHY",
+   "name": "PIMCO US Short Trm HY Corp Bond UCITS ETF USD Inc",
+   "isin": "IE00B7N3YW49"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 514,
+   "list": "meridian",
+   "symbol": "STHS",
+   "name": "PIMCO US Sh Trm HY Corp Bond UCITS ETF GBP Hgd Inc",
+   "isin": "IE00BYXVWC37"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 515,
+   "list": "meridian",
+   "symbol": "SUAG",
+   "name": "iShares US Aggregate Bond UCITS ETF USD (Dist)",
+   "isin": "IE00B44CGS96"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 516,
+   "list": "meridian",
+   "symbol": "SUAP",
+   "name": "iShares MSCI USA SRI UCITS ETF GBP Hedged (Dist)",
+   "isin": "IE00BMWPV470"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 517,
+   "list": "meridian",
+   "symbol": "SUKC",
+   "name": "SPDR Bloomberg 0-5 Year Sterling Corporate Bond UCITS ETF",
+   "isin": "IE00BCBJF711"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 518,
+   "list": "meridian",
+   "symbol": "SUOG",
+   "name": "iShares   Corp Bond ESG SRI UCITS ETF GBP Hegd D",
+   "isin": "IE00BK74KV56"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 519,
+   "list": "meridian",
+   "symbol": "SUOP",
+   "name": "iShares $ Corp Bd ESG SRI UCITS ETF GBP Hedged D",
+   "isin": "IE00BMWPV702"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 520,
+   "list": "meridian",
+   "symbol": "SUSD",
+   "name": "SPDR Bloomberg 0-3 Year US Corporate Bond UCITS ETF",
+   "isin": "IE00BC7GZX26"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 521,
+   "list": "meridian",
+   "symbol": "SUWG",
+   "name": "iShares MSCI World SRI UCITS ETF USD (Dist)",
+   "isin": "IE00BDZZTM54"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 522,
+   "list": "meridian",
+   "symbol": "SWDA",
+   "name": "iShares Core MSCI World UCITS ETF USD (Acc)",
+   "isin": "IE00B4L5Y983"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 523,
+   "list": "meridian",
+   "symbol": "SWLD",
+   "name": "SPDR MSCI World UCITS ETF",
+   "isin": "IE00BFY0GT14"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 524,
+   "list": "meridian",
+   "symbol": "SX5S",
+   "name": "Invesco EURO STOXX 50 UCITS Acc ETF",
+   "isin": "IE00B60SWX25"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 525,
+   "list": "meridian",
+   "symbol": "TDGB",
+   "name": "VanEck Ms Developed Markets Div Lead UCITS ETF",
+   "isin": "NL0011683594"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 526,
+   "list": "meridian",
+   "symbol": "TECW",
+   "name": "SPDR MSCI World Technology UCITS ETF",
+   "isin": "IE00BYTRRD19"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 527,
+   "list": "meridian",
+   "symbol": "TEGB",
+   "name": "VanEck European Equal Weight Screened UCITS ETF",
+   "isin": "NL0010731816"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 528,
+   "list": "meridian",
+   "symbol": "TI5A",
+   "name": "iShares $ TIPS 0-5 UCITS ETF USD Acc",
+   "isin": "IE000JXFRNI0"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 529,
+   "list": "meridian",
+   "symbol": "TI5G",
+   "name": "iShares $ TIPS 0-5 UCITS ETF GBP Hgd Dist",
+   "isin": "IE00BDZVHB89"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 530,
+   "list": "meridian",
+   "symbol": "TIPH",
+   "name": "Amundi US TIPS Gov Infl-Lnkd Bd UCITS ETF GBP Hg D",
+   "isin": "LU1452600601"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 531,
+   "list": "meridian",
+   "symbol": "TREG",
+   "name": "VanEck Global Real Estate UCITS ETF",
+   "isin": "NL0009690239"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 532,
+   "list": "meridian",
+   "symbol": "TSGB",
+   "name": "VanEck World Equal Weight Screened UCITS ETF",
+   "isin": "NL0010408704"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 533,
+   "list": "meridian",
+   "symbol": "TSY3",
+   "name": "SPDR Bloomberg 1-3 Year U.S. Treasury Bond UCITS ETF",
+   "isin": "IE00BC7GZJ81"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 534,
+   "list": "meridian",
+   "symbol": "U13E",
+   "name": "Amundi US Treasury Bond 1-3Y UCITS ETF GBP Hgd Dis",
+   "isin": "LU1407887675"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 535,
+   "list": "meridian",
+   "symbol": "U37H",
+   "name": "Amundi US Treasury Bond 3-7Y UCITS ETF GBP Hgd Dis",
+   "isin": "LU1407889457"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 536,
+   "list": "meridian",
+   "symbol": "U71H",
+   "name": "Amundi US Treasury Bond 7-10Y UCITS ETF GBP Hgd D",
+   "isin": "LU1407888483"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 537,
+   "list": "meridian",
+   "symbol": "UB01",
+   "name": "UBS EURO STOXX 50 UCITS EUR dis ETF",
+   "isin": "LU0136234068"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 538,
+   "list": "meridian",
+   "symbol": "UB03",
+   "name": "UBS FTSE 100 UCITS ETF GBP dis",
+   "isin": "LU0136242590"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 539,
+   "list": "meridian",
+   "symbol": "UB32",
+   "name": "UBS Core MSCI EM UCITS ETF USD dis",
+   "isin": "LU0480132876"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 540,
+   "list": "meridian",
+   "symbol": "UC13",
+   "name": "UBS Core S&P 500 UCITS ETF USD dis",
+   "isin": "IE00B7K93397"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 541,
+   "list": "meridian",
+   "symbol": "UC55",
+   "name": "UBS MSCI World UCITS ETF USD dis",
+   "isin": "LU0340285161"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 542,
+   "list": "meridian",
+   "symbol": "UESD",
+   "name": "Ishrs Gbp Ultrashort B Esg Sri Etf Dist",
+   "isin": "IE00BJP26F04"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 543,
+   "list": "meridian",
+   "symbol": "UGDV",
+   "name": "SPDR S&P U.S. Dividend Aristocrats ESG UCITS (Dist) ETF",
+   "isin": "IE00BYTH5R14"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 544,
+   "list": "meridian",
+   "symbol": "UH10",
+   "name": "Amundi US Trsr Bd Long Dated UCITS ETF GBP Hg D",
+   "isin": "LU1407891271"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 545,
+   "list": "meridian",
+   "symbol": "UHYG",
+   "name": "Amundi USD High Yield Corporate Bond Esg Ucits ETF Dist",
+   "isin": "LU1435356149"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 546,
+   "list": "meridian",
+   "symbol": "UKCO",
+   "name": "SPDR Bloomberg Sterling Corporate Bond UCITS ETF",
+   "isin": "IE00B4694Z11"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 547,
+   "list": "meridian",
+   "symbol": "UKDV",
+   "name": "SPDR S&P UK Dividend Aristocrats UCITS ETF",
+   "isin": "IE00B6S2Z822"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 548,
+   "list": "meridian",
+   "symbol": "URND",
+   "name": "Global X Uranium UCITS ETF USD Dist",
+   "isin": "IE000MS9DTS9"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 549,
+   "list": "meridian",
+   "symbol": "URNG",
+   "name": "Global X Uranium UCITS ETF USD Acc",
+   "isin": "IE000NDWFGA5"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 550,
+   "list": "meridian",
+   "symbol": "USDV",
+   "name": "SPDR S&P US Dividend Aristocrats UCITS ETF",
+   "isin": "IE00B6YX5D40"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 551,
+   "list": "meridian",
+   "symbol": "USEE",
+   "name": "iShares US Equity Enhanced Active UCITS ETF USD Ac",
+   "isin": "IE0009VWHAE6"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 552,
+   "list": "meridian",
+   "symbol": "USGH",
+   "name": "iShares US Equity Enhanced Active UCITS ETF GBPH A",
+   "isin": "IE000IX54FW5"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 553,
+   "list": "meridian",
+   "symbol": "USLP",
+   "name": "iShares MSCI USA Leaders UCITS ETF USD Dist",
+   "isin": "IE0004OXDQN6"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 554,
+   "list": "meridian",
+   "symbol": "USLV",
+   "name": "SPDR S&P 500 Low Volatility UCITS ETF",
+   "isin": "IE00B802KR88"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 555,
+   "list": "meridian",
+   "symbol": "USPG",
+   "name": "UBS Core S&P 500 UCITS ETF hGBP dis",
+   "isin": "IE00BD34DL14"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 556,
+   "list": "meridian",
+   "symbol": "USTY",
+   "name": "SPDR Bloomberg US Treasury Bond UCITS ETF",
+   "isin": "IE00B44CND37"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 557,
+   "list": "meridian",
+   "symbol": "UTEC",
+   "name": "Amundi US Tech 100 Equal Weight UCITS DR - USD ETF",
+   "isin": "IE000Y9MG996"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 558,
+   "list": "meridian",
+   "symbol": "UTIP",
+   "name": "SPDR Bloomberg U.S. TIPS UCITS ETF",
+   "isin": "IE00BZ0G8977"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 559,
+   "list": "meridian",
+   "symbol": "UVAL",
+   "name": "SPDR MSCI USA Value UCITS ETF",
+   "isin": "IE00BSPLC520"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 560,
+   "list": "meridian",
+   "symbol": "V3AB",
+   "name": "Vanguard ESG Global All Cap UCITS ETF (USD) Acc",
+   "isin": "IE00BNG8L278"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 561,
+   "list": "meridian",
+   "symbol": "V3AM",
+   "name": "Vanguard ESG Global All Cap UCITS ETF (USD) Dist",
+   "isin": "IE00BNG8L385"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 562,
+   "list": "meridian",
+   "symbol": "V3GP",
+   "name": "Vanguard ESG Global Corp Bond UCITS ETF GBP Hgd D",
+   "isin": "IE00BNDS1V99"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 563,
+   "list": "meridian",
+   "symbol": "V3GS",
+   "name": "Vanguard ESG Global Corp Bond UCITS ETF GBP Hgd A",
+   "isin": "IE00BNDS1T77"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 564,
+   "list": "meridian",
+   "symbol": "V3MB",
+   "name": "Vanguard Esg Emerg Mark Ucits Etf Usd D",
+   "isin": "IE000KPJJWM6"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 565,
+   "list": "meridian",
+   "symbol": "V3MM",
+   "name": "Vanguard Esg Emerg Mark Ucits Etf Usd D",
+   "isin": "IE0001VXZTV7"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 566,
+   "list": "meridian",
+   "symbol": "V3NB",
+   "name": "Vanguard ESG N America All Cap UCITS ETF USD Acc",
+   "isin": "IE000O58J820"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 567,
+   "list": "meridian",
+   "symbol": "V3NM",
+   "name": "Vanguard ESG N America All Cap UCITS ETF USD Dist",
+   "isin": "IE000L2ZNB07"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 568,
+   "list": "meridian",
+   "symbol": "V3PB",
+   "name": "Vanguard ESG DevAsiaPacific AC UCITS ETF Acc",
+   "isin": "IE000GOJO2A3"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 569,
+   "list": "meridian",
+   "symbol": "V3PM",
+   "name": "Vanguard ESG DevAsiaPacific AC UCITS ETF Dis",
+   "isin": "IE0008T6IUX0"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 570,
+   "list": "meridian",
+   "symbol": "V3RE",
+   "name": "Vanguard ESG EUR Corp Bond UCITS ETF EUR Acc",
+   "isin": "IE000QADMYA3"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 571,
+   "list": "meridian",
+   "symbol": "V3RF",
+   "name": "Vanguard ESG EUR Corp Bond UCITS ETF EUR Dist",
+   "isin": "IE000F37PGZ3"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 572,
+   "list": "meridian",
+   "symbol": "V3RP",
+   "name": "Vanguard ESG EUR Corp Bond UCITS ETF GBP Hgd Acc",
+   "isin": "IE000UQLOH05"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 573,
+   "list": "meridian",
+   "symbol": "VAGP",
+   "name": "Vanguard Global Aggregate Bd UCITS ETF GBP Hgd Dis",
+   "isin": "IE00BG47KG48"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 574,
+   "list": "meridian",
+   "symbol": "VAGS",
+   "name": "Vanguard Global Aggregate Bd UCITS ETF GBP Hgd Acc",
+   "isin": "IE00BG47K971"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 575,
+   "list": "meridian",
+   "symbol": "VALW",
+   "name": "SPDR MSCI World Value UCITS ETF Acc",
+   "isin": "IE00BJXRT813"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 576,
+   "list": "meridian",
+   "symbol": "VAPX",
+   "name": "Vanguard FTSEDvlpAsiaPacexJpn UCITS ETF USDDis",
+   "isin": "IE00B9F5YL18"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 577,
+   "list": "meridian",
+   "symbol": "VUAG",
+   "name": "Vanguard S&P 500 UCITS ETF USD Acc",
+   "isin": "IE00BFMXXD54"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 578,
+   "list": "meridian",
+   "symbol": "VCPA",
+   "name": "Vanguard USD Corporate Bond UCITS ETF USD Acc",
+   "isin": "IE00BGYWFK87"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 579,
+   "list": "meridian",
+   "symbol": "VDPG",
+   "name": "Vanguard FTSEDvlpAsiaPacexJpn UCITS ETF USDAcc",
+   "isin": "IE00BK5BQZ41"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 580,
+   "list": "meridian",
+   "symbol": "VDTS",
+   "name": "Vanguard USD Treasury Bond UCITS ETF GBP Hdg Dis",
+   "isin": "IE000S0PSP47"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 581,
+   "list": "meridian",
+   "symbol": "VECA",
+   "name": "Vanguard EUR Corporate Bond UCITS ETF EUR Acc",
+   "isin": "IE00BGYWT403"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 582,
+   "list": "meridian",
+   "symbol": "VECP",
+   "name": "Vanguard EUR Corporate Bond UCITS ETF EUR Dis",
+   "isin": "IE00BZ163G84"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 583,
+   "list": "meridian",
+   "symbol": "VEGB",
+   "name": "VanEck Sustainable Future of Food UCITS ETF",
+   "isin": "IE0005B8WVT6"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 584,
+   "list": "meridian",
+   "symbol": "VEMA",
+   "name": "Vanguard USD Em Mkts Govt Bd UCITS ETF USD Acc",
+   "isin": "IE00BGYWCB81"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 585,
+   "list": "meridian",
+   "symbol": "VEMT",
+   "name": "Vanguard USD Em Mkts Govt Bd UCITS ETF USD Dis",
+   "isin": "IE00BZ163L38"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 586,
+   "list": "meridian",
+   "symbol": "VERG",
+   "name": "Vanguard FTSE Developed Europe ex UK UCITS - (EUR) Accumulating ETF",
+   "isin": "IE00BK5BQY34"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 587,
+   "list": "meridian",
+   "symbol": "VERX",
+   "name": "Vanguard FTSE Dvlp Eurp exUK UCITS ETF EUR Dis",
+   "isin": "IE00BKX55S42"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 588,
+   "list": "meridian",
+   "symbol": "VETA",
+   "name": "Vanguard EUR Eurozone Gvt Bd UCITS ETF EUR Acc",
+   "isin": "IE00BH04GL39"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 589,
+   "list": "meridian",
+   "symbol": "VETY",
+   "name": "Vanguard EUR Eurozone Gvt Bd UCITS ETF EUR Dis",
+   "isin": "IE00BZ163H91"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 590,
+   "list": "meridian",
+   "symbol": "VEUA",
+   "name": "Vanguard FTSE Developed Europe UCITS - (EUR) Accumulating ETF",
+   "isin": "IE00BK5BQX27"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 591,
+   "list": "meridian",
+   "symbol": "VEUR",
+   "name": "Vanguard FTSE Developed Europe UCITS ETF EUR D",
+   "isin": "IE00B945VV12"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 592,
+   "list": "meridian",
+   "symbol": "VEVE",
+   "name": "Vanguard FTSE Developed World UCITS ETF USD D",
+   "isin": "IE00BKX55T58"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 593,
+   "list": "meridian",
+   "symbol": "VFEM",
+   "name": "Vanguard FTSE Emerging Mkts UCITS ETF USD Dis",
+   "isin": "IE00B3VVMM84"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 594,
+   "list": "meridian",
+   "symbol": "VGCA",
+   "name": "Vanguard USD Corpo 1-3 Year Bd UCITS ETF GBP Hgd D",
+   "isin": "IE00BGYWSZ44"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 595,
+   "list": "meridian",
+   "symbol": "VGER",
+   "name": "Vanguard Germany All Cap UCITS ETF",
+   "isin": "IE00BG143G97"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 596,
+   "list": "meridian",
+   "symbol": "VGGS",
+   "name": "Vanguard Global Government Bond UCITS ETF GBPH Acc",
+   "isin": "IE000AI6QNJ5"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 597,
+   "list": "meridian",
+   "symbol": "VGOV",
+   "name": "Vanguard U.K. Gilt UCITS ETF GBP Dis",
+   "isin": "IE00B42WWV65"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 598,
+   "list": "meridian",
+   "symbol": "VGPA",
+   "name": "Vanguard USD Corporate Bond UCITS ETF GBP Hgd Acc",
+   "isin": "IE00BGYWFN19"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 599,
+   "list": "meridian",
+   "symbol": "V3EA",
+   "name": "Vanguard ESG Dev Europe All Cap UCITS ETF EUR Acc",
+   "isin": "IE000QUOSE01"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 600,
+   "list": "meridian",
+   "symbol": "V3EL",
+   "name": "Vanguard ESG Dev Europe All Cap UCITS ETF EUR Dist",
+   "isin": "IE000NRGX9M3"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 601,
+   "list": "meridian",
+   "symbol": "VGVA",
+   "name": "Vanguard U.K. Gilt UCITS ETF GBP Acc",
+   "isin": "IE00BH04GW44"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 602,
+   "list": "meridian",
+   "symbol": "VFEG",
+   "name": "Vanguard FTSE Emerging Mkts UCITS ETF USD Acc",
+   "isin": "IE00BK5BR733"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 603,
+   "list": "meridian",
+   "symbol": "VHVG",
+   "name": "Vanguard FTSE Developed World UCITS ETF USD A",
+   "isin": "IE00BK5BQV03"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 604,
+   "list": "meridian",
+   "symbol": "VHYG",
+   "name": "Vngrd FTSE All-Wld Hgh Div Yld UCITS ETF USD A",
+   "isin": "IE00BK5BR626"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 605,
+   "list": "meridian",
+   "symbol": "VHYL",
+   "name": "Vngrd FTSE All-Wld Hgh Div Yld UCITS ETF USD D",
+   "isin": "IE00B8GKDB10"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 606,
+   "list": "meridian",
+   "symbol": "VJPB",
+   "name": "Vanguard FTSE Japan UCITS ETF USD Acc",
+   "isin": "IE00BFMXYX26"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 607,
+   "list": "meridian",
+   "symbol": "VJPN",
+   "name": "Vanguard FTSE Japan UCITS ETF USD Dist",
+   "isin": "IE00B95PGT31"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 608,
+   "list": "meridian",
+   "symbol": "VMID",
+   "name": "Vanguard FTSE 250 UCITS ETF GBP Dis",
+   "isin": "IE00BKX55Q28"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 609,
+   "list": "meridian",
+   "symbol": "VMIG",
+   "name": "Vanguard FTSE 250 UCITS ETF GBP Acc",
+   "isin": "IE00BFMXVQ44"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 610,
+   "list": "meridian",
+   "symbol": "VNRG",
+   "name": "Vanguard FTSE North America UCITS - (USD) Accumulating ETF",
+   "isin": "IE00BK5BQW10"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 611,
+   "list": "meridian",
+   "symbol": "VNRT",
+   "name": "Vanguard FTSE North America UCITS ETF USD Dist",
+   "isin": "IE00BKX55R35"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 612,
+   "list": "meridian",
+   "symbol": "VPNG",
+   "name": "Global X DataCntrREITS&Dig Infra UCITS ETF USD Acc",
+   "isin": "IE00BMH5Y327"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 613,
+   "list": "meridian",
+   "symbol": "VSCA",
+   "name": "Vanguard USD Corpo 1-3 Year Bd UCITS ETF USD A",
+   "isin": "IE00BGYWSV06"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 614,
+   "list": "meridian",
+   "symbol": "VUCP",
+   "name": "Vanguard USD Corporate Bond UCITS ETF USD Dis",
+   "isin": "IE00BZ163K21"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 615,
+   "list": "meridian",
+   "symbol": "VUKE",
+   "name": "Vanguard FTSE 100 UCITS ETF GBP Dis",
+   "isin": "IE00B810Q511"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 616,
+   "list": "meridian",
+   "symbol": "VUKG",
+   "name": "Vanguard FTSE 100 UCITS ETF GBP Acc",
+   "isin": "IE00BFMXYP42"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 617,
+   "list": "meridian",
+   "symbol": "VUSA",
+   "name": "Vanguard S&P 500 UCITS ETF USD Dis",
+   "isin": "IE00B3XXRP09"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 618,
+   "list": "meridian",
+   "symbol": "VUSC",
+   "name": "Vanguard USD Corpo 1-3 Year Bd UCITS ETF USD D",
+   "isin": "IE00BDD48R20"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 619,
+   "list": "meridian",
+   "symbol": "VUTA",
+   "name": "Vanguard USD Treasury Bond UCITS ETF Acc",
+   "isin": "IE00BGYWFS63"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 620,
+   "list": "meridian",
+   "symbol": "VUTY",
+   "name": "Vanguard USD Treasury Bond UCITS ETF Dis",
+   "isin": "IE00BZ163M45"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 621,
+   "list": "meridian",
+   "symbol": "CEBG",
+   "name": "VanEck New China UCITS ETF",
+   "isin": "IE0000H445G8"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 622,
+   "list": "meridian",
+   "symbol": "NUCG",
+   "name": "VanEck Uranium and Nuclear Technologies UCITS ETF",
+   "isin": "IE000M7V94E1"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 623,
+   "list": "meridian",
+   "symbol": "VWRL",
+   "name": "Vanguard FTSE All-World UCITS ETF USD Dis",
+   "isin": "IE00B3RBWM25"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 624,
+   "list": "meridian",
+   "symbol": "VWRP",
+   "name": "Vanguard FTSE All-World UCITS - (USD) Accumulating ETF",
+   "isin": "IE00BK5BQT80"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 625,
+   "list": "meridian",
+   "symbol": "WEXU",
+   "name": "Amundi MSCI World ex USA UCITS Acc ETF",
+   "isin": "IE00085PWS28"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 626,
+   "list": "meridian",
+   "symbol": "WHCA",
+   "name": "iShares MSCI Wld Hlth Care Sec Adv UCITS ETF USD A",
+   "isin": "IE0009QS7W62"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 627,
+   "list": "meridian",
+   "symbol": "WINC",
+   "name": "iShares World Eqt High Income Actv UCITS ETF USD D",
+   "isin": "IE000KJPDY61"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 628,
+   "list": "meridian",
+   "symbol": "WITS",
+   "name": "iShares MSCI Wld IT Sector Advanced UCITS ETF USDD",
+   "isin": "IE00BJ5JNY98"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 629,
+   "list": "meridian",
+   "symbol": "WLDL",
+   "name": "Amundi MSCI World Swap II UCITS ETF Dist",
+   "isin": "FR0010315770"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 630,
+   "list": "meridian",
+   "symbol": "WLDS",
+   "name": "iShares MSCI World Small Cap UCITS ETF USD (Acc)",
+   "isin": "IE00BF4RFH31"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 631,
+   "list": "meridian",
+   "symbol": "WMVG",
+   "name": "iShares Edge MSCI Wld Min Vol UCITS ETF GBP Hgd A",
+   "isin": "IE00BGPP8L80"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 632,
+   "list": "meridian",
+   "symbol": "WNDG",
+   "name": "Global X Wind Energy UCITS ETF",
+   "isin": "IE000JNHCBM6"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 633,
+   "list": "meridian",
+   "symbol": "WOEE",
+   "name": "iShares World Equity Enhanced Active UCITS ETF USD (Acc)",
+   "isin": "IE000D8XC064"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 634,
+   "list": "meridian",
+   "symbol": "WOGH",
+   "name": "iShares World Equity Enhanc Active UCITS ETF GBPHA",
+   "isin": "IE000ZYE17Z0"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 635,
+   "list": "meridian",
+   "symbol": "WORL",
+   "name": "Franklin FTSE Developed Word UCITS ETF",
+   "isin": "IE000CVOSY02"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 636,
+   "list": "meridian",
+   "symbol": "WOSC",
+   "name": "SPDR MSCI World Small Cap UCITS ETF",
+   "isin": "IE00BCBJG560"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 637,
+   "list": "meridian",
+   "symbol": "WRDA",
+   "name": "UBS Core MSCI World UCITS USD acc ETF",
+   "isin": "IE00BD4TXV59"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 638,
+   "list": "meridian",
+   "symbol": "WRDD",
+   "name": "UBS Core MSCI World UCITS USD dis ETF",
+   "isin": "IE00B7KQ7B66"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 639,
+   "list": "meridian",
+   "symbol": "X7GB",
+   "name": "Xtrackers II Eurozone Gov Bd 7-10UCITS ETF 1D GBPh",
+   "isin": "LU2523865728"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 640,
+   "list": "meridian",
+   "symbol": "XAIX",
+   "name": "Xtrackers Artificial Intelligence & Big Data UCITS 1C ETF",
+   "isin": "IE00BGV5VN51"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 641,
+   "list": "meridian",
+   "symbol": "XBGB",
+   "name": "Xtrackers II Germany Gov Bond UCITS ETF 2D GBPh",
+   "isin": "LU2523866296"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 642,
+   "list": "meridian",
+   "symbol": "XCEU",
+   "name": "Xtrackers MSCI EMU Climate Transition UCITS ETF",
+   "isin": "IE000W6L2AI3"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 643,
+   "list": "meridian",
+   "symbol": "XCJD",
+   "name": "Xtrackers MSCI Japan Climate Transition UCITS ETF",
+   "isin": "IE0006FDYJF8"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 644,
+   "list": "meridian",
+   "symbol": "XCO2",
+   "name": "Amundi Global Aggregate Proceeds Bond 1-10Y UCITS Acc ETF",
+   "isin": "LU1981859819"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 645,
+   "list": "meridian",
+   "symbol": "XCOG",
+   "name": "Amundi Gl Aggrt Proceeds Bd 1-10Y UCITS ETF GBPH D",
+   "isin": "LU1981860585"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 646,
+   "list": "meridian",
+   "symbol": "XCTW",
+   "name": "Xtrackers MSCI World Climate Transition UCITS ETF",
+   "isin": "IE000P4AYI47"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 647,
+   "list": "meridian",
+   "symbol": "XCUU",
+   "name": "Xtrackers MSCI USA Climate Transition UCITS ETF",
+   "isin": "IE000GYDNJS5"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 648,
+   "list": "meridian",
+   "symbol": "XCX7",
+   "name": "Xtrackers MSCI China UCITS ETF",
+   "isin": "LU2456436083"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 649,
+   "list": "meridian",
+   "symbol": "XD11",
+   "name": "Xtrackers MSCI Gl SDG 11 Sust Cities UCITS ETF 1C",
+   "isin": "IE000V0GDVU7"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 650,
+   "list": "meridian",
+   "symbol": "XD12",
+   "name": "Xtrackers MSCI Gl Circular Economy UCITS ETF 1C",
+   "isin": "IE000Y6ZXZ48"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 651,
+   "list": "meridian",
+   "symbol": "XDAX",
+   "name": "Xtrackers DAX UCITS 1C ETF",
+   "isin": "LU0274211480"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 652,
+   "list": "meridian",
+   "symbol": "XDED",
+   "name": "Xtrackers S&P 500 Equal Weight UCITS ETF",
+   "isin": "IE000CXLGK86"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 653,
+   "list": "meridian",
+   "symbol": "XDG9",
+   "name": "Xtrackers MSCI Gl SDG 9 Ind Innvtn&InfrUCITS ETF1C",
+   "isin": "IE0005E47AH7"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 654,
+   "list": "meridian",
+   "symbol": "XDGB",
+   "name": "Xtrackers USD Corporate Bond UCITS ETF 5D GBP Hgd",
+   "isin": "IE00BG04LY46"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 655,
+   "list": "meridian",
+   "symbol": "XDPG",
+   "name": "Xtrackers S&P 500 UCITS ETF 2C GBP Hedged",
+   "isin": "IE00BM67HX07"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 656,
+   "list": "meridian",
+   "symbol": "XDPP",
+   "name": "Xtrackers S&P 500 UCITS ETF",
+   "isin": "IE000Z9SJA06"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 657,
+   "list": "meridian",
+   "symbol": "XDRE",
+   "name": "Xtrackers Developed Green Real Estate ESG UCITS 1C ETF",
+   "isin": "IE00BN2BCY94"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 658,
+   "list": "meridian",
+   "symbol": "XDUK",
+   "name": "Xtrackers FTSE 100 UCITS 1C ETF",
+   "isin": "LU0838780707"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 659,
+   "list": "meridian",
+   "symbol": "XDWG",
+   "name": "Xtrackers MSCI World UCITS ETF 2D GBP Hedged",
+   "isin": "IE00BZ1BS790"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 660,
+   "list": "meridian",
+   "symbol": "XDWP",
+   "name": "Xtrackers MSCI World UCITS 1D ETF",
+   "isin": "IE00BK1PV551"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 661,
+   "list": "meridian",
+   "symbol": "XE2D",
+   "name": "Xtrackers II Eurozone Gov Bd 1-3 UCITS ETF 2D GBPh",
+   "isin": "LU3003217638"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 662,
+   "list": "meridian",
+   "symbol": "XE5G",
+   "name": "Xtrackers II Eurozone Gov Bd 5-7 UCITS ETF 1D GBPh",
+   "isin": "LU3003217984"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 663,
+   "list": "meridian",
+   "symbol": "XECT",
+   "name": "Xtrackers MSCI Europe Climate Transition UCITS ETF",
+   "isin": "IE000N9MLVT1"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 664,
+   "list": "meridian",
+   "symbol": "XEMG",
+   "name": "Xtrackers Emerging Markets Net Zero Pathway Paris Aligned UCITS ETF",
+   "isin": "IE000TZT8TI0"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 665,
+   "list": "meridian",
+   "symbol": "XEPG",
+   "name": "Xtrackers Europe Net Zero Pathway Paris Aligned UCITS ETF",
+   "isin": "IE0001JH5CB4"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 666,
+   "list": "meridian",
+   "symbol": "XESC",
+   "name": "Xtrackers EURO STOXX 50 UCITS 1C ETF",
+   "isin": "LU0380865021"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 667,
+   "list": "meridian",
+   "symbol": "XESE",
+   "name": "Xtrackers MSCI Emerging Markets ESG UCITS ETF",
+   "isin": "IE00BG370F43"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 668,
+   "list": "meridian",
+   "symbol": "XESJ",
+   "name": "Xtrackers MSCI Japan ESG UCITS ETF",
+   "isin": "IE00BG36TC12"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 669,
+   "list": "meridian",
+   "symbol": "XESU",
+   "name": "Xtrackers MSCI USA ESG UCITS ETF",
+   "isin": "IE00BFMNPS42"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 670,
+   "list": "meridian",
+   "symbol": "XESW",
+   "name": "Xtrackers MSCI World ESG UCITS ETF",
+   "isin": "IE00BZ02LR44"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 671,
+   "list": "meridian",
+   "symbol": "XESX",
+   "name": "Xtrackers EURO STOXX 50 UCITS 1D ETF",
+   "isin": "LU0274211217"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 672,
+   "list": "meridian",
+   "symbol": "XEWG",
+   "name": "Xtrackers S&P 500 Equal Weight UCITS ETF 1D GBPH",
+   "isin": "IE000N5GJDD7"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 673,
+   "list": "meridian",
+   "symbol": "XEWP",
+   "name": "Xtrackers S&P500 EqlWg Scrd&ScrndUCITS ETF 4C GBPH",
+   "isin": "IE000SZ25OI0"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 674,
+   "list": "meridian",
+   "symbol": "XFSN",
+   "name": "Xtrackers MSCI Fintech Innovation UCITS ETF",
+   "isin": "IE000YDOORK7"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 675,
+   "list": "meridian",
+   "symbol": "XGBB",
+   "name": "Xtrackers USD Corporate Green Bd UCITS ETF 1D GBPH",
+   "isin": "IE000X63FXN4"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 676,
+   "list": "meridian",
+   "symbol": "XGEP",
+   "name": "Xtrackers II Eurozone Gov Bd 3-5 UCITS ETF 2D HGBP",
+   "isin": "LU2606231418"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 677,
+   "list": "meridian",
+   "symbol": "XGES",
+   "name": "Xtrackers MSCI Genomic Healthcare Innovation UCITS ETF",
+   "isin": "IE000KD0BZ68"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 678,
+   "list": "meridian",
+   "symbol": "XGLB",
+   "name": "Xtrackers II Eurozone Gov Bond UCITS ETF 2D GBPh",
+   "isin": "LU2523866023"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 679,
+   "list": "meridian",
+   "symbol": "XIFE",
+   "name": "Xtrackers Global Infrastructure ESG UCITS 1C ETF",
+   "isin": "IE00BYZNF849"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 680,
+   "list": "meridian",
+   "symbol": "XM1D",
+   "name": "Xtrackers MSCI Japan UCITS ETF",
+   "isin": "LU2581375230"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 681,
+   "list": "meridian",
+   "symbol": "XMCX",
+   "name": "Xtrackers FTSE 250 UCITS ETF",
+   "isin": "LU0292097317"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 682,
+   "list": "meridian",
+   "symbol": "XMEM",
+   "name": "Xtrackers MSCI Emerging Markets Swap UCITS 1C ETF",
+   "isin": "LU0292107645"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 683,
+   "list": "meridian",
+   "symbol": "XMGA",
+   "name": "Amundi MSCI USA Ex Mega Cap UCITS Acc ETF",
+   "isin": "IE000XL4IXU1"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 684,
+   "list": "meridian",
+   "symbol": "XMLA",
+   "name": "Xtrackers MSCI EM Latin America ESG UCITS 1C ETF",
+   "isin": "LU0292108619"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 685,
+   "list": "meridian",
+   "symbol": "XMMS",
+   "name": "Xtrackers MSCI Emerging Markets UCITS 1C ETF",
+   "isin": "IE00BTJRMP35"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 686,
+   "list": "meridian",
+   "symbol": "XMN2",
+   "name": "Xtrackers MSCI Nordic UCITS ETF 2C GBP Hedged",
+   "isin": "IE000MF9SZ46"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 687,
+   "list": "meridian",
+   "symbol": "XMOV",
+   "name": "Xtrackers Future Mobility UCITS 1C ETF",
+   "isin": "IE00BGV5VR99"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 688,
+   "list": "meridian",
+   "symbol": "XMWX",
+   "name": "Xtrackers MSCI World ex USA UCITS ETF",
+   "isin": "IE0006WW1TQ4"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 689,
+   "list": "meridian",
+   "symbol": "XNAQ",
+   "name": "Xtrackers Nasdaq-100 UCITS 1C ETF",
+   "isin": "IE00BMFKG444"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 690,
+   "list": "meridian",
+   "symbol": "XNGS",
+   "name": "Xtrackers MSCI Next Generation Internet Innovation UCITS ETF",
+   "isin": "IE000XOQ9TK4"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 691,
+   "list": "meridian",
+   "symbol": "XNJS",
+   "name": "Xtrackers Japan Net Zero Pathway Paris Aligned UCITS ETF",
+   "isin": "IE00074JLU02"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 692,
+   "list": "meridian",
+   "symbol": "XNZG",
+   "name": "Xtrackers USA Net Zero Pathway Paris Aligned UCITS ETF",
+   "isin": "IE0002ZM3JI1"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 693,
+   "list": "meridian",
+   "symbol": "XNZN",
+   "name": "Xtrackers Nordic Net Zero Pathway Paris Aligned UCITS ETF",
+   "isin": "IE000HT7E0B1"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 694,
+   "list": "meridian",
+   "symbol": "XPEJ",
+   "name": "Xtrackers MSCI Pacific ex Japan Scrnd UCITS ETF 1D",
+   "isin": "LU2755521270"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 695,
+   "list": "meridian",
+   "symbol": "XS5G",
+   "name": "Xtrackers S&P 500 Swap UCITS ETF 7C hGBP",
+   "isin": "LU2196473016"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 696,
+   "list": "meridian",
+   "symbol": "XSMW",
+   "name": "Xtrackers MSCI World Materials UCITS 1C ETF",
+   "isin": "IE00BM67HS53"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 697,
+   "list": "meridian",
+   "symbol": "XSPX",
+   "name": "Xtrackers S&P 500 Swap UCITS 1C ETF",
+   "isin": "LU0490618542"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 698,
+   "list": "meridian",
+   "symbol": "XSSW",
+   "name": "Xtrackers MSCI World Communication Services UCITS 1C ETF",
+   "isin": "IE00BM67HR47"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 699,
+   "list": "meridian",
+   "symbol": "XSX6",
+   "name": "Xtrackers STOXX Europe 600 UCITS 1C ETF",
+   "isin": "LU0328475792"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 700,
+   "list": "meridian",
+   "symbol": "XSXG",
+   "name": "Xtrackers S&P 500 Swap UCITS ETF",
+   "isin": "LU2009147757"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 701,
+   "list": "meridian",
+   "symbol": "XT01",
+   "name": "Xtrackers US Treasuries Ultrashort Bond UCITS 1C ETF",
+   "isin": "IE00BM97MR69"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 702,
+   "list": "meridian",
+   "symbol": "XNZS",
+   "name": "Xtrackers World Net Zero Pathway Paris Aligned UCITS ETF",
+   "isin": "IE000UZCJS58"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 703,
+   "list": "meridian",
+   "symbol": "XUCN",
+   "name": "Xtrackers MSCI USA Communication Services UCITS 1D ETF",
+   "isin": "IE00BNC1G707"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 704,
+   "list": "meridian",
+   "symbol": "XUHG",
+   "name": "Xtrackers USD High Yield Corp Bd UCITS ETF 4D GBPH",
+   "isin": "IE00BG04LV15"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 705,
+   "list": "meridian",
+   "symbol": "XUKX",
+   "name": "Xtrackers FTSE 100 Income UCITS ETF 1D",
+   "isin": "LU0292097234"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 706,
+   "list": "meridian",
+   "symbol": "XUSE",
+   "name": "iShares MSCI World ex-USA UCITS ETF USD Acc",
+   "isin": "IE000R4ZNTN3"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 707,
+   "list": "meridian",
+   "symbol": "XUSW",
+   "name": "Xtrackers MSCI USA Swap UCITS ETF",
+   "isin": "LU2581375073"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 708,
+   "list": "meridian",
+   "symbol": "XUTG",
+   "name": "Xtrackers II US Treasuries UCITS ETF 2C HGBP",
+   "isin": "LU2610432036"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 709,
+   "list": "meridian",
+   "symbol": "XWBS",
+   "name": "Xtrackers MSCI World Minimum Volatility ESG UCITS ETF",
+   "isin": "IE0008YN0OY8"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 710,
+   "list": "meridian",
+   "symbol": "XWCS",
+   "name": "Xtrackers MSCI World Consumer Staples UCITS 1C ETF",
+   "isin": "IE00BM67HN09"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 711,
+   "list": "meridian",
+   "symbol": "XWDS",
+   "name": "Xtrackers MSCI World Consumer Discretionary UCITS 1C ETF",
+   "isin": "IE00BM67HP23"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 712,
+   "list": "meridian",
+   "symbol": "XWES",
+   "name": "Xtrackers MSCI World Energy UCITS 1C ETF",
+   "isin": "IE00BM67HM91"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 713,
+   "list": "meridian",
+   "symbol": "XWFS",
+   "name": "Xtrackers MSCI World Financials UCITS 1C ETF",
+   "isin": "IE00BM67HL84"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 714,
+   "list": "meridian",
+   "symbol": "XWHS",
+   "name": "Xtrackers MSCI World Health Care UCITS 1C ETF",
+   "isin": "IE00BM67HK77"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 715,
+   "list": "meridian",
+   "symbol": "XWIS",
+   "name": "Xtrackers MSCI World Industrials UCITS 1C ETF",
+   "isin": "IE00BM67HV82"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 716,
+   "list": "meridian",
+   "symbol": "XWLD",
+   "name": "Xtrackers MSCI World UCITS 1C ETF",
+   "isin": "IE00BJ0KDQ92"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 717,
+   "list": "meridian",
+   "symbol": "XWMS",
+   "name": "Xtrackers MSCI World Momentum ESG UCITS ETF",
+   "isin": "IE000TL3PL69"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 718,
+   "list": "meridian",
+   "symbol": "XWOS",
+   "name": "Xtrackers MSCI World Swap UCITS 1D ETF",
+   "isin": "LU2263803533"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 719,
+   "list": "meridian",
+   "symbol": "XWQS",
+   "name": "Xtrackers MSCI World Quality ESG UCITS ETF",
+   "isin": "IE0003NQ0IY5"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 720,
+   "list": "meridian",
+   "symbol": "XWUS",
+   "name": "Xtrackers MSCI World Utilities UCITS 1C ETF",
+   "isin": "IE00BM67HQ30"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 721,
+   "list": "meridian",
+   "symbol": "XWVS",
+   "name": "Xtrackers MSCI World Value ESG UCITS ETF",
+   "isin": "IE000LAUZQT6"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 722,
+   "list": "meridian",
+   "symbol": "XXTW",
+   "name": "Xtrackers MSCI World Information Technology UCITS 1C ETF",
+   "isin": "IE00BM67HT60"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 723,
+   "list": "meridian",
+   "symbol": "XYLP",
+   "name": "Global X S&P 500 Covered Call UCITS ETF USD Dist",
+   "isin": "IE0002L5QB31"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 724,
+   "list": "meridian",
+   "symbol": "XZ2G",
+   "name": "Xtrackers USD HY Corp Bond Scrnd UCITS ETF 2C GBPH",
+   "isin": "IE000WHO5BF2"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 725,
+   "list": "meridian",
+   "symbol": "XZBU",
+   "name": "Xtrackers USD Corporate Bond SRI PAB UCITS 1C ETF",
+   "isin": "IE00BL58LJ19"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 726,
+   "list": "meridian",
+   "symbol": "XZE5",
+   "name": "Xtrackers II EURCorpBdShortDurSRI PAB UCITS ETF 1C",
+   "isin": "LU2178481649"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 727,
+   "list": "meridian",
+   "symbol": "XZES",
+   "name": "Xtrackers S&P 500 Equal Weight Score & Screened UCITS ETF",
+   "isin": "IE0004MFRED4"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 728,
+   "list": "meridian",
+   "symbol": "XZEZ",
+   "name": "Xtrackers MSCI EMU ESG UCITS 1C ETF",
+   "isin": "IE00BNC1G699"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 729,
+   "list": "meridian",
+   "symbol": "XZHS",
+   "name": "Xtrackers USD High Yield Corporate Bond Screened UCITS ETF",
+   "isin": "IE0006YM7D84"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 730,
+   "list": "meridian",
+   "symbol": "XZSS",
+   "name": "Xtrackers S&P 500 Score & Screened UCITS ETF",
+   "isin": "IE0007ULOZS8"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 731,
+   "list": "meridian",
+   "symbol": "XZWS",
+   "name": "Xtrackers II ESG Global Gov Bond UCITS ETF hGBP 2D",
+   "isin": "LU2385068247"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 732,
+   "list": "meridian",
+   "symbol": "EABE",
+   "name": "Amundi MSCI Europe Cl Paris Aligned UCITS ETF A",
+   "isin": "LU2130768844"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 733,
+   "list": "meridian",
+   "symbol": "L100",
+   "name": "Amundi Core FTSE 100 Swap UCITS ETF Acc",
+   "isin": "LU1650492173"
+  },
+  {
+   "sheet": "All ETFs",
+   "row": 734,
+   "list": "meridian",
+   "symbol": "SILG",
+   "name": "Global X Silver Miners UCITS ETF USD Acc",
+   "isin": "IE000UL6CLP7"
+  }
+ ]
+}

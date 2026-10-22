@@ -129,11 +129,19 @@ function findListing(rows, { etf, place, currency }) {
   return { named, matches };
 }
 
+// Read once per catalogue, as vietnamDelivery.mjs does: rereading it on every
+// line made the Reliance page take four seconds.
+const loaded = new Map();
 function loadRows(catalogueUrl) {
-  if (!fs.existsSync(catalogueUrl)) return null;
-  const catalogue = JSON.parse(fs.readFileSync(catalogueUrl, "utf8"));
-  const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
-  warmListingIndex(rows);
+  const key = String(catalogueUrl);
+  if (loaded.has(key)) return loaded.get(key);
+  let rows = null;
+  if (fs.existsSync(catalogueUrl)) {
+    const catalogue = JSON.parse(fs.readFileSync(catalogueUrl, "utf8"));
+    rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
+    warmListingIndex(rows);
+  }
+  loaded.set(key, rows);
   return rows;
 }
 

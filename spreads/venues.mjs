@@ -1684,6 +1684,14 @@ export const KNOWN_UNSOURCED = [
   // Netherlands and Portugal here, whatever Euronext the list still prints.
   { match: ["xeqt", "equiduct"], name: "Equiduct", why: "adaptateur non écrit" },
   { match: ["xkuw", "kuwait", "boursakuwait", "kuwaitstockexchange"], name: "Boursa Kuwait", why: "adaptateur non écrit" },
+  // NEPSE: the Nepal brokers sell its whole list; its live market depth is
+  // only shown inside the brokers' trading system (TMS), not published.
+  { match: ["xnep", "nepse", "nepalstockexchange"], name: "Nepal Stock Exchange", why: "pas de carnet public" },
+  { match: ["xzag", "zagrebstockexchange", "zagrebackaburza"], name: "Zagreb Stock Exchange", why: "adaptateur non écrit" },
+  { match: ["xbel", "belex", "belgradestockexchange", "beogradskaberza"], name: "Belgrade Stock Exchange", why: "adaptateur non écrit" },
+  { match: ["xsgo", "bcs", "bolsadesantiago", "bolsadecomerciodesantiago", "santiagostockexchange"], name: "Bolsa de Santiago", why: "adaptateur non écrit" },
+  { match: ["xkse", "kse", "kyrgyzstockexchange", "kse.kg"], name: "Kyrgyz Stock Exchange", why: "pas de carnet public" },
+  { match: ["fbkbts", "fbk", "fbkbts.kg"], name: "FBK-BTS (Kyrgyzstan)", why: "pas de carnet public" },
   // KASE prints a best bid and a best offer, and on 22 Sep 2026 the bid was
   // above the offer on 43 of the 49 names that had both. Those are the day's
   // extremes, not the two sides of one book, so there is nothing to store.
@@ -1981,6 +1989,13 @@ const BROKER_NAME = {
 };
 const BROKER_LIST = {
   // Folders named with their entity's country code.
+  webullus: "Webull",
+  webulluk: "Webull UK",
+  webulleu: "Webull Europe",
+  webullsg: "Webull SG",
+  webullca: "Webull Canada",
+  webullau: "Webull AU",
+  webullhk: "Webull Hong Kong",
   oandapl: "OANDA TMS",
   admiralcy: "Admirals",
   degironl: "DEGIRO",

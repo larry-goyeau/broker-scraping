@@ -1,0 +1,3865 @@
+{
+ "lists": {
+  "AccionesLideres": {
+   "savedOn": "2026-10-21",
+   "lines": [
+    {
+     "Especie": "CRES",
+     "Plazo": "24",
+     "Ult_Pre": 1816,
+     "Anterior": 1811
+    },
+    {
+     "Especie": "TRAN",
+     "Plazo": "24",
+     "Ult_Pre": 2408,
+     "Anterior": 2408
+    },
+    {
+     "Especie": "GGAL",
+     "Plazo": "24",
+     "Ult_Pre": 5915,
+     "Anterior": 5765
+    },
+    {
+     "Especie": "YPFD",
+     "Plazo": "24",
+     "Ult_Pre": 8205,
+     "Anterior": 8220
+    },
+    {
+     "Especie": "PAMP",
+     "Plazo": "24",
+     "Ult_Pre": 5065,
+     "Anterior": 5080
+    },
+    {
+     "Especie": "BBAR",
+     "Plazo": "24",
+     "Ult_Pre": 6855,
+     "Anterior": 6785
+    },
+    {
+     "Especie": "BYMA",
+     "Plazo": "24",
+     "Ult_Pre": 238.75,
+     "Anterior": 234.75
+    },
+    {
+     "Especie": "TGNO4",
+     "Plazo": "24",
+     "Ult_Pre": 2987.5,
+     "Anterior": 3022.5
+    },
+    {
+     "Especie": "VALO",
+     "Plazo": "24",
+     "Ult_Pre": 524,
+     "Anterior": 527
+    },
+    {
+     "Especie": "BMA",
+     "Plazo": "24",
+     "Ult_Pre": 10410,
+     "Anterior": 10320
+    },
+    {
+     "Especie": "ALUA",
+     "Plazo": "24",
+     "Ult_Pre": 826.5,
+     "Anterior": 821
+    },
+    {
+     "Especie": "METR",
+     "Plazo": "24",
+     "Ult_Pre": 2350,
+     "Anterior": 2341
+    },
+    {
+     "Especie": "TXAR",
+     "Plazo": "24",
+     "Ult_Pre": 751,
+     "Anterior": 717.5
+    },
+    {
+     "Especie": "EDN",
+     "Plazo": "24",
+     "Ult_Pre": 1542,
+     "Anterior": 1549
+    },
+    {
+     "Especie": "SUPV",
+     "Plazo": "24",
+     "Ult_Pre": 2375,
+     "Anterior": 2333
+    },
+    {
+     "Especie": "ECOG",
+     "Plazo": "24",
+     "Ult_Pre": 2278,
+     "Anterior": 2292
+    },
+    {
+     "Especie": "CEPU",
+     "Plazo": "24",
+     "Ult_Pre": 1995,
+     "Anterior": 1993
+    },
+    {
+     "Especie": "TGSU2",
+     "Plazo": "24",
+     "Ult_Pre": 8440,
+     "Anterior": 8435
+    },
+    {
+     "Especie": "LOMA",
+     "Plazo": "24",
+     "Ult_Pre": 3150,
+     "Anterior": 3142.5
+    }
+   ]
+  },
+  "PanelGeneral": {
+   "savedOn": "2026-10-21",
+   "lines": [
+    {
+     "Especie": "EDNB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 2219
+    },
+    {
+     "Especie": "LONG",
+     "Plazo": "24",
+     "Ult_Pre": 15.6,
+     "Anterior": 15.6
+    },
+    {
+     "Especie": "YPFDB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 8600
+    },
+    {
+     "Especie": "GRIM",
+     "Plazo": "24",
+     "Ult_Pre": 2340,
+     "Anterior": 2250
+    },
+    {
+     "Especie": "TECO2",
+     "Plazo": "24",
+     "Ult_Pre": 4375,
+     "Anterior": 4045
+    },
+    {
+     "Especie": "VALOB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 324.97
+    },
+    {
+     "Especie": "GGALB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 6875
+    },
+    {
+     "Especie": "FERR",
+     "Plazo": "24",
+     "Ult_Pre": 15.9,
+     "Anterior": 16
+    },
+    {
+     "Especie": "MOLA5",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 26000
+    },
+    {
+     "Especie": "CAPX",
+     "Plazo": "24",
+     "Ult_Pre": 3085,
+     "Anterior": 3145
+    },
+    {
+     "Especie": "TECOB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 1950
+    },
+    {
+     "Especie": "DOME",
+     "Plazo": "24",
+     "Ult_Pre": 63,
+     "Anterior": 62.2
+    },
+    {
+     "Especie": "LEDE",
+     "Plazo": "24",
+     "Ult_Pre": 664,
+     "Anterior": 686
+    },
+    {
+     "Especie": "MOLI5",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 4463.51
+    },
+    {
+     "Especie": "BMA.B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 0.01
+    },
+    {
+     "Especie": "ROSE",
+     "Plazo": "24",
+     "Ult_Pre": 140,
+     "Anterior": 144
+    },
+    {
+     "Especie": "GCDI",
+     "Plazo": "24",
+     "Ult_Pre": 11,
+     "Anterior": 11.3
+    },
+    {
+     "Especie": "CVH",
+     "Plazo": "24",
+     "Ult_Pre": 9400,
+     "Anterior": 9140
+    },
+    {
+     "Especie": "INTR",
+     "Plazo": "24",
+     "Ult_Pre": 277,
+     "Anterior": 280.5
+    },
+    {
+     "Especie": "CECOB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 345
+    },
+    {
+     "Especie": "COME",
+     "Plazo": "24",
+     "Ult_Pre": 37.64,
+     "Anterior": 37.68
+    },
+    {
+     "Especie": "COUR",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 3400
+    },
+    {
+     "Especie": "ECOGB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 2600
+    },
+    {
+     "Especie": "RICH",
+     "Plazo": "24",
+     "Ult_Pre": 1385,
+     "Anterior": 1385
+    },
+    {
+     "Especie": "SAMI",
+     "Plazo": "24",
+     "Ult_Pre": 398,
+     "Anterior": 397
+    },
+    {
+     "Especie": "INVJ",
+     "Plazo": "24",
+     "Ult_Pre": 373,
+     "Anterior": 369
+    },
+    {
+     "Especie": "CGPA2",
+     "Plazo": "24",
+     "Ult_Pre": 1560,
+     "Anterior": 1565
+    },
+    {
+     "Especie": "TRANB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 3895
+    },
+    {
+     "Especie": "BOLT",
+     "Plazo": "24",
+     "Ult_Pre": 68.6,
+     "Anterior": 68.4
+    },
+    {
+     "Especie": "SUPVB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 2940
+    },
+    {
+     "Especie": "HSAT",
+     "Plazo": "24",
+     "Ult_Pre": 123.5,
+     "Anterior": 124
+    },
+    {
+     "Especie": "CVHB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 5680
+    },
+    {
+     "Especie": "IRSA",
+     "Plazo": "24",
+     "Ult_Pre": 2330,
+     "Anterior": 2270
+    },
+    {
+     "Especie": "ALUAB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 970.88
+    },
+    {
+     "Especie": "TGSUB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 6390
+    },
+    {
+     "Especie": "GCLAB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 2125.77
+    },
+    {
+     "Especie": "COMEB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 253.5
+    },
+    {
+     "Especie": "PATA",
+     "Plazo": "24",
+     "Ult_Pre": 1150,
+     "Anterior": 1165
+    },
+    {
+     "Especie": "GCLA",
+     "Plazo": "24",
+     "Ult_Pre": 2575,
+     "Anterior": 2570
+    },
+    {
+     "Especie": "BHIPB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 333.41
+    },
+    {
+     "Especie": "BYMAB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 204.75
+    },
+    {
+     "Especie": "METRB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 2735
+    },
+    {
+     "Especie": "RAGH",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 1790
+    },
+    {
+     "Especie": "MORI",
+     "Plazo": "24",
+     "Ult_Pre": 20.75,
+     "Anterior": 20.95
+    },
+    {
+     "Especie": "PAMPB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 5195
+    },
+    {
+     "Especie": "EDSH",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 5590
+    },
+    {
+     "Especie": "BHIP",
+     "Plazo": "24",
+     "Ult_Pre": 241.5,
+     "Anterior": 240.5
+    },
+    {
+     "Especie": "A3B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 2910
+    },
+    {
+     "Especie": "MOLI",
+     "Plazo": "24",
+     "Ult_Pre": 2280,
+     "Anterior": 2270
+    },
+    {
+     "Especie": "RIGO",
+     "Plazo": "24",
+     "Ult_Pre": 390,
+     "Anterior": 391.5
+    },
+    {
+     "Especie": "IRSAB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 1725
+    },
+    {
+     "Especie": "TGN4B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 2400
+    },
+    {
+     "Especie": "MIRG",
+     "Plazo": "24",
+     "Ult_Pre": 1740,
+     "Anterior": 1710
+    },
+    {
+     "Especie": "A3",
+     "Plazo": "24",
+     "Ult_Pre": 2800,
+     "Anterior": 2815
+    },
+    {
+     "Especie": "IEB",
+     "Plazo": "24",
+     "Ult_Pre": 2240,
+     "Anterior": 2300
+    },
+    {
+     "Especie": "MOLA",
+     "Plazo": "24",
+     "Ult_Pre": 20825,
+     "Anterior": 21025
+    },
+    {
+     "Especie": "AUSO",
+     "Plazo": "24",
+     "Ult_Pre": 2790,
+     "Anterior": 2740
+    },
+    {
+     "Especie": "AGRO",
+     "Plazo": "24",
+     "Ult_Pre": 31.1,
+     "Anterior": 31.1
+    },
+    {
+     "Especie": "DGCU2",
+     "Plazo": "24",
+     "Ult_Pre": 1340,
+     "Anterior": 1330
+    },
+    {
+     "Especie": "OEST",
+     "Plazo": "24",
+     "Ult_Pre": 750,
+     "Anterior": 720
+    },
+    {
+     "Especie": "TXARB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 617
+    },
+    {
+     "Especie": "REGE",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 6500
+    },
+    {
+     "Especie": "CELU",
+     "Plazo": "24",
+     "Ult_Pre": 170,
+     "Anterior": 156
+    },
+    {
+     "Especie": "GARO",
+     "Plazo": "24",
+     "Ult_Pre": 390,
+     "Anterior": 395
+    },
+    {
+     "Especie": "SEMI",
+     "Plazo": "24",
+     "Ult_Pre": 13,
+     "Anterior": 13.15
+    },
+    {
+     "Especie": "GBAN",
+     "Plazo": "24",
+     "Ult_Pre": 1615,
+     "Anterior": 1630
+    },
+    {
+     "Especie": "BPAT",
+     "Plazo": "24",
+     "Ult_Pre": 1695,
+     "Anterior": 1685
+    },
+    {
+     "Especie": "GAMI",
+     "Plazo": "24",
+     "Ult_Pre": 357.5,
+     "Anterior": 356
+    },
+    {
+     "Especie": "FIPLB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 270
+    },
+    {
+     "Especie": "HARGB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 1623.5
+    },
+    {
+     "Especie": "BMA.5",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 8923.31
+    },
+    {
+     "Especie": "HAVA",
+     "Plazo": "24",
+     "Ult_Pre": 4140,
+     "Anterior": 4045
+    },
+    {
+     "Especie": "CADO",
+     "Plazo": "24",
+     "Ult_Pre": 534,
+     "Anterior": 534
+    },
+    {
+     "Especie": "LOMAB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 3525
+    },
+    {
+     "Especie": "MIRGB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 208.88
+    },
+    {
+     "Especie": "POLL",
+     "Plazo": "24",
+     "Ult_Pre": 305,
+     "Anterior": 305
+    },
+    {
+     "Especie": "CARC",
+     "Plazo": "24",
+     "Ult_Pre": 18,
+     "Anterior": 17.95
+    },
+    {
+     "Especie": "FIPL",
+     "Plazo": "24",
+     "Ult_Pre": 118.5,
+     "Anterior": 121.5
+    },
+    {
+     "Especie": "RAGHB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 1650
+    },
+    {
+     "Especie": "CTIO",
+     "Plazo": "24",
+     "Ult_Pre": 1690,
+     "Anterior": 1665
+    },
+    {
+     "Especie": "HARG",
+     "Plazo": "24",
+     "Ult_Pre": 1285,
+     "Anterior": 1260
+    },
+    {
+     "Especie": "CRESB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 1180
+    },
+    {
+     "Especie": "CECO2",
+     "Plazo": "24",
+     "Ult_Pre": 471,
+     "Anterior": 476
+    },
+    {
+     "Especie": "BBARB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 7164.91
+    }
+   ]
+  },
+  "Cedears": {
+   "savedOn": "2026-10-21",
+   "lines": [
+    {
+     "Especie": "VB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 19772.14
+    },
+    {
+     "Especie": "USB",
+     "Plazo": "24",
+     "Ult_Pre": 19420,
+     "Anterior": 19270
+    },
+    {
+     "Especie": "BABAB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 18300
+    },
+    {
+     "Especie": "ONDS",
+     "Plazo": "24",
+     "Ult_Pre": 5185,
+     "Anterior": 4995
+    },
+    {
+     "Especie": "XLBB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 4300
+    },
+    {
+     "Especie": "MMMB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 12959.84
+    },
+    {
+     "Especie": "PBI",
+     "Plazo": "24",
+     "Ult_Pre": 28320,
+     "Anterior": 28080
+    },
+    {
+     "Especie": "PAC",
+     "Plazo": "24",
+     "Ult_Pre": 22500,
+     "Anterior": 22040
+    },
+    {
+     "Especie": "VZ",
+     "Plazo": "24",
+     "Ult_Pre": 17800,
+     "Anterior": 18150
+    },
+    {
+     "Especie": "MP",
+     "Plazo": "24",
+     "Ult_Pre": 6490,
+     "Anterior": 6380
+    },
+    {
+     "Especie": "CCL",
+     "Plazo": "24",
+     "Ult_Pre": 14800,
+     "Anterior": 14710
+    },
+    {
+     "Especie": "SPHQ",
+     "Plazo": "24",
+     "Ult_Pre": 9910,
+     "Anterior": 9815
+    },
+    {
+     "Especie": "AVGO",
+     "Plazo": "24",
+     "Ult_Pre": 14210,
+     "Anterior": 14010
+    },
+    {
+     "Especie": "CL",
+     "Plazo": "24",
+     "Ult_Pre": 50950,
+     "Anterior": 51225
+    },
+    {
+     "Especie": "BMY",
+     "Plazo": "24",
+     "Ult_Pre": 33100,
+     "Anterior": 33500
+    },
+    {
+     "Especie": "BNY",
+     "Plazo": "24",
+     "Ult_Pre": 119925,
+     "Anterior": 117475
+    },
+    {
+     "Especie": "FMX.B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 15318.59
+    },
+    {
+     "Especie": "DIAB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 33760
+    },
+    {
+     "Especie": "PBR",
+     "Plazo": "24",
+     "Ult_Pre": 42100,
+     "Anterior": 41900
+    },
+    {
+     "Especie": "PAGS",
+     "Plazo": "24",
+     "Ult_Pre": 6265,
+     "Anterior": 6340
+    },
+    {
+     "Especie": "XLV",
+     "Plazo": "24",
+     "Ult_Pre": 10080,
+     "Anterior": 10100
+    },
+    {
+     "Especie": "V",
+     "Plazo": "24",
+     "Ult_Pre": 37080,
+     "Anterior": 36780
+    },
+    {
+     "Especie": "PAAS",
+     "Plazo": "24",
+     "Ult_Pre": 23650,
+     "Anterior": 24080
+    },
+    {
+     "Especie": "GLDB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 11100
+    },
+    {
+     "Especie": "XLU",
+     "Plazo": "24",
+     "Ult_Pre": 4602.5,
+     "Anterior": 4557.5
+    },
+    {
+     "Especie": "PKS",
+     "Plazo": "24",
+     "Ult_Pre": 30240,
+     "Anterior": 30500
+    },
+    {
+     "Especie": "BKNG",
+     "Plazo": "24",
+     "Ult_Pre": 377,
+     "Anterior": 389.5
+    },
+    {
+     "Especie": "WFC.B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 13450
+    },
+    {
+     "Especie": "ETHA",
+     "Plazo": "24",
+     "Ult_Pre": 18620,
+     "Anterior": 17930
+    },
+    {
+     "Especie": "RIOT",
+     "Plazo": "24",
+     "Ult_Pre": 7835,
+     "Anterior": 7500
+    },
+    {
+     "Especie": "TB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 1612.22
+    },
+    {
+     "Especie": "F",
+     "Plazo": "24",
+     "Ult_Pre": 19590,
+     "Anterior": 19770
+    },
+    {
+     "Especie": "DOW",
+     "Plazo": "24",
+     "Ult_Pre": 8265,
+     "Anterior": 8305
+    },
+    {
+     "Especie": "ROKU",
+     "Plazo": "24",
+     "Ult_Pre": 19570,
+     "Anterior": 19640
+    },
+    {
+     "Especie": "SDA",
+     "Plazo": "24",
+     "Ult_Pre": 287,
+     "Anterior": 293.25
+    },
+    {
+     "Especie": "NVSB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 10800
+    },
+    {
+     "Especie": "ABBV",
+     "Plazo": "24",
+     "Ult_Pre": 46380,
+     "Anterior": 46960
+    },
+    {
+     "Especie": "AMX",
+     "Plazo": "24",
+     "Ult_Pre": 39560,
+     "Anterior": 37220
+    },
+    {
+     "Especie": "XOMB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 24590
+    },
+    {
+     "Especie": "MSI",
+     "Plazo": "24",
+     "Ult_Pre": 37980,
+     "Anterior": 37660
+    },
+    {
+     "Especie": "NSAN",
+     "Plazo": "24",
+     "Ult_Pre": 5900,
+     "Anterior": 5900
+    },
+    {
+     "Especie": "AAPLB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 12100
+    },
+    {
+     "Especie": "SBUX",
+     "Plazo": "24",
+     "Ult_Pre": 13400,
+     "Anterior": 13470
+    },
+    {
+     "Especie": "SPOT",
+     "Plazo": "24",
+     "Ult_Pre": 30520,
+     "Anterior": 30580
+    },
+    {
+     "Especie": "INTCB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 35000
+    },
+    {
+     "Especie": "XLRE",
+     "Plazo": "24",
+     "Ult_Pre": 7640,
+     "Anterior": 7675
+    },
+    {
+     "Especie": "FMCC",
+     "Plazo": "24",
+     "Ult_Pre": 5800,
+     "Anterior": 5800
+    },
+    {
+     "Especie": "MRK.B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 33644.56
+    },
+    {
+     "Especie": "ERIC",
+     "Plazo": "24",
+     "Ult_Pre": 8540,
+     "Anterior": 8635
+    },
+    {
+     "Especie": "UAL",
+     "Plazo": "24",
+     "Ult_Pre": 34220,
+     "Anterior": 31980
+    },
+    {
+     "Especie": "META",
+     "Plazo": "24",
+     "Ult_Pre": 48180,
+     "Anterior": 47040
+    },
+    {
+     "Especie": "COP",
+     "Plazo": "24",
+     "Ult_Pre": 9520,
+     "Anterior": 9505
+    },
+    {
+     "Especie": "MBGB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 1968.41
+    },
+    {
+     "Especie": "UBER",
+     "Plazo": "24",
+     "Ult_Pre": 55725,
+     "Anterior": 56200
+    },
+    {
+     "Especie": "WELL",
+     "Plazo": "24",
+     "Ult_Pre": 8055,
+     "Anterior": 8055
+    },
+    {
+     "Especie": "XOM",
+     "Plazo": "24",
+     "Ult_Pre": 29000,
+     "Anterior": 28940
+    },
+    {
+     "Especie": "AIG",
+     "Plazo": "24",
+     "Ult_Pre": 26500,
+     "Anterior": 26660
+    },
+    {
+     "Especie": "VZB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 12945.35
+    },
+    {
+     "Especie": "HPQB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 39400
+    },
+    {
+     "Especie": "GM",
+     "Plazo": "24",
+     "Ult_Pre": 20800,
+     "Anterior": 20930
+    },
+    {
+     "Especie": "HUT",
+     "Plazo": "24",
+     "Ult_Pre": 23530,
+     "Anterior": 22660
+    },
+    {
+     "Especie": "ACWI",
+     "Plazo": "24",
+     "Ult_Pre": 10060,
+     "Anterior": 9970
+    },
+    {
+     "Especie": "SLVB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 14860
+    },
+    {
+     "Especie": "T",
+     "Plazo": "24",
+     "Ult_Pre": 11980,
+     "Anterior": 12750
+    },
+    {
+     "Especie": "HDB",
+     "Plazo": "24",
+     "Ult_Pre": 18640,
+     "Anterior": 18820
+    },
+    {
+     "Especie": "BNGB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 28100
+    },
+    {
+     "Especie": "GGB",
+     "Plazo": "24",
+     "Ult_Pre": 34580,
+     "Anterior": 34200
+    },
+    {
+     "Especie": "SAP",
+     "Plazo": "24",
+     "Ult_Pre": 62825,
+     "Anterior": 62100
+    },
+    {
+     "Especie": "BIOX",
+     "Plazo": "24",
+     "Ult_Pre": 424.5,
+     "Anterior": 421.5
+    },
+    {
+     "Especie": "PDD",
+     "Plazo": "24",
+     "Ult_Pre": 5125,
+     "Anterior": 5300
+    },
+    {
+     "Especie": "HMC",
+     "Plazo": "24",
+     "Ult_Pre": 55525,
+     "Anterior": 55925
+    },
+    {
+     "Especie": "DISN",
+     "Plazo": "24",
+     "Ult_Pre": 15160,
+     "Anterior": 15120
+    },
+    {
+     "Especie": "VALE3",
+     "Plazo": "24",
+     "Ult_Pre": 20900,
+     "Anterior": 21350
+    },
+    {
+     "Especie": "GPRK",
+     "Plazo": "24",
+     "Ult_Pre": 18840,
+     "Anterior": 18950
+    },
+    {
+     "Especie": "STLAB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 2990
+    },
+    {
+     "Especie": "IBM.B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 14584.12
+    },
+    {
+     "Especie": "EWZB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 27900
+    },
+    {
+     "Especie": "TSLAB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 27500
+    },
+    {
+     "Especie": "NG",
+     "Plazo": "24",
+     "Ult_Pre": 42040,
+     "Anterior": 42780
+    },
+    {
+     "Especie": "PLD",
+     "Plazo": "24",
+     "Ult_Pre": 7195,
+     "Anterior": 7125
+    },
+    {
+     "Especie": "AXP.B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 20185
+    },
+    {
+     "Especie": "SPCX",
+     "Plazo": "24",
+     "Ult_Pre": 5160,
+     "Anterior": 4802.5
+    },
+    {
+     "Especie": "XROX",
+     "Plazo": "24",
+     "Ult_Pre": 4530,
+     "Anterior": 4237.5
+    },
+    {
+     "Especie": "BBV",
+     "Plazo": "24",
+     "Ult_Pre": 42220,
+     "Anterior": 41520
+    },
+    {
+     "Especie": "IWM",
+     "Plazo": "24",
+     "Ult_Pre": 45340,
+     "Anterior": 44960
+    },
+    {
+     "Especie": "PG..B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 14356.22
+    },
+    {
+     "Especie": "ASTS",
+     "Plazo": "24",
+     "Ult_Pre": 4460,
+     "Anterior": 4452.5
+    },
+    {
+     "Especie": "IVE",
+     "Plazo": "24",
+     "Ult_Pre": 9755,
+     "Anterior": 9685
+    },
+    {
+     "Especie": "VRSN",
+     "Plazo": "24",
+     "Ult_Pre": 83875,
+     "Anterior": 83075
+    },
+    {
+     "Especie": "E",
+     "Plazo": "24",
+     "Ult_Pre": 24220,
+     "Anterior": 23940
+    },
+    {
+     "Especie": "MUX",
+     "Plazo": "24",
+     "Ult_Pre": 12870,
+     "Anterior": 12960
+    },
+    {
+     "Especie": "UNP",
+     "Plazo": "24",
+     "Ult_Pre": 23610,
+     "Anterior": 23400
+    },
+    {
+     "Especie": "KO",
+     "Plazo": "24",
+     "Ult_Pre": 30240,
+     "Anterior": 30420
+    },
+    {
+     "Especie": "UNH",
+     "Plazo": "24",
+     "Ult_Pre": 20650,
+     "Anterior": 20720
+    },
+    {
+     "Especie": "TEM",
+     "Plazo": "24",
+     "Ult_Pre": 9265,
+     "Anterior": 9100
+    },
+    {
+     "Especie": "SHOP",
+     "Plazo": "24",
+     "Ult_Pre": 2680,
+     "Anterior": 2637.5
+    },
+    {
+     "Especie": "TGTB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 11141.01
+    },
+    {
+     "Especie": "B.B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 37920
+    },
+    {
+     "Especie": "XLF",
+     "Plazo": "24",
+     "Ult_Pre": 45820,
+     "Anterior": 45420
+    },
+    {
+     "Especie": "KLAC",
+     "Plazo": "24",
+     "Ult_Pre": 7865,
+     "Anterior": 7770
+    },
+    {
+     "Especie": "ASR",
+     "Plazo": "24",
+     "Ult_Pre": 20850,
+     "Anterior": 20170
+    },
+    {
+     "Especie": "URA",
+     "Plazo": "24",
+     "Ult_Pre": 11690,
+     "Anterior": 11480
+    },
+    {
+     "Especie": "XLE",
+     "Plazo": "24",
+     "Ult_Pre": 55700,
+     "Anterior": 55375
+    },
+    {
+     "Especie": "IBN",
+     "Plazo": "24",
+     "Ult_Pre": 48020,
+     "Anterior": 48720
+    },
+    {
+     "Especie": "AKO.B",
+     "Plazo": "24",
+     "Ult_Pre": 49200,
+     "Anterior": 49160
+    },
+    {
+     "Especie": "AMD.B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 23200
+    },
+    {
+     "Especie": "MDT",
+     "Plazo": "24",
+     "Ult_Pre": 38220,
+     "Anterior": 38580
+    },
+    {
+     "Especie": "WFC",
+     "Plazo": "24",
+     "Ult_Pre": 27020,
+     "Anterior": 26780
+    },
+    {
+     "Especie": "JNJ",
+     "Plazo": "24",
+     "Ult_Pre": 27900,
+     "Anterior": 28240
+    },
+    {
+     "Especie": "INTC",
+     "Plazo": "24",
+     "Ult_Pre": 30320,
+     "Anterior": 30000
+    },
+    {
+     "Especie": "AMAT",
+     "Plazo": "24",
+     "Ult_Pre": 133900,
+     "Anterior": 132250
+    },
+    {
+     "Especie": "IEMG",
+     "Plazo": "24",
+     "Ult_Pre": 10600,
+     "Anterior": 10530
+    },
+    {
+     "Especie": "MO",
+     "Plazo": "24",
+     "Ult_Pre": 30200,
+     "Anterior": 30460
+    },
+    {
+     "Especie": "RBLX",
+     "Plazo": "24",
+     "Ult_Pre": 43120,
+     "Anterior": 42660
+    },
+    {
+     "Especie": "ABTB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 12178.47
+    },
+    {
+     "Especie": "AEG",
+     "Plazo": "24",
+     "Ult_Pre": 13700,
+     "Anterior": 13550
+    },
+    {
+     "Especie": "VALEB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 5720
+    },
+    {
+     "Especie": "VIG",
+     "Plazo": "24",
+     "Ult_Pre": 10230,
+     "Anterior": 10160
+    },
+    {
+     "Especie": "PEP.B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 11570
+    },
+    {
+     "Especie": "VIV",
+     "Plazo": "24",
+     "Ult_Pre": 21140,
+     "Anterior": 21020
+    },
+    {
+     "Especie": "DOCU",
+     "Plazo": "24",
+     "Ult_Pre": 6005,
+     "Anterior": 5905
+    },
+    {
+     "Especie": "TQQQ",
+     "Plazo": "24",
+     "Ult_Pre": 4787.5,
+     "Anterior": 4595
+    },
+    {
+     "Especie": "DE",
+     "Plazo": "24",
+     "Ult_Pre": 25840,
+     "Anterior": 25800
+    },
+    {
+     "Especie": "DAL",
+     "Plazo": "24",
+     "Ult_Pre": 16180,
+     "Anterior": 15660
+    },
+    {
+     "Especie": "TCOM",
+     "Plazo": "24",
+     "Ult_Pre": 32020,
+     "Anterior": 32800
+    },
+    {
+     "Especie": "MDTB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 9135.08
+    },
+    {
+     "Especie": "O",
+     "Plazo": "24",
+     "Ult_Pre": 6990,
+     "Anterior": 7075
+    },
+    {
+     "Especie": "NU",
+     "Plazo": "24",
+     "Ult_Pre": 12370,
+     "Anterior": 12300
+    },
+    {
+     "Especie": "NOW",
+     "Plazo": "24",
+     "Ult_Pre": 1452,
+     "Anterior": 1415
+    },
+    {
+     "Especie": "MSFTB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 20920
+    },
+    {
+     "Especie": "AEM",
+     "Plazo": "24",
+     "Ult_Pre": 50925,
+     "Anterior": 50625
+    },
+    {
+     "Especie": "CVX",
+     "Plazo": "24",
+     "Ult_Pre": 23150,
+     "Anterior": 22960
+    },
+    {
+     "Especie": "BKR",
+     "Plazo": "24",
+     "Ult_Pre": 13300,
+     "Anterior": 12870
+    },
+    {
+     "Especie": "BA.C",
+     "Plazo": "24",
+     "Ult_Pre": 20840,
+     "Anterior": 20640
+    },
+    {
+     "Especie": "MELI",
+     "Plazo": "24",
+     "Ult_Pre": 25260,
+     "Anterior": 25460
+    },
+    {
+     "Especie": "ELPC",
+     "Plazo": "24",
+     "Ult_Pre": 67900,
+     "Anterior": 69000
+    },
+    {
+     "Especie": "VEA",
+     "Plazo": "24",
+     "Ult_Pre": 11500,
+     "Anterior": 11390
+    },
+    {
+     "Especie": "ADBE",
+     "Plazo": "24",
+     "Ult_Pre": 9460,
+     "Anterior": 9470
+    },
+    {
+     "Especie": "ABEV3",
+     "Plazo": "24",
+     "Ult_Pre": 5445,
+     "Anterior": 5500
+    },
+    {
+     "Especie": "IVW",
+     "Plazo": "24",
+     "Ult_Pre": 11560,
+     "Anterior": 11360
+    },
+    {
+     "Especie": "TXR",
+     "Plazo": "24",
+     "Ult_Pre": 24320,
+     "Anterior": 24270
+    },
+    {
+     "Especie": "ZM",
+     "Plazo": "24",
+     "Ult_Pre": 3475,
+     "Anterior": 3390
+    },
+    {
+     "Especie": "WDC",
+     "Plazo": "24",
+     "Ult_Pre": 6740,
+     "Anterior": 6445
+    },
+    {
+     "Especie": "EMBJ",
+     "Plazo": "24",
+     "Ult_Pre": 119775,
+     "Anterior": 117950
+    },
+    {
+     "Especie": "XLB",
+     "Plazo": "24",
+     "Ult_Pre": 4640,
+     "Anterior": 4620
+    },
+    {
+     "Especie": "PFE.B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 8810
+    },
+    {
+     "Especie": "HD",
+     "Plazo": "24",
+     "Ult_Pre": 16040,
+     "Anterior": 16010
+    },
+    {
+     "Especie": "ABEV",
+     "Plazo": "24",
+     "Ult_Pre": 16160,
+     "Anterior": 16240
+    },
+    {
+     "Especie": "HOG",
+     "Plazo": "24",
+     "Ult_Pre": 14850,
+     "Anterior": 14680
+    },
+    {
+     "Especie": "GLD",
+     "Plazo": "24",
+     "Ult_Pre": 12420,
+     "Anterior": 12330
+    },
+    {
+     "Especie": "ALAB",
+     "Plazo": "24",
+     "Ult_Pre": 10740,
+     "Anterior": 10560
+    },
+    {
+     "Especie": "SLB",
+     "Plazo": "24",
+     "Ult_Pre": 27840,
+     "Anterior": 27260
+    },
+    {
+     "Especie": "WMT.B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 6610
+    },
+    {
+     "Especie": "ANET",
+     "Plazo": "24",
+     "Ult_Pre": 10390,
+     "Anterior": 10240
+    },
+    {
+     "Especie": "CORN",
+     "Plazo": "24",
+     "Ult_Pre": 7350,
+     "Anterior": 7280
+    },
+    {
+     "Especie": "HD..B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 19400
+    },
+    {
+     "Especie": "UPST",
+     "Plazo": "24",
+     "Ult_Pre": 7800,
+     "Anterior": 7670
+    },
+    {
+     "Especie": "ICLN",
+     "Plazo": "24",
+     "Ult_Pre": 5380,
+     "Anterior": 5335
+    },
+    {
+     "Especie": "AMZNB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 2800
+    },
+    {
+     "Especie": "RIOB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 8560
+    },
+    {
+     "Especie": "DECK",
+     "Plazo": "24",
+     "Ult_Pre": 5570,
+     "Anterior": 5690
+    },
+    {
+     "Especie": "QCOM",
+     "Plazo": "24",
+     "Ult_Pre": 26340,
+     "Anterior": 26080
+    },
+    {
+     "Especie": "SPGI",
+     "Plazo": "24",
+     "Ult_Pre": 16070,
+     "Anterior": 15860
+    },
+    {
+     "Especie": "JDB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 9215
+    },
+    {
+     "Especie": "SKHY",
+     "Plazo": "24",
+     "Ult_Pre": 9330,
+     "Anterior": 9140
+    },
+    {
+     "Especie": "LIN",
+     "Plazo": "24",
+     "Ult_Pre": 8060,
+     "Anterior": 7985
+    },
+    {
+     "Especie": "NUE",
+     "Plazo": "24",
+     "Ult_Pre": 27020,
+     "Anterior": 26580
+    },
+    {
+     "Especie": "XLC",
+     "Plazo": "24",
+     "Ult_Pre": 9430,
+     "Anterior": 9430
+    },
+    {
+     "Especie": "WBO",
+     "Plazo": "24",
+     "Ult_Pre": 1745,
+     "Anterior": 1781
+    },
+    {
+     "Especie": "RKLB",
+     "Plazo": "24",
+     "Ult_Pre": 7225,
+     "Anterior": 6900
+    },
+    {
+     "Especie": "AMD",
+     "Plazo": "24",
+     "Ult_Pre": 90675,
+     "Anterior": 87425
+    },
+    {
+     "Especie": "VST",
+     "Plazo": "24",
+     "Ult_Pre": 9930,
+     "Anterior": 9410
+    },
+    {
+     "Especie": "TLN",
+     "Plazo": "24",
+     "Ult_Pre": 9510,
+     "Anterior": 9035
+    },
+    {
+     "Especie": "ORLY",
+     "Plazo": "24",
+     "Ult_Pre": 625.5,
+     "Anterior": 633.5
+    },
+    {
+     "Especie": "ECL",
+     "Plazo": "24",
+     "Ult_Pre": 8470,
+     "Anterior": 8350
+    },
+    {
+     "Especie": "VISTB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 39960
+    },
+    {
+     "Especie": "PEP",
+     "Plazo": "24",
+     "Ult_Pre": 12240,
+     "Anterior": 12160
+    },
+    {
+     "Especie": "DJNJ3",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 1780
+    },
+    {
+     "Especie": "GILD",
+     "Plazo": "24",
+     "Ult_Pre": 62725,
+     "Anterior": 63600
+    },
+    {
+     "Especie": "OKLO",
+     "Plazo": "24",
+     "Ult_Pre": 1658,
+     "Anterior": 1614
+    },
+    {
+     "Especie": "TSMB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 27900
+    },
+    {
+     "Especie": "MCD",
+     "Plazo": "24",
+     "Ult_Pre": 16750,
+     "Anterior": 16710
+    },
+    {
+     "Especie": "IBKR",
+     "Plazo": "24",
+     "Ult_Pre": 8240,
+     "Anterior": 7960
+    },
+    {
+     "Especie": "BBCA",
+     "Plazo": "24",
+     "Ult_Pre": 8660,
+     "Anterior": 8545
+    },
+    {
+     "Especie": "GLW",
+     "Plazo": "24",
+     "Ult_Pre": 55200,
+     "Anterior": 53875
+    },
+    {
+     "Especie": "LLYB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 23070.69
+    },
+    {
+     "Especie": "ITUB",
+     "Plazo": "24",
+     "Ult_Pre": 15860,
+     "Anterior": 15870
+    },
+    {
+     "Especie": "BBAX",
+     "Plazo": "24",
+     "Ult_Pre": 7810,
+     "Anterior": 7825
+    },
+    {
+     "Especie": "VRSNB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 32950
+    },
+    {
+     "Especie": "LAR",
+     "Plazo": "24",
+     "Ult_Pre": 7270,
+     "Anterior": 7320
+    },
+    {
+     "Especie": "SCCO",
+     "Plazo": "24",
+     "Ult_Pre": 160700,
+     "Anterior": 164650
+    },
+    {
+     "Especie": "TEN",
+     "Plazo": "24",
+     "Ult_Pre": 96025,
+     "Anterior": 95025
+    },
+    {
+     "Especie": "GLOBB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 6640
+    },
+    {
+     "Especie": "EQNR",
+     "Plazo": "24",
+     "Ult_Pre": 12500,
+     "Anterior": 12600
+    },
+    {
+     "Especie": "EBAY",
+     "Plazo": "24",
+     "Ult_Pre": 100375,
+     "Anterior": 98875
+    },
+    {
+     "Especie": "AXP",
+     "Plazo": "24",
+     "Ult_Pre": 35340,
+     "Anterior": 34620
+    },
+    {
+     "Especie": "AZN",
+     "Plazo": "24",
+     "Ult_Pre": 68900,
+     "Anterior": 68875
+    },
+    {
+     "Especie": "CSCO",
+     "Plazo": "24",
+     "Ult_Pre": 35080,
+     "Anterior": 34740
+    },
+    {
+     "Especie": "MSFT",
+     "Plazo": "24",
+     "Ult_Pre": 29020,
+     "Anterior": 28840
+    },
+    {
+     "Especie": "PAASB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 32460
+    },
+    {
+     "Especie": "HSY",
+     "Plazo": "24",
+     "Ult_Pre": 12990,
+     "Anterior": 13100
+    },
+    {
+     "Especie": "GT",
+     "Plazo": "24",
+     "Ult_Pre": 3527.5,
+     "Anterior": 3452.5
+    },
+    {
+     "Especie": "GSK",
+     "Plazo": "24",
+     "Ult_Pre": 20400,
+     "Anterior": 20710
+    },
+    {
+     "Especie": "NKEB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 8140
+    },
+    {
+     "Especie": "GLNGB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 7920
+    },
+    {
+     "Especie": "NVS",
+     "Plazo": "24",
+     "Ult_Pre": 62850,
+     "Anterior": 62525
+    },
+    {
+     "Especie": "GSG",
+     "Plazo": "24",
+     "Ult_Pre": 9950,
+     "Anterior": 10040
+    },
+    {
+     "Especie": "UL",
+     "Plazo": "24",
+     "Ult_Pre": 35140,
+     "Anterior": 35500
+    },
+    {
+     "Especie": "MA",
+     "Plazo": "24",
+     "Ult_Pre": 30840,
+     "Anterior": 30620
+    },
+    {
+     "Especie": "XLKB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 6860
+    },
+    {
+     "Especie": "QQQB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 48160
+    },
+    {
+     "Especie": "PSQ",
+     "Plazo": "24",
+     "Ult_Pre": 5150,
+     "Anterior": 5205
+    },
+    {
+     "Especie": "IEUR",
+     "Plazo": "24",
+     "Ult_Pre": 11030,
+     "Anterior": 10960
+    },
+    {
+     "Especie": "BBDC3",
+     "Plazo": "24",
+     "Ult_Pre": 5945,
+     "Anterior": 5960
+    },
+    {
+     "Especie": "IBM",
+     "Plazo": "24",
+     "Ult_Pre": 26720,
+     "Anterior": 26340
+    },
+    {
+     "Especie": "JNJ.B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 14050
+    },
+    {
+     "Especie": "TSM",
+     "Plazo": "24",
+     "Ult_Pre": 78250,
+     "Anterior": 77100
+    },
+    {
+     "Especie": "OXYB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 18800.74
+    },
+    {
+     "Especie": "FDX",
+     "Plazo": "24",
+     "Ult_Pre": 49020,
+     "Anterior": 48760
+    },
+    {
+     "Especie": "CCJ",
+     "Plazo": "24",
+     "Ult_Pre": 5875,
+     "Anterior": 5690
+    },
+    {
+     "Especie": "FXI",
+     "Plazo": "24",
+     "Ult_Pre": 10780,
+     "Anterior": 10940
+    },
+    {
+     "Especie": "VALE",
+     "Plazo": "24",
+     "Ult_Pre": 10430,
+     "Anterior": 10630
+    },
+    {
+     "Especie": "TMUS",
+     "Plazo": "24",
+     "Ult_Pre": 7615,
+     "Anterior": 7585
+    },
+    {
+     "Especie": "CRWV",
+     "Plazo": "24",
+     "Ult_Pre": 3752.5,
+     "Anterior": 3745
+    },
+    {
+     "Especie": "ARCO",
+     "Plazo": "24",
+     "Ult_Pre": 26300,
+     "Anterior": 26360
+    },
+    {
+     "Especie": "LYG",
+     "Plazo": "24",
+     "Ult_Pre": 4467.5,
+     "Anterior": 4422.5
+    },
+    {
+     "Especie": "VIST",
+     "Plazo": "24",
+     "Ult_Pre": 38640,
+     "Anterior": 38460
+    },
+    {
+     "Especie": "ADBEB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 8215
+    },
+    {
+     "Especie": "LMT.B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 3940
+    },
+    {
+     "Especie": "TRIP",
+     "Plazo": "24",
+     "Ult_Pre": 7740,
+     "Anterior": 7760
+    },
+    {
+     "Especie": "AMGNB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 12954.32
+    },
+    {
+     "Especie": "FSLR",
+     "Plazo": "24",
+     "Ult_Pre": 15710,
+     "Anterior": 15820
+    },
+    {
+     "Especie": "UGP",
+     "Plazo": "24",
+     "Ult_Pre": 13090,
+     "Anterior": 12990
+    },
+    {
+     "Especie": "DEO",
+     "Plazo": "24",
+     "Ult_Pre": 25240,
+     "Anterior": 25360
+    },
+    {
+     "Especie": "GE..B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 57900
+    },
+    {
+     "Especie": "ABT",
+     "Plazo": "24",
+     "Ult_Pre": 40280,
+     "Anterior": 41960
+    },
+    {
+     "Especie": "SH",
+     "Plazo": "24",
+     "Ult_Pre": 6530,
+     "Anterior": 6580
+    },
+    {
+     "Especie": "NFLX",
+     "Plazo": "24",
+     "Ult_Pre": 2240,
+     "Anterior": 2336
+    },
+    {
+     "Especie": "OXY",
+     "Plazo": "24",
+     "Ult_Pre": 20450,
+     "Anterior": 20520
+    },
+    {
+     "Especie": "TXN",
+     "Plazo": "24",
+     "Ult_Pre": 94250,
+     "Anterior": 90650
+    },
+    {
+     "Especie": "XME",
+     "Plazo": "24",
+     "Ult_Pre": 5540,
+     "Anterior": 5440
+    },
+    {
+     "Especie": "LREN3",
+     "Plazo": "24",
+     "Ult_Pre": 4752.5,
+     "Anterior": 4817.5
+    },
+    {
+     "Especie": "GE",
+     "Plazo": "24",
+     "Ult_Pre": 61050,
+     "Anterior": 61125
+    },
+    {
+     "Especie": "HAL",
+     "Plazo": "24",
+     "Ult_Pre": 27460,
+     "Anterior": 27380
+    },
+    {
+     "Especie": "BA..B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 10290
+    },
+    {
+     "Especie": "HON",
+     "Plazo": "24",
+     "Ult_Pre": 44080,
+     "Anterior": 43440
+    },
+    {
+     "Especie": "CDE",
+     "Plazo": "24",
+     "Ult_Pre": 24610,
+     "Anterior": 24920
+    },
+    {
+     "Especie": "EEM",
+     "Plazo": "24",
+     "Ult_Pre": 20830,
+     "Anterior": 20660
+    },
+    {
+     "Especie": "BBDB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 2520
+    },
+    {
+     "Especie": "COINB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 13600
+    },
+    {
+     "Especie": "HOOD",
+     "Plazo": "24",
+     "Ult_Pre": 5805,
+     "Anterior": 5510
+    },
+    {
+     "Especie": "MDLZ",
+     "Plazo": "24",
+     "Ult_Pre": 6800,
+     "Anterior": 6940
+    },
+    {
+     "Especie": "XLY",
+     "Plazo": "24",
+     "Ult_Pre": 4387.5,
+     "Anterior": 4360
+    },
+    {
+     "Especie": "SID",
+     "Plazo": "24",
+     "Ult_Pre": 14710,
+     "Anterior": 14950
+    },
+    {
+     "Especie": "DHR",
+     "Plazo": "24",
+     "Ult_Pre": 6980,
+     "Anterior": 6805
+    },
+    {
+     "Especie": "KOFM",
+     "Plazo": "24",
+     "Ult_Pre": 96975,
+     "Anterior": 95975
+    },
+    {
+     "Especie": "JMIAB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 7350
+    },
+    {
+     "Especie": "SBS",
+     "Plazo": "24",
+     "Ult_Pre": 20920,
+     "Anterior": 20850
+    },
+    {
+     "Especie": "C...B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 7298.41
+    },
+    {
+     "Especie": "FCXB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 62.7
+    },
+    {
+     "Especie": "PYPLB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 11925
+    },
+    {
+     "Especie": "GRMN",
+     "Plazo": "24",
+     "Ult_Pre": 158575,
+     "Anterior": 157575
+    },
+    {
+     "Especie": "HALB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 20060
+    },
+    {
+     "Especie": "FSLRB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 19783
+    },
+    {
+     "Especie": "SCHW",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 9308.05
+    },
+    {
+     "Especie": "TENB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 25259.2
+    },
+    {
+     "Especie": "PG",
+     "Plazo": "24",
+     "Ult_Pre": 17150,
+     "Anterior": 17280
+    },
+    {
+     "Especie": "JPM",
+     "Plazo": "24",
+     "Ult_Pre": 36520,
+     "Anterior": 36480
+    },
+    {
+     "Especie": "RENT3",
+     "Plazo": "24",
+     "Ult_Pre": 8425,
+     "Anterior": 8565
+    },
+    {
+     "Especie": "SONY",
+     "Plazo": "24",
+     "Ult_Pre": 5120,
+     "Anterior": 5095
+    },
+    {
+     "Especie": "TM",
+     "Plazo": "24",
+     "Ult_Pre": 21270,
+     "Anterior": 21320
+    },
+    {
+     "Especie": "HON.B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 33857.79
+    },
+    {
+     "Especie": "PINS",
+     "Plazo": "24",
+     "Ult_Pre": 5415,
+     "Anterior": 5290
+    },
+    {
+     "Especie": "MELIB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 24280
+    },
+    {
+     "Especie": "SBUXB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 6307.63
+    },
+    {
+     "Especie": "ROST",
+     "Plazo": "24",
+     "Ult_Pre": 96825,
+     "Anterior": 97300
+    },
+    {
+     "Especie": "AMX.B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 1719.38
+    },
+    {
+     "Especie": "YELP",
+     "Plazo": "24",
+     "Ult_Pre": 16140,
+     "Anterior": 16460
+    },
+    {
+     "Especie": "MUB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 271801.61
+    },
+    {
+     "Especie": "KB",
+     "Plazo": "24",
+     "Ult_Pre": 97050,
+     "Anterior": 94525
+    },
+    {
+     "Especie": "SE",
+     "Plazo": "24",
+     "Ult_Pre": 3982.5,
+     "Anterior": 4087.5
+    },
+    {
+     "Especie": "NKE",
+     "Plazo": "24",
+     "Ult_Pre": 5120,
+     "Anterior": 5135
+    },
+    {
+     "Especie": "ANF",
+     "Plazo": "24",
+     "Ult_Pre": 262150,
+     "Anterior": 264400
+    },
+    {
+     "Especie": "GOOGL",
+     "Plazo": "24",
+     "Ult_Pre": 9440,
+     "Anterior": 9550
+    },
+    {
+     "Especie": "PM",
+     "Plazo": "24",
+     "Ult_Pre": 17840,
+     "Anterior": 18050
+    },
+    {
+     "Especie": "DEB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 9807.87
+    },
+    {
+     "Especie": "BIDUB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 10900
+    },
+    {
+     "Especie": "ANFB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 263160
+    },
+    {
+     "Especie": "ASMLB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 14380
+    },
+    {
+     "Especie": "PATH",
+     "Plazo": "24",
+     "Ult_Pre": 11200,
+     "Anterior": 10920
+    },
+    {
+     "Especie": "GDX",
+     "Plazo": "24",
+     "Ult_Pre": 14160,
+     "Anterior": 14080
+    },
+    {
+     "Especie": "COST",
+     "Plazo": "24",
+     "Ult_Pre": 33960,
+     "Anterior": 33700
+    },
+    {
+     "Especie": "BIIB",
+     "Plazo": "24",
+     "Ult_Pre": 30200,
+     "Anterior": 30400
+    },
+    {
+     "Especie": "BSBR",
+     "Plazo": "24",
+     "Ult_Pre": 9260,
+     "Anterior": 9145
+    },
+    {
+     "Especie": "GOGLB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 9295
+    },
+    {
+     "Especie": "BSN.B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 654
+    },
+    {
+     "Especie": "CAT",
+     "Plazo": "24",
+     "Ult_Pre": 60650,
+     "Anterior": 59150
+    },
+    {
+     "Especie": "STLA",
+     "Plazo": "24",
+     "Ult_Pre": 1395,
+     "Anterior": 1405
+    },
+    {
+     "Especie": "ADP",
+     "Plazo": "24",
+     "Ult_Pre": 80300,
+     "Anterior": 79375
+    },
+    {
+     "Especie": "JD",
+     "Plazo": "24",
+     "Ult_Pre": 10520,
+     "Anterior": 10860
+    },
+    {
+     "Especie": "BB",
+     "Plazo": "24",
+     "Ult_Pre": 5110,
+     "Anterior": 4827.5
+    },
+    {
+     "Especie": "DD",
+     "Plazo": "24",
+     "Ult_Pre": 43760,
+     "Anterior": 43300
+    },
+    {
+     "Especie": "ITA",
+     "Plazo": "24",
+     "Ult_Pre": 6740,
+     "Anterior": 6700
+    },
+    {
+     "Especie": "SATL",
+     "Plazo": "24",
+     "Ult_Pre": 6370,
+     "Anterior": 6015
+    },
+    {
+     "Especie": "MSTR",
+     "Plazo": "24",
+     "Ult_Pre": 12660,
+     "Anterior": 11660
+    },
+    {
+     "Especie": "SOYB",
+     "Plazo": "24",
+     "Ult_Pre": 8720,
+     "Anterior": 8715
+    },
+    {
+     "Especie": "URBN",
+     "Plazo": "24",
+     "Ult_Pre": 70600,
+     "Anterior": 70525
+    },
+    {
+     "Especie": "RIO",
+     "Plazo": "24",
+     "Ult_Pre": 17830,
+     "Anterior": 17980
+    },
+    {
+     "Especie": "TEAM",
+     "Plazo": "24",
+     "Ult_Pre": 7825,
+     "Anterior": 7630
+    },
+    {
+     "Especie": "MRK",
+     "Plazo": "24",
+     "Ult_Pre": 48560,
+     "Anterior": 48260
+    },
+    {
+     "Especie": "LLY",
+     "Plazo": "24",
+     "Ult_Pre": 37080,
+     "Anterior": 37380
+    },
+    {
+     "Especie": "CEG",
+     "Plazo": "24",
+     "Ult_Pre": 9880,
+     "Anterior": 9360
+    },
+    {
+     "Especie": "HPQ",
+     "Plazo": "24",
+     "Ult_Pre": 50800,
+     "Anterior": 50750
+    },
+    {
+     "Especie": "DJN3B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 1192
+    },
+    {
+     "Especie": "DIA",
+     "Plazo": "24",
+     "Ult_Pre": 43100,
+     "Anterior": 42740
+    },
+    {
+     "Especie": "NVDAB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 9730
+    },
+    {
+     "Especie": "RACE",
+     "Plazo": "24",
+     "Ult_Pre": 7830,
+     "Anterior": 7880
+    },
+    {
+     "Especie": "SAN",
+     "Plazo": "24",
+     "Ult_Pre": 87100,
+     "Anterior": 85575
+    },
+    {
+     "Especie": "JOYY",
+     "Plazo": "24",
+     "Ult_Pre": 27580,
+     "Anterior": 27660
+    },
+    {
+     "Especie": "B",
+     "Plazo": "24",
+     "Ult_Pre": 33280,
+     "Anterior": 33000
+    },
+    {
+     "Especie": "FDXB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 4827.9
+    },
+    {
+     "Especie": "IWMB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 13266.77
+    },
+    {
+     "Especie": "TTE",
+     "Plazo": "24",
+     "Ult_Pre": 49160,
+     "Anterior": 48920
+    },
+    {
+     "Especie": "ETSY",
+     "Plazo": "24",
+     "Ult_Pre": 9030,
+     "Anterior": 8875
+    },
+    {
+     "Especie": "IFF",
+     "Plazo": "24",
+     "Ult_Pre": 12350,
+     "Anterior": 12360
+    },
+    {
+     "Especie": "AI",
+     "Plazo": "24",
+     "Ult_Pre": 3887.5,
+     "Anterior": 3820
+    },
+    {
+     "Especie": "PLTR",
+     "Plazo": "24",
+     "Ult_Pre": 108750,
+     "Anterior": 104875
+    },
+    {
+     "Especie": "SNOW",
+     "Plazo": "24",
+     "Ult_Pre": 17720,
+     "Anterior": 17320
+    },
+    {
+     "Especie": "TRVV",
+     "Plazo": "24",
+     "Ult_Pre": 107775,
+     "Anterior": 107575
+    },
+    {
+     "Especie": "TMO",
+     "Plazo": "24",
+     "Ult_Pre": 51625,
+     "Anterior": 51025
+    },
+    {
+     "Especie": "JPMB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 37600
+    },
+    {
+     "Especie": "WMT",
+     "Plazo": "24",
+     "Ult_Pre": 10670,
+     "Anterior": 10640
+    },
+    {
+     "Especie": "CVX.B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 15800
+    },
+    {
+     "Especie": "PSX",
+     "Plazo": "24",
+     "Ult_Pre": 78700,
+     "Anterior": 79300
+    },
+    {
+     "Especie": "CAAP",
+     "Plazo": "24",
+     "Ult_Pre": 166950,
+     "Anterior": 164325
+    },
+    {
+     "Especie": "PHG",
+     "Plazo": "24",
+     "Ult_Pre": 8565,
+     "Anterior": 8450
+    },
+    {
+     "Especie": "XLK",
+     "Plazo": "24",
+     "Ult_Pre": 6680,
+     "Anterior": 6580
+    },
+    {
+     "Especie": "ACN",
+     "Plazo": "24",
+     "Ult_Pre": 5140,
+     "Anterior": 5180
+    },
+    {
+     "Especie": "USO",
+     "Plazo": "24",
+     "Ult_Pre": 17260,
+     "Anterior": 17420
+    },
+    {
+     "Especie": "SCCOB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 112250
+    },
+    {
+     "Especie": "TV",
+     "Plazo": "24",
+     "Ult_Pre": 1263,
+     "Anterior": 1300
+    },
+    {
+     "Especie": "NIO",
+     "Plazo": "24",
+     "Ult_Pre": 1349,
+     "Anterior": 1390
+    },
+    {
+     "Especie": "BBAS3",
+     "Plazo": "24",
+     "Ult_Pre": 3927.5,
+     "Anterior": 3950
+    },
+    {
+     "Especie": "TSLA",
+     "Plazo": "24",
+     "Ult_Pre": 42140,
+     "Anterior": 40620
+    },
+    {
+     "Especie": "MOB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 24260
+    },
+    {
+     "Especie": "PYPL",
+     "Plazo": "24",
+     "Ult_Pre": 11820,
+     "Anterior": 11600
+    },
+    {
+     "Especie": "BBD",
+     "Plazo": "24",
+     "Ult_Pre": 6620,
+     "Anterior": 6690
+    },
+    {
+     "Especie": "MOS",
+     "Plazo": "24",
+     "Ult_Pre": 5795,
+     "Anterior": 5805
+    },
+    {
+     "Especie": "HIMS",
+     "Plazo": "24",
+     "Ult_Pre": 12060,
+     "Anterior": 11880
+    },
+    {
+     "Especie": "VRTX",
+     "Plazo": "24",
+     "Ult_Pre": 8445,
+     "Anterior": 8305
+    },
+    {
+     "Especie": "PANW",
+     "Plazo": "24",
+     "Ult_Pre": 11510,
+     "Anterior": 11140
+    },
+    {
+     "Especie": "HSBC",
+     "Plazo": "24",
+     "Ult_Pre": 76925,
+     "Anterior": 75525
+    },
+    {
+     "Especie": "HMY",
+     "Plazo": "24",
+     "Ult_Pre": 27640,
+     "Anterior": 27280
+    },
+    {
+     "Especie": "EWJ",
+     "Plazo": "24",
+     "Ult_Pre": 11210,
+     "Anterior": 11130
+    },
+    {
+     "Especie": "SUZB3",
+     "Plazo": "24",
+     "Ult_Pre": 13700,
+     "Anterior": 13590
+    },
+    {
+     "Especie": "XYZ",
+     "Plazo": "24",
+     "Ult_Pre": 6425,
+     "Anterior": 6340
+    },
+    {
+     "Especie": "GSB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 116100
+    },
+    {
+     "Especie": "RTX",
+     "Plazo": "24",
+     "Ult_Pre": 61950,
+     "Anterior": 63000
+    },
+    {
+     "Especie": "AVY",
+     "Plazo": "24",
+     "Ult_Pre": 16250,
+     "Anterior": 16090
+    },
+    {
+     "Especie": "GS",
+     "Plazo": "24",
+     "Ult_Pre": 113875,
+     "Anterior": 111050
+    },
+    {
+     "Especie": "XLI",
+     "Plazo": "24",
+     "Ult_Pre": 9815,
+     "Anterior": 9720
+    },
+    {
+     "Especie": "VXX",
+     "Plazo": "24",
+     "Ult_Pre": 5695,
+     "Anterior": 5750
+    },
+    {
+     "Especie": "STNE",
+     "Plazo": "24",
+     "Ult_Pre": 6355,
+     "Anterior": 6560
+    },
+    {
+     "Especie": "MUFG",
+     "Plazo": "24",
+     "Ult_Pre": 35480,
+     "Anterior": 34920
+    },
+    {
+     "Especie": "KO..B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 25140
+    },
+    {
+     "Especie": "COIN",
+     "Plazo": "24",
+     "Ult_Pre": 10910,
+     "Anterior": 10330
+    },
+    {
+     "Especie": "C",
+     "Plazo": "24",
+     "Ult_Pre": 67400,
+     "Anterior": 66600
+    },
+    {
+     "Especie": "AAL",
+     "Plazo": "24",
+     "Ult_Pre": 10260,
+     "Anterior": 9870
+    },
+    {
+     "Especie": "RGTI",
+     "Plazo": "24",
+     "Ult_Pre": 9900,
+     "Anterior": 9515
+    },
+    {
+     "Especie": "BA",
+     "Plazo": "24",
+     "Ult_Pre": 13080,
+     "Anterior": 12910
+    },
+    {
+     "Especie": "ADGO",
+     "Plazo": "24",
+     "Ult_Pre": 15550,
+     "Anterior": 15580
+    },
+    {
+     "Especie": "TRVVB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 45633.34
+    },
+    {
+     "Especie": "XPEV",
+     "Plazo": "24",
+     "Ult_Pre": 3855,
+     "Anterior": 4052.5
+    },
+    {
+     "Especie": "F.B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 20740
+    },
+    {
+     "Especie": "IBITB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 6030
+    },
+    {
+     "Especie": "BPA11",
+     "Plazo": "24",
+     "Ult_Pre": 25900,
+     "Anterior": 26360
+    },
+    {
+     "Especie": "LAC",
+     "Plazo": "24",
+     "Ult_Pre": 3512.5,
+     "Anterior": 3497.5
+    },
+    {
+     "Especie": "SPCE",
+     "Plazo": "24",
+     "Ult_Pre": 8035,
+     "Anterior": 7725
+    },
+    {
+     "Especie": "CDEB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 7870
+    },
+    {
+     "Especie": "ARM",
+     "Plazo": "24",
+     "Ult_Pre": 13720,
+     "Anterior": 13380
+    },
+    {
+     "Especie": "SMH",
+     "Plazo": "24",
+     "Ult_Pre": 18250,
+     "Anterior": 17810
+    },
+    {
+     "Especie": "NATU3",
+     "Plazo": "24",
+     "Ult_Pre": 2461,
+     "Anterior": 2492
+    },
+    {
+     "Especie": "ING",
+     "Plazo": "24",
+     "Ult_Pre": 18120,
+     "Anterior": 17960
+    },
+    {
+     "Especie": "VIVT3",
+     "Plazo": "24",
+     "Ult_Pre": 10730,
+     "Anterior": 10600
+    },
+    {
+     "Especie": "MSTRB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 1314
+    },
+    {
+     "Especie": "EWZ",
+     "Plazo": "24",
+     "Ult_Pre": 34740,
+     "Anterior": 34980
+    },
+    {
+     "Especie": "IVV",
+     "Plazo": "24",
+     "Ult_Pre": 1840,
+     "Anterior": 1820
+    },
+    {
+     "Especie": "BA.CB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 5085.82
+    },
+    {
+     "Especie": "TMOB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 6024.5
+    },
+    {
+     "Especie": "XP",
+     "Plazo": "24",
+     "Ult_Pre": 12470,
+     "Anterior": 12830
+    },
+    {
+     "Especie": "IP",
+     "Plazo": "24",
+     "Ult_Pre": 13610,
+     "Anterior": 13780
+    },
+    {
+     "Especie": "AAPL",
+     "Plazo": "24",
+     "Ult_Pre": 28140,
+     "Anterior": 27640
+    },
+    {
+     "Especie": "JCI",
+     "Plazo": "24",
+     "Ult_Pre": 120000,
+     "Anterior": 119125
+    },
+    {
+     "Especie": "MBG",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 1492.62
+    },
+    {
+     "Especie": "SBSP3",
+     "Plazo": "24",
+     "Ult_Pre": 10600,
+     "Anterior": 10650
+    },
+    {
+     "Especie": "BAK",
+     "Plazo": "24",
+     "Ult_Pre": 1310,
+     "Anterior": 1354
+    },
+    {
+     "Especie": "ISRG",
+     "Plazo": "24",
+     "Ult_Pre": 7760,
+     "Anterior": 7935
+    },
+    {
+     "Especie": "FCX",
+     "Plazo": "24",
+     "Ult_Pre": 37500,
+     "Anterior": 37440
+    },
+    {
+     "Especie": "SNAP",
+     "Plazo": "24",
+     "Ult_Pre": 10490,
+     "Anterior": 10340
+    },
+    {
+     "Especie": "NTRA",
+     "Plazo": "24",
+     "Ult_Pre": 13350,
+     "Anterior": 12960
+    },
+    {
+     "Especie": "UALB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 6295
+    },
+    {
+     "Especie": "SNA",
+     "Plazo": "24",
+     "Ult_Pre": 100450,
+     "Anterior": 99475
+    },
+    {
+     "Especie": "MFG",
+     "Plazo": "24",
+     "Ult_Pre": 16420,
+     "Anterior": 16010
+    },
+    {
+     "Especie": "SUZ",
+     "Plazo": "24",
+     "Ult_Pre": 13820,
+     "Anterior": 13750
+    },
+    {
+     "Especie": "SHELB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 40246.23
+    },
+    {
+     "Especie": "BNG",
+     "Plazo": "24",
+     "Ult_Pre": 33080,
+     "Anterior": 33540
+    },
+    {
+     "Especie": "TIMB",
+     "Plazo": "24",
+     "Ult_Pre": 31300,
+     "Anterior": 31100
+    },
+    {
+     "Especie": "CRWD",
+     "Plazo": "24",
+     "Ult_Pre": 4992.5,
+     "Anterior": 4707.5
+    },
+    {
+     "Especie": "PCAR",
+     "Plazo": "24",
+     "Ult_Pre": 60300,
+     "Anterior": 59725
+    },
+    {
+     "Especie": "SPY",
+     "Plazo": "24",
+     "Ult_Pre": 21100,
+     "Anterior": 20900
+    },
+    {
+     "Especie": "KEEL",
+     "Plazo": "24",
+     "Ult_Pre": 19950,
+     "Anterior": 19190
+    },
+    {
+     "Especie": "CAR",
+     "Plazo": "24",
+     "Ult_Pre": 6235,
+     "Anterior": 6365
+    },
+    {
+     "Especie": "MMM",
+     "Plazo": "24",
+     "Ult_Pre": 28360,
+     "Anterior": 27820
+    },
+    {
+     "Especie": "HSYB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 8035.67
+    },
+    {
+     "Especie": "BHP",
+     "Plazo": "24",
+     "Ult_Pre": 65900,
+     "Anterior": 66725
+    },
+    {
+     "Especie": "ORCL",
+     "Plazo": "24",
+     "Ult_Pre": 70850,
+     "Anterior": 71100
+    },
+    {
+     "Especie": "HAPV3",
+     "Plazo": "24",
+     "Ult_Pre": 2895,
+     "Anterior": 3065
+    },
+    {
+     "Especie": "BMNR",
+     "Plazo": "24",
+     "Ult_Pre": 4985,
+     "Anterior": 4677.5
+    },
+    {
+     "Especie": "CVS",
+     "Plazo": "24",
+     "Ult_Pre": 10260,
+     "Anterior": 10280
+    },
+    {
+     "Especie": "LVS",
+     "Plazo": "24",
+     "Ult_Pre": 30760,
+     "Anterior": 31060
+    },
+    {
+     "Especie": "SPOTB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 873.5
+    },
+    {
+     "Especie": "ORCLB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 6261.83
+    },
+    {
+     "Especie": "MRVL",
+     "Plazo": "24",
+     "Ult_Pre": 28600,
+     "Anterior": 28080
+    },
+    {
+     "Especie": "UNHB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 11175
+    },
+    {
+     "Especie": "COPX",
+     "Plazo": "24",
+     "Ult_Pre": 9140,
+     "Anterior": 9225
+    },
+    {
+     "Especie": "EFA",
+     "Plazo": "24",
+     "Ult_Pre": 9480,
+     "Anterior": 9410
+    },
+    {
+     "Especie": "HL",
+     "Plazo": "24",
+     "Ult_Pre": 24700,
+     "Anterior": 24490
+    },
+    {
+     "Especie": "BIDU",
+     "Plazo": "24",
+     "Ult_Pre": 11710,
+     "Anterior": 11930
+    },
+    {
+     "Especie": "BCS",
+     "Plazo": "24",
+     "Ult_Pre": 37080,
+     "Anterior": 36440
+    },
+    {
+     "Especie": "NUB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 8520
+    },
+    {
+     "Especie": "MU",
+     "Plazo": "24",
+     "Ult_Pre": 300600,
+     "Anterior": 292900
+    },
+    {
+     "Especie": "WEGE3",
+     "Plazo": "24",
+     "Ult_Pre": 14850,
+     "Anterior": 15880
+    },
+    {
+     "Especie": "ASML",
+     "Plazo": "24",
+     "Ult_Pre": 18820,
+     "Anterior": 18260
+    },
+    {
+     "Especie": "GLNG",
+     "Plazo": "24",
+     "Ult_Pre": 7290,
+     "Anterior": 7265
+    },
+    {
+     "Especie": "CRMB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 17439.07
+    },
+    {
+     "Especie": "AMGN",
+     "Plazo": "24",
+     "Ult_Pre": 23770,
+     "Anterior": 23750
+    },
+    {
+     "Especie": "BIOXB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 8290
+    },
+    {
+     "Especie": "NEE",
+     "Plazo": "24",
+     "Ult_Pre": 6745,
+     "Anterior": 6740
+    },
+    {
+     "Especie": "INFY",
+     "Plazo": "24",
+     "Ult_Pre": 20800,
+     "Anterior": 20600
+    },
+    {
+     "Especie": "BRKBB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 35500
+    },
+    {
+     "Especie": "KGC",
+     "Plazo": "24",
+     "Ult_Pre": 38840,
+     "Anterior": 38560
+    },
+    {
+     "Especie": "XLP",
+     "Plazo": "24",
+     "Ult_Pre": 8890,
+     "Anterior": 8915
+    },
+    {
+     "Especie": "PFE",
+     "Plazo": "24",
+     "Ult_Pre": 12110,
+     "Anterior": 12280
+    },
+    {
+     "Especie": "BMYB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 9970.6
+    },
+    {
+     "Especie": "BSN",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 329.53
+    },
+    {
+     "Especie": "METAB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 45280
+    },
+    {
+     "Especie": "GFI",
+     "Plazo": "24",
+     "Ult_Pre": 59900,
+     "Anterior": 59125
+    },
+    {
+     "Especie": "MGLU3",
+     "Plazo": "24",
+     "Ult_Pre": 4195,
+     "Anterior": 4312.5
+    },
+    {
+     "Especie": "PRIO3",
+     "Plazo": "24",
+     "Ult_Pre": 11470,
+     "Anterior": 11610
+    },
+    {
+     "Especie": "ADGOB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 11903
+    },
+    {
+     "Especie": "MAB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 2827.16
+    },
+    {
+     "Especie": "EEMB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 10950
+    },
+    {
+     "Especie": "UBERB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 60500
+    },
+    {
+     "Especie": "GILDB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 3281.7
+    },
+    {
+     "Especie": "LRCX",
+     "Plazo": "24",
+     "Ult_Pre": 7645,
+     "Anterior": 7690
+    },
+    {
+     "Especie": "COSTB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 12828.45
+    },
+    {
+     "Especie": "NFLXB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 2632.5
+    },
+    {
+     "Especie": "SLV",
+     "Plazo": "24",
+     "Ult_Pre": 14190,
+     "Anterior": 14200
+    },
+    {
+     "Especie": "SYY",
+     "Plazo": "24",
+     "Ult_Pre": 16720,
+     "Anterior": 16870
+    },
+    {
+     "Especie": "TGT",
+     "Plazo": "24",
+     "Ult_Pre": 10510,
+     "Anterior": 10470
+    },
+    {
+     "Especie": "EFX",
+     "Plazo": "24",
+     "Ult_Pre": 17770,
+     "Anterior": 18020
+    },
+    {
+     "Especie": "GLOB",
+     "Plazo": "24",
+     "Ult_Pre": 3860,
+     "Anterior": 3760
+    },
+    {
+     "Especie": "ADS",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 3610.17
+    },
+    {
+     "Especie": "CSNA3",
+     "Plazo": "24",
+     "Ult_Pre": 1906,
+     "Anterior": 1920
+    },
+    {
+     "Especie": "ILF",
+     "Plazo": "24",
+     "Ult_Pre": 10280,
+     "Anterior": 10300
+    },
+    {
+     "Especie": "FMX",
+     "Plazo": "24",
+     "Ult_Pre": 34980,
+     "Anterior": 35000
+    },
+    {
+     "Especie": "LND",
+     "Plazo": "24",
+     "Ult_Pre": 6045,
+     "Anterior": 5935
+    },
+    {
+     "Especie": "CRM",
+     "Plazo": "24",
+     "Ult_Pre": 22010,
+     "Anterior": 21930
+    },
+    {
+     "Especie": "DISNB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 10750
+    },
+    {
+     "Especie": "AAP",
+     "Plazo": "24",
+     "Ult_Pre": 5180,
+     "Anterior": 5115
+    },
+    {
+     "Especie": "IBB",
+     "Plazo": "24",
+     "Ult_Pre": 12810,
+     "Anterior": 12720
+    },
+    {
+     "Especie": "NVDA",
+     "Plazo": "24",
+     "Ult_Pre": 15100,
+     "Anterior": 14720
+    },
+    {
+     "Especie": "NGG",
+     "Plazo": "24",
+     "Ult_Pre": 66250,
+     "Anterior": 65950
+    },
+    {
+     "Especie": "BX",
+     "Plazo": "24",
+     "Ult_Pre": 6005,
+     "Anterior": 6005
+    },
+    {
+     "Especie": "GPRKB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 12300
+    },
+    {
+     "Especie": "QCOMB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 80
+    },
+    {
+     "Especie": "CX",
+     "Plazo": "24",
+     "Ult_Pre": 17060,
+     "Anterior": 16690
+    },
+    {
+     "Especie": "TWLO",
+     "Plazo": "24",
+     "Ult_Pre": 12310,
+     "Anterior": 11680
+    },
+    {
+     "Especie": "CAH",
+     "Plazo": "24",
+     "Ult_Pre": 139950,
+     "Anterior": 139625
+    },
+    {
+     "Especie": "CIBR",
+     "Plazo": "24",
+     "Ult_Pre": 16930,
+     "Anterior": 16400
+    },
+    {
+     "Especie": "FISV",
+     "Plazo": "24",
+     "Ult_Pre": 7205,
+     "Anterior": 7125
+    },
+    {
+     "Especie": "SPXL",
+     "Plazo": "24",
+     "Ult_Pre": 19070,
+     "Anterior": 18620
+    },
+    {
+     "Especie": "DELL",
+     "Plazo": "24",
+     "Ult_Pre": 10690,
+     "Anterior": 10170
+    },
+    {
+     "Especie": "BABA",
+     "Plazo": "24",
+     "Ult_Pre": 18960,
+     "Anterior": 19640
+    },
+    {
+     "Especie": "TIMS3",
+     "Plazo": "24",
+     "Ult_Pre": 6230,
+     "Anterior": 6000
+    },
+    {
+     "Especie": "AVY.B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 16966.16
+    },
+    {
+     "Especie": "NEM",
+     "Plazo": "24",
+     "Ult_Pre": 63400,
+     "Anterior": 63400
+    },
+    {
+     "Especie": "LMT",
+     "Plazo": "24",
+     "Ult_Pre": 44760,
+     "Anterior": 44700
+    },
+    {
+     "Especie": "SWKS",
+     "Plazo": "24",
+     "Ult_Pre": 6340,
+     "Anterior": 6330
+    },
+    {
+     "Especie": "MRNA",
+     "Plazo": "24",
+     "Ult_Pre": 21390,
+     "Anterior": 20750
+    },
+    {
+     "Especie": "XLEB",
+     "Plazo": "24",
+     "Ult_Pre": 52625,
+     "Anterior": 50500
+    },
+    {
+     "Especie": "VOD",
+     "Plazo": "24",
+     "Ult_Pre": 25860,
+     "Anterior": 25800
+    },
+    {
+     "Especie": "NMR",
+     "Plazo": "24",
+     "Ult_Pre": 14910,
+     "Anterior": 14940
+    },
+    {
+     "Especie": "KEP",
+     "Plazo": "24",
+     "Ult_Pre": 17570,
+     "Anterior": 17330
+    },
+    {
+     "Especie": "ABNB",
+     "Plazo": "24",
+     "Ult_Pre": 19100,
+     "Anterior": 19230
+    },
+    {
+     "Especie": "MS",
+     "Plazo": "24",
+     "Ult_Pre": 7390,
+     "Anterior": 7170
+    },
+    {
+     "Especie": "NBIS",
+     "Plazo": "24",
+     "Ult_Pre": 10440,
+     "Anterior": 10320
+    },
+    {
+     "Especie": "MCD.B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 15250
+    },
+    {
+     "Especie": "CAT.B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 64600
+    },
+    {
+     "Especie": "ARKKB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 1371
+    },
+    {
+     "Especie": "NTES",
+     "Plazo": "24",
+     "Ult_Pre": 14340,
+     "Anterior": 14520
+    },
+    {
+     "Especie": "ESGU",
+     "Plazo": "24",
+     "Ult_Pre": 9150,
+     "Anterior": 9100
+    },
+    {
+     "Especie": "NOKA",
+     "Plazo": "24",
+     "Ult_Pre": 15090,
+     "Anterior": 14650
+    },
+    {
+     "Especie": "SHW",
+     "Plazo": "24",
+     "Ult_Pre": 7790,
+     "Anterior": 7820
+    },
+    {
+     "Especie": "JMIA",
+     "Plazo": "24",
+     "Ult_Pre": 9735,
+     "Anterior": 9405
+    },
+    {
+     "Especie": "BP",
+     "Plazo": "24",
+     "Ult_Pre": 16250,
+     "Anterior": 16080
+    },
+    {
+     "Especie": "QQQ",
+     "Plazo": "24",
+     "Ult_Pre": 59375,
+     "Anterior": 58500
+    },
+    {
+     "Especie": "IREN",
+     "Plazo": "24",
+     "Ult_Pre": 3820,
+     "Anterior": 3622.5
+    },
+    {
+     "Especie": "ITUB3",
+     "Plazo": "24",
+     "Ult_Pre": 17400,
+     "Anterior": 17230
+    },
+    {
+     "Especie": "SHEL",
+     "Plazo": "24",
+     "Ult_Pre": 85825,
+     "Anterior": 86075
+    },
+    {
+     "Especie": "CLS",
+     "Plazo": "24",
+     "Ult_Pre": 24810,
+     "Anterior": 24510
+    },
+    {
+     "Especie": "DOWB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 9000
+    },
+    {
+     "Especie": "NXE",
+     "Plazo": "24",
+     "Ult_Pre": 13890,
+     "Anterior": 14090
+    },
+    {
+     "Especie": "SPYB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 20770
+    },
+    {
+     "Especie": "SNDK",
+     "Plazo": "24",
+     "Ult_Pre": 13370,
+     "Anterior": 13100
+    },
+    {
+     "Especie": "PBRB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 32500
+    },
+    {
+     "Especie": "SAP.B",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 3957.69
+    },
+    {
+     "Especie": "NVO",
+     "Plazo": "24",
+     "Ult_Pre": 9190,
+     "Anterior": 9180
+    },
+    {
+     "Especie": "EWY",
+     "Plazo": "24",
+     "Ult_Pre": 5135,
+     "Anterior": 5030
+    },
+    {
+     "Especie": "BRKB",
+     "Plazo": "24",
+     "Ult_Pre": 40220,
+     "Anterior": 39940
+    },
+    {
+     "Especie": "HUTB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 55200
+    },
+    {
+     "Especie": "IJH",
+     "Plazo": "24",
+     "Ult_Pre": 10000,
+     "Anterior": 9895
+    },
+    {
+     "Especie": "BAYN",
+     "Plazo": "24",
+     "Ult_Pre": 29500,
+     "Anterior": 29000
+    },
+    {
+     "Especie": "IBIT",
+     "Plazo": "24",
+     "Ult_Pre": 7850,
+     "Anterior": 7630
+    },
+    {
+     "Especie": "YZCA",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 0.01
+    },
+    {
+     "Especie": "CSCOB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 11830
+    },
+    {
+     "Especie": "RSP",
+     "Plazo": "24",
+     "Ult_Pre": 11830,
+     "Anterior": 11740
+    },
+    {
+     "Especie": "ARKK",
+     "Plazo": "24",
+     "Ult_Pre": 14020,
+     "Anterior": 13590
+    },
+    {
+     "Especie": "FNMA",
+     "Plazo": "24",
+     "Ult_Pre": 6450,
+     "Anterior": 6450
+    },
+    {
+     "Especie": "AMZN",
+     "Plazo": "24",
+     "Ult_Pre": 2997.5,
+     "Anterior": 2975
+    },
+    {
+     "Especie": "SIEGY",
+     "Plazo": "24",
+     "Ult_Pre": 82000,
+     "Anterior": 85000
+    },
+    {
+     "Especie": "GEV",
+     "Plazo": "24",
+     "Ult_Pre": 8420,
+     "Anterior": 8055
+    },
+    {
+     "Especie": "PETR3",
+     "Plazo": "24",
+     "Ult_Pre": 21200,
+     "Anterior": 21090
+    },
+    {
+     "Especie": "TJX",
+     "Plazo": "24",
+     "Ult_Pre": 10720,
+     "Anterior": 10720
+    },
+    {
+     "Especie": "KMB",
+     "Plazo": "24",
+     "Ult_Pre": 29120,
+     "Anterior": 29360
+    },
+    {
+     "Especie": "XLFB",
+     "Plazo": "24",
+     "Ult_Pre": 0,
+     "Anterior": 7250.95
+    },
+    {
+     "Especie": "MRSH",
+     "Plazo": "24",
+     "Ult_Pre": 19320,
+     "Anterior": 19450
+    },
+    {
+     "Especie": "ADI",
+     "Plazo": "24",
+     "Ult_Pre": 44460,
+     "Anterior": 42760
+    }
+   ]
+  }
+ }
+}

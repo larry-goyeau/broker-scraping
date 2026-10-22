@@ -12,15 +12,36 @@
 //   its D line) is written only for a broker that lets clients hold
 //   dollars abroad (bymaRows option cable; each scraper cites its
 //   broker's own terms).
-// - A line on the panels with no market today (no trade, bid, offer or
-//   previous close on BYMA, no price on the broker's board) is looked up
-//   in BYMA's daily history (chart/historical-series, about two years
-//   deep): with no trade in that time it is listed but never quoted, and
-//   is not written. One that only did not trade today stays.
+// - Every line that did not trade today on BYMA (no volume on any term of
+//   the panels) is looked up in BYMA's daily history (chart/historical-
+//   series, the 24HS term, about two years deep): with no day of volume
+//   in that time it is listed but never traded, and is not written. One
+//   that only did not trade today stays. A bid, an offer or a previous
+//   close is not a market: BYMA carries placeholder quotes on lines that
+//   never trade (read 2026-10-22: ADS bid 0.01 and previous close 0.01 on
+//   CI, TIIAC previous close 0.01, HARGD previous close 0.008; none has a
+//   day of volume in two years), and the brokers' boards copy them, so
+//   neither a quote on BYMA nor a price on the broker's board spares a
+//   line the lookup. BYMA answers "no_data" for every CI series (AAPL CI,
+//   GGAL CI, read 2026-10-22), so only 24HS is read. Answers are kept in
+//   byma-history.json in this folder, shared by every scraper that reads
+//   this file: a line with a trade is not asked again while that trade is
+//   inside the window, a line with none is asked again the next day.
+// - Two lines of one certificate in one currency and one settlement (the
+//   same ISIN, both MEP or both cable) are one title quoted twice: BYMA
+//   keeps Southern Copper's legacy MEP line SCOOD (instrument 1941369, last
+//   trade 2026-07-17) next to SCCOD (instrument 3128255), read 2026-10-22
+//   on instruments-for-header-search. Only the line with the newer, higher
+//   BYMA instrument id (oid_) is written; the species cards of the pair are
+//   read again first, so a card BYMA answered wrongly cannot merge two
+//   titles.
 // - BYMA's species card gives the kind (Acciones, Cedears), the ISIN (the
 //   peso, MEP and cable lines of one certificate share it), the issuer of
 //   a local share, the company of a CEDEAR and its symbol on its home
-//   market. A kind that is not a share, a CEDEAR or an ADR (a warrant, a
+//   market. The card search matches loosely: asked for CC, Citigroup's
+//   cable line, it answers Bank of America's card (that of BA.CC; read
+//   2026-10-22). A dollar line (C, D) whose card names another home symbol
+//   than the card of its peso line (C for CC) takes the peso line's card. A kind that is not a share, a CEDEAR or an ADR (a warrant, a
 //   fund, a right) is not written. BYMA lists closed-end funds (FCIC:
 //   ALAAF, MELIF, the REIT fund) and their dollar lines on the general
 //   panel with no card; a symbol with no card is kept only when BYMA's
@@ -124,9 +145,10 @@ async function pool(items, limit, worker) {
   return out;
 }
 
-// Symbol -> { currency, panel, cable, live } for every line on BYMA's
+// Symbol -> { currency, panel, cable, traded } for every line on BYMA's
 // panels today. A symbol comes once per settlement term (CI, 24hs).
-// live: a trade, a bid, an offer or a previous close on any term today.
+// traded: volume on any term today. A bid, an offer or a previous close
+// alone is not a trade (BYMA's placeholder quotes: ADS bid 0.01).
 // cable: the line settles in dollars abroad (contado con liquidación):
 // BYMA prices it EXT, or it is the C line of a pair whose D line is
 // dollars (BYMA labels TGN4C, CEPUC and SAPC USD although they are the
@@ -145,13 +167,13 @@ export async function bymaBoard() {
       const currency = CASH[line.denominationCcy];
       if (!symbol) throw new Error(`BYMA ${flag} had a line with no symbol`);
       if (!currency) throw new Error(`BYMA ${symbol} was priced in ${line.denominationCcy}`);
-      const live = [line.trade, line.bidPrice, line.offerPrice, line.previousClosingPrice, line.closingPrice].some((value) => Number(value) > 0);
+      const traded = [line.volume, line.tradeVolume, line.volumeAmount].some((value) => Number(value) > 0);
       const prev = board.get(symbol);
       if (prev && (prev.currency !== currency || prev.panel !== panel)) {
         throw new Error(`BYMA ${symbol} was ${prev.panel} ${prev.currency} and ${panel} ${currency}`);
       }
-      if (prev) prev.live ||= live;
-      else board.set(symbol, { currency, panel, denomination: line.denominationCcy, live });
+      if (prev) prev.traded ||= traded;
+      else board.set(symbol, { currency, panel, denomination: line.denominationCcy, traded });
     }
     await pause(300);
   }
@@ -171,16 +193,51 @@ export async function bymaBoard() {
   return board;
 }
 
+// BYMA's history answers, kept between runs and shared by every scraper
+// that reads this file: symbol -> { checked, days, last } (the day it was
+// asked, the days with a trade, the last of them or "").
+const HISTORY_CACHE = new URL("byma-history.json", import.meta.url);
+const DEPTH_DAYS = 800;
+let historyBook = null;
+const asked = new Map();
+
+function historyCache() {
+  if (!historyBook) {
+    try {
+      historyBook = JSON.parse(fs.readFileSync(HISTORY_CACHE, "utf8"));
+    } catch {
+      historyBook = {};
+    }
+  }
+  return historyBook;
+}
+
+function saveHistoryCache() {
+  if (!historyBook) return;
+  const sorted = Object.fromEntries(Object.entries(historyBook).sort(([left], [right]) => left.localeCompare(right)));
+  fs.writeFileSync(HISTORY_CACHE, JSON.stringify(sorted, null, 0).replace(/\},"/g, '},\n"'));
+}
+
+const isoDay = (ms) => new Date(ms).toISOString().slice(0, 10);
+
 // Days with a trade (volume above zero) on BYMA's daily history of a
-// symbol over about two years (the depth BYMA serves), on either term.
-// The series carries the last close forward on days with no trade, so a
-// close alone is not a trade. BYMA sometimes answers with an empty body:
-// that is retried, and null is returned when no answer comes.
+// symbol over about two years (the depth BYMA serves), 24HS term (the CI
+// series is always no_data). The series carries the last close forward
+// on days with no trade, so a close alone is not a trade. BYMA sometimes
+// answers with an empty body: that is retried, and null is returned when
+// no answer comes. A cached answer is used when it was asked today, or
+// when its last trade is still inside the window.
 export async function tradedDays(symbol) {
-  const to = Math.floor(Date.now() / 1000);
-  let days = 0;
-  for (const term of ["24HS", "CI"]) {
-    const url = `${HISTORY}?symbol=${encodeURIComponent(`${symbol} ${term}`)}&resolution=D&from=${to - 800 * 86400}&to=${to}`;
+  const book = historyCache();
+  const today = isoDay(Date.now());
+  const kept = book[symbol];
+  if (kept && (kept.checked === today || (kept.last && Date.now() - Date.parse(kept.last) < (DEPTH_DAYS - 1) * 86_400_000))) {
+    return kept.days;
+  }
+  if (asked.has(symbol)) return asked.get(symbol);
+  const answer = (async () => {
+    const to = Math.floor(Date.now() / 1000);
+    const url = `${HISTORY}?symbol=${encodeURIComponent(`${symbol} 24HS`)}&resolution=D&from=${to - DEPTH_DAYS * 86400}&to=${to}`;
     let series = null;
     for (let attempt = 0; attempt < 4 && !series; attempt += 1) {
       try {
@@ -189,13 +246,94 @@ export async function tradedDays(symbol) {
       } catch {
         // empty or broken answer: try again
       }
-      await pause(series ? 250 : 1500 * (attempt + 1));
+      await pause(series ? 300 : 1500 * (attempt + 1));
     }
     if (!series) return null;
     const volume = series.v || [];
-    days += (series.t || []).filter((_, index) => Number(volume[index]) > 0).length;
+    const traded = (series.t || []).filter((_, index) => Number(volume[index]) > 0);
+    book[symbol] = { checked: today, days: traded.length, last: traded.length ? isoDay(Math.max(...traded) * 1000) : "" };
+    return traded.length;
+  })();
+  asked.set(symbol, answer);
+  return answer;
+}
+
+// The symbols of a list that BYMA's history shows no trade on in two
+// years. A symbol the history does not answer for is kept, and named.
+export async function neverTraded(symbols, label) {
+  let done = 0;
+  const history = new Map(
+    await pool(symbols, 2, async (symbol) => {
+      done += 1;
+      if (done % 200 === 0) console.error(`${label} BYMA history ${done}/${symbols.length}`);
+      return [symbol, await tradedDays(symbol)];
+    })
+  );
+  saveHistoryCache();
+  const never = new Set(symbols.filter((symbol) => history.get(symbol) === 0));
+  const unknown = symbols.filter((symbol) => history.get(symbol) === null);
+  if (unknown.length) console.error(`${label}: BYMA history did not answer for ${unknown.join(" ")} (kept)`);
+  console.error(`${label}: ${symbols.length} lines with no trade today on BYMA, ${never.size} never traded on BYMA in two years`);
+  return never;
+}
+
+// BYMA's instrument id (oid_) of a symbol, from its search box; 0 when
+// the box does not name it.
+async function instrumentId(symbol) {
+  const found = await post(SEARCH, { value: symbol });
+  const ids = (Array.isArray(found) ? found : [])
+    .filter((item) => clean(item.symbol).toUpperCase() === symbol)
+    .map((item) => Number(item.oid_))
+    .filter((id) => id > 0);
+  return ids.length ? Math.max(...ids) : 0;
+}
+
+// Two lines of one certificate in one currency and one settlement (same
+// ISIN, both cable or both not) are one title quoted twice (SCCOD and the
+// legacy SCOOD). The cards of the pair are read again, and when they
+// still agree only the line with the highest BYMA instrument id, the
+// newest, is kept. isCable(ticker) tells a cable line. Returns the rows
+// kept and the lines left out ("SCOOD older line of SCCOD").
+export async function withoutDuplicateLines(rows, isCable, label) {
+  const groups = new Map();
+  for (const row of rows) {
+    if (!row.isin) continue;
+    const key = `${row.isin} ${row.currency} ${isCable(row.ticker) ? "cable" : "local"}`;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(row.ticker);
   }
-  return days;
+  const dropped = [];
+  const gone = new Set();
+  for (const [key, tickers] of groups) {
+    if (tickers.length < 2) continue;
+    const isin = key.split(" ")[0];
+    const again = [];
+    for (const ticker of tickers) {
+      again.push((await speciesCard(ticker).catch(() => null))?.isin || "");
+      await pause(300);
+    }
+    if (again.some((code) => code !== isin)) {
+      console.error(`${label}: ${tickers.join(" ")} shared ${isin} once, not on a second read (${again.join(" ")}); all kept`);
+      continue;
+    }
+    const ids = [];
+    for (const ticker of tickers) {
+      ids.push(await instrumentId(ticker).catch(() => 0));
+      await pause(300);
+    }
+    if (ids.some((id) => !id) || new Set(ids).size !== ids.length) {
+      console.error(`${label}: ${tickers.join(" ")} share ${key} but BYMA's instrument ids are ${ids.join(" ")}; all kept`);
+      continue;
+    }
+    const newest = tickers[ids.indexOf(Math.max(...ids))];
+    for (const ticker of tickers) {
+      if (ticker === newest) continue;
+      gone.add(ticker);
+      dropped.push(`${ticker} older line of ${newest}`);
+    }
+    console.error(`${label}: ${tickers.map((ticker, index) => `${ticker} (${ids[index]})`).join(", ")} are one ${key} line; ${newest} kept`);
+  }
+  return { rows: rows.filter((row) => !gone.has(row.ticker)), dropped };
 }
 
 async function speciesCard(symbol) {
@@ -244,6 +382,23 @@ function listedBook() {
   return book;
 }
 
+// The ISIN of a share BYMA quotes with no species card and that
+// assets/stocks.csv does not hold, from the issuer's or a regulator's own
+// document. Used only when neither the card nor the list gives one.
+// - ATGS (and its dollar lines ATGSC, ATGSD): BYMA's search box calls it
+//   "ADR TRANSPORTADORA DE GAS DEL SUR", i.e. TGS's American Depositary
+//   Share itself (NYSE: TGS, five Class B shares each), not an Argentine
+//   certificate (the Class B share is TGSU2, ARP9308R1039). The ADS is CUSIP
+//   893870204 in TGS's SEC filings (Schedule 13G 0000950123-11-053042, "American
+//   Depositary Shares, representing Class 'B' Shares ... 893870204"), and
+//   CUSIP 893870204 with ISIN US8938702045 in the SEC N-PX vote record
+//   0002000324-26-004146 (TGS meeting of 15 April 2026). Read 2026-10-21.
+export const BYMA_ISINS = {
+  ATGS: ["US8938702045", "TGS ADS, CUSIP 893870204: SEC 13G 0000950123-11-053042; N-PX 0002000324-26-004146"],
+  ATGSC: ["US8938702045", "dollar (cable) line of ATGS"],
+  ATGSD: ["US8938702045", "dollar (MEP) line of ATGS"],
+};
+
 // BYMA's own search box: the description of a symbol the species card
 // does not know (often only the symbol again).
 async function searchName(symbol) {
@@ -253,7 +408,7 @@ async function searchName(symbol) {
   return text.toUpperCase() === symbol ? "" : text;
 }
 
-function namedType(name) {
+export function namedType(name) {
   if (/\bETNs?\b|exchange[- ]traded notes?|\bIPATH\b/i.test(name)) return "ETN";
   if (/\bETCs?\b/i.test(name) && !/\bETFs?\b/i.test(name)) return "ETC";
   if (
@@ -265,17 +420,18 @@ function namedType(name) {
   return "";
 }
 
-// entries: [{ symbol, raw, live }] in the broker's own order; live is
-// true when the broker's own board shows a price for the line today.
-// options.cable: the broker lets its clients trade the cable lines; when
-// false they are left out. Returns the rows and the lines left out, with
-// the reason.
+// entries: [{ symbol, raw }] in the broker's own order (a live field, the
+// broker's own board showing a price, is no longer read: the boards copy
+// BYMA's placeholder quotes). options.cable: the broker lets its clients
+// trade the cable lines; when false they are left out. Returns the rows
+// and the lines left out, with the reason.
 //
-// A line with no market today, neither on BYMA (no trade, bid, offer or
-// previous close on any term) nor on the broker's board, is kept only
-// when BYMA's daily history shows a trade on it in the last two years; a
-// line BYMA lists but never quoted in that time (AEMC, BBA3C, ISRGD) is
-// not written. A listed line that only did not trade today is kept.
+// A line with no trade today on BYMA is kept only when BYMA's daily
+// history shows a trade on it in the last two years; a line BYMA lists
+// but never traded in that time (AEMC, BBA3C, ISRGD, TIIAC, ADS) is not
+// written. A listed line that only did not trade today is kept. Of two
+// lines of one certificate, currency and settlement (SCCOD, SCOOD) only
+// the newer is written.
 export async function bymaRows(entries, label, options = {}) {
   const board = await bymaBoard();
   const dropped = [];
@@ -294,7 +450,7 @@ export async function bymaRows(entries, label, options = {}) {
       dropped.push(`${symbol} cable line`);
       continue;
     }
-    wanted.push({ ...entry, symbol, ...line, live: line.live || Boolean(entry.live) });
+    wanted.push({ ...entry, symbol, ...line });
   }
 
   // Cards for the listed symbols and for the stems of those ending in B.
@@ -317,6 +473,21 @@ export async function bymaRows(entries, label, options = {}) {
       }
     })
   );
+
+  // BYMA's card search matches loosely: asked for CC (Citigroup's cable
+  // line) it answers the card of BA.CC, Bank of America (read 2026-10-22).
+  // A dollar line (C or D) of a peso line whose card is read takes that
+  // line's card when the two name different home symbols.
+  for (const entry of wanted) {
+    const { symbol } = entry;
+    if (entry.currency !== "USD" || !/[CD]$/.test(symbol)) continue;
+    const stem = symbol.slice(0, -1);
+    const own = cards.get(symbol);
+    const parent = cards.get(stem);
+    if (!own?.home || !parent?.home || board.get(stem)?.currency !== "ARS" || own.home === parent.home) continue;
+    console.error(`${label}: BYMA's card for ${symbol} names ${own.home} (${own.isin}); the card of its peso line ${stem}, ${parent.home} (${parent.isin}), is used`);
+    cards.set(symbol, parent);
+  }
 
   const byIsin = new Map();
   for (const [symbol, card] of cards) {
@@ -402,7 +573,7 @@ export async function bymaRows(entries, label, options = {}) {
     if (panel === "cedear") {
       type = namedType(card?.title || "") || namedType(entry.name || "") || (home && usHome && etfs.has(home) ? "ETF" : "STOCK");
     }
-    const isin = card?.isin || listed.get(symbol)?.isin || "";
+    const isin = card?.isin || listed.get(symbol)?.isin || BYMA_ISINS[symbol]?.[0] || "";
     const name = (panel === "cedear" ? card?.title : card?.issuer) || clean(entry.name) || symbol;
     rows.push({
       query: symbol,
@@ -417,17 +588,18 @@ export async function bymaRows(entries, label, options = {}) {
       panel,
     });
   }
-  // A line with no market today, on BYMA or on the broker's board, is
-  // written only when BYMA's history shows a trade on it.
-  const live = new Map(wanted.map((entry) => [entry.symbol, entry.live]));
-  const quiet = rows.filter((row) => !live.get(row.ticker)).map((row) => row.ticker);
-  const history = new Map(await pool(quiet, 2, async (symbol) => [symbol, await tradedDays(symbol)]));
-  const never = new Set(quiet.filter((symbol) => history.get(symbol) === 0));
-  const unknown = quiet.filter((symbol) => history.get(symbol) === null);
-  if (unknown.length) console.error(`${label}: BYMA history did not answer for ${unknown.join(" ")} (kept)`);
-  console.error(`${label}: ${quiet.length} lines with no market today, ${never.size} never traded on BYMA in two years`);
+  // A line with no trade today on BYMA is written only when BYMA's
+  // history shows a trade on it. A quote alone does not spare the lookup.
+  const quiet = rows.filter((row) => !board.get(row.ticker)?.traded).map((row) => row.ticker);
+  const never = await neverTraded(quiet, label);
   for (const symbol of never) dropped.push(`${symbol} never quoted on BYMA`);
-  const kept = rows.filter((row) => !never.has(row.ticker));
+  const once = await withoutDuplicateLines(
+    rows.filter((row) => !never.has(row.ticker)),
+    (ticker) => Boolean(board.get(ticker)?.cable),
+    label
+  );
+  dropped.push(...once.dropped);
+  const kept = once.rows;
   kept.sort((left, right) => left.ticker.localeCompare(right.ticker));
   return { rows: kept, dropped, board };
 }
@@ -451,7 +623,11 @@ export function summary(label, rows, dropped) {
   const reasons = new Map();
   for (const line of dropped) {
     const reason = line.replace(/^\S+\s/, "");
-    const key = /^(block|not quoted on BYMA|cable line|never quoted on BYMA)$/.test(reason) ? reason : "other kind";
+    const key = /^(block|not quoted on BYMA|cable line|never quoted on BYMA)$/.test(reason)
+      ? reason
+      : /^older line of /.test(reason)
+        ? "older duplicate line"
+        : "other kind";
     reasons.set(key, (reasons.get(key) || 0) + 1);
   }
   console.error(

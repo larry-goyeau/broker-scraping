@@ -236,6 +236,22 @@ const EXCHANGE_NAMES = {
   CCC: "CRYPTO",
 };
 
+// The lists file Arca under AMEX and Cboe BZX under CBOE.
+const LIST_PLACES = { BATS: "CBOE", ARCA: "AMEX", NYSEARCA: "AMEX" };
+
+// A listing takes its ISIN only from a line of the lists on its own market.
+// The same ticker elsewhere is another company (CLM on Hanoi, CPA on Xetra
+// is Colgate), so it never stands in. A foreign code is fine when the
+// American or Hong Kong line itself carries it (an ADR, a Cayman issuer).
+const MARKET_PLACES = {
+  US: new Set(["NYSE", "NASDAQ", "AMEX", "CBOE", "OTC"]),
+  HK: new Set(["HKEX"]),
+};
+
+// Every line of the lists by ISIN, whatever its ticker: how many places
+// carry the code and the names they give it.
+const LIST_ISINS = new Map();
+
 function loadTickerCandidatesFromCsv(csvPath, kind, map = new Map()) {
   if (!csvPath || !fs.existsSync(csvPath)) return map;
 
@@ -248,9 +264,14 @@ function loadTickerCandidatesFromCsv(csvPath, kind, map = new Map()) {
     if (!ticker || isinIndex < 0) continue;
 
     const isin = toIsin(columns[isinIndex]);
-    const exchange = normalize(isinIndex >= 1 ? columns[isinIndex - 1] : columns[1]).toUpperCase();
+    const place = normalize(isinIndex >= 1 ? columns[isinIndex - 1] : columns[1]).toUpperCase();
+    const exchange = LIST_PLACES[place] || place;
     const name = columns.slice(isinIndex + 1).join(",").trim();
     if (!name) continue;
+
+    const spread = LIST_ISINS.get(isin) || LIST_ISINS.set(isin, { lines: 0, names: new Set() }).get(isin);
+    spread.lines += 1;
+    spread.names.add(name);
 
     const candidates = map.get(ticker) || [];
     map.set(ticker, candidates);
@@ -328,29 +349,25 @@ function nameScore(scrapedName, candidateName) {
 
 function scoreCandidate(scrapedName, candidate) {
   let best = { score: 0, name: candidate.names[0] || "" };
-  for (const name of candidate.names) {
+  const names = new Set([...candidate.names, ...(LIST_ISINS.get(candidate.isin)?.names || [])]);
+  for (const name of names) {
     const score = nameScore(scrapedName, name);
     if (score > best.score) best = { score, name };
   }
   return best;
 }
 
-const MIN_NAME_SCORE = 0.5;
-
 function resolveListing(tickerCandidates, listing, type) {
   const kind = type === "STOCK" ? "STOCK" : "ETF";
-  let candidates = (tickerCandidates.get(listing.ticker) || []).filter(
-    (candidate) => !candidate.kind || candidate.kind === kind
+  const places = MARKET_PLACES[listing.market] || MARKET_PLACES.US;
+  const onMarket = (tickerCandidates.get(listing.ticker) || []).filter((candidate) =>
+    [...candidate.exchanges].some((exchange) => places.has(exchange))
   );
+  // A closed-end fund such as CLM is a share on Webull and a fund in the
+  // lists: the other shelf answers when this one has no line.
+  const sameKind = onMarket.filter((candidate) => !candidate.kind || candidate.kind === kind);
+  const candidates = sameKind.length > 0 ? sameKind : onMarket;
   if (candidates.length === 0) return null;
-
-  if (listing.market === "HK") {
-    const hk = candidates.filter((candidate) => candidate.isin.startsWith("HK"));
-    if (hk.length) candidates = hk;
-  } else {
-    const us = candidates.filter((candidate) => candidate.isin.startsWith("US"));
-    if (us.length) candidates = us;
-  }
 
   const venue = EXCHANGE_NAMES[listing.exchange] || listing.exchange;
   const sameVenue = venue
@@ -365,11 +382,36 @@ function resolveListing(tickerCandidates, listing, type) {
 
   if (scored.length === 1) return scored[0];
 
-  const bestScore = Math.max(0, ...scored.map((candidate) => candidate.score));
-  if (bestScore < MIN_NAME_SCORE) return null;
+  // On its own market a ticker's codes are mostly one company's: a stale
+  // one after a reverse split (OTLY, COO) or one built from the CUSIP (ALKS
+  // IEG0176…, BMHL USG1194L…). Codes of one CUSIP issuer need no name; else
+  // a code's names must share a word with Webull's, which shortens them
+  // (AMC ENTMT HLDGS). Of those, the one quoted on the most places (order
+  // books, then lines of the lists) is in use; then, within one issuer, the
+  // last issue, which a reverse split moves up (KYG9545M115 to M123); then
+  // the closest name. Codes still level stay unnamed: the shared stamp
+  // keeps them all as matches.
+  const issuer = (candidate) => (/^[A-Z]{2}00/.test(candidate.isin) ? candidate.isin : candidate.isin.slice(2, 8));
+  const oneIssuer = new Set(scored.map(issuer)).size === 1;
+  const named = oneIssuer ? scored : scored.filter((candidate) => candidate.score > 0);
+  if (named.length === 0) return null;
+  const reach = (candidate) =>
+    Object.keys(spreads[candidate.isin] || {}).length * 1000 + (LIST_ISINS.get(candidate.isin)?.lines || 0);
+  const most = Math.max(...named.map(reach));
+  const latest = (list) =>
+    new Set(list.map((candidate) => candidate.isin.slice(0, 8))).size === 1
+      ? list.reduce((last, candidate) => (candidate.isin.slice(8, 11) > last.isin.slice(8, 11) ? candidate : last))
+      : null;
 
-  const winners = scored.filter((candidate) => candidate.score === bestScore);
-  return winners.length === 1 ? winners[0] : null;
+  const widest = named.filter((candidate) => reach(candidate) === most);
+  if (widest.length === 1) return widest[0];
+  const lastIssue = latest(widest);
+  if (lastIssue) return lastIssue;
+
+  const bestScore = Math.max(...widest.map((candidate) => candidate.score));
+  const winners = widest.filter((candidate) => candidate.score === bestScore);
+  if (winners.length === 1) return winners[0];
+  return latest(winners) || { ...winners[0], isin: "" };
 }
 
 function listingType(listing) {
@@ -441,7 +483,10 @@ const onlyTickers = new Set(
     .filter((ticker) => ticker && !toIsin(ticker))
 );
 
-const outputPath = new URL("webull-parsed.json", import.meta.url);
+// The Webull Singapore OpenAPI shelf, kept as the shared base of the
+// entity catalogues (brokers/webull<cc>/): no entity sells exactly this
+// list, so it is not a catalogue of its own and the site does not show it.
+const outputPath = new URL("webull-base.json", import.meta.url);
 const results = [];
 const seen = new Set();
 

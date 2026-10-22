@@ -44,6 +44,7 @@
 //   node assets/prices.mjs --amman           clôtures du bulletin quotidien d'Amman, sans clé
 //   node assets/prices.mjs --psx             clôtures du fichier quotidien de la PSX, sans clé
 //   node assets/prices.mjs --brvm            cours de clôture publiés par la BRVM, sans clé
+//   node assets/prices.mjs --frontier        clôtures des bourses lues chez elles (frontierBoards.mjs), sans clé
 //   node assets/prices.mjs --yahoo           clôtures Yahoo pour tout ISIN encore sans prix, sans clé
 //
 // The key lives in `.env` as EODHD_API_KEY, which `.gitignore` already keeps out of the
@@ -1572,6 +1573,10 @@ export async function ensureFresh(isin, maxAge = DAY, listings = null) {
       if (BRVM_COUNTRIES.has(key.slice(0, 2)) && !(Number(prices[key]?.XOF?.price) > 0)) {
         await brvmFresh(key);
       }
+      // Boards no vendor carries, read from the exchange itself
+      // (frontierBoards.mjs). The board is cached, so this is asked on every
+      // refresh and the close follows the session.
+      await frontierFresh(key);
       if (!hasPrice(key)) {
         // `listings` is the page's own rows. Without them the sweep still
         // walks the catalogues; with them a single view must not.
@@ -2245,6 +2250,51 @@ async function brvmFresh(isin) {
   return true;
 }
 
+// ---------------------------------------------------------------- frontier boards
+
+async function frontierFresh(isin) {
+  const { boardsFor, boardRows } = await import("./frontierBoards.mjs");
+  let found = false;
+  for (const mic of boardsFor(isin)) {
+    let row;
+    try {
+      row = (await boardRows(mic)).get(isin);
+    } catch (e) {
+      console.error(`prix ${isin} sur ${mic} : ${e.message}`);
+      continue;
+    }
+    if (!row) continue;
+    const leaf = ((prices[isin] ||= {})[row.currency] ||= { price: null, at: null, from: {} });
+    leaf.from[`${mic}:${row.ticker}`] = { price: row.price, at: row.at, primary: true };
+    leaf.price = row.price;
+    leaf.at = row.at;
+    fallback[isin] = new Date().toISOString();
+    found = true;
+  }
+  if (found) scheduleSave();
+  return found;
+}
+
+async function sweepFrontier() {
+  const { BOARDS, boardRows } = await import("./frontierBoards.mjs");
+  let priced = 0;
+  for (const mic of Object.keys(BOARDS)) {
+    let rows;
+    try {
+      rows = await boardRows(mic);
+    } catch (e) {
+      console.error(`${mic} : ${e.message}`);
+      continue;
+    }
+    let n = 0;
+    for (const isin of rows.keys()) if (await frontierFresh(isin)) n++;
+    console.error(`${mic} : ${n} cours.`);
+    priced += n;
+  }
+  save();
+  console.error(`${priced} cours des bourses sans vendeur. Écrit dans ${STORE_PATH}.`);
+}
+
 async function sweepBrvm() {
   const sheet = await brvmSheet();
   let priced = 0;
@@ -2338,6 +2388,7 @@ async function main() {
   if (has("amman")) return sweepAmman();
   if (has("psx")) return sweepPsx();
   if (has("brvm")) return sweepBrvm();
+  if (has("frontier")) return sweepFrontier();
   if (has("ngx")) return sweepNgx();
   if (has("yahoo")) return sweepYahoo();
   if (has("sgx")) return sweepSgx();

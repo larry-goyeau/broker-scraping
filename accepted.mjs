@@ -50,6 +50,7 @@ export const COUNTRY_NAMES = {
   VA: "Vatican City", VE: "Venezuela", VN: "Vietnam", ZA: "South Africa",
   ZM: "Zambia", ZW: "Zimbabwe",
   KH: "Cambodia", MM: "Myanmar", MU: "Mauritius", RU: "Russia",
+  LA: "Laos", JM: "Jamaica", NP: "Nepal", ET: "Ethiopia", IR: "Iran", LY: "Libya", SY: "Syria",
 };
 
 const US = { countries: ["US"] };
@@ -145,14 +146,6 @@ const TRADIER = [
 
 // Robinhood US (stocks) + UK (stocks) + Europe UAB (EEA stock tokens).
 const ROBINHOOD = ["US", "GB", ...EEA];
-
-// Webull national entities + AFM passport of Webull Securities (Europe) B.V.
-// (NL home, outgoing passport from Jan/Feb 2026). Not BG/CY/IS/LI/MT.
-const WEBULL = [
-  "US", "CA", "GB", "HK", "SG", "JP", "AU", "BR", "ZA", "TH", "ID", "MY", "MX",
-  "NL", "BE", "DK", "DE", "EE", "FI", "FR", "GR", "HU", "IE", "IT", "HR", "LV",
-  "LT", "LU", "NO", "AT", "PL", "PT", "RO", "SI", "SK", "ES", "CZ", "SE",
-];
 
 // Vivid help: where you can create an account.
 const VIVID = ["AT", "CY", "FR", "DE", "IT", "LU", "NL", "PT", "ES", "CH"];
@@ -297,7 +290,33 @@ export const ACCEPTED = {
   // sogotrade.com/products/intaccout.aspx: any foreign citizen+resident,
   // plus ordinary US accounts.
   sogotrade: WORLD,
-  webull: { countries: WEBULL },
+  // One folder per Webull entity, each for its own residents. Webull EU holds
+  // the EEA passport but onboards NL, DE and ES only (FAQ 1087, 2026-10-21;
+  // Italy and Portugal announced, not live).
+  // https://www.webull.eu/help/faq/1087
+  // Webull US: "does not open or maintain accounts for individuals residing
+  // outside the United States". https://www.webull.com/help/faq/10863
+  webullus: { countries: ["US"] },
+  // Webull UK: "Our services are aimed solely at UK residents".
+  // https://www.webull-uk.com/help/faq/1378
+  webulluk: { countries: ["GB"] },
+  webulleu: { countries: ["NL", "DE", "ES"] },
+  // Webull SG: Singpass holders, plus a residential status "Others" opened by
+  // hand with an ID and proof of address; offshore clients on reverse
+  // solicitation, no country named or excluded.
+  // https://www.webull.com.sg/help/faq/1027-How-do-I-open-an-account
+  // https://www.webull.com.sg/learn/courseware/VydQeI
+  webullsg: { all: true },
+  // Webull CA: SIN required. https://www.webull.ca/help/faq/371
+  webullca: { countries: ["CA"] },
+  // Webull AU: "only accepts the applications of Australian residents".
+  // https://www.webull.com.au/help/faq/1386
+  webullau: { countries: ["AU"] },
+  // Webull HK: Hong Kong, Macau and "Other regions (except U.S. residents)";
+  // the other-regions route needs proof of address outside mainland China.
+  // https://www.webull.hk/en/help/faq/237
+  // https://www.webull.hk/help/faq/857
+  webullhk: { all: true, except: ["US", "CN"] },
 
   // Questrade, 26 Sep 2026: a non-registered account (cash, margin, corporation)
   // is open to every residence except the US. The page says sanctioned
@@ -2295,7 +2314,554 @@ export const ACCEPTED = {
   // https://giobursatil.com.ar/preguntas-frecuentes/
   // https://giobursatil.com.ar/wp-content/uploads/2025/04/personafisica2025.pdf
   gio: { countries: ["AR"] },
+  // Opening is online with a DNI or passport. A foreigner can open with a CUIT, CUIL, CDI or CIE (the key for foreign investors).
+  // No list of countries is given, so the picker stays Argentina, as for ecovalores.
+  // https://ayuda.max.capital/es/articles/11044662-como-abrir-una-cuenta-personal
+  // https://ayuda.max.capital/es/articles/11044834-que-requisitos-aplican-para-personas-extranjeras-que-deseen-abrir-una-cuenta-personal
+  maxcapital: { countries: ["AR"] },
+  // The online opening on the site validates an Argentine DNI and looks up the person in the tax register (ValidarDNI, PadronSearch?dni=, ConsultarNosis?cuit=). No statement on foreign residents was found, so the picker is Argentina.
+  // https://nacionbursatil.com.ar/
+  nacionbursatil: { countries: ["AR"] },
+  // FAQ requirements: be over 21, 'Tener domicilio en Argentina', have a bank account, and give a copy of the DNI. The FAQ also states 'Patrimonio mínimo para apertura de cuenta $USD 40.000'.
+  // https://www.cohen.com.ar/preguntas-frecuentes/
+  cohen: { countries: ["AR"] },
+  // The individual account form asks for nationality, country of residence and a DNI. No statement on who can open was found, so the picker is the home country.
+  // https://www.parakeetcapital.com.ar/Informe/Legales/FormularioAperturaDeCuentaPersonaHumana
+  parakeet: { countries: ["AR"] },
+  // Account opening needs a PAN card, an Aadhaar card (mobile linked to Aadhaar for the DigiLocker/e-Sign OTP) and an Indian bank account; individuals only. No NRI or foreign path is published.
+  // https://univest.in/help-and-support/demat-account
+  univest: { countries: ["IN"] },
+  // The online opening (account.vdsc.com.vn, 4 steps, eContract/eSign) asks for the Vietnamese citizen card (CC/CCCD). No foreign-investor online path is published; same as kbsvn and kisvn.
+  // https://account.vdsc.com.vn/
+  vdsc: { countries: ["VN"] },
+  // The individual form requires an 11-digit BVN, an 11-digit NIN, a State of Origin and an LGA, and a 10-digit Nigerian bank account. A BVN comes from a Nigerian bank (funding-bank test), so the country is NG.
+  // https://atlassportfolios.com/individual-account/
+  atlass: { countries: ["NG"] },
+  // The online application takes any nationality but requires a 12-digit Kuwaiti civil ID (validator [0-9]{12}), and the FAQ says the unified contract must be signed in person at the broker's office in the Boursa Kuwait building. The civil ID gives Kuwait.
+  // https://www.efghermesifa.com/Login/Registration.aspx
+  // https://www.efghermesifa.com/Public/FAQsAr.aspx
+  efghermeskw: { countries: ["KW"] },
+  // GEK Capital states no residence rule: a person brings an identity document, a proof of address and a bank statement, at its Abidjan office or through its contact form; the phone is +225. As for macafrican, the countries are CI, the French-speaking UEMOA states and the French list. The site also has an English version, so the language test is weaker than for the French-only SGIs; WORLD would be the reading if the owner prefers it.
+  // https://gekcapital.com/fr/devenir-client/
+  // https://gekcapital.com/en/become-a-client/
+  gekcapital: { countries: [...new Set(["CI", "BJ", "BF", "ML", "NE", "TG", ...FRENCH])] },
+  // A person must give a cédula de identidad and/or passport, a RIF and a NIT (Venezuelan tax registrations), and open a sub-account at the Caja Venezolana de Valores; internet orders need a Banco Mercantil 'Llave Mercantil'. The RIF gives Venezuela.
+  // https://www.mercantilmerinvest.com/documents/condicionados-generales-cuenta-corretaje.docx
+  // https://www.mercantilmerinvest.com/productos
+  merinvest: { countries: ["VE"] },
+  // No residence statement found on targobank.de for the Direkt-Depot. Onboarding is German-only: online opening by VideoIdent or PostIdent (Deutsche Post) or in one of 300+ German branches, German-language forms, German Girokonto.
+  // The products 'können nicht von US-Personen erworben werden' (Preisübersicht p. 19). Picker is residence: DE.
+  // https://www.targobank.de/de/vermoegen/direkt-depot.html
+  // https://www.targobank.de/de/download/Preisubersicht.pdf
+  targobankde: { countries: ["DE"] },
+  // No residence sentence on eqi.co.uk itself. Equiniti's Shareview online dealing (same firm) is 'only available to UK residents' (BT shareholder page); the EQi ISA declaration requires UK tax residence; the dealing application form asks for a UK National Insurance number and US Green Card status.
+  // https://bt.com/about/investors/individual-shareholders/shareholder-administration/bt-group-easyshare-services/equiniti-shareview-dealing
+  // https://eqi.co.uk/media/hkuhe5qk/eqi-isa-declaration-26-27.pdf
+  // https://eqi.co.uk/media/2873/eqi-dealing-application-form.pdf
+  eqi: { countries: ["GB"] },
+  // The catalogue and cost file are MFI's offer to U.S. residents: "$0 commission trading is available only to U.S. residents trading in the U.S. markets through Moomoo Financial Inc."; a U.S. tax resident opens with an SSN and a U.S. address.
+  // MFI also opens accounts for non-U.S. tax residents (passport plus a non-Mainland-China address; ID issuance countries are a picker in the app, not published) under a separate fee schedule ($0.0049/share min $0.99 commission plus a $0.005/share min $1 platform fee and $0.003/share settlement on US stocks). Not modelled here: it would need its own plan or folder.
+  // https://www.moomoo.com/us/pricing
+  // https://www.moomoo.com/us/support/topic4_277
+  // https://www.moomoo.com/us/support/topic4_2
+  // https://www.moomoo.com/us/support/topic4_65
+  moomoous: { countries: ["US"] },
+  // KYC needs "a copy of citizenship certificate in case of Nepali citizen, in case of citizen of other country, a copy of the passport", a Nepali bank account and a CDSC BOID (demat) number; FAQ: broker account needs a copy of the citizenship certificate.
+  // Nepal only: the account needs a Nepali bank account, a CDSC demat (BOID) and Nepali KYC papers; no foreign residence route is described on the site (siprabi has no accepted.mjs line and falls back to NP).
+  // https://www.kumarisecurities.com/pages/brokers/learn/register
+  kumari: { countries: ["NP"] },
+  // KYC needs "a copy of citizenship certificate in case of Nepali citizen, in case of citizen of other country, a copy of the passport", a Nepali bank account and a CDSC BOID (demat) number; FAQ: broker account needs a copy of the citizenship certificate.
+  // Nepal only: the account needs a Nepali bank account, a CDSC demat (BOID) and Nepali KYC papers; no foreign residence route is described on the site (siprabi has no accepted.mjs line and falls back to NP).
+  // https://premiersecurities.com.np/pages/procedure
+  premiersecurities: { countries: ["NP"] },
+  // FAQ: broker account needs the demat confirmation slip and a copy of the citizenship certificate; the trading page (Nepali) asks the client to visit the Kathmandu office in person with the KYC papers within two weeks of the online form.
+  // Nepal only: the account needs a Nepali bank account, a CDSC demat (BOID) and Nepali KYC papers; no foreign residence route is described on the site (siprabi has no accepted.mjs line and falls back to NP).
+  // https://mallastock.com/pages/brokers/learn/faq
+  mallastock: { countries: ["NP"] },
+  // Required documents for a TMS account: KYC form, online agreement, citizenship, photo, PAN, bank cheque-book copy and demat confirmation; no passport route printed.
+  // Nepal only: the account needs a Nepali bank account, a CDSC demat (BOID) and Nepali KYC papers; no foreign residence route is described on the site (siprabi has no accepted.mjs line and falls back to NP).
+  // https://aryatarasecurities.com/pages/services/brokerage
+  aryatara: { countries: ["NP"] },
+  // Digital account opening is offered to a Resident Pakistani and to a Non-Resident Pakistani (through a Roshan Digital Account). The countries where the non-resident lives are not listed. The picker is a country, so the country is PK.
+  // https://abbasiandcompany.com/
+  // https://abbasiandcompany.com/roshan-digital
+  abbasi: { countries: ["PK"] },
+  // Online opening asks for a scanned CNIC, a Pakistani IBAN and a mobile SIM in the applicant's name. A non-resident Pakistani opens through a Roshan Digital Account. The picker is a country, so the country is PK.
+  // https://www.scstrade.com/documents/account%20opening%20requirments.pdf
+  // https://www.scstrade.com/OnlineTrading/OT_OnlineTradingRoshanDigital.aspx
+  standardcapital: { countries: ["PK"] },
+
+  // ---- catalogues added 2026-10-21 (sources: each broker's own pages) ----
+  // Both routes ask for a Kenya Revenue Authority PIN. The Dosikaa app,
+  // which the FAQ names for remote opening, asks "Enter your Kenya Revenue
+  // Authority PIN" before it creates the CDS account with ABC Capital
+  // (screens seen by the owner on 2026-10-22). The ActiveTrader web sign-up
+  // asks for a 'KRA PIN / Tax ID' too. A foreigner gets a KRA PIN only with a
+  // Kenyan permit or a Kenyan tax obligation, so a resident abroad is not
+  // served even though the web form has Foreign Individual and Non Resident
+  // options. Funding is M-Pesa paybill 111220 or a deposit to ABC Bank.
+  // Owner's choice (2026-10-22): Kenya only.
+  // https://www.abccapital.co.ke/faqtwo/
+  // https://abccapital.kenyaonlinetrading.com/ActiveTrader/#!/login/
+  abccapital: { countries: ["KE"] },
+  // Opening runs on LBO NET, in Spanish only. Sign-up takes just a CUIL, an
+  // email and a password. The CUIL is checked against RENAPER, the Argentine
+  // national register, then photos of both sides of a DNI and a selfie with
+  // it are asked for. No passport or foreign ID is offered. The phone picker
+  // starts at +54 and lists 16 other codes. The address step allows a
+  // foreign residence, and an outside-Argentina USD account at Banco Nación
+  // NY (SWIFT) exists. But pesos and local dollars come in by CVU or CBU
+  // from an account in the client's own name, matched by CUIL. Without an
+  // Argentine CUIL and DNI there is no account, and no page names another
+  // country, so the picker stays Argentina.
+  // https://www.acuantoesta.com.ar/tutoriales
+  // https://acuantoesta.net.lbo.com.ar/register
+  acuantoesta: { countries: ["AR"] },
+  // Account types page: the account is opened online from anywhere, with
+  // two exceptions. The USA, Canada, Australia, Hong Kong, Japan and
+  // Singapore need a direct request by phone or e-mail, so there is no
+  // online opening there. No account can be opened by anyone who lives or
+  // was born in Burundi, Cuba, Crimea, Iran, Iraq, Lebanon, Libya, North
+  // Korea, Russia, Somalia, South Sudan, Sudan and Darfur, Syria,
+  // Venezuela, Belarus, Yemen or the Central African Republic. Crimea is
+  // named, not Ukraine as a whole.
+  // https://www.agora-direct.com/de/depot/depotarten/
+  // https://www.agora-direct.com/de/depot/ablauf-voraussetzungen/
+  agoradirect: { all: true, except: [...SANCTIONED, "BI", "CF", "IQ", "LB", "LY", "SD", "SO", "SS", "VE", "YE", "US", "CA", "AU", "HK", "JP", "SG"] },
+  // The online application, in French only, is a request: the client then
+  // gets an e-mail or a call to set an appointment. It asks for a tax
+  // residence from a picker of 17 countries: Tunisia, France, Italy, the
+  // Netherlands, the United States, Singapore, Algeria, Libya, Morocco,
+  // Egypt, Syria, Lebanon, the Emirates, Saudi Arabia, Qatar, Kuwait and
+  // Burkina Faso. The identity document is a national ID card, a passport
+  // or a residence card. The phone is free text with no dial-code picker,
+  // and the client file has a phone-abroad field and a non-resident
+  // reference letter. Funds come in cash, by cheque or by transfer, and the
+  // agreements ask for the client's bank RIB. No country is named as
+  // refused.
+  // https://ati.attijaribourse.com.tn/AttijariBourse/devenir-client
+  // https://ati.attijaribourse.com.tn/Ebourse/WsAgonom/getByCnom
+  // https://ati.attijaribourse.com.tn/AttijariBourse/assets/documents/KYC-Fiche%20Client%20Personne%20Physique.pdf
+  // https://ati.attijaribourse.com.tn/AttijariBourse/assets/documents/CONVENTION_CEA_LIBRE.pdf
+  attijaritn: { countries: ["TN", "FR", "IT", "NL", "US", "SG", "DZ", "LY", "MA", "EG", "SY", "LB", "AE", "SA", "QA", "KW", "BF"] },
+  // Account opening: a local opens with a Lao identity card and a BCEL passbook,
+  // on a paper form at the office or a BCEL branch. A foreigner, resident or not,
+  // needs a passport, a BCEL kip account (alien card or work permit, or an LSX
+  // foreign investor certificate) and "shall be present at BCEL-KT's office".
+  // There is no online opening and no country is named, so the picker is Laos.
+  // https://www.bcel-kt.com/index.php?r=site/display&id=10
+  // https://www.bcel-kt.com/index.php?r=site/display&id=7
+  bcelkt: { countries: ["LA"] },
+  // The "Ouvrir un compte" button leads to an online request form, in
+  // French only. Its "nationalité" and "pays de résidence fiscale" pickers
+  // each list the same 197 countries, Tunisia by default, and the ID can be
+  // a CIN, a residence card (CS), a passport or other, with its issuing
+  // country from that list. No country is named as refused. The form ends
+  // with a choice of agency, Tunis only. The phone is free text in
+  // international format. The paper form asks for a bank and RIB; no
+  // funding route is described. So the list is the picker's countries:
+  // Bermuda, the Faroe Islands, Guernsey, Gibraltar, Greenland, Hong Kong,
+  // the Isle of Man, Jersey, Macau, French Polynesia and Taiwan are not on
+  // it. Owner's choice (2026-10-22), as for cdgcapital.
+  // https://www.btkconseil.com/devenir-client/
+  // https://www.btkconseil.com/nos-produits/compte-libres/
+  // https://www.btkconseil.com/download/formulaire-douverture-de-comptes/
+  btkconseil: { all: true, except: ["BM", "FO", "GG", "GI", "GL", "HK", "IM", "JE", "MO", "PF", "TW"] },
+  // FAQ: "Cambodian investors are able open Trading Account online by Phsarhun app";
+  // "Foreigner investors are required to visit at counter of Canadia Securities."
+  // A foreigner opens with a passport and an SECC investor ID, in person only.
+  // No country of residence is named, so the picker is Cambodia.
+  // https://canasecurities.com.kh/faqs/
+  // https://canasecurities.com.kh/investor-id/
+  // https://canasecurities.com.kh/bank-account/
+  canadia: { countries: ["KH"] },
+  // Help centre, list of brokers by country for Triodos receipts: Captin
+  // serves the Netherlands, Belgium, Germany and Spain. The United Kingdom
+  // is sale only, and the funding page says UK holders cannot place buy
+  // orders, so Britain stays out. The help centre is in Dutch, French
+  // (Belgium), German, Spanish, Catalan and English. Since 18 June 2025
+  // Captin opens no new trading account for Triodos receipts. Only holders
+  // invited by an activation email can onboard, so there is no public form
+  // or dial picker to read. Identity is a passport or ID card, or a driving
+  // licence for UK residents only. Funding is a euro transfer to Captin's
+  // ABN AMRO account, and the counter account must be in the holder's name.
+  // https://support.captin.com/hc/en-gb/articles/27909898029085
+  // https://support.captin.com/hc/en-gb/articles/11829486217245
+  // https://support.captin.com/hc/en-gb/articles/27910100593949
+  // https://support.captin.com/hc/en-gb/articles/11749704295453
+  // https://support.captin.com/hc/en-gb/articles/7865821534493
+  // https://support.captin.com/hc/en-gb/articles/13540650091421
+  captin: { countries: ["NL", "BE", "DE", "ES"] },
+  // Account opening is at the head office or a CB Bank branch, on a printed form.
+  // A local needs an NRC and a CB Bank account. A foreigner needs a passport, a
+  // visa and a CB Bank MMK account. The foreign-investor page cites the SECM rule
+  // that admits non-residents but names no country, so the picker is Myanmar.
+  // https://cbsecurities.com.mm/account-opening-2/
+  // https://cbsecurities.com.mm/foreign-investor/
+  cbsecurities: { countries: ["MM"] },
+  // The opening page takes Moroccans, resident or not, with a national ID
+  // card. It also takes foreigners living in Morocco with a residence card,
+  // and foreigners living abroad with a passport. Each also needs a bank
+  // RIB, with no country named for that bank. The request is made online,
+  // then the client brings the documents to CDG Capital Bourse, which is not
+  // a refusal. The site and form are in French and English. The phone and
+  // mobile fields take any country code (+1 to +3 digits, no SMS check). The
+  // first deposit is asked in MAD, and no funding route is named.
+  // Nationality and residence pickers default to Morocco and use an old list
+  // of about 220 countries. Andorra, Armenia, Azerbaijan, Bosnia, Estonia,
+  // the Faroe Islands, Georgia, Guernsey, the Isle of Man, Jersey,
+  // Kazakhstan, Latvia, Lithuania, Moldova, Montenegro, North Macedonia,
+  // Serbia and Uzbekistan are not on it, so a resident there cannot be
+  // entered. No country is named as refused.
+  // https://www.cdgcapitalbourse.ma/OuvrirCompte
+  // https://www.cdgcapitalbourse.ma/OuvrirCompte/FormStart
+  // https://www.cdgcapitalbourse.ma/api/ (COUNTRIES)
+  cdgcapital: { all: true, except: ["AD", "AM", "AZ", "BA", "EE", "FO", "GE", "GG", "IM", "JE", "KZ", "LT", "LV", "MD", "ME", "MK", "RS", "UZ"] },
+  // FAQ: residents of India, NRIs, HUFs and firms can open a trading
+  // account, but online opening is limited to Indian resident individuals.
+  // A paperless account needs a valid Aadhaar and an Aadhaar-linked mobile
+  // or email. The NRI route is offline and names no countries. The picker
+  // is a country, so the country is IN.
+  // https://www.cholasecurities.com/faq
+  chola: { countries: ["IN"] },
+  // Requirements sheet: the original ID is shown in person, plus a letter
+  // from a Qatari bank with the IBAN and a QCSD investor statement.
+  // "Regulatory requirements mandate availability of Qatari Bank account to
+  // proceed with opening an account." A non-resident authenticates the
+  // documents in the issuing country. Deposits come only by transfer from
+  // the client's registered Qatari bank account. The online application
+  // (English and Arabic) takes a Qatari ID or a passport and has world-wide
+  // nationality and residence pickers, with a dial-code picker that
+  // defaults to Qatar and lists the GCC first. Its bank list is Qatari
+  // banks plus "Others". The app's "Open an Account" form starts with a
+  // mandatory NIN (the QCSD investor number) and an "Upload National ID"
+  // step (screen seen by the owner on 2026-10-22). No country of residence
+  // is named, so the picker is Qatar.
+  // https://www.dlalabroker.com/wp-content/uploads/2021/08/AOR.pdf
+  // https://www.dlalabroker.com/wp-content/uploads/2021/08/Bank_Accounts_Con_EN.pdf
+  // https://www.dlalabroker.com/en/about-us/faq/
+  // https://dlalawebapp.dlalaholding.com/OpenAccountApplication_v2/PublicOpenAccount/OpenAccount/Wizard?applyType=individual
+  dlala: { countries: ["QA"] },
+  // Share trading is ordered online with BankID, the Norwegian bank ID.
+  // Without BankID, a client applies on a form and then shows a passport
+  // at a DNB branch. Someone new in Norway also needs a residence permit or
+  // asylum card, or a Norwegian D-number. No other country of residence is
+  // named. The site and form are in Norwegian and English. The form's dial
+  // picker lists every country, with +47 by default and an SMS code, and it
+  // has a 'Living abroad' status and a country field for an address outside
+  // Norway. But its first field is the 11-digit Norwegian national identity
+  // number or D-number, and identity is checked at a DNB office or by mail.
+  // The trading account is funded only by transfer from the client's own
+  // DNB accounts.
+  // https://www.dnb.no/markets/aksjer/aksjehandel-privat
+  // https://www.dnb.no/kundeprogram/bli-kunde
+  // https://www.dnb.no/kundeprogram/bli-kunde/uten-bankid
+  // https://www.dnb.no/kundeprogram/bli-kunde/ny-i-norge
+  dnb: { countries: ["NO"] },
+  // Who can open: 18 or older for a cash account, 21 for margin. The page
+  // names no residency, but the application wants proof of address and a
+  // bank account in the client's own name, and the help centre gives that
+  // proof only for a Dutch or a Belgian bank. The tax pages are for clients
+  // who live in the Netherlands or Belgium (form 8-3-6, Belgian TOB). No
+  // other country of residence is named.
+  // The site, help centre and form are in Dutch only (the /fr/support page is
+  // empty). The form starts with a mobile number and an SMS code. Its dial
+  // picker lists every country, with NL, BE, FR, DE and ZA first. Identity is
+  // a valid passport or ID card. Proof of address is a bank or card statement
+  // or a Dutch BRP extract. Funding is a bank transfer from an account in the
+  // client's own name to Interactive Brokers Ireland (IBAN DE72...).
+  // The open dial picker and passport do not widen the list, because no
+  // page names a third country of residence.
+  // https://www.easybroker.nl/support/kan-iedereen-een-rekening-openen-via-easybroker
+  // https://www.easybroker.nl/start-aanvraag
+  // https://accounts.easybroker.nl/view/form?formKey=onboard
+  // https://www.easybroker.nl/support/wat-is-een-bewijs-van-adres
+  // https://www.easybroker.nl/support/hoe-download-ik-een-bankafschrift-in-belgie
+  // https://www.easybroker.nl/support/waarom-moet-ik-mijn-bankgegevens
+  // https://www.easybroker.nl/support/hoe-maak-ik-geld-over-naar-mijn-easybroker-beleggers-rekening
+  // https://www.easybroker.nl/support/waarom-formulier-8-3-6
+  // https://www.easybroker.nl/blog/beleggen-vanuit-belgie-beurstaks
+  easybroker: { countries: ["NL", "BE"] },
+  // Opening is in Spanish only. The sign-up app's identity step takes a
+  // cédula (checked at the Registro Civil) or a passport. A passport opens a
+  // country-of-residence picker with a foreign tax number, and the phone
+  // picker lists every dial code. But the app's own FAQ asks for a natural
+  // person resident in Ecuador with a cédula and an Ecuadorian bank
+  // account, also for foreigners. It also says INVIERTE needs an
+  // Ecuadorian mobile line. Money comes in only by interbank transfer from
+  // the client's own account, and the bank picker lists Ecuadorian banks
+  // and cooperatives only. So the picker stays Ecuador.
+  // https://clientes.futurocasadevalores.com/perfilInversionista/
+  // https://www.futurocasadevalores.com/portafolio/
+  // https://www.futurocasadevalores.com/terminos-y-condiciones-de-portafolio-app-de-casa-de-valores-futuro-futurocapital-s-a
+  futuro: { countries: ["EC"] },
+  // General terms 21.1(k): an individual client warrants, on every
+  // transaction, that neither they nor their spouse is a non-resident of
+  // Jamaica. The KYC sheet takes a TRN or a foreign number such as an SSN,
+  // but no other residence is named. Opening is the paper form package.
+  // https://gk-capital.com/forms/
+  // https://gk-capital.com/wp-content/uploads/2023/07/gk-capital-general-terms-and-conditions-1.pdf
+  // https://gk-capital.com/wp-content/uploads/2023/07/GKCM-KTC-Acceptable-Document-3.pdf
+  gkcapital: { countries: ["JM"] },
+  // Advisory agreement 1: the Program is for US citizens with a valid SSN
+  // or tax ID. It is not offered outside the United States. The site's
+  // disclaimer says the advisory services are only for US residents.
+  // https://www.grifin.com/legal/advisory-agreement
+  grifin: { countries: ["US"] },
+  // Búho Bank FAQ, "¿Qué necesitás para dar de alta tu cuenta?": be over
+  // 18, use the BH app, check your details with a DNI and a selfie, and
+  // "Tener domicilio radicado en Argentina". The Cuenta Inversor comes in
+  // the Búho Inversor package opened through that same channel.
+  // https://www.hipotecario.com.ar/buhobank/
+  // https://www.hipotecario.com.ar/buhobank/buho-inversor/
+  hipotecario: { countries: ["AR"] },
+  // Support FAQ: a UAE resident signs up with an Emirates ID, a UAE mobile
+  // and a UAE address. An international client uses a passport, a mobile
+  // number from the country of residence and an address. The user guide
+  // checks the phone by SMS OTP and takes the address country from the
+  // phone number. The FAQ says SMS does not yet reach international
+  // numbers. The app is in English and Arabic. Trades go through xCube,
+  // which takes a passport and proof of funds from non-residents. Funding
+  // is a transfer to the client's own iVestor IBAN (Emirates NBD) or an
+  // ENBD cash deposit, and at xCube a bank transfer or a UAE or foreign
+  // card in the client's name. The features need an active iVestor card.
+  // Because of regulatory restrictions it cannot be delivered to Vietnam,
+  // Iran, Somalia, Egypt, Russia, China, Belarus, South Korea, Sudan,
+  // Syria, Afghanistan, Australia, India and Ukraine, so those countries
+  // stay out.
+  // https://ivestor.ae/support/
+  // https://ivestor.ae/wp-content/uploads/2026/06/iVestorUserGuideCompressed.pdf
+  // https://www.xcube.ae/support/
+  ivestor: { all: true, except: ["AF", "AU", "BY", "CN", "EG", "IN", "IR", "KR", "RU", "SD", "SO", "SY", "UA", "VN"] },
+  // Individual accounts page and FAQ: a person residing outside Jamaica
+  // opens with the same documents, notarised overseas, plus a bank
+  // reference: a TRN, a driver's licence, passport or national ID, and a
+  // proof of address. The site and the online application are in English
+  // only. The application (answering 502 on 2026-10-22, read from its
+  // February 2026 copy) takes a mobile number from any country, Jamaica
+  // first, then the United States and the United Kingdom, and sends SMS
+  // codes to it. Its country list puts Jamaica, Canada, the United Kingdom
+  // and the United States above "All Countries", and its tax step asks for
+  // a TRN, SSN, NIN or SIN. Overseas money is wired to Citibank New York
+  // (US dollars from the USA, the UK or Canada), Citibank London (sterling)
+  // or Scotiabank (Canadian dollars), or sent as a banker's cheque. The
+  // treaty tax rates name the same three countries. No other residence is
+  // named.
+  // https://www.jnfunds.com/become-a-client/accounts-for-individuals/
+  // https://www.jnfunds.com/resource-centre/faqs/
+  // https://www.jnfunds.com/how-to-send-funds-to-your-investment-account-from-overseas/
+  // https://www.jnfunds.com/wp-content/uploads/JNFM-Client_On-Boarding_Checklist-Revised-February-2024.pdf
+  // https://onboarding.jnfunds.com/
+  // https://onboarding.jnfunds.com/assets/js/bundle-5.5.2.min.js
+  jnfund: { countries: ["JM", "US", "GB", "CA"] },
+  // Opening is PAN, Aadhaar e-KYC through DigiLocker and an Aadhaar e-sign.
+  // The KYC app asks the client to confirm "I'm an Indian Resident", not a
+  // US person and not a tax resident of any other country. It refuses a
+  // location outside India. The picker is a country, so the country is IN.
+  // https://lemonn.co.in/open-delivery-trading-account
+  // https://kyc.lemonn.co.in/
+  lemonn: { countries: ["IN"] },
+  // Moneybox is only available in the UK. Every account needs the client to
+  // be a UK resident for tax purposes, and an ISA also needs a National
+  // Insurance number. A client who stops being UK tax resident must tell
+  // Moneybox. No other country of residence is named.
+  // https://support.moneyboxapp.com/faqs/getting-started/availability-outside-uk/
+  // https://support.moneyboxapp.com/faqs/category/registering-online/eligibility/
+  // https://support.moneyboxapp.com/faqs/what-happens-if-i-move-abroad/
+  moneybox: { countries: ["GB"] },
+  // Every individual, TFSA and RRSP account needs a Canadian SIN and a
+  // residential address in Canada (no mailbox). The address page lists the
+  // provinces and territories it accepts, all thirteen. No non-resident
+  // path is published, so the country is CA.
+  // https://www.moomoo.com/ca/support/topic10_18
+  // https://www.moomoo.com/ca/support/topic10_15
+  moomooca: { countries: ["CA"] },
+  // The online application, NCB's shared form on its Capital Markets
+  // route, is in English only. It asks "Are you a Jamaican Resident?". A
+  // "No" ends the online path: the page says to print and notarise the
+  // documents abroad and mail them to Jamaica. Online it takes a TRN and a
+  // driver's licence, voter ID or passport scanned by camera, and proof of
+  // address from an NWC, JPS, Digicel or FLOW bill. The phone fields are
+  // free text in North American format, with no dial-code picker. Equity
+  // Online needs an NCB Jamaica internet banking profile, which also moves
+  // the money. Since October 2026 the opening link sends to an appointment
+  // scheduler. The paper form takes a non-resident with a passport and an
+  // overseas bank reference, but names no country. So it stays Jamaica.
+  // https://openaccount.jncb.com/select-subsidiary/cap
+  // https://openaccount.jncb.com/static/js/main.f2fef795.chunk.js
+  // https://ncbcapitalmarkets.com/research/informationcentre/articles/clientdocuments/432-application-form-for-individuals/file
+  // https://www.ncbcapitalmarkets.com/wealthmanagement/products/buysellstocks
+  ncbcm: { countries: ["JM"] },
+  // The ESX launch notice says Neway lets an investor onboard remotely, for
+  // "everyone across the country". The app is in English only and signs up
+  // in the app. No public form shows a dial code or a residence picker. The
+  // ESX investor guide says anyone "from every corner of Ethiopia" can
+  // invest, including Ethiopians, foreigners of Ethiopian origin and foreign
+  // nationals, subject to ECMA and NBE rules, with a copy of the national
+  // identification. That is nationality, not another residence. Funds go to
+  // the investor account through the ESX trading member, in birr, and no
+  // foreign route is named. No other country is named.
+  // https://esx.et/?p=9425
+  // https://esx.et/wp-content/uploads/2025/04/Investor-Booklet-v7-edited.pdf
+  // https://esx.et/equity-market/invest/
+  // https://apps.apple.com/us/app/neway-esx/id6753160438
+  neway: { countries: ["ET"] },
+  // Terms 3.3: the platform is for individuals aged 18 or over who are UK
+  // residents and not US persons. The ISA also opens for a UK Crown servant,
+  // their spouse or civil partner, or a dependant. The FAQ says Quilter
+  // Invest is only available in the UK, and a National Insurance number is
+  // required. No other country of residence is named.
+  // https://www.quilterinvest.com/site-terms/terms-and-conditions-app
+  // https://www.quilterinvest.com/faq/can-i-use-quilter-invest-if-i-live-outside-the-uk
+  // https://www.quilterinvest.com/faq/can-i-have-a-quilter-invest-account-if-i-dont-have-a-national-insurance-number
+  quilter: { countries: ["GB"] },
+  // Support: Raseed serves citizens and residents of GCC countries, Jordan
+  // and Egypt, and plans more countries later. The same page lists the
+  // countries it cannot onboard (sanctioned and not supported). No country
+  // outside the GCC, Jordan and Egypt is open, so the list is those eight.
+  // https://raseedcapital.com/en/support/is-raseed-available-for-citizens-of-all-countries
+  raseed: { groups: ["GCC"], countries: ["JO", "EG"] },
+  // Sbanken is a concept of DNB Bank ASA. A client signs up by entering a
+  // Norwegian national identity number (fødselsnummer) and confirming with
+  // BankID on dnb.no. Share trading runs on DNB's aksjehandel. No other
+  // country of residence is named.
+  // https://sbanken.no/bli-kunde
+  // https://sbanken.no/bli-kunde/skjema
+  // https://sbanken.no/spare/aksjer/aksjehandel
+  sbanken: { countries: ["NO"] },
+  // KYC needs a citizenship certificate for a Nepali citizen, or a passport
+  // for a citizen of another country, plus a Nepali bank account and a CDSC
+  // demat (BOID). The FAQ says verification may be in person. The pages
+  // name no residence outside Nepal, so the country is NP.
+  // https://www.siprabi.com/pages/brokers/learn/register
+  // https://www.siprabi.com/pages/brokers/learn/faq
+  siprabi: { countries: ["NP"] },
+  // FAQ (site and app in Turkish and English): an account at Dinamik
+  // Menkul Değerler needs Turkish Republic ID verification and a video
+  // call. Opening is not supported for foreign nationals, nor for holders
+  // of a foreigner ID or a Blue Card. Sign-up is in the app only. Funding
+  // is a TRY transfer, free from partner banks, and US shares are bought
+  // after converting TRY to USD in the app. No other residency is named,
+  // so the country is TR. The separate "Slayz: Invest, Trade, Swap" app
+  // belongs to Global Dynamic Markets (Mauritius FSC), not this entity.
+  // https://slayz.app/sss
+  // https://slayz.app/en/faq
+  // https://slayz.app/destek
+  // https://apps.apple.com/tr/app/id6761392541
+  slayz: { countries: ["TR"] },
+  // FAQ: open online through the KYC (kyc.sunsecurities.com) with a
+  // citizenship certificate (both sides), a photo, Nepali bank details and a
+  // signature. A CDSC demat is needed, and Sun opens it as the DP. No
+  // passport, foreigner or NRN route is printed. The site is in English
+  // only and prints only +977 numbers. Funding is a voucher for a payment
+  // to Sun's accounts at Global IME Bank or Prabhu Bank in Kathmandu
+  // (wallet, connectIPS, RTGS, cheque or cash), with no SWIFT or card route,
+  // and withdrawals go only to the client's registered bank account. The
+  // pages name no other residence, so the country is NP.
+  // https://sunsecurities.com/faqs
+  // https://sunsecurities.com/
+  sunsecurities: { countries: ["NP"] },
+  // The steps to get a bourse code start with registration in Sejam (the
+  // central depository's customer system) and identity checks, then the
+  // online sign-up (fardaregister.irbrokersite.ir). The code is given on a
+  // shenasnameh or an Iranian national card, and the identity page offers
+  // only the form for Iranian natural persons. The online trading page
+  // asks for identity checks at a branch and a linked bank account. The
+  // site is in Persian only and prints only Iranian numbers. Funding is in
+  // rials to the broker's Iranian bank accounts (IR Sheba) or through its
+  // payment gateway, with no foreign route. No page names foreign nationals
+  // or non-residents, so the picker is Iran.
+  // https://fardabroker.ir/bond
+  // https://fardabroker.ir/ehraz
+  // https://fardabroker.ir/barkhat
+  // https://fardabroker.ir/banks
+  // https://fardabroker.ir/questions
+  tosee: { countries: ["IR"] },
+  // Online opening has four steps: a form, uploaded documents, the agreement
+  // signed with a DigiGO electronic ID from TunTrust (the Tunisian
+  // certification agency; identity checked by video, ID sent by SMS), then
+  // a first deposit. The account can also be opened at one of the eight
+  // branches in Tunisia. The site is in French and English; the form itself
+  // is in French. The mobile phone is free text with no dial-code picker,
+  // and no nationality or residence picker is shown. The FAQ asks for a
+  // water, power or landline bill as proof of address. Funds go by transfer
+  // to a Tunisie Valeurs account at Amen Bank, and the client then brings
+  // the transfer order to the branch; a bank RIB is added at the branch.
+  // No residency is named as accepted or refused, so the country is TN.
+  // https://www.tunisievaleurs.com/faq/
+  // https://devenirclient.tunisievaleurs.com/ouverture-de-compte/
+  // https://devenirclient.tunisievaleurs.com/demarrez-votre-ouverture-de-compte/
+  tunisievaleurs: { countries: ["TN"] },
+  // Nationality list is Zimbabwe only, and both client types read
+  // "Individual retail investors (Zimbabwean)" / "(Zimbabwean)". Money comes
+  // by FCA (Nostro) transfer from a commercial bank in Zimbabwe or by mobile
+  // money, from USD 10. The FAQ lets a Zimbabwean living abroad buy, and the
+  // residence picker lists about 69 usable countries, but the offer is for
+  // Zimbabweans. Owner's choice (2026-10-22): Zimbabwe only.
+  // https://d3u8q0mxu6epjj.cloudfront.net/api/v1/public/nationalities
+  // https://d3u8q0mxu6epjj.cloudfront.net/api/v1/client-types
+  // https://vfexdirect.vfex.exchange/
+  // https://ds88jcmqc11je.cloudfront.net/api/faqs?exchange=VFEX
+  vfexdirect: { countries: ["ZW"] },
+  // The online opening form asks for a Vietnamese citizen card ("Số CCCD/ CMTND"),
+  // its issue date and place, an address and a bank account; customer care then
+  // calls to finish. The terms identify the client by CCCD/CC. No page names a
+  // foreign-investor or non-resident path, so the picker is Vietnam, as for vdsc.
+  // https://xtsc.vn/openaccount
+  // https://xtsc.vn/dieu-kien-dieu-khoan
+  xtsc: { countries: ["VN"] },
+  // FAQ "What do I need to open an account?": you must live in
+  // Switzerland, Austria or Liechtenstein and not be a US person. A foreign
+  // national living in Switzerland also needs a residence permit. Onboarding
+  // for residents of other countries is on hold. Austria and Liechtenstein
+  // need an official proof of residence and a first deposit of at least
+  // EUR 500 from a bank in that country.
+  // https://www.yuh.com/en/help/faq/
+  // https://www.yuh.com/en/help/fatca/
+  yuh: { countries: ["CH", "AT", "LI"] },
+  // Dosikaa asks "Enter your Kenya Revenue Authority PIN" before it creates
+  // the CDS account with AIB-AXYS (screens seen by the owner on
+  // 2026-10-22). The DigiTrader auto-opening terms, clause 3(i): "only
+  // applicable to natural person of legal age , local citizens". The
+  // ActiveTrader web sign-up requires a "KRA PIN / Tax ID" too. The paper
+  // account form, filled at the Nairobi office (FAQ), asks for a KRA PIN
+  // and a KRA PIN certificate, Foreign Individual box included. The
+  // auto-opened account is funded by M-Pesa only. Kenya only.
+  // https://ww2.aib-axysafrica.com/_files/ugd/af94b6_ae7307fe1f5c48e28a6215d816cf76d6.pdf
+  // https://ww2.aib-axysafrica.com/_files/ugd/af94b6_07ac907c25f3494db14e7e9be84e07ed.pdf
+  // https://ww2.aib-axysafrica.com/_files/ugd/af94b6_7132bbfc5dcc4d60a47245382c86f42c.pdf
+  // https://aibaxys.kenyaonlinetrading.com/ActiveTrader/
+  aibaxys: { countries: ["KE"] },
+  // The Dosikaa app asks "Enter your Kenya Revenue Authority PIN" before it
+  // creates the CDS account with Faida (screens seen by the owner on
+  // 2026-10-22). Faida's own registration form asks for an ID or passport
+  // number and a KRA PIN. Its nationality and country lists hold some 200
+  // countries, but Faida names no route for non-residents. Funding is
+  // M-Pesa paybill 888900 or a deposit to Faida's Co-operative Bank or
+  // Stanbic accounts in Kenya. Kenya only, as for ABC Capital.
+  // https://fib.co.ke/faqs/
+  // https://fib.co.ke/registration-form/
+  // https://web.archive.org/web/20260511234123/https://fib.co.ke/registration-form/
+  faida: { countries: ["KE"] },
+  // Dosikaa asks "Enter your Kenya Revenue Authority PIN" before it creates
+  // the CDS account with Kingdom Securities (screens seen by the owner on
+  // 2026-10-22). KSL's own self-onboarding link needs the original physical
+  // National ID and a KRA PIN certificate. The FAQ's other routes are on
+  // paper. A Kenyan abroad is introduced through Co-op Bank's diaspora
+  // banking department, which stamps the forms; this is a nationality
+  // route, not a residence one. A foreigner in Kenya brings a passport, an
+  // embassy letter and an entry or work permit. Kenya only, as for
+  // abccapital.
+  // https://kingdomsecurities.co.ke/faqs/
+  // https://kingdomsecurities.co.ke/wp-content/uploads/2026/04/Individual-CDS-Self-Onboarding-Link-1.pdf
+  kingdomsecurities: { countries: ["KE"] },
 };
+
+// Names added on 2026-10-22 so that a broker's own country can be picked
+// (BCEL-KT Laos, the Jamaican, Nepalese, Ethiopian and Iranian brokers,
+// Attijari Intermédiation's diaspora list). A worldwide broker ({ all: true })
+// is not read as taking these: its pages were checked against the earlier list.
+const NAMED_ONLY = new Set(["LA", "JM", "NP", "ET", "IR", "LY", "SY"]);
 
 const GROUPS = { EEA, EU, GCC };
 
@@ -2303,7 +2869,7 @@ export function expand(spec) {
   const set = new Set();
   if (!spec) return set;
   if (spec.all) {
-    for (const code of Object.keys(COUNTRY_NAMES)) set.add(code);
+    for (const code of Object.keys(COUNTRY_NAMES)) if (!NAMED_ONLY.has(code)) set.add(code);
   }
   for (const group of spec.groups || []) {
     for (const code of GROUPS[group] || []) set.add(code);

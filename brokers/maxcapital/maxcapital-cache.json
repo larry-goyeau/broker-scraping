@@ -1,0 +1,6937 @@
+{
+ "source": "https://www.max.capital/api/cotizaciones/buscador/",
+ "savedOn": "2026-10-21",
+ "note": "The acciones and cedears entries of the site's search index, read in a browser; the site answers 403 to scripts.",
+ "items": [
+  {
+   "code": "CL",
+   "type": "cedears",
+   "description": "Colgate"
+  },
+  {
+   "code": "XMEC",
+   "type": "cedears",
+   "description": "SPDR S&P Metals & Mining ETF"
+  },
+  {
+   "code": "GLDC",
+   "type": "cedears",
+   "description": "SPDR Gold Shares"
+  },
+  {
+   "code": "BMY",
+   "type": "cedears",
+   "description": "Bristol-Myers Squibb"
+  },
+  {
+   "code": "GEVC",
+   "type": "cedears",
+   "description": "GE Vernova"
+  },
+  {
+   "code": "ECLD",
+   "type": "cedears",
+   "description": "Ecolab"
+  },
+  {
+   "code": "BKNGD",
+   "type": "cedears",
+   "description": "Booking Holdings Inc"
+  },
+  {
+   "code": "BNY",
+   "type": "cedears",
+   "description": "BNY"
+  },
+  {
+   "code": "FMX.B",
+   "type": "cedears",
+   "description": "FMX.B"
+  },
+  {
+   "code": "MBGB",
+   "type": "cedears",
+   "description": "MBGB"
+  },
+  {
+   "code": "UBER",
+   "type": "cedears",
+   "description": "Uber"
+  },
+  {
+   "code": "WELL",
+   "type": "cedears",
+   "description": "Welltower Inc"
+  },
+  {
+   "code": "XOM",
+   "type": "cedears",
+   "description": "ExxonMobil"
+  },
+  {
+   "code": "CORNC",
+   "type": "cedears",
+   "description": "Teucrium Corn Fund"
+  },
+  {
+   "code": "NTRAC",
+   "type": "cedears",
+   "description": "Natera Inc"
+  },
+  {
+   "code": "PFED",
+   "type": "cedears",
+   "description": "Pfizer"
+  },
+  {
+   "code": "GLNGD",
+   "type": "cedears",
+   "description": "CEDEAR GOLAR LNG LTD."
+  },
+  {
+   "code": "AIG",
+   "type": "cedears",
+   "description": "American International Group"
+  },
+  {
+   "code": "AMD.B",
+   "type": "cedears",
+   "description": "AMD.B"
+  },
+  {
+   "code": "URAC",
+   "type": "cedears",
+   "description": "CEDEAR GLOBAL X URANIUM ETF"
+  },
+  {
+   "code": "WFC",
+   "type": "cedears",
+   "description": "Wells Fargo"
+  },
+  {
+   "code": "NVDAC",
+   "type": "cedears",
+   "description": "Nvidia"
+  },
+  {
+   "code": "PBRC",
+   "type": "cedears",
+   "description": "Petrobras"
+  },
+  {
+   "code": "INTC",
+   "type": "cedears",
+   "description": "Intel"
+  },
+  {
+   "code": "HPQB",
+   "type": "cedears",
+   "description": "HPQB"
+  },
+  {
+   "code": "ERICC",
+   "type": "cedears",
+   "description": "Ericsson"
+  },
+  {
+   "code": "OKLOC",
+   "type": "cedears",
+   "description": "CEDEAR OKLO INC."
+  },
+  {
+   "code": "O",
+   "type": "cedears",
+   "description": "CEDEAR REALTY INCOME CORP."
+  },
+  {
+   "code": "HLC",
+   "type": "cedears",
+   "description": "Hecla Mining Company"
+  },
+  {
+   "code": "MELI",
+   "type": "cedears",
+   "description": "Mercado Libre"
+  },
+  {
+   "code": "HUTC",
+   "type": "cedears",
+   "description": "Hut 8 Corp"
+  },
+  {
+   "code": "TRIPC",
+   "type": "cedears",
+   "description": "TripAdvisor"
+  },
+  {
+   "code": "MELID",
+   "type": "cedears",
+   "description": "Mercado Libre"
+  },
+  {
+   "code": "GM",
+   "type": "cedears",
+   "description": "General Motors"
+  },
+  {
+   "code": "HUT",
+   "type": "cedears",
+   "description": "Hut 8 Corp"
+  },
+  {
+   "code": "MDLZC",
+   "type": "cedears",
+   "description": "Mondelēz International"
+  },
+  {
+   "code": "ABEV3",
+   "type": "cedears",
+   "description": "CEDEAR AMBEV S.A"
+  },
+  {
+   "code": "MSFTC",
+   "type": "cedears",
+   "description": "Microsoft"
+  },
+  {
+   "code": "LIN",
+   "type": "cedears",
+   "description": "Linde plc"
+  },
+  {
+   "code": "ACWI",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES MSCI ACWI ETF"
+  },
+  {
+   "code": "NUE",
+   "type": "cedears",
+   "description": "Nucor Corp"
+  },
+  {
+   "code": "TC",
+   "type": "cedears",
+   "description": "AT&T"
+  },
+  {
+   "code": "IPC",
+   "type": "cedears",
+   "description": "International Paper"
+  },
+  {
+   "code": "WDC",
+   "type": "cedears",
+   "description": "Western Digital"
+  },
+  {
+   "code": "XLBD",
+   "type": "cedears",
+   "description": "State Street Materials Select Sector SPDR ETF"
+  },
+  {
+   "code": "ICLN",
+   "type": "cedears",
+   "description": "iShares Global Clean Energy ETF"
+  },
+  {
+   "code": "BA.CB",
+   "type": "cedears",
+   "description": "BA.CB"
+  },
+  {
+   "code": "EEMD",
+   "type": "cedears",
+   "description": "iShares MSCI Emerging Markets ETF"
+  },
+  {
+   "code": "SLVB",
+   "type": "cedears",
+   "description": "SLVB"
+  },
+  {
+   "code": "BAKD",
+   "type": "cedears",
+   "description": "BAKD"
+  },
+  {
+   "code": "XLC",
+   "type": "cedears",
+   "description": "State Street Communication Services Select Sector SPDR ETF"
+  },
+  {
+   "code": "T",
+   "type": "cedears",
+   "description": "AT&T"
+  },
+  {
+   "code": "AAPLD",
+   "type": "cedears",
+   "description": "Apple"
+  },
+  {
+   "code": "XP",
+   "type": "cedears",
+   "description": "XP Inc"
+  },
+  {
+   "code": "SONYD",
+   "type": "cedears",
+   "description": "SONYD"
+  },
+  {
+   "code": "IEURD",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES CORE MSCI EUROPE ETF"
+  },
+  {
+   "code": "GSC",
+   "type": "cedears",
+   "description": "Goldman Sachs"
+  },
+  {
+   "code": "AAPL",
+   "type": "cedears",
+   "description": "Apple"
+  },
+  {
+   "code": "XLREC",
+   "type": "cedears",
+   "description": "Real Estate Select Sector SPDR Fund"
+  },
+  {
+   "code": "RGTIC",
+   "type": "cedears",
+   "description": "CEDEAR RIGETTI COMPUTING (RGTI)"
+  },
+  {
+   "code": "GRMND",
+   "type": "cedears",
+   "description": "Garmin"
+  },
+  {
+   "code": "HDB",
+   "type": "cedears",
+   "description": "HDFC Bank "
+  },
+  {
+   "code": "BNGB",
+   "type": "cedears",
+   "description": "BNGB"
+  },
+  {
+   "code": "NGG",
+   "type": "cedears",
+   "description": "National Grid"
+  },
+  {
+   "code": "AEG",
+   "type": "cedears",
+   "description": "AEGON"
+  },
+  {
+   "code": "IFFC",
+   "type": "cedears",
+   "description": "International Flavors & Fragrances"
+  },
+  {
+   "code": "BIDUD",
+   "type": "cedears",
+   "description": "Baidu"
+  },
+  {
+   "code": "VALEB",
+   "type": "cedears",
+   "description": "VALEB"
+  },
+  {
+   "code": "XROXC",
+   "type": "cedears",
+   "description": "Xerox"
+  },
+  {
+   "code": "SLBC",
+   "type": "cedears",
+   "description": "Schlumberger Limited"
+  },
+  {
+   "code": "ONDSC",
+   "type": "cedears",
+   "description": "CEDEAR ONDAS HOLDINGS INC."
+  },
+  {
+   "code": "QCOMB",
+   "type": "cedears",
+   "description": "QCOMB"
+  },
+  {
+   "code": "VIG",
+   "type": "cedears",
+   "description": "CEDEAR ETF VANGUARD DIVIDEND APPRECIATION (VIG)"
+  },
+  {
+   "code": "UNPD",
+   "type": "cedears",
+   "description": "Union Pacific Corp"
+  },
+  {
+   "code": "TWLOC",
+   "type": "cedears",
+   "description": "Twilio"
+  },
+  {
+   "code": "DOCUD",
+   "type": "cedears",
+   "description": "Docusign"
+  },
+  {
+   "code": "ANETC",
+   "type": "cedears",
+   "description": "CEDEAR ARISTA NETWORKS INC."
+  },
+  {
+   "code": "XOMD",
+   "type": "cedears",
+   "description": "ExxonMobil"
+  },
+  {
+   "code": "ESGUC",
+   "type": "cedears",
+   "description": "iShares ESG Aware MSCI USA ETF"
+  },
+  {
+   "code": "XLED",
+   "type": "cedears",
+   "description": "Energy Select Sector SPDR Fund"
+  },
+  {
+   "code": "GGB",
+   "type": "cedears",
+   "description": "Gerdau"
+  },
+  {
+   "code": "RSPC",
+   "type": "cedears",
+   "description": "Invesco S&P 500 Equal Weight ETF"
+  },
+  {
+   "code": "INGC",
+   "type": "cedears",
+   "description": "ING"
+  },
+  {
+   "code": "PEP.B",
+   "type": "cedears",
+   "description": "PEP.B"
+  },
+  {
+   "code": "MBG",
+   "type": "cedears",
+   "description": "Mercedes-Benz Group"
+  },
+  {
+   "code": "NUD",
+   "type": "cedears",
+   "description": "CEDEAR NU HOLDINGS LTD/CAYMAN ISLANDS"
+  },
+  {
+   "code": "ETHAD",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES ETHEREUM TR ETF"
+  },
+  {
+   "code": "XPEVC",
+   "type": "cedears",
+   "description": "CEDEAR XPENG INC (XPEV)"
+  },
+  {
+   "code": "IBNC",
+   "type": "cedears",
+   "description": "ICICI Bank"
+  },
+  {
+   "code": "NUC",
+   "type": "cedears",
+   "description": "CEDEAR NU HOLDINGS LTD/CAYMAN ISLANDS"
+  },
+  {
+   "code": "VIV",
+   "type": "cedears",
+   "description": "Telefônica Brasil"
+  },
+  {
+   "code": "XYZC",
+   "type": "cedears",
+   "description": "XYZC"
+  },
+  {
+   "code": "DOCU",
+   "type": "cedears",
+   "description": "Docusign"
+  },
+  {
+   "code": "SAP",
+   "type": "cedears",
+   "description": "SAP"
+  },
+  {
+   "code": "CXC",
+   "type": "cedears",
+   "description": "Cemex"
+  },
+  {
+   "code": "NOWD",
+   "type": "cedears",
+   "description": "CEDEAR SERVICENOW INC (NOW)"
+  },
+  {
+   "code": "TQQQ",
+   "type": "cedears",
+   "description": "CEDEAR PROSHARES ULTRAPRO QQQ ETF"
+  },
+  {
+   "code": "BAC",
+   "type": "cedears",
+   "description": "Boeing"
+  },
+  {
+   "code": "PATHC",
+   "type": "cedears",
+   "description": "CEDEAR UIPATH INC (PATH)"
+  },
+  {
+   "code": "BB.D",
+   "type": "cedears",
+   "description": "CEDEAR BLACKBERRY"
+  },
+  {
+   "code": "CRWDD",
+   "type": "cedears",
+   "description": "CEDEAR CROWDSTRIKE HOLDINGS INC."
+  },
+  {
+   "code": "FC",
+   "type": "cedears",
+   "description": "Ford Motor Company"
+  },
+  {
+   "code": "BAK",
+   "type": "cedears",
+   "description": "Braskem"
+  },
+  {
+   "code": "DJN3D",
+   "type": "cedears",
+   "description": "CEDEAR JOHNSON & JOHNSON ADR VTO.2029"
+  },
+  {
+   "code": "NG",
+   "type": "cedears",
+   "description": "Novagold Resources"
+  },
+  {
+   "code": "WBO",
+   "type": "cedears",
+   "description": "Weibo Corp"
+  },
+  {
+   "code": "HAP3C",
+   "type": "cedears",
+   "description": "HAP3C"
+  },
+  {
+   "code": "CEGC",
+   "type": "cedears",
+   "description": "CEDEAR CONSTELLATION ENERGY CORPORATION (CEG)"
+  },
+  {
+   "code": "PAGSD",
+   "type": "cedears",
+   "description": "CEDEAR PAGSEGURO DIGITAL LTD"
+  },
+  {
+   "code": "SIDD",
+   "type": "cedears",
+   "description": "Companhia Siderúrgica Nacional"
+  },
+  {
+   "code": "PETRD",
+   "type": "cedears",
+   "description": "CEDEAR PETROLEO BRASILEIRO S.A."
+  },
+  {
+   "code": "NEMC",
+   "type": "cedears",
+   "description": "Newmont Mining Corporation"
+  },
+  {
+   "code": "PLD",
+   "type": "cedears",
+   "description": "Prologis"
+  },
+  {
+   "code": "ERIC",
+   "type": "cedears",
+   "description": "Ericsson"
+  },
+  {
+   "code": "AXPD",
+   "type": "cedears",
+   "description": "American Express"
+  },
+  {
+   "code": "AXP.B",
+   "type": "cedears",
+   "description": "AXP.B"
+  },
+  {
+   "code": "BBAS3",
+   "type": "cedears",
+   "description": "Banco do Brasil"
+  },
+  {
+   "code": "DE",
+   "type": "cedears",
+   "description": "Deere & Company"
+  },
+  {
+   "code": "VXXD",
+   "type": "cedears",
+   "description": "CEDEAR IPATH SERIES B S&P 500 VIX ETF"
+  },
+  {
+   "code": "FCX",
+   "type": "cedears",
+   "description": "Freeport"
+  },
+  {
+   "code": "GMC",
+   "type": "cedears",
+   "description": "General Motors"
+  },
+  {
+   "code": "RIOB",
+   "type": "cedears",
+   "description": "RIOB"
+  },
+  {
+   "code": "PYPLC",
+   "type": "cedears",
+   "description": "Paypal"
+  },
+  {
+   "code": "WBOD",
+   "type": "cedears",
+   "description": "Weibo Corp"
+  },
+  {
+   "code": "EWYC",
+   "type": "cedears",
+   "description": "iShares MSCI South Korea ETF"
+  },
+  {
+   "code": "GILDC",
+   "type": "cedears",
+   "description": "Gilead Sciences"
+  },
+  {
+   "code": "FXIC",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES TRUST FTSE CHINA 25 IF"
+  },
+  {
+   "code": "VD",
+   "type": "cedears",
+   "description": "Visa"
+  },
+  {
+   "code": "SATLC",
+   "type": "cedears",
+   "description": "Satellogic"
+  },
+  {
+   "code": "JDB",
+   "type": "cedears",
+   "description": "JDB"
+  },
+  {
+   "code": "UNPC",
+   "type": "cedears",
+   "description": "Union Pacific Corp"
+  },
+  {
+   "code": "CIBR",
+   "type": "cedears",
+   "description": "CEDEAR FIRST TRUST NASDAQ CYBERSECURITY"
+  },
+  {
+   "code": "SHWC",
+   "type": "cedears",
+   "description": "Sherwin-Williams"
+  },
+  {
+   "code": "MOB",
+   "type": "cedears",
+   "description": "MOB"
+  },
+  {
+   "code": "VISTD",
+   "type": "cedears",
+   "description": "Vista Oil & Gas"
+  },
+  {
+   "code": "DAL",
+   "type": "cedears",
+   "description": "Delta Air Lines"
+  },
+  {
+   "code": "DOCUC",
+   "type": "cedears",
+   "description": "Docusign"
+  },
+  {
+   "code": "TWLOD",
+   "type": "cedears",
+   "description": "Twilio"
+  },
+  {
+   "code": "AMATC",
+   "type": "cedears",
+   "description": "Applied Materials"
+  },
+  {
+   "code": "AMDDB",
+   "type": "cedears",
+   "description": "AMDDB"
+  },
+  {
+   "code": "UAL",
+   "type": "cedears",
+   "description": "United Airlines Holdings"
+  },
+  {
+   "code": "RBLXC",
+   "type": "cedears",
+   "description": "Roblox Corporation"
+  },
+  {
+   "code": "PDDD",
+   "type": "cedears",
+   "description": "CEDEAR PDD HOLDINGS INC (PDD"
+  },
+  {
+   "code": "IBMC",
+   "type": "cedears",
+   "description": "IBM"
+  },
+  {
+   "code": "EFXD",
+   "type": "cedears",
+   "description": "Equifax"
+  },
+  {
+   "code": "ALAC",
+   "type": "cedears",
+   "description": "CEDEAR ASTERA LABS INC."
+  },
+  {
+   "code": "NFLXD",
+   "type": "cedears",
+   "description": "Netflix"
+  },
+  {
+   "code": "NTRA",
+   "type": "cedears",
+   "description": "Natera Inc"
+  },
+  {
+   "code": "AAPLC",
+   "type": "cedears",
+   "description": "Apple"
+  },
+  {
+   "code": "LLYD",
+   "type": "cedears",
+   "description": "Eli Lilly and Company"
+  },
+  {
+   "code": "SLVD",
+   "type": "cedears",
+   "description": "CEDEAR ETF ISHARES SILVER TRUST (SLV)"
+  },
+  {
+   "code": "TRIPD",
+   "type": "cedears",
+   "description": "TripAdvisor"
+  },
+  {
+   "code": "CDED",
+   "type": "cedears",
+   "description": "CDED"
+  },
+  {
+   "code": "BMNRD",
+   "type": "cedears",
+   "description": "BitMine"
+  },
+  {
+   "code": "SNA",
+   "type": "cedears",
+   "description": "Snap-on"
+  },
+  {
+   "code": "BABAC",
+   "type": "cedears",
+   "description": "Alibaba"
+  },
+  {
+   "code": "MOS",
+   "type": "cedears",
+   "description": "Mosaic Co"
+  },
+  {
+   "code": "TCOM",
+   "type": "cedears",
+   "description": "Trip.com Group"
+  },
+  {
+   "code": "GLDDB",
+   "type": "cedears",
+   "description": "GLDDB"
+  },
+  {
+   "code": "WFCC",
+   "type": "cedears",
+   "description": "WFCC"
+  },
+  {
+   "code": "VRSNC",
+   "type": "cedears",
+   "description": "Verisign"
+  },
+  {
+   "code": "SPXL",
+   "type": "cedears",
+   "description": "CEDEAR DIREXION DAILY S&P 500 BULL 3X"
+  },
+  {
+   "code": "META",
+   "type": "cedears",
+   "description": "Meta"
+  },
+  {
+   "code": "SPCX",
+   "type": "cedears",
+   "description": "Space Exploration Technologies Corp"
+  },
+  {
+   "code": "VRTX",
+   "type": "cedears",
+   "description": "CEDEAR VERTEX PHARMACEUTICALS INC (VRTX)"
+  },
+  {
+   "code": "EWYD",
+   "type": "cedears",
+   "description": "iShares MSCI South Korea ETF"
+  },
+  {
+   "code": "ITUB",
+   "type": "cedears",
+   "description": "Itaú Unibanco"
+  },
+  {
+   "code": "XOMC",
+   "type": "cedears",
+   "description": "ExxonMobil"
+  },
+  {
+   "code": "DJN3C",
+   "type": "cedears",
+   "description": "CEDEAR JOHNSON & JOHNSON ADR VTO.2029"
+  },
+  {
+   "code": "TMUSC",
+   "type": "cedears",
+   "description": "T-Mobile US"
+  },
+  {
+   "code": "ULD",
+   "type": "cedears",
+   "description": "Unilever"
+  },
+  {
+   "code": "DALC",
+   "type": "cedears",
+   "description": "Delta Air Lines"
+  },
+  {
+   "code": "TMOD",
+   "type": "cedears",
+   "description": "Thermo Fisher Scientific Inc"
+  },
+  {
+   "code": "ADGOC",
+   "type": "cedears",
+   "description": "Adecoagro"
+  },
+  {
+   "code": "TSMD",
+   "type": "cedears",
+   "description": "TSMC"
+  },
+  {
+   "code": "KLACC",
+   "type": "cedears",
+   "description": "KLA Corporation"
+  },
+  {
+   "code": "HLD",
+   "type": "cedears",
+   "description": "Hecla Mining Company"
+  },
+  {
+   "code": "NGC",
+   "type": "cedears",
+   "description": "Novagold Resources"
+  },
+  {
+   "code": "DIAC",
+   "type": "cedears",
+   "description": "CEDEAR SPDR DOW JONES INDUSTRIAL"
+  },
+  {
+   "code": "MFG",
+   "type": "cedears",
+   "description": "Mizuho Financial Group"
+  },
+  {
+   "code": "XROX",
+   "type": "cedears",
+   "description": "Xerox"
+  },
+  {
+   "code": "NMRD",
+   "type": "cedears",
+   "description": "NMRD"
+  },
+  {
+   "code": "EQNR",
+   "type": "cedears",
+   "description": "CEDEAR EQUINOR ASA"
+  },
+  {
+   "code": "FD",
+   "type": "cedears",
+   "description": "Ford Motor Company"
+  },
+  {
+   "code": "DECKC",
+   "type": "cedears",
+   "description": "CEDEAR DECKERS OUTDOOR CORPORATION (DECK)"
+  },
+  {
+   "code": "KOD",
+   "type": "cedears",
+   "description": "The Coca-Cola Company"
+  },
+  {
+   "code": "HSBC",
+   "type": "cedears",
+   "description": "HSBC"
+  },
+  {
+   "code": "UNHD",
+   "type": "cedears",
+   "description": "Unitedhealth Group Inc."
+  },
+  {
+   "code": "AZN",
+   "type": "cedears",
+   "description": "AstraZeneca"
+  },
+  {
+   "code": "XLCD",
+   "type": "cedears",
+   "description": "State Street Communication Services Select Sector SPDR ETF"
+  },
+  {
+   "code": "HMC",
+   "type": "cedears",
+   "description": "Honda"
+  },
+  {
+   "code": "SUZ",
+   "type": "cedears",
+   "description": "Suzano"
+  },
+  {
+   "code": "MSFT",
+   "type": "cedears",
+   "description": "Microsoft"
+  },
+  {
+   "code": "MCD",
+   "type": "cedears",
+   "description": "McDonald's"
+  },
+  {
+   "code": "BBV",
+   "type": "cedears",
+   "description": "BBVA"
+  },
+  {
+   "code": "AMATD",
+   "type": "cedears",
+   "description": "Applied Materials"
+  },
+  {
+   "code": "IVED",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES S&P 500 VALUE ETF"
+  },
+  {
+   "code": "XLYD",
+   "type": "cedears",
+   "description": "State Street Consumer Discretionary Select Sector SPDR ETF"
+  },
+  {
+   "code": "RIOTD",
+   "type": "cedears",
+   "description": "Riot Platforms Inc"
+  },
+  {
+   "code": "BNYD",
+   "type": "cedears",
+   "description": "BNYD"
+  },
+  {
+   "code": "GSGC",
+   "type": "cedears",
+   "description": "iShares S&P GSCI Commodity-Indexed Trust ETF"
+  },
+  {
+   "code": "FDXD",
+   "type": "cedears",
+   "description": "FedEx"
+  },
+  {
+   "code": "VALEC",
+   "type": "cedears",
+   "description": "Companhia Vale Do Rio Doce"
+  },
+  {
+   "code": "SHELB",
+   "type": "cedears",
+   "description": "SHELB"
+  },
+  {
+   "code": "INTCC",
+   "type": "cedears",
+   "description": "CEDEAR INTEL CORPORATION ESCRIT."
+  },
+  {
+   "code": "AID",
+   "type": "cedears",
+   "description": "CEDEAR C3.AI INC (AI)"
+  },
+  {
+   "code": "SCCOD",
+   "type": "cedears",
+   "description": "SCCOD"
+  },
+  {
+   "code": "DISN",
+   "type": "cedears",
+   "description": "The Walt Disney Company"
+  },
+  {
+   "code": "SUZD",
+   "type": "cedears",
+   "description": "Suzano"
+  },
+  {
+   "code": "HSBCD",
+   "type": "cedears",
+   "description": "HSBCD"
+  },
+  {
+   "code": "TIMS3",
+   "type": "cedears",
+   "description": "CEDEAR TIM S.A."
+  },
+  {
+   "code": "IWM",
+   "type": "cedears",
+   "description": "iShares Russell 2000 ETF"
+  },
+  {
+   "code": "ADGOD",
+   "type": "cedears",
+   "description": "Adecoagro"
+  },
+  {
+   "code": "COP",
+   "type": "cedears",
+   "description": "CEDEAR CONOCOPHILLIPS"
+  },
+  {
+   "code": "BNG",
+   "type": "cedears",
+   "description": "Bunge Global"
+  },
+  {
+   "code": "VALE3",
+   "type": "cedears",
+   "description": "CEDEAR VALE S.A."
+  },
+  {
+   "code": "MSFDB",
+   "type": "cedears",
+   "description": "MSFDB"
+  },
+  {
+   "code": "NTESC",
+   "type": "cedears",
+   "description": "NetEase"
+  },
+  {
+   "code": "GSK",
+   "type": "cedears",
+   "description": "GlaxoSmithKline"
+  },
+  {
+   "code": "ABNBD",
+   "type": "cedears",
+   "description": "Airbnb"
+  },
+  {
+   "code": "SHELD",
+   "type": "cedears",
+   "description": "Shell"
+  },
+  {
+   "code": "TEN",
+   "type": "cedears",
+   "description": "Tenaris"
+  },
+  {
+   "code": "KMBD",
+   "type": "cedears",
+   "description": "Kimberly-Clark"
+  },
+  {
+   "code": "GPRKC",
+   "type": "cedears",
+   "description": "GeoPark Ltd"
+  },
+  {
+   "code": "TGTD",
+   "type": "cedears",
+   "description": "Target Corporation"
+  },
+  {
+   "code": "PG..B",
+   "type": "cedears",
+   "description": "PG..B"
+  },
+  {
+   "code": "QQQB",
+   "type": "cedears",
+   "description": "QQQB"
+  },
+  {
+   "code": "FMXD",
+   "type": "cedears",
+   "description": "Fomento Economico Mexicano"
+  },
+  {
+   "code": "RTX",
+   "type": "cedears",
+   "description": "RTX Corporation"
+  },
+  {
+   "code": "GPRK",
+   "type": "cedears",
+   "description": "GeoPark Ltd"
+  },
+  {
+   "code": "QQQD",
+   "type": "cedears",
+   "description": "Invesco QQQ Trust"
+  },
+  {
+   "code": "LAC",
+   "type": "cedears",
+   "description": "Lithium Americas Corp"
+  },
+  {
+   "code": "TIMB",
+   "type": "cedears",
+   "description": "TIM Brasil"
+  },
+  {
+   "code": "XLIC",
+   "type": "cedears",
+   "description": "State Street Industrial Select Sector SPDR ETF"
+  },
+  {
+   "code": "PSQ",
+   "type": "cedears",
+   "description": "CEDEAR ETF PROSHARES SHORT QQQ (PSQ)"
+  },
+  {
+   "code": "ABTD",
+   "type": "cedears",
+   "description": "Abbott Laboratories"
+  },
+  {
+   "code": "ICLND",
+   "type": "cedears",
+   "description": "iShares Global Clean Energy ETF"
+  },
+  {
+   "code": "HSBCC",
+   "type": "cedears",
+   "description": "HSBC"
+  },
+  {
+   "code": "DDC",
+   "type": "cedears",
+   "description": "DuPont Corporation"
+  },
+  {
+   "code": "BXD",
+   "type": "cedears",
+   "description": "Blackstone"
+  },
+  {
+   "code": "ETSYC",
+   "type": "cedears",
+   "description": "Etsy"
+  },
+  {
+   "code": "WELLD",
+   "type": "cedears",
+   "description": "Welltower Inc"
+  },
+  {
+   "code": "GS",
+   "type": "cedears",
+   "description": "Goldman Sachs"
+  },
+  {
+   "code": "ASMLC",
+   "type": "cedears",
+   "description": "CEDEAR ASML HOLDING NV (ASML)"
+  },
+  {
+   "code": "RACEC",
+   "type": "cedears",
+   "description": "Ferrari NV"
+  },
+  {
+   "code": "XLPD",
+   "type": "cedears",
+   "description": "State Street Consumer Staples Select Sector SPDR ETF"
+  },
+  {
+   "code": "SPOTC",
+   "type": "cedears",
+   "description": "Spotify"
+  },
+  {
+   "code": "DELLD",
+   "type": "cedears",
+   "description": "Dell Technologies"
+  },
+  {
+   "code": "MUD",
+   "type": "cedears",
+   "description": "Micron Technology"
+  },
+  {
+   "code": "SOYBD",
+   "type": "cedears",
+   "description": "Teucrium Soybean Fund"
+  },
+  {
+   "code": "TMUSD",
+   "type": "cedears",
+   "description": "T-Mobile US"
+  },
+  {
+   "code": "SYYC",
+   "type": "cedears",
+   "description": "Sysco Corp"
+  },
+  {
+   "code": "NEM",
+   "type": "cedears",
+   "description": "Newmont Mining Corporation"
+  },
+  {
+   "code": "HDD",
+   "type": "cedears",
+   "description": "The Home Depot"
+  },
+  {
+   "code": "SIEGC",
+   "type": "cedears",
+   "description": "SIEGC"
+  },
+  {
+   "code": "GTC",
+   "type": "cedears",
+   "description": "GTC"
+  },
+  {
+   "code": "CVSC",
+   "type": "cedears",
+   "description": "CVS Health"
+  },
+  {
+   "code": "NOKAC",
+   "type": "cedears",
+   "description": "Nokia"
+  },
+  {
+   "code": "STLAB",
+   "type": "cedears",
+   "description": "STLAB"
+  },
+  {
+   "code": "IBM",
+   "type": "cedears",
+   "description": "IBM"
+  },
+  {
+   "code": "AIGD",
+   "type": "cedears",
+   "description": "American International Group"
+  },
+  {
+   "code": "AAL",
+   "type": "cedears",
+   "description": "American Airlines"
+  },
+  {
+   "code": "GLNGB",
+   "type": "cedears",
+   "description": "GLNGB"
+  },
+  {
+   "code": "CSCOC",
+   "type": "cedears",
+   "description": "Cisco Systems"
+  },
+  {
+   "code": "SWKS",
+   "type": "cedears",
+   "description": "Skyworks Solutions"
+  },
+  {
+   "code": "QQQDB",
+   "type": "cedears",
+   "description": "QQQDB"
+  },
+  {
+   "code": "VIGC",
+   "type": "cedears",
+   "description": "CEDEAR ETF VANGUARD DIVIDEND APPRECIATION (VIG)"
+  },
+  {
+   "code": "LRCXD",
+   "type": "cedears",
+   "description": "Lam Research"
+  },
+  {
+   "code": "KOC",
+   "type": "cedears",
+   "description": "The Coca-Cola Company"
+  },
+  {
+   "code": "IWMD",
+   "type": "cedears",
+   "description": "iShares Russell 2000 ETF"
+  },
+  {
+   "code": "VEAC",
+   "type": "cedears",
+   "description": "CEDEAR VANGUARD FTSE DEVELOPED MARKETS ETF"
+  },
+  {
+   "code": "IVWC",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES S&P 500 GROWTH ETF"
+  },
+  {
+   "code": "CATD",
+   "type": "cedears",
+   "description": "Caterpillar"
+  },
+  {
+   "code": "IREND",
+   "type": "cedears",
+   "description": "Iren"
+  },
+  {
+   "code": "IBICB",
+   "type": "cedears",
+   "description": "IBICB"
+  },
+  {
+   "code": "METAC",
+   "type": "cedears",
+   "description": "Meta"
+  },
+  {
+   "code": "ASTS",
+   "type": "cedears",
+   "description": "AST SpaceMobile"
+  },
+  {
+   "code": "INTCD",
+   "type": "cedears",
+   "description": "Intel"
+  },
+  {
+   "code": "RGTID",
+   "type": "cedears",
+   "description": "CEDEAR RIGETTI COMPUTING (RGTI)"
+  },
+  {
+   "code": "IBBD",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES NASDAQ BIOTECHNOLOGY"
+  },
+  {
+   "code": "VIST",
+   "type": "cedears",
+   "description": "Vista Oil & Gas"
+  },
+  {
+   "code": "BKRD",
+   "type": "cedears",
+   "description": "BKRD"
+  },
+  {
+   "code": "CIBRD",
+   "type": "cedears",
+   "description": "CEDEAR FIRST TRUST NASDAQ CYBERSECURITY"
+  },
+  {
+   "code": "CRWD",
+   "type": "cedears",
+   "description": "CEDEAR CROWDSTRIKE HOLDINGS INC."
+  },
+  {
+   "code": "GSG",
+   "type": "cedears",
+   "description": "iShares S&P GSCI Commodity-Indexed Trust ETF"
+  },
+  {
+   "code": "IVE",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES S&P 500 VALUE ETF"
+  },
+  {
+   "code": "SH",
+   "type": "cedears",
+   "description": "CEDEAR PROSHARES SHORT S&P500"
+  },
+  {
+   "code": "RTXC",
+   "type": "cedears",
+   "description": "RTX Corporation"
+  },
+  {
+   "code": "MDTD",
+   "type": "cedears",
+   "description": "Medtronic"
+  },
+  {
+   "code": "NBISC",
+   "type": "cedears",
+   "description": "CEDEAR NEBIUS GROUP N.V."
+  },
+  {
+   "code": "EWZ",
+   "type": "cedears",
+   "description": "iShares Msci Brazil ETF"
+  },
+  {
+   "code": "MA",
+   "type": "cedears",
+   "description": "Mastercard"
+  },
+  {
+   "code": "XLEB",
+   "type": "cedears",
+   "description": "XLEB"
+  },
+  {
+   "code": "VRSN",
+   "type": "cedears",
+   "description": "Verisign"
+  },
+  {
+   "code": "PCAR",
+   "type": "cedears",
+   "description": "Paccar"
+  },
+  {
+   "code": "JMIAC",
+   "type": "cedears",
+   "description": "Jumia"
+  },
+  {
+   "code": "XLRED",
+   "type": "cedears",
+   "description": "Real Estate Select Sector SPDR Fund"
+  },
+  {
+   "code": "PCARD",
+   "type": "cedears",
+   "description": "Paccar"
+  },
+  {
+   "code": "EFAD",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES MSCI EAFE ETF (EFA)"
+  },
+  {
+   "code": "SAND",
+   "type": "cedears",
+   "description": "Banco Santander"
+  },
+  {
+   "code": "COPXD",
+   "type": "cedears",
+   "description": "Global X Copper Miners ETF"
+  },
+  {
+   "code": "FSLRD",
+   "type": "cedears",
+   "description": "FSLRD"
+  },
+  {
+   "code": "EEM",
+   "type": "cedears",
+   "description": "iShares MSCI Emerging Markets ETF"
+  },
+  {
+   "code": "CCJC",
+   "type": "cedears",
+   "description": "CEDEAR CAMECO CORPORATION"
+  },
+  {
+   "code": "XLUD",
+   "type": "cedears",
+   "description": "Utilities Select Sector SPDR Fund"
+  },
+  {
+   "code": "IEUR",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES CORE MSCI EUROPE ETF"
+  },
+  {
+   "code": "KEP",
+   "type": "cedears",
+   "description": "Korea Electric Power Corp"
+  },
+  {
+   "code": "TCOMD",
+   "type": "cedears",
+   "description": "Trip.com Group"
+  },
+  {
+   "code": "CIBRC",
+   "type": "cedears",
+   "description": "CEDEAR FIRST TRUST NASDAQ CYBERSECURITY"
+  },
+  {
+   "code": "IBKRC",
+   "type": "cedears",
+   "description": "Interactive Brokers"
+  },
+  {
+   "code": "E",
+   "type": "cedears",
+   "description": "Eni"
+  },
+  {
+   "code": "SPY",
+   "type": "cedears",
+   "description": "SPDR S&P 500"
+  },
+  {
+   "code": "DOWB",
+   "type": "cedears",
+   "description": "DOWB"
+  },
+  {
+   "code": "PGC",
+   "type": "cedears",
+   "description": "Procter & Gamble"
+  },
+  {
+   "code": "TSM",
+   "type": "cedears",
+   "description": "TSMC"
+  },
+  {
+   "code": "WMTD",
+   "type": "cedears",
+   "description": "Walmart"
+  },
+  {
+   "code": "XLCC",
+   "type": "cedears",
+   "description": "State Street Communication Services Select Sector SPDR ETF"
+  },
+  {
+   "code": "KGCD",
+   "type": "cedears",
+   "description": "KGCD"
+  },
+  {
+   "code": "LMTC",
+   "type": "cedears",
+   "description": "Lockheed Martin"
+  },
+  {
+   "code": "CATC",
+   "type": "cedears",
+   "description": "Caterpillar"
+  },
+  {
+   "code": "IPD",
+   "type": "cedears",
+   "description": "International Paper"
+  },
+  {
+   "code": "SNDK",
+   "type": "cedears",
+   "description": "CEDEAR SANDISK CORPORATION"
+  },
+  {
+   "code": "FCXB",
+   "type": "cedears",
+   "description": "FCXB"
+  },
+  {
+   "code": "ARKK",
+   "type": "cedears",
+   "description": "Arkk"
+  },
+  {
+   "code": "PINSC",
+   "type": "cedears",
+   "description": "Pinterest"
+  },
+  {
+   "code": "KEEL",
+   "type": "cedears",
+   "description": "CEDEAR KEEL INFRASTRUCTURE"
+  },
+  {
+   "code": "XLEC",
+   "type": "cedears",
+   "description": "Energy Select Sector SPDR Fund"
+  },
+  {
+   "code": "PSQD",
+   "type": "cedears",
+   "description": "CEDEAR ETF PROSHARES SHORT QQQ (PSQ)"
+  },
+  {
+   "code": "AMZNC",
+   "type": "cedears",
+   "description": "Amazon"
+  },
+  {
+   "code": "TJX",
+   "type": "cedears",
+   "description": "CEDEAR TJX COMPANIES INC."
+  },
+  {
+   "code": "ARM",
+   "type": "cedears",
+   "description": "ARM"
+  },
+  {
+   "code": "CAR",
+   "type": "cedears",
+   "description": "Cendant Corporation"
+  },
+  {
+   "code": "EWZC",
+   "type": "cedears",
+   "description": "iShares Msci Brazil ETF"
+  },
+  {
+   "code": "MRNAC",
+   "type": "cedears",
+   "description": "Moderna"
+  },
+  {
+   "code": "NATU3",
+   "type": "cedears",
+   "description": "NATU3"
+  },
+  {
+   "code": "MUX",
+   "type": "cedears",
+   "description": "McEwen Mining Inc"
+  },
+  {
+   "code": "PSQC",
+   "type": "cedears",
+   "description": "CEDEAR ETF PROSHARES SHORT QQQ (PSQ)"
+  },
+  {
+   "code": "INGD",
+   "type": "cedears",
+   "description": "ING"
+  },
+  {
+   "code": "SWKSD",
+   "type": "cedears",
+   "description": "Skyworks Solutions"
+  },
+  {
+   "code": "KMB",
+   "type": "cedears",
+   "description": "Kimberly-Clark"
+  },
+  {
+   "code": "IBM.B",
+   "type": "cedears",
+   "description": "IBM.B"
+  },
+  {
+   "code": "NVO",
+   "type": "cedears",
+   "description": "Novo Nordisk A/S"
+  },
+  {
+   "code": "UNP",
+   "type": "cedears",
+   "description": "Union Pacific Corp"
+  },
+  {
+   "code": "FDX",
+   "type": "cedears",
+   "description": "FedEx"
+  },
+  {
+   "code": "BHP",
+   "type": "cedears",
+   "description": "BHP Billiton"
+  },
+  {
+   "code": "XLFB",
+   "type": "cedears",
+   "description": "XLFB"
+  },
+  {
+   "code": "COPXC",
+   "type": "cedears",
+   "description": "Global X Copper Miners ETF"
+  },
+  {
+   "code": "STNED",
+   "type": "cedears",
+   "description": "CEDEAR STONECO LTD"
+  },
+  {
+   "code": "ERICD",
+   "type": "cedears",
+   "description": "Ericsson"
+  },
+  {
+   "code": "EWY",
+   "type": "cedears",
+   "description": "iShares MSCI South Korea ETF"
+  },
+  {
+   "code": "SHD",
+   "type": "cedears",
+   "description": "SHD"
+  },
+  {
+   "code": "BHPC",
+   "type": "cedears",
+   "description": "BHP Billiton"
+  },
+  {
+   "code": "CDEB",
+   "type": "cedears",
+   "description": "CDEB"
+  },
+  {
+   "code": "FXI",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES TRUST FTSE CHINA 25 IF"
+  },
+  {
+   "code": "ICLNC",
+   "type": "cedears",
+   "description": "iShares Global Clean Energy ETF"
+  },
+  {
+   "code": "PFE.B",
+   "type": "cedears",
+   "description": "PFE.B"
+  },
+  {
+   "code": "EWZCB",
+   "type": "cedears",
+   "description": "EWZCB"
+  },
+  {
+   "code": "UBERC",
+   "type": "cedears",
+   "description": "Uber"
+  },
+  {
+   "code": "BRKB",
+   "type": "cedears",
+   "description": "Berkshire Hathaway"
+  },
+  {
+   "code": "KO",
+   "type": "cedears",
+   "description": "The Coca-Cola Company"
+  },
+  {
+   "code": "IJHC",
+   "type": "cedears",
+   "description": "CEDEAR ETF ISHARES CORE S&P MID - CAP (IJH)"
+  },
+  {
+   "code": "COSTD",
+   "type": "cedears",
+   "description": "Costco"
+  },
+  {
+   "code": "HD",
+   "type": "cedears",
+   "description": "The Home Depot"
+  },
+  {
+   "code": "ORCL",
+   "type": "cedears",
+   "description": "Oracle Corporation"
+  },
+  {
+   "code": "NAT3D",
+   "type": "cedears",
+   "description": "NAT3D"
+  },
+  {
+   "code": "EEMC",
+   "type": "cedears",
+   "description": "iShares MSCI Emerging Markets ETF"
+  },
+  {
+   "code": "NXEC",
+   "type": "cedears",
+   "description": "NXEC"
+  },
+  {
+   "code": "JOYYD",
+   "type": "cedears",
+   "description": "JOYYD"
+  },
+  {
+   "code": "ABBVD",
+   "type": "cedears",
+   "description": "AbbVie"
+  },
+  {
+   "code": "UNH",
+   "type": "cedears",
+   "description": "Unitedhealth Group Inc."
+  },
+  {
+   "code": "BMNR",
+   "type": "cedears",
+   "description": "BitMine"
+  },
+  {
+   "code": "CLC",
+   "type": "cedears",
+   "description": "Colgate"
+  },
+  {
+   "code": "SMHC",
+   "type": "cedears",
+   "description": "CEDEAR VAN ECK VECTORS ETF TRUST"
+  },
+  {
+   "code": "CRWVC",
+   "type": "cedears",
+   "description": "CEDEAR COREWEAVE INC."
+  },
+  {
+   "code": "PMC",
+   "type": "cedears",
+   "description": "Philip Morris International"
+  },
+  {
+   "code": "PLDC",
+   "type": "cedears",
+   "description": "Prologis"
+  },
+  {
+   "code": "TGTB",
+   "type": "cedears",
+   "description": "TGTB"
+  },
+  {
+   "code": "MOSD",
+   "type": "cedears",
+   "description": "Mosaic Co"
+  },
+  {
+   "code": "MBGC",
+   "type": "cedears",
+   "description": "Mercedes-Benz Group"
+  },
+  {
+   "code": "IJH",
+   "type": "cedears",
+   "description": "CEDEAR ETF ISHARES CORE S&P MID - CAP (IJH)"
+  },
+  {
+   "code": "NBISD",
+   "type": "cedears",
+   "description": "CEDEAR NEBIUS GROUP N.V."
+  },
+  {
+   "code": "EFA",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES MSCI EAFE ETF (EFA)"
+  },
+  {
+   "code": "EFAC",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES MSCI EAFE ETF (EFA)"
+  },
+  {
+   "code": "FSLRB",
+   "type": "cedears",
+   "description": "FSLRB"
+  },
+  {
+   "code": "COSTC",
+   "type": "cedears",
+   "description": "Costco"
+  },
+  {
+   "code": "SCHW",
+   "type": "cedears",
+   "description": "Charles Schwab"
+  },
+  {
+   "code": "CEGD",
+   "type": "cedears",
+   "description": "CEDEAR CONSTELLATION ENERGY CORPORATION (CEG)"
+  },
+  {
+   "code": "TMUS",
+   "type": "cedears",
+   "description": "T-Mobile US"
+  },
+  {
+   "code": "XPC",
+   "type": "cedears",
+   "description": "XP Inc"
+  },
+  {
+   "code": "NEEC",
+   "type": "cedears",
+   "description": "CEDEAR NEXTERA ENERGY INC."
+  },
+  {
+   "code": "TENB",
+   "type": "cedears",
+   "description": "TENB"
+  },
+  {
+   "code": "ABEV",
+   "type": "cedears",
+   "description": "AmBev"
+  },
+  {
+   "code": "PG",
+   "type": "cedears",
+   "description": "Procter & Gamble"
+  },
+  {
+   "code": "UALC",
+   "type": "cedears",
+   "description": "United Airlines Holdings"
+  },
+  {
+   "code": "PATHD",
+   "type": "cedears",
+   "description": "CEDEAR UIPATH INC (PATH)"
+  },
+  {
+   "code": "GLD",
+   "type": "cedears",
+   "description": "SPDR Gold Shares"
+  },
+  {
+   "code": "MMMC",
+   "type": "cedears",
+   "description": "3M"
+  },
+  {
+   "code": "SLB",
+   "type": "cedears",
+   "description": "Schlumberger Limited"
+  },
+  {
+   "code": "ABBVC",
+   "type": "cedears",
+   "description": "AbbVie"
+  },
+  {
+   "code": "ANET",
+   "type": "cedears",
+   "description": "CEDEAR ARISTA NETWORKS INC."
+  },
+  {
+   "code": "RENT3",
+   "type": "cedears",
+   "description": "Localiza Rent a Car"
+  },
+  {
+   "code": "HD..B",
+   "type": "cedears",
+   "description": "HD..B"
+  },
+  {
+   "code": "XPEVD",
+   "type": "cedears",
+   "description": "CEDEAR XPENG INC (XPEV)"
+  },
+  {
+   "code": "SPCED",
+   "type": "cedears",
+   "description": "Virgin Galactic"
+  },
+  {
+   "code": "HPQD",
+   "type": "cedears",
+   "description": "Hewlett-Packard"
+  },
+  {
+   "code": "XYZD",
+   "type": "cedears",
+   "description": "XYZD"
+  },
+  {
+   "code": "JPMC",
+   "type": "cedears",
+   "description": "J.P. Morgan Chase"
+  },
+  {
+   "code": "DISND",
+   "type": "cedears",
+   "description": "The Walt Disney Company"
+  },
+  {
+   "code": "RBLXD",
+   "type": "cedears",
+   "description": "Roblox Corporation"
+  },
+  {
+   "code": "TXRC",
+   "type": "cedears",
+   "description": "Ternium"
+  },
+  {
+   "code": "MRVLD",
+   "type": "cedears",
+   "description": "Marvell Technology Inc"
+  },
+  {
+   "code": "CCLC",
+   "type": "cedears",
+   "description": "Carnival Corporation"
+  },
+  {
+   "code": "ADID",
+   "type": "cedears",
+   "description": "Analog Devices"
+  },
+  {
+   "code": "HAPV3",
+   "type": "cedears",
+   "description": "Hapvida Participacoes e Investimentos"
+  },
+  {
+   "code": "BBAXC",
+   "type": "cedears",
+   "description": "JPMorgan BetaBuilders Developed Asia Pacific ex-Japan"
+  },
+  {
+   "code": "ARCOD",
+   "type": "cedears",
+   "description": "Arcos Dorados Holdings"
+  },
+  {
+   "code": "TVC",
+   "type": "cedears",
+   "description": "Televisa"
+  },
+  {
+   "code": "CSCOB",
+   "type": "cedears",
+   "description": "CSCOB"
+  },
+  {
+   "code": "VODC",
+   "type": "cedears",
+   "description": "Vodafone"
+  },
+  {
+   "code": "TEAMD",
+   "type": "cedears",
+   "description": "CEDEAR ATLASSIAN CORPORATION (TEAM)"
+  },
+  {
+   "code": "B.B",
+   "type": "cedears",
+   "description": "B.B"
+  },
+  {
+   "code": "BIOX",
+   "type": "cedears",
+   "description": "Bioceres Crop Solutions Corp"
+  },
+  {
+   "code": "LRCXC",
+   "type": "cedears",
+   "description": "Lam Research"
+  },
+  {
+   "code": "BRKBC",
+   "type": "cedears",
+   "description": "Berkshire Hathaway"
+  },
+  {
+   "code": "PDD",
+   "type": "cedears",
+   "description": "CEDEAR PDD HOLDINGS INC (PDD"
+  },
+  {
+   "code": "XLF",
+   "type": "cedears",
+   "description": "Financial Select Sector SPDR Fund"
+  },
+  {
+   "code": "IBMD",
+   "type": "cedears",
+   "description": "IBM"
+  },
+  {
+   "code": "SBSPD",
+   "type": "cedears",
+   "description": "CEDEAR CIA DE SANEAMIENTO BASICO DE SP SA"
+  },
+  {
+   "code": "KLAC",
+   "type": "cedears",
+   "description": "KLA Corporation"
+  },
+  {
+   "code": "AMAT",
+   "type": "cedears",
+   "description": "Applied Materials"
+  },
+  {
+   "code": "AMGNC",
+   "type": "cedears",
+   "description": "Amgen"
+  },
+  {
+   "code": "ITU3C",
+   "type": "cedears",
+   "description": "CEDEAR BANCO ITAU UNIBANCO SA"
+  },
+  {
+   "code": "DEOD",
+   "type": "cedears",
+   "description": "Diageo"
+  },
+  {
+   "code": "SDA",
+   "type": "cedears",
+   "description": "SunCar Technology Group Inc"
+  },
+  {
+   "code": "ASR",
+   "type": "cedears",
+   "description": "Grupo Aeroportuario del Sureste"
+  },
+  {
+   "code": "IEMG",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES CORE MSCI EMERG.MARK.ETF"
+  },
+  {
+   "code": "ELPCD",
+   "type": "cedears",
+   "description": "ELPCD"
+  },
+  {
+   "code": "URA",
+   "type": "cedears",
+   "description": "CEDEAR GLOBAL X URANIUM ETF"
+  },
+  {
+   "code": "MO",
+   "type": "cedears",
+   "description": "Altria Group"
+  },
+  {
+   "code": "NVSB",
+   "type": "cedears",
+   "description": "NVSB"
+  },
+  {
+   "code": "INFYC",
+   "type": "cedears",
+   "description": "Infosys"
+  },
+  {
+   "code": "SKHYC",
+   "type": "cedears",
+   "description": "SK Hynix"
+  },
+  {
+   "code": "PANWC",
+   "type": "cedears",
+   "description": "Palo Alto Networks"
+  },
+  {
+   "code": "BA.CC",
+   "type": "cedears",
+   "description": "BA.CC"
+  },
+  {
+   "code": "IBITC",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES BITCOIN TR"
+  },
+  {
+   "code": "COINC",
+   "type": "cedears",
+   "description": "Coinbase Inc"
+  },
+  {
+   "code": "SBUXB",
+   "type": "cedears",
+   "description": "SBUXB"
+  },
+  {
+   "code": "ABBV",
+   "type": "cedears",
+   "description": "AbbVie"
+  },
+  {
+   "code": "FCXD",
+   "type": "cedears",
+   "description": "Freeport"
+  },
+  {
+   "code": "XLE",
+   "type": "cedears",
+   "description": "Energy Select Sector SPDR Fund"
+  },
+  {
+   "code": "BBVD",
+   "type": "cedears",
+   "description": "BBVA"
+  },
+  {
+   "code": "AKO.B",
+   "type": "cedears",
+   "description": "Coca-Cola Andina"
+  },
+  {
+   "code": "SAPD",
+   "type": "cedears",
+   "description": "SAP"
+  },
+  {
+   "code": "MDT",
+   "type": "cedears",
+   "description": "Medtronic"
+  },
+  {
+   "code": "RBLX",
+   "type": "cedears",
+   "description": "Roblox Corporation"
+  },
+  {
+   "code": "RSPD",
+   "type": "cedears",
+   "description": "Invesco S&P 500 Equal Weight ETF"
+  },
+  {
+   "code": "MRSH",
+   "type": "cedears",
+   "description": "MRSH"
+  },
+  {
+   "code": "ESGUD",
+   "type": "cedears",
+   "description": "iShares ESG Aware MSCI USA ETF"
+  },
+  {
+   "code": "ARCO",
+   "type": "cedears",
+   "description": "Arcos Dorados Holdings"
+  },
+  {
+   "code": "CVS",
+   "type": "cedears",
+   "description": "CVS Health"
+  },
+  {
+   "code": "BCS",
+   "type": "cedears",
+   "description": "Barclays"
+  },
+  {
+   "code": "SATLD",
+   "type": "cedears",
+   "description": "Satellogic"
+  },
+  {
+   "code": "BHPD",
+   "type": "cedears",
+   "description": "BHP Billiton"
+  },
+  {
+   "code": "WEGE3",
+   "type": "cedears",
+   "description": "CEDEAR WEG S.A."
+  },
+  {
+   "code": "NIOC",
+   "type": "cedears",
+   "description": "Nio Inc"
+  },
+  {
+   "code": "CRMB",
+   "type": "cedears",
+   "description": "CRMB"
+  },
+  {
+   "code": "MRKC",
+   "type": "cedears",
+   "description": "Merck Sharp and Dohme"
+  },
+  {
+   "code": "IEURC",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES CORE MSCI EUROPE ETF"
+  },
+  {
+   "code": "ADI",
+   "type": "cedears",
+   "description": "Analog Devices"
+  },
+  {
+   "code": "AMX",
+   "type": "cedears",
+   "description": "América Móvil"
+  },
+  {
+   "code": "IVEC",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES S&P 500 VALUE ETF"
+  },
+  {
+   "code": "TRVVD",
+   "type": "cedears",
+   "description": "The Travelers Companies"
+  },
+  {
+   "code": "XOMB",
+   "type": "cedears",
+   "description": "XOMB"
+  },
+  {
+   "code": "BCSC",
+   "type": "cedears",
+   "description": "Barclays"
+  },
+  {
+   "code": "MSTRD",
+   "type": "cedears",
+   "description": "MicroStrategy"
+  },
+  {
+   "code": "ROST",
+   "type": "cedears",
+   "description": "Ross Stores"
+  },
+  {
+   "code": "VALED",
+   "type": "cedears",
+   "description": "Companhia Vale Do Rio Doce"
+  },
+  {
+   "code": "JNJ",
+   "type": "cedears",
+   "description": "Johnson & Johson"
+  },
+  {
+   "code": "HALC",
+   "type": "cedears",
+   "description": "Halliburton"
+  },
+  {
+   "code": "ALAD",
+   "type": "cedears",
+   "description": "CEDEAR ASTERA LABS INC."
+  },
+  {
+   "code": "ITAD",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES U.S. AEROPACE & DEFENSE ETF"
+  },
+  {
+   "code": "AMGN",
+   "type": "cedears",
+   "description": "Amgen"
+  },
+  {
+   "code": "TMD",
+   "type": "cedears",
+   "description": "Toyota"
+  },
+  {
+   "code": "ABTB",
+   "type": "cedears",
+   "description": "ABTB"
+  },
+  {
+   "code": "PLDD",
+   "type": "cedears",
+   "description": "Prologis"
+  },
+  {
+   "code": "XLFC",
+   "type": "cedears",
+   "description": "Financial Select Sector SPDR Fund"
+  },
+  {
+   "code": "MSI",
+   "type": "cedears",
+   "description": "Motorola Solutions"
+  },
+  {
+   "code": "NEE",
+   "type": "cedears",
+   "description": "CEDEAR NEXTERA ENERGY INC."
+  },
+  {
+   "code": "WDCC",
+   "type": "cedears",
+   "description": "Western Digital"
+  },
+  {
+   "code": "NSAN",
+   "type": "cedears",
+   "description": "Nissan"
+  },
+  {
+   "code": "JDD",
+   "type": "cedears",
+   "description": "CEDEAR JD.COM, INC."
+  },
+  {
+   "code": "LVS",
+   "type": "cedears",
+   "description": "Las Vegas Sands"
+  },
+  {
+   "code": "BABAD",
+   "type": "cedears",
+   "description": "Alibaba"
+  },
+  {
+   "code": "XLP",
+   "type": "cedears",
+   "description": "State Street Consumer Staples Select Sector SPDR ETF"
+  },
+  {
+   "code": "ADBEB",
+   "type": "cedears",
+   "description": "ADBEB"
+  },
+  {
+   "code": "TGTC",
+   "type": "cedears",
+   "description": "Target Corporation"
+  },
+  {
+   "code": "SBUXD",
+   "type": "cedears",
+   "description": "Starbucks"
+  },
+  {
+   "code": "SNAP",
+   "type": "cedears",
+   "description": "Snap Inc."
+  },
+  {
+   "code": "DIAB",
+   "type": "cedears",
+   "description": "DIAB"
+  },
+  {
+   "code": "UALB",
+   "type": "cedears",
+   "description": "UALB"
+  },
+  {
+   "code": "PBR",
+   "type": "cedears",
+   "description": "Petrobras"
+  },
+  {
+   "code": "MMM",
+   "type": "cedears",
+   "description": "3M"
+  },
+  {
+   "code": "PAGS",
+   "type": "cedears",
+   "description": "PagSeguro Digital Ltd"
+  },
+  {
+   "code": "HSYB",
+   "type": "cedears",
+   "description": "HSYB"
+  },
+  {
+   "code": "XLV",
+   "type": "cedears",
+   "description": "State Street Health Care Select Sector SPDR ETF"
+  },
+  {
+   "code": "COPX",
+   "type": "cedears",
+   "description": "Global X Copper Miners ETF"
+  },
+  {
+   "code": "GOGLD",
+   "type": "cedears",
+   "description": "Google"
+  },
+  {
+   "code": "HL",
+   "type": "cedears",
+   "description": "Hecla Mining Company"
+  },
+  {
+   "code": "VC",
+   "type": "cedears",
+   "description": "Visa"
+  },
+  {
+   "code": "DHRD",
+   "type": "cedears",
+   "description": "DHRD"
+  },
+  {
+   "code": "XPD",
+   "type": "cedears",
+   "description": "XP Inc"
+  },
+  {
+   "code": "METAB",
+   "type": "cedears",
+   "description": "METAB"
+  },
+  {
+   "code": "DOWC",
+   "type": "cedears",
+   "description": "Dow Inc"
+  },
+  {
+   "code": "RACED",
+   "type": "cedears",
+   "description": "Ferrari NV"
+  },
+  {
+   "code": "IVWD",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES S&P 500 GROWTH ETF"
+  },
+  {
+   "code": "SPOTB",
+   "type": "cedears",
+   "description": "SPOTB"
+  },
+  {
+   "code": "MU",
+   "type": "cedears",
+   "description": "Micron Technology"
+  },
+  {
+   "code": "GFI",
+   "type": "cedears",
+   "description": "Gold Fields"
+  },
+  {
+   "code": "BBAXD",
+   "type": "cedears",
+   "description": "JPMorgan BetaBuilders Developed Asia Pacific ex-Japan"
+  },
+  {
+   "code": "VAL3C",
+   "type": "cedears",
+   "description": "CEDEAR VALE S.A."
+  },
+  {
+   "code": "PRIO3",
+   "type": "cedears",
+   "description": "Magazine Luiza"
+  },
+  {
+   "code": "ASML",
+   "type": "cedears",
+   "description": "CEDEAR ASML HOLDING NV (ASML)"
+  },
+  {
+   "code": "VXXC",
+   "type": "cedears",
+   "description": "CEDEAR IPATH SERIES B S&P 500 VIX ETF"
+  },
+  {
+   "code": "TMOC",
+   "type": "cedears",
+   "description": "Thermo Fisher Scientific Inc"
+  },
+  {
+   "code": "ORCLB",
+   "type": "cedears",
+   "description": "ORCLB"
+  },
+  {
+   "code": "V",
+   "type": "cedears",
+   "description": "Visa"
+  },
+  {
+   "code": "LMT.B",
+   "type": "cedears",
+   "description": "LMT.B"
+  },
+  {
+   "code": "PAAS",
+   "type": "cedears",
+   "description": "Pan American Silver Corp"
+  },
+  {
+   "code": "TRIP",
+   "type": "cedears",
+   "description": "TripAdvisor"
+  },
+  {
+   "code": "MAB",
+   "type": "cedears",
+   "description": "MAB"
+  },
+  {
+   "code": "BXC",
+   "type": "cedears",
+   "description": "Blackstone"
+  },
+  {
+   "code": "B.D",
+   "type": "cedears",
+   "description": "CEDEAR BARRICK GOLD CORP."
+  },
+  {
+   "code": "GLNG",
+   "type": "cedears",
+   "description": "CEDEAR GOLAR LNG LTD."
+  },
+  {
+   "code": "SED",
+   "type": "cedears",
+   "description": "Sea Ltd"
+  },
+  {
+   "code": "AMGNB",
+   "type": "cedears",
+   "description": "AMGNB"
+  },
+  {
+   "code": "PSXD",
+   "type": "cedears",
+   "description": "Phillips 66 Company"
+  },
+  {
+   "code": "ABEVC",
+   "type": "cedears",
+   "description": "AmBev"
+  },
+  {
+   "code": "MRVL",
+   "type": "cedears",
+   "description": "Marvell Technology Inc"
+  },
+  {
+   "code": "DECKD",
+   "type": "cedears",
+   "description": "CEDEAR DECKERS OUTDOOR CORPORATION (DECK)"
+  },
+  {
+   "code": "HIMSD",
+   "type": "cedears",
+   "description": "CEDEAR HIMS & HERS HEALTH INC."
+  },
+  {
+   "code": "SNAPD",
+   "type": "cedears",
+   "description": "Snap Inc."
+  },
+  {
+   "code": "BRKBB",
+   "type": "cedears",
+   "description": "BRKBB"
+  },
+  {
+   "code": "UBERB",
+   "type": "cedears",
+   "description": "UBERB"
+  },
+  {
+   "code": "VAL3D",
+   "type": "cedears",
+   "description": "CEDEAR VALE S.A."
+  },
+  {
+   "code": "GLWD",
+   "type": "cedears",
+   "description": "GLWD"
+  },
+  {
+   "code": "NTESD",
+   "type": "cedears",
+   "description": "NetEase"
+  },
+  {
+   "code": "XLKC",
+   "type": "cedears",
+   "description": "State Street Technology Select Sector SPDR ETF"
+  },
+  {
+   "code": "DIAD",
+   "type": "cedears",
+   "description": "CEDEAR SPDR DOW JONES INDUSTRIAL"
+  },
+  {
+   "code": "ACWID",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES MSCI ACWI ETF"
+  },
+  {
+   "code": "ORLYD",
+   "type": "cedears",
+   "description": "ORLYD"
+  },
+  {
+   "code": "ARMD",
+   "type": "cedears",
+   "description": "ARMD"
+  },
+  {
+   "code": "MAC",
+   "type": "cedears",
+   "description": "Mastercard"
+  },
+  {
+   "code": "COPD",
+   "type": "cedears",
+   "description": "CEDEAR CONOCOPHILLIPS"
+  },
+  {
+   "code": "MCDD",
+   "type": "cedears",
+   "description": "McDonald's"
+  },
+  {
+   "code": "KMBC",
+   "type": "cedears",
+   "description": "Kimberly-Clark"
+  },
+  {
+   "code": "EBAYC",
+   "type": "cedears",
+   "description": "eBay"
+  },
+  {
+   "code": "BIDU",
+   "type": "cedears",
+   "description": "Baidu"
+  },
+  {
+   "code": "MMMD",
+   "type": "cedears",
+   "description": "3M"
+  },
+  {
+   "code": "GLOBC",
+   "type": "cedears",
+   "description": "CEDEAR GLOBANT S.A."
+  },
+  {
+   "code": "LYGC",
+   "type": "cedears",
+   "description": "Lloyds Banking Group"
+  },
+  {
+   "code": "BMYB",
+   "type": "cedears",
+   "description": "BMYB"
+  },
+  {
+   "code": "XROXD",
+   "type": "cedears",
+   "description": "Xerox"
+  },
+  {
+   "code": "UPSTC",
+   "type": "cedears",
+   "description": "Upstart Holdings Inc"
+  },
+  {
+   "code": "MSD",
+   "type": "cedears",
+   "description": "Morgan Stanley"
+  },
+  {
+   "code": "SBUX",
+   "type": "cedears",
+   "description": "Starbucks"
+  },
+  {
+   "code": "SPOT",
+   "type": "cedears",
+   "description": "Spotify"
+  },
+  {
+   "code": "XLU",
+   "type": "cedears",
+   "description": "Utilities Select Sector SPDR Fund"
+  },
+  {
+   "code": "VIGD",
+   "type": "cedears",
+   "description": "CEDEAR ETF VANGUARD DIVIDEND APPRECIATION (VIG)"
+  },
+  {
+   "code": "QCOMC",
+   "type": "cedears",
+   "description": "Qualcomm"
+  },
+  {
+   "code": "ADBED",
+   "type": "cedears",
+   "description": "Adobe"
+  },
+  {
+   "code": "PKS",
+   "type": "cedears",
+   "description": "Posco"
+  },
+  {
+   "code": "INTCB",
+   "type": "cedears",
+   "description": "INTCB"
+  },
+  {
+   "code": "BPD",
+   "type": "cedears",
+   "description": "BP"
+  },
+  {
+   "code": "SPHQD",
+   "type": "cedears",
+   "description": "Invesco S&P 500 Quality ETF"
+  },
+  {
+   "code": "TJXD",
+   "type": "cedears",
+   "description": "TJXD"
+  },
+  {
+   "code": "XLRE",
+   "type": "cedears",
+   "description": "Real Estate Select Sector SPDR Fund"
+  },
+  {
+   "code": "EC",
+   "type": "cedears",
+   "description": "Eni"
+  },
+  {
+   "code": "PFE",
+   "type": "cedears",
+   "description": "Pfizer"
+  },
+  {
+   "code": "ILFD",
+   "type": "cedears",
+   "description": " iShares Latin America 40 ETF"
+  },
+  {
+   "code": "YELP",
+   "type": "cedears",
+   "description": "Yelp"
+  },
+  {
+   "code": "BNGD",
+   "type": "cedears",
+   "description": "Bunge Global"
+  },
+  {
+   "code": "BKNG",
+   "type": "cedears",
+   "description": "Booking Holdings Inc"
+  },
+  {
+   "code": "BIOXD",
+   "type": "cedears",
+   "description": "Bioceres Crop Solutions Corp"
+  },
+  {
+   "code": "FMCC",
+   "type": "cedears",
+   "description": "Freddie Mac"
+  },
+  {
+   "code": "IRENC",
+   "type": "cedears",
+   "description": "CEDEAR IREN LTD."
+  },
+  {
+   "code": "GDX",
+   "type": "cedears",
+   "description": "CEDEAR VAN ECK GOLD MINERS ETF (GDX)"
+  },
+  {
+   "code": "GPRKD",
+   "type": "cedears",
+   "description": "GeoPark Ltd"
+  },
+  {
+   "code": "SYYD",
+   "type": "cedears",
+   "description": "Sysco Corp"
+  },
+  {
+   "code": "CAT",
+   "type": "cedears",
+   "description": "Caterpillar"
+  },
+  {
+   "code": "TEMD",
+   "type": "cedears",
+   "description": "CEDEAR TEMPUS AI INC (TEM)"
+  },
+  {
+   "code": "SPGID",
+   "type": "cedears",
+   "description": "S&P Global"
+  },
+  {
+   "code": "UPSTD",
+   "type": "cedears",
+   "description": "Upstart Holdings Inc"
+  },
+  {
+   "code": "OKLOD",
+   "type": "cedears",
+   "description": "CEDEAR OKLO INC."
+  },
+  {
+   "code": "FSLR",
+   "type": "cedears",
+   "description": "First Solar"
+  },
+  {
+   "code": "IBB",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES NASDAQ BIOTECHNOLOGY"
+  },
+  {
+   "code": "LINC",
+   "type": "cedears",
+   "description": "Linde plc"
+  },
+  {
+   "code": "EMBJD",
+   "type": "cedears",
+   "description": "EMBJD"
+  },
+  {
+   "code": "BIOXC",
+   "type": "cedears",
+   "description": "Bioceres Crop Solutions Corp"
+  },
+  {
+   "code": "SPXLC",
+   "type": "cedears",
+   "description": "CEDEAR DIREXION DAILY S&P 500 BULL 3X"
+  },
+  {
+   "code": "URBNC",
+   "type": "cedears",
+   "description": "Urban Outfitters"
+  },
+  {
+   "code": "CSCOD",
+   "type": "cedears",
+   "description": "Cisco Systems"
+  },
+  {
+   "code": "DEO",
+   "type": "cedears",
+   "description": "Diageo"
+  },
+  {
+   "code": "MDTC",
+   "type": "cedears",
+   "description": "Medtronic"
+  },
+  {
+   "code": "OXY",
+   "type": "cedears",
+   "description": "Occidental Petroleum Corporation"
+  },
+  {
+   "code": "TB",
+   "type": "cedears",
+   "description": "TB"
+  },
+  {
+   "code": "VRTXD",
+   "type": "cedears",
+   "description": "CEDEAR VERTEX PHARMACEUTICALS INC (VRTX)"
+  },
+  {
+   "code": "GRMN",
+   "type": "cedears",
+   "description": "Garmin"
+  },
+  {
+   "code": "NFLXB",
+   "type": "cedears",
+   "description": "NFLXB"
+  },
+  {
+   "code": "MELDB",
+   "type": "cedears",
+   "description": "MELDB"
+  },
+  {
+   "code": "TTEC",
+   "type": "cedears",
+   "description": "TotalEnergies"
+  },
+  {
+   "code": "AALD",
+   "type": "cedears",
+   "description": "American Airlines Group"
+  },
+  {
+   "code": "AAP",
+   "type": "cedears",
+   "description": "Advance Auto Parts Inc."
+  },
+  {
+   "code": "JNJC",
+   "type": "cedears",
+   "description": "Johnson & Johson"
+  },
+  {
+   "code": "CEG",
+   "type": "cedears",
+   "description": "CEDEAR CONSTELLATION ENERGY CORPORATION (CEG)"
+  },
+  {
+   "code": "TRVVC",
+   "type": "cedears",
+   "description": "The Travelers Companies"
+  },
+  {
+   "code": "UGPD",
+   "type": "cedears",
+   "description": "Ultrapar"
+  },
+  {
+   "code": "TVD",
+   "type": "cedears",
+   "description": "Televisa"
+  },
+  {
+   "code": "WFC.B",
+   "type": "cedears",
+   "description": "WFC.B"
+  },
+  {
+   "code": "ARKKD",
+   "type": "cedears",
+   "description": "Arkk"
+  },
+  {
+   "code": "ABNB",
+   "type": "cedears",
+   "description": "Airbnb"
+  },
+  {
+   "code": "DJN3B",
+   "type": "cedears",
+   "description": "DJN3B"
+  },
+  {
+   "code": "KB",
+   "type": "cedears",
+   "description": "Kookmin Bank"
+  },
+  {
+   "code": "TEND",
+   "type": "cedears",
+   "description": "Tenaris"
+  },
+  {
+   "code": "ROKUD",
+   "type": "cedears",
+   "description": "Roku Inc"
+  },
+  {
+   "code": "NVADB",
+   "type": "cedears",
+   "description": "NVADB"
+  },
+  {
+   "code": "CAHD",
+   "type": "cedears",
+   "description": "Cardinal Health"
+  },
+  {
+   "code": "EMBJ",
+   "type": "cedears",
+   "description": "EMBJ"
+  },
+  {
+   "code": "ZMC",
+   "type": "cedears",
+   "description": "Zoom Video Communications"
+  },
+  {
+   "code": "FISVC",
+   "type": "cedears",
+   "description": "CEDEAR FISERV INC."
+  },
+  {
+   "code": "NKE",
+   "type": "cedears",
+   "description": "Nike"
+  },
+  {
+   "code": "XLPC",
+   "type": "cedears",
+   "description": "State Street Consumer Staples Select Sector SPDR ETF"
+  },
+  {
+   "code": "C.D",
+   "type": "cedears",
+   "description": "Citigroup"
+  },
+  {
+   "code": "RACE",
+   "type": "cedears",
+   "description": "Ferrari NV"
+  },
+  {
+   "code": "BPC",
+   "type": "cedears",
+   "description": "BP"
+  },
+  {
+   "code": "PYPLD",
+   "type": "cedears",
+   "description": "Paypal"
+  },
+  {
+   "code": "F",
+   "type": "cedears",
+   "description": "Ford Motor Company"
+  },
+  {
+   "code": "ETHA",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES ETHEREUM TR ETF"
+  },
+  {
+   "code": "SPXLD",
+   "type": "cedears",
+   "description": "CEDEAR DIREXION DAILY S&P 500 BULL 3X"
+  },
+  {
+   "code": "CRMD",
+   "type": "cedears",
+   "description": "Salesforce"
+  },
+  {
+   "code": "OXYDB",
+   "type": "cedears",
+   "description": "OXYDB"
+  },
+  {
+   "code": "BBDC",
+   "type": "cedears",
+   "description": "Bradesco"
+  },
+  {
+   "code": "PBRD",
+   "type": "cedears",
+   "description": "Petrobras"
+  },
+  {
+   "code": "MCD.B",
+   "type": "cedears",
+   "description": "MCD.B"
+  },
+  {
+   "code": "WELLC",
+   "type": "cedears",
+   "description": "Welltower Inc"
+  },
+  {
+   "code": "DOW",
+   "type": "cedears",
+   "description": "Dow Inc"
+  },
+  {
+   "code": "ADSD",
+   "type": "cedears",
+   "description": "Adidas"
+  },
+  {
+   "code": "GTD",
+   "type": "cedears",
+   "description": "GTD"
+  },
+  {
+   "code": "TEAM",
+   "type": "cedears",
+   "description": "CEDEAR ATLASSIAN CORPORATION (TEAM)"
+  },
+  {
+   "code": "ARKKB",
+   "type": "cedears",
+   "description": "ARKKB"
+  },
+  {
+   "code": "ROKU",
+   "type": "cedears",
+   "description": "Roku Inc"
+  },
+  {
+   "code": "VISTC",
+   "type": "cedears",
+   "description": "Vista Oil & Gas"
+  },
+  {
+   "code": "RIOT",
+   "type": "cedears",
+   "description": "Riot Platforms Inc"
+  },
+  {
+   "code": "ITUBC",
+   "type": "cedears",
+   "description": "Itaú Unibanco"
+  },
+  {
+   "code": "SPGI",
+   "type": "cedears",
+   "description": "S&P Global"
+  },
+  {
+   "code": "CAHC",
+   "type": "cedears",
+   "description": "Cardinal Health"
+  },
+  {
+   "code": "MSIC",
+   "type": "cedears",
+   "description": "Motorola Solutions"
+  },
+  {
+   "code": "PCARC",
+   "type": "cedears",
+   "description": "Paccar"
+  },
+  {
+   "code": "YZCAC",
+   "type": "cedears",
+   "description": "Yanzhou Coal Mining Company"
+  },
+  {
+   "code": "SHW",
+   "type": "cedears",
+   "description": "Sherwin-Williams"
+  },
+  {
+   "code": "BBCAD",
+   "type": "cedears",
+   "description": "CEDEAR JPMORGAN BETABUILDERS CANADA ETF"
+  },
+  {
+   "code": "ORCLC",
+   "type": "cedears",
+   "description": "Oracle Corporation"
+  },
+  {
+   "code": "SHOPD",
+   "type": "cedears",
+   "description": "Shopify"
+  },
+  {
+   "code": "AMZNB",
+   "type": "cedears",
+   "description": "AMZNB"
+  },
+  {
+   "code": "KEELD",
+   "type": "cedears",
+   "description": "CEDEAR KEEL INFRASTRUCTURE"
+  },
+  {
+   "code": "DECK",
+   "type": "cedears",
+   "description": "CEDEAR DECKERS OUTDOOR CORPORATION (DECK)"
+  },
+  {
+   "code": "RKLB",
+   "type": "cedears",
+   "description": "Rocket Lab"
+  },
+  {
+   "code": "ACN",
+   "type": "cedears",
+   "description": "Accenture"
+  },
+  {
+   "code": "VB",
+   "type": "cedears",
+   "description": "VB"
+  },
+  {
+   "code": "RIOC",
+   "type": "cedears",
+   "description": "Rio Tinto"
+  },
+  {
+   "code": "TD",
+   "type": "cedears",
+   "description": "AT&T"
+  },
+  {
+   "code": "VRSND",
+   "type": "cedears",
+   "description": "Verisign"
+  },
+  {
+   "code": "TV",
+   "type": "cedears",
+   "description": "Televisa"
+  },
+  {
+   "code": "NGD",
+   "type": "cedears",
+   "description": "Novagold Resources"
+  },
+  {
+   "code": "ROSTC",
+   "type": "cedears",
+   "description": "Ross Stores"
+  },
+  {
+   "code": "BA",
+   "type": "cedears",
+   "description": "Boeing"
+  },
+  {
+   "code": "IVVC",
+   "type": "cedears",
+   "description": "iShares Core S&P 500 ETF"
+  },
+  {
+   "code": "F.B",
+   "type": "cedears",
+   "description": "F.B"
+  },
+  {
+   "code": "GE",
+   "type": "cedears",
+   "description": "General Electric"
+  },
+  {
+   "code": "BPA11",
+   "type": "cedears",
+   "description": "CEDEAR BANCO BTG PACTUAL S.A. UNIT"
+  },
+  {
+   "code": "BA..B",
+   "type": "cedears",
+   "description": "BA..B"
+  },
+  {
+   "code": "SPCE",
+   "type": "cedears",
+   "description": "Virgin Galactic"
+  },
+  {
+   "code": "HOOD",
+   "type": "cedears",
+   "description": "Robinhood"
+  },
+  {
+   "code": "ING",
+   "type": "cedears",
+   "description": "ING"
+  },
+  {
+   "code": "XLBC",
+   "type": "cedears",
+   "description": "State Street Materials Select Sector SPDR ETF"
+  },
+  {
+   "code": "VIVT3",
+   "type": "cedears",
+   "description": "CEDEAR TELEFONICA BRASIL S.A"
+  },
+  {
+   "code": "PSXC",
+   "type": "cedears",
+   "description": "Phillips 66 Company"
+  },
+  {
+   "code": "BIOXB",
+   "type": "cedears",
+   "description": "BIOXB"
+  },
+  {
+   "code": "USOD",
+   "type": "cedears",
+   "description": "CEDEAR UNITED STATE OIL FUND LP (USO)"
+  },
+  {
+   "code": "KLACD",
+   "type": "cedears",
+   "description": "KLA Corporation"
+  },
+  {
+   "code": "BNGC",
+   "type": "cedears",
+   "description": "Bunge Global"
+  },
+  {
+   "code": "SONY",
+   "type": "cedears",
+   "description": "Sony"
+  },
+  {
+   "code": "SUZB3",
+   "type": "cedears",
+   "description": "CEDEAR SUZANO S.A"
+  },
+  {
+   "code": "PYPLB",
+   "type": "cedears",
+   "description": "PYPLB"
+  },
+  {
+   "code": "TSMC",
+   "type": "cedears",
+   "description": "TSMC"
+  },
+  {
+   "code": "CXD",
+   "type": "cedears",
+   "description": "Cemex"
+  },
+  {
+   "code": "MAD",
+   "type": "cedears",
+   "description": "Mastercard"
+  },
+  {
+   "code": "ADGO",
+   "type": "cedears",
+   "description": "Adecoagro"
+  },
+  {
+   "code": "HON.B",
+   "type": "cedears",
+   "description": "HON.B"
+  },
+  {
+   "code": "USB",
+   "type": "cedears",
+   "description": "U.S. Bancorp"
+  },
+  {
+   "code": "BIDUC",
+   "type": "cedears",
+   "description": "Baidu"
+  },
+  {
+   "code": "SKHY",
+   "type": "cedears",
+   "description": "SK Hynix"
+  },
+  {
+   "code": "DOWD",
+   "type": "cedears",
+   "description": "Dow Inc"
+  },
+  {
+   "code": "TLN",
+   "type": "cedears",
+   "description": "Talen Energy Corporation"
+  },
+  {
+   "code": "ITAC",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES U.S. AEROPACE & DEFENSE ETF"
+  },
+  {
+   "code": "EMBJC",
+   "type": "cedears",
+   "description": "EMBJC"
+  },
+  {
+   "code": "XPEV",
+   "type": "cedears",
+   "description": "CEDEAR XPENG INC (XPEV)"
+  },
+  {
+   "code": "HMC.D",
+   "type": "cedears",
+   "description": "HMC.D"
+  },
+  {
+   "code": "EWJC",
+   "type": "cedears",
+   "description": "CEDEAR ETF ISHARES MSCI JAPAN (EWJ)"
+  },
+  {
+   "code": "HALB",
+   "type": "cedears",
+   "description": "HALB"
+  },
+  {
+   "code": "ORLY",
+   "type": "cedears",
+   "description": "CEDEAR O´REILLY AUTOMOTIVE INC."
+  },
+  {
+   "code": "HOND",
+   "type": "cedears",
+   "description": "Honeywell"
+  },
+  {
+   "code": "AVYDB",
+   "type": "cedears",
+   "description": "AVYDB"
+  },
+  {
+   "code": "PDDC",
+   "type": "cedears",
+   "description": "CEDEAR PDD HOLDINGS INC (PDD"
+  },
+  {
+   "code": "CAAPD",
+   "type": "cedears",
+   "description": "Corporación América Airports"
+  },
+  {
+   "code": "EFXC",
+   "type": "cedears",
+   "description": "Equifax"
+  },
+  {
+   "code": "PAASC",
+   "type": "cedears",
+   "description": "CEDEAR PAN AMERICAN SILVER CORP"
+  },
+  {
+   "code": "RKLBC",
+   "type": "cedears",
+   "description": "CEDEAR ROCKET LAB CORP."
+  },
+  {
+   "code": "AALC",
+   "type": "cedears",
+   "description": "American Airlines Group"
+  },
+  {
+   "code": "GSD",
+   "type": "cedears",
+   "description": "Goldman Sachs"
+  },
+  {
+   "code": "RIOD",
+   "type": "cedears",
+   "description": "Rio Tinto"
+  },
+  {
+   "code": "GLWC",
+   "type": "cedears",
+   "description": "Corning Inc."
+  },
+  {
+   "code": "PETR3",
+   "type": "cedears",
+   "description": "CEDEAR PETROLEO BRASILEIRO S.A."
+  },
+  {
+   "code": "TIMBC",
+   "type": "cedears",
+   "description": "TIM Brasil"
+  },
+  {
+   "code": "INFY",
+   "type": "cedears",
+   "description": "Infosys"
+  },
+  {
+   "code": "ECL",
+   "type": "cedears",
+   "description": "Ecolab"
+  },
+  {
+   "code": "MPD",
+   "type": "cedears",
+   "description": "CEDEAR MP MATERIALS CORP."
+  },
+  {
+   "code": "AZNC",
+   "type": "cedears",
+   "description": "AstraZeneca"
+  },
+  {
+   "code": "HOG",
+   "type": "cedears",
+   "description": "Harley-Davidson"
+  },
+  {
+   "code": "OXYC",
+   "type": "cedears",
+   "description": "Occidental Petroleum Corporation"
+  },
+  {
+   "code": "NOWC",
+   "type": "cedears",
+   "description": "CEDEAR SERVICENOW INC (NOW)"
+  },
+  {
+   "code": "JOYY",
+   "type": "cedears",
+   "description": "JOYY"
+  },
+  {
+   "code": "ULC",
+   "type": "cedears",
+   "description": "Unilever"
+  },
+  {
+   "code": "OD",
+   "type": "cedears",
+   "description": "CEDEAR REALTY INCOME CORP."
+  },
+  {
+   "code": "CDE",
+   "type": "cedears",
+   "description": "Coeur Mining"
+  },
+  {
+   "code": "ONDS",
+   "type": "cedears",
+   "description": "CEDEAR ONDAS HOLDINGS INC."
+  },
+  {
+   "code": "SONYC",
+   "type": "cedears",
+   "description": "SONYC"
+  },
+  {
+   "code": "KGC",
+   "type": "cedears",
+   "description": "Kinross Gold Corp"
+  },
+  {
+   "code": "AKOBD",
+   "type": "cedears",
+   "description": "Coca-Cola Andina"
+  },
+  {
+   "code": "ORLYC",
+   "type": "cedears",
+   "description": "ORLYC"
+  },
+  {
+   "code": "NEED",
+   "type": "cedears",
+   "description": "CEDEAR NEXTERA ENERGY INC."
+  },
+  {
+   "code": "XLBB",
+   "type": "cedears",
+   "description": "XLBB"
+  },
+  {
+   "code": "WFCD",
+   "type": "cedears",
+   "description": "Wells Fargo"
+  },
+  {
+   "code": "WMTC",
+   "type": "cedears",
+   "description": "Walmart"
+  },
+  {
+   "code": "BSN",
+   "type": "cedears",
+   "description": "Danone"
+  },
+  {
+   "code": "ALAB",
+   "type": "cedears",
+   "description": "Astera Labs"
+  },
+  {
+   "code": "PATH",
+   "type": "cedears",
+   "description": "CEDEAR UIPATH INC (PATH)"
+  },
+  {
+   "code": "GGBC",
+   "type": "cedears",
+   "description": "Gerdau"
+  },
+  {
+   "code": "SCCOB",
+   "type": "cedears",
+   "description": "SCCOB"
+  },
+  {
+   "code": "SNDKD",
+   "type": "cedears",
+   "description": "CEDEAR SANDISK CORPORATION"
+  },
+  {
+   "code": "NIO",
+   "type": "cedears",
+   "description": "Nio Inc"
+  },
+  {
+   "code": "ACND",
+   "type": "cedears",
+   "description": "Accenture"
+  },
+  {
+   "code": "FSLRC",
+   "type": "cedears",
+   "description": "FSLRC"
+  },
+  {
+   "code": "TIIAC",
+   "type": "cedears",
+   "description": "Telecom Italia S.p.A."
+  },
+  {
+   "code": "MUC",
+   "type": "cedears",
+   "description": "Micron Technology"
+  },
+  {
+   "code": "PEP",
+   "type": "cedears",
+   "description": "Pepsico"
+  },
+  {
+   "code": "VSTC",
+   "type": "cedears",
+   "description": "CEDEARV VISTRA CORPORATION (VST)"
+  },
+  {
+   "code": "MGLU3",
+   "type": "cedears",
+   "description": "Magazine Luiza"
+  },
+  {
+   "code": "GILDD",
+   "type": "cedears",
+   "description": "Gilead Sciences"
+  },
+  {
+   "code": "NVSD",
+   "type": "cedears",
+   "description": "Novartis"
+  },
+  {
+   "code": "TSLA",
+   "type": "cedears",
+   "description": "Tesla"
+  },
+  {
+   "code": "VODD",
+   "type": "cedears",
+   "description": "Vodafone"
+  },
+  {
+   "code": "DJNJ3",
+   "type": "cedears",
+   "description": "CEDEAR JOHNSON & JOHNSON ADR VTO.2029"
+  },
+  {
+   "code": "GOGLB",
+   "type": "cedears",
+   "description": "GOGLB"
+  },
+  {
+   "code": "AMXD",
+   "type": "cedears",
+   "description": "América Móvil"
+  },
+  {
+   "code": "SLBD",
+   "type": "cedears",
+   "description": "Schlumberger Limited"
+  },
+  {
+   "code": "GGBD",
+   "type": "cedears",
+   "description": "Gerdau"
+  },
+  {
+   "code": "MUXD",
+   "type": "cedears",
+   "description": "MUXD"
+  },
+  {
+   "code": "SKHYD",
+   "type": "cedears",
+   "description": "SK Hynix"
+  },
+  {
+   "code": "ADGOB",
+   "type": "cedears",
+   "description": "ADGOB"
+  },
+  {
+   "code": "PLTRD",
+   "type": "cedears",
+   "description": "Palantir Technologies"
+  },
+  {
+   "code": "GILD",
+   "type": "cedears",
+   "description": "Gilead Sciences"
+  },
+  {
+   "code": "BA.CD",
+   "type": "cedears",
+   "description": "Bank Of America"
+  },
+  {
+   "code": "TXND",
+   "type": "cedears",
+   "description": "Texas Instruments"
+  },
+  {
+   "code": "STNEC",
+   "type": "cedears",
+   "description": "CEDEAR STONECO LTD"
+  },
+  {
+   "code": "EEMB",
+   "type": "cedears",
+   "description": "EEMB"
+  },
+  {
+   "code": "GDXC",
+   "type": "cedears",
+   "description": "CEDEAR VAN ECK GOLD MINERS ETF (GDX)"
+  },
+  {
+   "code": "OKLO",
+   "type": "cedears",
+   "description": "Oklo"
+  },
+  {
+   "code": "GILDB",
+   "type": "cedears",
+   "description": "GILDB"
+  },
+  {
+   "code": "MMMB",
+   "type": "cedears",
+   "description": "MMMB"
+  },
+  {
+   "code": "HALD",
+   "type": "cedears",
+   "description": "Halliburton"
+  },
+  {
+   "code": "WMT.B",
+   "type": "cedears",
+   "description": "WMT.B"
+  },
+  {
+   "code": "DEC",
+   "type": "cedears",
+   "description": "Deere & Company"
+  },
+  {
+   "code": "SLV",
+   "type": "cedears",
+   "description": "CEDEAR ETF ISHARES SILVER TRUST (SLV)"
+  },
+  {
+   "code": "XMED",
+   "type": "cedears",
+   "description": "SPDR S&P Metals & Mining ETF"
+  },
+  {
+   "code": "TSMB",
+   "type": "cedears",
+   "description": "TSMB"
+  },
+  {
+   "code": "CORN",
+   "type": "cedears",
+   "description": "Teucrium Corn Fund"
+  },
+  {
+   "code": "NKED",
+   "type": "cedears",
+   "description": "Nike"
+  },
+  {
+   "code": "BKRC",
+   "type": "cedears",
+   "description": "BKRC"
+  },
+  {
+   "code": "SYY",
+   "type": "cedears",
+   "description": "Sysco Corp"
+  },
+  {
+   "code": "HMYC",
+   "type": "cedears",
+   "description": "Harmony Gold Mining Company"
+  },
+  {
+   "code": "YELPD",
+   "type": "cedears",
+   "description": "Yelp"
+  },
+  {
+   "code": "GLDD",
+   "type": "cedears",
+   "description": "CEDEAR ETF SPDR GOLD TRUST"
+  },
+  {
+   "code": "IBKR",
+   "type": "cedears",
+   "description": "Interactive Brokers"
+  },
+  {
+   "code": "LRCX",
+   "type": "cedears",
+   "description": "Lam Research"
+  },
+  {
+   "code": "UPST",
+   "type": "cedears",
+   "description": "Upstart Holdings Inc"
+  },
+  {
+   "code": "SE",
+   "type": "cedears",
+   "description": "Sea Ltd"
+  },
+  {
+   "code": "TGT",
+   "type": "cedears",
+   "description": "Target Corporation"
+  },
+  {
+   "code": "SCHWD",
+   "type": "cedears",
+   "description": "Charles Schwab"
+  },
+  {
+   "code": "COSTB",
+   "type": "cedears",
+   "description": "COSTB"
+  },
+  {
+   "code": "BSN.B",
+   "type": "cedears",
+   "description": "BSN.B"
+  },
+  {
+   "code": "PYPL",
+   "type": "cedears",
+   "description": "Paypal"
+  },
+  {
+   "code": "DALD",
+   "type": "cedears",
+   "description": "Delta Air Lines"
+  },
+  {
+   "code": "BBCA",
+   "type": "cedears",
+   "description": "CEDEAR JPMORGAN BETABUILDERS CANADA ETF"
+  },
+  {
+   "code": "GLOB",
+   "type": "cedears",
+   "description": "Globant"
+  },
+  {
+   "code": "AVGOC",
+   "type": "cedears",
+   "description": "Broadcom Inc."
+  },
+  {
+   "code": "PBI",
+   "type": "cedears",
+   "description": "Pitney Bowes"
+  },
+  {
+   "code": "PETRC",
+   "type": "cedears",
+   "description": "CEDEAR PETROLEO BRASILEIRO S.A."
+  },
+  {
+   "code": "GMD",
+   "type": "cedears",
+   "description": "General Motors"
+  },
+  {
+   "code": "EFX",
+   "type": "cedears",
+   "description": "Equifax"
+  },
+  {
+   "code": "OXYD",
+   "type": "cedears",
+   "description": "Occidental Petroleum Corporation"
+  },
+  {
+   "code": "CSNA3",
+   "type": "cedears",
+   "description": "CEDEAR COMPANHIA SIDERURGICA NACIONAL SA"
+  },
+  {
+   "code": "QCOM",
+   "type": "cedears",
+   "description": "Qualcomm"
+  },
+  {
+   "code": "ANFB",
+   "type": "cedears",
+   "description": "ANFB"
+  },
+  {
+   "code": "IJHD",
+   "type": "cedears",
+   "description": "CEDEAR ETF ISHARES CORE S&P MID - CAP (IJH)"
+  },
+  {
+   "code": "STLA",
+   "type": "cedears",
+   "description": "Stellantis"
+  },
+  {
+   "code": "GLW",
+   "type": "cedears",
+   "description": "Corning Inc."
+  },
+  {
+   "code": "BBD",
+   "type": "cedears",
+   "description": "Bradesco"
+  },
+  {
+   "code": "ADS",
+   "type": "cedears",
+   "description": "Adidas"
+  },
+  {
+   "code": "COST",
+   "type": "cedears",
+   "description": "Costco"
+  },
+  {
+   "code": "FMX",
+   "type": "cedears",
+   "description": "Fomento Economico Mexicano"
+  },
+  {
+   "code": "AMD",
+   "type": "cedears",
+   "description": "Advanced Micro Devices"
+  },
+  {
+   "code": "PAC",
+   "type": "cedears",
+   "description": "Grupo Aeroportuario del Pacífico"
+  },
+  {
+   "code": "ITUBD",
+   "type": "cedears",
+   "description": "Itaú Unibanco"
+  },
+  {
+   "code": "ADP",
+   "type": "cedears",
+   "description": "Automatic Data Processing Inc"
+  },
+  {
+   "code": "RTXD",
+   "type": "cedears",
+   "description": "RTX Corporation"
+  },
+  {
+   "code": "HIMS",
+   "type": "cedears",
+   "description": "CEDEAR HIMS & HERS HEALTH INC."
+  },
+  {
+   "code": "BIIB",
+   "type": "cedears",
+   "description": "Biogen"
+  },
+  {
+   "code": "MUFGD",
+   "type": "cedears",
+   "description": "Mitsubishi Tokyo Financial Group"
+  },
+  {
+   "code": "CRM",
+   "type": "cedears",
+   "description": "Salesforce"
+  },
+  {
+   "code": "VZ",
+   "type": "cedears",
+   "description": "Visa"
+  },
+  {
+   "code": "LLYB",
+   "type": "cedears",
+   "description": "LLYB"
+  },
+  {
+   "code": "JD",
+   "type": "cedears",
+   "description": "JD.com"
+  },
+  {
+   "code": "NUEC",
+   "type": "cedears",
+   "description": "Nucor Corp"
+  },
+  {
+   "code": "AAPD",
+   "type": "cedears",
+   "description": "AAPD"
+  },
+  {
+   "code": "BKNGC",
+   "type": "cedears",
+   "description": "Booking Holdings Inc"
+  },
+  {
+   "code": "LACD",
+   "type": "cedears",
+   "description": "Lithium Americas Corp"
+  },
+  {
+   "code": "BBDCD",
+   "type": "cedears",
+   "description": "CEDEAR BANCO BRADESCO S.A."
+  },
+  {
+   "code": "TSLAC",
+   "type": "cedears",
+   "description": "Tesla"
+  },
+  {
+   "code": "ILF",
+   "type": "cedears",
+   "description": " iShares Latin America 40 ETF"
+  },
+  {
+   "code": "DD",
+   "type": "cedears",
+   "description": "DuPont Corporation"
+  },
+  {
+   "code": "SLVC",
+   "type": "cedears",
+   "description": "CEDEAR ETF ISHARES SILVER TRUST (SLV)"
+  },
+  {
+   "code": "NVDA",
+   "type": "cedears",
+   "description": "Nvidia"
+  },
+  {
+   "code": "TSLAD",
+   "type": "cedears",
+   "description": "Tesla"
+  },
+  {
+   "code": "LND",
+   "type": "cedears",
+   "description": "BrasilAgro"
+  },
+  {
+   "code": "TXNC",
+   "type": "cedears",
+   "description": "Texas Instruments"
+  },
+  {
+   "code": "MP",
+   "type": "cedears",
+   "description": "CEDEAR MP MATERIALS CORP."
+  },
+  {
+   "code": "SATL",
+   "type": "cedears",
+   "description": "Satellogic"
+  },
+  {
+   "code": "HDBC",
+   "type": "cedears",
+   "description": "HDFC Bank "
+  },
+  {
+   "code": "XLVC",
+   "type": "cedears",
+   "description": "State Street Health Care Select Sector SPDR ETF"
+  },
+  {
+   "code": "AXP",
+   "type": "cedears",
+   "description": "American Express"
+  },
+  {
+   "code": "LMTD",
+   "type": "cedears",
+   "description": "Lockheed Martin"
+  },
+  {
+   "code": "PANW",
+   "type": "cedears",
+   "description": "Palo Alto Networks"
+  },
+  {
+   "code": "NU",
+   "type": "cedears",
+   "description": "Nu Holdings Ltd"
+  },
+  {
+   "code": "BB",
+   "type": "cedears",
+   "description": "CEDEAR BLACKBERRY"
+  },
+  {
+   "code": "ADGDB",
+   "type": "cedears",
+   "description": "ADGDB"
+  },
+  {
+   "code": "SAPC",
+   "type": "cedears",
+   "description": "SAP"
+  },
+  {
+   "code": "GSKC",
+   "type": "cedears",
+   "description": "GlaxoSmithKline"
+  },
+  {
+   "code": "DELLC",
+   "type": "cedears",
+   "description": "Dell Technologies"
+  },
+  {
+   "code": "HPQC",
+   "type": "cedears",
+   "description": "Hewlett-Packard"
+  },
+  {
+   "code": "HOODD",
+   "type": "cedears",
+   "description": "Robinhood"
+  },
+  {
+   "code": "XLUC",
+   "type": "cedears",
+   "description": "Utilities Select Sector SPDR Fund"
+  },
+  {
+   "code": "PINSD",
+   "type": "cedears",
+   "description": "Pinterest"
+  },
+  {
+   "code": "AVYD",
+   "type": "cedears",
+   "description": "Avery Dennison Corp"
+  },
+  {
+   "code": "CCL",
+   "type": "cedears",
+   "description": "Carnival Corporation"
+  },
+  {
+   "code": "FXID",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES TRUST FTSE CHINA 25 IF"
+  },
+  {
+   "code": "AVYC",
+   "type": "cedears",
+   "description": "Avery Dennison Corp"
+  },
+  {
+   "code": "HOODC",
+   "type": "cedears",
+   "description": "CEDEAR ROBINHOOD MARKETS INC."
+  },
+  {
+   "code": "HMY",
+   "type": "cedears",
+   "description": "Harmony Gold Mining Company"
+  },
+  {
+   "code": "GED",
+   "type": "cedears",
+   "description": "General Electric"
+  },
+  {
+   "code": "SPHQ",
+   "type": "cedears",
+   "description": "CEDEAR INVERSCO S&P 500 QUALITY ETF (SPHQ)"
+  },
+  {
+   "code": "SNOWC",
+   "type": "cedears",
+   "description": "Snowflake Inc."
+  },
+  {
+   "code": "VSTD",
+   "type": "cedears",
+   "description": "CEDEARV VISTRA CORPORATION (VST)"
+  },
+  {
+   "code": "AVGOD",
+   "type": "cedears",
+   "description": "Broadcom Inc."
+  },
+  {
+   "code": "ADBEC",
+   "type": "cedears",
+   "description": "Adobe"
+  },
+  {
+   "code": "XLFD",
+   "type": "cedears",
+   "description": "Financial Select Sector SPDR Fund"
+  },
+  {
+   "code": "AMDC",
+   "type": "cedears",
+   "description": "Advanced Micro Devices"
+  },
+  {
+   "code": "EWJD",
+   "type": "cedears",
+   "description": "CEDEAR ETF ISHARES MSCI JAPAN (EWJ)"
+  },
+  {
+   "code": "NOW",
+   "type": "cedears",
+   "description": "CEDEAR SERVICENOW INC (NOW)"
+  },
+  {
+   "code": "CVSD",
+   "type": "cedears",
+   "description": "CVS Health"
+  },
+  {
+   "code": "CAR.C",
+   "type": "cedears",
+   "description": "Cendant Corporation"
+  },
+  {
+   "code": "ETHAC",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES ETHEREUM TR ETF"
+  },
+  {
+   "code": "KBD",
+   "type": "cedears",
+   "description": "Kookmin Bank"
+  },
+  {
+   "code": "HIMSC",
+   "type": "cedears",
+   "description": "CEDEAR HIMS & HERS HEALTH INC."
+  },
+  {
+   "code": "LARC",
+   "type": "cedears",
+   "description": "CEDEAR LITHIUM AMERICAS (ARGENTINA) CORP"
+  },
+  {
+   "code": "NVSC",
+   "type": "cedears",
+   "description": "Novartis"
+  },
+  {
+   "code": "AVGO",
+   "type": "cedears",
+   "description": "Broadcom Inc."
+  },
+  {
+   "code": "DISNB",
+   "type": "cedears",
+   "description": "DISNB"
+  },
+  {
+   "code": "TMC",
+   "type": "cedears",
+   "description": "TMC"
+  },
+  {
+   "code": "BX",
+   "type": "cedears",
+   "description": "Blackstone"
+  },
+  {
+   "code": "EWJ",
+   "type": "cedears",
+   "description": "CEDEAR ETF ISHARES MSCI JAPAN (EWJ)"
+  },
+  {
+   "code": "STLAD",
+   "type": "cedears",
+   "description": "Stellantis"
+  },
+  {
+   "code": "SNOWD",
+   "type": "cedears",
+   "description": "Snowflake Inc."
+  },
+  {
+   "code": "TXRD",
+   "type": "cedears",
+   "description": "Ternium"
+  },
+  {
+   "code": "BMYD",
+   "type": "cedears",
+   "description": "Bristol-Myers Squibb"
+  },
+  {
+   "code": "SPGIC",
+   "type": "cedears",
+   "description": "S&P Global"
+  },
+  {
+   "code": "VST",
+   "type": "cedears",
+   "description": "CEDEARV VISTRA CORPORATION (VST)"
+  },
+  {
+   "code": "XLVD",
+   "type": "cedears",
+   "description": "State Street Health Care Select Sector SPDR ETF"
+  },
+  {
+   "code": "ITA",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES U.S. AEROPACE & DEFENSE ETF"
+  },
+  {
+   "code": "JDC",
+   "type": "cedears",
+   "description": "JD.com"
+  },
+  {
+   "code": "XOMDB",
+   "type": "cedears",
+   "description": "XOMDB"
+  },
+  {
+   "code": "AEM",
+   "type": "cedears",
+   "description": "Agnico Eagle Mines"
+  },
+  {
+   "code": "GT",
+   "type": "cedears",
+   "description": "CEDEAR GOODYEAR TIRE & RUBBER CO."
+  },
+  {
+   "code": "ABEVD",
+   "type": "cedears",
+   "description": "AmBev"
+  },
+  {
+   "code": "BAD",
+   "type": "cedears",
+   "description": "Boeing"
+  },
+  {
+   "code": "STLAC",
+   "type": "cedears",
+   "description": "Stellantis"
+  },
+  {
+   "code": "MUXC",
+   "type": "cedears",
+   "description": "MUXC"
+  },
+  {
+   "code": "MSTR",
+   "type": "cedears",
+   "description": "MicroStrategy"
+  },
+  {
+   "code": "ADPC",
+   "type": "cedears",
+   "description": "Automatic Data Processing Inc"
+  },
+  {
+   "code": "JNJ.B",
+   "type": "cedears",
+   "description": "JNJ.B"
+  },
+  {
+   "code": "TSMDB",
+   "type": "cedears",
+   "description": "TSMDB"
+  },
+  {
+   "code": "ABNBC",
+   "type": "cedears",
+   "description": "Airbnb"
+  },
+  {
+   "code": "SIDC",
+   "type": "cedears",
+   "description": "Companhia Siderúrgica Nacional"
+  },
+  {
+   "code": "ROSTD",
+   "type": "cedears",
+   "description": "Ross Stores"
+  },
+  {
+   "code": "NVOD",
+   "type": "cedears",
+   "description": "Novo Nordisk A/S"
+  },
+  {
+   "code": "ASTSD",
+   "type": "cedears",
+   "description": "AST SpaceMobile"
+  },
+  {
+   "code": "TWLO",
+   "type": "cedears",
+   "description": "Twilio"
+  },
+  {
+   "code": "URBN",
+   "type": "cedears",
+   "description": "Urban Outfitters"
+  },
+  {
+   "code": "CRWVD",
+   "type": "cedears",
+   "description": "CoreWeave"
+  },
+  {
+   "code": "RKLBD",
+   "type": "cedears",
+   "description": "Rocket Lab"
+  },
+  {
+   "code": "GEC",
+   "type": "cedears",
+   "description": "General Electric"
+  },
+  {
+   "code": "FDXC",
+   "type": "cedears",
+   "description": "FedEx"
+  },
+  {
+   "code": "XLYC",
+   "type": "cedears",
+   "description": "State Street Consumer Discretionary Select Sector SPDR ETF"
+  },
+  {
+   "code": "XYZ",
+   "type": "cedears",
+   "description": "XYZ"
+  },
+  {
+   "code": "LREN3",
+   "type": "cedears",
+   "description": "Lojas Renner"
+  },
+  {
+   "code": "IEMGC",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES CORE MSCI EMERG.MARK.ETF"
+  },
+  {
+   "code": "HONC",
+   "type": "cedears",
+   "description": "Honeywell"
+  },
+  {
+   "code": "CX",
+   "type": "cedears",
+   "description": "Cemex"
+  },
+  {
+   "code": "CLD",
+   "type": "cedears",
+   "description": "Colgate"
+  },
+  {
+   "code": "FISV",
+   "type": "cedears",
+   "description": "CEDEAR FISERV INC."
+  },
+  {
+   "code": "KEELC",
+   "type": "cedears",
+   "description": "CEDEAR KEEL INFRASTRUCTURE"
+  },
+  {
+   "code": "IVVD",
+   "type": "cedears",
+   "description": "iShares Core S&P 500 ETF"
+  },
+  {
+   "code": "QQQC",
+   "type": "cedears",
+   "description": "Invesco QQQ Trust"
+  },
+  {
+   "code": "ADPD",
+   "type": "cedears",
+   "description": "ADPD"
+  },
+  {
+   "code": "PMD",
+   "type": "cedears",
+   "description": "Philip Morris International"
+  },
+  {
+   "code": "CAH",
+   "type": "cedears",
+   "description": "Cardinal Health"
+  },
+  {
+   "code": "DELL",
+   "type": "cedears",
+   "description": "Dell Technologies"
+  },
+  {
+   "code": "PAASD",
+   "type": "cedears",
+   "description": "CEDEAR PAN AMERICAN SILVER CORP"
+  },
+  {
+   "code": "UALD",
+   "type": "cedears",
+   "description": "United Airlines Holdings"
+  },
+  {
+   "code": "MPC",
+   "type": "cedears",
+   "description": "CEDEAR MP MATERIALS CORP."
+  },
+  {
+   "code": "CVX",
+   "type": "cedears",
+   "description": "Chevron"
+  },
+  {
+   "code": "ANFD",
+   "type": "cedears",
+   "description": "Abercrombie & Fitch"
+  },
+  {
+   "code": "HAL",
+   "type": "cedears",
+   "description": "Halliburton"
+  },
+  {
+   "code": "TIMBD",
+   "type": "cedears",
+   "description": "TIM Brasil"
+  },
+  {
+   "code": "HMC.C",
+   "type": "cedears",
+   "description": "Honda"
+  },
+  {
+   "code": "NVOC",
+   "type": "cedears",
+   "description": "Novo Nordisk A/S"
+  },
+  {
+   "code": "TQQQC",
+   "type": "cedears",
+   "description": "CEDEAR PROSHARES ULTRAPRO QQQ ETF"
+  },
+  {
+   "code": "JPMD",
+   "type": "cedears",
+   "description": "J.P. Morgan Chase"
+  },
+  {
+   "code": "NMR",
+   "type": "cedears",
+   "description": "Nomura Holdings"
+  },
+  {
+   "code": "HSYD",
+   "type": "cedears",
+   "description": "Hershey's"
+  },
+  {
+   "code": "ZMD",
+   "type": "cedears",
+   "description": "Zoom Video Communications"
+  },
+  {
+   "code": "BABA",
+   "type": "cedears",
+   "description": "Alibaba"
+  },
+  {
+   "code": "HON",
+   "type": "cedears",
+   "description": "Honeywell"
+  },
+  {
+   "code": "AVY",
+   "type": "cedears",
+   "description": "Avery Dennison Corp"
+  },
+  {
+   "code": "JMIA",
+   "type": "cedears",
+   "description": "Jumia"
+  },
+  {
+   "code": "BKR",
+   "type": "cedears",
+   "description": "CEDEAR BAKER HUGHES CO."
+  },
+  {
+   "code": "MS",
+   "type": "cedears",
+   "description": "Morgan Stanley"
+  },
+  {
+   "code": "LLY",
+   "type": "cedears",
+   "description": "Eli Lilly and Company"
+  },
+  {
+   "code": "VXX",
+   "type": "cedears",
+   "description": "CEDEAR IPATH SERIES B S&P 500 VIX ETF"
+  },
+  {
+   "code": "COIND",
+   "type": "cedears",
+   "description": "Coinbase Inc"
+  },
+  {
+   "code": "B.C",
+   "type": "cedears",
+   "description": "CEDEAR BARRICK GOLD CORP."
+  },
+  {
+   "code": "AVY.B",
+   "type": "cedears",
+   "description": "AVY.B"
+  },
+  {
+   "code": "ELPC",
+   "type": "cedears",
+   "description": "Companhia Paranaense de Energia"
+  },
+  {
+   "code": "BP",
+   "type": "cedears",
+   "description": "BP"
+  },
+  {
+   "code": "JCI",
+   "type": "cedears",
+   "description": "Johnson Controls"
+  },
+  {
+   "code": "HSYC",
+   "type": "cedears",
+   "description": "Hershey's"
+  },
+  {
+   "code": "PINS",
+   "type": "cedears",
+   "description": "Pinterest"
+  },
+  {
+   "code": "HPQ",
+   "type": "cedears",
+   "description": "Hewlett-Packard"
+  },
+  {
+   "code": "HSY",
+   "type": "cedears",
+   "description": "Hershey's"
+  },
+  {
+   "code": "ADBE",
+   "type": "cedears",
+   "description": "Adobe"
+  },
+  {
+   "code": "LMT",
+   "type": "cedears",
+   "description": "Lockheed Martin"
+  },
+  {
+   "code": "TLND",
+   "type": "cedears",
+   "description": "Talen Energy Corporation"
+  },
+  {
+   "code": "NBIS",
+   "type": "cedears",
+   "description": "CEDEAR NEBIUS GROUP N.V."
+  },
+  {
+   "code": "DISNC",
+   "type": "cedears",
+   "description": "The Walt Disney Company"
+  },
+  {
+   "code": "ANF",
+   "type": "cedears",
+   "description": "Abercrombie & Fitch"
+  },
+  {
+   "code": "CORND",
+   "type": "cedears",
+   "description": "Teucrium Corn Fund"
+  },
+  {
+   "code": "CLSC",
+   "type": "cedears",
+   "description": "CEDEAR CELESTICA INC (CLS)"
+  },
+  {
+   "code": "NKEB",
+   "type": "cedears",
+   "description": "NKEB"
+  },
+  {
+   "code": "MRNA",
+   "type": "cedears",
+   "description": "Moderna"
+  },
+  {
+   "code": "MRNAD",
+   "type": "cedears",
+   "description": "Moderna"
+  },
+  {
+   "code": "TXR",
+   "type": "cedears",
+   "description": "Ternium"
+  },
+  {
+   "code": "PBRDB",
+   "type": "cedears",
+   "description": "PBRDB"
+  },
+  {
+   "code": "QQQ",
+   "type": "cedears",
+   "description": "Invesco QQQ Trust"
+  },
+  {
+   "code": "GOOGL",
+   "type": "cedears",
+   "description": "Google"
+  },
+  {
+   "code": "WDCD",
+   "type": "cedears",
+   "description": "Western Digital"
+  },
+  {
+   "code": "ONDSD",
+   "type": "cedears",
+   "description": "CEDEAR ONDAS HOLDINGS INC."
+  },
+  {
+   "code": "BNYC",
+   "type": "cedears",
+   "description": "BNYC"
+  },
+  {
+   "code": "URBND",
+   "type": "cedears",
+   "description": "Urban Outfitters"
+  },
+  {
+   "code": "TMDB",
+   "type": "cedears",
+   "description": "TMDB"
+  },
+  {
+   "code": "PM",
+   "type": "cedears",
+   "description": "Philip Morris International"
+  },
+  {
+   "code": "SBUXC",
+   "type": "cedears",
+   "description": "Starbucks"
+  },
+  {
+   "code": "JMIAD",
+   "type": "cedears",
+   "description": "Jumia"
+  },
+  {
+   "code": "ITUB3",
+   "type": "cedears",
+   "description": "CEDEAR BANCO ITAU UNIBANCO SA"
+  },
+  {
+   "code": "IFFD",
+   "type": "cedears",
+   "description": "IFFD"
+  },
+  {
+   "code": "NUB",
+   "type": "cedears",
+   "description": "NUB"
+  },
+  {
+   "code": "VZC",
+   "type": "cedears",
+   "description": "CEDEAR VERIZON"
+  },
+  {
+   "code": "DEB",
+   "type": "cedears",
+   "description": "DEB"
+  },
+  {
+   "code": "UGPC",
+   "type": "cedears",
+   "description": "Ultrapar"
+  },
+  {
+   "code": "XLB",
+   "type": "cedears",
+   "description": "State Street Materials Select Sector SPDR ETF"
+  },
+  {
+   "code": "MELIC",
+   "type": "cedears",
+   "description": "Mercado Libre"
+  },
+  {
+   "code": "TEM",
+   "type": "cedears",
+   "description": "CEDEAR TEMPUS AI INC (TEM)"
+  },
+  {
+   "code": "OC",
+   "type": "cedears",
+   "description": "CEDEAR REALTY INCOME CORP."
+  },
+  {
+   "code": "NXED",
+   "type": "cedears",
+   "description": "NXED"
+  },
+  {
+   "code": "IBBC",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES NASDAQ BIOTECHNOLOGY"
+  },
+  {
+   "code": "GLDCB",
+   "type": "cedears",
+   "description": "GLDCB"
+  },
+  {
+   "code": "ACNC",
+   "type": "cedears",
+   "description": "Accenture"
+  },
+  {
+   "code": "CLSD",
+   "type": "cedears",
+   "description": "CEDEAR CELESTICA INC (CLS)"
+  },
+  {
+   "code": "ARCOC",
+   "type": "cedears",
+   "description": "Arcos Dorados Holdings"
+  },
+  {
+   "code": "CAT.B",
+   "type": "cedears",
+   "description": "CAT.B"
+  },
+  {
+   "code": "AMDD",
+   "type": "cedears",
+   "description": "CEDEAR ADVANCED MICRO DEVICES, INC."
+  },
+  {
+   "code": "MRKD",
+   "type": "cedears",
+   "description": "Merck Sharp and Dohme"
+  },
+  {
+   "code": "MOSC",
+   "type": "cedears",
+   "description": "Mosaic Co"
+  },
+  {
+   "code": "GSB",
+   "type": "cedears",
+   "description": "GSB"
+  },
+  {
+   "code": "EWZD",
+   "type": "cedears",
+   "description": "iShares Msci Brazil ETF"
+  },
+  {
+   "code": "LIND",
+   "type": "cedears",
+   "description": "Linde plc"
+  },
+  {
+   "code": "TQQQD",
+   "type": "cedears",
+   "description": "CEDEAR PROSHARES ULTRAPRO QQQ ETF"
+  },
+  {
+   "code": "BIIBD",
+   "type": "cedears",
+   "description": "Biogen"
+  },
+  {
+   "code": "AMGND",
+   "type": "cedears",
+   "description": "Amgen"
+  },
+  {
+   "code": "NTES",
+   "type": "cedears",
+   "description": "NetEase"
+  },
+  {
+   "code": "VIVC",
+   "type": "cedears",
+   "description": "Telefônica Brasil"
+  },
+  {
+   "code": "XLI",
+   "type": "cedears",
+   "description": "State Street Industrial Select Sector SPDR ETF"
+  },
+  {
+   "code": "SHOP",
+   "type": "cedears",
+   "description": "Shopify"
+  },
+  {
+   "code": "DHRC",
+   "type": "cedears",
+   "description": "DHRC"
+  },
+  {
+   "code": "TEAMC",
+   "type": "cedears",
+   "description": "CEDEAR ATLASSIAN CORPORATION (TEAM)"
+  },
+  {
+   "code": "BSNC",
+   "type": "cedears",
+   "description": "Danone"
+  },
+  {
+   "code": "SAN",
+   "type": "cedears",
+   "description": "Banco Santander"
+  },
+  {
+   "code": "AMZND",
+   "type": "cedears",
+   "description": "Amazon"
+  },
+  {
+   "code": "VOD",
+   "type": "cedears",
+   "description": "Vodafone"
+  },
+  {
+   "code": "HMYD",
+   "type": "cedears",
+   "description": "Harmony Gold Mining Company"
+  },
+  {
+   "code": "IBN",
+   "type": "cedears",
+   "description": "ICICI Bank"
+  },
+  {
+   "code": "NVS",
+   "type": "cedears",
+   "description": "Novartis"
+  },
+  {
+   "code": "EWZDB",
+   "type": "cedears",
+   "description": "EWZDB"
+  },
+  {
+   "code": "CCJD",
+   "type": "cedears",
+   "description": "CEDEAR CAMECO CORPORATION"
+  },
+  {
+   "code": "IWMC",
+   "type": "cedears",
+   "description": "iShares Russell 2000 ETF"
+  },
+  {
+   "code": "NMRC",
+   "type": "cedears",
+   "description": "Nomura Holdings"
+  },
+  {
+   "code": "PEPC",
+   "type": "cedears",
+   "description": "Pepsico"
+  },
+  {
+   "code": "IBKRD",
+   "type": "cedears",
+   "description": "Interactive Brokers"
+  },
+  {
+   "code": "UL",
+   "type": "cedears",
+   "description": "Unilever"
+  },
+  {
+   "code": "BBAX",
+   "type": "cedears",
+   "description": "JPMorgan BetaBuilders Developed Asia Pacific ex-Japan"
+  },
+  {
+   "code": "AIC",
+   "type": "cedears",
+   "description": "CEDEAR C3.AI INC (AI)"
+  },
+  {
+   "code": "PGD",
+   "type": "cedears",
+   "description": "Procter & Gamble"
+  },
+  {
+   "code": "ETSY",
+   "type": "cedears",
+   "description": "Etsy"
+  },
+  {
+   "code": "VIVD",
+   "type": "cedears",
+   "description": "Telefônica Brasil"
+  },
+  {
+   "code": "DDD",
+   "type": "cedears",
+   "description": "DuPont Corporation"
+  },
+  {
+   "code": "CRMC",
+   "type": "cedears",
+   "description": "Salesforce"
+  },
+  {
+   "code": "JNJD",
+   "type": "cedears",
+   "description": "Johnson & Johson"
+  },
+  {
+   "code": "SOYBC",
+   "type": "cedears",
+   "description": "Teucrium Soybean Fund"
+  },
+  {
+   "code": "SOYB",
+   "type": "cedears",
+   "description": "Teucrium Soybean Fund"
+  },
+  {
+   "code": "XLKB",
+   "type": "cedears",
+   "description": "XLKB"
+  },
+  {
+   "code": "ESGU",
+   "type": "cedears",
+   "description": "iShares ESG Aware MSCI USA ETF"
+  },
+  {
+   "code": "MOC",
+   "type": "cedears",
+   "description": "CEDEAR ALTRIA GR"
+  },
+  {
+   "code": "AXPC",
+   "type": "cedears",
+   "description": "American Express"
+  },
+  {
+   "code": "BRKBD",
+   "type": "cedears",
+   "description": "Berkshire Hathaway"
+  },
+  {
+   "code": "RIO",
+   "type": "cedears",
+   "description": "Rio Tinto"
+  },
+  {
+   "code": "UBERD",
+   "type": "cedears",
+   "description": "Uber"
+  },
+  {
+   "code": "BBDC3",
+   "type": "cedears",
+   "description": "CEDEAR BANCO BRADESCO S.A."
+  },
+  {
+   "code": "QQQCB",
+   "type": "cedears",
+   "description": "QQQCB"
+  },
+  {
+   "code": "VRSNB",
+   "type": "cedears",
+   "description": "VRSNB"
+  },
+  {
+   "code": "NOKA",
+   "type": "cedears",
+   "description": "Nokia"
+  },
+  {
+   "code": "HDC",
+   "type": "cedears",
+   "description": "The Home Depot"
+  },
+  {
+   "code": "LAR",
+   "type": "cedears",
+   "description": "CEDEAR LITHIUM AMERICAS (ARGENTINA) CORP"
+  },
+  {
+   "code": "ORCLD",
+   "type": "cedears",
+   "description": "Oracle Corporation"
+  },
+  {
+   "code": "IREN",
+   "type": "cedears",
+   "description": "Iren"
+  },
+  {
+   "code": "SCOOD",
+   "type": "cedears",
+   "description": "SCOOD"
+  },
+  {
+   "code": "OXYB",
+   "type": "cedears",
+   "description": "OXYB"
+  },
+  {
+   "code": "MSTRC",
+   "type": "cedears",
+   "description": "MicroStrategy"
+  },
+  {
+   "code": "BIDUB",
+   "type": "cedears",
+   "description": "BIDUB"
+  },
+  {
+   "code": "MRK",
+   "type": "cedears",
+   "description": "Merck Sharp and Dohme"
+  },
+  {
+   "code": "PBRB",
+   "type": "cedears",
+   "description": "PBRB"
+  },
+  {
+   "code": "MSFTD",
+   "type": "cedears",
+   "description": "Microsoft"
+  },
+  {
+   "code": "ABTC",
+   "type": "cedears",
+   "description": "Abbott Laboratories"
+  },
+  {
+   "code": "CC",
+   "type": "cedears",
+   "description": "Citigroup"
+  },
+  {
+   "code": "BIIBC",
+   "type": "cedears",
+   "description": "Biogen"
+  },
+  {
+   "code": "CAAP",
+   "type": "cedears",
+   "description": "Corporación América Airports"
+  },
+  {
+   "code": "BSBR",
+   "type": "cedears",
+   "description": "Banco Santander (Brasil)"
+  },
+  {
+   "code": "MUFG",
+   "type": "cedears",
+   "description": "Mitsubishi Tokyo Financial Group"
+  },
+  {
+   "code": "AEMD",
+   "type": "cedears",
+   "description": "AEMD"
+  },
+  {
+   "code": "COIN",
+   "type": "cedears",
+   "description": "Coinbase Inc"
+  },
+  {
+   "code": "BBDD",
+   "type": "cedears",
+   "description": "CEDEAR Banco Bradesco"
+  },
+  {
+   "code": "ECLC",
+   "type": "cedears",
+   "description": "CEDEAR ECOLAB INC."
+  },
+  {
+   "code": "NEMD",
+   "type": "cedears",
+   "description": "Newmont Mining Corporation"
+  },
+  {
+   "code": "LARD",
+   "type": "cedears",
+   "description": "CEDEAR LITHIUM AMERICAS (ARGENTINA) CORP"
+  },
+  {
+   "code": "NIOD",
+   "type": "cedears",
+   "description": "Nio Inc"
+  },
+  {
+   "code": "TRVVB",
+   "type": "cedears",
+   "description": "TRVVB"
+  },
+  {
+   "code": "RIOTC",
+   "type": "cedears",
+   "description": "Riot Platforms Inc"
+  },
+  {
+   "code": "SMH",
+   "type": "cedears",
+   "description": "CEDEAR VAN ECK VECTORS ETF TRUST"
+  },
+  {
+   "code": "ETHCB",
+   "type": "cedears",
+   "description": "ETHCB"
+  },
+  {
+   "code": "MSTRB",
+   "type": "cedears",
+   "description": "MSTRB"
+  },
+  {
+   "code": "CCLD",
+   "type": "cedears",
+   "description": "Carnival Corporation"
+  },
+  {
+   "code": "IVV",
+   "type": "cedears",
+   "description": "iShares Core S&P 500 ETF"
+  },
+  {
+   "code": "TMOB",
+   "type": "cedears",
+   "description": "TMOB"
+  },
+  {
+   "code": "GLOBD",
+   "type": "cedears",
+   "description": "CEDEAR GLOBANT S.A."
+  },
+  {
+   "code": "VITCB",
+   "type": "cedears",
+   "description": "VITCB"
+  },
+  {
+   "code": "IP",
+   "type": "cedears",
+   "description": "International Paper"
+  },
+  {
+   "code": "SBSP3",
+   "type": "cedears",
+   "description": "CEDEAR CIA DE SANEAMIENTO BASICO DE SP SA"
+  },
+  {
+   "code": "SHOPC",
+   "type": "cedears",
+   "description": "Shopify"
+  },
+  {
+   "code": "ISRG",
+   "type": "cedears",
+   "description": "ISRG"
+  },
+  {
+   "code": "MOD",
+   "type": "cedears",
+   "description": "CEDEAR ALTRIA GR"
+  },
+  {
+   "code": "UGP",
+   "type": "cedears",
+   "description": "Ultrapar"
+  },
+  {
+   "code": "TXN",
+   "type": "cedears",
+   "description": "Texas Instruments"
+  },
+  {
+   "code": "SPCXC",
+   "type": "cedears",
+   "description": "Space Exploration Technologies Corp"
+  },
+  {
+   "code": "CVXD",
+   "type": "cedears",
+   "description": "Chevron"
+  },
+  {
+   "code": "CVXC",
+   "type": "cedears",
+   "description": "Chevron"
+  },
+  {
+   "code": "SPCXD",
+   "type": "cedears",
+   "description": "Space Exploration Technologies Corp"
+  },
+  {
+   "code": "METAD",
+   "type": "cedears",
+   "description": "Meta"
+  },
+  {
+   "code": "XME",
+   "type": "cedears",
+   "description": "SPDR S&P Metals & Mining ETF"
+  },
+  {
+   "code": "CAR.D",
+   "type": "cedears",
+   "description": "CAR.D"
+  },
+  {
+   "code": "TENC",
+   "type": "cedears",
+   "description": "Tenaris"
+  },
+  {
+   "code": "NKEC",
+   "type": "cedears",
+   "description": "Nike"
+  },
+  {
+   "code": "SMHD",
+   "type": "cedears",
+   "description": "CEDEAR VAN ECK VECTORS ETF TRUST"
+  },
+  {
+   "code": "GOGLC",
+   "type": "cedears",
+   "description": "Google"
+  },
+  {
+   "code": "SHEL",
+   "type": "cedears",
+   "description": "Shell"
+  },
+  {
+   "code": "SAP.B",
+   "type": "cedears",
+   "description": "SAP.B"
+  },
+  {
+   "code": "CCJ",
+   "type": "cedears",
+   "description": "CEDEAR CAMECO CORPORATION"
+  },
+  {
+   "code": "B",
+   "type": "cedears",
+   "description": "CEDEAR BARRICK GOLD CORP."
+  },
+  {
+   "code": "DIA",
+   "type": "cedears",
+   "description": "CEDEAR SPDR DOW JONES INDUSTRIAL"
+  },
+  {
+   "code": "STNE",
+   "type": "cedears",
+   "description": "StoneCo Ltd"
+  },
+  {
+   "code": "FCXC",
+   "type": "cedears",
+   "description": "Freeport"
+  },
+  {
+   "code": "VZD",
+   "type": "cedears",
+   "description": "CEDEAR VERIZON"
+  },
+  {
+   "code": "AIGC",
+   "type": "cedears",
+   "description": "American International Group"
+  },
+  {
+   "code": "CLS",
+   "type": "cedears",
+   "description": "CEDEAR CELESTICA INC (CLS)"
+  },
+  {
+   "code": "PLTRC",
+   "type": "cedears",
+   "description": "PLTRC"
+  },
+  {
+   "code": "IEMGD",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES CORE MSCI EMERG.MARK.ETF"
+  },
+  {
+   "code": "FISVD",
+   "type": "cedears",
+   "description": "CEDEAR FISERV INC."
+  },
+  {
+   "code": "C",
+   "type": "cedears",
+   "description": "Citigroup"
+  },
+  {
+   "code": "HUTB",
+   "type": "cedears",
+   "description": "HUTB"
+  },
+  {
+   "code": "VALE",
+   "type": "cedears",
+   "description": "Companhia Vale Do Rio Doce"
+  },
+  {
+   "code": "ANETD",
+   "type": "cedears",
+   "description": "CEDEAR ARISTA NETWORKS INC."
+  },
+  {
+   "code": "FDXB",
+   "type": "cedears",
+   "description": "FDXB"
+  },
+  {
+   "code": "MCDC",
+   "type": "cedears",
+   "description": "McDonald's"
+  },
+  {
+   "code": "MDLZD",
+   "type": "cedears",
+   "description": "Mondelēz International"
+  },
+  {
+   "code": "XLID",
+   "type": "cedears",
+   "description": "State Street Industrial Select Sector SPDR ETF"
+  },
+  {
+   "code": "JCIC",
+   "type": "cedears",
+   "description": "Johnson Controls"
+  },
+  {
+   "code": "NXE",
+   "type": "cedears",
+   "description": "CEDEAR NEXGEN ENERGY"
+  },
+  {
+   "code": "MUFGC",
+   "type": "cedears",
+   "description": "Mitsubishi Tokyo Financial Group"
+  },
+  {
+   "code": "BHPDB",
+   "type": "cedears",
+   "description": "BHPDB"
+  },
+  {
+   "code": "CRWV",
+   "type": "cedears",
+   "description": "CoreWeave"
+  },
+  {
+   "code": "GEVD",
+   "type": "cedears",
+   "description": "GE Vernova"
+  },
+  {
+   "code": "ASMLD",
+   "type": "cedears",
+   "description": "CEDEAR ASML HOLDING NV (ASML)"
+  },
+  {
+   "code": "SNDKC",
+   "type": "cedears",
+   "description": "CEDEAR SANDISK CORPORATION"
+  },
+  {
+   "code": "BA.C",
+   "type": "cedears",
+   "description": "Bank Of America"
+  },
+  {
+   "code": "UNHC",
+   "type": "cedears",
+   "description": "Unitedhealth Group Inc."
+  },
+  {
+   "code": "IWMB",
+   "type": "cedears",
+   "description": "IWMB"
+  },
+  {
+   "code": "NSANC",
+   "type": "cedears",
+   "description": "Nissan"
+  },
+  {
+   "code": "TTE",
+   "type": "cedears",
+   "description": "TotalEnergies"
+  },
+  {
+   "code": "RGTI",
+   "type": "cedears",
+   "description": "CEDEAR RIGETTI COMPUTING (RGTI)"
+  },
+  {
+   "code": "BAYN",
+   "type": "cedears",
+   "description": "Bayer"
+  },
+  {
+   "code": "RSP",
+   "type": "cedears",
+   "description": "Invesco S&P 500 Equal Weight ETF"
+  },
+  {
+   "code": "VEA",
+   "type": "cedears",
+   "description": "CEDEAR VANGUARD FTSE DEVELOPED MARKETS ETF"
+  },
+  {
+   "code": "IVW",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES S&P 500 GROWTH ETF"
+  },
+  {
+   "code": "SHC",
+   "type": "cedears",
+   "description": "SHC"
+  },
+  {
+   "code": "ZM",
+   "type": "cedears",
+   "description": "Zoom Video Communications"
+  },
+  {
+   "code": "SNOW",
+   "type": "cedears",
+   "description": "Snowflake Inc."
+  },
+  {
+   "code": "TMO",
+   "type": "cedears",
+   "description": "Thermo Fisher Scientific Inc"
+  },
+  {
+   "code": "CVX.B",
+   "type": "cedears",
+   "description": "CVX.B"
+  },
+  {
+   "code": "IBITD",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES BITCOIN TR"
+  },
+  {
+   "code": "GSKD",
+   "type": "cedears",
+   "description": "GlaxoSmithKline"
+  },
+  {
+   "code": "PEPD",
+   "type": "cedears",
+   "description": "Pepsico"
+  },
+  {
+   "code": "LYG",
+   "type": "cedears",
+   "description": "Lloyds Banking Group"
+  },
+  {
+   "code": "GSGD",
+   "type": "cedears",
+   "description": "iShares S&P GSCI Commodity-Indexed Trust ETF"
+  },
+  {
+   "code": "DED",
+   "type": "cedears",
+   "description": "Deere & Company"
+  },
+  {
+   "code": "FNMA",
+   "type": "cedears",
+   "description": "Fannie Mae"
+  },
+  {
+   "code": "IBIT",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES BITCOIN TR"
+  },
+  {
+   "code": "ABT",
+   "type": "cedears",
+   "description": "Abbott Laboratories"
+  },
+  {
+   "code": "IFF",
+   "type": "cedears",
+   "description": "International Flavors & Fragrances"
+  },
+  {
+   "code": "AZND",
+   "type": "cedears",
+   "description": "AstraZeneca"
+  },
+  {
+   "code": "SHWD",
+   "type": "cedears",
+   "description": "Sherwin-Williams"
+  },
+  {
+   "code": "AI",
+   "type": "cedears",
+   "description": "CEDEAR C3.AI INC (AI)"
+  },
+  {
+   "code": "FMXC",
+   "type": "cedears",
+   "description": "Fomento Economico Mexicano"
+  },
+  {
+   "code": "VRTXC",
+   "type": "cedears",
+   "description": "CEDEAR VERTEX PHARMACEUTICALS INC (VRTX)"
+  },
+  {
+   "code": "GLNGC",
+   "type": "cedears",
+   "description": "CEDEAR GOLAR LNG LTD."
+  },
+  {
+   "code": "NTRAD",
+   "type": "cedears",
+   "description": "Natera Inc"
+  },
+  {
+   "code": "HUTD",
+   "type": "cedears",
+   "description": "Hut 8 Corp"
+  },
+  {
+   "code": "PLTR",
+   "type": "cedears",
+   "description": "Palantir Technologies"
+  },
+  {
+   "code": "YZCA",
+   "type": "cedears",
+   "description": "Yanzhou Coal Mining Company"
+  },
+  {
+   "code": "EBAYD",
+   "type": "cedears",
+   "description": "eBay"
+  },
+  {
+   "code": "PFEC",
+   "type": "cedears",
+   "description": "Pfizer"
+  },
+  {
+   "code": "NFLX",
+   "type": "cedears",
+   "description": "Netflix"
+  },
+  {
+   "code": "LLYC",
+   "type": "cedears",
+   "description": "Eli Lilly and Company"
+  },
+  {
+   "code": "COINB",
+   "type": "cedears",
+   "description": "COINB"
+  },
+  {
+   "code": "TRVV",
+   "type": "cedears",
+   "description": "The Travelers Companies"
+  },
+  {
+   "code": "SCCO",
+   "type": "cedears",
+   "description": "Southern Copper Corporation"
+  },
+  {
+   "code": "XLEDB",
+   "type": "cedears",
+   "description": "XLEDB"
+  },
+  {
+   "code": "ILFC",
+   "type": "cedears",
+   "description": " iShares Latin America 40 ETF"
+  },
+  {
+   "code": "EBAY",
+   "type": "cedears",
+   "description": "eBay"
+  },
+  {
+   "code": "MSC",
+   "type": "cedears",
+   "description": "Morgan Stanley"
+  },
+  {
+   "code": "AMZN",
+   "type": "cedears",
+   "description": "Amazon"
+  },
+  {
+   "code": "SHELC",
+   "type": "cedears",
+   "description": "Shell"
+  },
+  {
+   "code": "QCOMD",
+   "type": "cedears",
+   "description": "Qualcomm"
+  },
+  {
+   "code": "SPYC",
+   "type": "cedears",
+   "description": "SPDR S&P 500"
+  },
+  {
+   "code": "CSCO",
+   "type": "cedears",
+   "description": "Cisco Systems"
+  },
+  {
+   "code": "PANWD",
+   "type": "cedears",
+   "description": "Palo Alto Networks"
+  },
+  {
+   "code": "SIEGY",
+   "type": "cedears",
+   "description": "Siemens AG"
+  },
+  {
+   "code": "SEC",
+   "type": "cedears",
+   "description": "Sea Ltd"
+  },
+  {
+   "code": "ACWIC",
+   "type": "cedears",
+   "description": "CEDEAR ISHARES MSCI ACWI ETF"
+  },
+  {
+   "code": "DEOC",
+   "type": "cedears",
+   "description": "Diageo"
+  },
+  {
+   "code": "WMT",
+   "type": "cedears",
+   "description": "Walmart"
+  },
+  {
+   "code": "BMYC",
+   "type": "cedears",
+   "description": "Bristol-Myers Squibb"
+  },
+  {
+   "code": "SANC",
+   "type": "cedears",
+   "description": "Banco Santander"
+  },
+  {
+   "code": "ASTSC",
+   "type": "cedears",
+   "description": "CEDEAR AST SPACEMOBILE INC."
+  },
+  {
+   "code": "XLKD",
+   "type": "cedears",
+   "description": "State Street Technology Select Sector SPDR ETF"
+  },
+  {
+   "code": "GEV",
+   "type": "cedears",
+   "description": "GE Vernova"
+  },
+  {
+   "code": "ETSYD",
+   "type": "cedears",
+   "description": "Etsy"
+  },
+  {
+   "code": "URAD",
+   "type": "cedears",
+   "description": "CEDEAR GLOBAL X URANIUM ETF"
+  },
+  {
+   "code": "PSX",
+   "type": "cedears",
+   "description": "Phillips 66 Company"
+  },
+  {
+   "code": "GDXD",
+   "type": "cedears",
+   "description": "CEDEAR VAN ECK GOLD MINERS ETF (GDX)"
+  },
+  {
+   "code": "MDLZ",
+   "type": "cedears",
+   "description": "Mondelēz International"
+  },
+  {
+   "code": "VEAD",
+   "type": "cedears",
+   "description": "CEDEAR VANGUARD FTSE DEVELOPED MARKETS ETF"
+  },
+  {
+   "code": "XLY",
+   "type": "cedears",
+   "description": "State Street Consumer Discretionary Select Sector SPDR ETF"
+  },
+  {
+   "code": "SID",
+   "type": "cedears",
+   "description": "Companhia Siderúrgica Nacional"
+  },
+  {
+   "code": "AMXC",
+   "type": "cedears",
+   "description": "América Móvil"
+  },
+  {
+   "code": "TTED",
+   "type": "cedears",
+   "description": "TotalEnergies"
+  },
+  {
+   "code": "DHR",
+   "type": "cedears",
+   "description": "DHR"
+  },
+  {
+   "code": "NVDAD",
+   "type": "cedears",
+   "description": "Nvidia"
+  },
+  {
+   "code": "KOFM",
+   "type": "cedears",
+   "description": "Coca-Cola Femsa"
+  },
+  {
+   "code": "PHG",
+   "type": "cedears",
+   "description": "Philips"
+  },
+  {
+   "code": "SPYD",
+   "type": "cedears",
+   "description": "SPDR S&P 500"
+  },
+  {
+   "code": "JMIAB",
+   "type": "cedears",
+   "description": "JMIAB"
+  },
+  {
+   "code": "SBS",
+   "type": "cedears",
+   "description": "Sabesp"
+  },
+  {
+   "code": "JPM",
+   "type": "cedears",
+   "description": "J.P. Morgan Chase"
+  },
+  {
+   "code": "SPOTD",
+   "type": "cedears",
+   "description": "Spotify"
+  },
+  {
+   "code": "TM",
+   "type": "cedears",
+   "description": "Toyota"
+  },
+  {
+   "code": "ARKKC",
+   "type": "cedears",
+   "description": "Arkk"
+  },
+  {
+   "code": "XLK",
+   "type": "cedears",
+   "description": "State Street Technology Select Sector SPDR ETF"
+  },
+  {
+   "code": "USO",
+   "type": "cedears",
+   "description": "CEDEAR UNITED STATE OIL FUND LP (USO)"
+  },
+  {
+   "code": "NFLXC",
+   "type": "cedears",
+   "description": "Netflix"
+  },
+  {
+   "code": "SPHQC",
+   "type": "cedears",
+   "description": "Invesco S&P 500 Quality ETF"
+  },
+  {
+   "code": "ALUAB",
+   "type": "acciones",
+   "description": "ALUAB"
+  },
+  {
+   "code": "BYMAD",
+   "type": "acciones",
+   "description": "Bolsas y Mercados Argentinos"
+  },
+  {
+   "code": "RAGH",
+   "type": "acciones",
+   "description": "Raghsa"
+  },
+  {
+   "code": "EDSH",
+   "type": "acciones",
+   "description": "EDSH"
+  },
+  {
+   "code": "SAMID",
+   "type": "acciones",
+   "description": "San Miguel"
+  },
+  {
+   "code": "EDN",
+   "type": "acciones",
+   "description": "Edenor"
+  },
+  {
+   "code": "SUPVD",
+   "type": "acciones",
+   "description": "Grupo Supervielle"
+  },
+  {
+   "code": "LOMA",
+   "type": "acciones",
+   "description": "Loma Negra"
+  },
+  {
+   "code": "ECOGB",
+   "type": "acciones",
+   "description": "ECOGB"
+  },
+  {
+   "code": "GCLAB",
+   "type": "acciones",
+   "description": "GCLAB"
+  },
+  {
+   "code": "COMED",
+   "type": "acciones",
+   "description": "Sociedad Comercial del Plata"
+  },
+  {
+   "code": "BYMAC",
+   "type": "acciones",
+   "description": "Bolsas y Mercados Argentinos"
+  },
+  {
+   "code": "INVJ",
+   "type": "acciones",
+   "description": "Inversora Juramento"
+  },
+  {
+   "code": "VALOB",
+   "type": "acciones",
+   "description": "VALOB"
+  },
+  {
+   "code": "MOLI5",
+   "type": "acciones",
+   "description": "MOLINOS RIO DE LA PLATA ESCRIT.  A  5 VOTOS"
+  },
+  {
+   "code": "METRC",
+   "type": "acciones",
+   "description": "Metrogas"
+  },
+  {
+   "code": "BHIPB",
+   "type": "acciones",
+   "description": "BHIPB"
+  },
+  {
+   "code": "BHIP",
+   "type": "acciones",
+   "description": "Banco Hipotecario"
+  },
+  {
+   "code": "TRAN",
+   "type": "acciones",
+   "description": "Transener"
+  },
+  {
+   "code": "SUPV",
+   "type": "acciones",
+   "description": "Grupo Supervielle"
+  },
+  {
+   "code": "CEPDB",
+   "type": "acciones",
+   "description": "CEPDB"
+  },
+  {
+   "code": "CRESC",
+   "type": "acciones",
+   "description": "Cresud"
+  },
+  {
+   "code": "METRB",
+   "type": "acciones",
+   "description": "METRB"
+  },
+  {
+   "code": "GCDI",
+   "type": "acciones",
+   "description": "TGLT"
+  },
+  {
+   "code": "IRSAC",
+   "type": "acciones",
+   "description": "IRSA"
+  },
+  {
+   "code": "TRANB",
+   "type": "acciones",
+   "description": "TRANB"
+  },
+  {
+   "code": "CVH",
+   "type": "acciones",
+   "description": "Cablevisión Holding"
+  },
+  {
+   "code": "BOLT",
+   "type": "acciones",
+   "description": "Boldt"
+  },
+  {
+   "code": "ECOG",
+   "type": "acciones",
+   "description": "ECOGAS INV.  CL.D  1 V. ESCRIT"
+  },
+  {
+   "code": "MIRGB",
+   "type": "acciones",
+   "description": "MIRGB"
+  },
+  {
+   "code": "PAMPC",
+   "type": "acciones",
+   "description": "Pampa Energía"
+  },
+  {
+   "code": "SUPVC",
+   "type": "acciones",
+   "description": "Grupo Supervielle"
+  },
+  {
+   "code": "YPFDD",
+   "type": "acciones",
+   "description": "YPF"
+  },
+  {
+   "code": "ECOGD",
+   "type": "acciones",
+   "description": "ECOGAS INV.  CL.D  1 V. ESCRIT"
+  },
+  {
+   "code": "BMA.D",
+   "type": "acciones",
+   "description": "Banco Macro"
+  },
+  {
+   "code": "ROSE",
+   "type": "acciones",
+   "description": "INST. ROSENBUSCH  ORD. B  1 VOTO"
+  },
+  {
+   "code": "YPDDB",
+   "type": "acciones",
+   "description": "YPDDB"
+  },
+  {
+   "code": "CECOB",
+   "type": "acciones",
+   "description": "CECOB"
+  },
+  {
+   "code": "EDND",
+   "type": "acciones",
+   "description": "Edenor"
+  },
+  {
+   "code": "ALUA",
+   "type": "acciones",
+   "description": "Aluar"
+  },
+  {
+   "code": "CRES",
+   "type": "acciones",
+   "description": "Cresud"
+  },
+  {
+   "code": "TECOC",
+   "type": "acciones",
+   "description": "TELECOM ARG. ESCRIT. B 1 V."
+  },
+  {
+   "code": "CTIOC",
+   "type": "acciones",
+   "description": "Consultatio"
+  },
+  {
+   "code": "CEPU",
+   "type": "acciones",
+   "description": "Central Puerto"
+  },
+  {
+   "code": "GGAL",
+   "type": "acciones",
+   "description": "Grupo Financiero Galicia"
+  },
+  {
+   "code": "BBARC",
+   "type": "acciones",
+   "description": "BBVA"
+  },
+  {
+   "code": "VALO",
+   "type": "acciones",
+   "description": "Banco de Valores"
+  },
+  {
+   "code": "IRSAB",
+   "type": "acciones",
+   "description": "IRSAB"
+  },
+  {
+   "code": "A3",
+   "type": "acciones",
+   "description": "A3 MERCADOS S.A"
+  },
+  {
+   "code": "METR",
+   "type": "acciones",
+   "description": "Metrogas"
+  },
+  {
+   "code": "MORI",
+   "type": "acciones",
+   "description": "Morixe"
+  },
+  {
+   "code": "LONG",
+   "type": "acciones",
+   "description": "Longvie"
+  },
+  {
+   "code": "CGPA2",
+   "type": "acciones",
+   "description": "Camuzzi Gas"
+  },
+  {
+   "code": "CEPUD",
+   "type": "acciones",
+   "description": "Central Puerto"
+  },
+  {
+   "code": "CVHC",
+   "type": "acciones",
+   "description": "Cablevisión Holding"
+  },
+  {
+   "code": "MIRG",
+   "type": "acciones",
+   "description": "Mirgor"
+  },
+  {
+   "code": "LOMAC",
+   "type": "acciones",
+   "description": "Loma Negra"
+  },
+  {
+   "code": "GRIM",
+   "type": "acciones",
+   "description": "GRIMOLDI-  B  ORDS.1 VOTO ESCRIT."
+  },
+  {
+   "code": "TGSU2",
+   "type": "acciones",
+   "description": "Transportadora de Gas del Sur"
+  },
+  {
+   "code": "CVHB",
+   "type": "acciones",
+   "description": "CVHB"
+  },
+  {
+   "code": "TECOD",
+   "type": "acciones",
+   "description": "TELECOM ARG. ESCRIT. B 1 V."
+  },
+  {
+   "code": "VALOC",
+   "type": "acciones",
+   "description": "Banco de Valores"
+  },
+  {
+   "code": "CEPUC",
+   "type": "acciones",
+   "description": "Central Puerto"
+  },
+  {
+   "code": "CAPX",
+   "type": "acciones",
+   "description": "Capex"
+  },
+  {
+   "code": "A3B",
+   "type": "acciones",
+   "description": "A3B"
+  },
+  {
+   "code": "ALUAD",
+   "type": "acciones",
+   "description": "Aluar"
+  },
+  {
+   "code": "MOLA",
+   "type": "acciones",
+   "description": "Molinos Agro"
+  },
+  {
+   "code": "TGN4D",
+   "type": "acciones",
+   "description": "TRANS. GAS DEL NORTE C ORD $ ESC"
+  },
+  {
+   "code": "DOME",
+   "type": "acciones",
+   "description": "DOMEC S.A. - ORDINARIAS 1 VOTO"
+  },
+  {
+   "code": "MOLI",
+   "type": "acciones",
+   "description": "Molinos Río de la Plata"
+  },
+  {
+   "code": "CTIOD",
+   "type": "acciones",
+   "description": "Consultatio"
+  },
+  {
+   "code": "MOLA5",
+   "type": "acciones",
+   "description": "MOLINOS AGRO S.A. CL. A 5 V $ ESC."
+  },
+  {
+   "code": "LEDE",
+   "type": "acciones",
+   "description": "LEDESMA ORDINARIAS 1 VOTO ESCRITURAL"
+  },
+  {
+   "code": "BPAT",
+   "type": "acciones",
+   "description": "Banco Patagonia"
+  },
+  {
+   "code": "EDNC",
+   "type": "acciones",
+   "description": "Edenor"
+  },
+  {
+   "code": "MORID",
+   "type": "acciones",
+   "description": "Morixe"
+  },
+  {
+   "code": "INTR",
+   "type": "acciones",
+   "description": "Cia. Introductora de Buenos Aires"
+  },
+  {
+   "code": "AGRO",
+   "type": "acciones",
+   "description": "Agrometal"
+  },
+  {
+   "code": "EDNB",
+   "type": "acciones",
+   "description": "EDNB"
+  },
+  {
+   "code": "BHIPD",
+   "type": "acciones",
+   "description": "BHIPD"
+  },
+  {
+   "code": "YPDCB",
+   "type": "acciones",
+   "description": "YPDCB"
+  },
+  {
+   "code": "TECO2",
+   "type": "acciones",
+   "description": "Telecom"
+  },
+  {
+   "code": "TXAR",
+   "type": "acciones",
+   "description": "Ternium"
+  },
+  {
+   "code": "AGROD",
+   "type": "acciones",
+   "description": "Agrometal"
+  },
+  {
+   "code": "CTICB",
+   "type": "acciones",
+   "description": "CTICB"
+  },
+  {
+   "code": "ECOGC",
+   "type": "acciones",
+   "description": "ECOGAS INV.  CL.D  1 V. ESCRIT"
+  },
+  {
+   "code": "BMA.5",
+   "type": "acciones",
+   "description": "Banco Macro"
+  },
+  {
+   "code": "TGSDB",
+   "type": "acciones",
+   "description": "TGSDB"
+  },
+  {
+   "code": "COME",
+   "type": "acciones",
+   "description": "Sociedad Comercial del Plata"
+  },
+  {
+   "code": "IRSAD",
+   "type": "acciones",
+   "description": "IRSA"
+  },
+  {
+   "code": "HARG",
+   "type": "acciones",
+   "description": "Holcin"
+  },
+  {
+   "code": "MOLID",
+   "type": "acciones",
+   "description": "Molinos Río de la Plata"
+  },
+  {
+   "code": "COMEC",
+   "type": "acciones",
+   "description": "Sociedad Comercial del Plata"
+  },
+  {
+   "code": "MIRGC",
+   "type": "acciones",
+   "description": "Mirgor"
+  },
+  {
+   "code": "CADO",
+   "type": "acciones",
+   "description": "Carlos Casado"
+  },
+  {
+   "code": "METRD",
+   "type": "acciones",
+   "description": "Metrogas"
+  },
+  {
+   "code": "TXARB",
+   "type": "acciones",
+   "description": "TXARB"
+  },
+  {
+   "code": "ALUAC",
+   "type": "acciones",
+   "description": "Aluar"
+  },
+  {
+   "code": "VALOD",
+   "type": "acciones",
+   "description": "Banco de Valores"
+  },
+  {
+   "code": "GGALD",
+   "type": "acciones",
+   "description": "Grupo Financiero Galicia"
+  },
+  {
+   "code": "GGALC",
+   "type": "acciones",
+   "description": "Grupo Financiero Galicia"
+  },
+  {
+   "code": "FERR",
+   "type": "acciones",
+   "description": "Ferrum"
+  },
+  {
+   "code": "CELU",
+   "type": "acciones",
+   "description": "Celulosa Argentina"
+  },
+  {
+   "code": "BYMA",
+   "type": "acciones",
+   "description": "Bolsas y Mercados Argentinos"
+  },
+  {
+   "code": "COUR",
+   "type": "acciones",
+   "description": "CONTINENTAL URBANA S.A. INVERSORA $ ESC."
+  },
+  {
+   "code": "GCLAC",
+   "type": "acciones",
+   "description": "Grupo Clarin"
+  },
+  {
+   "code": "GCLA",
+   "type": "acciones",
+   "description": "Grupo Clarin"
+  },
+  {
+   "code": "CECO2",
+   "type": "acciones",
+   "description": "Central Costanera"
+  },
+  {
+   "code": "SEMI",
+   "type": "acciones",
+   "description": "Molinos Juan Semino"
+  },
+  {
+   "code": "IEBD",
+   "type": "acciones",
+   "description": "DYCASA B 1 VOTO ESCRITURAL"
+  },
+  {
+   "code": "RIGO",
+   "type": "acciones",
+   "description": "RIGOLLEAU S.A.- ORDS. 1 VOTO"
+  },
+  {
+   "code": "RICH",
+   "type": "acciones",
+   "description": "Richmond"
+  },
+  {
+   "code": "COMEB",
+   "type": "acciones",
+   "description": "COMEB"
+  },
+  {
+   "code": "TGSUC",
+   "type": "acciones",
+   "description": "T. DE GAS DEL SUR ESC. B 1 V."
+  },
+  {
+   "code": "PAMP",
+   "type": "acciones",
+   "description": "Pampa Energía"
+  },
+  {
+   "code": "FIPLB",
+   "type": "acciones",
+   "description": "FIPLB"
+  },
+  {
+   "code": "POLL",
+   "type": "acciones",
+   "description": "POLLEDO S.A.  ORD. 1 VOTO"
+  },
+  {
+   "code": "SAMI",
+   "type": "acciones",
+   "description": "San Miguel"
+  },
+  {
+   "code": "CARC",
+   "type": "acciones",
+   "description": "Carboclor"
+  },
+  {
+   "code": "HARGB",
+   "type": "acciones",
+   "description": "HARGB"
+  },
+  {
+   "code": "TGNO4",
+   "type": "acciones",
+   "description": "Transportadora Gas del Norte"
+  },
+  {
+   "code": "BBAR",
+   "type": "acciones",
+   "description": "BBVA"
+  },
+  {
+   "code": "MOLAD",
+   "type": "acciones",
+   "description": "Molinos Agro"
+  },
+  {
+   "code": "PATAD",
+   "type": "acciones",
+   "description": "La Anónima"
+  },
+  {
+   "code": "LOMAD",
+   "type": "acciones",
+   "description": "Loma Negra"
+  },
+  {
+   "code": "BOLTD",
+   "type": "acciones",
+   "description": "Boldt"
+  },
+  {
+   "code": "YPFD",
+   "type": "acciones",
+   "description": "YPF"
+  },
+  {
+   "code": "OEST",
+   "type": "acciones",
+   "description": "Grupo Concesionario Del Oeste"
+  },
+  {
+   "code": "HAVAD",
+   "type": "acciones",
+   "description": "Havanna"
+  },
+  {
+   "code": "HAVA",
+   "type": "acciones",
+   "description": "Havanna"
+  },
+  {
+   "code": "GBAN",
+   "type": "acciones",
+   "description": "Naturgy Ban"
+  },
+  {
+   "code": "CTIO",
+   "type": "acciones",
+   "description": "Consultatio"
+  },
+  {
+   "code": "TXARC",
+   "type": "acciones",
+   "description": "Ternium"
+  },
+  {
+   "code": "CVHD",
+   "type": "acciones",
+   "description": "Cablevisión Holding"
+  },
+  {
+   "code": "TGN4C",
+   "type": "acciones",
+   "description": "TRANS. GAS DEL NORTE C ORD $ ESC"
+  },
+  {
+   "code": "BMA.C",
+   "type": "acciones",
+   "description": "Banco Macro"
+  },
+  {
+   "code": "YPFDC",
+   "type": "acciones",
+   "description": "YPF"
+  },
+  {
+   "code": "RICHD",
+   "type": "acciones",
+   "description": "Richmond"
+  },
+  {
+   "code": "HSAT",
+   "type": "acciones",
+   "description": "HOLDSAT ACC ORD ESC 1 V"
+  },
+  {
+   "code": "A3D",
+   "type": "acciones",
+   "description": "A3 MERCADOS S.A"
+  },
+  {
+   "code": "REGE",
+   "type": "acciones",
+   "description": "GARCIA REGUERA S.A.- ORDS.1 VOTO"
+  },
+  {
+   "code": "CRESD",
+   "type": "acciones",
+   "description": "Cresud"
+  },
+  {
+   "code": "TRAND",
+   "type": "acciones",
+   "description": "Transener"
+  },
+  {
+   "code": "IRSA",
+   "type": "acciones",
+   "description": "IRSA"
+  },
+  {
+   "code": "TXARD",
+   "type": "acciones",
+   "description": "Ternium"
+  },
+  {
+   "code": "PAMDB",
+   "type": "acciones",
+   "description": "PAMDB"
+  },
+  {
+   "code": "LEDED",
+   "type": "acciones",
+   "description": "LEDED"
+  },
+  {
+   "code": "GARO",
+   "type": "acciones",
+   "description": "GAROVAGLIO Y ZORRAQUIN ORDS. 1V."
+  },
+  {
+   "code": "GAMI",
+   "type": "acciones",
+   "description": "B-GAMING S.A.  ACC. ORD. 1 VOTO $ ESC"
+  },
+  {
+   "code": "AUSO",
+   "type": "acciones",
+   "description": "Autopistas del Sol"
+  },
+  {
+   "code": "FIPL",
+   "type": "acciones",
+   "description": "Fiplasto"
+  },
+  {
+   "code": "PATA",
+   "type": "acciones",
+   "description": "La Anónima"
+  },
+  {
+   "code": "PAMPD",
+   "type": "acciones",
+   "description": "Pampa Energía"
+  },
+  {
+   "code": "DGCU2",
+   "type": "acciones",
+   "description": "Distribuidora de Gas Cuyana"
+  },
+  {
+   "code": "BBARD",
+   "type": "acciones",
+   "description": "BBVA"
+  },
+  {
+   "code": "RAGHB",
+   "type": "acciones",
+   "description": "RAGHB"
+  },
+  {
+   "code": "TGSUD",
+   "type": "acciones",
+   "description": "T. DE GAS DEL SUR ESC. B 1 V."
+  },
+  {
+   "code": "BMA",
+   "type": "acciones",
+   "description": "Banco Macro"
+  },
+  {
+   "code": "PAMCB",
+   "type": "acciones",
+   "description": "PAMCB"
+  },
+  {
+   "code": "IEB",
+   "type": "acciones",
+   "description": "DYCASA B 1 VOTO ESCRITURAL"
+  }
+ ]
+}

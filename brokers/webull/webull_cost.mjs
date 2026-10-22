@@ -5,51 +5,87 @@
 // 100 000-share surcharge. `roundTrip` is given the size and charges
 // what is charged.
 //
-// National entities, pages re-read 2026-09-18. Default is Webull
-// Financial LLC (`--plan=us`). The catalogue is `webull_scraping.mjs` —
-// US listed and OTC, HKEX, a Stock Connect CNH book, and US crypto.
-// Until that file has been run, this one answers that the book is
-// missing. Options, futures, AU/SGX cash equities and algo
-// ($0.005 / share) are not this trip.
+// One folder per national entity (brokers/webull<cc>/), each with its own
+// catalogue; its cost file calls `makeRoundTrip` here with its plans, and
+// this file holds the fee card. Options, futures and algo ($0.005 / share)
+// are not this trip. Each side unless said.
 //
-//   US          listed / ordinary OTC     $0
+//   US (Webull Financial LLC), read 2026-09-18
+//     https://www.webull.com/pricing
+//     https://www.webull.com/help/faq/11091-Fees-and-Limits
+//               listed / ordinary OTC     $0
 //               OTC > 100 000 shares, p < $1
 //                                   $0.0002 / share, cap 5 %
 //               crypto              1 % spread each way (0 on USDC)
 //               CAT NMS / OTC       $0.000003 / $0.00000003 a share, both sides
-//   UK Go       US / HK / China-A   $0 + FX 0.50 %
-//   UK Meridian same                $0 + FX 0.35 %
-//   Europe      US shares           $1 a side (no % printed)
-//   Singapore   US                  $0 (card does not name SEC / TAF)
-//   Canada      US                  $0
-//   Australia   US                  $0 + FX 0.50 %
-//   Hong Kong   US / HK             $0
+//   Europe, read 2026-09-18
+//     https://www.webull.eu/pricing
+//     https://www.webull.eu/help/faq/1289
+//               US shares           $1 + FX 0.25 % (USD cannot be held)
+//
+//   UK, read 2026-10-21              https://www.webull-uk.com/pricing
+//               US                  $0 + FX Go 0.50 % / Meridian 0.35 %
+//               LSE shares, ETFs    Go 0.075 % (min £1), Meridian 0.05 % (min 50p)
+//                                   + FX Go 0.50 % / Meridian 0.35 % on a USD line
+//               HK                  $0; trading 0.00565 % (min HK$0.01),
+//                                   settlement 0.0042 %, SFC 0.0027 % (min HK$0.01),
+//                                   FRC 0.00015 %, stamp 0.1 % rounded up to HK$1 (min HK$1)
+//                                   + FX Go 0.50 % / Meridian 0.35 %
+//               China Connect       $0; handling 0.00341 %, CSRC 0.002 %, CSDC 0.001 %,
+//                                   HKSCC 0.002 % (each min CNH 0.01),
+//                                   stamp 0.05 % on the sale (min CNH 0.01)
+//                                   + FX 0.35 % (one rate printed on the A-share table)
+//   Singapore, read 2026-10-21       https://www.webull.com.sg/pricing
+//               US / OTC            $0, SEC 0.0000206 on the sale, CAT $0.000003 / share
+//               SGX                 commission 0.025 % (min S$0.80) + platform 0.025 %
+//                                   (min S$0.80); SGX clearing 0.0325 %, trading 0.0075 %,
+//                                   SI fees S$0.35 + S$0.35 a trade
+//                                   (commission waived the first year for new clients)
+//               HK                  0.03 % (min HK$12); trading 0.00565 %, settlement
+//                                   0.0042 %, SFC 0.0027 % (each min HK$0.01), FRC 0.00015 %,
+//                                   stamp 0.1 % rounded up (min HK$1), ETFs exempt
+//               China Connect       0.02 % (min CNH 12); stock levies as UK;
+//                                   ETF: handling 0.004 %, HKSCC 0.002 %, no CSRC/CSDC/stamp
+//               GST 9 % on Webull's commission and platform fee and on SGX's fees.
+//               No FX rate printed: a line in a currency SG cannot hold is N/A.
+//   Canada, read 2026-10-21          https://www.webull.ca/pricing
+//                                     https://www.webull.ca/help/faq/355
+//               US / OTC, TSX, TSXV, NEX, CSE, Cboe Canada   $0
+//               crypto              1 % markup / markdown in the price each way
+//               FX                  exchange rate + 1.5 %
+//   Australia, read 2026-10-21       https://www.webull.com.au/pricing
+//               US                  $0
+//               ASX / Cboe AU       shares 0.03 % (min A$1, GST in), ETFs $0
+//               HK                  $0; trading 0.00565 % (min HK$0.01), settlement 0.002 %,
+//                                   SFC 0.0027 % (min HK$0.01), FRC 0.00015 %,
+//                                   stamp 0.13 % rounded up (min HK$1), as printed
+//               China Connect       $0; stock and ETF levies as SG
+//               FX                  50 pips (0.50 %)
+//   Hong Kong, read 2026-10-21       https://www.webull.hk/en/pricing
+//                                     https://www.webull.hk/en/help/faq/601-Popular-inquiries-about-currency-exchange
+//               US / HK             $0; HK levies as SG, settlement without minimum
+//               China Connect       commission 0 + platform CNY 15 an order; levies as SG
+//               JP shares, ETFs     0.05 % (min JPY 80), platform 0
+//               FX                  "Webull does not charge any fees for currency exchange"
 //
 // SEC 0.0000206 of the sale and TAF $0.000195 / $9.79 where the card
-// names regulatory fees (US and UK print the rates; EU / CA / AU / HK
-// say they apply). CAT only where the card prints it (US, UK). Stamp /
-// FTT from taxMap by ISIN. Tickets already in the number stay out of
-// the remark. FX remarks show the one-way rate only.
+// names regulatory fees. CAT only where the card prints it. Stamp / FTT
+// from taxMap by ISIN, except on Hong Kong and China Connect, whose stamp
+// is the page's own line (taxMap carries none for those books). Tickets
+// already in the number stay out of the remark. FX remarks show the
+// one-way rate only, and only on a multi-currency entity whose rate is
+// printed; where the listing currency cannot be held, FX is in the total.
 //
 // The 1 % crypto spread sits in the price, not on a ticket, so it is
 // in `usd` and not in `brokerFees`. F-stock and NSCC illiquidity
 // surcharges are named without a list of symbols and stay out.
 //
-//   https://www.webull.com/pricing
-//   https://www.webull.com/help/faq/11091-Fees-and-Limits
-//   https://www.webull-uk.com/pricing
-//   https://www.webull.eu/pricing
-//   https://www.webull.com.sg/pricing
-//   https://www.webull.ca/pricing
-//   https://www.webull.com.au/us-stocks
-//   https://www.webull.hk/en/us-stocks
-//
-//   node brokers/webull/webull_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
-//   node brokers/webull/webull_cost.mjs AAPL NASDAQ USD --plan=uk-go --shares=10 --price=230
-//   node brokers/webull/webull_cost.mjs AAPL NASDAQ USD --plan=eu --shares=10 --price=230
-//   node brokers/webull/webull_cost.mjs 700 HKEX HKD --plan=uk-go --shares=10 --price=400
-//   node brokers/webull/webull_cost.mjs BTC --amount=1000
-//   node brokers/webull/webull_cost.mjs --schedule
+//   node brokers/webullus/webullus_cost.mjs AAPL NASDAQ USD --shares=10 --price=230
+//   node brokers/webulluk/webulluk_cost.mjs VOD LSE GBX --shares=100 --price=70 --plan=uk-meridian
+//   node brokers/webullsg/webullsg_cost.mjs D05 SGX SGD --shares=10 --price=40
+//   node brokers/webullhk/webullhk_cost.mjs 7203 Tokyo JPY --shares=100 --price=3000
+//   node brokers/webullca/webullca_cost.mjs BTC --amount=1000
+//   node brokers/webullus/webullus_cost.mjs --schedule
 //
 // `roundTrip(...)` reads files, not the network.
 
@@ -58,21 +94,18 @@ import fs from "node:fs";
 import { listingKey, resolveVenue, spreadLeaf } from "../../spreads/venues.mjs";
 import { spreads } from "../../spreads/book.mjs";
 import { plus, finite } from "../../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, toUsd, usdPer } from "../../fx.mjs";
-import { taxesOf, taxRates } from "../../taxMap.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, fxRemark, toUsd, usdPer } from "../../fx.mjs";
+import { taxGap, taxesOf, taxRates } from "../../taxMap.mjs";
 
-const CATALOGUE = new URL("webull-parsed.json", import.meta.url);
 
 const SCHEDULE = {
-  us: "https://www.webull.com/pricing",
-  crypto: "https://www.webull.com/help/faq/11091-Fees-and-Limits",
-  uk: "https://www.webull-uk.com/pricing",
-  eu: "https://www.webull.eu/pricing",
-  sg: "https://www.webull.com.sg/pricing",
-  ca: "https://www.webull.ca/pricing",
-  au: "https://www.webull.com.au/us-stocks",
-  hk: "https://www.webull.hk/en/us-stocks",
-  readOn: "2026-09-18",
+  us: ["https://www.webull.com/pricing", "https://www.webull.com/help/faq/11091-Fees-and-Limits"],
+  uk: ["https://www.webull-uk.com/pricing"],
+  eu: ["https://www.webull.eu/pricing", "https://www.webull.eu/help/faq/1289"],
+  sg: ["https://www.webull.com.sg/pricing"],
+  ca: ["https://www.webull.ca/pricing", "https://www.webull.ca/help/faq/355"],
+  au: ["https://www.webull.com.au/pricing"],
+  hk: ["https://www.webull.hk/en/pricing", "https://www.webull.hk/en/help/faq/601-Popular-inquiries-about-currency-exchange"],
   entity: "Webull Financial LLC",
   crd: "289063",
 };
@@ -95,7 +128,88 @@ const ADR_NAMED = /\bADRs?\b|american deposit|depositary receipt/i;
 const LISTED_MICS = new Set(["XNAS", "XNYS", "ARCX", "XASE", "BATS", "IEXG"]);
 const LISTED_CODES = /^(NASDAQ|NYSE|AMEX|ARCA|NYSEARCA|BATS|BZX|CBOE|IEX)$/;
 const HK_CODES = /^(HKEX|SEHK|XGEM)$/;
+const CHINA_CODES = /^(SHANGHAI|SHENZHEN|SSE|SZSE)$/;
+const CHINA_MICS = new Set(["XSHG", "XSHE"]);
 
+// Markets outside the US tape, by the catalogue's place name or by MIC.
+const LOCAL_CODES = [
+  [/^(LSE|LON|LONDON STOCK EXCHANGE)$/, "lse"],
+  [/^(SGX|SES|SINGAPORE EXCHANGE)$/, "sgx"],
+  [/^(TORONTO STOCK EXCHANGE|TSX|TSX VENTURE|TSXV|NEX|CANADIAN SECURITIES EXCHANGE|CSE|CBOE CANADA|NEO)$/, "canada"],
+  [/^(ASX|CBOE AUSTRALIA|CHI-X AUSTRALIA)$/, "asx"],
+  [/^(TOKYO|TSE|TOKYO STOCK EXCHANGE)$/, "tokyo"],
+];
+const LOCAL_MICS = {
+  XLON: "lse",
+  XSES: "sgx",
+  XTSE: "canada",
+  XTSX: "canada",
+  XCNQ: "canada",
+  NEOE: "canada",
+  XASX: "asx",
+  CXAC: "asx",
+  XTKS: "tokyo",
+};
+// The currency each market's fees are printed in.
+const FEE_CCY = { hk: "HKD", china: "CNH", lse: "GBP", sgx: "SGD", canada: "CAD", asx: "AUD", tokyo: "JPY" };
+
+// Pass-through lines, as each entity's page prints them: a rate of the
+// trade value (with a minimum when printed) or a flat amount, on both
+// sides unless `sellOnly`. `stamp` lines go to taxes, the rest to the
+// regulatory part. `dollarUp`: rounded up to the whole dollar.
+const HK_TRADING = { name: "SEHK trading fee", rate: 0.0000565, min: 0.01 };
+const HK_SFC = { name: "SFC levy", rate: 0.000027, min: 0.01 };
+const HK_FRC = { name: "FRC levy", rate: 0.0000015 };
+const HK_STAMP = { name: "stamp", rate: 0.001, min: 1, dollarUp: true, stamp: true };
+const HK_LEVIES = {
+  uk: [HK_TRADING, { name: "HKSCC settlement", rate: 0.000042 }, HK_SFC, HK_FRC, HK_STAMP],
+  sg: [
+    HK_TRADING,
+    { name: "HKSCC settlement", rate: 0.000042, min: 0.01 },
+    HK_SFC,
+    HK_FRC,
+    { ...HK_STAMP, etfExempt: true },
+  ],
+  // AU prints settlement at 0.002 % and stamp at 0.13 %; the card keeps the page.
+  au: [
+    HK_TRADING,
+    { name: "HKSCC settlement", rate: 0.00002 },
+    HK_SFC,
+    HK_FRC,
+    { ...HK_STAMP, rate: 0.0013 },
+  ],
+  hk: [
+    HK_TRADING,
+    { name: "HKSCC settlement", rate: 0.000042 },
+    HK_SFC,
+    HK_FRC,
+    { ...HK_STAMP, etfExempt: true },
+  ],
+};
+const CN_STOCK = [
+  { name: "SSE/SZSE handling", rate: 0.0000341, min: 0.01 },
+  { name: "CSRC management", rate: 0.00002, min: 0.01 },
+  { name: "CSDC transfer", rate: 0.00001, min: 0.01 },
+  { name: "HKSCC transfer", rate: 0.00002, min: 0.01 },
+  { name: "stamp", rate: 0.0005, min: 0.01, sellOnly: true, stamp: true },
+];
+const CN_ETF = [
+  { name: "SSE/SZSE handling", rate: 0.00004, min: 0.01 },
+  { name: "HKSCC transfer", rate: 0.00002, min: 0.01 },
+];
+const SGX_LEVIES = [
+  { name: "SGX clearing", rate: 0.000325, gst: true },
+  { name: "SGX trading", rate: 0.000075, gst: true },
+  { name: "SGX clearing SI", flat: 0.35, gst: true },
+  { name: "SGX DA SI", flat: 0.35, gst: true },
+];
+
+// `local[market]`: Webull's own charge on a market outside the US tape,
+// in that market's fee currency (FEE_CCY): `commission` and `platform`
+// as { rate, min } or { flat }, `etfFree` when the page prints ETFs at 0,
+// and the pass-through `levies` (by `stock` / `etf` when the page splits
+// them). `fx`: the one-way markup when the listing currency is not held;
+// null when the entity prints none. `fxBy` overrides it per market.
 const PLANS = {
   us: {
     id: "us",
@@ -104,43 +218,52 @@ const PLANS = {
     offers: new Set(["listed", "otc", "crypto"]),
     ticket: 0,
     ticketCcy: "USD",
-    hk: null,
+    local: {},
     fx: 0,
     sec: true,
     taf: true,
     cat: true,
-    crypto: true,
     url: "us",
+    readOn: "2026-09-18",
   },
   "uk-go": {
     id: "uk-go",
     name: "Webull UK Go",
     hold: new Set(["GBP"]),
-    offers: new Set(["listed", "hk", "china"]),
+    offers: new Set(["listed", "hk", "china", "lse"]),
     ticket: 0,
     ticketCcy: "USD",
-    hk: 0,
+    local: {
+      lse: { commission: { rate: 0.00075, min: 1 } },
+      hk: { levies: HK_LEVIES.uk },
+      china: { levies: { stock: CN_STOCK } },
+    },
     fx: 0.005,
+    fxBy: { china: 0.0035 },
     sec: true,
     taf: true,
     cat: true,
-    crypto: false,
     url: "uk",
+    readOn: "2026-10-21",
   },
   "uk-meridian": {
     id: "uk-meridian",
     name: "Webull UK Meridian",
     hold: new Set(["GBP"]),
-    offers: new Set(["listed", "hk", "china"]),
+    offers: new Set(["listed", "hk", "china", "lse"]),
     ticket: 0,
     ticketCcy: "USD",
-    hk: 0,
+    local: {
+      lse: { commission: { rate: 0.0005, min: 0.5 } },
+      hk: { levies: HK_LEVIES.uk },
+      china: { levies: { stock: CN_STOCK } },
+    },
     fx: 0.0035,
     sec: true,
     taf: true,
     cat: true,
-    crypto: false,
     url: "uk",
+    readOn: "2026-10-21",
   },
   eu: {
     id: "eu",
@@ -149,73 +272,94 @@ const PLANS = {
     offers: new Set(["listed"]),
     ticket: 1,
     ticketCcy: "USD",
-    hk: null,
-    fx: 0,
+    local: {},
+    // FAQ 1289: "USD cannot be held in Webull EU accounts"; buys convert at 0.25 %.
+    fx: 0.0025,
     sec: true,
     taf: true,
     cat: true,
-    crypto: false,
     url: "eu",
+    readOn: "2026-09-18",
   },
   sg: {
     id: "sg",
     name: "Webull Singapore",
-    hold: new Set(["USD", "SGD"]),
-    offers: new Set(["listed"]),
+    hold: new Set(["SGD", "USD", "HKD"]),
+    offers: new Set(["listed", "otc", "sgx", "hk", "china"]),
     ticket: 0,
     ticketCcy: "USD",
-    hk: null,
-    fx: 0,
-    sec: false,
+    local: {
+      sgx: {
+        commission: { rate: 0.00025, min: 0.8 },
+        platform: { rate: 0.00025, min: 0.8 },
+        levies: SGX_LEVIES,
+        newClientFree: true,
+      },
+      hk: { commission: { rate: 0.0003, min: 12 }, levies: HK_LEVIES.sg },
+      china: { commission: { rate: 0.0002, min: 12 }, levies: { stock: CN_STOCK, etf: CN_ETF } },
+    },
+    gst: 0.09,
+    fx: null,
+    sec: true,
     taf: false,
-    cat: false,
-    crypto: false,
+    cat: true,
     url: "sg",
+    readOn: "2026-10-21",
   },
   ca: {
     id: "ca",
     name: "Webull Canada",
     hold: new Set(["CAD", "USD"]),
-    offers: new Set(["listed"]),
+    offers: new Set(["listed", "otc", "canada", "crypto"]),
     ticket: 0,
     ticketCcy: "USD",
-    hk: null,
-    fx: 0,
+    local: { canada: { commission: { flat: 0 } } },
+    fx: 0.015,
     sec: true,
-    taf: true,
+    // webull.ca/pricing prints TAF at $0 from October to December 2026.
+    taf: false,
     cat: false,
-    crypto: false,
     url: "ca",
+    readOn: "2026-10-21",
   },
   au: {
     id: "au",
     name: "Webull Australia",
-    hold: new Set(["AUD"]),
-    offers: new Set(["listed"]),
+    hold: new Set(["AUD", "USD"]),
+    offers: new Set(["listed", "asx", "hk", "china"]),
     ticket: 0,
     ticketCcy: "USD",
-    hk: null,
+    local: {
+      asx: { commission: { rate: 0.0003, min: 1 }, etfFree: true },
+      hk: { levies: HK_LEVIES.au },
+      china: { levies: { stock: CN_STOCK, etf: CN_ETF } },
+    },
     fx: 0.005,
     sec: true,
     taf: true,
     cat: false,
-    crypto: false,
     url: "au",
+    readOn: "2026-10-21",
   },
   hk: {
     id: "hk",
     name: "Webull HK",
-    hold: new Set(["HKD", "USD"]),
-    offers: new Set(["listed", "hk", "china"]),
+    hold: new Set(["HKD", "CNH", "USD"]),
+    offers: new Set(["listed", "hk", "china", "tokyo"]),
     ticket: 0,
     ticketCcy: "USD",
-    hk: 0,
+    local: {
+      hk: { levies: HK_LEVIES.hk },
+      china: { platform: { flat: 15 }, levies: { stock: CN_STOCK, etf: CN_ETF } },
+      tokyo: { commission: { rate: 0.0005, min: 80 } },
+    },
+    // FAQ 601: "Webull does not charge any fees for currency exchange."
     fx: 0,
     sec: true,
     taf: true,
     cat: false,
-    crypto: false,
     url: "hk",
+    readOn: "2026-10-21",
   },
 };
 
@@ -240,9 +384,15 @@ const PLAN_ALIAS = {
   hongkong: "hk",
 };
 
-const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
-const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
-warmListingIndex(rows);
+// One catalogue per Webull entity (brokers/webull<cc>/). Each entity's cost
+// file builds its round trip with `makeRoundTrip`, which reads that folder's
+// catalogue; this file keeps the fee card every entity shares.
+function loadRows(url) {
+  const data = fs.existsSync(url) ? JSON.parse(fs.readFileSync(url, "utf8")) : null;
+  const list = Array.isArray(data) ? data : data?.rows || [];
+  warmListingIndex(list);
+  return { catalogue: data, rows: list };
+}
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 const code = (s) => String(s || "").trim().toUpperCase();
@@ -257,11 +407,12 @@ const cryptoBase = (ticker) => {
 };
 
 const dollars = (amount, currency) => {
-  const v = toUsd(amount, settleCcy(currency) || currency);
+  // fx.mjs prices GBX in pence; settleCcy would read pence as pounds.
+  const v = toUsd(amount, code(currency) || currency);
   return v == null ? null : Number(v.toPrecision(6));
 };
 
-const fxNote = (currency) => ({
+const fxNote_ = (currency) => ({
   quote: QUOTE,
   asOf: FX_AS_OF,
   listing: usdPer(settleCcy(currency) || currency),
@@ -280,12 +431,19 @@ export function feeMarketOf(row, mic) {
   const raw = code(row?.exchange);
   const m = code(mic);
   if (isOverTheCounter(row) || raw === "OTC") return "otc";
-  if (code(row?.currency) === "CNH") return "china";
+  if (CHINA_CODES.test(raw) || CHINA_MICS.has(m)) return "china";
+  // An RMB counter on the Hong Kong exchange is a Hong Kong trade.
   if (HK_CODES.test(raw) || m === "XHKG") return "hk";
+  for (const [re, market] of LOCAL_CODES) if (re.test(raw)) return market;
+  if (LOCAL_MICS[m]) return LOCAL_MICS[m];
+  if (code(row?.currency) === "CNH") return "china";
   if (LISTED_MICS.has(m) || LISTED_CODES.test(raw)) return "listed";
   return null;
 }
 
+const american = (market) => market === "listed" || market === "otc";
+
+/** Webull's own ticket, in `ticketCcy`, on the US tape. */
 export function commissionEach({ market, plan, shares, price, notional }) {
   const picked = typeof plan === "string" ? planOf(plan) : plan;
   const n = Number(shares);
@@ -293,16 +451,71 @@ export function commissionEach({ market, plan, shares, price, notional }) {
   const amt = Number(notional);
   if (!picked) return null;
   if (market === "crypto") return 0;
-  if (!picked.offers.has(market)) return null;
-  if (market === "hk" || market === "china") return picked.hk;
+  if (!picked.offers.has(market) || !american(market)) return null;
   if (market === "otc" && picked.id === "us" && n > OTC_LOW_SHARES && p < OTC_LOW_PRICE && amt > 0) {
     return Math.min(n * OTC_LOW_PS, OTC_LOW_CAP * amt);
   }
-  if (market === "listed" || market === "otc") return picked.ticket;
-  return null;
+  return picked.ticket;
 }
 
-function findListing({ etf, place, currency }) {
+const centUp = (v) => Math.ceil(v * 100 - 1e-9) / 100;
+const isFund = (type) => /^(ETF|ETN|ETC)$/i.test(String(type || ""));
+
+function charge(line, amount) {
+  if (!line) return 0;
+  if (line.flat != null) return line.flat;
+  const v = line.rate * amount;
+  return line.min != null ? Math.max(v, line.min) : v;
+}
+
+function levyEach(line, amount) {
+  if (line.flat != null) return line.flat;
+  if (line.dollarUp) return Math.max(Math.ceil(line.rate * amount - 1e-9), line.min ?? 0);
+  return centUp(charge(line, amount));
+}
+
+/**
+ * Round trip on a market outside the US tape, in its fee currency:
+ * Webull's commission and platform fee (GST added where the entity says
+ * so), the pass-through levies and the stamp the page prints. `amount` is
+ * the order's value in that currency. null when the page has no line.
+ */
+export function localFees({ plan, market, amount, type }) {
+  const spec = plan?.local?.[market];
+  if (!spec || !(amount > 0)) return null;
+  const fund = isFund(type);
+  const levies = Array.isArray(spec.levies) ? spec.levies : spec.levies ? spec.levies[fund ? "etf" : "stock"] : [];
+  if (!levies) return null;
+  const gst = plan.gst || 0;
+  const commissionSide = spec.etfFree && fund ? 0 : charge(spec.commission, amount);
+  const platformSide = charge(spec.platform, amount);
+  const webullSide = (commissionSide + platformSide) * (1 + gst);
+  let regulatory = 0;
+  let stamp = 0;
+  let gstOnLevies = 0;
+  const lines = [];
+  for (const line of levies) {
+    if (line.stamp && line.etfExempt && fund) continue;
+    const each = levyEach(line, amount);
+    const total = line.sellOnly ? each : 2 * each;
+    if (line.stamp) stamp += total;
+    else regulatory += total;
+    if (line.gst) gstOnLevies += total * gst;
+    lines.push(`${line.name} ${line.flat != null ? `${line.flat}` : `${+(line.rate * 100).toPrecision(4)} %`}${line.sellOnly ? " (vente)" : ""}`);
+  }
+  return {
+    ccy: FEE_CCY[market],
+    commissionSide,
+    platformSide,
+    webull: 2 * webullSide,
+    regulatory: regulatory + gstOnLevies,
+    stamp,
+    gstOnLevies,
+    lines,
+  };
+}
+
+function findListing({ etf, place, currency, rows }) {
   const asked = loose(etf);
   const resolved = place ? resolveVenue({ exchange: place, mic: place }) : {};
   const wantVenue = resolved.venue || null;
@@ -343,7 +556,7 @@ const listAlternatives = (named) =>
     .map((r) => `${r.ticker || r.isin} ${r.currency || "?"} @ ${r.exchange || "place non dite"}`)
     .slice(0, 12);
 
-function coverage() {
+function coverage(rows, broker) {
   if (!rows.length) return null;
   const out = {};
   for (const r of rows) {
@@ -356,7 +569,7 @@ function coverage() {
           mic: venue?.mic ?? null,
           currency: r.currency,
           unsourced,
-          broker: "webull",
+          broker,
           ticker: r.ticker,
         });
     const market = feeMarketOf(r, venue?.mic) || "?";
@@ -370,10 +583,12 @@ function coverage() {
   return out;
 }
 
-function remarkOf({ plan, adr }) {
+function remarkOf({ plan, adr, fxNote, newClient }) {
   const lines = [];
   if (plan?.id?.startsWith("uk") && adr) lines.push("ADR custody $0.01–$0.03/share.");
   else if (adr) lines.push("ADR pass-through billed as incurred.");
+  if (newClient) lines.push(newClient);
+  if (fxNote) lines.push(fxNote);
   return lines.join("\n");
 }
 
@@ -382,17 +597,10 @@ function remarkOf({ plan, adr }) {
  * coin) and selling straight back. `usd` is the number the page prints;
  * `brokerFees` is Webull's own ticket and, when printed, the FX markup.
  */
-export function roundTrip({
-  etf,
-  place,
-  currency,
-  shares,
-  price,
-  amount,
-  bp = null,
-  perShare = null,
-  plan = DEFAULT_PLAN,
-}) {
+function roundTripWith(
+  { rows, catalogue, broker, folder },
+  { etf, place, currency, shares, price, amount, bp = null, perShare = null, plan = DEFAULT_PLAN }
+) {
   const picked = planOf(plan);
   const answer = {
     usd: null,
@@ -410,11 +618,11 @@ export function roundTrip({
   if (!catalogue) {
     return {
       ...answer,
-      why: "le catalogue Webull n'existe pas encore : lancer `node brokers/webull/webull_scraping.mjs`",
+      why: `le catalogue Webull n'existe pas encore : lancer \`node brokers/${folder}/${folder}_scraping.mjs\``,
     };
   }
 
-  const { named, matches } = findListing({ etf, place, currency });
+  const { named, matches } = findListing({ etf, place, currency, rows });
   if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue Webull` };
   if (!matches.length) {
     return {
@@ -434,7 +642,7 @@ export function roundTrip({
         mic: m.venue?.mic ?? null,
         currency: listingCcy,
         unsourced: m.unsourced,
-        broker: "webull",
+        broker,
         ticker: m.row.ticker,
       });
   const market = feeMarketOf(m.row, book.mic ?? m.venue?.mic);
@@ -458,6 +666,10 @@ export function roundTrip({
       why: `${listing.brokerExchange || listing.exchange} n'a pas de palier publié chez Webull`,
     };
   }
+  // Webull UK Go: the FTSE 100 and its own ETF shortlist only.
+  if (picked.id === "uk-go" && m.row.go === false) {
+    return { ...answer, listing, onlineBuy: false, why: `${picked.name} ne propose pas ce titre` };
+  }
   if (!picked.offers.has(market)) {
     return {
       ...answer,
@@ -466,54 +678,102 @@ export function roundTrip({
       why: `${picked.name} ne vend pas ce palier (${market})`,
     };
   }
-  if ((market === "hk" || market === "china") && picked.hk == null) {
+  const local = !american(market) && market !== "crypto";
+  if (local && !picked.local?.[market]) {
+    return { ...answer, listing, why: `${picked.name} n'imprime pas de barème ${market}` };
+  }
+  if (local && !localFees({ plan: picked, market, amount: 1, type: listing.type })) {
     return {
       ...answer,
       listing,
-      why: `${picked.name} n'imprime pas de ticket ${market}`,
+      why: `${picked.name} n'imprime pas de ligne ${listing.type || "?"} sur le barème ${market}`,
     };
   }
 
   const leaf = book.leaf;
   const marketBp = bp ?? leaf?.bp ?? null;
   const marketPerShare = perShare ?? leaf?.perShare ?? null;
-  const tax = crypto ? { known: true, buy: {}, sell: {} } : taxesOf(listing.isin);
+  // Hong Kong and China Connect: the stamp is the page's own line, so taxMap stays out.
+  const venueStamp = market === "hk" || market === "china";
+  const tax = crypto || venueStamp ? { known: true, buy: {}, sell: {} } : taxesOf(listing.isin);
   const rates = taxRates(tax);
   const taxTotal = Object.values(rates).reduce((s, r) => s + r, 0);
-  const holdable = picked.hold.has(settleCcy(listing.currency));
-  const fxPct = !crypto && !holdable ? picked.fx : 0;
+  const gap = local && !venueStamp ? taxGap(listing.isin, listing.type, book.mic ?? m.venue?.mic ?? null) : null;
+  const cashCcy = settleCcy(listing.currency);
+  const holdable = picked.hold.has(cashCcy);
+  const fxRate = picked.fxBy?.[market] ?? picked.fx;
+  const fxPct = !crypto && !holdable ? fxRate : 0;
   const coin = cryptoBase(m.row.ticker || etf);
   const stable = crypto && STABLES.has(coin);
+  // A multi-currency entity that prints its rate: the FX it would charge on cash in another currency.
+  const fxNote =
+    holdable && picked.hold.size > 1 && fxRate > 0 ? fxRemark((100 * fxRate).toFixed(2), listing.currency) : "";
 
   const shared = {
     ...answer,
     listing,
     feeMarket: market,
-    cashCurrency: holdable ? listing.currency : [...picked.hold][0] || "",
-    remark: remarkOf({ plan: picked, adr: listing.adr }),
+    cashCurrency: holdable ? cashCcy : [...picked.hold][0] || "",
+    remark: remarkOf({ plan: picked, adr: listing.adr, fxNote }),
     bp: crypto ? (stable ? 0 : CRYPTO_SPREAD * 1e4) : marketBp,
     perShare: marketPerShare,
-    url: SCHEDULE[picked.url] || SCHEDULE.us,
-    basis: `barème ${picked.name}, palier ${market}, relu le ${SCHEDULE.readOn}`,
+    url: (SCHEDULE[picked.url] || SCHEDULE.us)[0],
+    sources: SCHEDULE[picked.url] || SCHEDULE.us,
+    basis: `barème ${picked.name}, palier ${market}, relu le ${picked.readOn}`,
     tax,
     ccy: QUOTE,
-    fx: fxNote(listing.currency),
-    fxIfConverted: fxPct * 2,
+    fx: fxNote_(listing.currency),
+    fxIfConverted: fxRate == null ? null : fxRate * 2,
   };
+
+  if (fxPct == null) {
+    return {
+      ...shared,
+      why: `change forcé non publié : ${cashCcy} n'est pas une devise de dépôt chez ${picked.name}, et aucun taux de conversion n'est imprimé`,
+    };
+  }
+  if (gap) return { ...shared, why: gap };
 
   const n = Number(shares);
   const p = Number(price);
   const cash = Number(amount);
   const notional = n > 0 && p > 0 ? n * p : crypto && cash > 0 ? cash : null;
-  const each = commissionEach({ market, plan: picked, shares: n, price: p, notional });
+  const each = local ? null : commissionEach({ market, plan: picked, shares: n, price: p, notional });
+  const spec = picked.local?.[market];
 
-  shared.commission = {
-    rate: crypto ? 0 : 0,
-    flat: crypto ? 0 : each,
-    currency: picked.ticketCcy,
-    eachWay: true,
-    plan: picked.id,
-    ...(crypto ? { spread: stable ? 0 : CRYPTO_SPREAD } : {}),
+  shared.commission = local
+    ? {
+        rate: spec.etfFree && isFund(listing.type) ? 0 : spec.commission?.rate ?? 0,
+        min: spec.etfFree && isFund(listing.type) ? 0 : spec.commission?.min ?? spec.commission?.flat ?? 0,
+        platform: spec.platform ?? null,
+        gst: picked.gst || 0,
+        currency: FEE_CCY[market],
+        eachWay: true,
+        plan: picked.id,
+      }
+    : {
+        rate: 0,
+        flat: crypto ? 0 : each,
+        currency: picked.ticketCcy,
+        eachWay: true,
+        plan: picked.id,
+        ...(crypto ? { spread: stable ? 0 : CRYPTO_SPREAD } : {}),
+      };
+
+  const notes = {
+    picked,
+    market,
+    listing,
+    leaf,
+    marketBp,
+    marketPerShare,
+    unsourced: m.unsourced,
+    via606: book.via606,
+    fxPct,
+    holdable,
+    taxTotal,
+    stable,
+    coin,
   };
 
   if (notional == null) {
@@ -524,26 +784,19 @@ export function roundTrip({
         : !(n > 0)
           ? "aucun nombre de parts"
           : "aucun prix pour cette ligne : lancer node assets/prices.mjs",
-      confidence: confidenceOf({
-        picked,
-        market,
-        listing,
-        leaf,
-        marketBp,
-        marketPerShare,
-        unsourced: m.unsourced,
-        via606: book.via606,
-        fxPct,
-        holdable,
-        taxTotal,
-        stable,
-        coin,
-      }),
+      confidence: confidenceOf(notes),
     };
   }
 
   const notionalUsd = dollars(notional, crypto ? "USD" : listing.currency);
-  const commissionUsd = each == null ? null : dollars(each * 2, picked.ticketCcy);
+  const feeCcy = local ? FEE_CCY[market] : null;
+  const feeAmount = local && notionalUsd != null && usdPer(feeCcy) ? notionalUsd / usdPer(feeCcy) : null;
+  const venue = local ? localFees({ plan: picked, market, amount: feeAmount, type: listing.type }) : null;
+  const inUsd = (x) => (x == null ? null : toUsd(x, feeCcy));
+
+  const commissionUsd = local
+    ? venue ? inUsd(venue.webull) : null
+    : each == null ? null : dollars(each * 2, picked.ticketCcy);
   const spreadUsd = crypto ? (stable || notionalUsd == null ? 0 : notionalUsd * CRYPTO_SPREAD * 2) : 0;
   const bookUsd = crypto
     ? spreadUsd
@@ -552,16 +805,26 @@ export function roundTrip({
       : marketBp != null && notionalUsd != null
         ? (notionalUsd * marketBp) / 1e4
         : null;
-  const american = market === "listed" || market === "otc";
-  const secUsd = picked.sec && american && notionalUsd != null ? notionalUsd * SEC_RATE : 0;
-  const tafRaw = picked.taf && american && n > 0 ? n * TAF_PER_SHARE : 0;
-  const tafUsd = picked.taf && american ? Math.min(Math.max(tafRaw, tafRaw ? TAF_MIN : 0), TAF_CAP) : 0;
+  const us = american(market);
+  const secUsd = picked.sec && us && notionalUsd != null ? notionalUsd * SEC_RATE : 0;
+  const tafRaw = picked.taf && us && n > 0 ? n * TAF_PER_SHARE : 0;
+  const tafUsd = picked.taf && us ? Math.min(Math.max(tafRaw, tafRaw ? TAF_MIN : 0), TAF_CAP) : 0;
   const catRate = market === "otc" ? CAT_OTC : CAT_NMS;
-  const catUsd = picked.cat && american && n > 0 ? n * catRate * 2 : 0;
-  const taxUsd = crypto || notionalUsd == null ? 0 : notionalUsd * taxTotal;
+  const catUsd = picked.cat && us && n > 0 ? n * catRate * 2 : 0;
+  const levyUsd = local ? (venue ? inUsd(venue.regulatory) : null) : 0;
+  const stampUsd = local ? (venue ? inUsd(venue.stamp) : null) : 0;
+  const taxUsd = crypto || notionalUsd == null ? 0 : plus(notionalUsd * taxTotal, stampUsd);
   const fxUsd = fxPct && notionalUsd != null ? notionalUsd * fxPct * 2 : 0;
-  const usd = plus(bookUsd, commissionUsd, secUsd, tafUsd, catUsd, taxUsd, fxUsd);
+  const usd = plus(bookUsd, commissionUsd, secUsd, tafUsd, catUsd, levyUsd, taxUsd, fxUsd);
   const brokerFees = plus(commissionUsd, fxUsd);
+
+  // SGX: the page waives the commission for a new client's first year.
+  let newClient = "";
+  if (spec?.newClientFree && venue && feeAmount > 0) {
+    const waived = (2 * venue.commissionSide * (1 + (picked.gst || 0))) / feeAmount;
+    newClient = `New clients' first year: ${(100 * waived).toFixed(2)}% lower.`;
+  }
+  if (newClient) shared.remark = remarkOf({ plan: picked, adr: listing.adr, fxNote, newClient });
 
   return {
     ...shared,
@@ -585,32 +848,15 @@ export function roundTrip({
     parts: {
       marché: finite(bookUsd, 6),
       courtage: finite(commissionUsd, 6),
-      réglementaire: finite(plus(secUsd, tafUsd, catUsd), 6),
+      réglementaire: finite(plus(secUsd, tafUsd, catUsd, levyUsd), 6),
       taxes: finite(taxUsd, 6),
       change: finite(fxUsd, 6),
     },
-    sell: picked.sec || picked.taf
-      ? { sec: finite(secUsd, 6), taf: finite(tafUsd, 6), tafCapped: tafUsd >= TAF_CAP, cat: finite(catUsd, 6) }
-      : null,
-    confidence: confidenceOf({
-      picked,
-      market,
-      listing,
-      leaf,
-      marketBp,
-      marketPerShare,
-      unsourced: m.unsourced,
-      via606: book.via606,
-      fxPct,
-      holdable,
-      taxTotal,
-      stable,
-      coin,
-      each,
-      n,
-      p,
-      american: market === "listed" || market === "otc",
-    }),
+    sell:
+      us && (picked.sec || picked.taf)
+        ? { sec: finite(secUsd, 6), taf: finite(tafUsd, 6), tafCapped: tafUsd >= TAF_CAP, cat: finite(catUsd, 6) }
+        : null,
+    confidence: confidenceOf({ ...notes, each, n, p, american: us, venue, spec }),
   };
 }
 
@@ -632,15 +878,29 @@ function confidenceOf({
   n,
   p,
   american,
+  venue,
+  spec,
 }) {
   const said = [];
-  said.push(`barème ${picked.name} ${market}, relu le ${SCHEDULE.readOn}`);
+  said.push(`barème ${picked.name} ${market}, relu le ${picked.readOn}`);
   if (market === "crypto") {
     said.push(
       stable
         ? `USDC : le 1 % ne s'applique pas aux stablecoins`
-        : `spread ${CRYPTO_SPREAD * 100} % par jambe, dans le prix, pas un ticket (FAQ ${SCHEDULE.readOn})`
+        : `spread ${CRYPTO_SPREAD * 100} % par jambe, dans le prix, pas un ticket`
     );
+  } else if (spec) {
+    const ccy = FEE_CCY[market];
+    const fund = isFund(listing.type);
+    const c = spec.commission;
+    if (spec.etfFree && fund) said.push(`courtage 0 sur un ETF`);
+    else if (c?.rate) said.push(`courtage ${+(c.rate * 100).toPrecision(4)} % par jambe, minimum ${c.min} ${ccy}`);
+    else said.push(`courtage 0`);
+    if (spec.platform?.rate) said.push(`frais de plateforme ${+(spec.platform.rate * 100).toPrecision(4)} %, minimum ${spec.platform.min} ${ccy}`);
+    else if (spec.platform?.flat) said.push(`frais de plateforme ${spec.platform.flat} ${ccy} par ordre`);
+    if (picked.gst) said.push(`GST ${picked.gst * 100} % sur le courtage, la plateforme et les frais SGX`);
+    if (venue?.lines?.length) said.push(`frais de place imprimés : ${venue.lines.join(", ")}`);
+    if (market === "hk" || market === "china") said.push(`droit de timbre pris sur la page, pas dans taxMap`);
   } else if (each) {
     said.push(`ticket ${each} ${picked.ticketCcy} par jambe`);
   } else {
@@ -659,10 +919,12 @@ function confidenceOf({
     );
   } else if (!holdable && market !== "crypto") {
     said.push(
-      `change hors du total : ${listing.currency} n'est pas une devise de caisse imprimée, et aucun % n'est publié`
+      fxPct === 0
+        ? `change à 0 : ${listing.currency} n'est pas tenu, et l'entité dit ne prendre aucun frais de change`
+        : `change hors du total : ${listing.currency} n'est pas une devise de caisse imprimée, et aucun % n'est publié`
     );
   } else if (holdable && market !== "crypto") {
-    said.push(`change hors du total : le compte tient déjà ${listing.currency}`);
+    said.push(`change hors du total : le compte tient déjà ${settleCcy(listing.currency)}`);
   }
   if (american && picked.sec) {
     said.push(
@@ -701,7 +963,29 @@ function confidenceOf({
   return said.join(" ; ");
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+/**
+ * The round trip of one entity's folder: `plans` are the plan ids that folder
+ * shows (one, or Go and Meridian for the UK), `defaultPlan` the first.
+ */
+export function makeRoundTrip({ catalogueUrl, folder, broker = folder, plans }) {
+  const ctx = { ...loadRows(catalogueUrl), broker, folder };
+  const defaultPlan = plans[0];
+  const roundTrip = (query = {}) => {
+    const asked = planOf(query.plan || defaultPlan);
+    const plan = asked && plans.includes(asked.id) ? asked.id : query.plan ? query.plan : defaultPlan;
+    if (!plans.includes(planOf(plan)?.id)) {
+      return { usd: null, brokerFees: null, ccy: QUOTE, plan, why: `formule inconnue chez ${folder} : ${plan}` };
+    }
+    return roundTripWith(ctx, { ...query, plan });
+  };
+  roundTrip.coverage = () => coverage(ctx.rows, broker);
+  roundTrip.plans = plans;
+  return roundTrip;
+}
+
+/** The CLI every entity's cost file runs: `runCli(import.meta.url, roundTrip)`. */
+export function runCli(url, roundTrip) {
+  if (url !== `file://${process.argv[1]}`) return;
   const flag = (name) => {
     const hit = process.argv.find((a) => a.startsWith(`--${name}=`));
     return hit ? hit.split("=").slice(1).join("=") : null;
@@ -712,18 +996,14 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       JSON.stringify(
         {
           ...SCHEDULE,
-          defaultPlan: DEFAULT_PLAN,
           plans: Object.fromEntries(
-            Object.entries(PLANS).map(([id, p]) => [
-              id,
-              { ...p, hold: [...p.hold], offers: [...p.offers] },
-            ])
+            roundTrip.plans.map((id) => [id, { ...PLANS[id], hold: [...PLANS[id].hold], offers: [...PLANS[id].offers] }])
           ),
           sec: SEC_RATE,
           taf: { perShare: TAF_PER_SHARE, min: TAF_MIN, cap: TAF_CAP },
           cat: { nms: CAT_NMS, otc: CAT_OTC },
           crypto: { spread: CRYPTO_SPREAD, stables: [...STABLES] },
-          coverage: coverage(),
+          coverage: roundTrip.coverage(),
         },
         null,
         2
@@ -736,13 +1016,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const [etf, place, currency] = positional;
   if (!etf) {
     console.error(
-      "usage : node brokers/webull/webull_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--amount=a] [--plan=us|uk-go|uk-meridian|eu|sg|ca|au|hk] [--json]\n" +
-        "        node brokers/webull/webull_cost.mjs --schedule\n" +
-        "  ex.   node brokers/webull/webull_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
-        "        node brokers/webull/webull_cost.mjs AAPL NASDAQ USD --plan=uk-go --shares=10 --price=230\n" +
-        "        node brokers/webull/webull_cost.mjs AAPL NASDAQ USD --plan=eu --shares=10 --price=230\n" +
-        "        node brokers/webull/webull_cost.mjs 700 HKEX HKD --plan=uk-go --shares=10 --price=400\n" +
-        "        node brokers/webull/webull_cost.mjs BTC --amount=1000"
+      "usage : node brokers/webull<cc>/webull<cc>_cost.mjs <ticker|ISIN> [place] [devise] [--shares=n] [--price=p] [--amount=a] [--plan=…] [--json]\n" +
+        "        node brokers/webull<cc>/webull<cc>_cost.mjs --schedule\n" +
+        "  ex.   node brokers/webullus/webullus_cost.mjs AAPL NASDAQ USD --shares=10 --price=230\n" +
+        "        node brokers/webulluk/webulluk_cost.mjs AAPL NASDAQ USD --plan=uk-go --shares=10 --price=230"
     );
     process.exit(2);
   }
@@ -756,7 +1033,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     amount: flag("amount") ? Number(flag("amount")) : null,
     bp: flag("bp") ? Number(flag("bp")) : null,
     perShare: flag("per-share") ? Number(flag("per-share")) : null,
-    plan: flag("plan") || DEFAULT_PLAN,
+    plan: flag("plan") || undefined,
   });
 
   if (process.argv.includes("--json")) {

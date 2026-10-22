@@ -121,6 +121,39 @@ export const ALIASES = {
   nomurajp: "nomurasecuritiesinternational",
   // LYNX transmits to IBIE. IBIE routes US equities to Interactive Brokers LLC.
   lynxnl: "interactivebrokers",
+  // Easybroker and AGORA direct are introducing brokers of Interactive
+  // Brokers Ireland: the client account is held at IBIE. IBIE routes US
+  // equities to Interactive Brokers LLC.
+  // https://www.easybroker.nl/support/wat-is-een-multivalutaaccount
+  // https://www.agora-direct.com/de/depot/ablauf-voraussetzungen/
+  easybroker: "interactivebrokers",
+  agoradirect: "interactivebrokers",
+  // Grifin's fee schedule: Apex Clearing Corporation provides the brokerage
+  // services and executes every order.
+  // https://www.grifin.com/documents/grifin-fee-schedule.pdf
+  grifin: "apex",
+  // Moneybox's Order Transmission Policy, section 8: a US stock order goes
+  // "to our US Broker Dealer, DriveWealth". Its 606 stock sections are
+  // empty, so its own 605 (DWWT) is the mix.
+  // http://web.archive.org/web/20261003131432/https://support.moneyboxapp.com/order-transmission-policy/
+  moneybox: "drivewealth",
+  // Raseed's disclosures list the Alpaca Customer Agreement and Alpaca
+  // Disclosures among its client documents (Raseed Invest Limited, DIFC);
+  // its site said "Brokerage services are provided by Alpaca Securities
+  // LLC". New accounts default to Fullerverse (SC), whose agreement names
+  // no US firm.
+  // https://raseedcapital.com/en/disclosures
+  // https://web.archive.org/web/20240718075116/https://raseedinvest.com/
+  raseed: "alpaca",
+  // Moomoo Canada names only its carrying broker, Canaccord Genuity Corp.,
+  // which "handles trade execution, clearing, and settlement" (notice of
+  // 22 September 2025). CGC's best-execution disclosure sends retail orders
+  // in securities listed only in the US "either to Citadel Securities LLC
+  // or Virtu Americas LLC". Moomoo itself names no US firm. User decision
+  // (2026-10-22): use that chain; aliasOf takes the higher Q of the two.
+  // https://www.moomoo.com/ca/support/topic10_235
+  // https://www.canaccordgenuity.com/4a9937/globalassets/capital-markets/documents/regulatory--legal-disclosures/canada/best-execution-disclosure.pdf
+  moomooca: ["citadelsecurities", "virtuamericas"],
   trading212: "interactivebrokers",
   vivid: "interactivebrokers",
   // UniCredit Polska: orders are executed by Interactive Brokers Ireland
@@ -139,6 +172,14 @@ export const ALIASES = {
   nagacy: "citadelsecurities",
   // Matsui transmits US cash orders to Interactive Brokers LLC.
   matsui: "interactivebrokers",
+  // Every Webull entity's US orders go through Webull Financial LLC.
+  webullus: "webull",
+  webulluk: "webull",
+  webulleu: "webull",
+  webullsg: "webull",
+  webullca: "webull",
+  webullau: "webull",
+  webullhk: "webull",
   // LHV Pank is a member of the Baltic exchanges. On other markets it
   // transmits the order. Interactive Brokers LLC is the US broker-dealer
   // on that list, and IBKRATS is an execution venue.
@@ -186,6 +227,10 @@ export const ALIASES = {
   // moomoo AU's US transfer-in page gives DTC 4272, Futu Clearing Inc.'s
   // number. https://www.moomoo.com/au/support/topic6_393
   moomooau: "futuclearing",
+  // Moomoo Financial Inc. passes its orders to its affiliate Futu Clearing
+  // Inc. (its own 606, 2026 Q2), like the other moomoo companies.
+  // https://cdn.finra.org/606/2026/283078_606_NMS_2026_Q2_CNTXT_FUTM_V1.pdf
+  moomoous: "futuclearing",
   // Futu Hong Kong names Futu Clearing Inc. as the DTC firm for a US
   // stock transfer, code 4272. Futu Clearing's 606 is the routing report.
   // https://www.futuhk.com/support/topic2_277

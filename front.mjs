@@ -12,6 +12,7 @@ import path from "node:path";
 import v8 from "node:v8";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { catalogueFiles } from "./catalogues.mjs";
+import { internRow } from "./listingIndex.mjs";
 import { isObligation } from "./obligation.mjs";
 import { resolveVenue } from "./spreads/venues.mjs";
 import { accepts, COUNTRY_NAMES, countryOptions, listingAccepts, stampResidency, EEA, EU, GCC } from "./accepted.mjs";
@@ -107,7 +108,6 @@ const FOLDER_NAME = {
   tradier: "Tradier",
   vested: "Vested Finance",
   vivid: "Vivid Money",
-  webull: "Webull",
   WHSelfInvest: "WH SelfInvest",
   xtb: "XTB",
   fortuneo: "Fortuneo",
@@ -165,6 +165,21 @@ const FOLDER_NAME = {
   monexjp: "Monex",
   kotak: "Kotak",
   daiwaconnect: "Daiwa",
+  maxcapital: "Max Capital",
+  nacionbursatil: "Nación Bursátil",
+  cohen: "Cohen",
+  parakeet: "Parakeet Capital",
+  univest: "Univest",
+  vdsc: "Viet Dragon Securities (Rong Viet)",
+  targobankde: "TARGOBANK",
+  eqi: "EQi",
+  moomoous: "moomoo US",
+  kumari: "Kumari Securities",
+  premiersecurities: "Premier Securities",
+  mallastock: "Malla & Malla",
+  aryatara: "Arya Tara",
+  abbasi: "Abbasi and Company",
+  standardcapital: "Standard Capital",
 };
 
 // Display name above, broker-list row below, when the two differ.
@@ -215,6 +230,13 @@ const FOLDER_LIST = {
   futuhk: "Futu / moomoo HK",
   kotak: "Kotak Securities",
   daiwaconnect: "Daiwa Connect Securities",
+  webullus: "Webull",
+  webulluk: "Webull UK",
+  webulleu: "Webull Europe",
+  webullsg: "Webull SG",
+  webullca: "Webull Canada",
+  webullau: "Webull AU",
+  webullhk: "Webull Hong Kong",
   nagacy: "NAGA",
   capitalcomcy: "Capital.com",
   unicreditpl: "UniCredit Polska",
@@ -238,6 +260,29 @@ const FOLDER_LIST = {
   dodl: "AJ Bell Dodl",
   bloomo: "Bloomo Securities",
   kbsvn: "KB Securities Vietnam",
+  // 2026-10-21 catalogues whose folder name does not find their row.
+  nacionbursatil: "Nación Bursátil",
+  parakeet: "Parakeet Capital",
+  univest: "Univest",
+  vdsc: "Viet Dragon Securities",
+  atlass: "Atlass Portfolio (CITITRADER)",
+  efghermeskw: "EFG Hermes IFA",
+  merinvest: "Mercantil Merinvest Casa de Bolsa",
+  targobankde: "Targobank",
+  moomoous: "moomoo (Futu US)",
+  kumari: "Kumari Securities",
+  premiersecurities: "Premier Securities",
+  mallastock: "Malla & Malla Stock Broking Company",
+  aryatara: "Arya Tara Investment and Securities",
+  abbasi: "Abbasi and Company",
+  standardcapital: "Standard Capital Securities",
+  futuro: "Futuro Casa de Valores",
+  acuantoesta: "A Cuánto Está",
+  attijaritn: "Attijari",
+  hipotecario: "Hipotecario",
+  ncbcm: "NCB Capital",
+  xtsc: "Xuan Thien",
+  agoradirect: "AGORA",
 };
 
 // The page drops the word "Securities" from a broker's name: "Ando
@@ -295,16 +340,16 @@ function indexStamp() {
     fileURLToPath(new URL("./assets/stocks.csv", import.meta.url)),
     fileURLToPath(new URL("./assets/etfs.csv", import.meta.url)),
   ];
-  return files
-    .map((file) => {
-      try {
-        const st = fs.statSync(file);
-        return `${file}\t${st.mtimeMs}\t${st.size}`;
-      } catch {
-        return `${file}\tmissing`;
-      }
-    })
-    .join("\n");
+  const lines = files.map((file) => {
+    try {
+      const st = fs.statSync(file);
+      return `${file}\t${st.mtimeMs}\t${st.size}`;
+    } catch {
+      return `${file}\tmissing`;
+    }
+  });
+  // The format line makes an index written by an older front.mjs miss.
+  return ["format\t2", ...lines].join("\n");
 }
 
 function loadIndexCache(stamp) {
@@ -337,6 +382,11 @@ if (cachedIndex) {
   aliases = cachedIndex.aliases;
   listings = cachedIndex.listings || countListings(instruments);
   for (const [folder, broker] of brokers) Object.assign(broker, metaFor(folder, list));
+  // v8.deserialize hands every listing its own copy of each string; the pool
+  // in listingIndex.mjs takes about half the index back.
+  for (const inst of instruments.values()) {
+    for (const rows of inst.byBroker.values()) for (const listing of rows) internRow(listing);
+  }
 }
 
 function cryptoPair(ticker, currency) {
@@ -390,6 +440,13 @@ function displayExchange(raw, extra = {}) {
 // ChiNext and the STAR Market are on Stock Connect only for institutional
 // professional investors. The sentence is added for every broker, after that
 // broker's own remark.
+// One sentence a line in the remark cell (it is white-space: pre-line). A
+// sentence ends at . ! or ? before a capital, a digit or a currency sign;
+// "U.S." and a lower-case follow-on stay on their line.
+function oneSentencePerLine(text) {
+  return String(text || "").replace(/(?<![A-Z]\.[A-Z])([.!?])[ \t]+(?=[A-Z0-9€$£₹¥])/g, "$1\n");
+}
+
 function connectRemark(listing, remark) {
   const code = String(listing.exchangeRaw || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
   const line = code === "CHINEXT"
@@ -397,8 +454,8 @@ function connectRemark(listing, remark) {
     : code === "SEHKSTAR"
       ? "The STAR Market on Stock Connect is limited to institutional professional investors."
       : "";
-  if (!line || String(remark || "").includes(line)) return remark || "";
-  return [remark, line].filter(Boolean).join("\n");
+  if (!line || String(remark || "").includes(line)) return oneSentencePerLine(remark);
+  return oneSentencePerLine([remark, line].filter(Boolean).join("\n"));
 }
 
 function addName(set, counts, value) {
@@ -413,6 +470,7 @@ function addName(set, counts, value) {
 // should state. A broker whose crypto shelf is quoted in several currencies is not
 // imposing any, and naming one of them would read as a restriction it does not have.
 const cryptoCcys = new Map();
+if (cachedIndex?.cryptoCcys) for (const [folder, ccys] of cachedIndex.cryptoCcys) cryptoCcys.set(folder, ccys);
 
 // Revolut quotes its whole shelf in euro and still takes any balance the account
 // holds: the €100 USDC ticket of 2026-09-12 was paid in euro on a coin quoted in
@@ -502,6 +560,7 @@ for (const file of catalogueFiles()) {
     if (row.indianOnly) listing.indianOnly = true;
     if (row.cfd) listing.cfd = true;
     if (Array.isArray(row.supportedCountries)) listing.supportedCountries = row.supportedCountries;
+    internRow(listing);
     const held = inst.byBroker.get(folder) || [];
     // MeDirect files the same Nasdaq name twice, NAS on the Belgian book
     // and NMS on the Maltese one. Both display as Nasdaq. The residence
@@ -1060,8 +1119,11 @@ function absorbInstrument(into, from) {
   }
 }
 
-if (!cachedIndex) {
+// The reference names are read at every start: `referenceName` needs them
+// when a page is served, not only while the index is built.
 loadReferenceNames();
+
+if (!cachedIndex) {
 
 {
   const parent = new Map();
@@ -1160,7 +1222,7 @@ for (const inst of instruments.values()) {
 }
 console.error(`${widerLinks} listings share brokers with a depositary certificate`);
   const started = Date.now();
-  fs.writeFileSync(INDEX_CACHE, v8.serialize({ brokers, instruments, aliases, listings }));
+  fs.writeFileSync(INDEX_CACHE, v8.serialize({ brokers, instruments, aliases, listings, cryptoCcys }));
   fs.writeFileSync(INDEX_STAMP, indexStampText);
   console.error(`index écrit dans le cache en ${Date.now() - started} ms`);
 }
@@ -1201,7 +1263,6 @@ function listingOpen(listing, nat) {
 
 function depositPlans(folder, nat) {
   if (folder === "xtb") return XTB_PLANS.filter((p) => xtbOpen(p.id, nat)).map((p) => p.id);
-  if (folder === "webull") return WEBULL_PLANS.filter((p) => webullOpen(p.id, nat)).map((p) => p.id);
   if (folder === "lightyear") return lightyearPlansFor(nat).map((p) => p.id);
   if (folder === "robinhood") return ROBINHOOD_PLANS.filter((p) => robinhoodOpen(p.id, nat)).map((p) => p.id);
   if (folder === "plum") return PLUM_PLANS.filter((p) => plumOpen(p.id, nat)).map((p) => p.id);
@@ -1561,6 +1622,10 @@ const GOPOCKET_PLANS = [
 // portfolios (Bronze 0.4 %, Silver 0.3 %, Gold and Platinum 0.2 %), each
 // halved on the Portu <26 account.
 const SPLIT_PLANS = {
+  webulluk: { brand: "Webull UK", plans: [
+    { id: "uk-go", label: "Go" },
+    { id: "uk-meridian", label: "Meridian" },
+  ] },
   ibkrus: { brand: "IBKR US", plans: [
     { id: "pro", label: "Pro" },
     { id: "lite", label: "Lite" },
@@ -1786,58 +1851,6 @@ const VIVID_PLANS = [
   { id: "plus", name: "Vivid Plus" },
   { id: "prime", name: "Vivid Prime" },
 ];
-
-const WEBULL_PLANS = [
-  { id: "us", name: "Webull US", url: "https://www.webull.com" },
-  { id: "uk-go", name: "Webull UK Go", url: "https://www.webull-uk.com" },
-  { id: "uk-meridian", name: "Webull UK Meridian", url: "https://www.webull-uk.com" },
-  { id: "eu", name: "Webull Europe", url: "https://www.webull.eu" },
-  { id: "sg", name: "Webull Singapore", url: "https://www.webull.com.sg" },
-  { id: "ca", name: "Webull Canada", url: "https://www.webull.ca" },
-  { id: "au", name: "Webull Australia", url: "https://www.webull.com.au" },
-  { id: "hk", name: "Webull HK", url: "https://www.webull.hk" },
-];
-
-const WEBULL_EU = new Set([
-  "NL", "BE", "DK", "DE", "EE", "FI", "FR", "GR", "HU", "IE", "IT", "HR", "LV",
-  "LT", "LU", "NO", "AT", "PL", "PT", "RO", "SI", "SK", "ES", "CZ", "SE",
-]);
-
-function webullOpen(plan, nat) {
-  const n = String(nat || "").trim().toUpperCase();
-  if (!n) return true;
-  if (n === "US") return plan === "us";
-  if (n === "CA") return plan === "ca";
-  if (n === "GB") return plan === "uk-go" || plan === "uk-meridian";
-  if (n === "AU") return plan === "au";
-  if (n === "HK") return plan === "hk";
-  if (n === "SG") return plan === "sg";
-  if (WEBULL_EU.has(n)) return plan === "eu";
-  return false;
-}
-
-function collapseWebull(built) {
-  const groups = [];
-  for (const row of built) {
-    const hit = groups.find((g) => sameLink(g.members[0], row) && sameTripListings(g.listings, row.listings));
-    if (hit) hit.members.push(row);
-    else groups.push({ listings: row.listings, members: [row] });
-  }
-  return groups.map((g) => {
-    if (g.members.length === 1) return g.members[0];
-    const ids = g.members.map((m) => m.plan);
-    return {
-      ...g.members[0],
-      folder: `webull:${ids.join("-")}`,
-      family: "Webull",
-      name: g.members
-        .map((m, i) => (i === 0 ? m.name : m.name.replace(/^Webull\s+/, "")))
-        .join(" / "),
-      plan: "",
-      planRank: 0,
-    };
-  });
-}
 
 const TRADEZERO_PLANS = [
   { id: "tza", name: "TradeZero America", url: "https://tradezero.com" },
@@ -3014,16 +3027,6 @@ function detail(key, nat = "", size = {}, dep = "") {
         if (listed.length) built.push(asPlan(plan, i, listed));
       });
       for (const row of collapseScalable(built)) rows.push(row);
-      continue;
-    }
-    if (folder === "webull") {
-      const built = [];
-      WEBULL_PLANS.forEach((plan, i) => {
-        if (!webullOpen(plan.id, nat) || !depositHas(folder, plan.id, dep)) return;
-        const listed = listings({ plan: plan.id });
-        if (listed.length) built.push(asPlan(plan, i, listed));
-      });
-      for (const row of collapseWebull(built)) rows.push(row);
       continue;
     }
     if (folder === "vivid") {

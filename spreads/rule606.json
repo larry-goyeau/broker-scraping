@@ -1,6 +1,6 @@
 {
   "quarter": "2026-Q2",
-  "fetchedAt": "2026-10-20T17:51:21.609Z",
+  "fetchedAt": "2026-10-24T18:42:39.897Z",
   "source": "https://cdn.finra.org/606reportBulk/2026/606_NMS_2026_Q2.zip",
   "brokers": {
     "alpaca": {
@@ -509,6 +509,19 @@
         "STXG": 0.08859,
         "JNST": 0.06117,
         "HRTF": 0.02102
+      }
+    },
+    "tickrsclearing": {
+      "crd": [
+        "312531"
+      ],
+      "name": "Tickrs Clearing",
+      "files": [
+        "312531_606_NMS_2026_Q2_V1_20260729.xml"
+      ],
+      "mix": {
+        "CODX": 0.3117,
+        "OTHER": 0.6883
       }
     }
   }

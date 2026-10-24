@@ -217,6 +217,63 @@ export function nepseRoundTrip(schedule, query) {
   };
 }
 
+const nprUsd = (amount) => {
+  const v = toUsd(amount, "NPR");
+  return v == null ? null : Number(v.toPrecision(12));
+};
+
+// nepseRoundTrip plus two things its schedule does not take: `minimum`, a
+// floor in rupees on the brokerage of each order, and `dpSellOnly`, a DP
+// charge taken on the sell alone.
+export function nepseRoundTripWith(schedule, query) {
+  const answer = nepseRoundTrip(schedule, query);
+  const minimum = schedule.minimum || 0;
+  const dpSides = schedule.dpSellOnly ? 1 : 2;
+  const words = (text) => {
+    if (!text) return text;
+    let out = text;
+    if (minimum) {
+      out = out.replace(", chaque sens ; frais SEBON", `, minimum ${minimum} NPR par ordre, chaque sens ; frais SEBON`);
+      out = out.replace(
+        "aucun minimum publié pour les actions (le plancher de 10 NPR de la page vaut pour les obligations et les fonds)",
+        `minimum ${minimum} NPR par ordre`,
+      );
+    }
+    if (dpSides === 1) {
+      out = out.replace(`et frais DP ${schedule.dp} NPR, chaque sens.`, `chaque sens ; frais DP ${schedule.dp} NPR à la vente seulement.`);
+    }
+    return out;
+  };
+  const out = { ...answer, basis: words(answer.basis), confidence: words(answer.confidence) };
+  if (!answer.trade || !answer.commission) return out;
+
+  const { notional } = answer.trade;
+  const rate = answer.commission.rate;
+  const perOrder = Math.max(minimum, notional * rate);
+  const courtageNpr = perOrder * 2 + schedule.dp * dpSides;
+  const brokerFees = nprUsd(courtageNpr);
+  const usd = answer.parts.marché == null ? null : plus(answer.parts.marché, brokerFees, answer.parts.taxes);
+  if (minimum && notional * rate < minimum) {
+    out.confidence += ` ; ${frRate(notional * rate)} NPR sous le minimum : ${minimum} NPR par ordre`;
+  }
+  return {
+    ...out,
+    usd: finite(usd, 6),
+    brokerFees: finite(brokerFees, 6),
+    commission: {
+      ...answer.commission,
+      buy: finite(perOrder, 8),
+      sell: finite(perOrder, 8),
+      minimum,
+      dpPerSide: dpSides === 2 ? schedule.dp : 0,
+      dpSell: schedule.dp,
+    },
+    parts: { ...answer.parts, courtage: finite(brokerFees, 6), courtageNpr: finite(courtageNpr, 6) },
+  };
+}
+
+const frRate = (x) => String(Math.round(x * 100) / 100).replace(".", ",");
+
 export function printCli(callerUrl, roundTrip) {
   let called = false;
   try {

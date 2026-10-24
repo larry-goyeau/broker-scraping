@@ -183,6 +183,7 @@ async function readProfiles(file, label, symbols, stale, keep, gap = PROFILE_GAP
   if (wanted.length) {
     console.error(`OTC Markets ${label}: ${wanted.length} to read, about ${Math.ceil((wanted.length * gap) / 60_000)} min`);
     let failures = 0;
+    let refused = 0;
     for (let start = 0; start < wanted.length && failures < 3; ) {
       try {
         await withScreenerPage(async (get) => {
@@ -192,9 +193,16 @@ async function readProfiles(file, label, symbols, stale, keep, gap = PROFILE_GAP
             const target = `${base}${encodeURIComponent(symbol)}?symbol=${encodeURIComponent(symbol)}`;
             try {
               body = await get(target);
+              refused = 0;
             } catch (error) {
               if (/answered (404|400)/.test(error.message)) body = {};
-              else if (/answered 500/.test(error.message)) {
+              // A line OTC Markets keeps its data from (an Expert Market
+              // line, APLIF) answers 403, kept as empty; five in a row is a
+              // block, not five such lines.
+              else if (/answered 403/.test(error.message) && refused < 4) {
+                refused += 1;
+                body = {};
+              } else if (/answered 500/.test(error.message)) {
                 // A profile the back end cannot build (BGLAF): asked once
                 // more, then kept as empty, to be asked again another day.
                 await sleep(PROFILE_GAP * 4);

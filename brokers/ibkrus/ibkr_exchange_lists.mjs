@@ -194,7 +194,10 @@ async function otcBarred() {
           if ((body.stocks || []).length < 100) break;
           await sleep(300);
         }
-        if (!count || symbols.size !== count) throw new Error(`OTC Markets ${filter}: announced ${count}, read ${symbols.size}`);
+        // The screener's count runs a few symbols ahead of its pages while
+        // the list changes (Expert Market 3,729 announced, 3,724 read on
+        // 2026-10-21): up to 0.5% short is accepted, more stops the run.
+        if (!count || symbols.size > count || symbols.size < count * 0.995) throw new Error(`OTC Markets ${filter}: announced ${count}, read ${symbols.size}`);
       }
       return barred;
     } catch (error) {

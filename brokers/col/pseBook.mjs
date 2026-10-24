@@ -199,6 +199,23 @@ async function crawl() {
   const companies = await directoryIds();
   console.error(`${companies.length} companies, ${quotes.size} TradingView lines`);
   const books = (await pool(companies, 6, companySecurities)).flat();
+  // The blank-text listing sometimes skips a line (SLF on 2026-10-24); a
+  // search on the symbol itself still finds it.
+  for (const line of books) {
+    if (quotes.has(line.symbol) || line.status.toLowerCase() !== "open") continue;
+    const url = `${SEARCH}?text=${encodeURIComponent(line.symbol)}&exchange=PSE&lang=en&domain=production&search_type=stocks`;
+    const body = JSON.parse(await getText(url, { Origin: "https://www.tradingview.com" }));
+    const symbol = (body.symbols || []).find((item) => item.exchange === "PSE" && normalize(item.symbol).toUpperCase() === line.symbol);
+    if (!symbol) continue;
+    quotes.set(line.symbol, {
+      ticker: line.symbol,
+      name: normalize(symbol.description),
+      type: normalize(symbol.type).toLowerCase(),
+      specs: Array.isArray(symbol.typespecs) ? symbol.typespecs : [],
+      currency: normalize(symbol.currency_code).toUpperCase(),
+      isin: isinOf(symbol.isin),
+    });
+  }
   try {
     fs.writeFileSync(CACHE, JSON.stringify({ at: Date.now(), books, quotes: [...quotes] }));
   } catch {}

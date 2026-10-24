@@ -8,8 +8,7 @@
 // market. The reading, what is kept (ordinary, promoter and perpetual
 // preference shares open to trade, all in rupees) and what is left out
 // (debentures, closed-end funds, suspended, delisted, legacy lines with
-// no ISIN, orphan promoter lines; Nepal lists no ETF) and the remark on
-// a bank's or insurer's promoter share (regulator vets the buyer) are in
+// no ISIN, orphan promoter lines; Nepal lists no ETF) are in
 // ../kumari/nepseShares.mjs, shared by the four brokers on this template.
 // broker-list.json gives one place, Nepal Stock Exchange, with no
 // restriction.

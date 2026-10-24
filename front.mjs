@@ -174,12 +174,22 @@ const FOLDER_NAME = {
   targobankde: "TARGOBANK",
   eqi: "EQi",
   moomoous: "moomoo US",
+  jtrust: "J Trust",
+  cgsid: "CGS Indonesia",
+  raiffeisenrs: "Raiffeisen",
+  otpbankahr: "OTP Hrvatska",
   kumari: "Kumari Securities",
   premiersecurities: "Premier Securities",
   mallastock: "Malla & Malla",
   aryatara: "Arya Tara",
   abbasi: "Abbasi and Company",
   standardcapital: "Standard Capital",
+  hamagin: "Hamagin Tokai",
+  netwealth: "Netwealth Share",
+  gotyme: "GoTyme",
+  rhbid: "RHB Sekuritas",
+  alwathbah: "Al Wathbah",
+  avangard: "Avangard",
 };
 
 // Display name above, broker-list row below, when the two differ.
@@ -283,6 +293,35 @@ const FOLDER_LIST = {
   ncbcm: "NCB Capital",
   xtsc: "Xuan Thien",
   agoradirect: "AGORA",
+  // 2026-10-23 cost files whose folder name misses their row or hits another.
+  ahlatci: "Ahlatcı Yatırım",
+  bancoentrerios: "Banco Entre Ríos",
+  cgsid: "CGS International Sekuritas Indonesia",
+  granit: "Gránit Bank",
+  okasanbt: "Okasan Business & Technology Securities",
+  raiffeisenrs: "Raiffeisen banka Beograd",
+  mercantilesec: "Mercantile Securities",
+  thrive: "Thrive Brokerage House",
+  webulljp: "Webull Japan",
+  jtrust: "J Trust Global Securities",
+  otpbankahr: "OTP banka Hrvatska",
+  // 2026-10-24 catalogues whose folder name misses their row or hits another.
+  rhbid: "RHB Sekuritas Indonesia",
+  hamagin: "Hamagin Tokai Tokyo Securities",
+  netwealth: "Netwealth Share Trading",
+  gotyme: "GoTyme Bank",
+  alwathbah: "Al Wathbah Shares and Bonds Center",
+  avangard: "Avangard Bank",
+  webullth: "Webull Thailand",
+  hsbctr: "HSBC Yatırım",
+  nabilsd: "Nabil",
+  ddkc: "Dipshikha Dhitopatra Karobar Co.",
+  magnet: "Magnet",
+  // "Himalayan Securities" is another NEPSE broker.
+  himalayan: "Himalayan",
+  dakshinkali: "Dakshinkali",
+  // "Sigma Securities" is another broker; the folder takes "Sigma".
+  sigmacap: "Sigma",
 };
 
 // The page drops the word "Securities" from a broker's name: "Ando
@@ -1704,6 +1743,55 @@ const SPLIT_PLANS = {
     { id: "u26silver", label: "<26 Silver" },
     { id: "u26gold", label: "<26 Gold / Platinum" },
   ] },
+  // Japanese online courses the client picks: a fee per order or one flat
+  // fee for the day's total (IwaiCosmo also has a monthly flat course).
+  iwaicosmo: { brand: "IwaiCosmo", plans: [
+    { id: "active", label: "Active" },
+    { id: "standard", label: "Standard" },
+    { id: "monthly", label: "Monthly 50" },
+  ] },
+  okasanbt: { brand: "Okasan B&T", plans: [
+    { id: "pertrade", label: "Per-trade course" },
+    { id: "daily", label: "Daily flat course" },
+  ] },
+  sbineotrade: { brand: "SBI Neotrade", plans: [
+    { id: "flat", label: "Flat plan" },
+    { id: "daily", label: "Daily flat plan" },
+  ] },
+  tachibana: { brand: "Tachibana", plans: [
+    { id: "pertrade", label: "Per-order course" },
+    { id: "daily", label: "Daily flat course" },
+  ] },
+  investlink: { brand: "Investlink", plans: [
+    { id: "pro", label: "Pro" },
+    { id: "premium", label: "Premium / Private" },
+  ] },
+  birzhevoy: { brand: "Birzhevoy", plans: [
+    { id: "investor", label: "Инвестор" },
+    { id: "trader", label: "Трейдер" },
+  ] },
+  vtb: { brand: "VTB", plans: [
+    { id: "online", label: "My Online" },
+    { id: "professional", label: "Professional" },
+  ] },
+  sovcombank: { brand: "Sovcombank", plans: [
+    { id: "halva", label: "Halva" },
+    { id: "halvaf", label: "HalvaF" },
+  ] },
+  gazprombank: { brand: "Gazprombank", plans: [
+    { id: "base", label: "Basic" },
+    { id: "investor", label: "Investor" },
+  ] },
+  bcs: { brand: "BCS", plans: [
+    { id: "investor", label: "Investor" },
+    { id: "trader", label: "Trader" },
+  ] },
+  finam: { brand: "Finam", plans: [
+    { id: "longterm", label: "Long-term Portfolio" },
+    { id: "investor", label: "Investor" },
+    { id: "strateg", label: "Strategist" },
+    { id: "day", label: "Unified Daily" },
+  ] },
 };
 
 // One row per set of plans that price a place the same, as collapseSaxo
@@ -2433,7 +2521,7 @@ function collapseSaxo(built) {
     const all = b.plans.length === allIds.length;
     return {
       ...b.row,
-      folder: `saxo:${[...b.plans].join("-")}`,
+      folder: `saxofr:${[...b.plans].join("-")}`,
       family: name,
       name,
       plan: all ? "" : [...b.plans].join("-"),

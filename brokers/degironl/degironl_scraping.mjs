@@ -350,6 +350,7 @@ if (!fresh && fs.existsSync(outputPath)) {
 
 let untradable = 0;
 let absent = 0;
+let notShare = 0;
 
 for (const product of shelf) {
   if (String(product.productType || "").toUpperCase() === "BOND") continue;
@@ -371,6 +372,20 @@ for (const product of shelf) {
   const exchange = exchanges.get(String(product.exchangeId)) || String(product.exchangeId);
   const name = normalize(product.name);
   if (!name) continue;
+
+  // A title our lists do not carry (--all) is typed by DeGiro alone. Its
+  // fund shelf holds mutual funds (Kepler), not ETFs, and its ASX "stocks"
+  // include listed options (codes ending O, OA…OZ) and rights.
+  if (kind === "") {
+    if (String(product.productType || "").toUpperCase() === "FUND") {
+      notShare += 1;
+      continue;
+    }
+    if (exchange === "ASX" && (/^[A-Z0-9]{3}O[A-Z]?$/.test(ticker) || /\bRights\b/i.test(name))) {
+      notShare += 1;
+      continue;
+    }
+  }
 
   const row = {
     query: isin,
@@ -395,7 +410,7 @@ console.error(
   `${results.length} listings over ${new Set(results.map((row) => row.isin)).size} ISINs ` +
     `(${Object.entries(byType)
       .map(([type, count]) => `${count} ${type}`)
-      .join(", ")}), ${untradable} not tradable, ${absent} the catalogues do not carry`
+      .join(", ")}), ${untradable} not tradable, ${absent} the catalogues do not carry, ${notShare} funds, options or rights left out`
 );
 
 await browser.disconnect();

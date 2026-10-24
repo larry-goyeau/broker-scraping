@@ -38,8 +38,9 @@
 //
 // In the total: the book, brokerage, DP, STT, stamp, exchange, SEBI and
 // GST. Remarks: the intraday round trip gap on a share, and the prepaid
-// plans. Not here: Call & Trade (₹50 an order, phone), net-banking pay-in
-// ₹9 + GST (UPI is free), auto square-off ₹40 + GST.
+// packs at their "as low as ₹5 per order" (Fees might be x% lower). Not
+// here: Call & Trade (₹50 an order, phone), net-banking pay-in ₹9 + GST
+// (UPI is free), auto square-off ₹40 + GST.
 //
 //   node brokers/univest/univest_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
 //   node brokers/univest/univest_cost.mjs A1L BSE INR --shares=100 --price=5
@@ -105,16 +106,29 @@ const SCHEDULE = {
   ipftRate: 0,
   dpInr: 20,
   basis:
-    "Courtage livraison sans forfait : le plus bas de 20 ₹ et 0,1 % par ordre exécuté (forfaits prépayés à 0 ₹, prix non publiés). DP 20 ₹ + GST à la vente. " +
+    "Courtage livraison sans forfait : le plus bas de 20 ₹ et 0,1 % par ordre exécuté (forfaits prépayés « dès 5 ₹ par ordre » : remarque). DP 20 ₹ + GST à la vente. " +
     "Transaction NSE 0,00322 %, BSE 0,00375 % sauf groupes M, MT, TS, MS 0,00275 % ; X, XT, Z 0,1 % ; P, ZP 1 % (barème BSE). IPFT non publié : 0. " +
     "STT d'un ETF : 0,001 % à la vente pour un fonds actions, 0 pour or, argent, dette, liquidités ou indice étranger.",
-  remark: "Prepaid trade plans bring brokerage to ₹0; their price is not published.",
+  remark: "",
 };
+
+// The prepaid packs are "as low as ₹5 per order" (help page), against the
+// standard ₹20 / 0.1 %: the gap on both legs, with GST, at the order amount.
+const PACK_EACH = 5;
+function packLower(notional) {
+  if (!(notional > 0)) return "";
+  const gap = (2 * Math.max(0, brokerageEach(notional) - PACK_EACH) * (1 + SCHEDULE.gstRate)) / notional;
+  const pctText = Number((gap * 100).toFixed(2));
+  return pctText > 0 ? `Fees might be ${pctText}% lower.` : "";
+}
 
 export function roundTrip(query) {
   const cost = indiaRoundTrip(SCHEDULE, query);
+  if (cost.usd == null && cost.brokerFees == null) return cost;
+  const lower = packLower(cost.trade?.notional);
   // The intraday gap is a share's (an ETF's STT is another rule).
-  return cost.listing?.type === "STOCK" ? intradayBuySell(cost, SCHEDULE, () => 20) : cost;
+  const out = cost.listing?.type === "STOCK" ? intradayBuySell(cost, SCHEDULE, () => 20) : cost;
+  return { ...out, remark: [out.remark, lower].filter(Boolean).join(" ") };
 }
 
 printCli(import.meta.url, roundTrip);

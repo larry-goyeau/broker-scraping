@@ -2855,6 +2855,545 @@ export const ACCEPTED = {
   // https://kingdomsecurities.co.ke/faqs/
   // https://kingdomsecurities.co.ke/wp-content/uploads/2026/04/Individual-CDS-Self-Onboarding-Link-1.pdf
   kingdomsecurities: { countries: ["KE"] },
+  // 2026-10-23: the 44 catalogues that got cost files that day.
+  // FAQ 2747: "口座開設は日本国内に居住するお客様のみとなりますので、海外に居住されているお客様は、
+  // 口座開設はいただけません". A foreign national applies by post or at a branch with a residence card;
+  // online opening needs a My Number. The picker is residence, so the country is JP.
+  // https://aizawa-faq.jp/concierge/aizawa-user/ai-result?sid=investorFAQ&qano=2747
+  // https://www.aizawa.co.jp/service/request/
+  aizawa: { countries: ["JP"] },
+  // Online trade terms art. 3: users are "日本国内に居住する個人". The securities terms art. 41: a client
+  // who stops living in Japan reports it and closes the account. The picker is residence, so the
+  // country is JP.
+  // https://www.105sec.co.jp/wp/wp-content/uploads/2026/02/20260209_百五証券オンライントレード約款.pdf
+  // https://www.105sec.co.jp/wp/wp-content/uploads/2024/03/shoukentorihiki_yakkan.pdf
+  hyakugo: { countries: ["JP"] },
+  // FAQ: "海外在住の方は口座開設ができません。日本国内在住の方に限定させていただいております";
+  // dealing is only for people living in Japan (FAQ 498). A foreign national opens with a residence
+  // card, by post. The picker is residence, so the country is JP.
+  // https://www.iwaicosmo.net/faq/post_138.html
+  // https://www.iwaicosmo.net/faq/post_498.html
+  iwaicosmo: { countries: ["JP"] },
+  // Terms art. 3: the firm refuses "日本国以外に居住している方". A foreign national sends a residence
+  // card or special permanent resident certificate; opening needs a My Number. The picker is
+  // residence, so the country is JP.
+  // https://bb.jtg-sec.co.jp/keiyaku/general/regulation.pdf
+  // https://bb.jtg-sec.co.jp/confirm/kouza_kaisetsu.htm
+  jtrust: { countries: ["JP"] },
+  // MARUSAN-NET rules art. 2: "原則、お客様が日本国内に居住されている個人の方であること". The service
+  // ends when the client becomes a non-resident (art. 31). The picker is residence, so the country is JP.
+  // https://www.marusan-sec.co.jp/kitei/toriatsukaikitei/pdf/sougou_yakkan.pdf
+  // https://www.marusan-sec.co.jp/torihiki/marusannet/userguide/index.html
+  marusan: { countries: ["JP"] },
+  // 水戸ネット rules art. 2: "日本国内に居住している成年年齢に達した個人". Opening online is for
+  // "日本国籍をもつ国内にお住まいの" adults under 80. The picker is residence, so the country is JP.
+  // https://www.mito.co.jp/mitonet/notice/innternetkitei_201308.pdf
+  // https://www.mito.co.jp/service/type/internet/flow.html
+  mito: { countries: ["JP"] },
+  // Account-opening FAQ: opening is limited to individuals living in
+  // Kyushu (Okinawa excluded) or Yamaguchi ("九州(沖縄県除く)・山口県在住の
+  // 個人(成人)のお客さまに限ります"). The net-only account is opened the same
+  // way. The picker is residence, so the country is JP.
+  // https://www.ffg-sec.co.jp/service/internet_trade/faq/
+  // https://www.ffg-sec.co.jp/service/internet_trade/
+  ffg: { countries: ["JP"] },
+  // FAQ, account-opening criteria: the client must live in Japan, of any
+  // nationality ("日本国内に居住していること（国籍は問いません）"), and be able
+  // to communicate in Japanese. A foreign national opens with a residence
+  // card or special permanent resident certificate. The picker is
+  // residence, so the country is JP.
+  // https://www.secjp.co.jp/faq/category_01/index.html
+  okasanbt: { countries: ["JP"] },
+  // FAQ, account-opening criteria: someone who does not live in Japan
+  // cannot apply ("国内に居住していない方"). A client posted abroad who becomes
+  // a non-resident must close the account (online terms, art. 12(6)). The
+  // picker is residence, so the country is JP.
+  // https://faq.sbineotrade.jp/answer/608752eba86ee343fd137285/
+  // https://faq.sbineotrade.jp/answer/608752eba86ee343fd13729f/
+  sbineotrade: { countries: ["JP"] },
+  // FAQ: non-residents and foreign companies cannot apply ("非居住者の方および
+  // 外国法人からのお申込みは受付しておりません"). Accounts are opened only for
+  // clients of Iyo Bank. The online trade is for individuals aged 18 or
+  // over. The picker is residence, so the country is JP.
+  // https://www.shikoku-alliance-sec.co.jp/faq/synthesis.html
+  // https://www.shikoku-alliance-sec.co.jp/faq/onlinetrade.html
+  shikokualliance: { countries: ["JP"] },
+  // Account rules: the e支店 service is limited to Japan, so only people
+  // living in Japan can open, of any nationality ("日本国内に居住されている
+  // お客様に限定しております。（国籍は問いません）"). A My Number is required,
+  // and a residence card is an accepted ID. The picker is residence, so the
+  // country is JP.
+  // https://www.e-shiten.jp/TorihikiRule/rule/acountopen.html
+  // https://www.e-shiten.jp/QA/answer01.html
+  tachibana: { countries: ["JP"] },
+  // FAQ: a foreign national may open if they live in Japan and submit an ID
+  // with a Japanese address and a My Number document ("日本国内在住の方で…
+  // 外国籍のお客様の口座開設が可能です"). The residence card must be valid for
+  // 3+ months. The picker is residence, so the country is JP.
+  // https://www.webull.co.jp/help/faq/1301
+  webulljp: { countries: ["JP"] },
+  // Downloads page lists the papers for an individual: KYC form, TMS agreement, citizenship certificate, photo, demat confirmation, cheque copy, PAN. The KYC form (Anusuchi-12) has an NRN box with no country list.
+  // Nepal only: citizenship-based KYC, a Nepali bank cheque, payment partners connectIPS / fonepay / eSewa; no foreign residence is named.
+  // https://garimasecurities.com.np/post/downloads
+  // https://garimasecurities.com.np/post/faq
+  garima: { countries: ["NP"] },
+  // "KYC Login" goes to NEPSE's TMS client registration (tms72), where nationality defaults to Nepal and an NRN option takes an NRN ID; downloads are the citizenship-based KYC and demat forms.
+  // Nepal only: Nepali KYC papers and a CDSC demat; the site names no residence outside Nepal.
+  // https://hatemalo.com.np/downloads.html
+  // https://tms72.nepsetms.com.np/client-registration/
+  hatemalo: { countries: ["NP"] },
+  // "Apply Online" (SmartKyc 3-in-1 form): nationality "Nepalese", country prefilled Nepal with only Nepal's 7 provinces; required citizenship front/back, a selfie with it, a National ID, a hand-drawn map of the residence and proof of a bank account.
+  // A "Foreign Employment Card" is optional (Nepali migrant workers); deposits go to Global IME Bank, Kamaladi. Nepal only.
+  // https://kyc.kalashstock.com.np/DPForm?type=3in1
+  kalash: { countries: ["NP"] },
+  // Downloads: the standard KYC form (Anusuchi-12): Nepalese/Others nationality, citizenship no., PAN, an NRN ID-and-address line with no country list. "Open account" goes to NEPSE TMS client registration (tms47); the site links connectIPS.
+  // Nepal only: no foreign residence is named.
+  // https://neevsecurities.com/downloads
+  // https://tms47.nepsetms.com.np/client-registration
+  neev: { countries: ["NP"] },
+  // KYC registration (React bundle): mobile field fixed to "+977" with 10 digits, citizenship number required (format 1234-05-12345), nationality "Nepali" and country "Nepal" by default, citizenship front/back and location photo required; an NRN line exists without a country list.
+  // Nepal only.
+  // https://sagarmathasecurities.com/kyc
+  sagarmatha: { countries: ["NP"] },
+  // FAQ: open with "our KYC form along with one passport size photograph and a photocopy of your citizenship certificate"; the online route is the DG Trade portal (asks "Are you NRN?", 10-digit mobile, no country code).
+  // Nepal only: site prints only +977 numbers; no foreign residence is named.
+  // https://shareprosecurities.com/info-center/faq
+  // https://kyc.shareprosecurities.com/kyc/register
+  sharepro: { countries: ["NP"] },
+  // Sign-up on the DG Trade KYC portal: email and a 10-digit mobile with no country code; the form asks "Are you NRN?" with no country list. TMS account: sign the agreement and send it back.
+  // Nepal only: no foreign residence is named.
+  // https://kyc.swetasecurities.com/kyc/register
+  // https://swetasecurities.com/services
+  sweta: { countries: ["NP"] },
+  // Downloads: KYC form for individual and demat form (Annex 12); payments by account-payee cheque or deposit to Global IME Bank, Kamaladi (with client code); offices in Kathmandu, Pokhara and Damauli; connectIPS linked.
+  // Nepal only: no foreign residence is named.
+  // https://thrivebrokerage.com/downloads
+  // https://thrivebrokerage.com.np/pages/bank-account-detail
+  thrive: { countries: ["NP"] },
+  // The FAQ sets out IDs for "Local individuals residing abroad" and for
+  // "Foreign individuals residing abroad", each with consularized IDs. A
+  // foreigner living in the Philippines sends an ACR or a resident visa. No
+  // country of residence is refused.
+  // https://www.mytrade.com.ph/faqs/
+  mytrade: { all: true },
+  // The FAQ says any adult, "whether Filipino or a foreign national", can
+  // open online. A non-resident foreigner sends IDs from their home country,
+  // authenticated by a Philippine embassy or consulate. A wire from abroad is
+  // a funding route. No country of residence is refused.
+  // https://utradeph.com/faqs/
+  utrade: { all: true },
+  // The FAQ takes an adult "of any nationality", and Filipinos working
+  // abroad. The opening page names a resident foreigner (ACR or DOLE work
+  // permit) and a non-resident foreigner (an authenticated passport). No
+  // country of residence is refused.
+  // https://www.timson.com.ph/faq/who-can-open-a-timson-trade-account/
+  // https://www.timson.com.ph/open-an-account/
+  timson: { all: true },
+  // The FAQ asks for two valid IDs, a FATCA form and a video call. It does
+  // not say who can open. Deposits go only through Philippine bills payment
+  // (BDO, BPI, Security Bank, UnionBank) or an RCBC account. The picker is
+  // residence, so the country is PH.
+  // https://www.2tradeasia.com/faqs
+  "2tradeasia": { countries: ["PH"] },
+  // The FAQ asks for two government IDs and the signed forms, sent to the
+  // BGC office. It does not say who can open. Deposits go to LANDBANK or
+  // BDO, or by GCash, PayMaya or InstaPay. The picker is residence, so the
+  // country is PH.
+  // https://www.landbanksec.com/login/includes/faqs.asp
+  landbanksec: { countries: ["PH"] },
+  // The site FAQ asks for two government IDs, from Passport, SSS/GSIS,
+  // Voter's, Senior Citizen, TIN and UMID cards, all but the passport
+  // Philippine. Funding is by UPAY or bills payment. It names no foreigner or
+  // non-resident. The picker is residence, so the country is PH.
+  // https://www.mercantilesec.com/
+  mercantilesec: { countries: ["PH"] },
+  // A citizen sends a KTP, an NPWP and a savings passbook. A foreigner sends
+  // a passport and a KITAS/KITAP, a stay permit in Indonesia. Money goes
+  // through an RDN at Panin, Mandiri, BCA, CIMB Niaga or BSI. No other
+  // country of residence is named.
+  // https://www.facsekuritas.co.id/pedoman
+  fac: { countries: ["ID"] },
+  // The equities page sells CGS iTrade and does not say who can open. An
+  // Indonesian account has an RDN at a local bank and trades in IDR. No
+  // foreigner or non-resident route is named. The picker is residence, so
+  // the country is ID.
+  // https://www.cgsi.co.id/our-offerings/products/equities
+  cgsid: { countries: ["ID"] },
+  // The open-account form needs a phone matching ^((\+91-?)|0)?[0-9]{10}$,
+  // an Indian number. The page offers repatriable and non-repatriable NRI
+  // demat accounts but names no country. The picker is a country, so the
+  // country is IN.
+  // https://www.idbidirect.in/open-demat-account/
+  idbicapital: { countries: ["IN"] },
+  // Remote opening runs in the AHL Pro app. The applicant enters a T.C.
+  // identity number, confirms it by SMS, then has a video call. The FAQ
+  // offers a branch as the other route. No foreigner or passport route is
+  // named. The September 2026 SPK rule allows passport onboarding of
+  // foreigners but does not oblige brokers to offer it. So the country is TR.
+  // https://www.ahlatciyatirim.com.tr/hesap-ac
+  // https://www.ahlatciyatirim.com.tr/hakkimizda/sikca-sorulan-sorular
+  ahlatci: { countries: ["TR"] },
+  // The "Tera Yatırım Hesap Aç" app opens accounts with the new chip
+  // identity card (NFC and face check), then a live call. No passport,
+  // foreigner or non-resident route is named. Clients who want foreign
+  // markets are sent to the sister company Tera Europe. So the country is TR.
+  // https://apps.apple.com/tr/app/id6737128786
+  // https://www.terayatirim.com/hesap
+  tera: { countries: ["TR"] },
+  // Opening runs through a Ziraat Bankası (or Ziraat Katılım / Dinamik)
+  // account, in the bank app, the internet branch or a branch. Clients
+  // whose contact address is abroad start with online trading switched
+  // off. It is switched on above a TRY 100,000 balance. No foreign
+  // country is named, so the country is TR.
+  // https://www.ziraatyatirim.com.tr/hesap-acilis-ve-sozlesme-yenileme
+  // https://www.ziraatyatirim.com.tr/hesap-ac
+  ziraat: { countries: ["TR"] },
+  // FAQ: "Any Jordanian or foreign nationality, irrespective of their
+  // country of residence, is allowed to open an account." Foreigners send
+  // an attested passport copy, in person at the Amman office or by fax.
+  // https://hekma-fs.com/page/15/FAQ
+  alhekma: WORLD,
+  // eTrade (Mubasher) is opened at a branch with a Khaleeji account.
+  // Non-Bahraini clients need "a valid Smart Card and Resident Visa pass",
+  // that is residence in Bahrain. No non-resident or GCC-national route is
+  // named, so the country is BH.
+  // https://khaleeji.bank/pages-sidebar-nav/current-account/
+  // https://khaleeji.bank/pages-sidebar-nav/khaleeji-etrade/
+  khaleeji: { countries: ["BH"] },
+  // No list. Remote opening uses an identity document, a selfie and a
+  // liveness check. The Regulations provide for non-resident clients (cl.
+  // 5.7: payouts to a bank in the client's country). Sign-up offers 237
+  // phone country codes, and the address country is typed freely. The
+  // site gives a Swiss number "For clients from the EU". No country is excluded.
+  // https://zamaninvest.kg/assets/docs/pravovaya/reglament-brokerskogo-obsluzhivaniya.pdf
+  // https://zamaninvest.kg/assets/docs/pravovaya/prilozhenie-6-pravila-cifrovoy-identifikacii.pdf
+  // https://app.zamaninvest.kg/?signup=1
+  zaman: WORLD,
+  // Online opening (Gránit app selfie, or the web form plus VideóBank) needs a
+  // chip Hungarian ID card issued after 1 Jan 2016, or a card-format Hungarian
+  // ID, plus a Hungarian address card (lakcímkártya). The securities account is
+  // then opened in the app with the Hungarian tax ID. No other country is
+  // named, so the country is HU.
+  // https://granitbank.hu/lakossag/bankszamlak/digit%C3%A1lis
+  granit: { countries: ["HU"] },
+  // The brokerage page: "Ugovaranje svih usluga trgovanja ... možete obaviti u
+  // bilo kojoj poslovnici OTP banke", so the contract is signed at a Croatian
+  // branch, then e-trader is used. The bank's general terms take residents and
+  // non-residents, but no country is named. The country is HR.
+  // https://www.otpbanka.hr/globalna-trzista/brokersko-poslovanje
+  otpbankahr: { countries: ["HR"] },
+  // mTrader is open "svim fizičkim licima, rezidentima i nerezidentima", but
+  // the brokerage contract and the dinar/FX accounts are signed at an
+  // authorised branch or with a personal banker. No country of residence is
+  // named, so the country is RS.
+  // https://www.raiffeisenbank.rs/sr/stanovnistvo/digitalne-usluge/mtrader.html
+  raiffeisenrs: { countries: ["RS"] },
+  // The online brokerage contract page says "coming soon". The tariff prices
+  // deals made at the counter (на гише), and a remote-identification link
+  // (id.rbbt.dev) asks only for a name, a free-text phone and an email. No page
+  // names EU or foreign residents, so the country is BG.
+  // https://ugmarket.com/brokerage-contract-online/
+  ugmarket: { countries: ["BG"] },
+  // Investor Hub sign-up: South African ID book or card, or a passport from any
+  // country of issue, then proof of residence with a Province field, then a
+  // bank picked from a list with branch codes (South African banking, debit
+  // orders). It also asks "resident for tax purposes anywhere other than South
+  // Africa?". No other country is named, so the country is ZA.
+  // https://invest.etfsa.co.za/register
+  etfsa: { countries: ["ZA"] },
+  // Hazte Cliente, persona natural: "Tener tu carnet de identidad chileno
+  // vigente" and be the holder of a bank account. The FAQ adds that foreigners
+  // need a "RUT vigente", and withdrawals go only to an account under the same
+  // RUT. The country is CL.
+  // https://www.ccbolsa.cl/apps/script/modulos/hazteCliente/hazte-cliente.asp
+  ccbolsa: { countries: ["CL"] },
+  // Capital markets FAQ: you must hold a Cuenta Comitente, which is tied to a
+  // peso and a dollar Cuenta a la Vista at the bank. Becoming a client: "Solo
+  // necesitás presentar tu DNI, ser mayor de 18 años". The DNI is Argentine,
+  // so the country is AR.
+  // https://www.bancoentrerios.com.ar/personas/tarjetas/hacete-cliente
+  bancoentrerios: { countries: ["AR"] },
+  // Same Grupo Petersen terms as Banco Entre Ríos: a Cuenta Comitente tied to
+  // the bank's peso and dollar accounts, and "Solo necesitás presentar tu DNI,
+  // ser mayor de 18 años". The country is AR.
+  // https://www.bancosantafe.com.ar/personas/tarjetas/hacete-cliente
+  bancosantafe: { countries: ["AR"] },
+  // Same Grupo Petersen terms: "Solo necesitás presentar tu DNI, ser mayor de
+  // 18 años y estar calificado según normativa interna del Banco". AR.
+  // https://www.bancosanjuan.com/personas/tarjetas/hacete-cliente
+  bancosanjuan: { countries: ["AR"] },
+  // https://www.bancosantacruz.com/personas/tarjetas/hacete-cliente
+  bancosantacruz: { countries: ["AR"] },
+  // "Sahm supports account opening for citizens and residents of Saudi
+  // Arabia, the Emirates (UAE), and Qatar", and "Foreign investors can now
+  // open a Sahm account with a passport" (Global/Other – Passport), with no
+  // country excluded. Only the US securities account is closed to US
+  // citizens and tax residents; the Saudi one is not. So worldwide.
+  // https://www.sahmcapital.com/support/detail/x?articleId=433
+  // https://www.sahmcapital.com/support/detail/x?articleId=443
+  sahm: WORLD,
+  // An Indian demat and trading account opened online; no page offers an
+  // NRI account (the only NRI page is a glossary entry). IN.
+  // https://www.venturasecurities.com/open-demat-account/
+  // https://www.venturasecurities.com/share-market-glossary/nri-demat-account/
+  ventura: { countries: ["IN"] },
+  // Online eKYC is "Applied to Vietnamese individual customers"; foreigners
+  // open on paper at an FPTS office. The site shows what opens online: VN.
+  // https://www.fpts.com.vn/open-account
+  fpts: { countries: ["VN"] },
+  // The investment account is opened from HSBC Bank A.Ş. internet or mobile
+  // banking, so a Turkish HSBC bank customer. No foreign path is named. TR.
+  // https://www.hsbcyatirim.com.tr/hizmetlerimiz/pay-senetleri-piyasasi/hsbc-pay-senetleri-piyasasi
+  hsbctr: { countries: ["TR"] },
+  // The account form asks nationality and US-person (FATCA) questions and
+  // limits no country of residence; nothing else is published. Worldwide,
+  // as decided for rowad (same case).
+  // https://www.sigma-cap.com/main/system_forms.download?file=Consolidated+Account+Opening+Form+AR.pdf&form_code_p=102
+  sigmacap: WORLD,
+  // General terms: clients may be "any natural person or legal entity,
+  // domestic or foreign".
+  // https://www.vipbroker.net/docs/general_terms_and_conditions.pdf
+  vipbroker: WORLD,
+  // mySEM sits on a CDS account opened with any SEM investment dealer. SEM:
+  // "There is virtually no restriction on foreign investment in companies
+  // listed on the Stock Exchange"; no country is named.
+  // https://www.stockexchangeofmauritius.com/education-investor-services/investor-education/investor-education-faqs
+  mysem: WORLD,
+  // The Nepal brokers below take Nepali KYC (citizenship) and a CDSC demat,
+  // with client registration on NEPSE's TMS; none names a residence outside
+  // Nepal. NP, as hatemalo and thrive.
+  // https://www.sunrisesecurities.com.np/services/
+  sunrisesec: { countries: ["NP"] },
+  // https://www.sumerusecurities.com/faqs
+  sumeru: { countries: ["NP"] },
+  // https://www.nabilstockdealer.com.np/services/brokerage-services/
+  nabilsd: { countries: ["NP"] },
+  // https://naasasecurities.com.np/services
+  naasa: { countries: ["NP"] },
+  // https://himalayanbroker.com/services/brokerage-service
+  himalayan: { countries: ["NP"] },
+  // https://displtd33.com/about-us/
+  dakshinkali: { countries: ["NP"] },
+  // https://ddkc.com.np/service/brokering-service
+  ddkc: { countries: ["NP"] },
+  // https://magnetsecurities.com.np/services
+  magnet: { countries: ["NP"] },
+  // An account is opened at a branch or by post, in principle only for a
+  // person living in Niigata prefecture ("当社での口座開設は、原則として新潟県内
+  // にお住まいのお客さまのみ"); the home trade says the same ("原則として
+  // 新潟県内に居住の個人のお客さま にご利用いただけます"). Opening asks for a
+  // My Number document and a Japanese bank account for payouts. The picker
+  // is a country, so the country is JP.
+  // https://www.dh-sec.co.jp/account/
+  // https://www.dh-sec.co.jp/home_trade/
+  daishihokuetsu: { countries: ["JP"] },
+  // The online-service terms refuse a person who is not resident in Japan
+  // ("日本国内の居住者でない方"), along with a minor and a company (art. 3).
+  // The account itself is opened through a branch. The picker is a country
+  // of residence, so the country is JP.
+  // https://www.hokuyo-sec.co.jp/online/pdf/online_yakkan.pdf
+  // https://www.hokuyo-sec.co.jp/online/faq/
+  hokuyo: { countries: ["JP"] },
+  // FAQ: a person who does not live in Japan cannot apply for
+  // 浜銀TT証券ダイレクト ("日本国内に居住していない方はお申し込みできません"), and
+  // the terms issue no login to a non-resident of Japan (art. 3). The
+  // picker is a country of residence, so the country is JP.
+  // https://www.hamagintt.co.jp/service/online/faq.html
+  // https://www.hamagintt.co.jp/service/pdf/online_kiyaku_211005.pdf
+  hamagin: { countries: ["JP"] },
+  // An individual account is for a ROC national of 18 or older
+  // ("自然人（年滿18歲以上之中華民國國民）"), in person, with the national
+  // identity card, a second ID and a Bank of Taiwan TWD settlement account
+  // ("交割銀行僅限臺灣銀行新臺幣存款帳戶"). No foreigner route is printed. The
+  // picker is residence, so the country is Taiwan.
+  // https://www.twfhcsec.com.tw/Activity/BusinessIntro
+  // https://www.twfhcsec.com.tw/Home/faq
+  banktaiwan: { countries: ["TW"] },
+  // FAQ: an ordinary domestic natural person opens with a national identity
+  // card and a second ID ("一般本國自然人開戶要準備的文件有，身分證、第二證件"),
+  // at a branch or online, and settlement is through a Union Bank account
+  // only ("目前本公司只使用聯邦銀行的帳戶作為證券交割帳戶"). No page names a
+  // foreigner or another country. The picker is residence, so the country
+  // is Taiwan.
+  // https://www.usot.com.tw/faq.htm
+  // https://eopen.usot.com.tw/NewAccount/Account
+  unionsec: { countries: ["TW"] },
+  // Every page: the site "is directed and available to and for the benefit
+  // of Australian residents only". Its FAQ lets someone living abroad open,
+  // but only with an Australian bank account and an Australian residential
+  // address. The picker is a country, so the country is AU.
+  // https://www.sharetrading.netwealth.com.au/Public/Trading/AustralianShares.aspx
+  netwealth: { countries: ["AU"] },
+  // Help centre, "Cash Equities (CE) account (Australia Only)": offered to
+  // "eligible Australian clients". The cash-equities page (Internet Archive
+  // copy; the site blocks scripts) says the AFSL covers "people or
+  // businesses that are located in Australia". The picker is a country, so
+  // the country is AU.
+  // https://support.thinkmarkets.com/hc/en-gb/articles/11613207707537-Cash-Equities-CE-account-Australia-Only
+  // https://web.archive.org/web/2026/https://www.thinkmarkets.com/au/cash-equities/
+  thinkmarketsau: { countries: ["AU"] },
+  // GStocks PH opens inside GCash: 18 or older, "With a PH SIM", a Fully
+  // Verified GCash user, and a valid government ID. "If you are not a PH
+  // resident (like an OFW or seaman), you can still apply if you have an
+  // SSS number and TIN." The SSS number and the TIN are Philippine, and a
+  // GCash account with a PH SIM is for "Filipinos in the Philippines" (GCash
+  // Overseas, on a foreign SIM, is another product). Money comes only from
+  // the GCash wallet. No other country of residence is named. The picker is
+  // residence, so the country is PH.
+  // https://help.gcash.com/hc/en-us/articles/31210291269273-How-to-create-a-GStocks-PH-account
+  // https://help.gcash.com/hc/en-us/articles/900005866623-How-to-create-a-new-GCash-account
+  // https://help.gcash.com/hc/en-us/articles/17542490721689-How-to-cash-in-to-GStocks-PH-Trading-Wallet
+  gstocks: { countries: ["PH"] },
+  // PH Stocks is activated inside a GoTyme Bank account, with a TIN. A
+  // Filipino opens the bank account with a Philippine ID. A foreigner must
+  // be "legally residing in the Philippines", with a passport and an ACR
+  // I-Card, and only for the nationalities GoTyme lists. The bank is still
+  // "working to enhance onboarding options for dual citizens and overseas
+  // residents". The account is funded from the GoTyme wallet. The picker
+  // is residence, so the country is PH.
+  // https://www.gotyme.com.ph/help/ph-stocks/getting-started-with-ph-stocks
+  // https://www.gotyme.com.ph/help/your-account/opening-a-gotyme-bank-account
+  // https://www.gotyme.com.ph/api/1/services/help-center.json (what the help pages read)
+  gotyme: { countries: ["PH"] },
+  // Wayback copy of the BDO Securities FAQ (21 May 2026; bdo.com.ph hangs
+  // for scripts): an online account needs a valid TIN, "a valid and existing
+  // BDO Savings or Current Account" and the BDO Online App. A TIN is a
+  // Philippine tax number and BDO is a Philippine bank. The same FAQ
+  // mentions "overseas customers" only for reactivating a dormant account.
+  // No other country of residence is named. The picker is residence, so
+  // the country is PH.
+  // https://web.archive.org/web/20260521050426/https://www.bdo.com.ph/bdo-securities/faqs
+  bdosec: { countries: ["PH"] },
+  // The FAQ (faq1-1) opens to Filipinos, US persons or holders of US
+  // indicia, resident aliens, and OFWs ("OFW client must be a CBC
+  // depositor"), all with a TIN. A US person sends an ACR and a US
+  // passport, and a resident alien an ACR, which is residence in the
+  // Philippines. An OFW needs a China Bank account and a TIN, both
+  // Philippine. No other country of residence is named. The picker is
+  // residence, so the country is PH.
+  // https://www.chinabankseconline.ph/CBSEC_DATA/downloadjson/cms3.json (faq1-1, faq1-2)
+  chinabanksec: { countries: ["PH"] },
+  // The FAQ asks for an original e-KTP, an active personal bank account in
+  // the client's name and an NPWP (optional). The e-KTP must be registered
+  // at Dukcapil. An e-KTP is an Indonesian citizen's card. No foreigner or
+  // other country of residence is named.
+  // https://www.indopremier.com/app/js/constant.js (the site's FAQ)
+  indopremier: { countries: ["ID"] },
+  // Registration asks for a KTP, an NPWP and a selfie. The printed form
+  // goes to the head office or an RHB branch. Every client opens an RDN
+  // "di salah satu bank Indonesia" (BCA, Permata or Panin). No foreigner or
+  // other country of residence is named.
+  // https://www.rhbtradesmart.co.id/tradesmart
+  // https://www.rhbtradesmart.co.id/faq
+  rhbid: { countries: ["ID"] },
+  // The FAQ asks for an ID, a recent utility bill, a photo and a signature.
+  // A client in the diaspora sends the same documents notarized. "Do I need
+  // a Nigerian bank account to operate an account?" "YES, having a Nigerian
+  // bank account is a statutory requirement." No country of residence is
+  // named. The picker is a country, so the country is NG.
+  // https://meritrade.com/faq (the FAQ sits in the page's JavaScript)
+  meristem: { countries: ["NG"] },
+  // The FAQ (read at stage.alwathbah.ae, the only host that answers): an
+  // account needs an ADX or DFM investor number, a passport, an ID and a
+  // letter from the client's bank with the IBAN. A "Non UAE Resident" sends
+  // the same documents notarized and authenticated by a UAE embassy. The
+  // owner keeps the United Arab Emirates only (2026-10-24).
+  // https://stage.alwathbah.ae/faqs
+  alwathbah: { countries: ["AE"] },
+  // The brokerage conditions take the application at a Sber office (the
+  // "Место обслуживания", an authorised branch) or through Sberbank Online,
+  // Sberbank Online pro and the broker app, which log in a Sber bank client.
+  // For a foreign representative the bank asks for the migration card and
+  // the document giving the right to stay in Russia. No residence abroad is
+  // named. sberbank.ru blocks scripts; the PDF is the same file on
+  // sberbank.com. The picker keeps Russia.
+  // https://www.sberbank.com/common/img/uploaded/broker/brokerage_agreement.pdf
+  sber: { countries: ["RU"] },
+  // "Нерезиденты могут выводить деньги с брокерского счета, если в банке есть
+  // информация о действующем виде на жительство в России (ВНЖ)"; without
+  // one, a withdrawal needs a separate approval. "Вывести деньги можно
+  // только на свой банковский счет, открытый в любом российском банке."
+  // No residence abroad is named. The picker keeps Russia.
+  // https://www.vtb.ru/personal/investicii/help/popolneniya-perevodi-vivodi/denejnie-perevodi
+  vtb: { countries: ["RU"] },
+  // "Брокерский счёт может открыть любое физическое или юридическое лицо",
+  // but online it opens for an existing Sovcombank bank client, or else
+  // "потребуется подтвержденная учетная запись на Госуслугах" (the Russian
+  // state portal). No residence abroad is named. The picker keeps Russia.
+  // https://invest.sovcombank.ru/
+  sovcombank: { countries: ["RU"] },
+  // "Для получения услуг банка необходимо заключение брокерского и
+  // депозитарного договоров в Центральном офисе банка Авангард."
+  // "Услуга предоставляется только в Москве, в Центральном офисе". The
+  // account needs presence in Russia. The picker keeps Russia.
+  // https://www.avangard.ru/rus/private/securities/brokerage_service/
+  avangard: { countries: ["RU"] },
+  // The regulation (ed. 15, from 08.10.2026) opens remotely only a client
+  // "являющимся гражданином Российской Федерации" (3.2.4.1). A foreign
+  // citizen signs at the office, showing the passport and, where needed, a
+  // migration card, visa or residence permit for Russia (3.2.2.2). The
+  // place of the contract is Moscow. The picker keeps Russia.
+  // https://trinfico.ru/disclosure/dokumenty-brokera/
+  trinfico: { countries: ["RU"] },
+  // "быть гражданином Российской Федерации и не иметь иного гражданства;
+  // иметь статус налогового резидента РФ".
+  // https://gazprombank.investments/help/brokerskiy-schet/
+  gazprombank: { countries: ["RU"] },
+  // Online opening asks for "скан или фото паспорта", an email address and a
+  // phone number. The sign-up asks for citizenship and tax residency ("Страна,
+  // в которой вы проживаете большую часть времени"), but both pickers are fed
+  // by the generic geo list (api.broker.tj/api/v3/geo/countries: all 249 ISO
+  // codes, Iran and North Korea included), not a list of accepted countries.
+  // The AML questionnaire has a Resident / Non-resident box, and its section
+  // for foreign citizens asks for the document giving the right to stay in
+  // Tajikistan (residence permit, visa, migration card) where the law needs
+  // one. No page names a country of residence other than Tajikistan (the
+  // kk / ky / uz site versions are translations). The picker keeps Tajikistan.
+  // https://broker.tj/services/broker-account
+  // https://cabinet.broker.tj/documents/profile-docs/tj-broker/Анкета ПОД и ФТ физ.лицо.docx
+  // https://cabinet.broker.tj/documents/profile-docs/tj-broker/Список необходимых документов для физического лица.docx
+  birzhevoy: { countries: ["TJ"] },
+  // The app registers through the Interbank Identification System (МСИ),
+  // "единый стандарт идентификации для финансовых и инвестиционных компаний
+  // Республики Беларусь", with the Belarusian identification (personal)
+  // number. On the Moscow Exchange book, "Вывод возможен только в
+  // белорусских рублях (BYN) на ваш счёт в банке-резиденте Республики
+  // Беларусь." No residence abroad is named. The picker keeps Belarus.
+  // https://aigenis.by/mobilnoe-prilozhenie/
+  // https://aigenis.by/rossijskij-fondovyj-rynok/
+  aigenis: { countries: ["BY"] },
+  // Investlink LTD (AFSA, Astana) has a Kazakh site and an English one
+  // (investlink.io) with a DIFC representative office. Neither the FAQ, the
+  // user agreement nor the privacy policy names who may open: the policy
+  // collects "сведения о гражданстве, стране проживания и налоговом
+  // резидентстве" and the terms bar sanctioned countries without naming
+  // them. No country of residence is named, so the picker keeps Kazakhstan.
+  // https://investlink.kz/
+  // https://investlink.kz/cloud/investlink/user_agreement.pdf
+  // https://investlink.io/cloud/investlink/user_agreement.pdf
+  investlink: { countries: ["KZ"] },
+  // "Currently, Webull supports account opening only for individuals holding
+  // a Thai national ID card. Note: Webull does not support individuals with
+  // U.S. nationality or those holding a Green Card." Automatic debit from
+  // SCB, BAY, BBL or KBANK only.
+  // https://www.webull.co.th/en/help/faq/385
+  // https://www.webull.co.th/en/help/faq/393
+  webullth: { countries: ["TH"] },
+  // FAQ "Как открыть брокерский счет нерезиденту РФ?": a non-resident goes
+  // to a BCS office with a foreign passport, a migration card and a
+  // document giving the right to stay or live in Russia. That is presence
+  // in Russia (as tinvest). Read in a browser on 2026-10-24 (bcs.ru answers
+  // scripts with a bot check). The picker is residence, so the country is RU.
+  // https://bcs.ru/faq/category/142/338
+  bcs: { countries: ["RU"] },
+  // FAQ "Какие документы нужны для открытия брокерского счета?": a Russian
+  // citizen uses a passport scan or Gosuslugi; "Если вы являетесь
+  // иностранным гражданином, то при открытии счета вам понадобится скан
+  // документа, удостоверяющего личность и TIN". Remote, with no stay in
+  // Russia asked and no country refused on the page. Read in a browser on
+  // 2026-10-24 (finam.ru answers scripts with a bot check).
+  // https://broker.finam.ru/landing/faq/category/broker/scheta/
+  finam: { all: true },
 };
 
 // Names added on 2026-10-22 so that a broker's own country can be picked

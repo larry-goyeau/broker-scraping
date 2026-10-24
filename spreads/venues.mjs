@@ -1692,6 +1692,15 @@ export const KNOWN_UNSOURCED = [
   { match: ["xsgo", "bcs", "bolsadesantiago", "bolsadecomerciodesantiago", "santiagostockexchange"], name: "Bolsa de Santiago", why: "adaptateur non écrit" },
   { match: ["xkse", "kse", "kyrgyzstockexchange", "kse.kg"], name: "Kyrgyz Stock Exchange", why: "pas de carnet public" },
   { match: ["fbkbts", "fbk", "fbkbts.kg"], name: "FBK-BTS (Kyrgyzstan)", why: "pas de carnet public" },
+  // The Taipei Exchange's emerging board (興櫃) is a negotiated market: market
+  // makers quote and orders are matched against them, with no public book.
+  { match: ["taipeiexchangeemergingstockboard", "emergingstockboard", "tpexemerging", "xingui"], name: "Taipei Exchange Emerging Stock Board", why: "marché négocié avec teneurs de marché, pas de carnet public" },
+  // The Belarusian Currency and Stock Exchange posts its trades; no adapter
+  // reads a bid and an offer from it.
+  { match: ["bcse", "belarusiancurrencyandstockexchange"], name: "Belarusian Currency and Stock Exchange", why: "adaptateur non écrit" },
+  // AIX's market watch (market-backend.aixkz.com) prints bid and offer
+  // fields, empty on most lines; no adapter reads them.
+  { match: ["aixk", "aix", "astanainternationalexchange"], name: "Astana International Exchange", why: "adaptateur non écrit" },
   // KASE prints a best bid and a best offer, and on 22 Sep 2026 the bid was
   // above the offer on 43 of the 49 names that had both. Those are the day's
   // extremes, not the two sides of one book, so there is nothing to store.

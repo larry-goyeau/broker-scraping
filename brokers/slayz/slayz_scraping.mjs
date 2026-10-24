@@ -26,10 +26,12 @@
 //
 // The list is not kept up to date: it still offers to buy shares gone
 // in a merger, a take-private or a ticker change (BK is now BNY, PSTG is
-// P, MARKA is USHOL on Borsa Istanbul) and shares off the board. So:
-// - a Borsa Istanbul share is kept only when its code is a stock code of
-//   a listed company on KAP's BIST companies page (kap.org.tr/tr/bist-
-//   sirketler; funds are not companies there and are not checked);
+// P, MARKA is USHOL on Borsa Istanbul, the Ziraat dividend fund ZTM15 has
+// been ZTM25 since 2024-08-05) and shares off the board. So:
+// - a Borsa Istanbul line is kept only when ../ziraat/bist.mjs, the list
+//   of every BIST share (the stock codes of KAP's BIST companies page that
+//   TradingView files as a share or trust) and exchange-traded fund (KAP's
+//   BYF funds), has its code as the same kind;
 // - a US line on an exchange is kept only when Nasdaq Trader's symbol
 //   directories of the day list it (./../raseed/usTape.mjs, which refuses
 //   a directory older than the New York date), has a volume in the list
@@ -65,6 +67,7 @@
 //   https://webapp.slayz.app/api/Security?Language=tr&Market=tr
 //   https://webapp.slayz.app/api/Security?Language=tr&Market=us
 //   https://www.kap.org.tr/tr/bist-sirketler
+//   https://www.kap.org.tr/tr/YatirimFonlari/BYF
 //   ftp://ftp.nasdaqtrader.com/symboldirectory/nasdaqlisted.txt
 //   ftp://ftp.nasdaqtrader.com/symboldirectory/otherlisted.txt
 //   https://www.nyse.com/api/trade-halts/current/download
@@ -77,9 +80,9 @@ import { withoutObligations } from "../../obligation.mjs";
 import { parseCsv, usRow } from "../mitsubishiufjesmart/japan.mjs";
 import fs from "node:fs";
 import { LISTING, openHalts, tapeKey, usDirectory } from "../raseed/usTape.mjs";
+import { bistListings } from "../ziraat/bist.mjs";
 
 const API = "https://webapp.slayz.app/api/Security?Language=tr&Market=";
-const KAP = "https://www.kap.org.tr/tr/bist-sirketler";
 const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36";
 const STOCKS = new URL("../../assets/stocks.csv", import.meta.url);
 const ETFS = new URL("../../assets/etfs.csv", import.meta.url);
@@ -134,29 +137,6 @@ function assetNames() {
   return { bist, byIsin };
 }
 
-// The stock codes of the companies listed on Borsa Istanbul, from KAP. The
-// page carries its data as an escaped JSON in the HTML; one company can
-// have several codes ("AKM, AKMEN").
-async function kapCodes() {
-  let last = "";
-  for (let attempt = 0; attempt < 4; attempt += 1) {
-    try {
-      const response = await fetch(KAP, { headers: { "User-Agent": UA, Accept: "text/html" }, signal: AbortSignal.timeout(90_000) });
-      if (!response.ok) throw new Error(`${response.status} ${KAP}`);
-      const html = (await response.text()).replace(/\\"/g, '"');
-      const companies = [...html.matchAll(/"kapMemberTitle":"[^"]*","relatedMemberTitle":"[^"]*","stockCode":"([^"]*)"/g)].map((match) => match[1]);
-      const codes = new Set(companies.flatMap((list) => list.split(",").map((code) => code.trim().toUpperCase())).filter(Boolean));
-      if (companies.length < 600 || codes.size < 650) throw new Error(`KAP lists only ${companies.length} companies, ${codes.size} codes`);
-      for (const code of codes) if (!/^[A-Z0-9]{3,6}$/.test(code)) throw new Error(`KAP stock code ${code}`);
-      return codes;
-    } catch (error) {
-      last = String(error.message || error);
-    }
-    await sleep(1500 * 2 ** attempt);
-  }
-  throw new Error(last);
-}
-
 const fold = (value) =>
   clean(value)
     .toLocaleUpperCase("tr")
@@ -173,8 +153,9 @@ function check(line) {
 }
 
 const names = assetNames();
-const [tr, us, kap, tape, halts] = await Promise.all([market("tr"), market("us"), kapCodes(), usDirectory(), openHalts()]);
-const leftOut = { index: 0, right: 0, he: 0, certificate: 0, fund: [], closed: [], notOnKap: [], unlisted: [], noVolume: [], halted: [], reused: [] };
+const [tr, us, bist, tape, halts] = await Promise.all([market("tr"), market("us"), bistListings(), usDirectory(), openHalts()]);
+const listed = new Map(bist.rows.map((row) => [row.ticker, row.type]));
+const leftOut = { index: 0, right: 0, he: 0, certificate: 0, fund: [], closed: [], notListed: [], unlisted: [], noVolume: [], halted: [], reused: [] };
 
 const rows = [];
 for (const line of tr) {
@@ -218,10 +199,11 @@ for (const line of tr) {
     type = "ETF";
   }
   if (!/^[A-Z0-9]{3,6}$/.test(ticker)) throw new Error(`unreadable BIST code ${code} (${name})`);
-  if (type === "STOCK" && !kap.has(ticker)) {
-    leftOut.notOnKap.push(ticker);
+  if (!listed.has(ticker)) {
+    leftOut.notListed.push(ticker);
     continue;
   }
+  if (listed.get(ticker) !== type) throw new Error(`${code} is a ${type} here and a ${listed.get(ticker)} on BIST`);
   const assetName = names.bist.get(ticker);
   const sameFund = assetName && [...nameWords(assetName)].some((word) => nameWords(name).has(word));
   rows.push({
@@ -349,7 +331,7 @@ console.error(
     `${Object.entries(byMic).map(([mic, n]) => `${mic} ${n}`).join(", ")}; ISIN ${stamped.filter((row) => row.isin).length}; ` +
     `left out ${leftOut.index} index, ${leftOut.right} rights, ${leftOut.he} .HE, ${leftOut.certificate} certificates, ` +
     `funds ${leftOut.fund.join(" ") || "none"}, buying shut ${leftOut.closed.join(" ") || "none"}; ` +
-    `BIST shares not on KAP ${leftOut.notOnKap.length} (${leftOut.notOnKap.join(" ") || "none"}); ` +
+    `BIST lines no share or fund on KAP ${leftOut.notListed.length} (${leftOut.notListed.join(" ") || "none"}); ` +
     `US (directories of ${tape.created["nasdaqlisted.txt"]} ET) not listed ${leftOut.unlisted.length} (${leftOut.unlisted.join(" ") || "none"}), ` +
     `no volume ${leftOut.noVolume.length} (${leftOut.noVolume.join(" ") || "none"}), halted ${leftOut.halted.length} [${halts.sources.join(", ")}] (${leftOut.halted.join("; ") || "none"}), ` +
     `ticker now a fund ${leftOut.reused.length} (${leftOut.reused.join("; ") || "none"}); ` +

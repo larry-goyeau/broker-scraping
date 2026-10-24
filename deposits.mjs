@@ -2462,6 +2462,591 @@ const FOLDER = {
   // https://kingdomsecurities.co.ke/wp-content/uploads/2022/09/HOW-TO-BUY-SHARES-AND-ADD-FUNDS-THROUGH-YOUR-CDS-AC-AT-KINGDOM-SECURITIES..pdf
   // http://kingdomsecurities.co.ke/wp-content/uploads/2021/09/KSL-TERMS-AND-CONDITIONS.pdf
   kingdomsecurities: ["KES"],
+  // A yen transfer lands in the account. The foreign-currency settlement
+  // service holds 22 currencies "外貨のままで保有・管理・決済", Blue Trade included.
+  // A wire from a bank in Japan goes to the firm's 外貨普通預金 at Mizuho
+  // Kabutocho. Accounts are printed for these eight and the rouble; the
+  // rouble is left out as for mufg. The other held currencies (GBP, CAD, CHF,
+  // CNY, KRW, TWD, SGD, IDR, THB, PHP, MYR, ILS, VND) have no receiving
+  // account, so they are only reached by converting yen.
+  // https://www.aizawa.co.jp/service/convenience/f_exchange/
+  // https://www.aizawa.co.jp/service/convenience/f_exchange/pay.html
+  // https://www.aizawa.co.jp/service/convenience/f_exchange/notes.html
+  aizawa: ["JPY", "USD", "HKD", "EUR", "AUD", "NZD", "TRY", "MXN", "ZAR"],
+  // Yen lands in the account. The FAQ allows a foreign-currency transfer
+  // ("外貨をFFG証券の口座に送金する際にかかる手数料") but names no currency
+  // and no foreign balance. US shares are dealt over the counter at the
+  // firm's price and exchange rate, and the commission is charged on the
+  // yen amount ("外貨受渡金額 × 為替").
+  // https://www.ffg-sec.co.jp/faq/category10/
+  // https://www.ffg-sec.co.jp/service/commission
+  // https://www.ffg-sec.co.jp/goods/stock/us/
+  ffg: ["JPY"],
+  // Yen lands in the comprehensive account and is put into an MRF. The FAQ
+  // says a foreign-currency transfer to the firm's designated account is
+  // credited to the securities account. The fee table has a 外貨 deposit row
+  // at Hyakugo Bank or another bank. The currencies are those of the firm's
+  // FX spread table. The real is left out because Brazilian real is not
+  // deliverable abroad.
+  // https://www.105sec.co.jp/contact/
+  // https://www.105sec.co.jp/service/commission/
+  hyakugo: ["JPY", "USD", "EUR", "AUD", "CAD", "NZD", "TRY", "ZAR"],
+  // Yen only. The US-share rules: "米ドルでの入金は承っておりません。米ドル残高を
+  // 追加する場合は、為替振替にて円から米ドルに振替を行ってください。"
+  // A dollar balance only comes from converting yen. The site has been in
+  // maintenance since 2026-10-21, so the archive copy is cited.
+  // https://web.archive.org/web/20260810163607/https://www.iwaicosmo.net/products/foreign/us/rule.html
+  iwaicosmo: ["JPY"],
+  // Yen lands in the account. A foreign-currency wire from a bank in Japan
+  // goes to the firm's 外貨普通預金 at SMBC Shinjuku and pays foreign shares,
+  // bonds, MMFs and FX in that currency. These nine are the 対象通貨 of the
+  // remittance page. The internet channel itself trades domestic shares only.
+  // https://www.jtg-sec.co.jp/camp/gaika.htm
+  // https://www.jtg-sec.co.jp/bond/kessai.htm
+  jtrust: ["JPY", "USD", "AUD", "GBP", "EUR", "TRY", "CAD", "MXN", "NZD", "ZAR"],
+  // A yen transfer goes to the branch's bank account. The FAQ only says
+  // "外貨の振込手数料はお取引店にお問合せください", with no currency and no
+  // foreign balance named. Foreign shares are branch-only and carry an FX
+  // spread on each trade.
+  // https://www.marusan-sec.co.jp/faq/deposits_withdrawals/index.html
+  // https://www.marusan-sec.co.jp/torihiki/fee/fee_03/
+  marusan: ["JPY"],
+  // Yen is a transfer to the client's Mizuho Best Receiver account. A wire in
+  // foreign currency is accepted at the client's cost ("外貨によるお振込…ご入金").
+  // Since 2019 the 外貨決済サービス settles foreign shares in dollars and keeps
+  // them as dollars. No other currency is named as a balance.
+  // https://www.mito.co.jp/service/payment/cash.html
+  // https://www.mito.co.jp/service/commissions/
+  // https://www.mito.co.jp/corporate/information/659edff856e2015bf9975b69e4173c842dcf6874.pdf
+  mito: ["JPY", "USD"],
+  // The internet account is funded by a yen transfer to the firm's current
+  // accounts at Mizuho, Resona, MUFG and SMBC, or through Japan Post Bank.
+  // Online trading is Tokyo only. Foreign shares and foreign bonds are
+  // face-to-face only. No foreign-currency deposit is named.
+  // https://web.archive.org/web/2026/https://www.secjp.co.jp/service/net/payment/deposit/
+  // https://web.archive.org/web/2025/https://www.secjp.co.jp/service/comparison/
+  okasanbt: ["JPY"],
+  // Quick deposit, or a transfer to the client's own receiving account, in
+  // yen. Foreign shares are not handled.
+  // https://www.sbineotrade.jp/stock/money/
+  sbineotrade: ["JPY"],
+  // Yen is put into an MRF. A foreign-currency transfer, from Iyo Bank or any
+  // other bank, "入金されたご資金は、そのまま預り金となります", after the client
+  // asks the branch for the receiving account. Online trading covers domestic
+  // products only. The currencies are those of the firm's FX spread table.
+  // https://www.shikoku-alliance-sec.co.jp/faq/synthesis.html
+  // https://www.shikoku-alliance-sec.co.jp/service/commission_charges.html
+  shikokualliance: ["JPY", "USD", "EUR", "AUD", "GBP", "CAD", "NZD"],
+  // The only deposit is a bank transfer to the client's own receiving account
+  // at Mizuho, in yen. There is no online or instant deposit. e支店 sells no
+  // foreign shares.
+  // https://www.e-shiten.jp/TorihikiRule/rule/payment_1.html
+  tachibana: ["JPY"],
+  // Yen comes in by quick deposit or bank transfer. Dollars can be wired from
+  // a bank in Japan to the firm's own account (FAQ "米ドル入金の方法") and are
+  // held as the dollar balance that pays US trades. A dollar withdrawal is not
+  // offered ("米ドル出金には対応をしておりません").
+  // https://www.webull.co.jp/help/faq/1655
+  // https://www.webull.co.jp/pricing
+  webulljp: ["JPY", "USD"],
+  // A peso transfer to RCBC, or a bills payment at BDO, BPI, Security
+  // Bank or UnionBank, credits the account. The only bank account listed
+  // is of the type "Peso Deposit". The opening minimum is PHP 25,000. No
+  // dollar balance is named.
+  // https://www.2tradeasia.com/faqs
+  "2tradeasia": ["PHP"],
+  // A deposit to the Landbank or BDO account, iAccess, GCash, PayMaya or
+  // InstaPay credits MyStocks. Those rails are pesos. The minimum to buy
+  // is P500. No dollar balance is named.
+  // https://www.landbanksec.com/login/includes/faqs.asp
+  landbanksec: ["PHP"],
+  // "Fund the account via UPAY or bills payment". Add fund on the
+  // dashboard picks the payment method. The fees are in Php. No dollar
+  // account is named.
+  // https://www.mercantilesec.com/
+  // https://www.mercantilesec.com/main.dart.js
+  mercantilesec: ["PHP"],
+  // A deposit slip at BDO, BPI, Metrobank, UnionBank or RCBC, a bills
+  // payment or coins.ph credits the account. Online banking, a cheque and
+  // a telegraphic transfer are also taken. The transfer's currency is
+  // not named, and no dollar balance is named.
+  // https://www.mytrade.com.ph/getting-started/
+  // https://www.mytrade.com.ph/faqs/
+  mytrade: ["PHP"],
+  // A merchant payment at BDO, Metrobank or BPI credits the account,
+  // net of the bank's fee in pesos. A client overseas deposits to one
+  // BDO account, and no dollar account is named. The opening minimum is
+  // PHP5,000.
+  // https://www.timson.com.ph/faq/how-do-i-fund-my-timson-trade-account/
+  // https://www.timson.com.ph/faq/what-is-the-minimum-initial-deposit-to-open-an-account/
+  timson: ["PHP"],
+  // The funding list names a "Savings-PHP" account and a "Dollar" account,
+  // both at BDO Ayala Triangle, and peso accounts at UnionBank, BPI,
+  // Chinabank, EastWest and AUB. A wire from abroad goes to the peso
+  // accounts. The page does not say whether a dollar deposit stays in dollars.
+  // https://utradeph.com/faqs/
+  utrade: ["PHP", "USD"],
+  // The opening deposit is "Rp0", and interest is paid on funds from
+  // Rp5,000,000. The RDN forms are for BCA, CIMB Niaga and Mandiri. No
+  // dollar or other foreign-currency account is named.
+  // https://www.cgsi.co.id/help/faq-opening-account
+  // https://www.cgsi.co.id/cgsi/api/v1/GetHelpCenterByID?lang=2&id=faq-opening-account
+  cgsid: ["IDR"],
+  // "Untuk menyetor dana, Anda hanya perlu transfer ke RDN". The RDN is
+  // at Panin, Mandiri, BCA, CIMB Niaga or BSI. The opening deposit is
+  // Rp 3.000.000, and sale proceeds land in the same RDN. No foreign-
+  // currency account is named.
+  // https://www.facsekuritas.co.id/pedoman
+  fac: ["IDR"],
+  // A 3-in-1 account links trading, demat and a savings account at an
+  // Indian bank. Funds move by net banking, a payment gateway, a lien on
+  // the savings balance or a broking QR code. Those are rupee accounts.
+  // No foreign-currency balance is named.
+  // https://www.idbidirect.in/FAQ-Inner.aspx?Option=ao
+  // https://www.idbidirect.in/FAQ-Inner.aspx?Option=ft
+  idbicapital: ["INR"],
+  // Payment partners are ConnectIPS, fonepay and eSewa, all moving rupees
+  // from a Nepali bank or wallet. Collateral is loaded online in TMS. Every
+  // brokerage band and depository charge is in rupees. No foreign-currency
+  // account is named.
+  // https://garimasecurities.com.np
+  // https://garimasecurities.com.np/post/pricing
+  garima: ["NPR"],
+  // The site names no payment route of its own. Clients trade on the
+  // exchange's TMS (tms72), where collateral is loaded through connectIPS
+  // into the broker's account and withdrawn to the client's bank. Every
+  // brokerage band is in rupees. No foreign-currency account is named.
+  // https://hatemalo.com.np/brokerage-services.html
+  // https://connectips.com/index.php/component/content/article/38-nepal-stock-exchange
+  hatemalo: ["NPR"],
+  // Payments go to the rupee account at Global IME Bank, Kamaladi, in the
+  // name of Kalash Stock Market, or through ConnectIPS, eSewa, Fonepay,
+  // Khalti, NepalPay or the QR code. Every brokerage band is in rupees. No
+  // foreign-currency account is named.
+  // https://kalashstock.com.np/payment
+  // https://kalashstock.com.np/services/stock-brokerage-services
+  kalash: ["NPR"],
+  // The site links only to Connect IPS and its TMS (tms47), where
+  // collateral is loaded through connectIPS into the broker's account and
+  // withdrawn to the client's bank. No bank details and no
+  // foreign-currency account are named.
+  // https://neevsecurities.com
+  // https://connectips.com/index.php/component/content/article/38-nepal-stock-exchange
+  neev: ["NPR"],
+  // The footer gives the current account at Global IME Bank, Kamaladi, in
+  // the name of Sagarmatha Securities, "Via: GBIME CIPS", with a QR code
+  // to pay. Every brokerage band and the DP charge are in rupees. No
+  // foreign-currency account is named.
+  // https://sagarmathasecurities.com
+  // https://sagarmathasecurities.com/services
+  sagarmatha: ["NPR"],
+  // Collateral goes to the account at Prabhu Bank, Putalisadak, in the
+  // name of SharePro Securities; the home page has a separate
+  // "Accounts- Collateral" desk. Every brokerage band is in rupees. No
+  // foreign-currency account is named.
+  // https://shareprosecurities.com
+  // https://shareprosecurities.com/services/brokerage-services
+  sharepro: ["NPR"],
+  // "How to load collateral from TMS?": Fund Management > Collateral
+  // Management, load from bank, then sign in to Connect IPS and pick the
+  // debit account. A purchase made offline is paid the same way. No
+  // foreign-currency account is named.
+  // https://swetasecurities.com/
+  // https://swetasecurities.com/services
+  sweta: ["NPR"],
+  // Payments go to the rupee account at Global IME Bank, Kamaladi, in the
+  // name of Thrive Brokerage House ("compulsorily include your client
+  // code"), or through Connect IPS (Brokers Payment, broker no. 13),
+  // Fonepay or eSewa. Every brokerage band is in rupees. No
+  // foreign-currency account is named.
+  // https://thrivebrokerage.com/pages/bank-account-detail
+  // https://thrivebrokerage.com/
+  // https://thrivebrokerage.com/pages/fee-comission
+  thrive: ["NPR"],
+  // A havale or EFT goes to Ahlatcı's accounts at Takasbank, Akbank, Garanti
+  // and seven other banks. Each bank has TL, USD and EUR IBANs, but the page
+  // calls them margin ("teminat") accounts of the leveraged desk: "Kaldıraçlı
+  // piyasa işlemlerinde (Forex) teminatınız hesabınızda Dolar ($) bazında
+  // tutulmaktadır". No eurobond or foreign share is offered, so dollars or
+  // euros are converted before buying a BIST share.
+  // https://www.ahlatciyatirim.com.tr/hakkimizda/para-yatirma-cekme
+  // https://www.ahlatciyatirim.com.tr/hakkimizda/bilmeniz-gerekenler
+  ahlatci: ["TRY"],
+  // TL, USD and EUR IBANs at Takasbank, Garanti, Akbank and six other banks,
+  // headed "MENKUL KIYMET, DÖVİZ VE TL İŞLEMLERİNDE": not limited to the
+  // leveraged desk. Tera sells dollar and euro eurobonds, held at Euroclear
+  // through Takasbank, so a dollar or euro transfer stays as it is.
+  // https://www.terayatirim.com/kurumsal/banka-bilgileri/4
+  // https://www.terayatirim.com/yatirim-araclari/eurobond/5
+  tera: ["TRY", "USD", "EUR"],
+  // Money comes from the client's Ziraat Bankası current account through the
+  // bank's internet branch ("ZRY (Borsa) hesabına para yatır"). No USD or EUR
+  // IBAN is published, and every amount on the cash and fee pages is in TL.
+  // Eurobonds are sold by Ziraat Bankası, not the broker. The evidence is thin.
+  // https://www.ziraatyatirim.com.tr/nakit-islemleri
+  // https://www.ziraatyatirim.com.tr/komisyon-ve-masraflar
+  ziraat: ["TRY"],
+  // Cash, a draft or a transfer goes to Al-Hekma's account at Jordan
+  // Commercial Bank, with the slip faxed in. Cash up to JD 10,000 can be paid
+  // at the office. Only dinar amounts appear and no dollar account is named.
+  // The evidence is thin.
+  // https://hekma-fs.com/page/15/FAQ
+  alhekma: ["JOD"],
+  // The eTrade page says only "Fund your account", after a branch opens the
+  // eTrading account. It names no linked account or currency. The bank keeps
+  // USD savings accounts, but no page ties one to eTrade, and the eTrade fee
+  // is in dinars ("Minimum BD 3 or 0.20%"). The evidence is thin.
+  // https://khaleeji.bank/pages-sidebar-nav/khaleeji-etrade/
+  // https://khaleeji.bank/wp-content/uploads/2026/09/Khaleeji-Service-Charges-SEP26B.pdf
+  khaleeji: ["BHD"],
+  // The client account is kept in forint and in foreign currency ("A Bank az
+  // ügyfélszámlát forintban és devizában vezeti"). A trade settles in its
+  // market's currency, and conversion is only on the client's order. The
+  // tariff minimums are "349 Ft/1EUR/1USD".
+  // https://granitbank.hu/tajekoztatok-es-nyilatkozatok/befektetesi-szolgaltatasok
+  granit: ["HUF", "EUR", "USD"],
+  // Cover is paid into one cash account (Račun novčanih sredstava). e-trader
+  // reaches ZSE only, in euro. Foreign trades by phone are "izvršava u stranim
+  // valutama", but nothing says the cash account keeps a non-euro balance.
+  // The evidence is thin.
+  // https://www.otpbanka.hr/globalna-trzista/dokumenti-globalnih-trzista
+  // https://www.otpbanka.hr/sw/static/file/Cjenikbrokerskihuslugauprimjeniod01.01.2026..pdf
+  otpbankahr: ["EUR"],
+  // mTrader uses dedicated purpose accounts ("namenski račun") "u valutama RSD,
+  // EUR i USD", funded by internal transfer from the current account. A buy
+  // needs cash "u valuti trgovanja", so a dollar trade is paid from the
+  // dollar account, unconverted.
+  // https://help.raiffeisenbank.rs/knowledge-base/korisnicko-uputstvo-o-koriscenju-mtrader-a/
+  // https://www.raiffeisenbank.rs/sr/stanovnistvo/digitalne-usluge/mtrader.html
+  raiffeisenrs: ["RSD", "EUR", "USD"],
+  // Two client-money accounts are published, both "IBAN EUR", at Texim Bank
+  // and Central Cooperative Bank. The tariff has been in euro since
+  // 1 December 2025. Only the BSE and its MTF are offered. No dollar account.
+  // https://ugmarket.com/contacts/
+  // https://ugmarket.com/wp-content/uploads/2026/09/2_Тарифа_01122025-EUR.pdf
+  ugmarket: ["EUR"],
+  // The brokerage account holds som and dollars. The tariff has a "Вывод
+  // средств (USD)" line and a USD/KGS conversion at 0.1%, so a dollar balance
+  // stays dollars until converted. Dollar bonds are traded too.
+  // https://zamaninvest.kg/assets/docs/pravovaya/tarify-i-komissii.pdf
+  // https://zamaninvest.kg/assets/docs/pravovaya/prilozhenie-3-poruchenie-na-vyvod-sredstv.pdf
+  zaman: ["KGS", "USD"],
+  // A lump sum or a debit order comes from a South African bank account,
+  // "from R300 per ETP". Every product is a JSE listing in rand, and no
+  // foreign-currency deposit is named.
+  // https://etfsa.co.za/product/diy/
+  // https://etfsa.co.za/wp-content/uploads/2024/04/Investor-Hub-brochure-v1-June2024.pdf
+  etfsa: ["ZAR"],
+  // Payment is online, by transfer, or at a BCI or Consorcio branch, all in
+  // pesos. The "Caja Dólar" is filled only by a purchase inside the account:
+  // "para comprar dólares debes tener dinero disponible en Caja Peso". No
+  // dollar transfer in is published.
+  // https://www.ccbolsa.cl/apps/static/informaciones/Manual_de_Abonos.pdf
+  // https://www.ccbolsa.cl/apps/static/informaciones/ManualCVDolar.pdf
+  ccbolsa: ["CLP"],
+  // The bank is the ALyC, and trades go from Home Banking with a peso and a
+  // dollar savings account. The tariff has peso and dollar columns and a fee
+  // for trades "con liquidación en moneda extranjera (dólar MEP)", so MEP
+  // dollars stay dollars. No cable route. Settlement against the savings
+  // accounts is not spelled out.
+  // https://www.bancoentrerios.com.ar/personas/inversiones/mercado-de-capitales
+  // https://assets.ctfassets.net/e7eu92ue673r/392uCSfw9HyWTmt9g5GZDY/9b4137d909570a762152bd44b631cb7b/TARIFARIO_WEB_1092026.pdf
+  bancoentrerios: ["ARS", "USD"],
+  // Same Grupo Petersen setup: a Cuenta Comitente traded from Home Banking,
+  // with the client's free dollar savings account. Tariff note (20) covers
+  // trades "con liquidación en moneda extranjera (dólar MEP)". No cable route.
+  // Settlement against the savings accounts is not spelled out.
+  // https://www.bancosantafe.com.ar/personas/inversiones/mercado-de-capitales
+  // https://assets.ctfassets.net/e7eu92ue673r/2hY5ulIda9r4MzQGDQjCZF/113234cef55b9ebc0e03b38defc0add3/6b56ead2-d786-4ce5-93c7-1829ccc55170.pdf
+  bancosantafe: ["ARS", "USD"],
+  // Grupo Petersen again: "podés operar todos los productos que se
+  // encuentren listados en el mercado" from a Cuenta Comitente, with peso and
+  // dollar columns in the individuals' tariff; dollar settlement is MEP only.
+  // https://www.bancosanjuan.com/personas/inversiones/mercado-de-capitales
+  // https://assets.ctfassets.net/e7eu92ue673r/3TPVnRodZS14IgLyrdPQbu/e637f552e03ad759cdb059506d9d5cd0/8e2dd0ee-8d7a-45ec-ba69-2dfd04f1254a.pdf
+  bancosanjuan: ["ARS", "USD"],
+  // Same setup and tariff layout as Banco San Juan (MEP dollar, no cable).
+  // https://www.bancosantacruz.com/personas/inversiones/mercado-de-capitales
+  // https://assets.ctfassets.net/e7eu92ue673r/a8PmGbsl5CjUwfClFT4jW/7631f0f16ea0f209506224f626068bf7/WEB_BSC_Nota_Aumento_de_Comisiones_Todos_lo_productos__01-08-2026___clientes_CCPJ_Aclaraciones.pdf
+  bancosantacruz: ["ARS", "USD"],
+  // "Deposits and withdrawals in both USD and SAR are supported": SAR for
+  // the Saudi account, USD for the US one.
+  // https://www.sahmcapital.com/support/detail/x?articleId=121
+  sahm: ["SAR", "USD"],
+  // Every band of the pricing plan is in rupees and no foreign-currency
+  // account is named.
+  // https://www.venturasecurities.com/exclusive-pricing-plan/
+  ventura: ["INR"],
+  // The account and every fee are in dong; no foreign-currency balance.
+  // https://www.fpts.com.vn/ho-tro-khach-hang/dich-vu-tai-chinh/bieu-phi-dich-vu/giao-dich-chung-khoan-co-so/
+  fpts: ["VND"],
+  // Borsa Istanbul only, priced and settled in lira; the commission is a
+  // lira rate plus BSMV. A foreign-currency deposit is converted first.
+  // https://www.hsbc.com.tr/hsbc/urun-ve-hizmet-ucretleri
+  // https://www.hsbcyatirim.com.tr/hizmetlerimiz/pay-senetleri-piyasasi/hsbc-pay-senetleri-piyasasi
+  hsbctr: ["TRY"],
+  // The account form lets Sigma cover a debit "من حساباته الدائنة الأخرى وإن
+  // كانت بعملات مختلفة" (from the client's other credit accounts, even in
+  // other currencies) at the Central Bank rate: balances are kept per
+  // currency, and EGX quotes some lines in dollars.
+  // https://www.sigma-cap.com/main/system_forms.download?file=Consolidated+Account+Opening+Form+AR.pdf&form_code_p=102
+  sigmacap: ["EGP", "USD"],
+  // One deposit account at NLB Banka in Montenegro, a euro country; the fee
+  // schedule is in euros.
+  // https://www.vipbroker.net/docs/commissions_and_fees.pdf
+  vipbroker: ["EUR"],
+  // mySEM orders go through the client's SEM stockbroker and settle in the
+  // CDS, which settles MUR, USD, EUR, GBP and ZAR (as mcbsecurities).
+  // https://stockexchangeofmauritius.com/cds/clearing-settlement-services
+  mysem: ["MUR", "USD", "EUR", "GBP", "ZAR"],
+  // The Nepal brokers below: NEPSE settles in rupees through connectIPS and
+  // every brokerage band is in rupees. No foreign-currency account is named.
+  // https://connectips.com/index.php/component/content/article/38-nepal-stock-exchange
+  // https://www.sunrisesecurities.com.np/services/
+  sunrisesec: ["NPR"],
+  // https://www.sumerusecurities.com/faqs
+  sumeru: ["NPR"],
+  // https://www.nabilstockdealer.com.np/commission-rate/
+  nabilsd: ["NPR"],
+  // https://naasasecurities.com.np/pricing/1
+  naasa: ["NPR"],
+  // https://himalayanbroker.com/services/brokerage-service
+  himalayan: ["NPR"],
+  // https://displtd33.com/broker-services/
+  dakshinkali: ["NPR"],
+  // https://ddkc.com.np/share-calculator
+  ddkc: ["NPR"],
+  // https://magnetsecurities.com.np/pricing
+  magnet: ["NPR"],
+  // Yen is moved from the client's Daishi Hokuetsu Bank account by the
+  // らくらく口座振替サービス, or wired to the firm account named for the
+  // client's branch ("店舗ごとの第四北越証券指定の振込先金融機関口座"). The home
+  // trade is domestic shares and funds only. US shares go through the branch,
+  // and the fee page says "円決済の場合は、スプレッド（為替手数料）も必要", so a
+  // foreign settlement exists there. No page names a foreign-currency deposit
+  // route or a foreign-currency balance, so the account is left in yen.
+  // https://www.dh-sec.co.jp/inquiry/home_trade.php
+  // https://www.dh-sec.co.jp/home_trade/rakufuri.php
+  // https://www.dh-sec.co.jp/fee/
+  daishihokuetsu: ["JPY"],
+  // Yen is a transfer to the firm's designated bank account. The 外貨決済
+  // サービス handles nine currencies, "外貨でのご入金・ご出金も可能", each wired
+  // to its own account at North Pacific Bank or SMBC Sapporo; after the
+  // credit is seen it lands in "お客さまの外貨預り金勘定". A foreign withdrawal
+  // is paid "外貨預り金の範囲内". Online orders are domestic only, but these
+  // balances belong to the same securities account.
+  // https://www.hokuyo-sec.co.jp/product/settlement/
+  // https://www.hokuyo-sec.co.jp/online/
+  hokuyo: ["JPY", "USD", "EUR", "AUD", "NZD", "CAD", "GBP", "TRY", "MXN", "ZAR"],
+  // Yen goes in by Yu-cho ATM card, by a transfer to the client's own
+  // receiving account at Bank of Yokohama Kamome branch, or by a real-time
+  // debit from Bank of Yokohama. The page also takes "外貨送金でのご入金" and
+  // refunds the sending fee in yen. It names no currency for such a
+  // remittance and no foreign-currency balance. The terms let foreign-security
+  // money pass "円貨または外貨（当社が応じ得る範囲内で申込者が指定する外貨に限ります。）",
+  // and the bond page says some foreign bonds cannot be paid in foreign
+  // currency. No currency is named, so only yen is listed.
+  // https://www.hamagintt.co.jp/service/payment.html
+  // https://www.hamagintt.co.jp/common/pdf/agreement.pdf
+  // https://www.hamagintt.co.jp/products/bond.html
+  hamagin: ["JPY"],
+  // The settlement account is the client's own Bank of Taiwan deposit
+  // account in New Taiwan dollars: "交割銀行僅限臺灣銀行新臺幣存款帳戶". The FAQ
+  // asks for that passbook at opening ("臺灣銀行存款帳戶之存摺及印鑑"). Trades
+  // are debited from it at T+2. No foreign-currency settlement is offered.
+  // https://www.twfhcsec.com.tw/Activity/BusinessIntro
+  // https://www.twfhcsec.com.tw/Home/faq
+  banktaiwan: ["TWD"],
+  // The settlement account must be at Union Bank: "目前本公司只使用聯邦銀行的
+  // 帳戶作為證券交割帳戶". Purchases are debited from it at T+2 and sale
+  // proceeds paid into it. The firm sells Taiwan shares only and offers no
+  // foreign-currency settlement account.
+  // https://www.usot.com.tw/faq.htm
+  unionsec: ["TWD"],
+  // Funds arrive by BPAY or a direct debit from a bank account in the
+  // client's name. The FAQ, asked about other currencies: "No, I am sorry
+  // but you can only transfer AUD at this point."
+  // https://www.sharetrading.netwealth.com.au/Public/Trading/AustralianShares.aspx
+  netwealth: ["AUD"],
+  // The cash equities account is funded by a bank wire to the TF Global
+  // Securities (Aust) Trust Account at the Commonwealth Bank (BSB 063-000).
+  // The equities terms put the account in one base currency and convert "any
+  // money received from you in a non-Base Currency". The rate card is in
+  // Australian dollars, and an order under "$500 AUD" is rejected. No other
+  // balance is named. thinkmarkets.com refuses scripts: the support pages
+  // were read from the Internet Archive (funding January 2026, trading fees
+  // 2026), and the terms from the PDF of July 2024.
+  // https://www.thinkmarkets.com/au/support/funding/
+  // https://www.thinkmarkets.com/au/support/trading-fees/
+  // https://www.thinkmarkets.com/tfxmain/media/img/pdf/TF-Global-Markets-Equities-(Aust)-Pty-Ltd-Terms-and-Conditions.pdf
+  thinkmarketsau: ["AUD"],
+  // The trading wallet is filled from the GCash wallet: "add money to your
+  // GStocks PH trading wallet from your GCash wallet first", up to PHP
+  // 50,000 on a Basic account. A cash-out goes back to the GCash wallet.
+  // GCash is a peso wallet. No other balance is named.
+  // https://help.gcash.com/hc/en-us/articles/17542490721689-How-to-cash-in-to-GStocks-PH-Trading-Wallet
+  // https://help.gcash.com/hc/en-us/articles/31210579108633-How-to-cash-out-from-GStocks-PH-Trading-Wallet
+  gstocks: ["PHP"],
+  // "You can fund your account instantly from your GoTyme Bank wallet",
+  // up to Php 500,000 a transfer. Withdrawals go back to the GoTyme Bank
+  // account, and the portfolio is shown in pesos. No dollar balance is
+  // named for PH Stocks. The bank's multi-currency product is a time
+  // deposit, not the stocks account.
+  // https://www.gotyme.com.ph/help/ph-stocks/guide-on-investing-in-ph-stocks-with-gotyme
+  // https://www.gotyme.com.ph/api/1/services/help-center.json (what the help page reads)
+  gotyme: ["PHP"],
+  // "Fund Account" moves money from the client's BDO savings or checking
+  // account (the Beneficiary Account) into the Settlement Account. The
+  // account terms say both can be "Philippine Peso, US Dollar and/or other
+  // foreign currency": BDO opens a Settlement Account "(Philippine Peso, US
+  // Dollar, and/or other foreign currency)" as a regular savings account.
+  // A dollar Beneficiary Account therefore fills a dollar Settlement Account
+  // without conversion. That is the balance for Dollar Denominated
+  // Securities: NoCD accounts are opened "for its clients with dollar
+  // denominated accounts". No other foreign currency is named for the PSE.
+  // bdo.com.ph hangs for scripts; read on the Wayback Machine copies of
+  // 21 May 2026 (FAQ) and 2 December 2025 (terms).
+  // https://www.bdo.com.ph/bdo-securities/faqs
+  // https://www.bdo.com.ph/content/dam/bdounibank/en-ph/wealth/securities/Documents/1060J-MPM_SEC_TC_for_Online_TradingInvestment_Facility_Form.pdf
+  bdosec: ["PHP", "USD"],
+  // A bills payment through China Bank Online, or over the counter at a
+  // China Bank branch in cash or cheque, credits the online account. A
+  // client whose settlement account is at another bank puts up "a minimum
+  // initial deposit of Php 50,000". Dollar securities are "not
+  // accommodated under the online trading platform". No dollar balance is
+  // named.
+  // https://www.chinabankseconline.ph/CBSEC_DATA/downloadjson/cms3.json (FAQ faq1-6, faq2-1, faq3-1)
+  chinabanksec: ["PHP"],
+  // "Setoran dana dapat dikirimkan ke RDN yang telah dibuatkan oleh IPOT
+  // atas nama kamu." The RDN is at Permata, BCA or Mandiri, or BCA Syariah
+  // for the Sharia account. No dollar or other foreign-currency account
+  // is named.
+  // https://www.indopremier.com/app/js/constant.js (FAQ)
+  indopremier: ["IDR"],
+  // The client transfers to the RDN, at BCA, Panin or Maybank (BCA Syariah
+  // for the Sharia account): "setoran dana awal maupun penambahan dana
+  // langsung ke rekening RDN tersebut". The minimum withdrawal is
+  // Rp50.000. No foreign-currency account is named.
+  // https://www.rhbtradesmart.co.id/faq
+  rhbid: ["IDR"],
+  // The dashboard takes a card payment or a payment from the client's
+  // bank, and "having a Nigerian bank account is a statutory requirement".
+  // Withdrawals go to that bank account. The margin threshold is
+  // N1,000,000. No dollar balance is named.
+  // https://meritrade.com/faq
+  meristem: ["NGN"],
+  // "To deposit fund to your account, you need to deposit cheques or
+  // transfer money to Al Wathbah Account with one of our recognized banks
+  // i.e. FAB, ADIB, Emirates NBD." Fees and minimums are in dirhams, and no
+  // foreign-currency account is named. The site answers only at the stage
+  // host that www.alwathbah.ae redirects to.
+  // https://stage.alwathbah.ae/faqs
+  alwathbah: ["AED"],
+  // Rubles go by transfer to the NSD/USOFR details in the notice sent at
+  // opening. The terms of 06.10.2026 add that "Платежи в иностранных
+  // валютах осуществляются по реквизитам, указанным на интернет-сайте
+  // Банка", for the currency and OTC portfolios only, and the IIS takes
+  // rubles only. sberbank.ru blocks scripts, and Wayback holds only the
+  // block page, so that list of currencies was not read. The undated memo
+  // says a currency card can pay in, but names no currency. The USD/EUR
+  // requisites sheets still served are pre-2022 (BNY Mellon and J.P. Morgan
+  // correspondents), so they are not used. Only rubles are certain.
+  // https://www.sberbank.com/common/img/uploaded/broker/brokerage_agreement.pdf
+  // https://www.sberbank.com/common/img/uploaded/broker/broker_pamyatka.pdf
+  sber: ["RUB"],
+  // Rubles from any bank. "Как пополнить брокерский счет в валюте?": in VTB
+  // Online and at a branch, yuan, Belarusian rubles, Turkish lira, tenge,
+  // drams and rand; in the VTB My Investments app, yuan only. "Зачисление
+  // остальной иностранной валюты на брокерский счет временно недоступно."
+  // Dollars and euros can still be withdrawn, but only to a VTB account.
+  // They are not paid in.
+  // https://www.vtb.ru/personal/investicii/help/popolneniya-perevodi-vivodi/denejnie-perevodi/
+  vtb: ["RUB", "CNY", "BYN", "TRY", "KZT", "AMD", "ZAR"],
+  // The rules in force from 02.09.2026 say "Перечисление иностранной валюты
+  // на Брокерский счет осуществляется Клиентом со счета в соответствующей
+  // валюте, открытого на имя Клиента в Банке либо иной кредитной
+  // организации". The web app's guide says money can be withdrawn "в 4-х
+  // валютах: рубли, доллары, евро, китайские юани", each to a Sovcombank
+  // account in the same currency. Those four are the balances. No page
+  // names a narrower list for deposits.
+  // https://prod-api.sovcombank.ru/documents/19253
+  // https://cdn.invest.sovcombank.ru/MPI._Rukovodstvo_polzovatelya_Web.pdf
+  sovcombank: ["RUB", "USD", "EUR", "CNY"],
+  // A transfer to the client's brokerage account at Avangard, or cash at
+  // its desk. The minimum first deposit is 30,000 rubles. The broker "без
+  // заявления КЛИЕНТА, открывает КЛИЕНТУ брокерские счета в иных валютах"
+  // only when it needs to. Avangard offers the Moscow Exchange stock market
+  // only, and publishes no foreign-currency details.
+  // https://www.avangard.ru/rus/private/securities/brokerage_service/pdf/dogovor_fiz_112023.pdf
+  avangard: ["RUB"],
+  // "Переведите деньги на свой счет из любого российского банка." The rules
+  // (ed. 15, from 08.10.2026) send money to a special brokerage account "в
+  // соответствующей валюте", with the details "на Сайте Компании". The two
+  // published sheets (with and without the right of use, at NSD and
+  // Raiffeisenbank) list RUR accounts only. No foreign-currency account is
+  // given.
+  // https://trinfico.ru/
+  // https://trinfico.ru/upload/iblock/9a2/w8jutl7395wy1c0kvpylxdtuk4p8z7ac/Брокерский%20регламент%20(для%20физических%20лиц)%20ред.%2015.pdf
+  // https://trinfico.ru/upload/iblock/1c4/iapzvwwfp3e8lyncnx8ltntsj6pdbd5x/SBS_Bank_requisites_BPI.doc
+  // https://trinfico.ru/upload/iblock/bf1/5e41a4vuf24d57p0lvjwlceehmw8f1lp/SBS_Bank_requisites_SPI.doc
+  trinfico: ["RUB"],
+  // "Брокерский счет можно пополнить только в рублях и юанях. ИИС пополнить
+  // валютой нельзя." Rubles come by card, SBP or transfer. Yuan come by
+  // transfer to Newton Investments' yuan account 40701156700000000040 at
+  // Bank GPB (correspondent Bank of China (Russia)).
+  // https://gazprombank.investments/help/popolnenie-scheta/kak-popolnit-schet-valyutoy/
+  // https://gazprombank.investments/help/popolnenie-scheta/kak-popolnit-schet/
+  gazprombank: ["RUB", "CNY"],
+  // Somoni by any bank card, by Alif and DC wallets, or by transfer from
+  // any bank ("Возможность инвестировать в сомони и других валютах"). The
+  // dollar products say "Пополняете счёт в долларах" and "В какой валюте? В
+  // долларах США." The tariff charges a fee on withdrawals "в долларах США и
+  // евро", but no page says euros can be paid in. No tenge or dirham deposit
+  // is named. The KASE, AIX and Nasdaq Dubai lines are bought by
+  // converting.
+  // https://broker.tj/services/broker-account
+  // https://broker.tj/investments/currency-deposits
+  // https://broker.tj/
+  birzhevoy: ["TJS", "USD"],
+  // BCSE: the brokerage account is filled by a free-form transfer from any
+  // Belarusian bank. Every bank instruction (Paritetbank, Belarusbank,
+  // Alfa, BSB, Oplati) is in rubles. MOEX: "Пополнять счёт можно только в
+  // белорусских рублях (BYN)." The trust account at Paritetbank is in BYN,
+  // and Russian rubles are bought in the app. Withdrawals are "только в
+  // белорусских рублях (BYN)". So RUB is a conversion, not a deposit.
+  // https://aigenis.by/help/popolnenie-brokerskogo-scheta/
+  // https://aigenis.by/rossijskij-fondovyj-rynok/
+  aigenis: ["BYN"],
+  // "Пополните брокерский счет путем безопасного SWIFT-перевода." The money
+  // goes "с вашего банковского текущего счета в долларах на ваш
+  // персональный брокерский счет" at Alpaca. No other currency is named.
+  // https://investlink.kz/stocks/
+  // https://investlink.kz/reliability/
+  investlink: ["USD"],
+  // "You can only deposit money with THB and then convert to USD/HKD/CN¥."
+  // Deposits are by automatic debit from SCB, BAY, BBL or KBANK. FAQ 388
+  // says to convert THB to USD under "Currency Exchange" before trading.
+  // Transfers from a Webull account in another country are not accepted.
+  // https://www.webull.co.th/en/help/faq/360
+  // https://www.webull.co.th/en/help/faq/393
+  // https://www.webull.co.th/en/help/faq/375
+  webullth: ["THB"],
+  // Rubles from BCS Bank or any other bank. The FAQ "Какая валюта доступна
+  // для вывода и пополнения?": "Пополнить брокерский счет со счета в БКС
+  // Банке (без комиссии) можно иностранной валютой: доллары США, евро,
+  // дирхамы ОАЭ, белорусские рубли, китайские юани, киргизские сомы", and
+  // other foreign currencies are temporarily refused from any bank. Read in
+  // a browser on 2026-10-24 (bcs.ru answers scripts with a bot check).
+  // https://bcs.ru/faq
+  bcs: ["RUB", "USD", "EUR", "AED", "BYN", "CNY", "KGS"],
+  // Rubles by SBP, card, transfer or at the Finam Bank desk. The FAQ: "0%
+  // при пополнении счета в белорусских рублях, китайских юанях и
+  // американских долларах". The tariff's tenge line is "временно
+  // недоступно". Read in a browser on 2026-10-24 (finam.ru answers scripts
+  // with a bot check).
+  // https://broker.finam.ru/landing/faq/category/operacii-i-upravlenie-aktivami/popolnenie-perevody/
+  // https://broker.finam.ru/landing/tariffs-n3-investor/
+  finam: ["RUB", "BYN", "CNY", "USD"],
 };
 
 const BY_PLAN = {

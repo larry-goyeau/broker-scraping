@@ -14,6 +14,21 @@
 // The board keeps the last line of a symbol BYMA no longer quotes (a
 // delisted company, a cancelled programme); every live line carries the
 // board's date, so a symbol last dated more than two weeks earlier stays out.
+// The date alone does not show a market: the board restamps lines that
+// never trade every session (read 2026-10-22 on www.cohen.com.ar: CTIOC
+// 24hs dated 21/10/2026 with no trade, HARGD CI dated 21/10/2026 with a
+// 0.008 previous close). So, as ../comafi/byma.mjs does for its brokers,
+// every symbol with no trade today on BYMA's own panels is looked up in
+// BYMA's daily history (chart/historical-series, 24HS, about two years
+// deep; the answers are cached in ../comafi/byma-history.json): with no
+// day of volume in that time it is listed but never traded, and stays out
+// (CTIOC, INGC, LYGC, TIIAC: no trade on BYMA in two years). A symbol that
+// only did not trade today stays.
+//
+// Two lines of one certificate in one currency and one settlement (same
+// ISIN, both MEP or both cable: Southern Copper's SCCOD and its legacy
+// SCOOD) are one title quoted twice; only the line with the newer BYMA
+// instrument id is kept (byma.mjs withoutDuplicateLines).
 //
 // A block line is the same certificate with B on the end (AAPLB, AAPDB,
 // GGADB) and a 150-unit minimum. The broker's species page says
@@ -26,22 +41,29 @@
 // share and for a CEDEAR (the certificate, shared by the peso, MEP and
 // cable lines), with the kind, the issuer, and for a CEDEAR the company and
 // its symbol on its home market. A symbol the card does not know takes the
-// ISIN assets/stocks.csv holds for it. A local share is named by its issuer,
+// ISIN assets/stocks.csv holds for it. The card search matches loosely
+// (asked for CC, Citigroup's cable line, it answers Bank of America's card,
+// that of BA.CC; read 2026-10-22): a dollar line (C, D) whose card names
+// another home symbol than the card of its peso line takes that card. A local share is named by its issuer,
 // a CEDEAR by its company. The code is the BYMA symbol, since the peso, MEP
 // and cable lines of one certificate share the ISIN. A card kind other than
-// a share, a CEDEAR or an ADR stays out. A CEDEAR is an ETF when its home
-// symbol is an American ETF in assets/etfs.csv, or its name says so.
+// a share, a CEDEAR or an ADR stays out. A CEDEAR is an ETN or an ETC when
+// its name says so (the iPath VIX note VXX, "iPath Series B S&P 500 VIX",
+// is an ETN), as byma.mjs namedType reads it; an ETF when its home symbol
+// is an American ETF in assets/etfs.csv, or its name says so.
 //
 //   https://<host>/Bursatil/Cotizacion/Acciones/
 //   https://<host>/Financial/ListCotizacion (POST grupo=ACCIONES&especieTipo=…)
 //   https://<host>/Bursatil/Especie/<symbol>/MERVAL/24hs.
-//   https://open.bymadata.com.ar/ (species card)
+//   https://open.bymadata.com.ar/ (species card, get-market-data,
+//   chart/historical-series/history, instruments-for-header-search)
 
 import { stampRows } from "../../accepted.mjs";
 import { withoutObligations } from "../../obligation.mjs";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import fs from "node:fs";
+import { BYMA_ISINS, bymaBoard, namedType, neverTraded, withoutDuplicateLines } from "../comafi/byma.mjs";
 
 const execFileAsync = promisify(execFile);
 
@@ -170,7 +192,9 @@ function symbolsOf(payload, tipo, panel) {
     const symbol = head.trim().toUpperCase();
     if (!symbol || /\s/.test(symbol)) throw new Error(`${tipo} had an unreadable symbol: ${line.Simbolo}`);
     if (String(line.Mercado || "").toUpperCase() !== "MERVAL") throw new Error(`${symbol} was on ${line.Mercado}`);
-    const cash = CASH[String(line.CodigoMoneda || "").toLowerCase()];
+    // Cohen labels its 48-hour dollar lines "dolar." with a trailing dot.
+    const code = String(line.CodigoMoneda || "").toLowerCase().replace(/\.$/, "");
+    const cash = CASH[code];
     if (!cash) throw new Error(`${symbol} was priced in ${line.CodigoMoneda}`);
     if (!lines.has(symbol)) {
       lines.set(symbol, {
@@ -190,13 +214,22 @@ function symbolsOf(payload, tipo, panel) {
     if (!Number.isFinite(day)) throw new Error(`${symbol} had no date: ${line.Fecha}`);
     row.day = Math.max(row.day || 0, day);
     row.terms.add(line.CodigoVencimiento);
-    if (/^Vto_(C|24)$/.test(line.CodigoVencimiento)) row.near.add(cash);
-    else row.far.add(cash);
+    // ext is the cable dollar (contado con liquidación).
+    if (/^Vto_(C|24)$/.test(line.CodigoVencimiento)) {
+      row.near.add(cash);
+      row.nearCable ||= code === "ext";
+    } else {
+      row.far.add(cash);
+      row.farCable ||= code === "ext";
+    }
   }
   for (const row of lines.values()) {
     const seen = row.near.size ? row.near : row.far;
     if (seen.size !== 1) throw new Error(`${row.symbol} was priced in ${[...seen].join(" and ")}`);
     row.currency = [...seen][0];
+    row.cable = row.near.size ? Boolean(row.nearCable) : Boolean(row.farCable);
+    delete row.nearCable;
+    delete row.farCable;
     delete row.near;
     delete row.far;
   }
@@ -268,13 +301,6 @@ function listedIsins() {
   return book;
 }
 
-function namedEtf(name) {
-  return (
-    /\bETFs?\b/i.test(name) ||
-    /\b(SPDR|ISHARES|PROSHARES|DIREXION|GLOBAL X|VANGUARD|VANECK|VAN ECK|SELECT SECTOR|FIRST TRUST|INVESCO QQQ)\b/i.test(name)
-  );
-}
-
 export async function ingematicaCatalogue({ origin, folder, label }) {
   const first = await list(origin, "ACCIONES");
   const offered = (first.EspecieTipoList || []).map((item) => String(item.Codigo || "").toUpperCase());
@@ -314,6 +340,20 @@ export async function ingematicaCatalogue({ origin, folder, label }) {
     })
   );
 
+  // BYMA's card search matches loosely: asked for CC (Citigroup's cable
+  // line) it answers the card of BA.CC, Bank of America (read 2026-10-22).
+  // A dollar line (C or D) of a peso line on the board takes that line's
+  // card when the two name different home symbols.
+  for (const symbol of symbols) {
+    if (board.get(symbol).currency !== "USD" || !/[CD]$/.test(symbol)) continue;
+    const stem = symbol.slice(0, -1);
+    const own = cards.get(symbol);
+    const parent = cards.get(stem);
+    if (!own?.home || !parent?.home || board.get(stem)?.currency !== "ARS" || own.home === parent.home) continue;
+    console.error(`${label}: BYMA's card for ${symbol} names ${own.home} (${own.isin}); the card of its peso line ${stem}, ${parent.home} (${parent.isin}), is used`);
+    cards.set(symbol, parent);
+  }
+
   const candidates = symbols.filter((symbol) => symbol.endsWith("B"));
   console.error(`${label}: checking ${candidates.length} symbols ending in B on the species page`);
   const flags = new Map(
@@ -349,11 +389,12 @@ export async function ingematicaCatalogue({ origin, folder, label }) {
     }
     const home = card?.home || "";
     const usHome = !card?.homeBoard || US_BOARDS.has(card.homeBoard) || /^NYSE|^NASDAQ/.test(card.homeBoard);
-    const etf =
-      line.panel === "cedear" &&
-      ((home && usHome && etfs.has(home)) || namedEtf(line.name) || namedEtf(card?.title || ""));
-    const type = etf ? "ETF" : "STOCK";
-    const isin = card?.isin || flag?.isin || listed.get(symbol) || "";
+    const type =
+      line.panel === "cedear"
+        ? namedType(card?.title || "") || namedType(line.name) || (home && usHome && etfs.has(home) ? "ETF" : "STOCK")
+        : "STOCK";
+    // A line BYMA files with no ISIN, settled from official filings (byma.mjs).
+    const isin = card?.isin || flag?.isin || listed.get(symbol) || BYMA_ISINS[symbol]?.[0] || "";
     rows.push({
       query: symbol,
       ticker: symbol,
@@ -367,6 +408,26 @@ export async function ingematicaCatalogue({ origin, folder, label }) {
       panel: line.panel,
     });
   }
+
+  // A symbol with no trade today on BYMA's panels is kept only when BYMA's
+  // history shows a trade on it in two years; the board's date and its
+  // prices are no proof (it restamps dead lines and copies placeholders).
+  const byma = await bymaBoard();
+  const quiet = rows.filter((row) => !byma.get(row.ticker)?.traded).map((row) => row.ticker);
+  const unquoted = quiet.filter((symbol) => !byma.has(symbol));
+  if (unquoted.length) console.error(`${label}: not on BYMA's panels today: ${unquoted.join(" ")}`);
+  const never = await neverTraded(quiet, label);
+  for (const symbol of never) dropped.push(`${symbol} never traded on BYMA in two years`);
+  const once = await withoutDuplicateLines(
+    rows.filter((row) => !never.has(row.ticker)),
+    // BYMA's own flag, which also knows the C lines it labels USD (TGN4C);
+    // the board's ext for a symbol BYMA does not quote today.
+    (ticker) => (byma.has(ticker) ? byma.get(ticker).cable : Boolean(board.get(ticker)?.cable)),
+    label
+  );
+  dropped.push(...once.dropped);
+  rows.length = 0;
+  rows.push(...once.rows);
 
   rows.sort((left, right) => left.ticker.localeCompare(right.ticker));
   const tickers = rows.map((row) => row.ticker);

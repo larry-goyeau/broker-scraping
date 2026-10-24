@@ -14,7 +14,7 @@
 // quantity, not a charge.
 //
 // PDTC custodianship is a pass-through on the market value, billed
-// monthly. The page prints no rate, so it stays in the remark. There
+// monthly. The page prints no rate, so it is left out (no remark). There
 // is no monthly fee from AB Capital itself. A certificate is not this
 // order. The 20 peso floor is in pesos, so a line in another currency
 // is not priced here.
@@ -91,7 +91,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     onlineBuy: true,
     cashCurrency: "PHP",
     url: PAGE,
-    remark: "PDTC custodianship is billed monthly on the market value of the holdings. The page prints no rate.",
+    remark: "",
   };
   if (!catalogue) {
     return { ...answer, why: "le catalogue AB Capital n'existe pas encore : lancer `node brokers/abcapital/abcapital_scraping.mjs`" };

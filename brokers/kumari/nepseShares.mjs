@@ -28,21 +28,9 @@
 // Promoter shares stay: they are listed and a client can order them on
 // TMS (NEPSE on HIDCLP: "freely tradable through NOTS ... like other
 // ordinary share", https://www.sharesansar.com/newsdetail/nepse-clarifies-that-promoter-shares-of-hydroelectricity-investment-and-development-company-hidclp-is-freely-traded-through-nots-2022-08-31).
-// But the buyer of a bank's, financial institution's or insurer's
-// promoter share is vetted by the regulator, which depends on the
-// client, so writeNepseCatalogue puts a remark on those rows (by name:
-// bank, bikas, laghubitta, bittiya, finance; insurance, beema):
-//   - bank and financial institution: "Buyer needs to disclose source of
-//     funds" and the transaction "must pass through scrutiny of NRB"
-//     (https://www.sharesansar.com/newsdetail/why-the-huge-price-gap-between-ordinary-promoter-shares-of-nabil-and-nib-when-both-are-easily-tradable);
-//     "a holder of 2% or less of a bank's paid-up capital no longer needs
-//     NRB approval to buy or sell promoter shares", so more still does
-//     (https://kharchapatra.com/blog/promoter-shares-vs-ordinary-shares-nepal);
-//   - insurer: "To be eligible to purchase promoter shares, one must
-//     qualify as per the Insurance Promoter Share Transaction Directive,
-//     2077", issued by the Nepal Insurance Authority (Neco Insurance's
-//     notice, https://nepsetrading.com/announcements/neco-insurance-notice-of-12-million-promoter-shares-sale?lang=en).
-// Other promoter lines (HIDCLP, Citizen Investment Trust) carry none.
+// The buyer of a bank's or insurer's promoter share is vetted by the
+// regulator, but the trade costs the same, so no remark is written
+// (owner, 2026-10-23: remarks are cost facts).
 //
 // The exchange crawl (about 500 signed calls) is kept in nepse-cache.json
 // next to this file for 12 hours, so the four scrapers run back to back
@@ -285,17 +273,6 @@ export async function nepseShares() {
   return { ...result, fetchedAt, fromCache: false };
 }
 
-// The remark of a promoter row whose buyer the regulator vets (header).
-const INSURER = /\b(insurance|insurace|reinsurance|beema)\b/i;
-const BFI = /\b(bank|bikas|bikash|laghu ?bitta|lagubitta|bittiya|bittya|finance|microfinance)\b/i;
-export function promoterRemark(row) {
-  if (!String(row.raw || "").endsWith(" promoter")) return "";
-  if (INSURER.test(row.name)) return "Insurer promoter share: the buyer must qualify under the Nepal Insurance Authority's promoter share directive (2077).";
-  if (BFI.test(row.name)) return "Bank or financial institution promoter share: source-of-funds disclosure and NRB scrutiny; NRB approval above 2% of paid-up capital.";
-  return "";
-}
-
-const promoterCount = (rows) => rows.filter((row) => String(row.raw || "").endsWith(" promoter")).length;
 
 // Writes <folder>-parsed.json for one broker: the NEPSE book, held to the
 // broker's own list. The broker's list misses about a third of the
@@ -307,20 +284,12 @@ export async function writeNepseCatalogue({ broker, listUrl, out }) {
   const unknown = publicRows.filter((row) => !known.has(row.ticker));
   if (unknown.length > publicRows.length * 0.1) throw new Error(`${unknown.length} NEPSE shares are not in the list of ${broker}: ${unknown.map((row) => row.ticker).join(" ")}`);
   const stamped = stampRows(withoutObligations(rows.map((row) => ({ ...row }))));
-  let remarked = 0;
-  for (const row of stamped) {
-    const remark = promoterRemark(row);
-    if (!remark) continue;
-    row.remark = remark;
-    remarked += 1;
-  }
-  if (promoterCount(stamped) - remarked > 10) throw new Error(`${promoterCount(stamped) - remarked} promoter lines are neither a bank nor an insurer`);
   fs.writeFileSync(out, JSON.stringify(stamped, null, 2));
   const promoters = rows.length - publicRows.length;
   const leftOut = Object.entries(left).map(([reason, count]) => `${count} ${reason}`).join(", ");
   console.error(
     `${stamped.length} listings (${stamped.length} STOCK, ${promoters} of them promoter shares) on ${EXCHANGE}` +
-      `${fromCache ? " (NEPSE read from nepse-cache.json)" : ""}; ${remarked} promoter shares remarked (bank or insurer); left out ${leftOut}; ` +
+      `${fromCache ? " (NEPSE read from nepse-cache.json)" : ""}; left out ${leftOut}; ` +
       `${unknown.length} public shares not in the search list of ${broker}${unknown.length ? `: ${unknown.map((row) => row.ticker).join(" ")}` : ""}`,
   );
   return stamped;

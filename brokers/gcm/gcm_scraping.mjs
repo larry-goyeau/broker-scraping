@@ -8,17 +8,28 @@
 // Certificates (the Darphane gold certificate ALTINS1, the DMLKTG real
 // estate certificate) are not shares or funds and are left out. Foreign shares are sold only as CFDs, so none are here.
 //
+// The selector is not kept up to date: it still has pages for shares gone
+// from the exchange (ARTI, BEWEN, ROYAL, SNKRN, YGYO: on neither KAP nor
+// İş Yatırım's page of every BIST share nor TradingView on 2026-10-22) and
+// for DNYVA, Dünya Varlık Yönetim, a bond issuer whose only market on KAP
+// is the bond market's qualified-investor board. So a line is kept only
+// when ../ziraat/bist.mjs, the list of every BIST share (KAP's companies
+// that TradingView files as a share or trust) and exchange-traded fund
+// (KAP's BYF funds), has its code as the same kind.
+//
 // The page names no ISIN; ../../accepted.mjs fills it from the BIST lines
 // of the stock and ETF lists. The name is the list's when it has the code,
 // else the page slug.
 //
 //   https://www.gcmyatirim.com.tr/borsa/hisse
 //   https://www.gcmyatirim.com.tr/sitemap/hissesenetleri.xml
+//   https://www.kap.org.tr/tr/sirket-bilgileri/ozet/8acae2c569cee403016b991858035a54 (DNYVA)
 //
 //   node brokers/gcm/gcm_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
 import { withoutObligations } from "../../obligation.mjs";
+import { bistListings } from "../ziraat/bist.mjs";
 import fs from "node:fs";
 
 const PAGE = "https://www.gcmyatirim.com.tr/borsa/hisse";
@@ -74,7 +85,8 @@ function slugName(slug, code) {
   return words.map((word) => word.toUpperCase()).join(" ");
 }
 
-const [html, sitemap] = await Promise.all([getText(PAGE), getText(SITEMAP)]);
+const [html, sitemap, bist] = await Promise.all([getText(PAGE), getText(SITEMAP), bistListings()]);
+const listed = new Map(bist.rows.map((row) => [row.ticker, row.type]));
 const options = [
   ...html.matchAll(/<option value="https:\/\/www\.gcmyatirim\.com\.tr\/borsa\/hisse\/([^"]+)">\s*([^<]+?)\s*<\/option>/g),
 ].map((match) => ({ slug: match[1], code: match[2].toUpperCase() }));
@@ -91,6 +103,7 @@ if (offMap.length + offPage.length > 10) {
 const names = bistNames();
 const rows = [];
 const leftOut = [];
+const notListed = [];
 for (const { slug, code } of options) {
   if (LEAVE_OUT.test(slug)) {
     leftOut.push(code);
@@ -100,6 +113,12 @@ for (const { slug, code } of options) {
   const fund = /borsa-yatirim-fonu$/.test(slug);
   if (fund && !code.endsWith("F")) throw new Error(`fund ${code} without the F suffix (${slug})`);
   const ticker = fund ? code.slice(0, -1) : code;
+  const type = fund ? "ETF" : "STOCK";
+  if (!listed.has(ticker)) {
+    notListed.push(ticker);
+    continue;
+  }
+  if (listed.get(ticker) !== type) throw new Error(`${code} is a ${type} here and a ${listed.get(ticker)} on BIST`);
   rows.push({
     query: ticker,
     ticker,
@@ -107,10 +126,12 @@ for (const { slug, code } of options) {
     exchange: "BIST",
     mic: "XIST",
     currency: "TRY",
-    type: fund ? "ETF" : "STOCK",
+    type,
     raw: [code, slug].join(" "),
   });
 }
+
+if (notListed.length > 20) throw new Error(`${notListed.length} lines are no BIST share or fund: ${notListed.join(" ")}`);
 
 const unique = new Map();
 for (const row of rows) {
@@ -130,5 +151,6 @@ fs.writeFileSync(new URL("gcm-parsed.json", import.meta.url), JSON.stringify(sta
 const withIsin = stamped.filter((row) => row.isin).length;
 console.error(
   `gcm: ${stamped.length} rows, BIST ${count.STOCK} STOCK, ${count.ETF} ETF; ISIN ${withIsin}; ` +
-    `left out ${leftOut.join(", ") || "none"}; selector/sitemap mismatch ${offMap.length}/${offPage.length}`
+    `left out ${leftOut.join(", ") || "none"}; not a BIST share or fund ${notListed.length} (${notListed.join(" ") || "none"}); ` +
+    `selector/sitemap mismatch ${offMap.length}/${offPage.length}`
 );

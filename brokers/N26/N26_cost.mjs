@@ -688,8 +688,13 @@ export function roundTrip({ etf, place, currency, shares, price, amount, bp = nu
   };
 
   if (!at) {
+    // No book, but the two tickets are known: the fees column keeps them and
+    // only the total waits for a market. Sterling stays unknown, its forced
+    // conversion has no published rate.
+    const fees = rowCcy === "GBP" ? null : plus(ticketUsd, ticketUsd);
     return {
       ...shared,
+      brokerFees: finite(fees, 6),
       why:
         rowCcy === "GBP"
           ? `Upvest exécute le sterling chez ${VENUES.gbp.name}, hors bourse et sans carnet publié : aucun écart chiffrable ; ` +

@@ -76,6 +76,9 @@ export const US_BROKERS = {
   sofi: { crd: ["151717"], name: "SoFi Securities LLC" },
   // Lime Trading Corp, formerly Just2Trade Inc. Its <bd> tag is "SPCX".
   lime: { crd: ["11826"], name: "Lime Trading Corp" },
+  // Formerly Valuable Capital Securities, LLC (SEC CIK 1841658, renamed
+  // August 2023). Its <bd> tag is "Tickrs Clearing".
+  tickrsclearing: { crd: ["312531"], name: "Tickrs Clearing" },
 };
 
 // Introducing brokers that do not file their own 606: same mix as the US BD
@@ -155,6 +158,11 @@ export const ALIASES = {
   // https://www.canaccordgenuity.com/4a9937/globalassets/capital-markets/documents/regulatory--legal-disclosures/canada/best-execution-disclosure.pdf
   moomooca: ["citadelsecurities", "virtuamericas"],
   trading212: "interactivebrokers",
+  // Sahm Capital holds US shares in the omnibus account "Valuable Capital
+  // Securities LLC-OMNI" at Velocity Clearing (DTC 0294); that firm is now
+  // Tickrs Clearing, of the same Valuable Capital group as Sahm.
+  // https://www.sahmcapital.com/support/detail/x?articleId=544
+  sahm: "tickrsclearing",
   vivid: "interactivebrokers",
   // UniCredit Polska: orders are executed by Interactive Brokers Ireland
   // (MiFID brochure 2.2). IBIE routes US equities to Interactive Brokers LLC.
@@ -180,6 +188,7 @@ export const ALIASES = {
   webullca: "webull",
   webullau: "webull",
   webullhk: "webull",
+  webullth: "webull",
   // LHV Pank is a member of the Baltic exchanges. On other markets it
   // transmits the order. Interactive Brokers LLC is the US broker-dealer
   // on that list, and IBKRATS is an execution venue.

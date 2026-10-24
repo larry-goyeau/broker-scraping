@@ -66,6 +66,9 @@ const FOREIGN_PER_USD = {
   // NBK official rate, not an ECB print. Same day as AS_OF.
   // https://nationalbank.kz/rss/get_rates.cfm?fdate=07.09.2026
   KZT: 456.56,
+  // National Bank of the Republic of Belarus official rate, same day. Not an ECB print.
+  // https://api.nbrb.by/exrates/rates/431?ondate=2026-09-07
+  BYN: 3.0753,
   // Banco Central de Chile, dólar observado, same day. Not an ECB print.
   // https://si3.bcentral.cl/Siete/ES/Siete/Cuadro/CAP_TIPO_CAMBIO/MN_TIPO_CAMBIO4/DOLAR_OBS_ADO
   CLP: 934.35,
@@ -141,6 +144,10 @@ const FOREIGN_PER_USD = {
   MUR: 46.861,
   KHR: 4047.18,
   TZS: 2649.59,
+  // Kyrgyz som and Serbian dinar, same file and day (Zaman, Belex lines of
+  // Raiffeisen banka Beograd). The dinar is about 117.4 per euro.
+  KGS: 87.5446,
+  RSD: 101.036,
   // CFA franc (BCEAO), fixed at 655.957 per euro, so the ECB euro of the
   // same day gives the dollar: 655.957 × 0.86044.
   XOF: 564.4116,

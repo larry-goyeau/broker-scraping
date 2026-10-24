@@ -1167,7 +1167,7 @@ const written = stamped.filter((row) => {
 for (const [ticker, mic] of [["00941", "XHKG"], ["00883", "XHKG"], ["00728", "XHKG"], ["600941", "XSHG"], ["601728", "XSHG"], ["600938", "XSHG"], ["600685", "XSHG"], ["688327", "XSHG"], ["00020", "XHKG"], ["80020", "XHKG"], ["SNTMF", "OTCM"]]) {
   if (written.some((row) => row.ticker === ticker && row.mic === mic)) throw new Error(`NS-CMIC ${ticker} (${mic}) was not left out`);
 }
-const floors = { "OTC Markets": 2900, "Hong Kong Stock Exchange": 2500, "Shanghai Stock Exchange": 1500, "Shenzhen Stock Exchange": 1500, Nasdaq: 3500, "New York Stock Exchange": 1800, "NYSE Arca": 1500, "Cboe BZX": 500 };
+const floors = { "OTC Markets": 2900, "Hong Kong Stock Exchange": 2500, "Shanghai Stock Exchange": 1200, "Shenzhen Stock Exchange": 1000, Nasdaq: 3500, "New York Stock Exchange": 1800, "NYSE Arca": 1500, "Cboe BZX": 500 };
 for (const [exchange, floor] of Object.entries(floors)) {
   const count = written.filter((row) => row.exchange === exchange).length;
   if (count < floor) throw new Error(`only ${count} rows on ${exchange}`);

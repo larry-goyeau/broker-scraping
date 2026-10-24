@@ -18,6 +18,8 @@
 //   Tehran and Fara Bourse    IRR  cmsalmas.ir board (official close by ISIN)
 //   Victoria Falls (VFEX)     USD  the exchange's price sheet
 //   Captin (HZPC)             EUR  the issuer page's newest trade
+//   Stock Exchange of Mauritius MUR (and USD, EUR, GBP lines) the SEM's own
+//                                  trading-quotes tables, "Latest" price
 //
 // A board that cannot be read throws, and the caller tries again later.
 
@@ -400,6 +402,45 @@ async function captin() {
   return rows;
 }
 
+// -------------------------------------------------------------- Mauritius
+// The SEM's trading-quotes tables: Official Market and DEM (Company,
+// Currency, Trend, Last Closing Price, Latest, …) and the ETF page (Name,
+// Currency, Trend, Reference Price, Latest, …). "Latest" is kept: the last
+// trade, or the previous close when nothing traded. The pages print no
+// session date, so the day read is stamped, as for the Gulf boards. A line
+// is tied to its ISIN through the board name the mySEM catalogue keeps in
+// `raw` ("Company: MCB GROUP | Currency: MUR …"), with its currency.
+const SEM = "https://www.stockexchangeofmauritius.com/products-market-data";
+const SEM_PAGES = ["/equities-board/trading-quotes/official", "/equities-board/trading-quotes/dem", "/etfs"];
+
+async function mauritius() {
+  const byName = new Map();
+  for (const r of catalogue("mysem")) {
+    const name = String(r.raw || "").match(/\| (?:Company|Name): (.*?) \| Currency: ([A-Z]{3}) \|/);
+    if (name) byName.set(`${name[1].toUpperCase()}|${name[2]}`, r);
+  }
+  if (!byName.size) throw new Error("no mySEM catalogue to tie SEM names to ISINs");
+  const at = new Date().toISOString().slice(0, 10);
+  const rows = new Map();
+  for (const page of SEM_PAGES) {
+    const html = await (await get(SEM + page)).text();
+    for (const table of html.match(/<table[\s\S]*?<\/table>/g) || []) {
+      const lines = table.match(/<tr[\s\S]*?<\/tr>/g) || [];
+      const head = [...(lines[0] || "").matchAll(/<t[hd][^>]*>([\s\S]*?)<\/t[hd]>/g)].map((c) => strip(c[1]));
+      const latest = head.indexOf("Latest");
+      if (!(head[0] === "Company" || head[0] === "Name") || head[1] !== "Currency" || latest < 0) continue;
+      for (const line of lines.slice(1)) {
+        const cells = [...line.matchAll(/<t[hd][^>]*>([\s\S]*?)<\/t[hd]>/g)].map((c) => strip(c[1]));
+        const row = byName.get(`${String(cells[0] || "").toUpperCase()}|${cells[1]}`);
+        const price = num(cells[latest]);
+        if (row && price) rows.set(row.isin, { ticker: row.ticker, currency: cells[1], price, at });
+      }
+    }
+  }
+  if (rows.size < 50) throw new Error(`SEM boards gave ${rows.size} lines`);
+  return rows;
+}
+
 // ------------------------------------------------------------------ table
 // `folders` are the catalogues that list the board: an ISIN is sent to a
 // board only when one of them names it, whatever its country code (Umeme
@@ -416,6 +457,7 @@ export const BOARDS = {
   XTEH: { folders: ["tosee"], read: iran },
   VFEX: { folders: ["vfexdirect"], read: vfex },
   CPTX: { folders: ["captin"], read: captin },
+  XMAU: { folders: ["mysem", "mcbsecurities"], read: mauritius },
 };
 
 const cache = new Map();

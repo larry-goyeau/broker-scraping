@@ -50,8 +50,9 @@
 // brokerFees is Sahm's own commission and the VAT on it.
 // Remarks: the Nomu qualified-investor remark from the catalogue; "Fees
 // might be x% lower if you are a non-Saudi investor." for the VAT a foreign
-// investor does not pay ("Foreign investors are exempt from this fee"), when it
-// reaches 0.01 % of the order; "FX when cash ≠ CCY." The account holds SAR
+// investor does not pay ("Foreign investors are exempt from this fee"), as a
+// cut of the fee lines with their VAT, when that VAT reaches 0.01 % of the
+// order; "FX when cash ≠ CCY." The account holds SAR
 // and USD (deposits.mjs), so a line is never converted by force. Sahm
 // prints no FX spread ("Real-time rates ... provided by banks"), only
 // 1 SAR an exchange beyond ten a day, so the FX remark has no rate.
@@ -216,13 +217,15 @@ const BASIS = {
   OTC: `livraison en ligne, barème américain relu le ${READ_ON}, sans table OTC à part : mêmes lignes que la cote. Commission 0,015 USD l'action (plancher 0,49 USD jusqu'à 5 USD, 1,99 USD au-delà, plafond 1,5 % du montant), règlement 0,003 USD l'action (min 0,01, max 7 %), CAT 0,000003 USD l'action (min 0,01) à chaque sens ; SEC 0,00206 % (min 0,01) et TAF 0,000195 USD l'action (min 0,01, max 9,79) à la vente ; TVA 15 % sur l'ensemble.`,
 };
 
-// The VAT a foreign investor does not pay, buy and sell together, in % of
-// the order. Below 0.01 % it is left out.
-function vatRemark(vat, notional) {
+// The VAT a foreign investor does not pay, buy and sell together, as a cut
+// of every fee line with its VAT. Left out when it is under 0.01 % of the
+// order.
+function vatRemark(bill, notional) {
+  const vat = bill.vat;
   if (!(notional > 0) || !(vat > 0)) return "";
-  const x = (100 * vat) / notional;
-  if (x < 0.01) return "";
-  return `Fees might be ${Number(x.toFixed(2))}% lower if you are a non-Saudi investor.`;
+  if ((100 * vat) / notional < 0.01) return "";
+  const x = (100 * vat) / (bill.commission + bill.settlement + bill.levy + vat);
+  return `Fees might be ${x >= 10 ? Math.round(x) : Number(x.toFixed(1))}% lower if you are a non-Saudi investor.`;
 }
 
 export function roundTrip({ etf, place, currency, shares, price, bp = null, perShare = null }) {
@@ -333,7 +336,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
 
   return {
     ...shared,
-    remark: [m.row.remark, vatRemark(bill.vat, notional), fxLine].filter(Boolean).join("\n"),
+    remark: [m.row.remark, vatRemark(bill, notional), fxLine].filter(Boolean).join("\n"),
     usd: finite(usd, 6),
     brokerFees: finite(brokerFees, 6),
     bp: marketBp,

@@ -16,6 +16,7 @@
 //                        which client pays which rate, so the figure is the
 //                        1 % ceiling, as Balanz's "hasta" is. The 500 is
 //                        pesos; a dollar line takes its peso equivalent.
+//                        The 0.5 % floor is the remark, 50 % under the 1 %.
 //   IVA                  Not included, says the sheet, with no rate printed.
 //                        A share or a CEDEAR takes the 21 % rate.
 //   Market rights        Not on the sheet. BYMA bills them on every trade and
@@ -77,7 +78,7 @@ const RATE_LOW = 0.005;
 const MIN_ARS = 500;
 const MARKET = 0.0005;
 const REMARK =
-  "Commission can be up to 0.5% lower; the sheet does not say when.\nCustody 500 to 20,000 pesos + VAT, period not stated. Dividends and coupons pay 2%.";
+  "Commission can be up to 50% lower; the sheet does not say when.\nCustody 500 to 20,000 pesos + VAT, period not stated. Dividends and coupons pay 2%.";
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];

@@ -94,7 +94,9 @@ const FOREIGN = [
   ["pop6040_id_list.html", "id"],
   ["pop6040_th_list.html", "th"],
   ["pop6040_my_list.html", "my"],
-  ["pop6040_ru_list.html", "ru"],
+  // Russian shares: "2022/2/28(月)注文受付分より、売買ともにロシア株式の注文の受付を停止"
+  // (SBI's Russian attention page), so the ru list is not read.
+  // https://search.sbisec.co.jp/v2/popwin/attention/stock/ru_cash.html
   ["pop6040_etf.html", "etf"],
 ];
 

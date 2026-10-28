@@ -12,10 +12,10 @@
 //   STT and stamp round to the rupee. Other charges round to the paisa.
 //   Gold, liquid and gilt ETFs have no STT.
 //
-// United States, https://dhan.co/us-stocks/ read on 2026-09-25.
-//   Brokerage                   0.25% of trade value, minimum $0.01, each order
-//   A transfer into the US account below $100 costs $1. It is not part of
-//   this trip.
+// United States, https://dhan.co/us-stocks/ re-read on 2026-10-27:
+//   Brokerage                   "Flat 0.10% Brokerage on trade value or a
+//                               minimum of $0.01", each order
+//   Pay-in / pay-out            "Deposits are FREE", "Withdrawals are FREE".
 //   Cash is rupees only (deposits.mjs), so a US line is a forced INR->USD
 //   conversion on the buy and USD->INR on the sell. Dhan prints no rate:
 //   "The FX rate applied includes a markup over the interbank rate. The
@@ -35,7 +35,7 @@ import { indiaRoundTrip, printCli, pct, sebiRate, intradayGap } from "../../indi
 import { plus, finite } from "../../na.mjs";
 import { QUOTE, toUsd } from "../../fx.mjs";
 
-const US_RATE = 0.0025;
+const US_RATE = 0.001;
 const US_MIN = 0.01;
 
 function dollars(amount, currency) {
@@ -53,8 +53,8 @@ function usRoundTrip({ listing, leafBook, shared, query }) {
   const n = Number(query.shares);
   const p = Number(query.price);
   const basis =
-    "actions américaines, page relue le 2026-09-25 : 0,25 % par ordre, minimum 0,01 $. Change forcé INR→USD et retour : marge de change non publiée (FAQ relue le 2026-10-19).";
-  const remark = "A pay-in below $100 costs $1.";
+    "actions américaines, page relue le 2026-10-27 : 0,10 % par ordre, minimum 0,01 $, dépôts et retraits gratuits. Change forcé INR→USD et retour : marge de change non publiée (FAQ relue le 2026-10-19).";
+  const remark = "";
   if (!(n > 0) || !(p > 0)) {
     return { ...shared, cashCurrency: "USD", basis, remark, why: !(n > 0) ? "aucun nombre de parts" : "aucun prix pour cette ligne : lancer node assets/prices.mjs" };
   }

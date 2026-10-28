@@ -11,7 +11,7 @@
 //       0.375 % min 5.90 zł per order
 //     the same session's reverse trade, point 12, on shares and ETF
 //       0.25 % min 5.90 zł. The figure stays at 0.375 %. The remark
-//       is the gap, −0.125 point.
+//       is the sale's commission cut, (0.375 − 0.25) / 0.375 = 33 %.
 //     GPW ETF, ETC and ETN, communiqué 104, both legs
 //       0.10 % min 5.90 zł
 //   Abroad, part II point 2, charged in the order currency
@@ -320,7 +320,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     remark: [
       fxRemark("max 0.3", listing.currency, "(min 30 PLN) to buy foreign currency, max 1% (min 100 PLN) to buy PLN"),
       rule.dayTrade
-        ? `If the sale is the same day, fees are ${Number(((POLISH_RATE - DAY_RATE) * 100).toFixed(2))}% lower.`
+        ? `If the sale is the same day, fees are ${Math.round((100 * (POLISH_RATE - DAY_RATE)) / POLISH_RATE)}% lower.`
         : "",
     ].filter(Boolean).join("\n"),
     url: SCHEDULE.url,

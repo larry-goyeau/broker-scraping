@@ -304,7 +304,8 @@ function leviesOf({ market, listing, n, notional, notionalGbp }) {
     const tax = stock ? TW.stock : TW.etf;
     out.native = 2 * notional * TW.exec + notional * tax;
     out.said.push(`frais d'exécution 0,02 % par sens, taxe ${(100 * tax).toFixed(1)} % sur la vente`);
-    if (stock) out.remark.push(`Same day sell is ${Number((100 * (TW.stock - TW.dayTrade)).toFixed(2))}% lower.`);
+    // The day-trade securities tax's cut of the 0.3 % tax itself.
+    if (stock) out.remark.push(`Same day sell tax is ${Math.round((100 * (TW.stock - TW.dayTrade)) / TW.stock)}% lower.`);
   } else if (market === "my") {
     const stamp = etf ? 0 : Math.min(MY.stampMax, Math.ceil(notional / MY.stampPer));
     const clearing = Math.min(MY.clearingMax, notional * MY.clearing);

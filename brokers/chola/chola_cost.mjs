@@ -45,7 +45,8 @@
 // plan fee, the ₹0 period, and the same-day sell gap read at this order's
 // value (intraday brokerage + GST both ways, STT 0.025% on the sell and
 // stamp 0.003% on the buy, as the calculator page prints them, no DP)
-// against the delivery trip. Cash is rupees only (deposits.mjs): every
+// against the delivery trip: "x% lower" is the cut of those delivery
+// charges themselves, as in intradayBuySell (../../indianDelivery.mjs). Cash is rupees only (deposits.mjs): every
 // line is INR, so no FX.
 //
 //   node brokers/chola/chola_cost.mjs RELIANCE NSE INR --shares=10 --price=1211.2
@@ -56,7 +57,7 @@
 // `roundTrip(...)` reads files, not the network.
 
 import { pathToFileURL } from "node:url";
-import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate, roundPct } from "../../indianDelivery.mjs";
 
 const PAGE = "https://www.cholasecurities.com/pricing";
 const CALCULATOR = "https://www.cholasecurities.com/calculators/brokerage-calculator";
@@ -134,7 +135,8 @@ function sameDay(cost, plan) {
   const delivery = 2 * notional * pct(plan.delivery) * g + notional * (2 * STT + STAMP) + plan.dpInr(notional) * g;
   const intraday = 2 * notional * pct(plan.intraday) * g + notional * (INTRADAY_STT + INTRADAY_STAMP);
   const gap = Math.round(((delivery - intraday) / notional) * 100 * 100) / 100;
-  const line = gap ? `Same day sell is ${Math.abs(gap)}% ${gap > 0 ? "lower" : "higher"}.` : "";
+  const cut = gap > 0 ? roundPct((100 * (delivery - intraday)) / delivery) : Math.abs(gap);
+  const line = gap ? `Same day sell fees are ${cut}% ${gap > 0 ? "lower" : "higher"}.` : "";
   return { ...cost, remark: [cost.remark, line].filter(Boolean).join(" ") };
 }
 

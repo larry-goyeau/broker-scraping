@@ -79,6 +79,13 @@ function jseListing(exchange) {
   return String(exchange || "").toUpperCase() === "JSE";
 }
 
+// Moscow Exchange: IBKR clients "cannot open or close positions" there
+// (Russian restrictions) and IBKR gets no MOEX prices since 21 June 2024.
+// https://www.interactivebrokers.com/en/index.php?f=44442
+function moexListing(exchange) {
+  return String(exchange || "").toUpperCase() === "MOEX";
+}
+
 // Corporate-action contracts, not a stock exchange.
 function corpactListing(exchange) {
   return String(exchange || "").toUpperCase() === "CORPACT";
@@ -274,7 +281,7 @@ if (!fresh && fs.existsSync(outputPath)) {
     const existing = JSON.parse(fs.readFileSync(outputPath, "utf8"));
     if (Array.isArray(existing)) {
       for (const entry of existing) {
-        if (jseListing(entry?.exchange) || corpactListing(entry?.exchange) || valueListing(entry?.exchange)) continue;
+        if (jseListing(entry?.exchange) || corpactListing(entry?.exchange) || moexListing(entry?.exchange) || valueListing(entry?.exchange)) continue;
         results.push(entry);
         if (entry?.ticker) seen.add(entryKey(entry));
       }
@@ -583,7 +590,7 @@ async function scrapeJob(job) {
     const name = listingName(hit) || normalize(info.companyName || "");
     const exchange = listingVenue(hit, info) || (job.kind === "CRYPTO" ? "CRYPTO" : "");
     const currency = info.currency || null;
-    if (!ticker || !exchange || !name || jseListing(exchange) || corpactListing(exchange) || valueListing(exchange)) continue;
+    if (!ticker || !exchange || !name || jseListing(exchange) || corpactListing(exchange) || moexListing(exchange) || valueListing(exchange)) continue;
 
     const type = listingType(name, job.kind);
     rows.push({
@@ -646,7 +653,7 @@ async function runJob(queryIndex, job) {
       raw: row.raw,
       isin: job.shelf === "isin" ? job.query : "",
     };
-    if (jseListing(entry.exchange) || corpactListing(entry.exchange) || valueListing(entry.exchange)) continue;
+    if (jseListing(entry.exchange) || corpactListing(entry.exchange) || moexListing(entry.exchange) || valueListing(entry.exchange)) continue;
     if (row.restricted) entry.nonEuResident = true;
 
     const key = entryKey(entry);

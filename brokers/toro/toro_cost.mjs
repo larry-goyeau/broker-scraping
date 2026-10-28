@@ -24,7 +24,7 @@
 //   A same-day buy and sell        0.023% a side and no transfer
 //                                  fee. The figure stays on the
 //                                  regular 0.030%. The remark is
-//                                  the gap, −0.007%.
+//                                  the cut on the B3 fees, 23%.
 //   An opening or closing auction  the trading fee becomes 0.007%.
 //                                  Not this order.
 // Custody is not charged by Toro and is not this order. The account
@@ -53,7 +53,8 @@ const CCP = 0.000224;
 const TRANSFER = 0.000026;
 const SIDE = NEGOTIATION + CCP + TRANSFER;
 const DAY_TRADE = 0.00023;
-const SAME_DAY = Number(((SIDE - DAY_TRADE) * 100).toFixed(2));
+// The day-trade fees as a cut of the regular B3 fees.
+const SAME_DAY = Math.round(((SIDE - DAY_TRADE) / SIDE) * 100);
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
@@ -104,7 +105,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     onlineBuy: true,
     cashCurrency: "BRL",
     url: PAGE,
-    remark: SAME_DAY ? `A same-day buy and sell is ${SAME_DAY}% lower.` : "",
+    remark: SAME_DAY ? `A same-day buy and sell's B3 fees are ${SAME_DAY}% lower.` : "",
   };
   if (!catalogue) {
     return { ...answer, why: "le catalogue Toro n'existe pas encore : lancer `node brokers/toro/toro_scraping.mjs`" };

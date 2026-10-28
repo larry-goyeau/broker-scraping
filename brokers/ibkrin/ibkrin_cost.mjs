@@ -30,7 +30,8 @@
 //   Demat            INR 4.50 a stock on a sale (no GST printed: 0).
 //   Same day: STT 0.025 % on the sell only (0.001 % for an equity fund),
 //   stamp 0.003 %, no demat debit; brokerage, exchange and SEBI unchanged.
-//   That gap is the remark "Same day sell is x% lower.", at this notional.
+//   That gap is the remark "Same day sell fees are x% lower.", x = its cut of the
+//   round trip's fees and levies at this notional.
 //   A REIT, an InvIT, a preference share or a buy-back line is not the
 //   equity table: N/A. IBKR charges no custody.
 //
@@ -76,7 +77,7 @@
 
 import fs from "node:fs";
 import { makeIbkr, runCli } from "../ibkrca/ibkrca_cost.mjs";
-import { productOf } from "../../indianDelivery.mjs";
+import { productOf, roundPct } from "../../indianDelivery.mjs";
 import { bookParts, plus, finite } from "../../na.mjs";
 import { QUOTE, toUsd } from "../../fx.mjs";
 import { depositHas, currencyOptions } from "../../deposits.mjs";
@@ -198,10 +199,11 @@ function nseRoundTrip(found, { shares, price }) {
   const bookUsd = parts.a == null || parts.b == null || notionalUsd == null ? null : parts.a * notionalUsd + parts.b * n;
   const usd = plus(bookUsd, brokerFees, leviesUsd);
 
-  // Same day: STT and stamp lower, no demat debit.
+  // Same day: STT and stamp lower, no demat debit; the remark is that cut
+  // of the trip's fees and levies.
   const sameDayGap = notional * (stt.delivery - stt.sameDay) + notional * (NSE.stamp - NSE.stampSameDay) + NSE.demat;
-  const gapPct = Math.round((sameDayGap / notional) * 100 * 100) / 100;
-  const remark = gapPct > 0 ? `Same day sell is ${gapPct}% lower.` : "";
+  const gapPct = roundPct((100 * sameDayGap) / (brokerInr + levyInr));
+  const remark = gapPct > 0 ? `Same day sell fees are ${gapPct}% lower.` : "";
 
   const unknown = [
     bookUsd == null ? `aucun carnet pour ${listing.exchange || "NSE"} : pas de feuille de carnet` : null,

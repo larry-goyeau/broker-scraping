@@ -45,9 +45,13 @@
 // the pricing page, the non-US detail card and the Account Agreement have
 // no currency-exchange line, rate, spread or fee (the page only prints an
 // HKD margin rate). The « 2 $ par exécution » this file used to carry in
-// `confidence` had no source and is gone. So those totals (and
-// `brokerFees`, which holds the conversion) are N/A.
+// `confidence` had no source and is gone. Stand-in for an HKD line (owner,
+// 2026-10-27): TradeUP belongs to UP Fintech, whose Tiger Brokers (AU) prints
+// "USD⇆HKD 132 PIPS" added spread per transaction (last reviewed 17 Feb
+// 2025), 0.0132 HKD a dollar (about 0.17 %), on the buy and on the sale. A
+// CNY line has no group figure: that total (and `brokerFees`) stays N/A.
 //   https://www.tradeup.com/pricing
+//   https://itiger.com/au/commissions/fees/forex
 //   https://www.tradeup.com/pricing/detail
 //   https://tradeup.com/agreement/240
 //
@@ -73,6 +77,9 @@ import { spreads } from "../../spreads/book.mjs";
 import { plus, finite } from "../../na.mjs";
 import { AS_OF as FX_AS_OF, QUOTE, listingCash, toUsd, usdPer } from "../../fx.mjs";
 import { depositHas } from "../../deposits.mjs";
+
+// Tiger Brokers (AU)'s added spread on USD/HKD, HKD a dollar (stand-in).
+const TIGER_HKD_PIPS = 0.0132;
 
 const CATALOGUE = new URL("tradeup-parsed.json", import.meta.url);
 
@@ -323,8 +330,14 @@ export function roundTrip({
   // rate TradeUP does not publish, so that leg has no figure.
   const cashCcy = listingCash(listing.currency);
   const held = depositHas("tradeup", resolved.id, cashCcy);
-  const fxWhy = held ? null : `change forcé USD→${cashCcy} : taux de change non publié`;
-  const fxBasis = held ? "" : ` ; change forcé USD→${cashCcy} sans taux publié (page tarifs relue le 2026-10-19)`;
+  // Tiger Brokers (AU)'s added USD/HKD spread stands in for an HKD line.
+  const tigerHkd = !held && cashCcy === "HKD";
+  const fxWhy = held || tigerHkd ? null : `change forcé USD→${cashCcy} : taux de change non publié`;
+  const fxBasis = held
+    ? ""
+    : tigerHkd
+      ? " ; change forcé USD→HKD et retour : écart non publié par TradeUP, 132 pips de Tiger Brokers (AU), même groupe UP Fintech, pris à la place"
+      : ` ; change forcé USD→${cashCcy} sans taux publié (page tarifs relue le 2026-10-19)`;
 
   const n = Number(shares);
   const p = Number(price);
@@ -394,8 +407,8 @@ export function roundTrip({
         : null;
   const secUsd = market === "hk" || notionalUsd == null ? (market === "hk" ? 0 : null) : Math.max(SEC_MIN, notionalUsd * SEC_RATE);
   const tafUsd = market === "hk" ? 0 : Math.min(n * TAF_PER_SHARE, TAF_CAP);
-  // Forced conversion with no published rate: unknown, and so is the total.
-  const fxUsd = held ? 0 : null;
+  // Forced conversion: Tiger's 132 pips both ways on HKD, unknown otherwise.
+  const fxUsd = held ? 0 : tigerHkd && notionalUsd != null ? 2 * notionalUsd * TIGER_HKD_PIPS * usdPer("HKD") : null;
   const brokerFees = plus(commissionUsd, fxUsd);
   const usd = plus(bookUsd, brokerFees, secUsd, tafUsd);
   const why = [
@@ -495,7 +508,7 @@ function confidenceOf({
   said.push(
     `hors trajet : algo +${ALGO} $/part, virement ${WIRE.domestic} $, ` +
       `ACAT sortant ${ACAT.full} $ / ${ACAT.partial} $, ACH reversal ${ACH_REVERSAL} $. ` +
-      `Compte en dollars : une ligne HKD ou CNY est un change forcé sans taux publié, donc N/A. ` +
+      `Compte en dollars : une ligne HKD paie l'écart de 132 pips de Tiger Brokers (AU) à l'achat et à la vente ; une ligne CNY est un change forcé sans taux publié, donc N/A. ` +
       `Aucun aller-retour réel dans ce dépôt`
   );
   return said.join(" ; ");

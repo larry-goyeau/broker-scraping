@@ -21,7 +21,8 @@
 //   Tax for the state treasury          0.0008   (0.08%)  each side
 // The ASE also lets an online-trading broker go down to 0.002 ("The minimum
 // trading commission for online trading service users will be 0.002"): in
-// the remark as a rate the client may get.
+// the remark as a rate the client may get, a cut of the commission
+// (0.004 → 0.002 = 50% lower).
 //   https://hekma-fs.com/page/15/FAQ
 //   https://www.ase.com.jo/en/Product-Services/Trading-Services/Transaction-Cost
 //
@@ -51,8 +52,8 @@ const TREASURY = 0.0008;
 const INSTITUTIONS = 0.0014;
 const EACH = COMMISSION + TREASURY + INSTITUTIONS;
 const CASH = "JOD";
-// Buy and sell together, in percent.
-const REMARK = `Fees might be ${Number(((COMMISSION - ONLINE_FLOOR) * 2 * 100).toFixed(2))}% lower.`;
+// The online floor as a cut of the broker commission, in percent.
+const REMARK = `Fees might be ${Math.round(((COMMISSION - ONLINE_FLOOR) / COMMISSION) * 100)}% lower.`;
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];

@@ -21,7 +21,8 @@
 //   floor, and negotiable from Rs. 1 billion (SEC directive of 18 March
 //   2024): no fixed figure, so such a trade answers N/A.
 //   An intraday round trip through the same broker is charged on one side
-//   only (CSE rule): this trip stays two sides, the gap is the remark.
+//   only (CSE rule): this trip stays two sides, the gap is the remark
+//   (one 1.12 % ticket instead of two: 50 % lower).
 //
 //   https://www.cse.lk/pages/transaction-costs/transaction-costs.component.html
 //   https://cal.lk/faq-items/what-is-the-brokerage-fee/
@@ -157,7 +158,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const shared = {
     ...answer,
     listing,
-    remark: "Intraday round trip is 1.12% lower.",
+    remark: "Intraday round trip fees are 50% lower.",
     url: SCHEDULE.url,
     basis: "CSE transaction-cost table (LOLC prints none): 0.64% brokerage, 1.12% with the market lines, each way, up to Rs. 100 million",
     tax,

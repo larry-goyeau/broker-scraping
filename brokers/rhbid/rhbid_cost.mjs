@@ -22,7 +22,8 @@
 // hingga serendah 0.08%" under "Smart Fee", where the fee changes day to
 // day and falls as the trade grows. No schedule is printed and only the
 // buy floor is named, so the total keeps 0.15%/0.25% and the remark says
-// the buy may be 0.07 points lower.
+// the round trip may be 18% lower (0.07 of the 0.40 points buy and sell
+// together).
 //
 // A share and an ETF on the exchange are the same order and take these
 // two figures. The account is in rupiah and every line is IDR: no FX.
@@ -49,7 +50,7 @@ const PAGE = "https://www.rhbtradesmart.co.id/faq";
 const READ_ON = "2026-10-24";
 const BUY = 0.0015;
 const SELL = 0.0025;
-const REMARK = "Fees might be 0.07% lower.";
+const REMARK = "Fees might be 18% lower.";
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];

@@ -1,6 +1,6 @@
 {
   "quarter": "2026-Q2",
-  "fetchedAt": "2026-10-24T18:42:39.897Z",
+  "fetchedAt": "2026-10-26T14:32:40.846Z",
   "source": "https://cdn.finra.org/606reportBulk/2026/606_NMS_2026_Q2.zip",
   "brokers": {
     "alpaca": {
@@ -522,6 +522,380 @@
       "mix": {
         "CODX": 0.3117,
         "OTHER": 0.6883
+      }
+    },
+    "wellsfargoclearing": {
+      "crd": [
+        "19616"
+      ],
+      "name": "Wells Fargo Clearing Services, LLC",
+      "files": [
+        "19616_606_NMS_2026_Q2_WELS_V1_20260731.xml"
+      ],
+      "mix": {
+        "OTHER": 0.815,
+        "CDRG": 0.1207,
+        "NITE": 0.03043,
+        "UBSS": 0.006477,
+        "ETMM": 0.006028,
+        "SOHO": 0.005823,
+        "JNST": 0.0106,
+        "GTSM": 0.004945
+      }
+    },
+    "usbancorpadvisors": {
+      "crd": [
+        "14455"
+      ],
+      "name": "U.S. BANCORP ADVISORS, LLC",
+      "files": [
+        "14455_606_NMS_2026_Q2_V1_20260723.xml"
+      ],
+      "mix": {
+        "CDRG": 0.2867,
+        "NITE": 0.2233,
+        "JNST": 0.141,
+        "ETMM": 0.216,
+        "OTHER": 0.03776,
+        "HRTF": 0.07414,
+        "UBSS": 0.003234,
+        "SOHO": 0.0178
+      }
+    },
+    "tiaacref": {
+      "crd": [
+        "20472"
+      ],
+      "name": "TIAA-CREF INDIVIDUAL &",
+      "files": [
+        "20472_606_NMS_2026_Q2_V1_20260717.xml"
+      ],
+      "mix": {
+        "CDRG": 0.2346,
+        "ETMM": 0.1678,
+        "HRTF": 0.1048,
+        "OTHER": 0.09337,
+        "JNST": 0.172,
+        "NITE": 0.1137,
+        "SOHO": 0.05821,
+        "UBSS": 0.0524,
+        "GTSM": 0.003172
+      }
+    },
+    "digitalbrokerage": {
+      "crd": [
+        "308213"
+      ],
+      "name": "Digital Brokerage Services LLC",
+      "files": [
+        "308213_606_NMS_2026_Q2_DIBS_V1_20260715.xml"
+      ],
+      "mix": {
+        "CDRG": 0.2667,
+        "NITE": 0.3082,
+        "OTHER": 0.013,
+        "HRTF": 0.2161,
+        "SOHO": 0.196
+      }
+    },
+    "truistinvestment": {
+      "crd": [
+        "17499"
+      ],
+      "name": "Truist Investment Services, Inc.",
+      "files": [
+        "17499_606_NMS_2026_Q2_V1_20260729.xml"
+      ],
+      "mix": {
+        "NITE": 0.1757,
+        "CDRG": 0.2264,
+        "JNST": 0.113,
+        "ETMM": 0.1721,
+        "OTHER": 0.2376,
+        "HRTF": 0.0603,
+        "UBSS": 0.002966,
+        "SOHO": 0.0119
+      }
+    },
+    "americancenturyis": {
+      "crd": [
+        "17437"
+      ],
+      "name": "AMERICAN CENTURY INVESTMENT",
+      "files": [
+        "17437_606_NMS_2026_Q2_V1_20260813.xml"
+      ],
+      "mix": {
+        "CDRG": 0.2336,
+        "ETMM": 0.1725,
+        "HRTF": 0.1049,
+        "OTHER": 0.08785,
+        "JNST": 0.1811,
+        "NITE": 0.1106,
+        "SOHO": 0.05767,
+        "UBSS": 0.04921,
+        "GTSM": 0.002593
+      }
+    },
+    "wealthfrontbrokerage": {
+      "crd": [
+        "153407"
+      ],
+      "name": "WLTH",
+      "files": [
+        "153407_606_NMS_2026_Q2_WLTH_V1_20260731.xml"
+      ],
+      "mix": {
+        "CDRG": 0.4529,
+        "NITE": 0.3254,
+        "GTSM": 0.103,
+        "HRTF": 0.1187
+      }
+    },
+    "aeis": {
+      "crd": [
+        "26506"
+      ],
+      "name": "American Enterprise Investment Services Inc. (AEIS)",
+      "files": [
+        "26506_606_NMS_2026_Q2_V1_20260727.xml"
+      ],
+      "mix": {
+        "CDRG": 0.297,
+        "UBSS": 0.1351,
+        "ETMM": 0.1839,
+        "NITE": 0.138,
+        "JNST": 0.1352,
+        "OTHER": 0.0598,
+        "SOHO": 0.05101
+      }
+    },
+    "pershing": {
+      "crd": [
+        "7560"
+      ],
+      "name": "PERSHING LLC",
+      "files": [
+        "7560_606_NMS_2026_Q2_V1_20260723.xml"
+      ],
+      "mix": {
+        "CDRG": 0.2438,
+        "ETMM": 0.1539,
+        "GTSM": 0.006691,
+        "HRTF": 0.1163,
+        "OTHER": 0.0493,
+        "JNST": 0.186,
+        "NITE": 0.114,
+        "SOHO": 0.06217,
+        "UBSS": 0.06794
+      }
+    },
+    "stonexfinancial": {
+      "crd": [
+        "45993"
+      ],
+      "name": "StoneX Financial, Inc.",
+      "files": [
+        "45993_606_NMS_2026_Q2_INTL_V1_20260731.xml"
+      ],
+      "mix": {
+        "CDRG": 0.9048,
+        "JNST": 0.09516
+      }
+    },
+    "firstcitizensis": {
+      "crd": [
+        "44430"
+      ],
+      "name": "FIRST CITIZENS INVESTOR SERVICES",
+      "files": [
+        "44430_606_NMS_2026_Q2_V1_20260716.xml"
+      ],
+      "mix": {
+        "CDRG": 0.2579,
+        "ETMM": 0.1539,
+        "HRTF": 0.1196,
+        "OTHER": 0.0483,
+        "JNST": 0.1826,
+        "NITE": 0.1153,
+        "SOHO": 0.05856,
+        "UBSS": 0.05922,
+        "GTSM": 0.004671
+      }
+    },
+    "empowerfs": {
+      "crd": [
+        "13109"
+      ],
+      "name": "EMPOWER FINANCIAL SERVICES, INC.",
+      "files": [
+        "13109_606_NMS_2026_Q2_CNTXT-Pershing7560GWFS_V1_20260710.xml"
+      ],
+      "mix": {
+        "CDRG": 0.239,
+        "ETMM": 0.1821,
+        "HRTF": 0.1003,
+        "OTHER": 0.05948,
+        "JNST": 0.1856,
+        "NITE": 0.1206,
+        "SOHO": 0.05922,
+        "UBSS": 0.05138,
+        "GTSM": 0.002379
+      }
+    },
+    "umbfs": {
+      "crd": [
+        "17073"
+      ],
+      "name": "UMB FINANCIAL SERVICES, INC.",
+      "files": [
+        "17073_606_NMS_2026_Q2_V1_20260723.xml"
+      ],
+      "mix": {
+        "ETMM": 0.1611,
+        "CDRG": 0.2077,
+        "JNST": 0.1072,
+        "NITE": 0.1523,
+        "OTHER": 0.2955,
+        "HRTF": 0.05817,
+        "UBSS": 0.009986,
+        "GTSM": 0.002652,
+        "SOHO": 0.005337
+      }
+    },
+    "bokfs": {
+      "crd": [
+        "17530"
+      ],
+      "name": "BOK Financial Securities, Inc.",
+      "files": [
+        "17530_606_NMS_2026_Q2_V1_20260721.xml"
+      ],
+      "mix": {
+        "CDRG": 0.2556,
+        "JNST": 0.1842,
+        "ETMM": 0.1594,
+        "NITE": 0.1289,
+        "HRTF": 0.1014,
+        "OTHER": 0.05768,
+        "SOHO": 0.05431,
+        "UBSS": 0.05661,
+        "GTSM": 0.001876
+      }
+    },
+    "rqd": {
+      "crd": [
+        "134284"
+      ],
+      "name": "RQD* Clearing LLC",
+      "files": [
+        "https://cdn.finra.org/606/2026/134284_606_NMS_2026_Q2_V1.xml"
+      ],
+      "mix": {
+        "NITE": 0.1026,
+        "SOHO": 0.1291,
+        "JNST": 0.1116,
+        "CDRG": 0.5959,
+        "OTHER": 0.06083
+      }
+    },
+    "lpl": {
+      "crd": [
+        "6413"
+      ],
+      "name": "LPL FINANCIAL",
+      "files": [
+        "6413_606_NMS_2026_Q2_LPL_LPL_V1_20260723.xml"
+      ],
+      "mix": {
+        "CDRG": 0.2976,
+        "JNST": 0.2408,
+        "NITE": 0.1753,
+        "ETMM": 0.07606,
+        "OTHER": 0.06059,
+        "UBSS": 0.05518,
+        "SOHO": 0.02968,
+        "GTSM": 0.06476
+      }
+    },
+    "morganstanleysb": {
+      "crd": [
+        "149777"
+      ],
+      "name": "Morgan Stanley Smith Barney LLC",
+      "files": [
+        "149777_606_NMS_2026_Q2_MSWM_V1_20260731.xml"
+      ],
+      "mix": {
+        "MSCO": 0.2914,
+        "CDRG": 0.2385,
+        "HRTF": 0.09926,
+        "ETMM": 0.1749,
+        "JNST": 0.06219,
+        "NITE": 0.09919,
+        "SOHO": 0.0263,
+        "GTSM": 0.008221,
+        "OTHER": 0.00003345
+      }
+    },
+    "rbcclearing": {
+      "crd": [
+        "31194"
+      ],
+      "name": "RBC Clearing & Custody",
+      "files": [
+        "31194_606_NMS_2026_Q2_CNTXT-RBCCLEARINGCUSTODY_V1_20260731.xml"
+      ],
+      "mix": {
+        "CDRG": 0.1975,
+        "NITE": 0.1344,
+        "JNST": 0.1655,
+        "ETMM": 0.1016,
+        "UBSS": 0.0926,
+        "HRTF": 0.116,
+        "SOHO": 0.1028,
+        "OTHER": 0.06612,
+        "GTSM": 0.02351
+      }
+    },
+    "velox": {
+      "crd": [
+        "290215"
+      ],
+      "name": "Velox Clearing, LLC",
+      "files": [
+        "290215_606_NMS_2026_Q2_VLOX_V1_20260730.xml"
+      ],
+      "mix": {
+        "OTHER": 1
+      }
+    },
+    "xpus": {
+      "crd": [
+        "156691"
+      ],
+      "name": "XPUS",
+      "files": [
+        "156691_606_NMS_2026_Q2_V1_20260731.xml"
+      ],
+      "mix": {
+        "CDRG": 0.991,
+        "OTHER": 0.008973
+      }
+    },
+    "cantor": {
+      "crd": [
+        "134"
+      ],
+      "name": "CSTI",
+      "files": [
+        "134_606_NMS_2026_Q2_CSTI_V2_20260730.xml"
+      ],
+      "mix": {
+        "HRTF": 0.366,
+        "OTHER": 0.3892,
+        "NITE": 0.2346,
+        "SOHO": 0.01018
       }
     }
   }

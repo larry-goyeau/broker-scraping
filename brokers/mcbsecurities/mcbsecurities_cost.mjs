@@ -27,8 +27,8 @@
 // debt (NEWGOLD) 0.35 % (dealer 0.21, SEM 0.07, FSC 0.014, CDS 0.056); a
 // debt underlying (ADBF) 0.10 %, or Rs 75 flat below Rs 75,000.
 // A sale before the first trade settles is a "turnaround trade": 0.15 %
-// (Rs 75 flat below Rs 50,000) instead. That is the same-day remark, not
-// the total.
+// (Rs 75 flat below Rs 50,000) instead. That is the same-day remark, as a
+// cut of the sale's fee (1.25 % → 0.15 %: 88 % lower), not the total.
 //
 // Left out: no account, custody or app fee is printed. The rupee amounts
 // are in `parts`. The SEM book is not stored, so the total stays unknown
@@ -131,12 +131,13 @@ function scheduleOf(listing, rs) {
   return { dealer: f.dealer / rs, sem: f.sem / rs, fsc: f.fsc / rs, cds: f.cds / rs };
 }
 
-/** "Same day sell is x% lower." against the one-side rate, at this size. */
+/** "Same day sell fees are x% lower.", x = the cut of the one-side rate, at this size. */
 function turnaroundNote(rate, rs) {
   if (rate == null || rs == null || !(rs > 0)) return "";
   const t = rs < TURNAROUND.below ? TURNAROUND.flat / rs : TURNAROUND.rate;
-  const gap = Number(((rate - t) * 100).toFixed(2));
-  return gap > 0 ? `Same day sell is ${gap}% lower.` : "";
+  const x = (100 * (rate - t)) / rate;
+  const gap = x >= 10 ? Math.round(x) : Math.round(x * 10) / 10;
+  return gap > 0 ? `Same day sell fees are ${gap}% lower.` : "";
 }
 
 function findListing({ etf, place, currency }) {

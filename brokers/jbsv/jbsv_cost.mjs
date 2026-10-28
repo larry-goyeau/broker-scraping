@@ -8,7 +8,8 @@
 //              The sheet prints "0,027% – 0,15%" for a listed or UPCOM
 //              security online, including the exchange fee, with no rule
 //              for where in the range an order falls. At the counter or by
-//              phone it is 0.15%.
+//              phone it is 0.15%. The remark is the bottom of the range
+//              as a cut of the commission: 0.15% → 0.027% = 82% lower.
 //   Sale transfer fee   0.3 dong a share on each sale, at most 300,000
 //              dong per stock and per transfer ("phí chuyển khoản khi bán
 //              chứng khoán", item III.2.2). It is charged on every sale,
@@ -38,7 +39,7 @@ const SCHEDULE = {
   readOn: "2026-10-18",
   rate: () => pct("0.15"),
   basis: "le haut de la fourchette 0,027 % à 0,15 %, frais de bourse inclus",
-  remark: "Commission can be up to 0.12% lower; the sheet does not say when.",
+  remark: "Commission can be up to 82% lower; the sheet does not say when.",
   saleFee: perShareOnSale(0.3, { max: 300_000 }),
 };
 

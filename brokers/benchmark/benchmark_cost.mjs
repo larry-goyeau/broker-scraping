@@ -117,7 +117,8 @@ const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
 warmListingIndex(rows);
 
 const loose = (s) => String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
-const round2 = (x) => Number(Number(x).toFixed(2));
+// A relative cut in percent: whole when 10 or more, one decimal below.
+const roundPct = (x) => (x >= 10 ? Math.round(x) : Math.round(x * 10) / 10);
 
 const dollars = (amount, currency) => {
   const v = toUsd(amount, currency);
@@ -180,14 +181,15 @@ export function exchangeSide({ amountEur, row, segment }) {
   return floored(amountEur, bseRuleOf(row, segment));
 }
 
-// The yearly-turnover tier as "x% lower", at this order's amount with the
-// minimums, or at the bare rates when no amount is known.
+// The yearly-turnover tier as "x% lower", the cut of the commission itself
+// at this order's amount with the minimums, or at the bare rates when no
+// amount is known.
 function tierRemark(row, amountEur) {
   if (isExpat(row)) return "";
   const base = BROKER.standard;
   const fee = (r) => Math.max(r.min, amountEur * r.rate);
-  const gap = amountEur > 0 ? ((fee(base) - fee(YEAR_TIER)) / amountEur) * 100 : (base.rate - YEAR_TIER.rate) * 100;
-  const v = round2(gap);
+  const gap = amountEur > 0 ? ((fee(base) - fee(YEAR_TIER)) / fee(base)) * 100 : ((base.rate - YEAR_TIER.rate) / base.rate) * 100;
+  const v = roundPct(gap);
   return v > 0 ? `Over €51,129.19 traded in a calendar year, commission is ${v}% lower.` : "";
 }
 

@@ -24,7 +24,8 @@
 //   Club de los Millones 0.25% once 30,000,000 pesos trade on at least
 //                        three days that week. The credit is the next
 //                        Monday, so the figure stays at 0.33%. The gap is
-//                        the remark.
+//                        the remark, as the cut of the commission:
+//                        (0.33% - 0.25%) / 0.33% = 24%.
 //
 // A peso line settles in pesos. A MEP line and a cable line settle in
 // dollars, so the conversion stays out of the figure. The remark is half
@@ -63,7 +64,7 @@ const RATE = 0.0033;
 const MARKET = 0.0005;
 const REMARK = [
   "If the sale is the same day, the commission is half.",
-  "Trading fees are 0.08% lower above 30,000,000 pesos traded on at least 3 days that week.",
+  "Trading fees are 24% lower above 30,000,000 pesos traded on at least 3 days that week.",
 ].join("\n");
 // Compra, venta. Pesos per 1 dollar. Last point of 2026-10-09 16:59 ART.
 // Half the width, over the mid, is the remark.

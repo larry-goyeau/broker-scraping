@@ -54,6 +54,12 @@
 // cross-currency help "The exchange rate is determined by a third party
 // currency exchange channel. For details, please refer to your statement."
 // Neither prints a rate, a spread or the bank, so there is no board to read.
+// Stand-in for a USD line (owner, 2026-10-27): the group's moomoo AU
+// Financial Services Guide (Futu Securities (Australia), April 2024, section
+// 4.4) adds 55 pips on AUD/USD each way, 0.0055 USD an Australian dollar
+// (about 0.85 %), on the buy and on the sale. Another foreign line has no
+// group figure: N/A.
+//   https://static.moomoo.com/upload/official-website/moo/au/moomoo-FUTU-AU_FSG0408-7c63a1a705cd5ff229d1171c1cc97c00.pdf
 //   https://www.moomoo.com/my/support/topic9_33
 //   https://www.moomoo.com/my/support/topic9_85
 //
@@ -87,6 +93,8 @@ const PAGES = {
   CN: "https://www.moomoo.com/my/support/topic9_292",
 };
 const FX_PAGE = "https://www.moomoo.com/my/support/topic9_138";
+// moomoo AU's added spread on AUD/USD, USD an Australian dollar (stand-in).
+const AUD_USD_PIPS = 0.0055;
 const READ_ON = "2026-10-20";
 const SST = 0.08;
 const SG_MIN = {
@@ -277,9 +285,10 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const bill = ticket({ market, type: listing.type, currency: listing.currency, notional, shares: n });
   const commissionUsd = bill ? dollars(Number(bill.fees.toPrecision(12)), bill.feeCcy) : null;
   const levyUsd = bill ? plus(dollars(Number(bill.levy.toPrecision(12)), bill.feeCcy), dollars(bill.stampMyr, "MYR")) : null;
-  // Any foreign line is a forced conversion from ringgit at a rate the
-  // broker does not print: unknown.
-  const fxUsd = held ? 0 : null;
+  // A USD line converts from ringgit at the group's 55-pip AUD/USD stand-in,
+  // both ways; any other foreign line at a rate no one prints: unknown.
+  const auFx = !held && listing.currency === "USD" && notionalUsd != null ? (2 * notionalUsd * AUD_USD_PIPS) / usdPer("AUD") : null;
+  const fxUsd = held ? 0 : auFx;
   const brokerFees = plus(commissionUsd, fxUsd);
 
   let marketBp = bp ?? book.leaf?.bp ?? null;
@@ -304,13 +313,17 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
         ? `le barème Singapour n'imprime pas de minimum en ${listing.currency}`
         : "pas de cours en ringgit pour le timbre malaisien"
       : null,
-    held ? null : `change forcé MYR → ${listing.currency} et retour : moomoo MY n'imprime pas d'écart de change`,
+    held || auFx != null ? null : `change forcé MYR → ${listing.currency} et retour : moomoo MY n'imprime pas d'écart de change`,
     bookUsd == null ? `aucun carnet pour ${listing.exchange} : ${m.unsourced?.why || "pas de feuille de carnet"}` : null,
   ].filter(Boolean);
 
   return {
     ...shared,
-    ...(held ? {} : { basis: `${shared.basis} Change forcé MYR → ${listing.currency} au cours maison, écart non publié (${FX_PAGE}).` }),
+    ...(held
+      ? {}
+      : auFx != null
+        ? { basis: `${shared.basis} Change forcé MYR → USD et retour : écart non publié par moomoo MY (${FX_PAGE}), 55 pips AUD/USD du guide de moomoo AU (même groupe) pris à la place, ${finite(auFx, 4)} $.` }
+        : { basis: `${shared.basis} Change forcé MYR → ${listing.currency} au cours maison, écart non publié (${FX_PAGE}).` }),
     usd: finite(usd, 6),
     brokerFees: finite(brokerFees, 6),
     bp: marketBp,

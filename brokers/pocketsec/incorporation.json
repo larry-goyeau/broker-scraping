@@ -1,0 +1,3292 @@
+{
+ "7789": {
+  "name": "ASSOCIATED BANC-CORP",
+  "country": "WI",
+  "address": "WI",
+  "mailing": "WI",
+  "at": "2026-10-25"
+ },
+ "12927": {
+  "name": "BOEING CO",
+  "country": "DE",
+  "address": "VA",
+  "mailing": "VA",
+  "at": "2026-10-25"
+ },
+ "19617": {
+  "name": "JPMORGAN CHASE & CO",
+  "country": "DE",
+  "address": "NY",
+  "mailing": "NY",
+  "at": "2026-10-25"
+ },
+ "34903": {
+  "name": "FEDERAL REALTY INVESTMENT TRUST",
+  "country": "MD",
+  "address": "MD",
+  "mailing": "MD",
+  "at": "2026-10-25"
+ },
+ "35527": {
+  "name": "FIFTH THIRD BANCORP",
+  "country": "OH",
+  "address": "OH",
+  "mailing": "OH",
+  "at": "2026-10-25"
+ },
+ "36104": {
+  "name": "US BANCORP \\DE\\",
+  "country": "DE",
+  "address": "MN",
+  "mailing": "MN",
+  "at": "2026-10-25"
+ },
+ "36270": {
+  "name": "M&T BANK CORP",
+  "country": "NY",
+  "address": "NY",
+  "mailing": "NY",
+  "at": "2026-10-25"
+ },
+ "36966": {
+  "name": "FIRST HORIZON CORP",
+  "country": "TN",
+  "address": "TN",
+  "mailing": "TN",
+  "at": "2026-10-25"
+ },
+ "39263": {
+  "name": "CULLEN/FROST BANKERS, INC.",
+  "country": "TX",
+  "address": "TX",
+  "mailing": "TX",
+  "at": "2026-10-25"
+ },
+ "46195": {
+  "name": "BANK OF HAWAII CORP",
+  "country": "DE",
+  "address": "HI",
+  "mailing": "HI",
+  "at": "2026-10-25"
+ },
+ "49196": {
+  "name": "HUNTINGTON BANCSHARES INC /MD/",
+  "country": "MD",
+  "address": "OH",
+  "mailing": "OH",
+  "at": "2026-10-25"
+ },
+ "59558": {
+  "name": "LINCOLN NATIONAL CORP",
+  "country": "IN",
+  "address": "PA",
+  "mailing": "PA",
+  "at": "2026-10-25"
+ },
+ "70858": {
+  "name": "BANK OF AMERICA CORP /DE/",
+  "country": "DE",
+  "address": "NC",
+  "mailing": "NC",
+  "at": "2026-10-25"
+ },
+ "72971": {
+  "name": "WELLS FARGO & COMPANY/MN",
+  "country": "DE",
+  "address": "CA",
+  "mailing": "CA",
+  "at": "2026-10-25"
+ },
+ "73124": {
+  "name": "NORTHERN TRUST CORP",
+  "country": "DE",
+  "address": "IL",
+  "mailing": "IL",
+  "at": "2026-10-25"
+ },
+ "78150": {
+  "name": "PLDT Inc.",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "91576": {
+  "name": "KEYCORP /NEW/",
+  "country": "OH",
+  "address": "OH",
+  "mailing": "OH",
+  "at": "2026-10-25"
+ },
+ "92230": {
+  "name": "TRUIST FINANCIAL CORP",
+  "country": "NC",
+  "address": "NC",
+  "mailing": "NC",
+  "at": "2026-10-25"
+ },
+ "93751": {
+  "name": "STATE STREET CORP",
+  "country": "MA",
+  "address": "MA",
+  "mailing": "MA",
+  "at": "2026-10-25"
+ },
+ "101382": {
+  "name": "UMB FINANCIAL CORP",
+  "country": "MO",
+  "address": "MO",
+  "mailing": "MO",
+  "at": "2026-10-25"
+ },
+ "106640": {
+  "name": "WHIRLPOOL CORP /DE/",
+  "country": "DE",
+  "address": "MI",
+  "mailing": "MI",
+  "at": "2026-10-25"
+ },
+ "109380": {
+  "name": "ZIONS BANCORPORATION, NATIONAL ASSOCIATION /UT/",
+  "country": "UT",
+  "address": "UT",
+  "mailing": "UT",
+  "at": "2026-10-25"
+ },
+ "203596": {
+  "name": "WESBANCO INC",
+  "country": "WV",
+  "address": "WV",
+  "mailing": "WV",
+  "at": "2026-10-25"
+ },
+ "217410": {
+  "name": "UNILEVER PLC",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "230557": {
+  "name": "SELECTIVE INSURANCE GROUP INC",
+  "country": "NJ",
+  "address": "NJ",
+  "mailing": "NJ",
+  "at": "2026-10-25"
+ },
+ "313216": {
+  "name": "KONINKLIJKE PHILIPS NV",
+  "country": "Netherlands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "313838": {
+  "name": "Sony Group Corp",
+  "country": "Japan",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "314489": {
+  "name": "FIRST BUSEY CORP /NV/",
+  "country": "NV",
+  "address": "KS",
+  "mailing": "KS",
+  "at": "2026-10-25"
+ },
+ "314590": {
+  "name": "SASOL LTD",
+  "country": "South Africa",
+  "address": "South Africa",
+  "mailing": "South Africa",
+  "at": "2026-10-25"
+ },
+ "316709": {
+  "name": "SCHWAB CHARLES CORP",
+  "country": "DE",
+  "address": "TX",
+  "mailing": "TX",
+  "at": "2026-10-25"
+ },
+ "357294": {
+  "name": "HOVNANIAN ENTERPRISES INC",
+  "country": "DE",
+  "address": "NJ",
+  "mailing": "NJ",
+  "at": "2026-10-25"
+ },
+ "700564": {
+  "name": "FULTON FINANCIAL CORP",
+  "country": "PA",
+  "address": "PA",
+  "mailing": "PA",
+  "at": "2026-10-25"
+ },
+ "707179": {
+  "name": "OLD NATIONAL BANCORP /IN/",
+  "country": "IN",
+  "address": "IN",
+  "mailing": "IN",
+  "at": "2026-10-25"
+ },
+ "712771": {
+  "name": "ConnectOne Bancorp, Inc.",
+  "country": "NJ",
+  "address": "NJ",
+  "mailing": "NJ",
+  "at": "2026-10-25"
+ },
+ "717826": {
+  "name": "ERICSSON LM TELEPHONE CO",
+  "country": "Sweden",
+  "address": "Sweden",
+  "mailing": "Sweden",
+  "at": "2026-10-25"
+ },
+ "720672": {
+  "name": "STIFEL FINANCIAL CORP",
+  "country": "DE",
+  "address": "MO",
+  "mailing": "MO",
+  "at": "2026-10-25"
+ },
+ "727273": {
+  "name": "CADIZ INC",
+  "country": "DE",
+  "address": "CA",
+  "mailing": "CA",
+  "at": "2026-10-25"
+ },
+ "732717": {
+  "name": "AT&T INC.",
+  "country": "DE",
+  "address": "TX",
+  "mailing": "TX",
+  "at": "2026-10-25"
+ },
+ "736772": {
+  "name": "CNB FINANCIAL CORP/PA",
+  "country": "PA",
+  "address": "PA",
+  "mailing": "PA",
+  "at": "2026-10-25"
+ },
+ "746514": {
+  "name": "NEW ENGLAND REALTY ASSOCIATES LIMITED PARTNERSHIP",
+  "country": "MA",
+  "address": "MA",
+  "mailing": "MA",
+  "at": "2026-10-25"
+ },
+ "759944": {
+  "name": "CITIZENS FINANCIAL GROUP INC/RI",
+  "country": "DE",
+  "address": "RI",
+  "mailing": "RI",
+  "at": "2026-10-25"
+ },
+ "798941": {
+  "name": "FIRST CITIZENS BANCSHARES INC /DE/",
+  "country": "DE",
+  "address": "NC",
+  "mailing": "NC",
+  "at": "2026-10-25"
+ },
+ "806968": {
+  "name": "WPP plc",
+  "country": "",
+  "address": "United Kingdom",
+  "mailing": "United Kingdom",
+  "at": "2026-10-25"
+ },
+ "811156": {
+  "name": "CMS ENERGY CORP",
+  "country": "MI",
+  "address": "MI",
+  "mailing": "MI",
+  "at": "2026-10-25"
+ },
+ "811809": {
+  "name": "BHP Group Ltd",
+  "country": "Australia",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "813762": {
+  "name": "ICAHN ENTERPRISES L.P.",
+  "country": "DE",
+  "address": "FL",
+  "mailing": "FL",
+  "at": "2026-10-25"
+ },
+ "827054": {
+  "name": "MICROCHIP TECHNOLOGY INC",
+  "country": "DE",
+  "address": "AZ",
+  "mailing": "AZ",
+  "at": "2026-10-25"
+ },
+ "831001": {
+  "name": "CITIGROUP INC",
+  "country": "DE",
+  "address": "NY",
+  "mailing": "NY",
+  "at": "2026-10-25"
+ },
+ "839923": {
+  "name": "VODAFONE GROUP PUBLIC LTD CO",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "842180": {
+  "name": "BANCO BILBAO VIZCAYA ARGENTARIA, S.A.",
+  "country": "",
+  "address": "Spain",
+  "mailing": "Spain",
+  "at": "2026-10-25"
+ },
+ "844150": {
+  "name": "NatWest Group plc",
+  "country": "United Kingdom",
+  "address": "United Kingdom",
+  "mailing": "United Kingdom",
+  "at": "2026-10-25"
+ },
+ "844551": {
+  "name": "WOODSIDE ENERGY GROUP LTD",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "858446": {
+  "name": "INTERCONTINENTAL HOTELS GROUP PLC /NEW/",
+  "country": "DE",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "874766": {
+  "name": "HARTFORD INSURANCE GROUP, INC.",
+  "country": "DE",
+  "address": "CT",
+  "mailing": "CT",
+  "at": "2026-10-25"
+ },
+ "879101": {
+  "name": "KIMCO REALTY CORP",
+  "country": "MD",
+  "address": "NY",
+  "mailing": "NY",
+  "at": "2026-10-25"
+ },
+ "879764": {
+  "name": "TotalEnergies SE",
+  "country": "France",
+  "address": "France",
+  "mailing": "France",
+  "at": "2026-10-25"
+ },
+ "883948": {
+  "name": "Atlantic Union Bankshares Corp",
+  "country": "VA",
+  "address": "VA",
+  "mailing": "VA",
+  "at": "2026-10-25"
+ },
+ "886982": {
+  "name": "GOLDMAN SACHS GROUP INC",
+  "country": "DE",
+  "address": "NY",
+  "mailing": "NY",
+  "at": "2026-10-25"
+ },
+ "887153": {
+  "name": "GRUPO SIMEC, S.A.B. de C.V.",
+  "country": "",
+  "address": "NY",
+  "mailing": "NY",
+  "at": "2026-10-25"
+ },
+ "888721": {
+  "name": "TRINITY BIOTECH PLC",
+  "country": "Ireland",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "888746": {
+  "name": "UNITED BREWERIES CO INC",
+  "country": "",
+  "address": "Chile",
+  "mailing": "Chile",
+  "at": "2026-10-25"
+ },
+ "889132": {
+  "name": "POSCO HOLDINGS INC.",
+  "country": "",
+  "address": "Korea, Republic of",
+  "mailing": "Korea, Republic of",
+  "at": "2026-10-25"
+ },
+ "891478": {
+  "name": "Banco Santander, S.A.",
+  "country": "Spain",
+  "address": "Spain",
+  "mailing": "Spain",
+  "at": "2026-10-25"
+ },
+ "895421": {
+  "name": "MORGAN STANLEY",
+  "country": "DE",
+  "address": "NY",
+  "mailing": "NY",
+  "at": "2026-10-25"
+ },
+ "897448": {
+  "name": "AMARIN CORP PLC\\UK",
+  "country": "United Kingdom",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "899051": {
+  "name": "ALLSTATE CORP",
+  "country": "DE",
+  "address": "IL",
+  "mailing": "IL",
+  "at": "2026-10-25"
+ },
+ "904851": {
+  "name": "YPF SOCIEDAD ANONIMA",
+  "country": "Argentina",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "907254": {
+  "name": "SAUL CENTERS, INC.",
+  "country": "MD",
+  "address": "MD",
+  "mailing": "MD",
+  "at": "2026-10-25"
+ },
+ "909037": {
+  "name": "CHEMICAL & MINING CO OF CHILE INC",
+  "country": "Chile",
+  "address": "Chile",
+  "mailing": "Chile",
+  "at": "2026-10-25"
+ },
+ "909327": {
+  "name": "Suzano S.A.",
+  "country": "",
+  "address": "Brazil",
+  "mailing": "Brazil",
+  "at": "2026-10-25"
+ },
+ "910073": {
+  "name": "FLAGSTAR BANK, NATIONAL ASSOCIATION",
+  "country": "",
+  "address": "NY",
+  "mailing": "NY",
+  "at": "2026-10-25"
+ },
+ "910631": {
+  "name": "COCA COLA FEMSA SAB DE CV",
+  "country": "",
+  "address": "Mexico",
+  "mailing": "Mexico",
+  "at": "2026-10-25"
+ },
+ "912892": {
+  "name": "GRUPO TELEVISA, S.A.B.",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "912958": {
+  "name": "MILLICOM INTERNATIONAL CELLULAR SA",
+  "country": "",
+  "address": "Luxembourg",
+  "mailing": "Luxembourg",
+  "at": "2026-10-25"
+ },
+ "913059": {
+  "name": "Banco BBVA Argentina S.A.",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "913144": {
+  "name": "RENAISSANCERE HOLDINGS LTD",
+  "country": "Bermuda",
+  "address": "Bermuda",
+  "mailing": "Bermuda",
+  "at": "2026-10-25"
+ },
+ "915913": {
+  "name": "ALBEMARLE CORP",
+  "country": "VA",
+  "address": "NC",
+  "mailing": "NC",
+  "at": "2026-10-25"
+ },
+ "917251": {
+  "name": "AGREE REALTY CORP",
+  "country": "DE",
+  "address": "MI",
+  "mailing": "MI",
+  "at": "2026-10-25"
+ },
+ "917851": {
+  "name": "Vale S.A.",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "924613": {
+  "name": "NOKIA CORP",
+  "country": "Finland",
+  "address": "Finland",
+  "mailing": "Finland",
+  "at": "2026-10-25"
+ },
+ "925261": {
+  "name": "ANDINA BOTTLING CO INC",
+  "country": "",
+  "address": "Chile",
+  "mailing": "Chile",
+  "at": "2026-10-25"
+ },
+ "927628": {
+  "name": "CAPITAL ONE FINANCIAL CORP",
+  "country": "DE",
+  "address": "VA",
+  "mailing": "VA",
+  "at": "2026-10-25"
+ },
+ "929869": {
+  "name": "RELX PLC",
+  "country": "United Kingdom",
+  "address": "United Kingdom",
+  "mailing": "United Kingdom",
+  "at": "2026-10-25"
+ },
+ "930157": {
+  "name": "RENTOKIL INITIAL PLC /FI",
+  "country": "United Kingdom",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "931427": {
+  "name": "GAS TRANSPORTER OF THE SOUTH INC",
+  "country": "",
+  "address": "Argentina",
+  "mailing": "Argentina",
+  "at": "2026-10-25"
+ },
+ "932470": {
+  "name": "TELECOM ARGENTINA SA",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "932787": {
+  "name": "STMicroelectronics N.V.",
+  "country": "Netherlands",
+  "address": "Netherlands",
+  "mailing": "Netherlands",
+  "at": "2026-10-25"
+ },
+ "933267": {
+  "name": "IRSA INVESTMENTS & REPRESENTATIONS INC",
+  "country": "",
+  "address": "Argentina",
+  "mailing": "Argentina",
+  "at": "2026-10-25"
+ },
+ "936528": {
+  "name": "WAFD INC",
+  "country": "WA",
+  "address": "WA",
+  "mailing": "WA",
+  "at": "2026-10-25"
+ },
+ "937966": {
+  "name": "ASML HOLDING NV",
+  "country": "",
+  "address": "Netherlands",
+  "mailing": "Netherlands",
+  "at": "2026-10-25"
+ },
+ "947484": {
+  "name": "ARCH CAPITAL GROUP LTD.",
+  "country": "",
+  "address": "Bermuda",
+  "mailing": "Bermuda",
+  "at": "2026-10-25"
+ },
+ "1000184": {
+  "name": "SAP SE",
+  "country": "Germany",
+  "address": "Germany",
+  "mailing": "Germany",
+  "at": "2026-10-25"
+ },
+ "1002242": {
+  "name": "ENI SPA",
+  "country": "Italy",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1003935": {
+  "name": "NICE Ltd.",
+  "country": "",
+  "address": "Israel",
+  "mailing": "Israel",
+  "at": "2026-10-25"
+ },
+ "1004315": {
+  "name": "NATIONAL GRID PLC",
+  "country": "",
+  "address": "United Kingdom",
+  "mailing": "United Kingdom",
+  "at": "2026-10-25"
+ },
+ "1015328": {
+  "name": "WINTRUST FINANCIAL CORP",
+  "country": "IL",
+  "address": "IL",
+  "mailing": "IL",
+  "at": "2026-10-25"
+ },
+ "1015820": {
+  "name": "QIAGEN N.V.",
+  "country": "Netherlands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1022837": {
+  "name": "SUMITOMO MITSUI FINANCIAL GROUP, INC.",
+  "country": "Japan",
+  "address": "Japan",
+  "mailing": "Japan",
+  "at": "2026-10-25"
+ },
+ "1023512": {
+  "name": "DRDGOLD LTD",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1023549": {
+  "name": "XTL BIOPHARMACEUTICALS LTD",
+  "country": "Israel",
+  "address": "NY",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1025835": {
+  "name": "ENTERPRISE FINANCIAL SERVICES CORP",
+  "country": "DE",
+  "address": "MO",
+  "mailing": "MO",
+  "at": "2026-10-25"
+ },
+ "1027552": {
+  "name": "BANCO SANTANDER CHILE",
+  "country": "Chile",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1032975": {
+  "name": "LOGITECH INTERNATIONAL S.A.",
+  "country": "",
+  "address": "CA",
+  "mailing": "CA",
+  "at": "2026-10-25"
+ },
+ "1034957": {
+  "name": "CRESUD INC",
+  "country": "Argentina",
+  "address": "Argentina",
+  "mailing": "Argentina",
+  "at": "2026-10-25"
+ },
+ "1038683": {
+  "name": "RYANAIR HOLDINGS PLC",
+  "country": "",
+  "address": "",
+  "mailing": "NY",
+  "at": "2026-10-25"
+ },
+ "1039765": {
+  "name": "ING GROEP NV",
+  "country": "Netherlands",
+  "address": "Netherlands",
+  "mailing": "Netherlands",
+  "at": "2026-10-25"
+ },
+ "1041792": {
+  "name": "ENERGY CO OF PARANA",
+  "country": "",
+  "address": "",
+  "mailing": "NY",
+  "at": "2026-10-25"
+ },
+ "1041934": {
+  "name": "EDAP TMS SA",
+  "country": "",
+  "address": "France",
+  "mailing": "France",
+  "at": "2026-10-25"
+ },
+ "1045986": {
+  "name": "FORMULA SYSTEMS (1985) LTD",
+  "country": "Israel",
+  "address": "Israel",
+  "mailing": "Israel",
+  "at": "2026-10-25"
+ },
+ "1047716": {
+  "name": "LATAM AIRLINES GROUP S.A.",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1049659": {
+  "name": "NATIONAL STEEL CO",
+  "country": "Brazil",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1051512": {
+  "name": "TELEPHONE & DATA SYSTEMS INC /DE/",
+  "country": "DE",
+  "address": "IL",
+  "mailing": "IL",
+  "at": "2026-10-25"
+ },
+ "1061736": {
+  "name": "MEXICAN ECONOMIC DEVELOPMENT INC",
+  "country": "Mexico",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1066119": {
+  "name": "TELEFONICA BRASIL S.A.",
+  "country": "",
+  "address": "Brazil",
+  "mailing": "Brazil",
+  "at": "2026-10-25"
+ },
+ "1067491": {
+  "name": "Infosys Ltd",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1070304": {
+  "name": "ORIX CORP",
+  "country": "Japan",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1071438": {
+  "name": "BRASKEM SA",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1073404": {
+  "name": "GERDAU S.A.",
+  "country": "Brazil",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1075880": {
+  "name": "KAZIA THERAPEUTICS LTD",
+  "country": "Australia",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1076378": {
+  "name": "CEMEX SAB DE CV",
+  "country": "Mexico",
+  "address": "Mexico",
+  "mailing": "Mexico",
+  "at": "2026-10-25"
+ },
+ "1077428": {
+  "name": "TEXAS CAPITAL BANCSHARES INC/TX",
+  "country": "",
+  "address": "TX",
+  "mailing": "TX",
+  "at": "2026-10-25"
+ },
+ "1091223": {
+  "name": "MATERIALISE NV",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1094972": {
+  "name": "ULTRAPAR HOLDINGS INC",
+  "country": "",
+  "address": "Brazil",
+  "mailing": "NY",
+  "at": "2026-10-25"
+ },
+ "1099219": {
+  "name": "METLIFE INC",
+  "country": "DE",
+  "address": "NY",
+  "mailing": "NY",
+  "at": "2026-10-25"
+ },
+ "1101215": {
+  "name": "BREAD FINANCIAL HOLDINGS, INC.",
+  "country": "DE",
+  "address": "OH",
+  "mailing": "OH",
+  "at": "2026-10-25"
+ },
+ "1110646": {
+  "name": "NetEase, Inc.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1114700": {
+  "name": "GRUPO FINANCIERO GALICIA SA",
+  "country": "Argentina",
+  "address": "Argentina",
+  "mailing": "Argentina",
+  "at": "2026-10-25"
+ },
+ "1119639": {
+  "name": "PETROBRAS - PETROLEO BRASILEIRO SA",
+  "country": "Brazil",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1121404": {
+  "name": "Sanofi",
+  "country": "France",
+  "address": "France",
+  "mailing": "France",
+  "at": "2026-10-25"
+ },
+ "1122411": {
+  "name": "ASE Technology Holding Co., Ltd.",
+  "country": "Taiwan",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1123134": {
+  "name": "CHIPMOS TECHNOLOGIES INC",
+  "country": "Taiwan",
+  "address": "Taiwan",
+  "mailing": "Taiwan",
+  "at": "2026-10-25"
+ },
+ "1123452": {
+  "name": "SOUTHEAST AIRPORT GROUP",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1129137": {
+  "name": "AMERICA MOVIL SAB DE CV/",
+  "country": "Mexico",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1131343": {
+  "name": "ALTERITY THERAPEUTICS LTD",
+  "country": "Australia",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1131399": {
+  "name": "GSK plc",
+  "country": "United Kingdom",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1132597": {
+  "name": "Itau Unibanco Holding S.A.",
+  "country": "Brazil",
+  "address": "Brazil",
+  "mailing": "Brazil",
+  "at": "2026-10-25"
+ },
+ "1157557": {
+  "name": "ENERGY CO OF MINAS GERAIS",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1160106": {
+  "name": "Lloyds Banking Group plc",
+  "country": "United Kingdom",
+  "address": "United Kingdom",
+  "mailing": "United Kingdom",
+  "at": "2026-10-25"
+ },
+ "1160330": {
+  "name": "BANK BRADESCO",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1161125": {
+  "name": "BANK OF CHILE",
+  "country": "",
+  "address": "Chile",
+  "mailing": "Chile",
+  "at": "2026-10-25"
+ },
+ "1163653": {
+  "name": "NOMURA HOLDINGS INC",
+  "country": "Japan",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1169770": {
+  "name": "BANC OF CALIFORNIA, INC.",
+  "country": "MD",
+  "address": "CA",
+  "mailing": "CA",
+  "at": "2026-10-25"
+ },
+ "1170858": {
+  "name": "COMPANHIA DE SANEAMENTO BASICO DO ESTADO DE SAO PAULO-SABESP",
+  "country": "Brazil",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1172724": {
+  "name": "GOLD FIELDS LTD",
+  "country": "",
+  "address": "South Africa",
+  "mailing": "South Africa",
+  "at": "2026-10-25"
+ },
+ "1190723": {
+  "name": "TENARIS SA",
+  "country": "",
+  "address": "Luxembourg",
+  "mailing": "Luxembourg",
+  "at": "2026-10-25"
+ },
+ "1212545": {
+  "name": "WESTERN ALLIANCE BANCORPORATION",
+  "country": "DE",
+  "address": "AZ",
+  "mailing": "AZ",
+  "at": "2026-10-25"
+ },
+ "1214816": {
+  "name": "AXIS CAPITAL HOLDINGS LTD",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1221029": {
+  "name": "CEMENTOS PACASMAYO SAA",
+  "country": "",
+  "address": "Peru",
+  "mailing": "Peru",
+  "at": "2026-10-25"
+ },
+ "1236275": {
+  "name": "QXO, Inc.",
+  "country": "DE",
+  "address": "CT",
+  "mailing": "CT",
+  "at": "2026-10-25"
+ },
+ "1263043": {
+  "name": "SHINHAN FINANCIAL GROUP CO LTD",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1264136": {
+  "name": "WOORI FINANCIAL GROUP INC.",
+  "country": "Korea, Republic of",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1269238": {
+  "name": "Trip.com Group Ltd",
+  "country": "Cayman Islands",
+  "address": "Singapore",
+  "mailing": "Singapore",
+  "at": "2026-10-25"
+ },
+ "1281761": {
+  "name": "REGIONS FINANCIAL CORP",
+  "country": "DE",
+  "address": "AL",
+  "mailing": "AL",
+  "at": "2026-10-25"
+ },
+ "1290877": {
+  "name": "Clinuvel Pharmaceuticals Ltd",
+  "country": "Australia",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1303523": {
+  "name": "British American Tobacco p.l.c.",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1306965": {
+  "name": "Shell plc",
+  "country": "DC",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1313310": {
+  "name": "GRAVITY Co., Ltd.",
+  "country": "Korea, Republic of",
+  "address": "Korea, Republic of",
+  "mailing": "Korea, Republic of",
+  "at": "2026-10-25"
+ },
+ "1326160": {
+  "name": "Duke Energy CORP",
+  "country": "DE",
+  "address": "NC",
+  "mailing": "NC",
+  "at": "2026-10-25"
+ },
+ "1329099": {
+  "name": "Baidu, Inc.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1329394": {
+  "name": "Silicon Motion Technology CORP",
+  "country": "Cayman Islands",
+  "address": "Hong Kong",
+  "mailing": "Hong Kong",
+  "at": "2026-10-25"
+ },
+ "1333141": {
+  "name": "Fresenius Medical Care AG",
+  "country": "",
+  "address": "Germany",
+  "mailing": "Germany",
+  "at": "2026-10-25"
+ },
+ "1333986": {
+  "name": "Equitable Holdings, Inc.",
+  "country": "DE",
+  "address": "NY",
+  "mailing": "NY",
+  "at": "2026-10-25"
+ },
+ "1335730": {
+  "name": "MIZUHO FINANCIAL GROUP INC",
+  "country": "",
+  "address": "Japan",
+  "mailing": "Japan",
+  "at": "2026-10-25"
+ },
+ "1341317": {
+  "name": "Bridgewater Bancshares Inc",
+  "country": "MN",
+  "address": "MN",
+  "mailing": "MN",
+  "at": "2026-10-25"
+ },
+ "1341439": {
+  "name": "ORACLE CORP",
+  "country": "",
+  "address": "TX",
+  "mailing": "TX",
+  "at": "2026-10-25"
+ },
+ "1342338": {
+  "name": "Himax Technologies, Inc.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1342874": {
+  "name": "Ternium S.A.",
+  "country": "Luxembourg",
+  "address": "Luxembourg",
+  "mailing": "Luxembourg",
+  "at": "2026-10-25"
+ },
+ "1345099": {
+  "name": "MESOBLAST LTD",
+  "country": "Australia",
+  "address": "Australia",
+  "mailing": "Australia",
+  "at": "2026-10-25"
+ },
+ "1345105": {
+  "name": "Copa Holdings, S.A.",
+  "country": "Panama",
+  "address": "Panama",
+  "mailing": "Panama",
+  "at": "2026-10-25"
+ },
+ "1347426": {
+  "name": "Macro Bank Inc.",
+  "country": "Argentina",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1347557": {
+  "name": "Pacific Airport Group",
+  "country": "Mexico",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1355444": {
+  "name": "EMBRAER S.A.",
+  "country": "",
+  "address": "Brazil",
+  "mailing": "Brazil",
+  "at": "2026-10-25"
+ },
+ "1372920": {
+  "name": "New Oriental Education & Technology Group Inc.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1373670": {
+  "name": "Green Brick Partners, Inc.",
+  "country": "DE",
+  "address": "TX",
+  "mailing": "TX",
+  "at": "2026-10-25"
+ },
+ "1375365": {
+  "name": "Super Micro Computer, Inc.",
+  "country": "CA",
+  "address": "CA",
+  "mailing": "CA",
+  "at": "2026-10-25"
+ },
+ "1378239": {
+  "name": "Central North Airport Group",
+  "country": "Mexico",
+  "address": "NY",
+  "mailing": "NY",
+  "at": "2026-10-25"
+ },
+ "1378789": {
+  "name": "AerCap Holdings N.V.",
+  "country": "Netherlands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1381640": {
+  "name": "Melco Resorts & Entertainment LTD",
+  "country": "Cayman Islands",
+  "address": "Hong Kong",
+  "mailing": "Hong Kong",
+  "at": "2026-10-25"
+ },
+ "1383395": {
+  "name": "SEQUANS COMMUNICATIONS",
+  "country": "France",
+  "address": "France",
+  "mailing": "France",
+  "at": "2026-10-25"
+ },
+ "1390777": {
+  "name": "Bank of New York Mellon Corp",
+  "country": "DE",
+  "address": "NY",
+  "mailing": "NY",
+  "at": "2026-10-25"
+ },
+ "1393311": {
+  "name": "Public Storage",
+  "country": "MD",
+  "address": "TX",
+  "mailing": "TX",
+  "at": "2026-10-25"
+ },
+ "1395064": {
+  "name": "TAKEDA PHARMACEUTICAL CO LTD",
+  "country": "",
+  "address": "Japan",
+  "mailing": "Japan",
+  "at": "2026-10-25"
+ },
+ "1395213": {
+  "name": "EDENOR",
+  "country": "Argentina",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1412558": {
+  "name": "Evotec SE",
+  "country": "Germany",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1413447": {
+  "name": "NXP Semiconductors N.V.",
+  "country": "",
+  "address": "",
+  "mailing": "Netherlands",
+  "at": "2026-10-25"
+ },
+ "1420529": {
+  "name": "ATA Creativity Global",
+  "country": "Cayman Islands",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "1421876": {
+  "name": "Lakefront Biotherapeutics NV",
+  "country": "Belgium",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1423689": {
+  "name": "AGNC Investment Corp.",
+  "country": "",
+  "address": "MD",
+  "mailing": "MD",
+  "at": "2026-10-25"
+ },
+ "1432364": {
+  "name": "AZUL SA",
+  "country": "Brazil",
+  "address": "Brazil",
+  "mailing": "Brazil",
+  "at": "2026-10-25"
+ },
+ "1434265": {
+  "name": "GENMAB A/S",
+  "country": "",
+  "address": "Denmark",
+  "mailing": "Denmark",
+  "at": "2026-10-25"
+ },
+ "1438569": {
+  "name": "Grifols SA",
+  "country": "",
+  "address": "NY",
+  "mailing": "NY",
+  "at": "2026-10-25"
+ },
+ "1444406": {
+  "name": "ECOPETROL S.A.",
+  "country": "Colombia",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1462120": {
+  "name": "Live Oak Bancshares, Inc.",
+  "country": "NC",
+  "address": "NC",
+  "mailing": "NC",
+  "at": "2026-10-25"
+ },
+ "1462418": {
+  "name": "ALTISOURCE PORTFOLIO SOLUTIONS S.A.",
+  "country": "Luxembourg",
+  "address": "Luxembourg",
+  "mailing": "Luxembourg",
+  "at": "2026-10-25"
+ },
+ "1464790": {
+  "name": "BRC Group Holdings, Inc.",
+  "country": "DE",
+  "address": "CA",
+  "mailing": "CA",
+  "at": "2026-10-25"
+ },
+ "1466026": {
+  "name": "Midland States Bancorp, Inc.",
+  "country": "IL",
+  "address": "IL",
+  "mailing": "IL",
+  "at": "2026-10-25"
+ },
+ "1468091": {
+  "name": "VEON Ltd.",
+  "country": "Bermuda",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1468522": {
+  "name": "Ferrovial N.V.",
+  "country": "Netherlands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1469395": {
+  "name": "Pampa Energy Inc.",
+  "country": "Argentina",
+  "address": "Argentina",
+  "mailing": "Argentina",
+  "at": "2026-10-25"
+ },
+ "1471055": {
+  "name": "Banco Santander (Brasil) S.A.",
+  "country": "Brazil",
+  "address": "Brazil",
+  "mailing": "Brazil",
+  "at": "2026-10-25"
+ },
+ "1472072": {
+  "name": "Concord Medical Services Holdings Ltd",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1477641": {
+  "name": "DAQO NEW ENERGY CORP.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1481513": {
+  "name": "JinkoSolar Holding Co., Ltd.",
+  "country": "Cayman Islands",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "1483994": {
+  "name": "H World Group Ltd",
+  "country": "Cayman Islands",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "1489393": {
+  "name": "LyondellBasell Industries N.V.",
+  "country": "Netherlands",
+  "address": "TX",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1490078": {
+  "name": "First Phosphate Corp.",
+  "country": "British Columbia, Canada",
+  "address": "British Columbia, Canada",
+  "mailing": "British Columbia, Canada",
+  "at": "2026-10-25"
+ },
+ "1498403": {
+  "name": "BioLineRx Ltd.",
+  "country": "Israel",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1499494": {
+  "name": "Eason Technology Ltd",
+  "country": "Cayman Islands",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "1499505": {
+  "name": "Adecoagro S.A.",
+  "country": "",
+  "address": "Luxembourg",
+  "mailing": "Luxembourg",
+  "at": "2026-10-25"
+ },
+ "1499543": {
+  "name": "NOAH HOLDINGS LTD",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1499620": {
+  "name": "TAL Education Group",
+  "country": "Cayman Islands",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "1499849": {
+  "name": "BrasilAgro - Brazilian Agricultural Real Estate Co",
+  "country": "Brazil",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1504764": {
+  "name": "Grupo Aval Acciones Y Valores S.A.",
+  "country": "",
+  "address": "Colombia",
+  "mailing": "Colombia",
+  "at": "2026-10-25"
+ },
+ "1505065": {
+  "name": "Brainsway Ltd.",
+  "country": "Israel",
+  "address": "Israel",
+  "mailing": "Israel",
+  "at": "2026-10-25"
+ },
+ "1506184": {
+  "name": "IMMUTEP Ltd",
+  "country": "Australia",
+  "address": "Australia",
+  "mailing": "Australia",
+  "at": "2026-10-25"
+ },
+ "1508475": {
+  "name": "VNET Group, Inc.",
+  "country": "",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "1509646": {
+  "name": "Phoenix New Media Ltd",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1510593": {
+  "name": "Xunlei Ltd",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1513845": {
+  "name": "Nebius Group N.V.",
+  "country": "Netherlands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1517399": {
+  "name": "Grupo Supervielle S.A.",
+  "country": "",
+  "address": "Argentina",
+  "mailing": "Argentina",
+  "at": "2026-10-25"
+ },
+ "1520504": {
+  "name": "Controladora Vuela Compania de Aviacion, S.A.B. de C.V.",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1523836": {
+  "name": "LightInTheBox Holding Co., Ltd.",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1526125": {
+  "name": "GDS Holdings Ltd",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1526475": {
+  "name": "NICOLA MINING INC.",
+  "country": "British Columbia, Canada",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1527636": {
+  "name": "Autohome Inc.",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1529192": {
+  "name": "Vipshop Holdings Ltd",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1530238": {
+  "name": "JOYY Inc.",
+  "country": "",
+  "address": "Singapore",
+  "mailing": "Singapore",
+  "at": "2026-10-25"
+ },
+ "1534248": {
+  "name": "Chemomab Therapeutics Ltd.",
+  "country": "Israel",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1535929": {
+  "name": "Voya Financial, Inc.",
+  "country": "DE",
+  "address": "NY",
+  "mailing": "NY",
+  "at": "2026-10-25"
+ },
+ "1536196": {
+  "name": "Can-Fite BioPharma Ltd.",
+  "country": "Israel",
+  "address": "Israel",
+  "mailing": "Israel",
+  "at": "2026-10-25"
+ },
+ "1539638": {
+  "name": "Triumph Financial, Inc.",
+  "country": "TX",
+  "address": "TX",
+  "mailing": "TX",
+  "at": "2026-10-25"
+ },
+ "1541157": {
+  "name": "Akari Therapeutics Plc",
+  "country": "United Kingdom",
+  "address": "FL",
+  "mailing": "FL",
+  "at": "2026-10-25"
+ },
+ "1549802": {
+  "name": "JD.com, Inc.",
+  "country": "Cayman Islands",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "1553846": {
+  "name": "RedHill Biopharma Ltd.",
+  "country": "Israel",
+  "address": "Israel",
+  "mailing": "Israel",
+  "at": "2026-10-25"
+ },
+ "1557860": {
+  "name": "Globant S.A.",
+  "country": "Spain",
+  "address": "Luxembourg",
+  "mailing": "Luxembourg",
+  "at": "2026-10-25"
+ },
+ "1561861": {
+  "name": "Grupo Aeromexico, S.A.B. de C.V.",
+  "country": "Mexico",
+  "address": "Mexico",
+  "mailing": "Mexico",
+  "at": "2026-10-25"
+ },
+ "1563411": {
+  "name": "CONSTELLIUM SE",
+  "country": "",
+  "address": "France",
+  "mailing": "France",
+  "at": "2026-10-25"
+ },
+ "1565025": {
+  "name": "AMBEV S.A.",
+  "country": "Brazil",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1567094": {
+  "name": "CNH Industrial N.V.",
+  "country": "Netherlands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1574232": {
+  "name": "Addex Therapeutics Ltd.",
+  "country": "Switzerland",
+  "address": "Switzerland",
+  "mailing": "Switzerland",
+  "at": "2026-10-25"
+ },
+ "1576427": {
+  "name": "Criteo S.A.",
+  "country": "Luxembourg",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1577552": {
+  "name": "Alibaba Group Holding Ltd",
+  "country": "Hong Kong",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1587987": {
+  "name": "NewtekOne, Inc.",
+  "country": "MD",
+  "address": "FL",
+  "mailing": "FL",
+  "at": "2026-10-25"
+ },
+ "1590560": {
+  "name": "uniQure N.V.",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1592560": {
+  "name": "VisionSys AI Inc",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1595761": {
+  "name": "WEIBO Corp",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1597095": {
+  "name": "Tuniu Corp",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1597835": {
+  "name": "Cheetah Mobile Inc.",
+  "country": "Cayman Islands",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "1598599": {
+  "name": "Innate Pharma SA",
+  "country": "France",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1601712": {
+  "name": "Synchrony Financial",
+  "country": "NY",
+  "address": "CT",
+  "mailing": "CT",
+  "at": "2026-10-25"
+ },
+ "1605484": {
+  "name": "Stellantis N.V.",
+  "country": "Netherlands",
+  "address": "Netherlands",
+  "mailing": "Netherlands",
+  "at": "2026-10-25"
+ },
+ "1609804": {
+  "name": "Orion S.A.",
+  "country": "",
+  "address": "TX",
+  "mailing": "TX",
+  "at": "2026-10-25"
+ },
+ "1610601": {
+  "name": "Hello Group Inc.",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1611747": {
+  "name": "Scinai Immunotherapeutics Ltd.",
+  "country": "Israel",
+  "address": "Israel",
+  "mailing": "Israel",
+  "at": "2026-10-25"
+ },
+ "1612940": {
+  "name": "ProQR Therapeutics N.V.",
+  "country": "Netherlands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1613780": {
+  "name": "DBV Technologies S.A.",
+  "country": "France",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1614744": {
+  "name": "PURPLE BIOTECH LTD.",
+  "country": "Israel",
+  "address": "Israel",
+  "mailing": "Israel",
+  "at": "2026-10-25"
+ },
+ "1619544": {
+  "name": "9F Inc.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1625414": {
+  "name": "Baozun Inc.",
+  "country": "Cayman Islands",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "1627281": {
+  "name": "Cellectis S.A.",
+  "country": "France",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1629019": {
+  "name": "Merchants Bancorp",
+  "country": "IN",
+  "address": "IN",
+  "mailing": "IN",
+  "at": "2026-10-25"
+ },
+ "1631761": {
+  "name": "Yiren Digital Ltd.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1639920": {
+  "name": "Spotify Technology S.A.",
+  "country": "Luxembourg",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1643303": {
+  "name": "Nano Dimension Ltd.",
+  "country": "Israel",
+  "address": "MA",
+  "mailing": "MA",
+  "at": "2026-10-25"
+ },
+ "1648257": {
+  "name": "HUTCHMED (China) Ltd",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1648416": {
+  "name": "Ferrari N.V.",
+  "country": "Netherlands",
+  "address": "Italy",
+  "mailing": "Italy",
+  "at": "2026-10-25"
+ },
+ "1651308": {
+  "name": "BeOne Medicines Ltd.",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1651625": {
+  "name": "AC Immune SA",
+  "country": "Switzerland",
+  "address": "Switzerland",
+  "mailing": "Switzerland",
+  "at": "2026-10-25"
+ },
+ "1652044": {
+  "name": "Alphabet Inc.",
+  "country": "DE",
+  "address": "CA",
+  "mailing": "CA",
+  "at": "2026-10-25"
+ },
+ "1656081": {
+  "name": "Endava plc",
+  "country": "United Kingdom",
+  "address": "United Kingdom",
+  "mailing": "United Kingdom",
+  "at": "2026-10-25"
+ },
+ "1659494": {
+  "name": "51Talk Online Education Group",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1659939": {
+  "name": "Enel Chile S.A.",
+  "country": "Chile",
+  "address": "Chile",
+  "mailing": "Chile",
+  "at": "2026-10-25"
+ },
+ "1660046": {
+  "name": "Immuron Ltd",
+  "country": "Australia",
+  "address": "Australia",
+  "mailing": "Australia",
+  "at": "2026-10-25"
+ },
+ "1668717": {
+  "name": "Anheuser-Busch InBev SA/NV",
+  "country": "Belgium",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1671502": {
+  "name": "Quoin Pharmaceuticals Ltd.",
+  "country": "Israel",
+  "address": "VA",
+  "mailing": "VA",
+  "at": "2026-10-25"
+ },
+ "1671927": {
+  "name": "Immunocore Holdings plc",
+  "country": "United Kingdom",
+  "address": "United Kingdom",
+  "mailing": "United Kingdom",
+  "at": "2026-10-25"
+ },
+ "1677250": {
+  "name": "ZTO Express (Cayman) Inc.",
+  "country": "",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "1683825": {
+  "name": "trivago N.V.",
+  "country": "Netherlands",
+  "address": "Germany",
+  "mailing": "Germany",
+  "at": "2026-10-25"
+ },
+ "1685040": {
+  "name": "Brighthouse Financial, Inc.",
+  "country": "DE",
+  "address": "NC",
+  "mailing": "NC",
+  "at": "2026-10-25"
+ },
+ "1691221": {
+  "name": "Foresight Autonomous Holdings Ltd.",
+  "country": "Israel",
+  "address": "Israel",
+  "mailing": "Israel",
+  "at": "2026-10-25"
+ },
+ "1691445": {
+  "name": "FinVolution Group",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1692705": {
+  "name": "High Templar Tech Ltd",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1693577": {
+  "name": "MainStreet Bancshares, Inc.",
+  "country": "VA",
+  "address": "VA",
+  "mailing": "VA",
+  "at": "2026-10-25"
+ },
+ "1697818": {
+  "name": "Amber International Holding Ltd",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1697862": {
+  "name": "ARGENX SE",
+  "country": "Netherlands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1702318": {
+  "name": "Akso Health Group",
+  "country": "Cayman Islands",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "1703399": {
+  "name": "Sea Ltd",
+  "country": "Cayman Islands",
+  "address": "Singapore",
+  "mailing": "Singapore",
+  "at": "2026-10-25"
+ },
+ "1704292": {
+  "name": "Zai Lab Ltd",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1707753": {
+  "name": "Elastic N.V.",
+  "country": "",
+  "address": "CA",
+  "mailing": "CA",
+  "at": "2026-10-25"
+ },
+ "1708259": {
+  "name": "LexinFintech Holdings Ltd.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1708441": {
+  "name": "Mynd.ai, Inc.",
+  "country": "Cayman Islands",
+  "address": "GA",
+  "mailing": "GA",
+  "at": "2026-10-25"
+ },
+ "1708688": {
+  "name": "InflaRx N.V.",
+  "country": "Netherlands",
+  "address": "Germany",
+  "mailing": "Germany",
+  "at": "2026-10-25"
+ },
+ "1709626": {
+  "name": "NuCana plc",
+  "country": "United Kingdom",
+  "address": "United Kingdom",
+  "mailing": "United Kingdom",
+  "at": "2026-10-25"
+ },
+ "1709819": {
+  "name": "Four Seasons Education (Cayman) Inc.",
+  "country": "China",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1711375": {
+  "name": "Loma Negra Compania Industrial Argentina Sociedad Anonima",
+  "country": "",
+  "address": "Argentina",
+  "mailing": "Argentina",
+  "at": "2026-10-25"
+ },
+ "1712178": {
+  "name": "NaaS Technology Inc.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1713334": {
+  "name": "STUDIO CITY INTERNATIONAL HOLDINGS Ltd",
+  "country": "Virgin Islands, British",
+  "address": "Hong Kong",
+  "mailing": "Hong Kong",
+  "at": "2026-10-25"
+ },
+ "1713930": {
+  "name": "Nexa Resources S.A.",
+  "country": "Luxembourg",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1716338": {
+  "name": "J & Friends Holdings Ltd",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1717161": {
+  "name": "CENTRAL PUERTO S.A.",
+  "country": "Argentina",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1717393": {
+  "name": "CORPORACION AMERICA AIRPORTS S.A.",
+  "country": "Luxembourg",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1719714": {
+  "name": "Mereo BioPharma Group plc",
+  "country": "United Kingdom",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1720446": {
+  "name": "Zepp Health Corp",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1722608": {
+  "name": "iQIYI, Inc.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1723690": {
+  "name": "Bilibili Inc.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1723935": {
+  "name": "Sunlands Technology Group",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1724755": {
+  "name": "GreenTree Hospitality Group Ltd.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1725033": {
+  "name": "X Financial",
+  "country": "Cayman Islands",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "1725332": {
+  "name": "Alarum Technologies Ltd.",
+  "country": "Israel",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1728190": {
+  "name": "HUYA Inc.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1729173": {
+  "name": "Uxin Ltd",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1730463": {
+  "name": "Autolus Therapeutics plc",
+  "country": "United Kingdom",
+  "address": "United Kingdom",
+  "mailing": "United Kingdom",
+  "at": "2026-10-25"
+ },
+ "1733868": {
+  "name": "CNFinance Holdings Ltd.",
+  "country": "Cayman Islands",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "1734107": {
+  "name": "Sohu.com Ltd",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1736541": {
+  "name": "NIO Inc.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1737339": {
+  "name": "Aurora Mobile Ltd",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1737450": {
+  "name": "Opera Ltd",
+  "country": "Cayman Islands",
+  "address": "Norway",
+  "mailing": "Norway",
+  "at": "2026-10-25"
+ },
+ "1737806": {
+  "name": "PDD Holdings Inc.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1738906": {
+  "name": "111, Inc.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1741530": {
+  "name": "Qfin Holdings, Inc.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1742770": {
+  "name": "Viomi Technology Co., Ltd",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1743102": {
+  "name": "Jiayin Group Inc.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1743340": {
+  "name": "Token Cat Ltd",
+  "country": "Cayman Islands",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "1743971": {
+  "name": "MOGU Inc.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1744676": {
+  "name": "Tencent Music Entertainment Group",
+  "country": "Cayman Islands",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "1744781": {
+  "name": "Niu Technologies",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1745114": {
+  "name": "MOLECULAR PARTNERS AG",
+  "country": "Switzerland",
+  "address": "Switzerland",
+  "mailing": "Switzerland",
+  "at": "2026-10-25"
+ },
+ "1754581": {
+  "name": "Futu Holdings Ltd",
+  "country": "Cayman Islands",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "1756594": {
+  "name": "Inventiva S.A.",
+  "country": "France",
+  "address": "France",
+  "mailing": "France",
+  "at": "2026-10-25"
+ },
+ "1756699": {
+  "name": "UP Fintech Holding Ltd",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1756708": {
+  "name": "Jumia Technologies AG",
+  "country": "Germany",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1759783": {
+  "name": "EHang Holdings Ltd",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1759824": {
+  "name": "ALTA EQUIPMENT GROUP INC.",
+  "country": "DE",
+  "address": "MI",
+  "mailing": "MI",
+  "at": "2026-10-25"
+ },
+ "1760854": {
+  "name": "Nanobiotix S.A.",
+  "country": "France",
+  "address": "France",
+  "mailing": "France",
+  "at": "2026-10-25"
+ },
+ "1761612": {
+  "name": "BICYCLE THERAPEUTICS PLC",
+  "country": "United Kingdom",
+  "address": "United Kingdom",
+  "mailing": "United Kingdom",
+  "at": "2026-10-25"
+ },
+ "1762417": {
+  "name": "DouYu International Holdings Ltd",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1762506": {
+  "name": "Vista Energy, S.A.B. de C.V.",
+  "country": "Mexico",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1768259": {
+  "name": "Gaotu Techedu Inc.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1769256": {
+  "name": "XChange TEC.INC",
+  "country": "",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "1769731": {
+  "name": "AMTD IDEA GROUP",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1771910": {
+  "name": "ADC Therapeutics SA",
+  "country": "Switzerland",
+  "address": "Switzerland",
+  "mailing": "Switzerland",
+  "at": "2026-10-25"
+ },
+ "1775898": {
+  "name": "uCloudlink Group Inc.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1776985": {
+  "name": "BioNTech SE",
+  "country": "Germany",
+  "address": "Germany",
+  "mailing": "Germany",
+  "at": "2026-10-25"
+ },
+ "1778016": {
+  "name": "NovaBridge Biosciences",
+  "country": "Cayman Islands",
+  "address": "MD",
+  "mailing": "MD",
+  "at": "2026-10-25"
+ },
+ "1778982": {
+  "name": "Huize Holding Ltd",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1779476": {
+  "name": "36Kr Holdings Inc.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1780652": {
+  "name": "Canaan Inc.",
+  "country": "Cayman Islands",
+  "address": "Singapore",
+  "mailing": "Singapore",
+  "at": "2026-10-25"
+ },
+ "1781753": {
+  "name": "Youdao, Inc.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1783407": {
+  "name": "Sound Group Inc.",
+  "country": "Cayman Islands",
+  "address": "Singapore",
+  "mailing": "Singapore",
+  "at": "2026-10-25"
+ },
+ "1786909": {
+  "name": "Sibanye Stillwater Ltd",
+  "country": "South Africa",
+  "address": "South Africa",
+  "mailing": "South Africa",
+  "at": "2026-10-25"
+ },
+ "1788257": {
+  "name": "BETTERWARE DE MEXICO, S.A.P.I. DE C.V",
+  "country": "Mexico",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1791706": {
+  "name": "Li Auto Inc.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1791942": {
+  "name": "JBS N.V.",
+  "country": "Netherlands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1792267": {
+  "name": "Burning Rock Biotech Ltd",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1794350": {
+  "name": "Yalla Group Ltd",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1795589": {
+  "name": "Kingsoft Cloud Holdings Ltd",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1799207": {
+  "name": "AUNA S.A.",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1801198": {
+  "name": "Legend Biotech Corp",
+  "country": "Cayman Islands",
+  "address": "NJ",
+  "mailing": "NJ",
+  "at": "2026-10-25"
+ },
+ "1802883": {
+  "name": "Agora, Inc.",
+  "country": "Cayman Islands",
+  "address": "CA",
+  "mailing": "CA",
+  "at": "2026-10-25"
+ },
+ "1806524": {
+  "name": "Lion Group Holding Ltd",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1809196": {
+  "name": "Immatics N.V.",
+  "country": "Netherlands",
+  "address": "Germany",
+  "mailing": "Germany",
+  "at": "2026-10-25"
+ },
+ "1809587": {
+  "name": "KE Holdings Inc.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1809691": {
+  "name": "AMTD Digital Inc.",
+  "country": "Cayman Islands",
+  "address": "France",
+  "mailing": "France",
+  "at": "2026-10-25"
+ },
+ "1810997": {
+  "name": "XPENG INC.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1814067": {
+  "name": "Lixiang Education Holding Co. Ltd.",
+  "country": "",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "1814423": {
+  "name": "iHuman Inc.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1815846": {
+  "name": "MINISO Group Holding Ltd",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1816007": {
+  "name": "Lufax Holding Ltd",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1818838": {
+  "name": "Adagene Inc.",
+  "country": "Cayman Islands",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "1819580": {
+  "name": "Yatsen Holding Ltd",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1819704": {
+  "name": "Medirom Healthcare Technologies Inc.",
+  "country": "Japan",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1821468": {
+  "name": "17 Education & Technology Group Inc.",
+  "country": "China",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1822993": {
+  "name": "Jackson Financial Inc.",
+  "country": "DE",
+  "address": "MI",
+  "mailing": "MI",
+  "at": "2026-10-25"
+ },
+ "1823986": {
+  "name": "Waterdrop Inc.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1826168": {
+  "name": "TIM S.A.",
+  "country": "Brazil",
+  "address": "Brazil",
+  "mailing": "Brazil",
+  "at": "2026-10-25"
+ },
+ "1828098": {
+  "name": "Steakholder Foods Ltd.",
+  "country": "Israel",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1828253": {
+  "name": "Evaxion A/S",
+  "country": "Denmark",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1828316": {
+  "name": "Pharming Group N.V.",
+  "country": "Netherlands",
+  "address": "Netherlands",
+  "mailing": "Netherlands",
+  "at": "2026-10-25"
+ },
+ "1828365": {
+  "name": "RLX Technology Inc.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1829118": {
+  "name": "Tuya Inc.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1830487": {
+  "name": "Pharvaris N.V.",
+  "country": "Netherlands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1831907": {
+  "name": "LuxExperience B.V.",
+  "country": "Netherlands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1835724": {
+  "name": "Zhihu Inc.",
+  "country": "Cayman Islands",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "1836242": {
+  "name": "Tokyo Lifestyle Co., Ltd.",
+  "country": "Japan",
+  "address": "Japan",
+  "mailing": "Japan",
+  "at": "2026-10-25"
+ },
+ "1836564": {
+  "name": "Valneva SE",
+  "country": "France",
+  "address": "France",
+  "mailing": "France",
+  "at": "2026-10-25"
+ },
+ "1838413": {
+  "name": "Full Truck Alliance Co. Ltd.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1838716": {
+  "name": "Genenta Science S.p.A.",
+  "country": "Italy",
+  "address": "Italy",
+  "mailing": "Italy",
+  "at": "2026-10-25"
+ },
+ "1838957": {
+  "name": "ATRenew Inc.",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1840416": {
+  "name": "Sono Group N.V.",
+  "country": "Netherlands",
+  "address": "Germany",
+  "mailing": "Germany",
+  "at": "2026-10-25"
+ },
+ "1840706": {
+  "name": "SOPHiA GENETICS SA",
+  "country": "Switzerland",
+  "address": "Switzerland",
+  "mailing": "Switzerland",
+  "at": "2026-10-25"
+ },
+ "1841644": {
+  "name": "PicS N.V.",
+  "country": "Netherlands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1841675": {
+  "name": "Argo Blockchain Plc",
+  "country": "United Kingdom",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1843586": {
+  "name": "Oatly Group AB",
+  "country": "Sweden",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1845097": {
+  "name": "Ardagh Metal Packaging S.A.",
+  "country": "Luxembourg",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1846715": {
+  "name": "Eco Wave Power Global AB (publ)",
+  "country": "Sweden",
+  "address": "Sweden",
+  "mailing": "Sweden",
+  "at": "2026-10-25"
+ },
+ "1849853": {
+  "name": "Stevanato Group S.p.A.",
+  "country": "",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1850235": {
+  "name": "D-MARKET Electronic Services & Trading",
+  "country": "Turkey",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1852440": {
+  "name": "Jianzhi Education Technology Group Co Ltd",
+  "country": "Cayman Islands",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "1853717": {
+  "name": "Atour Lifestyle Holdings Ltd",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1854545": {
+  "name": "Dingdong (Cayman) Ltd",
+  "country": "Cayman Islands",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "1857190": {
+  "name": "Nyxoah SA",
+  "country": "Belgium",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1858724": {
+  "name": "BingEx Ltd",
+  "country": "Cayman Islands",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "1861737": {
+  "name": "Hesai Group",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1862044": {
+  "name": "ZKH Group Ltd",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1866501": {
+  "name": "Wallbox N.V.",
+  "country": "Netherlands",
+  "address": "Spain",
+  "mailing": "Spain",
+  "at": "2026-10-25"
+ },
+ "1866782": {
+  "name": "Codere Online Luxembourg, S.A.",
+  "country": "Luxembourg",
+  "address": "Luxembourg",
+  "mailing": "Luxembourg",
+  "at": "2026-10-25"
+ },
+ "1867729": {
+  "name": "WeRide Inc.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1872529": {
+  "name": "MDxHealth SA",
+  "country": "Belgium",
+  "address": "Belgium",
+  "mailing": "Belgium",
+  "at": "2026-10-25"
+ },
+ "1874252": {
+  "name": "Quantum Cyber N.V.",
+  "country": "Netherlands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1877787": {
+  "name": "Ermenegildo Zegna N.V.",
+  "country": "Netherlands",
+  "address": "Italy",
+  "mailing": "Italy",
+  "at": "2026-10-25"
+ },
+ "1879248": {
+  "name": "Ads-Tec Energy Public Ltd Co",
+  "country": "Ireland",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1880319": {
+  "name": "Perimeter Solutions, Inc.",
+  "country": "",
+  "address": "MO",
+  "mailing": "MO",
+  "at": "2026-10-25"
+ },
+ "1884082": {
+  "name": "Polestar Automotive Holding UK PLC",
+  "country": "United Kingdom",
+  "address": "Sweden",
+  "mailing": "Sweden",
+  "at": "2026-10-25"
+ },
+ "1888886": {
+  "name": "Structure Therapeutics Inc.",
+  "country": "Cayman Islands",
+  "address": "CA",
+  "mailing": "CA",
+  "at": "2026-10-25"
+ },
+ "1888980": {
+  "name": "LEAD REAL ESTATE CO., LTD",
+  "country": "Japan",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1889109": {
+  "name": "BELITE BIO, INC",
+  "country": "Cayman Islands",
+  "address": "CA",
+  "mailing": "CA",
+  "at": "2026-10-25"
+ },
+ "1894693": {
+  "name": "SaverOne 2014 Ltd.",
+  "country": "Israel",
+  "address": "Israel",
+  "mailing": "Israel",
+  "at": "2026-10-25"
+ },
+ "1895597": {
+  "name": "Intchains Group Ltd",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1896084": {
+  "name": "ioneer Ltd",
+  "country": "Australia",
+  "address": "NV",
+  "mailing": "NV",
+  "at": "2026-10-25"
+ },
+ "1898601": {
+  "name": "IPERIONX Ltd",
+  "country": "Australia",
+  "address": "VA",
+  "mailing": "VA",
+  "at": "2026-10-25"
+ },
+ "1900304": {
+  "name": "Haleon plc",
+  "country": "United Kingdom",
+  "address": "United Kingdom",
+  "mailing": "United Kingdom",
+  "at": "2026-10-25"
+ },
+ "1913847": {
+  "name": "Coincheck Group N.V.",
+  "country": "Netherlands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1932770": {
+  "name": "Here Group Ltd",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1935172": {
+  "name": "Xiao-I Corp",
+  "country": "Cayman Islands",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "1936258": {
+  "name": "NewAmsterdam Pharma Co N.V.",
+  "country": "Netherlands",
+  "address": "Netherlands",
+  "mailing": "Netherlands",
+  "at": "2026-10-25"
+ },
+ "1937737": {
+  "name": "Moolec Science SA",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1944399": {
+  "name": "Perpetuals.com Ltd",
+  "country": "Japan",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1944552": {
+  "name": "Adlai Nortye Group Ltd.",
+  "country": "DE",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1948294": {
+  "name": "CL Workshop Group Ltd",
+  "country": "Virgin Islands, British",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1949257": {
+  "name": "Radiopharm Theranostics Ltd",
+  "country": "Australia",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1956827": {
+  "name": "Abivax S.A.",
+  "country": "France",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1962746": {
+  "name": "Lotus Technology Inc.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1963439": {
+  "name": "Turbo Energy, S.A.",
+  "country": "Spain",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1966041": {
+  "name": "DSC Holdings Ltd.",
+  "country": "",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "1966233": {
+  "name": "NIP Group Inc.",
+  "country": "Cayman Islands",
+  "address": "Sweden",
+  "mailing": "Sweden",
+  "at": "2026-10-25"
+ },
+ "1967631": {
+  "name": "Jinxin Technology Holding Co",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1969302": {
+  "name": "Pony AI Inc.",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1969373": {
+  "name": "Vesta Real Estate Corporation, S.A.B. de C.V.",
+  "country": "Mexico",
+  "address": "Mexico",
+  "mailing": "Mexico",
+  "at": "2026-10-25"
+ },
+ "1973239": {
+  "name": "ARM HOLDINGS PLC /UK",
+  "country": "United Kingdom",
+  "address": "United Kingdom",
+  "mailing": "United Kingdom",
+  "at": "2026-10-25"
+ },
+ "1978867": {
+  "name": "Cadeler A/S",
+  "country": "Denmark",
+  "address": "Denmark",
+  "mailing": "Denmark",
+  "at": "2026-10-25"
+ },
+ "1979887": {
+  "name": "XCHG Ltd",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1987240": {
+  "name": "SCHMID Group N.V.",
+  "country": "Netherlands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "1991605": {
+  "name": "Yimutian Inc.",
+  "country": "Cayman Islands",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "1995306": {
+  "name": "SUPER HI INTERNATIONAL HOLDING LTD.",
+  "country": "Cayman Islands",
+  "address": "Singapore",
+  "mailing": "Singapore",
+  "at": "2026-10-25"
+ },
+ "1995520": {
+  "name": "Yuanbao Inc.",
+  "country": "Cayman Islands",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "1996862": {
+  "name": "Bunge Global SA",
+  "country": "Switzerland",
+  "address": "Switzerland",
+  "mailing": "Switzerland",
+  "at": "2026-10-25"
+ },
+ "1999860": {
+  "name": "Wing Yip Food Holdings Group Ltd",
+  "country": "Hong Kong",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "2000366": {
+  "name": "Scage Future",
+  "country": "Cayman Islands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "2004711": {
+  "name": "Bending Spoons S.p.A.",
+  "country": "Italy",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "2006960": {
+  "name": "Londian Wason New Energy Tech Inc.",
+  "country": "Cayman Islands",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "2007191": {
+  "name": "Telix Pharmaceuticals Ltd",
+  "country": "Australia",
+  "address": "Australia",
+  "mailing": "Australia",
+  "at": "2026-10-25"
+ },
+ "2013649": {
+  "name": "Chagee Holdings Ltd.",
+  "country": "",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "2018462": {
+  "name": "PicoCELA Inc.",
+  "country": "Japan",
+  "address": "Japan",
+  "mailing": "Japan",
+  "at": "2026-10-25"
+ },
+ "2020932": {
+  "name": "AgomAb Therapeutics NV",
+  "country": "Belgium",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "2028177": {
+  "name": "Youlife Group Inc.",
+  "country": "",
+  "address": "China",
+  "mailing": "China",
+  "at": "2026-10-25"
+ },
+ "2030277": {
+  "name": "LEIFRAS Co., Ltd.",
+  "country": "Japan",
+  "address": "Japan",
+  "mailing": "Japan",
+  "at": "2026-10-25"
+ },
+ "2035304": {
+  "name": "Titan America SA",
+  "country": "Belgium",
+  "address": "",
+  "mailing": "VA",
+  "at": "2026-10-25"
+ },
+ "2039972": {
+  "name": "Guardian Metal Resources PLC",
+  "country": "United Kingdom",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "2058601": {
+  "name": "BRBI BR Partners S.A.",
+  "country": "Brazil",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "2058897": {
+  "name": "Grupo Cibest S.A.",
+  "country": "Colombia",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "2067627": {
+  "name": "Terra Innovatum Global N.V.",
+  "country": "Italy",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "2071668": {
+  "name": "Magnum Ice Cream Co N.V.",
+  "country": "Netherlands",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "2083526": {
+  "name": "Micware Co., Ltd.",
+  "country": "Japan",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "2095096": {
+  "name": "Einride AB",
+  "country": "Sweden",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "2102907": {
+  "name": "Resolution Minerals Ltd",
+  "country": "Australia",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "2109150": {
+  "name": "INNIO N.V.",
+  "country": "Germany",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "2113060": {
+  "name": "IQM Quantum Computers Oyj",
+  "country": "Finland",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "2119292": {
+  "name": "Pasqal Holding SA",
+  "country": "France",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "2120882": {
+  "name": "SK hynix Inc.",
+  "country": "Korea, Republic of",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ },
+ "2124403": {
+  "name": "Vicore Pharma Holding AB",
+  "country": "Sweden",
+  "address": "",
+  "mailing": "",
+  "at": "2026-10-25"
+ }
+}

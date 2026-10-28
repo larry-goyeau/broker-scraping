@@ -14,7 +14,8 @@
 // Warsaw is the domestic table on the fees page, not that PDF. The
 // same line prices GPW and the ASO, so NewConnect uses it.
 //   shares                 0.38 % min 5 zł. A same-day close is 0.15 %,
-//                          so the remark is −0.23 point on the fees.
+//                          so the remark is the sale's commission cut by
+//                          (0.38 − 0.15) / 0.38 = 61 %.
 //   ETF, ETC, ETN, ETP     0.25 % min 5 zł, promotion through 2026-12-30
 //   Beta ETF TBSP and
 //   Beta ETF Obligacji 6M  0.10 % min 3 zł, same promotion
@@ -62,6 +63,9 @@ const SCHEDULE = {
 
 const FOREIGN_RATE = 0.0029;
 const GPW_RATE = 0.0038;
+// A same-day close of a GPW share, and its cut of the 0.38 % commission.
+const GPW_SAME_DAY = 0.0015;
+const GPW_SAME_DAY_CUT = Math.round((100 * (GPW_RATE - GPW_SAME_DAY)) / GPW_RATE);
 const GPW_FUND = 0.0025;
 const GPW_BETA = 0.001;
 const GPW_MIN = 5;
@@ -254,7 +258,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const remark = [
     held ? `FX ${FX_FLAT.PLN} PLN / ${FX_FLAT.EUR} EUR / ${FX_FLAT.USD} USD / ${FX_FLAT.GBP} GBP if cash ≠ ${cash}.` : "",
     market === "gpw" && listing.type === "STOCK"
-      ? "If the sale is the same day, fees are 0.23% lower."
+      ? `If the sale is the same day, fees are ${GPW_SAME_DAY_CUT}% lower.`
       : "",
     isFund(listing.type) ? "IKE and IKZE: 0 % on ETF, ETP, ETN and ETC through February 2027." : "",
   ]

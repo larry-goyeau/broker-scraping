@@ -21,7 +21,9 @@
 //   same-day exit costs the same. Minimum order 50,000 pesos.
 //   Custody at the DCV: "Este servicio no tiene costos para el cliente."
 //   Club $100 Millones is a lower rate a client may get: the remark gives
-//   the saving on both sides at the standard VAT.
+//   it as a cut of this order's commission, the 3,900-peso fixed part
+//   included (0.25% against 0.40%, VAT scaling both alike: 19% lower on
+//   920,000 pesos; 38% at the bare rates when no order is known).
 //
 // Cash: pesos only (deposits.mjs CLP), and every line is in pesos, so
 // nothing is converted. Chile has no stamp or transaction tax on shares.
@@ -71,9 +73,13 @@ const dollars = (amount, currency) => {
   return v == null ? null : Number(v.toPrecision(12));
 };
 
-// Club $100 Millones: both sides, with VAT, as a share of the order.
-const CLUB_GAP = Number(((RATE - CLUB_RATE) * (1 + IVA) * 2 * 100).toFixed(2));
-const REMARK = `Fees might be ${CLUB_GAP}% lower.`;
+// Club $100 Millones as a cut of the commission on `notional` pesos (fixed
+// part included), or of the bare rate when no order is known.
+function clubRemark(notional) {
+  const x = notional > 0 ? ((RATE - CLUB_RATE) * notional * 100) / (RATE * notional + FIXED_CLP) : ((RATE - CLUB_RATE) / RATE) * 100;
+  return `Fees might be ${x >= 10 ? Math.round(x) : Number(x.toFixed(1))}% lower.`;
+}
+const REMARK = clubRemark(null);
 
 const SANTIAGO_CODES = new Set(["BCS", "XSGO", "SANTIAGO", "BOLSADESANTIAGO", "SANTIAGOSTOCKEXCHANGE"]);
 
@@ -189,6 +195,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     ...shared,
     usd: finite(usd, 6),
     brokerFees: finite(brokerFees, 6),
+    remark: clubRemark(notional),
     ...(bookUsd == null
       ? { why: `aucun carnet pour ${m.unsourced?.name || listing.exchange} : ${m.unsourced?.why || "pas de feuille de carnet pour cette ligne"}` }
       : {}),

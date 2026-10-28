@@ -60,7 +60,7 @@
 // In the total: the book, brokerage + GST both ways, the DP debit + GST on
 // the sell, STT, stamp, exchange, IPFT, SEBI and GST on exchange and SEBI.
 // Cash is rupees only (deposits.mjs) and every line is INR: no FX.
-// Remark on a share, at this order's value: "Same day sell is x% lower."
+// Remark on a share, at this order's value: "Same day sell fees are x% lower."
 // (an intraday buy and sell: the same brokerage, STT 0.025% on the sell
 // only, stamp 0.003% on the buy, no DP debit). Not here: Call & trade
 // (₹45 + GST per order, phone), CUSPA, pledges, delayed payment interest.
@@ -193,7 +193,7 @@ export function roundTrip(query) {
   // The same-day gap is a share's (an ETF's STT is another rule).
   if (cost.listing?.type !== "STOCK") return cost;
   const out = intradayBuySell(cost, SCHEDULE, brokerageEach);
-  return { ...out, remark: String(out.remark || "").replace(/^Intraday buy and sell is /, "Same day sell is ") };
+  return { ...out, remark: String(out.remark || "").replace(/^Intraday buy and sell fees are /, "Same day sell fees are ") };
 }
 
 printCli(import.meta.url, roundTrip);

@@ -38,7 +38,7 @@
 // liquid or foreign-index ETF pays none.
 //
 // In the total: the book, brokerage, DP, STT, stamp, exchange, SEBI, IPFT
-// and GST. Remark on a share, at this order's value: "Same day sell is x%
+// and GST. Remark on a share, at this order's value: "Same day sell fees are x%
 // lower." (an intraday buy and sell: same brokerage, STT 0.025% on the
 // sell only, stamp 0.003%, no DP debit). Cash is rupees only (deposits.mjs)
 // and every line is INR: no FX. Not here: Call and
@@ -133,7 +133,7 @@ export function roundTrip(query) {
   // The same-day gap is a share's (an ETF's STT is another rule).
   if (cost.listing?.type !== "STOCK") return cost;
   const out = intradayBuySell(cost, SCHEDULE, brokerageEach);
-  return { ...out, remark: String(out.remark || "").replace(/^Intraday buy and sell is /, "Same day sell is ") };
+  return { ...out, remark: String(out.remark || "").replace(/^Intraday buy and sell fees are /, "Same day sell fees are ") };
 }
 
 // The catalogue line behind a listing, for its BSE group.

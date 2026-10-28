@@ -34,25 +34,20 @@
 //      https://www.hkex.com.hk/-/media/HKEX-Market/Mutual-Market/Stock-Connect/Eligible-Stocks/View-All-Eligible-Securities_xls/SSE_Securities.xls
 //      https://www.hkex.com.hk/-/media/HKEX-Market/Mutual-Market/Stock-Connect/Eligible-Stocks/View-All-Eligible-Securities_xls/SZSE_Securities.xls
 //
-// 3. London (LSE and London IOB): no suspended lines. The LSE instrument
-//    API files trading status "S" ("S c"); the LSE's own page shows it as
-//    "Trading Status: Suspended - Closed" (checked on SPMU, last close
-//    6 March 2024). The LSE price explorer lists every equity and ETP line
-//    with its mid price; a suspended line has none (SPMU, PYX, OIH, RKMD,
-//    ATAD: midPrice null). So only the lines with no mid price, or that the
-//    explorer does not list, are asked for their status (about 110 of
-//    6,230 on 2026-10-20; the API blocks a burst of calls for minutes),
-//    and a line is dropped only when the LSE answers for its TIDM with the
-//    same ISIN and status S. A line the LSE does not answer for is kept.
-//      https://api.londonstockexchange.com/api/v1/pages?path=live-markets/market-data-dashboard/price-explorer&parameters=categories%3DEQUITY%2CETFS%26size%3D1000%26page%3D0
-//      https://api.londonstockexchange.com/api/gw/lse/instruments/alldata/<TIDM>
-//      https://www.londonstockexchange.com/stock/SPMU/spiritus-mundi-plc/company-page
+// 3. London (LSE and London IOB): no suspended or halted lines. The LSE's
+//    price explorer data API files every equity and ETP line with its
+//    trading status ("Normal", "Suspended", "Halted", with " - Closed"
+//    outside hours); a row whose line is Suspended or Halted goes, and a
+//    row the explorer does not list is kept. The old pages API
+//    (api.londonstockexchange.com/api/v1/pages, gw/lse/instruments/alldata)
+//    answers 403 since the LSE moved its site on 2026-10-24, so the shared
+//    reader ../stratiphy/lseBook.mjs (lseLines) is used.
+//      https://www.londonstockexchange.com/en/price-explorer
+//      https://apidata.londonstockexchange.com/search/v1/query (POST)
 //
-// 4. London IOB: a depositary receipt is kept only when the LSE's price
-//    explorer still files it under Equity > IOB (by TIDM or ISIN); GDRs
-//    the LSE no longer lists (SAUD, LKCS) go.
-//      https://www.londonstockexchange.com/live-markets/market-data-dashboard/price-explorer
-//      https://api.londonstockexchange.com/api/v1/pages?path=live-markets/market-data-dashboard/price-explorer&parameters=subcategories%3D2%26size%3D100
+// 4. London IOB: a depositary receipt is kept only when the same price
+//    explorer still tags it "IOB (International Order Book)" (by TIDM or
+//    ISIN); GDRs the LSE no longer lists (SAUD, LKCS) go.
 //
 // 5. ASX: ordinary shares, units and ETPs only. A code is kept when it is
 //    on the ASX list of listed companies (one code per listed entity) or on
@@ -84,6 +79,7 @@ import { execFileSync, spawnSync } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { lseLines } from "../stratiphy/lseBook.mjs";
 
 const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
@@ -93,7 +89,6 @@ const CONNECT = {
   XSHG: "https://www.hkex.com.hk/-/media/HKEX-Market/Mutual-Market/Stock-Connect/Eligible-Stocks/View-All-Eligible-Securities_xls/SSE_Securities.xls",
   XSHE: "https://www.hkex.com.hk/-/media/HKEX-Market/Mutual-Market/Stock-Connect/Eligible-Stocks/View-All-Eligible-Securities_xls/SZSE_Securities.xls",
 };
-const LSE_LINE = "https://api.londonstockexchange.com/api/gw/lse/instruments/alldata/";
 const ASX_COMPANIES = "https://www.asx.com.au/asx/research/ASXListedCompanies.csv";
 const ASX_PRODUCTS = "https://www.asx.com.au/issuers/investment-products/asx-investment-products-monthly-report.html";
 const ASX_API = "https://asx.api.cmfyapp.com/asx-research/1.0/companies/";
@@ -239,39 +234,20 @@ async function connectLists() {
 
 // ---- 3-4. London ---------------------------------------------------------
 
-const LSE_HEADERS = { Accept: "application/json", Origin: "https://www.londonstockexchange.com", Referer: "https://www.londonstockexchange.com/" };
 const LINE_CURRENCIES = /(GBP|GBX|USD|EUR|CHF|JPY|HKD|SGD|AUD|CAD|SEK|NOK|DKK|PLN|ILS|ZAR)$/;
 
-const EXPLORER = "https://api.londonstockexchange.com/api/v1/pages?path=live-markets/market-data-dashboard/price-explorer&parameters=";
-
-async function explorer(parameters) {
-  const page = await get(EXPLORER + encodeURIComponent(parameters), { headers: LSE_HEADERS, as: "json" });
-  const block = (page?.components || []).flatMap((component) => component.content || []).find((item) => item.name === "priceexplorersearch")?.value;
-  if (!block || !Array.isArray(block.content)) throw new Error(`the LSE price explorer answered no list for ${parameters}`);
-  return block;
-}
-
-// Every equity and ETP line of the price explorer (about 11,000, 1,000 a
-// page): TIDM, ISIN, currency and mid price.
+// Every equity and ETP line of the LSE price explorer (about 6,400):
+// TIDM, ISIN, currency, search tags and trading status.
 async function lseExplorer() {
-  const lines = [];
-  let total = null;
-  for (let number = 0; number < 40; number += 1) {
-    const block = await explorer(`categories=EQUITY,ETFS&size=1000&page=${number}`);
-    total ??= block.totalElements;
-    lines.push(...block.content);
-    if (block.content.length < 1000 || lines.length >= total) break;
-    await sleep(2000);
-  }
-  if (lines.length !== total || lines.length < 8000) throw new Error(`the LSE price explorer has ${lines.length} of ${total} lines`);
+  const lines = await lseLines();
+  if (lines.length < 5000) throw new Error(`the LSE price explorer has only ${lines.length} lines`);
   return lines;
 }
 
-async function lseIob() {
-  const block = await explorer("subcategories=2&size=100");
-  const lines = block.content;
-  if (lines.length !== block.totalElements || lines.length < 30) throw new Error(`the LSE IOB list has ${lines.length} of ${block.totalElements} lines`);
-  return { tidms: new Set(lines.map((line) => line.tidm)), isins: new Set(lines.map((line) => line.isin)) };
+function lseIob(lines) {
+  const iob = lines.filter((line) => (line.searchTag || []).includes("IOB (International Order Book)"));
+  if (iob.length < 30) throw new Error(`the LSE IOB list has only ${iob.length} lines`);
+  return { tidms: new Set(iob.map((line) => line.tidm)), isins: new Set(iob.map((line) => line.isin)) };
 }
 
 // The price-explorer line of a row: its TIDM, or the TIDM without IBKR's
@@ -449,41 +425,26 @@ export async function pruneByExchangeLists(rows) {
 
   const london = rows.filter((row) => row.mic === "XLON");
   if (london.length) {
-    const iob = london.some((row) => row.exchange === "London IOB") ? await lseIob() : null;
     const lines = await lseExplorer();
+    const iob = london.some((row) => row.exchange === "London IOB") ? lseIob(lines) : null;
     const byTidm = new Map(lines.map((line) => [line.tidm, line]));
     const byIsin = new Map();
     for (const line of lines) byIsin.set(line.isin, [...(byIsin.get(line.isin) || []), line]);
-    // A line quoted with a mid price (bid and offer) is trading; only the
-    // others are asked for their status, one by one and slowly (the LSE
-    // API blocks a burst for several minutes).
-    const unquoted = [];
+    let unlisted = 0;
     for (const row of london) {
       if (row.exchange === "London IOB" && !iob.tidms.has(normalize(row.ticker).replace(/\.$/, "")) && !iob.isins.has(row.isin)) {
         drop(row, "London IOB: no longer on the LSE IOB list");
         continue;
       }
       const line = explorerLineOf(row, byTidm, byIsin);
-      if (!line || line.midPrice == null) unquoted.push([row, line?.tidm]);
-    }
-    if (unquoted.length > 800) throw new Error(`${unquoted.length} London lines have no mid price: the price explorer changed`);
-    let unanswered = 0;
-    for (const [row, tidm] of unquoted) {
-      const candidates = [...new Set([tidm, normalize(row.ticker).toUpperCase().replace(/\.$/, "")].filter((code) => code && /^[A-Z0-9.]{1,10}$/.test(code)))];
-      let found = null;
-      for (const code of candidates) {
-        const data = await get(LSE_LINE + encodeURIComponent(code), { headers: LSE_HEADERS, as: "json", notFound: true });
-        await sleep(400);
-        if (data && (!row.isin || data.isin === row.isin)) {
-          found = data;
-          break;
-        }
+      if (!line) {
+        unlisted += 1;
+        continue;
       }
-      if (!found) unanswered += 1;
-      else if (String(found.tradingstatus || "").toUpperCase() === "S") drop(row, "LSE: suspended (trading status S)");
+      const status = String(line.tradingStatus || "");
+      if (/^(Suspended|Halted)/i.test(status)) drop(row, `LSE: ${status.replace(/ - Closed$/, "").toLowerCase()} (price explorer)`);
     }
-    notes.push(`London: ${london.length - unquoted.length} lines quoted with a mid price, ${unquoted.length} asked for their status`);
-    if (unanswered) notes.push(`${unanswered} London rows kept: the LSE API has no line for their TIDM and ISIN`);
+    if (unlisted) notes.push(`${unlisted} London rows kept: the LSE price explorer has no line for their TIDM and ISIN`);
   }
 
   const asx = rows.filter((row) => row.mic === "XASX");

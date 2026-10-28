@@ -12,14 +12,15 @@
 // The first deposit is treated as that turnover. Nothing here has a
 // quarter on file, so the first band is the one below 50,000 lei.
 // The other bands are turnover the page does not have. The remark
-// shows how far each one sits below the 0.80% in the figure. There
-// is no lei floor on this platform.
+// gives each one as a cut of the 0.80% in the figure (0.60% = 25%
+// lower, 0.50% = 38%, 0.39% = 51%; the 1 leu order fee is apart).
+// There is no lei floor on this platform.
 //
 // An intraday pair is a buy and a sell of the same number of shares
 // of the same issuer on the same day. The page prices that pair at
 // 0.25% whatever the turnover, and credits the difference by the
 // settlement day. The figure uses the first band for a share too.
-// The same-day credit is 0.80% down to 0.25%, so −0.55% per
+// The same-day credit is 0.80% down to 0.25%, 69% lower per
 // execution, and that credit stays in the remark. The sentence says
 // shares. An ETF has no such credit.
 //
@@ -48,10 +49,11 @@ const READ_ON = "2026-10-05";
 const INTRADAY = 0.0025;
 const FIRST_BAND = 0.008;
 const ORDER = { RON: 1, EUR: 1 };
-const SAME_DAY = `${Number(((FIRST_BAND - INTRADAY) * 100).toFixed(2))}% lower`;
-const gap = (rate) => `${Number(((FIRST_BAND - rate) * 100).toFixed(2))}% lower`;
+// A rate as a cut of the first band's commission.
+const gap = (rate) => `${Math.round(((FIRST_BAND - rate) / FIRST_BAND) * 100)}% lower`;
+const SAME_DAY = gap(INTRADAY);
 const VOLUME_ABOVE =
-  `Above 50,000 lei of average monthly turnover in the last finished quarter: ${gap(0.006)} up to 100,000, ${gap(0.005)} up to 700,000, ${gap(0.0039)} above 700,000`;
+  `Above 50,000 lei of average monthly turnover in the last finished quarter: fees are ${gap(0.006)} up to 100,000, ${gap(0.005)} up to 700,000, ${gap(0.0039)} above 700,000`;
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];
@@ -134,7 +136,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     listing,
     cashCurrency: listing.currency || "RON",
     remark: share
-      ? `If the sale is the same day: ${SAME_DAY} per execution. ${VOLUME_ABOVE}.`
+      ? `If the sale is the same day: fees are ${SAME_DAY} per execution. ${VOLUME_ABOVE}.`
       : `${VOLUME_ABOVE}.`,
     basis: share
       ? `Prime Transaction online, schedule re-read on ${READ_ON}. Share, first band, turnover unknown: 0.80% per execution and 1 leu per order.`

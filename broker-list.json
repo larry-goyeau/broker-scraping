@@ -838,9 +838,6 @@
     "type": "Neobroker",
     "url": "https://www.sofi.com/invest/active/",
     "exchanges": {
-      "OTC Markets": {
-        "reliability": "high"
-      },
       "United States": {
         "count": 10996,
         "reliability": "high"
@@ -922,10 +919,7 @@
     "type": "Neobroker",
     "url": "https://www.etoro.com/en-us/",
     "exchanges": {
-      "New York Stock Exchange": {
-        "reliability": "high"
-      },
-      "Nasdaq": {
+      "United States": {
         "reliability": "high"
       }
     }
@@ -1135,10 +1129,7 @@
     "type": "Broker",
     "url": "https://www.eoption.com",
     "exchanges": {
-      "New York Stock Exchange": {
-        "reliability": "high"
-      },
-      "Nasdaq": {
+      "United States": {
         "reliability": "high"
       }
     }
@@ -1177,12 +1168,7 @@
     "type": "Neobroker",
     "url": "https://hapi.trade",
     "exchanges": {
-      "New York Stock Exchange": {
-        "restriction": "No penny stocks",
-        "reliability": "high"
-      },
-      "Nasdaq": {
-        "restriction": "No penny stocks",
+      "United States": {
         "reliability": "high"
       }
     }
@@ -1221,7 +1207,7 @@
     "type": "Broker",
     "url": "https://www.troweprice.com/personal-investing/accounts/brokerage/",
     "exchanges": {
-      "Nasdaq": {
+      "United States": {
         "reliability": "high"
       },
       "OTC Markets": {
@@ -1359,10 +1345,7 @@
     "type": "Neobroker",
     "url": "https://help.coinbase.com/en/stocks-funds",
     "exchanges": {
-      "New York Stock Exchange": {
-        "reliability": "high"
-      },
-      "Nasdaq": {
+      "United States": {
         "reliability": "high"
       }
     }
@@ -1964,10 +1947,7 @@
     "type": "Neobroker",
     "url": "https://www.gemini.com/legal/form-crs",
     "exchanges": {
-      "New York Stock Exchange": {
-        "reliability": "high"
-      },
-      "Nasdaq": {
+      "United States": {
         "reliability": "high"
       }
     }
@@ -2148,10 +2128,7 @@
     "type": "Broker",
     "url": "https://investrade.com/wp-content/uploads/Discount-Disclosure.pdf",
     "exchanges": {
-      "Nasdaq": {
-        "reliability": "high"
-      },
-      "New York Stock Exchange": {
+      "United States": {
         "reliability": "high"
       }
     }
@@ -2264,10 +2241,7 @@
     "type": "Neobroker",
     "url": "https://carry.com/equities",
     "exchanges": {
-      "New York Stock Exchange": {
-        "reliability": "high"
-      },
-      "Nasdaq": {
+      "United States": {
         "reliability": "high"
       }
     }
@@ -2373,10 +2347,7 @@
     "type": "Neobroker",
     "url": "https://www.lighthorse.io/instructions/trading/placing-an-order",
     "exchanges": {
-      "New York Stock Exchange": {
-        "reliability": "high"
-      },
-      "Nasdaq": {
+      "United States": {
         "reliability": "high"
       }
     }
@@ -5284,12 +5255,7 @@
     "type": "Neobroker",
     "url": "https://withplum.com/en-gb/investments",
     "exchanges": {
-      "New York Stock Exchange": {
-        "restriction": "Stocks only, no ETFs",
-        "reliability": "high"
-      },
-      "Nasdaq": {
-        "restriction": "Stocks only, no ETFs",
+      "United States": {
         "reliability": "high"
       }
     }
@@ -9921,6 +9887,9 @@
     "type": "Bank",
     "url": "https://www.maerkische-bank.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/wertpapierdepot.html",
     "exchanges": {
+      "Germany": {
+        "reliability": "high"
+      },
       "Tradegate": {
         "reliability": "high"
       },
@@ -9935,6 +9904,9 @@
     "type": "Bank",
     "url": "https://www.westerwaldbank.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/wertpapierdepot.html",
     "exchanges": {
+      "Germany": {
+        "reliability": "high"
+      },
       "Tradegate": {
         "reliability": "high"
       },
@@ -11362,6 +11334,9 @@
     "type": "Bank",
     "url": "https://www.hamburger-volksbank.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": {
+      "Germany": {
+        "reliability": "high"
+      },
       "Tradegate": {
         "reliability": "high"
       },
@@ -11390,6 +11365,9 @@
     "type": "Bank",
     "url": "https://www.wvb.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": {
+      "Germany": {
+        "reliability": "high"
+      },
       "Tradegate": {
         "reliability": "high"
       },
@@ -15071,6 +15049,9 @@
     "type": "Bank",
     "url": "https://www.volksbank-luebeck.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": {
+      "Germany": {
+        "reliability": "high"
+      },
       "Tradegate": {
         "reliability": "high"
       },
@@ -17964,6 +17945,9 @@
     "type": "Bank",
     "url": "https://www.v-mn.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": {
+      "Germany": {
+        "reliability": "high"
+      },
       "Tradegate": {
         "reliability": "high"
       },
@@ -18033,6 +18017,9 @@
     "type": "Bank",
     "url": "https://www.vb-alzey-worms.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": {
+      "Germany": {
+        "reliability": "high"
+      },
       "Tradegate": {
         "reliability": "medium"
       },
@@ -18047,6 +18034,9 @@
     "type": "Bank",
     "url": "https://www.volksbank-allgaeu-oberschwaben.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": {
+      "Germany": {
+        "reliability": "high"
+      },
       "Tradegate": {
         "reliability": "high"
       },
@@ -18127,6 +18117,9 @@
     "type": "Bank",
     "url": "https://www.vbidr.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": {
+      "Germany": {
+        "reliability": "high"
+      },
       "Tradegate": {
         "reliability": "high"
       },
@@ -18174,6 +18167,9 @@
     "type": "Bank",
     "url": "https://www.vrbank-sh-mitte.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": {
+      "Germany": {
+        "reliability": "high"
+      },
       "Tradegate": {
         "reliability": "high"
       },
@@ -18265,6 +18261,9 @@
     "type": "Bank",
     "url": "https://www.meine-vrbank.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": {
+      "Germany": {
+        "reliability": "high"
+      },
       "Tradegate": {
         "reliability": "high"
       },
@@ -18290,6 +18289,9 @@
     "type": "Bank",
     "url": "https://www.vblh.de/",
     "exchanges": {
+      "Germany": {
+        "reliability": "high"
+      },
       "Tradegate": {
         "reliability": "high"
       },
@@ -18471,6 +18473,9 @@
     "type": "Bank",
     "url": "https://www.vr-verbundbank.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": {
+      "Germany": {
+        "reliability": "high"
+      },
       "Tradegate": {
         "reliability": "high"
       },
@@ -18485,6 +18490,9 @@
     "type": "Bank",
     "url": "https://www.meine-vvb.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": {
+      "Germany": {
+        "reliability": "high"
+      },
       "Tradegate": {
         "reliability": "high"
       },
@@ -18753,6 +18761,9 @@
     "type": "Bank",
     "url": "https://www.bergische-volksbank.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": {
+      "Germany": {
+        "reliability": "high"
+      },
       "Tradegate": {
         "reliability": "high"
       },
@@ -18767,10 +18778,16 @@
     "type": "Bank",
     "url": "https://www.voba-rhein-erft-koeln.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": {
+      "Germany": {
+        "reliability": "high"
+      },
       "Börse Xetra": {
         "reliability": "high"
       },
       "Tradegate": {
+        "reliability": "high"
+      },
+      "Quotrix": {
         "reliability": "high"
       }
     }
@@ -18815,10 +18832,16 @@
     "type": "Bank",
     "url": "https://www.vrbank-hg.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": {
+      "Germany": {
+        "reliability": "high"
+      },
       "Börse Xetra": {
         "reliability": "high"
       },
       "Tradegate": {
+        "reliability": "high"
+      },
+      "Quotrix": {
         "reliability": "high"
       }
     }
@@ -18840,10 +18863,16 @@
     "type": "Bank",
     "url": "https://www.vrbankgl.de/privatkunden/banking-brokerage.html",
     "exchanges": {
+      "Germany": {
+        "reliability": "high"
+      },
       "Börse Xetra": {
         "reliability": "high"
       },
       "Tradegate": {
+        "reliability": "high"
+      },
+      "Quotrix": {
         "reliability": "high"
       }
     }
@@ -18876,10 +18905,16 @@
     "type": "Bank",
     "url": "https://www.vbsdn.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": {
+      "Germany": {
+        "reliability": "high"
+      },
       "Börse Xetra": {
         "reliability": "high"
       },
       "Tradegate": {
+        "reliability": "high"
+      },
+      "Quotrix": {
         "reliability": "high"
       }
     }
@@ -18890,10 +18925,16 @@
     "type": "Bank",
     "url": "https://www.vrbank-bayreuth-hof.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": {
+      "Germany": {
+        "reliability": "high"
+      },
       "Börse Xetra": {
         "reliability": "high"
       },
       "Tradegate": {
+        "reliability": "high"
+      },
+      "Quotrix": {
         "reliability": "high"
       }
     }
@@ -18904,6 +18945,9 @@
     "type": "Bank",
     "url": "https://www.vrbanking.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": {
+      "Germany": {
+        "reliability": "high"
+      },
       "Tradegate": {
         "reliability": "high"
       },
@@ -18918,6 +18962,9 @@
     "type": "Bank",
     "url": "https://www.vb-ruhrmitte.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": {
+      "Germany": {
+        "reliability": "high"
+      },
       "Tradegate": {
         "reliability": "high"
       },
@@ -19114,6 +19161,9 @@
     "type": "Bank",
     "url": "https://www.bremischevb.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": {
+      "Germany": {
+        "reliability": "high"
+      },
       "Tradegate": {
         "reliability": "high"
       },
@@ -19161,6 +19211,9 @@
     "type": "Bank",
     "url": "https://www.volksbank-dkn.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html",
     "exchanges": {
+      "Germany": {
+        "reliability": "high"
+      },
       "Tradegate": {
         "reliability": "high"
       },
@@ -28004,12 +28057,7 @@
     "type": "Broker",
     "url": "https://www.freestoxx.com/en-lu/commission-free-trading/free-web-platform/lay-out-order-types-positions-trades",
     "exchanges": {
-      "New York Stock Exchange": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "high"
-      },
-      "Nasdaq": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
+      "United States": {
         "reliability": "high"
       }
     }
@@ -34798,6 +34846,9 @@
       },
       "ETFplus": {
         "reliability": "high"
+      },
+      "Euronext Growth Milan": {
+        "reliability": "high"
       }
     }
   },
@@ -40697,6 +40748,15 @@
       "United States": {
         "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
         "reliability": "high"
+      },
+      "Börse Xetra": {
+        "reliability": "high"
+      },
+      "Euronext Milan": {
+        "reliability": "high"
+      },
+      "London Stock Exchange": {
+        "reliability": "high"
       }
     }
   },
@@ -43795,7 +43855,7 @@
         "reliability": "high"
       },
       "United States": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
+        "restriction": "By phone/advisor only",
         "reliability": "high"
       }
     }
@@ -65740,6 +65800,87 @@
       },
       "Athens Stock Exchange": {
         "reliability": "high"
+      },
+      "NYSE American": {
+        "reliability": "high"
+      },
+      "Euronext Amsterdam": {
+        "reliability": "high"
+      },
+      "ASX": {
+        "reliability": "high"
+      },
+      "Cboe BZX": {
+        "reliability": "high"
+      },
+      "Euronext Brussels": {
+        "reliability": "high"
+      },
+      "Nasdaq Copenhagen": {
+        "reliability": "high"
+      },
+      "Börse Xetra": {
+        "reliability": "high"
+      },
+      "Hong Kong Stock Exchange": {
+        "reliability": "high"
+      },
+      "Nasdaq Helsinki": {
+        "reliability": "high"
+      },
+      "Euronext Dublin": {
+        "reliability": "high"
+      },
+      "Euronext Lisbon": {
+        "reliability": "high"
+      },
+      "London Stock Exchange": {
+        "reliability": "high"
+      },
+      "London IOB": {
+        "reliability": "high"
+      },
+      "Euronext Milan": {
+        "reliability": "high"
+      },
+      "Euronext Growth Milan": {
+        "reliability": "high"
+      },
+      "Nasdaq": {
+        "reliability": "high"
+      },
+      "New York Stock Exchange": {
+        "reliability": "high"
+      },
+      "NYSE Arca": {
+        "reliability": "high"
+      },
+      "OTC Markets": {
+        "reliability": "high"
+      },
+      "Oslo Børs": {
+        "reliability": "high"
+      },
+      "Euronext Paris": {
+        "reliability": "high"
+      },
+      "Bolsa de Madrid": {
+        "reliability": "high"
+      },
+      "Nasdaq Stockholm": {
+        "reliability": "high"
+      },
+      "Nasdaq First North": {
+        "reliability": "high"
+      },
+      "SIX Swiss Exchange": {
+        "reliability": "high"
+      },
+      "Toronto Stock Exchange": {
+        "reliability": "high"
+      },
+      "Wiener Börse": {
+        "reliability": "high"
       }
     }
   },
@@ -67908,10 +68049,7 @@
     "type": "Neobroker",
     "url": "https://raseedcapital.com/",
     "exchanges": {
-      "New York Stock Exchange": {
-        "reliability": "high"
-      },
-      "Nasdaq": {
+      "United States": {
         "reliability": "high"
       }
     }
@@ -72603,7 +72741,7 @@
       "Borsa Istanbul": {
         "reliability": "high"
       },
-      "Nasdaq": {
+      "United States": {
         "reliability": "high"
       }
     }
@@ -74709,7 +74847,8 @@
         "reliability": "high"
       },
       "NASD OTC Exchange": {
-        "reliability": "high"
+        "reliability": "high",
+        "restriction": "By phone/advisor only"
       }
     }
   },
@@ -74731,9 +74870,6 @@
     "url": "https://cordros.com/securities/cordros-cape",
     "exchanges": {
       "Nigerian Exchange": {
-        "reliability": "high"
-      },
-      "NASD OTC Exchange": {
         "reliability": "high"
       }
     }
@@ -74809,7 +74945,8 @@
         "reliability": "high"
       },
       "NASD OTC Exchange": {
-        "reliability": "high"
+        "reliability": "high",
+        "restriction": "By phone/advisor only"
       }
     }
   },
@@ -74832,9 +74969,6 @@
     "exchanges": {
       "Nigerian Exchange": {
         "reliability": "high"
-      },
-      "NASD OTC Exchange": {
-        "reliability": "high"
       }
     }
   },
@@ -74845,9 +74979,6 @@
     "url": "https://www.parthiansecuritiesng.com/faqs/",
     "exchanges": {
       "Nigerian Exchange": {
-        "reliability": "high"
-      },
-      "NASD OTC Exchange": {
         "reliability": "high"
       }
     }
@@ -74862,7 +74993,8 @@
         "reliability": "high"
       },
       "NASD OTC Exchange": {
-        "reliability": "high"
+        "reliability": "high",
+        "restriction": "By phone/advisor only"
       }
     }
   },
@@ -74993,7 +75125,8 @@
         "reliability": "high"
       },
       "NASD OTC Exchange": {
-        "reliability": "high"
+        "reliability": "high",
+        "restriction": "By phone/advisor only"
       }
     }
   },
@@ -75035,7 +75168,8 @@
         "reliability": "high"
       },
       "NASD OTC Exchange": {
-        "reliability": "high"
+        "reliability": "high",
+        "restriction": "By phone/advisor only"
       }
     }
   },
@@ -75069,9 +75203,6 @@
     "exchanges": {
       "Nigerian Exchange": {
         "reliability": "high"
-      },
-      "NASD OTC Exchange": {
-        "reliability": "high"
       }
     }
   },
@@ -75082,9 +75213,6 @@
     "url": "https://valmonsecurities.com/etrade/",
     "exchanges": {
       "Nigerian Exchange": {
-        "reliability": "high"
-      },
-      "NASD OTC Exchange": {
         "reliability": "high"
       }
     }
@@ -75171,7 +75299,8 @@
         "reliability": "high"
       },
       "NASD OTC Exchange": {
-        "reliability": "high"
+        "reliability": "high",
+        "restriction": "By phone/advisor only"
       }
     }
   },
@@ -75182,9 +75311,6 @@
     "url": "https://fcslng.com/purchase-stocks-easily-online-step-by-step-guide/",
     "exchanges": {
       "Nigerian Exchange": {
-        "reliability": "high"
-      },
-      "NASD OTC Exchange": {
         "reliability": "high"
       }
     }
@@ -75266,9 +75392,6 @@
     "exchanges": {
       "Nigerian Exchange": {
         "reliability": "high"
-      },
-      "NASD OTC Exchange": {
-        "reliability": "high"
       }
     }
   },
@@ -75296,7 +75419,8 @@
         "reliability": "high"
       },
       "NASD OTC Exchange": {
-        "reliability": "high"
+        "reliability": "high",
+        "restriction": "By phone/advisor only"
       }
     }
   },
@@ -75329,9 +75453,6 @@
     "url": "https://trusthousetrader.com/",
     "exchanges": {
       "Nigerian Exchange": {
-        "reliability": "high"
-      },
-      "NASD OTC Exchange": {
         "reliability": "high"
       }
     }
@@ -75382,7 +75503,8 @@
         "reliability": "high"
       },
       "NASD OTC Exchange": {
-        "reliability": "high"
+        "reliability": "high",
+        "restriction": "By phone/advisor only"
       }
     }
   },
@@ -75404,9 +75526,6 @@
     "url": "https://www.rewardinvestments.com/",
     "exchanges": {
       "Nigerian Exchange": {
-        "reliability": "high"
-      },
-      "NASD OTC Exchange": {
         "reliability": "high"
       }
     }
@@ -75432,7 +75551,8 @@
         "reliability": "high"
       },
       "NASD OTC Exchange": {
-        "reliability": "high"
+        "reliability": "high",
+        "restriction": "By phone/advisor only"
       }
     }
   },
@@ -75546,9 +75666,6 @@
     "url": "https://www.kapitalcaretrust.com/",
     "exchanges": {
       "Nigerian Exchange": {
-        "reliability": "high"
-      },
-      "NASD OTC Exchange": {
         "reliability": "high"
       }
     }
@@ -76198,7 +76315,8 @@
         "reliability": "high"
       },
       "London Stock Exchange": {
-        "reliability": "high"
+        "reliability": "high",
+        "restriction": "By phone/advisor only"
       }
     }
   },
@@ -76234,7 +76352,8 @@
         "reliability": "high"
       },
       "London Stock Exchange": {
-        "reliability": "high"
+        "reliability": "high",
+        "restriction": "By phone/advisor only"
       }
     }
   },
@@ -77847,10 +77966,12 @@
     "url": "https://ijg.net/stockbroking/",
     "exchanges": {
       "Namibian Stock Exchange": {
-        "reliability": "high"
+        "reliability": "high",
+        "restriction": "By phone/advisor only"
       },
       "Johannesburg Stock Exchange": {
-        "reliability": "high"
+        "reliability": "high",
+        "restriction": "By phone/advisor only"
       }
     }
   },
@@ -78374,7 +78495,6 @@
         "reliability": "high"
       },
       "Cboe Australia": {
-        "count": 36,
         "reliability": "high"
       }
     }
@@ -79350,12 +79470,7 @@
     "type": "Neobroker",
     "url": "https://www.spaceship.com.au/",
     "exchanges": {
-      "New York Stock Exchange": {
-        "restriction": "Selected stocks and ETFs only (hundreds of the largest US companies and US ETFs)",
-        "reliability": "high"
-      },
-      "Nasdaq": {
-        "restriction": "Selected stocks and ETFs only (hundreds of the largest US companies and US ETFs)",
+      "United States": {
         "reliability": "high"
       }
     }
@@ -91803,10 +91918,13 @@
     "type": "Broker",
     "url": "https://zerodha.com/open-account/",
     "exchanges": {
+      "National Stock Exchange of India": {
+        "reliability": "high"
+      },
       "BSE": {
         "reliability": "high"
       },
-      "National Stock Exchange of India": {
+      "United States": {
         "reliability": "high"
       }
     }
@@ -92982,6 +93100,9 @@
       },
       "BSE": {
         "reliability": "high"
+      },
+      "United States": {
+        "reliability": "high"
       }
     }
   },
@@ -93486,6 +93607,9 @@
       },
       "Nasdaq": {
         "reliability": "high"
+      },
+      "NYSE Arca": {
+        "reliability": "high"
       }
     }
   },
@@ -93726,10 +93850,12 @@
     "url": "https://www.asianmarkets.in/",
     "exchanges": {
       "National Stock Exchange of India": {
-        "reliability": "high"
+        "reliability": "high",
+        "restriction": "By phone/advisor only"
       },
       "BSE": {
-        "reliability": "high"
+        "reliability": "high",
+        "restriction": "By phone/advisor only"
       }
     }
   },
@@ -96821,10 +96947,7 @@
     "type": "Neobroker",
     "url": "https://www.heygotrade.com/id/",
     "exchanges": {
-      "New York Stock Exchange": {
-        "reliability": "high"
-      },
-      "Nasdaq": {
+      "United States": {
         "reliability": "high"
       }
     }
@@ -99068,6 +99191,9 @@
       "United States": {
         "restriction": "Through the Conta Investimento Global held at XP's US broker (XP Investments/XP International), open only to individuals resident in Brazil who are Brazilian nationals, with active XP digital and investment accounts. The same help category covers stocks, ETFs and ADRs. No OTC Markets mentioned.",
         "reliability": "high"
+      },
+      "London Stock Exchange": {
+        "reliability": "high"
       }
     }
   },
@@ -99227,10 +99353,7 @@
     "type": "Neobroker",
     "url": "https://www.nomadglobal.com/investimentos",
     "exchanges": {
-      "New York Stock Exchange": {
-        "reliability": "high"
-      },
-      "Nasdaq": {
+      "United States": {
         "reliability": "high"
       }
     }
@@ -100030,9 +100153,6 @@
     "exchanges": {
       "BYMA": {
         "reliability": "high"
-      },
-      "Mercado Argentino de Valores": {
-        "reliability": "high"
       }
     }
   },
@@ -100105,9 +100225,6 @@
     "url": "https://quicktrade.com.ar/preguntasfrecuentestrading/",
     "exchanges": {
       "BYMA": {
-        "reliability": "high"
-      },
-      "Mercado Argentino de Valores": {
         "reliability": "high"
       }
     }
@@ -100471,9 +100588,6 @@
     "exchanges": {
       "BYMA": {
         "reliability": "high"
-      },
-      "Mercado Argentino de Valores": {
-        "reliability": "high"
       }
     }
   },
@@ -100723,7 +100837,7 @@
       "BYMA": {
         "reliability": "high"
       },
-      "New York Stock Exchange": {
+      "United States": {
         "reliability": "high"
       }
     }
@@ -100771,7 +100885,8 @@
         "reliability": "high"
       },
       "New York Stock Exchange": {
-        "reliability": "high"
+        "reliability": "high",
+        "restriction": "By phone/advisor only"
       }
     }
   },
@@ -101040,9 +101155,6 @@
     "exchanges": {
       "BYMA": {
         "reliability": "high"
-      },
-      "Mercado Argentino de Valores": {
-        "reliability": "high"
       }
     }
   },
@@ -101065,9 +101177,6 @@
     "exchanges": {
       "BYMA": {
         "reliability": "high"
-      },
-      "Mercado Argentino de Valores": {
-        "reliability": "high"
       }
     }
   },
@@ -101078,9 +101187,6 @@
     "url": "https://www.inverstart.com/",
     "exchanges": {
       "BYMA": {
-        "reliability": "high"
-      },
-      "Mercado Argentino de Valores": {
         "reliability": "high"
       }
     }
@@ -101117,9 +101223,6 @@
     "url": "https://vinver.com.ar/",
     "exchanges": {
       "BYMA": {
-        "reliability": "high"
-      },
-      "Mercado Argentino de Valores": {
         "reliability": "high"
       }
     }
@@ -101331,7 +101434,8 @@
         "reliability": "high"
       },
       "United States": {
-        "reliability": "high"
+        "reliability": "high",
+        "restriction": "By phone/advisor only"
       }
     }
   },
@@ -101467,9 +101571,6 @@
     "url": "https://banco.santander.cl/personas/corredores-de-bolsa",
     "exchanges": {
       "Santiago Stock Exchange": {
-        "reliability": "medium"
-      },
-      "New York Stock Exchange": {
         "reliability": "medium"
       }
     }
@@ -101734,7 +101835,8 @@
         "reliability": "high"
       },
       "United States": {
-        "reliability": "high"
+        "reliability": "high",
+        "restriction": "By phone/advisor only"
       }
     }
   },
@@ -101902,10 +102004,7 @@
     "type": "Neobroker",
     "url": "https://tyba.pe/",
     "exchanges": {
-      "Nasdaq": {
-        "reliability": "high"
-      },
-      "New York Stock Exchange": {
+      "United States": {
         "reliability": "high"
       }
     }
@@ -102240,7 +102339,7 @@
         "reliability": "high"
       },
       "United States": {
-        "restriction": "By phone/email via trade desk only",
+        "restriction": "By phone/advisor only",
         "reliability": "high"
       }
     }
@@ -102304,7 +102403,8 @@
         "reliability": "high"
       },
       "Bolsa de Valores de Montevideo": {
-        "reliability": "high"
+        "reliability": "high",
+        "restriction": "By phone/advisor only"
       }
     }
   },
@@ -103061,11 +103161,8 @@
     "type": "Neobroker",
     "url": "https://minvest.kg/en",
     "exchanges": {
-      "New York Stock Exchange": {
-        "reliability": "medium"
-      },
-      "Nasdaq": {
-        "reliability": "medium"
+      "United States": {
+        "reliability": "high"
       }
     }
   },
@@ -105267,9 +105364,6 @@
     "exchanges": {
       "Dhaka Stock Exchange": {
         "reliability": "high"
-      },
-      "Chittagong Stock Exchange": {
-        "reliability": "high"
       }
     }
   },
@@ -105455,9 +105549,6 @@
     "exchanges": {
       "Dhaka Stock Exchange": {
         "reliability": "high"
-      },
-      "Chittagong Stock Exchange": {
-        "reliability": "high"
       }
     }
   },
@@ -105479,9 +105570,6 @@
     "url": "http://www.modernsecurities.com/",
     "exchanges": {
       "Dhaka Stock Exchange": {
-        "reliability": "high"
-      },
-      "Chittagong Stock Exchange": {
         "reliability": "high"
       }
     }
@@ -108695,6 +108783,15 @@
       },
       "Shenzhen Stock Exchange": {
         "reliability": "high"
+      },
+      "STAR Market": {
+        "reliability": "high"
+      },
+      "ChiNext": {
+        "reliability": "high"
+      },
+      "Beijing Stock Exchange": {
+        "reliability": "high"
       }
     }
   },
@@ -109011,6 +109108,18 @@
       },
       "Shenzhen Stock Exchange": {
         "reliability": "high"
+      },
+      "STAR Market": {
+        "reliability": "high"
+      },
+      "ChiNext": {
+        "reliability": "high"
+      },
+      "Hong Kong Stock Exchange": {
+        "reliability": "high"
+      },
+      "National Equities Exchange and Quotations": {
+        "reliability": "high"
       }
     }
   },
@@ -109024,6 +109133,15 @@
         "reliability": "high"
       },
       "Shenzhen Stock Exchange": {
+        "reliability": "high"
+      },
+      "STAR Market": {
+        "reliability": "high"
+      },
+      "ChiNext": {
+        "reliability": "high"
+      },
+      "Beijing Stock Exchange": {
         "reliability": "high"
       }
     }
@@ -109322,6 +109440,15 @@
         "reliability": "high"
       },
       "Shenzhen Stock Exchange": {
+        "reliability": "high"
+      },
+      "STAR Market": {
+        "reliability": "high"
+      },
+      "ChiNext": {
+        "reliability": "high"
+      },
+      "Beijing Stock Exchange": {
         "reliability": "high"
       }
     }
@@ -110604,6 +110731,15 @@
       "Shenzhen Stock Exchange": {
         "restriction": "ChiNext requires CNY 100,000 in assets (20-day average) and 2 years' trading experience",
         "reliability": "high"
+      },
+      "STAR Market": {
+        "reliability": "high"
+      },
+      "ChiNext": {
+        "reliability": "high"
+      },
+      "Beijing Stock Exchange": {
+        "reliability": "high"
       }
     }
   },
@@ -110619,6 +110755,12 @@
       },
       "Shenzhen Stock Exchange": {
         "restriction": "ChiNext requires CNY 100,000 in assets (20-day average) and 2 years' trading experience",
+        "reliability": "high"
+      },
+      "STAR Market": {
+        "reliability": "high"
+      },
+      "ChiNext": {
         "reliability": "high"
       }
     }
@@ -112835,10 +112977,10 @@
     "type": "Neobroker",
     "url": "https://www.heygotrade.com/en/",
     "exchanges": {
-      "Nasdaq": {
+      "United States": {
         "reliability": "high"
       },
-      "New York Stock Exchange": {
+      "OTC Markets": {
         "reliability": "high"
       }
     }

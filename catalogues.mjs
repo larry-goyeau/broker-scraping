@@ -9,6 +9,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import { cashLines } from "./deposits.mjs";
 
 const ROOT = new URL("./brokers/", import.meta.url);
 
@@ -38,7 +39,8 @@ export function catalogueRows() {
   for (const file of catalogueFiles()) {
     const broker = path.basename(path.dirname(file));
     const parsed = JSON.parse(fs.readFileSync(file, "utf8"));
-    for (const row of Array.isArray(parsed) ? parsed : parsed.rows || []) rows.push({ ...row, broker });
+    // A multi-currency broker keeps a title in its cash currencies only.
+    for (const row of cashLines(broker, Array.isArray(parsed) ? parsed : parsed.rows || [])) rows.push({ ...row, broker });
   }
   return rows;
 }

@@ -29,7 +29,10 @@
 // Same-session trading (page 17, the "ذات الجلسة" contract) is 0.3 % a
 // side instead of 0.4 %, and the stamp is 0.025 % instead of 0.05 %. The
 // saving is the remark, computed at the trade's notional with the same
-// EGP 10 minimum.
+// EGP 10 minimum, as a cut on the fee itself (owner's rule, 2026-10-27):
+// "Same day sell fees are x% lower." on Sigma's own lines of a side (commission,
+// custody, admin fee: 21 % at EGP 48,600), "Same day sell tax is 50%
+// lower." on the stamp.
 //
 // The dollar lines (Nile Sat, SPHT, FAITA, ...) pay the same rates on the
 // dollar amount; the EGP minimums, floors and caps are converted at
@@ -99,7 +102,8 @@ const dollars = (amount, currency) => {
   return v == null ? null : Number(v.toPrecision(12));
 };
 const frPct = (rate) => `${String(Number((rate * 100).toPrecision(6))).replace(".", ",")} %`;
-const pct = (x) => String(Number(x.toFixed(2)));
+// Whole numbers from 10, one decimal below.
+const pct = (x) => String(x >= 9.95 ? Math.round(x) : Number(x.toFixed(1)));
 const boardOf = (row) => (String(row?.raw || "").match(/main market|SME market|OTC board/) || [null])[0];
 
 // An EGP amount in the listing's currency.
@@ -125,12 +129,14 @@ export function sigmaSide(notional, currency = "EGP", rate = RATE) {
   };
 }
 
+// The same-session cut on Sigma's own lines of a side, a fraction of them
+// (without a notional, on the rates: commission and custody).
 function sameDayLower(notional, currency) {
-  if (!(Number(notional) > 0)) return 2 * (RATE - SAME_SESSION_RATE + EG_STAMP_T1 - EG_STAMP_T0);
+  if (!(Number(notional) > 0)) return (RATE - SAME_SESSION_RATE) / (RATE + CUSTODY);
   const usual = sigmaSide(notional, currency);
   const same = sigmaSide(notional, currency, SAME_SESSION_RATE);
   if (!usual || !same) return null;
-  return (2 * (usual.commission - same.commission) + 2 * (EG_STAMP_T1 - EG_STAMP_T0) * notional) / notional;
+  return (usual.commission - same.commission) / (usual.commission + usual.custody + usual.admin);
 }
 
 // Central Bank of Egypt buy / sell, EGP a dollar, the rate the account form
@@ -141,7 +147,8 @@ const FX_PCT = (100 * (CBE_USD.sell - CBE_USD.buy)) / (CBE_USD.sell + CBE_USD.bu
 function remarkOf(notional, currency) {
   const lower = sameDayLower(notional, currency);
   return [
-    lower != null && lower > 0 ? `Same day sell is ${pct(lower * 100)}% lower.` : "",
+    lower != null && lower > 0 ? `Same day sell fees are ${pct(lower * 100)}% lower.` : "",
+    `Same day sell tax is ${pct((100 * (EG_STAMP_T1 - EG_STAMP_T0)) / EG_STAMP_T1)}% lower.`,
     `Live prices and online execution are EGP ${LIVE_MONTHLY} a month.`,
     fxRemark(FX_PCT, currency),
   ]

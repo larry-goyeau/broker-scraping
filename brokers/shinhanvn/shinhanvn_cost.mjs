@@ -5,7 +5,7 @@
 // read on 2026-10-18. The sheet is in force from 14 October 2026.
 //   Online, each side   0.15% of the fill for a domestic client, at
 //              every value (MTS, HTS, WTS). A foreign client pays 0.1%
-//              online. At the counter: 0.3% under 100 million dong,
+//              online, 33% less (the remark). At the counter: 0.3% under 100 million dong,
 //              0.25% to 1 billion, then 0.15%.
 //   Sale tax   0.1% of the sale, on top of the commission, gain or
 //              loss. The sheet prints it ("Thuế TNCN").
@@ -31,7 +31,7 @@ const SCHEDULE = {
   readOn: "2026-10-18",
   rate: () => pct("0.15"),
   basis: "client résident, frais de bourse inclus",
-  remark: "A foreign client's fee is 0.05% lower online. Custody is 0.27 VND a share a month.",
+  remark: "A foreign client's fee is 33% lower online. Custody is 0.27 VND a share a month.",
 };
 
 export function roundTrip(query) {

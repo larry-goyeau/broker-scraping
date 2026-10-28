@@ -79,6 +79,40 @@ export const US_BROKERS = {
   // Formerly Valuable Capital Securities, LLC (SEC CIK 1841658, renamed
   // August 2023). Its <bd> tag is "Tickrs Clearing".
   tickrsclearing: { crd: ["312531"], name: "Tickrs Clearing" },
+  // 2026-10-26: the US dealers of the new US catalogues (filename CRD and
+  // <bd> checked in the 2026 Q2 zip; each cost file's header quotes the
+  // page naming it).
+  wellsfargoclearing: { crd: ["19616"], name: "Wells Fargo Clearing Services, LLC" },
+  usbancorpadvisors: { crd: ["14455"], name: "U.S. Bancorp Advisors, LLC" },
+  tiaacref: { crd: ["20472"], name: "TIAA-CREF Individual & Institutional Services, LLC" },
+  digitalbrokerage: { crd: ["308213"], name: "Digital Brokerage Services LLC" },
+  truistinvestment: { crd: ["17499"], name: "Truist Investment Services, Inc." },
+  americancenturyis: { crd: ["17437"], name: "American Century Investment Services, Inc." },
+  wealthfrontbrokerage: { crd: ["153407"], name: "Wealthfront Brokerage LLC" },
+  aeis: { crd: ["26506"], name: "American Enterprise Investment Services Inc." },
+  pershing: { crd: ["7560"], name: "Pershing LLC" },
+  stonexfinancial: { crd: ["45993"], name: "StoneX Financial Inc." },
+  firstcitizensis: { crd: ["44430"], name: "First Citizens Investor Services, Inc." },
+  // Empower's own file, prepared by Pershing ("CNTXT-Pershing7560GWFS").
+  empowerfs: { crd: ["13109"], name: "Empower Financial Services, Inc." },
+  umbfs: { crd: ["17073"], name: "UMB Financial Services, Inc." },
+  bokfs: { crd: ["17530"], name: "BOK Financial Securities, Inc." },
+  // RQD's 2026 Q2 report is not in the bulk zip but is on FINRA's CDN
+  // (134284_606_NMS_2026_Q2_V1.xml): download606 fetches it there.
+  rqd: { crd: ["134284"], name: "RQD* Clearing, LLC" },
+  lpl: { crd: ["6413"], name: "LPL Financial LLC" },
+  // Morgan Stanley Smith Barney LLC (wealth management), not Morgan Stanley
+  // & Co. (morganstanleyco, CRD 8209).
+  morganstanleysb: { crd: ["149777"], name: "Morgan Stanley Smith Barney LLC" },
+  // CRD 31194 files three reports; RBC Clearing & Custody is the one for
+  // correspondent firms.
+  rbcclearing: { crd: ["31194"], name: "RBC Capital Markets, LLC", xml: /CNTXT-RBCCLEARINGCUSTODY/ },
+  // 2026-10-26, dealers named by the new non-US catalogues (filename CRD and
+  // <bd> in the 2026 Q2 zip): Velox's tag is "Velox Clearing, LLC", XP
+  // Investments US's "XPUS", Cantor Fitzgerald's "CSTI".
+  velox: { crd: ["290215"], name: "Velox Clearing, LLC" },
+  xpus: { crd: ["156691"], name: "XP Investments US, LLC" },
+  cantor: { crd: ["134"], name: "Cantor Fitzgerald & Co." },
 };
 
 // Introducing brokers that do not file their own 606: same mix as the US BD
@@ -453,6 +487,97 @@ export const ALIASES = {
   // Corp (CRD 11826), formerly Just2Trade Inc.
   // https://j2t.com/en/solutions/mma/
   just2trade: "lime",
+  // 2026-10-26 catalogues: the US broker-dealer each names for its US
+  // orders (cost files' headers quote the page).
+  // Alpaca Securities LLC holds the US accounts of Aktif, Fiba, trii, TF
+  // Capital and new Selfwealth accounts.
+  aktifyatrm: "alpaca",
+  fibayatrm: "alpaca",
+  triico: "alpaca",
+  tfcapital: "alpaca",
+  selfwealth: "alpaca",
+  // Tacirler's Rally and GBM's Trading USA clear through DriveWealth.
+  tacirleryatrm: "drivewealth",
+  gbm: "drivewealth",
+  // Interactive Brokers LLC: Osmanlı (its licence disclosure), Hellenic
+  // American (execution venue in its MiFID II file), Les Cinq, VM Wealth.
+  osmanlyatrm: "interactivebrokers",
+  hellenicamerican: "interactivebrokers",
+  lescinq: "interactivebrokers",
+  vmwealth: "interactivebrokers",
+  // Superhero's terms name Apex Clearing as US execution and clearing.
+  superhero: "apex",
+  // EleBank's US transfer page names Futu Clearing Inc. (DTC 4272).
+  elebank: "futuclearing",
+  // Geojit's US accounts are at ViewTrade; Bajaj's through Vested, whose
+  // pages name DriveWealth as the broker that routes and clears (Vested's
+  // own 606 has no market-order mix in 2026 Q2: the highest Q of the two).
+  geojit: "viewtrade",
+  bajaj: ["vested", "drivewealth"],
+  // Global Securities routes US orders "through the GTN platform", as
+  // Capital.com does.
+  globalsecurities: "gtnamericas",
+  // Acorns Securities' statement of financial condition (31 Dec 2025):
+  // "omnibus account trading agreements with clearing firms, RBC Capital
+  // Markets, LLC and DriveWealth, LLC in order to execute trades". Neither
+  // is said to take a given order: the highest Q, as for INDmoney.
+  // https://sqy7rm.media.zestyio.com/Acorns-Securities-SOFC-12-2025-FINAL.pdf
+  acorns: ["rbcclearing", "drivewealth"],
+  // Balanz's agente de valores: "acceso a los principales mercados
+  // internacionales y bancos de inversión en USA (Pershing)", and its tariff
+  // PDF has a "TARIFARIO StoneX" page. The highest Q of the two.
+  // https://www.balanz.com.uy/agente
+  // https://cms.balanz.com/PFS/119732_tarifarioagenteystonex2026.pdf
+  balanzuruguayagente: ["pershing", "stonexfinancial"],
+  // CA Indosuez Luxembourg's best-execution policy (07.2025, p. 12), US
+  // equities: "Canaccord, Citigroup, Goldman Sach, Intesa San Paolo,
+  // Instinet, JP Morgan, Stifel Europe, UBS, Kepler, RBC". Stifel Europe is
+  // not a US firm; Kepler and RBC have no key. The highest Q of the rest, as
+  // for ii.
+  // https://luxembourg.ca-indosuez.com/en/pdfPreview/40796
+  caindosuezwealth: ["canaccordgenuity", "citigroup", "goldmansachs", "bimi", "instinet", "jpmsecurities", "ubssecurities"],
+  // 2026-10-26, second pass on the new non-US catalogues: the dealer each
+  // broker (or the partner it names) gives for its US orders.
+  // "ViewTrade IFSC executes, clears, and custodies trades through ViewTrade
+  // Securities Inc" (https://bonanzaifsc.com/termsnconditions/).
+  bonanza: "viewtrade",
+  // Inter Securities' execution policy: "sends all securities orders to
+  // DriveWealth or Pershing for routing and execution"; it files no 606
+  // itself. The highest Q of the two (owner, 2026-10-26).
+  interbr: ["drivewealth", "pershing"],
+  // InvestSky's help: "our U.S. broker partner, DriveWealth".
+  investsky: "drivewealth",
+  // JM's US investing runs on Stockal, which "has entered into a clearing
+  // agreement with DriveWealth LLC"; SBI's on Appreciate, whose portfolios
+  // are "held in the US by Appreciate's clearing partner DriveWealth".
+  jmfinancial: "drivewealth",
+  sbisecurities: "drivewealth",
+  // Valuable's transfer guide: "Valuable Capital Securities LLC" (now
+  // Tickrs Clearing); Well Link's: "清算行：Velox Clearing LLC".
+  valuable: "tickrsclearing",
+  welllink: "velox",
+  // Rico's and XP's Conta Investimento Global is "oferecido pela XP
+  // International, uma corretora registrada nos EUA" (XP Investments US).
+  rico: "xpus",
+  xpbr: "xpus",
+  // Privacy policies, overseas brokers (해외중개기관): Kakao Pay names
+  // Cantor Fitzgerald, DriveWealth and Siebert; Woori "Cantor, Apex".
+  kakaopay: ["cantor", "drivewealth", "siebert"],
+  woori: ["cantor", "apex"],
+  // Several dealers named, none said to take a given order: the highest Q
+  // (owner, 2026-10-26).
+  // Piapiri's parent ÜNLÜ Menkul: "UTrade International ... (Interactive
+  // Brokers)" and "Alpaca unvanlı bir yabancı yatırım kuruluşu aracılığıyla".
+  // https://www.unlumenkul.com/yurtdisi-borsalar/
+  piapiri: ["alpaca", "interactivebrokers"],
+  // Lakshmishree: "US regulated clearing partners (e.g., DriveWealth/Apex)".
+  // https://www.lakshmishree.com/global-investing
+  lakshmishree: ["drivewealth", "apex"],
+  // Citibank HK's best-execution policy: "executes all client trades via Citi
+  // Global Markets ("CGM") or DBS Vickers ("DBSV")". DBS Vickers (USA) files
+  // no 606, so Citigroup Global Markets' is the one Q.
+  // https://www.citibank.com.hk/english/credit-cards/pdf/best-execution-policy.pdf
+  citibankhk: "citigroup",
 };
 
 // The BD key a broker routes through: the alias, or for an array the key
@@ -487,6 +612,12 @@ const ASSIGNED = {
   // or sent on, so that file is its mix.
   // https://legal.drivewealth.com
   drivewealth: { name: "DriveWealth, LLC", mix: { DWWT: 1 } },
+  // Atomic Brokerage LLC (CRD 315263) files its 606 as a PDF only (the CDN
+  // XML is refused). 2026 Q2, every month and both stock sections 100%
+  // market orders; equal-weight mean of the six venue tables: Virtu 52.77%,
+  // Citadel 47.12%, Jane Street 0.12%.
+  // https://cdn.finra.org/606/2026/315263_606_NMS_2026_Q2_V1.pdf
+  atomic: { name: "Atomic Brokerage LLC", mix: { NITE: 0.5277, CDRG: 0.4712, JNST: 0.0012 } },
 };
 
 const RIC = new Set(["CDRG", "NITE", "JNST", "UBSS", "HRTF", "SOHO", "ETMM", "GTSM", "IATS", "IBCO", "MSCO", "STXG", "CODX", "ICBX", "DWWT"]);
@@ -601,14 +732,32 @@ export async function download606({ quiet = false } = {}) {
         meta.crd.some((c) => n.startsWith(`${c}_`) || n.startsWith(`${c.padStart(c.length, "0")}_`)) &&
         (!meta.xml || meta.xml.test(n))
     );
+    // A firm missing from the zip may still have filed: its XML is then on
+    // FINRA's CDN under the same name (RQD, 2026 Q2).
+    const texts = files.map((name) => read(name));
+    if (!files.length && q && !meta.xml) {
+      const [year, n] = q.split("-");
+      for (const c of meta.crd) {
+        const url = `https://cdn.finra.org/606/${year}/${c}_606_NMS_${year}_${n}_V1.xml`;
+        try {
+          const res = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0" }, signal: AbortSignal.timeout(30000) });
+          if (res.ok) {
+            files.push(url);
+            texts.push(await res.text());
+          }
+        } catch {
+          /* absent */
+        }
+      }
+    }
     if (!files.length) {
       if (!quiet) console.error(`606 : ${folder} (CRD ${meta.crd.join(",")}) absent du zip ${q}`);
       continue;
     }
     let mix = {};
     let bd = meta.name;
-    for (const name of files) {
-      const parsed = parseReport(read(name));
+    for (const text of texts) {
+      const parsed = parseReport(text);
       // A tag that is only a code ("bimi") is not the firm's name.
       if (parsed.bd && /[A-Z]/.test(parsed.bd)) bd = parsed.bd;
       mix = mergeMix(mix, parsed.mix);

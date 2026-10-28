@@ -47,7 +47,7 @@
 //
 // `roundTrip(...)` reads files, not the network.
 
-import { indiaRoundTrip, intradayBuySell, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
+import { indiaRoundTrip, intradayBuySell, printCli, pct, sebiRate, roundPct } from "../../indianDelivery.mjs";
 
 const CRORE = 1e7;
 const PAGE = "https://univest.in/pricing";
@@ -113,12 +113,13 @@ const SCHEDULE = {
 };
 
 // The prepaid packs are "as low as ₹5 per order" (help page), against the
-// standard ₹20 / 0.1 %: the gap on both legs, with GST, at the order amount.
+// standard ₹20 / 0.1 %: the cut of the brokerage at the order amount (the
+// same on both legs, GST included or not).
 const PACK_EACH = 5;
 function packLower(notional) {
   if (!(notional > 0)) return "";
-  const gap = (2 * Math.max(0, brokerageEach(notional) - PACK_EACH) * (1 + SCHEDULE.gstRate)) / notional;
-  const pctText = Number((gap * 100).toFixed(2));
+  const each = brokerageEach(notional);
+  const pctText = each > PACK_EACH ? roundPct((100 * (each - PACK_EACH)) / each) : 0;
   return pctText > 0 ? `Fees might be ${pctText}% lower.` : "";
 }
 

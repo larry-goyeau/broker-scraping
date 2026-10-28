@@ -5,7 +5,8 @@
 // read on 2026-10-18.
 //   Each side  the top of the printed range, 0.35% of the fill. The
 //              page prints "0.15% - 0.35%" for a share with no rule for
-//              where in the range an order falls. The PDF linked from
+//              where in the range an order falls; the remark is the
+//              bottom as a cut of it (0.35% → 0.15% = 57% lower). The PDF linked from
 //              the trading guide prints "0.12% - 0.25%*", undated:
 //              https://vts.com.vn/upload/files/Bi%E1%BB%83u%20ph%C3%AD%20d%E1%BB%8Bch%20v%E1%BB%A5%20VTS.pdf
 //   Sale tax   0.1% of the sale, on top of the commission, gain or
@@ -32,7 +33,7 @@ const SCHEDULE = {
   readOn: "2026-10-18",
   rate: () => pct("0.35"),
   basis: "le haut de la fourchette 0,15 % à 0,35 %",
-  remark: "Commission can be up to 0.2% lower; the sheet does not say when. Custody is 0.27 VND a share.",
+  remark: "Commission can be up to 57% lower; the sheet does not say when. Custody is 0.27 VND a share.",
 };
 
 export function roundTrip(query) {

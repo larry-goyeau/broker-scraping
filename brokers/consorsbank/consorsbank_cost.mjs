@@ -548,6 +548,9 @@ function pct(x) {
   return two > 0 ? String(two) : String(Number((100 * x).toPrecision(1)));
 }
 
+// A relative cut in percent: whole when 10 or more, one decimal below.
+const roundPct = (x) => (x >= 10 ? Math.round(x) : Math.round(x * 10) / 10);
+
 function findListing({ etf, place, currency }) {
   const asked = loose(etf);
   const wantPlace = loose(place);
@@ -713,12 +716,15 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const fxEach = held ? 0 : notionalEur * rate;
 
   // Gold, from 26 orders a calendar year: same place cost, lower commission.
+  // The remark is the cut of the bank's own charges (commission or
+  // StarPartner price, plus the place cost; not the exchange's charge).
   const goldBuy = star != null ? star : commissionEur(notionalEur, GOLD) + where.fee + bourseEach;
   const goldSell = commissionEur(notionalEur, GOLD) + where.fee + bourseEach;
   const goldSaving = buyEach + sellEach - (goldBuy + goldSell);
+  const bankEur = buyEach + sellEach - (star != null ? 1 : 2) * bourseEach;
   const remarks = [];
   if (held && cash !== "EUR" && rate != null) remarks.push(fxRemark(pct(rate), listing.currency));
-  if (goldSaving > 0.005) remarks.push(`If ${GOLD.from} or more trades a year, fees ${pct(goldSaving / notionalEur)}% lower.`);
+  if (goldSaving > 0.005) remarks.push(`If ${GOLD.from} or more trades a year, fees ${roundPct((100 * goldSaving) / bankEur)}% lower.`);
 
   const courtageUsd = dollars(buyEach + sellEach, "EUR");
   const fxUsd = dollars(fxEach * 2, "EUR");

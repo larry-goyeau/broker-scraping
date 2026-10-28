@@ -15,7 +15,8 @@
 //                    10,000,001 TL +             0.0005
 //                  "Komisyon oranlarına Borsa Payı dâhildir": the BIST
 //                  exchange share is inside the rate. One trip is the first
-//                  band; the lower bands stay in the remark.
+//                  band; the lower bands stay in the remark, as a cut of
+//                  the 0.0009 rate (0.0008: 11% lower, 0.0005: 44%).
 //   Minimum        5 TL. The "Ücret ve Komisyonlar" page says a day's total
 //                  commission under 5 TL is charged as 5 TL. The buy and the
 //                  immediate sale are one day, so the floor bites on the sum
@@ -77,8 +78,12 @@ const BANDS = [
   { upTo: Infinity, rate: 0.0005 },
 ];
 const RATE = BANDS[0].rate;
-// How far a lower band is under the first one, in percent.
-const lower = (rate) => Number(((RATE - rate) * 100).toFixed(2));
+// How far a lower band is under the first one, as a cut of its rate in
+// percent: whole when 10 or more, one decimal below.
+const lower = (rate) => {
+  const x = (100 * (RATE - rate)) / RATE;
+  return x >= 10 ? Math.round(x) : Math.round(x * 10) / 10;
+};
 const DAILY_MIN = 5;
 const BSMV = 0.05;
 const TAKAS = 0.000004;

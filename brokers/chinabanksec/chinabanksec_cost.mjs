@@ -11,8 +11,8 @@
 //   SCCP                0.01% of the gross, each side
 //   Sales Tax           "0.6% of P100,000.00" in the selling example
 // The owner takes the 1.0% ceiling as the commission (2026-10-24); the
-// 0.25% floor of the range is the remark "Fees might be 1.68% lower."
-// (0.75 point plus 12% VAT, each side, buy and sell together). The worked
+// 0.25% floor of the range is the remark "Fees might be 75% lower." (a cut
+// of the commission; VAT scales both alike). The worked
 // examples use 0.25%: 20,000 MEG at P5, buying fees P295.00, selling fees
 // P895.00. The 0.6% is the stock transaction tax before the Capital
 // Markets Efficiency Promotion Act (RA 12214) cut it to 0.1% from 1 July
@@ -57,7 +57,7 @@ const SALES_TAX = 0.001;
 // Cash the account takes (deposits.mjs). A line in another currency would be
 // bought through a conversion the broker does not price.
 const CASH = ["PHP"];
-const REMARK = `Fees might be ${Number(((COMMISSION - COMMISSION_LOW) * (1 + VAT) * 2 * 100).toFixed(2))}% lower.`;
+const REMARK = `Fees might be ${Math.round(((COMMISSION - COMMISSION_LOW) / COMMISSION) * 100)}% lower.`;
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];

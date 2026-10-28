@@ -23,7 +23,8 @@
 //     so the online floor is 2 062 ¥ (75 % of 2 750).
 //     The special discount (特別割引) for individuals is set every six
 //     months from past commissions and assets held, up to 15 % ("最大15％
-//     割引"). A new client has none; the remark gives the most it saves.
+//     割引"). A new client has none; the remark gives the most it saves,
+//     as a cut of this order's commission (yen fractions dropped).
 //     The 99 % rule on a sale worth less than the fee does not reach a
 //     realistic order.
 //
@@ -207,8 +208,8 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
 
   const remark = (() => {
     const low = legYen(notional, SPECIAL_MAX);
-    const gap = one == null || low == null ? 0 : ((one - low) * 2) / notional;
-    return gap > 0 ? `Fees might be ${Number((gap * 100).toFixed(2))}% lower.` : "";
+    const x = one == null || low == null || !(one > 0) ? 0 : ((one - low) / one) * 100;
+    return x > 0 ? `Fees might be ${x >= 10 ? Math.round(x) : Number(x.toFixed(1))}% lower.` : "";
   })();
 
   return {

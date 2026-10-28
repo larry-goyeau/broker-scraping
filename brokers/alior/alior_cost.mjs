@@ -11,7 +11,8 @@
 //     the same session's reverse trade, cash market except bonds
 //       charged at the order rate, then the gap down to 0.20 % is refunded
 //       on the smaller of the two notionals. The figure stays at 0.38 %.
-//       The remark is the gap on that sale, −0.18 point.
+//       The remark is that refund as a cut of the sale's commission, at
+//       this order's value (0.18 / 0.38 = 47 % above the 3 zł floor).
 //     GPW ETF, ETC and ETN, communiqué of 30 June 2026, both legs
 //       0 through 31 December 2026
 //     GlobalConnect is that Warsaw market in złoty, so it uses this
@@ -71,6 +72,12 @@ const SCHEDULE = {
 const POLISH_RATE = 0.0038;
 const DAY_RATE = 0.002;
 const POLISH_MIN = 3;
+// The same-session refund (0.38 % → 0.20 % of the notional) as a cut of the
+// sale's commission: whole when 10 or more, one decimal below.
+function dayCut(sell, notional) {
+  const x = notional > 0 ? (100 * (POLISH_RATE - DAY_RATE) * notional) / sell : (100 * (POLISH_RATE - DAY_RATE)) / POLISH_RATE;
+  return x >= 10 ? Math.round(x) : Math.round(x * 10) / 10;
+}
 const FOREIGN_RATE = 0.0029;
 const FOREIGN_MIN = { EUR: 5, USD: 5, GBP: 5, SEK: 60, NOK: 60, DKK: 60 };
 const US_SHARE = { perShare: 0.02, mics: new Set(["XNAS", "XNYS"]) };
@@ -264,9 +271,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     cashCurrency: rule.currency,
     remark: [
       fxNote(listing.currency),
-      rule.dayTrade
-        ? `If the sale is the same day, that sale's fees are ${Number(((POLISH_RATE - DAY_RATE) * 100).toFixed(2))}% lower.`
-        : "",
+      rule.dayTrade ? `If the sale is the same day, that sale's fees are ${dayCut(rule.sell, priced ? n * p : 0)}% lower.` : "",
     ]
       .filter(Boolean)
       .join("\n"),

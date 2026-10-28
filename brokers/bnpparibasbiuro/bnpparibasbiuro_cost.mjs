@@ -10,7 +10,8 @@
 // quoted in złoty), internet column:
 //   0.35 % of the executed order, minimum 5 zł. A same-day reversing sale
 //   is charged 0.19 % (the difference is refunded within three days); this
-//   ticket keeps the position, so that is the remark. Phone and branch
+//   ticket keeps the position, so that is the remark, as a cut of the
+//   0.35 %: (0.35 - 0.19) / 0.35 = 46 %. Phone and branch
 //   orders are 0.80 % min 8 zł, another channel.
 //
 // A4.1, foreign cash markets. Orders are taken by phone only (8:30-17:30)
@@ -142,7 +143,7 @@ function bankFxRemark(cash) {
 }
 
 function remarkOf(domestic, cash) {
-  if (domestic) return `Same day sell is ${Number(((DOMESTIC_RATE - DAYTRADE_RATE) * 100).toFixed(2))}% lower.`;
+  if (domestic) return `Same day sell fees are ${Math.round((100 * (DOMESTIC_RATE - DAYTRADE_RATE)) / DOMESTIC_RATE)}% lower.`;
   return [
     "Foreign orders by phone only, 8:30-17:30. Minimum trade 10,000 USD/EUR/GBP.",
     bankFxRemark(cash),

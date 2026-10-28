@@ -230,15 +230,16 @@ function cheapestClass(classes, amount) {
   return best;
 }
 
-// Premium as "x% lower" than the class in the total, at this order's
-// amount in the fee currency (minimums included). Left out when it is
+// Premium as "x% lower" than the class in the total, x the cut of that
+// class's fee at this order's amount in the fee currency (minimums
+// included); whole when 10 or more, one decimal below. Left out when it is
 // no cheaper here.
 function premiumRemark(market, chosen, amount) {
   const t = market?.premium;
   if (!t || !chosen || !(amount > 0)) return "";
-  const gap = ((chosen.fee - Math.max(t.min, amount * t.rate)) / amount) * 100;
-  const v = Number(gap.toFixed(3));
-  return v > 0 ? `${t.label}: ${v}% lower.` : "";
+  const gap = ((chosen.fee - Math.max(t.min, amount * t.rate)) / chosen.fee) * 100;
+  const v = gap >= 10 ? Math.round(gap) : Math.round(gap * 10) / 10;
+  return v > 0 ? `${t.label}: fees are ${v}% lower.` : "";
 }
 
 function classText(market) {

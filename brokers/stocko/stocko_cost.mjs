@@ -35,6 +35,9 @@
 //   DP on a delivery sell       ₹15 + 18% GST per script
 // Trading account opening ₹200, AMC ₹200 + GST a year from the second
 // year, call & trade ₹20 + GST per order: none is per trade. No US line.
+// Per Trade remark: "Intraday buy and sell fees are x% lower.", the intraday
+// brokerage (the lower of ₹12.99 and 0.01%) as a cut of the delivery one,
+// at this order (90% at the bare rates; less once ₹12.99 caps delivery).
 //
 //   node brokers/stocko/stocko_cost.mjs RELIANCE NSE INR --shares=10 --price=1400
 //   node brokers/stocko/stocko_cost.mjs RELIANCE BSE INR --shares=10 --price=1400
@@ -44,7 +47,7 @@
 // `roundTrip(...)` reads files, not the network.
 
 import { pathToFileURL } from "node:url";
-import { indiaRoundTrip, printCli, pct, rateGap, sebiRate } from "../../indianDelivery.mjs";
+import { indiaRoundTrip, printCli, pct, sebiRate } from "../../indianDelivery.mjs";
 
 const PLANS_PAGE = "https://stocko.in/support/per-trade-and-monthly-brokerage-plans/";
 const CHARGES_PAGE = "https://stocko.in/support/stocko-account-opening-brokerage-and-other-charges-details/";
@@ -67,6 +70,18 @@ function txnRate(exchange, row) {
 // Per Trade plan, each order: the lower of ₹12.99 and this percentage.
 const DELIVERY = "0.1";
 const INTRADAY = "0.01";
+const CAP = 12.99;
+const perTrade = (rate) => (notional) => Math.min(CAP, notional * pct(rate));
+
+// The intraday brokerage as a cut of the delivery one, at `notional`, or at
+// the bare rates when no order is known.
+function intradayRemark(notional) {
+  const d = notional > 0 ? perTrade(DELIVERY)(notional) : pct(DELIVERY);
+  const i = notional > 0 ? perTrade(INTRADAY)(notional) : pct(INTRADAY);
+  const x = ((d - i) / d) * 100;
+  const v = x >= 10 ? Math.round(x) : Number(x.toFixed(1));
+  return v > 0 ? `Intraday buy and sell fees are ${v}% lower.` : "";
+}
 
 const COMMON =
   "DP 15 ₹ + GST par valeur à la vente. " +
@@ -100,9 +115,9 @@ const PLANS = {
   pertrade: schedule({
     name: "Per Trade",
     delivery: "le plus bas de 12,99 ₹ et 0,1 % par ordre",
-    brokerageEach: (notional) => Math.min(12.99, notional * pct(DELIVERY)),
+    brokerageEach: perTrade(DELIVERY),
     basis: "Plan par ordre : courtage livraison le plus bas de 12,99 ₹ et 0,1 % par ordre.",
-    remark: [`Intraday buy and sell is ${rateGap(pct(DELIVERY), pct(INTRADAY))}.`],
+    remark: [intradayRemark(null)],
   }),
   monthly: schedule({
     name: "Monthly",
@@ -116,7 +131,11 @@ const PLANS = {
 
 export function roundTrip(query) {
   const id = String(query.plan || "pertrade");
-  return indiaRoundTrip(PLANS[id] || PLANS.pertrade, query);
+  const plan = PLANS[id] || PLANS.pertrade;
+  const out = indiaRoundTrip(plan, query);
+  const notional = Number(out?.trade?.notional);
+  if (plan !== PLANS.pertrade || !(notional > 0) || !plan.remark || typeof out.remark !== "string") return out;
+  return { ...out, remark: out.remark.replace(plan.remark, intradayRemark(notional)) };
 }
 
 function cli() {

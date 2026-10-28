@@ -17,7 +17,9 @@
 // They are the same for every member of the exchange, so they are not
 // re-printed by these brokers. One fill is assumed, so FRA bites once a
 // side. The trip is sold on another day, as delivery is elsewhere, so the
-// T1/T2 stamp is used; the same-session saving is the remark.
+// T1/T2 stamp is used; the same-session saving is the remark, as a cut on
+// the stamp itself: 0.05 % → 0.025 %, "Same day sell tax is 50% lower."
+// (owner's rule, 2026-10-27).
 //
 // Every line is a pound line except Nile Sat (EGSA), which the EGX quotes
 // in dollars. That line pays the same rates in dollars; the EGP floor and
@@ -124,7 +126,7 @@ export function egyptRoundTrip(schedule, query) {
   const { etf, place, currency, shares, price, bp = null, perShare = null } = query;
   const remark = [
     schedule.remark,
-    `Intraday round trip is ${Number((2 * (EG_STAMP_T1 - EG_STAMP_T0) * 100).toFixed(2))}% lower.`,
+    `Same day sell tax is ${Math.round((100 * (EG_STAMP_T1 - EG_STAMP_T0)) / EG_STAMP_T1)}% lower.`,
     `MCDR custody ${Number((EG_CUSTODY * 100).toFixed(2))}% a year.`,
   ]
     .filter(Boolean)

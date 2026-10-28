@@ -1,0 +1,44 @@
+// What Asia Securities sells on the Colombo Stock Exchange, with no login.
+// Its only place is the CSE: clients trade through ATrad, "the ATRAD
+// platform ... web-based platform and mobile platform", and the FAQ prices
+// "Transaction cost applicable for equity and debt securities". None of its
+// pages names a board, segment or share class it does not handle; the FAQ
+// only recalls that equities list "on either the Main or Diri Savi Board".
+// So the catalogue is the whole Colombo share book.
+//
+//   https://www.asiasecurities.lk/client-solution/stockbroking/online-and-mobile-trading
+//   https://www.asiasecurities.lk/faqs   (fees: 1.12 % up to LKR 100 million,
+//                                         brokerage 0.64 %)
+//
+// Left out, as on every Colombo scraper here: lines the exchange lists as
+// trading suspended, dealing suspended or halted, delisted or never-traded
+// lines, rights (.R), warrants (.W), debentures (.D) and closed-end fund
+// units (.U). Voting (.N), non-voting (.X) and preference (.P) shares stay.
+// Colombo lists no ETF, ETN or ETC today. Every line trades in rupees.
+// The book and the ISINs come from the exchange through ../asialk/cseBook.mjs:
+//   https://www.cse.lk/api/allSecurityCode
+//   https://www.cse.lk/api/listedEntitiesByTradingStatus (TS, DS, TH)
+//   https://www.cse.lk/listed-entities/trading-status
+//   https://www.cse.lk/api/deListedEntities
+//   https://www.cse.lk/api/companyInfoSummery
+//
+//   node brokers/asialk/asialk_scraping.mjs
+
+import { stampRows } from "../../accepted.mjs";
+import { withoutObligations } from "../../obligation.mjs";
+import fs from "node:fs";
+import { cseBook, cseHalted } from "../asialk/cseBook.mjs";
+
+const OUTPUT = new URL("asialk-parsed.json", import.meta.url);
+
+const rows = await cseBook();
+if (rows.length < 250) throw new Error(`only ${rows.length} Colombo shares came back`);
+if (rows.some((row) => !/\.(N|X|P)\d{4}$/.test(row.ticker))) throw new Error("a line that is not a share stayed in the book");
+
+const stamped = stampRows(withoutObligations(rows));
+for (const row of stamped) if (row.isin) row.query = row.isin;
+fs.writeFileSync(OUTPUT, JSON.stringify(stamped, null, 2));
+
+const halted = Object.keys(await cseHalted());
+const withIsin = stamped.filter((row) => row.isin).length;
+console.error(`${stamped.length} listings, ${withIsin} with an ISIN; ${halted.length} suspended left out: ${halted.join(", ")}`);

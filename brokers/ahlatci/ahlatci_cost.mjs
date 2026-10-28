@@ -68,8 +68,9 @@ const BORSA_PAYI = 0.000025;
 const TAKAS = { STOCK: 0.000004, ETF: 0.000001 };
 const CASH = "TRY";
 
-// Buy and sell together, with BSMV, in percent.
-const LOWER_PCT = Number(((RATE - LOWEST) * 2 * (1 + BSMV) * 100).toFixed(2));
+// The cut of the commission itself, binde 1 → onbinde 1, in percent (the
+// same on each side, BSMV included or not).
+const LOWER_PCT = Math.round((100 * (RATE - LOWEST)) / RATE);
 const REMARK = `Fees might be ${LOWER_PCT}% lower.`;
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;

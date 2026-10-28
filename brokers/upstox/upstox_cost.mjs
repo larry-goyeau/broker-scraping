@@ -151,7 +151,8 @@ function fxGstInr(amount) {
 }
 
 // The bank's spread and the per-remittance bank fee; the free first 30
-// days are put in front at this order's commission once it is known.
+// days (no brokerage: 100% lower) are put in front once this order's
+// commission is known to be above zero.
 const US_REMARK = [
   "FX through the client's bank at a rate not stated.",
   "Each transfer of money to the US account pays a bank fee plus 18% GST: HDFC ₹500 up to $500 sent, ₹1,000 above; IDFC FIRST ₹100.",
@@ -316,7 +317,7 @@ function usRoundTrip(query) {
     gap,
   ].filter(Boolean);
 
-  const freeCut = Number(((commissionEach * (1 + GST)) / notional * 100).toFixed(2));
+  const freeCut = commissionEach > 0 ? 100 : 0;
   return {
     ...shared,
     remark: [freeCut ? `First 30 days: ${freeCut}% lower fee.` : "", US_REMARK].filter(Boolean).join("\n"),

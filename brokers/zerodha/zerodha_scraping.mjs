@@ -19,12 +19,25 @@
 // Strikes the exchange has withdrawn are absent. The GLOBAL rows are
 // indices, not a foreign share book.
 //
+// United States: the Global stocks segment, live in Kite ("Invest in 2,000
+// US-listed companies and ETFs"; "Zerodha's Global stocks segment supports
+// US-listed stocks and ETFs only, covering up to 2,000 companies and
+// ETFs"). Neither file lists them, and "US-listed" names no exchange, so
+// (owner's rules: a stated count keeps the N most popular, examples or no
+// venue mean the whole country) the US book of the day
+// (../wellstrade/usBook.mjs) cut to the 2,000 titles with the largest
+// 30-day traded value, shares and ETFs together (../tfcapital/usTop.mjs).
+// One NBBO row per title, in dollars. Resident Indians only (accepted.mjs).
+//   https://zerodha.com/us-stocks/
+//
 //   node brokers/zerodha/zerodha_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
 import { withoutObligations } from "../../obligation.mjs";
 import fs from "node:fs";
 import { gunzipSync } from "node:zlib";
+import { usTop } from "../tfcapital/usTop.mjs";
+import { usBook } from "../wellstrade/usBook.mjs";
 
 const INSTRUMENTS = "https://api.kite.trade/instruments";
 const FUNDS = "https://api.kite.trade/mf/instruments";
@@ -225,6 +238,16 @@ for (const row of await csv(FUNDS)) {
     isin,
   });
 }
+
+const US_COUNT = 2000;
+const usPage = await fetch("https://zerodha.com/us-stocks/", { headers: { "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" } }).then((r) => r.text());
+if (!/Invest in 2,000 US-listed companies and ETFs/.test(usPage.replace(/<[^>]+>/g, " ").replace(/\s+/g, " "))) {
+  throw new Error("zerodha.com/us-stocks no longer says \"Invest in 2,000 US-listed companies and ETFs\"");
+}
+const us = await usTop(await usBook(), US_COUNT);
+if (us.length !== US_COUNT) throw new Error(`only ${us.length} US titles`);
+for (const ticker of ["AAPL", "MSFT", "SPY", "QQQ"]) if (!us.some((row) => row.ticker === ticker)) throw new Error(`${ticker} is not in the US top ${US_COUNT}`);
+listings.push(...us);
 
 listings.sort((left, right) => {
   const byType = String(left.type).localeCompare(right.type);

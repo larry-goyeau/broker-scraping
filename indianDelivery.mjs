@@ -38,13 +38,20 @@ export function amountGap(applied, other) {
   if (rounded === 0) return "";
   return points > 0 ? `-${rounded}` : `${rounded}`;
 }
-// The same for two rates, as words: "0.15% lower" when the other table is
-// cheaper, "0.05% higher" when it costs more, "" when they round equal.
+// A relative cut in percent: whole when 10 or more, one decimal below.
+export function roundPct(x) {
+  return x >= 10 ? Math.round(x) : Math.round(x * 10) / 10;
+}
+
+// The same for two rates, as words. When the other table is cheaper, the cut
+// of the applied fee itself: 0.25% → 0.10% is "60% lower". When it costs
+// more, the gap in points of the trade ("0.05% higher": a free table has no
+// ratio). "" when they round equal.
 export function rateGap(applied, other) {
   const points = (Number(applied) - Number(other)) * 100;
-  const rounded = Math.round(Math.abs(points) * 100) / 100;
-  if (rounded === 0) return "";
-  return `${rounded}% ${points > 0 ? "lower" : "higher"}`;
+  if (Math.round(Math.abs(points) * 100) / 100 === 0) return "";
+  if (points > 0) return `${roundPct((100 * (Number(applied) - Number(other))) / Number(applied))}% lower`;
+  return `${Math.round(Math.abs(points) * 100) / 100}% higher`;
 }
 
 // The round trip charges `delivery`. Intraday is another table. The remark
@@ -60,7 +67,7 @@ export function sameDaySell(cost, deliveryEach, intradayEach) {
   const notional = Number(cost?.trade?.notional);
   if (!(notional > 0)) return cost;
   const gap = rateGap(deliveryEach(notional) / notional, intradayEach(notional) / notional);
-  const line = gap ? `Same day sell is ${gap}.` : "";
+  const line = gap ? `Same day sell fees are ${gap}.` : "";
   return { ...cost, remark: [line, cost.remark].filter(Boolean).join(" ") };
 }
 
@@ -68,7 +75,9 @@ export function sameDaySell(cost, deliveryEach, intradayEach) {
 // notional: brokerage plus GST, STT, stamp and the DP debit. The law's
 // intraday STT is 0.025% on the sell only and stamp 0.003% on the buy;
 // intraday has no DP debit. Exchange, SEBI and IPFT lines are the same on
-// both, so they cancel. Two decimals.
+// both, so they cancel. "x% lower" is the cut of those delivery charges
+// themselves (whole from 10 up, one decimal below); "x% higher" stays in
+// points of the trade, two decimals.
 export function intradayBuySell(cost, schedule, intradayEach) {
   const notional = Number(cost?.trade?.notional);
   if (!(notional > 0)) return cost;
@@ -79,7 +88,8 @@ export function intradayBuySell(cost, schedule, intradayEach) {
     schedule.dpInr * (schedule.gstOnDp ? gst : 1);
   const intraday = 2 * intradayEach(notional) * gst + notional * (INTRADAY_STT + INTRADAY_STAMP);
   const gap = Math.round(((delivery - intraday) / notional) * 100 * 100) / 100;
-  const line = gap ? `Intraday buy and sell is ${Math.abs(gap)}% ${gap > 0 ? "lower" : "higher"}.` : "";
+  const cut = gap > 0 ? roundPct((100 * (delivery - intraday)) / delivery) : Math.abs(gap);
+  const line = gap ? `Intraday buy and sell fees are ${cut}% ${gap > 0 ? "lower" : "higher"}.` : "";
   return { ...cost, remark: [line, cost.remark].filter(Boolean).join(" ") };
 }
 const INTRADAY_STT = 0.00025;

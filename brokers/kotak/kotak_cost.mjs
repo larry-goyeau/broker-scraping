@@ -136,7 +136,7 @@ function schedule({ name, url, delivery, basis, remark }) {
   };
 }
 
-const intraday = (delivery) => `Intraday buy and sell is ${rateGap(pct(delivery), pct(INTRADAY))}.`;
+const intraday = (delivery) => `Intraday buy and sell fees are ${rateGap(pct(delivery), pct(INTRADAY))}.`;
 
 const PLANS = {
   tradefree: schedule({

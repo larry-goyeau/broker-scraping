@@ -11,7 +11,9 @@
 //
 //   Argentina, Gold     0.5% of the consideration, plus IVA. Platinum is
 //                       0.3% and Black is 0.1%, from last month's volume.
-//                       A new month with nothing traded is Gold.
+//                       A new month with nothing traded is Gold. The
+//                       remark gives the cut of the commission: 40% and
+//                       80%.
 //   Same-day sale       The Argentine sale of what was bought the same
 //                       day, in the same symbol, currency and settlement,
 //                       is free of commission. The figure assumes the sale
@@ -64,7 +66,7 @@ const GOLD = 0.005;
 const MARKET = 0.0005;
 const US_RATE = 0.0035;
 const US_MIN = 2;
-const REMARK = "If the sale is the same day, no commission.\nTrading fees are 0.2% lower above 7,500,000 pesos traded in Argentina last month, 0.4% lower above 50,000,000.";
+const REMARK = "If the sale is the same day, no commission.\nTrading fees are 40% lower above 7,500,000 pesos traded in Argentina last month, 80% lower above 50,000,000.";
 // Dólar CCL, ley local (AL30C), compra then venta, 2026-10-09 17:10.
 // Half the spread over the mid.
 const CCL = [1609.1078, 1613.5644];

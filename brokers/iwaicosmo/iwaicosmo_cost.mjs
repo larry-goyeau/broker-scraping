@@ -17,7 +17,7 @@
 //             the smaller leg is taken out of the day's total ("デイトレード
 //             を行った場合、買いと売りの約定金額のうち、少ないほうを手数料計算
 //             の対象から除外"). Each leg here is its own day; the remark gives
-//             the same-day saving.
+//             the same-day saving as a cut of the two days' commission.
 //   standard  スタンダードコース (1約定ごと), cash, one order
 //               up to 5 000 000 ¥ 1 100 ¥, up to 10 000 000 ¥ 1 650 ¥, then
 //               550 ¥ per further 5 000 000 ¥; above 240 000 000 ¥ 27 500 ¥
@@ -127,13 +127,11 @@ function usLeg(notional) {
   return Math.min(US_CAP, notional * US_PRETAX * (1 + US_VAT));
 }
 
-const pct2 = (x) => Number((x * 100).toFixed(2));
-
 function japanRemark(plan, notional) {
   if (plan === "monthly") return `¥${MONTHLY_FEE.toLocaleString("en-US")} a month for ${MONTHLY_TRADES} trades.`;
   if (plan === "active") {
-    const saved = activeYen(notional);
-    return saved > 0 ? `Same day sell is ${pct2(saved / notional)}% lower.` : "";
+    // Same day, the smaller (here equal) leg drops out: one leg's fee of two.
+    return activeYen(notional) > 0 ? "Same day sell fees are 50% lower." : "";
   }
   return "";
 }

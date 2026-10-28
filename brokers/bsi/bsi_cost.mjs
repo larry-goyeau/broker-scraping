@@ -13,8 +13,9 @@
 //              27 March 2026 sets the classes by the month's trading value
 //              or margin debt, in billions of dong: Gold 10 / 2, Platinum
 //              25 / 5, Diamond 50 / 10; Silver has no requirement, so a new
-//              client is Silver. The lower classes are in the remark. It
-//              names no separate online rate.
+//              client is Silver. The lower classes are in the remark, as
+//              the cut of the 0.15% (Gold 20%, Platinum 33%, Diamond 60%).
+//              It names no separate online rate.
 //              https://www.bsi.com.vn/vn/tin-tuc/tin-va-su-kien/thong-bao-dieu-chinh-lai-suat-vay-margin
 //   VAT        the sheet says its fees are before VAT "if any"; brokerage
 //              is outside VAT in Vietnam, so none is added.
@@ -43,7 +44,7 @@ const SCHEDULE = {
   readOn: "2026-10-18",
   rate: () => pct("0.15"),
   basis: "classe Silver, le haut des taux par rang de client",
-  remark: "If more than 10 billion VND traded or 2 billion VND margin debt in the month, fees are 0.03% lower; more than 25 / 5 billion, 0.05% lower; more than 50 / 10 billion, 0.09% lower. Custody is 0.4 VND a share a month.",
+  remark: "If more than 10 billion VND traded or 2 billion VND margin debt in the month, fees are 20% lower; more than 25 / 5 billion, 33% lower; more than 50 / 10 billion, 60% lower. Custody is 0.4 VND a share a month.",
 };
 
 export function roundTrip(query) {

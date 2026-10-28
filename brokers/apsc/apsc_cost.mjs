@@ -11,7 +11,9 @@
 //                100 million to under 1 billion  0.25%
 //                1 billion and more              0.20%
 //              A newly opened account pays 0.15% for a period APSC may
-//              change at any time; that offer is not priced here.
+//              change at any time; that offer is not priced here. The
+//              remark gives it as a cut of this order's step (0.30% →
+//              0.15% = 50% lower).
 //   Sale transfer fee   0.3 dong a share for the shares sold on the
 //              exchange ("chuyển khoản chứng khoán bán thực hiện giao dịch
 //              qua SGDCK", item V.1), at least 100,000 dong a transfer
@@ -47,9 +49,11 @@ const SCHEDULE = {
     [null, pct("0.20")],
   ]),
   basis: "paliers par valeur du jour, tous canaux",
-  // The new-account rate, as a cut from this order's step.
-  remark: (rate) =>
-    `New account, for a limited time: ${Number(((rate - NEW_ACCOUNT) * 100).toFixed(2))}% lower fee.`,
+  // The new-account rate, as a cut of this order's step.
+  remark: (rate) => {
+    const x = ((rate - NEW_ACCOUNT) / rate) * 100;
+    return `New account, for a limited time: ${x >= 10 ? Math.round(x) : Number(x.toFixed(1))}% lower fee.`;
+  },
   saleFee: perShareOnSale(0.3, { min: 100_000, max: 300_000 }),
 };
 

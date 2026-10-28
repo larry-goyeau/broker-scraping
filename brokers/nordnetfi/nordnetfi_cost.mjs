@@ -224,17 +224,19 @@ export function cheapestClass(classes, amount) {
   return best;
 }
 
-// A cheaper activity class as "x% lower" than the class in the total, at
-// this order's amount in the fee currency (minimums included), or at the
-// bare rates when no amount is known. A tier no cheaper here is left out.
+// A cheaper activity class as "x% lower" than the class in the total: the
+// cut of the commission itself, at this order's amount in the fee currency
+// (minimums included), or at the bare rates when no amount is known. Whole
+// from 10 up, one decimal below. A tier no cheaper here is left out.
 function tierRemark(cls, amount) {
   if (!cls?.tiers) return "";
   const feeOf = (rate, min) => Math.max(min, amount * rate);
   const out = [];
   for (const t of cls.tiers) {
-    const gap = amount > 0 ? ((feeOf(cls.rate, cls.min) - feeOf(t.rate, t.min)) / amount) * 100 : (cls.rate - t.rate) * 100;
-    const v = Number(gap.toFixed(3));
-    if (v > 0) out.push(`${out.length ? t.label : t.full ?? t.label}: ${v}% lower`);
+    const base = amount > 0 ? feeOf(cls.rate, cls.min) : cls.rate;
+    const gap = ((base - (amount > 0 ? feeOf(t.rate, t.min) : t.rate)) / base) * 100;
+    const v = gap >= 10 ? Math.round(gap) : Math.round(gap * 10) / 10;
+    if (v > 0) out.push(out.length ? `${t.label}: ${v}% lower` : `${t.full ?? t.label}: fees are ${v}% lower`);
   }
   return out.length ? `${out.join("; ")}.` : "";
 }

@@ -15,7 +15,8 @@
 //         suspension to 2036 and adds active bond ETFs from 2027: re-read after
 //         2026-12-31.
 //   1.5‰  a same-day buy and sell of a share (現股當沖), "施行日期延長至2027/12/31":
-//         a remark, the round trip here is not a day trade.
+//         a remark ("Same day sell tax is 50% lower."), the round trip here
+//         is not a day trade.
 // Rounding: "小數點以下，無條件捨去" (BankTaiwan's fee and tax table).
 //
 //   https://www.twfhcsec.com.tw/Activity/BusinessIntro   (二、費用與收入說明)
@@ -66,12 +67,15 @@ export function saleTax(row, n, price) {
   return [round, odd].filter((q) => q > 0).reduce((sum, q) => sum + Math.floor(q * price * rate + 1e-9), 0);
 }
 
-// "Same day sell is x% lower." on a listed ordinary share, at the share of
-// the order that is in round lots (odd lots cannot be day-traded).
+// "Same day sell tax is x% lower." on a listed ordinary share: x is the cut
+// on the sale's tax (0.3 % → 0.15 %, 50 %), at the share of the order that
+// is in round lots (odd lots cannot be day-traded). Whole numbers from 10,
+// one decimal below (owner's rule, 2026-10-27).
 export function dayTradeRemark(row, n, emerging = false) {
   if (emerging || !isCommonShare(row)) return "";
   const { round } = splitLots(n);
   if (!(round > 0)) return "";
-  const pct = Number(((100 * (TAX.share - TAX.dayTrade) * round) / n).toFixed(2));
-  return pct > 0 ? `Same day sell is ${pct}% lower.` : "";
+  const x = (100 * (TAX.share - TAX.dayTrade) * round) / (TAX.share * n);
+  const pct = x >= 9.95 ? Math.round(x) : Number(x.toFixed(1));
+  return pct > 0 ? `Same day sell tax is ${pct}% lower.` : "";
 }

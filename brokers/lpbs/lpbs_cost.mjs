@@ -8,7 +8,8 @@
 //              With one it is 0.15%. A new account trades free for 30
 //              days except the exchange fee (Zero Fee); not priced here.
 //              The sheet prints no exchange fee; the remark uses the
-//              0.027% AIS prints, so -0.073%.
+//              0.027% AIS prints, so the fee is 73% lower
+//              ((0.1 - 0.027) / 0.1).
 //              https://www.lpbs.com.vn/san-pham-zero-fee-lpbs18
 //   Sale tax   0.1% of the sale, the personal income tax the broker
 //              withholds on every sale, gain or loss. This sheet does not
@@ -36,7 +37,7 @@ const SCHEDULE = {
   readOn: "2026-10-18",
   rate: () => pct("0.1"),
   basis: "client sans chargé de clientèle, frais de bourse inclus",
-  remark: "First 30 days: 0.07% lower fee. Custody is 0.27 VND a share a month plus VAT.",
+  remark: "First 30 days: 73% lower fee. Custody is 0.27 VND a share a month plus VAT.",
 };
 
 export function roundTrip(query) {

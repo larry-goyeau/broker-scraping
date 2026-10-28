@@ -17,8 +17,8 @@
 // 2026, https://www.idbidirect.in/pdf/DEPOSITORY_NEW.pdf) prints delivery
 // from 0.10% (Opulentia) to 0.50% (IDBI Savings, all other variants) by the
 // bank category. One order at the default is 0.50% in all three; the lower
-// rates are the remark "Fees might be up to 0.8% lower." (0.40 point a leg,
-// buy and sell together).
+// rates are the remark "Fees might be up to 80% lower." (0.50% → 0.10%, a
+// cut of the brokerage; the ₹25 minimum binds only under ₹25,000).
 //
 // DP on a delivery sell: IDBI Capital's own NSDL DP (IN300079),
 // https://www.idbidirect.in/download/DEPOSITORY%20FEE%20STRUCTURE%20-%20General%20new%203.0.pdf
@@ -41,7 +41,7 @@
 //   IPFT                        not printed: 0
 //
 // In the total: the book, brokerage, DP, STT, stamp, exchange, SEBI and GST.
-// Remark on a share, at this order's value: "Same day sell is x% lower." (an
+// Remark on a share, at this order's value: "Same day sell fees are x% lower." (an
 // intraday buy and sell: square-off brokerage, STT 0.025% on the sell only,
 // stamp 0.003%, no DP debit). Cash is rupees only (deposits.mjs) and every
 // line is INR: no FX. Encash (1%), e-Margin and Margin are other products. A
@@ -61,7 +61,7 @@ const SQUARE_OFF = pct("0.05");
 const MIN_ORDER = 25;
 const LOW_PRICE = 10;
 const LOW_PRICE_PER_SHARE = 0.04;
-const LOWER = "Fees might be up to 0.8% lower.";
+const LOWER = "Fees might be up to 80% lower.";
 
 // A leg's brokerage at `rate`, with the two printed minimums. The shares are
 // the notional over the price of this query.
@@ -115,7 +115,7 @@ export function roundTrip(query) {
   // The same-day gap is a share's (an ETF's STT is another rule).
   if (cost.listing?.type !== "STOCK" || cost.usd == null && cost.brokerFees == null) return cost;
   const out = intradayBuySell({ ...cost, remark: "" }, sched, legAt(SQUARE_OFF, price));
-  const sameDay = String(out.remark || "").replace(/^Intraday buy and sell is /, "Same day sell is ");
+  const sameDay = String(out.remark || "").replace(/^Intraday buy and sell fees are /, "Same day sell fees are ");
   return { ...out, remark: [sameDay, LOWER].filter(Boolean).join(" ") };
 }
 

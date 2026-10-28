@@ -39,7 +39,8 @@
 // Brokerage charges, SEM fees, CDS fees, and FSC charges".
 // Turnaround trades (a sale before the first trade settles): 0.15% from
 // Rs 50,000, Rs 75 flat below. That is a remark ("Sell before 3 day
-// settlement is x% lower."), not the total.
+// settlement is x% lower.", a cut of the sale's whole fee: 1.25% → 0.15%
+// = 88% lower), not the total.
 //
 // In the total: the SEM book crossed, the dealer's share (brokerFees) and
 // the SEM, FSC and CDS shares (parts.taxes), both ways. Remark: the
@@ -174,12 +175,13 @@ function scheduleOf(listing, rs) {
   return { dealer: f.dealer / rs, sem: f.sem / rs, fsc: f.fsc / rs, cds: f.cds / rs };
 }
 
-/** "Sell before 3 day settlement is x% lower." against the one-side rate. */
+/** "Sell before 3 day settlement fees are x% lower.", a cut of the one-side fee. */
 function turnaroundNote(rate, rs) {
-  if (rate == null || rs == null || !(rs > 0)) return "";
+  if (rate == null || rs == null || !(rs > 0) || !(rate > 0)) return "";
   const t = rs < TURNAROUND.below ? TURNAROUND.flat / rs : TURNAROUND.rate;
-  const gap = Number(((rate - t) * 100).toFixed(2));
-  return gap > 0 ? `Sell before 3 day settlement is ${gap}% lower.` : "";
+  const x = ((rate - t) / rate) * 100;
+  const gap = x >= 10 ? Math.round(x) : Number(x.toFixed(1));
+  return gap > 0 ? `Sell before 3 day settlement fees are ${gap}% lower.` : "";
 }
 
 function findListing({ etf, place, currency }) {

@@ -36,7 +36,8 @@
 //   Lower rate     "Kampanyalı hesaplarda; komisyon oranı sabit Binde 1 +
 //                  BSMV": teachers, health staff, police, soldiers, public
 //                  employees and pensioners paid by Ziraat Bankası. In the
-//                  remark when it is under the scale rate.
+//                  remark when it is under the scale rate, as a cut of
+//                  this order's commission (BSMV scales both alike).
 //   Not this trip  no account fee ("Hesap İşletim ücreti uygulaması
 //                  bulunmamaktadır"); MKK custody at its tariff; transfers.
 //
@@ -94,12 +95,13 @@ export const scaleRate = (dayVolume) => SCALE.find((b) => dayVolume <= b.upTo).r
 // Both legs in lira, before BSMV, at a given rate.
 const legs = (notional, rate) => 2 * Math.max(MIN_TRADE, notional * rate);
 
-// The campaign rate against the scale, buy and sell together with BSMV.
+// The campaign rate as a cut of the scale commission, buy and sell together.
 function remarkFor(notional) {
   if (!(notional > 0)) return "";
   const scale = legs(notional, scaleRate(2 * notional));
   const campaign = legs(notional, CAMPAIGN);
-  const pct = Number((((scale - campaign) * (1 + BSMV)) / notional * 100).toFixed(2));
+  const x = ((scale - campaign) / scale) * 100;
+  const pct = x >= 10 ? Math.round(x) : Number(x.toFixed(1));
   return pct > 0 ? `Teachers, health staff, police, soldiers and public employees: fees might be ${pct}% lower.` : "";
 }
 

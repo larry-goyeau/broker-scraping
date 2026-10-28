@@ -818,11 +818,14 @@ function roundTripWith(
   const usd = plus(bookUsd, commissionUsd, secUsd, tafUsd, catUsd, levyUsd, taxUsd, fxUsd);
   const brokerFees = plus(commissionUsd, fxUsd);
 
-  // SGX: the page waives the commission for a new client's first year.
+  // SGX: the page waives the commission for a new client's first year. The
+  // remark is the cut of Webull's own fees (commission + platform, GST in):
+  // whole from 10 up, one decimal below.
   let newClient = "";
-  if (spec?.newClientFree && venue && feeAmount > 0) {
-    const waived = (2 * venue.commissionSide * (1 + (picked.gst || 0))) / feeAmount;
-    newClient = `New clients' first year: ${(100 * waived).toFixed(2)}% lower.`;
+  if (spec?.newClientFree && venue && venue.webull > 0) {
+    const raw = (100 * 2 * venue.commissionSide * (1 + (picked.gst || 0))) / venue.webull;
+    const waived = raw >= 10 ? Math.round(raw) : Math.round(raw * 10) / 10;
+    if (waived > 0) newClient = `New clients' first year: ${waived}% lower.`;
   }
   if (newClient) shared.remark = remarkOf({ plan: picked, adr: listing.adr, fxNote, newClient });
 

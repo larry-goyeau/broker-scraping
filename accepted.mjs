@@ -51,6 +51,7 @@ export const COUNTRY_NAMES = {
   ZM: "Zambia", ZW: "Zimbabwe",
   KH: "Cambodia", MM: "Myanmar", MU: "Mauritius", RU: "Russia",
   LA: "Laos", JM: "Jamaica", NP: "Nepal", ET: "Ethiopia", IR: "Iran", LY: "Libya", SY: "Syria",
+  KP: "North Korea", PS: "Palestine",
 };
 
 const US = { countries: ["US"] };
@@ -226,6 +227,9 @@ const FRENCH = ["FR", "BE", "CH", "LU", "MC", "CA", "SN", "PF", "MA", "DZ", "TN"
 // German is an official language. Only countries the picker names.
 const GERMAN = ["DE", "AT", "CH", "LI", "LU", "BE"];
 const ARABIC = ["AE", "BH", "DZ", "EG", "IQ", "JO", "KW", "LB", "MA", "MR", "OM", "QA", "SA", "TN"];
+// Where Chinese is an official language (owner, 2026-10-26: a Hong Kong
+// broker that takes foreigners without a list).
+const CHINESE = ["CN", "HK", "MO", "TW", "SG"];
 
 export const ACCEPTED = {
   // US account, plus non-US addresses. Canada stays out.
@@ -3394,6 +3398,2205 @@ export const ACCEPTED = {
   // 2026-10-24 (finam.ru answers scripts with a bot check).
   // https://broker.finam.ru/landing/faq/category/broker/scheta/
   finam: { all: true },
+  // 2026-10-26: the single-place catalogues that got cost files that day.
+  // Wells Fargo product: English-only, US phone numbers, US account opening.
+  // The open page names no residency rule.
+  // https://www.wellsfargo.com/investing/wellstrade-online-brokerage/open/
+  wellstrade: { countries: ["US"] },
+  // Citi Personal Wealth Management's US product: online.citi.com/US, US phone
+  // 1-800-846-5200, English only.
+  // https://online.citi.com/US/nga/citi-self-invest
+  citiself: { countries: ["US"] },
+  // US. 'Self-directed investing is only available to current clients of U.S.
+  // Bancorp Advisors and its affiliate U.S. Bank' (US bank clients only).
+  // https://www.usbank.com/investing/online-investing/self-directed-investing.html
+  usbancorpadvisor: { countries: ["US"] },
+  // The agreement says 'the Account is not for a foreign financial
+  // institution, private banking accounts or non-residents of the United
+  // States'.
+  // https://www.tiaa.org/public/pdf/BrokerageAccountCustomerAgreement.pdf
+  tiaa: { countries: ["US"] },
+  // US. 'Plynk is available to US residents 18+ years old with a Social
+  // Security number'.
+  // https://www.plynkinvest.com/faqs
+  plynk: { countries: ["US"] },
+  // US. 'Only current Truist Financial Corporation Clients can open this
+  // account' (US bank, Member FDIC) - same URL
+  truisttrade: { countries: ["US"] },
+  // US (US territories too). 'All account owners must be age 18 or older and a
+  // U.S. citizen or resident alien of the U.S. or one of its territories' (
+  // the application verifies a US SSN and a residential street address (
+  // https://www.americancentury.com/invest/accounts/general-investment/
+  americancentury: { countries: ["US"] },
+  // Members only: NFCU membership (armed forces, DoD, veterans and families),
+  // US SSN and US/APO address (
+  // https://www.navyfederal.org/investment-services/investments.html
+  navyfederaldigit: { countries: ["US"] },
+  // US. 'require all Wealthfront clients to have a U.S. social security
+  // number, a permanent U.S. residential address, and currently reside in the
+  // U.S' (
+  // https://support.wealthfront.com/hc/en-us/articles/209335546
+  wealthfront: { countries: ["US"] },
+  // US (Puerto Rico and US Virgin Islands supported, Guam not). Help Center:
+  // 'currently only operates in the United States ... cannot accept
+  // international customers residing outside the United States', with a
+  // https://www.betterment.com/help/tag/common-questions
+  betterment: { countries: ["US"] },
+  // US only (US residents; a US app needing a linked US bank account;
+  // DriveWealth US brokerage).
+  // https://www.moneylion.com/investing/
+  moneylion: { countries: ["US"] },
+  // US only (needs a SmartInvest Checking account and a Huntington managed
+  // account; Ameriprise US brokerage).
+  // https://www.huntington.com/Personal/savings-cds-overview/smartinvest-money-market-account
+  huntington: { countries: ["US"] },
+  // Page: "Account holders residing in TX, ID, or NY are unable to trade" and
+  // "Brokerage services are available only to residents of the United States".
+  // https://www.mmfcu.org/digital-investing/securities-etfs
+  midminnesotafede: { countries: ["US"] },
+  // Brokerage services are available only to residents of the United States"
+  // and only in states where InvestiFi is registered.
+  // https://www.bluestonefcu.org/investment-tools/
+  bluestonefederal: { countries: ["US"] },
+  // Brokerage services are available only to residents of the United States"
+  // and only in InvestiFi's registered jurisdictions; Day Air members.
+  // https://dayair.org/invest/
+  dayaircreditunio: { countries: ["US"] },
+  // US - 'available only to residents of the United States' (
+  // https://www.elementfcu.org/invest/
+  elementfederalcr: { countries: ["US"] },
+  // US - 'available only to residents of the United States' (
+  // https://frankenmuthcu.org/invest/
+  frankenmuthcredi: { countries: ["US"] },
+  // US - 'available only to residents of the United States' (
+  // https://www.peninsulafcu.com/investing-securities
+  peninsulafederal: { countries: ["US"] },
+  // US - 'available only to residents of the United States' (
+  // https://tru-fcu.org/investment-portal/
+  trufederalcredit: { countries: ["US"] },
+  // US - US app with US bank account / ACH funding (
+  // https://albert.com/about/investing
+  albert: { countries: ["US"] },
+  // US - 'licensed and registered to conduct securities business in 53 U.S.
+  // states and territories', US kids' banking/investing app (
+  // https://busykid.com/investing-for-kids/
+  busykid: { countries: ["US"] },
+  // US - US persons only (US brokerage; ACH and domestic wire funding; SSN at
+  // sign-up) (
+  // https://frec.com
+  frec: { countries: ["US"] },
+  // US - disclosures quoted by the scraper: 'Accounts opened through StoneX
+  // One are currently available to U.S. persons only' (
+  // https://www.stonex.com/en-us/business/self-directed-services/
+  stonexone: { countries: ["US"] },
+  // US - US residents with SSN, US bank account required (
+  // https://www.acorns.com/pricing/
+  acorns: { countries: ["US"] },
+  // US - offered only to 'existing eligible HSBC Bank USA, N.A. Premier
+  // customers' (
+  // https://www.us.hsbc.com/investments/products/self-directed-brokerage/
+  hsbcus: { countries: ["US"] },
+  // US (and US jurisdictions). Quote: "TC2000 Brokerage can only accept
+  // applicants who reside in the United States or reside in a place subject to
+  // the jurisdiction of the United States." Source:
+  // https://www.tc2000.com/brokerage/formcrs
+  tc2000: { countries: ["US"] },
+  // US (moderate confidence). Saturna's IRA application offers only "US
+  // Citizen" and "US Resident Alien" for citizenship ( The brochure does
+  // mention Form 1042-S for foreign persons, but no page lists accepted
+  // https://www.saturna.com/sites/saturna.com/files/2025-03/IRA-Application-Traditional.pdf
+  saturna: { countries: ["US"] },
+  // US. A US bank's broker-dealer (First Citizens Investor Services, Raleigh
+  // NC); no foreign onboarding is published. Source:
+  // https://www.firstcitizens.com/personal/investments/self-directed-investing
+  firstcitizens: { countries: ["US"] },
+  // Source:
+  // https://www.empower.com/products-solutions/brokerage-accounts
+  empower: { countries: ["US"] },
+  // The help article says "Stocks is currently available to U.S. customers
+  // only." Source:
+  // https://help.crypto.com/en/articles/10153377-stock-and-etf-trading-via-the-crypto-com-app
+  cryptocom: { countries: ["US"] },
+  // Evidence: Uphold Securities offers its equities service to U.S. customers
+  // (launch press release of 2026-07-21; the disclosures link the regulators
+  // page for residents of the United States). No state exclusions were found.
+  // https://www.globenewswire.com/news-release/2026/07/21/3330625/0/en/Uphold-Launches-Single-Step-Crypto-to-Equities-Trading-for-4-000-U-S-Stocks-and-ETFs.html
+  uphold: { countries: ["US"] },
+  // US (not certain). The page only says 'not an offer or solicitation in
+  // jurisdictions where TradingBlock is not authorized'; no international
+  // account list was found.
+  // https://www.tradingblock.com/pricing-policies
+  tradingblock: { countries: ["US"] },
+  // Evidence: a US bank (Kansas City) self-directed account for its US
+  // clients; the page states no eligibility list.
+  // https://www.umb.com/wealth-management/investing/self-direct-investing
+  umb: { countries: ["US"] },
+  // Evidence: the FAQ says 'as long as you're an eligible U.S. resident 18 or
+  // older'.
+  // https://www.chime.com/invest/
+  chimeus: { countries: ["US"] },
+  // Evidence: a US regional bank product that requires a linked
+  // Premier/Diamond checking account; no foreign eligibility is published.
+  // https://www.bokfinancial.com/personal/products-and-services/personal-banking/checking-accounts/premier-checking
+  bok: { countries: ["US"] },
+  // Evidence: US broker (Opencash Securities LLC, clearing RQD) with only US
+  // ACH and wire funding, and a US CRS; no non-US offer.
+  // https://support.opencash.com/article/71-ocs-customer-relationship-summary
+  opencash: { countries: ["US"] },
+  // Evidence: the money account is at a US FDIC bank (Evolve) and brokerage is
+  // by DriveWealth, LLC, for US customers.
+  // https://step.com/investing
+  stepus: { countries: ["US"] },
+  // Evidence: the US individual site (bny.com/investments/us) and a US account
+  // introduced to Pershing LLC; no non-US offer.
+  // https://www.bny.com/investments/us/en/individual/resources/investment-tools-services/bny-brokerage-account.html
+  bny: { countries: ["US"] },
+  // US (low confidence). Evidence: the US site shows non-US visitors 'not
+  // intended for investors in your location' and sends them to a separate UK
+  // site; no list of eligible countries is published.
+  // https://www.mondeumcapital.com/overview/
+  mondeum: { countries: ["US"] },
+  // Evidence: a US broker-dealer (LPL Financial LLC) whose self-directed
+  // account is held through US advisers; it charges a separate $40 for foreign
+  // securities, and offers no non-US client sign-up.
+  // https://www.lpl.com/content/dam/edam/practice-management/fees/fs07-ctd.pdf
+  lpltradedirect: { countries: ["US"] },
+  // US (inferred). The page says "Available only to stock plan participants"
+  // and gives no residency list. The account is held at a US broker-dealer and
+  // pays in USD only. Same URL.
+  morganstanleyacc: { countries: ["US"] },
+  // US (inferred). The page states no residency rule. It covers "personal,
+  // trust and entity-owned full-service brokerage accounts" at a US
+  // broker-dealer.
+  jpmorganwealthpa: { countries: ["US"] },
+  // all (no published list). The platform page says "Musaffa supports users
+  // from more than 150 countries to trade US stocks and ETFs"; the fee
+  // schedule says "Certain services are only available in jurisdictions where
+  // https://musaffa.com/halal-investing-platform/
+  musaffa: WORLD,
+  // The page says "Brokerage services are available only to residents of the
+  // United States" and "in jurisdictions where InvestiFi Securities is
+  // registered".
+  // https://www.thinkwisecu.org/invest
+  thinkwisecreditu: { countries: ["US"] },
+  // The page says "Brokerage services are available only to residents of the
+  // United States and in jurisdictions where InvestiFi Securities is
+  // registered". The crypto-only restrictions on TX, ID and NY do not apply to
+  horizonutahfeder: { countries: ["US"] },
+  // Brokerage services are available only to residents of the United States"
+  // (same page)
+  summitchoicecred: { countries: ["US"] },
+  // Texas credit union; the platform is Apex/Unifimoney, which serves US
+  // residents only (
+  // https://www.ccutx.org/invest/wealth-management/online-investing
+  capitolcredituni: { countries: ["US"] },
+  // Access is via GoBankFFB online banking; brokerage is through Apex Clearing
+  // and Custody, for US customers only (
+  // https://www.ffb.com/unifimoney
+  firstfidelity: { countries: ["US"] },
+  // The broker, TAPP Engine Securities, is a US broker-dealer; this is an
+  // Arizona credit union, membership required (same page)
+  desertcreditunio: { countries: ["US"] },
+  // Eko's legal page: "available only to residents of the United States"; ECU
+  // membership is by county in Wisconsin and Illinois (
+  // https://eko.investments/legal
+  educatorscreditu: { countries: ["US"] },
+  // US — EasyInvest runs on Eko Investments, whose advisory services are
+  // "available only to residents of the United States" (
+  // https://eko.investments/legal
+  extracobanks: { countries: ["US"] },
+  // US — "Members of Casco FCU that are enrolled in online banking are
+  // eligible", and Eko serves "only residents of the United States" (
+  // https://www.cascofcu.com/additional-services/cascoinvest
+  cascofederalcred: { countries: ["US"] },
+  // US — eligibility: "A citizen of the United States" (
+  // https://www.crews.bank/digital-investing
+  crewstrust: { countries: ["US"] },
+  // US — no list is printed; a US credit union (One Nevada membership) with a
+  // US broker-dealer, Atomic Brokerage LLC (
+  // https://www.onenevada.org/onenvest
+  onenevadacreditu: { countries: ["US"] },
+  // US — "Eko's investment advisory services are available only to residents
+  // of the United States, age 18 years or older" (
+  // https://www.lakecitybank.com/personal/digital-banking/digital-investing/
+  lakecity: { countries: ["US"] },
+  // Customers of Central National Bank that are enrolled in online banking are
+  // eligible to invest" (US bank, individuals 18+).
+  // https://centralnational.com/whycentral/digital-investing.asp
+  centralnational: { countries: ["US"] },
+  // Parda (Michigan credit union) members open it inside Parda online banking;
+  // Unifimoney requires KYC and its offers are limited to US residents.
+  // https://www.parda.com/invest
+  pardafederalcred: { countries: ["US"] },
+  // MyFarmers Online and Mobile Banking (Farmers Bank & Trust, Arkansas
+  // customers).
+  // https://www.myfarmers.bank/unifimoney
+  farmerstrust: { countries: ["US"] },
+  // Dirigo FCU (Maine) members; the sign-up asks for a "Social Security Number
+  // (SSN) or Tax Identification Number (TIN)".
+  // https://www.dirigofcu.com/personal/online-services/dirigo-investing/
+  dirigofederalcre: { countries: ["US"] },
+  // Sea Air members can open an investment account directly within Online and
+  // Mobile Banking" (Florida credit union).
+  // https://www.seaairfcu.org/online-investing
+  seaairfederalcre: { countries: ["US"] },
+  // The enrolment guide is for Radiant members and asks for an SSN/TIN; the
+  // brokerage is Apex (US).
+  // https://www.radiantcu.org/online-investing
+  radiantcredituni: { countries: ["US"] },
+  // Terms 4.1: "Our service is only available to UK persons who have been
+  // onboarded as a client by IBKR".
+  // https://www.investa.co.uk/terms-of-service
+  investa: { countries: ["GB"] },
+  // all (no published list). Luxembourg private bank. The general terms only
+  // restrict US Persons for structured products and allow refusing
+  // transactions with US connections (FATCA, section 6.1). Unverified beyond
+  // https://luxembourg.ca-indosuez.com/en/pdfPreview/45073
+  caindosuezwealth: WORLD,
+  // The FAQ requires permanent residence in a country they serve and links the
+  // blocked list (FATF high-risk/non-cooperative annex, 2018).
+  // https://www.privatebrokers.eu/wp-content/uploads/2024/05/Vysokorizikove-a-nespolupracujuce-krajiny.pdf
+  privatebrokers: WORLD,
+  // These are the 'Region of operation' list on the fee schedule; the help
+  // centre also asks for EU citizenship or residency.
+  // https://fundvest.eu/fee-schedule/
+  fundvest: { countries: ["AT","BE","BG","CY","CZ","DK","EE","FI","FR","DE","HU","IS","IE","IT","LV","LT","LU","MT","NL","NO","PL","PT","RO","SK","SI","ES","SE"] },
+  // Mashreq NEO is a UAE retail bank product regulated by the CBUAE, and the
+  // account is opened in the Mashreq Mobile App for NEO customers.
+  // https://www.mashreq.com/en/uae/neo/investments/investments-us-stocks-etf/
+  mashrequsetfs: { countries: ["AE"] },
+  // Israeli TASE-member app with Israeli tax withholding; the credit card must
+  // be linked to the client's Israeli ID number, and cards issued abroad are
+  // refused.
+  // https://heyblink.com/support-category/withdrawals-and-deposits/
+  blinkil: { countries: ["IL"] },
+  // Webull Securities South Africa is an FSCA FSP (50863), and the footer
+  // addresses South African residents and the foreign investment allowance;
+  // the account sits with Webull Securities (Australia).
+  // https://www.webull.co.za/pricing
+  webullsouthafric: { countries: ["ZA"] },
+  // Jordanian bank: you need a Bank al Etihad account, the app and 'A valid
+  // national ID'.
+  // https://www.bankaletihad.com/en/personal/investments/stocks/
+  aletihad: { countries: ["JO"] },
+  // Mexican service (Vifaru, Mexican casa de bolsa; Spanish-only MX site). No
+  // published eligibility list was found.
+  // https://www.webull.com.mx/
+  webullmexico: { countries: ["MX"] },
+  // Mexican residents only: a foreigner needs 'una tarjeta de residencia
+  // temporal o permanente en México' (scraper header, uala.mx/acciones FAQ).
+  // https://www.uala.mx/acciones
+  ualamexico: { countries: ["MX"] },
+  // Lemon Argentina; the product is from Quaestus Advisory S.A. (CNV 1098) and
+  // the help centre is for Argentina ('En Argentina, las comisiones de
+  // Lemon...').
+  // https://help.lemon.me/es/
+  lemonar: { countries: ["AR"] },
+  // UY (weak). No published list. Uruguayan regulated intermediaries; the
+  // agent sits in Zona Franca and charges a 'Cargo por cuenta NON-US' of $50 a
+  // year. No country selector was found.
+  // https://www.balanz.com.uy/
+  balanzuruguay: { countries: ["UY"] },
+  // AM (weak). Central Bank of Armenia licensee; site in EN/HY/RU; RUB
+  // deposits accepted. No published country list was found.
+  // https://roqcapital.am/en/roqmarkets
+  roq: { countries: ["AM"] },
+  // The conditions page is meant only for "Gebietsansässigen, die ihren
+  // Wohnsitz in Deutschland haben" and excludes US persons and residents of
+  // the UK, Canada and Japan.
+  // https://www.1822direkt.de/anlegen-depot/leistungen-und-konditionen/
+  "1822direkt": { countries: ["DE"] },
+  // You need "ein Konto mit OnlineBanking-Zugang bei uns" at this regional
+  // cooperative bank (Chattengau-Schwalm-Eder).
+  // https://www.vr-partnerbank.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/wertpapierdepot.html
+  vrpartnerbank: { countries: ["DE"] },
+  // DE. A regional cooperative bank (Eckernförde); the depot is opened online
+  // or by appointment with the bank.
+  // https://www.eckernfoerder-bank.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/wertpapierdepot.html
+  eckernforder: { countries: ["DE"] },
+  // Um dieses Angebot ... nutzen zu können, brauchen Sie ein Konto bei uns" (a
+  // regional cooperative bank in Rosenheim, depot opened in OnlineBanking).
+  // https://www.vb-rb.de/privatkunden/anlegen-sparen/depot-und-brokerage/wertpapierdepot.html
+  meinevolksbankra: { countries: ["DE"] },
+  // You need an account with OnlineBanking access at the bank (a church bank
+  // in Dortmund).
+  // https://www.kd-bank.de/privatkunden/geldanlange/depot.html
+  kdbank: { countries: ["DE"] },
+  // Onboarding is German-only (German site and forms, branches in Germany,
+  // German Girokonto); no foreign-resident route is described.
+  // https://www.pax-bkc.de/privatkunden/sparen-und-anlegen/depot-und-brokerage/brokerage.html
+  pax: { countries: ["DE"] },
+  // The Girokonto FAQ says 'Zur Eröffnung eines Girokontos braucht man einen
+  // Wohnsitz in Deutschland und einen Personalausweis oder Reisepass'.
+  // https://www.berliner-volksbank.de/privatkunden/girokonto-karten/girokonto.html
+  berlinervolksban: { countries: ["DE"] },
+  // Onboarding is German-only through OnlineBanking with a German Girokonto at
+  // EDEKABANK; no foreign-resident route is described.
+  // https://www.edekabank.de/privatkunden/geldanlage/depot-brokerage/edeka-depot_aktiv.html
+  edekabank: { countries: ["DE"] },
+  // Onboarding is German-only: the depot opens in PSD OnlineBanking and needs
+  // a PSD Girokonto; no foreign-resident route is described.
+  // https://www.psd-rheinneckarsaar.de/produkte/geldanlage/depot-brokerage/wertpapierdepot.html
+  psdrheinneckarsa: { countries: ["DE"] },
+  // Onboarding is German-only (German site, depot opening in OnlineBanking
+  // with an EB Girokonto); no foreign-resident route is described.
+  // https://www.eb.de/privatkunden/wertpapiere/depot.html
+  evangelische: { countries: ["DE"] },
+  // German-only site; a depot needs a Kasseler Sparkasse Girokonto with online
+  // banking.
+  // https://www.kasseler-sparkasse.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html
+  kasselersparkass: { countries: ["DE"] },
+  // DE. 'Für die Depoteröffnung brauchen Sie ein Konto mit
+  // OnlineBanking-Zugang bei uns'; regional German cooperative bank.
+  // https://www.volksbank-koeln-bonn.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/wertpapierdepot.html
+  volksbankkolnbon: { countries: ["DE"] },
+  // German-only site; a depot needs a DKM account with online banking.
+  // https://www.dkm.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/meindepot.html
+  dkmdarlehnskasse: { countries: ["DE"] },
+  // German-only site; a depot needs a Kreissparkasse Ostalb account.
+  // https://www.ksk-ostalb.de/de/home/privatkunden/wertpapiere-und-boerse/wertpapier-depot.html
+  kreissparkasseos: { countries: ["DE"] },
+  // Regional Sparkasse, German-only site; a depot needs a Sparkasse
+  // Spree-Neiße account.
+  // https://www.sparkasse-spree-neisse.de/de/home/privatkunden/wertpapiere-und-boerse.html
+  sparkassespreene: { countries: ["DE"] },
+  // Opening an account needs 'Personalausweis oder Reisepass und Ihre
+  // Steuer-Identifikationsnummer' (the German tax ID), and the depot needs an
+  // account at the bank.
+  // https://www.gestalterbank.de/privatkunden/girokonto-und-bezahlen/produkte/girokonto.html
+  volksbankegdiege: { countries: ["DE"] },
+  // Opening an account needs an ID plus the 'Steuer-Identifikationsnummer',
+  // with Video-Ident; the depot requires an account at the bank.
+  // https://www.volksbankinostwestfalen.de/privatkunden/girokonto-und-bezahlen/produkte/girokonto.html
+  volksbankinostwe: { countries: ["DE"] },
+  // ["DE"]. 'Für die Depoteröffnung brauchen Sie ein Konto mit
+  // Online-Banking-Zugang bei uns', and opening that account needs an ID plus
+  // the Steuer-Identifikationsnummer.
+  // https://www.verbundvolksbank-owl.de/privatkunden/girokonto-und-bezahlen/produkte/girokonto.html
+  verbundvolksbank: { countries: ["DE"] },
+  // Opening an account needs an ID plus the Steuer-Identifikationsnummer, and
+  // the depot requires an account at the bank.
+  // https://www.volksbanking.de/privatkunden/girokonto-und-bezahlen/produkte/girokonto.html
+  volksbankdarmsta: { countries: ["DE"] },
+  // Opening an account needs an ID plus the Steuer-Identifikationsnummer, and
+  // the depot needs an account at the bank.
+  // https://www.vr-rheinahreifel.de/privatkunden/girokonto-und-bezahlen/produkte/girokonto.html
+  vrrheinahreifel: { countries: ["DE"] },
+  // DE. 'Für die Depoteröffnung brauchen Sie ein Konto mit Kundenportal-Zugang
+  // bei uns' (regional German cooperative bank, German current account
+  // required).
+  // https://www.vrbank-brs.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/meindepot.html
+  vrbonnrheinsieg: { countries: ["DE"] },
+  // DE. 'Für die Depoteröffnung brauchen Sie ein Konto mit
+  // OnlineBanking-Zugang bei uns' (regional German cooperative bank).
+  // https://www.vvrbank-krp.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/wertpapierdepot.html
+  vereinigtevrkuru: { countries: ["DE"] },
+  // DE. 'Für die Nutzung von VR-meinDepot ist ein sogenanntes
+  // Verrechnungskonto bei uns notwendig' (regional German cooperative bank).
+  // https://www.vrbank-lb.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/meindepot-investier.html
+  vrludwigsburg: { countries: ["DE"] },
+  // German cooperative bank (diebank.de); the depot is opened with an account
+  // and online banking at the bank.
+  // https://www.diebank.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/wertpapierdepot.html
+  vereinigtevolksb: { countries: ["DE"] },
+  // Bank Starnberg-Zugspitze eG, 82319 Starnberg, is a regional German
+  // cooperative bank; accounts are held at the bank.
+  // https://atruvia.scene7.com/is/content/atruvia/PLVpdf-42
+  vrstarnbergzugsp: { countries: ["DE"] },
+  // This is a regional cooperative bank, the site is in German only, and "Für
+  // die Depoteröffnung brauchen Sie ein Konto mit OnlineBanking-Zugang bei
+  // uns".
+  // https://www.vrbanknord.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/meindepot.html
+  vrnord: { countries: ["DE"] },
+  // This is a regional cooperative bank and the site is in German only: "Für
+  // die Depoteröffnung brauchen Sie ein Konto mit OnlineBanking-Zugang bei
+  // uns." Same URL.
+  vrteilhaberbankm: { countries: ["DE"] },
+  // This is a regional cooperative bank and the site is in German only; the
+  // depot is opened in OnlineBanking for an existing account ("Schalten Sie
+  // Ihr Konto fürs OnlineBanking frei. Anschließend eröffnen Sie Ihr Depot").
+  volksbanksauerla: { countries: ["DE"] },
+  // ["DE"]. "Für die Eröffnung des Depot benötigen Sie ein Girokonto bei der
+  // VR Bank Rhein-Neckar eG als Verrechnungskonto"; regional bank, German-only
+  // site. Same URL.
+  vrrheinneckar: { countries: ["DE"] },
+  // This is a regional cooperative bank, the site is in German only, and the
+  // depot is opened through the bank's OnlineBanking. Same URL.
+  volksbankbodense: { countries: ["DE"] },
+  // DE. A regional cooperative bank (Borken). The depot is opened in
+  // OnlineBanking, which needs an account at the bank, and onboarding is in
+  // German only; no foreign residents are mentioned. Same method as
+  // https://www.volksbank-wml.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/wertpapierdepot.html
+  volksbankwestmun: { countries: ["DE"] },
+  // DE. A regional cooperative bank (Schaumburg/Nienburg) with German-only
+  // onboarding; the depot is opened through OnlineBanking at the bank.
+  // https://www.vb-isun.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/wertpapierdepot.html
+  volksbankinschau: { countries: ["DE"] },
+  // The page says 'Für die Depoteröffnung brauchen Sie ein Konto mit
+  // OnlineBanking-Zugang bei uns'. A regional cooperative bank with
+  // German-only onboarding.
+  // https://www.volksbank-trier-eifel.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/wertpapierdepot.html
+  volksbanktrierei: { countries: ["DE"] },
+  // The page says 'Für die Depoteröffnung brauchen Sie ein Konto mit
+  // OnlineBanking-Zugang bei uns'. A regional cooperative bank with
+  // German-only onboarding.
+  // https://www.vrbank-hsh.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/wertpapierdepot.html
+  vrheilbronnschwa: { countries: ["DE"] },
+  // The depot page says 'Für die Depoteröffnung brauchen Sie ein Konto mit
+  // OnlineBanking-Zugang bei uns'. A regional cooperative bank (Nordoberpfalz)
+  // with German-only onboarding.
+  // https://www.vr-nordoberpfalz.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/wertpapierdepot.html
+  volksbankraiffei: { countries: ["DE"] },
+  // You need an account with OnlineBanking at the bank before opening a depot
+  // ("Für die Depoteröffnung brauchen Sie ein Konto mit OnlineBanking-Zugang
+  // bei uns"). It is a regional cooperative bank serving German residents.
+  // https://www.volksbank-hdneckartal.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/wertpapierdepot.html
+  volksbankheidelb: { countries: ["DE"] },
+  // Regional cooperative bank (Reinheim); the depot requires a current account
+  // at the bank.
+  // https://www.vvrb.de/
+  vereinigtevolksbde: { countries: ["DE"] },
+  // Regional cooperative bank; you open the depot through the bank's
+  // OnlineBanking.
+  // https://www.vbinswf.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/meindepot.html
+  volksbankinsudwe: { countries: ["DE"] },
+  // Regional cooperative bank; the depot needs an account at the bank.
+  // https://www.vbga.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/wertpapierdepot.html
+  volksbankgronaua: { countries: ["DE"] },
+  // Regional cooperative bank (Neckar Odenwald Main Tauber); the depot needs
+  // an account at the bank.
+  // https://www.ihre-vb.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/wertpapierdepot.html
+  ihrevolksbanknec: { countries: ["DE"] },
+  // OnlineBanking at the bank, the site is German only and no foreign
+  // residents are offered. Source: same page.
+  vraugsburgostall: { countries: ["DE"] },
+  // Volksbank: the depot requires an account at the bank and the site is
+  // German only. Source: same page.
+  vrrottalinn: { countries: ["DE"] },
+  // Volksbank; the depot needs an online-banking account at the bank. Source:
+  // https://www.vr-sf.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/wertpapierdepot.html
+  vrimsudlichenfra: { countries: ["DE"] },
+  // Volksbank; the depot is tied to an account at the bank. Source:
+  // https://www.volksbank-kurpfalz.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/wertpapierdepot.html
+  volksbankkurpfal: { countries: ["DE"] },
+  // Volksbank; the depot is opened alongside an account at the bank. Source:
+  // the wertpapierdepot page.
+  volksbankimweste: { countries: ["DE"] },
+  // DE. A regional cooperative bank (Leer). The depot needs a current account
+  // with online banking at the bank, and no foreign-resident offer is shown.
+  // https://www.ostfriesische-volksbank.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/meindepot.html
+  ostfriesischevol: { countries: ["DE"] },
+  // DE. A regional cooperative bank (Pinneberg). The depot needs an account
+  // with online banking at the bank.
+  // https://www.vrbank-in-holstein.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/meindepot.html
+  vrinholstein: { countries: ["DE"] },
+  // DE. A regional cooperative bank (Lippstadt). The meinDepot page says "Für
+  // die Depoteröffnung brauchen Sie ein Konto mit OnlineBanking-Zugang bei
+  // uns".
+  // https://www.vrbank-wl.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/meindepot.html
+  vrwestfalenlippe: { countries: ["DE"] },
+  // DE. A regional cooperative bank (Balingen). The depot needs an account
+  // with online banking at the bank.
+  // https://www.volksbank-zollernalb.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/meindepot.html
+  volksbankzollern: { countries: ["DE"] },
+  // DE. A regional cooperative bank (Lingen). The depot needs an account with
+  // online banking at the bank.
+  // https://www.elvb.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/meindepot.html
+  emslandischevolk: { countries: ["DE"] },
+  // Regional cooperative bank: the depot is opened in online banking on a
+  // current account at the bank, German-language only. Source:
+  // https://www.volksbank-niedersachsen-mitte.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/wertpapierdepot.html
+  volksbanknieders: { countries: ["DE"] },
+  // Munich cooperative bank: the depot needs a current account with online
+  // banking at the bank ('Für die Depoteröffnung brauchen Sie ein Konto mit
+  // OnlineBanking-Zugang bei uns'). Source:
+  // https://www.muenchner-bank.de/jugendmarkt/meindepot.html
+  munchner: { countries: ["DE"] },
+  // Regional cooperative bank: the depot needs a current account with online
+  // banking at the bank, and the page is in German only. Source:
+  // https://www.vrdo.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/wertpapierdepot.html
+  vrdonauoberschwa: { countries: ["DE"] },
+  // Regional cooperative bank: the depot is opened in online banking on an
+  // account at the bank, and the page is in German only. Source:
+  // https://www.vb-niers.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/wertpapierdepot.html
+  volksbankanderni: { countries: ["DE"] },
+  // Regional cooperative bank: the depot is opened in online banking ('Um
+  // dieses Angebot ... nutzen zu können, brauchen Sie ein Konto bei uns').
+  // Source:
+  // https://www.volksbank-lahr.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/wertpapierdepot.html
+  volksbanklahr: { countries: ["DE"] },
+  // DE. A regional cooperative bank, and the page says 'Um dieses Angebot ...
+  // nutzen zu können, brauchen Sie ein Konto bei uns'. Same URL.
+  vrsudpfalz: { countries: ["DE"] },
+  // DE. A regional cooperative bank, and the depot requires a current account
+  // at the bank.
+  // https://www.volksbank-mit-herz.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/brokerage.html
+  volksbankegwolfe: { countries: ["DE"] },
+  // The page says 'Für die Depoteröffnung brauchen Sie ein Konto mit
+  // OnlineBanking-Zugang bei uns'. Same URL.
+  vrkemptenoberall: { countries: ["DE"] },
+  // Same URL.
+  volksbankraiffeide: { countries: ["DE"] },
+  // Same URL.
+  vrneuulm: { countries: ["DE"] },
+  // Dachau; the site and price list are German only and the depot needs an
+  // account at the bank. Not checked further.
+  // https://www.vr-dachau.de/
+  volksbankraiffei2: { countries: ["DE"] },
+  // DE. A regional cooperative bank (München Land); the site is German only
+  // and a depot needs an account at the bank. Not checked further.
+  // https://www.vr-bank-muenchen-land.de/
+  vrmunchenland: { countries: ["DE"] },
+  // German cooperative bank (Bankhaus RSA eG); the price list and site are
+  // German only and a depot needs an account at the bank. Not checked further.
+  // https://www.bankhaus-rsa.de/
+  bankhausrsa: { countries: ["DE"] },
+  // Argentine bank: an account needs a DNI and CUIL; expats report opening
+  // only with CUIL and residency papers; the site is Argentina-only.
+  // https://www.galicia.ar/personas/inversiones/bonos-acciones
+  bancogalicia: { countries: ["AR"] },
+  // Argentine ALyC of Banco Macro; the site is Argentina-only and publishes no
+  // foreign onboarding.
+  // https://www.macro.com.ar/macrosecurities/intermediacion-bursatil
+  macro: { countries: ["AR"] },
+  // App Store listing: to open from Argentina you need to be over 13 with a
+  // valid Argentine DNI; foreigners need an Argentine DNI and CUIL.
+  // https://apps.apple.com/ar/app/ual%C3%A1/id1279808159
+  uala: { countries: ["AR"] },
+  // For ICBC clients only, with a custody account opened from ICBC Online
+  // Banking; Argentine bank, Argentina-only site.
+  // https://www.icbc.com.ar/personas/productos-servicios/inversiones/acciones-titulos
+  icbcar: { countries: ["AR"] },
+  // AR. FAQ: 'para operar online es necesario ser persona humana residente'
+  // (applies to all holders), and 'solo en el mercado local'.
+  // https://www.bancopatagonia.com.ar/personas/inversiones/preguntas-frecuentes.php
+  bancopatagonia: { countries: ["AR"] },
+  // The comitente account must be tied to a peso or dollar account at Banco
+  // Ciudad, and the form asks for Argentine tax status (IVA). Source: same PDF
+  bancociudad: { countries: ["AR"] },
+  // The page says 'Sólo necesitás tu DNI' and the phone numbers are +54.
+  // Source:
+  // https://alfyinversiones.com.ar/regulaciones-y-aranceles/
+  alfyinversiones: { countries: ["AR"] },
+  // Rosario firm, account-opening forms for Personas Humanas, phone +54 341.
+  // Source:
+  // https://www.rosental.com/mercado-de-capitales/
+  rosental: { countries: ["AR"] },
+  // Offices in Santa Fe and Paraná, phone +54, deposits by Argentine bank
+  // transfer or echeq from an account in the holder's name. Source:
+  // https://integrarinversiones.com.ar/preguntas-frecuentes/
+  integrarinversio: { countries: ["AR"] },
+  // Source:
+  // https://clientes.bavsa.com/manualUsuario.html
+  buenosairesvalor: { countries: ["AR"] },
+  // The FAQ asks for 'mayor de 18 años, argentino, residente' with a DNI and a
+  // CBU/CVU in your own name.
+  // https://criteria.com.ar/preguntas-frecuentes/
+  criteria: { countries: ["AR"] },
+  // Nothing published on who can open, so this falls back to the home country.
+  // The account-opening forms are for personas físicas and jurídicas.
+  // https://dracmainv.com.ar/como-comenzar/preguntas-frecuentes/
+  dracma: { countries: ["AR"] },
+  // No eligibility is published, and the funding accounts are Argentine (Banco
+  // Comafi), so this falls back to AR.
+  // https://lacalifornia.com.ar/cuentas-bancarias/
+  california: { countries: ["AR"] },
+  // Online onboarding with an ID document and a selfie, peso funding through a
+  // CVU, no foreign route published.
+  // https://www.fiwind.io
+  fiwind: { countries: ["AR"] },
+  // AR. 'Proceso de alta 100% digital', with no eligibility published, so this
+  // falls back to the home country.
+  // https://mills.capital/servicios/inversion-financiera/
+  mills: { countries: ["AR"] },
+  // An Argentine ALyC (CUIT 30-69320460-3, CNV 298). Spanish only, accounts
+  // opened locally, no foreign onboarding.
+  // https://winsa.com.ar/quienes-somos/
+  winsecurities: { countries: ["AR"] },
+  // Deposits come only by transfer from Argentine bank accounts (CBU) in the
+  // client's own name. Spanish only, Buenos Aires ALyC. Same document URL as
+  // above.
+  cucchiara: { countries: ["AR"] },
+  // An ALyC in Córdoba (CNV 85). Spanish only, local bank rails (pesos and
+  // UVA-priced transfers).
+  // https://www.petrini.com.ar/
+  petrinivalores: { countries: ["AR"] },
+  // App opening is 'únicamente para personas físicas'. Spanish only, Buenos
+  // Aires ALyC (CNV 182), no foreign onboarding.
+  // https://www.cgvm.com.ar/
+  cgvm: { countries: ["AR"] },
+  // An ALyC in Córdoba (CNV 235, BYMA agent 168). Argentine peso and dollar
+  // bank accounts are required; Spanish only.
+  // https://www.dinosauriobursatil.com.ar/productos/dolar-mep
+  dinosauriobursat: { countries: ["AR"] },
+  // AR
+  proficio: { countries: ["AR"] },
+  // AR
+  torontoinversion: { countries: ["AR"] },
+  // AR
+  one618: { countries: ["AR"] },
+  // AR
+  aldazabal: { countries: ["AR"] },
+  // AR
+  valiantbursatil: { countries: ["AR"] },
+  // Evidence: online onboarding asks for DNI number, DNI tramite number and
+  // CUIT, and validates the DNI with RENAPER.
+  // https://clientes.aratasa.com.ar/OnboardingFisica/
+  arata: { countries: ["AR"] },
+  // Evidence: the opening form (APERTURA-PH-ABRIL-2026) asks for DNI/passport
+  // and CUIT/CUIL, with an AR address and a foreign tax residence declared
+  // separately.
+  // https://beneditsa.com.ar/sites/default/files/descargas/APERTURA-PH-ABRIL-2026_0.pdf
+  beneditbursatil: { countries: ["AR"] },
+  // Evidence: the FAQ 'Qué datos necesito para abrir cuenta' asks for a photo
+  // of the DNI (Documento Nacional de Identidad) plus a selfie.
+  // https://fivesa.com.ar/
+  fivecorp: { countries: ["AR"] },
+  // Evidence: AR phone number (+54), and onboarding goes through Inviu's
+  // Argentine onboarding (DNI-based) linked from crear_cuenta. No foreign
+  // route is printed.
+  // https://www.sjb.com.ar/crear_cuenta/
+  sjbbursatil: { countries: ["AR"] },
+  // Evidence: the online sign-up (app.stcinversiones.com.ar/registro, a JS
+  // app) is from a Rosario ALyC that only names Argentine markets. No foreign
+  // route is printed.
+  // https://stcinversiones.com.ar/
+  stcinversiones: { countries: ["AR"] },
+  // No published country list; Spanish-only site, +54 phone, Buenos Aires
+  // office, opening done online or at the CABA office; same picker as the
+  // other BYMA ALyCs.
+  // https://www.bellinvestments.com.ar/abrir-cuenta
+  bellinvestments: { countries: ["AR"] },
+  // No published country list; Spanish-only site, Argentine CUIT, Buenos Aires
+  // agent, account run through the matriz by Primary app; same picker as the
+  // other BYMA ALyCs.
+  // https://www.aeromarvalores.com.ar/
+  aeromarvalores: { countries: ["AR"] },
+  // No published country list; Spanish-only site, CABA office, (011) phone,
+  // Argentine CUIT; online opening form for individuals and companies.
+  // https://agvalores.com.ar/apertura
+  valoresar: { countries: ["AR"] },
+  // No published country list; Spanish-only site, +54 11 phone, sign-up form
+  // asks for 'Cuit' (Argentine tax ID).
+  // https://fescina.com/registrarse/
+  fescina: { countries: ["AR"] },
+  // No published country list; Spanish-only site, (+5411) phone, Buenos Aires
+  // agent; the 'No residentes' page is only a FATCA/CRS notice, not an offer
+  // to non-residents.
+  // https://finco.com.ar/no-residentes/
+  finco: { countries: ["AR"] },
+  // Spanish-only site, Rosario office with a +54 phone, a CNV-registered
+  // agent, and online sign-up at app.listrovalores.com/registro with Argentine
+  // bank rails. No foreign-client list.
+  // https://listrovalores.com/
+  listrovalores: { countries: ["AR"] },
+  // Spanish-only site, Vicente Lopez office with a +54 phone, sign-up at
+  // app.omegabursatil.com/registro, and funding by bank transfer to the
+  // comitente account. No foreign-client list.
+  // https://www.omegabursatil.com/preguntas-frecuentes
+  omegabursatil: { countries: ["AR"] },
+  // Spanish-only site, Buenos Aires office with a +54 phone, 100% online
+  // opening, CNV ALyC. No foreign-client list.
+  // https://rigvalores.com/preguntas-frecuentes/
+  rigvalores: { countries: ["AR"] },
+  // Spanish-only site, CABA office with a +54 phone, CNV ALyC 195. No
+  // foreign-client list or online sign-up page.
+  // https://www.bairesbursatil.com.ar/
+  bairesbursatil: { countries: ["AR"] },
+  // Spanish-only site, CABA office with a (54-11) phone, a traditional BYMA
+  // agent (code 5). No foreign-client list or online sign-up page.
+  // https://alvarezycia.com.ar/
+  alvarezycia: { countries: ["AR"] },
+  // Spanish-only Argentine ALyC; account opened "100% digital" and run with an
+  // adviser; no foreign-client statement, so it follows the BYMA default
+  // (comafi, cohen).
+  // https://www.matexcapital.com.ar/
+  matex: { countries: ["AR"] },
+  // Spanish-only Argentine ALyC; opening at bienvenidos.aurum.com.ar; no
+  // foreign-client statement.
+  // https://aurum.com.ar/
+  aurumvalores: { countries: ["AR"] },
+  // Spanish-only; account opened "100% online" at
+  // leivahnos.com.ar/bur-crear-cuenta; no foreign-client statement.
+  // https://www.leivahnos.com.ar/home-bursatil/
+  leivahnos: { countries: ["AR"] },
+  // Spanish-only Argentine AN; opening by forms or app.elyca.com.ar/registro,
+  // then an adviser call; no foreign-client statement.
+  // https://www.elyca.com.ar/
+  elyca: { countries: ["AR"] },
+  // Spanish-only Argentine ALyC; online onboarding at
+  // app.portfolioinvestment.com.ar; no foreign-client statement.
+  // https://portfolioinvestment.com.ar/
+  portfolio: { countries: ["AR"] },
+  // Account opening asks for a DNI/LC/LE/Pasaporte plus a 'Constancia de
+  // CUIT/CUIL/CDI' and Argentine tax returns (Ganancias, Bienes Personales);
+  // phone +54. This follows the other BYMA ALyCs.
+  // https://www.futurobursatil.com.ar/#abrir-cuenta
+  futurobursatil: { countries: ["AR"] },
+  // The sign-up form asks for name, DNI and country but publishes no foreign
+  // path; the address is in CABA and the phone code +54. This follows the
+  // other BYMA ALyCs.
+  // https://szbursatil.com/abrir-cuenta/
+  szwarccia: { countries: ["AR"] },
+  // Account opening is in person at Reconquista 144, CABA, or by forms;
+  // requisites for individuals and companies; phone +54. No foreign path is
+  // published. This follows the other BYMA ALyCs.
+  // https://www.fernandezlaya.com.ar/abrir-cuenta
+  fernandezlaya: { countries: ["AR"] },
+  // Opening needs a regular CPF, a Brazilian ID (RG/CNH) and residence in
+  // Brazil (third-party guides; Nubank's pages print no residence list).
+  // https://www.nordinvestimentos.com.br/blog/conta-nubank/
+  nubank: { countries: ["BR"] },
+  // An Itaú account needs the client's own CPF and a Brazilian photo ID
+  // (RG/CNH/CTPS/RNE). Non-residents go through the separate 4373 custody
+  // service, not íon.
+  // https://itau.com.br/investmentservices-en/custody/non-resident-investors
+  itauion: { countries: ["BR"] },
+  // Retail opening is by CPF with Brazilian documents; Bradesco serves
+  // foreigners only through its non-resident (4373) custody.
+  // https://www.agorainvestimentos.com.br/home
+  agorabr: { countries: ["BR"] },
+  // Retail opening needs a CPF and Brazilian residence documents; foreign
+  // investors use Safra's institutional 4373 route.
+  // https://www.safra.com.br/investimentos/
+  bancosafra: { countries: ["BR"] },
+  // App opening needs a Brazilian mobile number for the SMS token, the CPF,
+  // and a photo of a Brazilian ID.
+  // https://blog.pagbank.com.br/como-criar-conta-pagbank
+  pagbank: { countries: ["BR"] },
+  // The home page says "no mesmo CPF" and "Não residentes são atendidos pelo
+  // nosso time International": non-residents go through a staffed team, not
+  // the online platform.
+  // https://www.novafutura.com.br/
+  novafutura: { countries: ["BR"] },
+  // ["BR"]. A CVM broker; sign-up takes a CPF. The site is Portuguese only,
+  // with no foreign onboarding.
+  // https://www.ativainvestimentos.com.br/
+  ativainvestiment: { countries: ["BR"] },
+  // It requires a Banrisul (Brazilian bank) current account, which takes a
+  // CPF.
+  // https://www.banrisulcorretora.com.br/lxa/link/como-realizar-operacoes.html
+  banrisulcorretor: { countries: ["BR"] },
+  // PicPay account takes a CPF and a Brazilian phone number; the help centre
+  // is pt-BR only.
+  // https://meajuda.picpay.com/hc/pt-br/articles/52896181711251
+  picpay: { countries: ["BR"] },
+  // Open to members (associados) of Brazilian Sicredi cooperatives only; this
+  // takes a CPF.
+  // https://www.sicredi.com.br/site/investimentos/renda-variavel/
+  sicredi: { countries: ["BR"] },
+  // Brazilian bank account with CPF required; Portuguese-only Brazilian site.
+  // https://www.caixa.gov.br/voce/poupanca-e-investimentos/acoes-online/custos-operacionais/
+  caixaacoesonline: { countries: ["BR"] },
+  // Brazilian broker (Mirae Asset Brasil CCTVM), Portuguese site, account
+  // opening needs a CPF.
+  // https://corretora.miraeasset.com.br/costs
+  miraebrasil: { countries: ["BR"] },
+  // Brazilian broker, Portuguese-only site, CPF-based account.
+  // https://eqi.com.br/renda-variavel/custos
+  eqiinvestimentos: { countries: ["BR"] },
+  // Brazilian broker, Portuguese-only site, CPF-based account.
+  // https://www.terrainvestimentos.com.br/custos/
+  terrainvestiment: { countries: ["BR"] },
+  // Brazilian bank, Portuguese site, account terms reference CPF/SCR and
+  // Brazilian law.
+  // https://www.sofisadireto.com.br/investimentos/renda-variavel/
+  sofisadireto: { countries: ["BR"] },
+  // Site is Portuguese only and sign-up is the Brazilian pessoa-física form
+  // (CPF) at Non-residents appear only as a custody-exemption line, not as an
+  // online sign-up route.
+  // https://novocadastro.planner.com.br/pessoa-fisica/cadastro
+  plannercorretora: { countries: ["BR"] },
+  // Site is Portuguese only, Brazilian broker regulated by CVM/B3 for a
+  // Brazilian CPF account; broker-list country is BR.
+  // https://www.rbinvestimentos.com/
+  rbinvestimentos: { countries: ["BR"] },
+  // Site is Portuguese only and account opening is the Brazilian pessoa-física
+  // registration form (cadastro2.novinvest.com.br, CPF).
+  // https://novinvest.com.br/documentos-para-abertura-de-contas/
+  novinvest: { countries: ["BR"] },
+  // Cooperative membership and the broker account are for Brazilian members
+  // (Portuguese-only site, CPF).
+  // https://www.unicred.com.br/
+  unicred: { countries: ["BR"] },
+  // Brazilian DTVM; the rules (Regras e Parâmetros de Atuação) cover clients
+  // with a Brazilian registration form, and the site section is pt-BR.
+  // https://www.filesandimages.com/Brand/StoneXBrasil/RPA_OperatingRulesandParameters_v12.pdf
+  stonexdtvm: { countries: ["BR"] },
+  // Brazilian-resident CPF account; the site is in Portuguese only; Toro's
+  // method.
+  // https://galapagoscapital.com/investimentos
+  galapagos: { countries: ["BR"] },
+  // Brazilian retail broker (Belo Horizonte), site in Portuguese only, CPF
+  // account.
+  // https://sita.com.br/sita/servicos/
+  sitacorretora: { countries: ["BR"] },
+  // Brazilian broker (Barueri), Portuguese only, TED funding.
+  // https://www.codepe.com.br/regras-e-parametros
+  codepecorretora: { countries: ["BR"] },
+  // Brazilian PNA of XP, Portuguese only, CPF account.
+  // https://www.montebravo.com.br/
+  montebravo: { countries: ["BR"] },
+  // Brazilian app, Portuguese only, account at Genial with a CPF (the FAQ asks
+  // for a CPF because B3 requires it).
+  // https://guru.com.vc/faq/
+  gurubr: { countries: ["BR"] },
+  // No list of accepted countries is published. The site is in Portuguese
+  // only, the account is opened through the app as a Brazilian DTVM account
+  // (Traders, through Terra Investimentos) that needs a CPF and a Brazilian
+  // https://traders.com.br/
+  traderscorretora: { countries: ["BR"] },
+  // The sign-up asks for 'citizenship, PAN, and bank details' (Nepali
+  // documents) and trading is through NEPSE TMS 49 only.
+  // https://onlinesecurities.com.np/services/OnlineTms
+  onlinesecurities: { countries: ["NP"] },
+  // ["NP"]. A NEPSE-only broker; TMS client registration needs Nepali
+  // citizenship and a BOID.
+  // https://ssl.com.np/service/trading
+  secured: { countries: ["NP"] },
+  // The required documents are 'Citizenship scan copy', a PAN card and a Mero
+  // Share account, all Nepali.
+  // https://imnpltd.com.np/
+  imnepal: { countries: ["NP"] },
+  // Client registration goes through NEPSE TMS 75 ( which needs Nepali
+  // citizenship and a BOID.
+  // https://tms75.nepsetms.com.np/client-registration
+  nimb: { countries: ["NP"] },
+  // Collateral can only be paid through Nepal's NCHL rail, and the broker is
+  // owned by Rastriya Banijya Bank and trades on NEPSE only.
+  // https://www.rbbsecurities.com.np/services.html
+  rbb: { countries: ["NP"] },
+  // Nepal-only broker, a subsidiary of Sanima Bank, offering NEPSE TMS
+  // accounts. KYC and DP forms are Nepali; +977 contacts.
+  // https://www.sanimasecurities.com.np/our-services
+  sanima: { countries: ["NP"] },
+  // ["NP"]. NEPSE broker no. 6 with TMS trading for Nepali clients; Nepali
+  // regulator links and +977 contacts.
+  // https://www.agrawalsecurities.com.np/trading-services/
+  agrawal: { countries: ["NP"] },
+  // The site says it helps Nepali investors trade; it is a NEPSE broker (no.
+  // 48), the site is in English and Nepali, and contacts are +977.
+  // https://trishakti.com.np/
+  trishakti: { countries: ["NP"] },
+  // ["NP"]. NEPSE broker no. 34 with sign-up through
+  // kyc.visionsecurities.com.np and Nepali bank rails only.
+  // https://www.visionsecurities.com.np/payment/our-bank-accounts
+  vision: { countries: ["NP"] },
+  // Nepali National ID (NID) number is mandatory on the KYC form; sign-up is
+  // at kyc.kalikasecurities.com; Kathmandu (Anamnagar) address.
+  // https://kalikasecurities.com/
+  kalika: { countries: ["NP"] },
+  // No foreign route is described: clients trade online through a NEPSE TMS
+  // account and the broker runs a CDSC demat and Mero Share (kumari/garima
+  // precedent).
+  // https://opalsecurities.com.np/service/1/details
+  opal: { countries: ["NP"] },
+  // Demat via online KYC requires a 'citizenship certificate copy, NID'. TMS
+  // requires 'NID and Bank Cheque'. No NRN or foreign route is described.
+  // https://www.primosecurities.com.np/services/brokerage
+  primo: { countries: ["NP"] },
+  // Services page: 'Individuals and institutions who are residents of Nepal
+  // can open Trading accounts' (documents: Citizenship, PAN, Demat, Bank
+  // account).
+  // https://abc.com.np/services
+  abcnp: { countries: ["NP"] },
+  // Orders go through the 'NEPSE Online Account' with a CDSC demat. No foreign
+  // or NRN route is described (kumari/garima precedent).
+  // https://midasstock.com.np/about
+  midas: { countries: ["NP"] },
+  // The site states no eligibility. Its 'Online Trading' link goes to the
+  // NEPSE TMS login, with a CDSC demat in rupees and Nepali rails only
+  // (kumari/garima precedent).
+  // https://trishulsecurities.com.np/our-services/
+  trishul: { countries: ["NP"] },
+  // Nepali KYC and CDSC demat through TMS 35 client registration ( The site
+  // names no route for residents outside Nepal.
+  // https://tms35.nepsetms.com.np/client-registration
+  kohinoor: { countries: ["NP"] },
+  // Nepali broker; clients register on TMS 41 with Nepali KYC and CDSC demat.
+  // https://tms41.nepsetms.com.np/
+  linchmarket: { countries: ["NP"] },
+  // Nepali broker; clients register on TMS 45 with Nepali KYC and CDSC demat.
+  // https://tms45.nepsetms.com.np/
+  imperial: { countries: ["NP"] },
+  // Nepali broker; online orders go through a TMS 50 account opened with
+  // Nepali KYC and CDSC demat.
+  // https://crystalsecurities.com/services/
+  crystalkanchanju: { countries: ["NP"] },
+  // Nepali broker; registration goes through TMS 54 client registration with
+  // Nepali KYC and demat forms (Downloads).
+  // https://tms54.nepsetms.com.np/client-registration
+  sewa: { countries: ["NP"] },
+  // Kathmandu NEPSE member, +977 contacts only, CDSC demat/Mero Share account
+  // required.
+  // https://pahiinvestment.com/services/
+  pahi: { countries: ["NP"] },
+  // ["NP"]: NEPSE member no. 85 in Kathmandu, TMS tms85 and a CDSC demat
+  // account required.
+  // https://capitalhub.com.np/services/
+  capitalhub: { countries: ["NP"] },
+  // ["NP"]: NEPSE member no. 86 (Dillibazar); you open a trading account with
+  // a CDSC demat account.
+  // https://stoxkarts.com.np/services/
+  stoxkarts: { countries: ["NP"] },
+  // ["NP"]: SEBON-licensed Kathmandu broker; account opening needs the Nepali
+  // CKYC and DEMAT/Meroshare forms.
+  // https://spsasecurities.com.np/service/stock-brokerage-services
+  spsasecurities: { countries: ["NP"] },
+  // ["NP"]: NEPSE member no. 90 (Babarmahal); 'Sajilo KYC' and a CDSC demat
+  // account are required.
+  // https://sajilobroker.com.np/brokerage-services/
+  sajilo: { countries: ["NP"] },
+  // Nepal-only broker: NEPSE member no. 92 in Sundhara, Kathmandu, with KYC at
+  // kyc.roadshowsecurities.com.np, a CDSC Demat/Meroshare account required,
+  // and Nepali phone numbers.
+  // https://roadshowsecurities.com.np/
+  roadshow: { countries: ["NP"] },
+  // Nepal-only: NEPSE member no. 96 in Kamaladi, Kathmandu, a subsidiary of
+  // Himalayan Bank, with Nepali KYC forms (Individual/Corporate KYC), TMS
+  // registration at tms96.nepsetms.com.np/client-registration and Nepali phone
+  // https://himalayansecurities.com/our-services
+  himalayannp: { countries: ["NP"] },
+  // CH, LI (free). DE, FR, IT, AT (CHF 5 or 30 a month). Other countries are
+  // accepted for CHF 40 a month. Source: price list 'Geschäftsbeziehung:
+  // Kunde/Kundin mit Domizil in der Schweiz oder in Liechtenstein kostenlos
+  migros: { countries: ["CH","LI"] },
+  // The brochure prints 'Frais de clients domiciliés à l'étranger CHF 10.-
+  // /mois (Etats-Unis : CHF 35.-)' (same PDF). No list of excluded countries
+  // was found.
+  banquecantonalen: { countries: ["CH","US"] },
+  // Source: 'Ausländische Kunden bedienen wir auf Nachfrage nur noch bei
+  // Wohnsitz in Deutschland, Österreich und Liechtenstein, jedoch
+  // ausschliesslich im Anlagebereich.'
+  // https://www.appkb.ch/ihre-appkb/ueber-uns/auslaendische-kunden
+  appenzellerkanto: { countries: ["CH","LI","DE","AT"] },
+  // The factsheet names 'Kundinnen und Kunden mit Domizil Schweiz und
+  // Fürstentum Liechtenstein'. It also prints 'Depotgebühren für im Ausland
+  // domizilierte Personen', so some foreign residents are accepted, but no
+  urnerkantonalban: { countries: ["CH","LI"] },
+  // No foreign-client list or foreign-domicile fee was found in the 2025
+  // tariff. It is a regional bank whose site is in French only.
+  banquecantonaled: { countries: ["CH"] },
+  // The tariff mentions 'Kunden mit Domizil Schweiz oder Liechtenstein' (VAT
+  // note), and 'Gebühren für Kunden mit ausländischem Domizil CHF 300 pro
+  // Jahr' shows it also takes some foreign residents, but no list is printed.
+  glarnerregionalb: { countries: ["CH","LI"] },
+  // The tariff says 'Preise für in der Schweiz und Liechtenstein wohnhafte
+  // Kunden', and the general list has 'Kunden mit Domizil Ausland CHF 160
+  // p.a.', so some foreign residents are taken. No list is printed.
+  clientissparundl: { countries: ["CH","LI"] },
+  // The price list mentions 'Kunden mit Domizil Schweiz oder Liechtenstein'
+  // (VAT note), and 'Kunden mit Domizil Ausland CHF 350 pro Jahr' shows some
+  // foreign residents are taken. No list is printed.
+  acrevis: { countries: ["CH","LI"] },
+  // Aargau; I found no foreign-domicile terms or country list in the price
+  // lists (
+  // https://www.hbl.ch/de/private/anlegen/solo/
+  hypothekarbankle: { countries: ["CH"] },
+  // The general price list mentions 'Kundinnen und Kunden mit Steuerdomizil
+  // Schweiz und Liechtenstein', and 'Auslandkundengebühr (Steuerdomizil
+  // ausserhalb der Schweiz) CHF 240 jährlich' shows some foreign residents are
+  aek1826: { countries: ["CH","LI"] },
+  // The tariff adds VAT 'Per i clienti domiciliati in Svizzera o nel
+  // Principato del Liechtenstein', which implies some foreign-domiciled
+  // clients too, but no country list is published (tariff PDF above).
+  bancapopolaredis: { countries: ["CH","LI"] },
+  // The tariff says 'Kunden mit Wohnsitz in der Schweiz und Liechtenstein wird
+  // zusätzlich die MwSt belastet'. No list of foreign countries is published
+  // (tariff PDF above).
+  ersparniskassesc: { countries: ["CH","LI"] },
+  // The online onboarding says 'Sie sind in der Schweiz wohnhaft' (
+  // https://onboarding.bankzimmerberg.ch/start-new-bank-account
+  zimmerberg: { countries: ["CH"] },
+  // The tariff mentions VAT for 'Kunden mit Domizil Schweiz und Liechtenstein'
+  // and a fee of CHF 180 a year for 'Kunde mit Domizil Ausland', but no list
+  // of foreign countries (same PDF).
+  sparkasseschwyz: { countries: ["CH","LI"] },
+  // The tariff has a 'Bankgebühr für Kunden mit Domizil Ausland CHF 240 pro
+  // Jahr', so some foreign-domiciled clients are accepted, but no country list
+  // is published (Gebührentarif PDF).
+  eki: { countries: ["CH"] },
+  // CH (plus LI by proximity; no list). The bank is a Frutigen (BE) regional
+  // bank; the tariff only mentions VAT exemption for "im Ausland wohnhafte
+  // Kunden" and has no foreign-client fee and no country list.
+  // https://www.slfrutigen.ch/media/0utf13h3/slf_gebuehrenblatt_web.pdf
+  sparundleihkasse: { countries: ["CH","LI"] },
+  // CH, LI (prices are "für in der Schweiz und Liechtenstein wohnhafte
+  // Kunden"; clients domiciled abroad are taken for "Jahresgebühr für
+  // Auslandkunden CHF 900.-/Jahr", with no country list).
+  // https://bankoberaargau.clientis.ch/documents/2043432/4745831/BOA_Preise_und_Gebuehren.pdf
+  clientisoberaarg: { countries: ["CH","LI"] },
+  // CH, LI (prices are "für in der Schweiz und Liechtenstein wohnhafte
+  // Kunden"; foreign clients accepted, "Jahresgebühr für Auslandkunden CHF
+  // 250.00", no country list).
+  // https://bankthur.clientis.ch/documents/2050824/4685435/BAT_Preise_andere_DL.pdf
+  clientisthur: { countries: ["CH","LI"] },
+  // CH, LI (prices are "für in der Schweiz und Liechtenstein wohnhafte
+  // Kunden"; "Jahresgebühr für Kunden Domizil Ausland CHF 300.00", no country
+  // list).
+  // https://eb.clientis.ch/documents/2239571/4744872/EBS_Preise_und_Gebuehren.pdf
+  clientisentlebuc: { countries: ["CH","LI"] },
+  // CH, LI (Clientis group terms; foreign-domiciled clients accepted: "Gebühr
+  // für Auslandkunden (abhängig von ... Kundendomizil) CHF 250.00 bis
+  // 300.00/Jahr", no country list).
+  // https://bankimthal.clientis.ch/documents/2073690/7848533/BIT_Preise_und_Gebuehren.pdf
+  clientisimthal: { countries: ["CH","LI"] },
+  // This is a Swiss regional bank with a German-only site. The tariff charges
+  // 'Gebühr für Kunden mit Domizil Ausland p.a. CHF 250', but it publishes no
+  // list of countries. Source:
+  // https://www.bankgantrisch.ch/images/content/Broschueren_Dokumente/Bank_Gantrisch_Gebuhrentarif.pdf
+  gantrisch: { countries: ["CH"] },
+  // The tariff charges a 'Grundgebühr für Kundenbeziehungen mit Domizil
+  // Ausland 200.–/Monat'. The site is German only and publishes no list of
+  // countries. Source:
+  // https://bankslm.ch/app/uploads/2018/01/Broschuere-Preise-Dienstleistungen.pdf
+  slm: { countries: ["CH"] },
+  // The factsheet charges 'Gebühren für Kunden mit Domizil Ausland (pro Jahr)
+  // 240.00'. This is a local Bucheggberg bank with a German-only site and no
+  // list of countries. Source:
+  // https://www.slb.ch/app/uploads/2026/07/Factsheet_SLB_Gebuehren-Tarife_aktuell.pdf
+  sparundleihkassech: { countries: ["CH"] },
+  // This is a Bern bank with a German-only site and a +41 hotline. It
+  // publishes no foreign-client offer or list of countries. Source:
+  // https://www.eek.ch/e-banking
+  eek: { countries: ["CH"] },
+  // Accounts open through Halkbank internet/mobile banking or a branch, with a
+  // T.C. kimlik number required (FAQ: 'kimlik fotokopisi ... (T.C. kimlik no
+  // içeren)'). No foreigner route is named.
+  // https://www.halkyatirim.com.tr/content/tr/musterimiz-olun
+  halkyatrm: { countries: ["TR"] },
+  // Opening runs through VakıfBank mobile or internet banking ('VakıfBank'ta
+  // hesabınız varsa şubeye gitmeden') or 'Uzaktan Müşteri Edinimi' (Turkish ID
+  // remote onboarding). No foreigner route is named.
+  // https://www.vakifyatirim.com.tr/hesap-acmak
+  vakfyatrm: { countries: ["TR"] },
+  // Opening is online by video call ('online (görüntülü)') or by courier or
+  // representative, with Turkish-language documents and a Turkish ID. No
+  // foreigner route is named.
+  // https://integralyatirim.com.tr/borsa/hesap-acilisi
+  integralyatrm: { countries: ["TR"] },
+  // Online application form plus internet branch; Turkish-only site paths,
+  // Turkish ID. No foreigner route is named.
+  // https://www.icbcyatirim.com.tr//tr/bize-ulasin/online-basvuru/Kisisel-Bilgileriniz/113/182/0
+  icbcturkeyyatrm: { countries: ["TR"] },
+  // Opening is 'Kolayca Görüntülü Hesap Aç' (video onboarding with a Turkish
+  // ID). No foreigner route is named.
+  // https://www.destekyatirim.com/internet-sube
+  destekyatrm: { countries: ["TR"] },
+  // The site is in Turkish and remote opening is the standard SPK route with a
+  // Turkish ID. The footer refuses people linked to the US, the UK, Russia or
+  // sanctioned countries.
+  // https://trive.com.tr/masraf-ve-komisyonlar
+  triveyatrm: { countries: ["TR"] },
+  // Opening runs through the Strateji Trader app with a video call to the
+  // Turkish contact centre (09:00-18:00), and the site is in Turkish. No
+  // foreigner route is named.
+  // https://strateji.com.tr/musterimiz-olun
+  stratejimenkulge: { countries: ["TR"] },
+  // Opening is a video call with a customer representative, and the site is in
+  // Turkish. No foreigner or passport route is named.
+  // https://www.ikonmenkul.com.tr/hisse-senedi/hisse-senedi-hesap-acilis-islemleri
+  ikonmenkul: { countries: ["TR"] },
+  // Video-call opening asks the applicant to have 'yeni kimlik kartınızı' (the
+  // Turkish chip ID card) at hand.
+  // https://allbatrossyatirim.com/hesap-acilis-islemleri/
+  allbatrossyatrm: { countries: ["TR"] },
+  // Opening requires first becoming an Alternatif Bank customer by video call
+  // in the Alternatif Bank Mobil app; only Turkish-resident banking onboarding
+  // is described.
+  // https://www.alternatifmenkul.com.tr/hesap-acmak-istiyorum
+  alternatifmenkul: { countries: ["TR"] },
+  // Online opening needs a T.C. chip ID card ("18 yaşını doldurmuş ve yeni
+  // T.C. Çipli kimlik kartına sahip herkes") with NFC and video check; the
+  // site is Turkish only.
+  // https://webborsam.com/webborsam/nasil-hesap-acilir
+  anadoluyatrm: { countries: ["TR"] },
+  // Account opening and every service page are in Turkish, with a Turkish
+  // support line (0212 410 0500). An English landing page exists for Bulls
+  // Trader, but no foreign-resident onboarding is published.
+  // https://bullsyatirim.com/hesap-basvurusu
+  bullsyatrm: { countries: ["TR"] },
+  // Online account opening ('Online Hesap Açılış Süreci') is in Turkish only,
+  // with a Turkish phone line and Turkish bank rails; no foreign onboarding is
+  // published.
+  // https://galatamenkul.com/nasil-hesap-acarim/
+  galatamenkul: { countries: ["TR"] },
+  // Individual account opening is remote by video call or e-mail with a
+  // Turkish support line; there is a TR/EN switch, but no foreign-resident
+  // onboarding is published.
+  // https://www.baskentmenkul.com.tr/tr/yardim-merkezi/bireysel-hesap-acilislari
+  baskentmenkul: { countries: ["TR"] },
+  // Enpara.com is QNB's Turkish online bank: the investment account sits
+  // inside an Enpara bank account opened with a Turkish ID, and the site is
+  // Turkish only.
+  // https://www.enpara.com/yatirim-hesabi/hisse-senedi
+  enpara: { countries: ["TR"] },
+  // Turkish participation bank: digital onboarding by video call in the Mobil
+  // Şube, a Turkish-only process with Turkish ID (an English site exists but
+  // onboarding is local).
+  // https://www.vakifkatilim.com.tr/tr/kendim-icin/yatirim/sermaye-piyasasi-urunleri/hisse-senedi
+  vakfkatlm: { countries: ["TR"] },
+  // Turkish participation bank: account opening in the Hayat Finans Mobil app
+  // with the compulsory Uygunluk Testi; Turkish-only site and onboarding.
+  // https://hayatfinans.com.tr/yatirim-ve-birikim/hisse-senedi-islemleri-yatirim-ve-birikim
+  hayatfinanskatlm: { countries: ["TR"] },
+  // Turkish participation bank: 'Hemen Müşteri Ol' digital onboarding; the
+  // site has an EN switch but share trading is in the Turkish mobile app only.
+  // https://dunyakatilim.com.tr/kendim-icin/yatirim-urunleri/sermaye-piyasasi-urunleri/hisse-senedi
+  dunyakatlmbankas: { countries: ["TR"] },
+  // Turkish-only site (no language switch), Istanbul phone number, and account
+  // opening by a Turkish account contract.
+  // https://www.metromenkul.com.tr/
+  metromenkulgerle: { countries: ["TR"] },
+  // Sign-up in the app needs an e-KTP photo and a selfie with it. No foreigner
+  // route found. Same as the existing IDX brokers (bni, indopremier: ID).
+  stockbit: { countries: ["ID"] },
+  // The page prints nothing on foreigners. KTP-based online opening, the
+  // convention for IDX brokers (bni, indopremier: ID).
+  miraeindonesia: { countries: ["ID"] },
+  // Full online opening with KTP. No foreigner route found.
+  siminvest: { countries: ["ID"] },
+  // Citizens open online with a KTP. Foreigners can open by manual forms with
+  // a passport, KITAS or KIMS, plus an NPWP or a no-NPWP statement and an
+  // Indonesian bank passbook, which in practice means Indonesian residents.
+  // https://star.id/faq
+  samuel: { countries: ["ID"] },
+  // Online e-form at eform.sucorsekuritas.com. Nothing printed on foreigners.
+  // KTP-based, the IDX convention.
+  sucor: { countries: ["ID"] },
+  // Sign-up asks for an e-KTP, NPWP (if held) and a personal Indonesian bank
+  // account; the KYC is online.
+  // https://bahanasekuritas.id/frequently-asked-questions/
+  bahana: { countries: ["ID"] },
+  // ID. A KTP is required ("harus sudah mempunyai KTP"). Under SEOJK 6/2019,
+  // an Indonesian citizen with tax duties abroad cannot open an account online
+  // either.
+  // https://phintracosekuritas.com/pertanyaan-umum/
+  phintraco: { countries: ["ID"] },
+  // Online account opening asks for a KTP, NPWP (if held) and an SID.
+  // https://www.kbvalbury.com/id/ajax/faq?category=1
+  kbvalbury: { countries: ["ID"] },
+  // Sign-up asks for an e-KTP, NPWP and a BCA account in the client's own
+  // name.
+  // https://www.minnapadi.com/faq
+  minnapadi: { countries: ["ID"] },
+  // The required documents are a KTP and an NPWP (if held).
+  // https://victoria-sekuritas.co.id/faq/
+  victoriaindonesi: { countries: ["ID"] },
+  // ID. FAQ 2.2 says it serves foreign clients, mainly Koreans, but opening
+  // needs a KTP, or a passport plus ITAS/ITAP, so only residents of Indonesia
+  // (
+  // https://www.kiwoom.co.id/cs/getFAQ
+  kiwoomindonesia: { countries: ["ID"] },
+  // Indonesian/English RIPLAY and FAQ; rupiah RDN at Indonesian banks; no
+  // foreigner offer found (
+  // https://www.yuanta.co.id/page/faq
+  yuantaindonesia: { countries: ["ID"] },
+  // Indonesian app and site, rupiah deposit; no foreigner offer (
+  // https://youtrade.yuliesekuritas.com/
+  yulie: { countries: ["ID"] },
+  // Indonesian-only site, OJK-licensed local broker, rupiah RDN (
+  // https://www.tuntun.co.id/id
+  tuntun: { countries: ["ID"] },
+  // Online opening needs an 'E-KTP yang telah terverifikasi (DUKCAPIL)', which
+  // only Indonesians hold (
+  // https://www.kisi.co.id/
+  koreaindonesia: { countries: ["ID"] },
+  // The site is Indonesian only, the firm is regulated by OJK, and the RDN is
+  // at an Indonesian bank. The page does not mention foreigners.
+  // https://www.pinatrade.id/
+  trustsekuritas: { countries: ["ID"] },
+  // The FAQ says online opening is for "WNI yang telah memiliki e-KTP"
+  // (Indonesian citizens with an e-KTP).
+  // https://www.hei5.id/faq
+  pancaglobal: { countries: ["ID"] },
+  // Sign-up checks the applicant's NIK against DUKCAPIL and the KTP signature,
+  // so it needs an Indonesian ID.
+  // https://www.webull.co.id/help/faq/66
+  webullindonesia: { countries: ["ID"] },
+  // The site is Indonesian only and the RDN is at an Indonesian bank. Neither
+  // the FAQ nor the manual PDF says anything about foreigners.
+  // https://www.erdikha.com/FAQ
+  erdikhaelit: { countries: ["ID"] },
+  // Sign-up requires an e-KTP (NPWP if the applicant has one) plus a BCA
+  // passbook or BCA mBanking QR. The FAQ does not mention a foreigner or
+  // passport route.
+  // https://www.yb.co.id/faq
+  ybsekuritasyakin: { countries: ["ID"] },
+  // Account opening goes through NCCPL/CDC under Pakistani rules (FAQ), and
+  // the offices are in Karachi and Lahore. No foreign-residence route is
+  // published.
+  // https://nextcapital.com.pk/faq
+  nextcapital: { countries: ["PK"] },
+  // The Sahulat account requires a CNIC/SNIC (FAQ). Non-residents use the
+  // Roshan Equity Investment route; the countries they live in are not listed.
+  // https://www.fsedge.com/faqs.php
+  foundation: { countries: ["PK"] },
+  // Residents open accounts through the A/C opening form, non-resident
+  // Pakistanis through RDA; the countries they live in are not listed.
+  // https://adamsecurities.com.pk/page-roshan-digital-account
+  adam: { countries: ["PK"] },
+  // The site offers "Resident Pakistani" and "Non-resident Pakistani" account
+  // opening, and says accounts open "from anywhere in Pakistan".
+  // https://bel.com.pk/contact-us/
+  babaequities: { countries: ["PK"] },
+  // The site offers online PSX accounts for residents and RDA for
+  // "Non-Resident Pakistanis"; no countries are listed.
+  // https://mra.com.pk/
+  mra: { countries: ["PK"] },
+  // Pakistani account-opening forms, plus Roshan Digital Account for
+  // non-resident Pakistanis; no country list is published.
+  // https://optimus.pk/account-opening-form/
+  optimus: { countries: ["PK"] },
+  // Pakistani PSX account-opening forms (individual, Shariah, Sahulat), plus
+  // Roshan Digital Account for non-resident Pakistanis; no country list.
+  // https://www.darson.com.pk/account-opening?l=PSX%20Account%20Opening
+  darson: { countries: ["PK"] },
+  // The online digital account opening asks for a CNIC, an IBAN and proof of
+  // IBAN; Roshan Digital Account for non-residents.
+  // https://munirkhanani.com/
+  munirkhanani: { countries: ["PK"] },
+  // Pakistani account-opening form, plus Roshan Equity Investment (RDA) for
+  // non-resident Pakistanis; no country list.
+  // https://ismailiqbal.com/Commission_Charges.php
+  ismailiqbal: { countries: ["PK"] },
+  // Digital Account Opening for residents, and the Roshan Equity Account for
+  // non-resident Pakistanis ("NRPs may select Al Habib Capital Markets ...
+  // after opening a Roshan Digital Account"); no country list.
+  // https://www.ahcml.com/grow
+  alhabib: { countries: ["PK"] },
+  // Evidence: Pakistani PSX broker; non-resident Pakistanis via the Roshan
+  // Digital Account (same as the akd/abbasi precedent).
+  // https://fortunesecurities.com/
+  fortune: { countries: ["PK"] },
+  // Evidence: Karachi PSX broker; deposits by Pakistani IBFT or cheque and
+  // withdrawals by crossed cheque to a mailing address 'within Pakistan'.
+  // https://www.msltrade.com/
+  multiline: { countries: ["PK"] },
+  // Evidence: Karachi PSX broker; Pakistani account opening, plus a Roshan
+  // Digital Account for non-resident Pakistanis.
+  // https://weonline.biz/WENEW/faq.php
+  wefinancialservi: { countries: ["PK"] },
+  // Evidence: Pakistani PSX broker; the client schedule is signed in Pakistan,
+  // and no non-resident route is published.
+  // https://tvspl.com/
+  tariqvohra: { countries: ["PK"] },
+  // Evidence: Karachi PSX corporate member; account opening forms for
+  // Pakistani individuals and Raast/bank deposits; no non-resident route is
+  // published.
+  // https://fdm.com.pk/
+  fdm: { countries: ["PK"] },
+  // Accounts are for CNIC holders; non-resident Pakistanis open through a
+  // Roshan Digital Account (menu: 'Open Roshan Digital Account'). Same as the
+  // abbasi/akd convention.
+  // https://rafisecurities.com/
+  rafi: { countries: ["PK"] },
+  // Pakistani PSX broker with Urdu/English site and Karachi phone lines; same
+  // as the akd/abbasi convention.
+  // https://www.spectrumonline.com.pk/
+  spectrum: { countries: ["PK"] },
+  // Digital account for residents; Pakistanis abroad 'open the Roshan Digital
+  // Account if you are Overseas' (home page). Same as the abbasi convention.
+  // https://bopcapital.com.pk/
+  bop: { countries: ["PK"] },
+  // Sign-up needs a Pakistani mobile OTP and a National Identity Card upload
+  // ('Submit Your NIC').
+  // https://www.iel.net.pk/OpenAccount.html
+  integratedequiti: { countries: ["PK"] },
+  // Pakistani PSX broker (Clifton, Karachi); same as the akd/abbasi
+  // convention.
+  // https://akikcapital.com/page-contact-us
+  akik: { countries: ["PK"] },
+  // The FAQ suspends non-residents' sale orders since 28.02.2022 and names no
+  // residence abroad; the precedent keeps Russia.
+  // https://www.psbank.ru/personal/wealth/markets/faq
+  psb: { countries: ["RU"] },
+  // RU. 'Открыть брокерский счёт может только гражданин РФ старше 18 лет'.
+  // https://support.mts.ru/invetitsii/brokerskii-schyot/otkritie-brokerskogo-schyota
+  mts: { countries: ["RU"] },
+  // Contracts are signed at the St Petersburg or Moscow office, online 'при
+  // условии наличия подтвержденной записи на сайте Госуслуги', or by notarised
+  // mail.
+  // https://brokerkf.ru/support/faq/
+  kitfinance: { countries: ["RU"] },
+  // RU. A foreign citizen needs a notarised passport translation and a
+  // migration card; the phone mask is +7; online opening is for qualified
+  // investors only.
+  // https://d8.capital/open/account/v2/
+  d8: { countries: ["RU"] },
+  // The site offers 'Открыть счет через Госуслуги' (the Russian state portal)
+  // and names no residence abroad.
+  // https://www.russ-invest.com/investment/depositarium/tariffs/
+  russ: { countries: ["RU"] },
+  // Regulation 1.1.23: the bank may require the client's personal presence for
+  // identification at a bank office, and may refuse the contract if the client
+  // declines. Foreign individuals must provide a migration card and a document
+  levoberezhny: { countries: ["RU"] },
+  // RU. FAQ: «Стать Клиентом Брокерского обслуживания может любой гражданин
+  // Российской Федерации». The account is opened at a bank office with
+  // passport, SNILS and INN. Same FAQ URL.
+  primorye: { countries: ["RU"] },
+  // The account opens online «с помощью авторизации на портале Госуслуг или
+  // через предоставление копии паспорта, ИНН и подтверждение номера своего
+  // мобильного телефона». Gosuslugi or a Russian INN means Russia.
+  // https://aktiv.ru/services/stat-klientom/
+  aktiv: { countries: ["RU"] },
+  // The rules are Annex 10 to the bank's «Условия комплексного банковского
+  // обслуживания физических лиц». The application is made on paper at the bank
+  // or through its internet bank InvestPay (2.2), so the client must already
+  // https://chelinvest.ru/upload/iblock/0f8/r9givqi1pjyk0ou5hhqjebpafkle4kx0.pdf
+  chelinvest: { countries: ["RU"] },
+  // Regulation 7.4: the place to sign the contract and hand in documents is
+  // «офисы Банка, расположенные на территории Российской Федерации».
+  // https://abr.ru/about/raskrytie-informatsii/disclosure-securities-market/broker-activity/
+  rossiya: { countries: ["RU"] },
+  // Russian-only site, +7 contacts, Russian brokerage under Russian ID rules;
+  // same as the sber/gazprombank precedent.
+  // https://bbrbroker.ru/products/brokerskiy-schyet.php
+  bbr: { countries: ["RU"] },
+  // Regional Russian bank (Vologda), Russian-only site, QUIK account opened
+  // under Russian ID rules; sber/gazprombank precedent.
+  // https://severgazbank.ru/invest/118/36307/
+  severgazbank: { countries: ["RU"] },
+  // Russian state bank, app on RuStore, Russian-only site, Russian ID rules;
+  // sber/gazprombank precedent.
+  // https://domrfbank.ru/stock-market/
+  dominvest: { countries: ["RU"] },
+  // Orders only on paper at the St Petersburg office (Малоохтинский пр. 64).
+  // Foreign nationals must show a migration card or a document giving the
+  // right to stay in the RF (Условия from 13.11.2026, annex 1.7).
+  // https://s3.ru-msk.k2.cloud/bucket-cms-prod/Usloviya_brokerskogo_obsluzhivaniya_dejstvuyut_s_13_11_2026_3de0d60786.pdf
+  saintpetersburg: { countries: ["RU"] },
+  // Orders only in person at the broker's location, through representatives,
+  // or by post or courier (8.1.1). Non-resident orders are executed under RF
+  // restrictions (8.2.14). Russian-only site; sber precedent.
+  // https://www.rsb.ru/upload/iblock/44d/44dbe5a5359ce48ee11549fdef54dc1c.pdf
+  russianstandard: { countries: ["RU"] },
+  // RU (weak evidence: Russian bank, Russian-language site, Russian phone
+  // lines 8-800, ruble payment rails; no published nonresident terms).
+  // https://www.metallinvestbank.ru/fonds/broker/
+  metallinvestbank: { countries: ["RU"] },
+  // The regulations' client data and broker documents are built on «паспорт
+  // гражданина Российской Федерации». Same regulations PDF.
+  investitsionnaya: { countries: ["RU"] },
+  // RU (weak evidence: Moscow broker, Russian-only site, +7 phone,
+  // NRD/Raiffeisenbank ruble rails; no published nonresident terms).
+  // https://ivolgacap.ru/
+  ivolga: { countries: ["RU"] },
+  // No published country list. The price list charges an "Auslandkundengebühr"
+  // of CHF 240 a year to clients domiciled abroad (excluding FL), which shows
+  // foreign clients are possible, but no country is named. Keep the home
+  // https://www.gkb.ch/content/dam/gkb/dokumente/private/Preise-Ueberblick-DE.pdf
+  graubundnerkanto: { countries: ["CH","LI"] },
+  // No published country list. The price list adds VAT "für Kunden mit
+  // Wohnsitz Schweiz und Fürstentum Liechtenstein" and is German only, so keep
+  // the home country plus FL.
+  // https://www.okb.ch/.dam/01d39e05-351f-4923-94d0-4fb81d40b6f4/OKB-Preisliste.pdf
+  obwaldnerkantona: { countries: ["CH","LI"] },
+  // No published country list. A regional Solothurn bank with German-only
+  // pages; the sheet adds VAT for "Domizil Schweiz oder Liechtenstein".
+  // https://www.regiobank.ch/privatkunden-zahlen-und-sparen
+  regiobanksolothu: { countries: ["CH","LI"] },
+  // No published country list. The fee sheet addresses clients "mit Domizil in
+  // der Schweiz oder im Fürstentum Liechtenstein" (VAT note) and is German
+  // only.
+  // https://www.dcbank.ch/wp-content/uploads/2025/03/DCB_Leistungen_und_Gebuehren_01.01.2025-Web.pdf
+  dcbank: { countries: ["CH","LI"] },
+  // No published country list. The price list has a cross-border section
+  // ("Kunden mit Auslanddomizil", CHF 25 a month for deliveries) but names no
+  // country, so keep the home country plus FL.
+  // https://nkb.ch/sites/default/files/media/document/Anlagegeschaeft_Preise_15_06_2026_2.pdf
+  nidwaldnerkanton: { countries: ["CH","LI"] },
+  // The e-banking page says 'Diese Dienstleistung (e-Trading) steht nur Kunden
+  // mit Domizil Schweiz zur Verfügung' and that offers apply 'nur für
+  // Schweizer Kunden, die in der Schweiz wohnhaft sind'. The price list does
+  // https://www.saanenbank.ch/de/privatkunden/zahlungen-taetigen/e-banking
+  saanen: { countries: ["CH"] },
+  // The account page says 'Wohnsitz in der Schweiz erforderlich', and the
+  // E-Banking/app page lists the prerequisite 'Domizil Schweiz'.
+  // https://www.bankbsu.ch/online-schalter/e-banking-und-app
+  bsu: { countries: ["CH"] },
+  // The site says its offer applies 'nur für Schweizer Kunden, die in der
+  // Schweiz wohnhaft sind' (quoted in the scraper header).
+  // https://bbobank.ch/de/Info/Zahlungsmittel/BBO_E-Banking
+  bbobrienzoberhas: { countries: ["CH"] },
+  // all. FAQ: 'I live outside Nigeria — can I invest? Yes. The full platform
+  // works from anywhere in the world'. Caveat: sign-up needs BVN and NIN, so
+  // in practice clients need Nigerian identity. If the owner weighs the ID
+  // https://www.morgancapitalgroup.com/faq
+  morgancapital: WORLD,
+  // Nigerian broker with Nigerian KYC (CSCS/BVN), naira account, and no
+  // foreign-client statement.
+  // https://asset.apel.com.ng/apelalpha
+  apel: { countries: ["NG"] },
+  // Offices in Lagos, Ibadan and Abuja, Nigerian phone numbers, and the KYC is
+  // Nigerian.
+  // https://integratedtrustng.com/forms/Application-Form-Guide-to-Online-Trading.pdf
+  integratedtrust: { countries: ["NG"] },
+  // Lagos (Victoria Island) address, +234 contact, Nigerian KYC, and no
+  // foreign-client offer.
+  // https://quantumzenithsecurities.com.ng/faqs/
+  quantumzenith: { countries: ["NG"] },
+  // Nigerian broker with Nigerian KYC and no foreign-client statement.
+  // https://www.falconsecltdonline.com/IW/Home/FAQs
+  falcon: { countries: ["NG"] },
+  // The form lists Resident/Non-Resident/Foreigner and accepts an
+  // international passport, but a BVN and a Nigerian bank account are
+  // required, as with stanbicibtc and meristem. Source:
+  // https://www.newdevcoinvestment.com/account-opening
+  newdevco: { countries: ["NG"] },
+  // Licensed by the Nigerian SEC/NSE. The FAQ asks for KYC with an ID and a
+  // utility bill, and a CSCS bank-account update form for direct settlement to
+  // a Nigerian bank. No foreign onboarding is published. Source:
+  // https://www.missionsecuritiesltd.com/faq.html
+  mission: { countries: ["NG"] },
+  // Evidence: the FAQ 'Wer darf bei tradegate.direct ein Depot eröffnen?' says
+  // 'in Deutschland unbeschränkt steuerpflichtig' and no US persons. This is
+  // quoted from the scraper header: the FAQ page timed out today, so I did not
+  // https://tradegate.direct/faq
+  tradegatedirect: { countries: ["DE"] },
+  // Evidence: no published country list. The site is German-only and the depot
+  // needs a Berliner Sparkasse Girokonto; adults only. URL
+  // https://www.sparkasse.de/pk/produkte/sparen-und-anlegen/geld-anlegen/depot/s-neo.html
+  berlinersparkass: { countries: ["DE"] },
+  // Evidence: no published list. The site is German-only and the depot needs a
+  // Naspa Girokonto; adults only. URL
+  // https://www.naspa.de/de/home/privatkunden/wertpapiere-und-boerse/s-neo.html
+  nassauischespark: { countries: ["DE"] },
+  // Evidence: no published list. The site is German-only and the depot needs
+  // an MBS Girokonto; adults only. URL
+  // https://www.mbs.de/de/home/privatkunden/wertpapiere-und-boerse/s-neo.html
+  mittelbrandenbur: { countries: ["DE"] },
+  // Evidence: no published list. The site is German-only and the depot needs a
+  // Stadtsparkasse Düsseldorf Girokonto; adults only. URL
+  // https://www.sskduesseldorf.de/de/home/privatkunden/wertpapier-und-boerse/s-neo.html
+  stadtsparkassedu: { countries: ["DE"] },
+  // Evidence: the help centre says EU/EEA and Swiss citizens and residents
+  // aged 18 or over can register. Other countries are case by case. US persons
+  // and UK residents are excluded. French overseas collectivities such as
+  // https://help.mintos.com/hc/en-us/articles/4422147715729
+  mintos: { countries: ["CH","AT","BE","BG","HR","CY","CZ","DK","EE","FI","FR","DE","GR","HU","IE","IT","LV","LT","LU","MT","NL","PL","PT","RO","SK","SI","ES","SE","IS","LI","NO"] },
+  // Opening asks for a TIN and a Philippine settlement bank (Pesonet fee
+  // unless the bank is MBT/BDO/BPI/UBP). DDS is open to 'any local or foreign
+  // investor with a US Dollar Deposit Account' at a commercial bank, but the
+  // https://help.firstmetrosec.com.ph/hc/en-us/articles/55429528585369-Fees-and-Charges
+  firstmetro: { countries: ["PH"] },
+  // Sign-up asks for a primary government-issued ID, and funding goes through
+  // Philippine banks only. No foreigner or non-resident route is printed.
+  // https://www.philstocks.ph/faq
+  philstocks: { countries: ["PH"] },
+  // Opening needs 2 valid IDs, and funding goes only through Philippine banks
+  // or e-wallets. No foreigner route is printed.
+  // https://aaa-equities.com.ph/faq/
+  aaaequities: { countries: ["PH"] },
+  // The ID list is Philippine; 'a foreign national residing in the
+  // Philippines' must submit an ACR/ICR. A settlement bank account at a
+  // Philippine bank is needed.
+  // https://www.investorsonline.ph/
+  investors: { countries: ["PH"] },
+  // Requirements: 'To be at least 18 years old and a Filipino citizen', a
+  // Philippine-based settlement bank, a TIN and a Philippine government ID.
+  // https://www.lunasecurities.com/support/
+  lunasec: { countries: ["PH"] },
+  // You need an "upgraded Maya account" ("upgrade your Maya account using 1
+  // valid primary ID") and must be 18+. Maya is a BSP-regulated Philippine
+  // e-wallet/bank, and funding is only from the Maya wallet. Source:
+  // https://www.maya.ph/stocks
+  mayastocks: { countries: ["PH"] },
+  // The site says "Non-Resident Bangladeshis and foreign investors can open
+  // accounts with us", trading is possible "from anywhere in the world", and
+  // no country list or exclusion is printed.
+  // https://www.mikasecurities.net/foreign-invest/
+  mika: WORLD,
+  // The site menu links a 'Foreign Investor' teaser ( I could not extract its
+  // text here) and prints no country restriction.
+  // https://www.basl-bd.com/downloads/Teaser_for_Foreign_Investors.pdf
+  bankasiasec: WORLD,
+  // The account-opening page takes foreign individuals ('Valid passport',
+  // introducer) and foreign institutions with no country list.
+  // https://www.sheltechbrokerage.com/page/details/account-opening
+  sheltech: WORLD,
+  // all (thin evidence). The only foreign route is an 'NRB, Transfer & all
+  // account types' link under Open a New BO Account, which means NRBs resident
+  // anywhere; no country list.
+  // https://abcdsebroker.com/deposit/show
+  abcoltd: WORLD,
+  // The About section says it serves "retail, institutional, NRB and foreign
+  // clients" and accepts 'national ID or passport'; no country list.
+  // https://www.mondolsecurities.com/
+  mondol: WORLD,
+  // The FAQ "How do I open an account" asks for "your National Identification
+  // Number". Funding is through Bangladeshi banks only, with a Dhaka office
+  // and a +880 phone number, and no NRB or foreign offer is shown.
+  // https://utrade.com.bd/#faq
+  uniroyal: { countries: ["BD"] },
+  // Set(["CI","BJ","BF","ML","NE","TG", ...FRENCH])]. The site is French only
+  // and account opening is by appointment with SG Côte d'Ivoire. The bank also
+  // sells a "Pack Diaspora" for non-residents, so a wider reading is possible
+  // https://particuliers.societegenerale.ci/fr/
+  societegeneralew: { countries: ["CI","BJ","BF","ML","NE","TG"] },
+  // Set(["CI","BJ","BF","ML","NE","TG", ...FRENCH])]. Accounts are opened
+  // through the BS CONNECT app or at the Abidjan office, and no residence rule
+  // is printed. The site also has EN and ES versions, as GEK's has, so WORLD
+  // https://www.bridge-securities.com/centre-dinformation/faq
+  bridge: { countries: ["CI","BJ","BF","ML","NE","TG"] },
+  // Set(["CI","BJ","BF","ML","NE","TG", ...FRENCH])]. No residence rule is
+  // printed. boaksdirect.com advertises "Ouvrir un compte titres UEMOA" and is
+  // French only; the corporate site also has an English version.
+  // https://boaksdirect.com/
+  boa: { countries: ["CI","BJ","BF","ML","NE","TG"] },
+  // Set(["CI","BJ","BF","ML","NE","TG", ...FRENCH])]. The site is French only
+  // (lang fr-FR), no residence rule is printed, and the head office is in
+  // Abidjan.
+  // https://nsiacapital.com/
+  nsia: { countries: ["CI","BJ","BF","ML","NE","TG"] },
+  // Set(["CI","BJ","BF","ML","NE","TG", ...FRENCH])]. The site is French only
+  // (lang fr-FR), no residence rule is printed, and the platform is aimed at
+  // UEMOA investors.
+  // https://sib.ci/aswa/bourse-en-ligne/
+  attijariwestafri: { countries: ["CI","BJ","BF","ML","NE","TG"] },
+  // ["HK"]: a HK-only broker with no list of client countries, following the
+  // brightsmart/futuhk convention.
+  // http://www.primesec.com.hk/
+  primehk: { countries: ["HK"] },
+  // ["HK"]: accounts are opened in person at the office with a 'Hong Kong
+  // Identity card or passport' and no country list, following the HK-broker
+  // convention.
+  // http://upbest.com/en/support/select.html
+  upbest: { countries: ["HK"] },
+  // Traditional-Chinese/English site, a HK bank account required, and no
+  // country list.
+  // https://asasec.com/tc/trading_help_securities.php
+  asa: { countries: ["HK"] },
+  // The tariff also prices 'Overseas Customers' (plan overseas) but prints no
+  // country list. Suggest HK for the resident plan and leave overseas unwired
+  // or 'all' only if the owner accepts the tariff line as evidence.
+  // https://www.publicbank.com.hk/en/retailbanking/investment/securitiestrading
+  publichk: { countries: ["HK"] },
+  // ["MO","CN"]: the home-page notice says accounts open online for '澳門本地居民'
+  // (Macau residents) or by Bay Area appointment for '內地居民' (mainland
+  // residents), or at a branch.
+  // https://www.wlbank.com.mo/
+  bancowelllink: { countries: ["MO","CN"] },
+  // The broker publishes account-opening forms for 'Foreign Individual: Any
+  // individual who is not a citizen of Sri Lanka' and for non-resident Sri
+  // Lankans, with no country list. (LOLC precedent was ["LK"]; the main
+  // https://www.asiasecurities.lk/open-an-asia-securities-stock-brokerage-account
+  asialk: WORLD,
+  // The site has a 'Foreign Desk' service and an SIA route for foreign
+  // investors, with no country list published. (LOLC precedent ["LK"])
+  // https://www.bartleetreligare.com/faqs/
+  bartleetreligare: WORLD,
+  // Foreign individuals and funds are accepted through an SIA ('A non-resident
+  // individual account typically takes 2 - 3 days'), with no country list.
+  // (LOLC precedent ["LK"])
+  // https://www.jksb.com/jksb_venture_with_us/
+  johnkeells: WORLD,
+  // The site menu has 'Make an Investment' entries for 'Foreign Individual'
+  // and 'Foreign Company', with no country list. (LOLC precedent ["LK"])
+  // https://www.ndbs.lk/pages/faq.jsp
+  ndb: WORLD,
+  // The site describes how to open a foreign individual CDS account (through
+  // the CSE app) and a foreign company CDS account, with no country list.
+  // (LOLC precedent ["LK"])
+  // https://capitaltrust.lk/knowledge-hub/
+  trustlk: WORLD,
+  // ["MX"]. FAQ: 'contar con nacionalidad y residencia mexicana'; foreigners
+  // only with 'Residencia Permanente en México, domicilio en el país'.
+  // https://actinvertrade.actinver.com/preguntas-frecuentes.html
+  actinvertrade: { countries: ["MX"] },
+  // Requirements: 'Tener a la mano tu RFC y CURP', 'Vivir en la República
+  // Mexicana'.
+  // https://ok2.kuspit.com/OpenKuspit/api/k2/generales/footer
+  kuspit: { countries: ["MX"] },
+  // Inferred by the owner's method (no published list): the site is
+  // Spanish-only and Mexico-only, sign-up asks for RFC validation, and money
+  // moves by SPEI and Mexican bank accounts.
+  // https://www.vepormas.com/fwpf/portal/documents/servicios-casa-de-bolsa-linea
+  bx: { countries: ["MX"] },
+  // Inferred by the owner's method (no published list): a Spanish-only Mexican
+  // site with peso, SPEI and TEF rails. Shares bought abroad go through a
+  // separate Miami firm (invex.us).
+  // https://invex.com/costos-y-comisiones
+  invexcasabolsa: { countries: ["MX"] },
+  // Bancor is the Córdoba provincial bank and the account needs a linked
+  // Bancor peso/dollar demand account (Bancón home banking). No page found on
+  // foreign residents, so the picker is the home country.
+  // https://www.bancor.com.ar/personas/inversiones/compra-venta-de-valores-negociables
+  bancor: { countries: ["AR"] },
+  // Rosario ALyC (CNV no. 496) with a +54 341 phone. The site has no opening
+  // requirements and no statement on foreign residents, so the picker is the
+  // home country.
+  // https://www.guor.com.ar/
+  guor: { countries: ["AR"] },
+  // Online opening through the Inviu app asks you to 'Escaneá frente y dorso
+  // de tu DNI' (Argentine national ID). No statement on foreigners was found.
+  // https://www.gorostiagabursatil.com/pages/abrir-cuenta.html
+  gorostiagabursat: { countries: ["AR"] },
+  // AR. FAQ: a foreigner 'deberás presentar CUIT, CUIL, CDI ó CIE' (an
+  // Argentine tax key), and funding comes from an Argentine CBU/CVU in the
+  // client's name. No country list, so the picker is the home country, as for
+  // https://wise.com.ar/preguntas-frecuentes/
+  wise: { countries: ["AR"] },
+  // The ISA requires 'UK resident for tax purposes'; the FAQ says customers
+  // 'can join from the UK or Italy through the respective Moneyfarm sites'
+  // (the UK site is GB only); no new US persons.
+  // https://www.moneyfarm.com/uk/contact-us/
+  moneyfarm: { countries: ["GB"] },
+  // GB. first direct is a UK bank (HSBC UK) and the Sharedealing account sits
+  // with a UK first direct banking relationship; it is closed to new
+  // applicants.
+  // https://www.firstdirect.com/savings-and-investments/sharedealing/sharedealing-services/
+  firstdirect: { countries: ["GB"] },
+  // The terms limit the service to UK, Isle of Man and Channel Islands
+  // residents ('EEA for Vodafone trading only'; no US nationals), as recorded
+  // in the scraper header.
+  // https://shareview.co.uk/documentrepository/svd/shareview_dealing_terms_and_conditions.pdf
+  shareviewdealing: { countries: ["GB","IM","JE","GG"] },
+  // Evidence: FAQ "Can I use Stratiphy if I am not a UK resident?" says
+  // non-residents can only create strategies and view signals, not trade.
+  // https://www.stratiphy.io/faq
+  stratiphy: { countries: ["GB"] },
+  // Evidence: terms require you to "be resident in the UK", be 18 or older and
+  // have a Monzo current account; the investments page says "UK residents
+  // 18+".
+  // https://monzo.com/legal/investments/terms-and-conditions
+  monzo: { countries: ["GB"] },
+  // Evidence: clause 5.1 requires you to "Be a resident of the United Kingdom
+  // for tax purposes" and not be a US Person; the account is a UK ISA.
+  // https://www.investwizz.co.uk/terms-of-service
+  investwizz: { countries: ["GB"] },
+  // Evidence: Spanish/Basque-only site, Spanish retail bank requiring DNI/NIE
+  // and a Kutxabank account at sign-up; no foreign client list. URL:
+  // https://portal.kutxabank.es/cs/Satellite/kb/es/particulares/productos/bolsa
+  kutxabank: { countries: ["ES"] },
+  // Evidence: Spanish-language retail site of Deutsche Bank S.A.E.; online
+  // banking guide for Spanish account holders; no foreign client list. URL:
+  // https://www.deutsche-bank.es/es/guia-ayuda/operativa-banca-online.html
+  deutscheespana: { countries: ["ES"] },
+  // Evidence: regional Galician credit cooperative with a Galician/Spanish
+  // site, Spanish CNMV register no. 3070 and no foreign client list. URL:
+  // https://www.caixaruralgalega.gal/particulares/bolsa-mercados
+  caixaruralgalega: { countries: ["ES"] },
+  // Evidence: terms s.7(1): the customer must be 18 or older and 'a registered
+  // and active M-PESA Customer for at least three (3) months' (Safaricom Kenya
+  // M-PESA); KYC is taken from Safaricom (ID/passport). URL: same terms page
+  ziiditrader: { countries: ["KE"] },
+  // Evidence: onboarding by email with CDS1 and KYC forms, a National ID or
+  // passport, and a KRA PIN certificate 'or Tax ID for non-residents', with
+  // iTax & IPRS checks. Non-residents are mentioned, but no country is named,
+  // https://www.omsafrica.co.ke/investor-guide
+  omsafrica: { countries: ["KE"] },
+  // Evidence: FAQ 3: a signed paper account form, ID/passport, and proof of
+  // income and residence, with originals sighted by staff or notary-certified;
+  // no non-resident route or country is named, so I applied the owner's rule
+  sbg: { countries: ["KE"] },
+  // The sign-up flow (E-Open Account, AomWise app) is in Thai and settles
+  // through Thai-bank ATS. No foreign-retail onboarding is printed (the equity
+  // page's 'foreign investors' means the institutional desk). Same as
+  // https://www.kgieworld.co.th/corporate/openaccount/kgiopenaccount
+  kgithailand: { countries: ["TH"] },
+  // The site and sign-up are in Thai, and settlement needs an account at a
+  // listed Thai bank. No foreign onboarding is printed.
+  // https://www.lhsec.co.th/infocus.php?method=detail&id=53
+  landhouses: { countries: ["TH"] },
+  // The site is in Thai and English, but there is no online foreign
+  // onboarding: access is through the Settrade / IVG Gold accounts of Thai
+  // clients, it settles through Thai-bank ATS, and the office phone is +66.
+  // https://www.ivglobal.co.th/content/articles/securities-trading.html
+  ivglobal: { countries: ["TH"] },
+  // ["VE"]: FAQ 'Se puede invertir ... estando fuera de Venezuela? Si, ...
+  // debes tener una cuenta bancaria y linea telefonica movil en Venezuela';
+  // sign-up and CVV account use the Venezuelan cedula.
+  // https://mercosur.com.ve/home/centrode-sopore/
+  mercosurcasabols: { countries: ["VE"] },
+  // Venezuelan casa de bolsa (SUNAVAL, BVC member 52), Spanish-only site, +58
+  // phone only, onboarding through Statera en Linea with CVV/Venezuelan
+  // banking.
+  // https://www.stateracasadebolsa.com/Servicios.html
+  stateracasabolsa: { countries: ["VE"] },
+  // Pago Movil or Venezuelan bank transfer, SUNAVAL/BCV/CVV-regulated, aimed
+  // at the Venezuelan market.
+  // https://www.per-capital.com/
+  percasabolsa: { countries: ["VE"] },
+  // Regional Volksbank in Saarland; the site is German only, and online depot
+  // opening needs a Bank 1 Saar account with OnlineBanking. No
+  // foreign-residency offer is printed, so this falls back to the home
+  // https://www.bank1saar.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/depot-aktiv.html
+  bank1saar: { countries: ["DE"] },
+  // German church cooperative bank; depot opening needs a BIB
+  // Verrechnungskonto with OnlineBanking. No foreign-residency offer is
+  // printed (the site has English/Spanish links but no onboarding for
+  // https://www.bib-fairbanking.de/privatkunden/geldanlage-und-sparen/produkte/depot-brokerage/wertpapierdepot.html
+  bibimbistumessen: { countries: ["DE"] },
+  // FR (metropolitan France + DROM-COM). Opening requires the applicant to
+  // 'habiter en France métropolitaine ou dans les DROM COM'.
+  // https://www.monabanq.com/fr/produits/compte_courant.html
+  monabanq: { countries: ["FR"] },
+  // Crédit Agricole regional bank (Clermont-Ferrand). Invest Store is for
+  // 'Tout titulaire d'un compte à la Banque Chalus'; the site is French only
+  // and no foreign opening path is offered.
+  // https://www.banque-chalus.fr/particulier/epargne/bourse/service-de-bourse-en-ligne-invest-store.html
+  banquechalus: { countries: ["FR"] },
+  // Evidence: a Spanish credit cooperative (CNMV 3025) with Spanish and
+  // Catalan sites only, a Spain-only 900 phone line and branches only in
+  // Spain. The online menu includes 'Modificar la condición de residente/no
+  // https://www.caixaenginyers.com/es/bolsa-y-mercados
+  cajaingenieros: { countries: ["ES"] },
+  // Evidence: a Catalan rural credit cooperative (Caja Rural de Guissona) with
+  // Catalan and Spanish sites only, branches in Spain only, and access to the
+  // GVC Gaesco platform through a CaixaGuissona account. No list of
+  // https://www.caixaguissona.com/es/public/gaescoadvantatges
+  caixaguissona: { countries: ["ES"] },
+  // DK
+  frslevmollerupsp: { countries: ["DK"] },
+  // DK (doctors and their families)
+  lgernes: { countries: ["DK"] },
+  // Romanian-only site and contract, CNP/CUI on the annex, agent-led account
+  // opening (
+  // https://ssif.brm.ro/cum-investesc/
+  brmssif: { countries: ["RO"] },
+  // Romanian-only site, contract asks for CNP/ID card or passport (
+  // https://www.shareinvest.ro/docs/PF_2025.03.25_V1.doc
+  shareinvest: { countries: ["RO"] },
+  // BG
+  abcfinance: { countries: ["BG"] },
+  // BG
+  ipfavorit: { countries: ["BG"] },
+  // There is no published country list. A local bank: sign-up needs an ID card
+  // or passport and a brokerage contract, and the eTrader username and
+  // password are handed out in person at the bank's securities department or
+  // https://www.ttk.com.mk/Web/ФИЗИЧКИ_ЛИЦА/Хартии_од_вредност/Електронско_тргување_со_хартии_од_вредност.aspx
+  ttkbanka: { countries: ["MK"] },
+  // There is no published country list. Individuals need an ID card or
+  // passport and a payment account at Stopanska banka, or a transaction
+  // account at another (Macedonian) bank. The site is in Macedonian with a
+  // https://www.stb.com.mk/finansiski-pazari/brokerski-uslugi/
+  stopanskabanka: { countries: ["MK"] },
+  // Evidence: the site's country/language selector (hreflang el-cy, el-gr,
+  // en-ie, es-es, fr-fr, fr-be, it-it, nl-be, nl-nl, pt-pt besides en-cy).
+  // This is accepted.mjs PLUM minus GB, which belongs to the UK entity.
+  // https://withplum.com/en-cy
+  plummoneycy: { countries: ["CY","GR","IE","ES","PT","FR","IT","BE","NL"] },
+  // Evidence: the product is offered in Colombia by Credicorp Capital Colombia
+  // S.A. as correspondent ('Promoción y oferta ... en Colombia'), and the
+  // article is titled 'invertir en acciones de Estados Unidos desde Colombia'.
+  // https://tyba.com.co/invertir-en-acciones/
+  tyba: { countries: ["CO"] },
+  // The site has no non-resident or account-opening page; the open-account URL
+  // returns 404. Contact is +965 and a Kuwait City office. Same reading as
+  // sharq and efghermeskw.
+  // https://www.kficbrokerage.com/en/our-business/
+  kfic: { countries: ["KW"] },
+  // all (WORLD). The FAQ's account-opening requirements accept a 'Passport or
+  // travel document for persons not residing in the state of Kuwait', besides
+  // a Civil ID for citizens and residents.
+  // https://www.tijarifb.com/en/faqs
+  altijari: WORLD,
+  // ["MA"] (same pattern as wafabourse). Saham Bank's offers cover Moroccan
+  // residents, Moroccans abroad (MRE packs Ahlan) and foreigners living in
+  // Morocco (Pack Alamente 'Étrangers au Maroc'). Foreigners living abroad are
+  // https://www.sahambank.com/wp-content/uploads/2026/02/Affiche-tarifaire-JAN-2026-Saham-Bank.pdf
+  sogecapitalbours: { countries: ["MA"] },
+  // all (WORLD). Account-opening page lists requirements for Non-Jordanian
+  // Non-resident individuals (valid passport, address in country of permanent
+  // residence).
+  // https://www.uajib.com/en/account-opening
+  unitedarabjordan: WORLD,
+  // No published country list; accounts are opened by visiting the Amman
+  // office (address, +962 phones only), so Jordan only, as for misk.
+  // https://excelinvest.jo/en/account-opening
+  excelfor: { countries: ["JO"] },
+  // Identity must be confirmed by a personal visit to an office in Uzbekistan
+  // ('необходим личный визит в офис ... Ташкент, Самарканд, ...'), phone +998,
+  // site in O'zb/Рус/Eng.
+  // https://ffin.uz/brokerskoe-obsludgivanie
+  freedomuzbekista: { countries: ["UZ"] },
+  // UZ. 'Открыть брокерский счёт онлайн через сервис Jett могут граждане
+  // Узбекистана и проживающие в Узбекистане нерезиденты' (Uzbek citizens and
+  // non-residents living in Uzbekistan). Other foreigners go to the broker
+  // https://jett.uz/ru/
+  jett: { countries: ["UZ"] },
+  // The FAQ says people abroad can trade 'from anywhere in the world' over the
+  // internet, and the account-opening list has a 'Foreign citizen' option
+  // (foreign passport plus a bank reference from a Mongolian or international
+  // https://icapital.mn/help-us/%d1%82%d2%af%d0%b3%d1%8d%d1%8d%d0%bc%d1%8d%d0%bb-%d0%b0%d1%81%d1%83%d1%83%d0%bb%d1%82-%d1%85%d0%b0%d1%80%d0%b8%d1%83%d0%bb%d1%82
+  invescore: WORLD,
+  // The online sign-up requires a Mongolian civil register number (2 letters +
+  // 8 digits, checked against the birth date), an 8-digit Mongolian mobile
+  // number and an e-Mongolia ID PDF. The mission statement addresses 'every
+  // https://bulganbroker.mn/register
+  bulgan: { countries: ["MN"] },
+  // DE (FAQ: account opening for adults 'mit Wohnsitz in Deutschland', ID plus
+  // Meldebestätigung) -
+  // https://www.umweltbank.de/service/faq/
+  umweltbank: { countries: ["DE","ID"] },
+  // Sonderbedingungen 3.2: natural persons living only in Germany who are
+  // German nationals only; 'Der Handel mit Wertpapieren bei BISON ist
+  // ausschließlich in Deutschland möglich.'
+  // https://bisonapp.com/dokumente/wertpapiere/
+  bison: { countries: ["DE"] },
+  // Online dossier not open to US citizens or to tax residents of CRS
+  // countries other than Italy, and needs an Italian BPnow account; contract
+  // in Italian only -
+  // https://www.bancadelpiemonte.it/wp-content/uploads/2024/04/offerta-titoli.pdf
+  bancapiemonte: { countries: ["IT"] },
+  // Evidence: the ViViConto FAQ says "E' necessario essere maggiorenni e
+  // fiscalmente residenti in Italia".
+  // https://www.vivibanca.it/viviconto/conto-corrente-viviconto
+  vivibanca: { countries: ["IT"] },
+  // FI (Finnish bank: no published list, joining by meeting, +358 support
+  // line, Aktia bank IDs;
+  // https://www.aktia.fi/fi/tule-asiakkaaksi
+  aktia: { countries: ["FI"] },
+  // Opening an account in the app (and logging in to the securities web) needs
+  // Icelandic electronic ID ("rafræn skilríki" / Auðkenni app), and the app
+  // "virkar fyrir einstaklinga sem eiga rafræn skilríki". ,
+  // https://acro.is/app/
+  acro: { countries: ["IS"] },
+  // PL (Polish-only site and onboarding, +48 numbers, domestic bank funding,
+  // US persons excluded by the Reg S declaration;
+  // https://www.trigon.pl/dom-maklerski/zaloz-rachunek
+  trigondommaklers: { countries: ["PL","US"] },
+  // Opening a securities account in mBanking requires an adult private
+  // individual who is a Hungarian resident ('18 év feletti devizabelföldi,
+  // rezidens magánszemély'). Opening an account online also asks for a
+  // https://www.unicreditbank.hu/hu/maganszemelyek/napi_penzugyek/elektronikus_bankolas/mbanking_ertekpapirszamlanyitas.html
+  unicredithungary: { countries: ["HU"] },
+  // all (suggested). The general terms accept 'Fizičke osobe – nerezidenti'
+  // with a passport or ID card, a Croatian OIB and a euro non-resident account
+  // contract, and name no excluded country. Sign-up is in person or by sending
+  agrambrokeri: WORLD,
+  // To open an account you sign an agreement with Raiffeisen CAPITAL and
+  // 'present your ID card'. Payment instructions exist only for BiH and
+  // nothing mentions non-residents.
+  // https://www.raiffeisenbank.ba/en/raiffeisen-grupa/raiffeisen-capital/proizvodi-i-usluge/brokerske-usluge-/kupovina-hartija-od-vrijednosti.html
+  raiffeisenba: { countries: ["BA"] },
+  // Evidence: Unibroker serves 'domaćim i stranim klijentima' (domestic and
+  // foreign clients); the contract is signed at its Sarajevo office.
+  // https://www.unibroker.ba/uputstvo.html
+  unibroker: WORLD,
+  // The sign-up form ( read from form-application.min.js) lets the client pick
+  // 'Non Resident' or 'Resident'. It has full country lists for Nationality
+  // and Country of Residence, accepts an ID or a passport, and has offshore
+  // https://www.sharenet.co.za/applications/#46
+  sharenet: WORLD,
+  // ZA
+  eqt: { countries: ["ZA"] },
+  // Sign-up asks for 'A copy of your photo ID (i.e. Australian passport or
+  // driver's license)', an Australian bank statement and a HIN, and accounts
+  // settle through a Macquarie CMA. Source:
+  // https://www.sequoiadirect.com.au/get-started/
+  sequoiadirect: { countries: ["AU"] },
+  // Evidence: the rules page says account holders are in principle residents
+  // of Nagano prefecture ("原則、長野県内に在住の方"), and it does not accept people
+  // living or working abroad ("海外居住者・勤務者のお取引につきましてはお承りできません").
+  // https://www.82sec.co.jp/trade/rule.php
+  hachijuni: { countries: ["JP"] },
+  // Accounts are opened only at the Yangon head office (or through KBZ Bank
+  // branches), and the page addresses 'a Myanmar resident'. The original NRC
+  // or passport and a bank book are required. Trading requires the KBZSC
+  // http://www.kbzsc.com/securities-trading/account-opening
+  kbzstirlingcolem: { countries: ["MM"] },
+  // Evidence: the help centre says a client who declares tax exit from Brazil
+  // has the account 'bloqueada' (blocked) and cannot make new movements, so
+  // only Brazilian residents are accepted.
+  // https://ajuda.cmcapital.com.br/hc/pt-br/articles/21037335014295
+  cmcapital: { countries: ["BR"] },
+  // Progresión is a Colombian sociedad comisionista de bolsa. Account opening
+  // is through its SARLAFT onboarding with a cédula, and every deposit route
+  // is Colombian (PSE, Baloto, Colombian cash networks). No other country is
+  // https://www.progresion.com.co/canales-digitales/trader-pro/
+  progresion: { countries: ["CO"] },
+  // Evidence: the onboarding checklist accepts 'clients resident overseas' and
+  // takes a TRN or SSN; the only toll-free lines are for the US, Canada and
+  // England (
+  // https://www.jmmb.com/sites/default/files/Jamaica/Attachments/Forms/Client-On-Boarding-Checklist.pdf
+  jmmb: { countries: ["JM","US","CA","GB"] },
+  // The FAQ and the page say "Persons Living outside of Trinidad & Tobago must
+  // include – Bankers Reference ..." with notarized documents, and a FATCA
+  // form is required.
+  // https://republicwealthmanagement.com/wp-content/uploads/2021/08/Brokerage-FAQs.pdf
+  republicwealth: WORLD,
+  // The site is Spanish only and every phone number is +598. Sign-up asks for
+  // a cédula or a passport, and the address step asks for a 'Departamento',
+  // which is a Uruguayan subdivision; there is also a free-text País field.
+  // https://www.maiorano.com.uy/tuplan/crear-cuenta.html
+  maioranocia: { countries: ["UY"] },
+  // all (non-residents accepted per FAQ; sanctions screening only)
+  udcapitaludcinve: WORLD,
+  // Evidence: XalqOnline retail sign-up asks for a mobile number registered
+  // with the bank plus a FIN code (Azerbaijani personal ID) or Asan Imza.
+  // There is no foreign onboarding, the app is AZ/EN/RU, and the bank is
+  // https://api.xalqbank.az/storage/XO-istifad-i-t-limat-Retail-Mob.pdf
+  xalq: { countries: ["AZ"] },
+  // AO
+  bfacm: { countries: ["AO"] },
+  // All except BY, CU, IR, KP, RU, SY, AF, IQ, MM, NG, VE, ZW. Evidence:
+  // 'Funds available to residents worldwide' ( The accounts are IBKR LLC
+  // accounts, so IBKR's application exclusions apply (as in ibkrint). The
+  // https://placetrade.com/investment-types-1
+  placetrade: WORLD,
+  // No published list. The FAQ: "Nemo.money is available to users in the
+  // UAE"; the terms exclude unnamed countries. AE only.
+  // https://nemo.money/
+  nemomoney: { countries: ["AE"] },
+  // The tariff sheet takes every profile, including "PERSONNE PHYSIQUE NON
+  // MAROCAINE NON RÉSIDENTE" with a passport; the site and documents are in
+  // French only (same pattern as cih).
+  // https://www.valorisgroup.ma/
+  valoris: { countries: FRENCH },
+  // 2026-10-26: the 61 catalogues of 2026-10-25 that had no client countries.
+  // Spanish forms. The "Abrir cuenta" contact form's Localidad list has only
+  // the 24 Argentine provinces; the online opening asks for a DNI, CUIT or
+  // CUIL, the phone field defaults to +54.
+  // https://www.avsa.com.ar/abrir-cuenta/
+  // https://aperturas.avsa.com.ar/
+  argentinavalores: { countries: ["AR"] },
+  // Opening: your details, then identity validated with "DNI Frente y dorso".
+  // https://bullmarket.com.ar/
+  bullmarket: { countries: ["AR"] },
+  // Requirements sheet: DNI plus CUIT/CUIL/CDI; a non-resident needs a legal
+  // representative in Argentina. No country list (as ecovalores).
+  // https://cafsecurities.com.ar/wp-content/uploads/2018/04/requisitos-persona-fisica.pdf
+  cafsecurities: { countries: ["AR"] },
+  // FAQ: "Solamente necesitás tu DNI argentino y ser mayor de edad", plus a
+  // CBU or CVU in your own name.
+  // https://www.iebmas.com.ar/preguntas-frecuentes/
+  ieb: { countries: ["AR"] },
+  // The online opening asks for a CUIL and checks it against RENAPER.
+  // https://net.lbo.com.ar/register
+  lbo: { countries: ["AR"] },
+  // Accounts through an adviser; its standing instructions fund an account
+  // only by "Transferencias Bancarias para fondeo Local" to Argentine CBUs.
+  // https://www.cinqcapital.com/IIPP_2026_CINQ_CAPITAL.pdf
+  lescinq: { countries: ["AR"] },
+  // Every "Abrir cuenta" button leads to a Spanish form whose required fields
+  // are name, email and "DNI *"; phone +54 11.
+  // https://www.optionsecurities.com.ar/contacto
+  optionsecurities: { countries: ["AR"] },
+  // Online opening asks for the DNI number and its trámite number, checked
+  // against RENAPER.
+  // https://apertura.pgavalores.com.ar/ObFisicas
+  pgavalores: { countries: ["AR"] },
+  // Online opening asks for the DNI, its trámite number and a CUIT, checked
+  // against RENAPER.
+  // https://operar.psec.com.ar/OnboardingFisica
+  psec: { countries: ["AR"] },
+  // "Solo tu DNI: Frente y dorso del documento y validación biométrica".
+  // https://www.rava.com/que-ofrecemos
+  rava: { countries: ["AR"] },
+  // FAQ: the form is signed at the office with a "DNI con domicilio
+  // actualizado" and a bank account in your own name.
+  // https://www.sailinginversiones.com/preguntas-frecuentes/
+  sailing: { countries: ["AR"] },
+  // Spanish site; a client's first VirtualBroker login takes only "DNI/CUIT"
+  // (or a user name) as identification. Office in Buenos Aires.
+  // https://virtualbroker-vetacapital.aunesa.com/auth/signin/primer-ingreso
+  veta: { countries: ["AR"] },
+  // App opening needs a verifiable CURP; anyone born abroad needs a 300,000
+  // MXN manual contract.
+  // https://gbm.com/faqs/por-que-no-puedo-abrir-una-cuenta-si-naci-en-el-extranjero-o-no-soy-mexicano-de-nacimiento
+  gbm: { countries: ["MX"] },
+  // FAQ: "solo usuarios con nacionalidad colombiana" with a cédula; nationals
+  // abroad too. Kept to Colombia (as myinvestor, bamboo).
+  // https://trii.co/faq
+  triico: { countries: ["CO"] },
+  // Inter Securities' US offer is for investors "resident, domiciled, or
+  // incorporated in Brazil"; the B3 account is CPF-based.
+  // https://inter.co/en/us/securities/
+  interbr: { countries: ["BR"] },
+  // XP group broker: CPF-based account; XP's international account is for
+  // Brazil residents only.
+  // https://acionista.com.br/como-o-cartao-global-xp-revoluciona-a-conta-internacional/
+  rico: { countries: ["BR"] },
+  // CPF-based account; XP's international account is for "residentes no
+  // Brasil".
+  // https://acionista.com.br/como-o-cartao-global-xp-revoluciona-a-conta-internacional/
+  xpbr: { countries: ["BR"] },
+  // Individual checklist covers investment accounts; non-HK residents give an
+  // address proof: "非香港居民住宅地址證明例子" (foreign ID, licence, statement).
+  // https://www.hk.bankcomm.com/hk/shtml/hk/tw/2004980/2600011/list.shtml
+  bocomhk: { countries: CHINESE },
+  // Account opened by mail with a witness, using "護照或身份證" (passport or ID
+  // card); no residency rule or country list.
+  // https://www.ccbintl.com.hk/Big5/securities3.html
+  ccbi: { countries: ["HK"] },
+  // Mail opening uses a HKID/passport and a HK bank cheque; a notice suspends
+  // "內地投資者" buying from the mainland from 26 Oct 2026. No country list.
+  // https://www.ccnew.com.hk/tc/customer-service/faq
+  centralchinahk: { countries: ["HK"] },
+  // Securities service for Chiyu bank customers through HK branches and
+  // e-banking; no residency rule or country list.
+  // https://www.chiyubank.com/cyb/index/tzlc/zq/zqmmfw/index.shtml
+  chiyu: { countries: ["HK"] },
+  // Online opening (then the investment accounts in the app): "have a Hong
+  // Kong permanent Identity Card, reside in Hong Kong".
+  // https://www.citibank.com.hk/english/personal-banking/citi-plus/
+  citibankhk: { countries: ["HK"] },
+  // "海外客戶（包括內地居民）" (overseas clients, mainland included) open with
+  // professionally certified copies; no country list.
+  // https://www.cswsec.com.hk/account-opening/
+  cswealth: { countries: ["HK"] },
+  // Branch opening asks for "入境證明(如非香港居民)" (entry proof for non-HK
+  // residents); mail opening takes witnesses in HK "或對等司法管轄區".
+  // https://www.eddid.com.hk/sf/account_opening/
+  eddid: { countries: CHINESE },
+  // The help centre's only account-opening category is "開戶（香港居民）"
+  // (Hong Kong residents).
+  // https://support.platform.elebank.com/personal/zh-hk/topic15_771
+  elebank: { countries: ["HK"] },
+  // Mox Invest needs "a Hong Kong Identity Card" and "a valid Hong Kong
+  // residential and mailing address"; not for US citizens.
+  // https://mox.com/faqs/mox-invest/
+  mox: { countries: ["HK"] },
+  // Online-opening document table has columns "Mainland / Macau resident" and
+  // "Foreign resident"; no US shares for US persons or Canadians.
+  // https://www.ebshkdirect.com/hk/web/en/info/index.php?info=applyonline
+  shkdirect: { countries: ["HK"] },
+  // Needs an integrated deposit account, which requires being "18+ years old
+  // and a Hong Kong resident"; "unable to open this account for US residents".
+  // https://www.sc.com/hk/investment/online-investment-account/
+  // https://www.sc.com/hk/help/deposits/
+  standardcharteredhk: { countries: ["HK"] },
+  // Documents listed for HK, Mainland China, Macau, Taiwan and "Overseas
+  // Residents (valid overseas passport)".
+  // https://hk.usmartglobal.com/en/help-centre/40/detail/10130
+  usmarthk: WORLD,
+  // Chinese-only site and app (owner, 2026-10-26: the Chinese-speaking
+  // countries). Its document list covers Hong Kong, Macau and Taiwan, and
+  // other residents with a passport and a bank card from the SFC's eligible
+  // jurisdictions (Singapore among them); mainland China is not on it.
+  // https://www.vbkr.com/help-center/detail/103509
+  valuable: { countries: CHINESE.filter((c) => c !== "CN") },
+  // Chinese-only site and sign-up (owner, 2026-10-26: the Chinese-speaking
+  // countries). Its document list covers 香港居民, 內地居民 and
+  // "其他國家/地區居民" (other countries, with a qualified witness).
+  // https://www.wlsec.com/post/開戶證件所需資料
+  welllink: { countries: CHINESE },
+  // FAQ: "目前線上開戶限本國年滿 18 歲之自然人" (online opening only for local
+  // people 18+); "持居留證者不得開戶" (residence-permit holders cannot open).
+  // https://www.pocket.tw/callcenter/questions/55/
+  pocketsec: { countries: ["TW"] },
+  // Account opens in Aktif Bank's N Kolay Mobil ("N Kolay Mobil üzerinden"); no
+  // branches, Turkish only, no foreigner or passport route named.
+  // https://www.aktifyatirim.com.tr/sikca-sorulan-sorular
+  aktifyatrm: { countries: ["TR"] },
+  // App opening by video call, "Yalnız kimliğinizle", 18+; Turkish-only site,
+  // no foreigner or passport route named.
+  // https://atayatirim.com.tr/yatirim-hesabi
+  atayatrm: { countries: ["TR"] },
+  // Opened inside Fibabanka Mobil (Borsa Market), as a Fibabanka customer or by
+  // becoming one there; no foreigner route named.
+  // https://www.fibayatirim.com.tr/fibayatirimli-ol
+  fibayatrm: { countries: ["TR"] },
+  // Digital opening: TCKN and new-type ID, "resmi ikametinizin Türkiye olması
+  // gereklidir" (official residence must be Turkey).
+  // https://www.osmanlimenkul.com.tr/finansal-planlama/kaynaklar/dijital-hesap-acilisi
+  osmanlyatrm: { countries: ["TR"] },
+  // App video-call opening needs an NFC phone and the new Turkish ID card
+  // ("yeni kimlik kartınıza"); no foreigner or non-resident route named.
+  // https://www.piapiri.com/bize-sor/hesap-acilisi/
+  piapiri: { countries: ["TR"] },
+  // Online opening "sadece Türk Vatandaşı" with a T.C. chip ID; from abroad only
+  // if "Türkiye'de ikamet ediyor (Tam Mükellef)". Foreigners: branch only.
+  // https://tacirler.com.tr/mobilden-goruntulu-gorusme-ile-hesabinizi-hemen-acin
+  tacirleryatrm: { countries: ["TR"] },
+  // "Any eligible resident individual with valid KYC documents can open a Demat
+  // account" (PAN, Aadhaar-linked mobile OTP); US and Canadian persons refused.
+  // https://www.bajajbroking.in/open-demat-account
+  bajaj: { countries: ["IN"] },
+  // Bonanza IFSC's US stocks product is "For Resident Indians"; its NRI/foreign
+  // product (NSE IX/INX, not in the catalogue) excludes US & Canada.
+  // https://bonanzaifsc.com/
+  bonanza: { countries: ["IN"] },
+  // Residents open online with PAN, Aadhaar and eKYC; NRI page: "a dedicated
+  // service for NRIs residing in the U.A.E, Bahrain, Kuwait and Oman".
+  // https://www.geojit.com/open-demat-account
+  // https://www.geojit.com/nri-services
+  geojit: { countries: ["IN", "AE", "BH", "KW", "OM"] },
+  // Online opening via JM's DIY eKYC (BlinkX stack, Aadhaar-linked mobile); no
+  // NRI route or country named on the site.
+  // https://register.jmfonline.in/diy/opendemataccount
+  jmfinancial: { countries: ["IN"] },
+  // Resident eKYC online; support says NRIs can open (NRE/PIS or NRO), but
+  // offline with physical presence; no country named.
+  // https://lakshmishree.com/support/knowledgebase/articles/can-nris-open-an-account-with-lakshmishree
+  lakshmishree: { countries: ["IN"] },
+  // SBICAP Securities: resident online opening; NRI 3-in-1 (PIS/NRE) also
+  // offered, no country of residence named.
+  // https://www.sbisecurities.in/
+  sbisecurities: { countries: ["IN"] },
+  // Indian broker introducing to Saxo; the international page names no
+  // eligible client country; NRI desk exists, no country list found.
+  // https://smcindiaonline.com/international-broking/
+  smcglobal: { countries: ["IN"] },
+  // Hebrew-only digital onboarding, "זכרו להצטייד בתעודת הזהות שלכם" (Israeli
+  // ID card); deposit from own bank account via the bank app.
+  // https://www.as-invest.co.il/trade/
+  altshuler: { countries: ["IL"] },
+  // App opening: "תושב ישראל מעל גיל 16" (Israeli resident over 16); not a US
+  // citizen or resident (green card holders included).
+  // https://www.mercantile.co.il/private/accounts/app-open-an-account/
+  mercantile: { countries: ["IL"] },
+  // Online opening needs a My Number document, which only Japanese residents
+  // hold; foreign nationals send a 在留カード (residence card).
+  // https://www.daiwa.jp/open/explain/honnin.html
+  daiwa: { countries: ["JP"] },
+  // FAQ: apply on the site and finish by post or at an Ogaki Kyoritsu Bank
+  // branch with a My Number and a bank passbook. Japanese only.
+  // https://www.okb-sec.co.jp/faq/
+  okb: { countries: ["JP"] },
+  // "口座開設は、日本国内に居住されている個人のお客さまに限ります".
+  // https://www.smbcnikko.co.jp/apply/
+  smbcnikko: { countries: ["JP"] },
+  // FAQ: real-name check by 주민등록증/운전면허증, "현재는 내국인만 거래가 가능";
+  // Korean phone and Korean bank account required.
+  // https://www.kakaopaysec.com/customer/faq/dynamicPage.do
+  kakaopay: { countries: ["KR"] },
+  // Remote opening for "만 19세 이상 대한민국 국적의 개인"; foreigners use a
+  // 외국인등록증 (alien registration card) at a branch.
+  // https://fundsupermarket.wooriib.com/fmu/FMU8020601/main.do
+  woori: { countries: ["KR"] },
+  // Help: "Selfwealth can only support clients who are Australian residents
+  // for tax purposes"; an Australian residential address is required.
+  // https://help.selfwealth.com.au/hc/en-au/articles/360040402972
+  selfwealth: { countries: ["AU"] },
+  // T&Cs: "You warrant that you have a current Australian residential
+  // address".
+  // https://docs.superhero.com.au/guides/Superhero+Terms+Conditions.pdf
+  superhero: { countries: ["AU"] },
+  // Opening in person at the Sheung Wan office with an HKID, or an ID or
+  // passport for non-permanent residents. No country list.
+  // https://www.austrax.com/customer-service/account-opening
+  innovax: { countries: ["HK"] },
+  // Help: "available for residents of Saudi Arabia"; needs a National ID or
+  // Iqama and current Saudi residence.
+  // https://help.investsky.com/en/articles/10256604-who-can-sign-up-for-investsky
+  investsky: { countries: ["SA"] },
+  // FAQ: personal ID, proof of residence and of employment, opened at the
+  // Ramallah or Nablus office or a Palestine Investment Bank branch.
+  // https://gsc.ps/en/content/الأسئلة-الشائعة
+  globalsecurities: { countries: ["PS"] },
+  // Documents: Greek ID card, tax notice (εκκαθαριστικό), TAXISNET, AMKA;
+  // signatures certified via KEP or gov.gr. Greek-only site.
+  // https://www.hellenicamerican.gr/wp-content/uploads/2023/03/ΔΙΚΑΙΟΛΟΓΗΤΙΚΑ-ΓΙΑ-ΑΝΟΙΓΜΑ-ΚΩΔΙΚΟΥ-ΦΥΣΙΚΟΥ-ΠΡΟΣΩΠΟΥ-k.pdf
+  hellenicamerican: { countries: ["GR"] },
+  // Terms: no service to "residents of certain jurisdictions such as" the US,
+  // Iran, North Korea and Myanmar. English and Montenegrin sign-up, phone
+  // picker with every country (default ME); "payment cards of foreign issuing
+  // banks" accepted for deposits.
+  // https://tfcapital.me/en/usa-berza/register
+  // https://tfcapital.me/en/termsConditions
+  tfcapital: { all: true, except: ["US", "IR", "KP", "MM"] },
+  // Diaspora FAQ: "Can I invest in Jamaica if I live abroad? Yes."; funding
+  // in USD, CAD, GBP, JMD; offices in New York, Florida, Canada and the UK.
+  // https://vmdiaspora.myvmgroup.com/faqs/
+  vmwealth: { countries: ["JM", "US", "CA", "GB"] },
+  // Nigerian app (NGX orders via CardinalStone); funding is "BANK DEPOSITS"
+  // or "NAIRA CARD DEPOSITS", fees in naira only.
+  // https://yochaa.com/fees
+  yochaa: { countries: ["NG"] },
 };
 
 // Names added on 2026-10-22 so that a broker's own country can be picked
@@ -3506,8 +5709,14 @@ export function stampResidency(row) {
   return row;
 }
 
+// The site lists shares, exchange-traded products and crypto, not funds:
+// rows typed FUND (closed-end and other listed funds) are dropped here, in
+// place, for every catalogue (owner, 2026-10-25).
 export function stampRows(rows) {
   if (!Array.isArray(rows)) return rows;
+  let kept = 0;
+  for (const row of rows) if (String(row?.type || "").toUpperCase() !== "FUND") rows[kept++] = row;
+  rows.length = kept;
   for (const row of rows) stampResidency(row);
   fillListIsins(rows);
   return rows;

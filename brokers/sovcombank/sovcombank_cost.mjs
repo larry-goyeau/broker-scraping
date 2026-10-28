@@ -22,7 +22,7 @@
 // разделе «Что купить» без комиссии"
 // (https://invest.sovcombank.ru/spec/investicii-bez-komissii). The shelf is
 // inside the app and not published, so a fund line pays the plan rate and
-// carries "Fees might be x% lower." (both legs).
+// carries "Fees might be 100% lower." (both legs free).
 //
 //   node brokers/sovcombank/sovcombank_cost.mjs SBER MISX RUB --shares=10 --price=286
 //   node brokers/sovcombank/sovcombank_cost.mjs SBER MISX RUB --shares=10 --price=286 --plan=halvaf
@@ -41,7 +41,7 @@ function flat(rate, name) {
       buyRub: side,
       sellRub: side,
       levyRub: 0,
-      remark: etf ? `Fees might be ${Number((2 * rate * 100).toFixed(2))}% lower.` : "",
+      remark: etf ? "Fees might be 100% lower." : "",
       basis:
         `tarif «${name}» : ${String(rate * 100).replace(".", ",")} % de chaque opération, frais de bourse compris ` +
         `(« включая комиссию биржи ») ; les fonds de l'étagère « 0% комиссия » de l'application ne sont pas publiés.`,

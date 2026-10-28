@@ -16,7 +16,7 @@ import { internRow } from "./listingIndex.mjs";
 import { isObligation } from "./obligation.mjs";
 import { resolveVenue } from "./spreads/venues.mjs";
 import { accepts, COUNTRY_NAMES, countryOptions, listingAccepts, stampResidency, EEA, EU, GCC } from "./accepted.mjs";
-import { depositHas, splitByPlan, currencyOptions } from "./deposits.mjs";
+import { cashLines, depositHas, splitByPlan, currencyOptions } from "./deposits.mjs";
 import { toUsd, usdPer } from "./fx.mjs";
 import { prices, ensureFresh } from "./assets/prices.mjs";
 import { ALIASES, US_BROKERS, aliasOf, qOf, routingOf } from "./spreads/rule606.mjs";
@@ -30,8 +30,12 @@ const HTML = new URL("front.html", import.meta.url);
 const METHOD = new URL("method.html", import.meta.url);
 const LIST = new URL("broker-list.json", import.meta.url);
 
+// Accents are stripped before the rest goes: "Bursátil" is "bursatil", not
+// "burstil", so omegabursatil finds Omega Bursátil.
 function slug(value) {
   return String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "");
 }
@@ -190,6 +194,45 @@ const FOLDER_NAME = {
   rhbid: "RHB Sekuritas",
   alwathbah: "Al Wathbah",
   avangard: "Avangard",
+  // 2026-10-27: shorter display names (owner: short, plan still identifiable).
+  one618: "ONE618",
+  cgvm: "CGVM",
+  dirigofederalcre: "Dirigo FCU",
+  usbancorpadvisor: "U.S. Bancorp",
+  centralnational: "Central National Bank",
+  ybsekuritasyakin: "YB Sekuritas",
+  mittelbrandenbur: "MBS (S-Neo)",
+  cascofederalcred: "Casco FCU",
+  investitsionnaya: "Investpalata",
+  koreaindonesia: "KIS Indonesia",
+  farmerstrust: "Farmers Bank & Trust",
+  sparundleihkassech: "SLB Bucheggberg",
+  roq: "ROQ Markets",
+  imnepal: "Investment Management Nepal",
+  clientissparundl: "Clientis Thayngen",
+  volksbankinschau: "Volksbank Schaumburg",
+  societegeneralew: "SG Capital West Africa",
+  dinosauriobursat: "Dinosaurio Bursátil",
+  onenevadacreditu: "One Nevada CU",
+  midminnesotafede: "Mid Minnesota FCU",
+  lakecity: "Lake City Bank",
+  centralchinahk: "Central China",
+  bocomhk: "BOCOM HK",
+  bancapopolaredis: "BPS (Suisse)",
+  actinvertrade: "Actinver Trade",
+  stadtsparkassedu: "SSK Düsseldorf (S-Neo)",
+  merinvest: "Merinvest",
+  horizonutahfeder: "Horizon Utah FCU",
+  crewstrust: "Crews Bank & Trust",
+  ddkc: "Dipshikha",
+  volksbankraiffei2: "Volksbank Dachau",
+  miraeindonesia: "Mirae Asset Indonesia",
+  elebank: "EleBank",
+  peninsulafederal: "Peninsula FCU",
+  bluestonefederal: "Bluestone FCU",
+  volksbankraiffei: "Volksbank Nordoberpfalz",
+  vereinigtevolksbde: "Vereinigte Volksbank Reinheim",
+  vereinigtevrkuru: "VR Bank Kur- und Rheinpfalz",
 };
 
 // Display name above, broker-list row below, when the two differ.
@@ -307,6 +350,13 @@ const FOLDER_LIST = {
   otpbankahr: "OTP banka Hrvatska",
   // 2026-10-24 catalogues whose folder name misses their row or hits another.
   rhbid: "RHB Sekuritas Indonesia",
+  // The prefix match would find Ualá (Argentina).
+  ualamexico: "Ualá México (Acciones)",
+  // 2026-10-25 catalogues whose folder name misses their row.
+  bocomhk: "Bank of Communications (Hong Kong)",
+  centralchinahk: "Central China International (中州國際)",
+  interbr: "Inter Invest",
+  xpbr: "XP Investimentos",
   hamagin: "Hamagin Tokai Tokyo Securities",
   netwealth: "Netwealth Share Trading",
   gotyme: "GoTyme Bank",
@@ -322,6 +372,156 @@ const FOLDER_LIST = {
   dakshinkali: "Dakshinkali",
   // "Sigma Securities" is another broker; the folder takes "Sigma".
   sigmacap: "Sigma",
+  // 2026-10-26 single-place cost files whose folder name misses their row or hits another.
+  hsbcus: "HSBC Securities (USA)",
+  chimeus: "Chime Invest",
+  desertcreditunio: "Desert Financial Credit Union",
+  crewstrust: "Crews Bank & Trust (Crews Invest)",
+  farmerstrust: "Farmers Bank & Trust (FB&T Unifimoney)",
+  mashrequsetfs: "Mashreq US Stocks & ETFs",
+  webullsouthafric: "Webull South Africa",
+  aletihad: "Bank al Etihad",
+  webullmexico: "Webull México",
+  eckernforder: "Eckernförder Bank",
+  psdrheinneckarsa: "PSD Bank RheinNeckarSaar",
+  volksbankkolnbon: "Volksbank Köln Bonn",
+  volksbankegdiege: "Volksbank eG – Die Gestalterbank",
+  volksbankinostwe: "Volksbank in Ostwestfalen",
+  volksbankdarmsta: "Volksbank Darmstadt Mainz",
+  vrrheinahreifel: "VR Bank RheinAhrEifel",
+  vrbonnrheinsieg: "VR-Bank Bonn Rhein-Sieg",
+  vereinigtevrkuru: "Vereinigte VR Bank Kur- und Rheinpfalz",
+  vrludwigsburg: "VR-Bank Ludwigsburg",
+  vrstarnbergzugsp: "VR Bank Starnberg-Zugspitze",
+  vrnord: "VR Bank Nord",
+  volksbanksauerla: "Volksbank Sauerland",
+  vrrheinneckar: "VR Bank Rhein-Neckar",
+  volksbankbodense: "Volksbank Bodensee-Oberschwaben",
+  volksbankwestmun: "Volksbank Westmünsterland",
+  volksbankinschau: "Volksbank in Schaumburg und Nienburg",
+  volksbanktrierei: "Volksbank Trier Eifel",
+  vrheilbronnschwa: "VR Bank Heilbronn Schwäbisch Hall",
+  volksbankraiffei: "Volksbank Raiffeisenbank Nordoberpfalz",
+  volksbankheidelb: "Volksbank Heidelberg-Neckartal",
+  vereinigtevolksbde: "Vereinigte Volksbank Raiffeisenbank (Reinheim)",
+  volksbankinsudwe: "Volksbank in Südwestfalen",
+  volksbankgronaua: "Volksbank Gronau-Ahaus",
+  vraugsburgostall: "VR Bank Augsburg-Ostallgäu",
+  vrrottalinn: "VR-Bank Rottal-Inn",
+  vrimsudlichenfra: "VR Bank im südlichen Franken",
+  volksbankkurpfal: "Volksbank Kurpfalz",
+  volksbankimweste: "Volksbank im Westen",
+  vrinholstein: "VR Bank in Holstein",
+  vrwestfalenlippe: "VR Bank Westfalen-Lippe",
+  volksbankzollern: "Volksbank Zollernalb",
+  emslandischevolk: "Emsländische Volksbank",
+  volksbanknieders: "Volksbank Niedersachsen-Mitte",
+  munchner: "Münchner Bank",
+  vrdonauoberschwa: "VR Bank Donau-Oberschwaben",
+  volksbankanderni: "Volksbank an der Niers",
+  vrsudpfalz: "VR Bank Südpfalz",
+  volksbankegwolfe: "Volksbank eG Wolfenbüttel",
+  vrkemptenoberall: "VR Bank Kempten-Oberallgäu",
+  volksbankraiffeide: "Volksbank Raiffeisenbank Würzburg",
+  vrneuulm: "VR-Bank Neu-Ulm",
+  volksbankraiffei2: "Volksbank Raiffeisenbank Dachau",
+  vrmunchenland: "VR Bank München Land",
+  uala: "Ualá",
+  california: "La California",
+  dinosauriobursat: "Dinosaurio Bursátil (Paez Bursátil)",
+  torontoinversion: "Toronto Inversiones (BACS)",
+  valiantbursatil: "Valiant Bursátil",
+  beneditbursatil: "Benedit Bursátil",
+  sjbbursatil: "SJB Bursátil",
+  valoresar: "AG Valores",
+  omegabursatil: "Omega Bursátil",
+  bairesbursatil: "Baires Bursátil",
+  alvarezycia: "Álvarez y Cía",
+  portfolio: "Portfolio Investment (PISA)",
+  futurobursatil: "Futuro Bursátil",
+  szwarccia: "Szwarc & Cía (SZ Bursátil)",
+  fernandezlaya: "Fernández Laya",
+  itauion: "Itaú íon",
+  agorabr: "Ágora (Bradesco)",
+  caixaacoesonline: "CAIXA Ações Online",
+  miraebrasil: "Mirae Asset Brasil",
+  imnepal: "Investment Management Nepal Pvt. Ltd.",
+  vision: "Vision Securities",
+  abcnp: "ABC Securities",
+  midas: "Midas Stock Broking Company",
+  linchmarket: "Linch Stock Market",
+  stoxkarts: "Stoxkarts Securities",
+  himalayannp: "Himalayan Securities",
+  aek1826: "AEK BANK 1826",
+  bancapopolaredis: "Banca Popolare di Sondrio (Suisse)",
+  zimmerberg: "Bank Zimmerberg",
+  eki: "Bank EKI",
+  clientisoberaarg: "Clientis Bank Oberaargau",
+  clientisthur: "Clientis Bank Thur",
+  clientisimthal: "Clientis Bank im Thal",
+  gantrisch: "Bank Gantrisch",
+  slm: "Bank SLM",
+  sparundleihkassech: "Spar- und Leihkasse Bucheggberg (SLB)",
+  eek: "Bank EEK",
+  stratejimenkulge: "Strateji Menkul Değerler",
+  baskentmenkul: "Başkent Menkul",
+  dunyakatlmbankas: "Dünya Katılım Bankası",
+  metromenkulgerle: "Metro Menkul Değerler",
+  miraeindonesia: "Mirae Asset Sekuritas Indonesia",
+  victoriaindonesi: "Victoria Sekuritas Indonesia",
+  kiwoomindonesia: "Kiwoom Sekuritas Indonesia",
+  yuantaindonesia: "Yuanta Sekuritas Indonesia",
+  koreaindonesia: "Korea Investment & Sekuritas Indonesia",
+  fortune: "Fortune Securities",
+  levoberezhny: "Bank Levoberezhny",
+  primorye: "Bank Primorye",
+  rossiya: "Bank Rossiya",
+  saintpetersburg: "Bank Saint Petersburg (BSPB Investments)",
+  graubundnerkanto: "Graubündner Kantonalbank",
+  bsu: "Bank BSU",
+  bbobrienzoberhas: "BBO Bank Brienz Oberhasli",
+  stadtsparkassedu: "Stadtsparkasse Düsseldorf (S-Neo)",
+  societegeneralew: "Société Générale Capital Securities West Africa",
+  attijariwestafri: "Attijari Securities West Africa",
+  primehk: "Prime Securities Ltd",
+  publichk: "Public Bank (Hong Kong)",
+  asialk: "Asia Securities",
+  trustlk: "Capital TRUST Securities",
+  invexcasabolsa: "INVEX Casa de Bolsa",
+  gorostiagabursat: "Gorostiaga Bursátil",
+  deutscheespana: "Deutsche Bank España",
+  kgithailand: "KGI Securities Thailand",
+  landhouses: "Land and Houses Securities",
+  mercosurcasabols: "Mercosur Casa de Bolsa",
+  stateracasabolsa: "Statera Casa de Bolsa",
+  percasabolsa: "Per Capital Casa de Bolsa",
+  bibimbistumessen: "BIB - Bank im Bistum Essen",
+  freedomuzbekista: "Freedom Broker Uzbekistan",
+  bancapiemonte: "Banca del Piemonte",
+  unicredithungary: "UniCredit Bank Hungary",
+  raiffeisenba: "Raiffeisen CAPITAL",
+  progresion: "Progresión",
+  maioranocia: "Maiorano & Cía",
+  // 2026-10-27: list rows of the folders renamed in FOLDER_NAME that day.
+  one618: "ONE618 Financial Services (ex Consultatio Investments)",
+  cgvm: "CGVM (Compañía General de Valores Mobiliarios)",
+  dirigofederalcre: "Dirigo Federal Credit Union (Dirigo Investing)",
+  usbancorpadvisor: "U.S. Bancorp Advisors Self-Directed Investing",
+  centralnational: "Central National Bank (Digital Investing)",
+  ybsekuritasyakin: "YB Sekuritas (Yakin Bertumbuh Sekuritas)",
+  mittelbrandenbur: "Mittelbrandenburgische Sparkasse (S-Neo)",
+  cascofederalcred: "Casco Federal Credit Union (CascoINVEST)",
+  investitsionnaya: "Investitsionnaya Palata (Investpalata)",
+  roq: "ROQ Markets (ROQ Capital, ex-Armbrok)",
+  clientissparundl: "Clientis Spar- und Leihkasse Thayngen",
+  onenevadacreditu: "One Nevada Credit Union (OneNVest)",
+  midminnesotafede: "Mid Minnesota Federal Credit Union",
+  lakecity: "Lake City Bank (Digital Investing)",
+  actinvertrade: "Actinver Trade (formerly Bursanet)",
+  horizonutahfeder: "Horizon Utah Federal Credit Union",
+  elebank: "EleBank (formerly Airstar Bank)",
+  peninsulafederal: "Peninsula Federal Credit Union",
+  bluestonefederal: "Bluestone Federal Credit Union",
 };
 
 // The page drops the word "Securities" from a broker's name: "Ando
@@ -376,6 +576,8 @@ function indexStamp() {
     ...catalogueFiles(),
     fileURLToPath(new URL("./spreads/venues.mjs", import.meta.url)),
     fileURLToPath(new URL("./accepted.mjs", import.meta.url)),
+    // The cash currencies decide which lines of a multi-currency broker stay.
+    fileURLToPath(new URL("./deposits.mjs", import.meta.url)),
     fileURLToPath(new URL("./assets/stocks.csv", import.meta.url)),
     fileURLToPath(new URL("./assets/etfs.csv", import.meta.url)),
   ];
@@ -388,7 +590,7 @@ function indexStamp() {
     }
   });
   // The format line makes an index written by an older front.mjs miss.
-  return ["format\t2", ...lines].join("\n");
+  return ["format\t3", ...lines].join("\n");
 }
 
 function loadIndexCache(stamp) {
@@ -527,7 +729,9 @@ for (const file of catalogueFiles()) {
   const folder = file.split("/").slice(-2, -1)[0];
   if (!brokers.has(folder)) brokers.set(folder, { folder, ...metaFor(folder, list) });
   const parsed = JSON.parse(fs.readFileSync(file, "utf8"));
-  const rows = Array.isArray(parsed) ? parsed : parsed.rows || parsed.instruments || [];
+  // A multi-currency broker keeps a title in its cash currencies only
+  // (deposits.mjs cashLines).
+  const rows = cashLines(folder, Array.isArray(parsed) ? parsed : parsed.rows || parsed.instruments || []);
   for (const row of rows) {
     if (isObligation(row.name || row.label, row.type)) {
       obligations += 1;
@@ -1791,6 +1995,221 @@ const SPLIT_PLANS = {
     { id: "investor", label: "Investor" },
     { id: "strateg", label: "Strategist" },
     { id: "day", label: "Unified Daily" },
+  ] },
+  // 2026-10-26 cost files.
+  bajaj: { brand: "Bajaj Broking", plans: [
+    { id: "freedom", label: "Freedom Pack" },
+    { id: "professional", label: "Professional Pack" },
+    { id: "basic", label: "US Basic" },
+    { id: "premium", label: "US Premium" },
+  ] },
+  geojit: { brand: "Geojit", plans: [
+    { id: "ginvestmax", label: "G-Invest Max" },
+    { id: "gtrade", label: "G-Trade Max / Cash" },
+  ] },
+  jmfinancial: { brand: "JM Financial", plans: [
+    { id: "payperorder", label: "Pay-Per-Order" },
+    { id: "subscription", label: "Subscription" },
+  ] },
+  sbisecurities: { brand: "SBI Securities", plans: [
+    { id: "suvidha", label: "SUVIDHA" },
+    { id: "pro749", label: "PRO 749" },
+    { id: "plan499", label: "Plan 499" },
+    { id: "oiop3k", label: "OIOP-3K" },
+    { id: "oiop10k", label: "OIOP-10K" },
+    { id: "women", label: "Women Plan" },
+    { id: "prozero", label: "PRO ZERO" },
+  ] },
+  smcglobal: { brand: "SMC Global", plans: [
+    { id: "nirvana", label: "Nirvana" },
+    { id: "alphatrader", label: "Alpha Trader" },
+  ] },
+  shkdirect: { brand: "SHK Direct", plans: [
+    { id: "standard", label: "Basic Commission" },
+    { id: "aycpro", label: "AYCT Pro" },
+  ] },
+  daiwa: { brand: "Daiwa", plans: [
+    { id: "consulting", label: "Consulting course" },
+    { id: "direct", label: "Direct course" },
+    { id: "daily", label: "Direct course, daily flat" },
+  ] },
+  smbcnikko: { brand: "SMBC Nikko", plans: [
+    { id: "direct", label: "Direct course" },
+    { id: "sogo", label: "Sogo course" },
+  ] },
+  triico: { brand: "trii", plans: [
+    { id: "standard", label: "Standard" },
+    { id: "triipro", label: "triipro" },
+  ] },
+  // 2026-10-26 single-place brokers with plans of different fees (ids read by each cost file).
+  volksbankkolnbon: { brand: "Volksbank Köln Bonn", plans: [
+    { id: "vobadepot", label: "VobaDepot" },
+    { id: "premium", label: "VobaDepot Premium" },
+    { id: "meindepot", label: "meinDepot (≤30)" },
+  ] },
+  kreissparkasseos: { brand: "KSK Ostalb", plans: [
+    { id: "trading", label: "OstalbDepot Trading" },
+    { id: "ostalbdepot", label: "OstalbDepot" },
+    { id: "young", label: "OstalbDepot Young RED (≤30)" },
+  ] },
+  vereinigtevrkuru: { brand: "VR Bank Kur- und Rheinpfalz", plans: [
+    { id: "direkt", label: "Direkt" },
+    { id: "direktplus", label: "Direkt Plus" },
+  ] },
+  vrludwigsburg: { brand: "VR-Bank Ludwigsburg", plans: [
+    { id: "standard", label: "meinDepot 25" },
+    { id: "meindepot", label: "meinDepot (≤30)" },
+  ] },
+  vereinigtevolksb: { brand: "Vereinigte Volksbanken", plans: [
+    { id: "standard", label: "Wertpapierdepot" },
+    { id: "meindepot", label: "meinDepot (≤30)" },
+  ] },
+  vrstarnbergzugsp: { brand: "VR Bank Starnberg", plans: [
+    { id: "standard", label: "Depot" },
+    { id: "meindepot", label: "meinDepot (≤30)" },
+  ] },
+  volksbankheidelb: { brand: "Volksbank Heidelberg", plans: [
+    { id: "depot", label: "Depot" },
+    { id: "meindepot", label: "meinDepot (≤30)" },
+  ] },
+  volksbankinsudwe: { brand: "Volksbank Südwestfalen", plans: [
+    { id: "classic", label: "meinDepot Classic" },
+    { id: "meindepot", label: "meinDepot (18–30)" },
+  ] },
+  volksbankgronaua: { brand: "Volksbank Gronau-Ahaus", plans: [
+    { id: "klassik", label: "Depot.Klassik" },
+    { id: "online", label: "Depot.Online" },
+    { id: "meindepot", label: "meinDepot (≤30)" },
+  ] },
+  ihrevolksbanknec: { brand: "Ihre Volksbank", plans: [
+    { id: "ihrdepot", label: "IhrDepot" },
+    { id: "meindepot", label: "meinDepot (≤30)" },
+  ] },
+  vraugsburgostall: { brand: "VR Bank Augsburg", plans: [
+    { id: "online", label: "Online" },
+    { id: "meindepot", label: "meinDepot (≤30)" },
+  ] },
+  vrrottalinn: { brand: "VR-Bank Rottal-Inn", plans: [
+    { id: "aktiv", label: "VR Depot aktiv" },
+    { id: "meindepot", label: "meinDepot (≤30)" },
+  ] },
+  volksbankkurpfal: { brand: "Volksbank Kurpfalz", plans: [
+    { id: "standard", label: "Standard" },
+    { id: "meindepot", label: "meinDepot (≤30)" },
+  ] },
+  volksbankimweste: { brand: "Volksbank im Westen", plans: [
+    { id: "direkt", label: "DirektDepot" },
+    { id: "meindepot", label: "meinDepot (≤30)" },
+    { id: "beratung", label: "Beratungsdepot" },
+  ] },
+  vrinholstein: { brand: "VR Bank in Holstein", plans: [
+    { id: "online", label: "Depot" },
+    { id: "meindepot", label: "meinDepot (≤30)" },
+  ] },
+  vrwestfalenlippe: { brand: "VR Bank Westfalen-Lippe", plans: [
+    { id: "online", label: "Depot" },
+    { id: "meindepot", label: "meinDepot (18–26)" },
+  ] },
+  bbr: { brand: "BBR Broker", plans: [
+    { id: "investor", label: "Успешный инвестор" },
+    { id: "pro", label: "Профессиональный трейдер" },
+  ] },
+  agrambrokeri: { brand: "Agram Brokeri", plans: [
+    { id: "model1", label: "Model 1" },
+    { id: "model2", label: "Model 2" },
+  ] },
+  sharenet: { brand: "Sharenet", plans: [
+    { id: "online", label: "Online Trader" },
+    { id: "classic", label: "Classic Trader" },
+  ] },
+  tc2000: { brand: "TC2000 Brokerage", plans: [
+    { id: "small", label: "Small Trader" },
+    { id: "active", label: "Active Trader" },
+  ] },
+  volksbankegdiege: { brand: "Die Gestalterbank", plans: [
+    { id: "online", label: "Online Depot / Classic" },
+    { id: "meindepot", label: "meinDepot (≤30)" },
+  ] },
+  volksbankinostwe: { brand: "Volksbank Ostwestfalen", plans: [
+    { id: "trader", label: "Trader-Depot" },
+    { id: "allinone", label: "All-in-One" },
+  ] },
+  volksbankdarmsta: { brand: "Volksbank Darmstadt", plans: [
+    { id: "direkt", label: "DirektDepot" },
+    { id: "meindepot", label: "meinDepot (≤30)" },
+  ] },
+  vrrheinahreifel: { brand: "VR Bank RheinAhrEifel", plans: [
+    { id: "online", label: "Online" },
+    { id: "klassik", label: "Klassik" },
+    { id: "premium", label: "Premium" },
+    { id: "meindepot", label: "meinDepot (≤30)" },
+  ] },
+  vrnord: { brand: "VR Bank Nord", plans: [
+    { id: "online", label: "Online-Brokerage" },
+    { id: "meindepot", label: "meinDepot (18–30)" },
+  ] },
+  vrteilhaberbankm: { brand: "VR TeilhaberBank", plans: [
+    { id: "direkt", label: "VR Depot Direkt" },
+    { id: "meindepot", label: "meinDepot (≤30)" },
+  ] },
+  volksbanksauerla: { brand: "Volksbank Sauerland", plans: [
+    { id: "online", label: "OnlineDepot" },
+    { id: "beratung", label: "BeratungsDepot" },
+    { id: "meindepot", label: "Mein.Depot (≤26)" },
+  ] },
+  vrrheinneckar: { brand: "VR Bank Rhein-Neckar", plans: [
+    { id: "basis", label: "Basis" },
+    { id: "plus25", label: "Plus 25" },
+    { id: "premium50", label: "Premium 50" },
+    { id: "meindepot", label: "meinDepot (≤30)" },
+  ] },
+  volksbankbodense: { brand: "Volksbank Bodensee", plans: [
+    { id: "online", label: "OnlineDepot" },
+    { id: "meindepot", label: "meinDepot (≤30)" },
+  ] },
+  volksbankwestmun: { brand: "Volksbank Westmünsterland", plans: [
+    { id: "direkt", label: "Direkt" },
+    { id: "komfort", label: "Komfort" },
+    { id: "premium", label: "Premium" },
+  ] },
+  volksbanktrierei: { brand: "Volksbank Trier", plans: [
+    { id: "online", label: "Depot Online" },
+    { id: "meindepot", label: "MeinDepot (≤30)" },
+  ] },
+  vrheilbronnschwa: { brand: "VR Bank Heilbronn", plans: [
+    { id: "standard", label: "VR-Depot" },
+    { id: "meindepot", label: "meinDepot (≤30)" },
+  ] },
+  vrsudpfalz: { brand: "VR Bank Südpfalz", plans: [
+    { id: "direkt", label: "meinDepot Direkt" },
+    { id: "vieltrader", label: "meinDepot Vieltrader" },
+    { id: "easy", label: "meinDepot Easy (≤30)" },
+  ] },
+  volksbankegwolfe: { brand: "Volksbank Wolfenbüttel", plans: [
+    { id: "privatdepot", label: "PrivatDepot" },
+    { id: "meindepot", label: "meinDepot (≤30)" },
+  ] },
+  volksbankraiffeide: { brand: "Volksbank Würzburg", plans: [
+    { id: "depotonline", label: "DepotOnline" },
+    { id: "meindepot", label: "meinDepot (≤30)" },
+  ] },
+  vrneuulm: { brand: "VR-Bank Neu-Ulm", plans: [
+    { id: "klassik", label: "meinDepot Klassik" },
+    { id: "jungeleute", label: "JungeLeute (≤26)" },
+  ] },
+  alhabib: { brand: "AL Habib", plans: [
+    { id: "basic", label: "GROW Basic" },
+    { id: "premium", label: "GROW Premium" },
+  ] },
+  publichk: { brand: "Public Bank", plans: [
+    { id: "hk", label: "Hong Kong customers" },
+    { id: "overseas", label: "Overseas customers" },
+  ] },
+  plummoneycy: { brand: "Plum Money CY", plans: [
+    { id: "basic", label: "basic" },
+    { id: "pro", label: "pro" },
+    { id: "boost", label: "boost" },
+    { id: "premium", label: "premium" },
   ] },
 };
 

@@ -11,7 +11,8 @@
 //              …) 0.15% -0.2% of trading value", stocks, fund units and
 //              covered warrants. The sheet does not say which client
 //              pays which end, so the figure is the top of the range,
-//              0.20%, and the remark is the gap to the bottom. Other
+//              0.20%, and the remark is the bottom as a cut of it
+//              (0.20% → 0.15% = 25% lower). Other
 //              channels (0.25% under 300 million dong a day, 0.20% from
 //              there) are not this ticket. KB Bestie and KB Zero Fee are
 //              time-limited offers, not this sheet.
@@ -49,7 +50,7 @@ const SCHEDULE = {
   rate: () => TOP,
   basis: "ordre en ligne (KB Buddy), haut de la fourchette 0,15 % à 0,2 % du barème du 1er août 2025",
   remark: [
-    `Online commission can be ${Number(((TOP - BOTTOM) * 100).toFixed(2))}% lower.`,
+    `Online commission can be ${Math.round(((TOP - BOTTOM) / TOP) * 100)}% lower.`,
     "Custody is 0.3 VND a share a month.",
   ].join("\n"),
   saleFee: perShareOnSale(0.5, { max: 500_000 }),

@@ -50,7 +50,8 @@
 //
 // In the total: the book, courtage both ways (brokerFees), and the bourse
 // commission plus VAT on both lines (réglementaire). In the remark: the
-// 0.4 % bottom of the courtage range and the web subscription.
+// 0.4 % bottom of the courtage range, as a cut of the 0.8 % courtage
+// ("Fees might be 50% lower"), and the web subscription.
 // Hors-cote lines (group 13) are N/A, see above.
 // The Bourse de Tunis book is not stored, so the total stays unknown until
 // it is; brokerFees is still given.
@@ -81,7 +82,7 @@ const CTB_CAP = 40000;
 const VAT = 0.19;
 const CASH = "TND";
 const HORS_COTE = "13";
-const REMARK = `Fees might be ${((COURTAGE - COURTAGE_LOW) * (1 + VAT) * 2 * 100).toFixed(2)}% lower. Web platform 10 TND a month.`;
+const REMARK = `Fees might be ${Math.round((100 * (COURTAGE - COURTAGE_LOW)) / COURTAGE)}% lower. Web platform 10 TND a month.`;
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];

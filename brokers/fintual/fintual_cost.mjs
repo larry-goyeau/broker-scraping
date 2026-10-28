@@ -77,10 +77,7 @@ const isOverTheCounter = (row) => /^(OTC|PINK)/i.test(String(row?.exchange || ""
 const FX_ONE_WAY = PESOS_PER_DOLLAR * usdPer("CLP");
 const FX_PCT = Number((FX_ONE_WAY * 100).toFixed(2));
 const BASE = "CLP";
-const REMARK = [
-  "The first 10 orders each month have no commission.",
-  "From the 11th, 0.1% of the order.",
-].join("\n");
+const REMARK = "If more than 10 orders a month, fees are 0.1% of the order.";
 const remarkOf = (held, currency) => (held ? `${REMARK}\nFX ${FX_PCT}% when cash ≠ ${listingCash(currency)}.` : REMARK);
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;

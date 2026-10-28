@@ -8,7 +8,8 @@
 //   Trading fee     0.30% of the amount, minimum $0.10 a side. Prestige
 //                   is 0.20% on the same minimum. Prestige needs $7,000
 //                   in the account or $32,000 traded in 30 days, so the
-//                   ticket uses the regular rate.
+//                   ticket uses the regular rate; the remark gives
+//                   Prestige as a cut of it (0.10 / 0.30 = 33%).
 //                   https://help.heygotrade.com/id/articles/9776551-apa-syarat-dan-keuntungan-menjadi-gotrade-prestige
 //   JFX             0.05% of the amount, at most $0.10 a side. Rounded
 //                   to the nearest cent.
@@ -62,7 +63,7 @@ const SEC = 0.0000206;
 const TAF = 0.000195;
 const TAF_CAP = 9.79;
 const CAT = 0.000003;
-const REMARK = "Prestige is 0.1% lower, from $7,000 or $32,000 traded in 30 days.\nFX 0.25% to 0.35% when cash ≠ USD.";
+const REMARK = "Prestige fees are 33% lower, from $7,000 or $32,000 traded in 30 days.\nFX 0.25% to 0.35% when cash ≠ USD.";
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
 const rows = Array.isArray(catalogue) ? catalogue : catalogue?.rows || [];

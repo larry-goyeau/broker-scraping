@@ -11,8 +11,8 @@
 //     «Базовый»; 0.20% «Серебряный», 0.15% «Золотой». The level comes
 //     from the client's activity under the bank's «Мультикарта» package
 //     (note *); without it the client is «Базовый». The row takes
-//     «Базовый»; the Gold rate is the remark "Fees might be 0.2% lower."
-//     (0.10% less on each leg).
+//     «Базовый»; the Gold rate is the remark "Fees might be 40% lower."
+//     (0.15% for 0.25% on each leg).
 //   Профессиональный, sheet prof.pdf: the day's turnover on the venue up to
 //     1 million RUB 0.045%, to 10 million 0.035%, to 50 million 0.025%,
 //     above 0.018%. The day's turnover prices all of it; a same-day round
@@ -78,7 +78,7 @@ export const roundTrip = makeRoundTrip({
           buyRub: side,
           sellRub: side,
           levyRub,
-          remark: `Fees might be ${Number((2 * (ONLINE_RATE - ONLINE_GOLD) * 100).toFixed(2))}% lower.`,
+          remark: `Fees might be ${Math.round((100 * (ONLINE_RATE - ONLINE_GOLD)) / ONLINE_RATE)}% lower.`,
           basis: `tarif «Мой онлайн», niveau «Базовый» : 0,25 % du chiffre du jour (0,20 % «Серебряный», 0,15 % «Золотой» avec le paquet Мультикарта) ; ${MOEX_BASIS}.`,
         };
       },

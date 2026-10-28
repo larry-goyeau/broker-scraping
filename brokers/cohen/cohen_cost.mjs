@@ -17,7 +17,9 @@
 //                        client pays which rate, so the figure is the 2%
 //                        ceiling, as LDT's and GIO's are, with the 100-peso
 //                        minimum. A dollar line takes the peso equivalent
-//                        of that minimum. The 0.1% floor is the remark.
+//                        of that minimum. The 0.1% floor is the remark, a
+//                        cut of the commission (2% → 0.1% = 95% lower; the
+//                        100-peso minimum binds below about 70 dollars).
 //   IVA                  The commission lines print no IVA; the same sheet
 //                        bills account maintenance "$250 + IVA", and a
 //                        broker's commission on a share or a CEDEAR bears
@@ -75,7 +77,7 @@ const SCHEDULE = {
 const IVA = 0.21;
 const RATE = 0.02;
 const MIN_ARS = 100;
-const REMARK = "Commission can be up to 1.9% lower; the sheet does not say when.";
+const REMARK = "Commission can be up to 95% lower; the sheet does not say when.";
 const MARKET = 0.0005;
 // Buy / sell, pesos per dollar, 2026-10-21 14:57 ART. Half the spread over the mid.
 const MEP = [1546.4, 1547.6];

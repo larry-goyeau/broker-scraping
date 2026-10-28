@@ -1,0 +1,2021 @@
+{
+ "at": "2026-10-24T22:44:11.426Z",
+ "lines": {
+  "AERD-R-A": {
+   "isin": "BA100AERDRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "AGKR-R-A": {
+   "isin": "BA100AGKRRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "ALPR-R-A": {
+   "isin": "BA100ALPRRA0",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Službeno berzansko tržište",
+   "delisted": ""
+  },
+  "ALUM-R-A": {
+   "isin": "BA100ALUMRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "ANGR-R-A": {
+   "isin": "BA100ANGRRA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "APBL-R-B": {
+   "isin": "BA100APBLRB2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Službeno berzansko tržište",
+   "delisted": ""
+  },
+  "ATMK-R-A": {
+   "isin": "BA100ATMKRA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "ATSC-R-A": {
+   "isin": "BA100ATSCRA9",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "ATSR-R-A": {
+   "isin": "BA100ATSRRA7",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "AURO-P-A": {
+   "isin": "BA100AUROPA8",
+   "cfi": "EPNEFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "AUTK-R-A": {
+   "isin": "BA100AUTKRA8",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "AUTR-R-A": {
+   "isin": "BA100AUTRRA3",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "BDLA-R-A": {
+   "isin": "BA100BDLARA0",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "BKMG-R-A": {
+   "isin": "BA100BKMGRA0",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "BMNT-R-A": {
+   "isin": "BA100BMNTRA7",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "BOBS-R-A": {
+   "isin": "BA100BOBSRA0",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "BOKS-R-A": {
+   "isin": "BA100BOKSRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Službeno berzansko tržište",
+   "delisted": ""
+  },
+  "BOSK-R-A": {
+   "isin": "BA100BOSKRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "BRJE-R-A": {
+   "isin": "BA100BRJERA6",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "BSNT-R-A": {
+   "isin": "BA100BSNTRA4",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "BTPR-R-A": {
+   "isin": "BA100BTPRRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "BUDU-R-A": {
+   "isin": "BA100BUDURA9",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "CIPC-R-A": {
+   "isin": "BA100CIPCRA4",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "CIST-R-A": {
+   "isin": "BA100CISTRA2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "CMEG-R-A": {
+   "isin": "BA100CMEGRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "CSGN-R-A": {
+   "isin": "BA100CSGNRA9",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "CTRS-R-A": {
+   "isin": "BA100CTRSRA3",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "CZEL-R-A": {
+   "isin": "BA100CZELRA3",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "DECB-R-A": {
+   "isin": "BA100DECBRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "DEST-R-A": {
+   "isin": "BA100DESTRA9",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Službeno berzansko tržište",
+   "delisted": ""
+  },
+  "DOIN-R-A": {
+   "isin": "BA100DOINRA2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "DPLS-R-A": {
+   "isin": "BA100DPLSRA2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "DRIN-R-A": {
+   "isin": "BA100DRINRA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "DROS-R-A": {
+   "isin": "BA100DROSRA2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "DRTR-R-A": {
+   "isin": "BA100DRTRRA3",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "DRVP-R-A": {
+   "isin": "BA100DRVPRA3",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "DSTC-R-A": {
+   "isin": "BA100DSTCRA3",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "DUVN-R-A": {
+   "isin": "BA100DUVNRA2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "EDPL-R-A": {
+   "isin": "BA100EDPLRA2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Službeno berzansko tržište",
+   "delisted": ""
+  },
+  "EKBL-R-A": {
+   "isin": "BA100EKBLRA7",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Službeno berzansko tržište",
+   "delisted": ""
+  },
+  "EKHC-R-A": {
+   "isin": "BA100EKHCRA3",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Službeno berzansko tržište",
+   "delisted": ""
+  },
+  "EKPL-R-A": {
+   "isin": "BA100EKPLRA7",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "ELBJ-R-A": {
+   "isin": "BA100ELBJRA9",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Službeno berzansko tržište",
+   "delisted": ""
+  },
+  "ELDO-R-A": {
+   "isin": "BA100ELDORA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Službeno berzansko tržište",
+   "delisted": ""
+  },
+  "ELKR-R-A": {
+   "isin": "BA100ELKRRA3",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "ELMT-R-A": {
+   "isin": "BA100ELMTRA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "ELSR-R-A": {
+   "isin": "BA100ELSRRA6",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "FAMO-R-A": {
+   "isin": "BA100FAMORA6",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "FATS-R-A": {
+   "isin": "BA100FATSRA2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "FDIS-R-A": {
+   "isin": "BA100FDISRA9",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "FKLS-R-A": {
+   "isin": "BA100FKLSRA8",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "FKNO-R-A": {
+   "isin": "BA100FKNORA3",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "FRKS-R-A": {
+   "isin": "BA100FRKSRA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "FRTL-R-D": {
+   "isin": "BA100FRTLRD5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "GACK-R-A": {
+   "isin": "BA100GACKRA3",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "GATP-R-A": {
+   "isin": "BA100GATPRA6",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "GCBR-R-A": {
+   "isin": "BA100GCBRRA6",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "GCGR-R-A": {
+   "isin": "BA100GCGRRA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "GEOF-R-A": {
+   "isin": "BA100GEOFRA0",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "GLSG-R-A": {
+   "isin": "BA100GLSGRA4",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "GLSS-R-A": {
+   "isin": "BA100GLSSRA9",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "GLST-R-A": {
+   "isin": "BA100GLSTRA7",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "GNG9-R-A": {
+   "isin": "BA100GNG9RA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "GPIS-R-A": {
+   "isin": "BA100GPISRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "GRAD-R-A": {
+   "isin": "BA100GRADRA6",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "GRDE-R-A": {
+   "isin": "BA100GRDERA8",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "GRDT-R-A": {
+   "isin": "BA100GRDTRA6",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "GRF9-R-A": {
+   "isin": "BA100GRF9RA2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "GRFK-R-A": {
+   "isin": "BA100GRFKRA0",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "GSBT-R-A": {
+   "isin": "BA100GSBTRA8",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "GTPR-R-A": {
+   "isin": "BA100GTPRRA0",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "GUBE-R-A": {
+   "isin": "BA100GUBERA6",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "HDMT-R-A": {
+   "isin": "BA100HDMTRA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "HEDR-R-A": {
+   "isin": "BA100HEDRRA6",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Službeno berzansko tržište",
+   "delisted": ""
+  },
+  "HELV-R-A": {
+   "isin": "BA100HELVRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Službeno berzansko tržište",
+   "delisted": ""
+  },
+  "HEMK-R-A": {
+   "isin": "BA100HEMKRA2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "HETR-R-A": {
+   "isin": "BA100HETRRA2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Službeno berzansko tržište",
+   "delisted": ""
+  },
+  "HPAL-R-A": {
+   "isin": "BA100HPALRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "HTCE-R-A": {
+   "isin": "BA100HTCERA4",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "HTLP-R-A": {
+   "isin": "BA100HTLPRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "IATR-R-A": {
+   "isin": "BA100IATRRA8",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "IEFB-R-A": {
+   "isin": "BA100IEFBRA3",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "IMAK-R-A": {
+   "isin": "BA100IMAKRA8",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "INTE-R-A": {
+   "isin": "BA100INTERA9",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "IPBL-R-A": {
+   "isin": "BA100IPBLRA7",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "IPRJ-R-A": {
+   "isin": "BA100IPRJRA7",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "IZEN-R-A": {
+   "isin": "BA100IZENRA6",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "IZER-R-A": {
+   "isin": "BA100IZERRA7",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "JANJ-R-A": {
+   "isin": "BA100JANJRA6",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "JAPR-R-A": {
+   "isin": "BA100JAPRRA4",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "JDRK-R-A": {
+   "isin": "BA100JDRKRA9",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "JGPB-R-A": {
+   "isin": "BA100JGPBRA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "JGPG-R-A": {
+   "isin": "BA100JGPGRA4",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "JGPR-R-A": {
+   "isin": "BA100JGPRRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "JLLC-R-A": {
+   "isin": "BA100JLLCRA2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "KCTS-R-A": {
+   "isin": "BA100KCTSRA8",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "KDVO-R-A": {
+   "isin": "BA100KDVORA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Službeno berzansko tržište",
+   "delisted": ""
+  },
+  "KLAS-R-A": {
+   "isin": "BA100KLASRA9",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "KMAG-R-A": {
+   "isin": "BA100KMAGRA2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "KMBJ-R-A": {
+   "isin": "BA100KMBJRA4",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "KMCB-R-A": {
+   "isin": "BA100KMCBRA9",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "KMLN-R-A": {
+   "isin": "BA100KMLNRA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "KMMD-R-A": {
+   "isin": "BA100KMMDRA4",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "KMNC-R-A": {
+   "isin": "BA100KMNCRA4",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "KMND-R-A": {
+   "isin": "BA100KMNDRA2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "KMNG-R-A": {
+   "isin": "BA100KMNGRA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "KMPD-R-A": {
+   "isin": "BA100KMPDRA7",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "KMTB-R-A": {
+   "isin": "BA100KMTBRA3",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "KNPT-R-A": {
+   "isin": "BA100KNPTRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "KNZM-R-A": {
+   "isin": "BA100KNZMRA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "KOBI-R-A": {
+   "isin": "BA100KOBIRA2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "KOMF-R-A": {
+   "isin": "BA100KOMFRA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "KOML-R-A": {
+   "isin": "BA100KOMLRA3",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "KOMS-R-A": {
+   "isin": "BA100KOMSRA8",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "KOOP-R-A": {
+   "isin": "BA100KOOPRA0",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "KPKS-R-A": {
+   "isin": "BA100KPKSRA9",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "KPMG-R-A": {
+   "isin": "BA100KPMGRA0",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "KPPL-R-A": {
+   "isin": "BA100KPPLRA3",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "KPTG-R-A": {
+   "isin": "BA100KPTGRA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "KRIS-R-A": {
+   "isin": "BA100KRISRA9",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "KRJN-R-A": {
+   "isin": "BA100KRJNRA8",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "KRLB-R-A": {
+   "isin": "BA100KRLBRA9",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "KROS-R-A": {
+   "isin": "BA100KROSRA7",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "KRPT-R-A": {
+   "isin": "BA100KRPTRA2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Službeno berzansko tržište",
+   "delisted": ""
+  },
+  "KUPR-R-A": {
+   "isin": "BA100KUPRRA0",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "KURJ-R-A": {
+   "isin": "BA100KURJRA3",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "KZPR-R-A": {
+   "isin": "BA100KZPRRA9",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "LIVN-R-A": {
+   "isin": "BA100LIVNRA0",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "LJUB-R-A": {
+   "isin": "BA100LJUBRA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "LKSM-R-A": {
+   "isin": "BA100LKSMRA4",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "MART-R-A": {
+   "isin": "BA100MARTRA0",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "MATE-R-A": {
+   "isin": "BA100MATERA8",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "MJDR-R-A": {
+   "isin": "BA100MJDRRA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "MJVC-R-A": {
+   "isin": "BA100MJVCRA9",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "MKOS-R-A": {
+   "isin": "BA100MKOSRA8",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "MLPR-R-A": {
+   "isin": "BA100MLPRRA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "MLPS-R-A": {
+   "isin": "BA100MLPSRA3",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "MONT-R-A": {
+   "isin": "BA100MONTRA0",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "MPDR-R-A": {
+   "isin": "BA100MPDRRA2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "MRDN-R-A": {
+   "isin": "BA100MRDNRA7",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Službeno berzansko tržište",
+   "delisted": ""
+  },
+  "MRKO-R-A": {
+   "isin": "BA100MRKORA0",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "MRKR-R-A": {
+   "isin": "BA100MRKRRA3",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "MRMR-R-A": {
+   "isin": "BA100MRMRRA9",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "MSRV-R-A": {
+   "isin": "BA100MSRVRA8",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "MTKS-R-A": {
+   "isin": "BA100MTKSRA7",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "MTNO-R-A": {
+   "isin": "BA100MTNORA0",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "NBLB-R-B": {
+   "isin": "BA100NBLBRB5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "NGRD-R-A": {
+   "isin": "BA100NGRDRA9",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "NOVB-R-E": {
+   "isin": "BA100NOVBRE1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "NPRK-R-A": {
+   "isin": "BA100NPRKRA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "NRAD-R-A": {
+   "isin": "BA100NRADRA2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "NSDM-R-A": {
+   "isin": "BA100NSDMRA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "NVRZ-R-A": {
+   "isin": "BA100NVRZRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "OCJH-R-A": {
+   "isin": "BA100OCJHRA4",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "PDNK-R-A": {
+   "isin": "BA100PDNKRA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "PEKS-R-A": {
+   "isin": "BA100PEKSRA2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "PIBB-P-A": {
+   "isin": "BA100PIBBPA2",
+   "cfi": "EPNEFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "PIBB-P-B": {
+   "isin": "BA100PIBBPB0",
+   "cfi": "EPNEFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "PIBB-R-D": {
+   "isin": "BA100PIBBRD2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "PIKO-R-B": {
+   "isin": "BA100PIKORB0",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "PKPR-R-A": {
+   "isin": "BA100PKPRRA0",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "PLAN-R-A": {
+   "isin": "BA100PLANRA9",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "PLDG-R-A": {
+   "isin": "BA100PLDGRA7",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "PLNA-R-A": {
+   "isin": "BA100PLNARA9",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "PLSM-R-A": {
+   "isin": "BA100PLSMRA3",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "PLVT-R-A": {
+   "isin": "BA100PLVTRA2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "PMPR-R-A": {
+   "isin": "BA100PMPRRA6",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "POPO-R-A": {
+   "isin": "BA100POPORA9",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "POST-R-A": {
+   "isin": "BA100POSTRA2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Službeno berzansko tržište",
+   "delisted": ""
+  },
+  "PPMK-R-A": {
+   "isin": "BA100PPMKRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Službeno berzansko tržište",
+   "delisted": ""
+  },
+  "PRED-R-A": {
+   "isin": "BA100PREDRA9",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "PRGS-R-A": {
+   "isin": "BA100PRGSRA2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "PRMT-R-A": {
+   "isin": "BA100PRMTRA8",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "PROG-R-A": {
+   "isin": "BA100PROGRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "PROJ-R-A": {
+   "isin": "BA100PROJRA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "PROM-R-A": {
+   "isin": "BA100PROMRA9",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "PTKZ-R-A": {
+   "isin": "BA100PTKZRA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "PTRL-R-A": {
+   "isin": "BA100PTRLRA0",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "PTSA-R-A": {
+   "isin": "BA100PTSARA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "PUTN-R-A": {
+   "isin": "BA100PUTNRA0",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "PZBL-R-A": {
+   "isin": "BA100PZBLRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "PZBN-R-A": {
+   "isin": "BA100PZBNRA7",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "RADZ-R-A": {
+   "isin": "BA100RADZRA6",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "RAZV-R-A": {
+   "isin": "BA100RAZVRA8",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "REKT-R-A": {
+   "isin": "BA100REKTRA6",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "RFUM-R-A": {
+   "isin": "BA100RFUMRA7",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Službeno berzansko tržište",
+   "delisted": ""
+  },
+  "RITE-R-A": {
+   "isin": "BA100RITERA0",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Službeno berzansko tržište",
+   "delisted": ""
+  },
+  "RNAF-R-A": {
+   "isin": "BA100RNAFRA7",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "ROPT-R-A": {
+   "isin": "BA100ROPTRA4",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "RTEU-R-A": {
+   "isin": "BA100RTEURA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Službeno berzansko tržište",
+   "delisted": ""
+  },
+  "SEHR-R-A": {
+   "isin": "BA100SEHRRA4",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "SEMB-R-A": {
+   "isin": "BA100SEMBRA8",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "SEPT-R-A": {
+   "isin": "BA100SEPTRA3",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "SGAS-R-A": {
+   "isin": "BA100SGASRA2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "SKCN-R-A": {
+   "isin": "BA100SKCNRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "SLGA-R-A": {
+   "isin": "BA100SLGARA7",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "SLIN-R-A": {
+   "isin": "BA100SLINRA6",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "SMBT-R-B": {
+   "isin": "BA100SMBTRB4",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "SMUS-R-A": {
+   "isin": "BA100SMUSRA8",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "SNEL-R-A": {
+   "isin": "BA100SNELRA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "SODJ-R-A": {
+   "isin": "BA100SODJRA9",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "STGR-R-A": {
+   "isin": "BA100STGRRA4",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "STOR-R-A": {
+   "isin": "BA100STORRA8",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "SVGR-R-A": {
+   "isin": "BA100SVGRRA0",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "TEKM-R-A": {
+   "isin": "BA100TEKMRA7",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "TENA-R-A": {
+   "isin": "BA100TENARA6",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "TGKA-R-A": {
+   "isin": "BA100TGKARA7",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "TGTN-R-A": {
+   "isin": "BA100TGTNRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "TLKM-R-A": {
+   "isin": "BA100TLKMRA2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Službeno berzansko tržište",
+   "delisted": ""
+  },
+  "TOME-R-A": {
+   "isin": "BA100TOMERA9",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "TPPD-R-A": {
+   "isin": "BA100TPPDRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "TRAN-R-A": {
+   "isin": "BA100TRANRA8",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "TRGR-R-A": {
+   "isin": "BA100TRGRRA6",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "TRMN-R-A": {
+   "isin": "BA100TRMNRA3",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "TRNS-R-A": {
+   "isin": "BA100TRNSRA0",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "TRST-R-A": {
+   "isin": "BA100TRSTRA7",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "TSL9-R-A": {
+   "isin": "BA100TSL9RA8",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "TSPR-R-A": {
+   "isin": "BA100TSPRRA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "UDRN-R-A": {
+   "isin": "BA100UDRNRA0",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "UFRS-R-A": {
+   "isin": "BA100UFRSRA4",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "UGST-R-A": {
+   "isin": "BA100UGSTRA8",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "UKRD-R-A": {
+   "isin": "BA100UKRDRA6",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "UNCC-R-A": {
+   "isin": "BA100UNCCRA4",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "UNCM-R-A": {
+   "isin": "BA100UNCMRA3",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "UNTR-R-A": {
+   "isin": "BA100UNTRRA6",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "UNVZ-R-A": {
+   "isin": "BA100UNVZRA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "UNZL-R-A": {
+   "isin": "BA100UNZLRA6",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "USLD-R-A": {
+   "isin": "BA100USLDRA2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "UTAS-R-A": {
+   "isin": "BA100UTASRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "UZLM-R-A": {
+   "isin": "BA100UZLMRA8",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "UZR9-R-B": {
+   "isin": "BA100UZR9RB8",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VBBB-R-A": {
+   "isin": "BA100VBBBRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VCVO-R-A": {
+   "isin": "BA100VCVORA0",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VDBL-R-A": {
+   "isin": "BA100VDBLRA6",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Službeno berzansko tržište",
+   "delisted": ""
+  },
+  "VDCL-R-A": {
+   "isin": "BA100VDCLRA4",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VDGR-R-A": {
+   "isin": "BA100VDGRRA2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VDKZ-R-A": {
+   "isin": "BA100VDKZRA7",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VDPL-R-A": {
+   "isin": "BA100VDPLRA6",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VDPR-R-A": {
+   "isin": "BA100VDPRRA3",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VDPV-R-A": {
+   "isin": "BA100VDPVRA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VDTR-R-A": {
+   "isin": "BA100VDTRRA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VDVD-R-A": {
+   "isin": "BA100VDVDRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VDVG-R-A": {
+   "isin": "BA100VDVGRA4",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VDVS-R-A": {
+   "isin": "BA100VDVSRA9",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VEL9-R-A": {
+   "isin": "BA100VEL9RA0",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VELE-R-A": {
+   "isin": "BA100VELERA8",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VIKM-R-A": {
+   "isin": "BA100VIKMRA4",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VITK-R-A": {
+   "isin": "BA100VITKRA9",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VKBJ-R-A": {
+   "isin": "BA100VKBJRA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Službeno berzansko tržište",
+   "delisted": ""
+  },
+  "VKIF-R-A": {
+   "isin": "BA100VKIFRA8",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VKNG-R-A": {
+   "isin": "BA100VKNGRA6",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VLPH-R-A": {
+   "isin": "BA100VLPHRA7",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VLTG-R-A": {
+   "isin": "BA100VLTGRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VLTK-R-A": {
+   "isin": "BA100VLTKRA3",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VRBS-R-A": {
+   "isin": "BA100VRBSRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VRTS-R-A": {
+   "isin": "BA100VRTSRA3",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VSBL-R-A": {
+   "isin": "BA100VSBLRA4",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VSCE-R-A": {
+   "isin": "BA100VSCERA7",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VSCL-R-A": {
+   "isin": "BA100VSCLRA2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VSDB-R-A": {
+   "isin": "BA100VSDBRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VSDE-R-A": {
+   "isin": "BA100VSDERA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VSGC-R-A": {
+   "isin": "BA100VSGCRA2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VSGR-R-A": {
+   "isin": "BA100VSGRRA0",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VSLA-R-A": {
+   "isin": "BA100VSLARA6",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VSLK-R-A": {
+   "isin": "BA100VSLKRA5",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VSMD-R-A": {
+   "isin": "BA100VSMDRA8",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VSMG-R-A": {
+   "isin": "BA100VSMGRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VSNE-R-A": {
+   "isin": "BA100VSNERA4",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VSPA-R-A": {
+   "isin": "BA100VSPARA7",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VSPD-R-A": {
+   "isin": "BA100VSPDRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VSPR-R-A": {
+   "isin": "BA100VSPRRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VSSM-R-A": {
+   "isin": "BA100VSSMRA6",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VSSP-R-A": {
+   "isin": "BA100VSSPRA9",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VSTS-R-A": {
+   "isin": "BA100VSTSRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VSUG-R-A": {
+   "isin": "BA100VSUGRA4",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VSVL-R-A": {
+   "isin": "BA100VSVLRA2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VSZV-R-A": {
+   "isin": "BA100VSZVRA2",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VTPR-R-A": {
+   "isin": "BA100VTPRRA9",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VTRG-R-A": {
+   "isin": "BA100VTRGRA8",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "VTSB-R-A": {
+   "isin": "BA100VTSBRA7",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "ZERS-R-A": {
+   "isin": "BA100ZERSRA6",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Službeno berzansko tržište",
+   "delisted": ""
+  },
+  "ZIBL-R-A": {
+   "isin": "BA100ZIBLRA6",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "ZNUS-R-A": {
+   "isin": "BA100ZNUSRA1",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "ZPKB-R-A": {
+   "isin": "BA100ZPKBRA3",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "ZRKV-R-A": {
+   "isin": "BA100ZRKVRA7",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "ZSTA-R-A": {
+   "isin": "BA100ZSTARA0",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "ZTRG-R-A": {
+   "isin": "BA100ZTRGRA9",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  },
+  "ZVST-R-A": {
+   "isin": "BA100ZVSTRA6",
+   "cfi": "ESVUFR",
+   "status": "Trading",
+   "market": "Slobodno tržište",
+   "delisted": ""
+  }
+ }
+}

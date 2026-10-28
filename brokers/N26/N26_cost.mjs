@@ -383,13 +383,10 @@ export function cryptoFeeSide({ euros, market, plan = DEFAULT_PLAN }) {
 }
 
 // The remark carries only what the number cannot: an allowance that belongs to a
-// month rather than to a trade, and a product cost that belongs to holding the
-// line rather than trading it.
-function remarkOf({ market, listing }) {
+// month rather than to a trade.
+function remarkOf({ market }) {
   if (market === "btc" || market === "crypto") return "";
-  const said = ["Go 9.90 €/mo: 3 trades with no broker fees.\nMetal 16.90 €/mo: 10 trades with no broker fees."];
-  if (String(listing?.type || "").toUpperCase() !== "STOCK") said.push("ETF product costs (TER) apply on top.");
-  return said.join("\n");
+  return "Go 9.90 €/mo: 3 trades with no broker fees.\nMetal 16.90 €/mo: 10 trades with no broker fees.";
 }
 
 function findListing({ etf, place, currency }) {

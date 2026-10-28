@@ -7,7 +7,8 @@
 //              from the seventh month. The first six months after the
 //              account opens are free of commission except the exchange
 //              fee, 0.027% for a share or a fund certificate; that offer
-//              is not priced here. Counter or phone is 0.15%.
+//              is not priced here. The remark is its cut of the 0.1%,
+//              (0.1 - 0.027) / 0.1 = 73%. Counter or phone is 0.15%.
 //   Sale tax   0.1% of the sale, the personal income tax the broker
 //              withholds on every sale, gain or loss. This sheet does not
 //              print it. The rate is the law's; the AAS, PHS and Shinhan
@@ -34,7 +35,7 @@ const SCHEDULE = {
   readOn: "2026-10-18",
   rate: () => pct("0.1"),
   basis: "à partir du septième mois",
-  remark: "First six months: 0.07% lower fee. Custody is 0.27 VND a share a month.",
+  remark: "First six months: 73% lower fee. Custody is 0.27 VND a share a month.",
 };
 
 export function roundTrip(query) {

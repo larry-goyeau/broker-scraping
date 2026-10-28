@@ -58,6 +58,12 @@
 //    same IBKR contract as a dropped Toronto line goes with it.
 //      https://www.tsx.com/json/company-directory/search/tsx/%5E*
 //      https://www.tsx.com/json/company-directory/search/tsxv/%5E*
+//    When TMX's sites are down (from 2026-10-24: "Our websites are
+//    currently unavailable. Due to security vulnerabilities related to
+//    PHP..."), the board list comes from TradingView's public Canada
+//    screener, filtered on exchange TSX or TSXV (same symbol form: RY,
+//    BBD.B, XIU).
+//      https://scanner.tradingview.com/canada/scan (POST)
 // 9. NSE: the ISIN or symbol must be on the NSE's equity, SME, REIT or
 //    InvIT list (long-suspended and partly-paid lines are not).
 //      https://nsearchives.nseindia.com/content/equities/EQUITY_L.csv
@@ -72,11 +78,15 @@
 //      https://www.jpx.co.jp/markets/statistics-equities/misc/01.html
 //      https://www.jpx.co.jp/listing/stocks/new/index.html
 //      https://www.jpx.co.jp/listing/stocks/delisted/index.html
-// 11. London: a row whose only LSE line has no price is asked for that
-//    line; a line on market "OTHERS" is an off-book reporting line with no
-//    order book (OXA6 for XAD6 EUR) and goes.
-//      https://api.londonstockexchange.com/api/v1/pages?path=live-markets/market-data-dashboard/price-explorer
-//      https://api.londonstockexchange.com/api/gw/lse/instruments/alldata/<TIDM>
+// 11. London: the LSE price explorer (order-book markets MAIN, AIM, ATT,
+//    PSM, read by ../stratiphy/lseBook.mjs) must carry the row's line, by
+//    TIDM or by ISIN in the row's currency. A line tagged "Trade Reporting
+//    Only" has no order book and goes; so does a row whose ISIN the
+//    explorer does not carry at all (an off-book reporting line such as
+//    OXA6 for XAD6 EUR sits on market OTHERS, outside those four). The old
+//    pages API answers 403 since the LSE moved its site on 2026-10-24.
+//      https://www.londonstockexchange.com/en/price-explorer
+//      https://apidata.londonstockexchange.com/search/v1/query (POST)
 // 12. A regional share of rule 2 that no European list carries is asked of
 //    its own venue. Tradegate: the order-book page says "Die Gattung wird
 //    derzeit nicht an der Tradegate BSX gehandelt" for a line it does not
@@ -103,6 +113,7 @@
 import { tokyoListing } from "../mitsubishiufjesmart/japan.mjs";
 import { execFileSync } from "node:child_process";
 import puppeteer from "puppeteer-core";
+import { lseLines } from "../stratiphy/lseBook.mjs";
 
 const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
 const DB_PAGE = "https://www.cashmarket.deutsche-boerse.com/cash-en/trading/Tradable-Instruments-Xetra";
@@ -136,9 +147,6 @@ const NSE = [
 ];
 const JPX_NEW = "https://www.jpx.co.jp/listing/stocks/new/index.html";
 const JPX_DELISTED = "https://www.jpx.co.jp/listing/stocks/delisted/index.html";
-const LSE_HEADERS = { Accept: "application/json", Origin: "https://www.londonstockexchange.com", Referer: "https://www.londonstockexchange.com/" };
-const LSE_EXPLORER = "https://api.londonstockexchange.com/api/v1/pages?path=live-markets/market-data-dashboard/price-explorer&parameters=";
-const LSE_LINE = "https://api.londonstockexchange.com/api/gw/lse/instruments/alldata/";
 
 const REGIONAL = new Set(["XSTU", "XMUN", "XGAT"]);
 // Venues whose rows the official lists have already checked (../ibkrus for
@@ -329,10 +337,30 @@ async function nordicSearch(isin) {
 }
 
 async function tsxSymbols(board, least) {
-  const body = await get(`${TSX}${board}/%5E*`, { as: "json" });
-  if (!Array.isArray(body?.results)) throw new Error(`the TMX ${board} directory has no results list`);
-  const symbols = new Set(body.results.flatMap((company) => company.instruments || []).map((item) => item.symbol));
-  if (symbols.size < least) throw new Error(`the TMX ${board} directory gave ${symbols.size} symbols`);
+  try {
+    const body = await get(`${TSX}${board}/%5E*`, { as: "json" });
+    if (!Array.isArray(body?.results)) throw new Error(`the TMX ${board} directory has no results list`);
+    const symbols = new Set(body.results.flatMap((company) => company.instruments || []).map((item) => item.symbol));
+    if (symbols.size < least) throw new Error(`the TMX ${board} directory gave ${symbols.size} symbols`);
+    return symbols;
+  } catch (error) {
+    console.error(`TMX ${board} directory unavailable (${String(error.message || error).slice(0, 80)}); TradingView's Canada screener is used`);
+    return tradingViewBoard(board === "tsx" ? "TSX" : "TSXV", least);
+  }
+}
+
+// Every symbol TradingView's public Canada screener files on that exchange.
+async function tradingViewBoard(exchange, least) {
+  const response = await fetch("https://scanner.tradingview.com/canada/scan", {
+    method: "POST",
+    headers: { "User-Agent": UA, "Content-Type": "application/json", Origin: "https://www.tradingview.com", Referer: "https://www.tradingview.com/" },
+    body: JSON.stringify({ filter: [{ left: "exchange", operation: "equal", right: exchange }], columns: ["name"], range: [0, 20000] }),
+    signal: AbortSignal.timeout(60_000),
+  });
+  if (!response.ok) throw new Error(`TradingView ${exchange} screener answered ${response.status}`);
+  const body = await response.json();
+  const symbols = new Set((body?.data || []).map((item) => String(item.d?.[0] || "").toUpperCase()).filter(Boolean));
+  if (symbols.size < least) throw new Error(`TradingView's ${exchange} screener gave ${symbols.size} symbols`);
   return symbols;
 }
 
@@ -388,18 +416,8 @@ async function tokyoCodes() {
 }
 
 async function lseExplorer() {
-  const lines = [];
-  let total = null;
-  for (let number = 0; number < 40; number += 1) {
-    const page = await get(LSE_EXPLORER + encodeURIComponent(`categories=EQUITY,ETFS&size=1000&page=${number}`), { headers: LSE_HEADERS, as: "json" });
-    const block = (page?.components || []).flatMap((component) => component.content || []).find((item) => item.name === "priceexplorersearch")?.value;
-    if (!block || !Array.isArray(block.content)) throw new Error("the LSE price explorer answered no list");
-    total ??= block.totalElements;
-    lines.push(...block.content);
-    if (block.content.length < 1000 || lines.length >= total) break;
-    await sleep(2000);
-  }
-  if (lines.length !== total || lines.length < 8000) throw new Error(`the LSE price explorer has ${lines.length} of ${total} lines`);
+  const lines = await lseLines();
+  if (lines.length < 5000) throw new Error(`the LSE price explorer has only ${lines.length} lines`);
   return lines;
 }
 
@@ -621,29 +639,29 @@ export async function pruneByVenueLists(rows) {
     if (added) notes.push(`${added} Tokyo codes listed after the JPX month-end file`);
   }
 
-  // Rule 11: London reporting lines.
+  // Rule 11: London lines with no order book.
   {
     const byTidm = new Map(lse.map((line) => [line.tidm, line]));
     const byIsin = new Map();
     for (const line of lse) byIsin.set(line.isin, [...(byIsin.get(line.isin) || []), line]);
-    const asked = new Map();
+    const reporting = (line) => (line.searchTag || []).some((tag) => /^Trade Reporting Only/.test(tag));
+    let unlisted = 0;
+    let reported = 0;
     for (const row of rows) {
       if (row.mic !== "XLON" || out.has(row)) continue;
       const ticker = normalize(row.ticker).toUpperCase().replace(/\.$/, "");
       const own = byTidm.get(ticker);
-      if (own && own.isin === row.isin) continue;
-      const lines = (byIsin.get(row.isin) || []).filter((line) => line.currency === row.currency || (line.currency === "GBX" && row.currency === "GBP"));
-      if (!lines.length || lines.some((line) => line.midPrice != null)) continue;
-      const tidm = lines[0].tidm;
-      if (!asked.has(tidm)) {
-        const data = await get(LSE_LINE + encodeURIComponent(tidm), { headers: LSE_HEADERS, as: "json" });
-        if (data?.tidm !== tidm || !("market" in data)) throw new Error(`the LSE line API changed for ${tidm}`);
-        asked.set(tidm, data.market);
-        await sleep(400);
+      const same = (byIsin.get(row.isin) || []).filter((line) => line.currency === row.currency || (line.currency === "GBX" && row.currency === "GBP"));
+      const line = own && own.isin === row.isin ? own : same[0];
+      if (!line && !own && !byIsin.has(row.isin)) {
+        drop(row, "LSE: not on an order-book market (price explorer)");
+        unlisted += 1;
+      } else if (line && reporting(line)) {
+        drop(row, "LSE: reporting line only (Trade Reporting Only)");
+        reported += 1;
       }
-      if (asked.get(tidm) === "OTHERS") drop(row, "LSE: reporting line only (market OTHERS)");
     }
-    if (asked.size) notes.push(`${asked.size} unpriced London lines asked for their market`);
+    if (unlisted || reported) notes.push(`London: ${unlisted} rows not in the price explorer, ${reported} reporting-only lines`);
   }
 
   // Rule 12: regional shares on no European list, asked of their venue.

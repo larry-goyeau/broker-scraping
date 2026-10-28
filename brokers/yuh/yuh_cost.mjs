@@ -52,7 +52,8 @@
 //
 // In the total: the book, the commission each way, the Swiss stamp each
 // way, the taxMap tax. Remarks: FX 0.95 % when cash is not the listing
-// currency; for an eligible ETF, how much lower a recurring buy is.
+// currency; for an eligible ETF, that a recurring buy's commission is
+// waived (100% lower).
 //
 //   node brokers/yuh/yuh_cost.mjs NESN XSWX CHF --shares=10 --price=80
 //   node brokers/yuh/yuh_cost.mjs VWRL XSWX CHF --shares=200 --price=130
@@ -271,7 +272,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const remarks = [];
   if (!forced) remarks.push(fxRemark((100 * FX_RATE).toFixed(2), listing.currency));
   if (planFree && each != null && amountChf > 0) {
-    remarks.push(`Recurring buy is ${Number(((each / amountChf) * 100).toFixed(2))}% lower.`);
+    remarks.push("Recurring buy is 100% lower.");
   }
 
   return {

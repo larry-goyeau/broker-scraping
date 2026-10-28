@@ -48,9 +48,13 @@
 // ("based on the Moomoo US comprehensive rate", topic4_40; the Universal
 // Account page: without cash in that currency, unified buying power borrows
 // it on margin). The customer agreement only says a conversion is "at a rate
-// of exchange determined conclusively by you". No spread is printed, so the
-// conversion leg is unknown and the total of an HKD or CNH line is N/A. A
-// Hong Kong dollar-counter line (USD) needs no conversion.
+// of exchange determined conclusively by you". No spread is printed. Stand-in
+// for an HKD line (owner, 2026-10-27): the group's moomoo AU Financial
+// Services Guide (Futu Securities (Australia), April 2024, section 4.4) adds
+// 40 pips on USD/HKD each way, 0.0040 HKD a dollar (about 0.05 %), on the
+// buy and on the sale. A CNH line has no group figure: N/A. A Hong Kong
+// dollar-counter line (USD) needs no conversion.
+//   https://static.moomoo.com/upload/official-website/moo/au/moomoo-FUTU-AU_FSG0408-7c63a1a705cd5ff229d1171c1cc97c00.pdf
 //   https://www.moomoo.com/us/support/topic4_40
 //   https://www.moomoo.com/us/support/topic4_475
 //
@@ -82,6 +86,8 @@ const CATALOGUE = new URL("moomoous-parsed.json", import.meta.url);
 const PAGE = "https://www.moomoo.com/us/pricing";
 const SCHEDULE = "https://www.moomoo.com/us/support/topic4_66";
 const FX_PAGE = "https://www.moomoo.com/us/support/topic4_40";
+// moomoo AU's added spread on USD/HKD (stand-in, see the header).
+const HKD_PIPS = 0.004;
 const READ_ON = "2026-10-21";
 const SCHEDULE_ON = "2026-10-01";
 // The help centre's only deposit currency (topic4_295), until deposits.mjs
@@ -234,9 +240,10 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const bill = ticket({ market, type: listing.type, currency: listing.currency, notional, shares: n });
   const commissionUsd = bill ? dollars(Number(bill.fees.toPrecision(12)), bill.feeCcy) : null;
   const levyUsd = bill ? dollars(Number(bill.levy.toPrecision(12)), bill.feeCcy) : null;
-  // An HKD or CNH line is bought with dollars converted at a rate the
-  // broker does not print: unknown.
-  const fxUsd = held ? 0 : null;
+  // An HKD line is bought with dollars converted at the group's 40-pip
+  // stand-in, both ways; a CNH line at a rate no one prints: unknown.
+  const hkdFx = !held && listing.currency === "HKD" && notionalUsd != null ? 2 * notionalUsd * HKD_PIPS * usdPer("HKD") : null;
+  const fxUsd = held ? 0 : hkdFx;
   const brokerFees = plus(commissionUsd, fxUsd);
 
   let marketBp = bp ?? book.leaf?.bp ?? null;
@@ -257,13 +264,17 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const usd = plus(bookUsd, brokerFees, levyUsd);
   const unknown = [
     !bill ? `pas de cours ${listing.currency}/HKD dans fx.mjs` : null,
-    held ? null : `change forcé USD → ${listing.currency} et retour : moomoo US n'imprime pas d'écart de change (${FX_PAGE})`,
+    held || hkdFx != null ? null : `change forcé USD → ${listing.currency} et retour : moomoo US n'imprime pas d'écart de change (${FX_PAGE})`,
     bookUsd == null ? `aucun carnet pour ${listing.exchange} : ${m.unsourced?.why || "pas de feuille de carnet"}` : null,
   ].filter(Boolean);
 
   return {
     ...shared,
-    ...(held ? {} : { basis: `${shared.basis} Change forcé USD → ${listing.currency} au « Moomoo US comprehensive rate », écart non publié.` }),
+    ...(held
+      ? {}
+      : hkdFx != null
+        ? { basis: `${shared.basis} Change forcé USD → HKD et retour : écart non publié par moomoo US, 40 pips du guide de moomoo AU (même groupe) pris à la place, ${finite(hkdFx, 4)} $.` }
+        : { basis: `${shared.basis} Change forcé USD → ${listing.currency} au « Moomoo US comprehensive rate », écart non publié.` }),
     usd: finite(usd, 6),
     brokerFees: finite(brokerFees, 6),
     bp: marketBp,

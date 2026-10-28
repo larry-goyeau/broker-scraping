@@ -10,7 +10,9 @@
 //       0.39 % min 5 zł per order
 //     same-day reverse trade, part 2 point 3
 //       0.25 %, and that column has no minimum. The figure stays at
-//       0.39 % min 5 zł. The remark is the gap.
+//       0.39 % min 5 zł. The remark is the cut on the sale's commission,
+//       at this order (0.39 % → 0.25 % = 36 % lower; more when the
+//       minimum bites).
 //   Abroad, internet, excluding foreign bonds and structured notes
 //     USA, Germany, France, Italy, the United Kingdom, Switzerland,
 //     Belgium and the Netherlands
@@ -131,6 +133,15 @@ function orderAmount(notional, spec) {
   return Math.max(notional * spec.rate, spec.min);
 }
 
+// The same-day reverse rate as a cut of the sale's commission at this
+// order, minimum included; at the bare rates when no order is known.
+function sameDayRemark(rule, notional) {
+  const normal = notional > 0 ? orderAmount(notional, rule) : rule.rate;
+  const day = notional > 0 ? notional * DAY_RATE : DAY_RATE;
+  const x = ((normal - day) / normal) * 100;
+  return `If the sale is the same day, the commission is ${x >= 10 ? Math.round(x) : Number(x.toFixed(1))}% lower.`;
+}
+
 /**
  * The whole bill for buying `shares` at `price` and selling straight back.
  * `usd` is the number the page prints. `brokerFees` is the ticket.
@@ -196,7 +207,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     ...answer,
     listing,
     cashCurrency: rule.currency,
-    remark: `If the sale is the same day, the commission is ${Number(((rule.rate - DAY_RATE) * 100).toFixed(2))}% lower.`,
+    remark: sameDayRemark(rule, null),
     url: SCHEDULE.url,
     basis: `taryfa Erste du ${SCHEDULE.tariffOn}, relue le ${SCHEDULE.readOn} : ${rule.label} par ordre`,
     tax,
@@ -249,6 +260,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
     ...shared,
     usd: finite(usd, 6),
     brokerFees: finite(brokerFees, 6),
+    remark: sameDayRemark(rule, notional),
     commission: {
       rate: rule.rate,
       min: rule.min,

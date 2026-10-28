@@ -20,4 +20,11 @@ parsed_json/xlm-cache.json
 # rejouent pas, le marché ayant bougé. Tout le reste des .json se régénère en relançant un script.
 !*/*-experiment.json
 !brokers/*/*-experiment.json
-broker.txt
+broker.txt# Local working files: page dumps, probes and listings kept out of the repo.
+.DS_Store
+.claude/
+/*.html
+/x
+/bcsq.json
+/enx-xams.csv
+/icones-nouveaux-brokers.png

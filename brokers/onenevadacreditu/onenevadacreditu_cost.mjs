@@ -21,9 +21,11 @@
 //                   $0 commission is the negotiated rate, so the trip uses
 //                   $0; the maintenance ceiling is not an order cost. It
 //                   prints no SEC, TAF or CAT figure.
-//   SEC / TAF / CAT not printed, so 0.
+//   SEC / TAF       "Other fees such as regulatory fees ... may apply": SEC
+//                   and TAF at the regulators' rates, rounded up to the
+//                   cent (no rate or rounding printed). CAT not named, 0.
 //
-// Formula: book + 0 + 0. Atomic Brokerage LLC, clearing and custody at
+// Formula: book + 0 + SEC and TAF on the sale. Atomic Brokerage LLC, clearing and custody at
 // Pershing LLC. Atomic files its own 606 (2026 Q2, PDF only):
 //   https://cdn.finra.org/606/2026/315263_606_NMS_2026_Q2_V1.pdf
 // key `atomic` in spreads/rule606.mjs, the book is the blended 605 × that
@@ -50,11 +52,11 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: () => 0,
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: false },
   basis:
     "page OneNVest, relue le 2026-10-26 : « $0 commissions charged on trades of U.S. listed registered securities » en heures normales, 0 $ à l'achat et à la vente",
   notes: [
-    "barème plafond d'Atomic Brokerage (6/5/2024) : 5 $ par ordre au maximum, remplacé par le 0 $ négocié de la page ; frais de tenue jusqu'à 3 $/mois hors trajet ; aucun chiffre SEC/TAF/CAT",
+    "barème plafond d'Atomic Brokerage (6/5/2024) : 5 $ par ordre au maximum, remplacé par le 0 $ négocié de la page ; frais de tenue jusqu'à 3 $/mois hors trajet ; « regulatory fees ... may apply » sans chiffre : SEC et TAF aux taux des régulateurs, arrondi au centime supérieur",
     "606 de Atomic Brokerage (CRD 315263), 2026 T2",
   ],
 };

@@ -65,6 +65,7 @@
 //   import { writeMilanCatalogue } from "../vivibanca/euronextMilanBook.mjs";
 //   await writeMilanCatalogue(import.meta.url, "vivibanca-parsed.json");
 //   // options: { types: ["STOCK", "ETF", "ETC", "ETN"], growth: false }
+//   // milanBook({ growth, pageSize: 1000 }) reads the directory tables in pages
 //   // or: const { listed, suspended, idle, leftOut } = await milanBook();
 //
 //   node brokers/vivibanca/euronextMilanBook.mjs     (prints the counts, writes nothing)
@@ -149,16 +150,34 @@ function tradeDay(text) {
 }
 
 // The directory table: ISIN -> { fullName, lastTrade (ms or null) }.
-async function table(file, mic) {
+// `pageSize` (option of milanBook) reads the table in pages of that many
+// rows instead of one call: on 28 October 2026 the ETFP trackers table
+// (2,088 rows) answered an empty page to a single 10,000-row call.
+async function tablePage(file, mic, start, length) {
   const body = new URLSearchParams({
     draw: "1",
-    start: "0",
-    length: "10000",
-    iDisplayStart: "0",
-    iDisplayLength: "10000",
+    start: String(start),
+    length: String(length),
+    iDisplayStart: String(start),
+    iDisplayLength: String(length),
     "args[display_datapoints]": "name,isin,symbol,lastPrice,lastTradeTime",
   }).toString();
-  const json = await get(`${BASE}${file}?mics=${mic}`, { as: "json", body });
+  return get(`${BASE}${file}?mics=${mic}`, { as: "json", body });
+}
+
+async function table(file, mic, pageSize = null) {
+  let json;
+  if (!pageSize) json = await tablePage(file, mic, 0, 10000);
+  else {
+    json = await tablePage(file, mic, 0, pageSize);
+    const total = Number(json?.iTotalRecords);
+    while (Array.isArray(json?.aaData) && json.aaData.length < total) {
+      await sleep(1000);
+      const next = await tablePage(file, mic, json.aaData.length, pageSize);
+      if (!Array.isArray(next?.aaData) || !next.aaData.length) break;
+      json.aaData.push(...next.aaData);
+    }
+  }
   if (!Array.isArray(json?.aaData) || !json.aaData.length) throw new Error(`Euronext ${file} ${mic} table: no rows`);
   if (json.aaData.length !== Number(json.iTotalRecords)) throw new Error(`Euronext ${file} ${mic} table: ${json.aaData.length} of ${json.iTotalRecords} rows`);
   const out = new Map();
@@ -203,14 +222,14 @@ function etvKind(shortName, fullName) {
   throw new Error(`ETFplus ETP "${shortName}" (${fullName}): neither ETC nor ETN`);
 }
 
-export async function milanBook({ growth = false } = {}) {
+export async function milanBook({ growth = false, pageSize = null } = {}) {
   const segments = ["MTAA", "ETFP", ...(growth ? ["EXGM"] : [])];
   const reads = [];
   for (const segment of segments) {
     for (const file of MARKETS[segment].files) {
       const lines = await download(file, segment);
       await sleep(2000);
-      const extra = await table(file, segment);
+      const extra = await table(file, segment, pageSize);
       await sleep(2000);
       reads.push({ segment, file, lines, extra });
     }

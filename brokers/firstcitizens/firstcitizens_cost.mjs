@@ -18,12 +18,14 @@
 //                           price is printed for a listed line (OTC equities
 //                           are $6.95, call center $40 + $0.03 a share over
 //                           1,000): unknown, so the total is N/A.
-//   SEC / TAF / CAT         "Commission-free trading does not apply to
-//                           transaction fees", but no rate is printed: 0.
+//   SEC / TAF / CAT         SEC and TAF added at the regulators' rates on the
+//                           sale, rounded up to the cent ("Commission-free
+//                           trading does not apply to transaction fees";
+//                           owner, 2026-10-28). CAT: no rate printed, 0.
 //   non-activity fee        $50 a year under $100,000, only with no
 //                           activity in the year: not this trip.
 //
-// Formula: book + 0 + 0 (price ≥ $3.00). Below $3.00: N/A.
+// Formula: book + 0 + SEC and TAF on the sale (price ≥ $3.00). Below $3.00: N/A.
 //
 // Routing: First Citizens Investor Services files its own 606 (CRD 44430
 // in the FINRA 606 bulk file, 2026 Q2, <bd> "FIRST CITIZENS INVESTOR
@@ -58,7 +60,7 @@ const SCHEDULE = {
     ctx.price < MIN_FREE_PRICE
       ? null
       : { buy: 0, sell: 0, note: "0 $ en ligne sur les actions et ETF cotés aux États-Unis à 3 $ la part ou plus" },
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: false },
   basis:
     "barème Self-Directed Investing (en vigueur le 12/1/2023), relu le 2026-10-26 : « Stocks & ETFs » « Self-directed Online Trading $0 », " +
     "« Excludes shares priced less than $3.00 or not trading on an exchange »",

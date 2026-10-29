@@ -2744,6 +2744,46 @@ const FOLDER = {
   // https://www.ccbolsa.cl/apps/static/informaciones/Manual_de_Abonos.pdf
   // https://www.ccbolsa.cl/apps/static/informaciones/ManualCVDolar.pdf
   ccbolsa: ["CLP"],
+  // Online orders are in pesos only: "La operativa a través de nuestro sitio
+  // web Banchileinversiones.cl y nuestra app Mi Inversión solo se realiza en
+  // pesos, por tanto, si desea comprar acciones mundo en dólares, deberá
+  // hacerlo a través de un ejecutivo de inversión". Dollars bought in the
+  // app go to the Banco de Chile account or a branch, not to the broker.
+  // https://sitiospublicos.bancochile.cl/banchileinversiones/preguntas-frecuentes/como-comprar-y-vender-acciones
+  // https://sitiospublicos.bancochile.cl/banchileinversiones/moneda-extranjera
+  banchile: ["CLP"],
+  // Fees and the worked example are in pesos ("$2.500 por día", a
+  // "$1.000.000" purchase). The broker's "Moneda Extranjera" product is a
+  // cash exchange of dollars and euros at BancoEstado Express offices, not a
+  // currency balance in the account.
+  // https://www.bancoestado.cl/content/bancoestado-public/cl/es/home/home/productos-/ahorro-e-inversiones-/compra-y-venta-de-acciones.html
+  // https://www.bancoestado.cl/content/bancoestado-public/cl/es/home/home/productos-/ahorro-e-inversiones-/corredora-de-bolsa---bancoestado-personas/productos-corredora-de-bolsa---bancoestado-personas/moneda-extranjera-corredores-de-bolsa---bancoestado-personas.html
+  bancoestado: ["CLP"],
+  // The online share page and its fact page price everything in pesos
+  // ("$ 18.000 + IVA", "$ 7.000 + IVA"); no dollar balance is published.
+  // Bci's dollar offer is mutual funds (Carteras Dólar) and offshore custody
+  // at Pershing, not this account.
+  // https://www.bci.cl/inversiones/soluciones-de-inversion/acciones
+  // http://www.bci.cl/empresarios/inversiones/acciones/conozcamassobreacciones.html
+  bciinversiones: ["CLP"],
+  // Local equities online in pesos. Dollar products (New York shares and
+  // ETFs, "Monto mínimo: $10.000 USD") go through an investment manager or
+  // e-mail, not online; the dollar current account is the bank's.
+  // https://banco.santander.cl/personas/corredores-de-bolsa
+  santandercl: ["CLP"],
+  // Local fees in pesos ("$5.000 + IVA"). USD: the platform sells dollars
+  // ("Invierte en acciones, dólares, fondos o ETFs"); no dollar transfer in
+  // is published, but a dollar balance bought in the account counts as cash
+  // (owner, 2026-10-28, as for SMC, Rico and XP).
+  // https://www.mbi.cl/landing-corredora/landing01/index.html
+  mbicorredores: ["CLP","USD"],
+  // Web orders "en pesos (CLP)" (step-by-step guide). USD: Vector buys and
+  // sells foreign currency for clients ("invertir en dólares"); a dollar
+  // balance bought in the account counts as cash (owner, 2026-10-28, as for
+  // SMC, Rico and XP).
+  // https://vectorcapital.cl/wp-content/uploads/2024/05/Paso-a-paso-para-comprar-y-vender-acciones.pdf
+  // https://vectorcapital.cl/productos/
+  vectorcapital: ["CLP","USD"],
   // The bank is the ALyC, and trades go from Home Banking with a peso and a
   // dollar savings account. The tariff has peso and dollar columns and a fee
   // for trades "con liquidación en moneda extranjera (dólar MEP)", so MEP
@@ -4732,6 +4772,30 @@ const FOLDER = {
   // IDR. RDN at BCA or BRI; the initial deposit is "Rp1.000.000".
   // https://www.yb.co.id/faq
   ybsekuritasyakin: ["IDR"],
+  // 2026-10-29, the IDX catalogues of 2026-10-28: each account is a
+  // rupiah RDN and every fee page prices in rupiah.
+  // https://www.mandirisekuritas.co.id/id/siaran-pers-artikel/artikel/Fee-Mandiri-Sekuritas-Apakah-Termurah-di-Indonesia
+  growin: ["IDR"],
+  // https://bcasekuritas.co.id/api/pdf/RIPLAY%20Umum_versi%2020082025.pdf
+  bcasekuritas: ["IDR"],
+  // https://pinepick.ciptadana.com/
+  ciptadana: ["IDR"],
+  // https://harita-sekuritas.co.id/simulasi-biaya
+  haritakencana: ["IDR"],
+  // https://uno.inasekuritas.com/
+  inasekuritas: ["IDR"],
+  // https://www.kafsekuritas.co.id/id/faqs
+  kafsekuritas: ["IDR"],
+  // https://lotussekuritas.com/services/securities/trading
+  lotusandalan: ["IDR"],
+  // https://www.mncsekuritas.id/pages/equity/
+  mncsekuritas: ["IDR"],
+  // https://www.poems.co.id/Support/Knowledgebase
+  phillipid: ["IDR"],
+  // https://profindo.com/page/tutorial-opening-account
+  profindo: ["IDR"],
+  // https://www.yugen.co.id/documents/files/docs/YBS%20RIPLAY.pdf
+  yugen: ["IDR"],
   // ["PKR"]. FAQ: "we only accept from or send money to clients via banking
   // channels", minimum deposit PKR 5,000; no other currency is named.
   // https://nextcapital.com.pk/faq
@@ -5433,6 +5497,23 @@ const FOLDER = {
   // ASBH6.00) trades in USD, and RWML sells the whole board. RWML's own pages
   // https://republicwealthmanagement.com/brokerage-services-local-equity/
   republicwealth: ["TTD","USD"],
+  // TTD, USD. Evidence: the TOP FAQ, question 21: trading "in the currency
+  // of the market in which the security is listed, i.e. Trinidad and Tobago
+  // Dollar (TTD) or United States Dollar (USD)"; FCBAS sells the whole TTSE
+  // board, USD Equity board included.
+  // https://www.firstcitizensgroup.com/tt/wp-content/uploads/sites/2/2025/10/TOP-Frequently-Asked-Questions.pdf
+  firstcitizenstt: ["TTD","USD"],
+  // TTD, USD. Evidence: the local stockbroking page's opening amount is
+  // "$10,000TT"; the TTSE USD Equity board trades in USD and Bourse sells
+  // the whole board; its international stockbroking account is in USD
+  // ("US$5,000").
+  // https://bourseinvestment.com/individual-solutions/stockbroking/local-stockbroking/
+  boursebrokers: ["TTD","USD"],
+  // TTD, USD. Evidence: products "Available in two (2) currencies TT$ and
+  // US$"; equities minimum "TT $2,500" or "US $10,000"; the NYSE and the
+  // TTSE USD Equity board trade in USD.
+  // https://tt.jmmb.com/investment-products
+  jmmbsecuritiestt: ["TTD","USD"],
   // USD, UYU. The site says 'Ofrecemos planes de ahorro en pesos y dólares',
   // all tariff amounts are in USD, and every BVM share line is in USD, so
   // there is no FX. and
@@ -5452,6 +5533,42 @@ const FOLDER = {
   // ibkrus/ibkrint), plus INR for the NSE lines only. Evidence: the accounts
   // https://placetrade.com/investment-types-1
   placetrade: ["AED","AUD","CAD","CHF","CNH","CZK","DKK","EUR","GBP","HKD","HUF","ILS","JPY","MXN","NOK","NZD","PLN","SEK","SGD","TRY","USD","ZAR","INR"],
+  // Caucasus Capital (IBKR introducing broker): the interest page rates cash
+  // balances in each of these. RUB is also printed but is not a currency IBKR
+  // takes in, so it is left out.
+  // https://capital.ge/interest-and-financing/
+  caucasus: ["USD","AUD","CAD","CHF","CNH","CZK","DKK","EUR","GBP","HKD","HUF","ILS","INR","JPY","KRW","MXN","NOK","NZD","PLN","SEK","SGD","ZAR"],
+  // Peso and dollar transfers are both free ("en pesos o en moneda
+  // extranjera" to local accounts); MEP dollars are bought into the client's
+  // own dollar account.
+  // https://quicktrade.com.ar/preguntas-frecuentes-quicktrade/
+  // https://quicktrade.com.ar/dolar-mep/
+  quicktrade: ["ARS","USD"],
+  // Funding from abroad is converted into the naira account; dividends and
+  // sale proceeds are paid in naira.
+  // https://networkcapitalltd.com/frequently-asked-questions/
+  netcap: ["NGN"],
+  // "using EUR, USD or PLN currency as a base for your account".
+  // https://axontrader.eu/
+  axon: ["EUR","USD","PLN"],
+  // Chong Hing Bank securities accounts in HKD, RMB and USD; FPS deposits in
+  // HKD and RMB.
+  // https://www.christfund.com/capital.php
+  christfund: ["HKD","USD","CNH"],
+  // The ADIB bank account is in dirhams; a foreign-market trading account is
+  // opened "in the Trading Currency" (SAR for Tadawul/Nomu, USD for the US).
+  // https://www.adibsecurities.ae/en/Pages/active_trading.aspx
+  adibsec: ["AED","SAR","USD"],
+  // Rupees for NSE/BSE; the global account takes dollars directly, "from
+  // Indian or international banks" or from ESOP/RSU proceeds.
+  // https://www.hdfcsec.com/globalinvesting
+  hdfcsec: ["INR","USD"],
+  // Rupees for NSE/BSE, and the dollars of the US wallet in GIFT City. That
+  // wallet is funded by an INR remittance converted to dollars, but it holds a
+  // dollar balance, which counts as cash (owner, 2026-10-28, as for SMC, Rico
+  // and XP).
+  // https://www.sharekhan.com/global-markets/invest-in-us-stocks
+  sharekhan: ["INR","USD"],
 };
 
 const BY_PLAN = {

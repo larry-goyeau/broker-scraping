@@ -22,7 +22,9 @@
 //
 //   online equity order   $2.00 for the first 1,000 shares, + $0.01 a share
 //                         over 1,000, each way
-//   SEC, TAF, CAT         not printed: 0 (owner rule)
+//   SEC, TAF, CAT         SEC and TAF added at the regulators' rates on the
+//                         sale, rounded up to the cent (none is printed;
+//                         owner, 2026-10-28). CAT: no rate printed, 0.
 //   minimum               $10,000 for the basic account (brochure): not a
 //                         cost on the order
 //
@@ -66,7 +68,7 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: (ctx) => commission(ctx),
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: false },
   basis:
     "brochure BNY Brokerage Account (DRD-885569-2026-02-12), relue le 2026-10-26 : ordre en ligne 2,00 $ jusqu'à 1 000 parts, " +
     "+ 0,01 $ la part au-delà, à l'achat comme à la vente",

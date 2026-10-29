@@ -62,6 +62,9 @@
 // Usage
 //   import { tradegateBook } from "../tradegatedirect/tradegateBook.mjs";
 //   const rows = await tradegateBook();                 // { fresh, log }
+//   const rows = await tradegateBook({ skipBrokenInitials: true });  // read a
+//     list page that still fails after the retries as empty, when the last
+//     full read had no line on it
 //   tradegateBook.stats                                 // counts of the run
 //
 //   node brokers/tradegatedirect/tradegateBook.mjs            counts
@@ -164,9 +167,20 @@ function listLines(html) {
   return out;
 }
 
-async function priceList(art, log) {
+// skipped: with the option skipBrokenInitials, the initials whose page
+// still fails after the retries are read as empty and listed here (on 28
+// October 2026 the "9" page of both lists answered HTTP 500; no Tradegate
+// name began with 9 the days before).
+async function priceList(art, log, skipped = null) {
   const pages = await pool(INITIALS, 2, (initial) =>
-    get(`${TG}/indizes.php?art=${art}&buchstabe=${initial}`, { check: (html) => html.includes('id="kursliste_abc"') }).then(listLines)
+    get(`${TG}/indizes.php?art=${art}&buchstabe=${initial}`, { check: (html) => html.includes('id="kursliste_abc"') })
+      .then(listLines)
+      .catch((error) => {
+        if (!skipped) throw error;
+        skipped.push(`${art} ${initial} (${error.message.replace(/^.*: /, "")})`);
+        log(`  Tradegate ${art} ${initial}: page failed, read as empty`);
+        return [];
+      })
   );
   const byIsin = new Map();
   for (const line of pages.flat()) if (!byIsin.has(line.isin)) byIsin.set(line.isin, { ...line, list: art });
@@ -251,7 +265,7 @@ function assetNames() {
 
 // ---- entry point -----------------------------------------------------------------
 
-export async function tradegateBook({ fresh = false, log = () => {} } = {}) {
+export async function tradegateBook({ fresh = false, log = () => {}, skipBrokenInitials = false } = {}) {
   const today = berlinDay();
   const cached = !fresh ? readJson(DAY_CACHE) : null;
   if (cached?.day === today && Array.isArray(cached.rows)) {
@@ -260,8 +274,21 @@ export async function tradegateBook({ fresh = false, log = () => {} } = {}) {
   }
 
   const lines = new Map();
+  const skipped = skipBrokenInitials ? [] : null;
   for (const art of Object.keys(LISTS)) {
-    for (const [isin, line] of await priceList(art, log)) if (!lines.has(isin)) lines.set(isin, line);
+    for (const [isin, line] of await priceList(art, log, skipped)) if (!lines.has(isin)) lines.set(isin, line);
+  }
+  if (skipped?.length) {
+    // A failed page is read as empty only when the last full read had no
+    // line on it (the pages that failed on 28 October 2026 were all empty
+    // ones: digits and Q of the ETP list, 9 of the share list).
+    const previous = readJson(DAY_CACHE)?.rows;
+    if (!Array.isArray(previous)) throw new Error(`Tradegate: list pages failed and no earlier read to check them against: ${skipped.join(", ")}`);
+    for (const page of skipped) {
+      const [art, initial] = page.split(" ");
+      const had = previous.filter((row) => row.list === art && String(row.raw || "").charAt(0).toUpperCase() === initial).length;
+      if (had) throw new Error(`Tradegate ${art} ${initial}: page failed and held ${had} lines on the last full read`);
+    }
   }
 
   const stats = { listed: lines.size, suspended: 0, delisting: 0, kept: 0, byType: {}, byList: {}, bookPages: 0 };
@@ -333,7 +360,10 @@ export async function tradegateBook({ fresh = false, log = () => {} } = {}) {
   }
   stats.kept = rows.length;
   rows.sort((a, b) => a.name.localeCompare(b.name) || a.isin.localeCompare(b.isin));
-  writeJson(DAY_CACHE, { day: today, stats, rows });
+  // A read with a skipped page is not cached for the day, so a caller
+  // without the option still gets the full read (or its error).
+  if (skipped?.length) stats.skippedInitials = skipped;
+  else writeJson(DAY_CACHE, { day: today, stats, rows });
   tradegateBook.stats = stats;
   return rows;
 }

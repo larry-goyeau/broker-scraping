@@ -14,12 +14,14 @@
 //     scheduled trade windows).
 //
 //   commission       $0 each way ("No ... transaction fees")
-//   SEC, TAF, CAT    not printed, so 0 (owner rule)
+//   SEC, TAF, CAT    SEC and TAF added at the regulators' rates on the sale,
+//                    rounded up to the cent (none is printed; owner,
+//                    2026-10-28). CAT: no rate printed, 0.
 //   subscription     Gold, $12 a month, needed for a Custom Portfolio:
 //                    remark, not in the total. Only Gold can hold these
 //                    lines, so there is one row, not one per plan.
 //
-// Formula: book + 0.
+// Formula: book + 0 + SEC and TAF on the sale.
 //
 // Routing: Acorns Securities has no report and no adopt-by-reference line
 // in the FINRA 606 bulk file (2026 Q2). Its statement of financial
@@ -52,7 +54,7 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: () => 0,
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: false },
   remark: "$12/month (Gold plan).",
   basis: "tarifs Acorns relus le 2026-10-26 : « No hidden costs or transaction fees », portefeuille Custom réservé à Gold (12 $/mois)",
   notes: [

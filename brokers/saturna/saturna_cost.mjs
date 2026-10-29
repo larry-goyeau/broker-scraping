@@ -16,7 +16,9 @@
 //                         share price < $1, add ¼¢ per share)"
 //   foreign securities    "may be assessed an additional foreign settlement
 //                         fee": not this place
-//   SEC / TAF / CAT       not printed, so 0
+//   SEC / TAF / CAT       SEC and TAF added at the regulators' rates on the
+//                         sale, rounded up to the cent (none is printed;
+//                         owner, 2026-10-28). CAT: no rate printed, 0.
 //   inactive account      $25 a year, only with no trade in the year: not
 //                         this trip
 //
@@ -64,7 +66,7 @@ const SCHEDULE = {
     const each = commissionEach(ctx.shares, ctx.price);
     return { buy: each, sell: each, note: `commission en ligne ${ONLINE} $ (+ 1 ¢ la part au-delà de 1 000 parts, ¼ ¢ sous 1 $) à l'achat et à la vente : ${each} $` };
   },
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: false },
   basis:
     "barème Saturna (brochure SBS-20240524-A, page 3), relu le 2026-10-26 : « Stocks » « $14.95 » en ligne, " +
     "« Add 1¢ per share for each share over 1,000 (if share price < $1, add ¼¢ per share) »",

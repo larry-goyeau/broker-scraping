@@ -12,7 +12,10 @@
 //                             inverse ETFs". No price is printed for them in the Self
 //                             Invest column, so a leveraged or inverse ETF/ETN line
 //                             has an unknown ticket: total N/A (owner rule)
-//   SEC, TAF, CAT             not printed: 0
+//   SEC, TAF, CAT             SEC and TAF added at the regulators' rates on
+//                             the sale, rounded up to the cent (none is
+//                             printed; owner, 2026-10-28). CAT: no rate
+//                             printed, 0.
 //   FX "up to 1.00%"          the account and every line are in dollars: not used
 //   transfer $95, wires $25   not on an order
 //
@@ -21,7 +24,7 @@
 // "Inverse", "Leveraged"). Bond funds called "Ultra Short" or "Short Term"
 // are not caught.
 //
-// Formula: book (605 × Q of Citigroup Global Markets) + $0 + $0.
+// Formula: book (605 × Q of Citigroup Global Markets) + $0 + SEC and TAF on the sale.
 //
 // Routing: Citi Self Invest orders are Citigroup Global Markets Inc. (CRD
 // 7059) orders; its CPWM report is the CNTXT-CGWM file of the FINRA 606
@@ -65,7 +68,7 @@ const SCHEDULE = {
     isLeveragedOrInverse(ctx.row)
       ? null
       : { buy: 0, sell: 0, note: "colonne Citi Self Invest : 0 $ en ligne et sur l'application" },
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: false },
   basis:
     "barème CPWM Pricing, Commissions, and Fees (1591255 09/26), relu le 2026-10-26 : " +
     "Citi Self Invest 0 $ par ordre d'actions ou d'ETF en ligne",

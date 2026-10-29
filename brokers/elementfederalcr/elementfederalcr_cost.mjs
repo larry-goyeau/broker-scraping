@@ -15,12 +15,14 @@
 //                  (section 23): "We do not currently charge fees, such as
 //                  commissions, mark-ups or otherwise, on Customer Account
 //                  transactions"
-//   SEC / TAF / CAT  not printed on Element's pages, so 0 (owner's rule;
-//                  Frankenmuth CU, on the same platform, prints the SEC fee)
+//   SEC / TAF / CAT  SEC and TAF added at the regulators' rates on the sale,
+//                    rounded up to the cent (Frankenmuth CU, on the same
+//                    InvestiFi platform, prints the SEC fee; owner,
+//                    2026-10-28). CAT: no rate printed, 0.
 //   order cap      "Buy up to $5,000 of stocks and ETFs per transaction": a
 //                  larger trip is refused (one order); minimum $1
 //
-// Formula: book (quoted NBBO, see below) + 0 + 0.
+// Formula: book (quoted NBBO, see below) + 0 + SEC and TAF on the sale.
 //
 // Routing: InvestiFi files no 606 of its own. The FINRA 606 bulk file, 2026
 // Q2 adopt-by-reference list, has "289604|INVESTIFI SECURITIES LLC|134284|RQD*
@@ -55,7 +57,7 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: () => 0,
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: false },
   tradable: (ctx) =>
     ctx.notionalUsd != null && ctx.notionalUsd > CAP ? `au-delà de ${CAP} $ par ordre d'achat (plafond Element FCU)` : null,
   remark: "",

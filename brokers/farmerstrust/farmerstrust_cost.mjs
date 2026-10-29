@@ -19,12 +19,14 @@
 //   commission     $0 each way: "Trade Commissions on self-elected individual
 //                  cash accounts: Free"; "$0 commission online trading of U.S.
 //                  listed stocks and ETFs (other fees may apply)"
-//   SEC / TAF / CAT  "Additional fees may apply, charged by APEX
-//                  (Broker/Dealer)": no figure printed, so 0 (owner's rule)
+//   SEC / TAF / CAT  SEC and TAF added at the regulators' rates on the sale,
+//                    rounded up to the cent ("Additional fees may apply,
+//                    charged by APEX (Broker/Dealer)"; owner, 2026-10-28).
+//                    CAT: no rate printed, 0.
 //   ACAT out       $50 one-time: not part of the trip
 //   minimum        "Invest in fractional or full shares with as little as $5"
 //
-// Formula: book (Apex 605 × Q) + 0 + 0.
+// Formula: book (Apex 605 × Q) + 0 + SEC and TAF on the sale.
 //
 // Routing: Apex is the broker-dealer of record, so a listed US line takes
 // Apex's per-symbol 605 × Q (rule606 key "apex"); the Texas Stock Exchange
@@ -53,7 +55,7 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: () => 0,
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: false },
   remark: "",
   basis:
     "barème Unifimoney Fees & Limits du 01/29/2026 relu le 2026-10-26 : « Trade Commissions on self-elected individual cash accounts: Free », frais Apex éventuels non chiffrés",

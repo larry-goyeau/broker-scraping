@@ -3111,6 +3111,39 @@ export const ACCEPTED = {
   // RUT. The country is CL.
   // https://www.ccbolsa.cl/apps/script/modulos/hazteCliente/hazte-cliente.asp
   ccbolsa: { countries: ["CL"] },
+  // "Accede a Banchile Inversiones si ya eres cliente Banco de Chile o abre
+  // tu cuenta 100% online"; a client of another bank opens a Banco de Chile
+  // account first, which asks for a "Cédula de Identidad vigente". The
+  // country is CL.
+  // https://sitiospublicos.bancochile.cl/banchileinversiones/hazte-cliente
+  // https://sitiospublicos.bancochile.cl/cuenta-corriente-online/centro-de-ayuda/detalles/que-requisitos-debo-cumplir-para-abrir-una-cuenta-corriente-digital
+  banchile: { countries: ["CL"] },
+  // "Los extranjeros deben poseer RUT", and enrolment needs a BancoEstado
+  // payment account (Cuenta Corriente, Chequera Electrónica or Cuenta RUT)
+  // and a "cédula de identidad vigente". The country is CL.
+  // https://www.bancoestado.cl/content/bancoestado-public/cl/es/home/home/centro-de-ayuda/productos/ahorro-e-inversiones---bancoestado-personas/corredores-de-bolsa---bancoestado-personas/-cuales-son-los-requisitos-para-ser-cliente-de-bancoestado-corre.html
+  bancoestado: { countries: ["CL"] },
+  // The online investment account is a Bci "cuenta corriente digital"; a
+  // foreigner opens one "presentando tu cédula de identidad chilena vigente
+  // y acreditando tu residencia definitiva o temporal". The country is CL.
+  // https://www.bci.cl/inversiones/activa-tus-inversiones/informacion
+  // https://www.bci.cl/personas/con-letra-grande/post/como-abrir-cuenta-corriente-en-chile-paso-a-paso-2026
+  bciinversiones: { countries: ["CL"] },
+  // "contar con tu RUT vigente"; the sign-up app: "Por el momento, solo
+  // podemos procesar solicitudes de personas con nacionalidad Chilena", with
+  // a Chilean address and bank. The country is CL.
+  // https://www.mbi.cl/landing-corredora/landing01/index.html
+  // https://app-trading.mbi.cl/signup
+  mbicorredores: { countries: ["CL"] },
+  // Online trading needs a "cuenta vigente con Banco Santander Chile" and
+  // the contract is signed "acercándose a cualquier sucursal de Banco
+  // Santander Chile". The country is CL.
+  // https://banco.santander.cl/personas/corredores-de-bolsa
+  santandercl: { countries: ["CL"] },
+  // "¿Qué necesitas para registrarte? Cédula de identidad vigente Cuenta
+  // corriente o vista asociada a tu RUT." The country is CL.
+  // https://nuevoregistro.vectorcapital.cl/es-CL/inicio-registro
+  vectorcapital: { countries: ["CL"] },
   // Capital markets FAQ: you must hold a Cuenta Comitente, which is tied to a
   // peso and a dollar Cuenta a la Vista at the bank. Becoming a client: "Solo
   // necesitás presentar tu DNI, ser mayor de 18 años". The DNI is Argentine,
@@ -4551,6 +4584,58 @@ export const ACCEPTED = {
   // Sign-up in the app needs an e-KTP photo and a selfie with it. No foreigner
   // route found. Same as the existing IDX brokers (bni, indopremier: ID).
   stockbit: { countries: ["ID"] },
+  // "Foto e-KTP dan Swafoto bersama e-KTP … NPWP … Rekening tabungan pribadi
+  // Anda di Bank Mandiri". No foreigner route found.
+  // https://growin.id/bantuan/dokumen-apa-saja-yang-harus-dilampirkan-untuk-persyaratan-pembukaan-rekening
+  growin: { countries: ["ID"] },
+  // Online opening: "Pastikan Anda menyiapkan e-KTP dan NPWP (jika ada)".
+  // The paper form takes a WNA with "KTP/Paspor/KITAS" and an Indonesian
+  // address only (no country field), so residence in Indonesia.
+  // https://bcasekuritas.co.id/help
+  // https://bcasekuritas.co.id/api/pdf/1-bcas-fpre-individu-tapres-20082025.pdf
+  bcasekuritas: { countries: ["ID"] },
+  // PinePick sign-up reads the KTP ("OCR and autofill of user information
+  // based on KTP data") and checks it against dukcapil, the Indonesian civil
+  // registry. No foreigner route found.
+  // https://apps.apple.com/id/app/pinepick/id6744606128
+  ciptadana: { countries: ["ID"] },
+  // "Fotokopi KTP atau paspor yang masih berlaku • Fotokopi NPWP jika ada •
+  // Fotokopi halaman depan buku tabungan"; no non-resident or foreign
+  // address route.
+  // https://harita-sekuritas.co.id/produk-layanan
+  // https://harita-sekuritas.co.id/faq
+  haritakencana: { countries: ["ID"] },
+  // Opening is in the UNO app ("dapat dilakukan melalui ponsel"), whose
+  // steps upload a KTP and a selfie. No foreigner route is published.
+  // https://opening.inasekuritas.com/
+  inasekuritas: { countries: ["ID"] },
+  // "Siapa yang Bisa Membuka Akun Trading Online ? Warga Negara Indonesia",
+  // with a KTP, an NPWP and a savings-book cover.
+  // https://www.kafsekuritas.co.id/id/open-account
+  kafsekuritas: { countries: ["ID"] },
+  // "Dokumen yang perlu dipersiapkan : eKTP NPWP 16 Digit ( jika ada ) Nomor
+  // Rekening BCA". No foreigner route.
+  // https://lotussekuritas.com/open-account
+  lotusandalan: { countries: ["ID"] },
+  // The individual form takes "Indonesia / Asing", a foreigner with
+  // "Fotocopy KTP / Paspor & KITAS": a KITAS is an Indonesian stay permit,
+  // so residence in Indonesia.
+  // https://www.mncsekuritas.id/assetweb//download/OA%20REGULER%2020261009_1791518557.pdf
+  mncsekuritas: { countries: ["ID"] },
+  // WNI open in the POEMS ID app with a "KTP Fisik"; the web route "hanya
+  // berlaku untuk Warga Negara Asing", whose documents sit behind
+  // registration. No route for a person living abroad is printed.
+  // https://www.poems.co.id/Home/BukaAkun
+  phillipid: { countries: ["ID"] },
+  // "Syarat pembukaan rekening saham secara online 1 . bapak/ibu sudah
+  // memiliki rekening pribadi BCA"; the form asks for the "Nama sesuai
+  // identitas KTP".
+  // https://profindo.com/page/tutorial-opening-account
+  profindo: { countries: ["ID"] },
+  // Client data form: "WNI: KTP; WNA: KIMS/KITAS + PASSPORT", an Indonesian
+  // address with no country field, so residence in Indonesia.
+  // https://www.yugen.co.id/documents/files/docs/4.%20Form-Pengkinian-Data-Yugen.pdf
+  yugen: { countries: ["ID"] },
   // The page prints nothing on foreigners. KTP-based online opening, the
   // convention for IDX brokers (bni, indopremier: ID).
   miraeindonesia: { countries: ["ID"] },
@@ -5318,6 +5403,21 @@ export const ACCEPTED = {
   // form is required.
   // https://republicwealthmanagement.com/wp-content/uploads/2021/08/Brokerage-FAQs.pdf
   republicwealth: WORLD,
+  // The account-opening checklist takes proof of address only as a Trinidad
+  // and Tobago utility bill (T&TEC, WASA, TSTT, B-Mobile, Digicel, FLOW,
+  // Green Dot), copies certified "original seen" by an FCBAS representative.
+  // https://www.firstcitizensgroup.com/tt/wp-content/uploads/sites/2/2021/10/BROKERAGE-ACCOUNT-OPENING-CHECKLIST-1.pdf
+  firstcitizenstt: { countries: ["TT"] },
+  // The local stockbroking page asks for "Two (2) forms of photo
+  // identification (e.g. National Identification Card, T&T Passport or
+  // Driver's License)" and names no route for a person living abroad.
+  // https://bourseinvestment.com/individual-solutions/stockbroking/local-stockbroking/
+  boursebrokers: { countries: ["TT"] },
+  // The individual account-opening checklist: "Any person residing outside
+  // of Trinidad and Tobago, to obtain Banker's Reference and bank statement
+  // showing activity over a 6 month period".
+  // https://www.jmmb.com/sites/default/files/CHECKLIST%20JMMB%20SECURITIES%20ACCOUNT%20OPENING%20REQUIREMENTS%20FOR%20INDIVIDUALS%20JULY%202016.pdf
+  jmmbsecuritiestt: WORLD,
   // The site is Spanish only and every phone number is +598. Sign-up asks for
   // a cédula or a passport, and the address step asks for a 'Departamento',
   // which is a Uruguayan subdivision; there is also a free-text País field.

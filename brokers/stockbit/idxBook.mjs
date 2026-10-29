@@ -50,7 +50,10 @@
 //
 // The crawl (about 150 calls, with pauses) is kept in idx-cache.json next
 // to this file for 12 hours, so the scrapers run back to back read IDX
-// once.
+// once. idx.co.id's Cloudflare check refuses the headless Chrome some days
+// (HTTP 403 on every call); with CHROME_URL=http://127.0.0.1:9222 the crawl
+// runs in a local Chrome started with --remote-debugging-port=9222 instead,
+// a window the site lets through (as ../ccbolsa reads its exchange).
 //
 //   import { idxBook, writeIdxCatalogue } from "../stockbit/idxBook.mjs";
 //   node brokers/stockbit/idxBook.mjs        prints the counts
@@ -124,10 +127,14 @@ async function api(page, path) {
 }
 
 async function crawl() {
-  const browser = await puppeteer.launch({ executablePath: CHROME, headless: true, args: ["--disable-gpu"], protocolTimeout: 300_000 });
+  const local = process.env.CHROME_URL;
+  const browser = local
+    ? await puppeteer.connect({ browserURL: local, defaultViewport: null, protocolTimeout: 300_000 })
+    : await puppeteer.launch({ executablePath: CHROME, headless: true, args: ["--disable-gpu"], protocolTimeout: 300_000 });
+  let page = null;
   try {
-    const page = await browser.newPage();
-    await page.setUserAgent(UA);
+    page = await browser.newPage();
+    if (!local) await page.setUserAgent(UA);
     await openSite(page);
 
     const shares = (await api(page, "/primary/StockData/GetSecuritiesStock?start=0&length=9999&code=&sector=&board=&language=en-us")).data;
@@ -168,7 +175,12 @@ async function crawl() {
     const items = news.Results.map((item) => ({ Kode: item.Kode, Info_Type: item.Info_Type, Date: item.Date, Judul: item.Judul }));
     return { shares, etfs, news: items, session, histories };
   } finally {
-    await browser.close();
+    if (local) {
+      await page?.close().catch(() => {});
+      browser.disconnect();
+    } else {
+      await browser.close();
+    }
   }
 }
 

@@ -197,6 +197,13 @@ export const ALIASES = {
   // Tickrs Clearing, of the same Valuable Capital group as Sahm.
   // https://www.sahmcapital.com/support/detail/x?articleId=544
   sahm: "tickrsclearing",
+  // Axon Securities sends real stocks to EXT Ltd (EXANTE, Cyprus), whose
+  // execution policy (v3.0/02.24, Annex 2) gives "Transferable Securities
+  // (US)" to Velocity Clearing, LLC (FINRA) as the standard venue; Number One
+  // Brokers and GTN Middle East only take over when it fails. Velocity
+  // Clearing is now Tickrs Clearing.
+  // https://exante.eu/files/clients-orders-execution-policy_ext/
+  axon: "tickrsclearing",
   vivid: "interactivebrokers",
   // UniCredit Polska: orders are executed by Interactive Brokers Ireland
   // (MiFID brochure 2.2). IBIE routes US equities to Interactive Brokers LLC.
@@ -261,6 +268,23 @@ export const ALIASES = {
   // partner that can suspend the service. US cash follows that firm's NMS
   // flow, so the book is Interactive Brokers LLC's 606.
   rakutenmy: "interactivebrokers",
+  // JMMB Securities (T&T)'s online US trading is JMMB International Access,
+  // whose page names Interactive Brokers LLC as the executing and clearing
+  // broker (owner's choice of stand-in, 2026-10-28).
+  // https://tt.jmmb.com/jmmb-interactive
+  jmmbsecuritiestt: "interactivebrokers",
+  // MBI Corredores de Bolsa: "Para clientes que desean una cuenta de
+  // inversión personal en el extranjero ... utilizamos los servicios de
+  // StoneX Financial Inc., Miembro de FINRA y SIPC". UBS, also on the page,
+  // is a Swiss custody service with no US broker-dealer named.
+  // https://mbi.cl/servicios-internacionales
+  mbicorredores: "stonexfinancial",
+  // Vector Capital names no US dealer for its own clients; the US accounts
+  // that trii and Zesty open "with Vector Capital" are held at Alpaca, and
+  // LatamFintech reports the Vector-Alpaca alliance (owner's stand-in,
+  // 2026-10-29).
+  // https://www.latamfintech.co/articles/corredora-de-bolsa-vector-capital-se-asocio-con-la-wealtech-colombiana-trii-como-apuesta-por-inversionistas-retail
+  vectorcapital: "alpaca",
   // moomoo証券's December 2025 trading booklet, chapter 1 article 13:
   // a US stock order is transmitted to Futu Clearing Inc.
   moomoojp: "futuclearing",
@@ -514,6 +538,9 @@ export const ALIASES = {
   // own 606 has no market-order mix in 2026 Q2: the highest Q of the two).
   geojit: "viewtrade",
   bajaj: ["vested", "drivewealth"],
+  // HDFC Securities' Global Investing is "powered by Vested Finance", with
+  // DriveWealth as custodian: the same pair.
+  hdfcsec: ["vested", "drivewealth"],
   // Global Securities routes US orders "through the GTN platform", as
   // Capital.com does.
   globalsecurities: "gtnamericas",
@@ -578,6 +605,10 @@ export const ALIASES = {
   // no 606, so Citigroup Global Markets' is the one Q.
   // https://www.citibank.com.hk/english/credit-cards/pdf/best-execution-policy.pdf
   citibankhk: "citigroup",
+  // Sharekhan's US orders: "Routed to US market makers" by ViewTrade
+  // International IFSC, which clears through ViewTrade Securities Inc.
+  // https://gift.sharekhan.com/
+  sharekhan: "viewtrade",
 };
 
 // The BD key a broker routes through: the alias, or for an array the key

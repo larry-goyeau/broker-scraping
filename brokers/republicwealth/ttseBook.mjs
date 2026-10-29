@@ -33,7 +33,11 @@
 //
 // The site sits behind a Sucuri firewall: a browser User-Agent is needed,
 // and www.stockex.co.tt/fetch_calls/* is refused; the two pages above are
-// plain HTML.
+// plain HTML. Since October 2026 the firewall answers curl with a
+// JavaScript challenge some days; with CHROME_URL=http://127.0.0.1:9222 the
+// two pages are read in a local Chrome started with
+// --remote-debugging-port=9222 instead (as ../ccbolsa reads its exchange),
+// which the firewall lets through. Nothing here solves a captcha.
 //
 // Use:
 //   import { ttseBook } from "../republicwealth/ttseBook.mjs";
@@ -83,7 +87,26 @@ const MOST_OFF_BOARD = 4;
 
 const pause = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+// A page as the local Chrome renders it (CHROME_URL), after the firewall's
+// own script has run.
+async function chromeText(url) {
+  const { default: puppeteer } = await import("puppeteer-core");
+  const browser = await puppeteer.connect({ browserURL: process.env.CHROME_URL, defaultViewport: null });
+  const page = await browser.newPage();
+  try {
+    await page.goto(url, { waitUntil: "networkidle2", timeout: 90_000 });
+    for (let wait = 0; wait < 30 && /sucuri|access denied|captcha/i.test(await page.title()); wait += 1) await pause(1000);
+    const html = await page.content();
+    if (/Sucuri WebSite Firewall - Access Denied/.test(html)) throw new Error(`the TTSE firewall refused ${url} in the local Chrome`);
+    return html;
+  } finally {
+    await page.close().catch(() => {});
+    browser.disconnect();
+  }
+}
+
 async function getText(url) {
+  if (process.env.CHROME_URL) return chromeText(url);
   let last = "";
   for (let attempt = 0; attempt < 4; attempt += 1) {
     try {

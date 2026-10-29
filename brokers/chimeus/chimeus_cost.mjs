@@ -11,7 +11,9 @@
 //                   other fees and expenses may apply"; FAQ "There are no
 //                   commission fees on trades", "no account opening or
 //                   maintenance fees"; fees page "No commission fees".
-//   SEC / TAF / CAT not printed by Chime, so 0.
+//   SEC / TAF / CAT SEC and TAF added at the regulators' rates on the sale,
+//                   rounded up to the cent (none is printed; owner,
+//                   2026-10-28). CAT: no rate printed, 0.
 //   Atomic schedule Atomic Brokerage's "Schedule of Maximum Charges" (as of
 //                   2024-06-05) caps a US stock order at $5.00 and an
 //                   individual account at $3.00 a month, for partners that
@@ -21,7 +23,7 @@
 //   advisory fee    Managed Portfolios only (0.25% a year, 0.10% Chime Plus,
 //                   $0 Chime Prime): not this trip.
 //
-// Formula: book + 0 + 0. Atomic Brokerage LLC (CRD 315263) files its own
+// Formula: book + 0 + SEC and TAF on the sale. Atomic Brokerage LLC (CRD 315263) files its own
 // 606 (2026 Q2: market orders to VIRTU Americas and Citadel Securities,
 // payment for order flow "through its clearing firm, RQD* Clearing"),
 //   https://cdn.finra.org/606/2026/315263_606_NMS_2026_Q2_V1.pdf
@@ -51,7 +53,7 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: () => 0,
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: false },
   basis:
     "page Chime Invest et page des frais Chime, relues le 2026-10-26 : « Trading stocks and ETFs is commission-free », " +
     "« no account opening or maintenance fees »",

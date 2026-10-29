@@ -167,6 +167,12 @@ const FOREIGN_PER_USD = {
   // figure is the mid.
   // https://boj.org.jm/market/foreign-exchange/counter-rates/
   JMD: 158.16225,
+  // Central Bank of Trinidad and Tobago weighted average, Trinidad and
+  // Tobago dollars per dollar, same day, read through Frankfurter's CBTT
+  // provider (the CBTT site prints no dated table a script can read). Not
+  // an ECB print.
+  // https://api.frankfurter.dev/v2/rates?base=usd&quotes=ttd&providers=cbtt&from=2026-09-07&to=2026-09-07
+  TTD: 6.7541,
   // Nepal Rastra Bank, rupees per dollar, same day. Not an ECB print.
   // Buy 150.88 / sell 151.48; the figure is the mid.
   // https://www.nrb.org.np/api/forex/v1/rates?page=1&per_page=5&from=2026-09-07&to=2026-09-07

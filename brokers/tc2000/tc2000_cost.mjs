@@ -16,8 +16,10 @@
 //                       on request: "Please let us know if you wish to
 //                       switch to the Active Trader Plan")
 //   No cap or minimum is printed beyond the $1 / $5 fixed part.
-//   SEC / TAF / CAT     not printed (the Form CRS only says "Direct fees
-//                       will be shown on your trade confirmation"), so 0.
+//   SEC / TAF / CAT     SEC and TAF added at the regulators' rates on the
+//                       sale, rounded up to the cent (the Form CRS: "Direct
+//                       fees will be shown on your trade confirmation"; owner,
+//                       2026-10-28). CAT: no rate printed, 0.
 //
 // The two plans price the same trade differently, so each is one row:
 // `plan: "small"` (default) and `plan: "active"`.
@@ -66,7 +68,7 @@ const SCHEDULE = {
     const each = ctx.plan.fixed + ctx.plan.perShare * ctx.shares;
     return { buy: each, sell: each, note: `${ctx.plan.label} : ${ctx.plan.fixed} $ + ${ctx.plan.perShare} $ la part, à l'achat et à la vente` };
   },
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: false },
   basis: (ctx) =>
     `page Commissions TC2000, relue le 2026-10-26 : « Stocks & ETF's $${ctx.plan.fixed} + $${ctx.plan.perShare} per share » (${ctx.plan.label} Plan)`,
   notes: ["TC2000 Brokerage adopte le 606 d'Interactive Brokers par référence (bulk FINRA 2026 T2)"],

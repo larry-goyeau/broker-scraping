@@ -10,9 +10,11 @@
 //   commission      $0 each way: "Self Directed Commissions $0"; FAQ "How
 //                   much does it cost to use this? The cost to trade
 //                   securities is free."
-//   SEC / TAF / CAT not printed, so 0.
+//   SEC / TAF / CAT SEC and TAF added at the regulators' rates on the sale,
+//                   rounded up to the cent (none is printed; owner,
+//                   2026-10-28). CAT: no rate printed, 0.
 //
-// Formula: book + 0 + 0. "Brokerage services are provided by InvestiFi
+// Formula: book + 0 + SEC and TAF on the sale. "Brokerage services are provided by InvestiFi
 // Securities LLC and RQD* Clearing LLC"; RQD is the custodian. InvestiFi
 // adopts RQD's 606 by reference: key `rqd` in spreads/rule606.mjs, the book
 // is the blended 605 × that 606's Q.
@@ -39,7 +41,7 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: () => 0,
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: false },
   basis:
     "page Invest de Thinkwise CU, relue le 2026-10-26 : « Self Directed Commissions $0 », " +
     "« The cost to trade securities is free », 0 $ à l'achat et à la vente",

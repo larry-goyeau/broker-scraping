@@ -20,11 +20,13 @@
 //                    self-elected trading. However, other charges may apply"
 //                    (Radiant); "Trade Commissions on self-elected individual
 //                    cash accounts: Free" (Unifimoney schedule)
-//   SEC / TAF / CAT  "other charges may apply", "Additional fees may apply,
-//                    charged by APEX": no figure printed, so 0 (owner's rule)
+//   SEC / TAF / CAT  SEC and TAF added at the regulators' rates on the sale,
+//                    rounded up to the cent ("other charges may apply",
+//                    "Additional fees may apply, charged "; owner,
+//                    2026-10-28). CAT: no rate printed, 0.
 //   ACAT out         $50 one-time: not part of the trip
 //
-// Formula: book (Apex 605 × Q) + 0 + 0.
+// Formula: book (Apex 605 × Q) + 0 + SEC and TAF on the sale.
 //
 // Routing: Apex is the broker-dealer of record, so a listed US line takes
 // Apex's per-symbol 605 × Q (rule606 key "apex"); the Texas Stock Exchange
@@ -53,7 +55,7 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: () => 0,
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: false },
   remark: "",
   basis:
     "page Radiant relue le 2026-10-26 : « Unifimoney does not charge a commission on self-elected trading » ; " +

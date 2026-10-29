@@ -1,5 +1,5 @@
 {
- "bookAt": "2026-10-24T22:43:07.805Z",
+ "bookAt": "2026-10-28T13:13:58.238Z",
  "book": {
   "shares": [
    {
@@ -143,7 +143,7 @@
     "currency": "BAM",
     "type": "STOCK",
     "isin": "BABHTSR00000",
-    "raw": "BHTSR BH Telecom d.d. Sarajevo Sarajevo Stock Exchange BAM STOCK Free market subsegment 1 ordinary last trade 2026-10-23"
+    "raw": "BHTSR BH Telecom d.d. Sarajevo Sarajevo Stock Exchange BAM STOCK Free market subsegment 1 ordinary last trade 2026-10-28"
    },
    {
     "query": "BABIGFRK3006",
@@ -330,7 +330,7 @@
     "currency": "BAM",
     "type": "FUND",
     "isin": "BACRBFRK1003",
-    "raw": "CRBFRK1 ZIF CROBIH Fond dd Mostar Sarajevo Stock Exchange BAM FUND Official market (funds) ordinary last trade 2026-10-21"
+    "raw": "CRBFRK1 ZIF CROBIH Fond dd Mostar Sarajevo Stock Exchange BAM FUND Official market (funds) ordinary last trade 2026-10-28"
    },
    {
     "query": "BACROSRK5004",
@@ -451,7 +451,7 @@
     "currency": "BAM",
     "type": "FUND",
     "isin": "BAEFNFRK1001",
-    "raw": "EFNFRK1 ZIF Eurofond-1 dd Sarajevo Sarajevo Stock Exchange BAM FUND Official market (funds) ordinary last trade 2026-10-02"
+    "raw": "EFNFRK1 ZIF Eurofond-1 dd Sarajevo Sarajevo Stock Exchange BAM FUND Official market (funds) ordinary last trade 2026-10-28"
    },
    {
     "query": "BAEGNSR00009",
@@ -506,7 +506,7 @@
     "currency": "BAM",
     "type": "STOCK",
     "isin": "BAENISR00005",
-    "raw": "ENISR Energoinvest d.d. Sarajevo Sarajevo Stock Exchange BAM STOCK Free market subsegment 1 ordinary last trade 2026-10-16"
+    "raw": "ENISR Energoinvest d.d. Sarajevo Sarajevo Stock Exchange BAM STOCK Free market subsegment 1 ordinary last trade 2026-10-28"
    },
    {
     "query": "BAENKTRK2006",
@@ -605,7 +605,7 @@
     "currency": "BAM",
     "type": "FUND",
     "isin": "BAFRTFRK1000",
-    "raw": "FRTFRK1 ZIF Fortuna fond dd Sarajevo Stock Exchange BAM FUND Official market (funds) ordinary last trade 2026-10-07"
+    "raw": "FRTFRK1 ZIF Fortuna fond dd Sarajevo Stock Exchange BAM FUND Official market (funds) ordinary last trade 2026-10-27"
    },
    {
     "query": "BAGDPSRK2002",
@@ -726,7 +726,7 @@
     "currency": "BAM",
     "type": "STOCK",
     "isin": "BAIGKCRK3008",
-    "raw": "IGKCRK3 Igman d.d. Konjic Sarajevo Stock Exchange BAM STOCK Free market subsegment 2 ordinary last trade 2026-10-22"
+    "raw": "IGKCRK3 Igman d.d. Konjic Sarajevo Stock Exchange BAM STOCK Free market subsegment 2 ordinary last trade 2026-10-29"
    },
    {
     "query": "BAIKBZRK2008",
@@ -737,7 +737,7 @@
     "currency": "BAM",
     "type": "STOCK",
     "isin": "BAIKBZRK2008",
-    "raw": "IKBZRK2 ASA Banka dd Sarajevo Sarajevo Stock Exchange BAM STOCK Free market subsegment 1 ordinary last trade 2026-10-23"
+    "raw": "IKBZRK2 ASA Banka dd Sarajevo Sarajevo Stock Exchange BAM STOCK Free market subsegment 1 ordinary last trade 2026-10-28"
    },
    {
     "query": "BAINGMRK2005",
@@ -792,7 +792,7 @@
     "currency": "BAM",
     "type": "STOCK",
     "isin": "BAJPEMR00001",
-    "raw": "JPEMR JP Elektroprivreda HZHB Mostar Sarajevo Stock Exchange BAM STOCK Free market subsegment 1 ordinary last trade 2026-02-11"
+    "raw": "JPEMR JP Elektroprivreda HZHB Mostar Sarajevo Stock Exchange BAM STOCK Free market subsegment 1 ordinary last trade 2026-10-27"
    },
    {
     "query": "BAJPESR00008",
@@ -803,7 +803,7 @@
     "currency": "BAM",
     "type": "STOCK",
     "isin": "BAJPESR00008",
-    "raw": "JPESR JP Elektroprivreda BIH dd Sarajevo Sarajevo Stock Exchange BAM STOCK Free market subsegment 1 ordinary last trade 2026-10-22"
+    "raw": "JPESR JP Elektroprivreda BIH dd Sarajevo Sarajevo Stock Exchange BAM STOCK Free market subsegment 1 ordinary last trade 2026-10-27"
    },
    {
     "query": "BAKIBBR00003",
@@ -1023,7 +1023,7 @@
     "currency": "BAM",
     "type": "STOCK",
     "isin": "BAPBJTRK1002",
-    "raw": "PBJTRK1 Pobjeda dd Tešanj Sarajevo Stock Exchange BAM STOCK Free market subsegment 2 ordinary last trade 2026-10-21"
+    "raw": "PBJTRK1 Pobjeda dd Tešanj Sarajevo Stock Exchange BAM STOCK Free market subsegment 2 ordinary last trade 2026-10-28"
    },
    {
     "query": "BAPINSR00001",
@@ -1100,7 +1100,7 @@
     "currency": "BAM",
     "type": "FUND",
     "isin": "BAPVNFRK3004",
-    "raw": "PVNFRK3 ZIF Prevent invest dd Sarajevo Sarajevo Stock Exchange BAM FUND Official market (funds) ordinary last trade 2026-10-23"
+    "raw": "PVNFRK3 ZIF Prevent invest dd Sarajevo Sarajevo Stock Exchange BAM FUND Official market (funds) ordinary last trade 2026-10-27"
    },
    {
     "query": "BARBKJRK2007",
@@ -1254,7 +1254,7 @@
     "currency": "BAM",
     "type": "STOCK",
     "isin": "BASOLTRK3006",
-    "raw": "SOLTRK3 Solana dd Tuzla Sarajevo Stock Exchange BAM STOCK Free market subsegment 1 ordinary last trade 2026-10-21"
+    "raw": "SOLTRK3 Solana dd Tuzla Sarajevo Stock Exchange BAM STOCK Free market subsegment 1 ordinary last trade 2026-10-27"
    },
    {
     "query": "BASOSOR00001",
@@ -1375,7 +1375,7 @@
     "currency": "BAM",
     "type": "STOCK",
     "isin": "BATCMKR00005",
-    "raw": "TCMKR HM Cement BiH d.d. Kakanj Sarajevo Stock Exchange BAM STOCK Free market subsegment 1 ordinary last trade 2026-10-22"
+    "raw": "TCMKR HM Cement BiH d.d. Kakanj Sarajevo Stock Exchange BAM STOCK Free market subsegment 1 ordinary last trade 2026-10-28"
    },
    {
     "query": "BATERTR00001",
@@ -1485,7 +1485,7 @@
     "currency": "BAM",
     "type": "STOCK",
     "isin": "BAUKMCRK1008",
-    "raw": "UKMCRK1 Unis Komerc dd Sarajevo Sarajevo Stock Exchange BAM STOCK Free market subsegment 2 ordinary last trade 2026-07-21"
+    "raw": "UKMCRK1 Unis Komerc dd Sarajevo Sarajevo Stock Exchange BAM STOCK Free market subsegment 2 ordinary last trade 2026-10-26"
    },
    {
     "query": "BAUMENR00003",
@@ -1672,7 +1672,7 @@
     "currency": "BAM",
     "type": "STOCK",
     "isin": "BAZEILRK2004",
-    "raw": "ZEILRK2 Željezara Ilijaš d.d. Ilijaš Sarajevo Stock Exchange BAM STOCK Free market subsegment 2 ordinary last trade 2025-11-27"
+    "raw": "ZEILRK2 Željezara Ilijaš d.d. Ilijaš Sarajevo Stock Exchange BAM STOCK Free market subsegment 2 ordinary last trade 2026-10-27"
    },
    {
     "query": "BAZGBMP00006",

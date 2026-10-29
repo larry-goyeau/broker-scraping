@@ -20,8 +20,9 @@
 //
 // The row is the free tier: the first four orders of the month cost R$0,
 // each side. Past four orders a month every order costs R$3.14 (R$2.09
-// when sold the same day); the remark gives that gap at this size, one
-// order per round lot and one for the odd lot (splitLegs).
+// when sold the same day). The free tier leaves no commission to take a
+// relative "x% higher" from, so the remark gives the tariff after it
+// (owner, 2026-10-27, as Blink).
 //
 // Formula: 2 × B3 (0.030 % of the amount, to the centavo) + the book.
 // Left out: the IRRF advance. The account is funded in reais.
@@ -33,6 +34,7 @@ import { makeB3Cost, printB3Cli, withTaxes } from "../nubank/b3Cost.mjs";
 const PAGE = "https://pagbank.com.br/conta-digital/investimentos/custos-operacionais";
 const ISS = 0.05;
 const SWING = withTaxes(2.99, ISS); // R$3.14
+const SWING_DAY = withTaxes(1.99, ISS); // R$2.09
 
 export const roundTrip = makeB3Cost({
   folder: "pagbank",
@@ -43,10 +45,7 @@ export const roundTrip = makeB3Cost({
   brokerage: () => 0,
   basis:
     "PagBank, plateforme numérique : courtage zéro de 0 à 4 ordres par mois, puis R$ 2,99 par ordre (R$ 1,99 en day trade) + ISS jusqu'à 5 %.",
-  remark: ({ legs, notional }) => {
-    const gap = Number(((100 * 2 * legs.length * SWING) / notional).toFixed(2));
-    return gap ? `Above 4 orders a month: fees are ${gap}% higher.` : "";
-  },
+  remark: () => `If more than 4 orders a month, fees are R$${SWING.toFixed(2)} an order (R$${SWING_DAY.toFixed(2)} when sold the same day).`,
 });
 
 printB3Cli(roundTrip, import.meta.url);

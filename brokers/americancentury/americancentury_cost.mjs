@@ -22,7 +22,9 @@
 //   Non-IRA outgoing transfer $100, paper fees, semiannual maintenance $50
 //     (waived with two trades every six months), ADR agent fee "Variable":
 //     not on an order
-//   SEC, TAF, CAT        not printed: 0 (owner rule)
+//   SEC, TAF, CAT        SEC and TAF added at the regulators' rates on the
+//                        sale, rounded up to the cent (none is printed; owner,
+//                        2026-10-28). CAT: no rate printed, 0.
 //
 // Formula: book + 2 × ticket, ticket =
 //   AC/Avantis ETF                     $0
@@ -90,7 +92,7 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: (ctx) => commission(ctx),
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: false },
   remark: remarkOf,
   basis: (ctx) =>
     isHouseEtf(ctx.row)

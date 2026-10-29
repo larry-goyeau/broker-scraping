@@ -13,9 +13,11 @@
 //   "También permiten acceder a ETFs".
 //
 // So the catalogue is BYMA's own share and CEDEAR board, read by
-// ../bancosantafe/bymaWhole.mjs (shared with brokers/bancosantafe): the peso
-// and MEP-dollar (D) lines of every local share and CEDEAR that BYMA quotes
-// and that traded in the last months; block lines, closed-end funds, bond
+// ../bancosantafe/bymaWhole.mjs (shared with the other Petersen banks): the
+// peso line of every local share and CEDEAR that BYMA quotes and that
+// traded in the last months, and the MEP-dollar (D) line BYMA lists next to
+// each, however little it trades (the bank holds pesos and dollars and
+// names no currency per title); block lines, closed-end funds, bond
 // CEDEARs and dormant lines are left out. Cable (C) lines are not written:
 // the bank's fee schedule has no cable or CCL line, and the only
 // foreign-currency settlement it names is the MEP dollar (note 5:

@@ -15,12 +15,17 @@
 //                  We don't charge anything per trade, or to open and
 //                  maintain your account." Self-directed portfolios "are not
 //                  assessed a Management Fee"
-//   SEC / TAF / CAT  not printed by CNB, Eko or in the agreement, so 0
-//                  (owner's rule)
+//   SEC / TAF / CAT  Alpaca's Broker Fee Schedule passes them to the
+//                   account: SEC $0.0000206 of the sale, TAF on the shares
+//                   sold, CAT $0.000003 a share each leg (OTC 1:0.01). Eko's
+//                   agreement: the client "may incur certain charges imposed
+//                   by custodians". Rounded up to the cent, as Alpaca does
+//                   (alpaca_cost.mjs). Read 2026-10-28.
+//                   https://files.alpaca.markets/disclosures/library/BrokFeeSched.pdf
 //   minimum        "The minimal funding amount is $10."
 //   crypto         1% Crypto Transaction Fee (agreement): not this trip
 //
-// Formula: book (Alpaca 605 × Q) + 0 + 0.
+// Formula: book (Alpaca 605 × Q) + 0 + SEC, TAF and CAT.
 //
 // Routing: Alpaca Securities LLC is the broker-dealer of record, so a
 // listed US line takes Alpaca's per-symbol 605 × Q (rule606 key "alpaca");
@@ -49,11 +54,11 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: () => 0,
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: { perShare: 0.000003, otcPerShare: 0.00000003, mode: "up" } },
   remark: "",
   basis:
     "page Digital Investing de Central National Bank relue le 2026-10-26 : « Self-Directed Investing is commission-free. " +
-    "We don't charge anything per trade », courtier Alpaca Securities, frais réglementaires non chiffrés",
+    "We don't charge anything per trade », courtier Alpaca Securities, SEC, TAF et CAT refacturées selon le barème d'Alpaca",
   notes: ["dépôt minimum 10 $", "portefeuilles pré-construits et hybrides 0,50 %/an, hors self-directed"],
 };
 

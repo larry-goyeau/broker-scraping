@@ -233,6 +233,17 @@ const FOLDER_NAME = {
   volksbankraiffei: "Volksbank Nordoberpfalz",
   vereinigtevolksbde: "Vereinigte Volksbank Reinheim",
   vereinigtevrkuru: "VR Bank Kur- und Rheinpfalz",
+  // 2026-10-28 cost files whose folder name misses their row.
+  sharekhan: "Sharekhan",
+  hdfcsec: "HDFC",
+  caucasus: "Caucasus",
+  // 2026-10-29: short names the owner chose for the Trinidad and Chile rows.
+  firstcitizenstt: "First Citizens",
+  republicwealth: "Republic Wealth",
+  bancoestado: "BancoEstado",
+  mbicorredores: "MBI",
+  santandercl: "Santander",
+  vectorcapital: "Vector",
 };
 
 // Display name above, broker-list row below, when the two differ.
@@ -522,6 +533,41 @@ const FOLDER_LIST = {
   elebank: "EleBank (formerly Airstar Bank)",
   peninsulafederal: "Peninsula Federal Credit Union",
   bluestonefederal: "Bluestone Federal Credit Union",
+  // 2026-10-28 catalogues (one or two places) whose folder name misses
+  // their row or hits another ("col" matched Colonya, "nagarik" NAGA,
+  // "vest" Vested, "goinvestru" the Uzbek GOINVEST).
+  caib: "Capital A Investment Bank",
+  phillipid: "Phillip Sekuritas Indonesia",
+  revolutbr: "Revolut Brasil",
+  revolutmx: "Revolut México",
+  bbvamx: "BBVA Trader México",
+  banorte: "Casa de Bolsa Banorte (BeTrading)",
+  hsbcmx: "HSBC eTrading",
+  bitsomx: "Bitso Acciones",
+  santandercl: "Santander Corredores de Bolsa Chile",
+  sagicorjm: "Sagicor Investments Jamaica",
+  firstcitizenstt: "First Citizens Brokerage and Advisory Services",
+  mefbc: "Middle East Financial Brokerage",
+  fibi: "First International Bank of Israel",
+  alamal: "Al-Amal Financial Investments",
+  nist19: "Nepal Investment & Securities Trading",
+  nagarik: "Nagarik Stock Dealer",
+  netcap: "Network Capital Limited",
+  raiffeisench: "Raiffeisen Switzerland",
+  gmozth: "GMO-Z.com Securities",
+  col: "COL Financial",
+  ccbmo: "China Construction Bank (Macau)",
+  goinvestru: "Go Invest",
+  vest: "Vest (formerly Sproutfi)",
+  // 2026-10-28: short names above, their broker-list rows here.
+  sharekhan: "Mirae Asset Sharekhan",
+  hdfcsec: "HDFC Securities",
+  caucasus: "Caucasus Capital",
+  // 2026-10-29: list rows of the short names above.
+  republicwealth: "Republic Wealth Management",
+  bancoestado: "BancoEstado Corredores de Bolsa",
+  mbicorredores: "MBI Corredores de Bolsa",
+  vectorcapital: "Vector Capital",
 };
 
 // The page drops the word "Securities" from a broker's name: "Ando
@@ -568,8 +614,11 @@ let instruments = new Map();
 let aliases = new Map();
 let listings = 0;
 
-const INDEX_CACHE = path.join(os.tmpdir(), "broker-front-index.bin");
-const INDEX_STAMP = path.join(os.tmpdir(), "broker-front-index.stamp");
+// FRONT_CACHE_DIR keeps the index cache out of /tmp, which a server reboot
+// empties (the live site sets it in its systemd unit).
+const CACHE_DIR = process.env.FRONT_CACHE_DIR || os.tmpdir();
+const INDEX_CACHE = path.join(CACHE_DIR, "broker-front-index.bin");
+const INDEX_STAMP = path.join(CACHE_DIR, "broker-front-index.stamp");
 
 function indexStamp() {
   const files = [
@@ -607,6 +656,50 @@ function loadIndexCache(stamp) {
   }
 }
 
+// Many brokers file the same line: the 154 Volksbanks share one Xetra book,
+// and a single-place broker files its whole exchange. The index keeps one
+// object per distinct listing and one array per distinct set of a title's
+// lines, shared by every broker that files it (owner, 2026-10-28: 9.3 million
+// listings, 2.3 million distinct). Nothing writes to a listing or to these
+// arrays once the index is built.
+const listingPool = new Map();
+function listingKey(listing) {
+  let key = "";
+  for (const k in listing) {
+    const v = listing[k];
+    key += `${k}\u0001${Array.isArray(v) ? v.join("\u0002") : v}\u0001`;
+  }
+  return key;
+}
+// The one object for this listing: the first seen with these fields.
+function pooledListing(listing) {
+  const key = listingKey(listing);
+  const one = listingPool.get(key);
+  if (one) return one;
+  listingPool.set(key, internRow(listing));
+  return listing;
+}
+function shareListings(map) {
+  const arrays = new Map();
+  const ids = new Map();
+  for (const inst of map.values()) {
+    for (const [folder, rows] of inst.byBroker) {
+      let arrayKey = "";
+      for (let i = 0; i < rows.length; i += 1) {
+        const one = pooledListing(rows[i]);
+        rows[i] = one;
+        if (!ids.has(one)) ids.set(one, ids.size);
+        arrayKey += `${ids.get(one)},`;
+      }
+      const shared = arrays.get(arrayKey);
+      if (shared) inst.byBroker.set(folder, shared);
+      else arrays.set(arrayKey, rows);
+    }
+  }
+  listingPool.clear();
+  return { listings: ids.size, sets: arrays.size };
+}
+
 const indexStampText = indexStamp();
 const cachedIndex = loadIndexCache(indexStampText);
 function countListings(map) {
@@ -625,8 +718,15 @@ if (cachedIndex) {
   for (const [folder, broker] of brokers) Object.assign(broker, metaFor(folder, list));
   // v8.deserialize hands every listing its own copy of each string; the pool
   // in listingIndex.mjs takes about half the index back.
-  for (const inst of instruments.values()) {
-    for (const rows of inst.byBroker.values()) for (const listing of rows) internRow(listing);
+  if (cachedIndex.shared) {
+    for (const inst of instruments.values()) {
+      for (const rows of inst.byBroker.values()) for (const listing of rows) internRow(listing);
+    }
+  } else {
+    const kept = shareListings(instruments);
+    console.error(`${kept.listings} cotations distinctes, ${kept.sets} listes partagées`);
+    // Written back shared: the next start reads the smaller file.
+    fs.writeFileSync(INDEX_CACHE, v8.serialize({ ...cachedIndex, shared: true }));
   }
 }
 
@@ -803,19 +903,19 @@ for (const file of catalogueFiles()) {
     if (row.indianOnly) listing.indianOnly = true;
     if (row.cfd) listing.cfd = true;
     if (Array.isArray(row.supportedCountries)) listing.supportedCountries = row.supportedCountries;
-    internRow(listing);
+    const pooled = pooledListing(listing);
     const held = inst.byBroker.get(folder) || [];
     // MeDirect files the same Nasdaq name twice, NAS on the Belgian book
     // and NMS on the Maltese one. Both display as Nasdaq. The residence
     // lists differ, so both lines stay.
     const dup = held.some(
       (h) =>
-        h.ticker === listing.ticker &&
-        h.exchange === listing.exchange &&
-        h.currency === listing.currency &&
-        (folder !== "medirect" || h.exchangeRaw === listing.exchangeRaw)
+        h.ticker === pooled.ticker &&
+        h.exchange === pooled.exchange &&
+        h.currency === pooled.currency &&
+        (folder !== "medirect" || h.exchangeRaw === pooled.exchangeRaw)
     );
-    if (!dup) held.push(listing);
+    if (!dup) held.push(pooled);
     inst.byBroker.set(folder, held);
     // A line with no single ISIN carries the correspondences the shared lists
     // did print: every ISIN on the allowed places, or the market code when
@@ -826,7 +926,7 @@ for (const file of catalogueFiles()) {
         if (!text) continue;
         if (/^[A-Z]{2}[A-Z0-9]{10}$/.test(text)) {
           inst.isins.add(text);
-          matchedListings.push({ isin: text, folder, listing });
+          matchedListings.push({ isin: text, folder, listing: pooled });
         } else {
           inst.tickers.add(text);
           inst.tickerCounts.set(text, (inst.tickerCounts.get(text) || 0) + 1);
@@ -1001,8 +1101,16 @@ const EMPTY_ROW = { total: NA, fees: NA, spread: NA, remark: "", buyable: true, 
 // its ADR, both sold OTC in dollars. The fee is a percent of a price.
 // When only one of those ISINs has a last, that last sizes the other
 // line too. The spread stays that line's own book.
-function priceFor(inst, listing) {
-  const ccy = String(listing.currency || "").toUpperCase();
+// The ISINs to try depend only on the index, so they are worked out once per
+// title and place: a page of 1,500 lines otherwise rescans every line for
+// each one.
+const priceIdsCache = new WeakMap();
+function priceIds(inst, listing, ccy) {
+  let byPlace = priceIdsCache.get(inst);
+  if (!byPlace) priceIdsCache.set(inst, (byPlace = new Map()));
+  const cacheKey = `${ccy}\u0001${listing.exchange}\u0001${listing.exchangeRaw}\u0001${listing.isin}`;
+  const known = byPlace.get(cacheKey);
+  if (known) return known;
   const ids = [];
   const add = (id) => {
     const key = String(id || "").trim().toUpperCase();
@@ -1020,6 +1128,13 @@ function priceFor(inst, listing) {
     }
   }
   add(inst.isin);
+  byPlace.set(cacheKey, ids);
+  return ids;
+}
+
+function priceFor(inst, listing) {
+  const ccy = String(listing.currency || "").toUpperCase();
+  const ids = priceIds(inst, listing, ccy);
   for (const id of ids) {
     const price = priceOf(id, ccy);
     if (price > 0) return price;
@@ -1464,8 +1579,10 @@ for (const inst of instruments.values()) {
   widerLinks += inst.wider.length;
 }
 console.error(`${widerLinks} listings share brokers with a depositary certificate`);
+  const kept = shareListings(instruments);
+  console.error(`${kept.listings} cotations distinctes, ${kept.sets} listes partagées`);
   const started = Date.now();
-  fs.writeFileSync(INDEX_CACHE, v8.serialize({ brokers, instruments, aliases, listings, cryptoCcys }));
+  fs.writeFileSync(INDEX_CACHE, v8.serialize({ brokers, instruments, aliases, listings, cryptoCcys, shared: true }));
   fs.writeFileSync(INDEX_STAMP, indexStampText);
   console.error(`index écrit dans le cache en ${Date.now() - started} ms`);
 }
@@ -1574,11 +1691,19 @@ function score(inst, Q) {
     else if (Q.length >= 3 && id.startsWith(Q)) s = Math.max(s, 85);
     // Length first: a substring scan of every ISIN is wasted on a query too
     // short to earn the points anyway.
-    else if (Q.length >= 6 && id.includes(Q)) s = Math.max(s, 55);
+    else if (Q.length >= 6 && id.includes(Q)) s = Math.max(s, 50);
   }
+  // A ticker that only starts with the query ranks with a name that does
+  // (owner, 2026-10-28: "Toyota" put the Thai DR's TOYOTA-R code before
+  // Toyota Motor itself); within that rank, more brokers come first.
+  // An exact ticker wins only for a ticker-length query that is not also the
+  // start of the name: "NESTLE" and "LVMH" are names first, so the NESTLE
+  // codes of Lagos and Karachi and a Canadian LVMH receipt rank by brokers
+  // with Nestlé S.A. and MC.
+  const tickerOnly = Q.length <= 5 && !N.startsWith(Q);
   for (const t of tickers) {
-    if (t === Q) s = Math.max(s, 110);
-    else if (Q.length >= 3 && t.startsWith(Q)) s = Math.max(s, 75);
+    if (t === Q) s = Math.max(s, tickerOnly ? 110 : 50);
+    else if (Q.length >= 3 && t.startsWith(Q)) s = Math.max(s, 50);
   }
   if (Q.length >= 2) {
       if (N === Q) s = Math.max(s, 100);
@@ -1997,6 +2122,18 @@ const SPLIT_PLANS = {
     { id: "day", label: "Unified Daily" },
   ] },
   // 2026-10-26 cost files.
+  hdfcsec: { brand: "HDFC", plans: [
+    { id: "standard", label: "Standard" },
+    { id: "optima", label: "Optima" },
+    { id: "maxima", label: "Maxima" },
+    { id: "premia", label: "Premia" },
+    { id: "platina", label: "Platina" },
+    { id: "supreme", label: "Supreme" },
+    { id: "elite", label: "Elite" },
+    { id: "basic", label: "Global Basic" },
+    { id: "silver", label: "Global Silver" },
+    { id: "gold", label: "Global Gold / Super Gold" },
+  ] },
   bajaj: { brand: "Bajaj Broking", plans: [
     { id: "freedom", label: "Freedom Pack" },
     { id: "professional", label: "Professional Pack" },
@@ -3919,6 +4056,7 @@ const DEPOSIT_CCY = {
   BR: "BRL", MX: "MXN", CL: "CLP", CO: "COP", AR: "ARS", SE: "SEK", NO: "NOK", DK: "DKK", FO: "DKK",
   GL: "DKK", PL: "PLN", CZ: "CZK", HU: "HUF", RO: "RON", TR: "TRY", EG: "EGP", SA: "SAR", IL: "ILS",
   KR: "KRW", TW: "TWD", MY: "MYR", CN: "CNH", KW: "KWD", ZW: "ZWG", VN: "VND", IQ: "IQD", MA: "MAD",
+  TT: "TTD", JM: "JMD",
 };
 const DEPOSIT_CURRENCIES = new Set(currencyOptions().map((row) => row.code));
 const localeCache = new Map();
@@ -4050,4 +4188,31 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, "127.0.0.1", () => {
   console.error(`http://127.0.0.1:${PORT}`);
+});
+
+// The first page of a big title used to wait about a minute on the live
+// server while each broker's catalogue and books loaded on first use. Once
+// the estimators are in, a few titles that between them reach every broker
+// are drawn in the background, biggest first.
+estimatorsReady.then(async () => {
+  const started = Date.now();
+  const left = new Set(brokers.keys());
+  const titles = [...instruments.values()]
+    .filter((inst) => !inst.key.startsWith("CRYPTO:"))
+    .sort((a, b) => b.byBroker.size - a.byBroker.size);
+  let drawn = 0;
+  for (const inst of titles) {
+    if (!left.size || drawn >= 80) break;
+    let reaches = false;
+    for (const folder of inst.byBroker.keys()) if (left.delete(folder)) reaches = true;
+    if (!reaches) continue;
+    try {
+      detail(inst.key, "", { amount: AMOUNT_DEFAULT });
+    } catch {
+      // A title that fails here fails the same way when asked.
+    }
+    drawn += 1;
+    await new Promise((done) => setImmediate(done));
+  }
+  console.error(`préchauffage : ${drawn} titres en ${Date.now() - started} ms`);
 });

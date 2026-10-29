@@ -758,6 +758,14 @@
       const withSize = (path) =>
         `${path}${path.includes("?") ? "&" : "?"}${sizeKind}=${encodeURIComponent(sizeValue())}`;
 
+      // A share count is shown rounded: whole from 10 shares, one decimal
+      // from 1, two significant digits below one share.
+      const roundShares = (n) =>
+        n >= 10
+          ? n.toLocaleString("en-US", { maximumFractionDigits: 0 })
+          : n >= 1
+            ? n.toLocaleString("en-US", { maximumFractionDigits: 1 })
+            : n.toLocaleString("en-US", { maximumSignificantDigits: 2 });
       const esc = (s) =>
         String(s || "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
@@ -855,7 +863,7 @@
         return [
           `<li>Sold by <strong>${d.brokers}</strong>${of} broker${d.brokers === 1 ? "" : "s"}</li>`,
           crypto || !venues ? "" : `<li>On <strong>${venues}</strong> exchange${venues === 1 ? "" : "s"}</li>`,
-          `<li>For <strong>$${esc(sizeValue().toLocaleString("en-US"))}</strong>${!crypto && Number(d.trade?.shares) > 0 ? ` (${esc(Number(d.trade.shares).toLocaleString("en-US", { maximumFractionDigits: 4 }))} shares)` : ""}</li>`,
+          `<li>For <strong>$${esc(sizeValue().toLocaleString("en-US"))}</strong>${!crypto && Number(d.trade?.shares) > 0 ? ` (${esc(roundShares(Number(d.trade.shares)))} shares)` : ""}</li>`,
         ].join("");
       };
       const syncExamples = (key) => {

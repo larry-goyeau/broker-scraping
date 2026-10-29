@@ -11,9 +11,15 @@
 //   commission      $0 each way: "A Self-Directed CascoINVEST portfolio is
 //                   commission-free. We don't charge anything per trade, or
 //                   to open or maintain your account."
-//   SEC / TAF / CAT not printed, so 0.
+//   SEC / TAF / CAT Alpaca's Broker Fee Schedule passes them to the
+//                  account: SEC $0.0000206 of the sale, TAF on the shares
+//                  sold, CAT $0.000003 a share each leg (OTC 1:0.01). Eko's
+//                  agreement: the client "may incur certain charges imposed
+//                  by custodians". Rounded up to the cent, as Alpaca does
+//                  (alpaca_cost.mjs). Read 2026-10-28.
+//                  https://files.alpaca.markets/disclosures/library/BrokFeeSched.pdf
 //
-// Formula: book (605 × Q) + 0 + 0. Eko's legal page: "Brokerage services
+// Formula: book (605 × Q) + 0 + SEC, TAF and CAT. Eko's legal page: "Brokerage services
 // are provided to clients by Alpaca Securities LLC" (CRD 288202), so a US
 // line takes Alpaca's Q (rule606 key "alpaca").
 //   https://eko.investments/legal
@@ -40,7 +46,7 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: () => 0,
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: { perShare: 0.000003, otcPerShare: 0.00000003, mode: "up" } },
   basis:
     "FAQ CascoINVEST, relue le 2026-10-26 : « Self-Directed CascoINVEST portfolio is commission-free. We don't charge anything per trade », 0 $ à l'achat et à la vente",
   notes: ["Eko Investments, courtage Alpaca Securities LLC : Q d'Alpaca"],

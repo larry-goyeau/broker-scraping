@@ -14,7 +14,9 @@
 //   $14.95 + Confirm Fee"; Confirm Fee $5 per transaction
 //   foreign securities: "Transaction (not applicable to American Depository
 //   Receipts) $40" (no foreign line in the catalogue)
-//   SEC, TAF, CAT        not quoted: 0 (owner rule)
+//   SEC, TAF, CAT        SEC and TAF added at the regulators' rates on the
+//                        sale, rounded up to the cent (none is printed; owner,
+//                        2026-10-28). CAT: no rate printed, 0.
 //
 // Formula: book (quoted NBBO × shares) + 2 × ($14.95 + $5.00).
 //
@@ -48,7 +50,7 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: () => Number((ONLINE + CONFIRM).toFixed(2)),
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: false },
   basis:
     "barème LPL Client Trade Direct (FS07-CTD Revised 0926), lu le 2026-10-25 : ordre saisi en ligne 14,95 $ " +
     "+ frais de confirmation 5 $, à l'achat comme à la vente",

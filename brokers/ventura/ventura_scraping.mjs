@@ -37,6 +37,23 @@
 //   out. Every other line is a STOCK: shares, REITs, InvITs, SME shares,
 //   DVRs and partly paid shares (IN9 ISIN).
 //
+// The exchange book completes the screener. The whole NSE and BSE book is
+// read and filtered as for the other Indian brokers (../bajaj/indiaBook.mjs:
+// share series and groups, ETFs by the NSE ETF list, the BSE's ETF group
+// or name; debt lines, other fund units, iNAV lines, rights entitlements,
+// BSE scrips the BSE lists as Suspended or Delisted and NSE lines listed
+// after today left out), and every title of it the screener lacks is
+// added, marked "exchange book" in raw. The screener lags new listings
+// (in October 2026 it lacked BONFIG, SMT, TONBO, ZETWERK and JPL on the
+// NSE for a few days) and leaves some BSE lines out: on 2026-10-28, 62 BSE
+// shares (56 in group P, shares listed elsewhere and only permitted on the
+// BSE) and 7 BSE Sensex ETFs (SENSEXBEES, SETFBSE100...), 69 rows added.
+// Ventura is a full-service NSE and BSE member that trades every
+// listed security. Owner's rule (2026-10-28): a title whose availability
+// is uncertain is kept, since a catalogue with more titles than reality
+// beats one with fewer. Far more missing stops the run: it means the
+// screener or the join went wrong.
+//
 // Fees: delivery and intraday cost Rs 9 an order or 0.05%, whichever is
 // lower (exclusive pricing plan page). Everything is in rupees.
 //
@@ -46,14 +63,15 @@
 //   https://www.venturasecurities.com/exclusive-pricing-plan/
 //   https://nsearchives.nseindia.com/content/equities/EQUITY_L.csv
 //   https://assets.upstox.com/market-quote/instruments/exchange/complete.json.gz
+//   https://nsearchives.nseindia.com/content/equities/eq_etfseclist.csv
 //   https://api.bseindia.com/BseIndiaAPI/api/ListofScripData/w?segment=Equity&status=Suspended
+//   https://api.bseindia.com/BseIndiaAPI/api/ListofScripData/w?segment=Equity&status=Active
 //
 //   node brokers/ventura/ventura_scraping.mjs
 
 import { stampRows } from "../../accepted.mjs";
 import { withoutObligations } from "../../obligation.mjs";
-import { cashBook } from "../../indianCash.mjs";
-import { bseClosed } from "../lemonn/bseStatus.mjs";
+import { indiaLists, wholeIndia } from "../bajaj/indiaBook.mjs";
 import fs from "node:fs";
 
 const SCREENER = "https://www.venturasecurities.com/invest/stocks/filter";
@@ -68,6 +86,9 @@ const PLACES = [
 // ETFs, BSE 5,075 with 273 ETFs).
 const FLOOR = { NSE: { all: 3000, etf: 300 }, BSE: { all: 4300, etf: 230 } };
 // Market caps are whole crores; the largest was 1,633,783.
+// Exchange titles a screener may lack, added from the book. Far more
+// means the screener or the join went wrong.
+const MISSING_CEILING = { NSE: 60, BSE: 400 };
 const BANDS = [[0, 0], [1, 25], [26, 100], [101, 300], [301, 800], [801, 2000], [2001, 5000], [5001, 15000], [15001, 60000], [60001, 3000000]];
 const pause = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -200,10 +221,11 @@ async function readPlace(place) {
 const isEtf = (line, isin) => isin.startsWith("INF") && (line.sector === "ETF" || /\bETF\b|BEES\b/i.test(line.name));
 const cleanName = (name) => String(name || "").replace(/\s+/g, " ").trim().replace(/\s+Share Price$/i, "");
 
-const book = await cashBook();
-const bse = await bseClosed();
+const lists = await indiaLists();
+const { book, bse } = lists;
 const bseIsins = new Set([...book].filter(([key]) => key.startsWith("BSE|")).map(([, entry]) => entry.isin));
 const nseByIsin = new Map([...book].filter(([key]) => key.startsWith("NSE|")).map(([key, entry]) => [entry.isin, key.slice(4)]));
+const whole = wholeIndia(lists);
 const rows = [];
 const report = [];
 for (const place of PLACES) {
@@ -264,7 +286,12 @@ for (const place of PLACES) {
   // more means a list or the ISINs went wrong.
   const dropped = Object.values(left).reduce((sum, value) => sum + value, 0);
   if (dropped > (place.exchange === "NSE" ? 80 : 1500)) throw new Error(`${place.exchange}: ${dropped} lines left out ${JSON.stringify(left)}`);
-  report.push(`${place.exchange} ${kept.length - etfs} STOCK ${etfs} ETF of ${total} screener lines (${reads.pages} pages, ${reads.shortFirst} hidden on the first walk; left out ${Object.entries(left).filter(([, v]) => v).map(([k, v]) => `${v} ${k}`).join(", ") || "none"}${isinFixed ? `; ${isinFixed} ISINs from the exchange` : ""}${renamed ? `; ${renamed} renamed symbols` : ""})`);
+  // The exchange book completes the screener: a title of the book it lacks
+  // is added, marked in raw.
+  const missing = whole.filter((row) => row.exchange === place.exchange && !seen.has(`${row.exchange}|${row.isin}`));
+  if (missing.length > MISSING_CEILING[place.exchange]) throw new Error(`${place.exchange}: ${missing.length} titles of the exchange book are not in the screener: ${missing.slice(0, 30).map((row) => row.ticker).join(" ")}`);
+  for (const row of missing) rows.push({ ...row, raw: `${row.raw} exchange book` });
+  report.push(`${place.exchange} ${kept.length - etfs} STOCK ${etfs} ETF of ${total} screener lines (${reads.pages} pages, ${reads.shortFirst} hidden on the first walk; left out ${Object.entries(left).filter(([, v]) => v).map(([k, v]) => `${v} ${k}`).join(", ") || "none"}${isinFixed ? `; ${isinFixed} ISINs from the exchange` : ""}${renamed ? `; ${renamed} renamed symbols` : ""}), ${missing.length} added from the exchange book (${missing.slice(0, 15).map((row) => row.ticker).join(" ")}${missing.length > 15 ? " ..." : ""})`);
 }
 
 rows.sort((a, b) => a.exchange.localeCompare(b.exchange) || a.ticker.localeCompare(b.ticker));

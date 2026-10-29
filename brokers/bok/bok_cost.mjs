@@ -16,7 +16,9 @@
 //                   penny stocks." Without the link "the current applicable
 //                   commission rate" applies, which is not published: the
 //                   only published online rate is used.
-//   SEC / TAF / CAT not printed, so 0.
+//   SEC / TAF / CAT SEC and TAF added at the regulators' rates on the sale,
+//                   rounded up to the cent (none is printed; owner,
+//                   2026-10-28). CAT: no rate printed, 0.
 //   linked checking Premier Checking has a "$25 monthly service fee", avoided
 //                   with $25,000 or more in linked bank deposits (or $50,000
 //                   across linked banking, brokerage and credit): remark,
@@ -50,7 +52,7 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: () => ({ buy: ONLINE_TRADE, sell: ONLINE_TRADE, note: `${ONLINE_TRADE} $ par ordre en ligne (NetXInvestor) à l'achat et à la vente` }),
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: false },
   remark: "Needs a linked Premier Checking account: $25/month below $25,000 in deposits.",
   basis:
     "page Premier Checking de BOK Financial, relue le 2026-10-26 : « $14.95 per equity trade » " +

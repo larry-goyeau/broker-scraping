@@ -11,9 +11,11 @@
 //                   stocks and ETFs with ... zero commissions on trades —
 //                   no fees on purchases." InvestiFi's Form CRS likewise
 //                   says it charges no commission on trades.
-//   SEC / TAF / CAT not printed, so 0.
+//   SEC / TAF / CAT SEC and TAF added at the regulators' rates on the sale,
+//                   rounded up to the cent (none is printed; owner,
+//                   2026-10-28). CAT: no rate printed, 0.
 //
-// Formula: book + 0 + 0. Broker InvestiFi Securities LLC; executing broker
+// Formula: book + 0 + SEC and TAF on the sale. Broker InvestiFi Securities LLC; executing broker
 // and custodian RQD Clearing LLC. InvestiFi adopts RQD's 606 by reference:
 // key `rqd` in spreads/rule606.mjs, the book is the blended 605 × that 606's
 // Q.
@@ -39,7 +41,7 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: () => 0,
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: false },
   basis:
     "page « Invest » de Day Air CU, relue le 2026-10-26 : « zero commissions on trades — no fees on purchases », " +
     "0 $ à l'achat et à la vente ; les 6 $ par ordre de la FAQ visent les cryptoactifs",

@@ -19,13 +19,15 @@
 //                   trade".
 //   SEC / TAF / CAT Ameriprise prints a "Transaction Fee ... Variable" on
 //                   some sells ("a nominal transaction fee to cover costs of
-//                   self-regulation may be charged") with no rate, so 0.
+//                   self-regulation may be charged", "only assessed on
+//                   sells") with no rate: the SEC's rate, rounded up to the
+//                   cent. TAF and CAT not named, 0.
 //   account fee     Ameriprise Brokerage Account $100 a year ($25 a
 //                   quarter), waived for Achiever Circle Elite households
 //                   ($500,000 or more at Ameriprise): remark, not the trip.
 //   limit/stop      outside the commission-free offer; not this trip.
 //
-// Formula: book + $6 + $6. Ameriprise Financial Services, LLC (CRD 6363)
+// Formula: book + $6 + $6 + SEC on the sale. Ameriprise Financial Services, LLC (CRD 6363)
 // clears through American Enterprise Investment Services Inc. (CRD 26506),
 // which files the 606: key `aeis` in spreads/rule606.mjs, the book is the
 // blended 605 × that 606's Q.
@@ -54,7 +56,7 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: () => ({ buy: ORDER_HANDLING, sell: ORDER_HANDLING, note: `0 $ de commission + frais de traitement d'ordre ${ORDER_HANDLING} $ à l'achat et à la vente` }),
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: false, cat: false },
   remark: "Account fee $100/year below $500,000 at Ameriprise. Needs a funded managed account, which has an advisory fee.",
   basis:
     "pages SmartInvest de Huntington et barème Ameriprise, relus le 2026-10-26 : ordres au marché en ligne sur ameriprise.com " +

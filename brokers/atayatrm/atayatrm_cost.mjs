@@ -124,11 +124,10 @@ const SCHEDULE = {
     bsmv: true,
     regulatory: { sec: 0.000008, taf: 0.000166, tafCap: TAF_CAP, cat: 0.000046 },
     bsmvOnRegulatory: true,
-    remark: (n, p) => {
-      const leg = usLeg(n);
-      const pct = Number((((leg * 2 - usTrip(leg)) * (1 + BSMV)) / (n * p) * 100).toFixed(2));
-      return pct > 0 ? `Above 100 trades or $100 of commission a month: ${pct}% more.` : "";
-    },
+    // The month's free allowance makes the trip's commission 0 or a part, so
+    // a relative "x% more" has no base: the remark gives the tariff after it
+    // (owner, 2026-10-27, as Blink).
+    remark: () => `If more than 100 trades or $100 of commission a month, fees are $${US_RATE} a share (min $${US_MIN}) + 5% BSMV.`,
     basis:
       "Ata Yatırım, tarif 2026 et page « Yurt Dışı Borsalar » relues le 2026-10-26 : 0,02 $ la part, minimum 1 $ par ordre, BSMV 5 % en sus, " +
       "mais « sıfır komisyon » jusqu'à 100 ordres ou 100 $ de commission par mois : seule la part au-delà de 100 $ est payée ; " +

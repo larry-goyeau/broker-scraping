@@ -10,13 +10,15 @@
 //   agent-assisted                                "$25" (not this trip: online only)
 //   Processing Fee                                "Varies", "used to offset certain fees that
 //                                                 are charged to Wells Fargo Advisors by
-//                                                 self-regulatory organizations". No rate:
-//                                                 SEC, TAF and CAT stay 0 (owner rule)
+//                                                 self-regulatory organizations"; the fee
+//                                                 table also lists "SEC Fee — Varies — Per
+//                                                 transaction". SEC at the SEC's rate, rounded
+//                                                 up to the cent (no rate or rounding printed);
+//                                                 TAF and CAT not named, 0
 //   ADR fee pass-through                          "Varies per security": custody, not this trip
 //   outgoing account transfer $49.95, wires       not on an order
 //
-// Formula: book (quoted NBBO × shares) + $0 + $0. No levy is printed, so the
-// regulatory part is 0.
+// Formula: book (quoted NBBO × shares) + $0 + SEC on the sale.
 //
 // Routing: Wells Fargo Clearing Services, LLC (CRD 19616) files its own 606
 // (FINRA 606 bulk 2026 Q2, 19616_606_NMS_2026_Q2_WELS). Key
@@ -45,7 +47,7 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: () => 0,
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: false, cat: false },
   basis:
     "barème WellsTrade (fees-expanded.htm), relu le 2026-10-26 : 0 $ par ordre d'actions ou d'ETF en ligne, " +
     "à l'achat comme à la vente",

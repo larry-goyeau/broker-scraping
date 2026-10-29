@@ -18,9 +18,14 @@
 //   answered 404 on 2026-10-25 and 2026-10-26.
 //
 //   commission       $0 each way
-//   SEC, TAF, CAT    "may apply", no figure printed: 0 (owner rule)
+//   SEC, TAF         passed on: the Form CRS of StoneX Securities says "we
+//                    pass along estimates of exchange and other regulatory
+//                    charges we will incur". No rate or rounding printed:
+//                    the regulators' rates, rounded up to the cent.
+//                    https://files.brokercheck.finra.org/crs_18456.pdf
+//   CAT              not named, 0
 //
-// Formula: book + 0.
+// Formula: book + 0 + SEC and TAF on the sale.
 //
 // Routing: the FINRA 606 bulk file, 2026 Q2 adopt-by-reference list, has
 // StoneX Securities adopting Pershing (7560) and StoneX Financial Inc.
@@ -53,10 +58,10 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: () => 0,
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: false },
   basis: "page StoneX One relue le 2026-10-26 : « commission-free trading for equities, options, mutual funds, and ETFs »",
   notes: [
-    "« Exchange, regulatory, and other charges may apply » sans chiffre : 0",
+    "« we pass along estimates of exchange and other regulatory charges » (Form CRS) : SEC et TAF aux taux des régulateurs, arrondi au centime supérieur (arrondi non imprimé)",
     "606 de StoneX Financial Inc. (CRD 45993), 2026 T2",
   ],
 };

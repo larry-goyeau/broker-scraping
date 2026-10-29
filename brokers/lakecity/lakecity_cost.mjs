@@ -12,9 +12,15 @@
 //                   invest: No cost"; FAQ: "Investing is commission-free.
 //                   There is no charge per trade, or to open or maintain
 //                   your account."
-//   SEC / TAF / CAT not printed, so 0.
+//   SEC / TAF / CAT Alpaca's Broker Fee Schedule passes them to the
+//                  account: SEC $0.0000206 of the sale, TAF on the shares
+//                  sold, CAT $0.000003 a share each leg (OTC 1:0.01). Eko's
+//                  agreement: the client "may incur certain charges imposed
+//                  by custodians". Rounded up to the cent, as Alpaca does
+//                  (alpaca_cost.mjs). Read 2026-10-28.
+//                  https://files.alpaca.markets/disclosures/library/BrokFeeSched.pdf
 //
-// Formula: book (605 × Q) + 0 + 0. "Brokerage services are provided to
+// Formula: book (605 × Q) + 0 + SEC, TAF and CAT. "Brokerage services are provided to
 // clients by Alpaca Securities LLC" (CRD 288202), so a US line takes
 // Alpaca's Q (rule606 key "alpaca").
 //
@@ -39,7 +45,7 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: () => 0,
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: { perShare: 0.000003, otcPerShare: 0.00000003, mode: "up" } },
   basis:
     "page Digital Investing de Lake City Bank, relue le 2026-10-26 : autogéré « No cost », « There is no charge per trade », 0 $ à l'achat et à la vente",
   notes: ["Eko Investments, courtage Alpaca Securities LLC : Q d'Alpaca"],

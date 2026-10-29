@@ -15,10 +15,12 @@
 //
 // The bank publishes no list of its own, so the catalogue is BYMA's share
 // and CEDEAR board, read by ../bancosantafe/bymaWhole.mjs (shared with
-// brokers/bancosantafe and brokers/bancoentrerios): the peso and MEP-dollar
-// (D) lines of every local share and CEDEAR that BYMA quotes and that traded
-// in the last months; block lines, closed-end funds, bond CEDEARs and
-// dormant lines are left out. Cable (C) lines are not written: the fee
+// brokers/bancosantafe and brokers/bancoentrerios): the peso line of every
+// local share and CEDEAR that BYMA quotes and that traded in the last
+// months, and the MEP-dollar (D) line BYMA lists next to each, however
+// little it trades (the bank holds pesos and dollars and names no currency
+// per title); block lines, closed-end funds, bond CEDEARs and dormant lines
+// are left out. Cable (C) lines are not written: the fee
 // schedule has no cable or CCL line, and the only foreign-currency
 // settlements it names are MEP dollar ones (note 12: "Compra Dólar Mep
 // (Compra en $ y Venta USD) con AL30"; note 15: "liquidación en moneda

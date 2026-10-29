@@ -11,12 +11,14 @@
 //
 //   commission     $0 each way: "zero commissions on trades" and "with no
 //                  fees for purchasing"
-//   SEC / TAF / CAT  not printed on the page, so 0 (owner's rule)
+//   SEC / TAF / CAT  SEC and TAF added at the regulators' rates on the sale,
+//                    rounded up to the cent (none is printed; owner,
+//                    2026-10-28). CAT: no rate printed, 0.
 //   limits         "starting at just $1.00", "Minimum sell orders are just
 //                  $1.10", "You can buy up to $100k of stocks and ETFs in a
 //                  single transaction" (none bites a $1,000 trip)
 //
-// Formula: book (quoted NBBO, see below) + 0 + 0.
+// Formula: book (quoted NBBO, see below) + 0 + SEC and TAF on the sale.
 //
 // Routing: InvestiFi files no 606 of its own. The FINRA 606 bulk file, 2026
 // Q2 adopt-by-reference list, has "289604|INVESTIFI SECURITIES LLC|134284|RQD*
@@ -50,7 +52,7 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: () => 0,
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: false },
   remark: "",
   basis:
     "page Securities & ETFs de Summit Choice CU relue le 2026-10-26 : « zero commissions on trades », « no fees for purchasing » (InvestiFi Securities, compensation RQD* Clearing)",

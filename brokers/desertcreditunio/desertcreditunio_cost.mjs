@@ -22,12 +22,13 @@
 //   commission     $0 each way: "All transactions are commission free";
 //                  "There are no transaction fees such as commissions for
 //                  brokerage services" (Form CRS)
-//   SEC / TAF / CAT  the Account Terms say the client bears "trading-related
-//                  regulatory fees", with no figure and no fee schedule in
-//                  the library, so 0 (owner's rule)
+//   SEC / TAF        the Account Terms say the client bears "trading-related
+//                  regulatory fees", with no figure: SEC and TAF at the
+//                  regulators' rates, rounded up to the cent (no rounding
+//                  printed). CAT not named, 0.
 //   minimum        "Just $5 can get you in on partial shares"
 //
-// Formula: book (quoted NBBO, see below) + 0 + 0.
+// Formula: book (quoted NBBO, see below) + 0 + SEC and TAF on the sale.
 //
 // Routing: TAPP Engine files no 606 of its own. The FINRA 606 bulk file, 2026
 // Q2 adopt-by-reference list, has "314806|TAPP ENGINE SECURITIES|134284|RQD*
@@ -60,13 +61,13 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: () => 0,
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: false },
   remark: "$3.50/month, free for Rewards+ members.",
   basis:
     "page Digital Investing de Desert Financial et Form CRS de TAPP Engine Securities relues le 2026-10-26 : « All transactions are commission free »",
   notes: [
     "abonnement 3,50 $/mois (offert aux membres Rewards+) hors trajet",
-    "frais réglementaires à la charge du client selon les conditions TAPP, non chiffrés : 0",
+    "frais réglementaires à la charge du client selon les conditions TAPP : SEC et TAF aux taux des régulateurs, arrondi au centime supérieur (arrondi non imprimé)",
     "achat minimum 5 $",
   ],
 };

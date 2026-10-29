@@ -16,9 +16,13 @@
 //                   a share sold, cap $9.79), rounded up to the cent (no
 //                   rounding printed). FINRA pauses it for trades from
 //                   2026-10-01 to 2026-12-31, so it is $0 today.
-//   SEC / CAT       not printed, so 0.
+//   SEC / CAT       Alpaca's Broker Fee Schedule passes them to the
+//                   account too: SEC $0.0000206 of the sale, CAT $0.000003
+//                   a share each leg (OTC 1:0.01), rounded up to the cent
+//                   as Alpaca does (alpaca_cost.mjs). Read 2026-10-28.
+//                   https://files.alpaca.markets/disclosures/library/BrokFeeSched.pdf
 //
-// Formula: book (605 × Q) + 0 + TAF on the sale. "Securities and brokerage
+// Formula: book (605 × Q) + 0 + SEC, TAF and CAT. "Securities and brokerage
 // services are offered by Alpaca Securities LLC" (CRD 288202), so a US line
 // takes Alpaca's Q (rule606 key "alpaca").
 //
@@ -43,7 +47,7 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: () => 0,
-  levies: { sec: false, taf: "up", cat: false },
+  levies: { sec: "up", taf: "up", cat: { perShare: 0.000003, otcPerShare: 0.00000003, mode: "up" } },
   basis:
     "FAQ Crews Invest, relue le 2026-10-26 : « Self-Directed Digital Investing portfolio is commission-free. We don't charge anything per trade », 0 $ à l'achat et à la vente",
   notes: [

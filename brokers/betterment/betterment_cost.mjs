@@ -10,9 +10,11 @@
 //   "You'll pay no trading commission fees, and Betterment's management fee
 //   doesn't apply." / "Betterment waives its wrap fee on assets in
 //   self-directed investing accounts."
-//   SEC, TAF, CAT    not printed: 0 (owner rule)
+//   SEC, TAF, CAT    SEC and TAF added at the regulators' rates on the sale,
+//                    rounded up to the cent (none is printed; owner,
+//                    2026-10-28). CAT: no rate printed, 0.
 //
-// Formula: book + $0 + $0.
+// Formula: book + $0 + SEC and TAF on the sale.
 //
 // Routing: Betterment Securities (CRD 47788) files no 606 of its own. The
 // FINRA 606 bulk file, 2026 Q2 adopt-by-reference list, has "47788|BETTERMENT
@@ -46,7 +48,7 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: () => 0,
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: false },
   basis:
     "page Betterment self-directed-investing, relue le 2026-10-26 : « All trades are commission-free », frais de gestion levés, " +
     "0 $ à l'achat comme à la vente",

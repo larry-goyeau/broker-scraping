@@ -49,7 +49,7 @@
 //     plans?, defaultPlan?, planAlias?,  // one row per plan (query.plan)
 //     ticket(ctx) -> number (each side) | { buy, sell, note? } | null
 //     levies?: { sec: false|"up"|"nearest"|"penny"|"exact",
-//                taf: same, cat: false | { perShare, otcPerShare?, mode? } },
+//                taf: same, cat: false | { perShare, otcPerShare?, mode?, sellOnly? } },
 //     fx?: { rate: 0.005, label?: "0.5" } | { unpublished: true },
 //     onlineBuy?: bool | (ctx) => bool,
 //     tradable?: (ctx) => null | "why",  // a line the online ticket refuses
@@ -79,7 +79,7 @@ import { AS_OF as FX_AS_OF, QUOTE, fxRemark, toUsd, usdPer } from "../../fx.mjs"
 import { depositHas } from "../../deposits.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
 
-export const SEC = { rate: 20.6 / 1_000_000, from: "2026-04-04", before: 0 };
+export const SEC = { rate: 0.0000206, from: "2026-04-04", before: 0 };
 export const TAF = { perShare: 0.000195, cap: 9.79 };
 export const TAF_PAUSE = { from: "2026-10-01", to: "2026-12-31" };
 export const SOURCES = {
@@ -141,7 +141,7 @@ export function catLeg(shares, cat, otc = false) {
 export function usLevies(notionalUsd, shares, levies = {}, { otc = false, day = today() } = {}) {
   const sec = secFee(notionalUsd, levies.sec || false, day);
   const taf = tafFee(shares, levies.taf || false, day);
-  const catBuy = catLeg(shares, levies.cat, otc);
+  const catBuy = levies.cat?.sellOnly ? 0 : catLeg(shares, levies.cat, otc);
   const catSell = catLeg(shares, levies.cat, otc);
   return { sec, taf, catBuy, catSell, total: plus(sec, taf, catBuy, catSell) };
 }
@@ -156,7 +156,11 @@ function levyNotes(levies = {}, sell, day) {
   if (!levies.taf) out.push("TAF non imprimée par le courtier : 0");
   else if (tafPerShare(day) === 0) out.push(`TAF à 0 $ : pause FINRA du ${TAF_PAUSE.from} au ${TAF_PAUSE.to} (SR-FINRA-2026-021), puis ${TAF.perShare} $ la part plafonnée à ${TAF.cap} $`);
   else out.push(`TAF ${TAF.perShare} $ la part vendue, plafond ${TAF.cap} $ : ${sell?.taf ?? "N/A"} $`);
-  out.push(levies.cat ? `CAT ${levies.cat.perShare} $ la part aux deux jambes` : "CAT non imprimée : 0");
+  out.push(
+    levies.cat
+      ? `CAT ${levies.cat.perShare} $ la part ${levies.cat.sellOnly ? `à la vente : ${sell?.catSell ?? "N/A"} $` : "aux deux jambes"}`
+      : "CAT non imprimée : 0"
+  );
   return out;
 }
 

@@ -17,10 +17,16 @@
 //                  investing." (Eko's Form CRS prints a 0.3% a year
 //                  management fee for its advisory portfolios; ECU says the
 //                  self-directed portfolio carries no account charge.)
-//   SEC / TAF / CAT  not printed, so 0 (owner's rule)
+//   SEC / TAF / CAT  Alpaca's Broker Fee Schedule passes them to the
+//                   account: SEC $0.0000206 of the sale, TAF on the shares
+//                   sold, CAT $0.000003 a share each leg (OTC 1:0.01). Eko's
+//                   agreement: the client "may incur certain charges imposed
+//                   by custodians". Rounded up to the cent, as Alpaca does
+//                   (alpaca_cost.mjs). Read 2026-10-28.
+//                   https://files.alpaca.markets/disclosures/library/BrokFeeSched.pdf
 //   minimum        "Start your journey with as little as $10"
 //
-// Formula: book (Alpaca 605 × Q) + 0 + 0.
+// Formula: book (Alpaca 605 × Q) + 0 + SEC, TAF and CAT.
 //
 // Routing: Alpaca Securities is the broker-dealer of record, so a listed US
 // line takes Alpaca's per-symbol 605 × Q (rule606 key "alpaca"); the Texas
@@ -49,7 +55,7 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: () => 0,
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: { perShare: 0.000003, otcPerShare: 0.00000003, mode: "up" } },
   remark: "",
   basis:
     "page Online Stock Trading d'Educators CU relue le 2026-10-26 : « Self-directed investing is commission-free. We don't charge anything per trade or to maintain your account. »",

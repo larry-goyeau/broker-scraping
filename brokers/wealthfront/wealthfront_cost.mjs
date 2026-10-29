@@ -11,9 +11,11 @@
 //   not charge clients any fees, including account fees or commissions."
 //   "Wealthfront does not charge any account-opening fees, withdrawal or
 //   account-closing fees, trading/commission fees, or account transfer fees."
-//   SEC, TAF, CAT    not printed: 0 (owner rule)
+//   SEC, TAF, CAT    SEC and TAF added at the regulators' rates on the sale,
+//                    rounded up to the cent (none is printed; owner,
+//                    2026-10-28). CAT: no rate printed, 0.
 //
-// Formula: book + $0 + $0.
+// Formula: book + $0 + SEC and TAF on the sale.
 //
 // Routing: Wealthfront Brokerage LLC (CRD 153407) files its own 606 (FINRA
 // 606 bulk 2026 Q2, 153407_606_NMS_2026_Q2_WLTH: Citadel, Virtu, GTS, HRT;
@@ -44,7 +46,7 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: () => 0,
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: false },
   basis:
     "article d'aide Wealthfront « Understanding Wealthfront fees » (mis à jour le 2026-10-16), relu le 2026-10-26 : " +
     "compte Brokerage gratuit, aucune commission à l'achat ni à la vente",

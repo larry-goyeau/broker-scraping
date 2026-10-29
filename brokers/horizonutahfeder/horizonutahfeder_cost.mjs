@@ -9,9 +9,11 @@
 //
 //   commission      $0 each way: FAQ "How much does it cost to use this?
 //                   The cost to trade securities is free."
-//   SEC / TAF / CAT not printed, so 0.
+//   SEC / TAF / CAT SEC and TAF added at the regulators' rates on the sale,
+//                   rounded up to the cent (none is printed; owner,
+//                   2026-10-28). CAT: no rate printed, 0.
 //
-// Formula: book + 0 + 0. Broker InvestiFi Securities LLC; "RQD is the
+// Formula: book + 0 + SEC and TAF on the sale. Broker InvestiFi Securities LLC; "RQD is the
 // executing broker of trades and custodies assets". InvestiFi adopts
 // RQD's 606 by reference: key `rqd` in spreads/rule606.mjs, the book is the
 // blended 605 × that 606's Q.
@@ -38,7 +40,7 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: () => 0,
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: false },
   basis: "FAQ de Horizon Utah FCU, relue le 2026-10-26 : « The cost to trade securities is free », 0 $ à l'achat et à la vente",
   notes: ["606 de RQD* Clearing (CRD 134284), 2026 T2"],
 };

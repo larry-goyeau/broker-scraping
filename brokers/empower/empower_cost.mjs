@@ -17,10 +17,12 @@
 //                       the $6.95 is the remark.
 //   SEC / TAF / CAT     footnote 3: "Regulatory and American depositary
 //                       receipt (ADR) fees as well as financial transaction
-//                       taxes are separate", with no rate: 0.
+//                       taxes are separate": passed on. No rate or
+//                       rounding printed: SEC and TAF at the regulators'
+//                       rates, rounded up to the cent; CAT not named, 0.
 //   IRA maintenance     $35 a year under $100,000 (IRA only): not this trip.
 //
-// Formula: book + 0 + 0.
+// Formula: book + 0 + SEC and TAF on the sale.
 //
 // Routing: the FINRA 606 bulk file, 2026 Q2 adopt-by-reference list, has
 // "13109|EMPOWER FINANCIAL SERVICES, INC.|7560|PERSHING LLC" from 2024 Q2.
@@ -52,13 +54,13 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: () => ({ buy: 0, sell: 0, note: "0 $ en ligne dans les 1 000 premiers ordres de l'année civile" }),
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: false },
   remark: "Over 1,000 online trades a year: $6.95 a trade.",
   basis:
     "barème Empower Brokerage (PDF du 2026-09-29), relu le 2026-10-26 : « Equities ... and exchange-traded funds (ETFs) » " +
     "« $0 for the first 1,000 trades », puis « $6.95 » par ordre en ligne",
   notes: [
-    "frais réglementaires et ADR « separate » sans taux imprimé : 0",
+    "frais réglementaires et ADR « separate » : SEC et TAF aux taux des régulateurs, arrondi au centime supérieur (arrondi non imprimé)",
     "606 de Empower Financial Services (CRD 13109), 2026 T2",
   ],
 };

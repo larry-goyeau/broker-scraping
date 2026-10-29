@@ -13,9 +13,15 @@
 //                   and ETFs free of charge with as little as $10". No
 //                   other EasyInvest page (the five FAQ entries) names a
 //                   trade, platform or account fee.
-//   SEC / TAF / CAT not printed, so 0.
+//   SEC / TAF / CAT Alpaca's Broker Fee Schedule passes them to the
+//                  account: SEC $0.0000206 of the sale, TAF on the shares
+//                  sold, CAT $0.000003 a share each leg (OTC 1:0.01). Eko's
+//                  agreement: the client "may incur certain charges imposed
+//                  by custodians". Rounded up to the cent, as Alpaca does
+//                  (alpaca_cost.mjs). Read 2026-10-28.
+//                  https://files.alpaca.markets/disclosures/library/BrokFeeSched.pdf
 //
-// Formula: book (605 × Q) + 0 + 0. Extraco's pages name no broker-dealer;
+// Formula: book (605 × Q) + 0 + SEC, TAF and CAT. Extraco's pages name no broker-dealer;
 // EasyInvest is Eko Investments' platform, and Eko's announcement of the
 // Extraco partnership (20 Nov 2024) says "Brokerage services are provided
 // to clients by Alpaca Securities LLC" (CRD 288202) and "commission-free
@@ -46,7 +52,7 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: () => 0,
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: { perShare: 0.000003, otcPerShare: 0.00000003, mode: "up" } },
   basis:
     "page EasyInvest d'Extraco, relue le 2026-10-26 : « stocks, bonds, and ETFs free of charge with as little as $10 », 0 $ à l'achat et à la vente",
   notes: ["plateforme Eko Investments, courtage Alpaca Securities LLC (annonce Eko du partenariat Extraco) : Q d'Alpaca"],

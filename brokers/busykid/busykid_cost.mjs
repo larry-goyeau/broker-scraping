@@ -14,10 +14,12 @@
 //     "For only $4/mo. (billed annually)" (the BusyKid subscription)
 //
 //   commission       $0 each way
-//   SEC, TAF, CAT    no figure printed, so 0 (owner rule)
+//   SEC, TAF, CAT    SEC and TAF added at the regulators' rates on the sale,
+//                    rounded up to the cent (none is printed; owner,
+//                    2026-10-28). CAT: no rate printed, 0.
 //   subscription     $4 a month billed annually: remark, not in the total
 //
-// Formula: book (605 × Q) + 0 + 0.
+// Formula: book (605 × Q) + 0 + SEC and TAF on the sale.
 //
 // Routing: the page names two dealers. Apex Fintech Brokerage Services
 // files its own 606 (2026 Q2, file 305818_606_NMS_2026_Q2_APEX_X82K: 100%
@@ -51,7 +53,7 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: () => 0,
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: false },
   remark: "$4/month subscription (billed annually).",
   basis: "page BusyKid relue le 2026-10-26 : « $0 commissions to purchase or sell stocks »",
   notes: [

@@ -19,7 +19,9 @@
 //                           $250,000 or for "clients who performed a trade in
 //                           the previous calendar year": remark
 //   IRA maintenance $60     not this account
-//   SEC, TAF, CAT           not printed: 0 (owner rule)
+//   SEC, TAF, CAT           SEC and TAF added at the regulators' rates on the
+//                           sale, rounded up to the cent (none is printed;
+//                           owner, 2026-10-28). CAT: no rate printed, 0.
 //
 // Formula: book + 2 × (n > 1,000 ? $0.03 × n : $0).
 //
@@ -56,7 +58,7 @@ const SCHEDULE = {
   feeCurrency: "USD",
   ticket: ({ shares }) => (shares > PER_SHARE_OVER.threshold ? Number((shares * PER_SHARE_OVER.perShare).toFixed(2)) : 0),
   tradable: ({ notional }) => (notional != null && notional < MIN_BUY ? `achat minimum ${MIN_BUY} $ chez Truist Trade` : null),
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: false },
   remark: "$60/year subscription and $60/year custody.",
   basis:
     "page Truist Trade (self-directed-investing), relue le 2026-10-26 : 0 $ de commission jusqu'à 1 000 parts par ordre, " +

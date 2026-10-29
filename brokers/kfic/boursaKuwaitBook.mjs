@@ -174,6 +174,11 @@ export async function boursaKuwaitBook({ reits = false } = {}) {
       leftOut.push(`${ticker} board ${board} market ${line.MARKET_ID}`);
       continue;
     }
+    if (line.MARKET_ID === "RP" || line.MARKET_ID === "RM") {
+      // Rights issue markets: a subscription right, not a share (AQAR126 on 2026-10-28).
+      leftOut.push(`${ticker} rights issue`);
+      continue;
+    }
     if (!isReit && !SEGMENT[line.MARKET_ID]) throw new Error(`${ticker} is on an unknown market ${line.MARKET_ID}`);
     if (!ISIN.test(isin)) {
       leftOut.push(`${ticker} no ISIN`);

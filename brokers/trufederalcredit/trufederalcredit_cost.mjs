@@ -15,12 +15,14 @@
 //                  same as the other InvestiFi credit unions): "We do not
 //                  currently charge fees, such as commissions, mark-ups or
 //                  otherwise, on Customer Account transactions"
-//   SEC / TAF / CAT  not printed on TRU's page, so 0 (owner's rule;
-//                  Frankenmuth CU, on the same platform, prints the SEC fee)
+//   SEC / TAF / CAT  SEC and TAF added at the regulators' rates on the sale,
+//                    rounded up to the cent (Frankenmuth CU, on the same
+//                    InvestiFi platform, prints the SEC fee; owner,
+//                    2026-10-28). CAT: no rate printed, 0.
 //   minimum        "The minimum purchase for securities is $1.00"; TRU's page
 //                  prints no per-order cap
 //
-// Formula: book (quoted NBBO, see below) + 0 + 0.
+// Formula: book (quoted NBBO, see below) + 0 + SEC and TAF on the sale.
 //
 // Routing: InvestiFi files no 606 of its own. The FINRA 606 bulk file, 2026
 // Q2 adopt-by-reference list, has "289604|INVESTIFI SECURITIES LLC|134284|RQD*
@@ -52,7 +54,7 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: () => 0,
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: false },
   remark: "",
   basis: "page Investment Portal de TRU FCU relue le 2026-10-26 : « The cost to trade securities is free » (InvestiFi Securities, accord client section 23)",
   notes: ["achat minimum 1 $"],

@@ -1,5 +1,5 @@
 {
- "bookAt": "2026-10-24T22:10:33.303Z",
+ "bookAt": "2026-10-28T13:19:08.964Z",
  "book": {
   "shares": [
    {
@@ -55,7 +55,7 @@
     "currency": "MKD",
     "type": "STOCK",
     "isin": "MKALKA101011",
-    "raw": "ALK Alkaloid AD Skopje Macedonian Stock Exchange MKD STOCK Exchange Listing ordinary continuous last trade 10/22/2026"
+    "raw": "ALK Alkaloid AD Skopje Macedonian Stock Exchange MKD STOCK Exchange Listing ordinary continuous last trade 10/27/2026"
    },
    {
     "query": "MKAGME101012",
@@ -242,7 +242,7 @@
     "currency": "MKD",
     "type": "STOCK",
     "isin": "MKEUHA101011",
-    "raw": "EUHA Eurohaus AD Skopje Macedonian Stock Exchange MKD STOCK Market of joint stock companies with special reporting obligations ordinary auction without limits last trade 10/27/2025"
+    "raw": "EUHA Eurohaus AD Skopje Macedonian Stock Exchange MKD STOCK Market of joint stock companies with special reporting obligations ordinary auction without limits no trade in the last year"
    },
    {
     "query": "MKEVRO101012",
@@ -330,7 +330,7 @@
     "currency": "MKD",
     "type": "STOCK",
     "isin": "MKGRNT101015",
-    "raw": "GRNT Granit AD Skopje Macedonian Stock Exchange MKD STOCK Exchange Listing ordinary continuous last trade 10/22/2026"
+    "raw": "GRNT Granit AD Skopje Macedonian Stock Exchange MKD STOCK Exchange Listing ordinary continuous last trade 10/26/2026"
    },
    {
     "query": "MKGRSN101016",
@@ -374,7 +374,7 @@
     "currency": "MKD",
     "type": "STOCK",
     "isin": "MKGEGO101014",
-    "raw": "GTRG Getro Gostivar Macedonian Stock Exchange MKD STOCK Market of joint stock companies with special reporting obligations ordinary auction without limits last trade 11/18/2025"
+    "raw": "GTRG Getro Gostivar Macedonian Stock Exchange MKD STOCK Market of joint stock companies with special reporting obligations ordinary auction without limits last trade 10/27/2026"
    },
    {
     "query": "MKGUMA101012",
@@ -451,7 +451,7 @@
     "currency": "MKD",
     "type": "STOCK",
     "isin": "MKINOV101012",
-    "raw": "INOV Inovo Broker AD Skopje Macedonian Stock Exchange MKD STOCK Free Market ordinary auction +/-20% no trade in the last year"
+    "raw": "INOV Inovo Broker AD Skopje Macedonian Stock Exchange MKD STOCK Free Market ordinary auction +/-20% last trade 10/27/2026"
    },
    {
     "query": "MKINPR101017",
@@ -517,7 +517,7 @@
     "currency": "MKD",
     "type": "STOCK",
     "isin": "MKKMBS101019",
-    "raw": "KMB Komercijalna banka AD Skopje Macedonian Stock Exchange MKD STOCK Super Listing ordinary continuous last trade 10/22/2026"
+    "raw": "KMB Komercijalna banka AD Skopje Macedonian Stock Exchange MKD STOCK Super Listing ordinary continuous last trade 10/27/2026"
    },
    {
     "query": "MKKOMU101010",
@@ -704,7 +704,7 @@
     "currency": "MKD",
     "type": "STOCK",
     "isin": "MKMPTS101014",
-    "raw": "MPT Makpetrol AD Skopje Macedonian Stock Exchange MKD STOCK Exchange Listing ordinary continuous last trade 10/22/2026"
+    "raw": "MPT Makpetrol AD Skopje Macedonian Stock Exchange MKD STOCK Exchange Listing ordinary continuous last trade 10/27/2026"
    },
    {
     "query": "MKMTUR101018",
@@ -803,7 +803,7 @@
     "currency": "MKD",
     "type": "STOCK",
     "isin": "MKOKTA101017",
-    "raw": "OKTA OKTA AD Skopje Macedonian Stock Exchange MKD STOCK Mandatory Listing ordinary auction +/-20% last trade 10/22/2026"
+    "raw": "OKTA OKTA AD Skopje Macedonian Stock Exchange MKD STOCK Mandatory Listing ordinary auction +/-20% last trade 10/26/2026"
    },
    {
     "query": "MKOPFO101012",
@@ -935,7 +935,7 @@
     "currency": "MKD",
     "type": "STOCK",
     "isin": "MKREPL101013",
-    "raw": "REPL Replek AD Skopje Macedonian Stock Exchange MKD STOCK Exchange Listing ordinary continuous last trade 10/22/2026"
+    "raw": "REPL Replek AD Skopje Macedonian Stock Exchange MKD STOCK Exchange Listing ordinary continuous last trade 10/27/2026"
    },
    {
     "query": "MKRIMI101017",
@@ -1243,7 +1243,7 @@
     "currency": "MKD",
     "type": "STOCK",
     "isin": "MKMTSK101019",
-    "raw": "TEL Makedonski Telekom AD – Skopje Macedonian Stock Exchange MKD STOCK Mandatory Listing ordinary continuous last trade 10/22/2026"
+    "raw": "TEL Makedonski Telekom AD – Skopje Macedonian Stock Exchange MKD STOCK Mandatory Listing ordinary continuous last trade 10/27/2026"
    },
    {
     "query": "MKTETE101016",
@@ -1254,7 +1254,7 @@
     "currency": "MKD",
     "type": "STOCK",
     "isin": "MKTETE101016",
-    "raw": "TETE Teteks AD Tetovo Macedonian Stock Exchange MKD STOCK Exchange Listing ordinary auction without limits last trade 10/1/2026"
+    "raw": "TETE Teteks AD Tetovo Macedonian Stock Exchange MKD STOCK Exchange Listing ordinary auction +/-20% last trade 10/26/2026"
    },
    {
     "query": "MKTIKV101010",
@@ -1298,7 +1298,7 @@
     "currency": "MKD",
     "type": "STOCK",
     "isin": "MKTNBA101019",
-    "raw": "TNB NLB Banka AD Skopje Macedonian Stock Exchange MKD STOCK Mandatory Listing ordinary continuous last trade 10/22/2026"
+    "raw": "TNB NLB Banka AD Skopje Macedonian Stock Exchange MKD STOCK Mandatory Listing ordinary continuous last trade 10/27/2026"
    },
    {
     "query": "MKTRAN101011",
@@ -1507,7 +1507,7 @@
     "currency": "MKD",
     "type": "STOCK",
     "isin": "MKZPKO101012",
-    "raw": "ZPKO ZK Pelagonija AD Bitola Macedonian Stock Exchange MKD STOCK Exchange Listing ordinary auction +/-20% last trade 10/22/2026"
+    "raw": "ZPKO ZK Pelagonija AD Bitola Macedonian Stock Exchange MKD STOCK Exchange Listing ordinary auction +/-20% last trade 10/27/2026"
    },
    {
     "query": "MKZPOG101018",
@@ -1701,6 +1701,8 @@
     "M220540",
     "M220632D",
     "M220931D",
+    "M221028",
+    "M221041",
     "M221133D",
     "M221231D",
     "M230332D",
@@ -1778,6 +1780,6 @@
     "UNIPO4"
    ]
   },
-  "scheduled": 375
+  "scheduled": 377
  }
 }

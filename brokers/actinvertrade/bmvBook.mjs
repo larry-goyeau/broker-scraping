@@ -57,7 +57,15 @@
 //   rows: { query, ticker, name, exchange: "Bolsa Mexicana", mic: "XMEX",
 //           currency: "MXN", type: STOCK|ETF|ETC|ETN|FUND, isin, raw }
 //
+// BIVA. bmvBook({ board: "BIVA" }) reads the Bolsa Institucional de Valores
+// the same way (TradingView exchange BIVA: its own listings, the BMV
+// issuers cross-listed there and its own SIC lines), with the same rules,
+// as rows { exchange: "BIVA", mic: "BIVA" }. A line with no ISIN on
+// TradingView takes the one assets/*.csv gives the same ticker on BIVA,
+// else on the BMV. Its crawl is cached apart (biva-book-cache.json).
+//
 //   node brokers/actinvertrade/bmvBook.mjs      prints the counts
+//   node brokers/actinvertrade/bmvBook.mjs BIVA prints the BIVA counts
 
 import fs from "node:fs";
 import os from "node:os";
@@ -68,7 +76,13 @@ const MEXICO = "https://scanner.tradingview.com/mexico/scan";
 const GLOBAL = "https://scanner.tradingview.com/global/scan";
 const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
 const HEADERS = { "User-Agent": UA, Origin: "https://www.tradingview.com" };
-const CACHE = path.join(os.tmpdir(), "bmv-book-cache.json");
+// Each board: TradingView's exchange code, the row's exchange and mic, its
+// cache file, the lines a whole book must hold and its floor of shares and
+// ETFs.
+const BOARDS = {
+  BMV: { exchange: "Bolsa Mexicana", mic: "XMEX", cache: "bmv-book-cache.json", must: ["WALMEX", "FUNO/11", "TLEVISA/CPO", "AAPL", "IVV", "NAFTRAC/ISHRS"], shares: 1500, etfs: 1000 },
+  BIVA: { exchange: "BIVA", mic: "BIVA", cache: "biva-book-cache.json", must: ["WALMEX", "AAPL", "IVV"], shares: 1000, etfs: 700 },
+};
 const CACHE_HOURS = 12;
 const DAY = 86400;
 const STALE_DAYS = 365;
@@ -107,25 +121,25 @@ async function getJson(url, options = {}) {
   throw new Error(last);
 }
 
-async function searchPage(text, type, start) {
-  const url = `${SEARCH}?text=${encodeURIComponent(text)}&exchange=BMV&lang=en&domain=production&search_type=${type}&start=${start}`;
+async function searchPage(board, text, type, start) {
+  const url = `${SEARCH}?text=${encodeURIComponent(text)}&exchange=${board}&lang=en&domain=production&search_type=${type}&start=${start}`;
   const body = await getJson(url, { headers: HEADERS });
   if (!Array.isArray(body.symbols) || !Number.isInteger(body.symbols_remaining)) throw new Error(`no page for ${url}`);
   return body;
 }
 
-// Every BMV line TradingView names, and the total it announces.
-async function searchAll() {
+// Every line of the board TradingView names, and the total it announces.
+async function searchAll(board) {
   const lines = new Map();
   const totals = {};
   for (const type of ["stocks", "funds"]) {
     for (const text of ["", ..."ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"]) {
       let start = 0;
       for (;;) {
-        const body = await searchPage(text, type, start);
+        const body = await searchPage(board, text, type, start);
         if (text === "" && start === 0) totals[type] = body.symbols.length + body.symbols_remaining;
         for (const symbol of body.symbols) {
-          if (symbol.exchange !== "BMV") continue;
+          if (symbol.exchange !== board) continue;
           const ticker = normalize(symbol.symbol).toUpperCase();
           if (ticker) lines.set(ticker, symbol);
         }
@@ -146,13 +160,14 @@ async function scan(url, body) {
   });
 }
 
-// Last daily bar (unix seconds) of each BMV line; null when there is none.
-async function lastTrades(tickers) {
+// Last daily bar (unix seconds) of each line of the board; null when there
+// is none.
+async function lastTrades(board, tickers) {
   const out = new Map();
   for (let i = 0; i < tickers.length; i += 400) {
     const chunk = tickers.slice(i, i + 400);
-    const body = await scan(MEXICO, { columns: ["time"], symbols: { tickers: chunk.map((t) => `BMV:${t}`) } });
-    for (const row of body.data || []) out.set(String(row.s).slice(4), row.d?.[0] ?? null);
+    const body = await scan(MEXICO, { columns: ["time"], symbols: { tickers: chunk.map((t) => `${board}:${t}`) } });
+    for (const row of body.data || []) out.set(String(row.s).slice(board.length + 1), row.d?.[0] ?? null);
     await sleep(700);
   }
   return out;
@@ -180,10 +195,12 @@ async function tradedElsewhere(isins) {
   return alive;
 }
 
-// assets/stocks.csv and etfs.csv: the ISIN of each BMV ticker, and the
-// ISINs listed on an exchange other than the Mexican two.
-function sharedLists() {
+// assets/stocks.csv and etfs.csv: the ISIN of each ticker of the board (for
+// BIVA, the BMV one when the file has no BIVA line), and the ISINs listed
+// on an exchange other than the Mexican two.
+function sharedLists(board = "BMV") {
   const out = new Map();
+  const bmv = new Map();
   const abroad = new Set();
   for (const file of ["assets/stocks.csv", "assets/etfs.csv"]) {
     let text = "";
@@ -195,28 +212,31 @@ function sharedLists() {
     for (const line of text.split("\n")) {
       const [ticker, exchange, isin] = line.split(",");
       if (!isinOf(isin)) continue;
-      if (exchange === "BMV") out.set(ticker.slice(4).toUpperCase(), isin.toUpperCase());
+      if (exchange === board) out.set(ticker.slice(board.length + 1).toUpperCase(), isin.toUpperCase());
+      if (exchange === "BMV") bmv.set(ticker.slice(4).toUpperCase(), isin.toUpperCase());
       else if (exchange !== "BIVA") abroad.add(isin.toUpperCase());
     }
   }
+  for (const [ticker, isin] of bmv) if (!out.has(ticker)) out.set(ticker, isin);
   return { isins: out, abroad };
 }
 
-async function crawl() {
+async function crawl(board) {
+  const CACHE = path.join(os.tmpdir(), BOARDS[board].cache);
   try {
     const cached = JSON.parse(fs.readFileSync(CACHE, "utf8"));
     if (Date.now() - cached.at < CACHE_HOURS * 3600_000 && cached.lines?.length) {
-      console.error(`BMV book read from ${CACHE}`);
+      console.error(`${board} book read from ${CACHE}`);
       return { lines: new Map(cached.lines), totals: cached.totals, trades: new Map(cached.trades), alive: new Set(cached.alive) };
     }
   } catch {}
-  const { lines, totals } = await searchAll();
+  const { lines, totals } = await searchAll(board);
   const found = { stocks: 0, funds: 0 };
   for (const symbol of lines.values()) found[symbol.type === "fund" ? "funds" : "stocks"] += 1;
   for (const type of ["stocks", "funds"]) {
-    if (found[type] < totals[type]) console.error(`BMV ${type}: ${found[type]} of the ${totals[type]} TradingView announces`);
+    if (found[type] < totals[type]) console.error(`${board} ${type}: ${found[type]} of the ${totals[type]} TradingView announces`);
   }
-  const trades = await lastTrades([...lines.keys()]);
+  const trades = await lastTrades(board, [...lines.keys()]);
   const now = Date.now() / 1000;
   const staleSic = [];
   for (const [ticker, symbol] of lines) {
@@ -250,10 +270,13 @@ function kindOf(symbol) {
 
 // Every BMV line that can be bought today, as catalogue rows sorted by type
 // then ticker; `dropped` names each line left out and why, `quiet` the SIC
-// lines kept with no BMV trade for more than a year.
-export async function bmvBook() {
-  const { lines, totals, trades, alive } = await crawl();
-  const { isins: fallback, abroad } = sharedLists();
+// lines kept with no BMV trade for more than a year. `board: "BIVA"` reads
+// BIVA instead, with the same rules.
+export async function bmvBook({ board = "BMV" } = {}) {
+  const spec = BOARDS[board];
+  if (!spec) throw new Error(`no board ${board}`);
+  const { lines, totals, trades, alive } = await crawl(board);
+  const { isins: fallback, abroad } = sharedLists(board);
   const now = Date.now() / 1000;
   const rows = [];
   const dropped = [];
@@ -266,11 +289,11 @@ export async function bmvBook() {
       continue;
     }
     const currency = normalize(symbol.currency_code).toUpperCase();
-    if (currency !== "MXN") throw new Error(`BMV ${ticker} is quoted ${currency || "nowhere"}`);
+    if (currency !== "MXN") throw new Error(`${board} ${ticker} is quoted ${currency || "nowhere"}`);
     const isin = isinOf(symbol.isin) || fallback.get(ticker) || "";
     const time = trades.get(ticker) ?? null;
     if (!time) {
-      dropped.push({ ticker, reason: "never traded on the BMV" });
+      dropped.push({ ticker, reason: `never traded on the ${board}` });
       continue;
     }
     const days = (now - time) / DAY;
@@ -291,13 +314,13 @@ export async function bmvBook() {
       continue;
     }
     const name = normalize(symbol.description);
-    if (!name) throw new Error(`BMV ${ticker} has no name`);
+    if (!name) throw new Error(`${board} ${ticker} has no name`);
     rows.push({
       query: ticker,
       ticker,
       name,
-      exchange: "Bolsa Mexicana",
-      mic: "XMEX",
+      exchange: spec.exchange,
+      mic: spec.mic,
       currency: "MXN",
       type: kind,
       isin,
@@ -307,18 +330,19 @@ export async function bmvBook() {
   const order = { STOCK: 0, ETF: 1, ETC: 2, ETN: 3, FUND: 4 };
   rows.sort((a, b) => order[a.type] - order[b.type] || a.ticker.localeCompare(b.ticker));
 
-  for (const ticker of ["WALMEX", "FUNO/11", "TLEVISA/CPO", "AAPL", "IVV", "NAFTRAC/ISHRS"]) {
-    if (!rows.some((row) => row.ticker === ticker)) throw new Error(`BMV book misses ${ticker}`);
+  for (const ticker of spec.must) {
+    if (!rows.some((row) => row.ticker === ticker)) throw new Error(`${board} book misses ${ticker}`);
   }
   const shares = rows.filter((row) => row.type === "STOCK").length;
   const etfs = rows.filter((row) => row.type !== "STOCK").length;
-  if (shares < 1500) throw new Error(`only ${shares} BMV shares`);
-  if (etfs < 1000) throw new Error(`only ${etfs} BMV ETFs`);
+  if (shares < spec.shares) throw new Error(`only ${shares} ${board} shares`);
+  if (etfs < spec.etfs) throw new Error(`only ${etfs} ${board} ETFs`);
   return { rows, dropped, quiet: quiet.sort(), totals };
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const book = await bmvBook();
+  const board = process.argv[2] || "BMV";
+  const book = await bmvBook({ board });
   const count = {};
   for (const row of book.rows) count[row.type] = (count[row.type] || 0) + 1;
   const reasons = {};
@@ -328,7 +352,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   }
   const sic = book.rows.filter((row) => !row.isin.startsWith("MX")).length;
   console.log(
-    `bmvBook: ${book.rows.length} rows (${Object.entries(count).map(([type, n]) => `${n} ${type}`).join(", ")}), ` +
+    `bmvBook ${board}: ${book.rows.length} rows (${Object.entries(count).map(([type, n]) => `${n} ${type}`).join(", ")}), ` +
       `${book.rows.length - sic} Mexican, ${sic} SIC; quiet SIC lines kept: ${book.quiet.length}`
   );
   console.log(`dropped ${book.dropped.length}: ${JSON.stringify(reasons)}`);

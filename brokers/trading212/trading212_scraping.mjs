@@ -1,6 +1,7 @@
 import puppeteer from "puppeteer-core";
 import { stampRows } from "../../accepted.mjs";
 import { withoutObligations } from "../../obligation.mjs";
+import { readInvestPage, withEntities } from "./t212Entities.mjs";
 import fs from "node:fs";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -324,9 +325,11 @@ if (!skipCrypto) {
 // them carry it, and the validator refuses every one.
 //
 // Trading212 does not mark PTP lines the way Alpaca does (`ptp_no_exception`).
-// A US-domiciled fund is left as the catalogue states it. The US dealers (AVUS,
-// AVUSUK) are instead named on `dealerExclusions` where they cannot buy: every
-// spot crypto pair lists them, so those pairs are EU/Cyprus, not the reverse.
+// A US-domiciled fund is left as the catalogue states it. `dealerExclusions`
+// names the Trading 212 companies that do not sell a line: AVUS (Trading 212
+// Ltd, Bulgaria), AVUSUK (Trading 212 UK Ltd, formerly Avus Capital UK),
+// T212CY, T212DE, T212AU. Every spot crypto pair lists AVUS and AVUSUK, so
+// those pairs are EU/Cyprus, not the reverse.
 //
 // Country registration is not a reason to drop the line: the list is written
 // on the row so the front can hide it per nationality. A fund with no list is
@@ -634,6 +637,17 @@ for (const instrument of offeredCrypto) {
 if (unnamedCrypto > 0) {
   console.error(
     `${unnamedCrypto} pairs are named by Trading212 alone; their base coin is not in cryptos.csv`
+  );
+}
+
+// The other Trading 212 companies: who sells each line, the lines this
+// account's company does not sell, and the residents who may see each one
+// (t212Entities.mjs, from the public Invest page). Skipped for a partial run.
+if (!skipEquities && positionalQueries.length === 0 && listPaths.length === 0 && !etfsOnly && !stocksOnly) {
+  const tally = withEntities(results, await readInvestPage(), entity);
+  console.error(
+    `Invest page: ${tally.stamped} lines stamped with their companies, ${tally.added} added for the other companies, ` +
+      `${tally.gone} no longer listed there`
   );
 }
 

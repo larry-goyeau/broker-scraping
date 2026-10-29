@@ -13,7 +13,9 @@
 //                   schedule; ETFs trade as stocks).
 //   phone           "Investor Service Center ... Stocks $45.00 $0.0075"
 //                   ($75.00 advisor-assisted): not online, not this trip.
-//   SEC / TAF / CAT not printed, so 0.
+//   SEC / TAF / CAT SEC and TAF added at the regulators' rates on the sale,
+//                   rounded up to the cent (none is printed; owner,
+//                   2026-10-28). CAT: no rate printed, 0.
 //   custody         "Annual Custodial Fee $50 annually": remark, not the
 //                   trip. Wiring $15, transfer out $100: not the trip.
 //
@@ -49,7 +51,7 @@ const SCHEDULE = {
     const each = Number((STOCK.base + STOCK.perShare * ctx.shares).toFixed(4));
     return { buy: each, sell: each, note: `${STOCK.base} $ + ${STOCK.perShare} $ la part à l'achat et à la vente` };
   },
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: false },
   remark: "Custody $50/year.",
   basis:
     "barème UMB « Commission schedule » (investissement autonome), relu le 2026-10-26 : " +

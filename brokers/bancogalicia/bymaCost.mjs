@@ -134,10 +134,10 @@ export function isCable(row, rows = []) {
   if (row?.cable === true) return true;
   if (code(row?.currency) !== "USD") return false;
   if (/\|\s*EXT\s*$/i.test(String(row?.raw || ""))) return true;
-  const ticker = code(row?.ticker);
-  if (!ticker.endsWith("C")) return false;
-  const stem = ticker.slice(0, -1).replace(/\.$/, "");
-  return rows.some((r) => code(r.currency) === "ARS" && code(r.ticker) === stem && code(r.isin) === code(row.isin));
+  // BYMA's cable symbol does not always extend the peso one (GOOGL → GOGLC,
+  // PETR3 → PETRC, ALAB → ALAC): the peso line is found by ISIN.
+  if (!code(row?.ticker).endsWith("C") || !row?.isin) return false;
+  return rows.some((r) => code(r.currency) === "ARS" && code(r.isin) === code(row.isin));
 }
 
 /** "FX x% when cash ≠ CCY." with the MEP quote, or the CCL quote on a cable line. */
@@ -216,8 +216,11 @@ export function bymaCostFile(config) {
 
   const holds = (plan, ccy) => (cash ? cash.map(code).includes(code(ccy)) : depositHas(folder, plan, ccy));
 
-  function findListing({ etf, place, currency }) {
+  // The page asks by ISIN and names the line's ticker: a CEDEAR's peso, MEP
+  // (D) and cable (C) lines share one ISIN, so the asked ticker comes first.
+  function findListing({ etf, place, currency, ticker }) {
     const asked = loose(etf);
+    const wantTicker = loose(ticker);
     const wantPlace = loose(place);
     const wantCurrency = code(currency);
     const named = rowsNamed(rows, asked, (r) => loose(r.isin) === asked || loose(r.ticker) === asked || loose(r.query) === asked);
@@ -225,10 +228,11 @@ export function bymaCostFile(config) {
       .map((r) => ({ row: r, ...listingKey(r) }))
       .filter((m) => !wantPlace || BUENOS_AIRES.has(wantPlace) || loose(m.row.exchange) === wantPlace || loose(m.row.mic) === wantPlace)
       .filter((m) => !wantCurrency || code(m.row.currency) === wantCurrency);
+    if (wantTicker) matches.sort((a, b) => (loose(b.row.ticker) === wantTicker) - (loose(a.row.ticker) === wantTicker));
     return { named, matches };
   }
 
-  function roundTrip({ etf, place, currency, shares, price, bp = null, perShare = null, plan: askedPlan = null, query = null }) {
+  function roundTrip({ etf, ticker = null, place, currency, shares, price, bp = null, perShare = null, plan: askedPlan = null, query = null }) {
     const plan = plans ? planOf(askedPlan ?? query?.plan ?? "") : "";
     const P = plan ? { ...config, ...plans[plan] } : config;
     const fee = P.commission ?? commission;
@@ -248,7 +252,7 @@ export function bymaCostFile(config) {
     if (!catalogue) {
       return { ...answer, why: `le catalogue ${name} n'existe pas encore : lancer \`node brokers/${folder}/${folder}_scraping.mjs\`` };
     }
-    const { named, matches } = findListing({ etf, place, currency });
+    const { named, matches } = findListing({ etf, place, currency, ticker });
     if (!named.length) return { ...answer, why: `${etf} n'est pas dans le catalogue ${name}` };
     if (!matches.length) {
       return {

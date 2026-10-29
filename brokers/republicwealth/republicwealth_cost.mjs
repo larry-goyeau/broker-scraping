@@ -27,7 +27,7 @@
 // trade (taxMap.mjs has no line for these ISINs); none is added.
 //
 // In the total: the book, the broker fee both ways (brokerFees) and the
-// TTCD fee both ways. Remark: none.
+// TTCD fee both ways. Remark: FX when cash ≠ the line's currency.
 //
 // The book: venues.mjs has no Trinidad and Tobago Stock Exchange, so a line
 // does not resolve to a venue and there is no bid and ask to read. `usd` is
@@ -36,9 +36,8 @@
 //
 // Cash: TTD and USD (TTD fees and opening amount; the USD Equity board
 // trades in USD and Republic Wealth sells the whole board). Each line
-// settles in its own currency, no conversion. fx.mjs has no TTD rate yet,
-// so a TTD line's fees stay in TTD (`commission`, `market`) and
-// `brokerFees` is N/A until it does.
+// settles in its own currency, no conversion. A TTD line's fees go to
+// dollars at fx.mjs's TTD rate (CBTT weighted average).
 //
 //   node brokers/republicwealth/republicwealth_cost.mjs MASSY XTRN TTD --shares=100 --price=67.5
 //   node brokers/republicwealth/republicwealth_cost.mjs MPCCEL XTRN USD --shares=1000 --price=1.05
@@ -52,7 +51,7 @@ import { pathToFileURL } from "node:url";
 import { listingKey, spreadLeaf } from "../../spreads/venues.mjs";
 import { spreads } from "../../spreads/book.mjs";
 import { bookParts, plus, finite } from "../../na.mjs";
-import { AS_OF as FX_AS_OF, QUOTE, listingCash, toUsd, usdPer } from "../../fx.mjs";
+import { AS_OF as FX_AS_OF, QUOTE, fxRemark, listingCash, toUsd, usdPer } from "../../fx.mjs";
 import { depositHas } from "../../deposits.mjs";
 import { taxesOf, taxRates } from "../../taxMap.mjs";
 
@@ -71,6 +70,14 @@ const RATE = 0.0075; // online broker fee, each side
 const TTCD = 0.0021; // TTCD fee, each side
 const DEPOSITS = ["TTD", "USD"];
 const REMARK = "";
+// A client converting TTD and USD does it at the group bank's rate; none
+// is printed for the brokerage, so the remark takes Republic Bank's
+// board half-spread, "USD … Buy (sight) 6.5527 … Sell 6.7493" (home-page board, 28.10.2026).
+// https://www.republictt.com/
+const BANK_FX_URL = "https://www.republictt.com/";
+const BANK_FX = { USD: [6.5527, 6.7493] }; // TTD per USD: [buy, sell]
+const halfSpread = ([buy, sell]) => ((sell - buy) / (sell + buy)) * 100;
+const fxNote = (currency) => fxRemark(halfSpread(BANK_FX.USD).toFixed(2), currency);
 const TTSE = "Trinidad and Tobago Stock Exchange";
 
 const catalogue = fs.existsSync(CATALOGUE) ? JSON.parse(fs.readFileSync(CATALOGUE, "utf8")) : null;
@@ -171,6 +178,7 @@ export function roundTrip({ etf, place, currency, shares, price, bp = null, perS
   const taxTotal = Object.values(taxRates(tax)).reduce((sum, rate) => sum + rate, 0);
   const shared = {
     ...answer,
+    remark: fxNote(listing.currency),
     listing,
     cashCurrency: inCash ? cashCcy : "",
     venueAuthoritative: false,
@@ -260,7 +268,7 @@ function printCli() {
     return hit ? hit.split("=").slice(1).join("=") : null;
   };
   if (process.argv.includes("--schedule")) {
-    console.log(JSON.stringify({ ...SCHEDULE, rate: RATE, min: 0, ttcdRate: TTCD, deposits: DEPOSITS, eachWay: true }, null, 2));
+    console.log(JSON.stringify({ ...SCHEDULE, rate: RATE, min: 0, ttcdRate: TTCD, deposits: DEPOSITS, eachWay: true, bankFx: { url: BANK_FX_URL, rates: BANK_FX } }, null, 2));
     return;
   }
   const positional = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));

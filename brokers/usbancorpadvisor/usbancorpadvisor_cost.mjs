@@ -11,12 +11,12 @@
 //                          commission rate" (not this trip: online only)
 //   regulatory fee         "sales of equities and ETFs are subject to a regulatory
 //                          transaction fee, which appears on trade confirmation as the
-//                          'Activity Assessment Fee'". No rate printed: SEC, TAF and CAT
-//                          stay 0 (owner rule)
+//                          'Activity Assessment Fee'". No rate printed: the SEC's rate,
+//                          rounded up to the cent. TAF and CAT not named, 0
 //   safekeeping $15/month  physical certificates, not a market position: left out
 //   wires $30, transfer $100, foreign securities $75 (not this place)
 //
-// Formula: book (quoted NBBO × shares) + $0 + $0.
+// Formula: book (quoted NBBO × shares) + $0 + SEC on the sale.
 //
 // Routing: U.S. Bancorp Advisors, LLC (CRD 14455) files its own 606 (FINRA
 // 606 bulk 2026 Q2, 14455_606_NMS_2026_Q2_V1); clearing and custody at
@@ -46,7 +46,7 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: () => 0,
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: false, cat: false },
   basis:
     "barème U.S. Bancorp Advisors Self-Directed Investing, relu le 2026-10-26 : 0 $ par ordre d'actions, " +
     "d'ETF ou de fonds fermés en ligne",

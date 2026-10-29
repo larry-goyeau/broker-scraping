@@ -12,14 +12,16 @@
 //   commission      $0 each way: "No trading fees: ... No hidden fees when
 //                   buying or selling stocks and ETFs"; the investing page
 //                   says "all with zero commission fees".
-//   SEC / TAF / CAT not printed by MoneyLion, so 0 (owner's rule; DriveWealth
-//                   can pass them through, MoneyLion does not say it does).
+//   SEC / TAF / CAT SEC and TAF added at the regulators' rates on the sale,
+//                   rounded up to the cent (DriveWealth, the custodian, can
+//                   pass them through; owner, 2026-10-28). CAT: no rate
+//                   printed, 0.
 //   monthly fee     only the Managed Investing account has one ($1 to $5 a
 //                   month); the ADV says "MLW does not charge an Account Fee
 //                   for Active Investing Accounts" and "Brokerage execution
 //                   fees are paid by MLW".
 //
-// Formula: book (605 × Q) + 0 + 0. Advisory by ML Wealth LLC; execution and
+// Formula: book (605 × Q) + 0 + SEC and TAF on the sale. Advisory by ML Wealth LLC; execution and
 // custody at DriveWealth, LLC (CRD 165429): the ADV says trades "are
 // generally expected to be executed by DriveWealth within seconds" and
 // names DriveWealth as the clearing partner, so a listed US line takes
@@ -47,7 +49,7 @@ const SCHEDULE = {
   deposits: ["USD"],
   feeCurrency: "USD",
   ticket: () => 0,
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: false },
   basis:
     "aide MoneyLion « What is the Active Investing account? » (mise à jour le 2026-07-07), relue le 2026-10-26 : " +
     "« No trading fees », aucun frais à l'achat ni à la vente, 0 $ de commission",

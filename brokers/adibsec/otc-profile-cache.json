@@ -1,0 +1,2752 @@
+{
+ "900100": {
+  "at": "2026-10-28T11:32:17.785Z",
+  "entry": null
+ },
+ "950140": {
+  "at": "2026-10-28T11:34:49.889Z",
+  "entry": null
+ },
+ "950200": {
+  "at": "2026-10-28T11:39:23.783Z",
+  "entry": null
+ },
+ "6KA": {
+  "at": "2026-10-28T11:31:55.620Z",
+  "entry": null
+ },
+ "ABBNY": {
+  "at": "2026-10-28T11:31:58.353Z",
+  "entry": {
+   "symbol": "ABBNY",
+   "cusip": "000375204",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "ABB Ltd."
+  }
+ },
+ "ADAPY": {
+  "at": "2026-10-28T11:31:59.550Z",
+  "entry": {
+   "symbol": "ADAPY",
+   "cusip": "00653A107",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Adaptimmune Therapeutics plc"
+  }
+ },
+ "ADDYY": {
+  "at": "2026-10-28T11:32:00.751Z",
+  "entry": {
+   "symbol": "ADDYY",
+   "cusip": "00687A107",
+   "tier": "OTCQX International",
+   "type": "ADR",
+   "name": "adidas AG"
+  }
+ },
+ "AVIFY": {
+  "at": "2026-10-28T11:32:02.658Z",
+  "entry": {
+   "symbol": "AVIFY",
+   "cusip": "00753G103",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Advanced Info Service Public Co., Ltd."
+  }
+ },
+ "ATEYY": {
+  "at": "2026-10-28T11:32:04.566Z",
+  "entry": {
+   "symbol": "ATEYY",
+   "cusip": "00762U200",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Advantest Corp."
+  }
+ },
+ "AFLYY": {
+  "at": "2026-10-28T11:32:07.945Z",
+  "entry": {
+   "symbol": "AFLYY",
+   "cusip": "009119108",
+   "tier": "OTCID",
+   "type": "ADR",
+   "name": "Air France-KLM"
+  }
+ },
+ "AIQUY": {
+  "at": "2026-10-28T11:32:10.002Z",
+  "entry": {
+   "symbol": "AIQUY",
+   "cusip": "009126202",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "L'Air Liquide SA"
+  }
+ },
+ "ALFVF": {
+  "at": "2026-10-28T11:32:11.233Z",
+  "entry": {
+   "symbol": "ALFVF",
+   "cusip": "W04008152",
+   "tier": "Pink Limited",
+   "type": "Ordinary Shares",
+   "name": "Alfa-Laval AB"
+  }
+ },
+ "APELY": {
+  "at": "2026-10-28T11:32:13.142Z",
+  "entry": {
+   "symbol": "APELY",
+   "cusip": "021090204",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Alps Alpine Co Ltd."
+  }
+ },
+ "AMZE": {
+  "at": "2026-10-28T11:32:15.446Z",
+  "entry": {
+   "symbol": "AMZE",
+   "cusip": "35804X309",
+   "tier": "Pink Limited",
+   "type": "Common Stock",
+   "name": "Amaze Holdings Inc."
+  }
+ },
+ "AMWD": {
+  "at": "2026-10-28T11:32:16.614Z",
+  "entry": null
+ },
+ "ANGPY": {
+  "at": "2026-10-28T11:32:19.788Z",
+  "entry": {
+   "symbol": "ANGPY",
+   "cusip": "03486T202",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "VALTERRA PLATINUM LTD"
+  }
+ },
+ "AAQL": {
+  "at": "2026-10-28T11:32:21.040Z",
+  "entry": {
+   "symbol": "AAQL",
+   "cusip": "00449Q101",
+   "tier": "OTCID",
+   "type": "Common Stock",
+   "name": "Antiaging Quantum Living Inc."
+  }
+ },
+ "AOTI": {
+  "at": "2026-10-28T11:32:22.275Z",
+  "entry": null
+ },
+ "AMKBF": {
+  "at": "2026-10-28T11:32:24.149Z",
+  "entry": {
+   "symbol": "AMKBF",
+   "cusip": "K0514G101",
+   "tier": "Pink Limited",
+   "type": "Ordinary Shares",
+   "name": "A.P. Moeller-Maersk A/S"
+  }
+ },
+ "APLS": {
+  "at": "2026-10-28T11:32:25.299Z",
+  "entry": null
+ },
+ "ALDS": {
+  "at": "2026-10-28T11:32:26.479Z",
+  "entry": {
+   "symbol": "ALDS",
+   "cusip": "03829G206",
+   "tier": "OTCID",
+   "type": "Common Stock",
+   "name": "AppLife Digital Solutions, Inc."
+  }
+ },
+ "APCX": {
+  "at": "2026-10-28T11:32:27.697Z",
+  "entry": {
+   "symbol": "APCX",
+   "cusip": "03834B309",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "AppTech Payments Corp."
+  }
+ },
+ "EMBVF": {
+  "at": "2026-10-28T11:32:29.531Z",
+  "entry": {
+   "symbol": "EMBVF",
+   "cusip": "P0448R103",
+   "tier": "Pink Limited",
+   "type": "Ordinary Shares",
+   "name": "Arca Continental SAB de CV"
+  }
+ },
+ "ARCAY": {
+  "at": "2026-10-28T11:32:30.803Z",
+  "entry": {
+   "symbol": "ARCAY",
+   "cusip": "03923E107",
+   "tier": "Pink Limited",
+   "type": "New York Registry Shs",
+   "name": "Arcadis NV"
+  }
+ },
+ "ASMIY": {
+  "at": "2026-10-28T11:32:32.176Z",
+  "entry": {
+   "symbol": "ASMIY",
+   "cusip": "N07045102",
+   "tier": "OTCQX International",
+   "type": "New York Registry Shs",
+   "name": "ASM International N.V."
+  }
+ },
+ "ASPU": {
+  "at": "2026-10-28T11:32:33.661Z",
+  "entry": {
+   "symbol": "ASPU",
+   "cusip": "04530L203",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "Aspen Group Inc."
+  }
+ },
+ "AWHL": {
+  "at": "2026-10-28T11:32:34.857Z",
+  "entry": {
+   "symbol": "AWHL",
+   "cusip": "04537Y208",
+   "tier": "OTCQX U.S.",
+   "type": "Common Stock",
+   "name": "Aspira Women's Health Inc."
+  }
+ },
+ "ASBFY": {
+  "at": "2026-10-28T11:32:36.065Z",
+  "entry": {
+   "symbol": "ASBFY",
+   "cusip": "045519402",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Associated British Foods plc"
+  }
+ },
+ "ALOT": {
+  "at": "2026-10-28T11:32:37.308Z",
+  "entry": null
+ },
+ "ABIT": {
+  "at": "2026-10-28T11:32:38.526Z",
+  "entry": {
+   "symbol": "ABIT",
+   "cusip": "046839106",
+   "tier": "Expert Market",
+   "type": "Common Stock",
+   "name": "ATHENA BITCOIN GLOBAL"
+  }
+ },
+ "ATKR": {
+  "at": "2026-10-28T11:32:39.770Z",
+  "entry": null
+ },
+ "ATLKY": {
+  "at": "2026-10-28T11:32:41.864Z",
+  "entry": {
+   "symbol": "ATLKY",
+   "cusip": "049255706",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Atlas Copco AB"
+  }
+ },
+ "AUOTY": {
+  "at": "2026-10-28T11:32:43.627Z",
+  "entry": {
+   "symbol": "AUOTY",
+   "cusip": "002255404",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "AUO CORPORATION"
+  }
+ },
+ "AATC": {
+  "at": "2026-10-28T11:32:48.085Z",
+  "entry": {
+   "symbol": "AATC",
+   "cusip": "053306106",
+   "tier": "OTCQX U.S.",
+   "type": "Common Stock",
+   "name": "Autoscope Technologies Corporation"
+  }
+ },
+ "AVNS": {
+  "at": "2026-10-28T11:32:49.242Z",
+  "entry": null
+ },
+ "AWCA": {
+  "at": "2026-10-28T11:32:52.344Z",
+  "entry": {
+   "symbol": "AWCA",
+   "cusip": "482226107",
+   "tier": "Pink Limited",
+   "type": "Common Stock",
+   "name": "Awaysis Capital Inc."
+  }
+ },
+ "AXIA": {
+  "at": "2026-10-28T11:32:53.507Z",
+  "entry": null
+ },
+ "AXIAY": {
+  "at": "2026-10-28T11:32:55.496Z",
+  "entry": {
+   "symbol": "AXIAY",
+   "cusip": "15234Q207",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "AXIA Energia"
+  }
+ },
+ "BASFY": {
+  "at": "2026-10-28T11:32:59.387Z",
+  "entry": {
+   "symbol": "BASFY",
+   "cusip": "055262505",
+   "tier": "OTCQX International",
+   "type": "ADR",
+   "name": "BASF SE"
+  }
+ },
+ "BVNRY": {
+  "at": "2026-10-28T11:33:00.564Z",
+  "entry": {
+   "symbol": "BVNRY",
+   "cusip": "071771109",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Bavarian Nordic A/S"
+  }
+ },
+ "BBXIB": {
+  "at": "2026-10-28T11:33:03.714Z",
+  "entry": {
+   "symbol": "BBXIB",
+   "cusip": "073319204",
+   "tier": "OTCID",
+   "type": "Common Stock",
+   "name": "BBX Capital, Inc."
+  }
+ },
+ "BBXIA": {
+  "at": "2026-10-28T11:33:06.975Z",
+  "entry": {
+   "symbol": "BBXIA",
+   "cusip": "073319105",
+   "tier": "OTCID",
+   "type": "Common Stock",
+   "name": "BBX Capital, Inc."
+  }
+ },
+ "BESIY": {
+  "at": "2026-10-28T11:33:10.773Z",
+  "entry": {
+   "symbol": "BESIY",
+   "cusip": "073320103",
+   "tier": "Pink Limited",
+   "type": "New York Registry Shs",
+   "name": "BE Semiconductor Industries N.V."
+  }
+ },
+ "BFLBF": {
+  "at": "2026-10-28T11:33:12.868Z",
+  "entry": {
+   "symbol": "BFLBF",
+   "cusip": "D11648108",
+   "tier": "Pink Limited",
+   "type": "Ordinary Shares",
+   "name": "Bilfinger SE"
+  }
+ },
+ "BLGO": {
+  "at": "2026-10-28T11:33:16.178Z",
+  "entry": {
+   "symbol": "BLGO",
+   "cusip": "09065A100",
+   "tier": "OTCQX U.S.",
+   "type": "Common Stock",
+   "name": "BioLargo, Inc."
+  }
+ },
+ "BLFS": {
+  "at": "2026-10-28T11:33:17.355Z",
+  "entry": null
+ },
+ "BIOQ": {
+  "at": "2026-10-28T11:33:20.329Z",
+  "entry": {
+   "symbol": "BIOQ",
+   "cusip": "09065J101",
+   "tier": "Pink Limited",
+   "type": "Common Stock",
+   "name": "BIOQUAL, Inc."
+  }
+ },
+ "BCRD": {
+  "at": "2026-10-28T11:33:23.522Z",
+  "entry": {
+   "symbol": "BCRD",
+   "cusip": "09630X106",
+   "tier": "OTCQX U.S.",
+   "type": "Common Stock",
+   "name": "BlueOne Technologies, Inc."
+  }
+ },
+ "BCLI": {
+  "at": "2026-10-28T11:33:26.707Z",
+  "entry": {
+   "symbol": "BCLI",
+   "cusip": "10501E300",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "BrainStorm Cell Therapeutics Inc."
+  }
+ },
+ "BRDCY": {
+  "at": "2026-10-28T11:33:27.979Z",
+  "entry": {
+   "symbol": "BRDCY",
+   "cusip": "108441205",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Bridgestone Corp."
+  }
+ },
+ "BBTT": {
+  "at": "2026-10-28T11:33:30.656Z",
+  "entry": {
+   "symbol": "BBTT",
+   "cusip": "029578200",
+   "tier": "OTCID",
+   "type": "Common Stock",
+   "name": "Btab Ecommerce Group, Inc."
+  }
+ },
+ "BZLFY": {
+  "at": "2026-10-28T11:33:33.298Z",
+  "entry": {
+   "symbol": "BZLFY",
+   "cusip": "120738406",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Bunzl plc"
+  }
+ },
+ "BURCA": {
+  "at": "2026-10-28T11:33:34.484Z",
+  "entry": {
+   "symbol": "BURCA",
+   "cusip": "122295108",
+   "tier": "OTCID",
+   "type": "Common Stock",
+   "name": "Burnham Holdings, Inc."
+  }
+ },
+ "BYD": {
+  "at": "2026-10-28T11:33:36.572Z",
+  "entry": {
+   "symbol": "BYD",
+   "cusip": "103304101",
+   "tier": "No Tier",
+   "type": "Common Stock",
+   "name": "Boyd Gaming Corp."
+  }
+ },
+ "BYDDY": {
+  "at": "2026-10-28T11:33:39.420Z",
+  "entry": {
+   "symbol": "BYDDY",
+   "cusip": "05606L100",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "BYD Co., Ltd."
+  }
+ },
+ "CVGW": {
+  "at": "2026-10-28T11:33:40.577Z",
+  "entry": null
+ },
+ "CAJPY": {
+  "at": "2026-10-28T11:33:41.733Z",
+  "entry": {
+   "symbol": "CAJPY",
+   "cusip": "138006309",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Canon, Inc."
+  }
+ },
+ "CGEMY": {
+  "at": "2026-10-28T11:33:43.770Z",
+  "entry": {
+   "symbol": "CGEMY",
+   "cusip": "13961R100",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Capgemini SE"
+  }
+ },
+ "CPRX": {
+  "at": "2026-10-28T11:33:44.976Z",
+  "entry": null
+ },
+ "CNFN": {
+  "at": "2026-10-28T11:33:46.195Z",
+  "entry": {
+   "symbol": "CNFN",
+   "cusip": "12529C308",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "CFN ENTERPRISES INC."
+  }
+ },
+ "CGXEF": {
+  "at": "2026-10-28T11:33:47.522Z",
+  "entry": {
+   "symbol": "CGXEF",
+   "cusip": "125405506",
+   "tier": "Pink Limited",
+   "type": "Ordinary Shares",
+   "name": "CGX Energy Inc."
+  }
+ },
+ "CAOVY": {
+  "at": "2026-10-28T11:33:49.334Z",
+  "entry": {
+   "symbol": "CAOVY",
+   "cusip": "169403201",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "China Overseas Land & Investment Ltd."
+  }
+ },
+ "SNPMF": {
+  "at": "2026-10-28T11:33:51.343Z",
+  "entry": {
+   "symbol": "SNPMF",
+   "cusip": "Y15010104",
+   "tier": "Pink Limited",
+   "type": "Ordinary Shares",
+   "name": "China Petroleum & Chemical Corp."
+  }
+ },
+ "CSUAY": {
+  "at": "2026-10-28T11:33:53.419Z",
+  "entry": {
+   "symbol": "CSUAY",
+   "cusip": "16942A302",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "China Shenhua Energy Co., Ltd."
+  }
+ },
+ "CWAN": {
+  "at": "2026-10-28T11:33:54.635Z",
+  "entry": null
+ },
+ "CLPHY": {
+  "at": "2026-10-28T11:33:56.819Z",
+  "entry": {
+   "symbol": "CLPHY",
+   "cusip": "18946Q101",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "CLP Holdings Ltd."
+  }
+ },
+ "CCHGY": {
+  "at": "2026-10-28T11:33:58.950Z",
+  "entry": {
+   "symbol": "CCHGY",
+   "cusip": "191223205",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Coca-Cola HBC AG"
+  }
+ },
+ "CODGF": {
+  "at": "2026-10-28T11:34:00.718Z",
+  "entry": {
+   "symbol": "CODGF",
+   "cusip": "F80343100",
+   "tier": "Pink Limited",
+   "type": "Ordinary Shares",
+   "name": "Compagnie de Saint-Gobain"
+  }
+ },
+ "CRN": {
+  "at": "2026-10-28T11:34:02.325Z",
+  "entry": null
+ },
+ "CODQL": {
+  "at": "2026-10-28T11:34:05.059Z",
+  "entry": {
+   "symbol": "CODQL",
+   "cusip": "U2024H107",
+   "tier": "Pink Limited",
+   "type": "Other Security Type",
+   "name": "Coronado Global Res Inc"
+  }
+ },
+ "CSCMY": {
+  "at": "2026-10-28T11:34:06.242Z",
+  "entry": {
+   "symbol": "CSCMY",
+   "cusip": "221118102",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "COSCO Shipping International (Singapore) Co., Ltd. "
+  }
+ },
+ "CSGS": {
+  "at": "2026-10-28T11:34:07.438Z",
+  "entry": null
+ },
+ "CVSI": {
+  "at": "2026-10-28T11:34:10.348Z",
+  "entry": {
+   "symbol": "CVSI",
+   "cusip": "126654102",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "CV Sciences, Inc."
+  }
+ },
+ "CLOQ": {
+  "at": "2026-10-28T11:34:11.691Z",
+  "entry": {
+   "symbol": "CLOQ",
+   "cusip": "23249K108",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "Cyberloq Technologies Inc."
+  }
+ },
+ "DSNKY": {
+  "at": "2026-10-28T11:34:13.851Z",
+  "entry": {
+   "symbol": "DSNKY",
+   "cusip": "23381D102",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Daiichi Sankyo Co., Ltd."
+  }
+ },
+ "DIFTY": {
+  "at": "2026-10-28T11:34:15.889Z",
+  "entry": {
+   "symbol": "DIFTY",
+   "cusip": "23405X209",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Daito Trust Construction Co."
+  }
+ },
+ "DANOY": {
+  "at": "2026-10-28T11:34:19.066Z",
+  "entry": {
+   "symbol": "DANOY",
+   "cusip": "23636T100",
+   "tier": "OTCQX International",
+   "type": "ADR",
+   "name": "Danone"
+  }
+ },
+ "DSNY": {
+  "at": "2026-10-28T11:34:22.163Z",
+  "entry": {
+   "symbol": "DSNY",
+   "cusip": "25063G303",
+   "tier": "OTCQB",
+   "type": "Ordinary Shares",
+   "name": "Destiny Media Technologies, Inc."
+  }
+ },
+ "DLAKY": {
+  "at": "2026-10-28T11:34:26.171Z",
+  "entry": {
+   "symbol": "DLAKY",
+   "cusip": "251561304",
+   "tier": "OTCQX International",
+   "type": "ADR",
+   "name": "Deutsche Lufthansa AG"
+  }
+ },
+ "DEVO": {
+  "at": "2026-10-28T11:34:28.429Z",
+  "entry": null
+ },
+ "DTNOY": {
+  "at": "2026-10-28T11:34:30.548Z",
+  "entry": {
+   "symbol": "DTNOY",
+   "cusip": "23290P105",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "DNO ASA"
+  }
+ },
+ "DQWS": {
+  "at": "2026-10-28T11:34:33.410Z",
+  "entry": {
+   "symbol": "DQWS",
+   "cusip": "26251W100",
+   "tier": "OTCID",
+   "type": "Common Stock",
+   "name": "Dswiss Inc"
+  }
+ },
+ "DUUO": {
+  "at": "2026-10-28T11:34:34.625Z",
+  "entry": {
+   "symbol": "DUUO",
+   "cusip": "266037100",
+   "tier": "Expert Market",
+   "type": "Common Stock",
+   "name": "Duo World Inc."
+  }
+ },
+ "BRQL": {
+  "at": "2026-10-28T11:34:35.841Z",
+  "entry": {
+   "symbol": "BRQL",
+   "cusip": "11478W109",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "Dynamic Aerospace Systems Corporation"
+  }
+ },
+ "EICCF": {
+  "at": "2026-10-28T11:34:37.460Z",
+  "entry": {
+   "symbol": "EICCF",
+   "cusip": "26827G100",
+   "tier": "Expert Market",
+   "type": "Ordinary Shares",
+   "name": "E Automotive Inc"
+  }
+ },
+ "EACO": {
+  "at": "2026-10-28T11:34:41.094Z",
+  "entry": {
+   "symbol": "EACO",
+   "cusip": "26824A205",
+   "tier": "OTCID",
+   "type": "Common Stock",
+   "name": "EACO Corp."
+  }
+ },
+ "ETST": {
+  "at": "2026-10-28T11:34:42.409Z",
+  "entry": {
+   "symbol": "ETST",
+   "cusip": "270311103",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "Earth Science Tech, Inc."
+  }
+ },
+ "EBCOY": {
+  "at": "2026-10-28T11:34:44.567Z",
+  "entry": {
+   "symbol": "EBCOY",
+   "cusip": "278614201",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Ebara Corp."
+  }
+ },
+ "ECTM": {
+  "at": "2026-10-28T11:34:47.490Z",
+  "entry": {
+   "symbol": "ECTM",
+   "cusip": "26827L109",
+   "tier": "OTCID",
+   "type": "Units",
+   "name": "ECA Marcellus Trust I"
+  }
+ },
+ "EA": {
+  "at": "2026-10-28T11:34:48.662Z",
+  "entry": null
+ },
+ "ENL": {
+  "at": "2026-10-28T11:34:51.100Z",
+  "entry": null
+ },
+ "MOJO": {
+  "at": "2026-10-28T11:34:53.882Z",
+  "entry": {
+   "symbol": "MOJO",
+   "cusip": "60841T400",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "Equator Beverage Company"
+  }
+ },
+ "ESGH": {
+  "at": "2026-10-28T11:34:56.968Z",
+  "entry": {
+   "symbol": "ESGH",
+   "cusip": "72754U100",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "ESG Inc."
+  }
+ },
+ "ESLOY": {
+  "at": "2026-10-28T11:34:58.829Z",
+  "entry": {
+   "symbol": "ESLOY",
+   "cusip": "297284200",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "EssilorLuxottica"
+  }
+ },
+ "EXDW": {
+  "at": "2026-10-28T11:35:01.639Z",
+  "entry": {
+   "symbol": "EXDW",
+   "cusip": "30067B102",
+   "tier": "Expert Market",
+   "type": "Common Stock",
+   "name": "Exceed World, Inc."
+  }
+ },
+ "EXPGY": {
+  "at": "2026-10-28T11:35:02.851Z",
+  "entry": {
+   "symbol": "EXPGY",
+   "cusip": "30215C101",
+   "tier": "OTCQX International",
+   "type": "ADR",
+   "name": "Experian plc"
+  }
+ },
+ "EXETF": {
+  "at": "2026-10-28T11:35:04.861Z",
+  "entry": {
+   "symbol": "EXETF",
+   "cusip": "30224T863",
+   "tier": "Pink Limited",
+   "type": "Ordinary Shares",
+   "name": "Extendicare, Inc."
+  }
+ },
+ "FADL": {
+  "at": "2026-10-28T11:35:06.097Z",
+  "entry": null
+ },
+ "FFPP": {
+  "at": "2026-10-28T11:35:08.848Z",
+  "entry": {
+   "symbol": "FFPP",
+   "cusip": "85423F304",
+   "tier": "OTCID",
+   "type": "Common Stock",
+   "name": "Fast Finance Pay Corp."
+  }
+ },
+ "FONR": {
+  "at": "2026-10-28T11:35:10.044Z",
+  "entry": null
+ },
+ "FSNUF": {
+  "at": "2026-10-28T11:35:13.854Z",
+  "entry": {
+   "symbol": "FSNUF",
+   "cusip": "D27348396",
+   "tier": "Pink Limited",
+   "type": "Ordinary Shares",
+   "name": "Fresenius SE & Co. KGaA"
+  }
+ },
+ "FUJIY": {
+  "at": "2026-10-28T11:35:15.911Z",
+  "entry": {
+   "symbol": "FUJIY",
+   "cusip": "35958N107",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "FUJIFILM Holdings Corp."
+  }
+ },
+ "FJTSY": {
+  "at": "2026-10-28T11:35:18.018Z",
+  "entry": {
+   "symbol": "FJTSY",
+   "cusip": "359590304",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Fujitsu Ltd."
+  }
+ },
+ "GLPEF": {
+  "at": "2026-10-28T11:35:20.284Z",
+  "entry": {
+   "symbol": "GLPEF",
+   "cusip": "X3078L108",
+   "tier": "Pink Limited",
+   "type": "Ordinary Shares",
+   "name": "Galp Energia, SA"
+  }
+ },
+ "GLAPY": {
+  "at": "2026-10-28T11:35:24.742Z",
+  "entry": {
+   "symbol": "GLAPY",
+   "cusip": "376788105",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Glanbia Plc"
+  }
+ },
+ "GDLG": {
+  "at": "2026-10-28T11:35:27.868Z",
+  "entry": {
+   "symbol": "GDLG",
+   "cusip": "37890C108",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "GLIDELOGIC CORP."
+  }
+ },
+ "GBTG": {
+  "at": "2026-10-28T11:35:29.066Z",
+  "entry": null
+ },
+ "JETMF": {
+  "at": "2026-10-28T11:35:30.238Z",
+  "entry": {
+   "symbol": "JETMF",
+   "cusip": "37960G401",
+   "tier": "OTCQB",
+   "type": "Ordinary Shares",
+   "name": "Global Crossing Airlines Group Inc."
+  }
+ },
+ "GIPL": {
+  "at": "2026-10-28T11:35:33.345Z",
+  "entry": {
+   "symbol": "GIPL",
+   "cusip": "37960M101",
+   "tier": "OTCID",
+   "type": "Common Stock",
+   "name": "Global Innovative Platforms Inc."
+  }
+ },
+ "GWLL": {
+  "at": "2026-10-28T11:35:36.548Z",
+  "entry": {
+   "symbol": "GWLL",
+   "cusip": "38138N104",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "GOLDENWELL BIOTECH INC."
+  }
+ },
+ "GGDVY": {
+  "at": "2026-10-28T11:35:38.699Z",
+  "entry": {
+   "symbol": "GGDVY",
+   "cusip": "400654208",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Guangdong Investment Ltd."
+  }
+ },
+ "GUER": {
+  "at": "2026-10-28T11:35:42.520Z",
+  "entry": {
+   "symbol": "GUER",
+   "cusip": "40162G203",
+   "tier": "OTCQX U.S.",
+   "type": "Common Stock",
+   "name": "Guerrilla RF, Inc."
+  }
+ },
+ "GULTU": {
+  "at": "2026-10-28T11:35:43.769Z",
+  "entry": {
+   "symbol": "GULTU",
+   "cusip": "40222T104",
+   "tier": "OTCID",
+   "type": "Other Security Type",
+   "name": "Gulf Coast Ultra Deep Royalty Trust"
+  }
+ },
+ "HMMR": {
+  "at": "2026-10-28T11:35:45.080Z",
+  "entry": {
+   "symbol": "HMMR",
+   "cusip": "40829T101",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "Hammer Technology Holdings Corp."
+  }
+ },
+ "HLPPY": {
+  "at": "2026-10-28T11:35:49.343Z",
+  "entry": {
+   "symbol": "HLPPY",
+   "cusip": "41043M104",
+   "tier": "OTCID",
+   "type": "ADR",
+   "name": "Hang Lung Properties Ltd."
+  }
+ },
+ "HBRIY": {
+  "at": "2026-10-28T11:35:51.409Z",
+  "entry": {
+   "symbol": "HBRIY",
+   "cusip": "411618200",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Harbour Energy Plc"
+  }
+ },
+ "HRGN": {
+  "at": "2026-10-28T11:35:53.068Z",
+  "entry": {
+   "symbol": "HRGN",
+   "cusip": "09074M202",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "Harvard Apparatus Regenerative Technology Inc."
+  }
+ },
+ "HLYK": {
+  "at": "2026-10-28T11:35:56.689Z",
+  "entry": {
+   "symbol": "HLYK",
+   "cusip": "42228P300",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "HealthLynked Corp."
+  }
+ },
+ "HEWA": {
+  "at": "2026-10-28T11:35:58.471Z",
+  "entry": {
+   "symbol": "HEWA",
+   "cusip": "42227G202",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "HealthWarehouse.com, Inc."
+  }
+ },
+ "HLEO": {
+  "at": "2026-10-28T11:35:59.651Z",
+  "entry": {
+   "symbol": "HLEO",
+   "cusip": "860914209",
+   "tier": "OTCID",
+   "type": "Common Stock",
+   "name": "Helio Corporation"
+  }
+ },
+ "HLTOY": {
+  "at": "2026-10-28T11:36:02.958Z",
+  "entry": {
+   "symbol": "HLTOY",
+   "cusip": "423325307",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Hellenic Telecommunications Organization S.A."
+  }
+ },
+ "HDVTY": {
+  "at": "2026-10-28T11:36:04.901Z",
+  "entry": {
+   "symbol": "HDVTY",
+   "cusip": "425070109",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Henderson Investment Ltd."
+  }
+ },
+ "HENOY": {
+  "at": "2026-10-28T11:36:07.112Z",
+  "entry": {
+   "symbol": "HENOY",
+   "cusip": "42550U208",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Henkel AG & Co. KGAA"
+  }
+ },
+ "HENKY": {
+  "at": "2026-10-28T11:36:09.193Z",
+  "entry": {
+   "symbol": "HENKY",
+   "cusip": "42550U109",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Henkel AG & Co. KGAA"
+  }
+ },
+ "HEOL": {
+  "at": "2026-10-28T11:36:11.623Z",
+  "entry": {
+   "symbol": "HEOL",
+   "cusip": "43123U105",
+   "tier": "Grey Market",
+   "type": "Units",
+   "name": "Highwater Ethanol LLC"
+  }
+ },
+ "HKMPY": {
+  "at": "2026-10-28T11:36:13.821Z",
+  "entry": {
+   "symbol": "HKMPY",
+   "cusip": "431288109",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Hikma Pharmaceuticals plc."
+  }
+ },
+ "HTHIY": {
+  "at": "2026-10-28T11:36:15.135Z",
+  "entry": {
+   "symbol": "HTHIY",
+   "cusip": "433578507",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Hitachi Ltd."
+  }
+ },
+ "HNOI": {
+  "at": "2026-10-28T11:36:16.366Z",
+  "entry": {
+   "symbol": "HNOI",
+   "cusip": "404729105",
+   "tier": "OTCID",
+   "type": "Common Stock",
+   "name": "HNO International Inc."
+  }
+ },
+ "HCMLY": {
+  "at": "2026-10-28T11:36:18.564Z",
+  "entry": {
+   "symbol": "HCMLY",
+   "cusip": "43475E105",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "HOLCIM LTD"
+  }
+ },
+ "HCIL": {
+  "at": "2026-10-28T11:36:19.780Z",
+  "entry": {
+   "symbol": "HCIL",
+   "cusip": "42831T202",
+   "tier": "Expert Market",
+   "type": "Common Stock",
+   "name": "Hongchang International Co Ltd."
+  }
+ },
+ "HOCPY": {
+  "at": "2026-10-28T11:36:22.058Z",
+  "entry": {
+   "symbol": "HOCPY",
+   "cusip": "443251103",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Hoya Corp."
+  }
+ },
+ "BOSSY": {
+  "at": "2026-10-28T11:36:26.049Z",
+  "entry": {
+   "symbol": "BOSSY",
+   "cusip": "444560106",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Hugo Boss AG"
+  }
+ },
+ "HSQVY": {
+  "at": "2026-10-28T11:36:28.489Z",
+  "entry": {
+   "symbol": "HSQVY",
+   "cusip": "448103101",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Husqvarna AB"
+  }
+ },
+ "HUTCY": {
+  "at": "2026-10-28T11:36:30.795Z",
+  "entry": {
+   "symbol": "HUTCY",
+   "cusip": "44841V201",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Hutchison Telecommunications Hong Kong Holdings Ltd."
+  }
+ },
+ "HYOR": {
+  "at": "2026-10-28T11:36:32.120Z",
+  "entry": {
+   "symbol": "HYOR",
+   "cusip": "04517L101",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "Hyorc Corporation"
+  }
+ },
+ "IONI": {
+  "at": "2026-10-28T11:36:33.382Z",
+  "entry": {
+   "symbol": "IONI",
+   "cusip": "44988A101",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "I-ON Digital Corp."
+  }
+ },
+ "IMPUY": {
+  "at": "2026-10-28T11:36:37.226Z",
+  "entry": {
+   "symbol": "IMPUY",
+   "cusip": "452553308",
+   "tier": "OTCQX International",
+   "type": "ADR",
+   "name": "Impala Platinum Holdings Ltd."
+  }
+ },
+ "IFNNY": {
+  "at": "2026-10-28T11:36:40.839Z",
+  "entry": {
+   "symbol": "IFNNY",
+   "cusip": "45662N103",
+   "tier": "OTCQX International",
+   "type": "ADR",
+   "name": "Infineon Technologies AG"
+  }
+ },
+ "INBP": {
+  "at": "2026-10-28T11:36:42.226Z",
+  "entry": {
+   "symbol": "INBP",
+   "cusip": "45811V105",
+   "tier": "OTCQX U.S.",
+   "type": "Common Stock",
+   "name": "Integrated BioPharma, Inc."
+  }
+ },
+ "ICAGY": {
+  "at": "2026-10-28T11:36:45.240Z",
+  "entry": {
+   "symbol": "ICAGY",
+   "cusip": "459348108",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "International Consolidated Airlines Group SA"
+  }
+ },
+ "IIJIY": {
+  "at": "2026-10-28T11:36:50.276Z",
+  "entry": {
+   "symbol": "IIJIY",
+   "cusip": "46059T109",
+   "tier": "OTCID",
+   "type": "ADR",
+   "name": "Internet Initiative Japan, Inc."
+  }
+ },
+ "IDXG": {
+  "at": "2026-10-28T11:36:53.360Z",
+  "entry": {
+   "symbol": "IDXG",
+   "cusip": "46062X402",
+   "tier": "OTCID",
+   "type": "Common Stock",
+   "name": "Interpace Biosciences, Inc."
+  }
+ },
+ "IFOS": {
+  "at": "2026-10-28T11:36:54.587Z",
+  "entry": null
+ },
+ "ITFS": {
+  "at": "2026-10-28T11:36:55.941Z",
+  "entry": {
+   "symbol": "ITFS",
+   "cusip": "465270106",
+   "tier": "OTCQX U.S.",
+   "type": "Ordinary Shares",
+   "name": "ITAFOS INC."
+  }
+ },
+ "JANL": {
+  "at": "2026-10-28T11:36:59.646Z",
+  "entry": {
+   "symbol": "JANL",
+   "cusip": "47077R109",
+   "tier": "OTCQX U.S.",
+   "type": "Common Stock",
+   "name": "Janel Corp."
+  }
+ },
+ "JFB": {
+  "at": "2026-10-28T11:37:01.086Z",
+  "entry": null
+ },
+ "SVMB": {
+  "at": "2026-10-28T11:37:05.430Z",
+  "entry": {
+   "symbol": "SVMB",
+   "cusip": "80534W205",
+   "tier": "OTCID",
+   "type": "Common Stock",
+   "name": "Jingbo Technology Inc."
+  }
+ },
+ "JMPLY": {
+  "at": "2026-10-28T11:37:08.123Z",
+  "entry": {
+   "symbol": "JMPLY",
+   "cusip": "479142606",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Johnson Matthey plc"
+  }
+ },
+ "JSDA": {
+  "at": "2026-10-28T11:37:11.501Z",
+  "entry": {
+   "symbol": "JSDA",
+   "cusip": "48023P106",
+   "tier": "OTCQB",
+   "type": "Ordinary Shares",
+   "name": "Jones Soda Co."
+  }
+ },
+ "JTKWY": {
+  "at": "2026-10-28T11:37:12.697Z",
+  "entry": null
+ },
+ "KAJMY": {
+  "at": "2026-10-28T11:37:14.941Z",
+  "entry": {
+   "symbol": "KAJMY",
+   "cusip": "483111209",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Kajima Corp."
+  }
+ },
+ "KAOOY": {
+  "at": "2026-10-28T11:37:16.136Z",
+  "entry": {
+   "symbol": "KAOOY",
+   "cusip": "485537401",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Kao Corp."
+  }
+ },
+ "KCDMY": {
+  "at": "2026-10-28T11:37:18.857Z",
+  "entry": {
+   "symbol": "KCDMY",
+   "cusip": "494386204",
+   "tier": "OTCID",
+   "type": "ADR",
+   "name": "Kimberly-Clark de Mexico, S.A.B de C.V."
+  }
+ },
+ "KGFHY": {
+  "at": "2026-10-28T11:37:20.041Z",
+  "entry": {
+   "symbol": "KGFHY",
+   "cusip": "495724403",
+   "tier": "OTCQX International",
+   "type": "ADR",
+   "name": "Kingfisher plc"
+  }
+ },
+ "KLNG": {
+  "at": "2026-10-28T11:37:21.207Z",
+  "entry": {
+   "symbol": "KLNG",
+   "cusip": "24372A305",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "Koil Energy Solutions, Inc."
+  }
+ },
+ "KMTUY": {
+  "at": "2026-10-28T11:37:24.200Z",
+  "entry": {
+   "symbol": "KMTUY",
+   "cusip": "500458401",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Komatsu Ltd."
+  }
+ },
+ "KTEL": {
+  "at": "2026-10-28T11:37:25.435Z",
+  "entry": {
+   "symbol": "KTEL",
+   "cusip": "50050T100",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "KonaTel, Inc."
+  }
+ },
+ "KNYJF": {
+  "at": "2026-10-28T11:37:27.067Z",
+  "entry": {
+   "symbol": "KNYJF",
+   "cusip": "X4551T105",
+   "tier": "Pink Limited",
+   "type": "Ordinary Shares",
+   "name": "Kone Oyj"
+  }
+ },
+ "KNCAY": {
+  "at": "2026-10-28T11:37:29.113Z",
+  "entry": {
+   "symbol": "KNCAY",
+   "cusip": "50048B104",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Konica Minolta Inc."
+  }
+ },
+ "KIROY": {
+  "at": "2026-10-28T11:37:31.266Z",
+  "entry": {
+   "symbol": "KIROY",
+   "cusip": "50125N104",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Kumba Iron Ore Ltd."
+  }
+ },
+ "KPEA": {
+  "at": "2026-10-28T11:37:34.494Z",
+  "entry": {
+   "symbol": "KPEA",
+   "cusip": "12672T207",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "Kun Peng International Ltd."
+  }
+ },
+ "LRLCY": {
+  "at": "2026-10-28T11:37:35.757Z",
+  "entry": {
+   "symbol": "LRLCY",
+   "cusip": "502117203",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "L'Oreal Co."
+  }
+ },
+ "LEAT": {
+  "at": "2026-10-28T11:37:38.815Z",
+  "entry": {
+   "symbol": "LEAT",
+   "cusip": "522132208",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "Leatt Corp."
+  }
+ },
+ "LNVGY": {
+  "at": "2026-10-28T11:37:41.157Z",
+  "entry": {
+   "symbol": "LNVGY",
+   "cusip": "526250105",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Lenovo Group Ltd."
+  }
+ },
+ "LICT": {
+  "at": "2026-10-28T11:37:42.351Z",
+  "entry": {
+   "symbol": "LICT",
+   "cusip": "50187G104",
+   "tier": "Pink Limited",
+   "type": "Common Stock",
+   "name": "LICT Corp."
+  }
+ },
+ "LCTC": {
+  "at": "2026-10-28T11:37:45.964Z",
+  "entry": {
+   "symbol": "LCTC",
+   "cusip": "53220Y207",
+   "tier": "OTCID",
+   "type": "Common Stock",
+   "name": "Lifeloc Technologies, Inc."
+  }
+ },
+ "LIVG": {
+  "at": "2026-10-28T11:37:47.174Z",
+  "entry": {
+   "symbol": "LIVG",
+   "cusip": "67052F201",
+   "tier": "Pink Limited",
+   "type": "Common Stock",
+   "name": "LIVENTO GROUP INC."
+  }
+ },
+ "LDDD": {
+  "at": "2026-10-28T11:37:50.275Z",
+  "entry": {
+   "symbol": "LDDD",
+   "cusip": "54303E209",
+   "tier": "OTCID",
+   "type": "Common Stock",
+   "name": "LONGDUODUO CO LTD."
+  }
+ },
+ "LSEB": {
+  "at": "2026-10-28T11:37:53.140Z",
+  "entry": {
+   "symbol": "LSEB",
+   "cusip": "50220T105",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "LSEB CREATIVE CORP."
+  }
+ },
+ "LKNCY": {
+  "at": "2026-10-28T11:37:54.340Z",
+  "entry": {
+   "symbol": "LKNCY",
+   "cusip": "54951L109",
+   "tier": "OTCID",
+   "type": "ADR",
+   "name": "Luckin Coffee Inc."
+  }
+ },
+ "MKTAY": {
+  "at": "2026-10-28T11:37:55.528Z",
+  "entry": {
+   "symbol": "MKTAY",
+   "cusip": "560877300",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Makita Corp."
+  }
+ },
+ "MPX": {
+  "at": "2026-10-28T11:37:56.760Z",
+  "entry": null
+ },
+ "MASI": {
+  "at": "2026-10-28T11:37:57.935Z",
+  "entry": null
+ },
+ "MTTRF": {
+  "at": "2026-10-28T11:37:59.916Z",
+  "entry": {
+   "symbol": "MTTRF",
+   "cusip": "57722Y102",
+   "tier": "Pink Limited",
+   "type": "Ordinary Shares",
+   "name": "Mattr Corp."
+  }
+ },
+ "MKKGY": {
+  "at": "2026-10-28T11:38:01.137Z",
+  "entry": {
+   "symbol": "MKKGY",
+   "cusip": "589339209",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Merck KGaA"
+  }
+ },
+ "MHGU": {
+  "at": "2026-10-28T11:38:02.340Z",
+  "entry": null
+ },
+ "MCW": {
+  "at": "2026-10-28T11:38:03.522Z",
+  "entry": null
+ },
+ "MIELY": {
+  "at": "2026-10-28T11:38:05.428Z",
+  "entry": {
+   "symbol": "MIELY",
+   "cusip": "606776201",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Mitsubishi Electric Corp."
+  }
+ },
+ "MOBQ": {
+  "at": "2026-10-28T11:38:06.679Z",
+  "entry": {
+   "symbol": "MOBQ",
+   "cusip": "60743F607",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "Mobiquity Technologies, Inc."
+  }
+ },
+ "MGYOY": {
+  "at": "2026-10-28T11:38:07.838Z",
+  "entry": {
+   "symbol": "MGYOY",
+   "cusip": "608464202",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "MOL Magyar Olaj-Es Gazipari RT"
+  }
+ },
+ "MCEM": {
+  "at": "2026-10-28T11:38:09.225Z",
+  "entry": {
+   "symbol": "MCEM",
+   "cusip": "609031307",
+   "tier": "OTCQX U.S.",
+   "type": "Common Stock",
+   "name": "Monarch Cement Co. (The)"
+  }
+ },
+ "MYX": {
+  "at": "2026-10-28T11:38:11.168Z",
+  "entry": {
+   "symbol": "MYX",
+   "cusip": "G5T117102",
+   "tier": "No Tier",
+   "type": "Ordinary Shares",
+   "name": "Maywood Acquisition Corp. 2"
+  }
+ },
+ "NATH": {
+  "at": "2026-10-28T11:38:12.386Z",
+  "entry": null
+ },
+ "NTZ": {
+  "at": "2026-10-28T11:38:13.572Z",
+  "entry": null
+ },
+ "NCSM": {
+  "at": "2026-10-28T11:38:14.800Z",
+  "entry": null
+ },
+ "NSRGY": {
+  "at": "2026-10-28T11:38:17.766Z",
+  "entry": {
+   "symbol": "NSRGY",
+   "cusip": "641069406",
+   "tier": "OTCID",
+   "type": "ADR",
+   "name": "Nestle S.A."
+  }
+ },
+ "NLST": {
+  "at": "2026-10-28T11:38:19.022Z",
+  "entry": {
+   "symbol": "NLST",
+   "cusip": "64118P109",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "Netlist, Inc."
+  }
+ },
+ "NXPRF": {
+  "at": "2026-10-28T11:38:20.931Z",
+  "entry": {
+   "symbol": "NXPRF",
+   "cusip": "F65277109",
+   "tier": "Pink Limited",
+   "type": "Ordinary Shares",
+   "name": "Nexans Paris ACT"
+  }
+ },
+ "NJDCY": {
+  "at": "2026-10-28T11:38:22.143Z",
+  "entry": {
+   "symbol": "NJDCY",
+   "cusip": "654090109",
+   "tier": "Expert Market",
+   "type": "ADR",
+   "name": "Nidec Corp."
+  }
+ },
+ "NINOY": {
+  "at": "2026-10-28T11:38:24.188Z",
+  "entry": {
+   "symbol": "NINOY",
+   "cusip": "654111202",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Nikon Corp."
+  }
+ },
+ "NTDOY": {
+  "at": "2026-10-28T11:38:25.467Z",
+  "entry": {
+   "symbol": "NTDOY",
+   "cusip": "654445303",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Nintendo Co., Ltd."
+  }
+ },
+ "NOBH": {
+  "at": "2026-10-28T11:38:26.822Z",
+  "entry": {
+   "symbol": "NOBH",
+   "cusip": "654892108",
+   "tier": "OTCQX U.S.",
+   "type": "Common Stock",
+   "name": "Nobility Homes, Inc."
+  }
+ },
+ "NORD": {
+  "at": "2026-10-28T11:38:29.870Z",
+  "entry": {
+   "symbol": "NORD",
+   "cusip": "28265K304",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "Nordicus Partners Corp."
+  }
+ },
+ "NHYDY": {
+  "at": "2026-10-28T11:38:33.910Z",
+  "entry": {
+   "symbol": "NHYDY",
+   "cusip": "656531605",
+   "tier": "OTCQX International",
+   "type": "ADR",
+   "name": "Norsk Hydro ASA"
+  }
+ },
+ "NCL": {
+  "at": "2026-10-28T11:38:35.076Z",
+  "entry": null
+ },
+ "NCLX": {
+  "at": "2026-10-28T11:38:36.275Z",
+  "entry": {
+   "symbol": "NCLX",
+   "cusip": "66373M408",
+   "tier": "Expert Market",
+   "type": "Common Stock",
+   "name": "Northann Corp."
+  }
+ },
+ "NWARF": {
+  "at": "2026-10-28T11:38:37.439Z",
+  "entry": {
+   "symbol": "NWARF",
+   "cusip": "R63179247",
+   "tier": "Pink Limited",
+   "type": "Ordinary Shares",
+   "name": "Norwegian Air Shuttle Asa"
+  }
+ },
+ "NVZMF": {
+  "at": "2026-10-28T11:38:38.653Z",
+  "entry": {
+   "symbol": "NVZMF",
+   "cusip": "K7317J133",
+   "tier": "Pink Limited",
+   "type": "Ordinary Shares",
+   "name": "NOVONESIS A S"
+  }
+ },
+ "NVZMY": {
+  "at": "2026-10-28T11:38:39.829Z",
+  "entry": {
+   "symbol": "NVZMY",
+   "cusip": "670108109",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "NOVONESIS A S"
+  }
+ },
+ "NPSKY": {
+  "at": "2026-10-28T11:38:40.996Z",
+  "entry": {
+   "symbol": "NPSKY",
+   "cusip": "670184100",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "NSK Ltd."
+  }
+ },
+ "AURX": {
+  "at": "2026-10-28T11:38:44.215Z",
+  "entry": {
+   "symbol": "AURX",
+   "cusip": "67059V209",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "Nuo Therapeutics, Inc."
+  }
+ },
+ "NSFDF": {
+  "at": "2026-10-28T11:38:47.672Z",
+  "entry": {
+   "symbol": "NSFDF",
+   "cusip": "62948Q107",
+   "tier": "OTCQB",
+   "type": "Ordinary Shares",
+   "name": "NXT Energy Solutions Inc."
+  }
+ },
+ "NYR": {
+  "at": "2026-10-28T11:38:48.910Z",
+  "entry": null
+ },
+ "OKMN": {
+  "at": "2026-10-28T11:38:51.908Z",
+  "entry": {
+   "symbol": "OKMN",
+   "cusip": "67921K100",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "OKMIN RESOURCES, INC."
+  }
+ },
+ "OLPX": {
+  "at": "2026-10-28T11:38:53.219Z",
+  "entry": null
+ },
+ "OLYMY": {
+  "at": "2026-10-28T11:38:55.349Z",
+  "entry": {
+   "symbol": "OLYMY",
+   "cusip": "68163W208",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Olympus Corp."
+  }
+ },
+ "OMRNY": {
+  "at": "2026-10-28T11:38:57.381Z",
+  "entry": {
+   "symbol": "OMRNY",
+   "cusip": "682151303",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "OMRON Corp."
+  }
+ },
+ "ORKLY": {
+  "at": "2026-10-28T11:38:59.492Z",
+  "entry": {
+   "symbol": "ORKLY",
+   "cusip": "686331109",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Orkla ASA"
+  }
+ },
+ "OSRH": {
+  "at": "2026-10-28T11:39:00.796Z",
+  "entry": {
+   "symbol": "OSRH",
+   "cusip": "68840D102",
+   "tier": "Pink Limited",
+   "type": "Common Stock",
+   "name": "OSR Health, Inc."
+  }
+ },
+ "OZVN": {
+  "at": "2026-10-28T11:39:03.971Z",
+  "entry": {
+   "symbol": "OZVN",
+   "cusip": "91023E101",
+   "tier": "OTCID",
+   "type": "Common Stock",
+   "name": "OZ Vision Inc."
+  }
+ },
+ "PAYD": {
+  "at": "2026-10-28T11:39:05.193Z",
+  "entry": {
+   "symbol": "PAYD",
+   "cusip": "69561N402",
+   "tier": "Pink Limited",
+   "type": "Common Stock",
+   "name": "Paid, Inc."
+  }
+ },
+ "PGNT": {
+  "at": "2026-10-28T11:39:06.416Z",
+  "entry": {
+   "symbol": "PGNT",
+   "cusip": "69912T108",
+   "tier": "OTCID",
+   "type": "Common Stock",
+   "name": "Paragon Technologies, Inc."
+  }
+ },
+ "PRKA": {
+  "at": "2026-10-28T11:39:09.434Z",
+  "entry": {
+   "symbol": "PRKA",
+   "cusip": "701455206",
+   "tier": "OTCQX U.S.",
+   "type": "Common Stock",
+   "name": "Parks! America, Inc."
+  }
+ },
+ "PCSVD": {
+  "at": "2026-10-28T11:39:10.632Z",
+  "entry": null
+ },
+ "PCSV": {
+  "at": "2026-10-28T11:39:13.672Z",
+  "entry": {
+   "symbol": "PCSV",
+   "cusip": "69325N201",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "PCS Edventures!, Inc."
+  }
+ },
+ "PPAAY": {
+  "at": "2026-10-28T11:39:15.590Z",
+  "entry": {
+   "symbol": "PPAAY",
+   "cusip": "69367P106",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "PT Perusahaan Gas Negara Persaro"
+  }
+ },
+ "PETV": {
+  "at": "2026-10-28T11:39:16.764Z",
+  "entry": {
+   "symbol": "PETV",
+   "cusip": "716817408",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "PetVivo Holdings Inc."
+  }
+ },
+ "PHGUF": {
+  "at": "2026-10-28T11:39:17.994Z",
+  "entry": {
+   "symbol": "PHGUF",
+   "cusip": "N69603145",
+   "tier": "Pink Limited",
+   "type": "Ordinary Shares",
+   "name": "Pharming Group NV"
+  }
+ },
+ "PMHS": {
+  "at": "2026-10-28T11:39:19.194Z",
+  "entry": {
+   "symbol": "PMHS",
+   "cusip": "898391206",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "Polomar Health Services, Inc."
+  }
+ },
+ "PVCT": {
+  "at": "2026-10-28T11:39:22.604Z",
+  "entry": {
+   "symbol": "PVCT",
+   "cusip": "74373P108",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "Provectus Biopharmaceuticals, Inc."
+  }
+ },
+ "PMDI": {
+  "at": "2026-10-28T11:39:26.756Z",
+  "entry": {
+   "symbol": "PMDI",
+   "cusip": "744375304",
+   "tier": "Expert Market",
+   "type": "Common Stock",
+   "name": "Psychemedics Corp."
+  }
+ },
+ "PEXNY": {
+  "at": "2026-10-28T11:39:28.832Z",
+  "entry": {
+   "symbol": "PEXNY",
+   "cusip": "69364V106",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "PTT Exploration & Production Public Co., Ltd."
+  }
+ },
+ "QEPC": {
+  "at": "2026-10-28T11:39:30.062Z",
+  "entry": {
+   "symbol": "QEPC",
+   "cusip": "74727K102",
+   "tier": "OTCQX U.S.",
+   "type": "Common Stock",
+   "name": "Q.E.P. Co., Inc."
+  }
+ },
+ "USAQ": {
+  "at": "2026-10-28T11:39:31.322Z",
+  "entry": {
+   "symbol": "USAQ",
+   "cusip": "90350R107",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "QHSLab Inc"
+  }
+ },
+ "QRVO": {
+  "at": "2026-10-28T11:39:32.510Z",
+  "entry": null
+ },
+ "QMCI": {
+  "at": "2026-10-28T11:39:35.446Z",
+  "entry": {
+   "symbol": "QMCI",
+   "cusip": "749114104",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "QuoteMedia, Inc."
+  }
+ },
+ "INIS": {
+  "at": "2026-10-28T11:39:36.607Z",
+  "entry": {
+   "symbol": "INIS",
+   "cusip": "45972C102",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "Radnostix, Inc."
+  }
+ },
+ "RNGE": {
+  "at": "2026-10-28T11:39:39.554Z",
+  "entry": {
+   "symbol": "RNGE",
+   "cusip": "56089M107",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "Range Impact Inc."
+  }
+ },
+ "RBGLY": {
+  "at": "2026-10-28T11:39:43.297Z",
+  "entry": {
+   "symbol": "RBGLY",
+   "cusip": "756255303",
+   "tier": "OTCQX International",
+   "type": "ADR",
+   "name": "Reckitt Benckiser Group Plc."
+  }
+ },
+ "RPMT": {
+  "at": "2026-10-28T11:39:46.043Z",
+  "entry": {
+   "symbol": "RPMT",
+   "cusip": "759141104",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "Rego Payment Architectures, Inc."
+  }
+ },
+ "RITR": {
+  "at": "2026-10-28T11:39:47.206Z",
+  "entry": null
+ },
+ "RITRF": {
+  "at": "2026-10-28T11:39:48.437Z",
+  "entry": {
+   "symbol": "RITRF",
+   "cusip": "G7486B106",
+   "tier": "Pink Limited",
+   "type": "Ordinary Shares",
+   "name": "REITAR LOGTECH HOLDINGS LTD"
+  }
+ },
+ "RNLXY": {
+  "at": "2026-10-28T11:39:51.976Z",
+  "entry": {
+   "symbol": "RNLXY",
+   "cusip": "75973T200",
+   "tier": "OTCQB",
+   "type": "ADR",
+   "name": "Renalytix plc"
+  }
+ },
+ "RNECY": {
+  "at": "2026-10-28T11:39:53.743Z",
+  "entry": {
+   "symbol": "RNECY",
+   "cusip": "75972B101",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Renesas Electronics Corp"
+  }
+ },
+ "REPYY": {
+  "at": "2026-10-28T11:39:57.433Z",
+  "entry": {
+   "symbol": "REPYY",
+   "cusip": "76026T205",
+   "tier": "OTCQX International",
+   "type": "ADR",
+   "name": "Repsol S.A."
+  }
+ },
+ "RICOY": {
+  "at": "2026-10-28T11:39:59.707Z",
+  "entry": {
+   "symbol": "RICOY",
+   "cusip": "765658307",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Ricoh Company Ltd."
+  }
+ },
+ "RHHBY": {
+  "at": "2026-10-28T11:40:01.425Z",
+  "entry": {
+   "symbol": "RHHBY",
+   "cusip": "771195104",
+   "tier": "OTCQX International",
+   "type": "ADR",
+   "name": "Roche Holding Ltd"
+  }
+ },
+ "RLEA": {
+  "at": "2026-10-28T11:40:04.682Z",
+  "entry": {
+   "symbol": "RLEA",
+   "cusip": "78109C109",
+   "tier": "Pink Limited",
+   "type": "Common Stock",
+   "name": "RUBBER LEAF INC"
+  }
+ },
+ "SAPMY": {
+  "at": "2026-10-28T11:40:06.633Z",
+  "entry": {
+   "symbol": "SAPMY",
+   "cusip": "79376W406",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Saipem S.p.A."
+  }
+ },
+ "SLD": {
+  "at": "2026-10-28T11:40:07.799Z",
+  "entry": null
+ },
+ "SDVKY": {
+  "at": "2026-10-28T11:40:10.929Z",
+  "entry": {
+   "symbol": "SDVKY",
+   "cusip": "800212201",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Sandvik AB"
+  }
+ },
+ "SSLZY": {
+  "at": "2026-10-28T11:40:13.076Z",
+  "entry": {
+   "symbol": "SSLZY",
+   "cusip": "803021807",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Santos Ltd."
+  }
+ },
+ "SHFH": {
+  "at": "2026-10-28T11:40:16.121Z",
+  "entry": {
+   "symbol": "SHFH",
+   "cusip": "808925101",
+   "tier": "OTCID",
+   "type": "Common Stock",
+   "name": "SCIENTIST HOME FUTURE HEALTH LTD"
+  }
+ },
+ "SFRX": {
+  "at": "2026-10-28T11:40:17.616Z",
+  "entry": {
+   "symbol": "SFRX",
+   "cusip": "811733104",
+   "tier": "Pink Limited",
+   "type": "Common Stock",
+   "name": "Seafarer Exploration Corp."
+  }
+ },
+ "SCTH": {
+  "at": "2026-10-28T11:40:19.148Z",
+  "entry": {
+   "symbol": "SCTH",
+   "cusip": "81374C101",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "Securetech Innovations, Inc."
+  }
+ },
+ "SGSOY": {
+  "at": "2026-10-28T11:40:21.343Z",
+  "entry": {
+   "symbol": "SGSOY",
+   "cusip": "818800104",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "SGS SA"
+  }
+ },
+ "SSDOY": {
+  "at": "2026-10-28T11:40:23.204Z",
+  "entry": {
+   "symbol": "SSDOY",
+   "cusip": "824841407",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Shiseido Company, Ltd."
+  }
+ },
+ "SDCH": {
+  "at": "2026-10-28T11:40:24.430Z",
+  "entry": {
+   "symbol": "SDCH",
+   "cusip": "17253H209",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "SideChannel Inc."
+  }
+ },
+ "SMERY": {
+  "at": "2026-10-28T11:40:28.837Z",
+  "entry": {
+   "symbol": "SMERY",
+   "cusip": "82621A203",
+   "tier": "OTCQX International",
+   "type": "ADR",
+   "name": "Siemens Energy AG"
+  }
+ },
+ "SLNCF": {
+  "at": "2026-10-28T11:40:31.075Z",
+  "entry": {
+   "symbol": "SLNCF",
+   "cusip": "G8128Y157",
+   "tier": "Pink Limited",
+   "type": "Ordinary Shares",
+   "name": "Silence Therapeutics, Plc."
+  }
+ },
+ "SVRS": {
+  "at": "2026-10-28T11:40:32.303Z",
+  "entry": null
+ },
+ "SMEBF": {
+  "at": "2026-10-28T11:40:34.158Z",
+  "entry": {
+   "symbol": "SMEBF",
+   "cusip": "Y7962G108",
+   "tier": "Pink Limited",
+   "type": "Ordinary Shares",
+   "name": "Sime Darby Bhd"
+  }
+ },
+ "SMSMY": {
+  "at": "2026-10-28T11:40:36.233Z",
+  "entry": {
+   "symbol": "SMSMY",
+   "cusip": "829160100",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Sims Ltd"
+  }
+ },
+ "SLP": {
+  "at": "2026-10-28T11:40:37.631Z",
+  "entry": null
+ },
+ "SKBSY": {
+  "at": "2026-10-28T11:40:39.478Z",
+  "entry": {
+   "symbol": "SKBSY",
+   "cusip": "830561205",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Skanska AB"
+  }
+ },
+ "SKFRY": {
+  "at": "2026-10-28T11:40:40.718Z",
+  "entry": {
+   "symbol": "SKFRY",
+   "cusip": "784375404",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "AB SKF"
+  }
+ },
+ "SMGZY": {
+  "at": "2026-10-28T11:40:44.122Z",
+  "entry": {
+   "symbol": "SMGZY",
+   "cusip": "83238P203",
+   "tier": "OTCID",
+   "type": "ADR",
+   "name": "Smiths Group Plc"
+  }
+ },
+ "SNCAF": {
+  "at": "2026-10-28T11:40:46.044Z",
+  "entry": {
+   "symbol": "SNCAF",
+   "cusip": "04764T104",
+   "tier": "Pink Limited",
+   "type": "Ordinary Shares",
+   "name": "AtkinsRealis Group Inc."
+  }
+ },
+ "SLNO": {
+  "at": "2026-10-28T11:40:47.248Z",
+  "entry": null
+ },
+ "SODI": {
+  "at": "2026-10-28T11:40:50.503Z",
+  "entry": {
+   "symbol": "SODI",
+   "cusip": "834256208",
+   "tier": "Pink Limited",
+   "type": "Common Stock",
+   "name": "Solitron Devices, Inc."
+  }
+ },
+ "SOM": {
+  "at": "2026-10-28T11:40:51.714Z",
+  "entry": null
+ },
+ "FCCN": {
+  "at": "2026-10-28T11:40:53.015Z",
+  "entry": {
+   "symbol": "FCCN",
+   "cusip": "84757R208",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "Spectral Capital Corp."
+  }
+ },
+ "EDTXF": {
+  "at": "2026-10-28T11:40:56.694Z",
+  "entry": {
+   "symbol": "EDTXF",
+   "cusip": "847577103",
+   "tier": "Pink Limited",
+   "type": "Ordinary Shares",
+   "name": "Spectral Medical Inc."
+  }
+ },
+ "ANY": {
+  "at": "2026-10-28T11:40:57.907Z",
+  "entry": null
+ },
+ "STCB": {
+  "at": "2026-10-28T11:40:59.108Z",
+  "entry": {
+   "symbol": "STCB",
+   "cusip": "85526F201",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "Starco Brands, Inc."
+  }
+ },
+ "SDST": {
+  "at": "2026-10-28T11:41:00.322Z",
+  "entry": {
+   "symbol": "SDST",
+   "cusip": "854936200",
+   "tier": "Pink Limited",
+   "type": "Common Stock",
+   "name": "Stardust Power Inc."
+  }
+ },
+ "SEOAY": {
+  "at": "2026-10-28T11:41:04.664Z",
+  "entry": {
+   "symbol": "SEOAY",
+   "cusip": "86210M106",
+   "tier": "OTCQX International",
+   "type": "ADR",
+   "name": "Stora Enso Oyj"
+  }
+ },
+ "SUBCY": {
+  "at": "2026-10-28T11:41:06.499Z",
+  "entry": {
+   "symbol": "SUBCY",
+   "cusip": "864323100",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Subsea 7 S.A."
+  }
+ },
+ "SNTW": {
+  "at": "2026-10-28T11:41:07.728Z",
+  "entry": {
+   "symbol": "SNTW",
+   "cusip": "866194103",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "Summit Networks Inc"
+  }
+ },
+ "SNCY": {
+  "at": "2026-10-28T11:41:08.892Z",
+  "entry": null
+ },
+ "TRXA": {
+  "at": "2026-10-28T11:41:10.078Z",
+  "entry": {
+   "symbol": "TRXA",
+   "cusip": "89532J108",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "Trex Acquisition Corp."
+  }
+ },
+ "TYOYY": {
+  "at": "2026-10-28T11:41:12.429Z",
+  "entry": {
+   "symbol": "TYOYY",
+   "cusip": "874047202",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Taiyo Yuden Co. Ltd."
+  }
+ },
+ "TALK": {
+  "at": "2026-10-28T11:41:13.587Z",
+  "entry": null
+ },
+ "TMHC": {
+  "at": "2026-10-28T11:41:14.903Z",
+  "entry": null
+ },
+ "TTDKY": {
+  "at": "2026-10-28T11:41:17.263Z",
+  "entry": {
+   "symbol": "TTDKY",
+   "cusip": "872351408",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "TDK Corp."
+  }
+ },
+ "TTNDY": {
+  "at": "2026-10-28T11:41:20.648Z",
+  "entry": {
+   "symbol": "TTNDY",
+   "cusip": "87873R101",
+   "tier": "OTCQX International",
+   "type": "ADR",
+   "name": "Techtronic Industries Ltd."
+  }
+ },
+ "TLGPY": {
+  "at": "2026-10-28T11:41:22.846Z",
+  "entry": {
+   "symbol": "TLGPY",
+   "cusip": "8796VP105",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Telstra Group Limited"
+  }
+ },
+ "TNABY": {
+  "at": "2026-10-28T11:41:24.911Z",
+  "entry": {
+   "symbol": "TNABY",
+   "cusip": "880277108",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Tenaga Nasional Berhad"
+  }
+ },
+ "THR": {
+  "at": "2026-10-28T11:41:26.074Z",
+  "entry": null
+ },
+ "TTSH": {
+  "at": "2026-10-28T11:41:27.250Z",
+  "entry": {
+   "symbol": "TTSH",
+   "cusip": "88677Q208",
+   "tier": "Pink Limited",
+   "type": "Common Stock",
+   "name": "Tile Shop Holdings, Inc."
+  }
+ },
+ "TBLD": {
+  "at": "2026-10-28T11:41:28.992Z",
+  "entry": {
+   "symbol": "TBLD",
+   "cusip": "885213108",
+   "tier": "No Tier",
+   "type": "Fund",
+   "name": "Thornburg Income Builder Opportunities Trust"
+  }
+ },
+ "TMRAY": {
+  "at": "2026-10-28T11:41:30.980Z",
+  "entry": {
+   "symbol": "TMRAY",
+   "cusip": "889905204",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Tomra Systems A/S/A"
+  }
+ },
+ "TROLB": {
+  "at": "2026-10-28T11:41:33.033Z",
+  "entry": {
+   "symbol": "TROLB",
+   "cusip": "890516206",
+   "tier": "Pink Limited",
+   "type": "Common Stock",
+   "name": "Tootsie Roll Industries, Inc."
+  }
+ },
+ "BLD": {
+  "at": "2026-10-28T11:41:34.204Z",
+  "entry": null
+ },
+ "TRSO": {
+  "at": "2026-10-28T11:41:38.351Z",
+  "entry": {
+   "symbol": "TRSO",
+   "cusip": "894001106",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "TRANSUITE.ORG INC."
+  }
+ },
+ "TMICY": {
+  "at": "2026-10-28T11:41:39.578Z",
+  "entry": {
+   "symbol": "TMICY",
+   "cusip": "89486M206",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Trend Micro Inc."
+  }
+ },
+ "TPH": {
+  "at": "2026-10-28T11:41:40.762Z",
+  "entry": null
+ },
+ "UNICY": {
+  "at": "2026-10-28T11:41:42.622Z",
+  "entry": {
+   "symbol": "UNICY",
+   "cusip": "90460M204",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Unicharm Corp."
+  }
+ },
+ "VLEEY": {
+  "at": "2026-10-28T11:41:44.591Z",
+  "entry": {
+   "symbol": "VLEEY",
+   "cusip": "919134304",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Valeo SE"
+  }
+ },
+ "OEZVY": {
+  "at": "2026-10-28T11:41:46.507Z",
+  "entry": {
+   "symbol": "OEZVY",
+   "cusip": "92336Y107",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Verbund AG"
+  }
+ },
+ "CKSNY": {
+  "at": "2026-10-28T11:41:48.382Z",
+  "entry": {
+   "symbol": "CKSNY",
+   "cusip": "92550C203",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Vesuvius Plc"
+  }
+ },
+ "VISL": {
+  "at": "2026-10-28T11:41:49.586Z",
+  "entry": {
+   "symbol": "VISL",
+   "cusip": "92836Y409",
+   "tier": "OTCID",
+   "type": "Common Stock",
+   "name": "Vislink Technologies, Inc."
+  }
+ },
+ "VSEE": {
+  "at": "2026-10-28T11:41:50.956Z",
+  "entry": {
+   "symbol": "VSEE",
+   "cusip": "92919Y201",
+   "tier": "Pink Limited",
+   "type": "Common Stock",
+   "name": "VSee Health, Inc."
+  }
+ },
+ "VTKLY": {
+  "at": "2026-10-28T11:41:52.936Z",
+  "entry": {
+   "symbol": "VTKLY",
+   "cusip": "928929207",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "VTech Holdings, Ltd."
+  }
+ },
+ "WALD": {
+  "at": "2026-10-28T11:41:54.186Z",
+  "entry": null
+ },
+ "WEAV": {
+  "at": "2026-10-28T11:41:55.373Z",
+  "entry": null
+ },
+ "WEBC": {
+  "at": "2026-10-28T11:41:56.675Z",
+  "entry": {
+   "symbol": "WEBC",
+   "cusip": "947621207",
+   "tier": "Pink Limited",
+   "type": "Common Stock",
+   "name": "Webco Industries, Inc."
+  }
+ },
+ "WGRX": {
+  "at": "2026-10-28T11:41:57.878Z",
+  "entry": null
+ },
+ "WYGC": {
+  "at": "2026-10-28T11:41:59.051Z",
+  "entry": {
+   "symbol": "WYGC",
+   "cusip": "543356109",
+   "tier": "OTCID",
+   "type": "Common Stock",
+   "name": "Wenyuan Group Corp."
+  }
+ },
+ "WBRBY": {
+  "at": "2026-10-28T11:42:01.003Z",
+  "entry": {
+   "symbol": "WBRBY",
+   "cusip": "967662107",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Wienerberger Baustoffindustrie AG"
+  }
+ },
+ "WTKWY": {
+  "at": "2026-10-28T11:42:03.132Z",
+  "entry": {
+   "symbol": "WTKWY",
+   "cusip": "977874205",
+   "tier": "Pink Limited",
+   "type": "ADR",
+   "name": "Wolters Kluwer N.V."
+  }
+ },
+ "WHEN": {
+  "at": "2026-10-28T11:42:04.583Z",
+  "entry": {
+   "symbol": "WHEN",
+   "cusip": "98148H109",
+   "tier": "Expert Market",
+   "type": "Common Stock",
+   "name": "World Health Energy Holdings, Inc."
+  }
+ },
+ "WYTC": {
+  "at": "2026-10-28T11:42:05.808Z",
+  "entry": {
+   "symbol": "WYTC",
+   "cusip": "983638107",
+   "tier": "OTCID",
+   "type": "Common Stock",
+   "name": "WYTEC INTERNATIONAL INC"
+  }
+ },
+ "YARIY": {
+  "at": "2026-10-28T11:42:07.038Z",
+  "entry": {
+   "symbol": "YARIY",
+   "cusip": "984851204",
+   "tier": "OTCID",
+   "type": "ADR",
+   "name": "Yara International ASA"
+  }
+ },
+ "YYGH": {
+  "at": "2026-10-28T11:42:08.267Z",
+  "entry": null
+ },
+ "ZENVF": {
+  "at": "2026-10-28T11:42:09.504Z",
+  "entry": {
+   "symbol": "ZENVF",
+   "cusip": "G9889V101",
+   "tier": "Expert Market",
+   "type": "Common Stock",
+   "name": "Zenvia Inc."
+  }
+ },
+ "ZEOX": {
+  "at": "2026-10-28T11:42:12.395Z",
+  "entry": {
+   "symbol": "ZEOX",
+   "cusip": "68621D206",
+   "tier": "OTCQB",
+   "type": "Common Stock",
+   "name": "Zeo ScientifiX Inc."
+  }
+ },
+ "ZIVO": {
+  "at": "2026-10-28T11:42:13.651Z",
+  "entry": {
+   "symbol": "ZIVO",
+   "cusip": "98978N309",
+   "tier": "OTCID",
+   "type": "Common Stock",
+   "name": "Zivo Bioscience, Inc."
+  }
+ }
+}

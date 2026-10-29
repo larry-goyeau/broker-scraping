@@ -211,7 +211,12 @@ async function suspendedIsins(log) {
 // mic, currency, type, isin, raw }; raw starts with the segment.
 // segments: which segments to keep ("Main market", "Standard market",
 // "Growth market"); default all.
-export async function bakuBook({ segments = Object.values(SEGMENTS), log = console.error } = {}) {
+// missingCard: "throw" (default) stops the run when an issuer page has no
+// instrument card for the Market Watch ISIN; "skip" leaves that line out
+// and logs it (the issuer page then shows another ISIN for the share, e.g.
+// Bank Respublika AZ1004002882 in the Market Watch, AZ1003002883 on its
+// card, October 2026).
+export async function bakuBook({ segments = Object.values(SEGMENTS), log = console.error, missingCard = "throw" } = {}) {
   const shares = await listedShares();
   await sleep(700);
   const dropped = await suspendedIsins(log);
@@ -238,6 +243,10 @@ export async function bakuBook({ segments = Object.values(SEGMENTS), log = conso
       card = { Currency: "AZN", Type: "issuer page missing, currency AZN assumed" };
     } else {
       card = instrumentCard(issuerPage, share.isin);
+      if (!card && missingCard === "skip") {
+        log(`BSE: ${share.isin} ${share.name} left out, no instrument card for it on ${source}`);
+        continue;
+      }
       if (!card) throw new Error(`BSE: no instrument card for ${share.isin} on ${source}`);
       if (card["Investment security"] !== "Stock") throw new Error(`BSE: ${share.isin} is a ${card["Investment security"]}`);
       if (!/^[A-Z]{3}$/.test(card.Currency || "")) throw new Error(`BSE: no currency for ${share.isin}`);

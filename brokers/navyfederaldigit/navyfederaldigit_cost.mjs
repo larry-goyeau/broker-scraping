@@ -21,7 +21,9 @@
 //                    month's only trading: the buy uses n of the 2,000, the
 //                    sell the next n, and every share past 2,000 pays $0.01
 //   service fees     outgoing ACAT $75, wires, paper: not on an order
-//   SEC, TAF, CAT    not printed: 0 (owner rule)
+//   SEC, TAF, CAT    SEC and TAF added at the regulators' rates on the sale,
+//                    rounded up to the cent (none is printed; owner,
+//                    2026-10-28). CAT: no rate printed, 0.
 //
 // Formula: book + $0.01 × max(0, 2n − 2,000).
 //
@@ -79,7 +81,7 @@ const SCHEDULE = {
     const t = passThrough(shares);
     return { ...t, note: t.buy + t.sell > 0 ? `au-delà de 2 000 parts dans le mois : 0,01 $ la part (${t.buy} $ + ${t.sell} $)` : null };
   },
-  levies: { sec: false, taf: false, cat: false },
+  levies: { sec: "up", taf: "up", cat: false },
   remark: `$${SUBSCRIPTION.month.toFixed(2)}/month.`,
   basis:
     "Client Relationship Summary NFIS (octobre 2024), relu le 2026-10-26 : 0 $ de commission, abonnement 3,50 $/mois " +

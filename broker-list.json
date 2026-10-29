@@ -1693,17 +1693,6 @@
     }
   },
   {
-    "name": "Vision Financial Markets",
-    "country": "US",
-    "type": "Broker",
-    "url": "https://www.vfmarkets.com/day-trading/",
-    "exchanges": {
-      "United States": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Frec",
     "country": "US",
     "type": "Neobroker",
@@ -1857,20 +1846,6 @@
     "type": "Broker",
     "url": "https://www.empower.com/products-solutions/brokerage-accounts",
     "exchanges": {
-      "United States": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Great Point Capital",
-    "country": "US",
-    "type": "Broker",
-    "url": "https://www.greatpointcapital.com/trading-solutions",
-    "exchanges": {
-      "OTC Markets": {
-        "reliability": "high"
-      },
       "United States": {
         "reliability": "high"
       }
@@ -2604,17 +2579,6 @@
     }
   },
   {
-    "name": "Bridge Credit Union",
-    "country": "US",
-    "type": "Bank",
-    "url": "https://www.bridgecu.org/",
-    "exchanges": {
-      "United States": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Marine Federal Credit Union",
     "country": "US",
     "type": "Bank",
@@ -2820,18 +2784,6 @@
     "url": "https://cobaltcu.com/cobalt-blue-investments",
     "exchanges": {
       "United States": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Amboy Bank",
-    "country": "US",
-    "type": "Bank",
-    "url": "https://www.amboybank.com/",
-    "exchanges": {
-      "United States": {
-        "restriction": "Self-directed stock trading only with at least $10,000 in investable assets; pre-built Vanguard ETF portfolios otherwise",
         "reliability": "high"
       }
     }
@@ -4162,20 +4114,6 @@
         "reliability": "high"
       }
     }
-  },
-  {
-    "name": "Swissquote UK",
-    "country": "UK",
-    "type": "Bank",
-    "url": "https://www.swissquote.com/",
-    "exchanges": {}
-  },
-  {
-    "name": "Plus500 UK",
-    "country": "UK",
-    "type": "Broker",
-    "url": "https://www.plus500.com/",
-    "exchanges": {}
   },
   {
     "name": "Trading 212",
@@ -10488,94 +10426,6 @@
         "reliability": "high"
       },
       "gettex": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "J.P. Morgan SE",
-    "country": "DE",
-    "type": "Bank",
-    "url": "https://privatebank.jpmorgan.com/eur/en/about-us/digital-capabilities/how-to-pages/execute-trades-online",
-    "exchanges": {
-      "New York Stock Exchange": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "high"
-      },
-      "Nasdaq": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "high"
-      },
-      "London Stock Exchange": {
-        "reliability": "high"
-      },
-      "Hong Kong Stock Exchange": {
-        "reliability": "high"
-      },
-      "Euronext": {
-        "reliability": "high"
-      },
-      "Deutsche Börse": {
-        "reliability": "high"
-      },
-      "Börse Xetra": {
-        "reliability": "high"
-      },
-      "Aquis Stock Exchange": {
-        "reliability": "high"
-      },
-      "Cboe Europe": {
-        "reliability": "high"
-      },
-      "Turquoise": {
-        "reliability": "high"
-      },
-      "Euronext Amsterdam": {
-        "reliability": "high"
-      },
-      "Euronext Brussels": {
-        "reliability": "high"
-      },
-      "Euronext Dublin": {
-        "reliability": "high"
-      },
-      "Euronext Lisbon": {
-        "reliability": "high"
-      },
-      "Euronext Paris": {
-        "reliability": "high"
-      },
-      "Euronext Milan": {
-        "reliability": "high"
-      },
-      "Athens Stock Exchange": {
-        "reliability": "high"
-      },
-      "Bolsa de Madrid": {
-        "reliability": "high"
-      },
-      "Budapest Stock Exchange": {
-        "reliability": "high"
-      },
-      "Nasdaq Copenhagen": {
-        "reliability": "high"
-      },
-      "Nasdaq Helsinki": {
-        "reliability": "high"
-      },
-      "Nasdaq Stockholm": {
-        "reliability": "high"
-      },
-      "Oslo Børs": {
-        "reliability": "high"
-      },
-      "Wiener Börse": {
-        "reliability": "high"
-      },
-      "Warsaw Stock Exchange": {
-        "reliability": "high"
-      },
-      "Prague Stock Exchange": {
         "reliability": "high"
       }
     }
@@ -21811,17 +21661,6 @@
     "exchanges": {}
   },
   {
-    "name": "Bank CIC (Schweiz)",
-    "country": "CH",
-    "type": "Bank",
-    "url": "https://www.cic.ch/loesungen/service/elounge/hilfeseite/anlagen.html",
-    "exchanges": {
-      "SIX Swiss Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "CIM Banque",
     "country": "CH",
     "type": "Bank",
@@ -21922,337 +21761,6 @@
     "type": "Bank",
     "url": "https://bank-avera.ch/rechtliche-hinweise/basisdokumente/e-banking-agb",
     "exchanges": {}
-  },
-  {
-    "name": "Julius Baer",
-    "country": "CH",
-    "type": "Bank",
-    "url": "https://www.juliusbaer.com/en/e-services/switzerland/market-link/equities-etfs/",
-    "exchanges": {
-      "BX Swiss": {
-        "reliability": "high"
-      },
-      "SIX Swiss Exchange": {
-        "reliability": "high"
-      },
-      "Wiener Börse": {
-        "reliability": "high"
-      },
-      "Euronext Brussels": {
-        "reliability": "high"
-      },
-      "Euronext Growth Brussels": {
-        "reliability": "low"
-      },
-      "Bulgarian Stock Exchange": {
-        "reliability": "high"
-      },
-      "Zagreb Stock Exchange": {
-        "reliability": "high"
-      },
-      "Cyprus Stock Exchange": {
-        "reliability": "high"
-      },
-      "Prague Stock Exchange": {
-        "reliability": "high"
-      },
-      "Nasdaq Copenhagen": {
-        "reliability": "high"
-      },
-      "Nasdaq Tallinn": {
-        "reliability": "high"
-      },
-      "Nasdaq Helsinki": {
-        "reliability": "high"
-      },
-      "Euronext Paris": {
-        "reliability": "high"
-      },
-      "Euronext Growth Paris": {
-        "reliability": "low"
-      },
-      "Börse Berlin": {
-        "reliability": "high"
-      },
-      "Equiduct": {
-        "reliability": "low"
-      },
-      "Börse Düsseldorf": {
-        "reliability": "high"
-      },
-      "Börse Frankfurt": {
-        "reliability": "high"
-      },
-      "Börse Hamburg": {
-        "reliability": "high"
-      },
-      "Börse Hannover": {
-        "reliability": "low"
-      },
-      "Börse München": {
-        "reliability": "high"
-      },
-      "gettex": {
-        "reliability": "low"
-      },
-      "Börse Stuttgart": {
-        "reliability": "high"
-      },
-      "Quotrix": {
-        "reliability": "low"
-      },
-      "Tradegate": {
-        "reliability": "low"
-      },
-      "Börse Xetra": {
-        "reliability": "high"
-      },
-      "Athens Stock Exchange": {
-        "reliability": "high"
-      },
-      "Budapest Stock Exchange": {
-        "reliability": "high"
-      },
-      "Euronext Dublin": {
-        "reliability": "high"
-      },
-      "Euronext Growth Dublin": {
-        "reliability": "low"
-      },
-      "Euronext Milan": {
-        "reliability": "high"
-      },
-      "Nasdaq Riga": {
-        "reliability": "high"
-      },
-      "Nasdaq Vilnius": {
-        "reliability": "high"
-      },
-      "Luxembourg Stock Exchange": {
-        "reliability": "high"
-      },
-      "Malta Stock Exchange": {
-        "reliability": "high"
-      },
-      "Euronext Amsterdam": {
-        "reliability": "high"
-      },
-      "Oslo Børs": {
-        "reliability": "high"
-      },
-      "Euronext Expand Oslo": {
-        "reliability": "low"
-      },
-      "Euronext Growth Oslo": {
-        "reliability": "low"
-      },
-      "Warsaw Stock Exchange": {
-        "reliability": "high"
-      },
-      "Euronext Lisbon": {
-        "reliability": "high"
-      },
-      "Bucharest Stock Exchange": {
-        "reliability": "high"
-      },
-      "Moscow Exchange": {
-        "reliability": "low"
-      },
-      "Bolsa de Madrid": {
-        "reliability": "high"
-      },
-      "Bratislava Stock Exchange": {
-        "reliability": "high"
-      },
-      "Ljubljana Stock Exchange": {
-        "reliability": "high"
-      },
-      "Nasdaq Stockholm": {
-        "reliability": "high"
-      },
-      "London Stock Exchange": {
-        "reliability": "high"
-      },
-      "Aquis Stock Exchange": {
-        "reliability": "low"
-      },
-      "Cboe Europe": {
-        "reliability": "low"
-      },
-      "Bahrain Bourse": {
-        "reliability": "high"
-      },
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      },
-      "Tel Aviv Stock Exchange": {
-        "reliability": "high"
-      },
-      "Amman Stock Exchange": {
-        "reliability": "high"
-      },
-      "Beirut Stock Exchange": {
-        "reliability": "high"
-      },
-      "Muscat Stock Exchange": {
-        "reliability": "high"
-      },
-      "Pakistan Stock Exchange": {
-        "reliability": "high"
-      },
-      "Qatar Stock Exchange": {
-        "reliability": "high"
-      },
-      "Johannesburg Stock Exchange": {
-        "reliability": "high"
-      },
-      "Borsa Istanbul": {
-        "reliability": "high"
-      },
-      "Abu Dhabi Securities Exchange": {
-        "reliability": "high"
-      },
-      "Dubai Financial Market": {
-        "reliability": "high"
-      },
-      "Nasdaq Dubai": {
-        "reliability": "high"
-      },
-      "BYMA": {
-        "reliability": "high"
-      },
-      "B3 São Paulo": {
-        "reliability": "high"
-      },
-      "Cboe Canada": {
-        "reliability": "low"
-      },
-      "Alpha Exchange": {
-        "reliability": "low"
-      },
-      "Canadian Securities Exchange": {
-        "reliability": "high"
-      },
-      "Toronto Stock Exchange": {
-        "reliability": "high"
-      },
-      "TSX Venture": {
-        "reliability": "high"
-      },
-      "Santiago Stock Exchange": {
-        "reliability": "high"
-      },
-      "Bolsa Mexicana": {
-        "reliability": "high"
-      },
-      "Bolsa de Valores de Lima": {
-        "reliability": "high"
-      },
-      "Cboe BZX": {
-        "reliability": "low"
-      },
-      "Nasdaq": {
-        "reliability": "high"
-      },
-      "New York Stock Exchange": {
-        "reliability": "high"
-      },
-      "NYSE Arca": {
-        "reliability": "high"
-      },
-      "NYSE American": {
-        "reliability": "high"
-      },
-      "ASX": {
-        "reliability": "high"
-      },
-      "Hong Kong Stock Exchange": {
-        "reliability": "high"
-      },
-      "Indonesia Stock Exchange": {
-        "reliability": "high"
-      },
-      "Nagoya Stock Exchange": {
-        "reliability": "high"
-      },
-      "Sapporo Securities Exchange": {
-        "reliability": "high"
-      },
-      "Tokyo Stock Exchange": {
-        "reliability": "high"
-      },
-      "Bursa Malaysia": {
-        "reliability": "high"
-      },
-      "NZX": {
-        "reliability": "high"
-      },
-      "Philippine Stock Exchange": {
-        "reliability": "high"
-      },
-      "Singapore Exchange": {
-        "reliability": "high"
-      },
-      "Korea Exchange": {
-        "reliability": "high"
-      },
-      "KOSDAQ": {
-        "reliability": "low"
-      },
-      "Colombo Stock Exchange": {
-        "reliability": "high"
-      },
-      "Taiwan Stock Exchange": {
-        "reliability": "high"
-      },
-      "Stock Exchange of Thailand": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Maerki Baumann",
-    "country": "CH",
-    "type": "Bank",
-    "url": "https://www.maerki-baumann.ch/en/about-mobile-banking-app",
-    "exchanges": {
-      "SIX Swiss Exchange": {
-        "reliability": "high"
-      },
-      "Nasdaq": {
-        "reliability": "high"
-      },
-      "New York Stock Exchange": {
-        "reliability": "high"
-      },
-      "Börse Xetra": {
-        "reliability": "high"
-      },
-      "Euronext Milan": {
-        "reliability": "high"
-      },
-      "London Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Bergos",
-    "country": "CH",
-    "type": "Bank",
-    "url": "https://www.bergos.ch/wp-content/uploads/2026/05/E-Banking_Securities_Desktop_EN.pdf",
-    "exchanges": {}
-  },
-  {
-    "name": "J. Safra Sarasin",
-    "country": "CH",
-    "type": "Bank",
-    "url": "https://jsafrasarasin.com/content/dam/jsafrasarasin/company/digital-services/documents/intro-app-clx-en.pdf",
-    "exchanges": {
-      "SIX Swiss Exchange": {
-        "reliability": "high"
-      }
-    }
   },
   {
     "name": "Vontobel",
@@ -27190,13 +26698,6 @@
     "exchanges": {}
   },
   {
-    "name": "Robein",
-    "country": "NL",
-    "type": "Broker",
-    "url": "https://beursonline.robein.nl/Login/?ReturnUrl=%2f",
-    "exchanges": {}
-  },
-  {
     "name": "BGL BNP Paribas",
     "country": "LU",
     "type": "Bank",
@@ -27988,70 +27489,6 @@
     }
   },
   {
-    "name": "UBS Luxembourg",
-    "country": "LU",
-    "type": "Bank",
-    "url": "https://www.ubs.com/lu/en/digital-banking/help/configuration-help.html",
-    "exchanges": {
-      "SIX Swiss Exchange": {
-        "reliability": "high"
-      },
-      "Börse Xetra": {
-        "reliability": "high"
-      },
-      "Euronext Paris": {
-        "reliability": "high"
-      },
-      "Euronext Amsterdam": {
-        "reliability": "high"
-      },
-      "Euronext Brussels": {
-        "reliability": "high"
-      },
-      "Euronext Milan": {
-        "reliability": "high"
-      },
-      "Bolsa de Madrid": {
-        "reliability": "high"
-      },
-      "London Stock Exchange": {
-        "reliability": "high"
-      },
-      "New York Stock Exchange": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "high"
-      },
-      "Nasdaq": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "high"
-      },
-      "Tokyo Stock Exchange": {
-        "reliability": "high"
-      },
-      "Hong Kong Stock Exchange": {
-        "reliability": "high"
-      },
-      "Singapore Exchange": {
-        "reliability": "high"
-      },
-      "ASX": {
-        "reliability": "high"
-      },
-      "Toronto Stock Exchange": {
-        "reliability": "high"
-      },
-      "Luxembourg Stock Exchange": {
-        "reliability": "high"
-      },
-      "Cboe Europe": {
-        "reliability": "high"
-      },
-      "Turquoise": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Freestoxx",
     "country": "LU",
     "type": "Broker",
@@ -28061,13 +27498,6 @@
         "reliability": "high"
       }
     }
-  },
-  {
-    "name": "Banque de Commerce et de Placements",
-    "country": "LU",
-    "type": "Bank",
-    "url": "https://ebanking.bcp.bank/doc/user_manual.pdf",
-    "exchanges": {}
   },
   {
     "name": "Bolero (KBC)",
@@ -32223,13 +31653,6 @@
     }
   },
   {
-    "name": "Swiss Life Banque Privée",
-    "country": "FR",
-    "type": "Bank",
-    "url": "https://banqueprivee.swisslife.fr/clientele-patrimoniale/le-moyen-de-vos-amibtions.html",
-    "exchanges": {}
-  },
-  {
     "name": "Banque Delubac & Cie",
     "country": "FR",
     "type": "Bank",
@@ -32263,17 +31686,6 @@
       },
       "Euronext Growth Paris": {
         "reliability": "medium"
-      }
-    }
-  },
-  {
-    "name": "Cholet Dupont Oudart",
-    "country": "FR",
-    "type": "Broker",
-    "url": "https://www.cholet-dupont-oudart.fr/notre-accompagnement/les-offres-de-gestion",
-    "exchanges": {
-      "France": {
-        "reliability": "high"
       }
     }
   },
@@ -34474,46 +33886,6 @@
     }
   },
   {
-    "name": "Cassa di Risparmio di Bolzano",
-    "country": "IT",
-    "type": "Bank",
-    "url": "https://www.sparkasse.it/media/so1nwqkg/guida-ai-servizi-a-distanza-per-i-consumatori-versione-2025-sparkasse.pdf",
-    "exchanges": {
-      "Euronext Milan": {
-        "reliability": "high"
-      },
-      "Börse Xetra": {
-        "reliability": "high"
-      },
-      "Nasdaq": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "high"
-      },
-      "New York Stock Exchange": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "high"
-      },
-      "Global Equity Market": {
-        "reliability": "high"
-      },
-      "ETFplus": {
-        "reliability": "high"
-      },
-      "London Stock Exchange": {
-        "reliability": "high"
-      },
-      "Euronext Amsterdam": {
-        "reliability": "high"
-      },
-      "First North Stockholm": {
-        "reliability": "high"
-      },
-      "Börse Frankfurt": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Deutsche Bank Italia",
     "country": "IT",
     "type": "Bank",
@@ -35819,46 +35191,6 @@
         "reliability": "high"
       },
       "ETFplus": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "CiviBank",
-    "country": "IT",
-    "type": "Bank",
-    "url": "https://play.google.com/store/apps/details?id=it.civibank.mobile&hl=en_US",
-    "exchanges": {
-      "Euronext Milan": {
-        "reliability": "high"
-      },
-      "Nasdaq": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "high"
-      },
-      "New York Stock Exchange": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "high"
-      },
-      "Euronext Paris": {
-        "reliability": "high"
-      },
-      "Global Equity Market": {
-        "reliability": "high"
-      },
-      "ETFplus": {
-        "reliability": "high"
-      },
-      "Börse Xetra": {
-        "reliability": "high"
-      },
-      "London Stock Exchange": {
-        "reliability": "high"
-      },
-      "Cboe Europe": {
-        "reliability": "low"
-      },
-      "Börse Frankfurt": {
         "reliability": "high"
       }
     }
@@ -43122,49 +42454,6 @@
       },
       "Cyprus Stock Exchange": {
         "reliability": "medium"
-      }
-    }
-  },
-  {
-    "name": "BETA Securities",
-    "country": "GR",
-    "type": "Broker",
-    "url": "https://betasecurities.com/online-trading-beta/",
-    "exchanges": {
-      "Athens Stock Exchange": {
-        "reliability": "high"
-      },
-      "Cyprus Stock Exchange": {
-        "reliability": "high"
-      },
-      "Athens Exchange Alternative Market": {
-        "reliability": "high"
-      },
-      "New York Stock Exchange": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "high"
-      },
-      "Nasdaq": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "high"
-      },
-      "London Stock Exchange": {
-        "reliability": "high"
-      },
-      "SIX Swiss Exchange": {
-        "reliability": "high"
-      },
-      "France": {
-        "reliability": "high"
-      },
-      "Germany": {
-        "reliability": "high"
-      },
-      "Canada": {
-        "reliability": "high"
-      },
-      "Cyprus Stock Exchange Emerging Companies Market": {
-        "reliability": "high"
       }
     }
   },
@@ -56552,124 +55841,6 @@
     }
   },
   {
-    "name": "Wood & Company",
-    "country": "CZ",
-    "type": "Broker",
-    "url": "https://wood.cz/",
-    "exchanges": {
-      "Prague Stock Exchange": {
-        "reliability": "high"
-      },
-      "Warsaw Stock Exchange": {
-        "reliability": "high"
-      },
-      "Budapest Stock Exchange": {
-        "reliability": "high"
-      },
-      "Wiener Börse": {
-        "reliability": "high"
-      },
-      "Bucharest Stock Exchange": {
-        "reliability": "high"
-      },
-      "Bulgarian Stock Exchange": {
-        "reliability": "high"
-      },
-      "Ljubljana Stock Exchange": {
-        "reliability": "high"
-      },
-      "Nasdaq Dubai": {
-        "reliability": "high"
-      },
-      "New York Stock Exchange": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "high"
-      },
-      "Nasdaq": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "high"
-      },
-      "Toronto Stock Exchange": {
-        "reliability": "high"
-      },
-      "London Stock Exchange": {
-        "reliability": "high"
-      },
-      "Euronext Milan": {
-        "reliability": "high"
-      },
-      "Euronext Paris": {
-        "reliability": "high"
-      },
-      "Euronext Brussels": {
-        "reliability": "high"
-      },
-      "Nasdaq Copenhagen": {
-        "reliability": "high"
-      },
-      "Nasdaq Stockholm": {
-        "reliability": "high"
-      },
-      "Nasdaq Helsinki": {
-        "reliability": "high"
-      },
-      "Oslo Børs": {
-        "reliability": "high"
-      },
-      "SIX Swiss Exchange": {
-        "reliability": "high"
-      },
-      "Euronext Dublin": {
-        "reliability": "high"
-      },
-      "Malta Stock Exchange": {
-        "reliability": "high"
-      },
-      "Athens Stock Exchange": {
-        "reliability": "high"
-      },
-      "Borsa Istanbul": {
-        "reliability": "high"
-      },
-      "Zagreb Stock Exchange": {
-        "reliability": "high"
-      },
-      "Belgrade Stock Exchange": {
-        "reliability": "high"
-      },
-      "Nasdaq Tallinn": {
-        "reliability": "high"
-      },
-      "Nasdaq Riga": {
-        "reliability": "high"
-      },
-      "Nasdaq Vilnius": {
-        "reliability": "high"
-      },
-      "Tel Aviv Stock Exchange": {
-        "reliability": "high"
-      },
-      "Nigerian Exchange": {
-        "reliability": "high"
-      },
-      "Johannesburg Stock Exchange": {
-        "reliability": "high"
-      },
-      "Tokyo Stock Exchange": {
-        "reliability": "high"
-      },
-      "Hong Kong Stock Exchange": {
-        "reliability": "high"
-      },
-      "Singapore Exchange": {
-        "reliability": "high"
-      },
-      "Moscow Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Raiffeisenbank ČR",
     "country": "CZ",
     "type": "Bank",
@@ -59154,20 +58325,6 @@
         "reliability": "high"
       },
       "Börse Xetra": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Muntenia Global Invest",
-    "country": "RO",
-    "type": "Broker",
-    "url": "https://mginvest.ro/tranzactionarea-on-line-prin-aplicatia-arena-xt/",
-    "exchanges": {
-      "Bucharest Stock Exchange": {
-        "reliability": "high"
-      },
-      "AeRO": {
         "reliability": "high"
       }
     }
@@ -63799,20 +62956,6 @@
     "url": "https://www.unibroker.ba/",
     "exchanges": {
       "Sarajevo Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Banka Kombëtare Tregtare",
-    "country": "AL",
-    "type": "Bank",
-    "url": "https://www.bkt.com.al/assets/uploads/documents/SmartInvest-Client-Manual-ENG.pdf",
-    "exchanges": {
-      "New York Stock Exchange": {
-        "reliability": "high"
-      },
-      "Nasdaq": {
         "reliability": "high"
       }
     }
@@ -73358,17 +72501,6 @@
     }
   },
   {
-    "name": "Acar Menkul Değerler",
-    "country": "TR",
-    "type": "Broker",
-    "url": "https://www.acar.com.tr/yatirim-urunleri/hisse-senedi",
-    "exchanges": {
-      "Borsa Istanbul": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Pusula Yatırım",
     "country": "TR",
     "type": "Broker",
@@ -73578,29 +72710,6 @@
     "url": "https://www.alternatifmenkul.com.tr/islem-kanallari/internet-subesi",
     "exchanges": {
       "Borsa Istanbul": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "NCM Investment",
-    "country": "TR",
-    "type": "Broker",
-    "url": "https://www.ncminvest.com.tr/ncm-trader-pro.htm",
-    "exchanges": {
-      "Borsa Istanbul": {
-        "reliability": "high"
-      },
-      "New York Stock Exchange": {
-        "reliability": "high"
-      },
-      "Nasdaq": {
-        "reliability": "high"
-      },
-      "London Stock Exchange": {
-        "reliability": "high"
-      },
-      "Hong Kong Stock Exchange": {
         "reliability": "high"
       }
     }
@@ -73826,17 +72935,6 @@
     }
   },
   {
-    "name": "Prim Menkul Değerler",
-    "country": "TR",
-    "type": "Broker",
-    "url": "https://www.prim.com.tr/",
-    "exchanges": {
-      "Borsa Istanbul": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Enpara",
     "country": "TR",
     "type": "Bank",
@@ -73929,17 +73027,6 @@
         "reliability": "high"
       },
       "United States": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Neta Menkul Değerler",
-    "country": "TR",
-    "type": "Broker",
-    "url": "https://www.netamenkul.com/",
-    "exchanges": {
-      "Borsa Istanbul": {
         "reliability": "high"
       }
     }
@@ -74510,107 +73597,12 @@
     }
   },
   {
-    "name": "Afrifocus Securities",
-    "country": "ZA",
-    "type": "Broker",
-    "url": "https://afrifocus.co.za/online-trading/",
-    "exchanges": {
-      "Johannesburg Stock Exchange": {
-        "reliability": "high"
-      },
-      "United States": {
-        "reliability": "high"
-      },
-      "Canada": {
-        "reliability": "high"
-      },
-      "United Kingdom": {
-        "reliability": "high"
-      },
-      "China": {
-        "reliability": "high"
-      },
-      "Hong Kong": {
-        "reliability": "high"
-      },
-      "Japan": {
-        "reliability": "high"
-      },
-      "Australia": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "EQT",
     "country": "ZA",
     "type": "Broker",
     "url": "https://www.oldmutual.co.za/wealth/eqt/",
     "exchanges": {
       "South Africa": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Velocity Trade",
-    "country": "ZA",
-    "type": "Broker",
-    "url": "https://help.za.velocitytrade.com/web-platform/trading-panels/order-entry",
-    "exchanges": {}
-  },
-  {
-    "name": "Momentum Securities South Africa",
-    "country": "ZA",
-    "type": "Broker",
-    "url": "https://www.momentumsecurities.co.za/",
-    "exchanges": {
-      "Johannesburg Stock Exchange": {
-        "reliability": "high"
-      },
-      "London Stock Exchange": {
-        "reliability": "high"
-      },
-      "AIM": {
-        "reliability": "high"
-      },
-      "New York Stock Exchange": {
-        "reliability": "high"
-      },
-      "Nasdaq": {
-        "reliability": "high"
-      },
-      "NYSE American": {
-        "reliability": "high"
-      },
-      "Euronext Dublin": {
-        "reliability": "high"
-      },
-      "Euronext Amsterdam": {
-        "reliability": "high"
-      },
-      "Euronext Brussels": {
-        "reliability": "high"
-      },
-      "Euronext Lisbon": {
-        "reliability": "high"
-      },
-      "Euronext Paris": {
-        "reliability": "high"
-      },
-      "SIX Swiss Exchange": {
-        "reliability": "high"
-      },
-      "Börse Xetra": {
-        "reliability": "high"
-      },
-      "Canada": {
-        "reliability": "high"
-      },
-      "Austria": {
-        "reliability": "high"
-      },
-      "Italy": {
         "reliability": "high"
       }
     }
@@ -76157,71 +75149,6 @@
     }
   },
   {
-    "name": "EFG Hermes ONE",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://www.efghermesone.com/openaccount",
-    "exchanges": {
-      "Dubai Financial Market": {
-        "reliability": "high"
-      },
-      "Abu Dhabi Securities Exchange": {
-        "reliability": "high"
-      },
-      "Nomu": {
-        "restriction": "Qualified investors only (CMA Nomu eligibility criteria); Nomu addendum and risk questionnaire required",
-        "reliability": "high"
-      },
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      },
-      "Nilex": {
-        "reliability": "high"
-      },
-      "Boursa Kuwait": {
-        "reliability": "high"
-      },
-      "United States": {
-        "reliability": "high"
-      },
-      "Muscat Stock Exchange": {
-        "reliability": "high"
-      },
-      "Tadawul": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "CI Capital",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://www.cicapital.com/business_lines/securities-brokerage/",
-    "exchanges": {
-      "United States": {
-        "reliability": "high"
-      },
-      "United Arab Emirates": {
-        "reliability": "high"
-      },
-      "Egypt": {
-        "reliability": "high"
-      },
-      "Saudi Arabia": {
-        "reliability": "high"
-      },
-      "Kuwait": {
-        "reliability": "high"
-      },
-      "Qatar": {
-        "reliability": "high"
-      },
-      "Morocco": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Beltone Securities",
     "country": "EG",
     "type": "Broker",
@@ -76233,98 +75160,10 @@
     }
   },
   {
-    "name": "Mubasher Trade Egypt",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://egypt.mubashertrade.com/",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Naeem Brokerage",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://egy.naeemonline.com/",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      },
-      "Qatar": {
-        "reliability": "high"
-      },
-      "Kuwait": {
-        "reliability": "high"
-      },
-      "Oman": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Al Ahly Pharos",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://pharoslive.com/",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Prime Holding",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://primeholdingco.com/securities-brokerage/",
-    "exchanges": {
-      "Nilex": {
-        "reliability": "high"
-      },
-      "United States": {
-        "reliability": "high"
-      },
-      "United Kingdom": {
-        "reliability": "high"
-      },
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Arabeya Online",
     "country": "EG",
     "type": "Broker",
     "url": "https://www.arabeyaonline.com/en/category/frequently-asked-questions/online-trading/",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "HC Securities",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://www.hc-si.com/hc-online",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      },
-      "London Stock Exchange": {
-        "reliability": "high",
-        "restriction": "By phone/advisor only"
-      }
-    }
-  },
-  {
-    "name": "Pharaonic Securities",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://www.pharaonicse.com/Services.aspx",
     "exchanges": {
       "The Egyptian Exchange": {
         "reliability": "high"
@@ -76343,21 +75182,6 @@
     }
   },
   {
-    "name": "Okaz",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://www.okazinvest.com/okaz/AboutOnlineTrading.aspx",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      },
-      "London Stock Exchange": {
-        "reliability": "high",
-        "restriction": "By phone/advisor only"
-      }
-    }
-  },
-  {
     "name": "Sigma",
     "country": "EG",
     "type": "Broker",
@@ -76369,46 +75193,10 @@
     }
   },
   {
-    "name": "Cairo Capital Securities",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://play.google.com/store/apps/details?id=tea.mobile.view.cairoCapitalApp&hl=en",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Ostoul Securities",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://play.google.com/store/apps/details?id=tea.mobile.view.ostoulApp&hl=en",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      },
-      "Nilex": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Tycoon Securities",
     "country": "EG",
     "type": "Broker",
     "url": "https://play.google.com/store/apps/details?id=tea.mobile.view.tycoonApp&hl=en",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Faisal Securities Brokerage",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://fbcbrokerage.com/faisalclick/",
     "exchanges": {
       "The Egyptian Exchange": {
         "reliability": "high"
@@ -76436,54 +75224,10 @@
     }
   },
   {
-    "name": "AF Securities",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://af-securities.com/",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Roaya Online",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://play.google.com/store/apps/details?id=tea.mobile.view.roayaETradeApp&hl=en",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Halan Securities Brokerage",
     "country": "EG",
     "type": "Broker",
     "url": "https://www.halansb.com/FAQ.aspx",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Al Ahram Securities Brokerage",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://www.alahramsecurities.com/etrade/OnlineTrading/AddOrder.aspx",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "El Horreya Brokerage",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://www.elhorreyabrokerage.com/HorreyaWeb/Questions.aspx",
     "exchanges": {
       "The Egyptian Exchange": {
         "reliability": "high"
@@ -76502,54 +75246,10 @@
     }
   },
   {
-    "name": "Mirage Brokerage",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://apps.apple.com/eg/app/mirage-brokerage/id1476961502",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Synergy Securities",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://apps.apple.com/app/synergy-securities/id6745751973",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Aman Securities Brokerage",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://apps.apple.com/app/aman-stocks/id6737268888",
-    "exchanges": {
-      "Egypt": {
-        "reliability": "medium"
-      }
-    }
-  },
-  {
     "name": "Pioneers Securities",
     "country": "EG",
     "type": "Broker",
     "url": "https://apps.apple.com/eg/app/pioneers-go/id6739808913",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Target Securities",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://apps.apple.com/eg/app/target-securities/id1661462484",
     "exchanges": {
       "The Egyptian Exchange": {
         "reliability": "high"
@@ -76564,17 +75264,6 @@
     "exchanges": {
       "Egypt": {
         "reliability": "low"
-      }
-    }
-  },
-  {
-    "name": "APEX Securities Egypt",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://apexholding-eg.com/",
-    "exchanges": {
-      "Egypt": {
-        "reliability": "high"
       }
     }
   },
@@ -76601,109 +75290,10 @@
     }
   },
   {
-    "name": "EgyTrend Securities",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://egytrendsecurities.com/",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "3Way Finance (3Way for Trading in Securities)",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://www.3way-finance.com/",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Al Rowad Securities Brokerage",
     "country": "EG",
     "type": "Broker",
     "url": "https://alrowadonline.com/",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Al Amalka Securities Brokerage (Amalka+)",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://al-amalka.com/",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Brokers Securities Brokerage",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://www.brokerseg.com/",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Commercial International Brokerage (Mahfazty CIBC)",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://www.mahfazty-cibc.com/",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Global Invest Securities",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://online.globalinv.com.eg/global/ContactUs",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Golden Way Securities Brokerage",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://www.goldenwayonline.com/Etrade/Home.aspx",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Horizon Securities Brokerage",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://www.horizon-brokerage.com/",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Arzan Brokerage Egypt (IFA Securities Brokerage)",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://www.arzanegypt.com/",
     "exchanges": {
       "The Egyptian Exchange": {
         "reliability": "high"
@@ -76722,109 +75312,10 @@
     }
   },
   {
-    "name": "Metro Brokerage for Securities Trading",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://www.metrotrade.net/",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Mina Securities Brokerage",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://www.minastock.com/",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "New Brent Securities Brokerage",
     "country": "EG",
     "type": "Broker",
     "url": "https://www.newbrentbrokerage.com/",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Premiere Securities Brokerage",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://apps.apple.com/eg/app/premiere-securities/id6445872873",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Pyramids Capital Securities Brokerage",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://www.pyramidscapital.com/",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Roots Securities Brokerage",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://therootsbh.com/",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Royal Brokerage Securities & Bonds",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://www.royalmg.net/",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Trend Securities Brokerage",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://apps.apple.com/eg/app/trend-brokerage/id6744294450",
-    "exchanges": {
-      "Egypt": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Watheeqa Securities Brokerage",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://www.watheeqa.com.eg/",
-    "exchanges": {
-      "The Egyptian Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Egypt Stocks Securities Brokerage",
-    "country": "EG",
-    "type": "Broker",
-    "url": "https://apps.apple.com/eg/app/egypt-stocks-online/id6737269180",
     "exchanges": {
       "The Egyptian Exchange": {
         "reliability": "high"
@@ -76979,65 +75470,10 @@
     }
   },
   {
-    "name": "Banque de Tunisie",
-    "country": "TN",
-    "type": "Bank",
-    "url": "https://www.bt.com.tn/bt-bourse",
-    "exchanges": {
-      "Tunis Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Maxula Bourse",
-    "country": "TN",
-    "type": "Broker",
-    "url": "http://www.maxulabourse.com.tn/compte-libre",
-    "exchanges": {
-      "Tunis Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Amen Invest",
-    "country": "TN",
-    "type": "Broker",
-    "url": "https://play.google.com/store/apps/details?id=com.TTA.AI&hl=en",
-    "exchanges": {
-      "Tunis Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "MAC SA",
-    "country": "TN",
-    "type": "Broker",
-    "url": "https://play.google.com/store/apps/details?id=com.tta.macsa&hl=en",
-    "exchanges": {
-      "Tunis Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Arab Financial Consultants",
     "country": "TN",
     "type": "Broker",
     "url": "https://www.afc.com.tn/intermediation-boursiere",
-    "exchanges": {
-      "Tunis Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "STB Finance",
-    "country": "TN",
-    "type": "Broker",
-    "url": "https://play.google.com/store/apps/details?id=com.na.sbt&hl=en",
     "exchanges": {
       "Tunis Stock Exchange": {
         "reliability": "high"
@@ -77591,37 +76027,6 @@
     }
   },
   {
-    "name": "FFA Private Bank",
-    "country": "LB",
-    "type": "Bank",
-    "url": "https://www.ffaprivatebank.com/online-trading.php",
-    "exchanges": {
-      "United States": {
-        "reliability": "high"
-      },
-      "United Kingdom": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "BLOMINVEST Bank",
-    "country": "LB",
-    "type": "Bank",
-    "url": "https://apps.apple.com/lb/app/blominvesttrade/id1615545494",
-    "exchanges": {
-      "Beirut Stock Exchange": {
-        "reliability": "high"
-      },
-      "United States": {
-        "reliability": "high"
-      },
-      "Australia": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "IC Securities",
     "country": "GH",
     "type": "Broker",
@@ -77667,17 +76072,6 @@
         "reliability": "high"
       },
       "United States": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "CAL Brokers",
-    "country": "GH",
-    "type": "Broker",
-    "url": "https://calbrokersghana.com/",
-    "exchanges": {
-      "Ghana Stock Exchange": {
         "reliability": "high"
       }
     }
@@ -77773,17 +76167,6 @@
     }
   },
   {
-    "name": "Atlantique Finance",
-    "country": "CI",
-    "type": "Broker",
-    "url": "https://www.atlantiquefinance.net/",
-    "exchanges": {
-      "BRVM": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Africabourse",
     "country": "CI",
     "type": "Broker",
@@ -77835,20 +76218,6 @@
     "exchanges": {
       "BRVM": {
         "reliability": "medium"
-      }
-    }
-  },
-  {
-    "name": "Daba",
-    "country": "CI",
-    "type": "Neobroker",
-    "url": "https://dabafinance.com/",
-    "exchanges": {
-      "BRVM": {
-        "reliability": "high"
-      },
-      "Nigerian Exchange": {
-        "reliability": "high"
       }
     }
   },
@@ -77956,22 +76325,6 @@
     "exchanges": {
       "Stock Exchange of Mauritius": {
         "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "IJG Securities",
-    "country": "NA",
-    "type": "Broker",
-    "url": "https://ijg.net/stockbroking/",
-    "exchanges": {
-      "Namibian Stock Exchange": {
-        "reliability": "high",
-        "restriction": "By phone/advisor only"
-      },
-      "Johannesburg Stock Exchange": {
-        "reliability": "high",
-        "restriction": "By phone/advisor only"
       }
     }
   },
@@ -79474,13 +77827,6 @@
         "reliability": "high"
       }
     }
-  },
-  {
-    "name": "ANZ Share Investing",
-    "country": "AU",
-    "type": "Bank",
-    "url": "https://www.anz.com.au/personal/superannuation/online-share-investing/",
-    "exchanges": {}
   },
   {
     "name": "Sharesies",
@@ -81824,13 +80170,6 @@
     }
   },
   {
-    "name": "Swissquote Asia",
-    "country": "HK",
-    "type": "Broker",
-    "url": "https://www.swissquote.com/",
-    "exchanges": {}
-  },
-  {
     "name": "Bright Smart Securities",
     "country": "HK",
     "type": "Broker",
@@ -82631,48 +80970,6 @@
     }
   },
   {
-    "name": "Emperor Securities",
-    "country": "HK",
-    "type": "Broker",
-    "url": "https://www.emperorcapital.com/en/business-overview/global-investment-product/hk-stocks/",
-    "exchanges": {
-      "Hong Kong Stock Exchange": {
-        "reliability": "high"
-      },
-      "New York Stock Exchange": {
-        "reliability": "high"
-      },
-      "Nasdaq": {
-        "reliability": "high"
-      },
-      "Shanghai Stock Exchange": {
-        "restriction": "B shares only",
-        "reliability": "high"
-      },
-      "Shenzhen Stock Exchange": {
-        "restriction": "B shares only",
-        "reliability": "high"
-      },
-      "Singapore Exchange": {
-        "reliability": "high"
-      },
-      "Tokyo Stock Exchange": {
-        "reliability": "high"
-      },
-      "Korea Exchange": {
-        "reliability": "high"
-      },
-      "Shanghai-Hong Kong Stock Connect": {
-        "restriction": "Northbound-eligible A-shares and ETFs only; STAR Market for institutional professional investors only",
-        "reliability": "high"
-      },
-      "Shenzhen-Hong Kong Stock Connect": {
-        "restriction": "Northbound-eligible A-shares and ETFs only; ChiNext for institutional professional investors only",
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Dah Sing Bank",
     "country": "HK",
     "type": "Bank",
@@ -83370,46 +81667,6 @@
     }
   },
   {
-    "name": "Success Securities",
-    "country": "HK",
-    "type": "Broker",
-    "url": "https://www.successfn.com/en/securities-faq/",
-    "exchanges": {
-      "United States": {
-        "reliability": "high"
-      },
-      "United Kingdom": {
-        "reliability": "high"
-      },
-      "Australia": {
-        "reliability": "high"
-      },
-      "Japan": {
-        "reliability": "high"
-      },
-      "South Korea": {
-        "reliability": "high"
-      },
-      "Singapore": {
-        "reliability": "high"
-      },
-      "Taiwan": {
-        "reliability": "high"
-      },
-      "Hong Kong Stock Exchange": {
-        "reliability": "high"
-      },
-      "Shanghai-Hong Kong Stock Connect": {
-        "restriction": "Northbound-eligible securities only; STAR Market for institutional professional investors only",
-        "reliability": "high"
-      },
-      "Shenzhen-Hong Kong Stock Connect": {
-        "restriction": "Northbound-eligible securities only; ChiNext for institutional professional investors only",
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Fubon Securities (Hong Kong)",
     "country": "HK",
     "type": "Broker",
@@ -83954,17 +82211,6 @@
         "reliability": "high"
       },
       "Philippines": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Tai Shing Securities",
-    "country": "HK",
-    "type": "Broker",
-    "url": "https://www.taishinghk.com/media/1074/ts_etrade-manual_oct24.pdf",
-    "exchanges": {
-      "Hong Kong Stock Exchange": {
         "reliability": "high"
       }
     }
@@ -84842,17 +83088,6 @@
     }
   },
   {
-    "name": "Head & Shoulders Securities",
-    "country": "HK",
-    "type": "Broker",
-    "url": "https://www.hnsfg.com/",
-    "exchanges": {
-      "Hong Kong Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Shenwan Hongyuan Securities (H.K.)",
     "country": "HK",
     "type": "Broker",
@@ -85158,81 +83393,6 @@
     }
   },
   {
-    "name": "SinoPac Securities (Asia)",
-    "country": "HK",
-    "type": "Broker",
-    "url": "https://www.sinopacasia.com/tc/",
-    "exchanges": {
-      "Hong Kong Stock Exchange": {
-        "reliability": "high"
-      },
-      "New York Stock Exchange": {
-        "reliability": "high"
-      },
-      "Nasdaq": {
-        "reliability": "high"
-      },
-      "NYSE American": {
-        "reliability": "high"
-      },
-      "Taiwan Stock Exchange": {
-        "reliability": "high"
-      },
-      "Shanghai-Hong Kong Stock Connect": {
-        "restriction": "Northbound-eligible SSE securities only; STAR Market for institutional professional investors only",
-        "reliability": "high"
-      },
-      "Shenzhen-Hong Kong Stock Connect": {
-        "restriction": "Northbound-eligible SZSE securities only; ChiNext for institutional professional investors only",
-        "reliability": "high"
-      },
-      "Japan": {
-        "reliability": "high"
-      },
-      "South Korea": {
-        "reliability": "high"
-      },
-      "Singapore": {
-        "reliability": "high"
-      },
-      "Malaysia": {
-        "reliability": "high"
-      },
-      "Vietnam": {
-        "reliability": "high"
-      },
-      "Australia": {
-        "reliability": "high"
-      },
-      "Indonesia": {
-        "reliability": "high"
-      },
-      "New Zealand": {
-        "reliability": "high"
-      },
-      "Switzerland": {
-        "reliability": "high"
-      },
-      "Shanghai Stock Exchange": {
-        "restriction": "B-shares only",
-        "reliability": "high"
-      },
-      "Shenzhen Stock Exchange": {
-        "restriction": "B-shares only",
-        "reliability": "high"
-      },
-      "Stock Exchange of Thailand": {
-        "reliability": "high"
-      },
-      "London Stock Exchange": {
-        "reliability": "high"
-      },
-      "Canada": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "ABCI Securities",
     "country": "HK",
     "type": "Broker",
@@ -85506,81 +83666,6 @@
         "reliability": "high"
       },
       "South Korea": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Orient Securities International (Orient Finance Holdings HK)",
-    "country": "HK",
-    "type": "Broker",
-    "url": "https://www.dfzq.com.hk/",
-    "exchanges": {
-      "Hong Kong Stock Exchange": {
-        "reliability": "high"
-      },
-      "New York Stock Exchange": {
-        "reliability": "high"
-      },
-      "NYSE American": {
-        "reliability": "high"
-      },
-      "Nasdaq": {
-        "reliability": "high"
-      },
-      "Shanghai-Hong Kong Stock Connect": {
-        "restriction": "Northbound-eligible SSE securities only; STAR Market for institutional professional investors only",
-        "reliability": "high"
-      },
-      "Shenzhen-Hong Kong Stock Connect": {
-        "restriction": "Northbound-eligible SZSE securities only; ChiNext for institutional professional investors only",
-        "reliability": "high"
-      },
-      "Toronto Stock Exchange": {
-        "reliability": "high"
-      },
-      "Tokyo Stock Exchange": {
-        "reliability": "high"
-      },
-      "Shanghai Stock Exchange": {
-        "restriction": "B-shares only; no B-share buying for mainland-China investors",
-        "reliability": "high"
-      },
-      "Shenzhen Stock Exchange": {
-        "restriction": "B-shares only; no B-share buying for mainland-China investors",
-        "reliability": "high"
-      },
-      "London Stock Exchange": {
-        "reliability": "high"
-      },
-      "ASX": {
-        "reliability": "high"
-      },
-      "Börse Xetra": {
-        "reliability": "high"
-      },
-      "Börse Frankfurt": {
-        "reliability": "high"
-      },
-      "Singapore Exchange": {
-        "reliability": "high"
-      },
-      "Taiwan Stock Exchange": {
-        "reliability": "high"
-      },
-      "AIM": {
-        "reliability": "high"
-      },
-      "OTC Markets": {
-        "reliability": "high"
-      },
-      "South Korea": {
-        "reliability": "high"
-      },
-      "STAR Market": {
-        "reliability": "low"
-      },
-      "ChiNext": {
         "reliability": "high"
       }
     }
@@ -86026,25 +84111,6 @@
         "reliability": "high"
       },
       "South Korea": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Wocom Securities",
-    "country": "HK",
-    "type": "Broker",
-    "url": "https://wocom.com.hk/",
-    "exchanges": {
-      "Hong Kong Stock Exchange": {
-        "reliability": "high"
-      },
-      "Shanghai-Hong Kong Stock Connect": {
-        "restriction": "Northbound-eligible SSE securities only (Stock Connect); STAR Market for institutional professional investors only",
-        "reliability": "high"
-      },
-      "Shenzhen-Hong Kong Stock Connect": {
-        "restriction": "Northbound-eligible SZSE securities only (Stock Connect); ChiNext for institutional professional investors only",
         "reliability": "high"
       }
     }
@@ -91555,23 +89621,6 @@
     }
   },
   {
-    "name": "Fushan Securities",
-    "country": "TW",
-    "type": "Broker",
-    "url": "https://www.fushan-ewin.com.tw/CustomService.html",
-    "exchanges": {
-      "Taiwan Stock Exchange": {
-        "reliability": "high"
-      },
-      "Taipei Exchange": {
-        "reliability": "high"
-      },
-      "Emerging Stock Board": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Shin Kong Securities",
     "country": "TW",
     "type": "Broker",
@@ -91735,20 +89784,6 @@
     }
   },
   {
-    "name": "Yong Hsing Securities",
-    "country": "TW",
-    "type": "Broker",
-    "url": "https://www.yss.com.tw/download2-detail.php?id=6",
-    "exchanges": {
-      "Taiwan Stock Exchange": {
-        "reliability": "high"
-      },
-      "Taipei Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "King's Town Securities",
     "country": "TW",
     "type": "Broker",
@@ -91840,20 +89875,6 @@
         "reliability": "high"
       },
       "Emerging Stock Board": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Taiwan Business Bank Securities",
-    "country": "TW",
-    "type": "Bank",
-    "url": "https://www.tbb.com.tw/zh-tw/personal/investments/securities/intro",
-    "exchanges": {
-      "Taiwan Stock Exchange": {
-        "reliability": "high"
-      },
-      "Taipei Exchange": {
         "reliability": "high"
       }
     }
@@ -95928,17 +93949,6 @@
     }
   },
   {
-    "name": "Merchant Partners Securities",
-    "country": "TH",
-    "type": "Broker",
-    "url": "https://www.merchant.co.th/",
-    "exchanges": {
-      "Stock Exchange of Thailand": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Rakuten MY",
     "country": "MY",
     "type": "Broker",
@@ -96198,73 +94208,6 @@
         "reliability": "high"
       },
       "Hong Kong Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "PublicInvest",
-    "country": "MY",
-    "type": "Bank",
-    "url": "https://www.publicinvestbank.com/pbswecos/register.asp?regtype=L",
-    "exchanges": {
-      "Bursa Malaysia": {
-        "reliability": "high"
-      },
-      "New York Stock Exchange": {
-        "reliability": "high"
-      },
-      "Nasdaq": {
-        "reliability": "high"
-      },
-      "Hong Kong Stock Exchange": {
-        "reliability": "high"
-      },
-      "Shanghai Stock Exchange": {
-        "restriction": "Northbound-eligible securities only (Stock Connect); STAR Market for institutional professional investors only",
-        "reliability": "high"
-      },
-      "Shenzhen Stock Exchange": {
-        "restriction": "Northbound-eligible securities only (Stock Connect); ChiNext for institutional professional investors only",
-        "reliability": "high"
-      },
-      "Singapore Exchange": {
-        "reliability": "high"
-      },
-      "ASX": {
-        "reliability": "high"
-      },
-      "London Stock Exchange": {
-        "reliability": "high"
-      },
-      "Tokyo Stock Exchange": {
-        "reliability": "high"
-      },
-      "Korea Exchange": {
-        "reliability": "high"
-      },
-      "Taiwan Stock Exchange": {
-        "reliability": "high"
-      },
-      "Stock Exchange of Thailand": {
-        "reliability": "high"
-      },
-      "Hanoi Stock Exchange": {
-        "reliability": "high"
-      },
-      "HOSE": {
-        "reliability": "high"
-      },
-      "UPCOM": {
-        "reliability": "high"
-      },
-      "Indonesia Stock Exchange": {
-        "reliability": "high"
-      },
-      "Börse Frankfurt": {
-        "reliability": "high"
-      },
-      "Toronto Stock Exchange": {
         "reliability": "high"
       }
     }
@@ -96587,40 +94530,6 @@
     }
   },
   {
-    "name": "Mercury Securities",
-    "country": "MY",
-    "type": "Broker",
-    "url": "https://www.mercurysecurities.com.my/faq/",
-    "exchanges": {
-      "Bursa Malaysia": {
-        "reliability": "high"
-      },
-      "New York Stock Exchange": {
-        "reliability": "high"
-      },
-      "London Stock Exchange": {
-        "reliability": "high"
-      },
-      "Hong Kong Stock Exchange": {
-        "reliability": "high"
-      },
-      "Singapore": {
-        "reliability": "low"
-      }
-    }
-  },
-  {
-    "name": "Apex Securities",
-    "country": "MY",
-    "type": "Broker",
-    "url": "https://apexsecurities.com.my/",
-    "exchanges": {
-      "Bursa Malaysia": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Berjaya Securities",
     "country": "MY",
     "type": "Broker",
@@ -96786,41 +94695,6 @@
     }
   },
   {
-    "name": "SJ Securities",
-    "country": "MY",
-    "type": "Broker",
-    "url": "https://www.sjsec.com/",
-    "exchanges": {
-      "Bursa Malaysia": {
-        "reliability": "high"
-      },
-      "Singapore Exchange": {
-        "reliability": "high"
-      },
-      "United States": {
-        "reliability": "high"
-      },
-      "ASX": {
-        "reliability": "high"
-      },
-      "London Stock Exchange": {
-        "reliability": "high"
-      },
-      "Tokyo Stock Exchange": {
-        "reliability": "high"
-      },
-      "Stock Exchange of Thailand": {
-        "reliability": "high"
-      },
-      "China": {
-        "reliability": "high"
-      },
-      "Indonesia Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "M&A Securities",
     "country": "MY",
     "type": "Broker",
@@ -96856,23 +94730,6 @@
         "reliability": "high"
       },
       "ASX": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "MIDF Invest",
-    "country": "MY",
-    "type": "Broker",
-    "url": "https://www.midf.com.my/share-trading",
-    "exchanges": {
-      "New York Stock Exchange": {
-        "reliability": "high"
-      },
-      "Nasdaq": {
-        "reliability": "high"
-      },
-      "Bursa Malaysia": {
         "reliability": "high"
       }
     }
@@ -97068,17 +94925,6 @@
     }
   },
   {
-    "name": "Panin Sekuritas",
-    "country": "ID",
-    "type": "Broker",
-    "url": "https://pans.co.id/reguler-online-trading",
-    "exchanges": {
-      "Indonesia Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Sucor Sekuritas",
     "country": "ID",
     "type": "Broker",
@@ -97211,28 +95057,6 @@
     }
   },
   {
-    "name": "Aldiracita Sekuritas",
-    "country": "ID",
-    "type": "Broker",
-    "url": "https://aldiracita.com/equity-brokerage/",
-    "exchanges": {
-      "Indonesia Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Artha Sekuritas",
-    "country": "ID",
-    "type": "Broker",
-    "url": "https://www.arthasekuritas.com/manualaset/manualasetmobile.pdf",
-    "exchanges": {
-      "Indonesia Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "KAF Sekuritas",
     "country": "ID",
     "type": "Broker",
@@ -97299,17 +95123,6 @@
     }
   },
   {
-    "name": "bjb Sekuritas",
-    "country": "ID",
-    "type": "Broker",
-    "url": "https://bjbsekuritas.co.id/download/1",
-    "exchanges": {
-      "Indonesia Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Lotus Andalan Sekuritas",
     "country": "ID",
     "type": "Broker",
@@ -97354,28 +95167,6 @@
     }
   },
   {
-    "name": "Buana Capital Sekuritas",
-    "country": "ID",
-    "type": "Broker",
-    "url": "https://www.buanacapital.com/tcid-legacy",
-    "exchanges": {
-      "Indonesia Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Shinhan Sekuritas Indonesia",
-    "country": "ID",
-    "type": "Broker",
-    "url": "https://www.shinhansekuritas.co.id/file/media/User%20Guide%20WebTrading%20STRADE.pdf",
-    "exchanges": {
-      "Indonesia Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Kay Hian Sekuritas",
     "country": "ID",
     "type": "Broker",
@@ -97402,28 +95193,6 @@
     "country": "ID",
     "type": "Broker",
     "url": "https://www.kisi.co.id/produk/saham",
-    "exchanges": {
-      "Indonesia Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Pacific Sekuritas Indonesia",
-    "country": "ID",
-    "type": "Broker",
-    "url": "https://www.pacificsekuritas.id/ot.php",
-    "exchanges": {
-      "Indonesia Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Waterfront Sekuritas",
-    "country": "ID",
-    "type": "Broker",
-    "url": "https://www.winvest.id/",
     "exchanges": {
       "Indonesia Stock Exchange": {
         "reliability": "high"
@@ -97486,17 +95255,6 @@
     }
   },
   {
-    "name": "Elit Sukses Sekuritas",
-    "country": "ID",
-    "type": "Broker",
-    "url": "https://elitsuksessekuritas.com/wp-content/uploads/2023/06/Manual-Book-Aplikasi-Online-Trading-1.pdf",
-    "exchanges": {
-      "Indonesia Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Maybank Sekuritas Indonesia",
     "country": "ID",
     "type": "Broker",
@@ -97508,87 +95266,10 @@
     }
   },
   {
-    "name": "Laba Sekuritas Indonesia",
-    "country": "ID",
-    "type": "Broker",
-    "url": "https://labasekuritas.com/",
-    "exchanges": {
-      "Indonesia Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Evergreen Sekuritas Indonesia",
-    "country": "ID",
-    "type": "Broker",
-    "url": "https://evergreensekuritas.co.id/",
-    "exchanges": {
-      "Indonesia Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Yugen Bertumbuh Sekuritas",
     "country": "ID",
     "type": "Broker",
     "url": "https://www.yugen.co.id/",
-    "exchanges": {
-      "Indonesia Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Semesta Indovest Sekuritas",
-    "country": "ID",
-    "type": "Broker",
-    "url": "https://www.semestaindovest.co.id/",
-    "exchanges": {
-      "Indonesia Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Ekokapital Sekuritas",
-    "country": "ID",
-    "type": "Broker",
-    "url": "https://ekokapital.com/",
-    "exchanges": {
-      "Indonesia Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Indo Harvest Sekuritas",
-    "country": "ID",
-    "type": "Broker",
-    "url": "https://ihsekuritas.co.id/",
-    "exchanges": {
-      "Indonesia Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Bumiputera Sekuritas",
-    "country": "ID",
-    "type": "Broker",
-    "url": "https://www.bumiputerasekuritas.co.id/",
-    "exchanges": {
-      "Indonesia Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Anugerah Sekuritas Indonesia",
-    "country": "ID",
-    "type": "Broker",
-    "url": "https://www.anugerahsekuritas.co.id/",
     "exchanges": {
       "Indonesia Stock Exchange": {
         "reliability": "high"
@@ -97611,28 +95292,6 @@
     "country": "ID",
     "type": "Broker",
     "url": "https://sfast.id/",
-    "exchanges": {
-      "Indonesia Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Pilarmas Investindo Sekuritas (POT)",
-    "country": "ID",
-    "type": "Broker",
-    "url": "https://apps.apple.com/us/app/id1556221479",
-    "exchanges": {
-      "Indonesia Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "BNC Sekuritas Indonesia",
-    "country": "ID",
-    "type": "Broker",
-    "url": "https://www.bncsekuritas.com/",
     "exchanges": {
       "Indonesia Stock Exchange": {
         "reliability": "high"
@@ -97805,17 +95464,6 @@
     }
   },
   {
-    "name": "AP Securities",
-    "country": "PH",
-    "type": "Broker",
-    "url": "https://www.apsonline.com.ph/",
-    "exchanges": {
-      "Philippine Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Landbank Securities",
     "country": "PH",
     "type": "Broker",
@@ -97849,17 +95497,6 @@
     }
   },
   {
-    "name": "Regina Capital",
-    "country": "PH",
-    "type": "Broker",
-    "url": "https://www.reginacapital.com/portal/company-profile",
-    "exchanges": {
-      "Philippine Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Alpha Securities",
     "country": "PH",
     "type": "Broker",
@@ -97875,28 +95512,6 @@
     "country": "PH",
     "type": "Broker",
     "url": "https://www.investorsonline.ph/",
-    "exchanges": {
-      "Philippine Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "VC Securities",
-    "country": "PH",
-    "type": "Broker",
-    "url": "https://vcsecurities.biz/faq-page/",
-    "exchanges": {
-      "Philippine Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Globalinks Securities",
-    "country": "PH",
-    "type": "Broker",
-    "url": "https://www.globalinks.com.ph/Faqs",
     "exchanges": {
       "Philippine Stock Exchange": {
         "reliability": "high"
@@ -97941,28 +95556,6 @@
     "country": "PH",
     "type": "Bank",
     "url": "https://www.gotyme.com.ph/ph-stocks",
-    "exchanges": {
-      "Philippine Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Meridian Securities",
-    "country": "PH",
-    "type": "Broker",
-    "url": "https://www.meridiansec.com.ph/",
-    "exchanges": {
-      "Philippine Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "F. Yap Securities",
-    "country": "PH",
-    "type": "Broker",
-    "url": "https://www.fyapsecurities.com/",
     "exchanges": {
       "Philippine Stock Exchange": {
         "reliability": "high"
@@ -99029,23 +96622,6 @@
     }
   },
   {
-    "name": "T-Cap (Tri Viet Securities)",
-    "country": "VN",
-    "type": "Broker",
-    "url": "https://tcap.vn/",
-    "exchanges": {
-      "HOSE": {
-        "reliability": "high"
-      },
-      "Hanoi Stock Exchange": {
-        "reliability": "high"
-      },
-      "UPCOM": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "ACLEDA Bank",
     "country": "KH",
     "type": "Bank",
@@ -99607,17 +97183,6 @@
     }
   },
   {
-    "name": "Coinvalores",
-    "country": "BR",
-    "type": "Broker",
-    "url": "https://coinvalores.com.br/seguranca/",
-    "exchanges": {
-      "B3 São Paulo": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "RB Investimentos",
     "country": "BR",
     "type": "Broker",
@@ -99679,17 +97244,6 @@
     }
   },
   {
-    "name": "Banco BV",
-    "country": "BR",
-    "type": "Bank",
-    "url": "https://www.bancobv.com.br/web/site/bvarquivos/legislacaoDTVM/regrasatuacao.pdf",
-    "exchanges": {
-      "B3 São Paulo": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Galapagos Capital",
     "country": "BR",
     "type": "Broker",
@@ -99705,17 +97259,6 @@
     "country": "BR",
     "type": "Broker",
     "url": "https://www.sita.com.br/servicos/ajuda.htm",
-    "exchanges": {
-      "B3 São Paulo": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Lerosa Investimentos",
-    "country": "BR",
-    "type": "Broker",
-    "url": "https://lerosa.com.br",
     "exchanges": {
       "B3 São Paulo": {
         "reliability": "high"
@@ -99899,20 +97442,6 @@
     }
   },
   {
-    "name": "Monex Casa de Bolsa",
-    "country": "MX",
-    "type": "Bank",
-    "url": "https://www.monex.com.mx",
-    "exchanges": {
-      "Bolsa Mexicana": {
-        "reliability": "high"
-      },
-      "BIVA": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Casa de Bolsa Banorte (BeTrading)",
     "country": "MX",
     "type": "Bank",
@@ -99964,47 +97493,11 @@
     }
   },
   {
-    "name": "ScotiaTrade",
-    "country": "MX",
-    "type": "Broker",
-    "url": "https://www.scotiabank.com.mx/servicios-bancarios/scotiatrade-inversiones.aspx",
-    "exchanges": {
-      "Mexico": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Punto Casa de Bolsa",
-    "country": "MX",
-    "type": "Broker",
-    "url": "https://www.pcbws.mx/Portal/publicoNuevo/HomePublicoController/descargaDocs.go?categoria=1&idContenido=162&titulo=Punto+Trader",
-    "exchanges": {
-      "Bolsa Mexicana": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "INVEX Casa de Bolsa",
     "country": "MX",
     "type": "Bank",
     "url": "https://clientes.invex.com/Inversion/informacion/ayuda.aspx",
     "exchanges": {
-      "Bolsa Mexicana": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Kapital Casa de Bolsa",
-    "country": "MX",
-    "type": "Broker",
-    "url": "https://assets.ctfassets.net/vr3zuj968faf/xMZF4IwZFOKoTh8mPnQzt/c3fb9bfcf8f62fbb643c5dd395904945/Folleto-informativo-del-sistema-de-Recepcion-y-Asignacion-de-Ordenes_Oct25.pdf",
-    "exchanges": {
-      "BIVA": {
-        "reliability": "high"
-      },
       "Bolsa Mexicana": {
         "reliability": "high"
       }
@@ -100968,17 +98461,6 @@
     }
   },
   {
-    "name": "Guarnieri Valores",
-    "country": "AR",
-    "type": "Broker",
-    "url": "https://guarnierisb.com.ar/",
-    "exchanges": {
-      "BYMA": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Les Cinq Capital",
     "country": "AR",
     "type": "Broker",
@@ -101425,21 +98907,6 @@
     }
   },
   {
-    "name": "BICE Inversiones",
-    "country": "CL",
-    "type": "Bank",
-    "url": "https://biceinversiones.cl/",
-    "exchanges": {
-      "Santiago Stock Exchange": {
-        "reliability": "high"
-      },
-      "United States": {
-        "reliability": "high",
-        "restriction": "By phone/advisor only"
-      }
-    }
-  },
-  {
     "name": "Banchile Inversiones",
     "country": "CL",
     "type": "Bank",
@@ -101551,20 +99018,6 @@
     }
   },
   {
-    "name": "LarrainVial",
-    "country": "CL",
-    "type": "Broker",
-    "url": "https://haztecliente.larrainvial.com/",
-    "exchanges": {
-      "Santiago Stock Exchange": {
-        "reliability": "high"
-      },
-      "Bolsa Electrónica de Chile": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Santander Corredores de Bolsa Chile",
     "country": "CL",
     "type": "Bank",
@@ -101655,20 +99108,6 @@
         "reliability": "high"
       },
       "United States": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Scotia Corredora de Bolsa",
-    "country": "CL",
-    "type": "Broker",
-    "url": "https://www.scotiabankchile.cl/personas/inversiones/corredores/inversiones-en-linea/",
-    "exchanges": {
-      "Santiago Stock Exchange": {
-        "reliability": "high"
-      },
-      "Bolsa Electrónica de Chile": {
         "reliability": "high"
       }
     }
@@ -101772,17 +99211,6 @@
       "Cboe BZX": {},
       "Texas Stock Exchange": {},
       "Börse Frankfurt": {}
-    }
-  },
-  {
-    "name": "Nevasa",
-    "country": "CL",
-    "type": "Broker",
-    "url": "https://www.nevasa.cl/",
-    "exchanges": {
-      "Santiago Stock Exchange": {
-        "reliability": "high"
-      }
     }
   },
   {
@@ -102244,31 +99672,6 @@
     "url": "https://www.jamstockex.com/services/jtraderpro/",
     "exchanges": {
       "Jamaica Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "FHC Investments",
-    "country": "JM",
-    "type": "Broker",
-    "url": "https://jtraderpro.jamstockex.com/Content/Files/Online%20Trading%20FAQs%20-%2013102026.pdf",
-    "exchanges": {
-      "Jamaica Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Mayberry Investments",
-    "country": "JM",
-    "type": "Broker",
-    "url": "https://www.mayberryinv.com/client-portal/market/equity-order/stocks-order/enter-order",
-    "exchanges": {
-      "Jamaica Stock Exchange": {
-        "reliability": "high"
-      },
-      "New York Stock Exchange": {
         "reliability": "high"
       }
     }
@@ -103055,17 +100458,6 @@
     }
   },
   {
-    "name": "Mirae Asset Securities Mongolia",
-    "country": "MN",
-    "type": "Broker",
-    "url": "https://miraeassetsecurities.mn/",
-    "exchanges": {
-      "Mongolian Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Tenger Capital",
     "country": "MN",
     "type": "Broker",
@@ -103077,17 +100469,6 @@
       "United States": {
         "restriction": "Through the Interactive Brokers platform (trader.tengercapital.mn); the page names no individual exchange, so US access is inferred from IB's coverage",
         "reliability": "medium"
-      }
-    }
-  },
-  {
-    "name": "Standard Investment",
-    "country": "MN",
-    "type": "Broker",
-    "url": "https://stin.mn/",
-    "exchanges": {
-      "Mongolian Stock Exchange": {
-        "reliability": "high"
       }
     }
   },
@@ -103115,17 +100496,6 @@
         "reliability": "high"
       },
       "Ulaanbaatar Securities Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Goodsec",
-    "country": "MN",
-    "type": "Broker",
-    "url": "https://goodsec.mn/",
-    "exchanges": {
-      "Mongolian Stock Exchange": {
         "reliability": "high"
       }
     }
@@ -104271,13 +101641,6 @@
         "reliability": "high"
       }
     }
-  },
-  {
-    "name": "Freedom Finance",
-    "country": "UA",
-    "type": "Broker",
-    "url": "https://ffin.ua",
-    "exchanges": {}
   },
   {
     "name": "Univer",
@@ -105954,17 +103317,6 @@
     "country": "LK",
     "type": "Broker",
     "url": "https://www.lolcsecurities.lk/",
-    "exchanges": {
-      "Colombo Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Acuity Stockbrokers",
-    "country": "LK",
-    "type": "Broker",
-    "url": "https://www.acuitystockbrokers.com/",
     "exchanges": {
       "Colombo Stock Exchange": {
         "reliability": "high"
@@ -111407,118 +108759,6 @@
     }
   },
   {
-    "name": "United Securities Oman",
-    "country": "OM",
-    "type": "Broker",
-    "url": "https://usoman.com/Download-Forms.html",
-    "exchanges": {
-      "Muscat Stock Exchange": {
-        "reliability": "high"
-      },
-      "United States": {
-        "reliability": "high"
-      },
-      "Saudi Arabia": {
-        "reliability": "high"
-      },
-      "United Arab Emirates": {
-        "reliability": "high"
-      },
-      "Qatar": {
-        "reliability": "high"
-      },
-      "Kuwait": {
-        "reliability": "high"
-      },
-      "Bahrain": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Ubhar Capital (U-Capital)",
-    "country": "OM",
-    "type": "Broker",
-    "url": "https://u-capital.net/u-capital-brokerage/",
-    "exchanges": {
-      "Muscat Stock Exchange": {
-        "reliability": "high"
-      },
-      "United States": {
-        "reliability": "high"
-      },
-      "Tadawul": {
-        "reliability": "high"
-      },
-      "Abu Dhabi Securities Exchange": {
-        "reliability": "high"
-      },
-      "Dubai Financial Market": {
-        "reliability": "high"
-      },
-      "Qatar Stock Exchange": {
-        "reliability": "high"
-      },
-      "Boursa Kuwait": {
-        "reliability": "high"
-      },
-      "Bahrain Bourse": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Financial Services Company SAOG",
-    "country": "OM",
-    "type": "Broker",
-    "url": "https://fscoman.net/faqs",
-    "exchanges": {
-      "Muscat Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Global Financial Securities",
-    "country": "OM",
-    "type": "Broker",
-    "url": "https://gfioman.com/wp/gfs/services/brokerage/web-etrade-system/",
-    "exchanges": {
-      "Muscat Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Horizons Capital Markets",
-    "country": "OM",
-    "type": "Broker",
-    "url": "https://www.hcmoman.com/brokerage-services/",
-    "exchanges": {
-      "Muscat Stock Exchange": {
-        "reliability": "high"
-      },
-      "United States": {
-        "reliability": "high"
-      },
-      "Saudi Arabia": {
-        "reliability": "high"
-      },
-      "United Arab Emirates": {
-        "reliability": "high"
-      },
-      "Qatar": {
-        "reliability": "high"
-      },
-      "Kuwait": {
-        "reliability": "high"
-      },
-      "Bahrain": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "QBG Geojit Securities",
     "country": "OM",
     "type": "Broker",
@@ -111538,78 +108778,12 @@
     }
   },
   {
-    "name": "Jabal Asset Management",
-    "country": "OM",
-    "type": "Broker",
-    "url": "https://apps.apple.com/us/app/jabal-invest/id6737515373",
-    "exchanges": {
-      "Shanghai Stock Exchange": {
-        "reliability": "high"
-      },
-      "Shenzhen Stock Exchange": {
-        "reliability": "high"
-      },
-      "Beijing Stock Exchange": {
-        "reliability": "high"
-      },
-      "BSE": {
-        "reliability": "high"
-      },
-      "National Stock Exchange of India": {
-        "reliability": "high"
-      },
-      "Muscat Stock Exchange": {
-        "reliability": "high"
-      },
-      "Hong Kong Stock Exchange": {
-        "reliability": "high"
-      },
-      "Tadawul": {
-        "reliability": "high"
-      },
-      "Abu Dhabi Securities Exchange": {
-        "reliability": "high"
-      },
-      "Qatar": {
-        "reliability": "high"
-      },
-      "Kuwait": {
-        "reliability": "high"
-      },
-      "Bahrain": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "National Bank of Oman",
-    "country": "OM",
-    "type": "Bank",
-    "url": "https://www.nbo.om/en/Pages/Corporate-Banking/MarketZone-App.aspx",
-    "exchanges": {
-      "Muscat Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "ahlibank Brokerage (ahliMarkets)",
     "country": "OM",
     "type": "Bank",
     "url": "https://ahlibank.om/ahlibank/investment-banking/brokerage-services/",
     "exchanges": {
       "Muscat Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Vision Capital",
-    "country": "OM",
-    "type": "Broker",
-    "url": "https://visioncapital.om/",
-    "exchanges": {
-      "Oman": {
         "reliability": "high"
       }
     }
@@ -112056,13 +109230,6 @@
     }
   },
   {
-    "name": "LOM Financial (OPUS)",
-    "country": "BM",
-    "type": "Broker",
-    "url": "https://www.lom.com/services/trading-investment-brokerage/",
-    "exchanges": {}
-  },
-  {
     "name": "Clarien Trade Direct",
     "country": "BM",
     "type": "Bank",
@@ -112377,32 +109544,6 @@
     }
   },
   {
-    "name": "Al-Watanieh Securities",
-    "country": "PS",
-    "type": "Broker",
-    "url": "https://alwatanieh.ps/",
-    "exchanges": {
-      "Palestine Exchange": {
-        "reliability": "high"
-      },
-      "Amman Stock Exchange": {
-        "reliability": "high"
-      },
-      "Dubai Financial Market": {
-        "reliability": "high"
-      },
-      "Abu Dhabi Securities Exchange": {
-        "reliability": "high"
-      },
-      "Saudi Arabia": {
-        "reliability": "high"
-      },
-      "United States": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
     "name": "Sahem Trading & Investments",
     "country": "PS",
     "type": "Broker",
@@ -112456,28 +109597,6 @@
     "country": "IQ",
     "type": "Broker",
     "url": "https://apps.apple.com/iq/app/rabee-financial-brokerage/id1622384599",
-    "exchanges": {
-      "Iraq Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Al-Hayat Brokerage",
-    "country": "IQ",
-    "type": "Broker",
-    "url": "https://apps.apple.com/iq/app/al-hyat-brokerage/id6757467890",
-    "exchanges": {
-      "Iraq Stock Exchange": {
-        "reliability": "high"
-      }
-    }
-  },
-  {
-    "name": "Al Karmal Brokerage",
-    "country": "IQ",
-    "type": "Broker",
-    "url": "https://apps.apple.com/iq/app/karmal-live/id6754594647",
     "exchanges": {
       "Iraq Stock Exchange": {
         "reliability": "high"
@@ -112708,13 +109827,6 @@
         "reliability": "high"
       }
     }
-  },
-  {
-    "name": "Storebrand Bank",
-    "country": "NO",
-    "type": "Bank",
-    "url": "https://www.storebrand.no/privat/sparing-og-pensjon/aksjer-og-fond/aksjehandel",
-    "exchanges": {}
   },
   {
     "name": "Kyokuto Securities",
@@ -112965,13 +110077,6 @@
     }
   },
   {
-    "name": "Renta 4 Colombia",
-    "country": "CO",
-    "type": "Broker",
-    "url": "https://www.renta4.com.co/",
-    "exchanges": {}
-  },
-  {
     "name": "Gotrade Global",
     "country": "Global",
     "type": "Neobroker",
@@ -113067,72 +110172,6 @@
         "reliability": "high"
       }
     }
-  },
-  {
-    "name": "Banca Popolare di Sondrio",
-    "country": "IT",
-    "type": "Bank",
-    "url": "https://www.popso.it/privati/risparmio-e-investimenti/trading-online",
-    "exchanges": {}
-  },
-  {
-    "name": "EuroBic",
-    "country": "PT",
-    "type": "Bank",
-    "url": "https://www.eurobic.pt/particulares/poupanca-e-investimento/investimento/bolsa-e-mercados",
-    "exchanges": {
-      "Bolsa de Madrid": {
-        "reliability": "high"
-      },
-      "Börse Frankfurt": {
-        "reliability": "low"
-      },
-      "Euronext Lisbon": {
-        "reliability": "high"
-      },
-      "Euronext Paris": {
-        "reliability": "high"
-      },
-      "Nasdaq": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "high"
-      },
-      "New York Stock Exchange": {
-        "restriction": "No US-domiciled ETFs (PRIIPs/KID)",
-        "reliability": "high"
-      },
-      "United Kingdom": {
-        "reliability": "high"
-      },
-      "Italy": {
-        "reliability": "high"
-      },
-      "Belgium": {
-        "reliability": "low"
-      },
-      "Netherlands": {
-        "reliability": "low"
-      },
-      "Luxembourg": {
-        "reliability": "low"
-      },
-      "Austria": {
-        "reliability": "low"
-      },
-      "Ireland": {
-        "reliability": "low"
-      },
-      "Greece": {
-        "reliability": "low"
-      }
-    }
-  },
-  {
-    "name": "HSBC Bank Malta",
-    "country": "MT",
-    "type": "Bank",
-    "url": "https://www.hsbc.com.mt/investments/products/brokerage/",
-    "exchanges": {}
   },
   {
     "name": "BankNordik",
@@ -113274,13 +110313,6 @@
         "reliability": "high"
       }
     }
-  },
-  {
-    "name": "Rogaland Sparebank",
-    "country": "NO",
-    "type": "Bank",
-    "url": "https://www.rogalandsparebank.no/privat/sparing-og-investering/aksjehandel",
-    "exchanges": {}
   },
   {
     "name": "Redmayne Bentley",

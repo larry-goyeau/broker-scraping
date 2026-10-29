@@ -1,0 +1,375 @@
+# Brokers sans dossier : vérification des tarifs (2026-10-29)
+
+1 867 lignes de broker-list.json sans dossier dans brokers/. Premier passage, puis contre-vérification des « pas de tarifs ».
+
+- Tarifs publiés : 1203 + 51 renversés à la contre-vérification
+- Barème officiel fixe (Iran, Népal, Jordanie, Sri Lanka, Qatar…) : 98
+- Douteux (site bloqué, JS, non tranché) : 173 — gardés
+- Pas de tarif, confirmé deux fois : 152 (+ 139 dans un pays à plafond officiel, + 8 au Koweït/Émirats à taux fixe)
+- Morts / fusionnés : 8
+
+## Enlevés : pas de tarif publié (152)
+
+- AL — Banka Kombëtare Tregtare — BKT fee document and SmartInvest manual contain no share commission figure (only treasury-bond custody/secondary trading free); SmartInvest reportedly suspended.
+- AR — Guarnieri Valores — Whole WordPress site (all pages, sitemap, account-opening page, client portal) has no aranceles/comisiones document; searches find none.
+- BM — LOM Financial (OPUS) — Brokerage, custody and account pages on lom.com list no commission schedule.
+- BR — Coinvalores — Site is now real-estate-fund focused; no corretagem table in pages or PDFs.
+- CH — Bank CIC (Schweiz) — Private tariff PDF says securities prices are in a special tariff 'Gebuehren und Konditionen im Anlagegeschaeft', which is not linked on cic.ch (checked DE/FR/IT/EN fee pages).
+- CH — Bergos — Sitemap (1,326 URLs) and additional-information page show no price list or brokerage tariff.
+- CH — J. Safra Sarasin — Trading services page and searches show no Swiss retail brokerage tariff.
+- CH — Julius Baer — Only published schedule is for Luxembourg-booked clients; Swiss Market Link page (viewed in browser) lists no fees.
+- CH — Maerki Baumann — Sitemap, MiFID and FIDLEG documents give only generic cost wording, no price list.
+- CI — Atlantique Finance — Site (40 pages) and brvm.org search show no tariff or homologation decision for this SGI, only an online-trading authorisation.
+- CI — Daba — FAQ says Daba routes orders to about 10 unnamed partner SGIs and shows fees in the app; no share trading rate is published (the only CFA figures are for managed funds, deposits and withdrawals).
+- CL — BICE Inversiones — Opened banco.bice.cl in a real browser (curl gets 403): the Inversiones and Acciones pages and the product description PDF carry no commission figure or tariff link.
+- CL — LarrainVial — Sign-up and client-information pages only say products may carry commissions and give no amount or tariff document; only third-party Rankia pages discuss rates.
+- CL — Nevasa — Site, product page and all downloadable policy PDFs (order execution, online operation, self-regulation code) contain no commission figure.
+- CL — Scotia Corredora de Bolsa — Scotia Corredora pages say custody is free but give no brokerage commission; the bank tariff PDFs cover accounts, cards and FX only.
+- CO — Renta 4 Colombia — The .com.co domain just serves the Spanish Renta 4 site (404 at root); Renta 4 Colombia is a fiduciary and no Colombian share trading tariff exists on the web.
+- CZ — Wood & Company — Czech site and its mandatory-disclosure and MiFID pages list reports, execution policy and complaints rules but no retail share price list (only the separate Portu robo product has a price list).
+- DE — J.P. Morgan SE — J.P. Morgan SE private-bank brokerage page, disclosures and client terms PDFs carry no commission or price list; fees are agreed per client.
+- EG — 3Way Finance (3Way for Trading in Securities) — E-trade portal pages contain no commission or fee text.
+- EG — AF Securities — Landing page has no commission or fee information.
+- EG — APEX Securities Egypt — Brokerage page and whole sitemap show no commission schedule.
+- EG — Al Ahly Pharos — Pharoslive FAQ only lists cost types (brokerage commission, custody, market fees) with no figures; opened in a real browser since curl gets 403.
+- EG — Al Ahram Securities Brokerage — E-trade FAQ and portal pages contain no commission text.
+- EG — Al Amalka Securities Brokerage (Amalka+) — Services and login pages contain no commission or fee text.
+- EG — Aman Securities Brokerage — App store listing has no commission or fee information and no other official page was found.
+- EG — Arzan Brokerage Egypt (IFA Securities Brokerage) — Site shows no commission or fee text.
+- EG — Brokers Securities Brokerage — Site goes to a login/e-trade page with no fee text.
+- EG — CI Capital — Brokerage page and sitemap show no commission schedule.
+- EG — Cairo Capital Securities — Play Store listing has no fee information and no official tariff was found.
+- EG — Commercial International Brokerage (Mahfazty CIBC) — Mahfazty site contains no commission or fee text.
+- EG — EFG Hermes ONE — FAQ mentions only no account-opening fee and no minimum deposit; no equity commission rate is published on the site or terms page.
+- EG — EgyTrend Securities — Landing/login page has no fee information.
+- EG — Egypt Stocks Securities Brokerage — App store listing has no commission or fee information.
+- EG — El Horreya Brokerage — FAQ has no commission rates.
+- EG — Faisal Securities Brokerage — Crawled about 70 pages incl. services and open-account pages; only 'no administrative fees' marketing, no commission rate.
+- EG — Global Invest Securities — Services, Downloads (empty) and Contact pages list no commission or tariff.
+- EG — Golden Way Securities Brokerage — Home, Help and login pages contain no commission or fee statements.
+- EG — HC Securities — Brokerage, HC Online and terms pages give no rates; only link to EGX rules.
+- EG — Horizon Securities Brokerage — Crawled 70 pages including FAQ, terms and services; no commission figures.
+- EG — Metro Brokerage for Securities Trading — Site FAQ only says commissions are a percentage that typically do not exceed 1% including regulatory fees, with no firm-specific rate.
+- EG — Mina Securities Brokerage — Crawled 70 pages; no commission or fee statements.
+- EG — Mirage Brokerage — E-trade portal (Terms, FAQ, Downloads) and 70 crawled pages show no commission rates.
+- EG — Mubasher Trade Egypt — Pricing page says 'lowest commissions' with no rates; only a EGP 200 price-screen fee when monthly commission is under EGP 250.
+- EG — Naeem Brokerage — Streamer portal and parent Naeem Holding site (40 pages) publish no brokerage commission.
+- EG — Okaz — 47 pages crawled incl. services and online trading; no commission or fee figures.
+- EG — Ostoul Securities — Site (40 pages, EN and AR) has no rate, only a client testimonial about a 'small commission'.
+- EG — Pharaonic Securities — Services, Help, Execution Manual and portal pages contain no commission rates.
+- EG — Premiere Securities Brokerage — Services page only mentions a reduced same-session commission without figures; no tariff found.
+- EG — Prime Holding — 70 pages crawled; brokerage page has no commission schedule.
+- EG — Pyramids Capital Securities Brokerage — Only says 'low commissions' with no figures; 70 pages crawled.
+- EG — Roaya Online — Developer/company site has only market data, about, services and platform login; no fees.
+- EG — Roots Securities Brokerage — Small site with home, about, structure, reports and prices; no commission information.
+- EG — Royal Brokerage Securities & Bonds — 70 pages crawled; no commission or fee information.
+- EG — Synergy Securities — 43 pages crawled; no commission schedule.
+- EG — Target Securities — Public fee table lists only platform fees (free if EGP 200k monthly turnover, else EGP 150/month); no commission, contract PDFs are scans.
+- EG — Trend Securities Brokerage — 28 pages crawled; only e-trade, downloads, reports and contacts; no commission.
+- EG — Watheeqa Securities Brokerage — FAQ and 29 crawled pages show no commission; says to contact the firm.
+- FR — Cholet Dupont Oudart — Legal and regulatory documents (conflicts policy, intermediary selection, RTS28) contain no tariff; group Milleis grid not shown to apply.
+- FR — Swiss Life Banque Privée — Published tariffs (2021 deposit account, fee information document, account agreement) cover accounts only; order passing free, no share/ETF brokerage rate.
+- GR — BETA Securities — All 29 site pages and the terms/KID/pre-contractual PDFs checked contain no commission rate; the Oct 2026 Greek terms PDF could not be fetched.
+- HK — Emperor Securities — Fee page shows brokerage commission as negotiable (face-to-face quote) and the July 2022 fee PDF leaves the commission % blank.
+- HK — Head & Shoulders Securities — Fee table gives only 'preferential' online/phone commission with HK$50 minimum, details via client service officer.
+- HK — Orient Securities International (Orient Finance Holdings HK) — Site has no fee page; account-opening forms have a blank 'Commission Charges' table to be filled per client; app store says only 'ultra-low commission'.
+- HK — SinoPac Securities (Asia) — Fee schedule PDF text shows brokerage commission as 面議 for all markets; only levies and tax published.
+- HK — Success Securities — Fees page lists commission as 'Negotiable'; only stamp duty and levies have rates.
+- HK — Swissquote Asia — The HK site offers only Forex and CFDs; securities pricing pages exist only for the Swiss/Luxembourg entities.
+- HK — Tai Shing Securities — Charges page (updated 2026-05-01) says ask branch staff or account executive for brokerage commission; only levies and other fees published.
+- HK — Wocom Securities — Commission is 'Negotiable (min. HK$125)' for HK and Stock Connect; no rate and no US/other markets commission.
+- ID — Aldiracita Sekuritas — Equity brokerage page and a site scan show no commission or fee rates.
+- ID — Anugerah Sekuritas Indonesia — 48 site pages scanned and searches in Indonesian found no fee or commission figure.
+- ID — Artha Sekuritas — Manual has no fee figures; site scan and Indonesian searches found no tariff.
+- ID — BNC Sekuritas Indonesia — Only says 'competitive transaction fees'; no rate on 17 pages scanned or in searches.
+- ID — Buana Capital Sekuritas — No commission rate on 26 site pages scanned or in Indonesian searches.
+- ID — Bumiputera Sekuritas — Pages only advertise 'Lower Fee & Commission' without any figure.
+- ID — Ekokapital Sekuritas — 55 pages scanned and searches found no fee or commission information.
+- ID — Elit Sukses Sekuritas — Online trading page says 'competitive' fees and a VAT notice says fees unchanged, but no rate is given.
+- ID — Evergreen Sekuritas Indonesia — Site is a single page with a software download; no fee text and nothing in searches.
+- ID — Indo Harvest Sekuritas — Nine pages scanned and searches found no fee or commission information.
+- ID — Laba Sekuritas Indonesia — 31 pages and the LabaConnect app listing show no fee or commission figures.
+- ID — Pacific Sekuritas Indonesia — Online trading page and 13 pages scanned have only product and download links, no fees.
+- ID — Panin Sekuritas — Site, FAQ, product pages, promo pages and 2025 annual report give no broker commission rate; promos only mention a waived broker fee and the 0.043%/0.143% exchange levy.
+- ID — Pilarmas Investindo Sekuritas (POT) — Account-opening terms only say commission is 'as stated in the Account Opening Application'; no rate published on site or App Store page.
+- ID — Semesta Indovest Sekuritas — Homepage, services page and App Store listing show no fee; 0.15%/0.25% appears only on a third-party ranking article.
+- ID — Shinhan Sekuritas Indonesia — FAQ, homepage and STRADE guide contain no commission rate; Shinhan bank RIPLAY documents are for the bank, not the broker.
+- ID — Waterfront Sekuritas — Winvest page has only features and download links; no fee or RIPLAY found for Waterfront/Winvest.
+- ID — bjb Sekuritas — Homepage, FAQ, products and BOFIS guide list no commission; no RIPLAY found.
+- IQ — Al Karmal Brokerage — App Store page and searches show no commission; Iraq brokers must put commissions in the client agreement but there is no fixed regulator schedule.
+- IQ — Al-Hayat Brokerage — App Store page lists no commission; no company site or tariff found, no fixed Iraq schedule.
+- IT — Cassa di Risparmio di Bolzano — Transparency fogli informativi (custody and administration, Conto Invest) list no order/negotiation commission.
+- IT — CiviBank — Same Sparkasse-group document set: custody and Conto Invest sheets only, no order commission; MiFID page has only execution-policy documents.
+- JM — FHC Investments — FHC site (searched via WP API) and JTraderPro FAQ give no rate; brokers set own commission, press quotes rates for other brokers only.
+- JM — Mayberry Investments — Site (searched via WP API) and trading pages give no commission; JSE broker commissions are set by each broker, press quotes name other brokers only.
+- LB — BLOMINVEST Bank — Online trading page says only 'competitive fees'; Equity Desk/Trading pages and app listing show no figures.
+- LB — FFA Private Bank — Online trading page refers to FFA Direct for commissions; the 'List of Charges and Prevailing Rates' page is empty.
+- LU — Banque de Commerce et de Placements — Legal-information page lists only privacy, best execution, complaints, MiFID/FinSA and risk documents; no securities tariff on site or in sitemap.
+- LU — UBS Luxembourg — Regulatory-information page and the execution-only consumer info PDF say costs are in the client's contractual fee schedule; no brokerage rates published.
+- MN — Goodsec — Site publishes only account-opening/statement/withdrawal service fees (Jan 2023 notice), no trading commission; terms, FAQ and guide pages have none.
+- MN — Mirae Asset Securities Mongolia — Brokerage service page lists channels only, no commission or tariff.
+- MN — Standard Investment — Brokerage page and FAQ list no commission or tariff.
+- MT — HSBC Bank Malta — Brokerage page is a 404, investments section lists only managed funds/pensions, and the General Tariff and statement of fees contain no share-dealing commission.
+- MX — Kapital Casa de Bolsa — Kapital's costs-and-commissions page covers only bank products; Casa de Bolsa is just a login link (ibex.com.mx), the order-allocation folleto has no fees and Intercam's 2024 services guide has no commission table.
+- MX — Monex Casa de Bolsa — Monex tariff page and Comisiones.pdf cover bank/digital-account products only; the intermediacion contract says tariffs exist per service but gives no figures; bolsa page has no rates.
+- MX — Punto Casa de Bolsa — Punto Casa de Bolsa site is a single landing page and the Punto Trader guide has no commission figures; no tariff document found.
+- MX — ScotiaTrade — Scotiabank Mexico costs-and-commissions page and investment services guide list fund and term-product commissions only, no equity brokerage tariff.
+- MY — Apex Securities — Apex equities, Apexetrade and product pages (all 19 WP pages) only say preferential brokerage rates with no figures; apex1trade.com.my is Cloudflare-blocked but is only the account-opening link.
+- MY — MIDF Invest — Share-trading page says attractive negotiated brokerage rates for HNW/corporate clients; downloads page has no tariff and no rate card exists.
+- MY — Mercury Securities — FAQ says brokerage per standard fee structure with no rate; account and online-trading application forms contain no tariff.
+- MY — PublicInvest — Official Fees and Charges PDF has CDS, nominee, late-payment and corporate-action charges only; Public Bank PB Sharelink pages say only 'competitive brokerage rates' and refer to the investment bank's transaction costs.
+- MY — SJ Securities — Site only states up to 30% off brokerage online; no rate card on products, FAQ, foreign-equity or account pages.
+- NA — IJG Securities — Stockbroking page claims clear competitive brokerage but publishes no rates; sitemap, FAQs and PDFs (unit-trust forms only) have no tariff.
+- NL — Robein — robein.nl is a blank IIS default page, trading portal is login-only, no tariff in searches (legacy Chesnara-owned run-off).
+- NO — Rogaland Sparebank — Price list and savings pages cover accounts, loans, cards and Eika funds only; no share trading or kurtasje page exists.
+- NO — Storebrand Bank — Aksjesparekonto is funds-only, the aksjehandel URL is an error page and the bank price list has no kurtasje.
+- OM — Financial Services Company SAOG — FAQ says account opening is free; no brokerage commission published; only third-party market-rate figures exist.
+- OM — Global Financial Securities — Brokerage, e-trade, mobile and downloads pages contain no commission or tariff document.
+- OM — Horizons Capital Markets — Downloads (account form, buy/sell forms, app manual) and brokerage page carry no commission rate.
+- OM — Jabal Asset Management — Jabal site and documents list only fund prospectuses and factsheets; brokerage page gives no rates.
+- OM — National Bank of Oman — Brokerage account form has a blank 'Brokerage Commission Rate' field and the T&Cs PDF has no rates.
+- OM — Ubhar Capital (U-Capital) — Brokerage page and ~4,000-URL sitemap show no tariff, only research reports.
+- OM — United Securities Oman — Site has forms only; no commission schedule found on site or in searches.
+- OM — Vision Capital — Site and e-trading page list no commission rates and no tariff link.
+- PH — AP Securities — Landing page has no content or links; no fee page, sitemap or PDFs, and searches found no schedule.
+- PH — F. Yap Securities — Site has services, disclosures and CAIF forms only; no commission rates (online arm not named on site).
+- PH — Globalinks Securities — FAQ refers to a 'Summary of Fees and Charges' that is absent from the FAQ, Terms, Trading Agreement and CAIF form; no rates anywhere.
+- PH — Meridian Securities — Home, services and FAQs pages list no commission; no fee page or PDF found.
+- PH — Regina Capital — Site redirects to the RCDC portal; no commission schedule found and searches returned nothing.
+- PH — VC Securities — Pricing-table page is an unrelated WordPress template ($20/month plans); FAQ and services have no commission.
+- PS — Al-Watanieh Securities — Site pages crawled (AR/EN) contain no commission or fee schedule; searches found no PEX-wide cap either.
+- RO — Muntenia Global Invest — Site pages, reports/disclosure PDFs and search show no commission rates, only that assisted trading costs more than online.
+- TH — Merchant Partners Securities — SET membership (equity brokerage) was transferred to Liberator Securities (LIB) from 21 Nov 2022; the firm's account-opening page now offers only mutual funds and bonds, with no share commission published.
+- TN — Amen Invest — Company site and Google Play listing have no tariff or convention with courtage rates; searches found only fund-level fees.
+- TN — Banque de Tunisie — BT Bourse page only says orders are routed to subsidiary Societe de Bourse de Tunisie; BT conditions tarifaires documents list no brokerage commission and SBT site is unreachable.
+- TN — MAC SA — Official site is a bare page and the Play Store listing describes only app features; no courtage rates found.
+- TN — Maxula Bourse — Account agreement PDF mentions a courtage commission and 'conditions tarifaires' but prints no rate; site pages publish none.
+- TN — STB Finance — Compte-titres and devenir-client pages and Play Store listing show no courtage rates.
+- TR — Acar Menkul Değerler — Tariff page lists account, transfer, dividend and repo fees but no share commission; no framework agreement or rate document found online.
+- TR — NCM Investment — Share and account pages only say 'low commission'; no tariff page or contract PDF with rates found.
+- TR — Neta Menkul Değerler — Small static site (pay market, legal, order execution policy pages) has no commission rate.
+- TR — Prim Menkul Değerler — Pay market, account opening, custody and contract-set pages show no commission rate or tariff document.
+- TW — Fushan Securities — Re-crawled site, FAQ, download PDFs and announcements: no commission rate or discount published, and no sub-brokerage fee table.
+- TW — Taiwan Business Bank Securities — Securities pages (intro, services, app, web, futures) and the bank's 115.9 fee-charge PDF list no brokerage commission for stock trades.
+- TW — Yong Hsing Securities — All site pages, news items and download pages checked; no commission rate, discount or sub-brokerage fee table.
+- UK — Plus500 UK — Plus500UK serves UK clients with CFDs only; the Plus500 Invest real-share fee page exists only for other (EEA) entities and third parties say Invest is not open to UK residents (plus500.com returned 403 to me, so not read directly).
+- UK — Swissquote UK — en-uk site and sitemap contain only forex/CFD pricing (account types, execution, trading conditions); no share or ETF dealing pages.
+- US — Amboy Bank — Wealth page says securities and insurance are offered through Amboy Financial Services (insurance producer division) with no named broker-dealer, no brokerage or trade pricing.
+- US — Bridge Credit Union — Only a TruStage 'Investment Services / Investments Advisors' link; no brokerage, partner broker-dealer or trade pricing found on the site.
+- US — Great Point Capital — Form CRS and site only describe fees generically (transaction-based, clearing, exchange fees); no rates published.
+- US — Vision Financial Markets — Securities Client Fees page, Form CRS and account application list only ancillary fees; commissions described as 'competitive' with no rates.
+- VN — T-Cap (Tri Viet Securities) — Checked site pages, sitemap, account-opening contract PDF and trading guide PDFs on tcap.vn: fees are only referred to as 'theo biểu phí của TVB' with no rates published, and web searches found no tariff.
+- ZA — Afrifocus Securities — All site pages, FAQ, T&Cs and the stockbroking and online-trading product-sheet PDFs only say 'low cost'/'competitive pricing' with no brokerage rates (online trading is white-labelled Velocity Trade, which also publishes no ZA rates).
+- ZA — Momentum Securities South Africa — Only the CFD brochure lists fees (JSE CFDs 0.35% min R35); no brokerage rates for cash share/ETF trading appear on the site, brochures, policies or app-store listing.
+- ZA — Velocity Trade — Main site and regulatory pages show equities execution as an enquiry-only institutional service; the only fee PDF (Rates-and-Fees.pdf) is a Canadian cash-management/account fee list with no commissions, and the ZA help and stat hosts return 403.
+
+## Enlevés : morts ou fusionnés (8)
+
+- AU — ANZ Share Investing — Page says ANZ Share Investing is closed and was transitioned to CMC Markets Stockbroking on 15 March 2023.
+- BR — Banco BV — BV closed its brokerage (DTVM) in 2024 and moved clients to Agora (Bradesco); the given PDF holds only operating rules, no share fee.
+- BR — Lerosa Investimentos — Site returns 'not accessible'; Lerosa sold its brokerage to Necton in 2020 and is now only an asset manager.
+- GH — CAL Brokers — GSE press release PR 370: CAL Brokers voluntarily resigned GSE membership effective 13 Dec 2019; site still online (iBroker text from 2009) but no fees published.
+- IT — Banca Popolare di Sondrio — popso.it now only shows a redirect notice: Banca Popolare di Sondrio has become BPER; services moved to bper.it (which does publish a commission table in its MiFID general information document).
+- LK — Acuity Stockbrokers — Domain unreachable; Acuity Partners was fully acquired by HNB and rebranded HNB Investment Bank; no official fee document found.
+- PT — EuroBic — EuroBic was fully integrated and rebranded into ABANCA Portugal in Nov 2025 (eurobic.pt redirects to abanca.pt); ABANCA page says only a fixed fee per order, no amounts found.
+- UA — Freedom Finance — Freedom Finance Ukraine is under sanctions since Oct 2022, licences suspended for the sanction period and activity frozen while client assets are returned; site has no tariff.
+
+## Pays à plafond officiel seulement — gardés (plafond pris comme tarif, choix du 2026-10-29)
+
+- NG : NGX 0,75–1,35 % — 36 sans tarif propre + 21 classés « barème » au premier passage
+- SA : CMA ≤ 0,155 % — 7 sans tarif propre + 0 classés « barème » au premier passage
+- BD : BSEC ≤ 1 % — 38 sans tarif propre + 0 classés « barème » au premier passage
+- PK : PSX 0,15 %–2,5 % — 26 sans tarif propre + 0 classés « barème » au premier passage
+- IN : SEBI ≤ 2,5 % — 26 sans tarif propre + 0 classés « barème » au premier passage
+- GH : GSE ≤ 2,5 % — 5 sans tarif propre + 0 classés « barème » au premier passage
+- MA : ≤ 0,6 % (presse) — 1 sans tarif propre + 0 classés « barème » au premier passage
+- KE : CMA plafond ~1,5–1,78 % — 0 sans tarif propre + 11 classés « barème » au premier passage
+- TZ : DSE ≤ 2,38 % — 0 sans tarif propre + 3 classés « barème » au premier passage
+
+## Pays à plafond : brokers sans tarif propre (gardés) (174)
+
+- BD — 3i Securities — Site (67 pages) and 12 form PDFs crawled; only 'our commission rate is also very good', no figure.
+- BD — ASENZ Securities — Site, services and downloads pages show no commission figure (rate on request).
+- BD — Ali Securities — Brokerage Service, products and form-download pages (site moved to Google Sites) list no commission rate.
+- BD — Apex Investments Limited — Charges page lists only BO opening Tk 250 and yearly BO fee Tk 150; site and forms crawled, no commission figure.
+- BD — Aries Securities — Only 'competitive commission rate' wording; 66 pages and downloads crawled, no figure.
+- BD — Bangladesh Finance Securities (BOOM) — Site, 14 download forms and margin documents show no share commission rate.
+- BD — Be Rich Limited — Site and forms crawled; only card-payment charge (1.9%) shown, no brokerage commission.
+- BD — Commerce Bank Securities and Investment — Only 'competitive rate of commission' wording; site and PDFs crawled, no figure.
+- BD — Delta Capital Limited — Site and forms crawled; no share commission published (page is forex/CFD oriented).
+- BD — E-Securities — Single-page site lists services only; no commission or tariff.
+- BD — EBL Securities — Site, FAQ and learning pages crawled; no retail equity commission figure (only a G-sec cap of 0.10% in a research note).
+- BD — First Capital Securities Limited — Only 'special rate of commission' wording for NRB accounts; site and form downloads crawled, no figure.
+- BD — GMF Securities — WordPress site and all pages via REST API checked; no commission or tariff.
+- BD — Globe Investment and Fintech Company — Only 'commission rate and charges are most competitive'; site and downloads crawled, no figure.
+- BD — Innova Securities — Site crawled; no commission or tariff published.
+- BD — Island Securities — Service page 'What are the charges?' lists only account opening Tk 150, BO maintenance Tk 150 and share transfer 0.0125%; no trading commission.
+- BD — Joytun Securities International — Only 'best commission rate and fees are low prices'; site and forms crawled, no figure.
+- BD — K-Securities and Consultants — Only 'preferential commission fees' wording; no figure.
+- BD — Midway Securities — Live pricing page says stock buy/sell commission is shared only on request; only BO, IPO and deposit fees are listed.
+- BD — Mirror Financial Management — Crawled 25 pages and DSE guide PDFs; no commission figure anywhere.
+- BD — Modern Securities — Whole site (22 URLs) has no commission or tariff content.
+- BD — Mona Financial Consultancy & Securities — Crawled site and sitemap; no commission rate or tariff document.
+- BD — Oshadhi Securities — Download page holds only forms, IPO results and research; no commission rate.
+- BD — Rasti Securities Consultant — Download and services pages carry no commission rates; only an authorisation letter PDF.
+- BD — Reliance Brokerage Services Ltd — Given URL belongs to Rupali Bank Securities and shows no tariff; Reliance Brokerage itself was suspended in 2023 over licence renewal and has no tariff online.
+- BD — Relief Exchange Limited — Account-opening form leaves the brokerage commission blank (dotted line); no rate published.
+- BD — Remons Investment and Securities — Site is live (DSE 108/CSE 042) but lists no commission; unrelated spam pages also present.
+- BD — Rose Securities — Eleven-URL site with no commission or fee content.
+- BD — Royal Capital — Site and download-forms PDFs show no commission rate.
+- BD — SAHCO Securities — Account opening form and other forms carry no commission figure.
+- BD — SAR Securities — Crawled site pages and T&C; no commission rates.
+- BD — SBAC Bank Investment — Forms and directives PDFs checked; no commission rate published.
+- BD — Sadeque Finance Management — Site shows only BO renewal and IPO fees, no brokerage commission.
+- BD — Shahjalal Islami Bank Securities — Account form leaves commission blank and Fees page lists only BO charges; a 0.40% figure appears only in an undated student report.
+- BD — Shanta Securities — Site crawl and EasyTrade page show no commission rate, only research PDFs.
+- BD — UCB Stock Brokerage — Site shows account types and research PDFs; no commission rate.
+- BD — United Financial Trading Company (UFTCL) — FAQ gives commission only as 'Competitive'; uftfast.com portal has forms only.
+- BD — United Securities — Site has only research sample PDFs and T&C without commission figures.
+- GH — Black Star — Brokerage page and Terms give no equity commission (only 'no fees' on fixed income); schedule is said to be in-app and the help centre blocked me.
+- GH — CDH Securities — Terms only say fees are disclosed before confirming a transaction; no equity commission on markets, help or site pages.
+- GH — Databank Brokerage — Equity pages describe services only; no commission or fee schedule found on site or by search.
+- GH — IC Securities — Only login/register pages and corporate site; no tariff published (2.5% figures come from third-party sites).
+- GH — Plus (10th Capital Investments) — FAQ has a 'What are the fees?' entry but no rate is rendered; Terms and App Store page give no trading fee.
+- IN — Abhipra Capital — Terms say fees are 'as published or agreed separately' but only demat (BSDA/regular) schemes are published; no brokerage tariff.
+- IN — Adroit Financial Services — Documents say brokerage is 'as mutually agreed'; only MTF interest 0.049%/day published.
+- IN — Asian Markets Securities — Institutional broking/PMS house; downloads are policies, KYC and PMS fee tool only, no retail brokerage tariff.
+- IN — Beeline Broking — Pricing page is a bidding form whose plan table is loaded from a backend API that returns an error; no rate shown (only MCX/NCDEX delivery 0.30%).
+- IN — Eureka Stock & Share Broking — Know-your-cost page uses 0.30%/0.03% only as an assumed example; FAQ says brokerage applies with no figure.
+- IN — Findoc — The Rs20 or 0.03% per order on the charges page is a generic discount-broker comparison, not a Findoc tariff; stock-trading and downloads pages have no rate.
+- IN — IFIN — Official IFIN tariff PDF covers depository charges only; equity pages give no brokerage rate (0.50% is a PMS fee).
+- IN — Inventure Growth & Securities — Equity page and policy PDFs list no brokerage rate or pricing plan.
+- IN — Joindre Capital Services — Account-opening form only refers to a tariff sheet 'as mutually agreed'; no rates printed.
+- IN — Kantilal Chhaganlal Securities — Account kit has a Brokerage Slab/Tariff page that is blank (to be filled per client); site says only 'industry-competitive rates'.
+- IN — Lohia Securities — Trading client form and site contain only the regulatory cap, no rates.
+- IN — Marwadi Shares and Finance — Official brokerage-change letter and KYC forms have blank rate tables; 0.30%/Rs20 appear only on comparison sites.
+- IN — Mehta Equities — Account form's Brokerage Tariff Sheet (page 15) is blank; only a Rs25/30 minimum per settlement is stated in terms.
+- IN — Monarch Networth Capital — Brokerage calculator takes a user-entered rate; no tariff or plan published (0.15%/0.01% only on chittorgarh).
+- IN — PhillipCapital India — Policies say brokerage is mutually decided at account opening; Booklet B and site carry no rates.
+- IN — Prabhudas Lilladher — Site, calculator, regulatory pages and blogs say only 'brokerage will not exceed SEBI limits'; no rate card.
+- IN — Pravin Ratilal Share and Stock Brokers — Equity trading pages and depository charge page show no brokerage rate.
+- IN — Ratnakar Securities — Only published tariff is the demat sheet; downloads list no account form or brokerage rate.
+- IN — Rikhav Securities — Online trading and home pages list no brokerage figure; downloads only DP tariff.
+- IN — Rudra Shares & Stock Brokers — Terms refer to 'the above rates' but no figures appear; only DP tariff and 'minimal' claims published.
+- IN — SKI Capital — Downloads list only a depository tariff; equity and app pages give no brokerage rate.
+- IN — SMIFS — Site, sitemap, downloads and investor-charter pages list no brokerage tariff; only rights/obligations and policy PDFs.
+- IN — SSJ Finance — Only a 2010 Minimum Brokerage Policy (Rs 25 per segment per day or 2.5%) and a client agreement saying the schedule is given separately; no rate card published.
+- IN — Sharewealth Securities — Equity page and site have no rates; only 'lowest brokerage' marketing wording.
+- IN — Shriram Insight — Only a demat tariff PDF; the account-opening form's trading tariff sheet is a blank template (min Rs 25 per trade, SEBI 2.5% cap).
+- IN — Sushil Finance — Downloads pages and sitemap show no tariff; only 'flexible brokerage terms' wording (rates appear only on third-party comparison sites).
+- KE — Dyer & Blair Investment Bank — No broker-specific tariff published on the site; Kenyan CMA Licensing Regulations/NSE cap equity commission (about 1.5-1.78%, total cost up to 2.1% for trades up to KES 100k), a maximum rather than a fixed rate.
+- KE — Fintrust Securities — No broker-specific tariff published on the site; Kenyan CMA Licensing Regulations/NSE cap equity commission (about 1.5-1.78%, total cost up to 2.1% for trades up to KES 100k), a maximum rather than a fixed rate. Site is a login trading portal.
+- KE — Francis Drummond — No broker-specific tariff published on the site; Kenyan CMA Licensing Regulations/NSE cap equity commission (about 1.5-1.78%, total cost up to 2.1% for trades up to KES 100k), a maximum rather than a fixed rate. Online trading page lists services only, fees on request.
+- KE — Genghis Capital — No broker-specific tariff published on the site; Kenyan CMA Licensing Regulations/NSE cap equity commission (about 1.5-1.78%, total cost up to 2.1% for trades up to KES 100k), a maximum rather than a fixed rate. Securities trading page says contact the firm.
+- KE — Investcent Investment Bank — No broker-specific tariff published on the site; Kenyan CMA Licensing Regulations/NSE cap equity commission (about 1.5-1.78%, total cost up to 2.1% for trades up to KES 100k), a maximum rather than a fixed rate. Site is a login trading portal.
+- KE — KCB Capital — No broker-specific tariff published on the site; Kenyan CMA Licensing Regulations/NSE cap equity commission (about 1.5-1.78%, total cost up to 2.1% for trades up to KES 100k), a maximum rather than a fixed rate. Site is a login trading portal; no fee page found.
+- KE — Kestrel Capital — No broker-specific tariff published on the site; Kenyan CMA Licensing Regulations/NSE cap equity commission (about 1.5-1.78%, total cost up to 2.1% for trades up to KES 100k), a maximum rather than a fixed rate. Site is a login trading portal; services pages give no rates.
+- KE — NCBA Investment Bank — No broker-specific tariff published on the site; Kenyan CMA Licensing Regulations/NSE cap equity commission (about 1.5-1.78%, total cost up to 2.1% for trades up to KES 100k), a maximum rather than a fixed rate. NCBA 2026 bank Tariff Guide PDF checked and has no share brokerage rates.
+- KE — Pergamon Investment Bank — No broker-specific tariff published on the site; Kenyan CMA Licensing Regulations/NSE cap equity commission (about 1.5-1.78%, total cost up to 2.1% for trades up to KES 100k), a maximum rather than a fixed rate. FAQ only says fees vary by transaction type and size.
+- KE — Sterling Capital — No broker-specific tariff published on the site; Kenyan CMA Licensing Regulations/NSE cap equity commission (about 1.5-1.78%, total cost up to 2.1% for trades up to KES 100k), a maximum rather than a fixed rate. Site is only a client application portal.
+- KE — Suntra Investments — No broker-specific tariff published on the site; Kenyan CMA Licensing Regulations/NSE cap equity commission (about 1.5-1.78%, total cost up to 2.1% for trades up to KES 100k), a maximum rather than a fixed rate. FAQ says contact Suntra for commission.
+- MA — Upline Securities — BCP 'Bourse en ligne' page gives no commission rate; Upline's own site did not resolve; AMMC still lists Upline as an active member; press quotes only old negotiable rates.
+- NG — AVA Capital (AVA Securities) — Firm site publishes no commission; NGX official fee table sets equity brokerage commission 0.75-1.35% for all brokers (SEC 0.3%, stamp duty 0.08%).
+- NG — Anchoria Securities — Firm site publishes no commission; NGX official fee table sets equity brokerage commission 0.75-1.35% for all brokers (SEC 0.3%, stamp duty 0.08%).
+- NG — Arthur Steven Asset Management — Firm site publishes no commission; NGX official fee table sets equity brokerage commission 0.75-1.35% for all brokers (SEC 0.3%, stamp duty 0.08%).
+- NG — Bancorp Securities — Firm site publishes no commission; NGX official fee table sets equity brokerage commission 0.75-1.35% for all brokers (SEC 0.3%, stamp duty 0.08%).
+- NG — Bestworth Assets & Trust — Firm site publishes no commission; NGX official fee table sets equity brokerage commission 0.75-1.35% for all brokers (SEC 0.3%, stamp duty 0.08%).
+- NG — CSL Stockbrokers — Firm site publishes no commission; NGX official fee table sets equity brokerage commission 0.75-1.35% for all brokers (SEC 0.3%, stamp duty 0.08%).
+- NG — Capital Assets Limited — Firm site publishes no commission; NGX official fee table sets equity brokerage commission 0.75-1.35% for all brokers (SEC 0.3%, stamp duty 0.08%).
+- NG — Capital Bancorp (TradePal) — Firm site publishes no commission; NGX official fee table sets equity brokerage commission 0.75-1.35% for all brokers (SEC 0.3%, stamp duty 0.08%).
+- NG — Chartwell Securities — Firm site publishes no commission; NGX official fee table sets equity brokerage commission 0.75-1.35% for all brokers (SEC 0.3%, stamp duty 0.08%).
+- NG — City Code Trust & Invest — Firm site publishes no commission; NGX official fee table sets equity brokerage commission 0.75-1.35% for all brokers (SEC 0.3%, stamp duty 0.08%).
+- NG — Compass Investments & Securities — Firm site publishes no commission; NGX official fee table sets equity brokerage commission 0.75-1.35% for all brokers (SEC 0.3%, stamp duty 0.08%).
+- NG — Cordros Cape — Firm site publishes no commission; NGX official fee table sets equity brokerage commission 0.75-1.35% for all brokers (SEC 0.3%, stamp duty 0.08%).
+- NG — Coronation Wealth — Firm site publishes no commission; NGX official fee table sets equity brokerage commission 0.75-1.35% for all brokers (SEC 0.3%, stamp duty 0.08%).
+- NG — Crown Capital — Firm site publishes no commission; NGX official fee table sets equity brokerage commission 0.75-1.35% for all brokers (SEC 0.3%, stamp duty 0.08%).
+- NG — DLM Securities — Firm site publishes no commission; NGX official fee table sets equity brokerage commission 0.75-1.35% for all brokers (SEC 0.3%, stamp duty 0.08%).
+- NG — DSU Brokerage Services — Firm site publishes no commission; NGX official fee table sets equity brokerage commission 0.75-1.35% for all brokers (SEC 0.3%, stamp duty 0.08%).
+- NG — Dominion Trust Limited — Firm site publishes no commission; NGX official fee table sets equity brokerage commission 0.75-1.35% for all brokers (SEC 0.3%, stamp duty 0.08%).
+- NG — Edgefield Capital Management — Firm site publishes no commission; NGX official fee table sets equity brokerage commission 0.75-1.35% for all brokers (SEC 0.3%, stamp duty 0.08%).
+- NG — El-Elyon Alliance and Securities — Firm site publishes no commission; NGX official fee table sets equity brokerage commission 0.75-1.35% for all brokers (SEC 0.3%, stamp duty 0.08%).
+- NG — FCSL Asset Management — Firm site publishes no commission; NGX official fee table sets equity brokerage commission 0.75-1.35% for all brokers (SEC 0.3%, stamp duty 0.08%).
+- NG — FSDH Capital — Firm site publishes no commission; NGX official fee table sets equity brokerage commission 0.75-1.35% for all brokers (SEC 0.3%, stamp duty 0.08%).
+- NG — FSL Securities — FSL site, downloads and services pages list no brokerage commission (only 1% management fee for discretionary portfolios).
+- NG — First Securities Brokers — T&C clause 11 refers to applicable charges and tariffs without figures; no tariff on site, forms or PDFs.
+- NG — Fundvine Capital & Securities — Site, FAQs, best-execution policy, account forms and 28 PDFs checked: no commission rate.
+- NG — Futureview Securities — Futureview group site and IW platform FAQ contain no brokerage commission rate.
+- NG — GTI Securities — GTI downloads, registration forms and client agreement have no commission schedule.
+- NG — Greenwich Securities — Greenwich site, resource centre (account forms only) and best-execution policy give no rate; trading runs via a login-only mytradebook platform.
+- NG — Gruene Capital — Home claims flat fees but no amount on any page (services, best execution, open account); gruenetrader.com is login only.
+- NG — Harmony Securities — Brokerage and download pages show no commission rate.
+- NG — Icon Stockbrokers — E-trade, downloads and terms mention fees generically, no commission rate.
+- NG — Interstate Securities — Brokerage-services, InterTrade, forms and 27 PDFs checked: no commission rate.
+- NG — InvestNaija — FAQ says fees are transparent and minimal without a figure; app terms say fees shown at transaction time, no rate table.
+- NG — Kapital Care Trust & Securities — Site and its PDFs (rights circulars, forms) show no commission schedule.
+- NG — Lead Securities — IW FAQ has no commission information; no other official fee page found.
+- NG — Mainstreet Bank Securities — E-trade page, best-execution policy and complaints policy have no commission rate.
+- NG — Mega Equities — Our Fees page lists account, CSCS and registrar service charges only, no brokerage commission.
+- NG — Mountain Investment & Securities — Site, FAQ and stock-trading pages say only that brokerage is exchange-regulated; no rate.
+- NG — Nigerian Stockbrokers Limited (NSL Trade Online) — Home, account-opening form and best-execution PDF show no commission rate.
+- NG — PIPC Securities — IW login/FAQ and PIPC group pages show no fee information.
+- NG — Pilot Securities — Site pages show no commission schedule.
+- NG — Prominent Securities Limited — FAQ and portal pages show no commission; site map has only 2 URLs and web searches return nothing firm-specific.
+- NG — Rainbow Securities — Site, 1,100-URL sitemap and SLA PDF contain no commission rate (only news items).
+- NG — Resort Securities — Download, price-list and services pages carry no commission schedule.
+- NG — Royal Guaranty & Trust — Only an e-trade login portal; no tariff and no search hits for the firm.
+- NG — Securities & Capital Management Company (SCMC) — Home, services, T&C and etrade login pages show no commission rate.
+- NG — Securities Africa Financial (Real Trade) — Real Trade, services and forms pages (all pages in sitemap) show no fee; only a Guardian launch article without rates.
+- NG — Sigma Securities — Download page forms, s-Trader access agreement and account forms contain no commission; 'pricing' pages are unused theme demos.
+- NG — Solid Rock Securities & Investment — FAQ says brokerage is regulated by the exchange but gives no rate; download page has only mandate and dividend forms.
+- NG — Standard Union Securities — E-trading SLA says portal access is free of charge and gives no brokerage rate.
+- NG — TRW Stockbrokers — Services page and small sitemap list no commission; searches find only generic benchmarks.
+- NG — Tiddo Securities — FAQ says a detailed fee schedule is provided at account opening; site PDFs are policies only.
+- NG — Transworld Investment & Securities — Terms page mentions only an annual online-service fee, no brokerage rate.
+- NG — Trusthouse Investment — Corporate site pages and downloads (forms, complaint form) show no commission; pricelist.php is market prices.
+- NG — Valmon Securities — Brokerage, e-trade and downloads pages list only forms and generic risk text, no rate.
+- NG — Vetiva Securities — Brokerage page has no fee schedule; searches show no Vetiva Trader tariff.
+- NG — WCM Capital (Woodland Capital) — Securities trading page describes services only, no commission figures.
+- NG — WSTC Securities — Portal landing page has no fees; trading is login-only.
+- PK — AHM Securities — No tariff page or PDF; downloads are PSX rulebook, terms and risk documents only.
+- PK — AZEE Securities — Tariff Sheet is referenced in Roshan page and pricing.html link but returns 404; account opening form and downloads carry no rate.
+- PK — Amanah Investments — No commission or tariff page or PDF; documents are licences, KYC and shareholding only.
+- PK — Axis Global Limited — Downloads are terms, PSX rulebook and risk documents; no commission schedule.
+- PK — Bawa Securities — Brochure says only 'commission rates at minimum of market'; account opening forms are blank scans with no rates.
+- PK — Dawood Equities — Only a PMEX commission PDF is published; no equity commission schedule on site.
+- PK — Fawad Yusuf Securities — Site and 130+ documents are accounts, NCB/LCB and manuals; no commission rates.
+- PK — Finqalab — FAQ and terms mention only the PKR 476 NCCPL fee and generic 'brokerage commissions as prevailing'; no rate (parent Next Capital also shows none).
+- PK — HH Misbah Securities — Frame site (index1.php) with services, FAQ and downloads pages; no commission or tariff.
+- PK — Iqbal Usman Kodvavi Securities — Frame site with FAQ, forms and generic pages; no commission or tariff.
+- PK — M.M. Securities — Documents are forms, KYC, PMEX and the PSX regulations; no firm commission schedule.
+- PK — MSMANIAR Financials — Downloads and FAQ hold investor guides and manuals only; no commission schedule.
+- PK — Muhammad Salim Kasmani Securities — FAQ, account opening and guideline pages carry no commission rates.
+- PK — OS Capital Investments — Documents are forms, policies and licences; no equity commission schedule (only PMEX material).
+- PK — Oriental Securities Pakistan — Forms, KYC and FAQ only; no commission schedule.
+- PK — Pasha Securities — Downloads are AOF, KYC, terms and policies; terms only say commission increases need 5 days notice, no rate.
+- PK — Pearl Securities — Vtrade manual, blank forms and site pages have no commission rates.
+- PK — R.T. Securities — Only marketing text about 'minimum/competitive commission' with no figures.
+- PK — Sakarwala Capital Securities — Only a 'Competitive Commission' marketing tile; no rates or tariff document.
+- PK — Seven Star Securities — Site, FAQ and downloads (cost_efficiency page 404) show no commission rates.
+- PK — Time Securities — Downloads page lists forms only; no commission rates.
+- PK — Trade Smart Securities — Only a PMEX commission structure PDF is published; AOF is for commodities; no equity rates.
+- PK — Value Stock and Commodities — Commission slab page covers only PMEX contracts; no share or ETF commission.
+- PK — Y.H. Securities — Services and Roshan pages mention only banks' schedules of charges; no brokerage commission.
+- PK — Zafar Securities — Site, FAQ, investor pages and downloads show only account-opening charges and a generic 'commission structure' heading, no rates.
+- PK — Zahid Latif Khan Securities — FAQ, downloads, account-opening form and investor guide give no commission rate, only the clause that brokerage commissions prevail from time to time.
+- SA — Al Nefaie Investment Group — Brokerage, download-center, securities-services pages and searches show no firm commission schedule.
+- SA — Alkhair Capital — Brokerage, custody-brokerage, trading-software and customer-care pages show no commission figures.
+- SA — Alpha Capital — Site (about, asset management, alternative investments, contact, news) has no brokerage commission schedule; searches found none.
+- SA — Jadwa Investment — Brokerage page, Terms and conditions page and searches show no commission figure.
+- SA — Musharaka Capital — Brokerage, foreign-investor and Terms & Conditions pages contain no commission rates (only fund subscription FAQs).
+- SA — Osool & Bakheet — Home, open-account and investor-relations pages show no brokerage commission schedule.
+- SA — Yaqeen Capital — Brokerage and Trading page is a short description with no fee or commission content.
+- TZ — Vertex International Securities — Vertex site publishes no fee; DSE says maximum total brokerage fees are 2.3768% of trade value.
+- TZ — Zan Securities — Zan site publishes no fee; DSE says maximum total brokerage fees are 2.3768% of trade value.
+- TZ — iTrust Finance — iTrust site publishes no fee; DSE says maximum total brokerage fees are 2.3768% of trade value.
+
+## Koweït / Émirats : taux fixe officiel (gardés) (8)
+
+- AE — Al Dar Shares and Bonds — All cms pages (about, services, e-trade, forms) and the site menu reviewed; no commission or tariff published (aldarshares.com is mostly a market-data portal); the brokerage domain aldarshares.ae refused connection.
+- AE — Daman Securities — All sitemap pages (UAE, global, regional markets, online trading, margin, Sharia) have no commission figure; web search by site and in Arabic finds none, only third-party reviews.
+- AE — SICO UAE — Site, services page and the individual client agreement PDF only say commission is 'prescribed by law/regulation' with no figure; no tariff found.
+- AE — World Investments — Site, cash/online/margin pages, brochure and all form PDFs checked in Arabic and English; no commission rate published.
+- KW — Arzan Trader — Page says only 'competitive commissions' with no figures; no tariff on site.
+- KW — KMEFIC — FAQ tells clients to call customer service for fees; Arabic customer agreement (scanned) has no fee table.
+- KW — National Investments Company / NICTRADE — Online trading page shows no commission or tariff.
+- KW — Oula Wasata — FAQ says commissions follow the official CMA/Boursa schedule and still contains a placeholder instead of figures.
